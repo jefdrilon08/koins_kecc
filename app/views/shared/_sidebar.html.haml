@@ -1,0 +1,13 @@
+.sidebar
+  %nav.sidebar-nav.open
+    %ul.nav
+      %li.nav-item
+        = link_to root_path, class: "nav-link #{params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : ''}" do
+          %i.fa.fa-tachometer-alt
+          Dashboard
+      %li.nav-title
+        Administration
+      %li{ class: "nav-item #{params[:controller] == 'administration/users'}" }
+        = link_to administration_users_path, class: 'nav-link' do
+          %i.fa.fa-users
+          User Management

@@ -1,0 +1,18 @@
+!!!
+%html
+  %head  
+    %title
+      KOINS
+    = csrf_meta_tags
+    = csp_meta_tag
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no" }
+
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  %body.app.header-fixed.sidebar-fixed.aside-menu-fixed.aside-menu-hidden.sidebar-hidden
+    = render partial: "shared/header"
+    .app-body
+      = render partial: "shared/sidebar"
+      %main.main
+        = yield

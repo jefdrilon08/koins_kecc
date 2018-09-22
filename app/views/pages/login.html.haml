@@ -1,0 +1,40 @@
+= stylesheet_link_tag "login"
+
+.container
+  .row
+    .col
+      #login-form
+        .card
+          .card-body
+            %center
+              = image_tag "logo.png", width: "220px"
+            %hr
+            .input-group
+              .input-group-prepend
+                .input-group-text
+                  .fa.fa-user
+              = text_field_tag :username, "", id: "input-username", class: "form-control", placeholder: "USERNAME"
+            .input-group
+              .input-group-prepend
+                .input-group-text
+                  .fa.fa-key
+              = password_field_tag :username, "", id: "input-password", class: "form-control", placeholder: "PASSWORD"
+            %hr
+            .row
+              .col
+                .message
+                %center
+                  .btn-group
+                    #btn-login.btn.btn-primary
+                      .fa.fa-sign-in-alt
+                      Login to Dashboard
+                    #btn-contact-support.btn.btn-info
+                      .fa.fa-question
+                      Contact Support
+
+= javascript_include_tag "Login"
+
+:javascript
+  $(document).ready(function() {
+    Login.init();
+  });
