@@ -1,0 +1,23 @@
+.card
+  .card-body
+    %h5.text-muted
+      CENTERS
+    .table-responsive
+      %table.table-bordered.table
+        %thead
+          %tr
+            %th Name
+            %th Short Name
+            %th Action
+        %tbody
+          - @branch.centers.each do |center|
+            %tr
+              %td= center.name
+              %td= center.short_name
+              %td
+                = link_to administration_center_path(center.id), class: "btn btn-primary btn-xs", target: "_blank " do
+                  Details
+
+
+
+

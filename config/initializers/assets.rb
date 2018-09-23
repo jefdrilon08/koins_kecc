@@ -16,5 +16,9 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 Rails.application.config.assets.precompile += [
   "login.scss",
   "Login.js",
-  "administration/users/Index.js"
+  "administration/users/Index.js",
+  "administration/areas/Index.js",
+  "administration/clusters/Index.js",
+  "administration/branches/Index.js",
+  "administration/centers/Index.js"
 ]
