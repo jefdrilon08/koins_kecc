@@ -7,7 +7,7 @@
           Dashboard
       %li.nav-title
         Administration
-      %li{ class: "nav-item #{params[:controller] == 'administration/users'}" }
+      %li{ class: "nav-item #{params[:controller] == 'administration/users' ? 'active' : ''}" }
         = link_to administration_users_path, class: 'nav-link' do
           %i.fa.fa-users
           User Management

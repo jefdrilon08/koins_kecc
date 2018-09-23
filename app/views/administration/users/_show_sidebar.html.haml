@@ -16,6 +16,19 @@
     %table.table.table-sm
       %tr
         %th
+          Identification Number
+        %td.text-muted.text-right
+          #{@user.identification_number}
+      %tr
+        %th
+          
+      %tr
+        %th
           Email
-        %td.text-muted
+        %td.text-muted.text-right
           #{@user.email}
+      %tr
+        %th
+          Roles
+        %td.text-muted.text-right
+          #{@user.roles.join(",")}

@@ -21,6 +21,11 @@
         %td
           #{user.email}
         %td
+          %ul
+            - user.roles.each do |r|
+              - if r.present?
+                %li
+                  #{r}
         %td
           .btn-group
             = link_to administration_user_path(user), class: 'btn btn-sm btn-primary' do
