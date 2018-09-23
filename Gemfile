@@ -16,6 +16,11 @@ gem 'haml'
 gem 'font-awesome-sass'
 gem 'devise'
 gem 'simple_form'
+gem 'awesome_print'
+gem 'whenever'
+gem 'mini_magick'
+gem 'aws-sdk-s3', require: false
+gem 'kaminari'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

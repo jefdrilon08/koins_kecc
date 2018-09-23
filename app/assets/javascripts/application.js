@@ -16,3 +16,7 @@
 //= require bootstrap/dist/js/bootstrap
 //= require coreui.min
 //= require mustache/mustache
+//= require datatables.net/js/jquery.dataTables
+//= require datatables.net-bs4/js/dataTables.bootstrap4
+//= require datatables.net-fixedheader/js/dataTables.fixedHeader
+//= require datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4

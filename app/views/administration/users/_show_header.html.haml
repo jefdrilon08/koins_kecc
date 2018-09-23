@@ -1,0 +1,19 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-lock
+    Administration
+  %li.breadcrumb-item
+    = link_to administration_users_path do
+      .fa.fa-users
+      Users
+  %li.breadcrumb-item
+    .fa.fa-user
+    User: #{@user.full_name}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to edit_administration_user_path(@user), class: 'btn' do
+        .fa.fa-pencil-alt
+        Edit
+      = link_to edit_administration_user_path(@user, change_password: true), class: 'btn' do
+        .fa.fa-unlock-alt
+        Change Password

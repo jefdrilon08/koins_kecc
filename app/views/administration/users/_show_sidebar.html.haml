@@ -1,0 +1,21 @@
+.card
+  .card-body
+    %center
+      - if @user.profile_picture.attached?
+        = image_tag @user.profile_picture.variant(resize: "128x128"), width: "128", height: "128", class: "img-avatar img-avatar-bordered"
+      - else
+        = image_tag @user.profile_picture_url, width: "128", height: "128", class: "img-avatar img-avatar-bordered"
+    %br
+    %hr
+    %center
+      %h5
+        #{@user.full_name}
+        %br
+        %small.text-muted
+          #{@user.username}
+    %table.table.table-sm
+      %tr
+        %th
+          Email
+        %td.text-muted
+          #{@user.email}

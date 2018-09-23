@@ -1,15 +1,46 @@
 class User < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  ROLES = [
+    "OAS",
+    "BK",
+    "SBK",
+    "CM",
+    "SO",
+    "FM",
+    "AM",
+    "MIS",
+    "ACC"
+  ]
 
   validates :username, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :identification_number, presence: true, uniqueness: true
 
+  # ActiveStorage
+  has_one_attached :profile_picture
+
+  serialize :roles, Array
+
   attr_accessor :login
+
+  def profile_picture_url
+    if self.profile_picture.attached?
+      return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+    else
+      "#{ENV['HOST']}/#{ ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
+    end
+  end
+
+  def full_name
+    "#{last_name.upcase}, #{first_name.upcase}"
+  end
 
   def login=(login)
     @login  = login

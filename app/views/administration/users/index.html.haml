@@ -10,3 +10,10 @@
           - else
             %p
               No users found
+
+= javascript_include_tag "administration/users/Index"
+
+:javascript
+  $(document).ready(function() {
+    Index.init();
+  });

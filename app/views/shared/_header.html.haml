@@ -8,14 +8,14 @@
     %li.nav-item.dropdown
       = link_to "#", class: "nav-link dropdown-toggle nav-link", data: { toggle: "dropdown" }, role: "button", "aria-hashpopup" => "true", "aria-expanded" => "true" do
         %span.d-md-down-none
-          [USERNAME]
+          #{current_user.username}
       .dropdown-menu.dropdown-menu-right
         .dropdown-header.text-center
           Settings
         = link_to "#", class: "dropdown-item" do
           %i.fa.fa-sync
           Change Password
-        = link_to "#", method: :delete, class: 'dropdown-item' do
+        = link_to destroy_user_session_path, method: :delete, class: 'dropdown-item' do
           %i.fa.fa-times
           Logout
   %button.navbar-toggler.sidebar-toggler.d-md-down-none{ data: { toggle: 'sidebar-show' } }
