@@ -1,1 +1,12 @@
 = render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @users.size > 0
+            = render partial: "index_list"
+          - else
+            %p
+              No users found

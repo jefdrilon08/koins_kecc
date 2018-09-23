@@ -3,8 +3,12 @@
     .fa.fa-lock
     Administration
   %li.breadcrumb-item
-    .fa.fa-users
-    Users
+    = link_to administration_users_path do
+      .fa.fa-users
+      Users
+  %li.breadcrumb-item
+    .fa.fa-plus
+    New User
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       = link_to new_administration_user_path, class: 'btn' do

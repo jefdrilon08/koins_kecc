@@ -15,6 +15,7 @@ gem 'dotenv-rails'
 gem 'haml'
 gem 'font-awesome-sass'
 gem 'devise'
+gem 'simple_form'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

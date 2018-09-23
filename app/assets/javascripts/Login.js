@@ -7,7 +7,6 @@ var Login = (function() {
   var $inputUsername;
   var $inputPassword;
   var $btnLogin;
-  var $btnContactSupport;
 
   var authenticityToken;
 
@@ -18,7 +17,6 @@ var Login = (function() {
     $inputUsername      = $("#input-username");
     $inputPassword      = $("#input-password");
     $btnLogin           = $("#btn-login");
-    $btnContactSupport  = $("#btn-contact-support");
     $message            = $(".message");
   };
 
@@ -38,7 +36,7 @@ var Login = (function() {
         data: data,
         dataType: 'json',
         success: function(response) {
-          window.location.href = "/dashboard";
+          window.location.href = "/";
         },
         error: function(response) {
           try {
@@ -53,6 +51,7 @@ var Login = (function() {
 
             _toggleInput();
           } catch(e) {
+            console.log(e);
             $message.html("Something went wrong...");
             _toggleInput();
           }
