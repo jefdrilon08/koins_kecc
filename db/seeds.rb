@@ -19,3 +19,35 @@ User.create!(
     }
   ]
 )
+
+1..100.times do |i|
+  AccountingCode.create!(
+    code: "ASSETS-#{i}",
+    name: "ASSETS-#{i}",
+    category: "ASSETS"
+  )
+
+  AccountingCode.create!(
+    code: "LIABILITIES-#{i}",
+    name: "LIABILITIES-#{i}",
+    category: "LIABILITIES"
+  )
+
+  AccountingCode.create!(
+    code: "EQUITIES-#{i}",
+    name: "EQUITIES-#{i}",
+    category: "EQUITIES"
+  )
+
+  AccountingCode.create!(
+    code: "EXPENSES-#{i}",
+    name: "EXPENSES-#{i}",
+    category: "EXPENSES"
+  )
+
+  AccountingCode.create!(
+    code: "INCOME-#{i}",
+    name: "INCOME-#{i}",
+    category: "INCOME"
+  )
+end
