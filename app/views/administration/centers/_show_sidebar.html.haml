@@ -1,0 +1,15 @@
+.card
+  .card-body
+    %center
+      %h4
+        #{@center.name}
+        %br
+        %small.text-muted
+          #{@center.short_name}
+    %table.table.table-sm
+      %tr
+        %th
+          Branch
+        %td.text-muted.text-right
+          #{@center.branch.name}
+      

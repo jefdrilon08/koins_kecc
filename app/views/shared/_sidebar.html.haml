@@ -19,3 +19,19 @@
         = link_to administration_users_path, class: 'nav-link' do
           %i.fa.fa-users
           User Management
+      %li{ class: "nav-item #{params[:controller] == 'administration/areas' ? 'active' : ''}" }
+        = link_to administration_areas_path, class: 'nav-link' do
+          %i.fa.fa-file
+          Areas 
+      %li{ class: "nav-item #{params[:controller] == 'administration/clusters' ? 'active' : ''}" }
+        = link_to administration_clusters_path, class: 'nav-link' do
+          %i.fa.fa-file
+          Clusters
+      %li{ class: "nav-item #{params[:controller] == 'administration/branches' ? 'active' : ''}" }
+        = link_to administration_branches_path, class: 'nav-link' do
+          %i.fa.fa-file
+          Branches
+      %li{ class: "nav-item #{params[:controller] == 'administration/centers' ? 'active' : ''}" }
+        = link_to administration_centers_path, class: 'nav-link' do
+          %i.fa.fa-file
+          Centers

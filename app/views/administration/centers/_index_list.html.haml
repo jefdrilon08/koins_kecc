@@ -1,0 +1,25 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th
+        Name
+      %th
+        Short Name
+      %th
+        Actions
+  %tbody
+    - @centers.each do |center|
+      %tr
+        %td
+          #{center.name.upcase}
+        %td
+          #{center.short_name.upcase}
+
+        %td
+          .btn-group
+            = link_to administration_center_path(center), class: 'btn btn-sm btn-primary' do
+              .fa.fa-search
+              Show
+            = link_to edit_administration_center_path(center), class: 'btn btn-sm btn-info' do
+              .fa.fa-pencil-alt
+              Edit

@@ -1,0 +1,11 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-lock
+    Administration
+  %li.breadcrumb-item
+    = link_to administration_clusters_path do
+      .fa.fa-users
+      Clusters
+  %li.breadcrumb-item
+    .fa.fa-pencil-alt
+    Edit Cluster: #{@cluster.name}
