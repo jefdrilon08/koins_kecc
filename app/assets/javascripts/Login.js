@@ -21,6 +21,20 @@ var Login = (function() {
   };
 
   var _bindEvents = function() {
+    $inputUsername.focus();
+
+    $inputUsername.keyup(function(e) {
+      if(e.keyCode == 13) {
+        $btnLogin.click();
+      }
+    });
+
+    $inputPassword.keyup(function(e) {
+      if(e.keyCode == 13) {
+        $btnLogin.click();
+      }
+    });
+
     $btnLogin.on("click", function() {
       var data  = {
         username: $inputUsername.val(),
@@ -50,6 +64,8 @@ var Login = (function() {
             );
 
             _toggleInput();
+
+            $inputUsername.focus();
           } catch(e) {
             console.log(e);
             $message.html("Something went wrong...");
