@@ -1,11 +1,7 @@
 module Loaders
-  class InsertAccountingCodesFromFile
+  class InsertAccountingCodesFromFile < InsertFromFile
     def initialize(params:)
-      @params     = params
-      @root       = @params[:root]
-      @filename   = @params[:filename]
-      @full_path  = "#{@root}/#{@filename}"
-      @data       = JSON.parse(File.read(@full_path)).deep_symbolize_keys!
+      super(params: params)
     end
 
     def execute!
