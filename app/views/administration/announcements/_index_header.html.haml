@@ -1,0 +1,11 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-lock
+    Administration
+  %li.breadcrumb-item
+    Announcements
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to new_administration_announcement_path, class: 'btn' do
+        .fa.fa-plus
+        New Announcement

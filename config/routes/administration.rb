@@ -4,4 +4,5 @@ namespace :administration do
   resources :clusters
   resources :branches
   resources :centers
+  resources :announcements
 end
