@@ -15,5 +15,6 @@ Rails.application.routes.draw do
   get "/download_backup", to: "pages#download_backup"
 
   draw :administration
+  draw :accounting
   draw :api
 end

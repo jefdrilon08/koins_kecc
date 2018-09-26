@@ -5,6 +5,14 @@
         = link_to root_path, class: "nav-link #{params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : ''}" do
           %i.fa.fa-tachometer-alt
           Dashboard
+
+      %li.nav-title
+        Accounting
+      %li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
+        = link_to accounting_accounting_codes_path, class: 'nav-link' do
+          %i.fa.fa-file
+          Accounting Codes
+
       %li.nav-title
         Administration
       %li{ class: "nav-item #{params[:controller] == 'administration/users' ? 'active' : ''}" }
@@ -14,21 +22,24 @@
       %li{ class: "nav-item #{params[:controller] == 'administration/areas' ? 'active' : ''}" }
         = link_to administration_areas_path, class: 'nav-link' do
           %i.fa.fa-file
-          Areas Management
-
+          Areas 
       %li{ class: "nav-item #{params[:controller] == 'administration/clusters' ? 'active' : ''}" }
         = link_to administration_clusters_path, class: 'nav-link' do
           %i.fa.fa-file
-          Cluster Management
+          Clusters
       %li{ class: "nav-item #{params[:controller] == 'administration/branches' ? 'active' : ''}" }
         = link_to administration_branches_path, class: 'nav-link' do
           %i.fa.fa-file
-          Branch Management
+          Branches
       %li{ class: "nav-item #{params[:controller] == 'administration/centers' ? 'active' : ''}" }
         = link_to administration_centers_path, class: 'nav-link' do
           %i.fa.fa-file
+<<<<<<< HEAD
           Center Management
       %li{ class: "nav-item #{params[:controller] == 'administration/announcements' ? 'active' : ''}" }
         = link_to administration_announcements_path, class: 'nav-link' do
           %i.fa.fa-bullhorn
           Announcements Management
+=======
+          Centers
+>>>>>>> d2d16fbc054ef1739d0857b232d820f89b915440
