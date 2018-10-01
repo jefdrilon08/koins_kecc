@@ -63,7 +63,9 @@ export default class IndexDisplay extends React.Component {
               accessor: "name",
               Cell: row => (
                 <strong>
-                  {row.original.name}
+                  <a href={"/members/" + row.original.id}>
+                    {row.original.name}
+                  </a>
                 </strong>
               )
             }

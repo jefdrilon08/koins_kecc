@@ -8,6 +8,7 @@ module Api
 
         members.each do |o|
           data << {
+            id: o.id,
             name: o.full_name
           }
         end

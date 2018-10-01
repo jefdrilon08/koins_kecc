@@ -1,4 +1,30 @@
 namespace :load do
+  task :loans_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertLoansFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
+  task :loan_products_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertLoanProductsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
   task :project_types_from_file => :environment do
     puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 

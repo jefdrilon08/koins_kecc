@@ -39,3 +39,6 @@
 
 # Ignore react generated files
 /app/assets/javascripts/*.react.js
+
+# scripts
+/bin/dev_reset.sh
