@@ -38,4 +38,8 @@
       %li{ class: "nav-item #{params[:controller] == 'administration/centers' ? 'active' : ''}" }
         = link_to administration_centers_path, class: 'nav-link' do
           %i.fa.fa-file
-          Centers
+          Center Management
+      %li{ class: "nav-item #{params[:controller] == 'administration/announcements' ? 'active' : ''}" }
+        = link_to administration_announcements_path, class: 'nav-link' do
+          %i.fa.fa-bullhorn
+          Announcements Management

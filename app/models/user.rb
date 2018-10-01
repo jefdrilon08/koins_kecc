@@ -25,6 +25,7 @@ class User < ApplicationRecord
 
   # ActiveStorage
   has_one_attached :profile_picture
+  has_many :announcements
 
   serialize :roles, Array
 

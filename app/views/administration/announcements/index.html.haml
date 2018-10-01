@@ -1,0 +1,20 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @announcements.size > 0
+
+            = render partial: "index_list"
+          - else
+            %p
+              No announcement found
+
+= javascript_include_tag "administration/announcements/Index"
+
+:javascript
+  $(document).ready(function() {
+    Index.init();
+  });
