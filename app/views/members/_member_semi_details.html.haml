@@ -1,0 +1,35 @@
+.card
+  .card-body#semi_member_details
+    %center
+      = image_tag "image.jpg"
+      %h2
+        #{@member.full_name}
+      %span.text-muted
+        #{@member.identification_number}
+    %ul.list-group.list-group-unbordered
+      %li.list-group-item
+        Branch
+        .value.text-muted
+          %b
+            #{@member.branch.name.upcase}
+            
+      %li.list-group-item
+        Center
+        .value.text-muted
+          %b
+            #{@member.center.name.upcase}
+
+      %li.list-group-item
+        Status
+        .value.text-muted
+          %b
+            #{@member.status.upcase}
+
+      %li.list-group-item
+        Insurance Status
+        .value.text-muted
+          %b
+            #{@member.insurance_status.upcase} 
+    = link_to "#", class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
+      %i.fa.fa-edit
+      Edit Record
