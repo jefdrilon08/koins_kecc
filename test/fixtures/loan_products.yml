@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  max_loan_amount: 9.99
+  min_loan_amount: 9.99
+  denomination: 9.99
+  insured: false
+  is_entry_point: false
+  monthly_interest_rate: 9.99
+
+two:
+  name: MyString
+  max_loan_amount: 9.99
+  min_loan_amount: 9.99
+  denomination: 9.99
+  insured: false
+  is_entry_point: false
+  monthly_interest_rate: 9.99

@@ -36,3 +36,6 @@
 
 # Ignore backup directory
 /db_backup
+
+# Ignore react generated files
+/app/assets/javascripts/*.react.js
