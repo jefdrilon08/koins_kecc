@@ -5,7 +5,8 @@ module.exports = {
   context: __dirname,
   devtool: debug ? "inline-sourcemap" : null,
   entry: {
-    MembersIndex: "./react/members/Index.js"
+    MembersIndex: "./react/members/Index.js",
+    MemberAccountsSavingsIndex: "./react/member_accounts/savings/Index.js"
   },
   module: {
     rules: [

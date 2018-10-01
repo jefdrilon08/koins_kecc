@@ -14,3 +14,6 @@ bundle exec rails load:project_type_categories_from_file ROOT=$ROOT FILENAME=pro
 bundle exec rails load:project_types_from_file ROOT=$ROOT FILENAME=project-types-v2.json
 bundle exec rails load:loan_products_from_file ROOT=$ROOT FILENAME=loan-products-v2.json
 bundle exec rails load:loans_from_file ROOT=$ROOT FILENAME=loans-v2.json
+bundle exec rails load:amortization_schedule_entries_from_file ROOT=$ROOT FILENAME=amortization-schedule-entries-v2.json
+bundle exec rails load:member_accounts_from_file ROOT=$ROOT FILENAME=member-accounts-v2.json
+bundle exec rails load:member_account_transactions_from_file ROOT=$ROOT FILENAME=member-account-transactions-v2.json

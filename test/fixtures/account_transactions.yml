@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subsidiary_id: 
+  subsidiary_type: MyString
+  amount: 9.99
+  transaction_type: MyString
+  transacted_at: 2018-10-01 15:04:28
+  status: MyString
+  data: 
+
+two:
+  subsidiary_id: 
+  subsidiary_type: MyString
+  amount: 9.99
+  transaction_type: MyString
+  transacted_at: 2018-10-01 15:04:28
+  status: MyString
+  data: 

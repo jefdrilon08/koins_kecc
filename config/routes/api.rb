@@ -5,5 +5,8 @@ namespace :api do
 
     # Members
     get "/members", to: "members#index"
+
+    # Member accounts
+    get "/savings_accounts", to: "savings_accounts#index"
   end
 end

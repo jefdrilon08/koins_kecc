@@ -22,6 +22,7 @@ Rails.application.config.assets.precompile += [
   "administration/clusters/Index.js",
   "administration/branches/Index.js",
   "administration/centers/Index.js",
+  "administration/announcements/Index.js",
   "MembersIndex.min.react.js",
-  "administration/announcements/Index.js"
+  "MemberAccountsSavingsIndex.min.react.js"
 ]

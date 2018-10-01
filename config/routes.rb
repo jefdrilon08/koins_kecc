@@ -8,8 +8,12 @@ Rails.application.routes.draw do
 
   root to: "pages#index"
 
+  # Members
   get "/members", to: "members#index"
   get "/members/:id", to: "members#show"
+
+  # Accounts
+  get "/savings_accounts", to: "savings_accounts#index"
 
   def draw(routes_name)
     instance_eval(File.read(Rails.root.join("config/routes/#{routes_name}.rb")))

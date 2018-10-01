@@ -10,11 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_30_114105) do
+ActiveRecord::Schema.define(version: 2018_10_01_070428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "account_transactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "subsidiary_id"
+    t.string "subsidiary_type"
+    t.decimal "amount"
+    t.string "transaction_type"
+    t.datetime "transacted_at"
+    t.string "status"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "accounting_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
@@ -60,6 +72,23 @@ ActiveRecord::Schema.define(version: 2018_09_30_114105) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "amortization_schedule_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.decimal "amount_due"
+    t.decimal "principal"
+    t.decimal "interest"
+    t.decimal "principal_paid"
+    t.decimal "interest_paid"
+    t.decimal "principal_balance"
+    t.decimal "interest_balance"
+    t.date "due_date"
+    t.boolean "is_paid"
+    t.uuid "loan_id"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["loan_id"], name: "index_amortization_schedule_entries_on_loan_id"
   end
 
   create_table "announcements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -161,6 +190,23 @@ ActiveRecord::Schema.define(version: 2018_09_30_114105) do
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
   end
 
+  create_table "member_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.string "account_type"
+    t.string "account_subtype"
+    t.decimal "balance"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.string "status"
+    t.decimal "maintaining_balance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "data"
+    t.index ["branch_id"], name: "index_member_accounts_on_branch_id"
+    t.index ["center_id"], name: "index_member_accounts_on_center_id"
+    t.index ["member_id"], name: "index_member_accounts_on_member_id"
+  end
+
   create_table "members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "center_id"
     t.uuid "branch_id"
@@ -228,6 +274,7 @@ ActiveRecord::Schema.define(version: 2018_09_30_114105) do
   end
 
   add_foreign_key "accounting_entries", "branches"
+  add_foreign_key "amortization_schedule_entries", "loans"
   add_foreign_key "branches", "clusters"
   add_foreign_key "centers", "branches"
   add_foreign_key "clusters", "areas"
@@ -238,6 +285,9 @@ ActiveRecord::Schema.define(version: 2018_09_30_114105) do
   add_foreign_key "loans", "loan_products"
   add_foreign_key "loans", "members"
   add_foreign_key "loans", "project_types"
+  add_foreign_key "member_accounts", "branches"
+  add_foreign_key "member_accounts", "centers"
+  add_foreign_key "member_accounts", "members"
   add_foreign_key "members", "branches"
   add_foreign_key "members", "centers"
   add_foreign_key "project_types", "project_type_categories"

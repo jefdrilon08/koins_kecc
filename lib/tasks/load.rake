@@ -1,4 +1,43 @@
 namespace :load do
+  task :member_account_transactions_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertMemberAccountTransactionsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
+  task :member_accounts_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertMemberAccountsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
+  task :amortization_schedule_entries_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertAmortizationScheduleEntriesFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
   task :loans_from_file => :environment do
     puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 
