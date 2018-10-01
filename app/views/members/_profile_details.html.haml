@@ -1,0 +1,112 @@
+:css 
+  .table th, .table td {
+    border: none!important;
+    padding: 8px;
+  }
+
+
+%h3.text-muted
+  Basic Information
+%table.table.table-responsive#profile-table
+  %tbody
+    %tr
+      %th{:width => "300px;"} Pangalan
+      %td= @member.full_name
+    %tr
+      %th Identification Number
+      %td= @member.identification_number
+    %tr
+      %th Kasarian
+      %td= @member.gender.upcase
+    %tr
+      %th Edad
+      %td
+
+
+%h3.text-muted
+  Other Information
+
+%table.table.table-responsive#profile-table
+  %tbody
+    %tr
+      %th{:width => "300px;"} Numero ng Mobile
+      %td= @member.mobile_number.try(:upcase)
+    %tr
+      %th Numero ng Telepono
+      %td= @member.home_number.try(:upcase)
+    %tr
+      %th Katayuang Sibil
+      %td= @member.civil_status.try(:upcase)
+    %tr
+      %th Relihiyon
+      %td= @member.religion.try(:name).try(:upcase)
+    %tr
+      %th Kapanganakan
+      %td= @member.date_of_birth.strftime("%B %d, %Y").try(:upcase)
+    %tr
+      %th Lugar ng Kapanganakan
+      %td= @member.place_of_birth.try(:upcase)
+    %tr
+      %th PHILHEALTH #:
+      %td= @member.try(:phil_health_number_formatted)
+    %tr
+      %th PAG-IBIG #:
+      %td= @member.try(:pag_ibig_number_formatted)
+    %tr
+      %th SSS #:
+      %td= @member.try(:sss_number_formatted)
+    %tr
+      %th TIN #:
+      %td
+    %tr
+      %th Bank / Account Type
+      %td
+    %tr
+      %th Asawa / Kinakasama:
+      %td
+    %tr
+      %th Uri ng Paninirahan
+      %td
+    %tr
+      %th Tagal na sa Tirahan
+      %td
+    %tr
+      %th Ipinakitang Katibayan
+      %td
+    %tr
+      %th Bilang ng Anak
+      %td
+    %tr
+      %th Ilan ang Nag-aaral (Elementary)
+      %td
+    %tr
+      %th Ilan ang Nag-aaral (High School)
+      %td
+    %tr
+      %th Ilan ang Nag-aaral (College)
+      %td      
+    %tr
+      %th KDCI Member Since:
+      %td
+    %tr
+      %th Reinstatement Date:
+      %td
+    %tr
+      %th Is Reinstated:
+      %td YES
+    %tr
+      %th Is Reinstate:
+      %td NO
+
+    %tr
+      %th Old Recognition Date:
+      %td
+    %tr
+      %th Certificate No.:
+      %td
+    %tr
+      %th Old Certificate No.:
+      %td
+%h3.text-muted
+  Beneficiaries
+= render partial: "show_beneficiaries"

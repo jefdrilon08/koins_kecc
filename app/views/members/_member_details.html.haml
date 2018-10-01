@@ -1,0 +1,27 @@
+%ul.nav.nav-tabs{:role => "tablist"}
+  %li.nav-item
+    %a.nav-link.active.show{"aria-controls" => "home", "aria-selected" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"} Profile
+  %li.nav-item
+    %a.nav-link{"aria-controls" => "loans", "aria-selected" => "false", "data-toggle" => "tab", :href => "#loans", :role => "tab"} Loans
+  %li.nav-item
+    %a.nav-link{"aria-controls" => "saving_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#saving_accounts", :role => "tab"} Saving Accounts
+  %li.nav-item
+    %a.nav-link{"aria-controls" => "insurance_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#insurance_accounts", :role => "tab"} Insurance Accounts
+  %li.nav-item
+    %a.nav-link{"aria-controls" => "equity_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#equity_accounts", :role => "tab"} Equity Accounts
+.tab-content
+  #home.tab-pane.active.show{:role => "tabpanel"}
+    = render partial: "profile_details"
+  #loans.tab-pane{:role => "tabpanel"}
+    2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  #saving_accounts.tab-pane{:role => "tabpanel"}
+    3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  #insurance_accounts.tab-pane{:role => "tabpanel"}
+    3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+  #equity_accounts.tab-pane{:role => "tabpanel"}
+    3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+    irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

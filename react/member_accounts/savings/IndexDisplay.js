@@ -77,7 +77,7 @@ export default class IndexDisplay extends React.Component {
               accessor: "member_full_name",
               Cell: row => (
                 <strong>
-                  <a href={"/members/" + row.original.id} target={"_blank"}>
+                  <a href={"/members/" + row.original.member_id} target={"_blank"}>
                     {row.original.member_full_name}
                     <br/>
                     <small className="text-muted">
