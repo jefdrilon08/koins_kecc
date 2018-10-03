@@ -16,6 +16,9 @@ Rails.application.routes.draw do
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
 
+  # Accounting
+  get "/accounting/trial_balance", to: "accounting#trial_balance"
+
   def draw(routes_name)
     instance_eval(File.read(Rails.root.join("config/routes/#{routes_name}.rb")))
   end

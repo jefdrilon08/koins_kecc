@@ -8,5 +8,8 @@ namespace :api do
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
+
+    # Accounting
+    get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
   end
 end

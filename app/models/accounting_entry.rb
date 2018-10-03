@@ -20,7 +20,7 @@ class AccountingEntry < ApplicationRecord
   validates :date_prepared, presence: true
   validates :status, presence: true
 
-  scope :approved, -> { where(status: "approved").order("date_prepared, date_approved DESC") }
+  scope :approved, -> { where(status: "approved").order("date_prepared, date_posted DESC") }
   scope :pending, -> { where(status: "pending").order("date_prepared DESC") }
 
   def approved?

@@ -23,6 +23,10 @@
 
       %li.nav-title
         Accounting
+      %li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'trial_balance' ? 'active' : ''}" }
+        = link_to "/accounting/trial_balance", class: 'nav-link' do
+          %i.nav-icon.fa.fa-balance-scale
+          Trial Balance
       %li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
         = link_to accounting_accounting_codes_path, class: 'nav-link' do
           %i.nav-icon.fa.fa-file
