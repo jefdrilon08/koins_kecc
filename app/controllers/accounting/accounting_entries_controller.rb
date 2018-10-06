@@ -5,5 +5,8 @@ module Accounting
     def show
       @accounting_entry = AccountingEntry.find(params[:id])
     end
+
+    def form
+    end
   end
 end

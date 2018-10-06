@@ -5,3 +5,8 @@
   %li.breadcrumb-item
     .fa.fa-book
     #{book}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to accounting_accounting_entry_form_path(book: book), class: "btn" do
+        .fa.fa-plus
+        New Entry

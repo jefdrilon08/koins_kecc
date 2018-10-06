@@ -8,7 +8,8 @@ module.exports = {
     MembersIndex: "./react/members/Index.js",
     MemberAccountsSavingsIndex: "./react/member_accounts/savings/Index.js",
     AccountingTrialBalance: "./react/accounting/TrialBalance.js",
-    AccountingGeneralLedger: "./react/accounting/GeneralLedger.js"
+    AccountingGeneralLedger: "./react/accounting/GeneralLedger.js",
+    AccountingEntryForm: "./react/accounting/AccountingEntryForm.js"
   },
   module: {
     rules: [

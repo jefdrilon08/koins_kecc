@@ -3,3 +3,10 @@
 .container-fluid
   .row
     .col
+      .card
+        .card-body
+          #content
+
+#parameters{ data: { id: params[:id], book: accounting_book_mnemonic(params[:book]) } }
+
+= javascript_include_tag "AccountingEntryForm.min.react"

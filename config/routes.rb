@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   namespace :accounting do
     get "/accounting_entries/:id", to: "accounting_entries#show"
+    get "/accounting_entry/form", to: "accounting_entries#form", as: :accounting_entry_form
   end
 
   def draw(routes_name)

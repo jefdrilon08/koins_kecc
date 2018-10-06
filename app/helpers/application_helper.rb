@@ -8,4 +8,14 @@ module ApplicationHelper
       return "bg-info"
     end
   end
+
+  def accounting_book_mnemonic(book)
+    if book == "Cash Receipts"
+      return "CRB"
+    elsif book == "Cash Disbursements"
+      return "CDB"
+    else
+      return "JVB"
+    end
+  end
 end
