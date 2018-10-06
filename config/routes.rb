@@ -18,6 +18,10 @@ Rails.application.routes.draw do
 
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
+  get "/accounting/general_ledger", to: "accounting#general_ledger"
+  get "/accounting/books/jvb", to: "accounting#jvb", as: :accounting_books_jvb
+  get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
+  get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
 
   def draw(routes_name)
     instance_eval(File.read(Rails.root.join("config/routes/#{routes_name}.rb")))

@@ -11,5 +11,6 @@ namespace :api do
 
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
+    get "/accounting/fetch_general_ledger", to: "accounting#fetch_general_ledger"
   end
 end

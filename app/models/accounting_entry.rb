@@ -23,6 +23,11 @@ class AccountingEntry < ApplicationRecord
   scope :approved, -> { where(status: "approved").order("date_prepared, date_posted DESC") }
   scope :pending, -> { where(status: "pending").order("date_prepared DESC") }
 
+  scope :jvb, -> { includes(:journal_entries).where(book: "JVB").order("date_prepared DESC") }
+  scope :crb, -> { includes(:journal_entries).where(book: "CRB").order("date_prepared DESC") }
+  scope :cdb, -> { includes(:journal_entries).where(book: "CDB").order("date_prepared DESC") }
+  scope :misc, -> { includes(:journal_entries).where(book: "MISC").order("date_prepared DESC") }
+
   def approved?
     self.status == "approved"
   end

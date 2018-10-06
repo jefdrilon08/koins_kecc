@@ -1,0 +1,31 @@
+%li.nav-title
+  Accounting
+%li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'trial_balance' ? 'active' : ''}" }
+  = link_to "/accounting/trial_balance", class: 'nav-link' do
+    %i.nav-icon.fa.fa-balance-scale
+    Trial Balance
+  = link_to "/accounting/general_ledger", class: 'nav-link' do
+    %i.nav-icon.fa.fa-atlas
+    General Ledger
+%li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
+  = link_to accounting_accounting_codes_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Accounts
+
+%li{ class: "nav-item nav-dropdown" }
+  = link_to "#", class: "nav-link nav-dropdown-toggle" do
+    %i.nav-icon.fa.fa-book-reader
+    Books
+  %ul.nav-dropdown-items
+    %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'jvb' ? 'active' : ''}" }
+      = link_to accounting_books_jvb_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-book
+        General Vouchers
+    %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'crb' ? 'active' : ''}" }
+      = link_to accounting_books_crb_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-book
+        Cash Receipts
+    %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'cdb' ? 'active' : ''}" }
+      = link_to accounting_books_cdb_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-book
+        Cash Disbursements

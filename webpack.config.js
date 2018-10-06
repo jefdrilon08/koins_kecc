@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     MembersIndex: "./react/members/Index.js",
     MemberAccountsSavingsIndex: "./react/member_accounts/savings/Index.js",
-    AccountingTrialBalance: "./react/accounting/TrialBalance.js"
+    AccountingTrialBalance: "./react/accounting/TrialBalance.js",
+    AccountingGeneralLedger: "./react/accounting/GeneralLedger.js"
   },
   module: {
     rules: [
@@ -34,6 +35,6 @@ module.exports = {
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+    new webpack.optimize.UglifyJsPlugin({ mangle: true, sourcemap: false }),
   ],
 };

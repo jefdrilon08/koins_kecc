@@ -1,0 +1,19 @@
+%li.nav-title
+  Operations
+%li.nav-item
+  = link_to root_path, class: "nav-link #{params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : ''}" do
+    %i.nav-icon.fa.fa-tachometer-alt
+    Dashboard
+%li.nav-item
+  = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
+    %i.nav-icon.fa.fa-users
+    Members
+%li{ class: "nav-item nav-dropdown" }
+  = link_to "#", class: "nav-link nav-dropdown-toggle" do
+    %i.nav-icon.fa.fa-money-check
+    Accounts
+  %ul.nav-dropdown-items
+    %li{ class: "nav-item #{params[:controller] == 'savings_accounts' ? 'active' : ''}" }
+      = link_to savings_accounts_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-piggy-bank
+        Savings

@@ -7,12 +7,13 @@ import Select from 'react-select';
 import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
+import GeneralLedgerEntry from './GeneralLedgerEntry';
 
 import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default class TrialBalanceDisplay extends React.Component {
+export default class GeneralLedgerDisplay extends React.Component {
   constructor(props) {
     super(props);
     
@@ -54,7 +55,7 @@ export default class TrialBalanceDisplay extends React.Component {
     var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
 
     $.ajax({
-      url: "/api/v1/accounting/fetch_trial_balance",
+      url: "/api/v1/accounting/fetch_general_ledger",
       method: "GET",
       data: {
         start_date: start_date,
@@ -64,7 +65,7 @@ export default class TrialBalanceDisplay extends React.Component {
       success: function(response) {
         console.log(response);
         var data  = response.data;
-
+        
         context.setState({
           isLoading: false,
           data: data
@@ -108,76 +109,30 @@ export default class TrialBalanceDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
+
     if(!state.isLoading && state.data != false) {
+      var generalLedgerEntries  = state.data.entries;
+      console.log("generalLedgerEntries:");
+      console.log(generalLedgerEntries);
+
+      var generalLedgerComponents = [];
+
+      for(var i = 0; i < generalLedgerEntries.length; i++) {
+
+        generalLedgerComponents.push(
+          <div>
+            <GeneralLedgerEntry
+              data={generalLedgerEntries[i]}
+              key={"glc-" + i}
+            />
+          </div>
+        );
+      }
+
       return  (
-        <ReactTable
-          columns={[
-            {
-              Header: "Accounting Code",
-              accessor: "name",
-              Cell: row => (
-                <strong>
-                  {row.original.name}
-                </strong>
-              )
-            },
-            {
-              Header: "Beginning DR",
-              accessor: "beginning_debit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.beginning_debit)}
-                </div>
-              )
-            },
-            {
-              Header: "Beginning CR",
-              accessor: "beginning_credit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.beginning_credit)}
-                </div>
-              )
-            },
-            {
-              Header: "Current DR",
-              accessor: "current_debit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.current_debit)}
-                </div>
-              )
-            },
-            {
-              Header: "Current CR",
-              accessor: "current_credit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.current_credit)}
-                </div>
-              )
-            },
-            {
-              Header: "Ending DR",
-              accessor: "ending_debit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.ending_debit)}
-                </div>
-              )
-            },
-            {
-              Header: "Ending CR",
-              accessor: "ending_credit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.ending_credit)}
-                </div>
-              )
-            }
-          ]}
-          data={state.data.entries}
-        />
+        <div>
+          {generalLedgerComponents}
+        </div>
       );
     }
   }
@@ -186,6 +141,9 @@ export default class TrialBalanceDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
+    var startDate = state.start_date.format('YYYY-MM-DD');
+    var endDate   = state.end_date.format('YYYY-MM-DD');
+
     if(state.isLoading) {
       return  (
         <SkCubeLoading/>
@@ -193,6 +151,13 @@ export default class TrialBalanceDisplay extends React.Component {
     } else if(state.data != false) {
       return (
         <div>
+          <div className="row">
+            <div className="col">
+              <h6>
+                General Ledger {startDate} to {endDate}
+              </h6>
+            </div>
+          </div>
           {context.renderTable()}
         </div>
       );

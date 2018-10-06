@@ -1,10 +1,10 @@
 class AccountingCode < ApplicationRecord
   CATEGORIES  = [
-    "ASSETS",
-    "LIABILITIES",
-    "EQUITIES",
-    "EXPENSES",
-    "INCOME"
+    "ASSETS",       # DR
+    "LIABILITIES",  # CR
+    "EQUITIES",     # CR
+    "EXPENSES",     # DR
+    "INCOME"        # CR 
   ]
 
   validates :name, presence: true, uniqueness: true
@@ -17,7 +17,17 @@ class AccountingCode < ApplicationRecord
   scope :income, -> { where(category: "INCOME").order("code ASC") }
   scope :liabilities, -> { where(category: "LIABILITIES").order("code ASC") }
 
+  has_many :journal_entries
+
   before_validation :load_defaults
+
+  def debit_entry?
+    ["ASSETS", "EXPENSES"].include?(self.category)
+  end
+
+  def credit_entry?
+    !self.debit_entry?
+  end
 
   def load_defaults
     if name.present?

@@ -1,0 +1,32 @@
+%li.nav-title
+  Administration
+%li{ class: "nav-item #{params[:controller] == 'administration/users' ? 'active' : ''}" }
+  = link_to administration_users_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    User Management
+
+%li{ class: "nav-item nav-dropdown" }
+  = link_to "#", class: "nav-link nav-dropdown-toggle" do
+    %i.nav-icon.fa.fa-cogs
+    Settings
+  %ul.nav-dropdown-items
+    %li{ class: "nav-item #{params[:controller] == 'administration/areas' ? 'active' : ''}" }
+      = link_to administration_areas_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Areas 
+    %li{ class: "nav-item #{params[:controller] == 'administration/clusters' ? 'active' : ''}" }
+      = link_to administration_clusters_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Clusters
+    %li{ class: "nav-item #{params[:controller] == 'administration/branches' ? 'active' : ''}" }
+      = link_to administration_branches_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Branches
+    %li{ class: "nav-item #{params[:controller] == 'administration/centers' ? 'active' : ''}" }
+      = link_to administration_centers_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Centers
+%li{ class: "nav-item #{params[:controller] == 'administration/announcements' ? 'active' : ''}" }
+  = link_to administration_announcements_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-bullhorn
+    Announcements
