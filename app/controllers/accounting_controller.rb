@@ -8,19 +8,19 @@ class AccountingController < ApplicationController
   end
 
   def jvb
-    @records  = AccountingEntry.jvb
+    @records  = AccountingEntry.jvb.order("reference_number DESC")
 
     @records  = @records.page(params[:page]).per(20)
   end
 
   def crb
-    @records  = AccountingEntry.crb
+    @records  = AccountingEntry.crb.order("reference_number DESC")
 
     @records  = @records.page(params[:page]).per(20)
   end
 
   def cdb
-    @records  = AccountingEntry.cdb
+    @records  = AccountingEntry.cdb.order("reference_number DESC")
 
     @records  = @records.page(params[:page]).per(20)
   end

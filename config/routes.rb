@@ -23,6 +23,10 @@ Rails.application.routes.draw do
   get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
 
+  namespace :accounting do
+    get "/accounting_entries/:id", to: "accounting_entries#show"
+  end
+
   def draw(routes_name)
     instance_eval(File.read(Rails.root.join("config/routes/#{routes_name}.rb")))
   end

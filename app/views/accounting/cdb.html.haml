@@ -1,1 +1,9 @@
 = render partial: "books_header", locals: { book: "Cash Disbursements" }
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "book_records", locals: { records: @records }
+          = paginate @records

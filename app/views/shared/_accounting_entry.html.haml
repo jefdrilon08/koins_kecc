@@ -1,12 +1,48 @@
 %div{ class: "card #{accounting_entry.approved? ? 'border-success' : 'border-danger'}" }
-  %div{ class: "card-header #{accounting_entry.approved? ? 'bordered-success bg-success text-white' : 'border-danger'}" }
+  %div{ class: "card-header #{accounting_entry.approved? ? "bordered-success #{accounting_entry_context_class(accounting_entry.book)} text-white" : 'border-danger'}" }
     .row
       .col-md-6
         %strong
-          #{accounting_entry.reference_number}
+          - if accounting_entry.approved?
+            #{accounting_entry.reference_number} - 
+            #{accounting_entry.date_posted.strftime("%B %d, %Y")}
       .col-md-6
         .text-right
           .text-muted
             .fa.fa-store
             #{accounting_entry.branch.to_s}
   .card-body
+    %table.table.table-sm
+      %tr
+        %th{ width: "50%" }
+          Accounting Code
+        %th.text-right{ width: "25%" }
+          Debit
+        %th.text-right{ width: "25%" }
+          Credit
+      - accounting_entry.journal_entries.debit.each do |o|
+        %tr
+          %td
+            #{o.accounting_code.name}
+          %td.text-right
+            #{number_to_currency(o.amount, unit: "")}
+          %td
+      - accounting_entry.journal_entries.credit.each do |o|
+        %tr
+          %td
+            #{o.accounting_code.name}
+          %td
+          %td.text-right
+            #{number_to_currency(o.amount, unit: "")}
+    %hr
+    .row
+      .col
+        %p
+          #{accounting_entry.particular}
+      .col
+        %p.text-right
+          %label
+            %strong
+              Approved By:
+          %br
+          #{accounting_entry.approved_by}
