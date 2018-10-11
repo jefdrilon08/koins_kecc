@@ -10,8 +10,10 @@ Rails.application.routes.draw do
 
   # Members
   get "/members", to: "members#index"
-  get "/members/:id", to: "members#show"
-  
+  get "/members/:id", to: "members#show", as: :member
+
+  # Loans
+  resources :loans, only: [:index, :show] 
 
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"

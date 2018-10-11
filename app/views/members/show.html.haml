@@ -1,78 +1,12 @@
-:css 
-  .tile_count .tile_stats_count .count {
-    font-size: 40px;
-    color: #73879C;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    font-weight: bold;
-  }
+#member-show-page
+  = render partial: "show_header"
 
-  .tile_count .tile_stats_count span {
-    font-size: 13px;
-    color: #73879C;
-  }
-
-  .tile_count .tile_stats_count:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    height: 65px;
-    margin-top: 10px;
-  }
-
-  .tile_count {
-    background-color: white;
-    padding: 10px;
-    margin-right: 4px;
-    margin-left: 4px;
-  }
-
-
-
-= render partial: "show_header"
-
-.container-fluid
-  .row.tile_count
-    .col-md-2.tile_stats_count{:style => "border-right: 2px solid #ADB2B5; height: 65px;"}
-      %span.count_top
-        %i.fa.fa-credit-card
-        LOAN BALANCE
-      .count 
-
-    .col-md-2.tile_stats_count{:style => "border-right: 2px solid #ADB2B5; height: 65px;"}
-      %span.count_top
-        %i.fa.fa-money
-        SAVINGS
-      .count
-
-    .col-md-2.tile_stats_count{:style => "border-right: 2px solid #ADB2B5; height: 65px;"}
-      %span.count_top
-        %i.fa.fa-wheelchair
-        CBU
-      .count.green 
-
-    .col-md-2.tile_stats_count{:style => "border-right: 2px solid #ADB2B5; height: 65px;"}
-      %span.count_top
-        %i.fa.fa-wheelchair
-        INSURANCE
-      .count
-
-    .col-md-2.tile_stats_count{:style => "border-right: 2px solid #ADB2B5; height: 65px;"}
-      %span.count_top
-        %i.fa.fa-balance-scale
-        EQUITY
-      .count 
-
-    .col-md-2.tile_stats_count
-      %span.count_top
-        %i.fa.fa-user
-        Total Something
-      .count 
-
-  .row{:style => "margin-top: 20px;"}
-    .col-md-4
-      = render partial: "member_semi_details"
-    .col-md-8
-      = render partial: "member_details"
+  .container-fluid
+    = render partial: "totals"
+    .row{:style => "margin-top: 20px;"}
+      .col-md-4
+        = render partial: "member_semi_details"
+      .col-md-8
+        = render partial: "member_details"
 
 = stylesheet_link_tag "member"

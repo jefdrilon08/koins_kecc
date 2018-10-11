@@ -1,0 +1,34 @@
+%h6
+  Active Loans
+
+%table.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th
+        PN Number
+      %th
+        Loan Product
+      %th.text-right
+        Total Due
+      %th.text-right
+        Total Paid
+      %th.text-right
+        Total Balance
+  %tbody
+    - @active_loans.each do |loan|
+      %tr
+        %td
+          = link_to loan_path(loan) do
+            %strong
+              #{loan.pn_number}
+        %td.text-muted
+          #{loan.loan_product}
+        %td.text-right.bg-info
+          %strong
+            #{number_to_currency(loan.total_dues, unit: "")}
+        %td.text-right.bg-success
+          %strong
+            #{number_to_currency(loan.total_paid, unit: "")}
+        %td.text-right.bg-danger
+          %strong
+            #{number_to_currency(loan.total_balance, unit: "")}

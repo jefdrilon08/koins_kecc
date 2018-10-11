@@ -1,0 +1,25 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %h5
+            Amortization Table
+          = render partial: "amortization_table"
+
+= render partial: "loans/modals/reage"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "loans/Show.js"
+
+#parameters{ data: { id: @loan.id } }
+
+:javascript
+  $(document).ready(function() {
+    var $parameters = $("#parameters");
+    var loanId      = $parameters.data("id");
+
+    Show.init(loanId);
+  });

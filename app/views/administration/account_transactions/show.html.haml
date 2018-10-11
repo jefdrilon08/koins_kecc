@@ -1,0 +1,9 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %div{ style: "background-color: black;" }
+            #{raw(ap @account_transaction)}
