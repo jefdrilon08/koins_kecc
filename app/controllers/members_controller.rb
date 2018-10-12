@@ -11,6 +11,9 @@ class MembersController < ApplicationController
     @paid_loans     = Loan.paid.where(member_id: params[:id])
     @pending_loans  = Loan.pending.where(member_id: params[:id])
 
+    @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
+    @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
+
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
   end
 end

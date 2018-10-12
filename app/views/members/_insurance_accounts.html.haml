@@ -1,0 +1,16 @@
+%table.table.table-sm.table-hover.table-bordered
+  %thead
+    %tr
+      %th
+        Type
+      %th.text-right
+        Current Balance
+  %tbody
+    - @insurance_accounts.each do |o|
+      %tr
+        %td
+          %strong
+            #{o.account_subtype}
+        %td.text-right
+          %strong
+            #{number_to_currency(o.balance, unit: "")}

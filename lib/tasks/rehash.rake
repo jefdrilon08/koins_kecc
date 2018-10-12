@@ -6,6 +6,7 @@ namespace :rehash do
     member_accounts.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing member account #{o.id}... #{progress}%%")
+      sleep(0.1)
 
       ::MemberAccounts::Rehash.new(
         member_account: o
@@ -23,6 +24,7 @@ namespace :rehash do
     loans.each_with_index do |loan, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing loan #{loan.id}... #{progress}%%")
+      sleep(0.1)
 
       ::Loans::Reage.new(
         loan: loan,

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
+  get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
 
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"

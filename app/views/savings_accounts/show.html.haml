@@ -1,0 +1,37 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %table.table.table-hover.table-sm
+            %thead
+              %tr
+                %th
+                  %center
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
+                  Beginning Balance
+                %th.text-right
+                  Amount
+                %th.text-right
+                  Ending Balance
+            %tbody
+              - @account_transactions.each do |o|
+                %tr
+                  %td
+                    %center
+                      #{o.transacted_at}
+                  %td
+                    %center
+                      #{o.transaction_type}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["beginning_balance"], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["ending_balance"], unit: "")}

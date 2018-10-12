@@ -18,5 +18,9 @@ namespace :api do
 
     # Branches
     get "/branches", to: "branches#index"
+
+    namespace :epassbook do
+      get "/members/show", to: "members#show"
+    end
   end
 end
