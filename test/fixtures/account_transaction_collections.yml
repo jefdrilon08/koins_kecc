@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  or_number: MyString
+  total_amount: 9.99
+  branch: one
+  center: one
+  status: MyString
+  transacted_at: 2018-10-11 15:11:24
+  collection_type: MyString
+  data: 
+
+two:
+  or_number: MyString
+  total_amount: 9.99
+  branch: two
+  center: two
+  status: MyString
+  transacted_at: 2018-10-11 15:11:24
+  collection_type: MyString
+  data: 

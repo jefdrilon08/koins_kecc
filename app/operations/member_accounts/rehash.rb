@@ -17,10 +17,10 @@ module MemberAccounts
 
       # Clear the beginning and ending balance
       @account_transactions.each do |o|
-        temp_data = o.data
+        temp_data = o.data.try(:to_json)
 
         if temp_data.blank?
-          temp_data = {}
+          temp_data = {}.to_json
         end
 
         temp_data = JSON.parse(temp_data).with_indifferent_access

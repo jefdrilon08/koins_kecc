@@ -1,4 +1,17 @@
 namespace :load do
+  task :billings_from_file => :environment do
+    puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertAccountTransactionCollectionsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
   task :loan_payments_from_file => :environment do
     puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 

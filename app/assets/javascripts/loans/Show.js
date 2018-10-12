@@ -41,7 +41,7 @@ var Show  = (function() {
         error: function(response) {
           var errors  = [];
           try {
-            errors  = JSON.parse(response.responseText).errors;
+            errors  = JSON.parse(response.responseText).errors.full_messages;
           } catch(err) {
             errors  = ["Something went wrong"];
             console.log(err);

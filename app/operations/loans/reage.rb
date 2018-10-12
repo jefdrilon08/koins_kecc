@@ -82,7 +82,7 @@ module Loans
       # Rehash to amort
       rehash_amort!
 
-      @loan_payments
+      @loan
     end
 
     def rehash_amort!

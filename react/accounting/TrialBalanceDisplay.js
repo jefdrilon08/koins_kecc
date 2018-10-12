@@ -26,11 +26,14 @@ export default class TrialBalanceDisplay extends React.Component {
       isLoading: false,
       start_date: moment(firstDay),
       end_date: moment(lastDay),
+      currentBranchId: "",
+      branches: [],
       data: false
     };
   }
 
   componentDidMount() {
+    this.fetchBranches();
   }
 
   numberWithCommas(x) {
@@ -47,9 +50,34 @@ export default class TrialBalanceDisplay extends React.Component {
 
   }
 
+  fetchBranches() {
+    var context = this;
+
+    $.ajax({
+      url: "/api/v1/branches",
+      method: "GET",
+      data: {
+        
+      },
+      dataType: 'json',
+      success: function(response) {
+        context.setState({
+          branches: response.branches
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching branches");
+
+        context.setState({
+          branches: []
+        });
+      }
+    });
+  }
+
   fetch() {
     var context     = this;
-    console.log(context.state);
     var start_date  = moment(context.state.start_date).format('YYYY-MM-DD');
     var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
 
@@ -58,7 +86,8 @@ export default class TrialBalanceDisplay extends React.Component {
       method: "GET",
       data: {
         start_date: start_date,
-        end_date: end_date
+        end_date: end_date,
+        branch_id: context.state.currentBranchId
       },
       dataType: 'json',
       success: function(response) {
@@ -72,7 +101,7 @@ export default class TrialBalanceDisplay extends React.Component {
       },
       error: function(response) {
         console.log(response);
-        alert("Error in fetching savings data");
+        alert("Error in fetching trial balance data");
 
         context.setState({
           isLoading: false,
@@ -182,6 +211,18 @@ export default class TrialBalanceDisplay extends React.Component {
     }
   }
 
+  handleBranchChanged(o) {
+    var temp  = "";
+
+    if(o) {
+      temp = o.value;
+    }
+
+    this.setState({
+      currentBranchId: temp
+    });
+  }
+
   renderContent() {
     var context = this;
     var state   = context.state;
@@ -209,6 +250,20 @@ export default class TrialBalanceDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
+    var branchOptions = [];
+    
+    for(var i = 0; i < state.branches.length; i++) {
+      branchOptions.push({
+        value: state.branches[i].id,
+        label: state.branches[i].name
+      });
+    }
+
+    var currentBranchId = state.currentBranchId;
+
+    console.log(branchOptions);
+    console.log("currentBranchId: " + this.state.currentBranchId);
+
     return  (
       <div>
         <div className="row">
@@ -232,6 +287,18 @@ export default class TrialBalanceDisplay extends React.Component {
                 onChange={context.handleEndDateChanged.bind(this)}
                 disabled={state.isLoading}
               />
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-group">
+              <label>Branch</label>
+              <Select
+                value={this.state.currentBranchId}
+                options={branchOptions}
+                onChange={this.handleBranchChanged.bind(this)}
+                disabled={state.isLoading}
+              />
+              <br/>
             </div>
           </div>
           <div className="col">
