@@ -27,7 +27,7 @@ class Member < ApplicationRecord
 
   validates :identification_number, presence: true, uniqueness: true
   validates :civil_status, presence: true
-  validates :home_number, presence: true
+  #validates :home_number, presence: true
   validates :mobile_number, presence: true
 
   def full_name

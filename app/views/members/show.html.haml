@@ -9,4 +9,19 @@
       .col-md-8
         = render partial: "member_details"
 
+= render partial: "members/modals/generate_access_token"
+
+= javascript_include_tag "members/Show.js"
+
 = stylesheet_link_tag "member"
+
+#parameters{ data: { member_id: @member.id } }
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var memberId          = $parameters.data("member-id");
+    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
+
+    Show.init(memberId, authenticityToken);
+  });

@@ -5,6 +5,7 @@ namespace :api do
 
     # Members
     get "/members", to: "members#index"
+    post "/members/generate_access_token", to: "members#generate_access_token"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"

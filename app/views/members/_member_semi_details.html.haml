@@ -33,3 +33,18 @@
     = link_to "#", class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
       %i.fa.fa-edit
       Edit Record
+
+    %hr
+    %h6
+      Access Token
+    %div
+      - if @member.access_token.present?
+        %code
+          #{@member.access_token}
+      - else
+        %small
+          No access token
+    %br
+    #btn-generate-access-token.btn.btn-info.btn-block
+      .fa.fa-sync
+      Generate Access Token
