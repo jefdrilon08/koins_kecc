@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
   # Members
   get "/members", to: "members#index"
-  get "/members/:id", to: "members#show", as: :member
+  get "/members/:id/display", to: "members#show", as: :member
+  get "/members/form", to: "members#form", as: :member_form
 
   # Loans
   resources :loans, only: [:index, :show] 
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
   get "/accounting/books/jvb", to: "accounting#jvb", as: :accounting_books_jvb
   get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
+  get "/accounting/form", to: "accounting#form", as: :accounting_form
 
   namespace :accounting do
     get "/accounting_entries/:id", to: "accounting_entries#show"

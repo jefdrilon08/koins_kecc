@@ -6,6 +6,7 @@ module.exports = {
   devtool: debug ? "inline-sourcemap" : null,
   entry: {
     MembersIndex: "./react/members/Index.js",
+    MembersForm: "./react/members/Form.js",
     MemberAccountsSavingsIndex: "./react/member_accounts/savings/Index.js",
     AccountingTrialBalance: "./react/accounting/TrialBalance.js",
     AccountingGeneralLedger: "./react/accounting/GeneralLedger.js",

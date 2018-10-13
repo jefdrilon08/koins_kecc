@@ -27,6 +27,7 @@ Rails.application.config.assets.precompile += [
   "members/Show.js",
   "loans/Show.js",
   "MembersIndex.min.react.js",
+  "MembersForm.min.react.js",
   "MemberAccountsSavingsIndex.min.react.js",
   "AccountingTrialBalance.min.react.js",
   "AccountingGeneralLedger.min.react.js",

@@ -24,4 +24,7 @@ class AccountingController < ApplicationController
 
     @records  = @records.page(params[:page]).per(20)
   end
+
+  def form
+  end
 end

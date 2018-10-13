@@ -4,6 +4,9 @@ class MembersController < ApplicationController
   def index
   end
 
+  def form
+  end
+
   def show
     @member = Member.find(params[:id])
 

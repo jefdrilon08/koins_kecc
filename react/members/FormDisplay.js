@@ -6,13 +6,15 @@ import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
 
-export default class IndexDisplay extends React.Component {
+export default class FormDisplay extends React.Component {
   constructor(props) {
     super(props);
 
     this.state  = {
       isLoading: true,
-      data: false
+      data: false,
+      memberId: props.id,
+      authenticityToken: props.authenticityToken
     };
   }
 
@@ -24,18 +26,16 @@ export default class IndexDisplay extends React.Component {
     var context = this;
 
     $.ajax({
-      url: "/api/v1/members",
+      url: "/api/v1/members/fetch",
       method: "GET",
       data: {
+        id: context.state.memberId
       },
       dataType: 'json',
       success: function(response) {
-        var members = response.members;
-        console.log(response);
-
         context.setState({
           isLoading: false,
-          data: members
+          data: response
         });
       },
       error: function(response) {
@@ -50,32 +50,6 @@ export default class IndexDisplay extends React.Component {
     });
   }
 
-  renderTable() {
-    var context = this;
-    var state   = context.state;
-
-    if(!state.isLoading && state.data != false) {
-      return  (
-        <ReactTable
-          columns={[
-            {
-              Header: "Name",
-              accessor: "name",
-              Cell: row => (
-                <strong>
-                  <a href={"/members/" + row.original.id + "/display"}>
-                    {row.original.name}
-                  </a>
-                </strong>
-              )
-            }
-          ]}
-          data={state.data}
-        />
-      );
-    }
-  }
-
   render() {
     var context = this;
     var state   = context.state;
@@ -87,7 +61,7 @@ export default class IndexDisplay extends React.Component {
     } else if(state.data != false) {
       return (
         <div>
-          {context.renderTable()}
+          <h2>Member Form</h2>
         </div>
       );
     } else {
