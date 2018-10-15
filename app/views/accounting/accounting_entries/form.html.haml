@@ -7,6 +7,6 @@
         .card-body
           #content
 
-#parameters{ data: { id: params[:id], book: accounting_book_mnemonic(params[:book]) } }
+#parameters{ data: { id: params[:id], book: accounting_book_mnemonic(params[:book]), reference_number: params[:reference_number], branch_id: params[:branch_id] } }
 
 = javascript_include_tag "AccountingEntryForm.min.react"

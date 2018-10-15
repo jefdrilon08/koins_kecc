@@ -18,6 +18,8 @@ class Member < ApplicationRecord
   belongs_to :center
   belongs_to :branch
 
+  has_many :loans
+
   validates :gender, presence: true
   validates :date_of_birth, presence: true
 

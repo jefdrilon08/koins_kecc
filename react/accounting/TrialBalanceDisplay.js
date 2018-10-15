@@ -211,15 +211,9 @@ export default class TrialBalanceDisplay extends React.Component {
     }
   }
 
-  handleBranchChanged(o) {
-    var temp  = "";
-
-    if(o) {
-      temp = o.value;
-    }
-
+  handleBranchChanged(event) {
     this.setState({
-      currentBranchId: temp
+      currentBranchId: event.target.value
     });
   }
 
@@ -253,10 +247,11 @@ export default class TrialBalanceDisplay extends React.Component {
     var branchOptions = [];
     
     for(var i = 0; i < state.branches.length; i++) {
-      branchOptions.push({
-        value: state.branches[i].id,
-        label: state.branches[i].name
-      });
+      branchOptions.push(
+        <option value={state.branches[i].id}>
+          {state.branches[i].name}
+        </option>
+      );
     }
 
     var currentBranchId = state.currentBranchId;
@@ -292,12 +287,13 @@ export default class TrialBalanceDisplay extends React.Component {
           <div className="col">
             <div className="form-group">
               <label>Branch</label>
-              <Select
-                value={this.state.currentBranchId}
-                options={branchOptions}
+              <select 
+                className="form-control" 
+                value={currentBranchId}
                 onChange={this.handleBranchChanged.bind(this)}
-                disabled={state.isLoading}
-              />
+              >
+                {branchOptions}
+              </select>
               <br/>
             </div>
           </div>

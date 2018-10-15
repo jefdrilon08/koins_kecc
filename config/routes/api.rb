@@ -1,5 +1,8 @@
 namespace :api do
   namespace :v1 do
+    # Accounting Codes
+    get "/accounting_codes", to: "accounting_codes#index"
+
     # Users
     post "/login", to: "users#login"
 
@@ -14,6 +17,9 @@ namespace :api do
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
     get "/accounting/fetch_general_ledger", to: "accounting#fetch_general_ledger"
 
+    # Accounting Entries
+    get "/accounting_entries/fetch", to: "accounting_entries#fetch"
+
     # Loans
     post "/loans/reage", to: "loans#reage"
 
@@ -22,6 +28,8 @@ namespace :api do
 
     namespace :epassbook do
       get "/members/show", to: "members#show"
+      get "/active_loans", to: "loans#active_loans"
+      get "/loans/show", to: "loans#show"
     end
   end
 end
