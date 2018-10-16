@@ -17,6 +17,18 @@ export default class AccountingEntryPreview extends React.Component {
     }
   }
 
+  renderBalancedWarning() {
+    if(!this.props.balanced) {
+      return (
+        <div className="callout callout-danger">
+          <strong>
+            Entries are not balanced...
+          </strong>
+        </div>
+      );
+    }
+  }
+
   render() {
     return  (
       <div className="card border-danger">
@@ -38,6 +50,7 @@ export default class AccountingEntryPreview extends React.Component {
           </div>
         </div>
         <div className="card-body">
+          {this.renderBalancedWarning()}
           <table className="table table-sm">
             <tr>
               <th width="50%">

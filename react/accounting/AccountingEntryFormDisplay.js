@@ -25,8 +25,10 @@ export default class AccountingEntryFormDisplay extends React.Component {
       branches: [],
       accountingCodes: [],
       accountingCodeId: "",
-      postType: "",
+      accountingCodeName: "",
+      postType: "DR",
       amount: 0.00,
+      balanced: false,
       data: {
         book: "",
         particular: "",
@@ -158,6 +160,33 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
   }
 
+  updateBalanced() {
+    debitAmount   = 0.00;
+    creditAmount  = 0.00;
+
+    for(var i = 0; i < this.state.data.journal_entries; i++) {
+      if(this.state.data.journal_entries[i].post_type == "DR") {
+        debitAmount += parseFloat(this.state.data.journal_entries[i].amount);
+      } else if(this.state.data.journal_entries[i].post_type == "CR") {
+        creditAmount += parseFloat(this.state.data.journal_entries[i].amount);
+      }
+    }
+
+    if(this.state.data.journal_entries.size == 0) {
+      this.setState({
+        balanced: false
+      });
+    } else if(debitAmount != creditAmount) {
+      this.setState({
+        balanced: false
+      });
+    } else {
+      this.setState({
+        balanced: true
+      });
+    }
+  }
+
   handleSaveBtnClicked() {
     var context = this;
     
@@ -201,7 +230,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
 
     this.setState({
-      accountingCodeId: temp
+      accountingCodeId: temp,
+      accountingCodeName: o.label
     });
   }
 
@@ -236,6 +266,51 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   handleAddJournalEntryClicked() {
+    var journal_entry = {
+      id: "",
+      accounting_code_id: this.state.accountingCodeId,
+      accounting_code_name: this.state.accountingCodeName,
+      post_type: this.state.postType,
+      amount: this.state.amount
+    }
+
+    console.log(journal_entry);
+
+    var foundAccountingCode = false;
+
+    var errors  = [];
+
+    for(var i = 0; i < this.state.data.journal_entries.length; i++) {
+      if(this.state.data.journal_entries[i].accounting_code_id == journal_entry.accounting_code_id) { 
+        errors.push("Duplicate accounting code");
+      }
+    }
+
+    // Check if accounting code is selected
+    if(journal_entry.accounting_code_id) {
+      errors.push("No accounting code specified");
+    } else if(foundAccountingCode) {
+      // Check if we have same accounting code and post type
+    }
+
+    // Check if amount is > 0
+    if(journal_entry.amount && journal_entry.amount <= 0) {
+      errors.push("Invalid amount");
+    }
+
+    if(errors.length > 0) {
+      alert("The following errors occurred:");
+      for(var i = 0; i < errors.length; i++) {
+        alert(errors[i]);
+      }
+    } else {
+      this.setState({
+        accountingCodeId: "",
+        accountingCodeName: "",
+        postType: "DR",
+        amount: 0.00
+      });
+    }
   }
 
   render() {
@@ -337,6 +412,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
             <div className="form-group">
               <label>Accounting Code</label>
               <Select
+                value={state.accountingCodeId}
                 options={accountingCodeOptions}
                 onChange={this.handleAccountingCodeChanged.bind(this)}
                 disabled={state.isLoading}
@@ -393,6 +469,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
           particular={data.particular}
           datePrepared={data.date_prepared.format("YYYY-MM-DD")}
           branch={data.branch_name}
+          balanced={this.state.balanced}
         />
       </div>
     );
