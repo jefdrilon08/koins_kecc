@@ -15,6 +15,7 @@ module Accounting
           branch_name: @branch.try(:name),
           particular: "",
           date_prepared: Date.today,
+          status: "pending",
           data: {
             or_number: "",
             check_number: "",
@@ -34,6 +35,14 @@ module Accounting
 
       def execute!
         if @existing_accounting_entry.present?
+          @accounting_entry[:status]            = @existing_accounting_entry.status
+          @accounting_entry[:date_prepared]     = @existing_accounting_entry.date_prepared
+          @accounting_entry[:book]              = @existing_accounting_entry.book
+          @accounting_entry[:reference_number]  = @existing_accounting_entry.reference_number
+          @accounting_entry[:branch_id]         = @existing_accounting_entry.branch.try(:id)
+          @accounting_entry[:branch_name]       = @existing_accounting_entry.branch.try(:name)
+          @accounting_entry[:particular]        = @existing_accounting_entry.particular
+
           journal_entries = @accounting_entry.journal_entries
 
           journal_entries.each do |o|

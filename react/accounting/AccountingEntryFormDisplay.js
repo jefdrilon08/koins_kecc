@@ -25,17 +25,20 @@ export default class AccountingEntryFormDisplay extends React.Component {
       branches: [],
       accountingCodes: [],
       accountingCodeId: "",
+      accountingCodeObject: {},
       accountingCodeName: "",
       postType: "DR",
       amount: 0.00,
       balanced: false,
+      message: "",
       data: {
-        book: "",
+        book: "JVB",
         particular: "",
         branch_id: "",
         branch_name: "",
         reference_number: "",
         date_prepared: moment(),
+        status: "pending",
         data: {
           or_number: "",
           check_number: "",
@@ -119,6 +122,61 @@ export default class AccountingEntryFormDisplay extends React.Component {
 
   }
 
+  save() {
+    var context = this;
+    var state   = context.state;
+
+    var accounting_entry_data = state.data;
+
+    this.setState({
+      isLoading: true,
+      message: "Loading..."
+    });
+
+    if(accounting_entry_data.journal_entries.length < 2) {
+      alert("No journal entries");
+      this.setState({
+        isLoading: false,
+        message: ""
+      });
+    } else {
+      var temp_data = JSON.stringify({
+        authenticity_token: context.props.authenticityToken,
+        accounting_entry_data: {
+          book: accounting_entry_data.book,
+          branch_id: accounting_entry_data.branch_id,
+          branch_name: accounting_entry_data.branch_name,
+          date_prepared: accounting_entry_data.date_prepared.format("YYYY-MM-DD"),
+          data: accounting_entry_data.data,
+          journal_entries: accounting_entry_data.journal_entries,
+          particular: accounting_entry_data.particular,
+          reference_number: accounting_entry_data.reference_number
+        }
+      });
+
+      console.log("temp_data:");
+      console.log(temp_data);
+
+      $.ajax({
+        url: "/api/v1/accounting_entries/save",
+        method: "POST",
+        dataType: 'json',
+        contentType: 'application/json',
+        data: temp_data,
+        success: function(response) {
+          window.location.href = "/accounting/accounting_entries/" + response.id;
+        },
+        error: function(response) {
+          alert("Error in saving accounting entry");
+          context.setState({
+            isLoading: false,
+            message: "Error"
+          });
+        }
+      });
+    }
+  }
+
   fetch() {
     var context = this;
     var state   = context.state;
@@ -147,6 +205,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
           });
         },
         error: function(response) {
+          console.log(response);
           context.setState({
             isLoading: false,
             data: false
@@ -161,8 +220,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   updateBalanced() {
-    debitAmount   = 0.00;
-    creditAmount  = 0.00;
+    var debitAmount   = 0.00;
+    var creditAmount  = 0.00;
 
     for(var i = 0; i < this.state.data.journal_entries; i++) {
       if(this.state.data.journal_entries[i].post_type == "DR") {
@@ -171,6 +230,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
         creditAmount += parseFloat(this.state.data.journal_entries[i].amount);
       }
     }
+
+    console.log("debitAmount: " + debitAmount);
+    console.log("creditAmount: " + creditAmount);
 
     if(this.state.data.journal_entries.size == 0) {
       this.setState({
@@ -223,6 +285,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   handleAccountingCodeChanged(o) {
+    console.log("handleAccountingCodeChanged");
+    console.log(o);
+
     var temp  = "";
 
     if(o) {
@@ -231,7 +296,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
 
     this.setState({
       accountingCodeId: temp,
-      accountingCodeName: o.label
+      accountingCodeName: o.label,
+      accountingCodeObject: o
     });
   }
 
@@ -274,8 +340,6 @@ export default class AccountingEntryFormDisplay extends React.Component {
       amount: this.state.amount
     }
 
-    console.log(journal_entry);
-
     var foundAccountingCode = false;
 
     var errors  = [];
@@ -287,14 +351,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
 
     // Check if accounting code is selected
-    if(journal_entry.accounting_code_id) {
+    if(journal_entry.accounting_code_id == "") {
       errors.push("No accounting code specified");
-    } else if(foundAccountingCode) {
-      // Check if we have same accounting code and post type
     }
 
     // Check if amount is > 0
-    if(journal_entry.amount && journal_entry.amount <= 0) {
+    if(journal_entry.amount <= 0) {
       errors.push("Invalid amount");
     }
 
@@ -304,13 +366,39 @@ export default class AccountingEntryFormDisplay extends React.Component {
         alert(errors[i]);
       }
     } else {
+      // Add to journal entries
+      var data  = this.state.data;
+
+      data.journal_entries.push(journal_entry);
+
       this.setState({
         accountingCodeId: "",
         accountingCodeName: "",
+        accountingCodeObject: {},
         postType: "DR",
-        amount: 0.00
+        amount: 0.00,
+        data: data
       });
+
+      this.updateBalanced();
     }
+  }
+
+  handleRemoveClicked(accountingCodeId, postType) {
+    var data            = this.state.data;
+    var journalEntries  = data.journal_entries;
+
+    for(var i = 0; i < journalEntries.length; i++) {
+      if(journalEntries[i].post_type == postType && journalEntries[i].accounting_code_id == accountingCodeId) {
+        journalEntries.splice(i, 1);
+      }
+    }
+
+    data.journal_entries = journalEntries;
+
+    this.setState({
+      data: data
+    });
   }
 
   render() {
@@ -352,6 +440,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
       </option>
     ];
 
+    var currentAccountingCodeId = this.state.accountingCodeId;
+
     return (
       <div>
         <div className="row">
@@ -369,7 +459,6 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 className="form-control"
                 selected={data.date_prepared}
                 onChange={context.handleDatePreparedChanged.bind(this)}
-                disabled={state.isLoading}
               />
             </div>
           </div>
@@ -380,6 +469,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 className="form-control" 
                 value={data.book} 
                 onChange={this.handleBookChanged.bind(this)}
+                disabled={this.state.isLoading}
               >
                 {bookOptions}
               </select>
@@ -401,7 +491,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         <div className="row">
           <div className="col">
             <label>Particular</label>
-            <textarea className="form-control" onChange={this.handleParticularChanged.bind(this)}>
+            <textarea className="form-control" onChange={this.handleParticularChanged.bind(this)} disabled={this.state.isLoading}>
             </textarea>
           </div>
         </div>
@@ -412,10 +502,10 @@ export default class AccountingEntryFormDisplay extends React.Component {
             <div className="form-group">
               <label>Accounting Code</label>
               <Select
-                value={state.accountingCodeId}
+                value={this.state.accountingCodeObject}
                 options={accountingCodeOptions}
                 onChange={this.handleAccountingCodeChanged.bind(this)}
-                disabled={state.isLoading}
+                disabled={this.state.isLoading}
               />
             </div>
           </div>
@@ -426,6 +516,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 className="form-control" 
                 value={state.postType} 
                 onChange={this.handlePostTypeChanged.bind(this)}
+                disabled={this.state.isLoading}
               >
                 <option value={"DR"}>
                   Debit
@@ -444,6 +535,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 className="form-control"
                 value={this.state.amount}
                 onChange={this.handleAmountChanged.bind(this)}
+                disabled={this.state.isLoading}
               />
             </div>
           </div>
@@ -470,7 +562,27 @@ export default class AccountingEntryFormDisplay extends React.Component {
           datePrepared={data.date_prepared.format("YYYY-MM-DD")}
           branch={data.branch_name}
           balanced={this.state.balanced}
+          status={this.state.data.status}
+          journalEntries={this.state.data.journal_entries}
+          isLoading={this.state.isLoading}
+          handleRemoveClicked={this.handleRemoveClicked.bind(this)}
         />
+
+        <hr/>
+        <div>
+          {this.state.message}
+        </div>
+        <button
+          className="btn btn-primary"
+          onClick={this.save.bind(this)}
+        >
+          <span className="fa fa-check"/>
+          Save
+        </button>
+        <a href="/" className="btn btn-danger">
+          <span className="fa fa-times" />
+          Cancel
+        </a>
       </div>
     );
   }

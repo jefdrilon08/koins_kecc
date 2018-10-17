@@ -29,7 +29,85 @@ export default class AccountingEntryPreview extends React.Component {
     }
   }
 
+  numberWithCommas(x) {
+    x = (Math.round(x * 100) / 100).toFixed(2);
+
+    if(x < 0) {
+      x = x * -1; 
+      x = "(" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ")";
+    } else {
+      x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }   
+
+    return x;
+  }
+
+  handleRemoveClicked(accountingCodeId, postType) {
+    this.props.handleRemoveClicked(accountingCodeId, postType);
+  }
+
   render() {
+    var journalEntryRecords = [];
+
+
+    // Debit entries
+    for(var i = 0; i < this.props.journalEntries.length; i++) {
+      if(this.props.journalEntries[i].post_type == "DR") {
+        var btnRemove = "";
+        if(this.props.status == "pending") {
+          btnRemove = <button 
+                        className="btn btn-sm btn-danger"
+                        onClick={this.handleRemoveClicked.bind(this, this.props.journalEntries[i].accounting_code_id, "DR")}
+                      >
+                        <span className="fa fa-times"/>
+                      </button>;
+        }
+
+        journalEntryRecords.push(
+          <tr key={"je-dr-" + i}>
+            <td>
+              {btnRemove}
+              {this.props.journalEntries[i].accounting_code_name}
+            </td>
+            <td className="text-right">
+              {this.numberWithCommas(this.props.journalEntries[i].amount)}
+            </td>
+            <td className="text-right">
+            </td>
+          </tr>
+        );
+      }
+    }
+
+    // Credit entries
+    for(var i = 0; i < this.props.journalEntries.length; i++) {
+      if(this.props.journalEntries[i].post_type == "CR") {
+        var btnRemove = "";
+        if(this.props.status == "pending") {
+          btnRemove = <button 
+                        className="btn btn-sm btn-danger"
+                        onClick={this.handleRemoveClicked.bind(this, this.props.journalEntries[i].accounting_code_id, "DR")}
+                      >
+                        <span className="fa fa-times"/>
+                      </button>;
+        }
+
+        journalEntryRecords.push(
+          <tr key={"je-cr-" + i}>
+            <td>
+              {btnRemove}
+              {this.props.journalEntries[i].accounting_code_name}
+            </td>
+            <td className="text-right">
+            </td>
+            <td className="text-right">
+              {this.numberWithCommas(this.props.journalEntries[i].amount)}
+            </td>
+          </tr>
+        );
+      }
+    }
+
     return  (
       <div className="card border-danger">
         <div className={"card-header " + this.accountingEntryContextColor()}>
@@ -63,6 +141,7 @@ export default class AccountingEntryPreview extends React.Component {
                 Credit
               </th>
             </tr>
+            {journalEntryRecords}
           </table>
           <hr/>
           <div className="row">

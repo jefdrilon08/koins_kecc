@@ -1,10 +1,14 @@
 %ol.breadcrumb
   %li.breadcrumb-item
-    .fa.fa-file
-    Accounting
+    .fa.fa-book-reader
+    Books
+  %li.breadcrumb-item
+    = link_to "/accounting/books/#{@accounting_entry.book.downcase}" do
+      .fa.fa-book
+      #{@accounting_entry.book}
   %li.breadcrumb-item
     .fa.fa-file
-    Entries
-  %li.breadcrumb-item
-    .fa.fa-file
-    #{@accounting_entry.reference_number} - #{@accounting_entry.book}
+    - if @accounting_entry.pending?
+      [PENDING]
+    - else
+      #{@accounting_entry.reference_number} - #{@accounting_entry.book}

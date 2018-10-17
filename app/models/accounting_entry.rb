@@ -16,7 +16,7 @@ class AccountingEntry < ApplicationRecord
   has_many :journal_entries
 
   validates :particular, presence: true
-  validates :reference_number, presence: true, uniqueness: { scope: :branch_id }
+  validates :reference_number, presence: true, uniqueness: { scope: :branch_id }, if: :approved?
   validates :date_prepared, presence: true
   validates :status, presence: true
 
@@ -27,6 +27,14 @@ class AccountingEntry < ApplicationRecord
   scope :crb, -> { includes(:journal_entries).where(book: "CRB").order("date_prepared DESC") }
   scope :cdb, -> { includes(:journal_entries).where(book: "CDB").order("date_prepared DESC") }
   scope :misc, -> { includes(:journal_entries).where(book: "MISC").order("date_prepared DESC") }
+
+  before_validation :load_defaults
+
+  def load_defaults
+    if self.new_record?
+      self.status = "pending"
+    end
+  end
 
   def approved?
     self.status == "approved"

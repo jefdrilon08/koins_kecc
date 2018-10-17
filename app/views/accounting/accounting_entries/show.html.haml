@@ -5,4 +5,4 @@
     .col
       .card
         .card-body
-          #content
+          = render partial: "shared/accounting_entry", locals: { accounting_entry: @accounting_entry }
