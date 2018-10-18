@@ -3,7 +3,7 @@
     .row
       .col-md-6
         %strong
-          = link_to accounting_accounting_entry_path(accounting_entry) do
+          = link_to accounting_accounting_entry_path(accounting_entry, book: accounting_entry.book.downcase) do
             - if accounting_entry.approved?
               #{accounting_entry.reference_number} - 
               #{accounting_entry.date_posted.strftime("%B %d, %Y")}
@@ -42,6 +42,11 @@
       .col
         %p
           #{accounting_entry.particular}
+        - if accounting_entry.crb?
+          %strong
+            OR Number: 
+          .text-muted
+            #{accounting_entry.data['or_number']}
       .col
         %p.text-right
           %label

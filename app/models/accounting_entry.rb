@@ -43,4 +43,20 @@ class AccountingEntry < ApplicationRecord
   def pending?
     self.status == "pending"
   end
+
+  def crb?
+    self.book == "CRB"
+  end
+
+  def jvb?
+    self.book == "JVB"
+  end
+
+  def cdb?
+    self.book == "CDB"
+  end
+
+  def misc?
+    self.book == "MISC"
+  end
 end

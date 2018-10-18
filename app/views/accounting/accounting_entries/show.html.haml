@@ -6,3 +6,12 @@
       .card
         .card-body
           = render partial: "shared/accounting_entry", locals: { accounting_entry: @accounting_entry }
+
+= render partial: "templates/error_list"
+
+= javascript_include_tag "accounting_entries/Show.js"
+
+:javascript
+  $(document).ready(function() {
+    Show.init();
+  });

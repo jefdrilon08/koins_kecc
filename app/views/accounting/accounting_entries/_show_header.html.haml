@@ -12,3 +12,9 @@
       [PENDING]
     - else
       #{@accounting_entry.reference_number} - #{@accounting_entry.book}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      - if @accounting_entry.pending?
+        #btn-approve.btn{ data: { id: @accounting_entry.id } }
+          .fa.fa-check
+          Approve
