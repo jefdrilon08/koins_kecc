@@ -4,6 +4,31 @@ module Api
       class SavingsController < ApiEpassbookController
         before_action :authenticate_member_access_token!
 
+        def transactions
+          member  = Member.where(access_token: @access_token).first
+          account = MemberAccount.where(id: params[:id]).first
+
+          data  = {
+            transactions: [],
+            account_type: account.account_subtype
+          }
+
+          AccountTransaction.where(
+            subsidiary_id: account.id,
+            subsidiary_type: 'MemberAccount'
+          ).order("transacted_at ASC").each do |o|
+            data[:transactions] << {
+              amount: o.amount,
+              beginning_balance: o.data['beginning_balance'],
+              ending_balance: o.data['ending_balance'],
+              transaction_type: o.transaction_type,
+              transacted_at: o.transacted_at.strftime("%B %d, %Y")
+            }
+          end
+
+          render json: data
+        end
+
         def index
           member  = Member.where(access_token: @access_token).first
 
