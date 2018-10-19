@@ -20,6 +20,7 @@ namespace :api do
     # Accounting Entries
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"
     post "/accounting_entries/save", to: "accounting_entries#save"
+    post "/accounting_entries/approve", to: "accounting_entries#approve"
 
     # Loans
     post "/loans/reage", to: "loans#reage"
@@ -30,6 +31,7 @@ namespace :api do
     namespace :epassbook do
       get "/members/show", to: "members#show"
       get "/active_loans", to: "loans#active_loans"
+      get "/savings", to: "savings#index"
       get "/loans/show", to: "loans#show"
     end
   end

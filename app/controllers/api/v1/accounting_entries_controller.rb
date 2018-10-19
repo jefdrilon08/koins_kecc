@@ -3,6 +3,27 @@ module Api
     class AccountingEntriesController < ApiController
       before_action :authenticate_user!
 
+      def approve
+        config  = {
+          accounting_entry: AccountingEntry.where(id: params[:id]).first,
+          user: current_user
+        }
+
+        errors  = ::Accounting::AccountingEntries::ValidateApprove.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: { errors: errors }, status: 400
+        else
+          ac  = ::Accounting::AccountingEntries::Approve.new(
+                  config: config
+                ).execute!
+
+          render json: { message: "ok", id: ac.id }
+        end
+      end
+
       def fetch
         config  = {
           book: params[:book],
@@ -28,8 +49,6 @@ module Api
         errors  = ::Accounting::AccountingEntries::ValidateSave.new(
                     config: config
                   ).execute!
-
-        puts errors
 
         if errors[:messages].size > 0
           render json: { errors: errors }, status: 400

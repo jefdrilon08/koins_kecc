@@ -19,6 +19,7 @@ Rails.application.config.assets.precompile += [
   "Login.js",
   "administration/users/Index.js",
   "accounting/accounting_codes/Index.js",
+  "accounting/accounting_entries/Show.js",
   "administration/areas/Index.js",
   "administration/clusters/Index.js",
   "administration/branches/Index.js",
