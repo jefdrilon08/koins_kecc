@@ -47,6 +47,7 @@ module Accounting
           @accounting_entry[:branch_id]         = @existing_accounting_entry.branch.try(:id)
           @accounting_entry[:branch_name]       = @existing_accounting_entry.branch.try(:name)
           @accounting_entry[:particular]        = @existing_accounting_entry.particular
+          @accounting_entry[:data]              = @existing_accounting_entry.data
 
           journal_entries = @existing_accounting_entry.journal_entries
 

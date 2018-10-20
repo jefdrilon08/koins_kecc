@@ -17,12 +17,40 @@ export default class AccountingEntryPreview extends React.Component {
     }
   }
 
+  renderCrbParameters() {
+    if(this.props.book == "CRB") {
+      return (
+        <div>
+          <hr/>
+          <strong>
+            OR Number: 
+          </strong>
+          <br/>
+          <span className="text-muted">
+            {this.props.data.or_number}
+          </span>
+        </div>
+      );
+    }
+  };
+
   renderBalancedWarning() {
+    var debitAmount   = 0.00;
+    var creditAmount  = 0.00;
+
+    for(var i = 0; i < this.props.journalEntries.length; i++) {
+      if(this.props.journalEntries[i].post_type == "DR") {
+        debitAmount += parseFloat(this.props.journalEntries[i].amount);
+      } else if(this.props.journalEntries[i].post_type == "CR") {
+        creditAmount += parseFloat(this.props.journalEntries[i].amount);
+      }
+    }
+
     if(!this.props.balanced) {
       return (
         <div className="callout callout-danger">
           <strong>
-            Entries are not balanced...
+            Entries are not balanced.. Debit: {this.numberWithCommas(debitAmount)} Credit: {this.numberWithCommas(creditAmount)}
           </strong>
         </div>
       );
@@ -163,6 +191,7 @@ export default class AccountingEntryPreview extends React.Component {
               </p>
             </div>
           </div>
+          {this.renderCrbParameters()}
         </div>
       </div>
     );

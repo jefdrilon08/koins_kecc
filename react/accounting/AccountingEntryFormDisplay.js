@@ -436,15 +436,52 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
   };
 
+  handleOrNumberChanged(event) {
+    var data            = this.state.data;
+    data.data.or_number = event.target.value;
+
+    this.setState({
+      data: data
+    });
+  };
+
+  renderDataParameters() {
+    var accountingEntryData = this.state.data;
+
+    if(accountingEntryData.book == "CRB") {
+      return  (
+        <div>
+          <hr/>
+          <h6>
+            Cash Receipt Parameters
+          </h6>
+          <div className="row">
+            <div className="col">
+              <div className="form-group">
+                <label>
+                  OR Number
+                </label>
+                <input 
+                  type="text" 
+                  value={accountingEntryData.data.or_number}
+                  onChange={this.handleOrNumberChanged.bind(this)} 
+                  className="form-control" 
+                  disabled={this.state.isLoading}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
   render() {
-    var context = this;
-    var state   = context.state;
-
-    var data  = state.data;
-
-    console.log(data);
-
-    var branchOptions = [];
+    var context               = this;
+    var state                 = context.state;
+    var data                  = state.data;
+    var branchOptions         = [];
+    var accountingCodeOptions = [];
 
     for(var i = 0; i < state.branches.length; i++) {
       branchOptions.push({
@@ -453,17 +490,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
       });
     }
 
-    var accountingCodeOptions = [];
-
     for(var i = 0; i < state.accountingCodes.length; i++) {
       accountingCodeOptions.push({
         value: state.accountingCodes[i].id,
         label: state.accountingCodes[i].name
       });
     }
-
-    console.log("Current Branch: ");
-    console.log(state.currentBranch);
 
     var bookOptions = [
       <option value={"JVB"}>
@@ -541,6 +573,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
             </textarea>
           </div>
         </div>
+        {this.renderDataParameters()}
         <hr/>
         <h6>Add Journal Entry</h6>
         <div className="row">
@@ -612,23 +645,26 @@ export default class AccountingEntryFormDisplay extends React.Component {
           journalEntries={this.state.data.journal_entries}
           isLoading={this.state.isLoading}
           handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+          data={this.state.data.data}
         />
 
         <hr/>
         <div>
           {this.state.message}
         </div>
-        <button
-          className="btn btn-primary"
-          onClick={this.save.bind(this)}
-        >
-          <span className="fa fa-check"/>
-          Save
-        </button>
-        <a href="/" className="btn btn-danger">
-          <span className="fa fa-times" />
-          Cancel
-        </a>
+        <div className="btn-group">
+          <button
+            className="btn btn-primary"
+            onClick={this.save.bind(this)}
+          >
+            <span className="fa fa-check"/>
+            Save
+          </button>
+          <a href={"/accounting/books/" + data.book.toLowerCase()} className="btn btn-danger">
+            <span className="fa fa-times" />
+            Cancel
+          </a>
+        </div>
       </div>
     );
   }
