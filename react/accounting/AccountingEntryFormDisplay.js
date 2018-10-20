@@ -59,10 +59,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   componentDidMount() {
-    if(this.state.id) {
-      this.fetchAccountingEntry();
-    }
-
+    this.fetchAccountingEntry();
     this.fetchBranches();
     this.fetchAccountingCodes();
   }
@@ -74,7 +71,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
       url: "/api/v1/accounting_entries/fetch",
       method: "GET",
       data: {
-        id: context.state.id
+        id: context.state.id,
+        book: context.state.book
       },
       success: function(response) {
         console.log("Fetched accounting entry:");
@@ -136,8 +134,21 @@ export default class AccountingEntryFormDisplay extends React.Component {
       },
       dataType: 'json',
       success: function(response) {
+        var tempCurrentBranch = {
+          value: "",
+          label: ""
+        }
+
+        if(!context.state.currentBranch) {
+          tempCurrentBranch = {
+            value: response.branches[0].value,
+            label: response.branches[1].label
+          };
+        }
+
         context.setState({
-          branches: response.branches
+          branches: response.branches,
+          currentBranch: tempCurrentBranch
         });
       },
       error: function(response) {

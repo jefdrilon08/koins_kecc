@@ -9,6 +9,10 @@ module Accounting
         @reference_number = @config[:reference_number]
         @branch           = @config[:branch]
 
+        if @branch.blank?
+          @branch = Branch.first
+        end
+
         @accounting_entry = {
           book: @book,
           reference_number: @reference_number,
@@ -26,12 +30,6 @@ module Accounting
           },
           journal_entries: []
         }
-
-        @existing_accounting_entry  = AccountingEntry.where(
-                                        book: @book,
-                                        reference_number: @reference_number,
-                                        branch_id: @branch.try(:id)
-                                      ).first
 
         if @id.present?
           @existing_accounting_entry = AccountingEntry.find(@id)
