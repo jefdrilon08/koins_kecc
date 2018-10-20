@@ -42,11 +42,8 @@ export default class AccountingEntryPreview extends React.Component {
     return x;
   }
 
-  handleRemoveClicked(accountingCodeId, postType) {
-    this.props.handleRemoveClicked(accountingCodeId, postType);
-  }
-
   render() {
+    var context = this;
     var journalEntryRecords = [];
 
 
@@ -57,7 +54,7 @@ export default class AccountingEntryPreview extends React.Component {
         if(this.props.status == "pending") {
           btnRemove = <button 
                         className="btn btn-sm btn-danger"
-                        onClick={this.handleRemoveClicked.bind(this, this.props.journalEntries[i].accounting_code_id, "DR")}
+                        onClick={context.props.handleRemoveClicked.bind(this, i)}
                       >
                         <span className="fa fa-times"/>
                       </button>;
@@ -86,7 +83,7 @@ export default class AccountingEntryPreview extends React.Component {
         if(this.props.status == "pending") {
           btnRemove = <button 
                         className="btn btn-sm btn-danger"
-                        onClick={this.handleRemoveClicked.bind(this, this.props.journalEntries[i].accounting_code_id, "DR")}
+                        onClick={context.props.handleRemoveClicked.bind(this, i)}
                       >
                         <span className="fa fa-times"/>
                       </button>;
@@ -130,18 +127,22 @@ export default class AccountingEntryPreview extends React.Component {
         <div className="card-body">
           {this.renderBalancedWarning()}
           <table className="table table-sm">
-            <tr>
-              <th width="50%">
-                Accounting Code
-              </th>
-              <th className="text-right" width="25%">
-                Debit
-              </th>
-              <th className="text-right" width="25%">
-                Credit
-              </th>
-            </tr>
-            {journalEntryRecords}
+            <thead>
+              <tr>
+                <th width="50%">
+                  Accounting Code
+                </th>
+                <th className="text-right" width="25%">
+                  Debit
+                </th>
+                <th className="text-right" width="25%">
+                  Credit
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {journalEntryRecords}
+            </tbody>
           </table>
           <hr/>
           <div className="row">

@@ -1,5 +1,6 @@
-var debug = process.env.NODE_ENV !== "production";
-var webpack = require('webpack');
+var debug                 = process.env.NODE_ENV !== "production";
+var webpack               = require('webpack');
+var WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = {
   context: __dirname,
@@ -38,5 +39,6 @@ module.exports = {
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: true, sourcemap: false }),
+    new WebpackNotifierPlugin({title: 'KOINS Webpack', alwaysNotify: true})
   ],
 };

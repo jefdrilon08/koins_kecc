@@ -35,6 +35,10 @@ module Accounting
           }
         end
 
+        @errors[:messages].each do |o|
+          @errors[:full_messages] << o[:message]
+        end
+
         @errors
       end
     end

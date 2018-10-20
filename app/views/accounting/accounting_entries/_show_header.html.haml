@@ -15,6 +15,12 @@
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       - if @accounting_entry.pending?
+        = link_to accounting_accounting_entry_form_path(id: @accounting_entry.id, book: @accounting_entry.book), class: 'btn' do
+          .fa.fa-pencil-alt
+          Edit
+        = link_to accounting_delete_accounting_entry_path(@accounting_entry.id), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
+          .fa.fa-times
+          Delete
         #btn-approve.btn{ data: { id: @accounting_entry.id } }
           .fa.fa-check
           Approve

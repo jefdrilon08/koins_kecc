@@ -7,6 +7,7 @@ import Select from 'react-select';
 import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
+import ErrorDisplay from '../ErrorDisplay';
 import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -19,6 +20,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
 
     this.state  = {
       isLoading: false,
+      id: props.id,
       book: props.book,
       referenceNumber: props.referenceNumber,
       branchId: props.branchId,
@@ -31,6 +33,11 @@ export default class AccountingEntryFormDisplay extends React.Component {
       amount: 0.00,
       balanced: false,
       message: "",
+      errors: null,
+      currentBranch: {
+        value: "",
+        label: ""
+      },
       data: {
         book: "JVB",
         particular: "",
@@ -52,9 +59,45 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   componentDidMount() {
+    if(this.state.id) {
+      this.fetchAccountingEntry();
+    }
+
     this.fetchBranches();
     this.fetchAccountingCodes();
   }
+
+  fetchAccountingEntry() {
+    var context = this;
+
+    $.ajax({
+      url: "/api/v1/accounting_entries/fetch",
+      method: "GET",
+      data: {
+        id: context.state.id
+      },
+      success: function(response) {
+        console.log("Fetched accounting entry:");
+        console.log(response);
+
+        response.date_prepared = moment(response.date_prepared);
+
+        context.setState({
+          data: response,
+          currentBranch: {
+            value: response.branch_id,
+            label: response.branch_name
+          }
+        });
+
+        context.updateBalanced();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching accounting entry");
+      }
+    });
+  };
 
   fetchAccountingCodes() {
     var context = this;
@@ -142,6 +185,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
     } else {
       var temp_data = JSON.stringify({
         authenticity_token: context.props.authenticityToken,
+        id: state.id,
         accounting_entry_data: {
           book: accounting_entry_data.book,
           branch_id: accounting_entry_data.branch_id,
@@ -177,53 +221,11 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
   }
 
-  fetch() {
-    var context = this;
-    var state   = context.state;
-
-    var book            = state.book;
-    var referenceNumber = state.referenceNumber;
-    var branchId        = state.branchId;
-
-    if(this.props.accountingEntryId) {
-      $.ajax({
-        url: "/api/v1/accounting/accounting_entries/fetch",
-        method: "GET",
-        data: {
-          book: book,
-          reference_number: referenceNumber,
-          branch_id: branchId
-        },
-        dataType: 'json',
-        success: function(response) {
-          console.log(response);
-          var data  = response.data;
-          
-          context.setState({
-            isLoading: false,
-            data: data
-          });
-        },
-        error: function(response) {
-          console.log(response);
-          context.setState({
-            isLoading: false,
-            data: false
-          });
-        }
-      });
-    } else {
-      context.setState({
-        isLoading: false
-      });
-    }
-  }
-
   updateBalanced() {
     var debitAmount   = 0.00;
     var creditAmount  = 0.00;
 
-    for(var i = 0; i < this.state.data.journal_entries; i++) {
+    for(var i = 0; i < this.state.data.journal_entries.length; i++) {
       if(this.state.data.journal_entries[i].post_type == "DR") {
         debitAmount += parseFloat(this.state.data.journal_entries[i].amount);
       } else if(this.state.data.journal_entries[i].post_type == "CR") {
@@ -238,14 +240,20 @@ export default class AccountingEntryFormDisplay extends React.Component {
       this.setState({
         balanced: false
       });
+
+      return false;
     } else if(debitAmount != creditAmount) {
       this.setState({
         balanced: false
       });
+
+      return false;
     } else {
       this.setState({
         balanced: true
       });
+
+      return false;
     }
   }
 
@@ -380,32 +388,61 @@ export default class AccountingEntryFormDisplay extends React.Component {
         data: data
       });
 
-      this.updateBalanced();
     }
+
+    this.updateBalanced();
   }
 
-  handleRemoveClicked(accountingCodeId, postType) {
+  handleRemoveClicked(index) {
     var data            = this.state.data;
     var journalEntries  = data.journal_entries;
 
+    var newJournalEntries = [];
+
     for(var i = 0; i < journalEntries.length; i++) {
-      if(journalEntries[i].post_type == postType && journalEntries[i].accounting_code_id == accountingCodeId) {
-        journalEntries.splice(i, 1);
+      if(i != index) {
+        newJournalEntries.push(
+          journalEntries[i]
+        );
       }
     }
 
-    data.journal_entries = journalEntries;
+    data.journal_entries = newJournalEntries;
 
     this.setState({
       data: data
     });
+
+    this.updateBalanced();
   }
+
+  renderErrorDisplay() {
+    var context = this;
+    var state   = context.state;
+    if(state.errors) {
+      return  (
+        <div className="row">
+          <div className="col">
+            <ErrorDisplay
+              errors={state.errors}
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return  (
+        <div></div>
+      );
+    }
+  };
 
   render() {
     var context = this;
     var state   = context.state;
 
     var data  = state.data;
+
+    console.log(data);
 
     var branchOptions = [];
 
@@ -424,6 +461,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
         label: state.accountingCodes[i].name
       });
     }
+
+    console.log("Current Branch: ");
+    console.log(state.currentBranch);
 
     var bookOptions = [
       <option value={"JVB"}>
@@ -451,6 +491,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
             </h6>
           </div>
         </div>
+        {this.renderErrorDisplay()}
         <div className="row">
           <div className="col">
             <div className="form-group">
@@ -479,7 +520,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
             <div className="form-group">
               <label>Branch</label>
               <Select
-                value={data.branchId}
+                value={this.state.currentBranch}
                 options={branchOptions}
                 onChange={this.handleBranchChanged.bind(this)}
                 disabled={state.isLoading}
@@ -491,7 +532,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
         <div className="row">
           <div className="col">
             <label>Particular</label>
-            <textarea className="form-control" onChange={this.handleParticularChanged.bind(this)} disabled={this.state.isLoading}>
+            <textarea 
+              className="form-control" 
+              value={this.state.data.particular}
+              onChange={this.handleParticularChanged.bind(this)} 
+              disabled={this.state.isLoading}
+            >
             </textarea>
           </div>
         </div>

@@ -13,7 +13,7 @@ class AccountingEntry < ApplicationRecord
 
   belongs_to :branch
 
-  has_many :journal_entries
+  has_many :journal_entries, dependent: :delete_all
 
   validates :particular, presence: true
   validates :reference_number, presence: true, uniqueness: { scope: :branch_id }, if: :approved?

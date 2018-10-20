@@ -26,6 +26,7 @@ module Api
 
       def fetch
         config  = {
+          id: params[:id],
           book: params[:book],
           reference_number: params[:reference_number],
           branch: Branch.where(id: params[:branch_id]).first
@@ -43,7 +44,8 @@ module Api
 
         config  = {
           accounting_entry_data: accounting_entry_data,
-          user: current_user
+          user: current_user,
+          id: params[:id]
         }
 
         errors  = ::Accounting::AccountingEntries::ValidateSave.new(

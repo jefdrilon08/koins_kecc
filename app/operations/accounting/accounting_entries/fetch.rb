@@ -4,6 +4,7 @@ module Accounting
       def initialize(config:)
         @config = config
 
+        @id               = @config[:id]
         @book             = @config[:book]
         @reference_number = @config[:reference_number]
         @branch           = @config[:branch]
@@ -31,6 +32,10 @@ module Accounting
                                         reference_number: @reference_number,
                                         branch_id: @branch.try(:id)
                                       ).first
+
+        if @id.present?
+          @existing_accounting_entry = AccountingEntry.find(@id)
+        end
       end
 
       def execute!
@@ -43,7 +48,7 @@ module Accounting
           @accounting_entry[:branch_name]       = @existing_accounting_entry.branch.try(:name)
           @accounting_entry[:particular]        = @existing_accounting_entry.particular
 
-          journal_entries = @accounting_entry.journal_entries
+          journal_entries = @existing_accounting_entry.journal_entries
 
           journal_entries.each do |o|
             @accounting_entry[:journal_entries] << {

@@ -19,3 +19,12 @@
 @import "coreui";
 @import "datatables.net-bs4/css/dataTables.bootstrap4";
 @import "datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4";
+
+#accounting-entry {
+  .card-header {
+    a {
+      color: #fff;
+      text-shadow: 1px 1px 1px #000;
+    }
+  }
+}

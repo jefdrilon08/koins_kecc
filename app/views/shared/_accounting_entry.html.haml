@@ -1,4 +1,4 @@
-%div{ class: "card #{accounting_entry.approved? ? 'border-success' : 'border-danger'}" }
+%div{ id: "accounting-entry", class: "card #{accounting_entry.approved? ? 'border-success' : 'border-danger'}" }
   %div{ class: "card-header #{accounting_entry.approved? ? "bordered-success #{accounting_entry_context_class(accounting_entry.book)} text-white" : 'border-danger'}" }
     .row
       .col-md-6
