@@ -17,7 +17,7 @@ module Accounting
     end
 
     def execute!
-      @trial_balance_data[:income_and_expenses_accounting_codes].each_with_index do |o, i|
+      @trial_balance_data[:accounting_codes].each_with_index do |o, i|
         if  @trial_balance_data[:beginning_entries][i][:dr_amount] != 0.00 or
             @trial_balance_data[:beginning_entries][i][:cr_amount] != 0.00 or
             @trial_balance_data[:current_entries][i][:dr_amount] != 0.00 or

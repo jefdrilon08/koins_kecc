@@ -18,7 +18,7 @@ class AccountingCode < ApplicationRecord
   scope :liabilities, -> { where(category: "LIABILITIES").order("code ASC") }
 
   scope :income_and_expenses, -> { where(category: ["INCOME", "EXPENSES"]).order("code ASC") }
-  scope :assets_and_equities_and_liabilities, -> { where(category: ["ASSETS", "EQUITIES", "LIABILITIES"]).order("code ASC") }
+  scope :assets_and_liabilities_and_equities, -> { where(category: ["ASSETS", "EQUITIES", "LIABILITIES"]).order("code ASC") }
 
   has_many :journal_entries
 
