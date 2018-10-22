@@ -105,6 +105,7 @@ module Accounting
                                 date_posted: x.accounting_entry.date_posted.strftime("%b %d, %Y"),
                                 accounting_entry_id: x.accounting_entry.id,
                                 reference_number: x.accounting_entry.reference_number,
+                                book: x.accounting_entry.book,
                                 particular: x.accounting_entry.particular,
                                 dr_amount: dr_amount,
                                 cr_amount: cr_amount,

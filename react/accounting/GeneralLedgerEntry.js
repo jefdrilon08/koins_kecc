@@ -28,22 +28,25 @@ export default class GeneralLedgerComponent extends React.Component {
     for(var i = 0; i < entries.length; i++) {
       items.push(
         <tr key={"item-" + entries[i].accounting_code_id + i}>
-          <td width={"10%"}>
-            <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id} target={"_balnk"}>
-              {entries[i].reference_number}
-            </a>
-          </td>
-          <td width={"58%"}>
-            <small>
-              {entries[i].particular}
-            </small>
-          </td>
-          <td width={"6%"}>
+          <td width={"8%"}>
             <center>
               <small>
                 {entries[i].date_posted}
               </small>
             </center>
+          </td>
+          <td width={"8%"}>
+            <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id} target={"_balnk"}>
+              {entries[i].reference_number}
+            </a>
+          </td>
+          <td width={"2%"}>
+            {entries[i].book}
+          </td>
+          <td width={"56%"}>
+            <small>
+              {entries[i].particular}
+            </small>
           </td>
           <td className="text-right" width={"8%"}>
             <small>
@@ -71,8 +74,13 @@ export default class GeneralLedgerComponent extends React.Component {
         <table className="table table-bordered table-sm">
           <thead>
             <tr className="bg-info">
-              <th colspan={3}>
+              <th colspan={2}>
                 {this.props.data.accounting_code_name}
+              </th>
+              <th className="">
+                Book
+              </th>
+              <th>
               </th>
               <th className="text-right">
                 Debit
@@ -90,8 +98,14 @@ export default class GeneralLedgerComponent extends React.Component {
           </tbody>
           <tfoot>
             <tr className="bg-success">
-              <th colspan={5}>
+              <th colspan={4}>
                 Ending for {this.props.data.accounting_code_name}
+              </th>
+              <th className="text-right">
+                {this.numberWithCommas(this.props.data.dr_sum)}
+              </th>
+              <th className="text-right">
+                {this.numberWithCommas(this.props.data.cr_sum)}
               </th>
               <th className="text-right">
                 {this.numberWithCommas(this.props.data.ending_balance)}
