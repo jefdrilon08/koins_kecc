@@ -4,6 +4,10 @@ var Show  = (function() {
   var $modalApprove;
   var $message;
 
+  var templateErrorList;
+
+  var _authenticityToken;
+
   var loanId;
 
   var _cacheDom = function() {
@@ -11,6 +15,8 @@ var Show  = (function() {
     $btnConfirmApprove  = $("#btn-confirm-approve");
     $modalApprove       = $("#modal-approve");
     $message            = $(".message");
+
+    templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
@@ -29,18 +35,38 @@ var Show  = (function() {
         method: "POST",
         dataType: 'json',
         data: {
-          id: loanId
+          id: loanId,
+          authenticity_token: _authenticityToken
         },
         success: function(response) {
           window.location.reload();
         },
         error: function(response) {
+          console.log(response);
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).errors.full_messages;
+          } catch(e) {
+            errors  = ["Something went wrong"];
+          }
+
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmApprove.prop("disabled", false);
         }
       });
     });
   };
 
-  var init  = function() {
+  var init  = function(config) {
+    _authenticityToken  = config.authenticityToken;
+    
     _cacheDom();
     _bindEvents();
   };

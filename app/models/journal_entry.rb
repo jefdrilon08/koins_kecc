@@ -12,4 +12,12 @@ class JournalEntry < ApplicationRecord
 
   scope :debit, -> { joins(:accounting_code).where("post_type = 'DR' AND amount > 0").order("accounting_codes.code ASC") }
   scope :credit, -> { joins(:accounting_code).where("post_type = 'CR' AND amount > 0").order("accounting_codes.code ASC") }
+
+  def debit?
+    self.post_type == "DR"
+  end
+
+  def credit?
+    self.post_type == "CR"
+  end
 end

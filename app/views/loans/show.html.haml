@@ -18,8 +18,9 @@
 
 :javascript
   $(document).ready(function() {
-    var $parameters = $("#parameters");
-    var loanId      = $parameters.data("id");
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
 
-    Show.init(loanId);
+    Show.init({
+      authenticityToken: authenticityToken
+    });
   });

@@ -14,5 +14,9 @@
 
 :javascript
   $(document).ready(function() {
-    Show.init();
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Show.init({
+      authenticityToken: authenticityToken
+    });
   });

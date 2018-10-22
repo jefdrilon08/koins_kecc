@@ -16,11 +16,11 @@ class AccountingEntry < ApplicationRecord
   has_many :journal_entries, dependent: :delete_all
 
   validates :particular, presence: true
-  validates :reference_number, presence: true, uniqueness: { scope: :branch_id }, if: :approved?
+  validates :reference_number, presence: true, uniqueness: { scope: [:branch_id, :book] }, if: :approved?
   validates :date_prepared, presence: true
   validates :status, presence: true
 
-  scope :approved, -> { where(status: "approved").order("date_prepared, date_posted DESC") }
+  scope :approved, -> { where(status: "approved").order("reference_number ASC") }
   scope :pending, -> { where(status: "pending").order("date_prepared DESC") }
 
   scope :jvb, -> { includes(:journal_entries).where(book: "JVB").order("date_prepared DESC") }
