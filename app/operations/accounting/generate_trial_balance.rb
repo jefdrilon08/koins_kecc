@@ -63,9 +63,19 @@ module Accounting
         if accounting_code.debit_entry?
           dr_amount = dr_amount - cr_amount
           cr_amount = 0.00
+
+          if dr_amount < 0
+            cr_amount = dr_amount * -1
+            dr_amount = 0.00
+          end
         elsif accounting_code.credit_entry?
           cr_amount = cr_amount - dr_amount
           dr_amount = 0.00
+
+          if cr_amount < 0
+            dr_amount = cr_amount * -1
+            cr_amount = 0.00
+          end
         end
 
         entry = {
@@ -109,9 +119,19 @@ module Accounting
         if accounting_code.debit_entry?
           dr_amount = dr_amount - cr_amount
           cr_amount = 0.00
+
+          if dr_amount < 0
+            cr_amount = dr_amount * -1
+            dr_amount = 0.00
+          end
         elsif accounting_code.credit_entry?
           cr_amount = cr_amount - dr_amount
           dr_amount = 0.00
+
+          if cr_amount < 0
+            dr_amount = cr_amount * -1
+            cr_amount = 0.00
+          end
         end
 
         entry = {
@@ -135,9 +155,19 @@ module Accounting
         if accounting_code.debit_entry?
           dr_amount = dr_amount - cr_amount
           cr_amount = 0.00
+
+          if dr_amount < 0
+            cr_amount = dr_amount * -1
+            dr_amount = 0.00
+          end
         elsif accounting_code.credit_entry?
           cr_amount = cr_amount - dr_amount
           dr_amount = 0.00
+
+          if cr_amount < 0
+            dr_amount = cr_amount * -1
+            cr_amount = 0.00
+          end
         end
 
         entry = {
