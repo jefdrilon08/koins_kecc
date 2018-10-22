@@ -31,11 +31,11 @@ module Accounting
     def execute!
       compute_beginning_assets_and_liabilities_and_equities!
       compute_current_assets_and_liabilities_and_equities!
-      compute_ending_assets_and_liabilities_and_equities!
 
       compute_beginning_income_and_expenses!
       compute_current_income_and_expenses!
-      compute_ending_income_and_expenses!
+
+      compute_ending!
 
       # Flatten Total
 #      result  = (@data[:total_beginning_debit] - @data[:total_beginning_credit]).abs
@@ -319,52 +319,10 @@ module Accounting
       end
     end
 
-    def compute_ending_assets_and_liabilities_and_equities!
-      @assets_and_liabilities_and_equities_accounting_codes.each_with_index do |accounting_code, i|
-        beginning_dr_amount = @data[:beginning_entries][i][:dr_amount] || 0
-        beginning_cr_amount = @data[:beginning_entries][i][:cr_amount] || 0
-
-        current_dr_amount = @data[:current_entries][i][:dr_amount]
-        current_cr_amount = @data[:current_entries][i][:cr_amount]
-
-        dr_amount = beginning_dr_amount + current_dr_amount
-        cr_amount = beginning_cr_amount + current_cr_amount
-
-        if accounting_code.debit_entry?
-          dr_amount = dr_amount - cr_amount
-          cr_amount = 0.00
-
-          if dr_amount < 0
-            cr_amount = dr_amount * -1
-            dr_amount = 0.00
-          end
-        elsif accounting_code.credit_entry?
-          cr_amount = cr_amount - dr_amount
-          dr_amount = 0.00
-
-          if cr_amount < 0
-            dr_amount = cr_amount * -1
-            cr_amount = 0.00
-          end
-        end
-
-        entry = {
-          accounting_code: accounting_code,
-          dr_amount: dr_amount,
-          cr_amount: cr_amount
-        }
-
-        @data[:ending_entries] << entry
-
-        @data[:total_ending_debit] += dr_amount
-        @data[:total_ending_credit] += cr_amount
-      end
-    end
-
-    def compute_ending_income_and_expenses!
-      @income_and_expenses_accounting_codes.each_with_index do |accounting_code, i|
-        beginning_dr_amount = @data[:beginning_entries][i][:dr_amount] || 0
-        beginning_cr_amount = @data[:beginning_entries][i][:cr_amount] || 0
+    def compute_ending!
+      @accounting_codes.each_with_index do |accounting_code, i|
+        beginning_dr_amount = @data[:beginning_entries][i][:dr_amount]
+        beginning_cr_amount = @data[:beginning_entries][i][:cr_amount]
 
         current_dr_amount = @data[:current_entries][i][:dr_amount]
         current_cr_amount = @data[:current_entries][i][:cr_amount]

@@ -29,28 +29,31 @@ export default class GeneralLedgerComponent extends React.Component {
       items.push(
         <tr key={"item-" + entries[i].accounting_code_id + i}>
           <td width={"10%"}>
-            <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id}>
+            <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id} target={"_balnk"}>
               {entries[i].reference_number}
             </a>
           </td>
-          <td width={"60%"}>
+          <td width={"58%"}>
             <small>
               {entries[i].particular}
             </small>
           </td>
-          <td width={"10%"}>
+          <td width={"6%"}>
             <center>
               <small>
                 {entries[i].date_posted}
               </small>
             </center>
           </td>
-          <td className="text-right" width={"10%"}>
-            <strong>
-              <small>
-                {this.numberWithCommas(entries[i].net_amount)}
-              </small>
-            </strong>
+          <td className="text-right" width={"8%"}>
+            <small>
+              {this.numberWithCommas(entries[i].dr_amount)}
+            </small>
+          </td>
+          <td className="text-right" width={"8%"}>
+            <small>
+              {this.numberWithCommas(entries[i].cr_amount)}
+            </small>
           </td>
           <td className="text-right text-muted" width={"10%"}>
             {this.numberWithCommas(entries[i].running_balance)}
@@ -67,7 +70,7 @@ export default class GeneralLedgerComponent extends React.Component {
       <div>
         <table className="table table-bordered table-sm">
           <tr className="bg-info">
-            <th colspan={4}>
+            <th colspan={5}>
               {this.props.data.accounting_code_name}
             </th>
             <th className="text-right">
@@ -76,7 +79,7 @@ export default class GeneralLedgerComponent extends React.Component {
           </tr>
           {this.renderEntries()}
           <tr className="bg-success">
-            <th colspan={4}>
+            <th colspan={5}>
               Ending for {this.props.data.accounting_code_name}
             </th>
             <th className="text-right">
