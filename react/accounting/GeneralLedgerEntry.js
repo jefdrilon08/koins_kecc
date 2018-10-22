@@ -35,7 +35,7 @@ export default class GeneralLedgerComponent extends React.Component {
               </small>
             </center>
           </td>
-          <td width={"8%"}>
+          <td width={"14%"}>
             <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id} target={"_balnk"}>
               {entries[i].reference_number}
             </a>
@@ -43,7 +43,7 @@ export default class GeneralLedgerComponent extends React.Component {
           <td width={"2%"}>
             {entries[i].book}
           </td>
-          <td width={"56%"}>
+          <td width={"50%"}>
             <small>
               {entries[i].particular}
             </small>
