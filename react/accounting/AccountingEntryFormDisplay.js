@@ -142,7 +142,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         if(!context.state.currentBranch) {
           tempCurrentBranch = {
             value: response.branches[0].value,
-            label: response.branches[1].label
+            label: response.branches[0].label
           };
         }
 
