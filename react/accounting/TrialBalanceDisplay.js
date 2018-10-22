@@ -137,76 +137,71 @@ export default class TrialBalanceDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
+    var entries = [];
+
+    for(var i = 0; i < state.data.entries.length; i++) {
+      var entry = state.data.entries[i];
+      entries.push(
+        <tr key={"gl-entry-" + i}>
+          <td>
+            <strong>
+              {entry.name}
+            </strong>
+          </td>
+          <td className="text-right">
+            {this.numberWithCommas(entry.beginning_debit)}
+          </td>
+          <td className="text-right">
+            {this.numberWithCommas(entry.beginning_credit)}
+          </td>
+          <td className="text-right">
+            {this.numberWithCommas(entry.current_debit)}
+          </td>
+          <td className="text-right">
+            {this.numberWithCommas(entry.current_credit)}
+          </td>
+          <td className="text-right">
+            {this.numberWithCommas(entry.ending_debit)}
+          </td>
+          <td className="text-right">
+            {this.numberWithCommas(entry.ending_credit)}
+          </td>
+        </tr>
+      );
+    }
+
     if(!state.isLoading && state.data != false) {
       return  (
-        <ReactTable
-          columns={[
-            {
-              Header: "Accounting Code",
-              accessor: "name",
-              Cell: row => (
-                <strong>
-                  {row.original.name}
-                </strong>
-              )
-            },
-            {
-              Header: "Beginning DR",
-              accessor: "beginning_debit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.beginning_debit)}
-                </div>
-              )
-            },
-            {
-              Header: "Beginning CR",
-              accessor: "beginning_credit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.beginning_credit)}
-                </div>
-              )
-            },
-            {
-              Header: "Current DR",
-              accessor: "current_debit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.current_debit)}
-                </div>
-              )
-            },
-            {
-              Header: "Current CR",
-              accessor: "current_credit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.current_credit)}
-                </div>
-              )
-            },
-            {
-              Header: "Ending DR",
-              accessor: "ending_debit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.ending_debit)}
-                </div>
-              )
-            },
-            {
-              Header: "Ending CR",
-              accessor: "ending_credit",
-              Cell: row => (
-                <div className="text-right">
-                  {context.numberWithCommas(row.original.ending_credit)}
-                </div>
-              )
-            }
-          ]}
-          data={state.data.entries}
-        />
+        <table className="table table-sm table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>
+                Accounting Code
+              </th>
+              <th className="text-right">
+                Beginning DR
+              </th>
+              <th className="text-right">
+                Beginning CR
+              </th>
+              <th className="text-right">
+                Current DR
+              </th>
+              <th className="text-right">
+                Current CR
+              </th>
+              <th className="text-right">
+                Ending DR
+              </th>
+              <th className="text-right">
+                Ending CR
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries}
+          </tbody>
+        </table>
       );
     }
   }

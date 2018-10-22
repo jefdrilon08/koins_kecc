@@ -4,6 +4,8 @@ module Accounting
       @config     = config
       @start_date = @config[:start_date]
       @end_date   = @config[:end_date]
+
+      @year = @end_date.year
       
       @accounting_codes = AccountingCode.all.order("code ASC")
 
@@ -36,13 +38,13 @@ module Accounting
     def compute_beginning!
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ?", 'DR', @start_date)
+                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year FROM date_posted) = ?", 'DR', @start_date, @year)
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ?", 'CR', @start_date)
+                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year FROM date_posted) = ?", 'CR', @start_date, @year)
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -56,6 +58,14 @@ module Accounting
 
         if cr_hash.has_key? accounting_code.id.to_s
           cr_amount = cr_hash[accounting_code.id.to_s].to_f
+        end
+
+        if accounting_code.debit_entry?
+          dr_amount = dr_amount - cr_amount
+          cr_amount = 0.00
+        elsif accounting_code.credit_entry?
+          cr_amount = cr_amount - dr_amount
+          dr_amount = 0.00
         end
 
         entry = {
@@ -74,13 +84,13 @@ module Accounting
     def compute_current!
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ?", 'DR', @start_date, @end_date)
+                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year FROM date_posted) = ?", 'DR', @start_date, @end_date, @year)
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ?", 'CR', @start_date, @end_date)
+                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year FROM date_posted) = ?", 'CR', @start_date, @end_date, @year)
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -94,6 +104,14 @@ module Accounting
 
         if cr_hash.has_key? accounting_code.id.to_s
           cr_amount = cr_hash[accounting_code.id.to_s].to_f
+        end
+
+        if accounting_code.debit_entry?
+          dr_amount = dr_amount - cr_amount
+          cr_amount = 0.00
+        elsif accounting_code.credit_entry?
+          cr_amount = cr_amount - dr_amount
+          dr_amount = 0.00
         end
 
         entry = {
@@ -113,6 +131,14 @@ module Accounting
       @accounting_codes.each_with_index do |accounting_code, i|
         dr_amount = @data[:beginning_entries][i][:dr_amount] + @data[:current_entries][i][:dr_amount]
         cr_amount = @data[:beginning_entries][i][:cr_amount] + @data[:current_entries][i][:cr_amount]
+
+        if accounting_code.debit_entry?
+          dr_amount = dr_amount - cr_amount
+          cr_amount = 0.00
+        elsif accounting_code.credit_entry?
+          cr_amount = cr_amount - dr_amount
+          dr_amount = 0.00
+        end
 
         entry = {
           accounting_code: accounting_code,
