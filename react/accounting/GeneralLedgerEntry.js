@@ -69,23 +69,35 @@ export default class GeneralLedgerComponent extends React.Component {
     return (
       <div>
         <table className="table table-bordered table-sm">
-          <tr className="bg-info">
-            <th colspan={5}>
-              {this.props.data.accounting_code_name}
-            </th>
-            <th className="text-right">
-              {this.numberWithCommas(this.props.data.beginning_balance)}
-            </th>
-          </tr>
-          {this.renderEntries()}
-          <tr className="bg-success">
-            <th colspan={5}>
-              Ending for {this.props.data.accounting_code_name}
-            </th>
-            <th className="text-right">
-              {this.numberWithCommas(this.props.data.ending_balance)}
-            </th>
-          </tr>
+          <thead>
+            <tr className="bg-info">
+              <th colspan={3}>
+                {this.props.data.accounting_code_name}
+              </th>
+              <th className="text-right">
+                Debit
+              </th>
+              <th className="text-right">
+                Credit
+              </th>
+              <th className="text-right">
+                {this.numberWithCommas(this.props.data.beginning_balance)}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderEntries()}
+          </tbody>
+          <tfoot>
+            <tr className="bg-success">
+              <th colspan={5}>
+                Ending for {this.props.data.accounting_code_name}
+              </th>
+              <th className="text-right">
+                {this.numberWithCommas(this.props.data.ending_balance)}
+              </th>
+            </tr>
+          </tfoot>
         </table>
       </div>
     );
