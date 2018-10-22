@@ -7,12 +7,14 @@ module Accounting
 
       @year = @end_date.year
       
-      @accounting_codes = AccountingCode.all.order("code ASC")
+      @accounting_codes                     = AccountingCode.all.order("code ASC")
+      @income_and_expenses_accounting_codes = @accounting_codes.income_and_expenses
 
       @data = {
         start_date: @start_date,
         end_date: @end_date,
         accounting_codes: @accounting_codes,
+        income_and_expenses_accounting_codes: @income_and_expenses_accounting_codes,
         beginning_entries: [],
         current_entries: [],
         ending_entries: [],
@@ -26,29 +28,42 @@ module Accounting
     end
 
     def execute!
-      compute_beginning!
-      compute_current!
-      compute_ending!
+
+      compute_beginning_income_and_expenses!
+      compute_current_income_and_expenses!
+      compute_ending_income_and_expenses!
 
       @data
     end
 
     private
 
-    def compute_beginning!
+    def compute_beginning_income_and_expenses!
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year FROM date_posted) = ?", 'DR', @start_date, @year)
+                  .where(
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    'DR', 
+                    @start_date,
+                    @income_and_expenses_accounting_codes.pluck(:id),
+                    @year
+                  )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year FROM date_posted) = ?", 'CR', @start_date, @year)
+                  .where(
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    'CR', 
+                    @start_date,
+                    @income_and_expenses_accounting_codes.pluck(:id),
+                    @year
+                  )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
-      @accounting_codes.each do |accounting_code|
+      @income_and_expenses_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
         cr_amount = 0.00
 
@@ -91,20 +106,34 @@ module Accounting
       end
     end
 
-    def compute_current!
+    def compute_current_income_and_expenses!
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year FROM date_posted) = ?", 'DR', @start_date, @end_date, @year)
+                  .where(
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    'DR', 
+                    @start_date, 
+                    @end_date,
+                    @income_and_expenses_accounting_codes.pluck(:id),
+                    @year
+                  )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
-                  .where("accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year FROM date_posted) = ?", 'CR', @start_date, @end_date, @year)
+                  .where(
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    'CR', 
+                    @start_date, 
+                    @end_date,
+                    @income_and_expenses_accounting_codes.pluck(:id),
+                    @year
+                  )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
-      @accounting_codes.each do |accounting_code|
+      @income_and_expenses_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
         cr_amount = 0.00
 
@@ -147,10 +176,16 @@ module Accounting
       end
     end
 
-    def compute_ending!
-      @accounting_codes.each_with_index do |accounting_code, i|
-        dr_amount = @data[:beginning_entries][i][:dr_amount] + @data[:current_entries][i][:dr_amount]
-        cr_amount = @data[:beginning_entries][i][:cr_amount] + @data[:current_entries][i][:cr_amount]
+    def compute_ending_income_and_expenses!
+      @income_and_expenses_accounting_codes.each_with_index do |accounting_code, i|
+        beginning_dr_amount = @data[:beginning_entries][i][:dr_amount] || 0
+        beginning_cr_amount = @data[:beginning_entries][i][:cr_amount] || 0
+
+        current_dr_amount = @data[:current_entries][i][:dr_amount]
+        current_cr_amount = @data[:current_entries][i][:cr_amount]
+
+        dr_amount = beginning_dr_amount + current_dr_amount
+        cr_amount = beginning_cr_amount + current_cr_amount
 
         if accounting_code.debit_entry?
           dr_amount = dr_amount - cr_amount
