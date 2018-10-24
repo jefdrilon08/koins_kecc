@@ -12,6 +12,7 @@ export default class FormDisplay extends React.Component {
 
     this.state  = {
       isLoading: true,
+      formDisabled: false,
       data: false,
       memberId: props.id,
       authenticityToken: props.authenticityToken
@@ -20,6 +21,24 @@ export default class FormDisplay extends React.Component {
 
   componentDidMount() {
     this.fetch();
+  }
+
+  save() {
+    var context = this;
+    var state   = context.state;
+
+    $.ajax({
+      url: "/api/v1/members/save",
+      method: "POST",
+      data: {
+        id: state.memberId,
+        authenticity_token: state.authenticityToken
+      },
+      success: function(response) {
+      },
+      error: function(response) {
+      }
+    });
   }
 
   fetch() {

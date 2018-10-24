@@ -1,6 +1,28 @@
 module Api
   module V1
     class MembersController < ApiController
+      def fetch
+        config  = {
+          id: params[:id]
+        }
+
+        data  = ::Members::Fetch.new(
+                  config: config
+                ).execute!
+
+        render json: data
+      end
+
+      def save_signature
+        member  = Member.find(params[:id])
+
+        member.update!(
+          signature_data: params[:signature_data]
+        )
+
+        render json: { message: "ok" }
+      end
+
       def index
         members = Member.all.order("last_name ASC")
 

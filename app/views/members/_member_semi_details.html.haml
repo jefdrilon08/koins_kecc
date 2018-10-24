@@ -48,3 +48,16 @@
     #btn-generate-access-token.btn.btn-info.btn-block
       .fa.fa-sync
       Generate Access Token
+    %hr
+    %h6
+      Signature
+    %div
+      #btn-generate-signature.btn.btn-success.btn-block
+        .fa.fa-pencil-alt
+        Generate Signature
+
+      - if @member.signature_data.present?
+        .card
+          .card-body
+            %center
+              %img{ src: @member.signature_data, width: "100", id: "signature-display" }

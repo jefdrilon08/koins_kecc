@@ -4,6 +4,27 @@ module Api
       class LoansController < ApiEpassbookController
         before_action :authenticate_member_access_token!
 
+        def payments
+          member  = Member.where(access_token: @access_token).first
+          loan    = Loan.where(id: params[:id], member_id: member.id).first
+
+          data  = {
+            payments: []
+          }
+
+          AccountTransaction.approved_loan_payments.where(
+            subsidiary_id: loan.id,
+            subsidiary_type: "Loan"
+          ).order("transacted_at ASC").each do |o|
+            data[:payments] << {
+              amount: o.amount,
+              transacted_at: o.transacted_at.strftime("%b %d, %Y")
+            }
+          end
+
+          render json: data
+        end
+
         def active_loans
           member  = Member.where(access_token: @access_token).first
 
