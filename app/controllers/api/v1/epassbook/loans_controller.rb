@@ -2,6 +2,7 @@ module Api
   module V1
     module Epassbook
       class LoansController < ApiEpassbookController
+        include ActionView::Helpers::NumberHelper
         before_action :authenticate_member_access_token!
 
         def payments
@@ -9,16 +10,30 @@ module Api
           loan    = Loan.where(id: params[:id], member_id: member.id).first
 
           data  = {
+            id: loan.id,
+            pn_number: loan.pn_number,
+            loan_product: loan.loan_product.to_s,
             payments: []
           }
+
+          balance = loan.total_dues
 
           AccountTransaction.approved_loan_payments.where(
             subsidiary_id: loan.id,
             subsidiary_type: "Loan"
           ).order("transacted_at ASC").each do |o|
+            amount_due  = o["data"]["amount_due"].to_f
+            balance -= o.amount
+
+#            o["data"]["amort_entries"].each do |a|
+#              amount_due += a["principal_paid"].to_f + a["interest_paid"].to_f
+#            end
+
             data[:payments] << {
-              amount: o.amount,
-              transacted_at: o.transacted_at.strftime("%b %d, %Y")
+              amount_paid: number_to_currency(o.amount, unit: ""),
+              amount_due: number_to_currency(amount_due, unit: ""),
+              transacted_at: o.transacted_at.strftime("%b %d, %Y"),
+              balance: number_to_currency(balance, unit: "")
             }
           end
 

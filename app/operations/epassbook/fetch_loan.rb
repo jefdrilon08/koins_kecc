@@ -1,5 +1,7 @@
 module Epassbook
   class FetchLoan
+    include ActionView::Helpers::NumberHelper
+
     def initialize(member:, loan:)
       @member = member
       @loan   = loan
@@ -15,10 +17,10 @@ module Epassbook
         loan: {
           id: @loan.id,
           pn_number: @loan.pn_number,
-          principal: @loan.principal,
-          interest: @loan.interest,
-          principal_paid: @loan.principal_paid,
-          interest_paid: @loan.interest_paid,
+          principal: number_to_currency(@loan.principal, unit: ""),
+          interest: number_to_currency(@loan.interest, unit: ""),
+          principal_paid: number_to_currency(@loan.principal_paid, unit: ""),
+          interest_paid: number_to_currency(@loan.interest_paid, unit: ""),
           amortization: [],
           payments: []
         }
@@ -30,9 +32,9 @@ module Epassbook
         @data[:loan][:amortization] << {
           id: o.id,
           due_date: o.due_date.strftime("%B %d, %Y"),
-          paid: o.total_paid,
-          balance: o.total_balance,
-          amount_due: o.amount_due
+          paid: number_to_currency(o.total_paid, unit: ""),
+          balance: number_to_currency(o.total_balance, unit: ""),
+          amount_due: number_to_currency(o.amount_due, unit: "")
         }
       end
 

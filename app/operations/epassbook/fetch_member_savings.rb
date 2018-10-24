@@ -1,5 +1,7 @@
 module Epassbook
   class FetchMemberSavings
+    include ActionView::Helpers::NumberHelper
+
     def initialize(member:)
       @member           = member
       @savings_accounts = MemberAccount.savings.where(member_id: @member.id)
@@ -26,13 +28,15 @@ module Epassbook
         @data[:accounts] << {
           id: o.id,
           savings_type: o.account_subtype,
-          balance: o.balance,
-          maintaining_balance: o.maintaining_balance,
-          last_transaction_amount: last_transaction_amount,
+          balance: number_to_currency(o.balance, unit: ""),
+          maintaining_balance: number_to_currency(o.maintaining_balance, unit: ""),
+          last_transaction_amount: number_to_currency(last_transaction_amount, unit: ""),
           last_transaction_date: last_transaction_date,
           last_transaction_type: last_transaction_type
         }
       end
+
+      @data[:total_savings] = number_to_currency(@data[:total_savings], unit: "")
 
       @data
     end
