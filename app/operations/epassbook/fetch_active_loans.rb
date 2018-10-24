@@ -6,6 +6,8 @@ module Epassbook
 
       @loans          = []
       @total_balance  = 0.00
+      @total_loan     = 0.00
+      @total_interest = 0.00
     end
 
     def execute!
@@ -30,15 +32,19 @@ module Epassbook
           next_payment_amount: next_payment.total_balance,
           next_payment_date: next_payment.due_date.strftime("%B %d, %Y"),
           last_payment_amount: last_payment.try(:amount) || 0.00,
-          last_payment_date: last_payment.present? ? last_payment.transacted_at.strftime("%B %d, %Y") : "N/A"
+          last_payment_date: last_payment.present? ? last_payment.transacted_at.strftime("%D") : "N/A"
         }
 
         @total_balance += o.total_balance
+        @total_loan += o.principal
+        @total_interest += o.interest
       end
 
       @data = {
         loans: @loans,
-        total_balance: @total_balance
+        total_balance: @total_balance,
+        total_loan: @total_loan,
+        total_interest: @total_interest
       }
 
       @data

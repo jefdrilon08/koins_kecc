@@ -10,7 +10,7 @@ module Api
           if member.blank?
             render json: { message: "member not found" }, status: 400
           else
-            render json: member
+            render json: member 
           end
         end
       end
