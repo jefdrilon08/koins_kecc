@@ -13,6 +13,7 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingEntryPreview from './AccountingEntryPreview';
+import {numberWithCommas} from '../utils/helpers'; 
 
 export default class AccountingEntryFormDisplay extends React.Component {
   constructor(props) {
@@ -51,7 +52,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
           check_number: "",
           check_voucher_number: "",
           date_of_check: "",
-          sub_reference_number: ""
+          sub_reference_number: "",
+          payee: ""
         },
         journal_entries: []
       }
@@ -460,6 +462,15 @@ export default class AccountingEntryFormDisplay extends React.Component {
     });
   };
 
+  handlePayeeChanged(event) {
+    var data        = this.state.data;
+    data.data.payee = event.target.value.toUpperCase();
+
+    this.setState({
+      data: data
+    });
+  };
+
   renderDataParameters() {
     var accountingEntryData = this.state.data;
 
@@ -571,6 +582,18 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 options={branchOptions}
                 onChange={this.handleBranchChanged.bind(this)}
                 disabled={state.isLoading}
+              />
+              <br/>
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-group">
+              <label>Payee</label>
+              <input
+                value={this.state.data.data.payee}
+                onChange={this.handlePayeeChanged.bind(this)}
+                disabled={state.isLoading}
+                className="form-control"
               />
               <br/>
             </div>

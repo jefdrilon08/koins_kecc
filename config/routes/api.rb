@@ -11,6 +11,7 @@ namespace :api do
     get "/members/fetch", to: "members#fetch"
     post "/members/generate_access_token", to: "members#generate_access_token"
     post "/members/save_signature", to: "members#save_signature"
+    post "/members/save", to: "members#save"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"

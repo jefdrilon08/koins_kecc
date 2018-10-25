@@ -9,9 +9,19 @@ module Api
         data  = []
 
         branches.each do |o|
+          centers = []
+
+          o.centers.each do |c|
+            centers << {
+              id: c.id,
+              name: c.name
+            }
+          end
+
           data << {
             id: o.id,
-            name: o.name
+            name: o.name,
+            centers: centers
           }
         end
 

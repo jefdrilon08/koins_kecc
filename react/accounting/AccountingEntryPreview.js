@@ -1,4 +1,5 @@
 import React from 'react';
+import {numberWithCommas} from '../utils/helpers';
 
 export default class AccountingEntryPreview extends React.Component {
   constructor(props) {
@@ -50,7 +51,7 @@ export default class AccountingEntryPreview extends React.Component {
       return (
         <div className="callout callout-danger">
           <strong>
-            Entries are not balanced.. Debit: {this.numberWithCommas(debitAmount)} Credit: {this.numberWithCommas(creditAmount)}
+            Entries are not balanced.. Debit: {numberWithCommas(debitAmount)} Credit: {numberWithCommas(creditAmount)}
           </strong>
         </div>
       );
@@ -95,7 +96,7 @@ export default class AccountingEntryPreview extends React.Component {
               {this.props.journalEntries[i].accounting_code_name}
             </td>
             <td className="text-right">
-              {this.numberWithCommas(this.props.journalEntries[i].amount)}
+              {numberWithCommas(this.props.journalEntries[i].amount)}
             </td>
             <td className="text-right">
             </td>
@@ -126,7 +127,7 @@ export default class AccountingEntryPreview extends React.Component {
             <td className="text-right">
             </td>
             <td className="text-right">
-              {this.numberWithCommas(this.props.journalEntries[i].amount)}
+              {numberWithCommas(this.props.journalEntries[i].amount)}
             </td>
           </tr>
         );

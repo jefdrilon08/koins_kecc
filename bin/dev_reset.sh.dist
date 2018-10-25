@@ -18,3 +18,7 @@ bundle exec rails load:amortization_schedule_entries_from_file ROOT=$ROOT FILENA
 bundle exec rails load:member_accounts_from_file ROOT=$ROOT FILENAME=member-accounts-v2.json
 bundle exec rails load:member_account_transactions_from_file ROOT=$ROOT FILENAME=member-account-transactions-v2.json
 bundle exec rails load:loan_payments_from_file ROOT=$ROOT FILENAME=loan-payments-v2.json
+
+# Rehash
+bundle exec rails rehash:member_accounts
+bundle exec rails rehash:loans

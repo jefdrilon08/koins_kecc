@@ -26,7 +26,8 @@ module Accounting
             check_number: "",
             check_voucher_number: "",
             date_of_check: "",
-            sub_reference_number: ""
+            sub_reference_number: "",
+            payee: ""
           },
           journal_entries: []
         }

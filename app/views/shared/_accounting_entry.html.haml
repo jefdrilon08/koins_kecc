@@ -39,15 +39,20 @@
             #{number_to_currency(o.amount, unit: "")}
     %hr
     .row
-      .col
-        %p
-          #{accounting_entry.particular}
+      .col-md-8
         - if accounting_entry.crb?
           %strong
             OR Number: 
           .text-muted
             #{accounting_entry.data['or_number']}
-      .col
+        - if accounting_entry.data["payee"].present?
+          %strong
+            Payee:
+          .text-muted
+            #{accounting_entry.data["payee"]}
+        %p
+          #{accounting_entry.particular}
+      .col-md-4
         %p.text-right
           %label
             %strong
