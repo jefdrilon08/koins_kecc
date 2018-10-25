@@ -3,7 +3,7 @@
     .fa.fa-book-reader
     Books
   %li.breadcrumb-item
-    = link_to "/accounting/books/#{params[:book].upcase}" do
+    = link_to "/accounting/books/#{params[:book].downcase}" do
       .fa.fa-book
       #{params[:book].downcase}
   %li.breadcrumb-item

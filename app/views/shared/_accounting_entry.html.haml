@@ -85,3 +85,10 @@
               Approved By:
           %br
           #{accounting_entry.approved_by}
+    .row
+      .col
+        .text-right
+          - if accounting_entry.pending?
+            = link_to accounting_accounting_entry_form_path(id: accounting_entry.id, book: accounting_entry.book), class: 'btn btn-info btn-sm' do
+              .fa.fa-pencil-alt
+              Edit Accounting Entry

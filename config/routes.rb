@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get "/accounting/form", to: "accounting#form", as: :accounting_form
 
   namespace :accounting do
+    get "/accounting_entries", to: "acounting_entries#index", as: :accounting_entries
     get "/accounting_entries/:id", to: "accounting_entries#show", as: :accounting_entry
     delete "/accounting_entries/:id", to: "accounting_entries#destroy", as: :delete_accounting_entry
     get "/accounting_entry/form", to: "accounting_entries#form", as: :accounting_entry_form

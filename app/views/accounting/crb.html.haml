@@ -5,5 +5,6 @@
     .col
       .card
         .card-body
+          = render partial: "filter"
           = render partial: "book_records", locals: { records: @records }
           = paginate @records
