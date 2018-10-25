@@ -45,13 +45,39 @@
             OR Number: 
           .text-muted
             #{accounting_entry.data['or_number']}
+        - if accounting_entry.cdb?
+          .row
+            - if accounting_entry.data["check_number"].present?
+              .col
+                %strong
+                  Check Number:
+                .text-muted
+                  #{accounting_entry.data["check_number"]}
+            - if accounting_entry.data["check_voucher_number"].present?
+              .col
+                %strong
+                  Check Voucher Number:
+                .text-muted
+                  #{accounting_entry.data["check_voucher_number"]}
+            - if accounting_entry.data["date_of_check"].present?
+              .col
+                %strong
+                  Date of Check
+                .text-muted
+                  #{accounting_entry.data["date_of_check"]}
         - if accounting_entry.data["payee"].present?
+          %br
           %strong
             Payee:
           .text-muted
             #{accounting_entry.data["payee"]}
-        %p
-          #{accounting_entry.particular}
+        %br
+        .row
+          .col
+            %label
+              Particular
+            %p
+              #{accounting_entry.particular}
       .col-md-4
         %p.text-right
           %label
