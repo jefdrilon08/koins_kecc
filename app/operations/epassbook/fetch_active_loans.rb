@@ -1,5 +1,7 @@
 module Epassbook
   class FetchActiveLoans
+    include ActionView::Helpers::NumberHelper
+
     def initialize(member:)
       @member       = member
       @active_loans = @member.loans.where(status: "active")
@@ -20,18 +22,20 @@ module Epassbook
 
         next_payment  = o.amortization_schedule_entries.unpaid.first
 
+        last_payment_amount = last_payment.try(:amount) || 0.00
+
         @loans << {
           id: o.id,
-          principal: o.principal,
-          interest: o.interest,
-          total_dues: o.total_dues,
-          total_balance: o.total_balance,
-          total_paid: o.total_paid,
+          principal: number_to_currency(o.principal, unit: ""),
+          interest: number_to_currency(o.interest, unit: ""),
+          total_dues: number_to_currency(o.total_dues, unit: ""),
+          total_balance: number_to_currency(o.total_balance, unit: ""),
+          total_paid: number_to_currency(o.total_paid, unit: ""),
           loan_product: o.loan_product.to_s,
           pn_number: o.pn_number,
-          next_payment_amount: next_payment.total_balance,
-          next_payment_date: next_payment.due_date.strftime("%B %d, %Y"),
-          last_payment_amount: last_payment.try(:amount) || 0.00,
+          next_payment_amount: number_to_currency(next_payment.total_balance, unit: ""),
+          next_payment_date: next_payment.due_date.strftime("%D"),
+          last_payment_amount: number_to_currency(last_payment_amount, unit: ""),
           last_payment_date: last_payment.present? ? last_payment.transacted_at.strftime("%D") : "N/A"
         }
 
@@ -42,9 +46,10 @@ module Epassbook
 
       @data = {
         loans: @loans,
-        total_balance: @total_balance,
-        total_loan: @total_loan,
-        total_interest: @total_interest
+        total_balance: number_to_currency(@total_balance, unit: ""),
+        total_loan: number_to_currency(@total_loan, unit: ""),
+        total_interest: number_to_currency(@total_interest, unit: ""),
+        total_balance: number_to_currency(@total_balance, unit: "")
       }
 
       @data
