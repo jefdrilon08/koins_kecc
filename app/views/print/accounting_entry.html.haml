@@ -1,0 +1,172 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: calibri;
+  }
+
+  table.voucher td.amount{
+    text-align: right;
+  }
+
+  table.voucher th.amount{
+    text-align: right;
+  }
+
+  table.voucher td.code{
+    text-align: center;
+  }
+
+  table.voucher th.header{
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  table.signatories td.overline{
+    text-decoration: overline;
+  }
+
+  hr {
+    border-color: black;
+  }
+
+%span.print-text
+  %center
+    %br
+    %br
+    %p
+      %b
+        #{@accounting_entry_data[:company_name]} - #{@accounting_entry_data[:branch]}
+      %br  
+      %b
+        #{@accounting_entry_data[:company_address]}
+  - if @accounting_entry_data[:book] == "CRB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH VOUCHER
+  - elsif @accounting_entry_data[:book] == "JVB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            JOURNAL VOUCHER
+  - elsif @accounting_entry_data[:book] == "CDB"
+    %span.print-text-book
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH DISBURSEMENT
+    %br
+%left
+  %br
+  %span.print-text-sub
+    %table{:border => "0"}
+      %tr
+        %th{:width => "17%"} System ID:
+        %th{:width => "20%"}
+      %tr
+        %th{:width => "17%"} Reference No:
+        %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
+        %th{:width => "18%"} Doc. No:
+        - if @accounting_entry_data[:book] == "CRB"
+          %th{:width => "17%"} OR Number:
+          %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
+        - else
+          %th{:width => "17%"} Check No:
+          %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
+      %tr
+        %th{:width => "17%"} Date Approved:
+        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+        %th{:width => "17%"} Date Requested:
+        %th{:width => "20%"} #{@accounting_entry_data[:date_prepared]}
+        %th{:width => "17%"} 
+        %th{:width => "20%"} 
+      - if @accounting_entry_data[:data][:payee].present?
+        %tr
+          %th{:width => "17%"} Payee:
+          %th{:width => "20%"} #{@accounting_entry_data[:data][:payee]}
+    %hr
+  %table.voucher{"border:" => "", :none => ""}
+    %tr
+      %th.header{width: 220} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
+      %th.header{width: 450} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
+      %th.header{width: 100} 
+      %th.header{width: 160} &emsp;&emsp;Debit(PHP)&emsp;&emsp;
+      %th.header{width: 160} &emsp;&emsp;Credit(PHP)&emsp;
+
+    - @accounting_entry_data[:debit_journal_entries].each do |o|
+      %tr
+        %td.code #{o[:code]}
+        %td #{o[:name]}
+        %td
+        %td.amount
+          #{o[:amount]}
+        %td 
+    - @accounting_entry_data[:credit_journal_entries].each do |o|
+      %tr
+        %td.code #{o[:code]}
+        %td #{o[:name]}
+        %td
+        %td
+        %td.amount
+          #{o[:amount]}
+    %tr
+      %th
+      %th
+      %th 
+      %th.amount ___________
+      %th.amount ___________
+    %tr
+      %th
+      %th
+      %th Total 
+      %th.amount
+        #{@accounting_entry_data[:total_debit]}
+      %th.amount
+        #{@accounting_entry_data[:total_credit]}
+%center
+  %p
+    __________________________________________________________
+    %br 
+    %b
+      *** Nothing Follows ***      
+%left  
+  %hr
+  %p
+    %b
+      Particular:
+    #{@accounting_entry_data[:particular]}
+  %br
+  %br  
+  %table.signatories{"border:" => "", :none => ""}
+    %tr
+      %th{width: 255} 
+        #{@accounting_entry_data[:prepared_by]}
+      %th{width: 255}
+      %th{width: 255} #{@accounting_entry_data[:approved_by]}
+    %tr
+      %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+      %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
+      %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  %br
+  %br
+  %p
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    ______________________________________________
+    %br
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    Recieved By:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date:
+
+:javascript
+  window.print();
