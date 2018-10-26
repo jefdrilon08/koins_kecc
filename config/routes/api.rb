@@ -36,6 +36,8 @@ namespace :api do
       get "/active_loans", to: "loans#active_loans"
       get "/savings", to: "savings#index"
       get "/savings/show", to: "savings#transactions"
+      get "/equities", to: "equities#index"
+      get "/equities/show", to: "equities#transactions"
       get "/loans/show", to: "loans#show"
       get "/loans/payments", to: "loans#payments"
     end
