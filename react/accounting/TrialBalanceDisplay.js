@@ -12,6 +12,8 @@ import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
+import {numberWithCommas} from '../utils/helpers';
+
 export default class TrialBalanceDisplay extends React.Component {
   constructor(props) {
     super(props);
@@ -36,20 +38,6 @@ export default class TrialBalanceDisplay extends React.Component {
     this.fetchBranches();
   }
 
-  numberWithCommas(x) {
-    x = (Math.round(x * 100) / 100).toFixed(2);
-
-    if(x < 0) {
-      x = x * -1; 
-      x = "(" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ")";
-    } else {
-      x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }   
-
-    return x;
-
-  }
-
   fetchBranches() {
     var context = this;
 
@@ -62,7 +50,8 @@ export default class TrialBalanceDisplay extends React.Component {
       dataType: 'json',
       success: function(response) {
         context.setState({
-          branches: response.branches
+          branches: response.branches,
+          currentBranchId: response.branches[0].id
         });
       },
       error: function(response) {
@@ -149,22 +138,22 @@ export default class TrialBalanceDisplay extends React.Component {
             </strong>
           </td>
           <td className="text-right">
-            {this.numberWithCommas(entry.beginning_debit)}
+            {numberWithCommas(entry.beginning_debit)}
           </td>
           <td className="text-right">
-            {this.numberWithCommas(entry.beginning_credit)}
+            {numberWithCommas(entry.beginning_credit)}
           </td>
           <td className="text-right">
-            {this.numberWithCommas(entry.current_debit)}
+            {numberWithCommas(entry.current_debit)}
           </td>
           <td className="text-right">
-            {this.numberWithCommas(entry.current_credit)}
+            {numberWithCommas(entry.current_credit)}
           </td>
           <td className="text-right">
-            {this.numberWithCommas(entry.ending_debit)}
+            {numberWithCommas(entry.ending_debit)}
           </td>
           <td className="text-right">
-            {this.numberWithCommas(entry.ending_credit)}
+            {numberWithCommas(entry.ending_credit)}
           </td>
         </tr>
       );

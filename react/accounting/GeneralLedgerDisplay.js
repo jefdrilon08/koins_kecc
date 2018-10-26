@@ -8,6 +8,7 @@ import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
 import GeneralLedgerEntry from './GeneralLedgerEntry';
+import ErrorDisplay from '../ErrorDisplay';
 
 import moment from 'moment';
 
@@ -27,39 +28,68 @@ export default class GeneralLedgerDisplay extends React.Component {
       isLoading: false,
       start_date: moment(firstDay),
       end_date: moment(lastDay),
+      currentBranchId: "",
+      branches: [],
+      errors: false,
       data: false
     };
   }
 
   componentDidMount() {
+    this.fetchBranches();
   }
 
-  numberWithCommas(x) {
-    x = (Math.round(x * 100) / 100).toFixed(2);
+  fetchBranches() {
+    var context = this;
 
-    if(x < 0) {
-      x = x * -1; 
-      x = "(" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ")";
-    } else {
-      x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }   
+    $.ajax({
+      url: "/api/v1/branches",
+      method: "GET",
+      data: {
+        
+      },
+      dataType: 'json',
+      success: function(response) {
+        console.log("response from /api/v1/branches");
+        console.log(response);
+        var branchId  = context.state.currentBranchId;
 
-    return x;
+        if(!branchId) {
+          branchId = response.branches[0].id;
+        }
 
+        console.log("branchId: " + branchId);
+
+        context.setState({
+          branches: response.branches,
+          currentBranchId: branchId,
+          errors: false
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        //alert("Error in fetching branches");
+
+        context.setState({
+          branches: []
+        });
+      }
+    });
   }
 
   fetch() {
     var context     = this;
-    console.log(context.state);
     var start_date  = moment(context.state.start_date).format('YYYY-MM-DD');
     var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
+    var branchId    = context.state.currentBranchId;
 
     $.ajax({
       url: "/api/v1/accounting/fetch_general_ledger",
       method: "GET",
       data: {
         start_date: start_date,
-        end_date: end_date
+        end_date: end_date,
+        branch_id: branchId
       },
       dataType: 'json',
       success: function(response) {
@@ -73,11 +103,15 @@ export default class GeneralLedgerDisplay extends React.Component {
       },
       error: function(response) {
         console.log(response);
-        alert("Error in fetching savings data");
+        //alert("Error in fetching general ledger data");
+
+        var errors  = JSON.parse(response.responseText);
+        console.log(errors);
 
         context.setState({
           isLoading: false,
-          data: false
+          data: false,
+          errors: errors
         });
       }
     });
@@ -137,6 +171,16 @@ export default class GeneralLedgerDisplay extends React.Component {
     }
   }
 
+  renderErrors() {
+    if(this.state.errors) {
+      return (
+        <ErrorDisplay
+          errors={this.state.errors}
+        />
+      );
+    }
+  }
+
   renderContent() {
     var context = this;
     var state   = context.state;
@@ -170,9 +214,30 @@ export default class GeneralLedgerDisplay extends React.Component {
     }
   }
 
+  handleBranchChanged(event) {
+    this.setState({
+      currentBranchId: event.target.value
+    });
+  }
+
   render() {
     var context = this;
     var state   = context.state;
+
+    var branchOptions = [];
+    
+    for(var i = 0; i < state.branches.length; i++) {
+      branchOptions.push(
+        <option value={state.branches[i].id} key={"b-" + i}>
+          {state.branches[i].name}
+        </option>
+      );
+    }
+
+    var currentBranchId = state.currentBranchId;
+
+    console.log(branchOptions);
+    console.log("currentBranchId: " + this.state.currentBranchId);
 
     return  (
       <div>
@@ -201,6 +266,19 @@ export default class GeneralLedgerDisplay extends React.Component {
           </div>
           <div className="col">
             <div className="form-group">
+              <label>Branch</label>
+              <select 
+                className="form-control" 
+                value={currentBranchId}
+                onChange={this.handleBranchChanged.bind(this)}
+              >
+                {branchOptions}
+              </select>
+              <br/>
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-group">
               <label>Actions</label>
               <br/>
               <button
@@ -213,6 +291,7 @@ export default class GeneralLedgerDisplay extends React.Component {
             </div>
           </div>
         </div>
+        {this.renderErrors()} 
         <hr/> 
         {context.renderContent()}
       </div>

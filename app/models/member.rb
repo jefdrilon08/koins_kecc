@@ -35,4 +35,8 @@ class Member < ApplicationRecord
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
   end
+
+  def active?
+    self.status == "active"
+  end
 end

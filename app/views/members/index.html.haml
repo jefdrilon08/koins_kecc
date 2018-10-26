@@ -5,6 +5,10 @@
     .col
       .card
         .card-body
-          #content
-
-= javascript_include_tag "MembersIndex.min.react"
+          = render partial: "index_filter"
+          - if @members.size > 0
+            = render partial: "index_list", locals: { members: @members }
+            = paginate @members
+          - else
+            %p
+              No members found

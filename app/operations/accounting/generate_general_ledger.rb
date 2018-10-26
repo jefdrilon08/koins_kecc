@@ -5,6 +5,7 @@ module Accounting
 
       @start_date = @config[:start_date]
       @end_date   = @config[:end_date]
+      @branch     = @config[:branch]
 
       @data = {
         start_date: @start_date.strftime("%b %d, %Y"),
@@ -17,9 +18,10 @@ module Accounting
       journal_entries_by_accounting_code  = JournalEntry
                                               .eager_load(:accounting_code, :accounting_entry)
                                               .where(
-                                                "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ?",
+                                                "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
                                                 @start_date,
-                                                @end_date
+                                                @end_date,
+                                                @branch.id
                                               )
                                               .order("accounting_codes.code ASC, accounting_entries.date_posted ASC")
                                               .group_by(&:accounting_code_id)
@@ -28,9 +30,10 @@ module Accounting
                               journal_entries: :accounting_entry
                             )
                             .where(
-                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ?",
+                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
                               "DR",
-                              @start_date
+                              @start_date,
+                              @branch.id
                             )
                             .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
                             .group("accounting_codes.id")
@@ -39,9 +42,10 @@ module Accounting
                               journal_entries: :accounting_entry
                             )
                             .where(
-                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ?",
+                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
                               "CR",
-                              @start_date
+                              @start_date,
+                              @branch.id
                             )
                             .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
                             .group("accounting_codes.id")
