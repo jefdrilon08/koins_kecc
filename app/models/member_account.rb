@@ -5,6 +5,7 @@ class MemberAccount < ApplicationRecord
 
   scope :savings, -> { joins(:member).where("account_type = ?", "SAVINGS").order("members.last_name ASC") }
   scope :insurance, -> { joins(:member).where("account_type = ?", "INSURANCE").order("members.last_name ASC") }
+  scope :equities, -> { joins(:member).where("account_type = ?", "EQUITY").order("members.last_name ASC") }
 
   def savings?
     self.account_type == "SAVINGS"

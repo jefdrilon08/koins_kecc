@@ -9,7 +9,7 @@ module Api
         data  = accounting_codes.map{ |o|
                   {
                     id: o.id,
-                    name: o.name
+                    name: "#{o.code} - #{o.name}"
                   }
                 }
 

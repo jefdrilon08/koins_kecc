@@ -3,20 +3,15 @@ import React from "react";
 export default class ErrorDisplay extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state  = {
-      errors: {
-        messages: [],
-        fullMessages: [] 
-      }
-    }
   }
 
   renderFullMessages() {
     var context       = this;
-    var fullMessages  = context.state.fullMessages;
+    var fullMessages  = this.props.errors.full_messages;
 
-    listItemMessages  = [];
+    var listItemMessages  = [];
+
+    console.log(this.props);
 
     for(var i = 0; i < fullMessages.length; i++) {
       listItemMessages.push(
@@ -25,14 +20,27 @@ export default class ErrorDisplay extends React.Component {
         </li>
       );
     }
+
+    return listItemMessages;
   };
 
   render() {
     return  (
       <div className="error-display">
         <div className="callout callout-danger">
-          <ul>
-          </ul>
+          <div className="row">
+            <div className="col">
+              <br/>
+              <p>
+                <strong>
+                  The following errors occurred:
+                </strong>
+              </p>
+              <ul>
+                {this.renderFullMessages()}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     );

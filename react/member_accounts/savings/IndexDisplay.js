@@ -6,6 +6,8 @@ import 'react-table/react-table.css';
 
 import SkCubeLoading from '../../SkCubeLoading';
 
+import {numberWithCommas} from '../../utils/helpers';
+
 export default class IndexDisplay extends React.Component {
   constructor(props) {
     super(props);
@@ -18,20 +20,6 @@ export default class IndexDisplay extends React.Component {
 
   componentDidMount() {
     this.fetch();
-  }
-
-  numberWithCommas(x) {
-    x = (Math.round(x * 100) / 100).toFixed(2);
-
-    if(x < 0) {
-      x = x * -1; 
-      x = "(" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ")";
-    } else {
-      x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }   
-
-    return x;
-
   }
 
   fetch() {
@@ -102,10 +90,10 @@ export default class IndexDisplay extends React.Component {
               Cell: row => (
                 <strong>
                   <div className="text-right">
-                    {context.numberWithCommas(row.original.balance)}
+                    {numberWithCommas(row.original.balance)}
                     <br/>
                     <small className="text-muted">
-                      Maintaining Balance: {context.numberWithCommas(row.original.maintaining_balance)}
+                      Maintaining Balance: {numberWithCommas(row.original.maintaining_balance)}
                     </small>
                   </div>
                 </strong>

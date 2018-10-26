@@ -13,6 +13,7 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingEntryPreview from './AccountingEntryPreview';
+import {numberWithCommas} from '../utils/helpers'; 
 
 export default class AccountingEntryFormDisplay extends React.Component {
   constructor(props) {
@@ -51,7 +52,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
           check_number: "",
           check_voucher_number: "",
           date_of_check: "",
-          sub_reference_number: ""
+          sub_reference_number: "",
+          payee: ""
         },
         journal_entries: []
       }
@@ -166,18 +168,16 @@ export default class AccountingEntryFormDisplay extends React.Component {
     });
   }
 
-  numberWithCommas(x) {
-    x = (Math.round(x * 100) / 100).toFixed(2);
+  handleDateOfCheckChanged(o) {
+    var data  = this.state.data;
 
-    if(x < 0) {
-      x = x * -1; 
-      x = "(" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ")";
-    } else {
-      x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }   
+    if(o) {
+      data.data.date_of_check = o.format("YYYY-MM-DD");
 
-    return x;
-
+      this.setState({
+        data: data
+      });
+    }
   }
 
   save() {
@@ -460,8 +460,36 @@ export default class AccountingEntryFormDisplay extends React.Component {
     });
   };
 
+  handlePayeeChanged(event) {
+    var data        = this.state.data;
+    data.data.payee = event.target.value.toUpperCase();
+
+    this.setState({
+      data: data
+    });
+  };
+
+  handleCheckNumberChanged(event) {
+    var data                = this.state.data;
+    data.data.check_number  = event.target.value;
+
+    this.setState({
+      data: data
+    });
+  };
+
+  handleCheckVoucherNumberChanged(event) {
+    var data                        = this.state.data;
+    data.data.check_voucher_number  = event.target.value;
+
+    this.setState({
+      data: data
+    });
+  };
+
   renderDataParameters() {
     var accountingEntryData = this.state.data;
+    var state               = this.state;
 
     if(accountingEntryData.book == "CRB") {
       return  (
@@ -482,6 +510,62 @@ export default class AccountingEntryFormDisplay extends React.Component {
                   onChange={this.handleOrNumberChanged.bind(this)} 
                   className="form-control" 
                   disabled={this.state.isLoading}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else if(accountingEntryData.book == "CDB") {
+      var dateOfCheck = moment();
+
+      if(accountingEntryData && accountingEntryData.data.date_of_check) {
+        dateOfCheck = moment(accountingEntryData.data.date_of_check);
+      }
+
+      return  (
+        <div>
+          <hr/>
+          <h6>
+            Cash Disbursement Parameters
+          </h6>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>
+                  Check Number
+                </label>
+                <input 
+                  type="text" 
+                  value={accountingEntryData.data.check_number}
+                  onChange={this.handleCheckNumberChanged.bind(this)} 
+                  className="form-control" 
+                  disabled={state.isLoading}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>
+                  Check Voucher Number
+                </label>
+                <input 
+                  type="text" 
+                  value={accountingEntryData.data.check_voucher_number}
+                  onChange={this.handleCheckVoucherNumberChanged.bind(this)} 
+                  className="form-control" 
+                  disabled={this.state.isLoading}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>Date of Check</label>
+                <DatePicker
+                  className="form-control"
+                  selected={dateOfCheck}
+                  onChange={this.handleDateOfCheckChanged.bind(this)}
+                  disabled={state.isLoading}
                 />
               </div>
             </div>
@@ -571,6 +655,18 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 options={branchOptions}
                 onChange={this.handleBranchChanged.bind(this)}
                 disabled={state.isLoading}
+              />
+              <br/>
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-group">
+              <label>Payee</label>
+              <input
+                value={this.state.data.data.payee}
+                onChange={this.handlePayeeChanged.bind(this)}
+                disabled={state.isLoading}
+                className="form-control"
               />
               <br/>
             </div>

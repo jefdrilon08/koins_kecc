@@ -13,6 +13,29 @@ module Api
         render json: data
       end
 
+      def save
+        member_data = params[:member_data]
+
+        config  = {
+          member_data: member_data,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateSave.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].size > 0
+          render json: errors, status: 402
+        else
+          member  = ::Members::Save.new(
+                      config: config
+                    )
+
+          render json: { id: member.id }
+        end
+      end
+
       def save_signature
         member  = Member.find(params[:id])
 

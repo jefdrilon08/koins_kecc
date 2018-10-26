@@ -4,6 +4,9 @@
     Dashboard
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      = link_to member_form_path, class: "btn" do
+        .fa.fa-plus
+        New Member
       = link_to "download_backup", class: "btn" do
         .fa.fa-download
         Download Backup

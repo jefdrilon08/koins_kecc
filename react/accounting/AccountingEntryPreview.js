@@ -1,4 +1,5 @@
 import React from 'react';
+import {numberWithCommas} from '../utils/helpers';
 
 export default class AccountingEntryPreview extends React.Component {
   constructor(props) {
@@ -34,6 +35,39 @@ export default class AccountingEntryPreview extends React.Component {
     }
   };
 
+  renderCdbParameters() {
+    if(this.props.book == "CDB") {
+      return (
+        <div className="row">
+          <div className="col">
+            <strong>
+              Check Number:
+            </strong>
+            <div className="text-muted">
+              {this.props.data.check_number}
+            </div>
+          </div>
+          <div className="col">
+            <strong>
+              Check Voucher Number:
+            </strong>
+            <div className="text-muted">
+              {this.props.data.check_voucher_number}
+            </div>
+          </div>
+          <div className="col">
+            <strong>
+              Date of Check
+            </strong>
+            <div className="text-muted">
+              {this.props.data.date_of_check}
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+
   renderBalancedWarning() {
     var debitAmount   = 0.00;
     var creditAmount  = 0.00;
@@ -50,24 +84,11 @@ export default class AccountingEntryPreview extends React.Component {
       return (
         <div className="callout callout-danger">
           <strong>
-            Entries are not balanced.. Debit: {this.numberWithCommas(debitAmount)} Credit: {this.numberWithCommas(creditAmount)}
+            Entries are not balanced.. Debit: {numberWithCommas(debitAmount)} Credit: {numberWithCommas(creditAmount)}
           </strong>
         </div>
       );
     }
-  }
-
-  numberWithCommas(x) {
-    x = (Math.round(x * 100) / 100).toFixed(2);
-
-    if(x < 0) {
-      x = x * -1; 
-      x = "(" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ")";
-    } else {
-      x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }   
-
-    return x;
   }
 
   render() {
@@ -95,7 +116,7 @@ export default class AccountingEntryPreview extends React.Component {
               {this.props.journalEntries[i].accounting_code_name}
             </td>
             <td className="text-right">
-              {this.numberWithCommas(this.props.journalEntries[i].amount)}
+              {numberWithCommas(this.props.journalEntries[i].amount)}
             </td>
             <td className="text-right">
             </td>
@@ -126,7 +147,7 @@ export default class AccountingEntryPreview extends React.Component {
             <td className="text-right">
             </td>
             <td className="text-right">
-              {this.numberWithCommas(this.props.journalEntries[i].amount)}
+              {numberWithCommas(this.props.journalEntries[i].amount)}
             </td>
           </tr>
         );
@@ -175,6 +196,9 @@ export default class AccountingEntryPreview extends React.Component {
           <hr/>
           <div className="row">
             <div className="col">
+              <label>
+                Particular:
+              </label>
               <p>
                 {this.props.particular}
               </p>
@@ -192,6 +216,7 @@ export default class AccountingEntryPreview extends React.Component {
             </div>
           </div>
           {this.renderCrbParameters()}
+          {this.renderCdbParameters()}
         </div>
       </div>
     );

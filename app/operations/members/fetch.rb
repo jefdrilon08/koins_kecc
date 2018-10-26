@@ -4,9 +4,55 @@ module Members
       @config = config
 
       @member = Member.where(id: @config[:id]).first
-    end
+
+      if @member.blank?
+        @member = Member.new(
+                    date_of_birth: Date.today - 30.years
+                  )
+      end
 
     def execute!
+      data  = {
+        address: {
+          street: "",
+          district: "",
+          city: ""
+        },
+        spouse: {
+          first_name: "",
+          middle_name: "",
+          last_name: "",
+          date_of_birth: Date.today - 30.years,
+          occupation: ""
+        },
+        government_identification_numbers: {
+          sss_number: "",
+          pag_ibig_number: "",
+          phil_health_number: "",
+          tin_number: ""
+        },
+        num_children_elementary: 0,
+        num_children_high_school: 0,
+        num_children_college: 0,
+        num_children_others: 0
+      }
+
+      @member_data  = {
+        first_name: @member.first_name || "",
+        middle_name: @member.middle_name || "",
+        last_name: @member.last_name || "",
+        gender: @member.gender || "Female",
+        date_of_birth: @member.date_of_birth || Date.today - 20.years,
+        civil_status: @member.civil_status || "Single",
+        home_number: @member.home_number || "",
+        mobile_number: @member.mobile_number || "",
+        place_of_birth: @member.place_of_birth || "",
+        member_type: @member.member_type || "Regular",
+        religion: @member.religion || "",
+        data: @member.new_record? ? data : @member.data
+      }
+    end
+      @member_data
     end
   end
 end
