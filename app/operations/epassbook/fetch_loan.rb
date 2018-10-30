@@ -39,7 +39,7 @@ module Epassbook
           paid: number_to_currency(o.total_paid, unit: ""),
           balance: number_to_currency(o.total_balance, unit: ""),
           amount_due: number_to_currency(o.amount_due, unit: ""),
-          running_balance: @running_balance
+          running_balance: number_to_currency(@running_balance, unit: "")
         }
       end
 
