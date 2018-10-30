@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  collection_date: 2018-10-30
+  center: one
+  branch: one
+  data: 
+  status: MyString
+
+two:
+  collection_date: 2018-10-30
+  center: two
+  branch: two
+  data: 
+  status: MyString

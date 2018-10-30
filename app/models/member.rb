@@ -32,6 +32,8 @@ class Member < ApplicationRecord
   #validates :home_number, presence: true
   validates :mobile_number, presence: true
 
+  scope :active, -> { where(status: "active").order("last_name ASC") }
+
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
   end

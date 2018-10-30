@@ -1,4 +1,4 @@
-module Billing
+module Billings
   class NextPayment
     def initialize(config:)
       @config           = config
@@ -20,6 +20,7 @@ module Billing
           identification_number: @member.identification_number
         },
         attendance: false,
+        total_expected_collections: 0.00,
         payments: []
       }
     end
@@ -61,10 +62,12 @@ module Billing
                           "due_date <= ?",
                           @collection_date
                         ).sum("principal_balance + interest_balance").round(2)
-
+        
         data[:enabled]  = true
         data[:loan_id]  = loan.id
       end
+
+      @data[:total_expected_collections] += data[:amount]
 
       data
     end
@@ -91,6 +94,8 @@ module Billing
         data[:enabled]  = true
         data[:loan_id]  = loan.id
       end
+
+      @data[:total_expected_collections] += data[:amount]
 
       data
     end

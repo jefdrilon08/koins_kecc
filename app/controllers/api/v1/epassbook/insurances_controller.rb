@@ -1,7 +1,7 @@
 module Api
   module V1
     module Epassbook
-      class InsuranceController < ApiEpassbookController
+      class InsurancesController < ApiEpassbookController
         before_action :authenticate_member_access_token!
 
         def transactions

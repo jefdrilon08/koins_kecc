@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
   get "/accounting/form", to: "accounting#form", as: :accounting_form
 
+  # Billing
+  resources :billings, only: [:index, :show, :destroy]
+
   # Printing
   get "/print", to: "print#print"
 
