@@ -20,7 +20,7 @@ module Api
                     approved_by: approved_by
                   ).execute!
 
-          render message: { message: "ok", id: loan.id }
+          render json: { message: "ok", id: loan.id }
         end
       end
     end

@@ -25,16 +25,21 @@ module Epassbook
           payments: []
         }
       }
+
+      @running_balance = @loan.principal + @loan.interest
     end
 
     def execute!
       @amortization_schedule_entries.each do |o|
+        @running_balance -= o.total_paid
+
         @data[:loan][:amortization] << {
           id: o.id,
           due_date: o.due_date.strftime("%B %d, %Y"),
           paid: number_to_currency(o.total_paid, unit: ""),
           balance: number_to_currency(o.total_balance, unit: ""),
-          amount_due: number_to_currency(o.amount_due, unit: "")
+          amount_due: number_to_currency(o.amount_due, unit: ""),
+          running_balance: @running_balance
         }
       end
 
