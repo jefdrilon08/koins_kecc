@@ -34,11 +34,16 @@ namespace :api do
     # Print Services
     post "/print/generate_file", to: "print#generate_file"
 
+    # Billing
+    post "/billings", to: "billings#create"
+
     namespace :epassbook do
       get "/members/show", to: "members#show"
       get "/active_loans", to: "loans#active_loans"
       get "/savings", to: "savings#index"
       get "/savings/show", to: "savings#transactions"
+      get "/insurances", to: "insurances#index"
+      get "/insurances", to: "insurances#transactions"
       get "/equities", to: "equities#index"
       get "/equities/show", to: "equities#transactions"
       get "/loans/show", to: "loans#show"

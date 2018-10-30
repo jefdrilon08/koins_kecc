@@ -11,7 +11,7 @@ module Api
         branches.each do |o|
           centers = []
 
-          o.centers.each do |c|
+          o.centers.order("name ASC").each do |c|
             centers << {
               id: c.id,
               name: c.name

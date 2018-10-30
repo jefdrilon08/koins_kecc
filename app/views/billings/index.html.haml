@@ -1,0 +1,28 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @billings.size > 0
+            = render partial: "index_list", locals: { billings: @billings }
+            = paginate @billings
+          - else
+            %p
+              No billings found
+
+= render partial: "billings/modals/new_transaction"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+= javascript_include_tag "billings/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

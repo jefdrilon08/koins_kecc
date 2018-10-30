@@ -1,0 +1,33 @@
+module Api
+  module V1
+    class BillingsController < ApplicationController
+      before_action :authenticate_user!
+
+      def create
+        collection_date = params[:collection_date].try(:to_date)
+        branch_id       = params[:branch_id]
+        center_id       = params[:center_id]
+
+        config  = {
+          collection_date: collection_date,
+          branch_id: branch_id,
+          center_id: center_id
+        }
+
+        errors  = ::Billings::ValidateCreateBilling.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].size > 0
+          render json: errors, status: 400
+        else
+          billing = ::Billings::CreateBilling.new(
+                      config: config
+                    ).execute!
+
+          render json: { id: billing.id }
+        end
+      end
+    end
+  end
+end

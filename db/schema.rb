@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_23_065836) do
+ActiveRecord::Schema.define(version: 2018_10_30_032608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -127,6 +127,18 @@ ActiveRecord::Schema.define(version: 2018_10_23_065836) do
     t.string "short_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "billings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_billings_on_branch_id"
+    t.index ["center_id"], name: "index_billings_on_center_id"
   end
 
   create_table "branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -302,6 +314,8 @@ ActiveRecord::Schema.define(version: 2018_10_23_065836) do
   add_foreign_key "account_transaction_collections", "centers"
   add_foreign_key "accounting_entries", "branches"
   add_foreign_key "amortization_schedule_entries", "loans"
+  add_foreign_key "billings", "branches"
+  add_foreign_key "billings", "centers"
   add_foreign_key "branches", "clusters"
   add_foreign_key "centers", "branches"
   add_foreign_key "clusters", "areas"
