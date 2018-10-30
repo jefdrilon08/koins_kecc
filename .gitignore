@@ -42,3 +42,8 @@
 
 # scripts
 /bin/dev_reset.sh
+/bin/update.sh
+
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml

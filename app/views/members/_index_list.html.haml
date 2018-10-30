@@ -1,0 +1,42 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "10%" }
+        ID Number
+      %th
+        Name
+      %th
+        Branch
+      %th
+        Center
+      %th
+        %center
+          Status
+  %tbody
+    - members.each do |o|
+      %tr
+        %td
+          = link_to member_path(o) do
+            %strong
+              %small
+                #{o.identification_number}
+        %td
+          = link_to member_path(o) do
+            %strong
+              #{o.full_name}
+        %td
+          .text-muted
+            %small
+              #{o.branch.name}
+        %td
+          .text-muted
+            %small
+              #{o.center.name}
+        %td
+          %center
+            - if o.active?
+              .badge.badge-success
+                #{o.status}
+            - else
+              .badge.badge-danger
+                #{o.status}

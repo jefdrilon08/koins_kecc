@@ -34,7 +34,14 @@ module Members
         num_children_elementary: 0,
         num_children_high_school: 0,
         num_children_college: 0,
-        num_children_others: 0
+        num_children: 0,
+        reason_for_joining: "",
+        housing: {
+          type: "",
+          num_months: 0,
+          num_years: 0,
+          proof: ""
+        }
       }
 
       @member_data  = {

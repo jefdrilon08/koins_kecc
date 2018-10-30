@@ -8,7 +8,7 @@ module Loans
     end
 
     def execute!
-      not_yet_implemented!
+      #not_yet_implemented!
 
       @errors
     end

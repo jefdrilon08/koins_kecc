@@ -2,6 +2,24 @@ class MembersController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @members  = Member.select("*").where(branch_id: @branches.pluck(:id))
+    @q        = params[:q]
+    @status   = params[:status]
+
+    @centers  = @branches.first.centers
+
+    if @q.present?
+      @members  = @members.where(
+                    "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+                    q: "#{@q.upcase}%"
+                  )
+    end
+
+    if @status.present?
+      @members  = @members.where(status: @status)
+    end
+
+    @members  = @members.order("last_name ASC").page(params[:page]).per(20)
   end
 
   def form

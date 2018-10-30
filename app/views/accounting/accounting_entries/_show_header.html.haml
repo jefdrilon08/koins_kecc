@@ -14,6 +14,9 @@
       #{@accounting_entry.reference_number} - #{@accounting_entry.book}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      #btn-print.btn{ data: { id: @accounting_entry.id } }
+        .fa.fa-print
+        Print
       - if @accounting_entry.pending?
         = link_to accounting_accounting_entry_form_path(id: @accounting_entry.id, book: @accounting_entry.book), class: 'btn' do
           .fa.fa-pencil-alt

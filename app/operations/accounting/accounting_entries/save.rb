@@ -30,6 +30,7 @@ module Accounting
         @accounting_entry.branch        = @branch
         @accounting_entry.data          = @accounting_entry_data[:data]
         @accounting_entry.date_prepared = @accounting_entry_data[:date_prepared]
+        @accounting_entry.prepared_by   = @user.full_name
 
         # Remove unwanted journal entries
         if !@accounting_entry.new_record?

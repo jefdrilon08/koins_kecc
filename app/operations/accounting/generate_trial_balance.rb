@@ -4,6 +4,7 @@ module Accounting
       @config     = config
       @start_date = @config[:start_date]
       @end_date   = @config[:end_date]
+      @branch     = @config[:branch]
 
       @year = @end_date.year
       
@@ -51,10 +52,11 @@ module Accounting
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?)", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
                     'DR', 
                     @start_date,
-                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id)
+                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -62,10 +64,11 @@ module Accounting
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?)", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
                     'CR', 
                     @start_date,
-                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id)
+                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -117,11 +120,12 @@ module Accounting
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
                     'DR', 
                     @start_date,
                     @income_and_expenses_accounting_codes.pluck(:id),
-                    @year
+                    @year,
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -129,11 +133,12 @@ module Accounting
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
                     'CR', 
                     @start_date,
                     @income_and_expenses_accounting_codes.pluck(:id),
-                    @year
+                    @year,
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -185,11 +190,12 @@ module Accounting
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?)", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
                     'DR', 
                     @start_date, 
                     @end_date,
                     @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -197,11 +203,12 @@ module Accounting
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?)", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
                     'CR', 
                     @start_date, 
                     @end_date,
                     @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -253,12 +260,13 @@ module Accounting
       dr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
                     'DR', 
                     @start_date, 
                     @end_date,
                     @income_and_expenses_accounting_codes.pluck(:id),
-                    @year
+                    @year,
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
@@ -266,12 +274,13 @@ module Accounting
       cr_hash = AccountingEntry
                   .includes(journal_entries: :accounting_code)
                   .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ?", 
+                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
                     'CR', 
                     @start_date, 
                     @end_date,
                     @income_and_expenses_accounting_codes.pluck(:id),
-                    @year
+                    @year,
+                    @branch.id
                   )
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")

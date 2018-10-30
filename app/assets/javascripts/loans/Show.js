@@ -9,6 +9,7 @@ var Show  = (function() {
   var _urlReage = "/api/v1/loans/reage";
 
   var _loanId;
+  var _authenticityToken;
 
   var _cacheDom = function() {
     $message          = $(".message");
@@ -32,20 +33,23 @@ var Show  = (function() {
         method: 'POST',
         dataType: 'json',
         data: {
-          id: _loanId
+          id: _loanId,
+          authenticity_token: _authenticityToken
         },
         success: function(response) {
           $message.html("Success! Redirecting...");
-          window.reload();
+          window.location.reload();
         },
         error: function(response) {
+          console.log(response);
           var errors  = [];
           try {
-            errors  = JSON.parse(response.responseText).errors.full_messages;
+            errors  = JSON.parse(response.responseText).full_messages;
           } catch(err) {
             errors  = ["Something went wrong"];
             console.log(err);
           } finally {
+            console.log(errors);
             $message.html(
               Mustache.render(
                 templateErrorList,
@@ -60,8 +64,10 @@ var Show  = (function() {
     });
   };
 
-  var init  = function(loanId) {
-    _loanId = loanId;
+  var init  = function(config) {
+    _loanId             = config.loanId;
+    _authenticityToken  = config.authenticityToken;
+
     _cacheDom();
     _bindEvents();
   };

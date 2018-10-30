@@ -31,6 +31,9 @@ namespace :api do
     # Branches
     get "/branches", to: "branches#index"
 
+    # Print Services
+    post "/print/generate_file", to: "print#generate_file"
+
     namespace :epassbook do
       get "/members/show", to: "members#show"
       get "/active_loans", to: "loans#active_loans"

@@ -6,23 +6,26 @@ module Api
       def fetch_general_ledger
         start_date  = params[:start_date].try(:to_date)
         end_date    = params[:end_date].try(:to_date)
+        branch_id   = params[:branch_id]
+        branch      = Branch.where(id: branch_id).first
 
-        errors  = []
+        config  = {
+          start_date: start_date,
+          end_date: end_date,
+          branch: branch
+        }
 
-        if start_date.blank?
-          errors << "Start date required"
-        end
+        errors  = ::Accounting::ValidateFetchGeneralLedger.new(
+                    config: config
+                  ).execute!
 
-        if end_date.blank?
-          errors << "End date required"
-        end
-
-        if errors.size > 0
-          render json: { errors: errors }, status: 400
+        if errors[:full_messages].size > 0
+          render json: errors, status: 400
         else
           config  = {
             start_date: start_date,
-            end_date: end_date
+            end_date: end_date,
+            branch: branch
           }
 
           general_ledger_data  = ::Accounting::GenerateGeneralLedger.new(
@@ -40,6 +43,7 @@ module Api
       def fetch_trial_balance
         start_date  = params[:start_date].try(:to_date)
         end_date    = params[:end_date].try(:to_date)
+        branch      = Branch.where(id: params[:branch_id]).first
 
         errors  = []
 
@@ -56,7 +60,8 @@ module Api
         else
           config  = {
             start_date: start_date,
-            end_date: end_date
+            end_date: end_date,
+            branch: branch
           }
 
           trial_balance_data  = ::Accounting::GenerateTrialBalance.new(
