@@ -1,7 +1,7 @@
 module Api
   module V1
     module Epassbook
-      class SavingsController < ApiEpassbookController
+      class InsuranceController < ApiEpassbookController
         before_action :authenticate_member_access_token!
 
         def transactions
@@ -17,19 +17,12 @@ module Api
             subsidiary_id: account.id,
             subsidiary_type: 'MemberAccount'
           ).order("transacted_at ASC").each do |o|
-            interest_html = ""
-
-            if o.data["is_interest"] == true
-              interest_html = "<span class='badge badge-success'>Interest</span>"
-            end
-
             data[:transactions] << {
               amount: o.amount,
               beginning_balance: o.data['beginning_balance'],
               ending_balance: o.data['ending_balance'],
               transaction_type: o.transaction_type,
-              transacted_at: o.transacted_at.strftime("%B %d, %Y"),
-              interest_html: interest_html
+              transacted_at: o.transacted_at.strftime("%B %d, %Y")
             }
           end
 
@@ -42,7 +35,7 @@ module Api
           if member.blank?
             render json: { message: "member not found" }, status: 400
           else
-            data  = ::Epassbook::FetchMemberSavings.new(
+            data  = ::Epassbook::FetchMemberInsurance.new(
                       member: member
                     ).execute!
 
