@@ -1,10 +1,40 @@
 .table-responsive
-  %table.table.table-sm.table-hover
+  %table.table.table-sm.table-hover.table-bordered
     %thead
       %tr
         %th
+        %th
           Pangalan
-        %th{ width: "5%" }
-          Attenadance
+        %th
+          %small
+            Attendance
+        - @data[:headers].each do |h|
+          %th
+            %small
+              #{h}
+        %th
+          WP
+        %th
+          CP
+        %th
+          Total
     %tbody
-      - @data
+      - @data[:records].each_with_index do |r, i|
+        %tr
+          %td
+            #{i+1}
+          %td
+            #{r[:member][:full_name]}
+          %td
+            - if r[:attendance]
+              .badge.badge-success
+                .fa.fa-check
+            - else
+              .badge.badge-danger
+                .fa.fa-times
+          - r[:payments].each do |o|
+            %td.text-right
+              - if o[:amount].to_f > 0
+                #{number_to_currency(o[:amount], unit: "")} 
+          %td.text-right
+            #{number_to_currency(r[:withdraw_payments], unit: "")}

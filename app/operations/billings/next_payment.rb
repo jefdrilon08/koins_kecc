@@ -19,7 +19,7 @@ module Billings
           last_name: @member.last_name,
           identification_number: @member.identification_number
         },
-        attendance: false,
+        attendance: true,
         total_expected_collections: 0.00,
         payments: []
       }
@@ -50,6 +50,7 @@ module Billings
           name: loan_product.to_s,
         },
         amount: 0.00,
+        withdraw_payment: 0.00,
         deposits: [],
         enabled: false,
         loan_id: false
@@ -79,6 +80,7 @@ module Billings
           name: loan_product.to_s,
         },
         amount: 0.00,
+        withdraw_payment: 0.00,
         enabled: false,
         loan_id: false
       }
