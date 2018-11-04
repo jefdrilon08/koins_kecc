@@ -10,3 +10,38 @@ export function numberWithCommas(x) {
 
   return x;
 }
+
+export function getReligionOptions() {
+  var religions = [
+    "Roman Catholic", 
+    "Other Christian", 
+    "Members Church of God International", 
+    "Iglesia ni Cristo", 
+    "Protestant", 
+    "Jehovah's Witnesses", 
+    "Seventh-day Adventist Church", 
+    "Muslim", 
+    "Aglipayan", 
+    "Seventh Day Baptist Church", 
+    "Church of God", 
+    "Jesus Miracle Crusade International Ministry", 
+    "Pentecostal Missionary Church of Christ", 
+    "Assemblies of God", 
+    "The Church of Jesus Christ of Latter-day Saints", 
+    "Sta. Iglesia Rosa Mistica Inc.", 
+    "United Pentecostal Church International", 
+    "Evangelical", 
+    "Most Holy Church of God in Jesus Christ"
+  ]
+
+  var data = [];
+
+  for(var i = 0; i < religions.length; i++) {
+    data.push({
+      value: religions[i],
+      label: religions[i]
+    });
+  }
+
+  return data;
+}

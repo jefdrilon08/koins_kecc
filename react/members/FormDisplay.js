@@ -9,6 +9,11 @@ import ErrorDisplay from '../ErrorDisplay';
 
 import FormApplicationHeader from './FormApplicationHeader';
 import FormPersonalInfo from './FormPersonalInfo';
+import FormNumChildren from './FormNumChildren';
+import FormContactNumbers from './FormContactNumbers';
+import FormGovernmentIdentificationNumbers from './FormGovernmentIdentificationNumbers';
+import FormSpouse from './FormSpouse';
+import FormExperience from './FormExperience';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -233,15 +238,67 @@ export default class FormDisplay extends React.Component {
                 updateCurrentCenter={this.updateCurrentCenter.bind(this)}
               />
 
-              <FormPersonalInfo
-                data={state.data}
-                updateData={this.updateData.bind(this)}
-                formDisabled={state.formDisabled}
-              />
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon
+                </div>
+                <div className="card-body">
+                  <FormPersonalInfo
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+
+                  <FormNumChildren
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+
+                  <FormContactNumbers
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+
+                  <FormGovernmentIdentificationNumbers
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon ng Asawa o Kinakasama (Common-law Spouse)
+                </div>
+                <div className="card-body">
+                  <FormSpouse
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Background sa Pahiraman
+                </div>
+                <div className="card-body">
+                  <FormExperience
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="row">
             <div className="col">
+              {this.renderErrorDisplay()}
               <div className="btn-group">
                 <button 
                   className="btn btn-primary" 

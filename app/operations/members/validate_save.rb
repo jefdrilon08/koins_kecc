@@ -33,6 +33,52 @@ module Members
         }
       end
 
+      # Validate address
+      if @member_data[:data][:address][:street].blank?
+        @errors[:messages] << {
+          key: "address_street",
+          message: "Address street required"
+        }
+      end
+
+      if @member_data[:data][:address][:district].blank?
+        @errors[:messages] << {
+          key: "address_district",
+          message: "Address district required"
+        }
+      end
+
+      # Validate date of birth
+      if @member_data[:date_of_birth].blank?
+        @errors[:messages] << {
+          key: "date_of_birth",
+          message: "Date of birth required"
+        }
+      end
+
+      # Validate gender
+      if @member_data[:gender].blank?
+        @errors[:messages] << {
+          key: "gender",
+          message: "Gender required"
+        }
+      end
+
+      # Validate civil status
+      if @member_data[:civil_status].blank?
+        @errors[:messages] << {
+          key: "civil_status",
+          message: "Civil status required"
+        }
+      end
+
+      if @member_data[:data][:address][:city].blank?
+        @errors[:messages] << {
+          key: "address_city",
+          message: "Address city required"
+        }
+      end
+
       not_yet_implemented!
 
       @errors[:messages].each do |m|

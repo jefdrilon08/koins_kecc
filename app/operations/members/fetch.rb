@@ -45,6 +45,7 @@ module Members
       }
 
       @member_data  = {
+        id: @member.id || "",
         first_name: @member.first_name || "",
         middle_name: @member.middle_name || "",
         last_name: @member.last_name || "",
