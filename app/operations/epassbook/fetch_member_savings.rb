@@ -22,6 +22,7 @@ module Epassbook
         last_transaction_amount = last_transaction.present? ? last_transaction.amount : 0.00
         last_transaction_date   = last_transaction.present? ? last_transaction.transacted_at.strftime("%B %d, %Y") : "N/A"
         last_transaction_type   = last_transaction.present? ? last_transaction.transaction_type : "N/A"
+        withdrawable_amount     = o.balance.to_f - o.maintaining_balance.to_f
 
         @data[:total_savings] += o.balance
         
@@ -32,7 +33,8 @@ module Epassbook
           maintaining_balance: number_to_currency(o.maintaining_balance, unit: ""),
           last_transaction_amount: number_to_currency(last_transaction_amount, unit: ""),
           last_transaction_date: last_transaction_date,
-          last_transaction_type: last_transaction_type
+          last_transaction_type: last_transaction_type,
+          withdrawable_amount: number_to_currency(withdrawable_amount, unit: "")
         }
       end
 

@@ -18,7 +18,10 @@ module Epassbook
                           subsidiary_type: "Loan"
                         ).order("transacted_at ASC").last
 
-        next_payment  = o.amortization_schedule_entries.unpaid.first
+        next_payment        = o.amortization_schedule_entries.unpaid.first
+        next_payment_amount = ::Billings::NextLoanPaymentAmount.new(
+                                config: { loan: o }
+                              ).execute!
 
         last_payment_amount = last_payment.try(:amount) || 0.00
 
@@ -31,7 +34,7 @@ module Epassbook
           total_paid: number_to_currency(o.total_paid, unit: ""),
           loan_product: o.loan_product.to_s,
           pn_number: o.pn_number,
-          next_payment_amount: number_to_currency(next_payment.total_balance, unit: ""),
+          next_payment_amount: number_to_currency(next_payment_amount, unit: ""),
           next_payment_date: next_payment.due_date.strftime("%B %d, %Y"),
           last_payment_amount: number_to_currency(last_payment_amount, unit: ""),
           last_payment_date: last_payment.present? ? last_payment.transacted_at.strftime("%B %d, %Y") : "N/A"

@@ -48,8 +48,26 @@ export default class FormPersonalInfo extends React.Component {
     this.props.updateData(data);
   }
 
+  handleGenderChanged(event) {
+    var data  = this.props.data;
+
+    if(event.target.value) {
+      data.gender = event.target.value;
+      this.props.updateData(data);
+    }
+  }
+
+  handleCivilStatusChanged(event) {
+    var data  = this.props.data;
+    
+    if(event.target.value) {
+      data.civil_status = event.target.value;
+      this.props.updateData(data);
+    }
+  }
+
   handleHousingTypeChanged(event) {
-    var data                = this.props.data;
+    var data  = this.props.data;
 
     if(event.target.value) {
       data.data.housing.type  = event.target.value;
@@ -71,7 +89,19 @@ export default class FormPersonalInfo extends React.Component {
 
   handleHousingProofChanged(event) {
     var data                    = this.props.data;
-    data.data.housing.proof     = event.target.value;
+    data.data.housing.proof     = event.target.value.toUpperCase();
+    this.props.updateData(data);
+  }
+
+  handleDateOfBirthChanged(event) {
+    var data            = this.props.data;
+    data.date_of_birth  = event.target.value;
+    this.props.updateData(data);
+  }
+
+  handlePlaceOfBirthChanged(event) {
+    var data            = this.props.data;
+    data.place_of_birth = event.target.value.toUpperCase();
     this.props.updateData(data);
   }
 
@@ -215,6 +245,7 @@ export default class FormPersonalInfo extends React.Component {
                   value={housingNumYears}
                   onChange={this.handleHousingNumYearsChanged.bind(this)}
                   className="form-control"
+                  disabled={this.props.formDisabled}
                 />
               </div>
             </div>
@@ -228,6 +259,7 @@ export default class FormPersonalInfo extends React.Component {
                   value={housingNumMonths}
                   onChange={this.handleHousingNumMonthsChanged.bind(this)}
                   className="form-control"
+                  disabled={this.props.formDisabled}
                 />
               </div>
             </div>
@@ -242,8 +274,133 @@ export default class FormPersonalInfo extends React.Component {
                   value={housingProof}
                   onChange={this.handleHousingProofChanged.bind(this)}
                   className="form-control"
+                  disabled={this.props.formDisabled}
                 />
               </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>
+                  * Kapanganakan
+                </label>
+                <input
+                  value={this.props.data.date_of_birth}
+                  className="form-control"
+                  type="date"
+                  onChange={this.handleDateOfBirthChanged.bind(this)}
+                  disabled={this.props.formDisabled}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>
+                  Lugar ng Kapanganakan
+                </label>
+                <input
+                  value={this.props.data.place_of_birth}
+                  className="form-control"
+                  onChange={this.handlePlaceOfBirthChanged.bind(this)}
+                  disabled={this.props.formDisabled}
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>
+                  * Kasarian
+                </label>
+                <br/>
+                <div className="row">
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      value={"Female"}
+                      checked={this.props.data.gender == "Female"}
+                      onChange={this.handleGenderChanged.bind(this)}
+                    />
+                    Babae
+                  </div>
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      value={"Male"}
+                      checked={this.props.data.gender == "Male"}
+                      onChange={this.handleGenderChanged.bind(this)}
+                    />
+                    Lalake
+                  </div>
+                  <div className="col-md-4">
+                    <input
+                      type="radio"
+                      value={"Others"}
+                      checked={this.props.data.gender == "Others"}
+                      onChange={this.handleGenderChanged.bind(this)}
+                    />
+                    Iba Pa
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  * Katayuang Sibil
+                </label>
+                <div className="row">
+                  <div className="col">
+                    <input
+                      type="radio"
+                      value="Single"
+                      checked={this.props.data.civil_status == "Single"}
+                      onChange={this.handleCivilStatusChanged.bind(this)}
+                    />
+                    Single
+                  </div>
+                  <div className="col">
+                    <input
+                      type="radio"
+                      value="May Kinakasama"
+                      checked={this.props.data.civil_status == "May Kinakasama"}
+                      onChange={this.handleCivilStatusChanged.bind(this)}
+                    />
+                    May Kinakasama
+                  </div>
+                  <div className="col">
+                    <input
+                      type="radio"
+                      value="Kasal"
+                      checked={this.props.data.civil_status == "Kasal"}
+                      onChange={this.handleCivilStatusChanged.bind(this)}
+                    />
+                    Kasal
+                  </div>
+                  <div className="col">
+                    <input
+                      type="radio"
+                      value="Biyudo/a"
+                      checked={this.props.data.civil_status == "Biyudo/a"}
+                      onChange={this.handleCivilStatusChanged.bind(this)}
+                    />
+                    Biyudo/a
+                  </div>
+                  <div className="col">
+                    <input
+                      type="radio"
+                      value="Hiwalay"
+                      checked={this.props.data.civil_status == "Hiwalay"}
+                      onChange={this.handleCivilStatusChanged.bind(this)}
+                    />
+                    Hiwalay
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
             </div>
           </div>
         </div>

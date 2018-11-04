@@ -20,7 +20,19 @@ class Billing < ApplicationRecord
     end
   end
 
+  def total_expected_collections
+    self.data["total_expected_collections"]
+  end
+
+  def total_collected
+    self.data["total_collected"]
+  end
+
   def pending?
     self.status == "pending"
+  end
+
+  def approved?
+    self.status == "approved"
   end
 end

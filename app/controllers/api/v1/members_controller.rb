@@ -18,6 +18,7 @@ module Api
 
         config  = {
           member_data: member_data,
+          id: params[:id],
           user: current_user
         }
 

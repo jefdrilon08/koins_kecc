@@ -3,4 +3,8 @@ class Center < ApplicationRecord
   validates :short_name, presence: true
 
   belongs_to :branch
+
+  def to_s
+    name
+  end
 end

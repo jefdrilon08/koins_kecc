@@ -4,7 +4,7 @@ module Members
       super()
 
       @config       = config
-      @member_data  = @config[:member_data].with_indifferent_access
+      @member_data  = @config[:member_data]
       @user         = @config[:user]
     end
 
@@ -18,8 +18,20 @@ module Members
       end
 
       # Validate middle_name
+      if @member_data[:middle_name].blank?
+        @errors[:messages] << {
+          key: "middle_name",
+          message: "Middle name required"
+        }
+      end
 
       # Validate last_name
+      if @member_data[:last_name].blank?
+        @errors[:messages] << {
+          key: "last_name",
+          message: "Last name required"
+        }
+      end
 
       not_yet_implemented!
 
