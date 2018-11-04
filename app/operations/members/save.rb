@@ -7,6 +7,9 @@ module Members
       @member_data  = @config[:member_data]
       @user         = @config[:user]
 
+      @branch = Branch.find(@member_data[:branch_id])
+      @center = Center.find(@member_data[:center_id])
+
       @member = Member.new
 
       if @member_data[:id].present?
@@ -27,6 +30,9 @@ module Members
       @member.member_type     = @member_data[:member_type]
       @member.religion        = @member_data[:religion]
       @member.data            = @member_data[:data]
+
+      @member.branch  = @branch
+      @member.center  = @center
 
       @member.save!
 

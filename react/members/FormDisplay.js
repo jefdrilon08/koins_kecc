@@ -44,8 +44,17 @@ export default class FormDisplay extends React.Component {
   }
 
   updateCurrentCenter(o) {
+    console.log("Update Current Center");
+    console.log(o);
+    var data  = false;
+    if(this.state.data) {
+      data  = this.state.data;
+      data.center_id = o.value;
+    }
+
     this.setState({
-      currentCenter: o
+      currentCenter: o,
+      data: data
     });
   }
 
@@ -59,13 +68,27 @@ export default class FormDisplay extends React.Component {
       }
     }
 
+    var data  = false;
+    if(this.state.data) {
+      data  = this.state.data;
+      data.branch_id = o.value;
+    }
+
+    var currentCenter = {
+      value: "",
+      label: ""
+    }
+
+    if(centers.length > 0) {
+      currentCenter.value = centers[0].id;
+      currentCenter.label = centers[0].name;
+    }
+
     this.setState({
+      data: data,
       currentBranch: o,
       centers: centers,
-      currentCenter: {
-        value: centers[0].id,
-        label: centers[0].name
-      }
+      currentCenter: currentCenter
     });
 
   }
@@ -90,6 +113,9 @@ export default class FormDisplay extends React.Component {
           value: response.branches[0].centers[0].id,
           label: response.branches[0].centers[0].name
         }
+
+        context.updateCurrentBranch(tempCurrentBranch);
+        context.updateCurrentCenter(tempCurrentCenter);
 
         context.setState({
           branches: response.branches,
@@ -122,7 +148,7 @@ export default class FormDisplay extends React.Component {
         authenticity_token: state.authenticityToken
       },
       success: function(response) {
-        window.location.href="/members/" + response.id
+        window.location.href="/members/" + response.id + "/display"
       },
       error: function(response) {
         try {

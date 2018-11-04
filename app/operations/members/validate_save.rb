@@ -6,6 +6,9 @@ module Members
       @config       = config
       @member_data  = @config[:member_data]
       @user         = @config[:user]
+
+      @branch = Branch.where(id: @member_data[:branch_id]).first
+      @center = Center.where(id: @member_data[:center_id]).first
     end
 
     def execute!
@@ -79,7 +82,22 @@ module Members
         }
       end
 
-      not_yet_implemented!
+      # Validate branch and center
+      if @branch.blank?
+        @errors[:messages] << {
+          key: "branch_id",
+          message: "Branch not found"
+        }
+      end
+
+      if @center.blank?
+        @errors[:messages] << {
+          key: "center_id",
+          message: "Center not found"
+        }
+      end
+
+      #not_yet_implemented!
 
       @errors[:messages].each do |m|
         @errors[:full_messages] << m[:message]
