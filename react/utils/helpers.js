@@ -1,3 +1,21 @@
+export function buildBillingTableData(o) {
+  var data  = [];
+
+  for(var i = 0; i < o.data.records.length; i++) {
+    // Loan products
+    data.push({
+    });
+
+    // Deposits
+
+    // Insurance
+
+    // Withdraw payments
+  }
+
+  return data;
+}
+
 export function numberWithCommas(x) {
   x = (Math.round(x * 100) / 100).toFixed(2);
 

@@ -1,2 +1,11 @@
 company_name: "KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE"
 company_address: "5 Don Francisco St, Don Enrique Heights, Quezon Cty"
+
+defaults:
+  insurance_deposits:
+    - 
+      account_subtype: "Life Insurance Fund"
+      amount: 15.00
+    -
+      account_subtype: "Retirement Fund"
+      amount: 5.00

@@ -3,6 +3,12 @@ module Api
     class BillingsController < ApplicationController
       before_action :authenticate_user!
 
+      def fetch
+        billing = Billing.find(params[:id])
+
+        render json: billing
+      end
+
       def create
         collection_date = params[:collection_date].try(:to_date)
         branch_id       = params[:branch_id]

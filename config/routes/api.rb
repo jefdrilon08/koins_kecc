@@ -37,6 +37,7 @@ namespace :api do
 
     # Billing
     post "/billings", to: "billings#create"
+    get "/billings/fetch", to: "billings#fetch"
 
     namespace :epassbook do
       get "/members/show", to: "members#show"
