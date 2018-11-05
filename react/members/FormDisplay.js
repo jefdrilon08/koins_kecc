@@ -9,6 +9,11 @@ import ErrorDisplay from '../ErrorDisplay';
 
 import FormApplicationHeader from './FormApplicationHeader';
 import FormPersonalInfo from './FormPersonalInfo';
+import FormNumChildren from './FormNumChildren';
+import FormContactNumbers from './FormContactNumbers';
+import FormGovernmentIdentificationNumbers from './FormGovernmentIdentificationNumbers';
+import FormSpouse from './FormSpouse';
+import FormExperience from './FormExperience';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -39,8 +44,17 @@ export default class FormDisplay extends React.Component {
   }
 
   updateCurrentCenter(o) {
+    console.log("Update Current Center");
+    console.log(o);
+    var data  = false;
+    if(this.state.data) {
+      data  = this.state.data;
+      data.center_id = o.value;
+    }
+
     this.setState({
-      currentCenter: o
+      currentCenter: o,
+      data: data
     });
   }
 
@@ -54,13 +68,27 @@ export default class FormDisplay extends React.Component {
       }
     }
 
+    var data  = false;
+    if(this.state.data) {
+      data  = this.state.data;
+      data.branch_id = o.value;
+    }
+
+    var currentCenter = {
+      value: "",
+      label: ""
+    }
+
+    if(centers.length > 0) {
+      currentCenter.value = centers[0].id;
+      currentCenter.label = centers[0].name;
+    }
+
     this.setState({
+      data: data,
       currentBranch: o,
       centers: centers,
-      currentCenter: {
-        value: centers[0].id,
-        label: centers[0].name
-      }
+      currentCenter: currentCenter
     });
 
   }
@@ -85,6 +113,9 @@ export default class FormDisplay extends React.Component {
           value: response.branches[0].centers[0].id,
           label: response.branches[0].centers[0].name
         }
+
+        context.updateCurrentBranch(tempCurrentBranch);
+        context.updateCurrentCenter(tempCurrentCenter);
 
         context.setState({
           branches: response.branches,
@@ -117,7 +148,7 @@ export default class FormDisplay extends React.Component {
         authenticity_token: state.authenticityToken
       },
       success: function(response) {
-        window.location.href="/members/" + response.id
+        window.location.href="/members/" + response.id + "/display"
       },
       error: function(response) {
         try {
@@ -233,15 +264,67 @@ export default class FormDisplay extends React.Component {
                 updateCurrentCenter={this.updateCurrentCenter.bind(this)}
               />
 
-              <FormPersonalInfo
-                data={state.data}
-                updateData={this.updateData.bind(this)}
-                formDisabled={state.formDisabled}
-              />
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon
+                </div>
+                <div className="card-body">
+                  <FormPersonalInfo
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+
+                  <FormNumChildren
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+
+                  <FormContactNumbers
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+
+                  <FormGovernmentIdentificationNumbers
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon ng Asawa o Kinakasama (Common-law Spouse)
+                </div>
+                <div className="card-body">
+                  <FormSpouse
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Background sa Pahiraman
+                </div>
+                <div className="card-body">
+                  <FormExperience
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="row">
             <div className="col">
+              {this.renderErrorDisplay()}
               <div className="btn-group">
                 <button 
                   className="btn btn-primary" 

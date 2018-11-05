@@ -8,6 +8,7 @@ module Epassbook
 
       @data = {
         total_savings: 0.00,
+        total_withrawable_balance: 0.00,
         accounts: []
       }
     end
@@ -22,8 +23,10 @@ module Epassbook
         last_transaction_amount = last_transaction.present? ? last_transaction.amount : 0.00
         last_transaction_date   = last_transaction.present? ? last_transaction.transacted_at.strftime("%D") : "N/A"
         last_transaction_type   = last_transaction.present? ? last_transaction.transaction_type : "N/A"
+        withdrawable_amount     = o.balance.to_f - o.maintaining_balance.to_f
 
         @data[:total_savings] += o.balance
+        @data[:total_withrawable_balance] += withdrawable_amount
         
         @data[:accounts] << {
           id: o.id,
@@ -32,11 +35,13 @@ module Epassbook
           maintaining_balance: number_to_currency(o.maintaining_balance, unit: ""),
           last_transaction_amount: number_to_currency(last_transaction_amount, unit: ""),
           last_transaction_date: last_transaction_date,
-          last_transaction_type: last_transaction_type
+          last_transaction_type: last_transaction_type,
+          withdrawable_amount: number_to_currency(withdrawable_amount, unit: "")
         }
       end
 
       @data[:total_savings] = number_to_currency(@data[:total_savings], unit: "")
+      @data[:total_withrawable_balance] = number_to_currency(@data[:total_withrawable_balance], unit: "")
 
       @data
     end

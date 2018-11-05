@@ -13,6 +13,22 @@ module Api
         render json: data
       end
 
+      def destroy
+        config  = {
+          id: params[:id]
+        }
+
+        member  = Member.where(id: params[:id]).first
+
+        if member.present? && member.pending?
+          member.destroy!
+
+          render json: { message: "ok" }
+        else
+          render json: { errors: ["member not pending"] }, status: 400
+        end
+      end
+
       def save
         member_data = params[:member_data]
 
@@ -30,7 +46,7 @@ module Api
         else
           member  = ::Members::Save.new(
                       config: config
-                    )
+                    ).execute!
 
           render json: { id: member.id }
         end

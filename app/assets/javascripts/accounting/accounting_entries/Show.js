@@ -6,13 +6,18 @@ var Show  = (function() {
   var $modalPrint;
   var $message;
   var $printMessage;
+  
+  var $btnAdjustDatePosted;
+  var $btnConfirmAdjustDatePosted;
+  var $modalAdjustDatePosted;
+  var $inputAdjustDatePosted;
 
   var templateErrorList;
   var loader;
 
   var _authenticityToken;
 
-  var loanId;
+  var accountingEntryId;
 
   var _cacheDom = function() {
     $btnApprove         = $("#btn-approve");
@@ -23,11 +28,62 @@ var Show  = (function() {
     $message            = $(".message");
     $printMessage       = $(".print-message");
 
+    $btnAdjustDatePosted        = $("#btn-adjust-date-posted");
+    $btnConfirmAdjustDatePosted = $("#btn-confirm-adjust-date-posted");
+    $modalAdjustDatePosted      = $("#modal-adjust-date-posted");
+    $inputAdjustDatePosted      = $("#input-adjust-date-posted");
+
     templateErrorList = $("#template-error-list").html();
     loader            = $("#template-loader").html();
   };
 
   var _bindEvents = function() {
+    $btnAdjustDatePosted.on("click", function() {
+      accountingEntryId = $(this).data('id');
+      $modalAdjustDatePosted.modal("show");
+    });
+
+    $btnConfirmAdjustDatePosted.on("click", function() {
+      var datePosted  = $inputAdjustDatePosted.val();
+
+      $btnConfirmAdjustDatePosted.prop("disabled", true);
+      $inputAdjustDatePosted.prop("disabled", true);
+
+      $.ajax({
+        url: "/api/v1/accounting_entries/modify_date_posted",
+        method: 'POST',
+        data: {
+          id: accountingEntryId,
+          date_posted: datePosted,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Reloading...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).errors.full_messages;
+          } catch(e) {
+            errors  = ["Something went wrong"];
+          }
+
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmAdjustDatePosted.prop("disabled", false);
+          $inputAdjustDatePosted.prop("disabled", false);
+        }
+      });
+    });
+
     $btnPrint.on("click", function() {
       var accountingEntryId = $btnPrint.data('id');
 
@@ -62,7 +118,7 @@ var Show  = (function() {
     });
 
     $btnApprove.on("click", function() {
-      loanId  = $(this).data("id");
+      accountingEntryId  = $(this).data("id");
       $modalApprove.modal("show");
     });
 
@@ -76,7 +132,7 @@ var Show  = (function() {
         method: "POST",
         dataType: 'json',
         data: {
-          id: loanId,
+          id: accountingEntryId,
           authenticity_token: _authenticityToken
         },
         success: function(response) {

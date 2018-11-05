@@ -24,6 +24,28 @@ module Api
         end
       end
 
+      def modify_date_posted
+        config  = {
+          id: params[:id],
+          date_posted: params[:date_posted],
+          user: current_user
+        }
+
+        errors  = ::Accounting::AccountingEntries::ValidateModifyDatePosted.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].size > 0
+          render json: { errors: errors }, status: 400
+        else
+          ::Accounting::AccountingEntries::ModifyDatePosted.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def fetch
         config  = {
           id: params[:id],

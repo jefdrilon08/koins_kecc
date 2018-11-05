@@ -20,3 +20,5 @@
 //= require datatables.net-bs4/js/dataTables.bootstrap4
 //= require datatables.net-fixedheader/js/dataTables.fixedHeader
 //= require datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4
+//= require signature_pad/dist/signature_pad
+

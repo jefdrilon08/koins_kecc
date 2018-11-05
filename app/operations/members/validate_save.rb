@@ -4,8 +4,11 @@ module Members
       super()
 
       @config       = config
-      @member_data  = @config[:member_data].with_indifferent_access
+      @member_data  = @config[:member_data]
       @user         = @config[:user]
+
+      @branch = Branch.where(id: @member_data[:branch_id]).first
+      @center = Center.where(id: @member_data[:center_id]).first
     end
 
     def execute!
@@ -18,10 +21,83 @@ module Members
       end
 
       # Validate middle_name
+      if @member_data[:middle_name].blank?
+        @errors[:messages] << {
+          key: "middle_name",
+          message: "Middle name required"
+        }
+      end
 
       # Validate last_name
+      if @member_data[:last_name].blank?
+        @errors[:messages] << {
+          key: "last_name",
+          message: "Last name required"
+        }
+      end
 
-      not_yet_implemented!
+      # Validate address
+      if @member_data[:data][:address][:street].blank?
+        @errors[:messages] << {
+          key: "address_street",
+          message: "Address street required"
+        }
+      end
+
+      if @member_data[:data][:address][:district].blank?
+        @errors[:messages] << {
+          key: "address_district",
+          message: "Address district required"
+        }
+      end
+
+      # Validate date of birth
+      if @member_data[:date_of_birth].blank?
+        @errors[:messages] << {
+          key: "date_of_birth",
+          message: "Date of birth required"
+        }
+      end
+
+      # Validate gender
+      if @member_data[:gender].blank?
+        @errors[:messages] << {
+          key: "gender",
+          message: "Gender required"
+        }
+      end
+
+      # Validate civil status
+      if @member_data[:civil_status].blank?
+        @errors[:messages] << {
+          key: "civil_status",
+          message: "Civil status required"
+        }
+      end
+
+      if @member_data[:data][:address][:city].blank?
+        @errors[:messages] << {
+          key: "address_city",
+          message: "Address city required"
+        }
+      end
+
+      # Validate branch and center
+      if @branch.blank?
+        @errors[:messages] << {
+          key: "branch_id",
+          message: "Branch not found"
+        }
+      end
+
+      if @center.blank?
+        @errors[:messages] << {
+          key: "center_id",
+          message: "Center not found"
+        }
+      end
+
+      #not_yet_implemented!
 
       @errors[:messages].each do |m|
         @errors[:full_messages] << m[:message]

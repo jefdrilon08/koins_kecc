@@ -20,7 +20,7 @@ module Epassbook
                             ).order("transacted_at ASC").last
 
         last_transaction_amount = last_transaction.present? ? last_transaction.amount : 0.00
-        last_transaction_date   = last_transaction.present? ? last_transaction.transacted_at.strftime("%B %d, %Y") : "N/A"
+        last_transaction_date   = last_transaction.present? ? last_transaction.transacted_at.strftime("%D") : "N/A"
         last_transaction_type   = last_transaction.present? ? last_transaction.transaction_type : "N/A"
 
         @data[:total_insurance] += o.balance

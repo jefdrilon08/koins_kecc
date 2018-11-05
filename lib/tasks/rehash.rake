@@ -21,6 +21,10 @@ namespace :rehash do
     loans = Loan.active_or_paid
     size  = loans.size
 
+    if ENV['BRANCH_ID'].present?
+      loans = loans.where(branch_id: ENV['BRANCH_ID'])
+    end
+
     loans.each_with_index do |loan, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing loan #{loan.id}... #{progress}%%")

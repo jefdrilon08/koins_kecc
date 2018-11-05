@@ -1,5 +1,16 @@
 module Billings
   class NextPayment
+    DEFAULT_SAVINGS_SUBTYPE = "K-IMPOK"
+
+    SAVINGS_SUBTYPES = [
+      "K-IMPOK"
+    ]
+
+    INSURANCE_SUBTYPES  = [
+      "Life Insurance Fund",
+      "Retirement Fund"
+    ]
+
     def initialize(config:)
       @config           = config
       @member           = @config[:member]
@@ -19,23 +30,39 @@ module Billings
           last_name: @member.last_name,
           identification_number: @member.identification_number
         },
-        attendance: false,
+        attendance: true,
         total_expected_collections: 0.00,
-        payments: []
+        records: []
       }
     end
 
     def execute!
+      # Entry point loans
       @entry_point_loan_products.each_with_index do |loan_product, i|
-        if i == 0
-          @data[:payments] << build_first_entry_point_payment(loan_product)
-        else
-          @data[:payments] << build_non_entry_point_payment(loan_product)
-        end
+        @data[:records] << build_loan_payment(loan_product)
       end
 
+      # Non-entry point loans
       @non_entry_point_loan_products.each do |loan_product|
-        @data[:payments] << build_non_entry_point_payment(loan_product)
+        @data[:records] << build_loan_payment(loan_product)
+      end
+
+      # Savings deposits
+      SAVINGS_SUBTYPES.each do |savings_subtype|
+        @data[:records] << build_savings_deposit(savings_subtype)
+      end
+
+      # Insurance deposits
+      INSURANCE_SUBTYPES.each do |insurance_subtype|
+        @data[:records] << build_insurance_deposit(insurance_subtype)
+      end
+
+      # Withdraw payments
+      @data[:records] << build_withdraw_payment
+
+      # Totals
+      @data[:records].each do |o|
+        @data[:total_expected_collections] += o[:amount]
       end
 
       @data
@@ -43,37 +70,81 @@ module Billings
 
     private
 
-    def build_first_entry_point_payment(loan_product)
+    def build_withdraw_payment
       data  = {
-        loan_product: {
-          id: loan_product.id,
-          name: loan_product.to_s,
-        },
+        record_type: "WP",
         amount: 0.00,
-        deposits: [],
         enabled: false,
-        loan_id: false
+        member_account_id: false
       }
 
-      loan  = @active_loans.where(loan_product_id: loan_product.id).first
+      member_account  = MemberAccount.savings.where(
+                          member_id: @member.id, 
+                          account_subtype: DEFAULT_SAVINGS_SUBTYPE
+                        ).first
 
-      if loan.present?
-        data[:amount] = loan.amortization_schedule_entries.unpaid.where(
-                          "due_date <= ?",
-                          @collection_date
-                        ).sum("principal_balance + interest_balance").round(2)
-        
-        data[:enabled]  = true
-        data[:loan_id]  = loan.id
+      if member_account.present?
+        data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
       end
-
-      @data[:total_expected_collections] += data[:amount]
 
       data
     end
 
-    def build_non_entry_point_payment(loan_product)
+    def build_insurance_deposit(insurance_subtype)
       data  = {
+        record_type: "INSURANCE",
+        account_subtype: insurance_subtype,
+        amount: 0.00,
+        enabled: false,
+        member_account_id: false
+      }
+
+      member_account  = MemberAccount.insurance.where(
+                          member_id: @member.id, 
+                          account_subtype: insurance_subtype
+                        ).first
+     
+      if member_account.present?
+        data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+
+        defaults  = Settings.try(:defaults).try(:insurance_deposits)
+
+        if defaults.present?
+          defaults.each do |o|
+            if o.account_subtype == insurance_subtype
+              data[:amount] = o.amount
+            end
+          end
+        end
+      end
+
+      data
+    end
+
+    def build_savings_deposit(savings_subtype)
+      data  = {
+        record_type: "SAVINGS",
+        account_subtype: savings_subtype,
+        amount: 0.00,
+        enabled: false,
+        member_account_id: false
+      }
+
+      member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
+
+      if member_account.present?
+        data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+      end
+
+      data
+    end
+
+    def build_loan_payment(loan_product)
+      data  = {
+        record_type: "LOAN_PAYMENT",
         loan_product: {
           id: loan_product.id,
           name: loan_product.to_s,
@@ -86,16 +157,15 @@ module Billings
       loan  = @active_loans.where(loan_product_id: loan_product.id).first
 
       if loan.present?
-        data[:amount] = loan.amortization_schedule_entries.unpaid.where(
-                          "due_date <= ?",
-                          @collection_date
-                        ).sum("principal_balance + interest_balance").round(2)
-
         data[:enabled]  = true
         data[:loan_id]  = loan.id
+        data[:amount]   = ::Billings::NextLoanPaymentAmount.new(
+                            config: {
+                              loan: loan,
+                              current_date: @collection_date
+                            }
+                          ).execute!
       end
-
-      @data[:total_expected_collections] += data[:amount]
 
       data
     end

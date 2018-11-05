@@ -39,7 +39,7 @@ module Api
                       member: member
                     ).execute!
 
-            render json: data
+            render json: data 
           end
         end
       end

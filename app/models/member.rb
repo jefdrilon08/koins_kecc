@@ -27,12 +27,16 @@ class Member < ApplicationRecord
   validates :middle_name, presence: true
   validates :last_name, presence: true
 
-  validates :identification_number, presence: true, uniqueness: true
+  validates :identification_number, presence: true, uniqueness: true, if: :active?
   validates :civil_status, presence: true
   #validates :home_number, presence: true
-  validates :mobile_number, presence: true
+  #validates :mobile_number, presence: true
+
+  validates :status, presence: true, inclusion: { in: STATUSES }
 
   scope :active, -> { where(status: "active").order("last_name ASC") }
+
+  before_validation :load_defaults
 
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
@@ -40,5 +44,12 @@ class Member < ApplicationRecord
 
   def active?
     self.status == "active"
+  end
+
+  def load_defaults
+    if self.new_record?
+      self.status = "pending"
+      self.insurance_status = "pending"
+    end
   end
 end

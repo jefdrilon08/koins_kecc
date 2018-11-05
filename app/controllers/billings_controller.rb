@@ -9,7 +9,7 @@ class BillingsController < ApplicationController
 
   def show
     @billing  = Billing.find(params[:id])
-    @data
+    @data     = @billing.data.with_indifferent_access
   end
 
   def destroy

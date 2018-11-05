@@ -1,5 +1,3 @@
-//= require signature_pad/dist/signature_pad
-
 var Show  = (function() {
   var $modalGenerateAccessToken;
   var $modalSignature;

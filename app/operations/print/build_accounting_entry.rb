@@ -20,6 +20,7 @@ module Print
       @data[:company_name]      = Settings.company_name
       @data[:company_address]   = Settings.company_address
       @data[:branch]            = @accounting_entry.branch.to_s.upcase
+      @data[:particular]        = @accounting_entry.particular
 
       if @accounting_entry.date_posted.present?
         @data[:date_posted] = @accounting_entry.date_posted.strftime("%B %d, %Y")

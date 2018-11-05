@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def development?
+    ENV['RAILS_ENV'] == 'development'
+  end
+
   def accounting_entry_context_class(book)
     if book == "CRB"
       return "bg-success"

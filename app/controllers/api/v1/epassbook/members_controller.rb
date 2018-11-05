@@ -10,7 +10,18 @@ module Api
           if member.blank?
             render json: { message: "member not found" }, status: 400
           else
-            render json: member 
+            data  = {
+              id: member.id,
+              first_name: member.first_name,
+              middle_name: member.middle_name,
+              last_name: member.last_name,
+              full_name: member.full_name,
+              branch: member.branch.to_s,
+              center: member.center.to_s
+            }
+
+            render json: data
+
           end
         end
       end

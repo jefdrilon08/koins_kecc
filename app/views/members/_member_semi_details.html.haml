@@ -30,7 +30,7 @@
         .value.text-muted
           %b
             #{@member.insurance_status.upcase} 
-    = link_to "#", class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
+    = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
       %i.fa.fa-edit
       Edit Record
 

@@ -29,6 +29,7 @@ module Accounting
 
         ActivityLog.create!(
           content: "#{@user.full_name} approved accounting entry #{@accounting_entry.id}",
+          activity_type: "approval",
           data: {
             user_id: @user.id,
             accounting_entry_id: @accounting_entry.id

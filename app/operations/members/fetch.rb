@@ -45,6 +45,7 @@ module Members
       }
 
       @member_data  = {
+        id: @member.id || "",
         first_name: @member.first_name || "",
         middle_name: @member.middle_name || "",
         last_name: @member.last_name || "",
@@ -56,7 +57,9 @@ module Members
         place_of_birth: @member.place_of_birth || "",
         member_type: @member.member_type || "Regular",
         religion: @member.religion || "",
-        data: @member.new_record? ? data : @member.data
+        data: @member.new_record? ? data : @member.data,
+        branch_id: @member.branch.try(:id) || "",
+        center_id: @member.center.try(:id) || ""
       }
     end
       @member_data

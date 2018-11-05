@@ -5,4 +5,14 @@
     .col
       .card
         .card-body
-          = render partial: "billing_table"
+          #billing-content
+
+          - if development?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@billing.to_json))}
+
+
+#parameters{ data: { id: @billing.id } }
+
+= javascript_include_tag "BillingUI.min.react"
