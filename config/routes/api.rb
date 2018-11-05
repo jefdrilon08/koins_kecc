@@ -24,6 +24,7 @@ namespace :api do
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"
     post "/accounting_entries/save", to: "accounting_entries#save"
     post "/accounting_entries/approve", to: "accounting_entries#approve"
+    post "/accounting_entries/modify_date_posted", to: "accounting_entries#modify_date_posted"
 
     # Loans
     post "/loans/reage", to: "loans#reage"

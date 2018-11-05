@@ -1,0 +1,22 @@
+#modal-adjust-date-posted.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Adjust Date Posted
+      .modal-body
+        .modal-body-content
+          .callout.callout-info
+            Are you sure?
+          %label
+            Date Posted:
+          = text_field_tag :date_posted, @accounting_entry.date_posted, type: 'date', class: 'form-control', id: 'input-adjust-date-posted'
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-adjust-date-posted.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

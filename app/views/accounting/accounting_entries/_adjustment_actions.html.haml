@@ -1,0 +1,9 @@
+.callout.callout-danger
+  .row
+    .col
+      %h5
+        Adjustments
+      %div
+        = link_to "#", class: 'btn btn-danger', id: 'btn-adjust-date-posted', data: { id: accounting_entry.id } do
+          .fa.fa-sync
+          Adjust Date Posted

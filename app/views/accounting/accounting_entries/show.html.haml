@@ -6,9 +6,16 @@
       .card
         .card-body
           = render partial: "shared/accounting_entry", locals: { accounting_entry: @accounting_entry }
+          - if @accounting_entry.approved?
+            = render partial: "accounting/accounting_entries/adjustment_actions", locals: { accounting_entry: @accounting_entry }
+
+          - if @activity_logs.size > 0
+            %hr
+            = render partial: "accounting/accounting_entries/activity_logs", locals: { activity_logs: @activity_logs }
 
 = render partial: "modal_approve"
 = render partial: "modal_print"
+= render partial: "modal_adjust_date_posted"
 = render partial: "templates/error_list"
 
 = javascript_include_tag "accounting/accounting_entries/Show.js"
