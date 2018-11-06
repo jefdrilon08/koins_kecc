@@ -32,6 +32,7 @@ module Billings
         },
         attendance: true,
         total_expected_collections: 0.00,
+        total_collected: 0.00,
         records: []
       }
     end
@@ -63,6 +64,7 @@ module Billings
       # Totals
       @data[:records].each do |o|
         @data[:total_expected_collections] += o[:amount]
+        @data[:total_collected] += o[:amount]
       end
 
       @data
