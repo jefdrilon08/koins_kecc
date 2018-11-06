@@ -6,6 +6,8 @@ import 'react-table/react-table.css';
 
 import {numberWithCommas} from '../utils/helpers';
 
+import ErrorDisplay from '../ErrorDisplay';
+
 const customStyles = {
   content : {
     top                   : '50%',
@@ -28,7 +30,8 @@ export default class BillingUITable extends React.Component {
       currentAmountValue: false,
       currentMember: false,
       modalIsOpen: false,
-      isLoading: false
+      isLoading: false,
+      errors: false
     };
   }
 
@@ -244,7 +247,8 @@ export default class BillingUITable extends React.Component {
       modalIsOpen: false,
       currentTransaction: false,
       currentMember: false,
-      currentAmountValue: false
+      currentAmountValue: false,
+      errors: false
     });
   }
 
@@ -302,6 +306,64 @@ export default class BillingUITable extends React.Component {
     }
   }
 
+  handleModalConfirm() {
+    var currentTransaction  = this.state.currentTransaction;
+    var currentMember       = this.state.currentMember;
+    var context             = this;
+
+    var data  = {
+      current_transaction: currentTransaction,
+      current_member: currentMember,
+      id: this.props.id,
+      authenticity_token: this.props.authenticityToken
+    };
+
+    this.setState({
+      isLoading: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/modify_transaction_record",
+      method: "POST",
+      data: data,
+      success: function(response) {
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          var errors  = JSON.parse(response.responseText).errors;
+
+          context.setState({
+            isLoading: false,
+            errors: errors
+          });
+        } catch(err) {
+          console.log(response);
+          alert("Something went wrong!");
+          context.setState({
+            isLoading: false
+          });
+        }
+      }
+    });
+  }
+
+  renderLoadingStatus() {
+    if(this.state.isLoading) {
+      return  (
+        <div className="callout callout-info">
+          Loading...
+        </div>
+      );
+    } else if(this.state.errors) {
+      return (
+        <ErrorDisplay
+          errors={this.state.errors}
+        />
+      );
+    }
+  }
+
   renderModalContent() {
     var currentTransaction  = this.state.currentTransaction;
     var currentMember       = this.state.currentMember;
@@ -334,6 +396,8 @@ export default class BillingUITable extends React.Component {
                 disabled={this.state.isLoading}
                 onChange={this.handleInputAmountChanged.bind(this)}
               />
+
+              {this.renderLoadingStatus()}
             </div>
           </div>
           <hr/>
@@ -341,12 +405,20 @@ export default class BillingUITable extends React.Component {
             <div className="col">
               <center>
                 <div className="btn-group">
-                  <button className="btn btn-success">
+                  <button 
+                    className="btn btn-success" 
+                    onClick={this.handleModalConfirm.bind(this)}
+                    disabled={this.state.isLoading}
+                  >
                     <span className="fa fa-check" />
                     Confirm Change
                   </button>
 
-                  <button className="btn btn-danger" onClick={this.handleModalClose.bind(this)}>
+                  <button 
+                    className="btn btn-danger" 
+                    onClick={this.handleModalClose.bind(this)}
+                    disabled={this.state.isLoading}
+                  >
                     <span className="fa fa-times" />
                     Cancel Change
                   </button>

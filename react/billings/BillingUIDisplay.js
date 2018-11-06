@@ -57,8 +57,10 @@ export default class BillingUIDisplay extends React.Component {
       return (
         <div>
           <BillingUITable
+            id={this.props.id}
             data={this.state.data}
             updateData={this.updateData.bind(this)}
+            authenticityToken={this.props.authenticityToken}
           />
         </div>
       );

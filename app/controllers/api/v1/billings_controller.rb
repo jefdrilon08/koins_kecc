@@ -9,6 +9,33 @@ module Api
         render json: billing
       end
 
+      def modify_transaction_record
+        billing             = Billing.where(id: params[:id]).first
+        current_transaction = params[:current_transaction]
+        current_member      = params[:current_member]
+
+        config  = {
+          billing: billing,
+          current_transaction: current_transaction,
+          current_member: current_member,
+          user: current_user
+        }
+
+        errors  = ::Billings::ValidateModifyTransactionRecord.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: { errors: errors }, status: 400
+        else
+          billing = ::Billings::ModifyTransactionRecord.new(
+                      config: config
+                    ).execute!
+
+          render json: { id: billing.id }
+        end
+      end
+
       def create
         collection_date = params[:collection_date].try(:to_date)
         branch_id       = params[:branch_id]
