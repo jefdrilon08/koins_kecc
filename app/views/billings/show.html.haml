@@ -5,27 +5,12 @@
     .col
       .card
         .card-body
-          %table.table.table-sm.table-bordered
-            %tr
-              %th
-                Branch / Center:
-              %td.text-right
-                #{@billing.branch} / #{@billing.center}
-            %tr
-              %th
-                Expected Collections:
-              %td.text-right
-                #{number_to_currency(@data[:total_expected_collections], unit: "")}
-            %tr
-              %th
-                Total Collected:
-              %td.text-right
-                #{number_to_currency(@data[:total_collected], unit: "")}
-          %hr
           - if @billing.pending?
             .callout.callout-info
               %p
                 Pindutin ang amount upang baguhin ito.
+          %h5
+            Billing for #{@billing.branch} / #{@billing.center}
           #billing-content
 
           - if development?

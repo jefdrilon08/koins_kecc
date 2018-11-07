@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 import SkCubeLoading from '../SkCubeLoading';
 import BillingUITable from './BillingUITable';
+import {numberWithCommas} from '../utils/helpers';
 
 export default class BillingUIDisplay extends React.Component {
   constructor(props) {
@@ -47,6 +48,7 @@ export default class BillingUIDisplay extends React.Component {
   }
 
   render() {
+    console.log(this.state.data);
     if(this.state.isLoading) {
       return (
         <div>
@@ -56,12 +58,38 @@ export default class BillingUIDisplay extends React.Component {
     } else {
       return (
         <div>
+          <table className="table table-sm table-bordered">
+            <tbody>
+              <tr>
+                <th>
+                  Expected Collections:
+                </th>
+                <td className="text-right">
+                  <div className="text-muted">
+                    {numberWithCommas(this.state.data.data.total_expected_collections)}
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Total Collected:
+                </th>
+                <td className="text-right">
+                  <strong>
+                    {numberWithCommas(this.state.data.data.total_collected)}
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <hr/>
           <BillingUITable
             id={this.props.id}
             data={this.state.data}
             updateData={this.updateData.bind(this)}
             authenticityToken={this.props.authenticityToken}
           />
+          <hr/>
         </div>
       );
     }

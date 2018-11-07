@@ -327,7 +327,17 @@ export default class BillingUITable extends React.Component {
       method: "POST",
       data: data,
       success: function(response) {
-        window.location.reload();
+        //window.location.reload();
+        context.setState({
+          currentTransaction: false,
+          currentAmountValue: false,
+          currentMember: false,
+          modalIsOpen: false,
+          isLoading: false,
+          errors: false
+        });
+
+        context.props.updateData(response);
       },
       error: function(response) {
         try {

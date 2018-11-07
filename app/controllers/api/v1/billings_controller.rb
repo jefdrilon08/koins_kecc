@@ -32,7 +32,7 @@ module Api
                       config: config
                     ).execute!
 
-          render json: { id: billing.id }
+          render json: billing
         end
       end
 
