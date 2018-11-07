@@ -52,5 +52,10 @@ namespace :api do
       get "/loans/show", to: "loans#show"
       get "/loans/payments", to: "loans#payments"
     end
+
+    namespace :administration do
+      get "/user_branches", to: "user_branches#index"
+      post "/user_branches/toggle", to: "user_branches#toggle"
+    end
   end
 end

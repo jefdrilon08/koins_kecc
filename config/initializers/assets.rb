@@ -34,5 +34,6 @@ Rails.application.config.assets.precompile += [
   "AccountingTrialBalance.min.react.js",
   "AccountingGeneralLedger.min.react.js",
   "AccountingEntryForm.min.react.js",
-  "BillingUI.min.react.js"
+  "BillingUI.min.react.js",
+  "BranchManager.min.react.js"
 ]

@@ -1,2 +1,5 @@
 .card
   .card-body
+    - if current_user.is_mis?
+      = render partial: "branch_manager"
+

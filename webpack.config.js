@@ -12,7 +12,8 @@ module.exports = {
     AccountingTrialBalance: "./react/accounting/TrialBalance.js",
     AccountingGeneralLedger: "./react/accounting/GeneralLedger.js",
     AccountingEntryForm: "./react/accounting/AccountingEntryForm.js",
-    BillingUI: "./react/billings/BillingUI.js"
+    BillingUI: "./react/billings/BillingUI.js",
+    BranchManager: "./react/administration/users/BranchManager.js"
   },
   module: {
     rules: [
