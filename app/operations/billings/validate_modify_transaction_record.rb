@@ -104,7 +104,8 @@ module Billings
           message: "loan is not active"
         }
       else
-        loan_payment  = @current_transaction[:amount].try(:to_f)
+        loan_payment    = @current_transaction[:amount].try(:to_f)
+        current_balance = loan.total_balance
 
         if loan_payment > current_balance
           @errors[:messages] << {
