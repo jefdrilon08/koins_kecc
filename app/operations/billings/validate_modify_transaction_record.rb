@@ -79,7 +79,7 @@ module Billings
         end
       end
 
-      not_yet_implemented!
+      #not_yet_implemented!
 
       @errors[:messages].each do |o|
         @errors[:full_messages] << o[:message]
@@ -91,8 +91,6 @@ module Billings
     private
 
     def validate_loan_payment!
-      # total_loan_payment = loan_amount + wp (if any)
-
       loan  = Loan.where(id: @current_transaction[:loan_id]).first
 
       if loan.blank?
@@ -106,16 +104,12 @@ module Billings
           message: "loan is not active"
         }
       else
-        loan_payment_amount     = @current_transaction[:amount].try(:to_f)
-        withdraw_payment_amount = fetch_wp_amount!
+        loan_payment  = @current_transaction[:amount].try(:to_f)
 
-        total_loan_payment  = loan_payment_amount + withdraw_payment_amount
-        current_balance     = loan.total_balance
-
-        if total_loan_payment > current_balance
+        if loan_payment > current_balance
           @errors[:messages] << {
             key: "loan",
-            message: "overpayment of #{total_loan_payment} > current_balance: #{current_balance}"
+            message: "overpayment of #{loan_payment} > current_balance: #{current_balance}"
           }
         end
       end
@@ -178,17 +172,6 @@ module Billings
           key: "member_account",
           message: "not enough funds to withdraw #{amount}. Balance: #{member_account.balance}. Maintaning balance: #{member_account.maintaining_balance}"
         }
-      else
-        loan_payment_amount = fetch_loan_payment_amount!
-        total_loan_payment  = loan_payment_amount + amount
-        total_balance       = fetch_total_loan_balances!
-
-        if total_loan_payment > total_balance
-          @errors[:messages] << {
-            key: "member_account",
-            message: "overpayment. total_loan_payment: #{total_loan_payment}. total_balance: #{total_balance}"
-          }
-        end
       end
     end
 

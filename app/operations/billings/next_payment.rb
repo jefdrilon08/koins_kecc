@@ -64,7 +64,10 @@ module Billings
       # Totals
       @data[:records].each do |o|
         @data[:total_expected_collections] += o[:amount]
-        @data[:total_collected] += o[:amount]
+
+        if o[:record_type] != "WP"
+          @data[:total_collected] += o[:amount]
+        end
       end
 
       @data
