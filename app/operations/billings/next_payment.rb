@@ -3,7 +3,8 @@ module Billings
     DEFAULT_SAVINGS_SUBTYPE = "K-IMPOK"
 
     SAVINGS_SUBTYPES = [
-      "K-IMPOK"
+      "K-IMPOK",
+      "Golden K"
     ]
 
     INSURANCE_SUBTYPES  = [

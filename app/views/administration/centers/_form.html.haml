@@ -16,10 +16,10 @@
       .fa.fa-check
       Save
     - if center.new_record?
-      = link_to administration_areas_path, class: 'btn btn-danger' do
+      = link_to administration_branches_path, class: 'btn btn-danger' do
         .fa.fa-times
         Cancel
     - else
-      = link_to administration_area_path(center), class: 'btn btn-danger' do
+      = link_to administration_branch_path(center.branch), class: 'btn btn-danger' do
         .fa.fa-times
         Cancel
