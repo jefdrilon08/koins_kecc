@@ -9,6 +9,23 @@ module Api
         render json: billing
       end
 
+      def toggle_attendance
+        billing = Billing.find(params[:id])
+        data    = billing.data.with_indifferent_access
+
+        data[:records].each_with_index do |o, i|
+          if o[:member][:id] == params[:member_id]
+            data[:records][i][:attendance]  = !data[:records][i][:attendance]
+          end
+        end
+
+        billing.update!(
+          data: data
+        )
+        
+        render json: billing
+      end
+
       def modify_transaction_record
         billing             = Billing.where(id: params[:id]).first
         current_transaction = params[:current_transaction]

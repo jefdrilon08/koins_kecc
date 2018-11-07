@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import Modal from 'react-modal';
+import Toggle from 'react-toggle';
+import "react-toggle/style.css";
 
 import 'react-table/react-table.css';
 
@@ -39,6 +41,16 @@ export default class BillingUITable extends React.Component {
     var headers = [];
 
     headers.push(
+      <th key={"h-member-attendance"} style={{minWidth: "100px"}}>
+        <center>
+          <small>
+            Attend.
+          </small>
+        </center>
+      </th>
+    );
+
+    headers.push(
       <th key={"h-member"} style={{minWidth: "300px"}}>
         Member
       </th>
@@ -57,7 +69,7 @@ export default class BillingUITable extends React.Component {
     }
 
     headers.push(
-      <th  key={"h-total"} style={{minWidth: "100px"}}>
+      <th  key={"h-total"} style={{minWidth: "40px"}}>
         <center>
           TOTAL
         </center>
@@ -67,13 +79,48 @@ export default class BillingUITable extends React.Component {
     return headers;
   }
 
+  handleToggled(memberId) {
+    var context = this;
+
+    var data  = {
+      member_id: memberId,
+      id: this.props.id,
+      authenticity_token: this.props.authenticityToken
+    };
+
+    $.ajax({
+      url: "/api/v1/billings/toggle_attendance",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        context.props.updateData(response);
+      },
+      error: function(response) {
+        alert("Error in toggling attendance");
+      }
+    });
+  }
+
 
   buildRecords() {
     var records = [];
 
     for(var i = 0; i < this.props.data.data.records.length; i++) {
       var components  = [];
-      var member      = this.props.data.data.records[i].member;
+      var record      = this.props.data.data.records[i];
+      var member      = record.member;
+
+      components.push(
+        <td key={"c-member-attnd-" + member.id}>
+          <center>
+            <Toggle
+              defaultChecked={record.attendance}
+              onChange={this.handleToggled.bind(this, member.id)}
+              className="btn"
+            />
+          </center>
+        </td>
+      );
 
       components.push(
         <td key={"c-member-" + member.id}>
@@ -156,7 +203,7 @@ export default class BillingUITable extends React.Component {
       );
 
       records.push(
-        <tr key={"member-row-" + i}>
+        <tr key={"member-row-" + i} style={{ backgroundColor: (record.attendance ? '' : '#FFC6C7') }}>
           {components}
         </tr>
       );
@@ -167,6 +214,11 @@ export default class BillingUITable extends React.Component {
 
   buildTotals() {
     var records = [];
+
+    records.push(
+      <td>
+      </td>
+    );
 
     records.push(
       <td key="total-label">
