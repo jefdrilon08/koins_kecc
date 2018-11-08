@@ -76,43 +76,43 @@ loan_product_accounting_codes:
   -
     loan_product_id: "2f2329c5-6866-4a71-8328-860fe8c095dc"                         # K-Kalusugan W5
     receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "f9b2ffd9-ad4d-4cf7-9de6-b81016c474e9"                         # K-Kalusugan W6
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "9718d92b-f71f-40ed-be52-0a9e1f3e2f47"                         # K-Kalusugan W7
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "93cc8b30-f76a-4030-a392-300a96b00afe"                         # K-Kasal
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "114a803c-1703-4893-ad62-359c468edf25"                         # K-Kasangkapan
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "d1233493-0300-40b7-bb00-bbb2f502c398"                         # K-Manggagawa
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "e5830d02-2608-413a-b023-ca62b4285c0a"                         # K-NHA W1
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "84ef3a7b-9364-4012-a22d-b5ec8d242934"                         # K-NHA W2
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "9381e609-0df7-472d-9010-dcd765dd31b2"                         # K-PWD
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "2c9d23d5-9c06-4084-9196-8843fb32cd7d"                         # K-TODA
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
-   -
+  -
     loan_product_id: "3a092aa7-ded5-48fe-8f11-3052c9d59a24"                         # K-TRABAHO
     receivable_accounting_code_id: ""
     interest_receivable_accounting_code_id: ""
