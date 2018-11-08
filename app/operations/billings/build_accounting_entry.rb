@@ -1,15 +1,17 @@
 module Billings
   class BuildAccountingEntry
-    def initialize(billing:, config:)
+    include ActionView::Helpers::NumberHelper
+
+    def initialize(config:)
       @config = config
 
-      @branch   = @config[:branch]
-      @billing  = @config[:billing]
-      @user     = @config[:user]
-      @data     = @billing.data.with_indifferent_access
+      @branch           = @config[:branch]
+      @user             = @config[:user]
+      @collection_date  = @config[:collection_date].try(:to_date) || Date.today
+      @data             = @config[:data].with_indifferent_access
 
       @accounting_entry_data  = {
-        book: @config[:book],
+        book: @config[:book] || "CRB",
         date_prepared: @config[:date_prepared],
         company_name: Settings.company_name,
         company_address: Settings.company_address,
@@ -28,15 +30,39 @@ module Billings
         end
       end
 
+      @savings_accounting_codes   = Settings.savings_accounting_codes
+      @insurance_accounting_codes = Settings.insurance_accounting_codes
+
       # Trap settings not found
       if @billing_accounting_code_settings.blank?
         raise "No billing_accounting_code_settings found for branch #{@branch.id}"
       end
+
+      # Get loan_products in this billing
+      loan_product_ids  = []
+      @data[:records].each do |o|
+        o[:records].each do |oo|
+          if oo[:record_type] == "LOAN_PAYMENT"
+            loan_product_ids << oo[:loan_product][:id]
+          end
+        end
+      end
+
+      @loan_products  = LoanProduct.where(id: loan_product_ids.uniq)
+
+      @loan_product_accounting_codes  = Settings.loan_product_accounting_codes
+
+      # Total withdraw payment and total default savings
+      @total_wp        = 0.00
+      @total_savings   = 0.00
+
     end
 
     def execute!
       @accounting_entry_data[:debit_journal_entries]  = build_debit_journal_entries!
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
+
+      @accounting_entry_data
     end
 
     private
@@ -48,14 +74,154 @@ module Billings
       journal_entries << {
         code: accounting_code.code,
         name: accounting_code.name,
-        amount: number_to_currency(@data.total_collected, unit: "")
+        amount: @data[:total_collected]
       }
+
+      # WP
+      accounting_code = AccountingCode.find(@billing_accounting_code_settings.withdraw_payment_accounting_code_id)
+
+      @data[:totals].each do |o|
+        if o[:record_type] == "WP"
+          @total_wp = o[:amount].to_f
+        elsif o[:record_type] == "SAVINGS" and o[:key] == Settings.default_savings_key
+          @total_savings = o[:amount].to_f
+        end
+      end
+
+      if @total_wp > @total_savings
+        diff  = (@total_wp - @total_savings).to_f
+
+        journal_entries << {
+          code: accounting_code.code,
+          name: accounting_code.name,
+          amount: diff
+        }
+      end
 
       journal_entries
     end
 
     def build_credit_journal_entries!
       journal_entries = []
+
+      # loan_payments
+      @loan_products.each do |loan_product|
+        @loan_product_accounting_codes.each do |o|
+          if loan_product.id == o.loan_product_id
+            receivable_ac = AccountingCode.where(id: o.receivable_accounting_code_id).first
+            interest_ac   = AccountingCode.where(id: o.interest_receivable_accounting_code_id).first
+
+            if receivable_ac.blank?
+              raise "#{o.receivable_accounting_code_id} not found. #{o.inspect}"
+            end
+
+            if interest_ac.blank?
+              raise "#{o.interest_receivable_accounting_code_id} not found. #{o.inspect}"
+            end
+
+            journal_entries << {
+              code: receivable_ac.code,
+              name: receivable_ac.name,
+              record_type: "LOAN_PAYMENT",
+              loan_product_id: loan_product.id,
+              receivable: true,
+              interest: false,
+              amount: 0.00
+            }
+
+            journal_entries << {
+              code: interest_ac.code,
+              name: interest_ac.name,
+              record_type: "LOAN_PAYMENT",
+              loan_product_id: loan_product.id,
+              receivable: false,
+              interest: true,
+              amount: 0.00
+            }
+          end
+        end
+      end
+
+      # savings (deposit)
+      @savings_accounting_codes.each do |o|
+        accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
+
+        is_default_savings  = false
+        if Settings.default_savings_key == o.savings_type
+          is_default_savings = true
+        end
+
+        journal_entries << {
+          code: accounting_code.code,
+          name: accounting_code.name,
+          record_type: "SAVINGS",
+          savings_type: o.savings_type,
+          is_default_savings: is_default_savings,
+          amount: 0.00
+        }
+      end
+
+      # insurance
+      @insurance_accounting_codes.each do |o|
+        accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
+
+        journal_entries << {
+          code: accounting_code.code,
+          name: accounting_code.name,
+          record_type: "INSURANCE",
+          insurance_type: o.insurance_type,
+          amount: 0.00
+        }
+      end
+
+      @data[:records].each do |r|
+        r[:records].each do |rr|
+          if rr[:record_type] == "SAVINGS" and rr[:amount].to_f > 0
+            journal_entries.each_with_index do |j, i|
+              if rr[:account_subtype] == j[:savings_type] and j[:record_type] == "SAVINGS"
+                journal_entries[i][:amount] += rr[:amount].to_f
+              end
+            end
+          elsif rr[:record_type] == "INSURANCE" and rr[:amount].to_f > 0
+            journal_entries.each_with_index do |j, i|
+              if rr[:account_subtype] == j[:insurance_type] and j[:record_type] == "INSURANCE"
+                journal_entries[i][:amount] += rr[:amount].to_f
+              end
+            end
+          elsif rr[:record_type] == "LOAN_PAYMENT" and rr[:amount].to_f > 0
+            loan      = Loan.find(rr[:loan_id])
+            amount    = rr[:amount].to_f
+            date_paid = @collection_date
+
+            config = {
+              loan: loan,
+              amount: amount,
+              date_paid: date_paid
+            }
+
+            s = ::Loans::FetchPaymentStats.new(config: config).execute!
+
+            journal_entries.each_with_index do |j, i|
+              if j[:receivable] and j[:record_type] == "LOAN_PAYMENT" and j[:loan_product_id] == loan.loan_product_id and s[:principal_paid] > 0.00
+                journal_entries[i][:amount] += s[:principal_paid]
+              end
+
+              if j[:interest] and j[:record_type] == "LOAN_PAYMENT" and j[:loan_product_id] == loan.loan_product_id and s[:interest_paid] > 0.00
+                journal_entries[i][:amount] += s[:interest_paid]
+              end
+            end
+          end
+        end
+      end
+
+      # WP and Savings Net
+      if @total_wp > 0
+        journal_entries.each_with_index do |j, i|
+          if j[:record_type] == "SAVINGS" and j[:is_default_savings] == true
+            journal_entries[i][:amount] -= @total_wp
+          end
+        end
+      end
 
       journal_entries
     end

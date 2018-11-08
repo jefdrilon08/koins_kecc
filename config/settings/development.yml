@@ -10,6 +10,24 @@ defaults:
       account_subtype: "Retirement Fund"
       amount: 5.00
 
+default_savings_key: "K-IMPOK"
+
+insurance_accounting_codes:
+  -
+    insurance_type: "Life Insurance Fund"
+    deposit_accounting_code_id: "849582d4-0e3f-43cf-b7be-0e346fd18721"
+  -
+    insurance_type: "Retirement Fund"
+    deposit_accounting_code_id: "f987b63b-dafc-4717-84a4-89127727de6f"
+
+savings_accounting_codes:
+  -
+    savings_type: "K-IMPOK"
+    deposit_accounting_code_id: "c9eaa91b-a841-4ae8-9420-e357ce52744b"
+  -
+    savings_type: "Golden K"
+    deposit_accounting_code_id: "9426437f-be07-48b1-b469-052d48a98f1c"
+
 branch_billing_accounting_codes:
   -
     branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"
@@ -27,92 +45,93 @@ loan_product_accounting_codes:
     interest_receivable_accounting_code_id: "01d3dd16-a89a-46be-94c0-60b8bcc0033d"
   -
     loan_product_id: "e78c361b-d52a-4f49-81b9-ec0c2182b8ff"                         # K-Bahay W1
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "1a024b40-608e-4cfd-ac3b-70c9d6c035b5"
+    interest_receivable_accounting_code_id: "2f9317c7-d63c-438d-b005-f36901d7d929"
   -
     loan_product_id: "6ac70669-21ee-4ff5-86b3-053e71b0c84d"                         # K-Bahay W2
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "57f5a55a-14b3-4dd6-8072-444b953768e0"
+    interest_receivable_accounting_code_id: "472fff56-949f-4312-bff3-761e4fc4c2a3"
   -
     loan_product_id: "abea45ce-a02f-4954-8547-55b091cb0ef3"                         # K-Bahay W3
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "2e925752-6e65-49c9-9446-4d51865927a8"
+    interest_receivable_accounting_code_id: "647d2a45-7325-4442-b8ef-b8ab61898dcb"
   -
     loan_product_id: "cc4601fe-b4e6-4e9f-af29-edd7570141a7"                         # K-Benepisyo W1
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "c6e8e685-8e58-40ce-8888-2ce61a55ad42"
+    interest_receivable_accounting_code_id: "626a0898-df2e-4929-9815-acfbd7ec7f0c"
   -
     loan_product_id: "7edfde52-71fe-4249-b96a-2f316d504425"                         # K-Benepisyo W2
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "1c96af59-e215-429b-8476-9ca8cb2a76d9"
+    interest_receivable_accounting_code_id: "b9910ef4-0644-4923-a646-2c287bcccd7f"
   -
     loan_product_id: "0d03a959-c397-4ee3-a878-1386dcaa302b"                         # K-Edukasyon
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "f4b741c0-28b5-40d1-9f78-571f6a5a027b"
+    interest_receivable_accounting_code_id: "c13e205f-2fff-4d73-92b5-2727e976a4be"
   -
     loan_product_id: "7edfde52-71fe-4249-b96a-2f316d504425"                         # K-Edukasyon W2
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "762927c1-6b9f-4b2c-b12c-9695ae574054"
+    interest_receivable_accounting_code_id: "151dc48f-c9b3-45ba-ae3c-a1fc75fc2d05"
   -
     loan_product_id: "a2c7008c-e45d-4c24-be72-6f66a1bbec9e"                         # K-Kalamidad
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "9202b1fc-3373-4d6f-965f-6e54ea518ea6"
+    interest_receivable_accounting_code_id: "148cc2f7-eeca-4c0d-830f-b12cfa882f28"
   -
     loan_product_id: "f7a76bf3-cce4-48fc-b9bc-13e9b5c4c6c8"                         # K-Kalusugan W1
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "a711ec58-d749-47d8-b1df-02fabde5f715"
+    interest_receivable_accounting_code_id: "4d5058df-dd33-4fac-93c1-c32b92dfa71c"
   -
     loan_product_id: "bf5671ed-8473-4db4-980f-6ba7a2fb7163"                         # K-Kalusugan W2
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "3d151c3c-bf07-4d3e-9342-fe3842e30d6a"
+    interest_receivable_accounting_code_id: "343ea71a-1708-45bc-bafb-c11017e29854"
   -
     loan_product_id: "10d28981-1132-4ea8-9fbd-b14e4348efd7"                         # K-Kalusugan W3
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "1fd39eb8-e62c-44f3-a8fd-eccb7f5e6be2"
+    interest_receivable_accounting_code_id: "52e585b9-f3ba-468c-99f7-64afd4c73cbb"
   -
     loan_product_id: "b13f34e5-abbd-4899-922c-dbb77879bd51"                         # K-Kalusugan W4
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "129ce683-abe7-4fb8-8f00-4993eb3b31ee"
+    interest_receivable_accounting_code_id: "c7f05039-ac59-4c67-ac2a-e52a1e2a8e60"
   -
     loan_product_id: "2f2329c5-6866-4a71-8328-860fe8c095dc"                         # K-Kalusugan W5
-    receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "af8b352d-1ff3-4a0f-a05e-f6ecc74b9d35"
+    interest_receivable_accounting_code_id: "f57eca4f-77cf-4211-adaf-029bc45fa0fe"
   -
     loan_product_id: "f9b2ffd9-ad4d-4cf7-9de6-b81016c474e9"                         # K-Kalusugan W6
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "f0c9ada8-d7d1-44a1-bda3-571ca3bef4dc"
+    interest_receivable_accounting_code_id: "e8f5b167-3d64-457c-914a-6f62424422b4"
   -
     loan_product_id: "9718d92b-f71f-40ed-be52-0a9e1f3e2f47"                         # K-Kalusugan W7
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "0d268ab8-6aa4-4de7-b302-dd0487106b4f"
+    interest_receivable_accounting_code_id: "b71b5c22-d0c4-4e1e-b924-78d8ea06ef34"
   -
     loan_product_id: "93cc8b30-f76a-4030-a392-300a96b00afe"                         # K-Kasal
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "3394037a-4baf-4b9d-bdc9-f9565dc6a623"
+    interest_receivable_accounting_code_id: "eefe28cf-ef0b-4427-9f65-21487694bbe3"
   -
     loan_product_id: "114a803c-1703-4893-ad62-359c468edf25"                         # K-Kasangkapan
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "8de4ddad-6bd4-4d91-b077-20020ac8d7e0"
+    interest_receivable_accounting_code_id: "21bf23ab-b105-4cf1-9c5a-956645002706"
   -
     loan_product_id: "d1233493-0300-40b7-bb00-bbb2f502c398"                         # K-Manggagawa
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "8f0b4c36-3527-4547-afde-9518470cc851"
+    interest_receivable_accounting_code_id: "c70e7931-b4d4-4e54-89eb-181c2f639550"
   -
     loan_product_id: "e5830d02-2608-413a-b023-ca62b4285c0a"                         # K-NHA W1
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "53e49a48-cbef-4417-a755-8ab1136fa677"
+    interest_receivable_accounting_code_id: "b0d63cfe-bb45-4649-ae72-85fbca57cc67"
   -
     loan_product_id: "84ef3a7b-9364-4012-a22d-b5ec8d242934"                         # K-NHA W2
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "1003bc0d-5aa0-4c79-98b9-fdf01d7a9981"
+    interest_receivable_accounting_code_id: "e04bd3e9-4e35-45d1-9411-a0001ff10e05"
   -
     loan_product_id: "9381e609-0df7-472d-9010-dcd765dd31b2"                         # K-PWD
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "aa1ece49-fb5f-4ec0-a5a1-4573c8efde21"
+    interest_receivable_accounting_code_id: "6a6b8837-62da-438a-a90e-07b8debe48f0"
   -
     loan_product_id: "2c9d23d5-9c06-4084-9196-8843fb32cd7d"                         # K-TODA
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "b8905769-fdd2-4ab3-ba6c-48c4215f0f2b"
+    interest_receivable_accounting_code_id: "ce104b94-a1ee-4900-b702-7f878a4d7dcf"
   -
     loan_product_id: "3a092aa7-ded5-48fe-8f11-3052c9d59a24"                         # K-TRABAHO
-    receivable_accounting_code_id: ""
-    interest_receivable_accounting_code_id: ""
+    receivable_accounting_code_id: "6444c0bc-6d44-4323-b12d-b29dcd09f155"
+    interest_receivable_accounting_code_id: "eed24dfa-ce7e-4913-8b1d-bbe4f5e67b75"

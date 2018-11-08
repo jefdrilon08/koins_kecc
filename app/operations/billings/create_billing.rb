@@ -3,6 +3,7 @@ module Billings
     def initialize(config:)
       @config           = config
       @collection_date  = @config[:collection_date]
+      @user             = @config[:user]
       @branch           = Branch.where(id: @config[:branch_id]).first
       @center           = Center.where(id: @config[:center_id]).first
 
@@ -45,6 +46,15 @@ module Billings
       end
 
       load_headers_and_totals!
+
+      # Load accounting entry
+      @data[:accounting_entry]  = ::Billings::BuildAccountingEntry.new(
+                                    config: {
+                                      branch: @branch,
+                                      data: @data,
+                                      user: @user
+                                    }
+                                  ).execute!
 
       @billing.data = @data
 

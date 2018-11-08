@@ -61,7 +61,8 @@ module Api
         config  = {
           collection_date: collection_date,
           branch_id: branch_id,
-          center_id: center_id
+          center_id: center_id,
+          user: current_user
         }
 
         errors  = ::Billings::ValidateCreateBilling.new(

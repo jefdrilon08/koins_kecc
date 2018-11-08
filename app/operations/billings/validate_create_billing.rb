@@ -6,9 +6,17 @@ module Billings
       @collection_date  = @config[:collection_date]
       @branch           = Branch.where(id: @config[:branch_id]).first
       @center           = Center.where(id: @config[:center_id]).first
+      @user             = @config[:user]
     end
 
     def execute!
+      if @user.blank?
+        @errors[:messages] << {
+          key: "user",
+          message: "user not found"
+        }
+      end
+
       if @branch.blank?
         @errors[:messages] << {
           key: "branch",

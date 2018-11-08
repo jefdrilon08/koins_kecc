@@ -43,6 +43,15 @@ module Billings
       )
       
 
+      # Update accounting_entry
+      @data[:accounting_entry]  = ::Billings::BuildAccountingEntry.new(
+                                    config: {
+                                      branch: @billing.branch,
+                                      data: @data,
+                                      user: @user
+                                    }
+                                  ).execute!
+
       # Update billing
       @billing.data = @data
 
@@ -96,7 +105,7 @@ module Billings
         if t[:record_type] == "SAVINGS"
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
-              if rr[:record_type] == "SAVINGS"
+              if rr[:record_type] == "SAVINGS" and t[:key] == MemberAccount.savings.where(id: rr[:member_account_id]).first.account_subtype
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end

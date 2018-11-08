@@ -3,7 +3,7 @@ module Loans
     def initialize(config:)
       @config     = config
       @loan       = @config[:loan]
-      @amount     = @config[:amount]
+      @amount     = @config[:amount].to_f
       @date_paid  = @config[:date_paid]
 
       @unpaid_amortization  = @loan.amortization_schedule_entries.unpaid
@@ -24,11 +24,11 @@ module Loans
         interest_paid   = 0.00
         due_date        = o.due_date
 
-        # Pay interest_balance
         if @amount > 0
-          if o.interest_balance > @amount
+          # Pay interest_balance
+          if o.interest_balance >= @amount
             interest_paid += @amount
-            @data[:interest_paid] += (o.interest_balance - @amount)
+            @data[:interest_paid] += @amount
             @amount = 0.00
           elsif o.interest_balance < @amount
             interest_paid += o.interest_balance
@@ -37,24 +37,22 @@ module Loans
           end
 
           # Pay principal_balance
-          if o.principal_balance > @amount
-            principal_paid += (o.principal_paid - @amount)
-            @data[:principal_paid] += (o.principal_paid - @amount)
+          if o.principal_balance >= @amount
+            principal_paid += @amount
+            @data[:principal_paid] += @amount
             @amount = 0.00
           elsif o.principal_balance < @amount
-            principal_paid += @amount
+            principal_paid += o.principal_balance
             @data[:principal_paid] += o.principal_balance
             @amount -= o.principal_balance
           end
 
-          if @amount >= 0.00
-            @data[:amort_entries] << {
-              id: o.id,
-              due_date: o.due_date,
-              principal_paid: principal_paid,
-              interest_paid: interest_paid
-            }
-          end
+          @data[:amort_entries] << {
+            id: o.id,
+            due_date: o.due_date,
+            principal_paid: principal_paid,
+            interest_paid: interest_paid
+          }
         end
       end
 
