@@ -4,7 +4,7 @@ module Api
       before_action :authenticate_user!
 
       def index
-        branches  = Branch.all.order("name ASC")
+        branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
 
         data  = []
 

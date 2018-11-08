@@ -10,7 +10,7 @@
               %p
                 Pindutin ang amount upang baguhin ito.
           %h5
-            Billing for #{@billing.branch} / #{@billing.center}
+            Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")}
           #billing-content
 
           - if development?

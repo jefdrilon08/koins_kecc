@@ -1,7 +1,8 @@
 = render partial: "index_header"
 
 .container-fluid
-  .col
-    = render partial: "announcements"
-
-          
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "announcements"
