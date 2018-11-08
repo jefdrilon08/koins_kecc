@@ -10,6 +10,10 @@
     %i.nav-icon.fa.fa-cogs
     Settings
   %ul.nav-dropdown-items
+    %li{ class: "nav-item #{params[:controller] == 'administration/loan_products' ? 'active' : ''}" }
+      = link_to administration_loan_products_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Loan Products
     %li{ class: "nav-item #{params[:controller] == 'administration/areas' ? 'active' : ''}" }
       = link_to administration_areas_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file

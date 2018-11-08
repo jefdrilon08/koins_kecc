@@ -6,4 +6,5 @@ namespace :administration do
   resources :branches
   resources :centers
   resources :announcements
+  resources :loan_products, only: [:index]
 end

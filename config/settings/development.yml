@@ -18,8 +18,8 @@ branch_billing_accounting_codes:
     receivables:
       -
         loan_product_id:
-        receivable_accounting_code_id:
-        interest_receivable_accounting_code_id:
+        receivable_accounting_code_id: "9b494af8-14fd-46b4-ab7c-70fa37dbe0ab"
+        interest_receivable_accounting_code_id: "01d3dd16-a89a-46be-94c0-60b8bcc0033d"
   -
     branch_id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"
     cash_in_bank_accounting_code_id:

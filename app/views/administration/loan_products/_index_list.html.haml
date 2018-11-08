@@ -1,0 +1,54 @@
+%table.table.table-sm.table-hover.table-bordered
+  %thead
+    %tr
+      %th
+        Name
+      %th.text-right
+        Min Loan Amount
+      %th.text-right
+        Max Loan Amount
+      %th.text-right
+        Denomination
+      %th
+        %center
+          Insured
+      %th
+        %center
+          Entry Point
+      %th
+        %center
+          Monthly I.R.
+  %tbody
+    - @loan_products.each do |o|
+      %tr
+        %td
+          %strong
+            #{o.name}
+          %br
+          %small
+            #{o.id}
+        %td.text-right
+          #{number_to_currency(o.min_loan_amount, unit: "")}
+        %td.text-right
+          #{number_to_currency(o.max_loan_amount, unit: "")}
+        %td.text-right
+          #{number_to_currency(o.denomination, unit: "")}
+        %td
+          %center
+            - if o.insured
+              .badge.badge-success
+                .fa.fa-check
+            - else
+              .badge.badge-danger
+                .fa.fa-times
+        %td
+          %center
+            - if o.is_entry_point
+              .badge.badge-success
+                .fa.fa-check
+            - else
+              .badge.badge-danger
+                .fa.fa-times
+        %td
+          %center
+            #{number_to_currency(o.monthly_interest_rate * 100, unit: "")} %
