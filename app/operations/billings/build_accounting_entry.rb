@@ -44,6 +44,13 @@ module Billings
     def build_debit_journal_entries!
       journal_entries = []
 
+      accounting_code = AccountingCode.find(@billing_accounting_code_settings.cash_in_bank_accounting_code_id)
+      journal_entries << {
+        code: accounting_code.code,
+        name: accounting_code.name,
+        amount: number_to_currency(@data.total_collected, unit: "")
+      }
+
       journal_entries
     end
 
