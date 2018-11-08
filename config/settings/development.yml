@@ -17,9 +17,37 @@ branch_billing_accounting_codes:
     withdraw_payment_accounting_code_id: "afbb24a0-b1ef-4ce8-8bff-40388e525497"
     receivables:
       -
-        loan_product_id:
+        loan_product_id: "15a9ac0b-ef51-4470-88a3-bab8a7a72557"                         # K-Kabuhayan
         receivable_accounting_code_id: "9b494af8-14fd-46b4-ab7c-70fa37dbe0ab"
         interest_receivable_accounting_code_id: "01d3dd16-a89a-46be-94c0-60b8bcc0033d"
+      -
+        loan_product_id: "e78c361b-d52a-4f49-81b9-ec0c2182b8ff"                         # K-Bahay W1
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
+      -
+        loan_product_id: "6ac70669-21ee-4ff5-86b3-053e71b0c84d"                         # K-Bahay W2
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
+      -
+        loan_product_id: "abea45ce-a02f-4954-8547-55b091cb0ef3"                         # K-Bahay W3
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
+      -
+        loan_product_id: "cc4601fe-b4e6-4e9f-af29-edd7570141a7"                         # K-Benepisyo W1
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
+      -
+        loan_product_id: "7edfde52-71fe-4249-b96a-2f316d504425"                         # K-Benepisyo W2
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
+      -
+        loan_product_id: "0d03a959-c397-4ee3-a878-1386dcaa302b"                         # K-Edukasyon
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
+      -
+        loan_product_id: "7edfde52-71fe-4249-b96a-2f316d504425"                         # K-Edukasyon W2
+        receivable_accounting_code_id: ""
+        interest_receivable_accounting_code_id: ""
   -
     branch_id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"
     cash_in_bank_accounting_code_id:

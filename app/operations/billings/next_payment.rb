@@ -19,8 +19,11 @@ module Billings
 
       @active_loans = Loan.active.where(member_id: @member.id)
 
-      @entry_point_loan_products      = LoanProduct.entry_point
-      @non_entry_point_loan_products  = LoanProduct.non_entry_point
+      @members  = Member.active.where(center_id: @member.center.id)
+      valid_loan_product_ids  = Loan.active.where(member_id: @members.pluck(:id)).pluck(:loan_product_id).uniq
+
+      @entry_point_loan_products      = LoanProduct.entry_point.where(id: valid_loan_product_ids)
+      @non_entry_point_loan_products  = LoanProduct.non_entry_point.where(id: valid_loan_product_ids)
 
       @data = {
         member: {
