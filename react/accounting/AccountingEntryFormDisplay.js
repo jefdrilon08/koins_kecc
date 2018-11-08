@@ -248,6 +248,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
       }
     }
 
+    debitAmount   = parseFloat(numberWithCommas(debitAmount));
+    creditAmount  = parseFloat(numberWithCommas(creditAmount));
+
     console.log("debitAmount: " + debitAmount);
     console.log("creditAmount: " + creditAmount);
 

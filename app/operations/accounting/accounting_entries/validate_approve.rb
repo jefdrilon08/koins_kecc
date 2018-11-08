@@ -24,8 +24,8 @@ module Accounting
       private
 
       def validate_balanced!
-        debit_amount  = @journal_entries.debit.sum(:amount)
-        credit_amount = @journal_entries.credit.sum(:amount)
+        debit_amount  = @journal_entries.debit.sum(:amount).round(2)
+        credit_amount = @journal_entries.credit.sum(:amount).round(2)
 
         if debit_amount != credit_amount
           @errors[:messages] << {
