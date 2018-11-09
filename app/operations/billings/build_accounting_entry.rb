@@ -19,7 +19,14 @@ module Billings
         prepared_by: @user.full_name,
         particular: default_particular,
         debit_journal_entries: [],
-        credit_journal_entries: []
+        credit_journal_entries: [],
+        journal_entries: [],
+        branch_id: @branch.id,
+        branch_name: @branch.name,
+        status: "display",
+        data: {
+          or_number: ""
+        }
       }
 
       @billing_accounting_code_settings = nil
@@ -62,6 +69,27 @@ module Billings
       @accounting_entry_data[:debit_journal_entries]  = build_debit_journal_entries!
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
 
+      # Build journal entries
+      @accounting_entry_data[:debit_journal_entries].each do |j|
+        @accounting_entry_data[:journal_entries] << {
+          id: "",
+          post_type: "DR",
+          accounting_code_id: j[:accounting_code_id],
+          accounting_code_name: j[:name],
+          amount: j[:amount]
+        }
+      end
+
+      @accounting_entry_data[:credit_journal_entries].each do |j|
+        @accounting_entry_data[:journal_entries] << {
+          id: "",
+          post_type: "CR",
+          accounting_code_id: j[:accounting_code_id],
+          accounting_code_name: j[:name],
+          amount: j[:amount]
+        }
+      end
+
       @accounting_entry_data
     end
 
@@ -72,6 +100,7 @@ module Billings
 
       accounting_code = AccountingCode.find(@billing_accounting_code_settings.cash_in_bank_accounting_code_id)
       journal_entries << {
+        accounting_code_id: accounting_code.id,
         code: accounting_code.code,
         name: accounting_code.name,
         amount: @data[:total_collected]
@@ -92,6 +121,7 @@ module Billings
         diff  = (@total_wp - @total_savings).to_f
 
         journal_entries << {
+          accounting_code_id: accounting_code.id,
           code: accounting_code.code,
           name: accounting_code.name,
           amount: diff
@@ -120,6 +150,7 @@ module Billings
             end
 
             journal_entries << {
+              accounting_code_id: receivable_ac.id,
               code: receivable_ac.code,
               name: receivable_ac.name,
               record_type: "LOAN_PAYMENT",
@@ -130,6 +161,7 @@ module Billings
             }
 
             journal_entries << {
+              accounting_code_id: interest_ac.id,
               code: interest_ac.code,
               name: interest_ac.name,
               record_type: "LOAN_PAYMENT",
@@ -152,6 +184,7 @@ module Billings
         end
 
         journal_entries << {
+          id: accounting_code.id,
           code: accounting_code.code,
           name: accounting_code.name,
           record_type: "SAVINGS",
@@ -166,6 +199,7 @@ module Billings
         accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
 
         journal_entries << {
+          id: accounting_code.id,
           code: accounting_code.code,
           name: accounting_code.name,
           record_type: "INSURANCE",
