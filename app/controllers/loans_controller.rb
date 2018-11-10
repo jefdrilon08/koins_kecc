@@ -9,5 +9,10 @@ class LoansController < ApplicationController
     @amortization_schedule  = @loan.amortization_schedule_entries.order(
                                 "due_date ASC"
                               )
+
+    @loan_payments  = AccountTransaction.approved_loan_payments.where(
+                        subsidiary_id: @loan.id,
+                        subsidiary_type: "Loan"
+                      )
   end
 end

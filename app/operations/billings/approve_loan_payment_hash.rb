@@ -10,6 +10,7 @@ module Billings
       @loan         = Loan.find(@loan_payment[:loan_id])
 
       @account_transaction  = AccountTransaction.new(
+                                amount: @amount,
                                 subsidiary_id: @loan.id,
                                 subsidiary_type: "Loan",
                                 transaction_type: "loan_payment",
