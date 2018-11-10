@@ -21,6 +21,8 @@ module Billings
       @non_entry_point_loan_products  = LoanProduct.non_entry_point.where(id: valid_loan_product_ids)
 
       @data = {
+        or_number: "",
+        ar_number: "",
         records: [],
         headers: [],
         totals: [],

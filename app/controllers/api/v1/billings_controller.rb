@@ -9,6 +9,44 @@ module Api
         render json: billing
       end
 
+      def update_or_number
+        billing   = Billing.find(params[:id])
+        data      = billing.try(:data).try(:with_indifferent_access)
+        or_number = params[:or_number]
+
+        if billing.pending?
+          data[:or_number]                            = or_number
+          data[:accounting_entry][:data][:or_number]  = or_number
+
+          billing.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
+      def update_ar_number
+        billing   = Billing.find(params[:id])
+        data      = billing.try(:data).try(:with_indifferent_access)
+        ar_number = params[:ar_number]
+
+        if billing.pending?
+          data[:ar_number]                            = ar_number
+          data[:accounting_entry][:data][:ar_number]  = ar_number
+
+          billing.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
       def toggle_attendance
         billing = Billing.find(params[:id])
         data    = billing.data.with_indifferent_access

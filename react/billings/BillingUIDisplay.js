@@ -53,8 +53,91 @@ export default class BillingUIDisplay extends React.Component {
     alert("Not implemented for this module");
   }
 
+  modifyOrNumber(event) {
+    var context     = this;
+    var newOrNumber = event.target.value;
+    var data        = context.state.data;
+
+    $.ajax({
+      url: "/api/v1/billings/update_or_number",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        or_number: newOrNumber
+      },
+      success: function(response) {
+        data.data.or_number                       = newOrNumber;
+        data.data.accounting_entry.data.or_number = newOrNumber;
+
+        context.setState({
+          data: data
+        });
+      },
+      error: function(response) {
+        alert("Error in updating or number");
+      }
+    });
+  }
+
+  modifyArNumber(event) {
+    var context     = this;
+    var newArNumber = event.target.value;
+    var data        = context.state.data;
+
+    $.ajax({
+      url: "/api/v1/billings/update_ar_number",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        ar_number: newArNumber
+      },
+      success: function(response) {
+        data.data.ar_number                       = newArNumber;
+        data.data.accounting_entry.data.ar_number = newArNumber;
+
+        context.setState({
+          data: data
+        });
+      },
+      error: function(response) {
+        alert("Error in updating ar number");
+      }
+    });
+  }
+
+  renderOrNumber() {
+    var orNumber  = this.state.data.data.or_number;
+    if(this.state.data.status == "pending") {
+      return  (
+        <input 
+          value={orNumber} 
+          onChange={this.modifyOrNumber.bind(this)} 
+          className="form-control"
+        />
+      );
+    } else {
+      return this.state.data.data.or_number;
+    }
+  }
+
+  renderArNumber() {
+    var arNumber  = this.state.data.data.ar_number;
+    if(this.state.data.status == "pending") {
+      return  (
+        <input 
+          value={arNumber} 
+          onChange={this.modifyArNumber.bind(this)} 
+          className="form-control"
+        />
+      );
+    } else {
+      return this.state.data.data.ar_number;
+    }
+  }
+
   render() {
-    console.log(this.state.data);
     if(this.state.isLoading) {
       return (
         <div>
@@ -86,6 +169,22 @@ export default class BillingUIDisplay extends React.Component {
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  OR Number:
+                </th>
+                <td className="text-right">
+                  {this.renderOrNumber()}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  AR Number:
+                </th>
+                <td className="text-right">
+                  {this.renderArNumber()}
                 </td>
               </tr>
             </tbody>

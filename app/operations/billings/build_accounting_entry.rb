@@ -25,7 +25,8 @@ module Billings
         branch_name: @branch.name,
         status: "display",
         data: {
-          or_number: ""
+          or_number: "",
+          ar_number: ""
         }
       }
 
