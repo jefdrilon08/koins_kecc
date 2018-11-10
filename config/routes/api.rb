@@ -39,6 +39,7 @@ namespace :api do
     post "/billings", to: "billings#create"
     post "/billings/modify_transaction_record", to: "billings#modify_transaction_record"
     post "/billings/toggle_attendance", to: "billings#toggle_attendance"
+    post "/billings/approve", to: "billings#approve"
     get "/billings/fetch", to: "billings#fetch"
 
     namespace :epassbook do

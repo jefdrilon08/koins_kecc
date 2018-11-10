@@ -26,6 +26,29 @@ module Api
         render json: billing
       end
 
+      def approve
+        billing = Billing.where(id: params[:id]).first
+
+        config  = {
+          billing: billing,
+          user: current_user
+        }
+
+        errors  = ::Billings::ValidateApprove.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::Billings::Approve.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def modify_transaction_record
         billing             = Billing.where(id: params[:id]).first
         current_transaction = params[:current_transaction]

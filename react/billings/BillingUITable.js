@@ -216,7 +216,7 @@ export default class BillingUITable extends React.Component {
     var records = [];
 
     records.push(
-      <td>
+      <td key="total-empty-td-0">
       </td>
     );
 
@@ -276,7 +276,7 @@ export default class BillingUITable extends React.Component {
     )
 
     return (
-      <tr>
+      <tr key={"totals-row"}>
         {records}
       </tr>
     );

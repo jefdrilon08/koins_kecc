@@ -3,6 +3,10 @@ module ApplicationHelper
     ENV['RAILS_ENV'] == 'development'
   end
 
+  def debug?
+    development? and params[:debug].present?
+  end
+
   def accounting_entry_context_class(book)
     if book == "CRB"
       return "bg-success"
