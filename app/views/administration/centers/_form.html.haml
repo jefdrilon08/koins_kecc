@@ -9,7 +9,9 @@
     .col
       .form-group
         = f.input :short_name, input_html: { class: 'form-control' }
-    
+    .col
+      .form-group
+        = f.input :meeting_day, as: :select, collection: Center::MEETING_DAYS.map { |o| [o[:display], o[:value]] }, input_html: { class: 'form-control' }
   %hr
   .btn-group
     %button{ type: "submit", class: "btn btn-primary" }

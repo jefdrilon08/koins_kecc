@@ -1,23 +1,31 @@
-.card
-  .card-body
-    %h5.text-muted
-      CENTERS
-    .table-responsive
-      %table.table-bordered.table
-        %thead
-          %tr
-            %th Name
-            %th Short Name
-            %th Action
-        %tbody
-          - @branch.centers.each do |center|
-            %tr
-              %td= center.name
-              %td= center.short_name
-              %td
-                = link_to administration_center_path(center.id), class: "btn btn-primary btn-xs", target: "_blank " do
-                  Details
-
-
-
-
+%h5.text-muted
+  Centers
+.table-responsive
+  %table.table-bordered.table.table-sm
+    %thead
+      %tr
+        %th 
+          Name
+        %th
+          %center
+            Meeting Day
+        %th
+          %center
+            \# Members
+    %tbody
+      - @branch.centers.order("name ASC").each do |center|
+        %tr
+          %td
+            = link_to administration_center_path(center.id), target: '_blank' do
+              %strong
+                = center.name
+                %br
+                %small
+                  #{center.id}
+          %td
+            %center
+              %small
+                #{center.meeting_day_display}
+          %td
+            %center
+              #{center.members.active.count}

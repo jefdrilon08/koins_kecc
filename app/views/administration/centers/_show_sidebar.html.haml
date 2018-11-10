@@ -11,5 +11,11 @@
         %th
           Branch
         %td.text-muted.text-right
-          #{@center.branch.name}
+          = link_to administration_branch_path(@center.branch) do
+            #{@center.branch.name}
       
+      %tr
+        %th
+          Meeting Day
+        %td.text-muted.text-right
+          #{@center.meeting_day_display}
