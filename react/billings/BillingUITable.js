@@ -110,17 +110,39 @@ export default class BillingUITable extends React.Component {
       var record      = this.props.data.data.records[i];
       var member      = record.member;
 
-      components.push(
-        <td key={"c-member-attnd-" + member.id}>
-          <center>
-            <Toggle
-              defaultChecked={record.attendance}
-              onChange={this.handleToggled.bind(this, member.id)}
-              className="btn"
-            />
-          </center>
-        </td>
-      );
+      if(this.props.data.status == "pending") {
+        components.push(
+          <td key={"c-member-attnd-" + member.id}>
+            <center>
+              <Toggle
+                defaultChecked={record.attendance}
+                onChange={this.handleToggled.bind(this, member.id)}
+                className="btn"
+              />
+            </center>
+          </td>
+        );
+      } else if(record.attendance) {
+        components.push(
+          <td key={"c-member-attnd-" + member.id}>
+            <center>
+              <div className="badge badge-success">
+                <span className="fa fa-check"/>
+              </div>
+            </center>
+          </td>
+        );
+      } else {
+        components.push(
+          <td key={"c-member-attnd-" + member.id}>
+            <center>
+              <div className="badge badge-danger">
+                <span className="fa fa-minus"/>
+              </div>
+            </center>
+          </td>
+        );
+      }
 
       components.push(
         <td key={"c-member-" + member.id}>
@@ -135,57 +157,89 @@ export default class BillingUITable extends React.Component {
       for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
         var paymentRecord = this.props.data.data.records[i].records[j];
         if(paymentRecord.record_type == "LOAN_PAYMENT" && paymentRecord.enabled == true) {
-          components.push(
-            <td key={"loan-payment-" + paymentRecord.loan_id} className="text-right">
-              <strong>
-                <a 
-                  href="#"
-                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                >
-                  {numberWithCommas(paymentRecord.amount)}
-                </a>
-              </strong>
-            </td>
-          );
+          if(this.props.data.status == "pending") {
+            components.push(
+              <td key={"loan-payment-" + paymentRecord.loan_id} className="text-right">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"loan-payment-" + paymentRecord.loan_id} className="text-right">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
         } else if(paymentRecord.record_type == "SAVINGS" && paymentRecord.enabled == true) {
-          components.push(
-            <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
-              <strong>
-                <a 
-                  href="#"
-                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                >
-                  {numberWithCommas(paymentRecord.amount)}
-                </a>
-              </strong>
-            </td>
-          );
+          if(this.props.data.status == "pending") {
+            components.push(
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
         } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
-          components.push(
-            <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
-              <strong>
-                <a 
-                  href="#"
-                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                >
-                  {numberWithCommas(paymentRecord.amount)}
-                </a>
-              </strong>
-            </td>
-          );
+          if(this.props.data.status == "pending") {
+            components.push(
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
         } else if(paymentRecord.record_type == "WP" && paymentRecord.enabled == true) {
-          components.push(
-            <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
-              <strong>
-                <a 
-                  href="#"
-                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                >
-                  {numberWithCommas(paymentRecord.amount)}
-                </a>
-              </strong>
-            </td>
-          );
+          if(this.props.data.status == "pending") {
+            components.push(
+              <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
         } else {
           components.push(
             <td key={"na-" + member.id + "-" + j}>

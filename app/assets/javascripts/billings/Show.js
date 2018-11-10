@@ -23,6 +23,7 @@ var Show  = (function() {
 
   var _bindEvents = function() {
     $btnApprove.on("click", function() {
+      $message.html("");
       $modalApprove.modal("show");
     });
 

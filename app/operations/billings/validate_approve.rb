@@ -25,7 +25,7 @@ module Billings
         }
       end
 
-      not_yet_implemented!
+      #not_yet_implemented!
 
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }
 
