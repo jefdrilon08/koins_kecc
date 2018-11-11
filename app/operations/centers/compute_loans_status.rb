@@ -1,60 +1,50 @@
-module Loans
-  class ComputeStatus
+module Centers
+  class ComputeLoansStatus
     def initialize(config:)
       @config = config
 
-      @loan         = @config[:loan]
-      @loan_product = @loan.loan_product
-      @member       = @loan.member
-      @as_of        = @config[:as_of].try(:to_date) || Date.today
-      @branch       = @loan.branch
-      @center       = @member.center
-      @cluster      = @branch.cluster
-      @area         = @cluster.area
+      @center   = @config[:center]
+      @as_of    = @config[:as_of].try(:to_date) || Date.today
+      @branch   = @center.branch
+      @cluster  = @branch.cluster
+      @area     = @cluster.area
 
-      @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id = ?",
-                  @as_of,
-                  @loan.id
-                ).order("due_date ASC")
+      @paid_loans = Loan.paid.where(
+                      "date_approved >= ? AND date_completed <= ? AND center_id = ?",
+                      @as_of,
+                      @as_of,
+                      @center.id
+                    )
+
+      @active_loans = Loan.active.where(
+                        "center_id = ? AND date_approved <= ?",
+                        @center.id,
+                        @as_of
+                      )
+
+      @loans          = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
 
       @payments = AccountTransaction.approved_loan_payments.where(
-                    "transacted_at <= ? AND subsidiary_id = ? AND subsidiary_type = ? AND amount > 0",
+                    "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
                     @as_of,
-                    @loan.id,
+                    @loans.pluck(:id),
                     "Loan"
                   ).order("transacted_at ASC")
 
+      @amorts = AmortizationScheduleEntry.where(
+                  "due_date <= ? AND loan_id IN (?)",
+                  @as_of,
+                  @loans.pluck(:id)
+                ).order("due_date ASC")
+
+      @loan_products  = LoanProduct.where(id: @loans.pluck(:loan_product_id).uniq)
+
       @data = {
         as_of: @as_of,
-        loan_id: @loan.id,
-        principal: @loan.principal.to_f.round(2),
-        interest: @loan.interest.to_f.round(2),
-        loan_product: {
-          id: @loan_product.id,
-          name: @loan_product.name
-        },
-        area: {
-          id: @area.id,
-          name: @area.name
-        },
-        cluster: {
-          id: @cluster.id,
-          name: @cluster.name
-        },
-        branch: {
-          id: @branch.id,
-          name: @branch.name
-        },
-        center: {
-          id: @center.id,
-          name: @center.name
-        },
-        member: {
-          id: @member.id,
-          first_name: @member.first_name,
-          last_name: @member.last_name
-        },
+        num_loans: @loans.size,
+        num_members: @loans.pluck(:member_id).uniq,
+        principal: @loans.sum(:principal),
+        interest: @loans.sum(:interest),
         repayment_rate: nil,
         par: nil,
         principal_repayment_rate: nil,
@@ -71,8 +61,23 @@ module Loans
         total_principal_past_due: 0.00,
         total_interest_past_due: 0.00,
         total_past_due: 0.00,
-        principal: @loan.principal,
-        interest: @loan.interest
+        center: {
+          id: @center.id,
+          name: @center.name
+        },
+        branch: {
+          id: @branch.id,
+          name: @branch.name
+        },
+        cluster: {
+          id: @cluster.id,
+          name: @cluster.name
+        },
+        area: {
+          id: @area.id,
+          name: @area.name
+        },
+        loan_products: []
       }
     end
 
@@ -118,7 +123,29 @@ module Loans
       # Compute for PAR
       @data[:par] = @data[:total_principal_balance] / @data[:principal]
 
-      return @data
+      if @config.has_key?(:include_loan_products) && @config[:include_loan_products] == true
+        @data[:loan_products] = build_loan_products!
+      end
+
+      @data
+    end
+
+    private
+
+    def build_loan_products!
+      data  = []
+
+      @loan_products.each do |loan_product|
+        data << ::LoanProducts::ComputeLoansStatus.new(
+                  config: {
+                    loan_product: loan_product,
+                    center_id: @center.id,
+                    as_of: @as_of
+                  }
+                ).execute!
+      end
+
+      data
     end
   end
 end

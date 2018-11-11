@@ -8,6 +8,10 @@
   = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
     %i.nav-icon.fa.fa-users
     Members
+%li.nav-item
+  = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
+    %i.nav-icon.fa.fa-money-check
+    Loans
 %li{ class: "nav-item nav-dropdown" }
   = link_to "#", class: "nav-link nav-dropdown-toggle" do
     %i.nav-icon.fa.fa-money-check

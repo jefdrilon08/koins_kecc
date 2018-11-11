@@ -34,6 +34,14 @@ class Loan < ApplicationRecord
     ["active", "paid"].include?(self.status)
   end
 
+  def pending?
+    self.status == "pending"
+  end
+
+  def paid?
+    self.status == "paid"
+  end
+
   def active?
     self.status == "active"
   end

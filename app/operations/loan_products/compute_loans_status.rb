@@ -1,60 +1,55 @@
-module Loans
-  class ComputeStatus
+module LoanProducts
+  class ComputeLoansStatus
     def initialize(config:)
       @config = config
 
-      @loan         = @config[:loan]
-      @loan_product = @loan.loan_product
-      @member       = @loan.member
+      @loan_product = @config[:loan_product]
       @as_of        = @config[:as_of].try(:to_date) || Date.today
-      @branch       = @loan.branch
-      @center       = @member.center
-      @cluster      = @branch.cluster
-      @area         = @cluster.area
 
-      @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id = ?",
-                  @as_of,
-                  @loan.id
-                ).order("due_date ASC")
+      @paid_loans = Loan.paid.where(
+                      "date_approved >= ? AND date_completed <= ? AND loan_product_id = ?",
+                      @as_of,
+                      @as_of,
+                      @loan_product.id
+                    )
+
+      @active_loans = Loan.active.where(
+                        "loan_product_id = ? AND date_approved <= ?",
+                        @loan_product.id,
+                        @as_of
+                      )
+
+      @loans  = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
+
+      # Filter if branch is included
+      if @config[:branch_id].present?
+        @loans  = @loans.where(branch_id: @config[:branch_id])
+      end
+
+      # Filter if center is included
+      if @config[:center_id].present?
+        @loans  = @loans.where(center_id: @config[:center_id])
+      end
 
       @payments = AccountTransaction.approved_loan_payments.where(
-                    "transacted_at <= ? AND subsidiary_id = ? AND subsidiary_type = ? AND amount > 0",
+                    "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
                     @as_of,
-                    @loan.id,
+                    @loans.pluck(:id),
                     "Loan"
                   ).order("transacted_at ASC")
 
+      @amorts = AmortizationScheduleEntry.where(
+                  "due_date <= ? AND loan_id IN (?)",
+                  @as_of,
+                  @loans.pluck(:id)
+                ).order("due_date ASC")
+
       @data = {
         as_of: @as_of,
-        loan_id: @loan.id,
-        principal: @loan.principal.to_f.round(2),
-        interest: @loan.interest.to_f.round(2),
-        loan_product: {
-          id: @loan_product.id,
-          name: @loan_product.name
-        },
-        area: {
-          id: @area.id,
-          name: @area.name
-        },
-        cluster: {
-          id: @cluster.id,
-          name: @cluster.name
-        },
-        branch: {
-          id: @branch.id,
-          name: @branch.name
-        },
-        center: {
-          id: @center.id,
-          name: @center.name
-        },
-        member: {
-          id: @member.id,
-          first_name: @member.first_name,
-          last_name: @member.last_name
-        },
+        num_loans: @loans.size,
+        num_members: @loans.pluck(:member_id).uniq.size,
+        principal: @loans.sum(:principal),
+        interest: @loans.sum(:interest),
         repayment_rate: nil,
         par: nil,
         principal_repayment_rate: nil,
@@ -71,8 +66,10 @@ module Loans
         total_principal_past_due: 0.00,
         total_interest_past_due: 0.00,
         total_past_due: 0.00,
-        principal: @loan.principal,
-        interest: @loan.interest
+        loan_product: {
+          id: @loan_product.id,
+          name: @loan_product.name
+        }
       }
     end
 
@@ -118,7 +115,7 @@ module Loans
       # Compute for PAR
       @data[:par] = @data[:total_principal_balance] / @data[:principal]
 
-      return @data
+      @data
     end
   end
 end
