@@ -169,7 +169,7 @@ export default class AccountingEntryPreview extends React.Component {
           <div className="row">
             <div className="col-md-6">
               <strong>
-                [REFERENCE NUMBER] - {this.props.datePrepared}
+                {this.props.referenceNumber} - {this.props.datePrepared}
               </strong>
             </div>
             <div className="col-md-6">

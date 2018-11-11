@@ -35,6 +35,8 @@ module Accounting
             accounting_entry_id: @accounting_entry.id
           }
         )
+
+        @accounting_entry
       end
     end
   end

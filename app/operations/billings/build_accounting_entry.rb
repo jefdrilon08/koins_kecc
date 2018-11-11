@@ -12,7 +12,7 @@ module Billings
 
       @accounting_entry_data  = {
         book: @config[:book] || "CRB",
-        date_prepared: @config[:date_prepared],
+        date_prepared: @collection_date.strftime("%B %d, %Y"),
         company_name: Settings.company_name,
         company_address: Settings.company_address,
         branch: @branch.to_s.upcase,
@@ -185,7 +185,7 @@ module Billings
         end
 
         journal_entries << {
-          id: accounting_code.id,
+          accounting_code_id: accounting_code.id,
           code: accounting_code.code,
           name: accounting_code.name,
           record_type: "SAVINGS",
@@ -200,7 +200,7 @@ module Billings
         accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
 
         journal_entries << {
-          id: accounting_code.id,
+          accounting_code_id: accounting_code.id,
           code: accounting_code.code,
           name: accounting_code.name,
           record_type: "INSURANCE",

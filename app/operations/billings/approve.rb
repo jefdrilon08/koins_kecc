@@ -15,12 +15,19 @@ module Billings
     end
 
     def execute!
+      post_accounting_entry!
       process_loan_payments!
       process_savings!
       process_insurance!
-      post_accounting_entry!
+      process_withdraw_payments!
 
       @data[:approved_by] = @user.full_name
+
+      # Update accounting entry with reference number
+      @data[:accounting_entry][:id]               = @accounting_entry.id
+      @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
+      @data[:accounting_entry][:status]           = @accounting_entry.status
+      @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
 
       @billing.update!(
         status: "approved",
@@ -77,7 +84,31 @@ module Billings
       end
     end
 
+    def process_withdraw_payments!
+    end
+
     def post_accounting_entry!
+      # Create new accounting entry
+      config  = {
+        accounting_entry_data: @data_accounting_entry.with_indifferent_access,
+        user: @user
+      }
+
+      accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: config
+                          ).execute!
+
+      # Post to books
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
+      @accounting_entry
     end
   end
 end

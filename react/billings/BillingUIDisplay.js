@@ -13,6 +13,7 @@ export default class BillingUIDisplay extends React.Component {
 
     this.state  = {
       isLoading: true,
+      isSaving: false,
       data: false
     };
   }
@@ -53,10 +54,14 @@ export default class BillingUIDisplay extends React.Component {
     alert("Not implemented for this module");
   }
 
-  modifyOrNumber(event) {
+  saveOrNumber() {
     var context     = this;
-    var newOrNumber = event.target.value;
     var data        = context.state.data;
+    var newOrNumber = data.data.accounting_entry.data.or_number;
+
+    context.setState({
+      isSaving: true
+    });
 
     $.ajax({
       url: "/api/v1/billings/update_or_number",
@@ -67,11 +72,49 @@ export default class BillingUIDisplay extends React.Component {
         or_number: newOrNumber
       },
       success: function(response) {
-        data.data.or_number                       = newOrNumber;
-        data.data.accounting_entry.data.or_number = newOrNumber;
-
         context.setState({
-          data: data
+          isSaving: false
+        });
+      },
+      error: function(response) {
+        alert("Error in updating or number");
+      }
+    });
+  }
+
+  modifyOrNumber(event) {
+    var context     = this;
+    var newOrNumber = event.target.value;
+    var data        = context.state.data;
+
+    data.data.or_number                       = newOrNumber;
+    data.data.accounting_entry.data.or_number = newOrNumber;
+
+    context.setState({
+      data: data
+    });
+  }
+
+  saveArNumber() {
+    var context     = this;
+    var data        = context.state.data;
+    var newArNumber = data.data.accounting_entry.data.ar_number;
+
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/update_ar_number",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        ar_number: newArNumber
+      },
+      success: function(response) {
+        context.setState({
+          isSaving: false
         });
       },
       error: function(response) {
@@ -85,25 +128,11 @@ export default class BillingUIDisplay extends React.Component {
     var newArNumber = event.target.value;
     var data        = context.state.data;
 
-    $.ajax({
-      url: "/api/v1/billings/update_ar_number",
-      method: 'POST',
-      data: {
-        id: context.state.data.id,
-        authenticity_token: context.props.authenticityToken,
-        ar_number: newArNumber
-      },
-      success: function(response) {
-        data.data.ar_number                       = newArNumber;
-        data.data.accounting_entry.data.ar_number = newArNumber;
+    data.data.ar_number                       = newArNumber;
+    data.data.accounting_entry.data.ar_number = newArNumber;
 
-        context.setState({
-          data: data
-        });
-      },
-      error: function(response) {
-        alert("Error in updating ar number");
-      }
+    context.setState({
+      data: data
     });
   }
 
@@ -111,11 +140,26 @@ export default class BillingUIDisplay extends React.Component {
     var orNumber  = this.state.data.data.or_number;
     if(this.state.data.status == "pending") {
       return  (
-        <input 
-          value={orNumber} 
-          onChange={this.modifyOrNumber.bind(this)} 
-          className="form-control"
-        />
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={orNumber} 
+              onChange={this.modifyOrNumber.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveOrNumber.bind(this)}
+            >
+              <span className="fa fa-check"/>
+              Save
+            </button>
+          </div>
+        </div>
       );
     } else {
       return this.state.data.data.or_number;
@@ -126,11 +170,26 @@ export default class BillingUIDisplay extends React.Component {
     var arNumber  = this.state.data.data.ar_number;
     if(this.state.data.status == "pending") {
       return  (
-        <input 
-          value={arNumber} 
-          onChange={this.modifyArNumber.bind(this)} 
-          className="form-control"
-        />
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={arNumber} 
+              onChange={this.modifyArNumber.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveArNumber.bind(this)}
+            >
+              <span className="fa fa-check"/>
+              Save
+            </button>
+          </div>
+        </div>
       );
     } else {
       return this.state.data.data.ar_number;
@@ -146,6 +205,7 @@ export default class BillingUIDisplay extends React.Component {
       );
     } else {
       var accounting_entry_data = this.state.data.data.accounting_entry;
+      console.log(accounting_entry_data);
 
       return (
         <div>
@@ -203,7 +263,9 @@ export default class BillingUIDisplay extends React.Component {
           <AccountingEntryPreview
             book={accounting_entry_data.book}
             particular={accounting_entry_data.particular}
-            datePrepared={moment(accounting_entry_data.date_prepared).format("YYYY-MM-DD")}
+            datePrepared={accounting_entry_data.date_prepared}
+            referenceNumber={accounting_entry_data.reference_number}
+            approved_by={accounting_entry_data.approved_by}
             branch={accounting_entry_data.branch_name}
             balanced={true}
             status={accounting_entry_data.status}
