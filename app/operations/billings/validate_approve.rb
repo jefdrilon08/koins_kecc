@@ -25,6 +25,13 @@ module Billings
         }
       end
 
+      if @data.present? and @data[:accounting_entry][:particular].blank?
+        @errors[:messages] << {
+          key: "particular",
+          message: "no particular found"
+        }
+      end
+
       #not_yet_implemented!
 
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }

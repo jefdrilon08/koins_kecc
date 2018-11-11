@@ -69,6 +69,21 @@ module Billings
       end
     end
 
+    def process_withdraw_payments!
+      @data_withdraw_payments.each do |o|
+        config  = { 
+          date_paid: @billing.collection_date,
+          withdraw_payment: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::Billings::ApproveWithdrawPaymentHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
     def process_insurance!
       @data_insurance.each do |o|
         config  = {
@@ -82,9 +97,6 @@ module Billings
           config: config
         ).execute!
       end
-    end
-
-    def process_withdraw_payments!
     end
 
     def post_accounting_entry!

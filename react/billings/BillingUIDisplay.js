@@ -54,6 +54,34 @@ export default class BillingUIDisplay extends React.Component {
     alert("Not implemented for this module");
   }
 
+  saveParticular() {
+    var context       = this;
+    var data          = context.state.data;
+    var newParticular = data.data.accounting_entry.particular;
+
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/update_particular",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        particular: newParticular
+      },
+      success: function(response) {
+        context.setState({
+          isSaving: false
+        });
+      },
+      error: function(response) {
+        alert("Error in updating particular");
+      }
+    });
+  }
+
   saveOrNumber() {
     var context     = this;
     var data        = context.state.data;
@@ -89,6 +117,18 @@ export default class BillingUIDisplay extends React.Component {
 
     data.data.or_number                       = newOrNumber;
     data.data.accounting_entry.data.or_number = newOrNumber;
+
+    context.setState({
+      data: data
+    });
+  }
+
+  modifyParticular(event) {
+    var context       = this;
+    var newParticular = event.target.value;
+    var data          = context.state.data;
+
+    data.data.accounting_entry.particular = newParticular;
 
     context.setState({
       data: data
@@ -136,8 +176,40 @@ export default class BillingUIDisplay extends React.Component {
     });
   }
 
+  renderParticular() {
+    var particular  = this.state.data.data.accounting_entry.particular;
+
+    if(this.state.data.status == "pending") {
+      return  (
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={particular} 
+              onChange={this.modifyParticular.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveParticular.bind(this)}
+            >
+              <span className="fa fa-check"/>
+              Save
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return particular;
+    }
+  }
+
   renderOrNumber() {
     var orNumber  = this.state.data.data.or_number;
+
     if(this.state.data.status == "pending") {
       return  (
         <div className="row">
@@ -245,6 +317,14 @@ export default class BillingUIDisplay extends React.Component {
                 </th>
                 <td className="text-right">
                   {this.renderArNumber()}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Particular:
+                </th>
+                <td className="text-right">
+                  {this.renderParticular()}
                 </td>
               </tr>
             </tbody>

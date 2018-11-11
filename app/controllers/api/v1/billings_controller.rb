@@ -9,6 +9,24 @@ module Api
         render json: billing
       end
 
+      def update_particular
+        billing     = Billing.find(params[:id])
+        data        = billing.try(:data).try(:with_indifferent_access)
+        particular  = params[:particular]
+
+        if billing.pending?
+          data[:accounting_entry][:particular]  = particular
+
+          billing.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
       def update_or_number
         billing   = Billing.find(params[:id])
         data      = billing.try(:data).try(:with_indifferent_access)
