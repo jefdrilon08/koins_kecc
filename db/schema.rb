@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_052155) do
+ActiveRecord::Schema.define(version: 2018_11_12_141718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -190,6 +190,19 @@ ActiveRecord::Schema.define(version: 2018_11_12_052155) do
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
   end
 
+  create_table "legal_dependents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name"
+    t.string "middle_name"
+    t.date "date_of_birth"
+    t.uuid "member_id"
+    t.string "relationship"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "last_name"
+    t.index ["member_id"], name: "index_legal_dependents_on_member_id"
+  end
+
   create_table "loan_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.decimal "max_loan_amount"
@@ -339,6 +352,7 @@ ActiveRecord::Schema.define(version: 2018_11_12_052155) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
+  add_foreign_key "legal_dependents", "members"
   add_foreign_key "loans", "branches"
   add_foreign_key "loans", "centers"
   add_foreign_key "loans", "loan_products"

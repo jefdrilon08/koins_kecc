@@ -19,6 +19,7 @@ class Member < ApplicationRecord
   belongs_to :branch
 
   has_many :loans
+  has_many :legal_dependents
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true

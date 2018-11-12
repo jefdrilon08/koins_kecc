@@ -42,7 +42,8 @@ module Members
           num_years: 0,
           proof: ""
         },
-        banks: []
+        banks: [],
+        legal_dependents: []
       }
 
       @member_data  = {
@@ -60,7 +61,8 @@ module Members
         religion: @member.religion || "",
         data: @member.new_record? ? data : @member.data,
         branch_id: @member.branch.try(:id) || "",
-        center_id: @member.center.try(:id) || ""
+        center_id: @member.center.try(:id) || "",
+        legal_dependents: @member.legal_dependents
       }
     end
       @member_data

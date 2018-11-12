@@ -15,6 +15,7 @@ import FormGovernmentIdentificationNumbers from './FormGovernmentIdentificationN
 import FormSpouse from './FormSpouse';
 import FormExperience from './FormExperience';
 import FormBankAccounts from './FormBankAccounts';
+import FormLegalDependents from './FormLegalDependents';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -302,6 +303,19 @@ export default class FormDisplay extends React.Component {
                 </div>
                 <div className="card-body">
                   <FormSpouse
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon ng mga Anak
+                </div>
+                <div className="card-body">
+                  <FormLegalDependents
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: MyString
+  middle_name: MyString
+  date_of_birth: 2018-11-12
+  member: one
+  relationship: MyString
+  data: 
+
+two:
+  first_name: MyString
+  middle_name: MyString
+  date_of_birth: 2018-11-12
+  member: two
+  relationship: MyString
+  data: 
