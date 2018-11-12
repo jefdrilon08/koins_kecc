@@ -144,18 +144,24 @@ export default class AccountingEntryFormDisplay extends React.Component {
         console.log("Fetched current branches:");
         console.log(response);
 
-        tempCurrentBranch = {
-          value: response.branches[0].id,
-          label: response.branches[0].name
-        };
+        if(response.branches.length > 0) {
+          tempCurrentBranch = {
+            value: response.branches[0].id,
+            label: response.branches[0].name
+          };
 
-        console.log("tempCurrentBranch:");
-        console.log(tempCurrentBranch);
+          console.log("tempCurrentBranch:");
+          console.log(tempCurrentBranch);
 
-        context.setState({
-          branches: response.branches,
-          currentBranch: tempCurrentBranch
-        });
+          context.setState({
+            branches: response.branches,
+            currentBranch: tempCurrentBranch
+          });
+        } else {
+          context.setState({
+            branches: response.branches
+          });
+        }
       },
       error: function(response) {
         console.log(response);
@@ -584,6 +590,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
     var data                  = state.data;
     var branchOptions         = [];
     var accountingCodeOptions = [];
+
+    console.log(state.branches);
 
     for(var i = 0; i < state.branches.length; i++) {
       branchOptions.push({

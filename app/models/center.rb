@@ -13,6 +13,7 @@ class Center < ApplicationRecord
   has_many :members
 
   belongs_to :branch
+  belongs_to :user, optional: true
 
   def meeting_day_display
     MEETING_DAYS.each do |o|

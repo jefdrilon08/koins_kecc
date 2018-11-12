@@ -46,6 +46,10 @@ class User < ApplicationRecord
     end
   end
 
+  def to_s
+    full_name
+  end
+
   def full_name
     "#{last_name.upcase}, #{first_name.upcase}"
   end

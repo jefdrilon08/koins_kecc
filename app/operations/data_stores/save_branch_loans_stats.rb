@@ -21,6 +21,7 @@ module DataStores
         @meta = {
           as_of: @as_of,
           branch_id: @branch.id,
+          branch_name: @branch.name,
           data_store_type: "BRANCH_LOANS_STATS",
           include_centers: @include_centers
         }

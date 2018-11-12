@@ -46,6 +46,10 @@ namespace :api do
     post "/billings/update_particular", to: "billings#update_particular"
     get "/billings/fetch", to: "billings#fetch"
 
+    namespace :data_stores do
+      post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
+    end
+
     namespace :epassbook do
       get "/members/show", to: "members#show"
       get "/active_loans", to: "loans#active_loans"

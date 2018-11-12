@@ -7,6 +7,7 @@ import 'react-table/react-table.css';
 import SkCubeLoading from '../SkCubeLoading';
 
 import {numberWithCommas, numberAsPercent} from '../utils/helpers';
+import moment from 'moment';
 
 export default class BranchLoanProductStatsUI extends React.Component {
   constructor(props) {
@@ -108,6 +109,19 @@ export default class BranchLoanProductStatsUI extends React.Component {
     });
   }
 
+  handleGenerate() {
+    var context         = this;
+    var state           = context.state;
+    var currentBranchId = state.currentBranchId;
+
+    context.setState({
+      dataIsLoading: true,
+      data: false
+    });
+
+    context.fetchData();
+  }
+
   renderFilter() {
     var context = this;
     var state   = context.state;
@@ -131,6 +145,7 @@ export default class BranchLoanProductStatsUI extends React.Component {
               className="form-control" 
               value={this.state.currentBranchId}
               onChange={this.handleBranchChanged.bind(this)}
+              disabled={this.state.dataIsLoading || this.state.isLoading}
             >
               {branchOptions}
             </select>
@@ -142,6 +157,8 @@ export default class BranchLoanProductStatsUI extends React.Component {
           <br/>
           <button
             className="btn btn-primary btn-block"
+            onClick={this.handleGenerate.bind(this)}
+            disabled={this.state.dataIsLoading || this.state.isLoading}
           >
             <span className="fa fa-sync"/>
             Generate
@@ -174,6 +191,7 @@ export default class BranchLoanProductStatsUI extends React.Component {
     } else {
       var loanProductRows = [];
       var data            = context.state.data;
+      var asOf            = moment(data.as_of).format("MMM Do YYYY");
 
       for(var i = 0; i < data.loan_products.length; i++) {
         var loanProduct = data.loan_products[i].loan_product.name;
@@ -225,6 +243,12 @@ export default class BranchLoanProductStatsUI extends React.Component {
 
       return  (
         <div>
+          <strong>
+            As Of: 
+            <span className="text-muted">
+              {asOf}
+            </span>
+          </strong>
           <table className="table table-sm table-bordered table-hover">
             <thead>
               <tr>
@@ -310,7 +334,6 @@ export default class BranchLoanProductStatsUI extends React.Component {
     } else {
       return  (
         <div>
-          {this.renderFilter()}
           {this.renderResult()}
         </div>
       );

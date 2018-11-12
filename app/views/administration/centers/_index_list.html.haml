@@ -6,6 +6,8 @@
       %th
         Branch
       %th
+        SO
+      %th
         Actions
   %tbody
     - @centers.each do |center|
@@ -14,6 +16,8 @@
           #{center.name.upcase}
         %td
           #{center.branch.to_s}
+        %td
+          #{center.user}
 
         %td
           .btn-group
