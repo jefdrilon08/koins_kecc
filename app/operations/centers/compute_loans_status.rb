@@ -55,6 +55,9 @@ module Centers
         total_principal_balance: 0.00,
         total_interest_balance: 0.00,
         total_balance: 0.00,
+        total_principal_portfolio: 0.00,
+        total_interest_portfolio: 0.00,
+        total_portfolio: 0.00,
         total_principal_paid: 0.00,
         total_interest_paid: 0.00,
         total_paid: 0.00,
@@ -92,9 +95,24 @@ module Centers
       @data[:total_interest_paid]   = @payments.sum("CAST(data->>'total_interest_paid' AS decimal)").round(2)
       @data[:total_paid]            = (@data[:total_principal_paid] + @data[:total_interest_paid]).round(2)
 
+      # Compute portfolio
+      @data[:total_principal_portfolio] = (@data[:principal] - @data[:total_principal_paid]).round(2)
+      @data[:total_interest_portfolio]  = (@data[:interest] - @data[:total_interest_paid]).round(2)
+      @data[:total_portfolio]           = (@data[:total_principal_portfolio] + @data[:total_interest_portfolio]).round(2)
+
       # Compute total balances
       @data[:total_principal_balance] = (@data[:total_principal_due] - @data[:total_principal_paid]).round(2)
+
+      if @data[:total_principal_balance] < 0
+        @data[:total_principal_balance] = 0.00
+      end
+
       @data[:total_interest_balance]  = (@data[:total_interest_due] - @data[:total_interest_paid]).round(2)
+
+      if @data[:total_interest_balance] < 0
+        @data[:total_interest_balance] = 0.00
+      end
+
       @data[:total_balance]           = (@data[:total_principal_balance] + @data[:total_interest_balance]).round(2)
 
       # Compute past due

@@ -6,7 +6,7 @@ import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
 
-import {numberWithCommas} from '../utils/helpers';
+import {numberWithCommas, numberAsPercent} from '../utils/helpers';
 
 export default class BranchLoanProductStatsUI extends React.Component {
   constructor(props) {
@@ -25,6 +25,40 @@ export default class BranchLoanProductStatsUI extends React.Component {
     this.fetch();
   }
 
+  fetchData() {
+    var context         = this;
+    var state           = context.state;
+    var currentBranchId = state.currentBranchId;
+
+    if(state.currentBranchId) {
+      $.ajax({
+        url: "/api/v1/branches/" + state.currentBranchId + "/stats",
+        method: 'GET',
+        data: {
+        },
+        success: function(response) {
+          context.setState({
+            data: response,
+            dataIsLoading: false,
+            isLoading: false
+          });
+        },
+        error: function(respones) {
+          context.setState({
+            data: false,
+            dataIsLoading: false,
+            isLoading: false
+          });
+        }
+      });
+    } else {
+      context.setState({
+        data: false,
+        dataIsLoading: false
+      });
+    }
+  }
+
   fetch() {
     var context = this;
 
@@ -38,16 +72,20 @@ export default class BranchLoanProductStatsUI extends React.Component {
         console.log(response);
         var branches        = response.branches;
         var currentBranchId = "";
+        var dataIsLoading   = true;
 
         if(branches.length > 0) {
-          currentBranchId =  branches[0].id;
+          currentBranchId = branches[0].id;
         }
 
         context.setState({
           isLoading: false,
           branches: branches,
+          dataIsLoading: dataIsLoading,
           currentBranchId: currentBranchId
         });
+
+        context.fetchData();
       },
       error: function(response) {
         console.log(response);
@@ -116,23 +154,146 @@ export default class BranchLoanProductStatsUI extends React.Component {
   renderResult() {
     var context = this;
     var state   = context.state;
+    var data    = state.data;
 
-    if(state.dataIsLoading) {
+    if(state.dataIsLoading == true) {
       return  (
         <div>
-          Fetching data... 
+          <SkCubeLoading/>
+          <center>
+            Fetching data... 
+          </center>
         </div>
       );
-    } else if(!data) {
+    } else if(state.dataIsLoading != true && state.data == false) {
       return  (
         <div>
           No data found
         </div>
       );
     } else {
+      var loanProductRows = [];
+      var data            = context.state.data;
+
+      for(var i = 0; i < data.loan_products.length; i++) {
+        var loanProduct = data.loan_products[i].loan_product.name;
+        var activeLoans = data.loan_products[i].num_loans;
+        var portfolio   = numberWithCommas(data.loan_products[i].total_principal_portfolio);
+        var pastDueAmt  = numberWithCommas(data.loan_products[i].total_past_due);
+        var parAmt      = numberWithCommas(data.loan_products[i].total_principal_balance);
+        var parRate     = numberAsPercent(data.loan_products[i].par);
+        var rr          = numberAsPercent(data.loan_products[i].repayment_rate);
+
+        loanProductRows.push(
+          <tr key={"row-" + i}>
+            <td>
+              <strong>
+                {loanProduct}
+              </strong>
+            </td>
+            <td>
+              <center>
+                {activeLoans}
+              </center>
+            </td>
+            <td className="text-right">
+              <div className="text-muted">
+                <strong>
+                  {portfolio}
+                </strong>
+              </div>
+            </td>
+            <td className="text-right">
+              <strong>
+                {pastDueAmt}
+              </strong>
+            </td>
+            <td className="text-right">
+              <strong>
+                {parAmt}
+              </strong>
+            </td>
+            <td className="text-center">
+              {parRate}
+            </td>
+            <td className="text-center">
+              {rr}
+            </td>
+          </tr>
+        );
+      }
+
       return  (
         <div>
-          render
+          <table className="table table-sm table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>
+                  Loan Product
+                </th>
+                <th className="text-center">
+                  Active Loans
+                </th>
+                <th className="text-right">
+                  Portfolio
+                </th>
+                <th className="text-right">
+                  Past Due Amount
+                </th>
+                <th className="text-right">
+                  Par Amount
+                </th>
+                <th className="text-center">
+                  Par Rate
+                </th>
+                <th className="text-center">
+                  RR
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {loanProductRows}
+            </tbody>
+            <tfoot>
+              <tr key={"total-row"}>
+                <td>
+                  <strong>
+                    Total
+                  </strong>
+                </td>
+                <td className="text-center">
+                  <strong>
+                    {data.num_loans}
+                  </strong>
+                </td>
+                <td className="text-right">
+                  <strong>
+                    {numberWithCommas(data.total_principal_portfolio)}
+                  </strong>
+                </td>
+                <td className="text-right">
+                  <strong>
+                    {numberWithCommas(data.total_past_due)}
+                  </strong>
+                </td>
+                <td className="text-right">
+                  <strong>
+                    {numberWithCommas(data.total_principal_balance)}
+                  </strong>
+                </td>
+                <td className="text-center">
+                  <strong>
+                    {numberAsPercent(data.par)}
+                  </strong>
+                </td>
+                <td className="text-center">
+                  <strong>
+                    {numberAsPercent(data.repayment_rate)}
+                  </strong>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       );
     }

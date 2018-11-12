@@ -31,6 +31,7 @@ namespace :api do
 
     # Branches
     get "/branches", to: "branches#index"
+    get "/branches/:id/stats", to: "branches#stats"
 
     # Print Services
     post "/print/generate_file", to: "print#generate_file"

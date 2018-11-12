@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_10_094406) do
+ActiveRecord::Schema.define(version: 2018_11_12_011600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -167,6 +167,14 @@ ActiveRecord::Schema.define(version: 2018_11_10_094406) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["area_id"], name: "index_clusters_on_area_id"
+  end
+
+  create_table "data_stores", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.json "meta"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status"
   end
 
   create_table "journal_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
