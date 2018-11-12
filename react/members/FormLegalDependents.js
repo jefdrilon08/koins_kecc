@@ -21,13 +21,14 @@ export default class FormLegalDependents extends React.Component {
     
     this.state  = {
       modalIsOpen: false,
+      errors: [],
       currentLegalDependent: {
         id: "",
         first_name: "",
         middle_name: "",
         last_name: "",
         date_of_birth: "",
-        relationship: "",
+        relationship: "Child",
         data: {
           educational_attainment: "",
           course: ""
@@ -55,6 +56,8 @@ export default class FormLegalDependents extends React.Component {
     this.setState({
       errors: errors
     });
+
+    return errors;
   }
 
   handleCancelClicked() {
@@ -86,13 +89,14 @@ export default class FormLegalDependents extends React.Component {
   handleAddClicked() {
     this.setState({
       modalIsOpen: true,
+      errors: [],
       currentLegalDependent: {
         id: "",
         first_name: "",
         middle_name: "",
         last_name: "",
         date_of_birth: "",
-        relationship: "",
+        relationship: "Child",
         data: {
           educational_attainment: "",
           course: ""
@@ -102,11 +106,11 @@ export default class FormLegalDependents extends React.Component {
   }
 
   handleConfirmSaveClicked() {
-    var data  = this.props.data;
+    var data    = this.props.data;
+    var errors  = this.validateCurrentLegalDependent();
 
-    this.validateCurrentLegalDependent();
-
-    if(this.state.errors.length == 0) {
+    if(errors.length == 0) {
+      data.legal_dependents.push(this.state.currentLegalDependent);
       this.props.updateData(data);
 
       this.setState({
@@ -197,7 +201,93 @@ export default class FormLegalDependents extends React.Component {
     });
   }
 
+  renderErrors() {
+    var errors  = this.state.errors;
+
+    if(errors.length > 0) {
+      var errorItems  = [];
+
+      for(var i = 0; i < errors.length; i++) {
+        errorItems.push(
+          <li key={"e-" + i}>
+            {errors[i]}
+          </li>
+        );
+      }
+
+      return  (
+        <div className="callout callout-danger">
+          <ul>
+            {errorItems}
+          </ul>
+        </div>
+      );
+    }
+  }
+
+  renderRecords() {
+    var legalDependents = this.props.data.legal_dependents;
+
+    if(legalDependents.length > 0) {
+      var records = [];
+
+      for(var i = 0; i < legalDependents.length; i++) {
+        var name          = legalDependents[i].last_name + ", " + legalDependents[i].first_name;
+        var relationship  = legalDependents[i].relationship;
+
+        records.push(
+          <tr key={"ld-record-" + i}>
+            <td>
+              {name}
+            </td>
+            <td>
+              {relationship}
+            </td>
+            <td>
+              <center>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={this.handleDeleteClicked.bind(this, i)}
+                >
+                  <span className="fa fa-minus"/>
+                  Del
+                </button>
+              </center>
+            </td>
+          </tr>
+        );
+      }
+
+      return  (
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Relationship</th>
+              <th>
+                <center>
+                  Actions
+                </center>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {records}
+          </tbody>
+        </table>
+      );
+    } else {
+      return  (
+        <p>
+          No legal dependents
+        </p>
+      );
+    }
+  }
+
   render() {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
     return (
       <div>
         <Modal
@@ -213,6 +303,8 @@ export default class FormLegalDependents extends React.Component {
                 <label>* Pangalan</label>
                 <input
                   className="form-control"
+                  value={currentLegalDependent.first_name}
+                  onChange={this.handleFirstNameChanged.bind(this)}
                 />
               </div>
             </div>
@@ -221,6 +313,8 @@ export default class FormLegalDependents extends React.Component {
                 <label>Gitnang Pangalan</label>
                 <input
                   className="form-control"
+                  value={currentLegalDependent.middle_name}
+                  onChange={this.handleMiddleNameChanged.bind(this)}
                 />
               </div>
             </div>
@@ -229,6 +323,8 @@ export default class FormLegalDependents extends React.Component {
                 <label>* Apelyido</label>
                 <input
                   className="form-control"
+                  value={currentLegalDependent.last_name}
+                  onChange={this.handleLastNameChanged.bind(this)}
                 />
               </div>
             </div>
@@ -240,6 +336,8 @@ export default class FormLegalDependents extends React.Component {
                 <input
                   className="form-control"
                   type="date"
+                  value={currentLegalDependent.date_of_birth}
+                  onChange={this.handleDateOfBirthChanged.bind(this)}
                 />
               </div>
             </div>
@@ -248,7 +346,10 @@ export default class FormLegalDependents extends React.Component {
                 <label>Antas ng Pag-aaral</label>
                 <select
                   className="form-control"
+                  value={currentLegalDependent.educational_attainment}
+                  onChange={this.handleEducationalAttainmentChanged.bind(this)}
                 >
+                  <option value="">-- SELECT --</option>
                   <option value="elementary">Elementary</option>
                   <option value="high school">High School</option>
                   <option value="college">College</option>
@@ -260,6 +361,8 @@ export default class FormLegalDependents extends React.Component {
                 <label>Kurso</label>
                 <input
                   className="form-control"
+                  value={currentLegalDependent.course}
+                  onChange={this.handleCourseChanged.bind(this)}
                 />
               </div>
             </div>
@@ -268,7 +371,10 @@ export default class FormLegalDependents extends React.Component {
                 <label>Relasyon</label>
                 <select
                   className="form-control"
+                  value={currentLegalDependent.relationship}
+                  onChange={this.handleRelationshipChanged.bind(this)}
                 >
+                  <option value="">-- SELECT --</option>
                   <option value="Child">Child</option>
                   <option value="Spouse">Spouse</option>
                   <option value="Parent">Parent</option>
@@ -276,6 +382,7 @@ export default class FormLegalDependents extends React.Component {
               </div>
             </div>
           </div>
+          {this.renderErrors()}
           <hr/>
           <center>
             <div className="btn-group">
@@ -296,6 +403,8 @@ export default class FormLegalDependents extends React.Component {
             </div>
           </center>
         </Modal>
+
+        {this.renderRecords()}
 
         <button
           className="btn btn-info btn-sm"

@@ -21,13 +21,15 @@ export default class FormBeneficiaries extends React.Component {
     
     this.state  = {
       modalIsOpen: false,
+      errors: [],
       currentBeneficiary: {
         id: "",
         first_name: "",
         middle_name: "",
         last_name: "",
         date_of_birth: "",
-        relationship: ""
+        relationship: "",
+        is_primary: false
       }
     }
   }
@@ -51,6 +53,8 @@ export default class FormBeneficiaries extends React.Component {
     this.setState({
       errors: errors
     });
+
+    return errors;
   }
 
   handleCancelClicked() {
@@ -63,18 +67,39 @@ export default class FormBeneficiaries extends React.Component {
         last_name: "",
         date_of_birth: "",
         relationship: "",
-        data: {
-          educational_attainment: "",
-          course: ""
-        }
+        is_primary: false
       }
     });
+  }
+
+  renderErrors() {
+    var errors  = this.state.errors;
+
+    if(errors.length > 0) {
+      var errorItems  = [];
+
+      for(var i = 0; i < errors.length; i++) {
+        errorItems.push(
+          <li key={"e-" + i}>
+            {errors[i]}
+          </li>
+        );
+      }
+
+      return  (
+        <div className="callout callout-danger">
+          <ul>
+            {errorItems}
+          </ul>
+        </div>
+      );
+    }
   }
 
   handleDeleteClicked(index) {
     var data  = this.props.data;
 
-    data.legal_dependents.splice(index);
+    data.beneficiaries.splice(index);
 
     this.props.updateData(data);
   };
@@ -82,6 +107,7 @@ export default class FormBeneficiaries extends React.Component {
   handleAddClicked() {
     this.setState({
       modalIsOpen: true,
+      errors: [],
       currentBeneficiary: {
         id: "",
         first_name: "",
@@ -100,9 +126,10 @@ export default class FormBeneficiaries extends React.Component {
   handleConfirmSaveClicked() {
     var data  = this.props.data;
 
-    this.validateCurrentBeneficiary();
+    var errors  = this.validateCurrentBeneficiary();
 
-    if(this.state.errors.length == 0) {
+    if(errors.length == 0) {
+      data.beneficiaries.push(this.state.currentBeneficiary);
       this.props.updateData(data);
 
       this.setState({
@@ -114,10 +141,7 @@ export default class FormBeneficiaries extends React.Component {
           last_name: "",
           date_of_birth: "",
           relationship: "",
-          data: {
-            educational_attainment: "",
-            course: ""
-          }
+          is_primary: false
         }
       });
     }
@@ -173,6 +197,66 @@ export default class FormBeneficiaries extends React.Component {
     });
   }
 
+  renderRecords() {
+    var beneficiaries = this.props.data.beneficiaries;
+
+    if(beneficiaries.length > 0) {
+      var records = [];
+
+      for(var i = 0; i < beneficiaries.length; i++) {
+        var name          = beneficiaries[i].last_name + ", " + beneficiaries[i].first_name;
+        var relationship  = beneficiaries[i].relationship;
+
+        records.push(
+          <tr key={"ld-record-" + i}>
+            <td>
+              {name}
+            </td>
+            <td>
+              {relationship}
+            </td>
+            <td>
+              <center>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={this.handleDeleteClicked.bind(this, i)}
+                >
+                  <span className="fa fa-minus"/>
+                  Del
+                </button>
+              </center>
+            </td>
+          </tr>
+        );
+      }
+
+      return  (
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Relationship</th>
+              <th>
+                <center>
+                  Actions
+                </center>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {records}
+          </tbody>
+        </table>
+      );
+    } else {
+      return  (
+        <p>
+          No beneficiaries
+        </p>
+      );
+    }
+  }
+
   render() {
     return (
       <div>
@@ -189,6 +273,8 @@ export default class FormBeneficiaries extends React.Component {
                 <label>* Pangalan</label>
                 <input
                   className="form-control"
+                  value={this.state.currentBeneficiary.first_name}
+                  onChange={this.handleFirstNameChanged.bind(this)}
                 />
               </div>
             </div>
@@ -197,6 +283,8 @@ export default class FormBeneficiaries extends React.Component {
                 <label>Gitnang Pangalan</label>
                 <input
                   className="form-control"
+                  value={this.state.currentBeneficiary.middle_name}
+                  onChange={this.handleMiddleNameChanged.bind(this)}
                 />
               </div>
             </div>
@@ -205,6 +293,8 @@ export default class FormBeneficiaries extends React.Component {
                 <label>* Apelyido</label>
                 <input
                   className="form-control"
+                  value={this.state.currentBeneficiary.last_name}
+                  onChange={this.handleLastNameChanged.bind(this)}
                 />
               </div>
             </div>
@@ -216,6 +306,8 @@ export default class FormBeneficiaries extends React.Component {
                 <input
                   className="form-control"
                   type="date"
+                  value={this.state.currentBeneficiary.date_of_birth}
+                  onChange={this.handleDateOfBirthChanged.bind(this)}
                 />
               </div>
             </div>
@@ -224,6 +316,8 @@ export default class FormBeneficiaries extends React.Component {
                 <label>Relasyon</label>
                 <input
                   className="form-control"
+                  value={this.state.currentBeneficiary.relationship}
+                  onChange={this.handleRelationshipChanged.bind(this)}
                 />
               </div>
             </div>
@@ -237,7 +331,11 @@ export default class FormBeneficiaries extends React.Component {
               </div>
             </div>
           </div>
+
+          {this.renderErrors()}
+
           <hr/>
+
           <center>
             <div className="btn-group">
               <button
@@ -257,6 +355,8 @@ export default class FormBeneficiaries extends React.Component {
             </div>
           </center>
         </Modal>
+
+        {this.renderRecords()}
 
         <button
           className="btn btn-info btn-sm"

@@ -43,7 +43,8 @@ module Members
           proof: ""
         },
         banks: [],
-        legal_dependents: []
+        legal_dependents: [],
+        beneficiaries: []
       }
 
       @member_data  = {
@@ -62,7 +63,8 @@ module Members
         data: @member.new_record? ? data : @member.data,
         branch_id: @member.branch.try(:id) || "",
         center_id: @member.center.try(:id) || "",
-        legal_dependents: @member.legal_dependents
+        legal_dependents: @member.legal_dependents,
+        beneficiaries: @member.beneficiaries
       }
     end
       @member_data

@@ -20,6 +20,7 @@ class Member < ApplicationRecord
 
   has_many :loans
   has_many :legal_dependents
+  has_many :beneficiaries
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
