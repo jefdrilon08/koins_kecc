@@ -16,6 +16,7 @@ import FormSpouse from './FormSpouse';
 import FormExperience from './FormExperience';
 import FormBankAccounts from './FormBankAccounts';
 import FormLegalDependents from './FormLegalDependents';
+import FormBeneficiaries from './FormBeneficiaries';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -329,6 +330,19 @@ export default class FormDisplay extends React.Component {
                 </div>
                 <div className="card-body">
                   <FormBankAccounts
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Beneficiaries
+                </div>
+                <div className="card-body">
+                  <FormBeneficiaries
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}

@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
 
+  get "/insurance_accounts", to: "insurance_accounts#index"
+  get "/insurance_accounts/:id", to: "insurance_accounts#show", as: :insurance_account
+
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
   get "/accounting/general_ledger", to: "accounting#general_ledger"
