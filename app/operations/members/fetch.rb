@@ -41,7 +41,8 @@ module Members
           num_months: 0,
           num_years: 0,
           proof: ""
-        }
+        },
+        banks: []
       }
 
       @member_data  = {
