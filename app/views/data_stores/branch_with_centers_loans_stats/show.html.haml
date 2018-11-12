@@ -1,0 +1,97 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %h5
+            As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
+          %hr
+          - @record.data.with_indifferent_access[:centers].each do |o|
+            = render partial: "center", locals: { record: o }
+
+          %h5
+            Summary for this Branch
+          %table.table.table-sm.table-hover.table-bordered
+            %thead
+              %tr
+                %th
+                  Loan Product
+                %th.text-center
+                  Active Loans
+                %th.text-right
+                  Portfolio
+                %th.text-right
+                  Past Due Amount
+                %th.text-right
+                  Par Amount
+                %th.text-center
+                  Par Rate
+                %th.text-center
+                  RR
+            %tbody
+              - @record.data.with_indifferent_access[:loan_products].each do |o|
+                %tr
+                  %td
+                    %strong
+                      #{o[:loan_product][:name]}
+                  %td.text-center
+                    #{o[:num_loans]}
+                  %td.text-right
+                    #{number_to_currency(o[:total_principal_portfolio], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o[:total_past_due], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o[:total_principal_balance], unit: "")}
+                  %td.text-center
+                    #{number_to_currency(o[:par].to_f * 100, unit: "")} %
+                  %td.text-center
+                    #{number_to_currency(o[:repayment_rate].to_f * 100, unit: "")} %
+            %tfoot
+              %tr
+                %td
+                  %strong
+                    Total
+                %td.text-center
+                  %strong
+                    #{@record.data.with_indifferent_access[:num_loans]}
+                %td.text-right
+                  %strong
+                    #{number_to_currency(@record.data.with_indifferent_access[:total_principal_portfolio], unit: "")}
+                %td.text-right
+                  %strong
+                    #{number_to_currency(@record.data.with_indifferent_access[:total_past_due], unit: "")}
+                %td.text-right
+                  %strong
+                    #{number_to_currency(@record.data.with_indifferent_access[:total_principal_balance], unit: "")}
+                %td.text-center
+                  %strong
+                    #{number_to_currency(@record.data.with_indifferent_access[:par].to_f * 100, unit: "")} %
+                %td.text-center
+                  %strong
+                    #{number_to_currency(@record.data.with_indifferent_access[:repayment_rate].to_f * 100, unit: "")} %
+
+          - if debug?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@record.to_json))}
+
+
+#parameters{ data: { id: "#{@record.id}" } }
+
+= render partial: "data_stores/branch_with_centers_loans_stats/modals/update"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "data_stores/branch_with_centers_loans_stats/Show"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var id  = $("#parameters").data('id');
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });

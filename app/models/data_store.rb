@@ -9,6 +9,7 @@ class DataStore < ApplicationRecord
   scope :done, -> { where(status: "done") }
 
   scope :branch_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_LOANS_STATS") }
+  scope :branch_with_centers_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_WITH_CENTERS_LOANS_STATS") }
 
   before_validation :load_defaults
 

@@ -1,27 +1,28 @@
-module Branches
+# For socioeconomic officers
+module Users
   class ComputeLoansStatus
     def initialize(config:)
       @config = config
 
-      @branch   = @config[:branch]
+      @user     = @config[:user]
       @as_of    = @config[:as_of].try(:to_date) || Date.today
-      @cluster  = @branch.cluster
-      @area     = @cluster.area
+
+      @centers  = Center.where(user_id: @user.id)
 
       @paid_loans = Loan.paid.where(
-                      "date_approved >= ? AND date_completed <= ? AND branch_id = ?",
+                      "date_approved >= ? AND date_completed <= ? AND center_id IN (?)",
                       @as_of,
                       @as_of,
-                      @branch.id
+                      @centers.pluck(:id)
                     )
 
       @active_loans = Loan.active.where(
-                        "branch_id = ? AND date_approved <= ?",
-                        @branch.id,
+                        "center_id IN (?) AND date_approved <= ?",
+                        @centers.pluck(:id),
                         @as_of
                       )
 
-      @loans  = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
+      @loans          = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
 
       @payments = AccountTransaction.approved_loan_payments.where(
                     "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
@@ -37,9 +38,6 @@ module Branches
                 ).order("due_date ASC")
 
       @loan_products  = LoanProduct.where(id: @loans.pluck(:loan_product_id).uniq)
-      @centers        = Center.where(id: @loans.pluck(:center_id).uniq)
-
-      @loan_statuses  = []
 
       @data = {
         as_of: @as_of,
@@ -66,19 +64,7 @@ module Branches
         total_principal_past_due: 0.00,
         total_interest_past_due: 0.00,
         total_past_due: 0.00,
-        branch: {
-          id: @branch.id,
-          name: @branch.name
-        },
-        cluster: {
-          id: @cluster.id,
-          name: @cluster.name
-        },
-        area: {
-          id: @area.id,
-          name: @area.name
-        },
-        loan_products: []
+        centers: []
       }
     end
 
@@ -139,10 +125,8 @@ module Branches
       # Compute for PAR
       @data[:par] = @data[:total_principal_balance] / @data[:principal]
 
-      @data[:loan_products] = build_loan_products!
-
       if @config.has_key?(:include_centers) && @config[:include_centers] == true
-        @data[:centers]       = build_centers!
+        @data[:centers] << build_centers!
       end
 
       @data
@@ -150,34 +134,18 @@ module Branches
 
     private
 
-    def build_loan_products!
-      data  = []
-
-      @loan_products.each do |loan_product|
-        data << ::LoanProducts::ComputeLoansStatus.new(
-                  config: {
-                    loan_product: loan_product,
-                    branch_id: @branch.id,
-                    as_of: @as_of
-                  }
-                ).execute!
-      end
-
-      data
-    end
-
     def build_centers!
       data  = []
 
       include_loans = false
 
-      if @config[:include_loans].present? && @config[:include_loans] == true
-        include_loans = true
+      if @config.has_key?(:include_loans)
+        include_loans = @config[:include_loans]
       end
 
       include_loan_products = false
 
-      if @config[:include_loan_products].present? && @config[:include_loan_products] == true
+      if @config.has_key?(:include_loan_products) && @config[:include_loan_products] == true
         include_loan_products = true
       end
 

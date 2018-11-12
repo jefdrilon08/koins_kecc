@@ -3,9 +3,10 @@ module DataStores
     def initialize(config:)
       @config = config
 
-      @data_store = DataStore.new
-      @as_of      = @config[:as_of].try(:to_date) || Date.today
-      @branch     = @config[:branch]
+      @data_store       = DataStore.new
+      @as_of            = @config[:as_of].try(:to_date) || Date.today
+      @branch           = @config[:branch]
+      @data_store_type  = @config[:data_store_type] || "BRANCH_LOANS_STATS"
 
       @include_centers  = false
 
@@ -22,7 +23,7 @@ module DataStores
           as_of: @as_of,
           branch_id: @branch.id,
           branch_name: @branch.name,
-          data_store_type: "BRANCH_LOANS_STATS",
+          data_store_type: @data_store_type,
           include_centers: @include_centers
         }
 
@@ -35,10 +36,17 @@ module DataStores
     end
 
     def execute!
+      include_loan_products = false
+
+      if @data_store.meta.with_indifferent_access[:data_store_type] == "BRANCH_WITH_CENTERS_LOANS_STATS"
+        include_loan_products = true
+      end
+
       config  = {
         branch: @branch,
         as_of: @as_of,
-        include_centers: @include_centers
+        include_centers: @include_centers,
+        include_loan_products: include_loan_products
       }
 
       # TODO: Thread this

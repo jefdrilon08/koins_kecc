@@ -12,7 +12,8 @@ class ProcessBranchLoansStats < ApplicationJob
       id: record.id,
       branch: branch,
       as_of: as_of,
-      include_centers: false
+      include_centers: args[:include_centers],
+      data_store_type: args[:data_store_type]
     }
 
     data_store  = ::DataStores::SaveBranchLoansStats.new(

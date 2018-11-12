@@ -29,6 +29,8 @@ Rails.application.config.assets.precompile += [
   "billings/Show.js",
   "data_stores/branch_loans_stats/Show.js",
   "data_stores/branch_loans_stats/Index.js",
+  "data_stores/branch_with_centers_loans_stats/Show.js",
+  "data_stores/branch_with_centers_loans_stats/Index.js",
   "members/Show.js",
   "loans/Show.js",
   "MembersIndex.min.react.js",

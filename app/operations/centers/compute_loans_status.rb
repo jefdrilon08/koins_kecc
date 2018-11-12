@@ -42,7 +42,7 @@ module Centers
       @data = {
         as_of: @as_of,
         num_loans: @loans.size,
-        num_members: @loans.pluck(:member_id).uniq,
+        num_members: @loans.pluck(:member_id).uniq.size,
         principal: @loans.sum(:principal),
         interest: @loans.sum(:interest),
         repayment_rate: nil,
@@ -153,12 +153,19 @@ module Centers
     def build_loan_products!
       data  = []
 
+      include_loans = false
+
+      if @config.has_key?(:include_loans)
+        include_loans = @config[:include_loans]
+      end
+
       @loan_products.each do |loan_product|
         data << ::LoanProducts::ComputeLoansStatus.new(
                   config: {
                     loan_product: loan_product,
                     center_id: @center.id,
-                    as_of: @as_of
+                    as_of: @as_of,
+                    include_loans: include_loans
                   }
                 ).execute!
       end

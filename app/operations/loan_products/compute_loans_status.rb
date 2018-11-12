@@ -72,7 +72,8 @@ module LoanProducts
         loan_product: {
           id: @loan_product.id,
           name: @loan_product.name
-        }
+        },
+        loans: []
       }
     end
 
@@ -133,7 +134,30 @@ module LoanProducts
       # Compute for PAR
       @data[:par] = @data[:total_principal_balance] / @data[:principal]
 
+      # Include loans
+      include_loans = false
+      if @config[:include_loans].present?
+        @data[:loans] = build_loans!
+      end
+
       @data
+    end
+
+    private
+
+    def build_loans!
+      data  = []
+
+      @loans.each do |loan|
+        data  <<  ::Loans::ComputeStatus.new(
+                    config: {
+                      loan: loan,
+                      as_of: @as_of
+                    }
+                  ).execute! 
+      end
+
+      data
     end
   end
 end
