@@ -69,6 +69,16 @@ export default class GeneralLedgerComponent extends React.Component {
   }
 
   render() {
+    var currentDrSum  = 0.00;
+    var currentCrSum  = 0.00;
+    var entries = this.props.data.entries;
+    var items   = [];
+
+    for(var i = 0; i < entries.length; i++) {
+      currentDrSum += parseFloat(entries[i].dr_amount);
+      currentCrSum += parseFloat(entries[i].cr_amount);
+    }
+
     return (
       <div>
         <table className="table table-bordered table-sm">
@@ -102,10 +112,10 @@ export default class GeneralLedgerComponent extends React.Component {
                 Ending for {this.props.data.accounting_code_name}
               </th>
               <th className="text-right">
-                {this.numberWithCommas(this.props.data.dr_sum)}
+                {this.numberWithCommas(currentDrSum)}
               </th>
               <th className="text-right">
-                {this.numberWithCommas(this.props.data.cr_sum)}
+                {this.numberWithCommas(currentCrSum)}
               </th>
               <th className="text-right">
                 {this.numberWithCommas(this.props.data.ending_balance)}
