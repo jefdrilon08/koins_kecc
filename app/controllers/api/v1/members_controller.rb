@@ -30,7 +30,7 @@ module Api
       end
 
       def save
-        member_data = params[:member_data]
+        member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
 
         config  = {
           member_data: member_data,
@@ -42,7 +42,7 @@ module Api
                   ).execute!
 
         if errors[:full_messages].size > 0
-          render json: errors, status: 402
+          render json: errors, status: 400
         else
           member  = ::Members::Save.new(
                       config: config

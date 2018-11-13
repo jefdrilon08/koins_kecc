@@ -8,7 +8,7 @@
       %th
         Date of Birth
   %tbody
-    - @member.beneficiaries.each do |o|
+    - @member.legal_dependents.each do |o|
       %tr
         %td
           #{o.full_name}

@@ -145,9 +145,10 @@ export default class FormDisplay extends React.Component {
     $.ajax({
       url: "/api/v1/members/save",
       method: "POST",
+      dataType: 'json',
       data: {
         id: state.memberId,
-        member_data: state.data,
+        member_data: JSON.stringify(state.data),
         authenticity_token: state.authenticityToken
       },
       success: function(response) {
