@@ -97,9 +97,18 @@ module Api
         if errors[:messages].size > 0
           render json: errors, status: 400
         else
-          ::Billings::Approve.new(
-            config: config
-          ).execute!
+          billing = ::Billings::Approve.new(
+                      config: config
+                    ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} approved billing",
+            activity_type: "approval",
+            data: {
+              user_id: current_user.id,
+              billing_id: billing.id
+            }
+          )
 
           render json: { message: "ok" }
         end
