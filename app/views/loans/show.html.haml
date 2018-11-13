@@ -5,12 +5,20 @@
     .col
       .card
         .card-body
-          %h5
-            Amortization Table
-          = render partial: "amortization_table"
-          %h5
-            Transaction Table
-          = render partial: "transaction_table"
+          %ul.nav.nav-tabs{:role => "tablist"}
+            %li.nav-item
+              %a.nav-link.active.show{"aria-controls" => "home", "aria-selected" => "true", "data-toggle" => "tab", :href => "#details", :role => "tab"} Details
+            %li.nav-item
+              %a.nav-link{"aria-controls" => "loans", "aria-selected" => "false", "data-toggle" => "tab", :href => "#amortization-table", :role => "tab"} Amortization Table
+            %li.nav-item
+              %a.nav-link{"aria-controls" => "savings_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#payments-table", :role => "tab"} Payments
+          .tab-content
+            #details.tab-pane.active.show{:role => "tabpanel"}
+              = render partial: "details"
+            #amortization-table.tab-pane{:role => "tabpanel"}
+              = render partial: "amortization_table"
+            #payments-table.tab-pane{:role => "tabpanel"}
+              = render partial: "transaction_table"
 
 = render partial: "loans/modals/reage"
 = render partial: "templates/error_list"

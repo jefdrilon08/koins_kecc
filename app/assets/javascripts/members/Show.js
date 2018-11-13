@@ -1,15 +1,22 @@
 var Show  = (function() {
   var $modalGenerateAccessToken;
   var $modalSignature;
+  var $modalNewLoan;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
   var $btnConfirmGenerateAccessToken;
   var $btnConfirmSignature;
+  var $btnNewLoan;
+  var $btnConfirmNewLoan;
+  var $selectLoanProduct;
   var $message;
+
+  var templateErrorList;
 
   var _urlGenerateAccessToken = "/api/v1/members/generate_access_token";
   var _urlSaveSignature       = "/api/v1/members/save_signature";
+  var _urlNewLoan             = "/api/v1/loans/apply";
   var _memberId;
   var _authenticityToken;
 
@@ -22,16 +29,68 @@ var Show  = (function() {
 
     $modalGenerateAccessToken       = $("#modal-generate-access-token");
     $modalSignature                 = $("#modal-signature");
+    $modalNewLoan                   = $("#modal-new-loan");
     $btnGenerateAccessToken         = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature            = $("#btn-confirm-signature");
     $btnGenerateSignature           = $("#btn-generate-signature");
     $btnClearSignature              = $("#btn-clear-signature");
+    $btnNewLoan                     = $("#btn-new-loan");
+    $btnConfirmNewLoan              = $("#btn-confirm-new-loan");
+    $selectLoanProduct              = $("#select-loan-product");
 
-    $message  = $(".message");
+    $message          = $(".message");
+    templateErrorList = $("#template-error-list").html();
   }
 
   var _bindEvents = function() {
+    $btnNewLoan.on("click", function() {
+      $message.html("");
+      $modalNewLoan.modal("show");
+    });
+
+    $btnConfirmNewLoan.on("click", function() {
+      var loanProductId = $selectLoanProduct.val();
+
+      $selectLoanProduct.prop("disabled", true);
+      $btnConfirmNewLoan.prop("disabled", true);
+
+      $.ajax({
+        url: _urlNewLoan,
+        method: 'POST',
+        data: {
+          loan_product_id: loanProductId,
+          member_id: _memberId,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.href="/loans/" + response.id + "/form";
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmNewLoan.prop("disabled", false);
+            $selectLoanProduct.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnConfirmSignature.on("click", function() {
       $btnConfirmSignature.prop("disabled", true);
 

@@ -36,5 +36,7 @@ class MembersController < ApplicationController
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
 
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
+
+    @loan_products  = LoanProduct.select("*").order("name ASC")
   end
 end

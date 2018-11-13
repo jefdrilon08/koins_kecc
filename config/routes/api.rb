@@ -28,6 +28,7 @@ namespace :api do
 
     # Loans
     post "/loans/reage", to: "loans#reage"
+    post "/loans/apply", to: "loans#apply"
 
     # Branches
     get "/branches", to: "branches#index"

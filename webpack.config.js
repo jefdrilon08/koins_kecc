@@ -15,7 +15,8 @@ module.exports = {
     BillingUI: "./react/billings/BillingUI.js",
     MembershipPaymentCollectionUI: "./react/membership_payment_collections/MembershipPaymentCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
-    BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js"
+    BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
+    LoanApplicationForm: "./react/loans/ApplicationForm.js"
   },
   module: {
     rules: [

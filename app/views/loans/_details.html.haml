@@ -1,0 +1,43 @@
+.row
+  .col
+    .card
+      .card-body
+        %center
+          %label
+            Loan Amount
+          .text-muted
+            #{number_to_currency(@loan.principal, unit: "")}
+  .col
+    .card
+      .card-body
+        %center
+          %label
+            Interest Amount
+          .text-muted
+            #{number_to_currency(@loan.interest, unit: "")}
+  .col
+    .card
+      .card-body
+        %center
+          %label
+            Current Balance
+          .text-muted
+            #{number_to_currency(@loan.total_balance, unit: "")}
+  .col
+    .card
+      .card-body
+        %center
+          %label
+            Total Paid
+          .text-muted
+            #{number_to_currency(@loan.total_paid, unit: "")}
+
+.row
+  .col-md-4
+    %h4
+      Details
+    = render partial: "specifications"
+  .col-md-8
+    %h4
+      Amortization
+    = render partial: "amortization"

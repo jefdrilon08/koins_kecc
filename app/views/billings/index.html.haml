@@ -5,6 +5,7 @@
     .col
       .card
         .card-body
+          = render partial: "index_filter"
           - if @billings.size > 0
             = render partial: "index_list", locals: { billings: @billings }
             = paginate @billings

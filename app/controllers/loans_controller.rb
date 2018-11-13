@@ -30,6 +30,16 @@ class LoansController < ApplicationController
     @loans  = @loans.order("status ASC").page(params[:page]).per(20)
   end
 
+  def form
+    @loan = Loan.find(params[:id])
+
+    if !@loan.pending?
+      redirect_to member_path(@loan.member.id)
+    else
+      render "form"
+    end
+  end
+
   def show
     @loan                   = Loan.find(params[:id])
     @amortization_schedule  = @loan.amortization_schedule_entries.order(

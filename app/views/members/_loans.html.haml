@@ -1,34 +1,117 @@
 %h6
   Active Loans
 
-%table.table.table-bordered.table-hover.table-sm
-  %thead
-    %tr
-      %th
-        PN Number
-      %th
-        Loan Product
-      %th.text-right
-        Total Due
-      %th.text-right
-        Total Paid
-      %th.text-right
-        Total Balance
-  %tbody
-    - @active_loans.each do |loan|
+- if @active_loans.size > 0
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
       %tr
-        %td
-          = link_to loan_path(loan) do
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-right
+          Total Due
+        %th.text-right
+          Total Paid
+        %th.text-right
+          Total Balance
+    %tbody
+      - @active_loans.each do |loan|
+        %tr
+          %td
+            = link_to loan_path(loan) do
+              %strong
+                #{loan.pn_number}
+          %td.text-muted
+            #{loan.loan_product}
+          %td.text-right
             %strong
-              #{loan.pn_number}
-        %td.text-muted
-          #{loan.loan_product}
-        %td.text-right.bg-info
-          %strong
-            #{number_to_currency(loan.total_dues, unit: "")}
-        %td.text-right.bg-success
-          %strong
-            #{number_to_currency(loan.total_paid, unit: "")}
-        %td.text-right.bg-danger
-          %strong
-            #{number_to_currency(loan.total_balance, unit: "")}
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_paid, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_balance, unit: "")}
+- else
+  %p
+    No active loans found.
+
+%hr
+%h6
+  Pending Loans
+
+- if @pending_loans.size > 0
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-right
+          Total Due
+        %th.text-right
+          Total Paid
+        %th.text-right
+          Total Balance
+    %tbody
+      - @pending_loans.each do |loan|
+        %tr
+          %td
+            = link_to loan_path(loan) do
+              %strong
+                #{loan.pn_number}
+          %td.text-muted
+            #{loan.loan_product}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_paid, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_balance, unit: "")}
+- else
+  %p
+    No pending loans found.
+
+%hr
+%h6
+  Paid Loans
+- if @paid_loans.size > 0
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-right
+          Total Due
+        %th.text-right
+          Total Paid
+        %th.text-right
+          Total Balance
+    %tbody
+      - @paid_loans.each do |loan|
+        %tr
+          %td
+            = link_to loan_path(loan) do
+              %strong
+                #{loan.pn_number}
+          %td.text-muted
+            #{loan.loan_product}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_paid, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_balance, unit: "")}
+- else
+  %p
+    No paid loans found.

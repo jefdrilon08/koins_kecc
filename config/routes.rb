@@ -14,7 +14,9 @@ Rails.application.routes.draw do
   get "/members/form", to: "members#form", as: :member_form
 
   # Loans
-  resources :loans, only: [:index, :show] 
+  resources :loans, only: [:index, :show] do
+    get "/form", to: "loans#form"
+  end
 
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"

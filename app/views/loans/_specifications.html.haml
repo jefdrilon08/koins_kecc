@@ -1,0 +1,62 @@
+%table.table.table-hover.table-sm
+  %tr
+    %th
+      PN Number:
+    %td.text-right
+      #{@loan.pn_number}
+  %tr
+    %th
+      Loan Product:
+    %td.text-right
+      #{@loan.loan_product}
+  %tr
+    %th
+      Monthly I.R.:
+    %td.text-right
+      #{number_to_currency((@loan.monthly_interest_rate * 100).round(2), unit: "")} %
+  %tr
+    %th
+      Status:
+    %td.text-right
+      - if @loan.active?
+        .badge.badge-info
+          Active
+      - elsif @loan.pending?
+        .badge.badge-danger
+          Pending
+      - elsif @loan.paid?
+        .badge.badge-success
+          Paid
+  %tr
+    %th
+      Date Prepared:
+    %td.text-right
+      #{@loan.date_prepared.strftime("%b %d, %Y")}
+  %tr
+    %th
+      Date Approved:
+    %td.text-right
+      - if @loan.active_or_paid?
+        #{@loan.date_approved.strftime("%b %d, %Y")}
+  %tr
+    %th
+      Date Released:
+    %td.text-right
+      - if @loan.active_or_paid?
+        #{@loan.date_released.strftime("%b %d, %Y")}
+  %tr
+    %th
+      Date Completed:
+    %td.text-right
+      - if @loan.paid?
+        #{@loan.date_completed.strftime("%b %d, %Y")}
+  %tr
+    %th
+      Term:
+    %td.text-right
+      #{@loan.term}
+  %tr
+    %th
+      Payment Type:
+    %td.text-right
+      #{@loan.payment_type}
