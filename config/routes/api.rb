@@ -46,6 +46,15 @@ namespace :api do
     post "/billings/update_particular", to: "billings#update_particular"
     get "/billings/fetch", to: "billings#fetch"
 
+    # Membership Payment Collection
+    post "/membership_payment_collections", to: "membership_payment_collections#create"
+    post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"
+    post "/membership_payment_collections/approve", to: "membership_payment_collections#approve"
+    post "/membership_payment_collections/update_or_number", to: "membership_payment_collections#update_or_number"
+    post "/membership_payment_collections/update_ar_number", to: "membership_payment_collections#update_ar_number"
+    post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
+    get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
+
     namespace :data_stores do
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
     end

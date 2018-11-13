@@ -30,11 +30,11 @@ module Billings
         }
       }
 
-      @billing_accounting_code_settings = nil
+      @branch_accounting_code_settings = nil
 
-      Settings.branch_billing_accounting_codes.each do |o|
+      Settings.branch_accounting_codes.each do |o|
         if o.branch_id == @branch.id
-          @billing_accounting_code_settings = o
+          @branch_accounting_code_settings = o
         end
       end
 
@@ -42,8 +42,8 @@ module Billings
       @insurance_accounting_codes = Settings.insurance_accounting_codes
 
       # Trap settings not found
-      if @billing_accounting_code_settings.blank?
-        raise "No billing_accounting_code_settings found for branch #{@branch.id}"
+      if @branch_accounting_code_settings.blank?
+        raise "No branch_accounting_code_settings found for branch #{@branch.id}"
       end
 
       # Get loan_products in this billing
@@ -99,7 +99,7 @@ module Billings
     def build_debit_journal_entries!
       journal_entries = []
 
-      accounting_code = AccountingCode.find(@billing_accounting_code_settings.cash_in_bank_accounting_code_id)
+      accounting_code = AccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,
@@ -108,7 +108,7 @@ module Billings
       }
 
       # WP
-      accounting_code = AccountingCode.find(@billing_accounting_code_settings.withdraw_payment_accounting_code_id)
+      accounting_code = AccountingCode.find(@branch_accounting_code_settings.withdraw_payment_accounting_code_id)
 
       @data[:totals].each do |o|
         if o[:record_type] == "WP"

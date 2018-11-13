@@ -7,11 +7,13 @@ memberships:
     type: "Cooperative"
     is_main: true
     fee: 20.00
+    accounting_code_id: "c0e4b49e-3a74-4758-8e60-14bbe8828d37"
   -
     name: "K-MBA"
     type: "Insurance"
     is_main: true
     fee: 50.00
+    accounting_code_id: "f81c6360-2f1f-4f34-83fb-04292636e86a"
 
 defaults:
   insurance_deposits:
@@ -23,6 +25,9 @@ defaults:
       amount: 5.00
 
 default_savings_key: "K-IMPOK"
+default_equities_key: "Share Capital"
+
+default_id_fee_accounting_code_id: "2c18be6d-37c9-4895-a1fe-8390f7e345d6"
 
 insurance_accounting_codes:
   -
@@ -40,7 +45,12 @@ savings_accounting_codes:
     savings_type: "Golden K"
     deposit_accounting_code_id: "9426437f-be07-48b1-b469-052d48a98f1c"
 
-branch_billing_accounting_codes:
+equity_accounting_codes:
+  -
+    equity_type: "Share Capital"
+    deposit_accounting_code_id: "ed07e812-2972-41d5-a5a0-b2b7c1f83500"
+
+branch_accounting_codes:
   -
     branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"
     cash_in_bank_accounting_code_id: "afbb24a0-b1ef-4ce8-8bff-40388e525497"

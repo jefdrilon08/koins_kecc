@@ -8,6 +8,8 @@
       %th
         Center Count
       %th
+        Member Counter
+      %th
         Actions
   %tbody
     - @branches.each do |branch|
@@ -18,6 +20,8 @@
           #{branch.short_name.upcase}
         %td
           #{branch.centers.count}
+        %td
+          #{branch.member_counter}
 
         %td
           .btn-group

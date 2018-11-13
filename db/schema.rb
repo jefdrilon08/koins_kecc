@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_045100) do
+ActiveRecord::Schema.define(version: 2018_11_13_083540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_045100) do
     t.string "short_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "member_counter"
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 

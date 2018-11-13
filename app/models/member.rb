@@ -37,6 +37,7 @@ class Member < ApplicationRecord
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   scope :active, -> { where(status: "active").order("last_name ASC") }
+  scope :pending, -> { where(status: "pending").order("last_name ASC") }
 
   before_validation :load_defaults
 

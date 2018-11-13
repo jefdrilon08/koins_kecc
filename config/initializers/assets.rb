@@ -27,6 +27,8 @@ Rails.application.config.assets.precompile += [
   "administration/announcements/Index.js",
   "billings/Index.js",
   "billings/Show.js",
+  "membership_payment_collections/Index.js",
+  "membership_payment_collections/Show.js",
   "data_stores/branch_loans_stats/Show.js",
   "data_stores/branch_loans_stats/Index.js",
   "data_stores/branch_with_centers_loans_stats/Show.js",
@@ -40,6 +42,7 @@ Rails.application.config.assets.precompile += [
   "AccountingGeneralLedger.min.react.js",
   "AccountingEntryForm.min.react.js",
   "BillingUI.min.react.js",
+  "MembershipPaymentCollectionUI.min.react.js",
   "BranchManager.min.react.js",
   "BranchLoanProductStats.min.react.js"
 ]

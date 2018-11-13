@@ -12,6 +12,10 @@
   = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
     %i.nav-icon.fa.fa-money-check
     Loans
+%li{ class: "nav-item #{params[:controller] == 'billings' ? 'active' : ''}" }
+  = link_to billings_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-download
+    Billing
 %li{ class: "nav-item nav-dropdown" }
   = link_to "#", class: "nav-link nav-dropdown-toggle" do
     %i.nav-icon.fa.fa-money-check
