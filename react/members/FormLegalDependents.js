@@ -294,9 +294,9 @@ export default class FormLegalDependents extends React.Component {
           isOpen={this.state.modalIsOpen}
           style={customStyles}
         >
-          <h3>
-            Legal Dependent Form
-          </h3>
+          <h5>
+            Impormasyon ng Anak
+          </h5>
           <div className="row">
             <div className="col">
               <div className="form-group">
@@ -364,21 +364,6 @@ export default class FormLegalDependents extends React.Component {
                   value={currentLegalDependent.course}
                   onChange={this.handleCourseChanged.bind(this)}
                 />
-              </div>
-            </div>
-            <div className="col">
-              <div className="form-group">
-                <label>Relasyon</label>
-                <select
-                  className="form-control"
-                  value={currentLegalDependent.relationship}
-                  onChange={this.handleRelationshipChanged.bind(this)}
-                >
-                  <option value="">-- SELECT --</option>
-                  <option value="Child">Child</option>
-                  <option value="Spouse">Spouse</option>
-                  <option value="Parent">Parent</option>
-                </select>
               </div>
             </div>
           </div>

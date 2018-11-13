@@ -32,7 +32,6 @@ module Billings
     end
 
     def execute!
-
       @members.each do |m|
         data  = ::Billings::NextPayment.new(
                   config: {

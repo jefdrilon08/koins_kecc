@@ -22,7 +22,7 @@ module Members
           first_name: "",
           middle_name: "",
           last_name: "",
-          date_of_birth: Date.today - 30.years,
+          date_of_birth: "",
           occupation: ""
         },
         government_identification_numbers: {

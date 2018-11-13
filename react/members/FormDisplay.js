@@ -340,7 +340,7 @@ export default class FormDisplay extends React.Component {
 
               <div className="card">
                 <div className="card-header">
-                  Beneficiaries
+                  Personal na Impormasyon sa mga Beneficiaries
                 </div>
                 <div className="card-body">
                   <FormBeneficiaries

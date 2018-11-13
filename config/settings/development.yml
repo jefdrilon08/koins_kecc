@@ -1,6 +1,18 @@
 company_name: "KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE"
 company_address: "5 Don Francisco St, Don Enrique Heights, Quezon Cty"
 
+memberships:
+  -
+    name: "K-KOOP"
+    type: "Cooperative"
+    is_main: true
+    fee: 20.00
+  -
+    name: "K-MBA"
+    type: "Insurance"
+    is_main: true
+    fee: 50.00
+
 defaults:
   insurance_deposits:
     - 

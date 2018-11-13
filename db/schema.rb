@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_12_150656) do
+ActiveRecord::Schema.define(version: 2018_11_13_045100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -309,6 +309,30 @@ ActiveRecord::Schema.define(version: 2018_11_12_150656) do
     t.index ["center_id"], name: "index_members_on_center_id"
   end
 
+  create_table "membership_payment_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_membership_payment_collections_on_branch_id"
+    t.index ["center_id"], name: "index_membership_payment_collections_on_center_id"
+  end
+
+  create_table "membership_payment_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "membership_type"
+    t.string "membership_name"
+    t.decimal "amount"
+    t.date "date_paid"
+    t.string "status"
+    t.uuid "member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
+  end
+
   create_table "project_type_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -378,5 +402,8 @@ ActiveRecord::Schema.define(version: 2018_11_12_150656) do
   add_foreign_key "member_accounts", "members"
   add_foreign_key "members", "branches"
   add_foreign_key "members", "centers"
+  add_foreign_key "membership_payment_collections", "branches"
+  add_foreign_key "membership_payment_collections", "centers"
+  add_foreign_key "membership_payment_records", "members"
   add_foreign_key "project_types", "project_type_categories"
 end
