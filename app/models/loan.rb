@@ -15,6 +15,7 @@ class Loan < ApplicationRecord
   scope :active, -> { where(status: "active") }
   scope :paid, -> { where(status: "paid") }
   scope :active_or_paid, -> { where(status: ["active", "paid"]) }
+  scope :active_or_pending, -> { where(status: ["active", "pending"]) }
 
   has_many :amortization_schedule_entries
 
