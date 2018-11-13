@@ -301,6 +301,19 @@ export default class FormDisplay extends React.Component {
 
               <div className="card">
                 <div className="card-header">
+                  Kasalukuyang Bangko
+                </div>
+                <div className="card-body">
+                  <FormBankAccounts
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
                   Personal na Impormasyon ng Asawa o Kinakasama (Common-law Spouse)
                 </div>
                 <div className="card-body">
@@ -318,19 +331,6 @@ export default class FormDisplay extends React.Component {
                 </div>
                 <div className="card-body">
                   <FormLegalDependents
-                    data={state.data}
-                    updateData={this.updateData.bind(this)}
-                    formDisabled={state.formDisabled}
-                  />
-                </div>
-              </div>
-
-              <div className="card">
-                <div className="card-header">
-                  Banks
-                </div>
-                <div className="card-body">
-                  <FormBankAccounts
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}
