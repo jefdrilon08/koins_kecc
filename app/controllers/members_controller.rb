@@ -38,5 +38,10 @@ class MembersController < ApplicationController
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
 
     @loan_products  = LoanProduct.select("*").order("name ASC")
+
+    @activity_logs  = ActivityLog.where(
+                        "data ->> 'member_id' = ?",
+                        @member.id
+                      ).order("created_at DESC")
   end
 end

@@ -48,6 +48,16 @@ module Api
                       config: config
                     ).execute!
 
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified member #{member.full_name}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member.id,
+              member_data: member_data
+            }
+          )
+
           render json: { id: member.id }
         end
       end
