@@ -82,6 +82,38 @@ export default class BillingUIDisplay extends React.Component {
     });
   }
 
+  handleBookChanged(event) {
+    var context = this;
+    var data    = context.state.data;
+    var book    = event.target.value;
+
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/update_particular",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        book: book
+      },
+      success: function(response) {
+        data.data.accounting_entry.book = book;
+
+        context.setState({
+          isSaving: false
+        });
+
+        context.props.updateData(data);
+      },
+      error: function(response) {
+        alert("Error in updating particular");
+      }
+    });
+  }
+
   saveOrNumber() {
     var context     = this;
     var data        = context.state.data;
@@ -238,6 +270,30 @@ export default class BillingUIDisplay extends React.Component {
     }
   }
 
+  renderBook() {
+    var book  = this.state.data.data.accounting_entry.book;
+
+    if(this.state.data.status == "pending") {
+      return (
+        <div className="row">
+          <div className="col">
+            <select
+              value={book}
+              disabled={this.state.isLoading}
+              onChange={this.handleBookChanged.bind(this)}
+              className="form-control"
+            >
+              <option value="CRB">CRB</option>
+              <option value="JVB">JVB</option>
+            </select>
+          </div>
+        </div>
+      );
+    } else {
+      return book;
+    }
+  }
+
   renderArNumber() {
     var arNumber  = this.state.data.data.ar_number;
     if(this.state.data.status == "pending") {
@@ -301,6 +357,14 @@ export default class BillingUIDisplay extends React.Component {
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Book:
+                </th>
+                <td className="text-right">
+                  {this.renderBook()}
                 </td>
               </tr>
               <tr>

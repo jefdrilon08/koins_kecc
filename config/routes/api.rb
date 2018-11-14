@@ -45,6 +45,7 @@ namespace :api do
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
+    post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
 
     # Membership Payment Collection

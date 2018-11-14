@@ -107,7 +107,7 @@ export default class AccountingEntryPreview extends React.Component {
 
     // Debit entries
     for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "DR") {
+      if(this.props.journalEntries[i].post_type == "DR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
         if(this.props.status == "pending") {
           btnRemove = <button 
@@ -136,7 +136,7 @@ export default class AccountingEntryPreview extends React.Component {
 
     // Credit entries
     for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "CR") {
+      if(this.props.journalEntries[i].post_type == "CR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
         if(this.props.status == "pending") {
           btnRemove = <button 
