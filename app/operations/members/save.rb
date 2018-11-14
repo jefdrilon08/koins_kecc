@@ -52,14 +52,18 @@ module Members
               end
             end
           else
-            @member.legal_dependents << LegalDependent.new(
-                                          first_name: o[:first_name],
-                                          middle_name: o[:middle_name],
-                                          last_name: o[:last_name],
-                                          date_of_birth: o[:date_of_birth],
-                                          relationship: o[:relationship],
-                                          data: o[:data]
-                                        )
+            ld  = LegalDependent.new(
+                      first_name: o[:first_name],
+                      middle_name: o[:middle_name],
+                      last_name: o[:last_name],
+                      date_of_birth: o[:date_of_birth],
+                      relationship: o[:relationship],
+                      data: o[:data]
+                    )
+
+            @member.legal_dependents << ld
+
+            ld_remaining_uuids << @member.legal_dependents.last.id
           end
         end
       end
@@ -97,8 +101,10 @@ module Members
         end
       end
 
-      ld_to_remove_ids  = @member.legal_dependents.where.not(id: ld_remaining_uuids)
-      b_to_remove_ids   = @member.beneficiaries.where.not(id: b_remaining_uuids)
+      ld_to_remove_ids  = @member.legal_dependents.where.not(id: ld_remaining_uuids).pluck(:id)
+      b_to_remove_ids   = @member.beneficiaries.where.not(id: b_remaining_uuids).pluck(:id)
+
+      #raise ld_to_remove_ids.inspect
 
       @member.branch  = @branch
       @member.center  = @center

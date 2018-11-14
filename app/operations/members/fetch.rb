@@ -10,6 +10,7 @@ module Members
                     date_of_birth: Date.today - 30.years
                   )
       end
+    end
 
     def execute!
       data  = {
@@ -66,7 +67,7 @@ module Members
         legal_dependents: @member.legal_dependents,
         beneficiaries: @member.beneficiaries
       }
-    end
+
       @member_data
     end
   end

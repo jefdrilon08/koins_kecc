@@ -81,7 +81,7 @@ export default class FormLegalDependents extends React.Component {
   handleDeleteClicked(index) {
     var data  = this.props.data;
 
-    data.legal_dependents.splice(index);
+    data.legal_dependents.splice(index, 1);
 
     this.props.updateData(data);
   };
