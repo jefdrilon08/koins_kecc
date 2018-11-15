@@ -9,7 +9,7 @@ module Epassbook
       @data = {
         total_equities: 0.00,
         accounts: []
-      }
+      } 
     end
 
     def execute!

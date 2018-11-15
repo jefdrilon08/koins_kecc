@@ -10,6 +10,9 @@ module Epassbook
       @total_balance  = 0.00
       @total_loan     = 0.00
       @total_interest = 0.00
+      @total_amount   = 0.00
+      @total_paid     = 0.00
+      @next_payment_total_amount = 0.00
     end
 
     def execute!
@@ -44,7 +47,10 @@ module Epassbook
 
         @total_balance += o.total_balance
         @total_loan += o.principal
-        @total_interest += o.interest
+        @total_interest += o.interest 
+        @total_amount = @total_loan + @total_interest
+        @total_paid += o.total_paid
+        @next_payment_total_amount += next_payment_amount
       end
 
       @data = {
@@ -52,7 +58,10 @@ module Epassbook
         total_balance: number_to_currency(@total_balance, unit: ""),
         total_loan: number_to_currency(@total_loan, unit: ""),
         total_interest: number_to_currency(@total_interest, unit: ""),
-        total_balance: number_to_currency(@total_balance, unit: "")
+        total_balance: number_to_currency(@total_balance, unit: ""),
+        total_amount: number_to_currency(@total_amount, unit: ""),
+        total_paid: number_to_currency(@total_paid, unit: ""),
+        next_payment_total_amount: number_to_currency(@next_payment_total_amount, unit: "")
       }
 
       @data
