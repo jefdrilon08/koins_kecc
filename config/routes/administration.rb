@@ -7,4 +7,8 @@ namespace :administration do
   resources :centers
   resources :announcements
   resources :loan_products, only: [:index]
+
+  resources :surveys, only: [:index, :show] do
+    get "/form", to: "surveys#form"
+  end
 end

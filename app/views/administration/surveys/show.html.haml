@@ -1,0 +1,33 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          #survey-content
+
+          - if debug?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@survey.to_json))}
+
+= render partial: "administration/surveys/modals/delete"
+= render partial: "templates/error_list"
+
+#parameters{ data: { id: "#{@survey.id}" } }
+
+= javascript_include_tag "administration/surveys/Show.js"
+= javascript_include_tag "SurveyUI.min.react"
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
+    var id                = $parameters.data("id");
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });

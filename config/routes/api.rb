@@ -77,6 +77,11 @@ namespace :api do
     namespace :administration do
       get "/user_branches", to: "user_branches#index"
       post "/user_branches/toggle", to: "user_branches#toggle"
+      
+      # Surveys
+      post "/surveys/save", to: "surveys#save"
+      post "/surveys/delete", to: "surveys#delete"
+      get "/surveys/fetch", to: "surveys#fetch"
     end
   end
 end

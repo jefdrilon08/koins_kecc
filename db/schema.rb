@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_083540) do
+ActiveRecord::Schema.define(version: 2018_11_17_063610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -348,6 +348,14 @@ ActiveRecord::Schema.define(version: 2018_11_13_083540) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_type_category_id"], name: "index_project_types_on_project_type_category_id"
+  end
+
+  create_table "surveys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status"
   end
 
   create_table "user_branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
