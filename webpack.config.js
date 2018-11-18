@@ -14,6 +14,7 @@ module.exports = {
     AccountingEntryForm: "./react/accounting/AccountingEntryForm.js",
     BillingUI: "./react/billings/BillingUI.js",
     SurveyUI: "./react/administration/surveys/SurveyUI.js",
+    SurveyQuestionUI: "./react/administration/surveys/survey_questions/SurveyQuestionUI.js",
     MembershipPaymentCollectionUI: "./react/membership_payment_collections/MembershipPaymentCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",

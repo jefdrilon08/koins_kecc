@@ -3,6 +3,8 @@
     %tr
       %th
         Name
+      %th.text-center
+        Questions
       %th
         Created By
       %th
@@ -16,6 +18,9 @@
         = link_to administration_survey_path(o) do
           %strong
             #{o.name}
+      %td
+        %center
+          #{o.survey_questions.size}
       %td
         #{o.created_by}
       %td

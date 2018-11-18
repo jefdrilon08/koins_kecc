@@ -6,6 +6,8 @@ class Survey < ApplicationRecord
 
   before_validation :load_defaults
 
+  has_many :survey_questions
+
   scope :active, -> { where(status: "active").order("name ASC") }
   scope :inactive, -> { where(status: "inactive").order("name ASC") }
 

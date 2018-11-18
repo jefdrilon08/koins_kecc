@@ -8,7 +8,7 @@ namespace :administration do
   resources :announcements
   resources :loan_products, only: [:index]
 
-  resources :surveys, only: [:index, :show] do
-    get "/form", to: "surveys#form"
+  resources :surveys, only: [:index, :show, :edit, :update] do
+    get "/survey_question_form", to: "surveys#survey_question_form"
   end
 end

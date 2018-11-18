@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_17_063610) do
+ActiveRecord::Schema.define(version: 2018_11_18_134346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -350,6 +350,27 @@ ActiveRecord::Schema.define(version: 2018_11_17_063610) do
     t.index ["project_type_category_id"], name: "index_project_types_on_project_type_category_id"
   end
 
+  create_table "survey_answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "survey_id"
+    t.jsonb "meta"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_survey_answers_on_survey_id"
+  end
+
+  create_table "survey_questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "survey_id"
+    t.string "content"
+    t.string "question_type"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "priority"
+    t.index ["survey_id"], name: "index_survey_questions_on_survey_id"
+  end
+
   create_table "surveys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "data"
@@ -415,4 +436,6 @@ ActiveRecord::Schema.define(version: 2018_11_17_063610) do
   add_foreign_key "membership_payment_collections", "centers"
   add_foreign_key "membership_payment_records", "members"
   add_foreign_key "project_types", "project_type_categories"
+  add_foreign_key "survey_answers", "surveys"
+  add_foreign_key "survey_questions", "surveys"
 end

@@ -57,6 +57,10 @@ namespace :api do
     post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
     get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
 
+    # Survey Answers
+    post "/survey_answers", to: "survey_answers#create"
+    post "/survey_answers/save", to: "survey_answers#save"
+
     namespace :data_stores do
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
     end
@@ -82,6 +86,11 @@ namespace :api do
       post "/surveys/save", to: "surveys#save"
       post "/surveys/delete", to: "surveys#delete"
       get "/surveys/fetch", to: "surveys#fetch"
+
+      # Survey Question
+      get "/survey_questions/fetch", to: "survey_questions#fetch"
+      post "/survey_questions/save", to: "survey_questions#save"
+      post "/survey_questions/delete", to: "survey_questions#delete"
     end
   end
 end

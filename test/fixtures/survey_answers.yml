@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  survey: one
+  meta: 
+  data: 
+  status: MyString
+
+two:
+  survey: two
+  meta: 
+  data: 
+  status: MyString

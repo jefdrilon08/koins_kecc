@@ -1,6 +1,24 @@
 module Api
   module V1
     class MembersController < ApiController
+      def create_survey
+        survey  = Survey.find(params[:survey_id])
+        member  = Member.find(params[:member_id])
+        user    = current_user
+
+        survey_answer = ::Members::BuildSurveyAnswer.new(
+                          config: {
+                            survey: survey,
+                            member: member,
+                            user: user
+                          }
+                        ).execute!
+
+        survey_answer.save!
+
+        render json: { id: survey_answer.id }
+      end
+
       def fetch
         config  = {
           id: params[:id]
