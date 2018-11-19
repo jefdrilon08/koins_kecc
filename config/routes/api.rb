@@ -9,6 +9,8 @@ namespace :api do
     # Members
     get "/members", to: "members#index"
     get "/members/fetch", to: "members#fetch"
+    get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
+    post "/members/create_survey", to: "members#create_survey"
     post "/members/generate_access_token", to: "members#generate_access_token"
     post "/members/save_signature", to: "members#save_signature"
     post "/members/save", to: "members#save"

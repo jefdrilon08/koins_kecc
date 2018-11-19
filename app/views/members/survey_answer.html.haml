@@ -1,0 +1,23 @@
+= render partial: "survey_answer_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+
+= render partial: "members/modals/delete_survey_answer"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "members/SurveyAnswer.js"
+
+#parameters{ data: { id: @survey_answer.id } }
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var id                = $parameters.data('id');
+    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
+
+    SurveyAnswer.init({ id: id, authenticityToken: authenticityToken });
+  });

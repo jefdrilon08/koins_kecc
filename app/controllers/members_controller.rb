@@ -25,6 +25,16 @@ class MembersController < ApplicationController
   def form
   end
 
+  def survey_answer
+    @member         = Member.find(params[:id])
+    @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+  end
+
+  def survey_answer_form
+    @member         = Member.find(params[:id])
+    @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+  end
+
   def show
     @member = Member.find(params[:id])
 
@@ -34,6 +44,12 @@ class MembersController < ApplicationController
 
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
+
+    @surveys        = Survey.all.order("name ASC")
+    @survey_answers = SurveyAnswer.where(
+                        "meta -> 'member' ->> 'id' = ?",
+                        @member.id
+                      ).order("updated_at DESC")
 
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
 

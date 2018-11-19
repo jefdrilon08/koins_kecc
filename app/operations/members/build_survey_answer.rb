@@ -30,6 +30,10 @@ module Members
         center: {
           id: @member.center.id,
           name: @member.center.name
+        },
+        survey: {
+          id: @survey.id,
+          name: @survey.name
         }
       }
 

@@ -1,22 +1,40 @@
 module Api
   module V1
     class MembersController < ApiController
+      before_action :authenticate_user!
+
+      def fetch_survey_answer
+        survey_answer = SurveyAnswer.find(params[:survey_answer_id])
+
+        render json: survey_answer
+      end
+
       def create_survey
-        survey  = Survey.find(params[:survey_id])
-        member  = Member.find(params[:member_id])
+        survey  = Survey.where(id: params[:survey_id]).first
+        member  = Member.where(id: params[:member_id]).first
         user    = current_user
 
-        survey_answer = ::Members::BuildSurveyAnswer.new(
-                          config: {
-                            survey: survey,
-                            member: member,
-                            user: user
-                          }
-                        ).execute!
+        config  = {
+          survey: survey,
+          member: member,
+          user: user
+        }
 
-        survey_answer.save!
+        errors  = ::Members::ValidateCreateSurvey.new(
+                    config: config
+                  ).execute!
 
-        render json: { id: survey_answer.id }
+        if errors[:messages].size > 0
+          render json: errors, status: 402
+        else
+          survey_answer = ::Members::BuildSurveyAnswer.new(
+                            config: config
+                          ).execute!
+
+          survey_answer.save!
+
+          render json: { id: survey_answer.id }
+        end
       end
 
       def fetch

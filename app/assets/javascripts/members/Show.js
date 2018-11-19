@@ -2,6 +2,7 @@ var Show  = (function() {
   var $modalGenerateAccessToken;
   var $modalSignature;
   var $modalNewLoan;
+  var $modalCreateSurvey;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -9,7 +10,10 @@ var Show  = (function() {
   var $btnConfirmSignature;
   var $btnNewLoan;
   var $btnConfirmNewLoan;
+  var $btnCreateSurvey;
+  var $btnConfirmCreateSurvey;
   var $selectLoanProduct;
+  var $selectSurvey;
   var $message;
 
   var templateErrorList;
@@ -17,6 +21,7 @@ var Show  = (function() {
   var _urlGenerateAccessToken = "/api/v1/members/generate_access_token";
   var _urlSaveSignature       = "/api/v1/members/save_signature";
   var _urlNewLoan             = "/api/v1/loans/apply";
+  var _urlCreateSurvey        = "/api/v1/members/create_survey";
   var _memberId;
   var _authenticityToken;
 
@@ -30,20 +35,73 @@ var Show  = (function() {
     $modalGenerateAccessToken       = $("#modal-generate-access-token");
     $modalSignature                 = $("#modal-signature");
     $modalNewLoan                   = $("#modal-new-loan");
+    $modalCreateSurvey              = $("#modal-create-survey");
     $btnGenerateAccessToken         = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature            = $("#btn-confirm-signature");
     $btnGenerateSignature           = $("#btn-generate-signature");
     $btnClearSignature              = $("#btn-clear-signature");
     $btnNewLoan                     = $("#btn-new-loan");
+    $btnCreateSurvey                = $("#btn-create-survey");
+    $btnConfirmCreateSurvey         = $("#btn-confirm-create-survey");
     $btnConfirmNewLoan              = $("#btn-confirm-new-loan");
     $selectLoanProduct              = $("#select-loan-product");
+    $selectSurvey                   = $("#select-survey");
 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   }
 
   var _bindEvents = function() {
+    $btnCreateSurvey.on("click", function() {
+      $message.html("");
+      $modalCreateSurvey.modal("show");
+    });
+
+    $btnConfirmCreateSurvey.on("click", function() {
+      $message.html("");
+
+      var data  = {
+        member_id: _memberId,
+        survey_id: $selectSurvey.val(),
+        authenticity_token: _authenticityToken
+      }
+
+      $selectSurvey.prop("disabled", true);
+      $btnConfirmCreateSurvey.prop("disabled", true);
+
+      $.ajax({
+        url: _urlCreateSurvey,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.href="/members/" + _memberId + "/survey_answers/" + response.id + "/form";
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmCreateSurvey.prop("disabled", false);
+            $selectSurvey.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnNewLoan.on("click", function() {
       $message.html("");
       $modalNewLoan.modal("show");
