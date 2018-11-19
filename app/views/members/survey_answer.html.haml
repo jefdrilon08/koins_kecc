@@ -11,13 +11,14 @@
 
 = javascript_include_tag "members/SurveyAnswer.js"
 
-#parameters{ data: { id: @survey_answer.id } }
+#parameters{ data: { id: @survey_answer.id, member_id: @member.id } }
 
 :javascript
   $(document).ready(function() {
     var $parameters       = $("#parameters");
     var id                = $parameters.data('id');
+    var memberId          = $parameters.data('member-id');
     var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
 
-    SurveyAnswer.init({ id: id, authenticityToken: authenticityToken });
+    SurveyAnswer.init({ id: id, memberId: memberId, authenticityToken: authenticityToken });
   });

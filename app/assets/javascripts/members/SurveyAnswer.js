@@ -8,6 +8,7 @@ var SurveyAnswer  = (function() {
 
   var _urlDeleteSurveyAnswer  = "/api/v1/members/delete_survey_answer";
   var _id;
+  var _memberId;
   var _authenticityToken;
 
   var _cacheDom = function() {
@@ -41,7 +42,7 @@ var SurveyAnswer  = (function() {
         data: data,
         success: function(response) {
           $message.html("Success! Redirecting...");
-          window.location.href="/members/" + _memberId;
+          window.location.href="/members/" + _memberId + "/display";
         },
         error: function(response) {
           console.log(response);
@@ -69,6 +70,7 @@ var SurveyAnswer  = (function() {
 
   var init  = function(options) {
     _id                 = options.id;
+    _memberId           = options.memberId;
     _authenticityToken  = options.authenticityToken
     _cacheDom();
     _bindEvents();

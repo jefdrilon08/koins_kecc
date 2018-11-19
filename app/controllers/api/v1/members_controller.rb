@@ -3,6 +3,28 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def delete_survey_answer
+        survey_answer = SurveyAnswer.where(id: params[:id]).first
+
+        config  = {
+          survey_answer: survey_answer,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateDeleteSurveyAnswer.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          
+          render json: errors, status: 402
+        else
+          survey_answer.destroy!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def fetch_survey_answer
         survey_answer = SurveyAnswer.find(params[:survey_answer_id])
 
