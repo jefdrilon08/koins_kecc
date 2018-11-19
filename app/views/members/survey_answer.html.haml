@@ -10,7 +10,7 @@
           %hr
           - @data[:answers].each do |o|
             %h4
-              #{o[:survey_question][:content]}: #{o[:answer]}
+              #{o[:survey_question][:content]}: #{o[:answer]} - #{o[:score]}
             - o[:survey_question][:data][:options].each do |option|
               %div
                 - if option[:content] == o[:answer]
