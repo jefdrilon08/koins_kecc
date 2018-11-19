@@ -3,6 +3,31 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def save_survey_answer
+        data          = JSON.parse(params[:data]).to_h.with_indifferent_access
+        survey_answer = SurveyAnswer.where(id: params[:id]).first
+
+        config  = {
+          data: data,
+          survey_answer: survey_answer,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateSaveSurveyAnswer.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 402
+        else
+          survey_answer = ::Members::SaveSurveyAnswer.new(
+                            config: config
+                          ).execute!
+
+          render json: { id: survey_answer.id }
+        end
+      end
+
       def delete_survey_answer
         survey_answer = SurveyAnswer.where(id: params[:id]).first
 

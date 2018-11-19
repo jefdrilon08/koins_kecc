@@ -50,6 +50,7 @@ export default class SurveyAnswerUIDisplay extends React.Component {
 
   save() {
     var context = this;
+    var state   = context.state;
     var data    = context.state.data;
 
     this.setState({
@@ -66,7 +67,7 @@ export default class SurveyAnswerUIDisplay extends React.Component {
         id: context.props.id
       },
       success: function(response) {
-        window.location.href="/members/" + state.memberId + "/survey_answers/" + state.id;
+        window.location.href="/members/" + context.props.memberId + "/survey_answers/" + state.id;
       },
       error: function(response) {
         try {
@@ -92,9 +93,7 @@ export default class SurveyAnswerUIDisplay extends React.Component {
   }
 
   handleSave() {
-    this.setState({
-      isSaving: true
-    });
+    this.save();
   }
 
   handleCancel() {
@@ -111,6 +110,22 @@ export default class SurveyAnswerUIDisplay extends React.Component {
     }
   }
 
+  handleOptionSelected(question, option) {
+    console.log(question);
+    console.log(option);
+
+    var data    = this.state.data;
+
+    for(var i = 0; i < data.data.answers.length; i++) {
+      if(data.data.answers[i].survey_question.id == question.id) {
+        data.data.answers[i].answer = option.content;
+        data.data.answers[i].score  = option.score;
+      }
+    }
+
+    this.updateData(data);
+  }
+
   renderQuestions() {
     var data  = this.state.data;
 
@@ -118,6 +133,7 @@ export default class SurveyAnswerUIDisplay extends React.Component {
 
     for(var i = 0; i < data.data.answers.length; i++) {
       var o               = data.data.answers[i];
+      var question        = o.survey_question;
       var options         = o.survey_question.data.options;
       var optionsDisplay  = [];
       console.log(o);
@@ -125,6 +141,13 @@ export default class SurveyAnswerUIDisplay extends React.Component {
       for(var j = 0; j < options.length; j++) {
         optionsDisplay.push(
           <div key={"answer-" + i + "-" + j}>
+            <input
+              type="radio"
+              name={"question-" + question.id + "-options"}
+              value={options[j].content}
+              onChange={this.handleOptionSelected.bind(this, question, options[j])}
+              checked={o.answer == options[j].content}
+            />
             {options[j].content}
           </div>
         );

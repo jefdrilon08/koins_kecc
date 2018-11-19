@@ -45,7 +45,8 @@ module Members
       @survey.survey_questions.order("priority ASC").each do |o|
         data[:answers] << {
           survey_question: o,
-          answer: ""
+          answer: "",
+          score: 0
         }
       end
 

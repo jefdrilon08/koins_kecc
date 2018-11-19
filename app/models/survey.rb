@@ -25,6 +25,10 @@ class Survey < ApplicationRecord
     end
   end
 
+  def to_s
+    name
+  end
+
   def created_by
     if self.data.with_indifferent_access[:created_by].present?
       self.data.with_indifferent_access[:created_by][:full_name]

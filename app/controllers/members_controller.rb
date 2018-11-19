@@ -28,6 +28,7 @@ class MembersController < ApplicationController
   def survey_answer
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+    @data           = @survey_answer.data.with_indifferent_access
   end
 
   def survey_answer_form
