@@ -185,8 +185,37 @@ export default class ApplicationFormDisplay extends React.Component {
   }
 
   handleSave() {
+    var context = this;
+    var state   = context.state;
+
     this.setState({
       isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/loans/save",
+      method: "POST",
+      data: {
+        data: JSON.stringify(state.data),
+        authenticity_token: context.props.authenticityToken
+      },
+      success: function(response) {
+        window.location.href="/loans/" + response.id;
+      },
+      error: function(response) {
+        try {
+          context.setState({
+            errors: JSON.parse(response.responseText),
+            isSaving: false
+          });
+        } catch(err) {
+          alert("Something went wrong");
+          context.setState({
+            errors: false,
+            isSaving: false
+          });
+        }
+      }
     });
   }
 
@@ -205,6 +234,12 @@ export default class ApplicationFormDisplay extends React.Component {
   renderLoanProducts() {
     var loanProducts        = this.state.loanProducts;
     var loanProductsDisplay = [];
+
+    loanProductsDisplay.push(
+      <option value="" key={"empty-loan-product"}>
+        -- SELECT --
+      </option>
+    );
 
     for(var i = 0; i < loanProducts.length; i++) {
       loanProductsDisplay.push(

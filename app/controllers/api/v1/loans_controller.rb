@@ -23,6 +23,39 @@ module Api
         end
       end
 
+      def save
+        loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access
+        
+        config  = {
+          loan_data: loan_data,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateSave.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].size > 0
+          render json: errors, status: 400
+        else
+          loan  = ::Loans::Save.new(
+                    config: config
+                  ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified loan #{loan.id}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id,
+              loan_data: loan_data
+            }
+          )
+
+          render json: { id: loan.id }
+        end
+      end
+
       def apply
         loan_product  = LoanProduct.where(id: params[:loan_product_id]).first
         member        = Member.where(id: params[:member_id]).first

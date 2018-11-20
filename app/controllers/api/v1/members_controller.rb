@@ -32,7 +32,11 @@ module Api
         member    = Member.find(params[:id])
         loans     = Loan.active_or_pending.where(member_id: member.id)
 
-        loan_products = LoanProduct.where.not(id: loans.pluck(:loan_product_id)).order("name DESC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+        if loans.size == 0 
+          loan_products = LoanProduct.entry_point.order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+        else
+          loan_products = LoanProduct.where.not(id: loans.pluck(:loan_product_id)).order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+        end
 
         render json: { loan_products: loan_products }
       end

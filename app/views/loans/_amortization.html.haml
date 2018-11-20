@@ -24,7 +24,8 @@
         %td
           %center
             %strong
-              #{o.due_date.strftime("%b %d, %Y")}
+              - if o.due_date
+                #{o.due_date.strftime("%b %d, %Y")}
         %td.text-right.text-muted
           #{number_to_currency(o.amount_due, unit: "")}
         %td.text-right
