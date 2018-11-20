@@ -21,11 +21,23 @@ module Loans
                   project_type_id: "",
                   status: "pending",
                   data: {
+                    clip_beneficiary: {
+                      first_name: "",
+                      middle_name: "",
+                      last_name: "",
+                      date_of_birth: "",
+                      relationship: ""
+                    },
                     clip_number: "",
                     voucher: {
+                      bank: "",
+                      bank_check_number: "",
                       check_number: "",
                       payee: "",
-                      date_requested: Date.today
+                      date_requested: Date.today,
+                      date_of_check: "",
+                      bank_transaction_reference_number: "",
+                      particular: ""
                     },
                     co_makers: [],
                     co_maker_two: "",

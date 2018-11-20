@@ -4,8 +4,9 @@ import moment from 'moment';
 import Select from 'react-select';
 
 import SkCubeLoading from '../SkCubeLoading';
-import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
-import {numberWithCommas} from '../utils/helpers';
+import ErrorDisplay from '../ErrorDisplay';
+import ApplicationFormFinancialInformation from './ApplicationFormFinancialInformation';
+import ApplicationFormCLIPBeneficiary from './ApplicationFormCLIPBeneficiary';
 
 export default class ApplicationFormDisplay extends React.Component {
   constructor(props) {
@@ -17,7 +18,8 @@ export default class ApplicationFormDisplay extends React.Component {
       isActive: false,
       coMakers: [],
       loanProducts: [],
-      data: false
+      data: false,
+      errors: false
     };
   }
 
@@ -80,6 +82,16 @@ export default class ApplicationFormDisplay extends React.Component {
         console.log(response);
       }
     });
+  }
+
+  renderErrorDisplay() {
+    if(this.state.errors) {
+      return  (
+        <ErrorDisplay
+          errors={this.state.errors}
+        />
+      );
+    }
   }
 
   updateData(data) {
@@ -160,6 +172,14 @@ export default class ApplicationFormDisplay extends React.Component {
     var data  = this.state.data;
 
     data.term = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleVoucherParticular(event) {
+    var data  = this.state.data;
+
+    data.data.voucher.particular  = event.target.value;
 
     this.updateData(data);
   }
@@ -292,6 +312,7 @@ export default class ApplicationFormDisplay extends React.Component {
 
       return  (
         <div>
+          {this.renderErrorDisplay()}
           <h5>
             Co-maker Information
           </h5>
@@ -449,6 +470,48 @@ export default class ApplicationFormDisplay extends React.Component {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <hr/>
+          <h5>
+            Financial Information
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <ApplicationFormFinancialInformation
+                data={this.state.data}
+                updateData={this.updateData.bind(this)}
+                disabled={this.state.isSaving || this.state.isActive}
+              />
+            </div>
+          </div>
+          <hr/>
+          <h5>
+            Voucher Particular
+          </h5>
+          <div className="row">
+            <div className="col">
+              <div className="form-group">
+                <input
+                  className="form-control"
+                  value={this.state.data.data.voucher.particular}
+                  onChange={this.handleVoucherParticular.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                />
+              </div>
+            </div>
+          </div>
+          <hr/>
+          <h5>
+            CLIP Beneficiary
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <ApplicationFormCLIPBeneficiary
+                data={this.state.data}
+                updateData={this.updateData.bind(this)}
+                disabled={this.state.isSaving || this.state.isActive}
+              />
             </div>
           </div>
           <hr/>
