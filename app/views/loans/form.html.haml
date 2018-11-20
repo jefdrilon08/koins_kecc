@@ -7,6 +7,6 @@
         .card-body
           #loan-application-content
 
-#parameters{ data: { id: "#{@loan.id}" }
+#parameters{ data: { id: "#{params[:id]}", member_id: "#{params[:member_id]}" } }
 
 = javascript_include_tag "LoanApplicationForm.min.react"

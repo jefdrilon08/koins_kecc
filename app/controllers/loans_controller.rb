@@ -31,12 +31,10 @@ class LoansController < ApplicationController
   end
 
   def form
-    @loan = Loan.find(params[:id])
+    @member = Member.where(id: params[:member_id]).first
 
-    if !@loan.pending?
-      redirect_to member_path(@loan.member.id)
-    else
-      render "form"
+    if @member.blank?
+      redirect_to members_path
     end
   end
 

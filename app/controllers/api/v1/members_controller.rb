@@ -28,6 +28,33 @@ module Api
         end
       end
 
+      def member_loan_products
+        member    = Member.find(params[:id])
+        loans     = Loan.active_or_pending.where(member_id: member.id)
+
+        loan_products = LoanProduct.where.not(id: loans.pluck(:loan_product_id)).order("name DESC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+
+        render json: { loan_products: loan_products }
+      end
+
+      def member_co_makers
+        member    = Member.find(params[:id])
+        co_makers = []
+
+        Member.active.where(center_id: member.center.id).where.not(id: member.id).each do |o|
+          co_makers << {
+            value: o.id,
+            label: o.full_name,
+            id: o.id,
+            first_name: o.first_name,
+            middle_name: o.middle_name,
+            last_name: o.last_name
+          }
+        end
+
+        render json: { co_makers: co_makers }
+      end
+
       def delete_survey_answer
         survey_answer = SurveyAnswer.where(id: params[:id]).first
 

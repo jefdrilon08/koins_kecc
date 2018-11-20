@@ -10,6 +10,8 @@ namespace :api do
     get "/members", to: "members#index"
     get "/members/fetch", to: "members#fetch"
     get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
+    get "/members/member_co_makers", to: "members#member_co_makers"
+    get "/members/member_loan_products", to: "members#member_loan_products"
     post "/members/create_survey", to: "members#create_survey"
     post "/members/delete_survey_answer", to: "members#delete_survey_answer"
     post "/members/generate_access_token", to: "members#generate_access_token"
@@ -33,6 +35,7 @@ namespace :api do
     # Loans
     post "/loans/reage", to: "loans#reage"
     post "/loans/apply", to: "loans#apply"
+    get "/loans/fetch", to: "loans#fetch"
 
     # Branches
     get "/branches", to: "branches#index"

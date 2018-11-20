@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import moment from 'moment';
+import Select from 'react-select';
 
 import SkCubeLoading from '../SkCubeLoading';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
@@ -13,11 +14,268 @@ export default class ApplicationFormDisplay extends React.Component {
     this.state  = {
       isLoading: true,
       isSaving: false,
+      isActive: false,
+      coMakers: [],
+      loanProducts: [],
       data: false
     };
   }
 
   componentDidMount() {
+    var context = this;
+
+    var data  = {
+      id: this.props.id,
+      member_id: this.props.memberId
+    }
+
+    $.ajax({
+      url: "/api/v1/loans/fetch",
+      data: data,
+      method: 'GET',
+      success: function(response) {
+        console.log(response);
+        context.setState({
+          isLoading: false,
+          data: response
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Something went wrong when fetching loan");
+      }
+    });
+
+    // Fetch co_makers
+    $.ajax({
+      url: "/api/v1/members/member_co_makers",
+      data: {
+        id: context.props.memberId
+      },
+      method: 'GET',
+      success: function(response) {
+        context.setState({
+          coMakers: response.co_makers
+        });
+      },
+      error: function(response) {
+        console.log(response);
+      }
+    });
+
+    // Fetch loan_products
+    $.ajax({
+      url: "/api/v1/members/member_loan_products",
+      data: {
+        id: context.props.memberId
+      },
+      method: 'GET',
+      success: function(response) {
+        console.log(response);
+        context.setState({
+          loanProducts: response.loan_products
+        });
+      },
+      error: function(response) {
+        console.log(response);
+      }
+    });
+  }
+
+  updateData(data) {
+    this.setState({
+      data: data
+    });
+  }
+
+  handleDatePrepared(event) {
+    var data  = this.state.data;
+
+    data.date_prepared  = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleDateReleased(event) {
+    var data  = this.state.data;
+
+    data.date_released  = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handlePnNumber(event) {
+    var data  = this.state.data;
+
+    data.pn_number  = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleClipNumber(event) {
+    var data  = this.state.data;
+
+    data.data.clip_number = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handlePrincipal(event) {
+    var data  = this.state.data;
+
+    data.principal  = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleCoMakerTwo(event) {
+    var data  = this.state.data;
+
+    data.data.co_maker_two  = event.target.value.toUpperCase();
+
+    this.updateData(data);
+  }
+
+  handleCoMakerOne(o) {
+    var data  = this.state.data;
+
+    for(var i = 0; i < this.state.coMakers.length; i++) {
+      if(this.state.coMakers[i].id == o.value) {
+        data.data.co_maker_one  = this.state.coMakers[i];
+      }
+    }
+
+    this.updateData(data);
+  }
+
+  handleNumInstallments(event) {
+    var data  = this.state.data;
+
+    data.num_installments = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleTerm(event) {
+    var data  = this.state.data;
+
+    data.term = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleSave() {
+    this.setState({
+      isSaving: true
+    });
+  }
+
+  handleCancel() {
+    window.location.href="/members/" + this.props.memberId + "/display";
+  }
+
+  handleLoanProduct(event) {
+    var data  = this.state.data;
+
+    data.loan_product_id  = event.target.value;
+
+    this.updateData(data);
+  }
+
+  renderLoanProducts() {
+    var loanProducts        = this.state.loanProducts;
+    var loanProductsDisplay = [];
+
+    for(var i = 0; i < loanProducts.length; i++) {
+      loanProductsDisplay.push(
+        <option value={loanProducts[i].id} key={"loan-product-" + loanProducts[i].id}>
+          {loanProducts[i].name}
+        </option>
+      );
+    }
+
+    return loanProductsDisplay;
+  }
+
+  renderNumInstallmentOptions() {
+    var term  = this.state.data.term;
+    var termItems = [];
+
+    if(term == "weekly") {
+      termItems.push(
+        <option value={15} key={"weekly-" + 15}>
+          15
+        </option>
+      );
+
+      termItems.push(
+        <option value={25} key={"weekly-" + 25}>
+          25
+        </option>
+      );
+
+      termItems.push(
+        <option value={35} key={"weekly-" + 35}>
+          35
+        </option>
+      );
+
+      termItems.push(
+        <option value={50} key={"weekly-" + 50}>
+          50
+        </option>
+      );
+    } else if(term == "monthly") {
+      termItems.push(
+        <option value={3} key={"monthly-" + 3}>
+          3
+        </option>
+      );
+
+      termItems.push(
+        <option value={6} key={"monthly-" + 6}>
+          6
+        </option>
+      );
+
+      termItems.push(
+        <option value={9} key={"monthly-" + 9}>
+          9
+        </option>
+      );
+
+      termItems.push(
+        <option value={12} key={"monthly-" + 12}>
+          12
+        </option>
+      );
+    } else if(term == "semi-monthly") {
+      termItems.push(
+        <option value={6} key={"semi-monthly-" + 6}>
+          6
+        </option>
+      );
+
+      termItems.push(
+        <option value={12} key={"semi-monthly-" + 12}>
+          12
+        </option>
+      );
+
+      termItems.push(
+        <option value={18} key={"semi-monthly-" + 18}>
+          18
+        </option>
+      );
+
+      termItems.push(
+        <option value={24} key={"semi-monthly-" + 24}>
+          24
+        </option>
+      );
+    }
+
+    return termItems;
   }
 
   render() {
@@ -26,9 +284,196 @@ export default class ApplicationFormDisplay extends React.Component {
         <SkCubeLoading/>
       );
     } else {
+      var data  = this.state.data;
+      var coMakerOne  = { 
+        value: data.data.co_maker_one.id,
+        label: data.data.co_maker_one.last_name + ", " + data.data.co_maker_one.first_name
+      };
+
       return  (
         <div>
-          Application Form Content
+          <h5>
+            Co-maker Information
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <div className="row">
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      Pangalan ng Co-maker (Kamag-anak)
+                    </label>
+                    <input
+                      className="form-control"
+                      value={data.data.co_maker_two}
+                      onChange={this.handleCoMakerTwo.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    />
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      Pangalan ng Co-maker (Kasama sa sentro)
+                    </label>
+                    <Select
+                      value={coMakerOne}
+                      options={this.state.coMakers}
+                      onChange={this.handleCoMakerOne.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col">
+              <div className="form-group">
+                <label>
+                  * PN Number
+                </label>
+                <input
+                  className="form-control"
+                  value={data.pn_number}
+                  onChange={this.handlePnNumber.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                />
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>
+                  CLIP Number
+                </label>
+                <input
+                  className="form-control"
+                  value={data.data.clip_number}
+                  onChange={this.handleClipNumber.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                />
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>
+                  * Date Prepared
+                </label>
+                <input
+                  className="form-control"
+                  type="date"
+                  value={data.date_prepared}
+                  onChange={this.handleDatePrepared.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                />
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>
+                  Date Released
+                </label>
+                <input
+                  className="form-control"
+                  type="date"
+                  value={data.date_released}
+                  onChange={this.handleDateReleased.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                />
+              </div>
+            </div>
+          </div>
+          <h5>
+            Loan Information
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <div className="row">
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      * Halaga ng Hinihiram
+                    </label>
+                    <input
+                      className="form-control"
+                      type="number"
+                      value={data.principal}
+                      onChange={this.handlePrincipal.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    />
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      Loan Product
+                    </label>
+                    <select
+                      className="form-control"
+                      value={data.loan_product_id || "-1"}
+                      onChange={this.handleLoanProduct.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    >
+                      {this.renderLoanProducts()}
+                    </select>
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      Term
+                    </label>
+                    <select
+                      className="form-control"
+                      value={data.num_installments}
+                      onChange={this.handleNumInstallments.bind(this)}
+                    >
+                      {this.renderNumInstallmentOptions()}
+                    </select>
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      Mode of Payment
+                    </label>
+                    <select
+                      className="form-control"
+                      value={data.term}
+                      onChange={this.handleTerm.bind(this)}
+                    >
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="semi-monthly">Semi-monthly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr/>
+          <div className="row">
+            <div className="col">
+              <div className="btn-group">
+                <button
+                  className="btn btn-primary"
+                  onClick={this.handleSave.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                >
+                  <span className="fa fa-check"/>
+                  Save
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={this.handleCancel.bind(this)}
+                  disabled={this.state.isSaving || this.state.isActive}
+                >
+                  <span className="fa fa-times"/>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       );
     }

@@ -3,6 +3,26 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def fetch
+        member  = Member.where(id: params[:member_id]).first
+
+        if member.blank?
+          render json: { message: "member not found" }, status: 402
+        else
+          loan    = Loan.where(id: params[:id]).first
+
+          config  = {
+            member: member,
+            loan: loan,
+            user: current_user
+          }
+
+          loan  = ::Loans::Fetch.new(config: config).execute!
+
+          render json: loan
+        end
+      end
+
       def apply
         loan_product  = LoanProduct.where(id: params[:loan_product_id]).first
         member        = Member.where(id: params[:member_id]).first
