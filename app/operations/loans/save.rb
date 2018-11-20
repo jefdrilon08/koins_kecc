@@ -70,6 +70,20 @@ module Loans
         @loan.amortization_schedule_entries << amort
       end
 
+      # Build accounting entry data
+      accounting_entry_data = ::Loans::BuildAccountingEntry.new(
+                                config: {
+                                  member: @member,
+                                  loan_product: @loan_product,
+                                  amount: @loan.principal,
+                                  term: @loan.term,
+                                  num_installments: @loan.num_installments,
+                                  particular: @loan.data.with_indifferent_access[:voucher][:particular]
+                                }
+                              ).execute!
+
+      @loan.data[:accounting_entry] = accounting_entry_data
+
       @loan.save!
 
       @loan

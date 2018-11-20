@@ -6,16 +6,6 @@
       #{@loan.pn_number}
   %tr
     %th
-      Loan Product:
-    %td.text-right
-      #{@loan.loan_product}
-  %tr
-    %th
-      Monthly I.R.:
-    %td.text-right
-      #{number_to_currency((@loan.monthly_interest_rate * 100).round(2), unit: "")} %
-  %tr
-    %th
       Status:
     %td.text-right
       - if @loan.active?
@@ -27,6 +17,16 @@
       - elsif @loan.paid?
         .badge.badge-success
           Paid
+  %tr
+    %th
+      Loan Product:
+    %td.text-right
+      #{@loan.loan_product}
+  %tr
+    %th
+      Monthly I.R.:
+    %td.text-right
+      #{number_to_currency((@loan.monthly_interest_rate * 100).round(2), unit: "")} %
   %tr
     %th
       Date Prepared:

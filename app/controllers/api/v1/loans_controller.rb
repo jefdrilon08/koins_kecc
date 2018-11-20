@@ -22,6 +22,41 @@ module Api
           render json: loan
         end
       end
+      
+      def delete
+        loan  = Loan.where(id: params[:id]).first
+
+        config  = {
+          loan: loan,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateDelete.new( 
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          loan_data = JSON.parse(loan.to_json).with_indifferent_access
+
+          loan  = ::Loans::Delete.new(
+                    config: config
+                  ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted loan #{loan_data[:id]}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan_data[:id],
+              loan_data: loan_data
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
 
       def save
         loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access

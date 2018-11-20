@@ -34,6 +34,7 @@ namespace :api do
 
     # Loans
     post "/loans/reage", to: "loans#reage"
+    post "/loans/delete", to: "loans#delete"
     post "/loans/apply", to: "loans#apply"
     post "/loans/save", to: "loans#save"
     get "/loans/fetch", to: "loans#fetch"

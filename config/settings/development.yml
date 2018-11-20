@@ -1,6 +1,27 @@
 company_name: "KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE"
 company_address: "5 Don Francisco St, Don Enrique Heights, Quezon Cty"
 
+default_member_accounts:
+  -
+    account_type: "SAVINGS"
+    account_subtype: "K-IMPOK"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Golden K"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "CBU"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Retirement Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Life Insurance Fund"
+  -
+    account_type: "EQUITY"
+    account_subtype: "Share Capital"
+    
+
 memberships:
   -
     name: "K-KOOP"

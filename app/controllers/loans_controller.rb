@@ -48,5 +48,10 @@ class LoansController < ApplicationController
                         subsidiary_id: @loan.id,
                         subsidiary_type: "Loan"
                       )
+
+    @activity_logs  = ActivityLog.where(
+                        "data ->> 'loan_id' = ?",
+                        @loan.id
+                      ).order("created_at DESC")
   end
 end

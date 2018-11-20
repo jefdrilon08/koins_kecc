@@ -51,7 +51,7 @@ module Loans
           key: "loan_product",
           message: "Loan product not found"
         }
-      elsif Loan.pending.where(member_id: @loan_data[:member_id], loan_product_id: @loan_product.id).count > 0
+      elsif Loan.pending.where.not(id: @loan_data[:id]).where(member_id: @loan_data[:member_id], loan_product_id: @loan_product.id).count > 0
         @errors[:messages] << {
           key: "loan_product",
           message: "Member still has pending loan products"

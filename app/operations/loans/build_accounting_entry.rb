@@ -9,6 +9,16 @@ module Loans
       @current_date = @config[:current_date] || Date.today
       @book         = @config[:book] || "CDB"
 
+      @user = @config[:user]
+
+      if @user.present?
+        @prepared_by  = @user.full_name
+      else
+        @prepared_by  = "SYSTEM"
+      end
+
+      @particular = @config[:particular] || default_particular
+
       @num_installments = @config[:num_installments]
       @term             = @config[:term]
       @amount_released  = @amount
@@ -19,7 +29,7 @@ module Loans
         company_name: Settings.company_name,
         company_address: Settings.company_address,
         branch: @branch.to_s.upcase,
-        prepared_by: "SYSTEM",
+        prepared_by: @prepared_by,
         particular: default_particular,
         debit_journal_entries: [],
         credit_journal_entries: [],
@@ -83,7 +93,7 @@ module Loans
 
       # Amount released
       accounting_code = AccountingCode.find(@settings.receivable_accounting_code_id)
-      amount          = s_deduction.amount
+      amount          = @amount_released
       name            = accounting_code.name
       code            = accounting_code.code
 
@@ -99,7 +109,7 @@ module Loans
         deduction_type  = s_deduction.deduction_type
         if deduction_type == "additional_amount_branch_term_map"
           s_deduction.meta.branches.each do |s_b|
-            accounting_code     = AccountingCode.find(id: s_deduction.accounting_code_id)
+            accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
             amount              = s_deduction.amount
             name                = accounting_code.name
             code                = accounting_code.code

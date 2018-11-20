@@ -11,6 +11,15 @@ class Loan < ApplicationRecord
   belongs_to :loan_product
   belongs_to :project_type, optional: true
 
+  validates :status, presence: true, inclusion: { in: STATUSES }
+  validates :principal, presence: true, numericality: true
+  validates :interest, presence: true, numericality: true
+  validates :date_prepared, presence: true
+  validates :principal_balance, presence: true, numericality: true
+  validates :interest_balance, presence: true, numericality: true
+  validates :principal_paid, presence: true, numericality: true
+  validates :interest_paid, presence: true, numericality: true
+
   scope :pending, -> { where(status: "pending") }
   scope :active, -> { where(status: "active") }
   scope :paid, -> { where(status: "paid") }
@@ -18,6 +27,15 @@ class Loan < ApplicationRecord
   scope :active_or_pending, -> { where(status: ["active", "pending"]) }
 
   has_many :amortization_schedule_entries
+
+  before_validation :load_defaults
+
+  def load_defaults
+    if self.new_record?
+      self.status = "pending"
+      self.payment_type = "cash"
+    end
+  end
 
   def total_balance
     self.principal_balance + self.interest_balance

@@ -109,8 +109,18 @@ module Members
       @member.branch  = @branch
       @member.center  = @center
 
+      if @member.new_record?
+        @will_generate_accounts = true
+      end
+
       @member.save!
       @member = Member.find(@member.id)
+
+      if @will_generate_accounts
+        ::Members::GenerateMissingAccounts.new(
+          config: { member: @member }
+        ).execute!
+      end
 
       # Remove has many
       LegalDependent.where(member_id: @member.id, id: ld_to_remove_ids).delete_all

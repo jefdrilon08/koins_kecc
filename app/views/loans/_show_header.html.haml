@@ -16,3 +16,10 @@
       .btn#btn-reage
         .fa.fa-sync
         Reage
+      - if @loan.pending?
+        = link_to loan_application_form_path(id: @loan.id, member_id: @loan.member), class: 'btn' do
+          .fa.fa-pencil-alt
+          Edit
+        .btn#btn-delete
+          .fa.fa-times
+          Delete
