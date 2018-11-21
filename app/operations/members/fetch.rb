@@ -6,9 +6,7 @@ module Members
       @member = Member.where(id: @config[:id]).first
 
       if @member.blank?
-        @member = Member.new(
-                    date_of_birth: Date.today - 30.years
-                  )
+        @member = Member.new
       end
     end
 
@@ -54,7 +52,7 @@ module Members
         middle_name: @member.middle_name || "",
         last_name: @member.last_name || "",
         gender: @member.gender || "Female",
-        date_of_birth: @member.date_of_birth || Date.today - 20.years,
+        date_of_birth: @member.date_of_birth,
         civil_status: @member.civil_status || "Single",
         home_number: @member.home_number || "",
         mobile_number: @member.mobile_number || "",
