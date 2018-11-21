@@ -1,0 +1,35 @@
+.container-fluid
+  .row
+    .col
+      %center
+        %h1
+          Chart of Accounts
+
+      %hr
+      %table.table.table-bordered.table-sm
+        %thead
+          %tr
+            %th
+              Code
+            %th
+              Name 
+            %th
+              Category
+            %th
+              Major Account
+        %tbody
+          - @accounting_codes.each do |o|
+            %tr
+              %td
+                #{o.code}
+              %td
+                #{o.name}
+              %td
+                #{o.category}
+              %td
+                #{o.data.with_indifferent_access[:major_account]}
+
+:javascript
+  $(document).ready(function() {
+    window.print();
+  });

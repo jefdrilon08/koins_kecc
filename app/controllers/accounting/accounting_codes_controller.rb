@@ -7,6 +7,12 @@ module Accounting
       @accounting_codes = AccountingCode.select("*").order("code ASC")
     end
 
+    def print
+      @accounting_codes = AccountingCode.select("*").order("code ASC")
+
+      render "print", layout: "plain"
+    end
+
     def new
       @accounting_code  = AccountingCode.new
     end

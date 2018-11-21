@@ -43,13 +43,6 @@ class AccountingCode < ApplicationRecord
   end
 
   def load_defaults
-    if name.present?
-      self.name = self.name.upcase
-    end
-
-    if code.present?
-      self.code = self.code.upcase
-    end
   end
 
   def to_s
