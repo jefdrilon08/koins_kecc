@@ -21,6 +21,7 @@
     %tr
       %th Edad
       %td
+        #{@member.age} (#{@member.date_of_birth.strftime("%B %d, %Y").try(:upcase)})
 
 
 %h3.text-muted
@@ -39,7 +40,7 @@
       %td= @member.civil_status.try(:upcase)
     %tr
       %th Relihiyon
-      %td= @member.religion.try(:name).try(:upcase)
+      %td= @member.religion
     %tr
       %th Kapanganakan
       %td= @member.date_of_birth.strftime("%B %d, %Y").try(:upcase)
@@ -48,25 +49,22 @@
       %td= @member.place_of_birth.try(:upcase)
     %tr
       %th PHILHEALTH #:
-      %td= @member.try(:phil_health_number_formatted)
+      %td= @member.fetch_government_id("phil_health_number")
     %tr
       %th PAG-IBIG #:
-      %td= @member.try(:pag_ibig_number_formatted)
+      %td= @member.fetch_government_id("pag_ibig_number")
     %tr
       %th SSS #:
-      %td= @member.try(:sss_number_formatted)
+      %td= @member.fetch_government_id("sss_number")
     %tr
       %th TIN #:
-      %td
-    %tr
-      %th Bank / Account Type
-      %td
+      %td= @member.fetch_government_id("tin_number")
     %tr
       %th Asawa / Kinakasama:
-      %td
+      %td #{@member.spouse}
     %tr
       %th Uri ng Paninirahan
-      %td
+      %td #{@member.housing_type}
     %tr
       %th Tagal na sa Tirahan
       %td
