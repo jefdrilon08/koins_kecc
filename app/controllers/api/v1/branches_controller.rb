@@ -3,6 +3,14 @@ module Api
     class BranchesController < ApiController
       before_action :authenticate_user!
 
+      def fetch_centers
+        branch  = @branches.where(id: params[:id]).first
+        
+        centers = branch.centers.map{ |c| { id: c.id, name:  c.name } }
+
+        render json: { centers: centers }
+      end
+
       def stats
         branch  = Branch.where(id: @branches.pluck(:id)).where(id: params[:id]).first
         as_of   = params[:as_of].try(:to_date)

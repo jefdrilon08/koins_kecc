@@ -9,9 +9,6 @@ default_member_accounts:
     account_type: "SAVINGS"
     account_subtype: "Golden K"
   -
-    account_type: "SAVINGS"
-    account_subtype: "CBU"
-  -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
   -
@@ -20,6 +17,9 @@ default_member_accounts:
   -
     account_type: "EQUITY"
     account_subtype: "Share Capital"
+  -
+    account_type: "EQUITY"
+    account_subtype: "CBU"
 
 memberships:
   -

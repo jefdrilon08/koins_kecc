@@ -42,6 +42,7 @@ namespace :api do
 
     # Branches
     get "/branches", to: "branches#index"
+    get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
 
     # Print Services

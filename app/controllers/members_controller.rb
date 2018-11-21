@@ -5,6 +5,8 @@ class MembersController < ApplicationController
     @members  = Member.select("*").where(branch_id: @branches.pluck(:id))
     @q        = params[:q]
     @status   = params[:status]
+    @center   = Center.where(id: params[:center_id]).first
+    @branch   = Branch.where(id: params[:branch_id]).first
 
     @centers  = @branches.first.centers
 
@@ -13,6 +15,14 @@ class MembersController < ApplicationController
                     "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
                     q: "#{@q.upcase}%"
                   )
+    end
+
+    if @branch.present?
+      @members  = @members.where(branch_id: @branch.id)
+    end
+
+    if @center.present?
+      @members  = @members.where(center_id: @center.id)
     end
 
     if @status.present?

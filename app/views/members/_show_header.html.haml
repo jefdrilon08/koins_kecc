@@ -13,6 +13,7 @@
       = link_to "#", class: "btn", id: "btn-create-survey" do
         .fa.fa-plus
         New Survey
-      = link_to loan_application_form_path(member_id: @member.id), class: "btn" do
-        .fa.fa-plus
-        New Loan
+      - if @member.active?
+        = link_to loan_application_form_path(member_id: @member.id), class: "btn" do
+          .fa.fa-plus
+          New Loan

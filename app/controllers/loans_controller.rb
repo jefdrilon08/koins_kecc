@@ -32,6 +32,17 @@ class LoansController < ApplicationController
 
   def form
     @member = Member.where(id: params[:member_id]).first
+    @branch = @member.branch
+
+    Settings.branch_banks.each do |o|
+      if o.branch_id == @branch.id
+        @banks  = o.banks
+      end
+    end
+
+    if @banks.blank?
+      redirect_to members_path
+    end
 
     if @member.blank?
       redirect_to members_path

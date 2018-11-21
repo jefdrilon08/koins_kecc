@@ -517,6 +517,7 @@ export default class ApplicationFormDisplay extends React.Component {
                 data={this.state.data}
                 updateData={this.updateData.bind(this)}
                 disabled={this.state.isSaving || this.state.isActive}
+                banks={this.props.banks}
               />
             </div>
           </div>
@@ -550,6 +551,7 @@ export default class ApplicationFormDisplay extends React.Component {
             </div>
           </div>
           <hr/>
+          {this.renderErrorDisplay()}
           <div className="row">
             <div className="col">
               <div className="btn-group">

@@ -16,6 +16,14 @@ export default class ApplicationFormFinancialInformation extends React.Component
     this.props.updateData(data);
   }
 
+  handleBank(event) {
+    var data  = this.props.data
+
+    data.data.voucher.bank = event.target.value;
+
+    this.props.updateData(data);
+  }
+
   // Voucher check number
   handleCheckNumber(event) {
     var data  = this.props.data;
@@ -49,6 +57,23 @@ export default class ApplicationFormFinancialInformation extends React.Component
     this.props.updateData(data);
   }
 
+  renderBanks() {
+    var banks       = this.props.banks;
+    var bankOptions = [];
+
+    for(var i = 0; i < banks.length; i++) {
+      bankOptions.push(
+        <option key={"bank-" + i} value={banks[i]}>
+          {banks[i]}
+        </option>
+      );
+    }
+
+    return  (
+      bankOptions
+    );
+  }
+
   render() {
     return  (
       <div>
@@ -80,15 +105,6 @@ export default class ApplicationFormFinancialInformation extends React.Component
               />
             </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <div className="form-group">
-              <label>
-                Bank
-              </label>
-            </div>
-          </div>
           <div className="col">
             <div className="form-group">
               <label>
@@ -112,19 +128,6 @@ export default class ApplicationFormFinancialInformation extends React.Component
                 type="date"
                 value={this.props.data.data.voucher.date_of_check}
                 onChange={this.handleDateOfCheck.bind(this)}
-                disabled={this.props.disabled}
-              />
-            </div>
-          </div>
-          <div className="col">
-            <div className="form-group">
-              <label>
-                Bank Transaction Ref. Number
-              </label>
-              <input
-                className="form-control"
-                value={this.props.data.data.voucher.bank_transaction_reference_number}
-                onChange={this.handleBankTransactionReferenceNumber.bind(this)}
                 disabled={this.props.disabled}
               />
             </div>
