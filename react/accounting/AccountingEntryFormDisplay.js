@@ -377,7 +377,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
     var errors  = [];
 
     for(var i = 0; i < this.state.data.journal_entries.length; i++) {
-      if(this.state.data.journal_entries[i].accounting_code_id == journal_entry.accounting_code_id) { 
+      if(this.state.data.journal_entries[i].accounting_code_id == journal_entry.accounting_code_id && this.state.data.journal_entries[i].post_type == journal_entry.post_type) { 
         errors.push("Duplicate accounting code");
       }
     }
