@@ -8,7 +8,7 @@ class AccountingController < ApplicationController
   end
 
   def jvb
-    @records  = AccountingEntry.jvb.order("reference_number DESC, updated_at ASC")
+    @records  = AccountingEntry.jvb.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)
@@ -40,7 +40,7 @@ class AccountingController < ApplicationController
   end
 
   def crb
-    @records  = AccountingEntry.crb.order("reference_number DESC, updated_at ASC")
+    @records  = AccountingEntry.crb.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)
@@ -72,7 +72,7 @@ class AccountingController < ApplicationController
   end
 
   def cdb
-    @records  = AccountingEntry.cdb.order("reference_number DESC, updated_at ASC")
+    @records  = AccountingEntry.cdb.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)

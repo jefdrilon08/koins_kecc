@@ -9,8 +9,9 @@
     - @insurance_accounts.each do |o|
       %tr
         %td
-          %strong
-            #{o.account_subtype}
+          = link_to insurance_account_path(o.id) do
+            %strong
+              #{o.account_subtype}
         %td.text-right
           %strong
             #{number_to_currency(o.balance, unit: "")}

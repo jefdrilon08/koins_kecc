@@ -5,6 +5,8 @@ class MembersController < ApplicationController
     @members  = Member.select("*").where(branch_id: @branches.pluck(:id))
     @q        = params[:q]
     @status   = params[:status]
+    @center   = Center.where(id: params[:center_id]).first
+    @branch   = Branch.where(id: params[:branch_id]).first
 
     @centers  = @branches.first.centers
 
@@ -13,6 +15,14 @@ class MembersController < ApplicationController
                     "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
                     q: "#{@q.upcase}%"
                   )
+    end
+
+    if @branch.present?
+      @members  = @members.where(branch_id: @branch.id)
+    end
+
+    if @center.present?
+      @members  = @members.where(center_id: @center.id)
     end
 
     if @status.present?
@@ -25,6 +35,17 @@ class MembersController < ApplicationController
   def form
   end
 
+  def survey_answer
+    @member         = Member.find(params[:id])
+    @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+    @data           = @survey_answer.data.with_indifferent_access
+  end
+
+  def survey_answer_form
+    @member         = Member.find(params[:id])
+    @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+  end
+
   def show
     @member = Member.find(params[:id])
 
@@ -35,6 +56,19 @@ class MembersController < ApplicationController
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
 
+    @surveys        = Survey.all.order("name ASC")
+    @survey_answers = SurveyAnswer.where(
+                        "meta -> 'member' ->> 'id' = ?",
+                        @member.id
+                      ).order("updated_at DESC")
+
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
+
+    @loan_products  = LoanProduct.select("*").order("name ASC")
+
+    @activity_logs  = ActivityLog.where(
+                        "data ->> 'member_id' = ?",
+                        @member.id
+                      ).order("created_at DESC")
   end
 end

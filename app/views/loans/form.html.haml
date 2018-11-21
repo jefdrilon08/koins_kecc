@@ -1,0 +1,12 @@
+= render "form_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          #loan-application-content
+
+#parameters{ data: { id: "#{params[:id]}", member_id: "#{params[:member_id]}", banks: @banks } }
+
+= javascript_include_tag "LoanApplicationForm.min.react"

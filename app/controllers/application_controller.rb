@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
     if user_signed_in?
       # TODO: Only fetch user assigned branches
-      @branches = Branch.all
+      @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
     end
   end
 end

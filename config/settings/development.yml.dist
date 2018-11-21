@@ -1,0 +1,31 @@
+company_name: "KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE"
+company_address: "5 Don Francisco St, Don Enrique Heights, Quezon Cty"
+
+defaults:
+  insurance_deposits:
+    - 
+      account_subtype: "Life Insurance Fund"
+      amount: 15.00
+    -
+      account_subtype: "Retirement Fund"
+      amount: 5.00
+
+branch_billing_accounting_codes:
+  -
+    branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"
+    cash_in_bank_accounting_code_id: "afbb24a0-b1ef-4ce8-8bff-40388e525497"
+    withdraw_payment_accounting_code_id: "afbb24a0-b1ef-4ce8-8bff-40388e525497"
+    receivables:
+      -
+        loan_product_id:
+        receivable_accounting_code_id:
+        interest_receivable_accounting_code_id:
+  -
+    branch_id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"
+    cash_in_bank_accounting_code_id:
+    withdraw_payment_accounting_code_id:
+    receivables:
+      -
+        loan_product_id:
+        receivable_accounting_code_id:
+        interest_receivable_accounting_code_id:

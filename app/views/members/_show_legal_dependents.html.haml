@@ -1,0 +1,18 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Name
+      %th
+        Relationship
+      %th
+        Date of Birth
+  %tbody
+    - @member.legal_dependents.each do |o|
+      %tr
+        %td
+          #{o.full_name}
+        %td
+          #{o.relationship}
+        %td
+          #{o.date_of_birth}

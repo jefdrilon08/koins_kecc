@@ -1,16 +1,18 @@
-#member-show-page
-  = render partial: "show_header"
+= render partial: "show_header"
 
-  .container-fluid
-    = render partial: "totals"
-    .row{:style => "margin-top: 20px;"}
-      .col-md-4
-        = render partial: "member_semi_details"
-      .col-md-8
-        = render partial: "member_details"
+.container-fluid
+  .row{:style => "margin-top: 20px;"}
+    .col-md-4
+      = render partial: "member_semi_details"
+    .col-md-8
+      = render partial: "member_details"
 
 = render partial: "members/modals/generate_access_token"
 = render partial: "members/modals/signature"
+= render partial: "members/modals/new_loan"
+= render partial: "members/modals/create_survey"
+= render partial: "members/modals/delete"
+= render partial: "templates/error_list"
 
 = javascript_include_tag "members/Show.js"
 

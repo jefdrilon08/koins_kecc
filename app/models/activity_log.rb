@@ -2,7 +2,9 @@ class ActivityLog < ApplicationRecord
   ACTIVITY_TYPES  = [
     "approval",
     "display",
-    "correction"
+    "deletion",
+    "correction",
+    "modification"
   ]
 
   validates :content, presence: true

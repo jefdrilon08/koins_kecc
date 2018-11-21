@@ -12,3 +12,12 @@
           - else
             %p
               No members found
+
+= render partial: "templates/center_options"
+
+= javascript_include_tag "members/Index"
+
+:javascript
+  $(document).ready(function() {
+    Index.init();
+  });

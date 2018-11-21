@@ -1,6 +1,155 @@
 module Api
   module V1
     class MembersController < ApiController
+      before_action :authenticate_user!
+
+      def delete
+        member  = Member.find(params[:id])
+        
+        config  = {
+          member: member,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateDelete.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          member_id         = member.id
+          member_full_name  = member.full_name
+
+          ::Members::Delete.new(
+            config: config
+          ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted member #{member_full_name}",
+            activity_type: "deletion",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def save_survey_answer
+        data          = JSON.parse(params[:data]).to_h.with_indifferent_access
+        survey_answer = SurveyAnswer.where(id: params[:id]).first
+
+        config  = {
+          data: data,
+          survey_answer: survey_answer,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateSaveSurveyAnswer.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 402
+        else
+          survey_answer = ::Members::SaveSurveyAnswer.new(
+                            config: config
+                          ).execute!
+
+          render json: { id: survey_answer.id }
+        end
+      end
+
+      def member_loan_products
+        member    = Member.find(params[:id])
+        loans     = Loan.active_or_pending.where(member_id: member.id)
+
+        if loans.size == 0 
+          loan_products = LoanProduct.entry_point.order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+        else
+          loan_products = LoanProduct.where.not(id: loans.pluck(:loan_product_id)).order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+        end
+
+        render json: { loan_products: loan_products }
+      end
+
+      def member_co_makers
+        member    = Member.find(params[:id])
+        co_makers = []
+
+        Member.active.where(center_id: member.center.id).where.not(id: member.id).each do |o|
+          co_makers << {
+            value: o.id,
+            label: o.full_name,
+            id: o.id,
+            first_name: o.first_name,
+            middle_name: o.middle_name,
+            last_name: o.last_name
+          }
+        end
+
+        render json: { co_makers: co_makers }
+      end
+
+      def delete_survey_answer
+        survey_answer = SurveyAnswer.where(id: params[:id]).first
+
+        config  = {
+          survey_answer: survey_answer,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateDeleteSurveyAnswer.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          
+          render json: errors, status: 402
+        else
+          survey_answer.destroy!
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def fetch_survey_answer
+        survey_answer = SurveyAnswer.find(params[:survey_answer_id])
+
+        render json: survey_answer
+      end
+
+      def create_survey
+        survey  = Survey.where(id: params[:survey_id]).first
+        member  = Member.where(id: params[:member_id]).first
+        user    = current_user
+
+        config  = {
+          survey: survey,
+          member: member,
+          user: user
+        }
+
+        errors  = ::Members::ValidateCreateSurvey.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 402
+        else
+          survey_answer = ::Members::BuildSurveyAnswer.new(
+                            config: config
+                          ).execute!
+
+          survey_answer.save!
+
+          render json: { id: survey_answer.id }
+        end
+      end
+
       def fetch
         config  = {
           id: params[:id]
@@ -30,7 +179,7 @@ module Api
       end
 
       def save
-        member_data = params[:member_data]
+        member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
 
         config  = {
           member_data: member_data,
@@ -42,11 +191,21 @@ module Api
                   ).execute!
 
         if errors[:full_messages].size > 0
-          render json: errors, status: 402
+          render json: errors, status: 400
         else
           member  = ::Members::Save.new(
                       config: config
                     ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified member #{member.full_name}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member.id,
+              member_data: member_data
+            }
+          )
 
           render json: { id: member.id }
         end

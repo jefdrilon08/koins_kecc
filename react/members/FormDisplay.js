@@ -14,6 +14,9 @@ import FormContactNumbers from './FormContactNumbers';
 import FormGovernmentIdentificationNumbers from './FormGovernmentIdentificationNumbers';
 import FormSpouse from './FormSpouse';
 import FormExperience from './FormExperience';
+import FormBankAccounts from './FormBankAccounts';
+import FormLegalDependents from './FormLegalDependents';
+import FormBeneficiaries from './FormBeneficiaries';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -142,9 +145,10 @@ export default class FormDisplay extends React.Component {
     $.ajax({
       url: "/api/v1/members/save",
       method: "POST",
+      dataType: 'json',
       data: {
         id: state.memberId,
-        member_data: state.data,
+        member_data: JSON.stringify(state.data),
         authenticity_token: state.authenticityToken
       },
       success: function(response) {
@@ -297,10 +301,49 @@ export default class FormDisplay extends React.Component {
 
               <div className="card">
                 <div className="card-header">
+                  Kasalukuyang Bangko
+                </div>
+                <div className="card-body">
+                  <FormBankAccounts
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
                   Personal na Impormasyon ng Asawa o Kinakasama (Common-law Spouse)
                 </div>
                 <div className="card-body">
                   <FormSpouse
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon ng mga Anak
+                </div>
+                <div className="card-body">
+                  <FormLegalDependents
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Personal na Impormasyon sa mga Beneficiaries
+                </div>
+                <div className="card-body">
+                  <FormBeneficiaries
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}

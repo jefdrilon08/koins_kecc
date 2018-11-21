@@ -7,6 +7,10 @@
     %a.nav-link{"aria-controls" => "savings_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#savings_accounts", :role => "tab"} Saving Accounts
   %li.nav-item
     %a.nav-link{"aria-controls" => "insurance_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#insurance_accounts", :role => "tab"} Insurance Accounts
+  %li.nav-item
+    %a.nav-link{"aria-controls" => "survey_answers", "aria-selected" => "false", "data-toggle" => "tab", :href => "#survey_answers", :role => "tab"} Surveys
+  %li.nav-item
+    %a.nav-link{"aria-controls" => "activity_logs", "aria-selected" => "false", "data-toggle" => "tab", :href => "#activity_logs", :role => "tab"} Activity Logs
 .tab-content
   #home.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "profile_details"
@@ -16,3 +20,7 @@
     = render partial: "savings_accounts"
   #insurance_accounts.tab-pane{:role => "tabpanel"}
     = render partial: "insurance_accounts"
+  #survey_answers.tab-pane{:role => "tabpanel"}
+    = render partial: "members/survey_answers", locals: { survey_answers: @survey_answers }
+  #activity_logs.tab-pane{:role => "tabpanel"}
+    = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }

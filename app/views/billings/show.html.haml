@@ -5,14 +5,37 @@
     .col
       .card
         .card-body
+          - if @billing.pending?
+            .callout.callout-info
+              %p
+                Pindutin ang amount upang baguhin ito.
+          %h5
+            Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")}
           #billing-content
 
-          - if development?
+          - if debug?
             %pre
               %code
                 #{JSON.pretty_generate(JSON.parse(@billing.to_json))}
+          %hr
+          = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
 
+= render partial: "billings/modals/approve"
+= render partial: "templates/error_list"
 
 #parameters{ data: { id: @billing.id } }
 
 = javascript_include_tag "BillingUI.min.react"
+= javascript_include_tag "billings/Show"
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var billingId         = $parameters.data('id');
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Show.init({
+      billingId: billingId, 
+      authenticityToken: authenticityToken
+    });
+  });

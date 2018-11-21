@@ -1,0 +1,24 @@
+#modal-new-loan.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Apply for Loan
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+          .row
+            .col
+              .form-group
+                %label
+                  Loan Product
+                = select_tag :loan_product_id, options_from_collection_for_select(@loan_products, :id, :name, @loan_product_id), class: "form-control select-select2", id: "select-loan-product", prompt: "-- SELECT --"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new-loan.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

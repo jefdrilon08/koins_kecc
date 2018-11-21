@@ -2,7 +2,9 @@
 
 .container-fluid
   .row
-    .col-md-4
-      = render partial: "show_sidebar"
-    .col-md-8
-      = render partial: "show_details"
+    .col
+      .card
+        .card-body
+          %h4
+            #{@branch.name}
+          = render partial: "show_details"

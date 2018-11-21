@@ -144,18 +144,24 @@ export default class AccountingEntryFormDisplay extends React.Component {
         console.log("Fetched current branches:");
         console.log(response);
 
-        tempCurrentBranch = {
-          value: response.branches[0].id,
-          label: response.branches[0].name
-        };
+        if(response.branches.length > 0) {
+          tempCurrentBranch = {
+            value: response.branches[0].id,
+            label: response.branches[0].name
+          };
 
-        console.log("tempCurrentBranch:");
-        console.log(tempCurrentBranch);
+          console.log("tempCurrentBranch:");
+          console.log(tempCurrentBranch);
 
-        context.setState({
-          branches: response.branches,
-          currentBranch: tempCurrentBranch
-        });
+          context.setState({
+            branches: response.branches,
+            currentBranch: tempCurrentBranch
+          });
+        } else {
+          context.setState({
+            branches: response.branches
+          });
+        }
       },
       error: function(response) {
         console.log(response);
@@ -247,6 +253,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
         creditAmount += parseFloat(this.state.data.journal_entries[i].amount);
       }
     }
+
+    debitAmount   = parseFloat(numberWithCommas(debitAmount));
+    creditAmount  = parseFloat(numberWithCommas(creditAmount));
 
     console.log("debitAmount: " + debitAmount);
     console.log("creditAmount: " + creditAmount);
@@ -368,7 +377,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
     var errors  = [];
 
     for(var i = 0; i < this.state.data.journal_entries.length; i++) {
-      if(this.state.data.journal_entries[i].accounting_code_id == journal_entry.accounting_code_id) { 
+      if(this.state.data.journal_entries[i].accounting_code_id == journal_entry.accounting_code_id && this.state.data.journal_entries[i].post_type == journal_entry.post_type) { 
         errors.push("Duplicate accounting code");
       }
     }
@@ -581,6 +590,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
     var data                  = state.data;
     var branchOptions         = [];
     var accountingCodeOptions = [];
+
+    console.log(state.branches);
 
     for(var i = 0; i < state.branches.length; i++) {
       branchOptions.push({

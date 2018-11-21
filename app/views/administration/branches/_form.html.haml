@@ -9,6 +9,9 @@
     .col
       .form-group
         = f.input :short_name, input_html: { class: 'form-control' }
+    .col
+      .form-group
+        = f.input :member_counter, input_html: { class: 'form-control' }
     
   %hr
   .btn-group
@@ -16,10 +19,10 @@
       .fa.fa-check
       Save
     - if branch.new_record?
-      = link_to administration_areas_path, class: 'btn btn-danger' do
+      = link_to administration_clusters_path, class: 'btn btn-danger' do
         .fa.fa-times
         Cancel
     - else
-      = link_to administration_area_path(branch), class: 'btn btn-danger' do
+      = link_to administration_cluster_path(branch.cluster), class: 'btn btn-danger' do
         .fa.fa-times
         Cancel

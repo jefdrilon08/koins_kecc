@@ -35,4 +35,60 @@ class Billing < ApplicationRecord
   def approved?
     self.status == "approved"
   end
+
+  def loan_payments
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:record_type] == "LOAN_PAYMENT" and oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+
+    records
+  end
+
+  def deposits
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:record_type] == "SAVINGS" and oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+
+    records
+  end
+
+  def insurance
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:record_type] == "INSURANCE" and oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+
+    records
+  end
+
+  def withdraw_payments
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:record_type] == "WP" and oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+
+    records
+  end
+
+  def accounting_entry
+    self.data.with_indifferent_access[:accounting_entry]
+  end
 end

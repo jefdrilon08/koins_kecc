@@ -1,0 +1,126 @@
+module Billings
+  class Approve
+    def initialize(config:)
+      @config   = config
+      @billing  = @config[:billing]
+      @user     = @config[:user]
+
+      @data = @billing.try(:data).try(:with_indifferent_access)
+
+      @data_loan_payments     = @billing.loan_payments
+      @data_deposits          = @billing.deposits
+      @data_insurance         = @billing.insurance
+      @data_withdraw_payments = @billing.withdraw_payments
+      @data_accounting_entry  = @billing.accounting_entry
+    end
+
+    def execute!
+      post_accounting_entry!
+      process_loan_payments!
+      process_savings!
+      process_insurance!
+      process_withdraw_payments!
+
+      @data[:approved_by] = @user.full_name
+
+      # Update accounting entry with reference number
+      @data[:accounting_entry][:id]               = @accounting_entry.id
+      @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
+      @data[:accounting_entry][:status]           = @accounting_entry.status
+      @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
+
+      @billing.update!(
+        status: "approved",
+        data: @data
+      )
+
+      @billing
+    end
+
+    private
+
+    def process_loan_payments!
+      @data_loan_payments.each do |o|
+        config  = {
+          loan_payment: o,
+          date_paid: @billing.collection_date,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::Billings::ApproveLoanPaymentHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
+    def process_savings!
+      @data_deposits.each do |o|
+        config  = {
+          date_paid: @billing.collection_date,
+          deposit: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::Billings::ApproveSavingsDepositHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
+    def process_withdraw_payments!
+      @data_withdraw_payments.each do |o|
+        config  = { 
+          date_paid: @billing.collection_date,
+          withdraw_payment: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::Billings::ApproveWithdrawPaymentHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
+    def process_insurance!
+      @data_insurance.each do |o|
+        config  = {
+          date_paid: @billing.collection_date,
+          insurance_deposit: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::Billings::ApproveInsuranceDepositHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
+    def post_accounting_entry!
+      # Create new accounting entry
+      config  = {
+        accounting_entry_data: @data_accounting_entry.with_indifferent_access,
+        user: @user
+      }
+
+      accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: config
+                          ).execute!
+
+      # Post to books
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
+      @accounting_entry
+    end
+  end
+end

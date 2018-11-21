@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_30_032608) do
+ActiveRecord::Schema.define(version: 2018_11_20_171225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -129,6 +129,20 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "beneficiaries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.string "relationship"
+    t.date "date_of_birth"
+    t.boolean "is_primary"
+    t.boolean "is_deceased"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_beneficiaries_on_member_id"
+  end
+
   create_table "billings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "collection_date"
     t.uuid "center_id"
@@ -147,6 +161,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.string "short_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "member_counter"
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 
@@ -156,6 +171,8 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.string "short_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "meeting_day"
+    t.uuid "user_id"
     t.index ["branch_id"], name: "index_centers_on_branch_id"
   end
 
@@ -168,6 +185,14 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.index ["area_id"], name: "index_clusters_on_area_id"
   end
 
+  create_table "data_stores", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.json "meta"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status"
+  end
+
   create_table "journal_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "post_type"
     t.uuid "accounting_code_id"
@@ -178,6 +203,19 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.datetime "updated_at", null: false
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
+  end
+
+  create_table "legal_dependents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name"
+    t.string "middle_name"
+    t.date "date_of_birth"
+    t.uuid "member_id"
+    t.string "relationship"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "last_name"
+    t.index ["member_id"], name: "index_legal_dependents_on_member_id"
   end
 
   create_table "loan_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -218,6 +256,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "first_date_of_payment"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
@@ -272,6 +311,30 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.index ["center_id"], name: "index_members_on_center_id"
   end
 
+  create_table "membership_payment_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_membership_payment_collections_on_branch_id"
+    t.index ["center_id"], name: "index_membership_payment_collections_on_center_id"
+  end
+
+  create_table "membership_payment_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "membership_type"
+    t.string "membership_name"
+    t.decimal "amount"
+    t.date "date_paid"
+    t.string "status"
+    t.uuid "member_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
+  end
+
   create_table "project_type_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -286,6 +349,43 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_type_category_id"], name: "index_project_types_on_project_type_category_id"
+  end
+
+  create_table "survey_answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "survey_id"
+    t.jsonb "meta"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["survey_id"], name: "index_survey_answers_on_survey_id"
+  end
+
+  create_table "survey_questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "survey_id"
+    t.string "content"
+    t.string "question_type"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "priority"
+    t.index ["survey_id"], name: "index_survey_questions_on_survey_id"
+  end
+
+  create_table "surveys", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status"
+  end
+
+  create_table "user_branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "branch_id"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -314,6 +414,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
   add_foreign_key "account_transaction_collections", "centers"
   add_foreign_key "accounting_entries", "branches"
   add_foreign_key "amortization_schedule_entries", "loans"
+  add_foreign_key "beneficiaries", "members"
   add_foreign_key "billings", "branches"
   add_foreign_key "billings", "centers"
   add_foreign_key "branches", "clusters"
@@ -321,6 +422,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
+  add_foreign_key "legal_dependents", "members"
   add_foreign_key "loans", "branches"
   add_foreign_key "loans", "centers"
   add_foreign_key "loans", "loan_products"
@@ -331,5 +433,10 @@ ActiveRecord::Schema.define(version: 2018_10_30_032608) do
   add_foreign_key "member_accounts", "members"
   add_foreign_key "members", "branches"
   add_foreign_key "members", "centers"
+  add_foreign_key "membership_payment_collections", "branches"
+  add_foreign_key "membership_payment_collections", "centers"
+  add_foreign_key "membership_payment_records", "members"
   add_foreign_key "project_types", "project_type_categories"
+  add_foreign_key "survey_answers", "surveys"
+  add_foreign_key "survey_questions", "surveys"
 end

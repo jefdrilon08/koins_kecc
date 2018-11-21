@@ -1,0 +1,45 @@
+%table.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th
+      %th
+        %center
+          Due Date
+      %th.text-right
+        Amount Due
+      %th.text-right
+        Running Balance
+  %tbody
+    - running_balance = @loan.total_dues
+    - @amortization_schedule.each do |o|
+      %tr
+        %td
+          %center
+            - if o.is_paid
+              .badge.badge-success
+                .fa.fa-check
+            - else
+              .badge.badge-danger
+                .fa.fa-times
+        %td
+          %center
+            %strong
+              - if o.due_date
+                #{o.due_date.strftime("%b %d, %Y")}
+        %td.text-right.text-muted
+          #{number_to_currency(o.amount_due, unit: "")}
+        %td.text-right
+          - running_balance = (running_balance - o.total_paid)
+          = number_to_currency(running_balance, unit: "")
+    %tr
+      %td
+      %td
+        %center
+          %strong
+            Total
+      %td.text-right
+        %strong
+          #{number_to_currency(@loan.total_dues, unit: "")}
+      %td.text-right
+        %strong
+          #{number_to_currency(running_balance, unit: "")}

@@ -3,7 +3,8 @@ module Billings
     DEFAULT_SAVINGS_SUBTYPE = "K-IMPOK"
 
     SAVINGS_SUBTYPES = [
-      "K-IMPOK"
+      "K-IMPOK",
+      "Golden K"
     ]
 
     INSURANCE_SUBTYPES  = [
@@ -18,8 +19,11 @@ module Billings
 
       @active_loans = Loan.active.where(member_id: @member.id)
 
-      @entry_point_loan_products      = LoanProduct.entry_point
-      @non_entry_point_loan_products  = LoanProduct.non_entry_point
+      @members  = Member.active.where(center_id: @member.center.id)
+      valid_loan_product_ids  = Loan.active.where(member_id: @members.pluck(:id)).pluck(:loan_product_id).uniq
+
+      @entry_point_loan_products      = LoanProduct.entry_point.where(id: valid_loan_product_ids)
+      @non_entry_point_loan_products  = LoanProduct.non_entry_point.where(id: valid_loan_product_ids)
 
       @data = {
         member: {
@@ -32,6 +36,7 @@ module Billings
         },
         attendance: true,
         total_expected_collections: 0.00,
+        total_collected: 0.00,
         records: []
       }
     end
@@ -63,6 +68,10 @@ module Billings
       # Totals
       @data[:records].each do |o|
         @data[:total_expected_collections] += o[:amount]
+
+        if o[:record_type] != "WP"
+          @data[:total_collected] += o[:amount]
+        end
       end
 
       @data

@@ -209,7 +209,7 @@ export default class FormPersonalInfo extends React.Component {
                 checked={housingType == "Pag-aari ang lupa"}
                 onChange={this.handleHousingTypeChanged.bind(this)}
               />
-              Pag-aari ang lupa
+              Pag-aari ang lupa at bahay (may titulo)
               <br/>
               <input
                 type="radio"
@@ -217,7 +217,7 @@ export default class FormPersonalInfo extends React.Component {
                 checked={housingType == "Umuupa"}
                 onChange={this.handleHousingTypeChanged.bind(this)}
               />
-              Umuupa
+              Umuupa (sharer or renter)
               <br/>
               <input
                 type="radio"
@@ -225,7 +225,7 @@ export default class FormPersonalInfo extends React.Component {
                 checked={housingType == "Nakikituloy"}
                 onChange={this.handleHousingTypeChanged.bind(this)}
               />
-              Nakikituloy
+              Nakikituloy (libre; mga magulang o extended family)
               <br/>
               <input
                 type="radio"
@@ -233,7 +233,7 @@ export default class FormPersonalInfo extends React.Component {
                 checked={housingType == "Namana"}
                 onChange={this.handleHousingTypeChanged.bind(this)}
               />
-              Namana
+              Namana o na-award pero wala pang titulo
               <br/>
               <input
                 type="radio"
@@ -241,7 +241,7 @@ export default class FormPersonalInfo extends React.Component {
                 checked={housingType == "Nagbabayad ng Rights"}
                 onChange={this.handleHousingTypeChanged.bind(this)}
               />
-              Nagbabayad ng Rights
+              Nagbabayad ng Rights sa lupa, pag-aari ng bahay
             </div>
           </div>
           <div className="col-md-4">
@@ -391,20 +391,20 @@ export default class FormPersonalInfo extends React.Component {
                 <div className="col">
                   <input
                     type="radio"
-                    value="Biyudo/a"
-                    checked={this.props.data.civil_status == "Biyudo/a"}
-                    onChange={this.handleCivilStatusChanged.bind(this)}
-                  />
-                  Biyudo/a
-                </div>
-                <div className="col">
-                  <input
-                    type="radio"
                     value="Hiwalay"
                     checked={this.props.data.civil_status == "Hiwalay"}
                     onChange={this.handleCivilStatusChanged.bind(this)}
                   />
                   Hiwalay
+                </div>
+                <div className="col">
+                  <input
+                    type="radio"
+                    value="Biyudo/a"
+                    checked={this.props.data.civil_status == "Biyudo/a"}
+                    onChange={this.handleCivilStatusChanged.bind(this)}
+                  />
+                  Biyudo/a
                 </div>
               </div>
             </div>

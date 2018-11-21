@@ -6,10 +6,9 @@ module Members
       @member = Member.where(id: @config[:id]).first
 
       if @member.blank?
-        @member = Member.new(
-                    date_of_birth: Date.today - 30.years
-                  )
+        @member = Member.new
       end
+    end
 
     def execute!
       data  = {
@@ -22,7 +21,7 @@ module Members
           first_name: "",
           middle_name: "",
           last_name: "",
-          date_of_birth: Date.today - 30.years,
+          date_of_birth: "",
           occupation: ""
         },
         government_identification_numbers: {
@@ -41,7 +40,10 @@ module Members
           num_months: 0,
           num_years: 0,
           proof: ""
-        }
+        },
+        banks: [],
+        legal_dependents: [],
+        beneficiaries: []
       }
 
       @member_data  = {
@@ -50,7 +52,7 @@ module Members
         middle_name: @member.middle_name || "",
         last_name: @member.last_name || "",
         gender: @member.gender || "Female",
-        date_of_birth: @member.date_of_birth || Date.today - 20.years,
+        date_of_birth: @member.date_of_birth,
         civil_status: @member.civil_status || "Single",
         home_number: @member.home_number || "",
         mobile_number: @member.mobile_number || "",
@@ -59,9 +61,11 @@ module Members
         religion: @member.religion || "",
         data: @member.new_record? ? data : @member.data,
         branch_id: @member.branch.try(:id) || "",
-        center_id: @member.center.try(:id) || ""
+        center_id: @member.center.try(:id) || "",
+        legal_dependents: @member.legal_dependents,
+        beneficiaries: @member.beneficiaries
       }
-    end
+
       @member_data
     end
   end

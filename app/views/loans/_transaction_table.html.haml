@@ -1,0 +1,63 @@
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        %center
+          Date
+      %th
+        Approved By
+      %th.text-right
+        Amount
+      %th{ width: "50%" }
+        Amortization
+      - if debug?
+        %th
+          ID
+  %tbody
+    - @loan_payments.each do |o|
+      %tr
+        %td
+          %center
+            %strong
+              #{o.transacted_at.localtime.strftime("%b %d, %Y")}
+        %td
+          #{o.data["approved_by"]}
+        %td.text-right
+          %strong
+            #{number_to_currency(o.amount, unit: "")}
+        %td
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                  %center
+                    Date
+                %th.text-right
+                  Principal Paid
+                %th.text-right
+                  Interest Paid
+                %th.text-right
+                  Total
+            %tbody
+              - o.data.with_indifferent_access[:amort_entries].each do |a|
+                %tr
+                  %td
+                    %center
+                      %strong
+                        %small
+                          #{a[:due_date].to_date.strftime("%b %d, %Y")}
+                  %td.text-right
+                    .text-muted
+                      %small
+                        #{number_to_currency(a[:principal_paid], unit: "")}
+                  %td.text-right
+                    .text-muted
+                      %small
+                        #{number_to_currency(a[:interest_paid], unit: "")}
+                  %td.text-right
+                    .text-muted
+                      %small
+                        #{number_to_currency(a[:interest_paid].to_f + a[:principal_paid].to_f, unit: "")}
+        - if debug?
+          %td
+            #{o.id}

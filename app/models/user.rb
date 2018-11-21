@@ -31,12 +31,23 @@ class User < ApplicationRecord
 
   attr_accessor :login
 
+  def is_mis?
+    roles.include?("MIS")
+  end
+
+  def is_admin?
+  end
+
   def profile_picture_url
     if self.profile_picture.attached?
       return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
     else
       "#{ENV['HOST']}/#{ ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
     end
+  end
+
+  def to_s
+    full_name
   end
 
   def full_name

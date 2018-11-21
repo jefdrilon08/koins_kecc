@@ -1,0 +1,12 @@
+= render partial: "survey_question_form_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          #survey-question-content
+
+#parameters{ data: { id: "#{params[:survey_question_id]}", survey_id: "#{@survey.id}" } }
+
+= javascript_include_tag "SurveyQuestionUI.min.react"

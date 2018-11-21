@@ -23,7 +23,7 @@ module Accounting
                                                 @end_date,
                                                 @branch.id
                                               )
-                                              .order("accounting_codes.code ASC, accounting_entries.date_posted ASC")
+                                              .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
                                               .group_by(&:accounting_code_id)
 
       dr_accounting_codes = AccountingCode.joins(

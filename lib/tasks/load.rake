@@ -1,4 +1,30 @@
 namespace :load do
+  task :beneficiaries_from_file => :environment do
+    puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertBeneficiariesFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
+  task :legal_dependents_from_file => :environment do
+    puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertLegalDependentsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
   task :billings_from_file => :environment do
     puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 

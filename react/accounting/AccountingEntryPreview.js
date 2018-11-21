@@ -30,6 +30,15 @@ export default class AccountingEntryPreview extends React.Component {
           <span className="text-muted">
             {this.props.data.or_number}
           </span>
+
+          <br/>
+          <strong>
+            AR Number: 
+          </strong>
+          <br/>
+          <span className="text-muted">
+            {this.props.data.ar_number}
+          </span>
         </div>
       );
     }
@@ -98,7 +107,7 @@ export default class AccountingEntryPreview extends React.Component {
 
     // Debit entries
     for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "DR") {
+      if(this.props.journalEntries[i].post_type == "DR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
         if(this.props.status == "pending") {
           btnRemove = <button 
@@ -127,7 +136,7 @@ export default class AccountingEntryPreview extends React.Component {
 
     // Credit entries
     for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "CR") {
+      if(this.props.journalEntries[i].post_type == "CR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
         if(this.props.status == "pending") {
           btnRemove = <button 
@@ -160,7 +169,7 @@ export default class AccountingEntryPreview extends React.Component {
           <div className="row">
             <div className="col-md-6">
               <strong>
-                [REFERENCE NUMBER] - {this.props.datePrepared}
+                {this.props.referenceNumber} - {this.props.datePrepared}
               </strong>
             </div>
             <div className="col-md-6">
