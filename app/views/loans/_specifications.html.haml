@@ -52,7 +52,7 @@
     %th
       Date Released:
     %td.text-right
-      - if @loan.active_or_paid?
+      - if @loan.date_released
         #{@loan.date_released.strftime("%b %d, %Y")}
   %tr
     %th

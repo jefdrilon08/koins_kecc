@@ -101,6 +101,14 @@ module Api
                     config: config
                   ).execute!
 
+          if loan.first_date_of_payment
+            ::Loans::AmortizeDates.new(
+              config: {
+                loan: loan
+              }
+            ).execute!
+          end
+
           ActivityLog.create!(
             content: "#{current_user.full_name} modified loan #{loan.id}",
             activity_type: "modification",
