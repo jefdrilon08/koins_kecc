@@ -28,12 +28,14 @@ memberships:
     is_main: true
     fee: 20.00
     accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
+    payment_default: true
   -
     name: "K-MBA"
     type: "Insurance"
     is_main: true
     fee: 50.00
     accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+    payment_default: false
 
 defaults:
   insurance_deposits:
@@ -46,6 +48,7 @@ defaults:
 
 default_savings_key: "K-IMPOK"
 default_equities_key: "Share Capital"
+default_equities_amount: 100
 
 default_id_fee_accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
 

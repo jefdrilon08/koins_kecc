@@ -60,7 +60,7 @@ module MembershipPaymentCollections
               account_subtype: o.name,
               membership_type: o.type,
               enabled: true,
-              amount: o.fee,
+              amount: o.payment_default == true ? o.fee : 0.00,
               member_id: m.id
             }
 
@@ -82,12 +82,18 @@ module MembershipPaymentCollections
         # EQUITY
         # TODO: Equity rules should be applied
         member_account = MemberAccount.equities.where(member_id: m.id, account_subtype: @default_equities_key).first
+        amount  = 0.00
+
+        if m.pending? and member_account.present?
+          amount  = Settings.default_equities_amount.try(:to_f)
+        end
+
         member_data[:records] << {
           record_type: "EQUITY",
           account_subtype: @default_equities_key,
           enabled: member_account.present?,
           member_account_id: member_account.try(:id),
-          amount: 0.00
+          amount: amount
         }
 
         @data[:records] << member_data
