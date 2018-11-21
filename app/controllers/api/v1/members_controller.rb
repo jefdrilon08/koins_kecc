@@ -3,6 +3,41 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def delete
+        member  = Member.find(params[:id])
+        
+        config  = {
+          member: member,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateDelete.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          member_id         = member.id
+          member_full_name  = member.full_name
+
+          ::Members::Delete.new(
+            config: config
+          ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted member #{member_full_name}",
+            activity_type: "deletion",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def save_survey_answer
         data          = JSON.parse(params[:data]).to_h.with_indifferent_access
         survey_answer = SurveyAnswer.where(id: params[:id]).first

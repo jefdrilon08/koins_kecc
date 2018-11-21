@@ -18,6 +18,7 @@ namespace :api do
     post "/members/save_signature", to: "members#save_signature"
     post "/members/save", to: "members#save"
     post "/members/save_survey_answer", to: "members#save_survey_answer"
+    post "/members/delete", to: "members#delete"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"

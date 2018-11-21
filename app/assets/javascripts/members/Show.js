@@ -2,6 +2,7 @@ var Show  = (function() {
   var $modalGenerateAccessToken;
   var $modalSignature;
   var $modalNewLoan;
+  var $modalDelete;
   var $modalCreateSurvey;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
@@ -12,6 +13,8 @@ var Show  = (function() {
   var $btnConfirmNewLoan;
   var $btnCreateSurvey;
   var $btnConfirmCreateSurvey;
+  var $btnDelete;
+  var $btnConfirmDelete;
   var $selectLoanProduct;
   var $selectSurvey;
   var $message;
@@ -22,6 +25,7 @@ var Show  = (function() {
   var _urlSaveSignature       = "/api/v1/members/save_signature";
   var _urlNewLoan             = "/api/v1/loans/apply";
   var _urlCreateSurvey        = "/api/v1/members/create_survey";
+  var _urlDelete              = "/api/v1/members/delete";
   var _memberId;
   var _authenticityToken;
 
@@ -36,6 +40,7 @@ var Show  = (function() {
     $modalSignature                 = $("#modal-signature");
     $modalNewLoan                   = $("#modal-new-loan");
     $modalCreateSurvey              = $("#modal-create-survey");
+    $modalDelete                    = $("#modal-delete");
     $btnGenerateAccessToken         = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature            = $("#btn-confirm-signature");
@@ -45,6 +50,8 @@ var Show  = (function() {
     $btnCreateSurvey                = $("#btn-create-survey");
     $btnConfirmCreateSurvey         = $("#btn-confirm-create-survey");
     $btnConfirmNewLoan              = $("#btn-confirm-new-loan");
+    $btnDelete                      = $("#btn-delete");
+    $btnConfirmDelete               = $("#btn-confirm-delete");
     $selectLoanProduct              = $("#select-loan-product");
     $selectSurvey                   = $("#select-survey");
 
@@ -53,6 +60,52 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnDelete.on("click", function() {
+      $message.html("");
+      $modalDelete.modal("show");
+    });
+
+    $btnConfirmDelete.on("click", function() {
+      $message.html("");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmDelete.prop("disabled", true);
+
+      $.ajax({
+        url: _urlDelete,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.href="/members";
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmDelete.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnCreateSurvey.on("click", function() {
       $message.html("");
       $modalCreateSurvey.modal("show");

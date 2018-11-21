@@ -21,6 +21,7 @@ class Member < ApplicationRecord
   has_many :loans
   has_many :legal_dependents
   has_many :beneficiaries
+  has_many :member_accounts
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -43,6 +44,10 @@ class Member < ApplicationRecord
 
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
+  end
+
+  def pending?
+    self.status == "pending"
   end
 
   def active?
