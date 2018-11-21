@@ -24,6 +24,16 @@ class AccountingCode < ApplicationRecord
 
   before_validation :load_defaults
 
+  def to_version_2_hash
+    {
+      id: id,
+      name: name,
+      code: code,
+      category: category,
+      data: data
+    }
+  end
+
   def debit_entry?
     ["ASSETS", "EXPENSES"].include?(self.category)
   end
