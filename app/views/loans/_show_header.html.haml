@@ -13,9 +13,10 @@
       (#{@loan.loan_product})
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      .btn#btn-reage
-        .fa.fa-sync
-        Reage
+      - if @loan.active?
+        .btn#btn-reage
+          .fa.fa-sync
+          Reage
       - if @loan.pending?
         = link_to loan_application_form_path(id: @loan.id, member_id: @loan.member), class: 'btn' do
           .fa.fa-pencil-alt

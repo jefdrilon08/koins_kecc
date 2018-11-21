@@ -3,6 +3,29 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def update_first_date_of_payment
+        loan  = Loan.find(params[:id])
+
+        loan.update!(first_date_of_payment: params[:first_date_of_payment])
+
+        ::Loans::AmortizeDates.new(
+          config: {
+            loan: loan
+          }
+        ).execute!
+
+        ActivityLog.create!(
+          content: "#{current_user.full_name} updated loan #{loan.id} first_date_of_payment to #{params[:first_date_of_payment]}",
+          activity_type: "modification",
+          data: {
+            user_id: current_user.id,
+            loan_id: loan.id
+          }
+        )
+
+        render json: { message: "ok" }
+      end
+
       def fetch
         member  = Member.where(id: params[:member_id]).first
 
@@ -24,7 +47,8 @@ module Api
       end
       
       def delete
-        loan  = Loan.where(id: params[:id]).first
+        loan    = Loan.where(id: params[:id]).first
+        member  = loan.member
 
         config  = {
           loan: loan,
@@ -54,7 +78,7 @@ module Api
             }
           )
 
-          render json: { message: "ok" }
+          render json: { message: "ok", id: member.id }
         end
       end
 
