@@ -109,14 +109,16 @@ module Members
       @member.branch  = @branch
       @member.center  = @center
 
-      if @member.new_record?
-        @will_generate_accounts = true
-      end
-
       @member.save!
       @member = Member.find(@member.id)
 
-      if @will_generate_accounts
+      missing_accounts  = ::Members::FetchMissingAccounts.new(
+                            config: {
+                              member: @member
+                            }
+                          ).execute!
+
+      if missing_accounts.size > 0
         ::Members::GenerateMissingAccounts.new(
           config: { member: @member }
         ).execute!
