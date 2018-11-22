@@ -10,6 +10,12 @@ module Members
       # Delete accounts
       @member.member_accounts.delete_all
 
+      # Dleete legal dependents
+      @member.legal_dependents.delete_all
+
+      # Delete beneficiaries
+      @member.beneficiaries.delete_all
+
       # Delete members
       @member.destroy!
     end

@@ -23,6 +23,7 @@
         .fa.fa-times
         Cancel
     - else
-      = link_to administration_cluster_path(branch.cluster), class: 'btn btn-danger' do
-        .fa.fa-times
-        Cancel
+      - if branch.cluster.present?
+        = link_to administration_cluster_path(branch.cluster), class: 'btn btn-danger' do
+          .fa.fa-times
+          Cancel
