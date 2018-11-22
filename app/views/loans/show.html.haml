@@ -27,6 +27,10 @@
               = render partial: "transaction_table"
             #activity-logs.tab-pane{:role => "tabpanel"}
               = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
+          - if debug?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@loan.to_json))}
 
 = render partial: "loans/modals/reage"
 = render partial: "loans/modals/delete"

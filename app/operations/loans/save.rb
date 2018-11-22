@@ -78,7 +78,8 @@ module Loans
                                   amount: @loan.principal,
                                   term: @loan.term,
                                   num_installments: @loan.num_installments,
-                                  particular: @loan.data.with_indifferent_access[:voucher][:particular]
+                                  particular: @loan.data.with_indifferent_access[:voucher][:particular],
+                                  loan: @loan
                                 }
                               ).execute!
 

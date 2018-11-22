@@ -54,6 +54,10 @@ class Member < ApplicationRecord
     self.status == "active"
   end
 
+  def insurance_pending?
+    self.insurance_status == "pending"
+  end
+
   def fetch_government_id(type)
     data_hash = self.data.with_indifferent_access[:government_identification_numbers]
 

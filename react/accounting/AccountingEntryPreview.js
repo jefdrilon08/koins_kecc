@@ -45,6 +45,8 @@ export default class AccountingEntryPreview extends React.Component {
   };
 
   renderCdbParameters() {
+    console.log("CDB Parameters: ");
+    console.log(this.props);
     if(this.props.book == "CDB") {
       return (
         <div className="row">
