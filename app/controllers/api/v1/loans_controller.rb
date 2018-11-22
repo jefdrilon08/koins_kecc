@@ -3,6 +3,29 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def approve
+        loan  = Loan.where(id: params[:id]).first
+
+        config  = {
+          loan: loan,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateApprove.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          loan  = ::Loans::Approve.new(
+                    config: config
+                  ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def update_date_released
         loan  = Loan.find(params[:id])
 

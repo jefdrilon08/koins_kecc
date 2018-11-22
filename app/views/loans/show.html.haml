@@ -32,6 +32,7 @@
               %code
                 #{JSON.pretty_generate(JSON.parse(@loan.to_json))}
 
+= render partial: "loans/modals/approve"
 = render partial: "loans/modals/reage"
 = render partial: "loans/modals/delete"
 = render partial: "loans/modals/first_date_of_payment"

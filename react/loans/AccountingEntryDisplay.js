@@ -27,8 +27,6 @@ export default class AccountingEntryDisplay extends React.Component {
       member_id: this.props.memberId
     }
 
-    console.log(data);
-
     $.ajax({
       url: "/api/v1/loans/fetch",
       data: data,
