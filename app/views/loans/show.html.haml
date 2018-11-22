@@ -17,6 +17,10 @@
           .tab-content
             #details.tab-pane.active.show{:role => "tabpanel"}
               = render partial: "details"
+              %hr
+              %h5
+                Accounting Entry
+              #loan-accounting-entry-content
             #amortization-table.tab-pane{:role => "tabpanel"}
               = render partial: "amortization_table"
             #payments-table.tab-pane{:role => "tabpanel"}
@@ -29,9 +33,10 @@
 = render partial: "loans/modals/first_date_of_payment"
 = render partial: "templates/error_list"
 
-= javascript_include_tag "loans/Show.js"
+#parameters{ data: { id: @loan.id, member_id: @loan.member.id } }
 
-#parameters{ data: { id: @loan.id } }
+= javascript_include_tag "loans/Show.js"
+= javascript_include_tag "LoanAccountingEntry.min.react"
 
 :javascript
   $(document).ready(function() {

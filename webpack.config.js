@@ -19,6 +19,7 @@ module.exports = {
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanApplicationForm: "./react/loans/ApplicationForm.js",
+    LoanAccountingEntry: "./react/loans/AccountingEntry.js",
     MemberSurveyAnswerUI: "./react/members/SurveyAnswerUI.js"
   },
   module: {

@@ -30,7 +30,7 @@ module Api
         member  = Member.where(id: params[:member_id]).first
 
         if member.blank?
-          render json: { message: "member not found" }, status: 402
+          render json: { message: "member not found" }, status: 400
         else
           loan    = Loan.where(id: params[:id]).first
 
