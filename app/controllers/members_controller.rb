@@ -55,6 +55,7 @@ class MembersController < ApplicationController
 
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
+    @equity_accounts    = MemberAccount.equities.where(member_id: @member.id)
 
     @surveys        = Survey.all.order("name ASC")
     @survey_answers = SurveyAnswer.where(

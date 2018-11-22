@@ -4,7 +4,11 @@
       .fa.fa-piggy-bank
       Savings
   %li.breadcrumb-item
-    #{@savings_account.member.full_name} - #{@savings_account.account_subtype}
+    = link_to member_path(@savings_account.member) do
+      .fa.fa-user
+      #{@savings_account.member.full_name}
+  %li.breadcrumb-item
+    #{@savings_account.account_subtype}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       .btn
