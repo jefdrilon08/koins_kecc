@@ -14,11 +14,17 @@ var Show  = (function() {
   var $modalFirstDateOfPayment;
   var $inputFirstDateOfPayment;
 
+  var $btnDateReleased;
+  var $btnConfirmDateReleased;
+  var $modalDateReleased;
+  var $inputDateReleased;
+
   var templateErrorList;
 
-  var _urlReage   = "/api/v1/loans/reage";
-  var _urlDelete  = "/api/v1/loans/delete";
+  var _urlReage               = "/api/v1/loans/reage";
+  var _urlDelete              = "/api/v1/loans/delete";
   var _urlFirstDateOfPayment  = "/api/v1/loans/update_first_date_of_payment";
+  var _urlDateReleased        = "/api/v1/loans/update_date_released";
 
   var _loanId;
   var _authenticityToken;
@@ -39,13 +45,66 @@ var Show  = (function() {
     $modalFirstDateOfPayment      = $("#modal-first-date-of-payment");
     $inputFirstDateOfPayment      = $("#input-first-date-of-payment");
 
+    $btnDateReleased        = $("#btn-date-released");
+    $btnConfirmDateReleased = $("#btn-confirm-date-released");
+    $modalDateReleased      = $("#modal-date-released");
+    $inputDateReleased      = $("#input-date-released");
+
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
-    $btnFirstDateOfPayment.on("click", function() {
-      $modalFirstDateOfPayment.modal("show");
+    $btnDateReleased.on("click", function() {
       $message.html("");
+      $modalDateReleased.modal("show");
+    });
+
+    $btnConfirmDateReleased.on("click", function() {
+      var dateReleased  = $inputDateReleased.val();
+
+      $btnConfirmDateReleased.prop("disabled", true);
+      $inputDateReleased.prop("disabled", true);
+
+      $.ajax({
+        url: _urlDateReleased,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: _loanId,
+          date_released: dateReleased,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmDateReleased.prop("disabled", false);
+            $inputDateReleased.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnFirstDateOfPayment.on("click", function() {
+      $message.html("");
+      $modalFirstDateOfPayment.modal("show");
     });
 
     $btnConfirmFirstDateOfPayment.on("click", function() {

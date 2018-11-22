@@ -1,0 +1,21 @@
+#modal-date-released.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Update Date Released
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+          %label
+            Date Released
+          = text_field_tag :date_released, @loan.date_released, type: "date", class: "form-control", id: "input-date-released"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-date-released.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
