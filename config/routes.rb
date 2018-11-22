@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   get "/members/:id/survey_answers/:survey_answer_id", to: "members#survey_answer", as: :member_survey_answer
   get "/members/:id/survey_answers/:survey_answer_id/form", to: "members#survey_answer_form", as: :member_survey_answer_form
 
+  resources :members, only: [] do
+    resources :member_shares, except: [:index], controller: "members/member_shares"
+  end
+
   # Loans
   resources :loans, only: [:index, :show] do
   end

@@ -27,7 +27,8 @@
               %td
                 #{o.category}
               %td
-                #{o.data.with_indifferent_access[:major_account]}
+                - if o.data
+                  #{o.data.with_indifferent_access[:major_account]}
 
 :javascript
   $(document).ready(function() {
