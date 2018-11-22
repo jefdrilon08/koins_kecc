@@ -18,6 +18,9 @@
     %a.nav-link{"aria-controls" => "survey_answers", "aria-selected" => "false", "data-toggle" => "tab", :href => "#survey_answers", :role => "tab"}
       Surveys
   %li.nav-item
+    %a.nav-link{"aria-controls" => "member_shares", "aria-selected" => "false", "data-toggle" => "tab", :href => "#member_shares", :role => "tab"}
+      Shares
+  %li.nav-item
     %a.nav-link{"aria-controls" => "activity_logs", "aria-selected" => "false", "data-toggle" => "tab", :href => "#activity_logs", :role => "tab"}
       Activity Logs
 .tab-content
@@ -33,5 +36,7 @@
     = render partial: "equity_accounts"
   #survey_answers.tab-pane{:role => "tabpanel"}
     = render partial: "members/survey_answers", locals: { survey_answers: @survey_answers }
+  #member_shares.tab-pane{:role => "tabpanel"}
+    = render partial: "members/member_shares", locals: { member_shares: @member_shares }
   #activity_logs.tab-pane{:role => "tabpanel"}
     = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }

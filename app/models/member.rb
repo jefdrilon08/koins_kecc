@@ -22,6 +22,7 @@ class Member < ApplicationRecord
   has_many :legal_dependents
   has_many :beneficiaries
   has_many :member_accounts
+  has_many :member_shares
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true

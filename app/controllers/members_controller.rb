@@ -57,6 +57,8 @@ class MembersController < ApplicationController
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
     @equity_accounts    = MemberAccount.equities.where(member_id: @member.id)
 
+    @member_shares  = @member.member_shares.order("created_at ASC")
+
     @surveys        = Survey.all.order("name ASC")
     @survey_answers = SurveyAnswer.where(
                         "meta -> 'member' ->> 'id' = ?",
