@@ -17,6 +17,15 @@ module Administration
     def create
       @loan_product = LoanProduct.new(loan_product_params)
 
+      ActivityLog.create!(
+        content: "#{current_user.full_name} created loan_product #{@loan_product}",
+        activity_type: "create",
+        data: {
+          user_id: current_user.id,
+          loan_product: @loan_product
+        }
+      )
+
       if @loan_product.save
         redirect_to administraiton_loan_product_path(@loan_product)
       else
@@ -32,7 +41,19 @@ module Administration
       @loan_product = LoanProduct.find(params[:id])
 
       if @loan_product.update(loan_product_params)
+
+        ActivityLog.create!(
+          content: "#{current_user.full_name} updated loan_product #{@loan_product}",
+          activity_type: "modification",
+          data: {
+            user_id: current_user.id,
+            loan_product: @loan_product
+          }
+        )
+
+        redirect_to administration_loan_product_path(@loan_product)
       else
+        render :edit
       end
     end
 

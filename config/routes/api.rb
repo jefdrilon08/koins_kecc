@@ -105,6 +105,9 @@ namespace :api do
       get "/survey_questions/fetch", to: "survey_questions#fetch"
       post "/survey_questions/save", to: "survey_questions#save"
       post "/survey_questions/delete", to: "survey_questions#delete"
+
+      # Loan Product
+      post "/loan_products/delete", to: "loan_products#delete"
     end
   end
 end

@@ -292,7 +292,7 @@ module Loans
                 amount: amount
               }
 
-              temp_amount -= amount
+              #temp_amount -= amount
             end
           end
         elsif deduction_type == "member_type_deduction_ratio"

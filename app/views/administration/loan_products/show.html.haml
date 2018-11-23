@@ -1,0 +1,68 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %h2
+            #{@loan_product}
+          %hr
+          %table.table.table-bordered.table-hover.table-sm 
+            %tr
+              %th{ width: "20%" }
+                Name
+              %td
+                #{@loan_product}
+            %tr
+              %th
+                Monthly I.R.
+              %td
+                #{@loan_product.monthly_interest_rate}
+            %tr
+              %th
+                Loan Range
+              %td
+                #{number_to_currency(@loan_product.min_loan_amount, unit: "")} - #{number_to_currency(@loan_product.max_loan_amount, unit: "")} (Denomination: #{number_to_currency(@loan_product.denomination, unit: "")})
+            %tr
+              %th
+                Insured
+              %td
+                - if @loan_product.insured
+                  .badge.badge-success
+                    .fa.fa-check
+                    Yes
+                - else
+                  .badge.badge-danger
+                    .fa.fa-times
+                    No
+            %tr
+              %th
+                Is Entry Point
+              %td
+                - if @loan_product.is_entry_point
+                  .badge.badge-success
+                    .fa.fa-check
+                    Yes
+                - else
+                  .badge.badge-danger
+                    .fa.fa-times
+                    No
+
+#parameters{ data: { id: @loan_product.id } }
+
+= render partial: "administration/loan_products/modals/delete"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "administration/loan_products/Show.js"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var id                = $("#parameters").data('id');
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });

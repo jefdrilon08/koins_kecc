@@ -22,11 +22,12 @@
     - @loan_products.each do |o|
       %tr
         %td
-          %strong
-            #{o.name}
-          %br
-          %small
-            #{o.id}
+          = link_to administration_loan_product_path(o) do
+            %strong
+              #{o.name}
+            %br
+            %small
+              #{o.id}
         %td.text-right
           #{number_to_currency(o.min_loan_amount, unit: "")}
         %td.text-right

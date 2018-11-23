@@ -70,10 +70,10 @@ module Members
 
       ActivityLog.create!(
         content: "#{current_user.full_name} deleted member_share #{certificate_number} of #{@member.full_name}",
-        activity_type: "modification",
+        activity_type: "delete",
         data: {
           user_id: current_user.id,
-          member_share: @member_share
+          certificate_number: certificate_number
         }
       )
 
