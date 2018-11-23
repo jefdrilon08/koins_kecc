@@ -22,7 +22,16 @@ module Api
                     config: config
                   ).execute!
 
-          render json: { message: "ok" }
+          ActivityLog.create!(
+            content: "#{current_user.full_name} approved loan #{loan.id}",
+            activity_type: "approval",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id
+            }
+          )
+
+          render json: { message: "ok", id: loan.id }
         end
       end
 

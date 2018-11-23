@@ -1,6 +1,6 @@
 module Accounting
   module AccountingEntries
-    class Save < AppValidator
+    class Save
       def initialize(config:)
         @config = config
 

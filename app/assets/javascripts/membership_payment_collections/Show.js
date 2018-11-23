@@ -28,6 +28,7 @@ var Show  = (function() {
     });
 
     $btnConfirmApprove.on("click", function() {
+      $message.html("Loading...");
       $btnConfirmApprove.prop("disabled", true);
 
       $.ajax({
