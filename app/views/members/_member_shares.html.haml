@@ -12,7 +12,7 @@
         %th
           Certificate Number
         %th
-          Created At
+          Date of Issue
     %tbody
       - member_shares.each do |o|
         %tr
@@ -20,4 +20,5 @@
             = link_to member_member_share_path(@member, o) do
               #{o.certificate_number}
           %td
-            #{o.created_at.localtime.strftime("%b %d, %Y %H:%M")}
+            - if o.date_of_issue
+              #{o.date_of_issue.strftime("%B %d, %Y")}

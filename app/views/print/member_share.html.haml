@@ -1,0 +1,33 @@
+:css
+  .member-details {
+    margin: 116px 0px 0px 250px;
+  }
+
+  .member-name {
+    margin-top: 265px;
+    max-width: 900px;
+  }
+
+  .member-recognition-month {
+    margin-left: 105px;
+  }
+
+  .member-recognition-year {
+    margin-left: 135px;
+  }
+
+  #member-certificate {
+  }
+
+#member-certificate
+  .member-name
+    %center
+      %h1
+        #{@member_share_data[:member_full_name]}
+  .member-details
+    %label
+      #{@member_share_data[:date_of_issue_day]}
+    %label.member-recognition-month
+      #{::Utils::MonthToFilipino.new(@member_share_data[:date_of_issue_month].to_i).execute!.capitalize}
+    %label{ class: "member-recognition-year" }
+      #{@member_share_data[:date_of_issue_year]}

@@ -10,6 +10,7 @@ module Loaders
           :id,
           :member_id,
           :certificate_number,
+          :date_of_issue,
           :data
         ]
 
