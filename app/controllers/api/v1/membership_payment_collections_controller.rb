@@ -9,6 +9,45 @@ module Api
         render json: membership_payment_collection
       end
 
+      def add_member
+        config  = {
+          membership_payment_collection:  MembershipPaymentCollection.where(id: params[:id]).first,
+          member: Member.where(id: params[:member_id]).first,
+          user: current_user
+        }
+
+        errors  = ::MembershipPaymentCollections::ValidateAddMember.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          o = ::MembershipPaymentCollections::AddMember.new(
+                config: config
+              ).execute!
+
+          render json: { id: o.id }
+        end
+      end
+
+      def fetch_members
+        membership_payment_collection = MembershipPaymentCollection.find(params[:id])
+
+        members = Member.active.where(
+                    center_id: membership_payment_collection.center_id
+                  ).where.not(
+                    id: membership_payment_collection.member_ids
+                  ).order("last_name ASC").map{ |o|
+                    {
+                      id: o.id,
+                      name: o.full_name
+                    }
+                  }
+
+        render json: { members: members }
+      end
+
       def update_particular
         membership_payment_collection = MembershipPaymentCollection.find(params[:id])
         data                          = membership_payment_collection.try(:data).try(:with_indifferent_access)

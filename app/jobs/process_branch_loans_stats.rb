@@ -1,5 +1,5 @@
 class ProcessBranchLoansStats < ApplicationJob
-  queue_as "process_branch_loans_stats"
+  queue_as :default
 
   def perform(args)
     record  = args[:record]

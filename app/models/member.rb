@@ -55,6 +55,10 @@ class Member < ApplicationRecord
     self.status == "active"
   end
 
+  def not_active?
+    self.status != "active"
+  end
+
   def insurance_pending?
     self.insurance_status == "pending"
   end

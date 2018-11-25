@@ -55,5 +55,6 @@ Rails.application.config.assets.precompile += [
   "BranchLoanProductStats.min.react.js",
   "LoanApplicationForm.min.react.js",
   "LoanAccountingEntry.min.react.js",
-  "MemberSurveyAnswerUI.min.react.js"
+  "MemberSurveyAnswerUI.min.react.js",
+  "DashboardMain.min.react.js"
 ]

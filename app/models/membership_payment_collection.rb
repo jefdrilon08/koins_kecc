@@ -14,6 +14,23 @@ class MembershipPaymentCollection < ApplicationRecord
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
 
+  def not_pending?
+    self.status != "pending"
+  end
+
+  def member_ids
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:member_id].present?
+          records << oo[:member_id]
+        end
+      end
+    end
+
+    records.uniq
+  end
+
   def id_payments
     records = []
     self.data.with_indifferent_access[:records].each do |o|

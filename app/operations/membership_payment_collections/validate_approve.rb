@@ -32,6 +32,13 @@ module MembershipPaymentCollections
         }
       end
 
+      if @data.present? and @data[:records].size == 0
+        @errors[:messages] << {
+          key: "records",
+          message: "no records found"
+        }
+      end
+
       #not_yet_implemented!
 
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }

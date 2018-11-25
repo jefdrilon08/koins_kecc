@@ -70,6 +70,8 @@ namespace :api do
     post "/membership_payment_collections/update_ar_number", to: "membership_payment_collections#update_ar_number"
     post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
     get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
+    get "/membership_payment_collections/fetch_members", to: "membership_payment_collections#fetch_members"
+    post "/membership_payment_collections/add_member", to: "membership_payment_collections#add_member"
 
     # Survey Answers
     post "/survey_answers", to: "survey_answers#create"

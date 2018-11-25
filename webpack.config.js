@@ -20,7 +20,8 @@ module.exports = {
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanApplicationForm: "./react/loans/ApplicationForm.js",
     LoanAccountingEntry: "./react/loans/AccountingEntry.js",
-    MemberSurveyAnswerUI: "./react/members/SurveyAnswerUI.js"
+    MemberSurveyAnswerUI: "./react/members/SurveyAnswerUI.js",
+    DashboardMain: "./react/dashboard/Main.js"
   },
   module: {
     rules: [
