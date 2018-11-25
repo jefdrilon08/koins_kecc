@@ -8,16 +8,23 @@ class ProcessBranchLoansStats < ApplicationJob
 
     record.update!(status: "processing")
 
-    config  = {
-      id: record.id,
-      branch: branch,
-      as_of: as_of,
-      include_centers: args[:include_centers],
-      data_store_type: args[:data_store_type]
-    }
 
-    data_store  = ::DataStores::SaveBranchLoansStats.new(
-                    config: config
-                  ).execute!
+    begin 
+      config  = {
+        id: record.id,
+        branch: branch,
+        as_of: as_of,
+        include_centers: args[:include_centers],
+        data_store_type: args[:data_store_type]
+      }
+
+      data_store  = ::DataStores::SaveBranchLoansStats.new(
+                      config: config
+                    ).execute!
+    rescue
+      record.update!(
+        status: "error"
+      )
+    end
   end
 end

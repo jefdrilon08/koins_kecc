@@ -1,5 +1,5 @@
 class DataStore < ApplicationRecord
-  STATUSES = ["processing", "done"]
+  STATUSES = ["processing", "done", "error"]
 
   validates :meta, presence: true
   validates :data, presence: true
@@ -25,5 +25,9 @@ class DataStore < ApplicationRecord
 
   def done?
     self.status == "done"
+  end
+
+  def error?
+    self.status == "error"
   end
 end
