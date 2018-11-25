@@ -1,5 +1,42 @@
+###############################
+# STATIC VALUES               #
+###############################
+
 company_name: "KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE"
 company_address: "5 Don Francisco St, Don Enrique Heights, Quezon Cty"
+
+###############################
+
+###############################
+#   MEMBERSHIP CONFIGURATION  #
+###############################
+
+memberships:
+  -
+    name: "K-KOOP"
+    type: "Cooperative"
+    is_main: true
+    fee: 20.00
+    accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
+    payment_default: true
+  -
+    name: "K-MBA"
+    type: "Insurance"
+    is_main: true
+    fee: 50.00
+    accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+    payment_default: false
+
+################################
+
+###############################
+# DEFAULT VALUES              #
+###############################
+
+default_savings_key: "K-IMPOK"
+default_equities_key: "Share Capital"
+default_equities_amount: 100.00
+default_id_fee_accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
 
 default_member_accounts:
   -
@@ -21,21 +58,6 @@ default_member_accounts:
     account_type: "EQUITY"
     account_subtype: "CBU"
 
-memberships:
-  -
-    name: "K-KOOP"
-    type: "Cooperative"
-    is_main: true
-    fee: 20.00
-    accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
-    payment_default: true
-  -
-    name: "K-MBA"
-    type: "Insurance"
-    is_main: true
-    fee: 50.00
-    accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-    payment_default: false
 
 defaults:
   insurance_deposits:
@@ -46,11 +68,7 @@ defaults:
       account_subtype: "Retirement Fund"
       amount: 5.00
 
-default_savings_key: "K-IMPOK"
-default_equities_key: "Share Capital"
-default_equities_amount: 100.00
-
-default_id_fee_accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
+################################
 
 insurance_accounting_codes:
   -
@@ -78,6 +96,10 @@ branch_accounting_codes:
     branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"                              #batasan
     cash_in_bank_accounting_code_id: "2d5b8dcb-4f00-4672-a44e-e9c315e36dde"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+
+###############################
+# LOAN PRODUCT CONFIG         #
+###############################
 
 loan_products:
   -
@@ -1930,3 +1952,4 @@ loan_product_accounting_codes:
     loan_product_id: "0093eb80-ec9d-45e1-9f80-73e678fea145"                         # K-TRABAHO
     receivable_accounting_code_id: "c601accc-3f7c-4789-af2a-d6927e42ffd1"
     interest_receivable_accounting_code_id: "fe904bce-efd4-417d-bf8d-f52ea96b7f1b"
+###############################
