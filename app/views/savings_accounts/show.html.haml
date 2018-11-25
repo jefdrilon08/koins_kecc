@@ -25,10 +25,17 @@
                 %tr
                   %td
                     %center
-                      #{o.transacted_at}
+                      #{o.transacted_at.localtime.strftime("%b %d, %Y")}
                   %td
                     %center
-                      #{o.transaction_type}
+                      - if o.deposit?
+                        .badge.badge-success
+                          .fa.fa-download
+                          Deposit
+                      - elsif o.withdraw?
+                        .badge.badge-info
+                          .fa.fa-upload
+                          Withdraw
                   %td.text-right.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
                   %td.text-right
