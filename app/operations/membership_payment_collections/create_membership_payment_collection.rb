@@ -90,6 +90,8 @@ module MembershipPaymentCollections
           amount  = Settings.default_equities_amount.try(:to_f) || 0.00
         end
 
+        member_data[:total_collected] += amount
+
         member_data[:records] << {
           record_type: "EQUITY",
           account_subtype: @default_equities_key,
