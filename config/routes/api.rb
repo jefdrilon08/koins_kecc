@@ -79,6 +79,7 @@ namespace :api do
 
     namespace :data_stores do
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
+      post "/member_counts/queue", to: "member_counts#queue"
     end
 
     namespace :epassbook do

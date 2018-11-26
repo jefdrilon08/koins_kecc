@@ -1,0 +1,57 @@
+%h5
+  As Of: #{@record.meta.with_indifferent_access[:as_of]}
+%table.table.table-bordered.table-hover.table-sm
+  %tr
+    %th{ width: "50%" }
+    %th.text-center
+      Male
+    %th.text-center
+      Female
+    %th.text-center
+      Others
+    %th.text-center
+      Total
+  %tr
+    %th
+      Pure Savers
+    %td.text-center
+      #{@data[:counts][:pure_savers][:male]}
+    %td.text-center
+      #{@data[:counts][:pure_savers][:female]}
+    %td.text-center
+      #{@data[:counts][:pure_savers][:others]}
+    %td.text-center
+      #{@data[:counts][:pure_savers][:total]}
+  %tr
+    %th
+      Active Loaners
+    %td.text-center
+      #{@data[:counts][:loaners][:male]}
+    %td.text-center
+      #{@data[:counts][:loaners][:female]}
+    %td.text-center
+      #{@data[:counts][:loaners][:others]}
+    %td.text-center
+      #{@data[:counts][:loaners][:total]}
+  %tr.bg-info
+    %th
+      Active Members
+    %td.text-center
+      #{@data[:counts][:active_members][:male]}
+    %td.text-center
+      #{@data[:counts][:active_members][:female]}
+    %td.text-center
+      #{@data[:counts][:active_members][:others]}
+    %td.text-center
+      #{@data[:counts][:active_members][:total]}
+  %tr.bg-danger
+    %th
+      Pending
+    %td.text-center
+      #{@data[:counts][:pending_members][:male]}
+    %td.text-center
+      #{@data[:counts][:pending_members][:female]}
+    %td.text-center
+      #{@data[:counts][:pending_members][:others]}
+    %td.text-center
+      #{@data[:counts][:pending_members][:total]}

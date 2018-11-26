@@ -57,12 +57,18 @@ Rails.application.routes.draw do
 
   # Data Stores
   namespace :data_stores do
+    get "/member_counts", to: "member_counts#index"
+    get "/member_counts/:id", to: "member_counts#show"
+    delete "/member_counts/:id", to: "member_counts#destroy"
+
     get "/branch_loans_stats", to: "branch_loans_stats#index"
     get "/branch_loans_stats/:id", to: "branch_loans_stats#show"
     delete "/branch_loans_stats/:id", to: "branch_loans_stats#destroy"
+
     get "/branch_with_centers_loans_stats", to: "branch_with_centers_loans_stats#index"
     get "/branch_with_centers_loans_stats/:id", to: "branch_with_centers_loans_stats#show"
     delete "/branch_with_centers_loans_stats/:id", to: "branch_with_centers_loans_stats#destroy"
+
   end
 
   namespace :accounting do
