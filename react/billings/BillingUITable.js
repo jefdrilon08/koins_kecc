@@ -71,7 +71,7 @@ export default class BillingUITable extends React.Component {
     headers.push(
       <th  key={"h-total"} style={{minWidth: "40px"}}>
         <center>
-          TOTAL
+          CP
         </center>
       </th>
     );
