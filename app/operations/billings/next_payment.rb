@@ -120,7 +120,7 @@ module Billings
 
         defaults  = Settings.try(:defaults).try(:insurance_deposits)
 
-        if defaults.present?
+        if defaults.present? and @member.loans.size <= 1
           defaults.each do |o|
             if o.account_subtype == insurance_subtype
               data[:amount] = o.amount

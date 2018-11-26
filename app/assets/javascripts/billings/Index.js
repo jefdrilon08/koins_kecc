@@ -42,6 +42,10 @@ var Index = (function() {
       var branchId        = $selectBranch.val();
       var centerId        = $selectCenter.val();
 
+      $message.html(
+        "Loading..."
+      );
+
       $btnConfirmNewTransaction.prop("disabled", true);
       $selectBranch.prop("disabled", true);
       $selectCenter.prop("disabled", true);
