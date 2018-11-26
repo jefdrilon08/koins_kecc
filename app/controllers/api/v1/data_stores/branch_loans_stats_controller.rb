@@ -49,6 +49,7 @@ module Api
                           include_centers: @include_centers
                         },
                         data: {
+                          status: "processing"
                         }
                       )
           end
