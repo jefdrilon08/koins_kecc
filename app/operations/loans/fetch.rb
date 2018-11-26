@@ -37,7 +37,7 @@ module Loans
                       date_requested: Date.today,
                       date_of_check: "",
                       bank_transaction_reference_number: "",
-                      particular: ""
+                      particular: build_default_loan_particular!
                     },
                     co_makers: [],
                     co_maker_two: "",
@@ -98,6 +98,10 @@ module Loans
       }
 
       @data
+    end
+
+    def build_default_loan_particular!
+      "Release of Loan - #{@member.first_name} #{@member.first_name} #{@member.last_name} cv# ________ ck# _______ clip# _______"
     end
   end
 end
