@@ -28,6 +28,7 @@ module DataStores
         }
 
         @data = {
+          status: "processing"
         }
       else
         @meta = @data_store.meta.with_indifferent_access
