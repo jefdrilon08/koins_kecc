@@ -25,6 +25,12 @@ module Billings
       @entry_point_loan_products      = LoanProduct.entry_point.where(id: valid_loan_product_ids)
       @non_entry_point_loan_products  = LoanProduct.non_entry_point.where(id: valid_loan_product_ids)
 
+      @settings_savings_deposits  = Settings.defaults.savings_deposits
+
+      if @settings_savings_deposits.blank?
+        raise "Settings for default.savings_deposits not found"
+      end
+
       @data = {
         member: {
           id: @member.id,
@@ -146,6 +152,18 @@ module Billings
       if member_account.present?
         data[:enabled]            = true
         data[:member_account_id]  = member_account.id
+      end
+
+      # Default amount
+      loan_amount = @member.loans.active.sum(:principal)
+      @settings_savings_deposits.each do |o|
+        if o.account_subtype == savings_subtype
+          o.regular_loan_deposits.each do |rs|
+            if loan_amount >= rs.min_amount and loan_amount < rs.max_amount
+              data[:amount] = rs.deposit_amount
+            end
+          end
+        end
       end
 
       data
