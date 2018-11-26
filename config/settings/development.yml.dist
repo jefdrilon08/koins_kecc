@@ -67,6 +67,90 @@ defaults:
     -
       account_subtype: "Retirement Fund"
       amount: 5.00
+  savings_deposits:
+    -
+      account_subtype: "K-IMPOK"
+      regular_loan_deposits:
+        -
+          min_amount: 1000
+          max_amount: 2000
+          deposit_amount: 74
+        -
+          min_amount: 2000
+          max_amount: 3000
+          deposit_amount: 77
+        -
+          min_amount: 3000
+          max_amount: 4000
+          deposit_amount: 81
+        -
+          min_amount: 4000
+          max_amount: 5000
+          deposit_amount: 85
+        -
+          min_amount: 5000
+          max_amount: 6000
+          deposit_amount: 89
+        -
+          min_amount: 6000
+          max_amount: 7000
+          deposit_amount: 92
+        -
+          min_amount: 7000
+          max_amount: 8000
+          deposit_amount: 96
+        -
+          min_amount: 8000
+          max_amount: 9000
+          deposit_amount: 100
+        -
+          min_amount: 9000
+          max_amount: 10000
+          deposit_amount: 104
+        -
+          min_amount: 10000
+          max_amount: 11000
+          deposit_amount: 107
+        -
+          min_amount: 11000
+          max_amount: 12000
+          deposit_amount: 111
+        -
+          min_amount: 12000
+          max_amount: 13000
+          deposit_amount: 115
+        -
+          min_amount: 13000
+          max_amount: 14000
+          deposit_amount: 118
+        -
+          min_amount: 14000
+          max_amount: 15000
+          deposit_amount: 122
+        -
+          min_amount: 15000
+          max_amount: 16000
+          deposit_amount: 126
+        -
+          min_amount: 16000
+          max_amount: 17000
+          deposit_amount: 130
+        -
+          min_amount: 17000
+          max_amount: 18000
+          deposit_amount: 133
+        -
+          min_amount: 18000
+          max_amount: 19000
+          deposit_amount: 137
+        -
+          min_amount: 19000
+          max_amount: 20000
+          deposit_amount: 141
+        -
+          min_amount: 20000
+          max_amount: 10000000
+          deposit_amount: 145
 
 ################################
 
