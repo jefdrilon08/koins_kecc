@@ -33,7 +33,8 @@ export default class BillingUITable extends React.Component {
       currentMember: false,
       modalIsOpen: false,
       isLoading: false,
-      errors: false
+      errors: false,
+      grandTotal: 0.00
     };
   }
 
@@ -76,6 +77,14 @@ export default class BillingUITable extends React.Component {
       </th>
     );
 
+    headers.push(
+      <th  key={"h-grand-total"} style={{minWidth: "40px"}}>
+        <center>
+          TOTAL
+        </center>
+      </th>
+    );
+
     return headers;
   }
 
@@ -101,6 +110,18 @@ export default class BillingUITable extends React.Component {
     });
   }
 
+  fetchGrandTotal() {
+    var t = 0.00
+    for(var i = 0; i < this.props.data.data.records.length; i++) {
+      for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
+        var paymentRecord = this.props.data.data.records[i].records[j];
+        t += parseFloat(paymentRecord.amount);
+      }
+    }
+
+    return t;
+  }
+
 
   buildRecords() {
     var records = [];
@@ -109,6 +130,8 @@ export default class BillingUITable extends React.Component {
       var components  = [];
       var record      = this.props.data.data.records[i];
       var member      = record.member;
+
+      var grandTotal  = 0.00
 
       if(this.props.data.status == "pending") {
         components.push(
@@ -156,6 +179,7 @@ export default class BillingUITable extends React.Component {
 
       for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
         var paymentRecord = this.props.data.data.records[i].records[j];
+
         if(paymentRecord.record_type == "LOAN_PAYMENT" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
@@ -177,6 +201,9 @@ export default class BillingUITable extends React.Component {
               </td>
             );
           }
+
+          // Add grand total
+          grandTotal += parseFloat(paymentRecord.amount);
         } else if(paymentRecord.record_type == "SAVINGS" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
@@ -191,12 +218,18 @@ export default class BillingUITable extends React.Component {
                 </strong>
               </td>
             );
+
+            // Add grand total
+            grandTotal += parseFloat(paymentRecord.amount);
           } else {
             components.push(
               <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
+
+            // Add grand total
+            grandTotal += parseFloat(paymentRecord.amount);
           }
         } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
@@ -212,12 +245,18 @@ export default class BillingUITable extends React.Component {
                 </strong>
               </td>
             );
+
+            // Add grand total
+            grandTotal += parseFloat(paymentRecord.amount);
           } else {
             components.push(
               <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
+
+            // Add grand total
+            grandTotal += parseFloat(paymentRecord.amount);
           }
         } else if(paymentRecord.record_type == "WP" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
@@ -233,12 +272,18 @@ export default class BillingUITable extends React.Component {
                 </strong>
               </td>
             );
+
+            // Add grand total
+            grandTotal += parseFloat(paymentRecord.amount);
           } else {
             components.push(
               <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
+
+            // Add grand total
+            grandTotal += parseFloat(paymentRecord.amount);
           }
         } else {
           components.push(
@@ -256,6 +301,14 @@ export default class BillingUITable extends React.Component {
         </td>
       );
 
+      components.push(
+        <td key={"c-member-grand-total-" + member.id} className="text-right">
+          <strong>
+            {numberWithCommas(grandTotal)}
+          </strong>
+        </td>
+      );
+
       records.push(
         <tr key={"member-row-" + i} style={{ backgroundColor: (record.attendance ? '' : '#FFC6C7') }}>
           {components}
@@ -267,7 +320,8 @@ export default class BillingUITable extends React.Component {
   }
 
   buildTotals() {
-    var records = [];
+    var records     = [];
+    var grandTotal  = 0.00;
 
     records.push(
       <td key="total-empty-td-0">
@@ -285,6 +339,8 @@ export default class BillingUITable extends React.Component {
     var totals  = this.props.data.data.totals;
     for(var i = 0; i < totals.length; i++) {
       if(totals[i].record_type == "LOAN_PAYMENT") {
+        grandTotal += parseFloat(totals[i].amount);
+
         records.push(
           <td key={"total-loan-payment-" + totals[i].key} className="text-right">
             <strong>
@@ -293,6 +349,8 @@ export default class BillingUITable extends React.Component {
           </td>
         );
       } else if(totals[i].record_type == "SAVINGS") {
+        grandTotal += parseFloat(totals[i].amount);
+
         records.push(
           <td key={"total-savings-" + totals[i].key} className="text-right">
             <strong>
@@ -301,6 +359,8 @@ export default class BillingUITable extends React.Component {
           </td>
         );
       } else if(totals[i].record_type == "INSURANCE") {
+        grandTotal += parseFloat(totals[i].amount);
+
         records.push(
           <td key={"total-insurance-" + totals[i].key} className="text-right">
             <strong>
@@ -309,6 +369,8 @@ export default class BillingUITable extends React.Component {
           </td>
         );
       } else if(totals[i].record_type == "WP") {
+        grandTotal += parseFloat(totals[i].amount);
+        
         records.push(
           <td key={"wp-" + totals[i].key} className="text-right">
             <strong>
@@ -324,6 +386,17 @@ export default class BillingUITable extends React.Component {
         <div className="badge badge-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}
+          </strong>
+        </div>
+      </td>
+    )
+
+    // Grand Total
+    records.push(
+      <td key="grand-total-final" className="text-right">
+        <div className="badge badge-info">
+          <strong>
+            {numberWithCommas(grandTotal)}
           </strong>
         </div>
       </td>
