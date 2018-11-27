@@ -7,21 +7,53 @@ var Show  = (function() {
   var $btnConfirmApprove;
   var $modalApprove;
 
+  var $btnPrint;
+  var $modalPrint;
+
   var $message;
   var templateErrorList;
 
   var _urlApprove = "/api/v1/billings/approve";
+  var _urlPrint   = "/api/v1/print/generate_file";
 
   var _cacheDom = function() {
     $btnApprove         = $("#btn-approve");
     $btnConfirmApprove  = $("#btn-confirm-approve");
     $modalApprove       = $("#modal-approve");
 
+    $btnPrint   = $("#btn-print");
+    $modalPrint = $("#modal-print");
+
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnPrint.on("click", function() {
+      $modalPrint.modal("show");
+
+      $.ajax({
+        url: "/api/v1/print/generate_file",
+        method: 'POST',
+        data: { 
+          id: billingId,
+          type: "billing",
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+
+          $modalPrint.modal("hide");
+          window.open("/print?filename=" + response.filename, '_blank');
+        },
+        error: function(response) {
+          $message.html("Error!");
+        }
+      });
+    });
+
     $btnApprove.on("click", function() {
       $message.html("");
       $modalApprove.modal("show");

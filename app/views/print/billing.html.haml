@@ -1,0 +1,67 @@
+:css
+  table {
+    font-size: 0.5em;
+  }
+
+%h3
+  Billing: #{@billing[:collection_date]}
+%h5.text-muted
+  #{@billing[:center]} / #{@billing[:branch]}
+
+
+- billing_total_cp    = 0.00
+- billing_grand_total = 0.00
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "2%" }
+        Att.
+      %th{ width: "10%" }
+        Member
+      - @billing[:data][:totals].each do |t|
+        %th.text-right
+          #{t[:key]}
+      %th.text-right
+        CP
+      %th.text-right
+        TOTAL
+  %tbody
+    - @billing[:data][:records].each do |r|
+      - member_total_cp     = 0.00
+      - member_grand_total  = 0.00
+
+      %tr
+        %td
+        %td
+          %strong
+            #{r[:member][:full_name].truncate(22)}
+        - r[:records].each do |rr|
+          - if rr[:record_type] == "WP"
+            - billing_grand_total += rr[:amount].to_f
+            - member_grand_total += rr[:amount].to_f
+          - else
+            - billing_grand_total += rr[:amount].to_f
+            - billing_total_cp += rr[:amount].to_f
+            - member_grand_total += rr[:amount].to_f
+            - member_total_cp += rr[:amount].to_f
+          %td.text-right
+            #{number_to_currency(rr[:amount], unit: "")}
+        %td.text-right
+          #{number_to_currency(member_total_cp, unit: "")}
+        %td.text-right
+          #{number_to_currency(member_grand_total, unit: "")}
+  %tfoot
+    %tr
+      %th{ width: "2%" }
+      %th{ width: "10%" }
+        TOTAL
+      - @billing[:data][:totals].each do |t|
+        %th.text-right
+          #{number_to_currency(t[:amount], unit: "")}
+      %th.text-right
+        #{number_to_currency(billing_total_cp, unit: "")}
+      %th.text-right
+        #{number_to_currency(billing_grand_total, unit: "")}
+
+:javascript
+  window.print();

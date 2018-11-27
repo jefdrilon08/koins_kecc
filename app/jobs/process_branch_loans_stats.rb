@@ -3,11 +3,12 @@ class ProcessBranchLoansStats < ApplicationJob
 
   def perform(args)
     record  = args[:record]
+
+    file    = args[:file]
     branch  = Branch.find(record.meta.with_indifferent_access[:branch_id])
     as_of   = record.meta.with_indifferent_access[:as_of].to_date
 
     record.update!(status: "processing")
-
 
     begin 
       config  = {

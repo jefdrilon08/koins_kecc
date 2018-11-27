@@ -23,7 +23,7 @@ module Api
             f.write(JSON.pretty_generate(json_data))
           end
 
-         render json: { filename: filename }
+          render json: { filename: filename }
         elsif type == "member_share"
           member_share  = MemberShare.find(params[:id])
           filename      = "member-share-#{Time.now.to_i}.json"
@@ -50,6 +50,24 @@ module Api
           )
 
          render json: { filename: filename }
+        elsif type == "billing"
+          billing   = Billing.find(params[:id])
+          filename  = "billing-#{Time.now.to_i}.json"
+
+          data  = ::Print::BuildBilling.new(
+                    billing: billing
+                  ).execute!
+
+          json_data = {
+            type: type,
+            data: data
+          }
+
+          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
+            f.write(JSON.pretty_generate(json_data))
+          end
+
+          render json: { filename: filename }
         else
           raise "Invalid type #{type}"
         end
