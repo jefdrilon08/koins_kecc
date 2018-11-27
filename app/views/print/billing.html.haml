@@ -5,10 +5,17 @@
     font-size: 0.6em;
   }
 
-%h3
-  Billing: #{@billing[:collection_date].to_date.strftime("%B %d, %Y")}
-%h5.text-muted
-  #{@billing[:center]} / #{@billing[:branch]}
+%small
+  %strong
+    #{Settings.company_name}
+    %br
+    #{Settings.company_address}
+    %br
+    VAT Registration Tin Number: #{Settings.company_tin_number}
+    %br
+    #{@billing[:center]} / #{@billing[:branch]}
+    %br
+    Billing: #{@billing[:collection_date].to_date.strftime("%B %d, %Y")}
 
 
 - billing_total_cp    = 0.00
@@ -35,8 +42,7 @@
       %tr
         %td
         %td
-          %strong
-            #{r[:member][:full_name].truncate(20)}
+          #{r[:member][:full_name].truncate(20)}
         - r[:records].each do |rr|
           - if rr[:record_type] == "WP"
             - billing_grand_total += rr[:amount].to_f
