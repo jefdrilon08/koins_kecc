@@ -5,12 +5,36 @@ module Loans
 
       @loan = config[:loan]
       @user = config[:user]
+
+      @member           = @loan.member
+      @loan_product     = @loan.loan_product
+      @num_installments = @loan.num_installments
+      @term             = @loan.term
       
       @current_date = Date.today
+
+      # Main settings for this loan product
+      @settings = nil
+
+      @transaction_type = "deposit"
+      @date_paid        = @current_date
+
+      Settings.loan_products.each do |s|
+        if s.loan_product_id == @loan_product.id
+          @settings = s
+        end
+      end
+
+      if @settings.blank?
+        raise "Settings not foud for loan product #{@loan_product.id}: #{@loan_product.name}. Please check production.yml"
+      end
     end
 
     def execute!
       post_accounting_entry!
+
+      perform_deposits!
+
       @loan.update!(
         status: "active",
         date_approved: @current_date
@@ -20,6 +44,90 @@ module Loans
     end
 
     private
+
+    def perform_deposits!
+      @settings.deductions.each do |s_deduction|
+        deduction_type  = s_deduction.deduction_type
+
+        if deduction_type == "deposit"
+          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+            offset          = s_deduction.meta.offset
+            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+            name            = accounting_code.name
+            code            = accounting_code.code
+            amount          = 0.00
+            val             = s_deduction.meta.value
+
+            multiplier  = @num_installments
+
+            if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
+              if @term == "weekly"
+              elsif @term == "monthly"
+                multiplier  = (multiplier * 4.3333333).ceil.to_i
+              elsif @term == "semi-monthly"
+                # weird unique rule for 12 semi-monthly
+                if @num_installments ==  12
+                  multiplier  = 12.5 * 2
+                elsif @num_installments == 6
+                  multiplier  = 15
+                else
+                  multiplier  = multiplier * 2
+                end
+              else
+                raise "Invalid term #{@term}"
+              end
+
+              amount  = val * (multiplier + offset)
+            else
+              amount  = s_deduction.amount
+            end
+
+            #### DEPOSIT TRANSACTION ####
+            if amount > 0
+              member_account  = MemberAccount.where(
+                                  member_id: @member.id,
+                                  account_type: s_deduction.meta.account_type,
+                                  account_subtype: s_deduction.meta.account_subtype
+                                ).first
+
+              account_transaction = AccountTransaction.new(
+                                      subsidiary_id: member_account.id,
+                                      subsidiary_type: "MemberAccount",
+                                      amount: amount,
+                                      transaction_type: @transaction_type,
+                                      transacted_at: @date_paid,
+                                      status: "approved",
+                                      data: {
+                                        is_withdraw_payment: false,
+                                        is_fund_transfer: false,
+                                        is_interest: false,
+                                        is_adjustment: false,
+                                        is_for_exit_age: false,
+                                        is_for_loan_payments: false,
+                                        accounting_entry_reference_number: nil,
+                                        beginning_balance: 0.00,
+                                        ending_balance: 0.00
+                                      }
+                                    )
+
+              # Compute beginning and ending balance
+              account_transaction.data[:beginning_balance]  = member_account.balance.round(2)
+              account_transaction.data[:ending_balance]     = (member_account.balance + amount).round(2)
+
+              # Update account balance
+              new_balance = (member_account.balance + amount).round(2)
+              member_account.update!(
+                balance: new_balance
+              )
+
+              account_transaction.save!
+            end 
+            #### DEPOSIT TRANSACTION
+
+          end
+        end
+      end
+    end
 
     def post_accounting_entry!
       accounting_entry_data = @loan.data.with_indifferent_access[:accounting_entry]

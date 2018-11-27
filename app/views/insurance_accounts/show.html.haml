@@ -25,7 +25,7 @@
                 %tr
                   %td
                     %center
-                      #{o.transacted_at}
+                      #{o.transacted_at.localtime.strftime("%B %d, %Y %H:%M")}
                   %td
                     %center
                       #{o.transaction_type}

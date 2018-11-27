@@ -70,6 +70,7 @@ var Show  = (function() {
 
     $btnConfirmApprove.on("click", function() {
       $btnConfirmApprove.prop("disabled", true);
+      $message.html("Loading...");
 
       $.ajax({
         url: _urlApprove,
