@@ -362,7 +362,7 @@ module Loans
                 raise "Invalid term #{@term}"
               end
 
-              amount  = s_deduction.amount * (multiplier + offset)
+              amount  = val * (multiplier + offset)
             else
               amount  = s_deduction.amount
             end
