@@ -68,6 +68,24 @@ module Api
           end
 
           render json: { filename: filename }
+        elsif type == "membership_payment_collection"
+          membership_payment_collection = MembershipPaymentCollection.find(params[:id])
+          filename                      = "membership-payment-collection-#{Time.now.to_i}.json"
+
+          data  = ::Print::BuildMembershipPaymentCollection.new(
+                    membership_payment_collection: membership_payment_collection
+                  ).execute!
+
+          json_data = {
+            type: type,
+            data: data
+          }
+
+          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
+            f.write(JSON.pretty_generate(json_data))
+          end
+
+          render json: { filename: filename }
         else
           raise "Invalid type #{type}"
         end

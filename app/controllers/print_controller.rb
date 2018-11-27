@@ -18,6 +18,10 @@ class PrintController < ApplicationController
       @billing  = @data[:data]
 
       render "print/billing", layout: "plain"
+    elsif @data[:type] == "membership_payment_collection"
+      @membership_payment_collection  = @data[:data]
+
+      render "print/membership_payment_collection", layout: "plain"
     else
       raise "Invalid type #{@data[:type]}"
     end
