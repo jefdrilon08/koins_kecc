@@ -1,12 +1,12 @@
 :css
-  @page { size: landscape; }
+  @page { size: landscape; margin: 2px;}
 
   table {
-    font-size: 0.5em;
+    font-size: 0.6em;
   }
 
 %h3
-  Billing: #{@billing[:collection_date]}
+  Billing: #{@billing[:collection_date].to_date.strftime("%B %d, %Y")}
 %h5.text-muted
   #{@billing[:center]} / #{@billing[:branch]}
 
@@ -36,7 +36,7 @@
         %td
         %td
           %strong
-            #{r[:member][:full_name].truncate(22)}
+            #{r[:member][:full_name].truncate(20)}
         - r[:records].each do |rr|
           - if rr[:record_type] == "WP"
             - billing_grand_total += rr[:amount].to_f
@@ -52,18 +52,17 @@
           #{number_to_currency(member_total_cp, unit: "")}
         %td.text-right
           #{number_to_currency(member_grand_total, unit: "")}
-  %tfoot
-    %tr
-      %th{ width: "2%" }
-      %th{ width: "10%" }
-        TOTAL
-      - @billing[:data][:totals].each do |t|
-        %th.text-right
-          #{number_to_currency(t[:amount], unit: "")}
+  %tr
+    %th{ width: "2%" }
+    %th{ width: "10%" }
+      TOTAL
+    - @billing[:data][:totals].each do |t|
       %th.text-right
-        #{number_to_currency(billing_total_cp, unit: "")}
-      %th.text-right
-        #{number_to_currency(billing_grand_total, unit: "")}
+        #{number_to_currency(t[:amount], unit: "")}
+    %th.text-right
+      #{number_to_currency(billing_total_cp, unit: "")}
+    %th.text-right
+      #{number_to_currency(billing_grand_total, unit: "")}
 
 :javascript
   window.print();
