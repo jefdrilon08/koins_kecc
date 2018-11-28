@@ -5,6 +5,7 @@ namespace :api do
 
     # Users
     post "/login", to: "users#login"
+    get "/roles", to: "users#roles"
 
     # Members
     get "/members", to: "members#index"
