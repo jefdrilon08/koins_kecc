@@ -28,11 +28,11 @@
       %th{ width: "10%" }
         Member
       - @billing[:data][:totals].each do |t|
-        %th.text-right
+        %th
           #{t[:key]}
-      %th.text-right
+      %th
         CP
-      %th.text-right
+      %th
         TOTAL
   %tbody
     - @billing[:data][:records].each do |r|
@@ -52,22 +52,22 @@
             - billing_total_cp += rr[:amount].to_f
             - member_grand_total += rr[:amount].to_f
             - member_total_cp += rr[:amount].to_f
-          %td.text-right
+          %td
             #{number_to_currency(rr[:amount], unit: "")}
-        %td.text-right
+        %td
           #{number_to_currency(member_total_cp, unit: "")}
-        %td.text-right
+        %td
           #{number_to_currency(member_grand_total, unit: "")}
   %tr
     %th{ width: "2%" }
     %th{ width: "10%" }
       TOTAL
     - @billing[:data][:totals].each do |t|
-      %th.text-right
+      %th
         #{number_to_currency(t[:amount], unit: "")}
-    %th.text-right
+    %th
       #{number_to_currency(billing_total_cp, unit: "")}
-    %th.text-right
+    %th
       #{number_to_currency(billing_grand_total, unit: "")}
 
 :javascript
