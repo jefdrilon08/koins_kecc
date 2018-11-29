@@ -14,6 +14,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingEntryPreview from './AccountingEntryPreview';
 import {numberWithCommas} from '../utils/helpers'; 
+import {customStyles} from '../utils/consts';
 
 export default class AccountingEntryFormDisplay extends React.Component {
   constructor(props) {
@@ -35,9 +36,16 @@ export default class AccountingEntryFormDisplay extends React.Component {
       balanced: false,
       message: "",
       errors: null,
+      modalEditIsOpen: false,
       currentBranch: {
         value: "",
         label: ""
+      },
+      journalEntry: {
+        index: "",
+        accounting_code_id: "",
+        post_type: "",
+        amount: 0.00
       },
       data: {
         book: "JVB",
@@ -241,6 +249,21 @@ export default class AccountingEntryFormDisplay extends React.Component {
         }
       });
     }
+  }
+
+  setJournalEntry(index) {
+    var journalEntries  = this.state.data.journal_entries;
+
+    var accounting_code_id  = journalEntries[index].accounting_code_id;
+    var post_type           = journalEntries[index].post_type;
+    var amount              = journalEntries[index].amount;
+
+    this.setState({
+      modalEditIsOpen: true,
+      index: index,
+      accounting_code_id: accounting_code_id,
+      post_type: post_type,
+    });
   }
 
   updateBalanced() {
@@ -585,6 +608,18 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
   };
 
+  renderModalEditContent() {
+    var journalEntry  = this.state.journalEntry;
+
+    return  (
+      <div className="container">
+        <div className="row">
+          
+        </div>
+      </div>
+    );
+  }
+
   render() {
     var context               = this;
     var state                 = context.state;
@@ -627,6 +662,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
 
     return (
       <div>
+        <Modal
+          isOpen={this.state.modalEditIsOpen}
+          style={customStyles}
+        >
+          {this.renderModalEditContent()}
+        </Modal>
         <div className="row">
           <div className="col">
             <h6>

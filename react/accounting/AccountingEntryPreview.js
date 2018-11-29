@@ -1,4 +1,5 @@
 import React from 'react';
+import Modal from 'react-modal';
 import {numberWithCommas} from '../utils/helpers';
 
 export default class AccountingEntryPreview extends React.Component {
@@ -111,6 +112,8 @@ export default class AccountingEntryPreview extends React.Component {
     for(var i = 0; i < this.props.journalEntries.length; i++) {
       if(this.props.journalEntries[i].post_type == "DR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
+        var btnEdit   = "";
+
         if(this.props.status == "pending") {
           btnRemove = <button 
                         className="btn btn-sm btn-danger"
@@ -118,11 +121,18 @@ export default class AccountingEntryPreview extends React.Component {
                       >
                         <span className="fa fa-times"/>
                       </button>;
+
+          btnEdit = <button
+                      className="btn btn-sm btn-info"
+                    >
+                      <span className="fa fa-pencil-alt"/>
+                    </button>
         }
 
         journalEntryRecords.push(
           <tr key={"je-dr-" + i}>
             <td>
+              {btnEdit}
               {btnRemove}
               {this.props.journalEntries[i].accounting_code_name}
             </td>
@@ -140,6 +150,8 @@ export default class AccountingEntryPreview extends React.Component {
     for(var i = 0; i < this.props.journalEntries.length; i++) {
       if(this.props.journalEntries[i].post_type == "CR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
+        var btnEdit   = "";
+
         if(this.props.status == "pending") {
           btnRemove = <button 
                         className="btn btn-sm btn-danger"
@@ -147,11 +159,18 @@ export default class AccountingEntryPreview extends React.Component {
                       >
                         <span className="fa fa-times"/>
                       </button>;
+
+          btnEdit = <button
+                      className="btn btn-sm btn-info"
+                    >
+                      <span className="fa fa-pencil-alt"/>
+                    </button>
         }
 
         journalEntryRecords.push(
           <tr key={"je-cr-" + i}>
             <td>
+              {btnEdit}
               {btnRemove}
               {this.props.journalEntries[i].accounting_code_name}
             </td>
