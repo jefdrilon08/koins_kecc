@@ -8,7 +8,7 @@ module Api
           member  = Member.where(access_token: @access_token).first
           account = MemberAccount.where(id: params[:id]).first
 
-          data  = {
+          data  = { 
             transactions: [],
             account_type: account.account_subtype
           }

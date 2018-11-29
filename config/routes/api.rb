@@ -89,7 +89,7 @@ namespace :api do
       get "/savings", to: "savings#index"
       get "/savings/show", to: "savings#transactions"
       get "/insurances", to: "insurances#index"
-      get "/insurances", to: "insurances#transactions"
+      get "/insurances/show", to: "insurances#transactions"
       get "/equities", to: "equities#index"
       get "/equities/show", to: "equities#transactions"
       get "/loans/show", to: "loans#show"

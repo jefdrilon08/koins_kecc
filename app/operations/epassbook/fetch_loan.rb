@@ -21,7 +21,8 @@ module Epassbook
           interest: number_to_currency(@loan.interest, unit: ""),
           principal_paid: number_to_currency(@loan.principal_paid, unit: ""),
           interest_paid: number_to_currency(@loan.interest_paid, unit: ""),
-          amortization: [],
+          date_released: @loan.date_released.present? ? @loan.date_released.strftime('%D') : N/A,
+          amortization: [], 
           payments: []
         }
       }
