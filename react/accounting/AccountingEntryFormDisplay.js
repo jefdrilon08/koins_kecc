@@ -233,6 +233,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         },
         error: function(response) {
           alert("Error in saving accounting entry");
+          console.log(response);
           context.setState({
             isLoading: false,
             message: "Error"

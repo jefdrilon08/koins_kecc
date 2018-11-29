@@ -7,9 +7,12 @@
     Billing: #{@billing.id}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      = link_to "#", class: 'btn', id: 'btn-print-wp' do
+        .fa.fa-print
+        Print Withdraw Payment
       = link_to "#", class: 'btn', id: 'btn-print' do
         .fa.fa-print
-        Print
+        Print Billing
       - if @billing.pending?
         = link_to "#", class: 'btn', id: 'btn-approve' do
           .fa.fa-check

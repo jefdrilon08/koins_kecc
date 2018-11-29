@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < ApiController
-      before_action :authenticate_user!, excep: [:login]
+      before_action :authenticate_user!, except: [:login]
 
       def login
         username  = params[:username]

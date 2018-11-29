@@ -8,6 +8,7 @@ var Show  = (function() {
   var $modalApprove;
 
   var $btnPrint;
+  var $btnPrintWp;
   var $modalPrint;
 
   var $message;
@@ -22,6 +23,7 @@ var Show  = (function() {
     $modalApprove       = $("#modal-approve");
 
     $btnPrint   = $("#btn-print");
+    $btnPrintWp = $("#btn-print-wp");
     $modalPrint = $("#modal-print");
 
     $message          = $(".message");
@@ -29,6 +31,31 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnPrintWp.on("click", function() {
+      $modalPrint.modal("show");
+
+      $.ajax({
+        url: "/api/v1/print/generate_file",
+        method: 'POST',
+        data: { 
+          id: billingId,
+          type: "wp",
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+
+          $modalPrint.modal("hide");
+          window.open("/print?filename=" + response.filename, '_blank');
+        },
+        error: function(response) {
+          $message.html("Error!");
+        }
+      });
+    });
+
     $btnPrint.on("click", function() {
       $modalPrint.modal("show");
 

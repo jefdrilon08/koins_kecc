@@ -5,6 +5,7 @@ module Api
 
       def generate_file
         type  = params[:type]
+        data  = {}
 
         if type == "accounting_entry"
           accounting_entry  = AccountingEntry.find(params[:id])
@@ -13,17 +14,6 @@ module Api
           data  = ::Print::BuildAccountingEntry.new(
                     accounting_entry: accounting_entry
                   ).execute!
-
-          json_data = {
-            type: type,
-            data: data
-          }
-
-          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
-            f.write(JSON.pretty_generate(json_data))
-          end
-
-          render json: { filename: filename }
         elsif type == "member_share"
           member_share  = MemberShare.find(params[:id])
           filename      = "member-share-#{Time.now.to_i}.json"
@@ -32,15 +22,6 @@ module Api
                     member_share: member_share
                   ).execute!
 
-          json_data = {
-            type: type,
-            data: data
-          }
-
-          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
-            f.write(JSON.pretty_generate(json_data))
-          end
-
           # Update printing information
           member_share.update!(
             data: {
@@ -48,8 +29,6 @@ module Api
               date_printed: Date.today
             }
           )
-
-         render json: { filename: filename }
         elsif type == "billing"
           billing   = Billing.find(params[:id])
           filename  = "billing-#{Time.now.to_i}.json"
@@ -57,17 +36,13 @@ module Api
           data  = ::Print::BuildBilling.new(
                     billing: billing
                   ).execute!
+        elsif type == "wp"
+          billing   = Billing.find(params[:id])
+          filename  = "wp-#{Time.now.to_i}.json"
 
-          json_data = {
-            type: type,
-            data: data
-          }
-
-          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
-            f.write(JSON.pretty_generate(json_data))
-          end
-
-          render json: { filename: filename }
+          data  = ::Print::BuildBilling.new(
+                    billing: billing
+                  ).execute!
         elsif type == "membership_payment_collection"
           membership_payment_collection = MembershipPaymentCollection.find(params[:id])
           filename                      = "membership-payment-collection-#{Time.now.to_i}.json"
@@ -75,20 +50,18 @@ module Api
           data  = ::Print::BuildMembershipPaymentCollection.new(
                     membership_payment_collection: membership_payment_collection
                   ).execute!
-
-          json_data = {
-            type: type,
-            data: data
-          }
-
-          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
-            f.write(JSON.pretty_generate(json_data))
-          end
-
-          render json: { filename: filename }
-        else
-          raise "Invalid type #{type}"
         end
+
+        json_data = {
+          type: type,
+          data: data
+        }
+
+        File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
+          f.write(JSON.pretty_generate(json_data))
+        end
+
+        render json: { filename: filename }
       end
     end
   end

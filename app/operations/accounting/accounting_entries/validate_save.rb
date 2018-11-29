@@ -17,6 +17,23 @@ module Accounting
           }
         else
           # TODO: Check balancing of journal entries
+          dr_amount = 0.00
+          cr_amount = 0.00
+          
+          @accounting_entry_data[:journal_entries].each do |o|
+            if o[:post_type] == "DR"
+              dr_amount += o[:amount].to_f
+            elsif o[:post_type] == "CR"
+              cr_amount += o[:amount].to_f
+            end
+          end
+
+          if dr_amount != cr_amount
+            @errors[:messages] << {
+              key: "journal_entries",
+              message: "unbalanced entries. dr: #{dr_amount} cr: #{cr_amount}"
+            }
+          end
         end
 
         # Check for book
@@ -34,6 +51,8 @@ module Accounting
             message: "Particular required"
           }
         end
+
+        #not_yet_implemented!
 
         @errors[:messages].each do |o|
           @errors[:full_messages] << o[:message]

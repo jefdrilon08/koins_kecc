@@ -1,0 +1,45 @@
+%small
+  %strong
+    #{Settings.company_name}
+    %br
+    #{Settings.company_address}
+    %br
+    VAT Registration Tin Number: #{Settings.company_tin_number}
+    %br
+    #{@billing[:center]} / #{@billing[:branch]}
+    %br
+    Withdraw Payments: #{@billing[:collection_date].to_date.strftime("%B %d, %Y")}
+
+%hr
+- total_wp  = 0.00
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "2%" }
+      %th{ width: "30%" }
+        Member
+      %th.text-right
+        WP
+    - @billing[:withdraw_payments].each_with_index do |o, i|
+      %tr
+        %td.text-center
+          #{i+1}
+        %td
+          #{o[:member][:full_name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+          - total_wp += o[:amount].to_f
+    %tr
+      %th
+      %th
+        Total
+      %th.text-right
+        #{number_to_currency(total_wp, unit: "")}
+
+%small
+  %strong
+    Reference number: #{@billing[:accounting_entry][:reference_number]}
+    %br
+    Date Approved: #{@billing[:accounting_entry][:date_approved]}
+    %br
+    Particular: #{@billing[:accounting_entry][:particular]}
