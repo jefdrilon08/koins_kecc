@@ -55,7 +55,7 @@ module Accounting
               id: o.id,
               post_type: o.post_type,
               accounting_code_id: o.accounting_code_id,
-              accounting_code_name: o.accounting_code.name,
+              accounting_code_name: "#{o.accounting_code.code} - #{o.accounting_code.name}",
               amount: o.amount
             }
           end

@@ -1,5 +1,4 @@
 import React from 'react';
-import Modal from 'react-modal';
 import {numberWithCommas} from '../utils/helpers';
 
 export default class AccountingEntryPreview extends React.Component {
@@ -124,6 +123,7 @@ export default class AccountingEntryPreview extends React.Component {
 
           btnEdit = <button
                       className="btn btn-sm btn-info"
+                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
                     >
                       <span className="fa fa-pencil-alt"/>
                     </button>
@@ -162,6 +162,7 @@ export default class AccountingEntryPreview extends React.Component {
 
           btnEdit = <button
                       className="btn btn-sm btn-info"
+                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
                     >
                       <span className="fa fa-pencil-alt"/>
                     </button>

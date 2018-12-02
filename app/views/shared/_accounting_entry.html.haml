@@ -27,14 +27,14 @@
       - accounting_entry.journal_entries.debit.each do |o|
         %tr
           %td
-            #{o.accounting_code.name}
+            #{o.accounting_code.code} - #{o.accounting_code.name}
           %td.text-right
             #{number_to_currency(o.amount, unit: "")}
           %td
       - accounting_entry.journal_entries.credit.each do |o|
         %tr
           %td
-            #{o.accounting_code.name}
+            #{o.accounting_code.code} - #{o.accounting_code.name}
           %td
           %td.text-right
             #{number_to_currency(o.amount, unit: "")}

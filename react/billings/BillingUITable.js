@@ -7,19 +7,9 @@ import "react-toggle/style.css";
 import 'react-table/react-table.css';
 
 import {numberWithCommas} from '../utils/helpers';
+import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
-};
 
 Modal.setAppElement("#billing-content")
 

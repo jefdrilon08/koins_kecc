@@ -25,7 +25,7 @@ module Billings
       @entry_point_loan_products      = LoanProduct.entry_point.where(id: valid_loan_product_ids)
       @non_entry_point_loan_products  = LoanProduct.non_entry_point.where(id: valid_loan_product_ids)
 
-      @settings_savings_deposits  = Settings.defaults.savings_deposits
+      @settings_savings_deposits  = Settings.try(:defaults).try(:savings_deposits)
 
       if @settings_savings_deposits.blank?
         raise "Settings for default.savings_deposits not found"
