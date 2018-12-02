@@ -7,6 +7,8 @@ module Accounting
       @end_date   = @config[:end_date]
       @branch     = @config[:branch]
 
+      @accounting_code_ids  = @config[:accounting_code_ids] || []
+
       @data = {
         start_date: @start_date.strftime("%b %d, %Y"),
         end_date: @end_date.strftime("%b %d, %Y"),
@@ -55,6 +57,10 @@ module Accounting
       # Fetch accounting codes
       #accounting_codes  = dr_accounting_codes.map{ |o| o.accounting_code_id } | cr_accounting_codes.map{ |o| o.accounting_code_id }
       accounting_codes  = AccountingCode.all.order("code ASC").pluck(:id)
+
+      if @accounting_code_ids.size > 0
+        accounting_codes  = AccountingCode.where(id: @accounting_code_ids).order("code ASC").pluck(:id)
+      end
 
       mapped_cr_accounting_codes  = cr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
       mapped_dr_accounting_codes  = dr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }

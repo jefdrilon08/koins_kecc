@@ -4,15 +4,17 @@ module Api
       before_action :authenticate_user!
 
       def fetch_general_ledger
-        start_date  = params[:start_date].try(:to_date)
-        end_date    = params[:end_date].try(:to_date)
-        branch_id   = params[:branch_id]
-        branch      = Branch.where(id: branch_id).first
+        start_date          = params[:start_date].try(:to_date)
+        end_date            = params[:end_date].try(:to_date)
+        branch_id           = params[:branch_id]
+        accounting_code_ids = params[:accounting_code_ids] || []
+        branch              = Branch.where(id: branch_id).first
 
         config  = {
           start_date: start_date,
           end_date: end_date,
-          branch: branch
+          branch: branch,
+          accounting_code_ids: accounting_code_ids
         }
 
         errors  = ::Accounting::ValidateFetchGeneralLedger.new(
@@ -22,12 +24,6 @@ module Api
         if errors[:full_messages].size > 0
           render json: errors, status: 400
         else
-          config  = {
-            start_date: start_date,
-            end_date: end_date,
-            branch: branch
-          }
-
           general_ledger_data  = ::Accounting::GenerateGeneralLedger.new(
                                   config: config
                                 ).execute!
