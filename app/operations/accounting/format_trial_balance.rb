@@ -6,6 +6,7 @@ module Accounting
       @data = {
         start_date: @trial_balance_data[:start_date],
         end_date: @trial_balance_data[:end_date],
+        branch: @trial_balance_data[:branch],
         total_beginning_debit: @trial_balance_data[:total_beginning_debit],
         total_beginning_credit: @trial_balance_data[:total_beginning_credit],
         total_current_debit: @trial_balance_data[:total_current_debit],

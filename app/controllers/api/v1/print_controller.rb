@@ -7,6 +7,11 @@ module Api
         type  = params[:type]
         data  = {}
 
+        errors  = {
+          messages: {},
+          full_messages: []
+        }
+
         if type == "accounting_entry"
           accounting_entry  = AccountingEntry.find(params[:id])
           filename          = "accounting-entry-#{Time.now.to_i}.json"
@@ -50,18 +55,48 @@ module Api
           data  = ::Print::BuildMembershipPaymentCollection.new(
                     membership_payment_collection: membership_payment_collection
                   ).execute!
+        elsif type == "trial_balance"
+          filename  = "trial-balance-#{Time.now.to_i}.json"
+
+          start_date  = params[:start_date].try(:to_date)
+          end_date    = params[:end_date].try(:to_date)
+          branch      = Branch.where(id: params[:branch_id]).first
+
+          config  = {
+            start_date: start_date,
+            end_date: end_date,
+            branch: branch
+          }
+
+          errors  = ::Accounting::ValidateFetchTrialBalance.new(
+                      config: config
+                    ).execute!
+
+          if errors[:full_messages].size == 0
+            trial_balance_data  = ::Accounting::GenerateTrialBalance.new(
+                                    config: config
+                                  ).execute!
+
+            data  = ::Accounting::FormatTrialBalance.new(
+                      trial_balance_data: trial_balance_data
+                    ).execute!
+          end
         end
 
-        json_data = {
-          type: type,
-          data: data
-        }
+        if errors[:full_messages].size == 0
+          json_data = {
+            type: type,
+            data: data
+          }
 
-        File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
-          f.write(JSON.pretty_generate(json_data))
+          File.open("#{Rails.root}/tmp/#{filename}", "w") do |f|
+            f.write(JSON.pretty_generate(json_data))
+          end
+
+          render json: { filename: filename }
+        else
+          render json: errors, status: 400
         end
-
-        render json: { filename: filename }
       end
     end
   end
