@@ -26,6 +26,10 @@ class PrintController < ApplicationController
       @trial_balance  = @data[:data]
 
       render "print/trial_balance", layout: "plain"
+    elsif @data[:type] == "general_ledger"
+      @general_ledger = @data[:data]
+
+      render "print/general_ledger", layout: "plain"
     elsif @data[:type] == "wp"
       @billing  = @data[:data]
 

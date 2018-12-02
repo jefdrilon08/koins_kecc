@@ -12,6 +12,10 @@ module Accounting
       @data = {
         start_date: @start_date.strftime("%b %d, %Y"),
         end_date: @end_date.strftime("%b %d, %Y"),
+        branch: {
+          id: @branch.id,
+          name: @branch.name
+        },
         entries: []
       }
     end

@@ -144,6 +144,47 @@ export default class GeneralLedgerDisplay extends React.Component {
     context.fetch();
   }
 
+  handlePrintClicked() {
+    var context = this;
+    
+    context.setState({
+      isLoading: true
+    });
+
+    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
+    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var branchId          = context.state.currentBranchId;
+    var accountingCodeIds = context.state.accountingCodeIds;
+
+    $.ajax({
+      url: "/api/v1/print/generate_file",
+      method: 'POST',
+      data: { 
+        start_date: start_date,
+        end_date: end_date,
+        branch_id: context.state.currentBranchId,
+        accounting_code_ids: accountingCodeIds,
+        type: "general_ledger",
+        authenticity_token: context.props.authenticityToken
+      },
+      success: function(response) {
+        window.open("/print?filename=" + response.filename, '_blank');
+
+        context.setState({
+          isLoading: false
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in printing!");
+
+        context.setState({
+          isLoading: false
+        });
+      }
+    });
+  }
+
   renderTable() {
     var context = this;
     var state   = context.state;
@@ -309,13 +350,24 @@ export default class GeneralLedgerDisplay extends React.Component {
             <div className="form-group">
               <label>Actions</label>
               <br/>
-              <button
-                className="btn btn-primary"
-                onClick={context.handleGenerateClicked.bind(this)}
-              >
-                <span className="fa fa-sync"/>
-                Generate
-              </button>
+              <div className="btn-group">
+                <button
+                  className="btn btn-primary"
+                  onClick={context.handleGenerateClicked.bind(this)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-sync"/>
+                  Generate
+                </button>
+                <button
+                  className="btn btn-info"
+                  onClick={context.handlePrintClicked.bind(this)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-print"/>
+                  Print
+                </button>
+              </div>
             </div>
           </div>
         </div>
