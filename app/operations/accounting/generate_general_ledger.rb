@@ -53,7 +53,8 @@ module Accounting
       entries = []
 
       # Fetch accounting codes
-      accounting_codes  = dr_accounting_codes.map{ |o| o.accounting_code_id } | cr_accounting_codes.map{ |o| o.accounting_code_id }
+      #accounting_codes  = dr_accounting_codes.map{ |o| o.accounting_code_id } | cr_accounting_codes.map{ |o| o.accounting_code_id }
+      accounting_codes  = AccountingCode.all.order("code ASC").pluck(:id)
 
       mapped_cr_accounting_codes  = cr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
       mapped_dr_accounting_codes  = dr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
@@ -74,6 +75,10 @@ module Accounting
 
         if credit_hash.present?
           accounting_code_name  = credit_hash[:name]
+        end
+
+        if accounting_code_name.blank?
+          accounting_code_name  = accounting_code.name
         end
 
         dr_sum  = debit_hash.present? ? debit_hash[:sum].to_f : 0.00 
