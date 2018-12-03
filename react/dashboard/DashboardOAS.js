@@ -126,6 +126,7 @@ export default class DashboardOAS extends React.Component {
 
   renderData() {
     return  (
+      <div></div>
     );
   }
 
