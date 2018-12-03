@@ -10,7 +10,10 @@
     Membership Payment: #{@membership_payment_collection.id}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      - if @membership_payment_collection.pending?
+      = link_to "#", class: 'btn', id: 'btn-print' do
+        .fa.fa-print
+        Print
+      - if @membership_payment_collection.pending? && (current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
         = link_to "#", class: 'btn', id: 'btn-approve' do
           .fa.fa-check
           Approve

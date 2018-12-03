@@ -28,6 +28,7 @@ module DataStores
         }
 
         @data = {
+          status: "processing"
         }
       else
         @meta = @data_store.meta.with_indifferent_access
@@ -49,7 +50,6 @@ module DataStores
         include_loan_products: include_loan_products
       }
 
-      # TODO: Thread this
       @data = ::Branches::ComputeLoansStatus.new(config: config).execute!
 
       @data_store.meta  = @meta

@@ -1,0 +1,24 @@
+= link_to new_member_member_share_path(@member), class: "btn btn-primary btn-sm" do
+  .fa.fa-plus
+  New Certificate
+%hr
+- if member_shares.size == 0
+  %p
+    No shares for this member
+- else
+  %table.table.table-bordered.table-sm.table-hover
+    %thead
+      %tr
+        %th
+          Certificate Number
+        %th
+          Date of Issue
+    %tbody
+      - member_shares.each do |o|
+        %tr
+          %td
+            = link_to member_member_share_path(@member, o) do
+              #{o.certificate_number}
+          %td
+            - if o.date_of_issue
+              #{o.date_of_issue.strftime("%B %d, %Y")}

@@ -17,6 +17,10 @@ module Accounting
         end_date: @end_date,
         accounting_codes: @accounting_codes,
         income_and_expenses_accounting_codes: @income_and_expenses_accounting_codes,
+        branch: {
+          id: @branch.id,
+          name: @branch.name
+        },
         beginning_entries: [],
         current_entries: [],
         ending_entries: [],

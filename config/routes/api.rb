@@ -5,6 +5,7 @@ namespace :api do
 
     # Users
     post "/login", to: "users#login"
+    get "/roles", to: "users#roles"
 
     # Members
     get "/members", to: "members#index"
@@ -34,11 +35,13 @@ namespace :api do
     post "/accounting_entries/modify_date_posted", to: "accounting_entries#modify_date_posted"
 
     # Loans
+    post "/loans/approve", to: "loans#approve"
     post "/loans/reage", to: "loans#reage"
     post "/loans/delete", to: "loans#delete"
     post "/loans/apply", to: "loans#apply"
     post "/loans/save", to: "loans#save"
     post "/loans/update_first_date_of_payment", to: "loans#update_first_date_of_payment"
+    post "/loans/update_date_released", to: "loans#update_date_released"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches
@@ -68,6 +71,8 @@ namespace :api do
     post "/membership_payment_collections/update_ar_number", to: "membership_payment_collections#update_ar_number"
     post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
     get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
+    get "/membership_payment_collections/fetch_members", to: "membership_payment_collections#fetch_members"
+    post "/membership_payment_collections/add_member", to: "membership_payment_collections#add_member"
 
     # Survey Answers
     post "/survey_answers", to: "survey_answers#create"
@@ -75,6 +80,7 @@ namespace :api do
 
     namespace :data_stores do
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
+      post "/member_counts/queue", to: "member_counts#queue"
     end
 
     namespace :epassbook do
@@ -103,6 +109,9 @@ namespace :api do
       get "/survey_questions/fetch", to: "survey_questions#fetch"
       post "/survey_questions/save", to: "survey_questions#save"
       post "/survey_questions/delete", to: "survey_questions#delete"
+
+      # Loan Product
+      post "/loan_products/delete", to: "loan_products#delete"
     end
   end
 end

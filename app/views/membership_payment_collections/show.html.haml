@@ -18,6 +18,7 @@
               %code
                 #{JSON.pretty_generate(JSON.parse(@membership_payment_collection.to_json))}
 
+= render partial: "shared/modals/print"
 = render partial: "membership_payment_collections/modals/approve"
 = render partial: "templates/error_list"
 

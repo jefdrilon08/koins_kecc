@@ -7,9 +7,9 @@
     Chart of Accounts
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      = link_to "#", class: 'btn', id: 'btn-upload' do
-        .fa.fa-upload
-        Upload File
+      = link_to "/accounting/print_chart_of_accounts", class: 'btn' do
+        .fa.fa-print
+        Print
       = link_to new_accounting_accounting_code_path, class: 'btn' do
         .fa.fa-plus
         New Accounting Code

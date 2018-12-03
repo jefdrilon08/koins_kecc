@@ -1,0 +1,46 @@
+:css
+  @page { size: landscape; }
+
+  table {
+    font-size: 0.7em;
+  }
+
+%h3
+  Membership Payment Collection: #{@membership_payment_collection[:collection_date].to_date.strftime("%B %d, %Y")}
+%h5.text-muted
+  #{@membership_payment_collection[:center]} / #{@membership_payment_collection[:branch]}
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "20%" }
+        Member
+      - @membership_payment_collection[:data][:totals].each do |t|
+        %th.text-right
+          #{t[:key]}
+      %th.text-right
+        TOTAL
+  %tbody
+    - @membership_payment_collection[:data][:records].each do |r|
+      %tr
+        %td
+          %strong
+            #{r[:member][:full_name]}
+        - r[:records].each do |rr|
+          %td.text-right
+            #{number_to_currency(rr[:amount], unit: '')}
+        %td.text-right
+          %strong
+            #{number_to_currency(r[:total_collected], unit: '')}
+  %tfoot
+    %tr
+      %th
+        TOTAL
+      - @membership_payment_collection[:data][:totals].each do |t|
+        %th.text-right
+          #{number_to_currency(t[:amount], unit: "")}
+      %th.text-right
+        #{number_to_currency(@membership_payment_collection[:data][:total_collected], unit: "")}
+
+:javascript
+  window.print();

@@ -6,7 +6,7 @@ namespace :administration do
   resources :branches
   resources :centers
   resources :announcements
-  resources :loan_products, only: [:index]
+  resources :loan_products, except: [:destroy]
 
   resources :surveys, only: [:index, :show, :edit, :update] do
     get "/survey_question_form", to: "surveys#survey_question_form"

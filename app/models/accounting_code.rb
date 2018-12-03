@@ -20,9 +20,22 @@ class AccountingCode < ApplicationRecord
   scope :income_and_expenses, -> { where(category: ["INCOME", "EXPENSES"]).order("code ASC") }
   scope :assets_and_liabilities_and_equities, -> { where(category: ["ASSETS", "EQUITIES", "LIABILITIES"]).order("code ASC") }
 
+  scope :debits, -> { where(category: ["ASSETS", "EXPENSES"]).order("code ASC") }
+  scope :credits, -> { where(category: ["LIABILITIES", "EQUITIES", "INCOME"]).order("code ASC") }
+
   has_many :journal_entries
 
   before_validation :load_defaults
+
+  def to_version_2_hash
+    {
+      id: id,
+      name: name,
+      code: code,
+      category: category,
+      data: data
+    }
+  end
 
   def debit_entry?
     ["ASSETS", "EXPENSES"].include?(self.category)
@@ -33,13 +46,6 @@ class AccountingCode < ApplicationRecord
   end
 
   def load_defaults
-    if name.present?
-      self.name = self.name.upcase
-    end
-
-    if code.present?
-      self.code = self.code.upcase
-    end
   end
 
   def to_s

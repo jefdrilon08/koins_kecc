@@ -55,18 +55,20 @@ module MembershipPaymentCollections
         # MEMBERSHIP
         @membership_parameters.each do |o|
           if !has_membership_payment_record?(m, o.name)
+            fee = o.payment_default == true ? o.fee : 0.00
+
             member_data[:records] << {
               record_type: "MEMBERSHIP_PAYMENT",
               account_subtype: o.name,
               membership_type: o.type,
               enabled: true,
-              amount: o.fee,
+              amount: fee,
               member_id: m.id
             }
 
-            member_data[:total_collected] += o.fee
+            member_data[:total_collected] += fee
 
-            @data[:total_collected] += o.fee
+            @data[:total_collected] += fee
           else
             member_data[:records] << {
               record_type: "MEMBERSHIP_PAYMENT",
@@ -82,14 +84,23 @@ module MembershipPaymentCollections
         # EQUITY
         # TODO: Equity rules should be applied
         member_account = MemberAccount.equities.where(member_id: m.id, account_subtype: @default_equities_key).first
+        amount  = 0.00
+
+        if m.pending? and member_account.present?
+          amount  = Settings.default_equities_amount.try(:to_f) || 0.00
+        end
+
+        member_data[:total_collected] += amount
+
         member_data[:records] << {
           record_type: "EQUITY",
           account_subtype: @default_equities_key,
           enabled: member_account.present?,
           member_account_id: member_account.try(:id),
-          amount: 0.00
+          amount: amount
         }
 
+        @data[:total_collected] += amount
         @data[:records] << member_data
       end
 

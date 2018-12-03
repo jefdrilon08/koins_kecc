@@ -13,7 +13,11 @@ import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingEntryPreview from './AccountingEntryPreview';
+import Modal from 'react-modal';
 import {numberWithCommas} from '../utils/helpers'; 
+import {customStyles} from '../utils/consts';
+
+Modal.setAppElement("#content")
 
 export default class AccountingEntryFormDisplay extends React.Component {
   constructor(props) {
@@ -35,9 +39,17 @@ export default class AccountingEntryFormDisplay extends React.Component {
       balanced: false,
       message: "",
       errors: null,
+      modalEditIsOpen: false,
       currentBranch: {
         value: "",
         label: ""
+      },
+      journalEntry: {
+        index: "",
+        accounting_code_name: "",
+        accounting_code_id: "",
+        post_type: "",
+        amount: 0.00
       },
       data: {
         book: "JVB",
@@ -141,17 +153,11 @@ export default class AccountingEntryFormDisplay extends React.Component {
           label: ""
         }
 
-        console.log("Fetched current branches:");
-        console.log(response);
-
         if(response.branches.length > 0) {
           tempCurrentBranch = {
             value: response.branches[0].id,
             label: response.branches[0].name
           };
-
-          console.log("tempCurrentBranch:");
-          console.log(tempCurrentBranch);
 
           context.setState({
             branches: response.branches,
@@ -233,6 +239,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         },
         error: function(response) {
           alert("Error in saving accounting entry");
+          console.log(response);
           context.setState({
             isLoading: false,
             message: "Error"
@@ -240,6 +247,37 @@ export default class AccountingEntryFormDisplay extends React.Component {
         }
       });
     }
+  }
+
+  handleJournalEntryEdit(index) {
+    var journalEntries  = this.state.data.journal_entries;
+
+    var accounting_code_id  = journalEntries[index].accounting_code_id;
+    var post_type           = journalEntries[index].post_type;
+    var amount              = journalEntries[index].amount;
+    var name                = journalEntries[index].name;
+
+    var journalEntry  = this.state.journalEntry;
+
+    journalEntry.index              = index;
+    journalEntry.accounting_code_id = accounting_code_id;
+    journalEntry.post_type          = post_type;
+    journalEntry.amount             = amount;
+    journalEntry.name               = name;
+
+    this.setState({
+      modalEditIsOpen: true,
+      journalEntry: journalEntry
+    });
+  }
+
+  handleJournalEntryPostTypeChanged(event) {
+    var journalEntry        = this.state.journalEntry;
+    journalEntry.post_type  = event.target.value;
+
+    this.setState({
+      journalEntry: journalEntry
+    });
   }
 
   updateBalanced() {
@@ -317,9 +355,6 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   handleAccountingCodeChanged(o) {
-    console.log("handleAccountingCodeChanged");
-    console.log(o);
-
     var temp  = "";
 
     if(o) {
@@ -584,6 +619,149 @@ export default class AccountingEntryFormDisplay extends React.Component {
     }
   };
 
+  handleJournalEntryAccountingCodeChanged(o) {
+    var journalEntry                  = this.state.journalEntry;
+    journalEntry.accounting_code_id   = o.value;
+    journalEntry.accounting_code_name = o.label;
+
+    this.setState({
+      journalEntry: journalEntry
+    });
+  }
+
+  handleJournalEntryAmountChanged(event) {
+    var journalEntry    = this.state.journalEntry;
+    journalEntry.amount = event.target.value;
+
+    this.setState({
+      journalEntry: journalEntry
+    });
+  }
+
+  handleSaveJournalEntryClicked() {
+    var journalEntry    = this.state.journalEntry;
+    var index           = journalEntry.index;
+    var data            = this.state.data;
+
+    console.log(journalEntry);
+
+    data.journal_entries[index].accounting_code_id    = journalEntry.accounting_code_id;
+    data.journal_entries[index].accounting_code_name  = journalEntry.accounting_code_name;
+    data.journal_entries[index].post_type             = journalEntry.post_type;
+    data.journal_entries[index].amount                = journalEntry.amount;
+
+    console.log("handleSaveJournalEntryClicked:");
+    console.log(data.journal_entries[index]);
+    console.log("---handleSaveJournalEntryClicked");
+
+    this.setState({
+      modalEditIsOpen: false,
+      data: data
+    })
+
+    this.updateBalanced();
+  }
+
+  renderModalEditContent() {
+    var state                 = this.state;
+    var journalEntry          = state.journalEntry;
+    var accountingCodeOptions = [];
+
+    var currentAccountingCode = {
+      value: "",
+      label: ""
+    }
+
+    for(var i = 0; i < state.accountingCodes.length; i++) {
+      if(journalEntry.accounting_code_id == state.accountingCodes[i].id) {
+        currentAccountingCode = {
+          value: state.accountingCodes[i].id,
+          label: state.accountingCodes[i].name
+        }
+      }
+
+      accountingCodeOptions.push({
+        value: state.accountingCodes[i].id,
+        label: state.accountingCodes[i].name
+      });
+    }
+
+    return  (
+      <div className="container-fluid">
+        <h3>
+          Edit Journal Entry
+        </h3>
+        <hr/>
+        <div className="row">
+          <div className="col-md-6">
+            <div className="form-group">
+              <label>
+                Accounting Code
+              </label>
+              <Select
+                value={currentAccountingCode}
+                options={accountingCodeOptions}
+                onChange={this.handleJournalEntryAccountingCodeChanged.bind(this)}
+                disabled={this.state.isLoading}
+              />
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="form-group">
+              <label>
+                Post Type
+              </label>
+              <select
+                className="form-control"
+                value={journalEntry.post_type}
+                onChange={this.handleJournalEntryPostTypeChanged.bind(this)}
+              >
+                <option value="DR">
+                  Debit
+                </option>
+                <option value="CR">
+                  Credit
+                </option>
+              </select>
+            </div>
+          </div>
+          <div className="col-3">
+            <div className="form-group">
+              <label>
+                Amount
+              </label>
+              <input
+                type="number"
+                value={journalEntry.amount}
+                className="form-control"
+                onChange={this.handleJournalEntryAmountChanged.bind(this)}
+              />
+            </div>
+          </div>
+        </div>
+        <hr/>
+        <center>
+          <div className="btn-group">
+            <button
+              className="btn btn-primary"
+              onClick={this.handleSaveJournalEntryClicked.bind(this)}
+            >
+              <span className="fa fa-check"/>
+              Update
+            </button>
+            <button 
+              className="btn btn-danger"
+            >
+              <span className="fa fa-times"/>
+              Cancel
+            </button>
+          </div>
+        </center>
+        <hr/>
+      </div>
+    );
+  }
+
   render() {
     var context               = this;
     var state                 = context.state;
@@ -626,6 +804,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
 
     return (
       <div>
+        <Modal
+          isOpen={this.state.modalEditIsOpen}
+          style={customStyles}
+        >
+          {this.renderModalEditContent()}
+        </Modal>
         <div className="row">
           <div className="col">
             <h6>
@@ -767,6 +951,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
           journalEntries={this.state.data.journal_entries}
           isLoading={this.state.isLoading}
           handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+          handleJournalEntryEdit={this.handleJournalEntryEdit.bind(this)}
           data={this.state.data.data}
         />
 

@@ -5,9 +5,6 @@
     .col
       .card
         .card-body
-          = render partial: "announcements"
+          #dashboard-content
 
-          / Branch Loan Product Stats
-          %h5
-            Loan Product Stats
-          = render partial: "widgets/branch_loan_product_stats"
+= javascript_include_tag "DashboardMain.min.react"

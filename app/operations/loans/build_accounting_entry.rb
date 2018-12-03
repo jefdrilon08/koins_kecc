@@ -2,12 +2,15 @@ module Loans
   class BuildAccountingEntry
     def initialize(config:)
       @config       = config
+      @loan         = @config[:loan]
       @member       = @config[:member]
       @branch       = @member.branch
       @loan_product = @config[:loan_product]
       @amount       = @config[:amount].to_f.round(2)
       @current_date = @config[:current_date] || Date.today
       @book         = @config[:book] || "CDB"
+      @loan_data    = @loan.data.with_indifferent_access
+      @voucher_data = @loan_data[:voucher]
 
       @user = @config[:user]
 
@@ -30,7 +33,7 @@ module Loans
         company_address: Settings.company_address,
         branch: @branch.to_s.upcase,
         prepared_by: @prepared_by,
-        particular: default_particular,
+        particular: @particular,
         debit_journal_entries: [],
         credit_journal_entries: [],
         journal_entries: [],
@@ -39,10 +42,16 @@ module Loans
         status: "display",
         data: {
           or_number: "",
-          ar_number: ""
+          ar_number: "",
+          check_number: "",
+          check_voucher_number: "",
+          date_of_check: "",
+          sub_reference_number: "",
+          payee: ""
         }
       }
 
+      # Main settings for this loan product
       @settings = nil
 
       Settings.loan_products.each do |s|
@@ -52,13 +61,42 @@ module Loans
       end
 
       if @settings.blank?
-        raise "Settings not foud for loan product #{@loan_product.id}: #{@loan_product.name}"
+        raise "Settings not foud for loan product #{@loan_product.id}: #{@loan_product.name}. Please check production.yml"
       end
 
+      # Branch related accounting code settings
+      @settings_branch_accounting_codes
+
+      Settings.branch_accounting_codes.each do |o|
+        if o.branch_id = @branch.id
+          @settings_branch_accounting_codes = o
+        end
+      end
+
+      if @settings_branch_accounting_codes.blank?
+        raise "Settings not found for branch #{@branch.id}: #{@branch.name}. Please check production.yml"
+      end
+
+      # Insurance membership can be paid form loans. This is its settings
+      @settings_insurance_membership
+
+      Settings.memberships.each do |o|
+        if o.type == "Insurance" and o.is_main == true
+          @settings_insurance_membership = o
+        end
+      end
+
+      if @settings_insurance_membership.blank?
+        raise "Settings not found for insurance membership. Please check production.yml"
+      end
+
+      # Receivable accounting code
       @receivable_accounting_code = AccountingCode.find(@settings.receivable_accounting_code_id)
     end
 
     def execute!
+      build_data!
+
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
       @accounting_entry_data[:debit_journal_entries]  = build_debit_journal_entries!
 
@@ -68,7 +106,7 @@ module Loans
           id: "",
           post_type: "DR",
           accounting_code_id: j[:accounting_code_id],
-          accounting_code_name: j[:name],
+          accounting_code_name: "#{j[:code]} - #{j[:name]}",
           amount: j[:amount]
         }
       end
@@ -78,7 +116,7 @@ module Loans
           id: "",
           post_type: "CR",
           accounting_code_id: j[:accounting_code_id],
-          accounting_code_name: j[:name],
+          accounting_code_name: "#{j[:code]} - #{j[:name]}",
           amount: j[:amount]
         }
       end
@@ -88,12 +126,24 @@ module Loans
 
     private
 
+    def build_data!
+      @accounting_entry_data[:data] = {
+        or_number: @loan_data[:or_number],
+        ar_number: "",
+        check_number: @voucher_data[:bank_check_number],
+        check_voucher_number: @voucher_data[:check_number],
+        date_of_check: @voucher_data[:date_of_check],
+        sub_reference_number: "",
+        payee: "#{@member.full_name}"
+      }
+    end
+
     def build_debit_journal_entries!
       journal_entries = []
 
-      # Amount released
+      # Receivable
       accounting_code = AccountingCode.find(@settings.receivable_accounting_code_id)
-      amount          = @amount_released
+      amount          = @amount
       name            = accounting_code.name
       code            = accounting_code.code
 
@@ -155,6 +205,7 @@ module Loans
 
       journal_entries = []
 
+      # Deductions
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
 
@@ -241,7 +292,7 @@ module Loans
                 amount: amount
               }
 
-              temp_amount -= amount
+              #temp_amount -= amount
             end
           end
         elsif deduction_type == "member_type_deduction_ratio"
@@ -311,7 +362,7 @@ module Loans
                 raise "Invalid term #{@term}"
               end
 
-              amount  = s_deduction.amount * (multiplier + offset)
+              amount  = val * (multiplier + offset)
             else
               amount  = s_deduction.amount
             end
@@ -329,6 +380,31 @@ module Loans
           end
         end
       end
+
+      # Insurance membership
+      if @member.insurance_pending?
+        accounting_code = AccountingCode.find(@settings_insurance_membership.accounting_code_id)
+        amount          = @settings_insurance_membership.fee
+
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: accounting_code.code,
+          name: accounting_code.name,
+          amount: amount
+        }
+
+        temp_amount -= amount
+      end
+
+      # Cash in bank for amount released
+      accounting_code = AccountingCode.find(@settings_branch_accounting_codes.cash_in_bank_accounting_code_id)
+
+      journal_entries << {
+        accounting_code_id: accounting_code.id,
+        code: accounting_code.code,
+        name: accounting_code.name,
+        amount: temp_amount
+      }
 
       # Update amount
       @amount_released  = temp_amount

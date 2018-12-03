@@ -1,8 +1,10 @@
 module Api
   module V1
     class SavingsAccountsController < ApiController
+      before_action :authenticate_user!
+
       def index
-        members = Member.all.order("last_name ASC")
+        members = Member.all.order("last_name ASC").where(branch_id: @branches.pluck(:id))
 
         savings_accounts  = MemberAccount.savings
 

@@ -1,0 +1,19 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-lock
+    Administration
+  %li.breadcrumb-item
+    = link_to administration_loan_products_path do
+      .fa.fa-file
+      Loan Products
+  %li.breadcrumb-item
+    .fa.fa-file
+    #{@loan_product}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to edit_administration_loan_product_path(@loan_product), class: 'btn' do
+        .fa.fa-pencil-alt
+        Edit
+      = link_to "#", id: 'btn-delete', class: 'btn' do
+        .fa.fa-times
+        Delete

@@ -18,6 +18,7 @@ export default class ApplicationFormDisplay extends React.Component {
       isActive: false,
       coMakers: [],
       loanProducts: [],
+      currentLoanProductId: "",
       data: false,
       errors: false
     };
@@ -30,23 +31,6 @@ export default class ApplicationFormDisplay extends React.Component {
       id: this.props.id,
       member_id: this.props.memberId
     }
-
-    $.ajax({
-      url: "/api/v1/loans/fetch",
-      data: data,
-      method: 'GET',
-      success: function(response) {
-        console.log(response);
-        context.setState({
-          isLoading: false,
-          data: response
-        });
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Something went wrong when fetching loan");
-      }
-    });
 
     // Fetch co_makers
     $.ajax({
@@ -73,13 +57,36 @@ export default class ApplicationFormDisplay extends React.Component {
       },
       method: 'GET',
       success: function(response) {
+        console.log("Got Loan Products");
         console.log(response);
+        console.log(context.state.data);
+        // Set currentLoanProductId
+        var data  = context.state.data;
+
         context.setState({
-          loanProducts: response.loan_products
+          loanProducts: response.loan_products,
+          data: data
         });
       },
       error: function(response) {
         console.log(response);
+      }
+    });
+
+    $.ajax({
+      url: "/api/v1/loans/fetch",
+      data: data,
+      method: 'GET',
+      success: function(response) {
+        console.log(response);
+        context.setState({
+          isLoading: false,
+          data: response
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Something went wrong when fetching loan");
       }
     });
   }
@@ -232,6 +239,7 @@ export default class ApplicationFormDisplay extends React.Component {
   }
 
   renderLoanProducts() {
+    var data                = this.state.data;
     var loanProducts        = this.state.loanProducts;
     var loanProductsDisplay = [];
 
@@ -242,6 +250,12 @@ export default class ApplicationFormDisplay extends React.Component {
     );
 
     for(var i = 0; i < loanProducts.length; i++) {
+      if(loanProducts[i].id == data.loan_product_id) {
+        console.log("Got loan product id: " + data.loan_product_id);
+      } else {
+        console.log("LP ID: " + data.loan_product_id + " i: " + loanProducts[i].id);
+      }
+
       loanProductsDisplay.push(
         <option value={loanProducts[i].id} key={"loan-product-" + loanProducts[i].id}>
           {loanProducts[i].name}

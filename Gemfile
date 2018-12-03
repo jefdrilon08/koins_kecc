@@ -23,6 +23,7 @@ gem 'aws-sdk-s3', require: false
 gem 'kaminari'
 gem 'activerecord-import'
 gem 'config'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

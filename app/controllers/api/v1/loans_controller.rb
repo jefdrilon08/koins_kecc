@@ -3,19 +3,45 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
-      def update_first_date_of_payment
+      def approve
+        loan  = Loan.where(id: params[:id]).first
+
+        config  = {
+          loan: loan,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateApprove.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          loan  = ::Loans::Approve.new(
+                    config: config
+                  ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} approved loan #{loan.id}",
+            activity_type: "approval",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id
+            }
+          )
+
+          render json: { message: "ok", id: loan.id }
+        end
+      end
+
+      def update_date_released
         loan  = Loan.find(params[:id])
 
-        loan.update!(first_date_of_payment: params[:first_date_of_payment])
-
-        ::Loans::AmortizeDates.new(
-          config: {
-            loan: loan
-          }
-        ).execute!
+        loan.update!(date_released: params[:date_released])
 
         ActivityLog.create!(
-          content: "#{current_user.full_name} updated loan #{loan.id} first_date_of_payment to #{params[:first_date_of_payment]}",
+          content: "#{current_user.full_name} updated loan #{loan.id} date_released to #{params[:date_released]}",
           activity_type: "modification",
           data: {
             user_id: current_user.id,
@@ -26,11 +52,47 @@ module Api
         render json: { message: "ok" }
       end
 
+      def update_first_date_of_payment
+        loan  = Loan.find(params[:id])
+
+        if params[:first_date_of_payment].blank?
+          errors  = {
+            messages: [
+              { key: "first_date_of_payment", meessage: "First date of payment required" }
+            ],
+            full_messages: [
+              "First date of payment required"
+            ]
+          }
+
+          render json: errors, status: 400
+        else
+          loan.update!(first_date_of_payment: params[:first_date_of_payment])
+
+          ::Loans::AmortizeDates.new(
+            config: {
+              loan: loan
+            }
+          ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} updated loan #{loan.id} first_date_of_payment to #{params[:first_date_of_payment]}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def fetch
         member  = Member.where(id: params[:member_id]).first
 
         if member.blank?
-          render json: { message: "member not found" }, status: 402
+          render json: { message: "member not found" }, status: 400
         else
           loan    = Loan.where(id: params[:id]).first
 

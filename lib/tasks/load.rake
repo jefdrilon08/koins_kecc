@@ -1,4 +1,17 @@
 namespace :load do
+  task :member_shares_from_file => :environment do
+    puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertMemberSharesFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
   task :beneficiaries_from_file => :environment do
     puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 

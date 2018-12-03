@@ -17,21 +17,32 @@
           .tab-content
             #details.tab-pane.active.show{:role => "tabpanel"}
               = render partial: "details"
+              %hr
+              %h5
+                Accounting Entry
+              #loan-accounting-entry-content
             #amortization-table.tab-pane{:role => "tabpanel"}
               = render partial: "amortization_table"
             #payments-table.tab-pane{:role => "tabpanel"}
               = render partial: "transaction_table"
             #activity-logs.tab-pane{:role => "tabpanel"}
               = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
+          - if debug?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@loan.to_json))}
 
+= render partial: "loans/modals/approve"
 = render partial: "loans/modals/reage"
 = render partial: "loans/modals/delete"
 = render partial: "loans/modals/first_date_of_payment"
+= render partial: "loans/modals/date_released"
 = render partial: "templates/error_list"
 
-= javascript_include_tag "loans/Show.js"
+#parameters{ data: { id: @loan.id, member_id: @loan.member.id } }
 
-#parameters{ data: { id: @loan.id } }
+= javascript_include_tag "loans/Show.js"
+= javascript_include_tag "LoanAccountingEntry.min.react"
 
 :javascript
   $(document).ready(function() {

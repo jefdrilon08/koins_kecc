@@ -20,11 +20,15 @@
           #{o.meta.with_indifferent_access[:branch_name]}
         %td.text-center
           - if o.processing?
-            .badge.badge-danger
+            .badge.badge-info
               Processing
           - elsif o.done?
             .badge.badge-success
               Done
+          - elsif o.error?
+            .badge.badge-danger
+              .fa.fa-times
+              ERROR
         %td.text-center
           %small
             #{o.updated_at.localtime}

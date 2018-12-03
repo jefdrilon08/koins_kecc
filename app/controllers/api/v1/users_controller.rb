@@ -1,6 +1,8 @@
 module Api
   module V1
     class UsersController < ApiController
+      before_action :authenticate_user!, except: [:login]
+
       def login
         username  = params[:username]
         password  = params[:password]
@@ -20,6 +22,10 @@ module Api
 
           render json: { errors: errors }, status: 400
         end
+      end
+
+      def roles
+        render json: { roles: current_user.roles, username: current_user.username } 
       end
     end
   end

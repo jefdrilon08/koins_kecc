@@ -1,0 +1,27 @@
+#modal-new.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          New Data Store: Member Counts
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Create a new data store for member counts
+          .row
+            .col
+              %h5
+                Date Today: #{Date.today}
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

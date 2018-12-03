@@ -99,7 +99,15 @@ module Billings
     def build_debit_journal_entries!
       journal_entries = []
 
+      # Cash in Bank
+      # if withdraw payment > 0
       accounting_code = AccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
+      amount          = @data[:total_collected]
+
+      if @total_wp > 0
+        amount  -= @total_wp
+      end
+
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,
@@ -254,6 +262,10 @@ module Billings
         journal_entries.each_with_index do |j, i|
           if j[:record_type] == "SAVINGS" and j[:is_default_savings] == true
             journal_entries[i][:amount] -= @total_wp
+            
+            if journal_entries[i][:amount] < 0
+              journal_entries[i][:amount] = 0.00
+            end
           end
         end
       end

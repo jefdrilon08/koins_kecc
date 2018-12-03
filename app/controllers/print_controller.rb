@@ -8,7 +8,32 @@ class PrintController < ApplicationController
 
     if @data[:type] == "accounting_entry"
       @accounting_entry_data  = @data[:data]
+
       render "print/accounting_entry", layout: "plain"
+    elsif @data[:type] == "member_share"
+      @member_share_data  = @data[:data]
+
+      render "print/member_share", layout: "plain"
+    elsif @data[:type] == "billing"
+      @billing  = @data[:data]
+
+      render "print/billing", layout: "plain"
+    elsif @data[:type] == "membership_payment_collection"
+      @membership_payment_collection  = @data[:data]
+
+      render "print/membership_payment_collection", layout: "plain"
+    elsif @data[:type] == "trial_balance"
+      @trial_balance  = @data[:data]
+
+      render "print/trial_balance", layout: "plain"
+    elsif @data[:type] == "general_ledger"
+      @general_ledger = @data[:data]
+
+      render "print/general_ledger", layout: "plain"
+    elsif @data[:type] == "wp"
+      @billing  = @data[:data]
+
+      render "print/wp", layout: "plain"
     else
       raise "Invalid type #{@data[:type]}"
     end

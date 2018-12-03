@@ -20,7 +20,7 @@
           #{o.meta.with_indifferent_access[:branch_name]}
         %td.text-center
           - if o.processing?
-            .badge.badge-danger
+            .badge.badge-info
               Processing
           - elsif o.done?
             .badge.badge-success

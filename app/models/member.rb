@@ -22,6 +22,7 @@ class Member < ApplicationRecord
   has_many :legal_dependents
   has_many :beneficiaries
   has_many :member_accounts
+  has_many :member_shares
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -52,6 +53,14 @@ class Member < ApplicationRecord
 
   def active?
     self.status == "active"
+  end
+
+  def not_active?
+    self.status != "active"
+  end
+
+  def insurance_pending?
+    self.insurance_status == "pending"
   end
 
   def fetch_government_id(type)

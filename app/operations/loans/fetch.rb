@@ -37,7 +37,7 @@ module Loans
                       date_requested: Date.today,
                       date_of_check: "",
                       bank_transaction_reference_number: "",
-                      particular: ""
+                      particular: build_default_loan_particular!
                     },
                     co_makers: [],
                     co_maker_two: "",
@@ -53,6 +53,33 @@ module Loans
     end
 
     def execute!
+      # Accounting entry display
+      data                  = @loan.data.with_indifferent_access
+      accounting_entry_data = @loan.data.with_indifferent_access[:accounting_entry]
+
+      if @loan.active_or_paid?
+        ac  = AccountingEntry.where(
+                branch_id: @loan.branch.id,
+                reference_number: accounting_entry_data[:reference_number],
+                book: accounting_entry_data[:book]
+              ).first
+
+        data[:accounting_entry] = JSON.parse(ac.to_json).with_indifferent_access
+
+        data[:accounting_entry][:branch_id]       = @loan.branch.id
+        data[:accounting_entry][:branch_name]     = @loan.branch.name
+        data[:accounting_entry][:branch]          = @loan.branch.to_s.upcase
+        data[:accounting_entry][:journal_entries] = ac.journal_entries.map{ |o| 
+                                                      {
+                                                        id: o.id,
+                                                        post_type: o.post_type,
+                                                        accounting_code_id: o.accounting_code.id,
+                                                        accounting_code_name: "#{o.accounting_code.code} - #{o.accounting_code.name}",
+                                                        amount: o.amount
+                                                      }
+                                                    }
+      end
+
       @data = {
         id: @loan.id,
         branch_id: @loan.branch_id,
@@ -67,10 +94,14 @@ module Loans
         num_installments: @loan.num_installments,
         project_type_id: @loan.project_type_id,
         status: @loan.status,
-        data: @loan.data
+        data: data
       }
 
       @data
+    end
+
+    def build_default_loan_particular!
+      "Release of Loan - #{@member.first_name} #{@member.first_name} #{@member.last_name} cv# ________ ck# _______ clip# _______"
     end
   end
 end

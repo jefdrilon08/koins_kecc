@@ -71,13 +71,13 @@ module MembershipPaymentCollections
         member          = Member.find(@current_member[:id])
 
         content = "#{@user.full_name} modified membership_payment amount from #{@original_amount} to #{@current_transaction[:amount]} for membership account (#{@current_transaction[:membership_type]} - #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
-      elsif @current_transaction[:record_type] == "EQUITY" and @current_transaction[:enabled] == true
+      elsif @current_transaction[:record_type] == "EQUITY"
         member          = Member.find(@current_member[:id])
         member_account  = MemberAccount.find(@current_transaction[:member_account_id])
 
         content = "#{@user.full_name} modified EQUITY amount from #{@original_amount} to #{@current_transaction[:amount]} for EQUITY account (#{member_account.account_subtype}) of member #{member.full_name}"
       else
-        raise "invalid record_type #{@current_transaction[:record_type]} in construct_log_message!"
+        raise "invalid record_type #{@current_transaction[:record_type]}:#{@current_transaction[:enabled]} in construct_log_message!"
       end
 
       content

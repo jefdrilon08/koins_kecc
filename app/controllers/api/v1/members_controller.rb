@@ -65,7 +65,7 @@ module Api
 
       def member_loan_products
         member    = Member.find(params[:id])
-        loans     = Loan.active_or_pending.where(member_id: member.id)
+        loans     = Loan.active.where(member_id: member.id)
 
         if loans.size == 0 
           loan_products = LoanProduct.entry_point.order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }

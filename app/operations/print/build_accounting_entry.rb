@@ -4,9 +4,7 @@ module Print
 
     def initialize(accounting_entry:)
       @accounting_entry = accounting_entry
-
-      @data = {
-      }
+      @data             = {}
     end
 
     def execute!

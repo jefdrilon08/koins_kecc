@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   root to: "pages#index"
 
   # Members
@@ -14,6 +17,10 @@ Rails.application.routes.draw do
   get "/members/form", to: "members#form", as: :member_form
   get "/members/:id/survey_answers/:survey_answer_id", to: "members#survey_answer", as: :member_survey_answer
   get "/members/:id/survey_answers/:survey_answer_id/form", to: "members#survey_answer_form", as: :member_survey_answer_form
+
+  resources :members, only: [] do
+    resources :member_shares, except: [:index], controller: "members/member_shares"
+  end
 
   # Loans
   resources :loans, only: [:index, :show] do
@@ -27,6 +34,9 @@ Rails.application.routes.draw do
 
   get "/insurance_accounts", to: "insurance_accounts#index"
   get "/insurance_accounts/:id", to: "insurance_accounts#show", as: :insurance_account
+
+  get "/equity_accounts", to: "equity_accounts#index"
+  get "/equity_accounts/:id", to: "equity_accounts#show", as: :equity_account
 
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
@@ -47,12 +57,18 @@ Rails.application.routes.draw do
 
   # Data Stores
   namespace :data_stores do
+    get "/member_counts", to: "member_counts#index"
+    get "/member_counts/:id", to: "member_counts#show"
+    delete "/member_counts/:id", to: "member_counts#destroy"
+
     get "/branch_loans_stats", to: "branch_loans_stats#index"
     get "/branch_loans_stats/:id", to: "branch_loans_stats#show"
     delete "/branch_loans_stats/:id", to: "branch_loans_stats#destroy"
+
     get "/branch_with_centers_loans_stats", to: "branch_with_centers_loans_stats#index"
     get "/branch_with_centers_loans_stats/:id", to: "branch_with_centers_loans_stats#show"
     delete "/branch_with_centers_loans_stats/:id", to: "branch_with_centers_loans_stats#destroy"
+
   end
 
   namespace :accounting do

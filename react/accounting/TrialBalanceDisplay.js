@@ -122,6 +122,44 @@ export default class TrialBalanceDisplay extends React.Component {
     context.fetch();
   }
 
+  handlePrintClicked() {
+    var context = this;
+    
+    context.setState({
+      isLoading: true
+    });
+
+    var start_date  = moment(context.state.start_date).format('YYYY-MM-DD');
+    var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
+
+    $.ajax({
+      url: "/api/v1/print/generate_file",
+      method: 'POST',
+      data: { 
+        start_date: start_date,
+        end_date: end_date,
+        branch_id: context.state.currentBranchId,
+        type: "trial_balance",
+        authenticity_token: context.props.authenticityToken
+      },
+      success: function(response) {
+        window.open("/print?filename=" + response.filename, '_blank');
+
+        context.setState({
+          isLoading: false
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in printing!");
+
+        context.setState({
+          isLoading: false
+        });
+      }
+    });
+  }
+
   renderTable() {
     var context = this;
     var state   = context.state;
@@ -232,7 +270,7 @@ export default class TrialBalanceDisplay extends React.Component {
     
     for(var i = 0; i < state.branches.length; i++) {
       branchOptions.push(
-        <option value={state.branches[i].id}>
+        <option value={state.branches[i].id} key={"branch-" + i}>
           {state.branches[i].name}
         </option>
       );
@@ -285,13 +323,24 @@ export default class TrialBalanceDisplay extends React.Component {
             <div className="form-group">
               <label>Actions</label>
               <br/>
-              <button
-                className="btn btn-primary"
-                onClick={context.handleGenerateClicked.bind(this)}
-              >
-                <span className="fa fa-sync"/>
-                Generate
-              </button>
+              <div className="btn-group">
+                <button
+                  className="btn btn-primary"
+                  onClick={context.handleGenerateClicked.bind(this)}
+                  disabled={state.isLoading}
+                >
+                  <span className="fa fa-sync"/>
+                  Generate
+                </button>
+                <button
+                  className="btn btn-info"
+                  onClick={context.handlePrintClicked.bind(this)}
+                  disabled={state.isLoading}
+                >
+                  <span className="fa fa-print"/>
+                  Print
+                </button>
+              </div>
             </div>
           </div>
         </div>

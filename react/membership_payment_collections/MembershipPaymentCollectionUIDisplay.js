@@ -5,6 +5,7 @@ import moment from 'moment';
 import SkCubeLoading from '../SkCubeLoading';
 import MembershipPaymentCollectionUITable from './MembershipPaymentCollectionUITable';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
+import AddRecord from './AddRecord';
 import {numberWithCommas} from '../utils/helpers';
 
 export default class MembershipPaymentCollectionUIDisplay extends React.Component {
@@ -319,6 +320,10 @@ export default class MembershipPaymentCollectionUIDisplay extends React.Componen
               </tr>
             </tbody>
           </table>
+          <AddRecord
+            data={this.state.data}
+            authenticityToken={this.props.authenticityToken}
+          />
           <hr/>
           <MembershipPaymentCollectionUITable
             id={this.props.id}

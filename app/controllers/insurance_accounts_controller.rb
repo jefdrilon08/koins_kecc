@@ -9,6 +9,6 @@ class InsuranceAccountsController < ApplicationController
 
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @insurance_account.id
-                            ).order("transacted_at ASC, updated_at ASC")
+                            ).order("transacted_at ASC")
   end
 end

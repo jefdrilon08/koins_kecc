@@ -17,6 +17,26 @@ namespace :db do
     end
   end
 
+  task :save_accounting_codes => :environment do
+    accounting_codes  = AccountingCode.all
+    filename          = "accounting-codes-v2.json"
+    full_path         = "#{Rails.root}/db_backup/#{filename}"
+
+    data = { 
+      accounting_codes: []
+    }   
+
+    accounting_codes.each do |o| 
+      data[:accounting_codes] << o.to_version_2_hash
+    end 
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
   private
 
   def with_config

@@ -36,12 +36,12 @@
     %th
       First Date of Payment
     %td.text-right
-      - if @loan.first_date_of_payment
-        #{@loan.first_date_of_payment.strftime("%b %d, %Y")}
       - if @loan.pending?
         = link_to "#", id: "btn-first-date-of-payment" do
           .fa.fa-pencil-alt
           Edit
+      - if @loan.first_date_of_payment
+        #{@loan.first_date_of_payment.strftime("%b %d, %Y")}
   %tr
     %th
       Date Approved:
@@ -52,6 +52,10 @@
     %th
       Date Released:
     %td.text-right
+      - if @loan.pending?
+        = link_to "#", id: "btn-date-released" do
+          .fa.fa-pencil-alt
+          Edit
       - if @loan.date_released
         #{@loan.date_released.strftime("%b %d, %Y")}
   %tr

@@ -14,6 +14,8 @@ import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
+import AccountingCodeMultiSelect from './AccountingCodeMultiSelect';
+
 export default class GeneralLedgerDisplay extends React.Component {
   constructor(props) {
     super(props);
@@ -30,6 +32,7 @@ export default class GeneralLedgerDisplay extends React.Component {
       end_date: moment(lastDay),
       currentBranchId: "",
       branches: [],
+      accountingCodeIds: [],
       errors: false,
       data: false
     };
@@ -78,10 +81,11 @@ export default class GeneralLedgerDisplay extends React.Component {
   }
 
   fetch() {
-    var context     = this;
-    var start_date  = moment(context.state.start_date).format('YYYY-MM-DD');
-    var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
-    var branchId    = context.state.currentBranchId;
+    var context           = this;
+    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
+    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var branchId          = context.state.currentBranchId;
+    var accountingCodeIds = context.state.accountingCodeIds;
 
     $.ajax({
       url: "/api/v1/accounting/fetch_general_ledger",
@@ -89,7 +93,8 @@ export default class GeneralLedgerDisplay extends React.Component {
       data: {
         start_date: start_date,
         end_date: end_date,
-        branch_id: branchId
+        branch_id: branchId,
+        accounting_code_ids: accountingCodeIds
       },
       dataType: 'json',
       success: function(response) {
@@ -137,6 +142,47 @@ export default class GeneralLedgerDisplay extends React.Component {
     });
 
     context.fetch();
+  }
+
+  handlePrintClicked() {
+    var context = this;
+    
+    context.setState({
+      isLoading: true
+    });
+
+    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
+    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var branchId          = context.state.currentBranchId;
+    var accountingCodeIds = context.state.accountingCodeIds;
+
+    $.ajax({
+      url: "/api/v1/print/generate_file",
+      method: 'POST',
+      data: { 
+        start_date: start_date,
+        end_date: end_date,
+        branch_id: context.state.currentBranchId,
+        accounting_code_ids: accountingCodeIds,
+        type: "general_ledger",
+        authenticity_token: context.props.authenticityToken
+      },
+      success: function(response) {
+        window.open("/print?filename=" + response.filename, '_blank');
+
+        context.setState({
+          isLoading: false
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in printing!");
+
+        context.setState({
+          isLoading: false
+        });
+      }
+    });
   }
 
   renderTable() {
@@ -220,6 +266,21 @@ export default class GeneralLedgerDisplay extends React.Component {
     });
   }
 
+  handleAccountingCodeSelectChanged(o) {
+    console.log("AccountingCodeMultiSelect.handleAccountingCodeSelectChanged:");
+    console.log(o);
+
+    var accountingCodeIds = [];
+
+    for(var i = 0; i < o.length; i++) {
+      accountingCodeIds.push(o[i].value);
+    }
+
+    this.setState({
+      accountingCodeIds: accountingCodeIds
+    });
+  }
+
   render() {
     var context = this;
     var state   = context.state;
@@ -242,7 +303,7 @@ export default class GeneralLedgerDisplay extends React.Component {
     return  (
       <div>
         <div className="row">
-          <div className="col">
+          <div className="col-md-2">
             <div className="form-group">
               <label>Start Date</label>
               <DatePicker
@@ -253,7 +314,7 @@ export default class GeneralLedgerDisplay extends React.Component {
               />
             </div>
           </div>
-          <div className="col">
+          <div className="col-md-2">
             <div className="form-group">
               <label>End Date</label>
               <DatePicker
@@ -264,7 +325,7 @@ export default class GeneralLedgerDisplay extends React.Component {
               />
             </div>
           </div>
-          <div className="col">
+          <div className="col-md-2">
             <div className="form-group">
               <label>Branch</label>
               <select 
@@ -279,15 +340,34 @@ export default class GeneralLedgerDisplay extends React.Component {
           </div>
           <div className="col">
             <div className="form-group">
+              <label>Acc. Codes</label>
+              <AccountingCodeMultiSelect
+                handleAccountingCodeSelectChanged={this.handleAccountingCodeSelectChanged.bind(this)}
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="form-group">
               <label>Actions</label>
               <br/>
-              <button
-                className="btn btn-primary"
-                onClick={context.handleGenerateClicked.bind(this)}
-              >
-                <span className="fa fa-sync"/>
-                Generate
-              </button>
+              <div className="btn-group">
+                <button
+                  className="btn btn-primary"
+                  onClick={context.handleGenerateClicked.bind(this)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-sync"/>
+                  Generate
+                </button>
+                <button
+                  className="btn btn-info"
+                  onClick={context.handlePrintClicked.bind(this)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-print"/>
+                  Print
+                </button>
+              </div>
             </div>
           </div>
         </div>

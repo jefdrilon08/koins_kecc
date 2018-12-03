@@ -45,6 +45,8 @@ export default class AccountingEntryPreview extends React.Component {
   };
 
   renderCdbParameters() {
+    console.log("CDB Parameters: ");
+    console.log(this.props);
     if(this.props.book == "CDB") {
       return (
         <div className="row">
@@ -109,6 +111,8 @@ export default class AccountingEntryPreview extends React.Component {
     for(var i = 0; i < this.props.journalEntries.length; i++) {
       if(this.props.journalEntries[i].post_type == "DR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
+        var btnEdit   = "";
+
         if(this.props.status == "pending") {
           btnRemove = <button 
                         className="btn btn-sm btn-danger"
@@ -116,11 +120,19 @@ export default class AccountingEntryPreview extends React.Component {
                       >
                         <span className="fa fa-times"/>
                       </button>;
+
+          btnEdit = <button
+                      className="btn btn-sm btn-info"
+                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
+                    >
+                      <span className="fa fa-pencil-alt"/>
+                    </button>
         }
 
         journalEntryRecords.push(
           <tr key={"je-dr-" + i}>
             <td>
+              {btnEdit}
               {btnRemove}
               {this.props.journalEntries[i].accounting_code_name}
             </td>
@@ -138,6 +150,8 @@ export default class AccountingEntryPreview extends React.Component {
     for(var i = 0; i < this.props.journalEntries.length; i++) {
       if(this.props.journalEntries[i].post_type == "CR" && this.props.journalEntries[i].amount > 0) {
         var btnRemove = "";
+        var btnEdit   = "";
+
         if(this.props.status == "pending") {
           btnRemove = <button 
                         className="btn btn-sm btn-danger"
@@ -145,11 +159,19 @@ export default class AccountingEntryPreview extends React.Component {
                       >
                         <span className="fa fa-times"/>
                       </button>;
+
+          btnEdit = <button
+                      className="btn btn-sm btn-info"
+                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
+                    >
+                      <span className="fa fa-pencil-alt"/>
+                    </button>
         }
 
         journalEntryRecords.push(
           <tr key={"je-cr-" + i}>
             <td>
+              {btnEdit}
               {btnRemove}
               {this.props.journalEntries[i].accounting_code_name}
             </td>
@@ -169,7 +191,7 @@ export default class AccountingEntryPreview extends React.Component {
           <div className="row">
             <div className="col-md-6">
               <strong>
-                {this.props.referenceNumber} - {this.props.datePrepared}
+                {this.props.book} {this.props.referenceNumber} - {this.props.datePrepared}
               </strong>
             </div>
             <div className="col-md-6">

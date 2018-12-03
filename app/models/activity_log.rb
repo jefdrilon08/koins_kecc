@@ -4,7 +4,9 @@ class ActivityLog < ApplicationRecord
     "display",
     "deletion",
     "correction",
-    "modification"
+    "modification",
+    "create",
+    "delete"
   ]
 
   validates :content, presence: true
