@@ -36,7 +36,7 @@ module Epassbook
         }
       end
 
-      @data[:total_equities] = number_to_currency(@data[:total_equities], unit: "")
+      @data[:total_equities] = number_to_currency(@data[:total_equities], unit: "") 
 
       @data
     end

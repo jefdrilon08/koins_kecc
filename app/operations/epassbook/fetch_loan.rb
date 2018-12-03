@@ -17,6 +17,7 @@ module Epassbook
         loan: {
           id: @loan.id,
           pn_number: @loan.pn_number,
+          loan_product: @loan.loan_product.name,
           principal: number_to_currency(@loan.principal, unit: ""),
           interest: number_to_currency(@loan.interest, unit: ""),
           principal_paid: number_to_currency(@loan.principal_paid, unit: ""),
@@ -33,6 +34,16 @@ module Epassbook
     def execute!
       @amortization_schedule_entries.each do |o|
         @running_balance -= o.total_paid
+        paid_html = ""
+
+
+        if o.data["is_paid"] == true
+          paid_html = "<span class='badge badge-success'>paid</span>"
+        end
+
+        if o.is_paid == true
+          paid = "paid"
+        end
 
         @data[:loan][:amortization] << {
           id: o.id,
@@ -40,7 +51,9 @@ module Epassbook
           paid: number_to_currency(o.total_paid, unit: ""),
           balance: number_to_currency(o.total_balance, unit: ""),
           amount_due: number_to_currency(o.amount_due, unit: ""),
-          running_balance: number_to_currency(@running_balance, unit: "")
+          running_balance: number_to_currency(@running_balance, unit: ""),
+          is_paid: paid,
+          paid_html: paid_html
         }
       end
 

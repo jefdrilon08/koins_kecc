@@ -51,6 +51,8 @@ module Epassbook
         @total_amount = @total_loan + @total_interest
         @total_paid += o.total_paid
         @next_payment_total_amount += next_payment_amount
+
+
       end
 
       @data = {
@@ -61,7 +63,8 @@ module Epassbook
         total_balance: number_to_currency(@total_balance, unit: ""),
         total_amount: number_to_currency(@total_amount, unit: ""),
         total_paid: number_to_currency(@total_paid, unit: ""),
-        next_payment_total_amount: number_to_currency(@next_payment_total_amount, unit: "")
+        next_payment_total_amount: number_to_currency(@next_payment_total_amount, unit: ""),
+        beggining_balance: @total_amount
       }
 
       @data

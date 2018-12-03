@@ -8,16 +8,19 @@ module Api
         def payments
           member  = Member.where(access_token: @access_token).first
           loan    = Loan.where(id: params[:id], member_id: member.id).first
+          beggining_balance = loan.interest + loan.principal
+
 
           data  = {
             id: loan.id,
             pn_number: loan.pn_number,
             loan_product: loan.loan_product.to_s,
             date_released: loan.date_released.strftime("%b %d, %Y"),
+            beggining_balance: number_to_currency(beggining_balance, unit: ""),
             payments: []
           }
 
-          balance = loan.total_dues
+          balance = loan.total_dues 
 
           AccountTransaction.approved_loan_payments.where(
             subsidiary_id: loan.id,
@@ -25,6 +28,8 @@ module Api
           ).order("transacted_at ASC").each do |o|
             amount_due  = o["data"]["amount_due"].to_f
             balance -= o.amount
+
+            
 
 #            o["data"]["amort_entries"].each do |a|
 #              amount_due += a["principal_paid"].to_f + a["interest_paid"].to_f
@@ -36,6 +41,8 @@ module Api
               transacted_at: o.transacted_at.strftime("%b %d, %Y"),
               balance: number_to_currency(balance, unit: "")
             }
+
+            
           end
 
           render json: data
