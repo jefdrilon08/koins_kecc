@@ -13,7 +13,7 @@
       = link_to "#", class: 'btn', id: 'btn-print' do
         .fa.fa-print
         Print
-      - if @membership_payment_collection.pending?
+      - if @membership_payment_collection.pending? && (current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
         = link_to "#", class: 'btn', id: 'btn-approve' do
           .fa.fa-check
           Approve
