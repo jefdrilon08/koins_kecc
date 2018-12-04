@@ -240,9 +240,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
         error: function(response) {
           alert("Error in saving accounting entry");
           console.log(response);
+
+          var errors  = JSON.parse(response.responseText).errors;
           context.setState({
             isLoading: false,
-            message: "Error"
+            message: "Error",
+            errors: errors
           });
         }
       });
@@ -637,6 +640,12 @@ export default class AccountingEntryFormDisplay extends React.Component {
       journalEntry: journalEntry
     });
   }
+  
+  handleCancelJournalEntryClicked() {
+    this.setState({
+      modalEditIsOpen: false
+    })
+  }
 
   handleSaveJournalEntryClicked() {
     var journalEntry    = this.state.journalEntry;
@@ -751,6 +760,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
             </button>
             <button 
               className="btn btn-danger"
+              onClick={this.handleCancelJournalEntryClicked.bind(this)}
             >
               <span className="fa fa-times"/>
               Cancel
