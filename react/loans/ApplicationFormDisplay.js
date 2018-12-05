@@ -136,6 +136,8 @@ export default class ApplicationFormDisplay extends React.Component {
 
     data.data.clip_number = event.target.value;
 
+    //data.data.voucher.particular  = data.data.voucher.particular.replace(/clip#/g, "clip# " + data.data.clip_number);
+
     this.updateData(data);
   }
 

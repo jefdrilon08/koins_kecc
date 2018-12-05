@@ -53,6 +53,87 @@ class Loan < ApplicationRecord
     ["active", "paid"].include?(self.status)
   end
 
+  # Insurance CLIP related information
+  def clip_number
+    temp  = self.data.with_indifferent_access
+
+    temp[:clip_number]
+  end
+
+  def beneficiary_first_name
+    temp  = self.data.with_indifferent_access
+
+    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:first_name]
+      temp[:clip_beneficiary] and temp[:clip_beneficiary][:first_name]
+    end
+  end
+
+  def beneficiary_middle_name
+    temp  = self.data.with_indifferent_access
+
+    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:middle_name]
+      temp[:clip_beneficiary] and temp[:clip_beneficiary][:middle_name]
+    end
+  end
+
+  def beneficiary_last_name
+    temp  = self.data.with_indifferent_access
+
+    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:last_name]
+      temp[:clip_beneficiary] and temp[:clip_beneficiary][:last_name]
+    end
+  end
+
+  def beneficiary_relationship
+    temp  = self.data.with_indifferent_access
+
+    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:relationship]
+      temp[:clip_beneficiary] and temp[:clip_beneficiary][:relationship]
+    end
+  end
+
+  def beneficiary_date_of_birth
+    temp  = self.data.with_indifferent_access
+
+    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:date_of_birth]
+      temp[:clip_beneficiary] and temp[:clip_beneficiary][:date_of_birth].to_date.strftime("%b %d, %Y")
+    end
+  end
+
+  def voucher_bank_check_number
+    temp  = self.data.with_indifferent_access[:voucher]
+
+    temp[:bank_check_number]
+  end
+
+  def voucher_check_voucher_number
+    temp  = self.data.with_indifferent_access[:voucher]
+
+    temp[:check_number]
+  end
+
+  def voucher_date_requested
+    temp  = self.data.with_indifferent_access[:voucher]
+
+    if temp[:date_requested]
+      temp[:date_requested].to_date.strftime("%b %d, %Y")
+    end
+  end
+
+  def voucher_date_of_check
+    temp  = self.data.with_indifferent_access[:voucher]
+
+    if temp[:date_of_check]
+      temp[:date_of_check].to_date.strftime("%b %d, %Y")
+    end
+  end
+
+  def voucher_particular
+    temp  = self.data.with_indifferent_access[:voucher]
+
+    temp[:particular]
+  end
+
   def pending?
     self.status == "pending"
   end

@@ -1,0 +1,35 @@
+%table.table.table-hover.table-sm
+  %tr
+    %th
+      CLIP Number:
+    %td.text-right
+      #{@loan.clip_number}
+
+%h6
+  Loan Beneficiary
+%table.table.table-hover.table-sm
+  %tr
+    %th
+      First Name
+    %td.text-right
+      #{@loan.beneficiary_first_name}
+  %tr
+    %th
+      Middle Name
+    %td.text-right
+      #{@loan.beneficiary_middle_name}
+  %tr
+    %th
+      Last Name
+    %td.text-right
+      #{@loan.beneficiary_last_name}
+  %tr
+    %th
+      Date of Birth
+    %td.text-right
+      #{@loan.beneficiary_date_of_birth}
+  %tr
+    %th
+      Relationship
+    %td.text-right
+      #{@loan.beneficiary_relationship}
