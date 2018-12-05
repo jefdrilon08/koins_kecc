@@ -9,6 +9,28 @@ module Api
         render json: membership_payment_collection
       end
 
+      def remove_member
+        config  = {
+          membership_payment_collection:  MembershipPaymentCollection.where(id: params[:id]).first,
+          member: Member.where(id: params[:member_id]).first,
+          user: current_user
+        }
+
+        errors  = ::MembershipPaymentCollections::ValidateRemoveMember.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          o = ::MembershipPaymentCollections::RemoveMember.new(
+                config: config
+              ).execute!
+
+          render json: { id: o.id }
+        end
+      end
+
       def add_member
         config  = {
           membership_payment_collection:  MembershipPaymentCollection.where(id: params[:id]).first,

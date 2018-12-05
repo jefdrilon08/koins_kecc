@@ -7,19 +7,9 @@ import "react-toggle/style.css";
 import 'react-table/react-table.css';
 
 import {numberWithCommas} from '../utils/helpers';
+import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
-};
 
 Modal.setAppElement("#membership-payment-collection-content")
 
@@ -69,6 +59,48 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
     return headers;
   }
 
+  handleRemoveRecord(id) {
+    var context = this;
+
+    this.setState({
+      isLoading: true
+    });
+
+    $.ajax({
+      url: "/api/v1/membership_payment_collections/remove_member",
+      method: 'POST',
+      data: {
+        authenticity_token: context.props.authenticityToken,
+        member_id: id,
+        id: context.props.data.id
+      },
+      success: function(response) {
+        context.setState({
+          errors: false,
+          message: "Success! Redirecting..."
+        });
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          console.log(response);
+          context.setState({
+            errors: JSON.parse(response.responseText),
+            isLoading: false,
+            message: "Error"
+          });
+        } catch(err) {
+          context.setState({
+            errors: false,
+            message: "Error!",
+            isLoading: false
+          });
+        }
+      }
+    });
+  }
+
   buildRecords() {
     var records = [];
 
@@ -79,6 +111,13 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
 
       components.push(
         <td key={"c-member-" + member.id}>
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={this.handleRemoveRecord.bind(this, member.id)}
+            disabled={this.state.isLoading}
+          >
+            <span className="fa fa-times"/>
+          </button>
           <strong>
             <a href={"/members/" + member.id + "/display"} target="_blank">
               {this.props.data.data.records[i].member.full_name}
@@ -405,7 +444,6 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
                 disabled={this.state.isLoading}
                 onChange={this.handleInputAmountChanged.bind(this)}
               />
-
               {this.renderLoadingStatus()}
             </div>
           </div>
@@ -455,6 +493,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         >
           {this.renderModalContent()}
         </Modal>
+        {this.renderLoadingStatus()}
         <table className="table table-bordered table-hover table-sm">
           <thead>
             <tr>
