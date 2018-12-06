@@ -1,6 +1,6 @@
 = simple_form_for([:administration, @loan_product]) do |f|
   .row
-    .col-md-6
+    .col-md-4
       .form-group
         = f.input :name, input_html: { class: 'form-control' }
     .col-md-2
@@ -16,6 +16,9 @@
         %label
           Insured
         = f.input :insured, label: false
+    .col-md-2
+      .form-group
+        = f.input :priority, input_html: { class: 'form-control' }
   .row
     .col
       .form-group

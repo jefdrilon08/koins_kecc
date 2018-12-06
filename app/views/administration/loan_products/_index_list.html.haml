@@ -9,15 +9,14 @@
         Max Loan Amount
       %th.text-right
         Denomination
-      %th
-        %center
-          Insured
-      %th
-        %center
-          Entry Point
-      %th
-        %center
-          Monthly I.R.
+      %th.text-center
+        Insured
+      %th.text-center
+        Entry Point
+      %th.text-center
+        Monthly I.R.
+      %th.text-center
+        Priority
   %tbody
     - @loan_products.each do |o|
       %tr
@@ -42,14 +41,14 @@
             - else
               .badge.badge-danger
                 .fa.fa-times
-        %td
-          %center
-            - if o.is_entry_point
-              .badge.badge-success
-                .fa.fa-check
-            - else
-              .badge.badge-danger
-                .fa.fa-times
-        %td
-          %center
-            #{number_to_currency(o.monthly_interest_rate * 100, unit: "")} %
+        %td.text-center
+          - if o.is_entry_point
+            .badge.badge-success
+              .fa.fa-check
+          - else
+            .badge.badge-danger
+              .fa.fa-times
+        %td.text-center
+          #{number_to_currency(o.monthly_interest_rate * 100, unit: "")} %
+        %td.text-center
+          #{o.priority}

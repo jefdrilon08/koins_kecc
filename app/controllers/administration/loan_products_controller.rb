@@ -3,7 +3,7 @@ module Administration
     before_action :authenticate_user!
 
     def index
-      @loan_products  = LoanProduct.select("*").order("name ASC")
+      @loan_products  = LoanProduct.select("*").order("priority ASC, name ASC")
     end
 
     def show
