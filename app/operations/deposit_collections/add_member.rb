@@ -1,0 +1,55 @@
+module DepositCollections
+  class AddMember
+    def initialize(config:)
+      @config                         = config
+      @deposit_collection  = @config[:deposit_collection]
+      @member                         = @config[:member]
+
+      @data = @deposit_collection.data.with_indifferent_access
+    end
+
+    def execute!
+      # Build member object
+      @member_object  = {
+        id: @member.id,
+        full_name: @member.full_name,
+        first_name: @member.first_name,
+        middle_name: @member.middle_name,
+        last_name: @member.last_name,
+        identification_number: @member.identification_number
+      }
+
+      # Build member records
+      @records  = []
+      @data[:headers].each_with_index do |o, i|
+        member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o, account_type: "SAVINGS").first
+        enabled         = false
+
+        if member_account
+          enabled = true
+        end
+
+        @records << {
+          amount: 0.00,
+          enabled: enabled,
+          member_id: @member.id,
+          record_type: "SAVINGS",
+          account_subtype: o,
+          member_account_id: member_account.id
+        }
+      end
+
+      @data[:records] << {
+        member: @member_object,
+        records: @records,
+        total_collected: 0.00
+      }
+
+      @deposit_collection.update!(
+        data: @data
+      )
+
+      @deposit_collection
+    end
+  end
+end

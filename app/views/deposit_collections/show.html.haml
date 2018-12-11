@@ -1,0 +1,40 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @deposit_collection.pending?
+            .callout.callout-info
+              %p
+                Pindutin ang amount upang baguhin ito.
+          %h5
+            Deposit Collection for #{@deposit_collection.branch} / #{@deposit_collection.center} - #{@deposit_collection.collection_date.strftime("%b %d, %Y")}
+          #deposit-collection-content
+
+          - if debug?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@deposit_collection.to_json))}
+
+= render partial: "shared/modals/print"
+= render partial: "deposit_collections/modals/approve"
+= render partial: "templates/error_list"
+
+#parameters{ data: { id: @deposit_collection.id } }
+
+= javascript_include_tag "DepositCollectionUI.min.react"
+= javascript_include_tag "deposit_collections/Show"
+
+:javascript
+  $(document).ready(function() {
+    var $parameters                   = $("#parameters");
+    var depositCollectionId = $parameters.data('id');
+    var authenticityToken             = $("meta[name='csrf-token']").attr('content');
+
+    Show.init({
+      depositCollectionId: depositCollectionId, 
+      authenticityToken: authenticityToken
+    });
+  });

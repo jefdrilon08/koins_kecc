@@ -76,6 +76,18 @@ namespace :api do
     post "/membership_payment_collections/add_member", to: "membership_payment_collections#add_member"
     post "/membership_payment_collections/remove_member", to: "membership_payment_collections#remove_member"
 
+    # Deposit Collection
+    post "/deposit_collections", to: "deposit_collections#create"
+    post "/deposit_collections/modify_transaction_record", to: "deposit_collections#modify_transaction_record"
+    post "/deposit_collections/approve", to: "deposit_collections#approve"
+    post "/deposit_collections/update_or_number", to: "deposit_collections#update_or_number"
+    post "/deposit_collections/update_ar_number", to: "deposit_collections#update_ar_number"
+    post "/deposit_collections/update_particular", to: "deposit_collections#update_particular"
+    get "/deposit_collections/fetch", to: "deposit_collections#fetch"
+    get "/deposit_collections/fetch_members", to: "deposit_collections#fetch_members"
+    post "/deposit_collections/add_member", to: "deposit_collections#add_member"
+    post "/deposit_collections/remove_member", to: "deposit_collections#remove_member"
+
     # Survey Answers
     post "/survey_answers", to: "survey_answers#create"
     post "/survey_answers/save", to: "survey_answers#save"

@@ -11,9 +11,9 @@ import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
 
-Modal.setAppElement("#membership-payment-collection-content")
+Modal.setAppElement("#deposit-collection-content")
 
-export default class MembershipPaymentCollectionUITable extends React.Component {
+export default class DepositCollectionUITable extends React.Component {
   constructor(props) {
     super(props);
 
@@ -67,7 +67,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
     });
 
     $.ajax({
-      url: "/api/v1/membership_payment_collections/remove_member",
+      url: "/api/v1/deposit_collections/remove_member",
       method: 'POST',
       data: {
         authenticity_token: context.props.authenticityToken,
@@ -135,72 +135,23 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
 
       for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
         var paymentRecord = this.props.data.data.records[i].records[j];
-        if(paymentRecord.record_type == "ID" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
-            components.push(
-              <td key={"id-payment"} className="text-right">
-                <strong>
-                  <a 
-                    href="#"
-                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                  >
-                    {numberWithCommas(paymentRecord.amount)}
-                  </a>
-                </strong>
-              </td>
-            );
-          } else {
-            components.push(
-              <td key={"id-payment"} className="text-right">
-                {numberWithCommas(paymentRecord.amount)}
-              </td>
-            );
-          }
-        } else if(paymentRecord.record_type == "MEMBERSHIP_PAYMENT" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
-            components.push(
-              <td key={"membership-payment-" + paymentRecord.account_subtype} className="text-right">
-                <strong>
-                  <a 
-                    href="#"
-                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                  >
-                    {numberWithCommas(paymentRecord.amount)}
-                  </a>
-                </strong>
-              </td>
-            );
-          } else {
-            components.push(
-              <td key={"membership-payment-" + paymentRecord.account_subtype} className="text-right">
-                {numberWithCommas(paymentRecord.amount)}
-              </td>
-            );
-          }
-        } else if(paymentRecord.record_type == "EQUITY" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
-            components.push(
-              <td key={"equity-" + paymentRecord.member_account_id} className="text-right">
-                <strong>
-                  <a 
-                    href="#"
-                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                  >
-                    {numberWithCommas(paymentRecord.amount)}
-                  </a>
-                </strong>
-              </td>
-            );
-          } else {
-            components.push(
-              <td key={"equity-" + paymentRecord.member_account_id} className="text-right">
-                {numberWithCommas(paymentRecord.amount)}
-              </td>
-            );
-          }
+        if(this.props.data.status == "pending") {
+          components.push(
+            <td key={"deposit-payment-" + j} className="text-right">
+              <strong>
+                <a 
+                  href="#"
+                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                >
+                  {numberWithCommas(paymentRecord.amount)}
+                </a>
+              </strong>
+            </td>
+          );
         } else {
           components.push(
-            <td key={"na-" + member.id + "-" + j}>
+            <td key={"na-" + member.id + "-" + j} className="text-right">
+              {numberWithCommas(paymentRecord.amount)}
             </td>
           )
         }
@@ -237,31 +188,13 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
 
     var totals  = this.props.data.data.totals;
     for(var i = 0; i < totals.length; i++) {
-      if(totals[i].record_type == "ID") {
-        records.push(
-          <td key={"total-id-payment"} className="text-right">
-            <strong>
-              {numberWithCommas(totals[i].amount)}
-            </strong>
-          </td>
-        );
-      } else if(totals[i].record_type == "MEMBERSHIP_PAYMENT") {
-        records.push(
-          <td key={"total-membership-payment-" + totals[i].key} className="text-right">
-            <strong>
-              {numberWithCommas(totals[i].amount)}
-            </strong>
-          </td>
-        );
-      } else if(totals[i].record_type == "EQUITY") {
-        records.push(
-          <td key={"total-equity-" + totals[i].key} className="text-right">
-            <strong>
-              {numberWithCommas(totals[i].amount)}
-            </strong>
-          </td>
-        );
-      }
+      records.push(
+        <td key={"total-deposit-payment-" + i} className="text-right">
+          <strong>
+            {numberWithCommas(totals[i].amount)}
+          </strong>
+        </td>
+      );
     }
 
     records.push(
@@ -319,36 +252,11 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
     var currentTransaction  = this.state.currentTransaction;
     var currentMember       = this.state.currentMember;
 
-    if(currentTransaction.record_type == "ID") {
-      return (
-        <h5>
-          ID PAYMENT
-        </h5>
-      );
-    } else if(currentTransaction.record_type == "MEMBERSHIP_PAYMENT") {
-      return (
-        <h5>
-          Membership Payment: &nbsp;
-          <span className="text-muted">
-            {currentTransaction.account_subtype}
-          </span>
-        </h5>
-      );
-    } else if(currentTransaction.record_type == "EQUITY") {
-      return (
-        <h5>
-          Equity: &nbsp;
-          <span className="text-muted">
-            {currentTransaction.account_subtype} 
-          </span>
-        </h5>
-      );
-    } else {
-      return (
-        <div>
-        </div>
-      );
-    }
+    return (
+      <h5>
+        SAVINGS
+      </h5>
+    );
   }
 
   handleModalConfirm() {
@@ -368,7 +276,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
     });
 
     $.ajax({
-      url: "/api/v1/membership_payment_collections/modify_transaction_record",
+      url: "/api/v1/deposit_collections/modify_transaction_record",
       method: "POST",
       data: data,
       success: function(response) {

@@ -1,0 +1,28 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @deposit_collections.size > 0
+            = render partial: "index_list", locals: { deposit_collections: @deposit_collections }
+            = paginate @deposit_collections
+          - else
+            %p
+              No deposit_collections found
+
+= render partial: "deposit_collections/modals/new_transaction"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+= javascript_include_tag "deposit_collections/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

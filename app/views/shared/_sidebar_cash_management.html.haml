@@ -7,3 +7,7 @@
       = link_to membership_payment_collections_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-download
         Membership Payment
+    %li{ class: "nav-item #{params[:controller] == 'deposit_collections' ? 'active' : ''}" }
+      = link_to deposit_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-download
+        Deposits
