@@ -1,5 +1,5 @@
-module DepositCollections
-  class CreateDepositCollection
+module WithdrawalCollections
+  class CreateWithdrawalCollection
     def initialize(config:)
       @config           = config
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
@@ -7,13 +7,12 @@ module DepositCollections
       @branch           = Branch.where(id: @config[:branch_id]).first
       @center           = Center.where(id: @config[:center_id]).first
 
-      @default_deposit_accounts = Settings.default_deposit_accounts
-
-      @deposit_collection  = DepositCollection.new(
-                                          collection_date: @collection_date,
-                                          branch: @branch,
-                                          center: @center
-                                        )
+      @default_withdrawal_accounts  = Settings.default_withdrawal_accounts
+      @withdrawal_collection        = WithdrawalCollection.new(
+                                        collection_date: @collection_date,
+                                        branch: @branch,
+                                        center: @center
+                                      )
 
       @members  = []
 
@@ -31,7 +30,7 @@ module DepositCollections
       load_headers_and_totals!
 
       # Load accounting entry
-      @data[:accounting_entry]  = ::DepositCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::WithdrawalCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @branch,
                                       data: @data,
@@ -39,21 +38,21 @@ module DepositCollections
                                     }
                                   ).execute!
 
-      @deposit_collection.data = @data
-      @deposit_collection.save!
+      @withdrawal_collection.data = @data
+      @withdrawal_collection.save!
 
-      @deposit_collection
+      @withdrawal_collection
     end
 
     private
 
     def load_headers_and_totals!
-      # DEPOSITS: default_deposit_accounts
-      @default_deposit_accounts.each do |c|
+      # DEPOSITS: default_withdrawal_accounts
+      @default_withdrawal_accounts.each do |c|
         @data[:headers] << c.account_subtype
 
         @data[:totals] << {
-          record_type: c.account_type,
+          record_type: "SAVINGS",
           key: c.account_subtype,
           amount: 0.00
         }

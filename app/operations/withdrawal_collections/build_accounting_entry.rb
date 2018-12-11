@@ -28,9 +28,8 @@ module DepositCollections
         }
       }
 
-      @default_deposit_accounts   = Settings.default_deposit_accounts
-      @savings_accounting_codes   = Settings.savings_accounting_codes
-      @insurance_accounting_codes = Settings.insurance_accounting_codes
+      @default_withdrawal_accounts  = Settings.default_withdrawal_accounts
+      @savings_accounting_codes     = Settings.savings_accounting_codes
 
       @branch_accounting_code_settings = nil
 
@@ -76,7 +75,7 @@ module DepositCollections
 
     private
 
-    def build_debit_journal_entries!
+    def build_credit_journal_entries!
       journal_entries = []
 
       accounting_code = AccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
@@ -90,28 +89,13 @@ module DepositCollections
       journal_entries
     end
 
-    def build_credit_journal_entries!
+    def build_debit_journal_entries!
       journal_entries = []
 
-      # SAVINGS DEPOSITS
+      # DEPOSITS
       @savings_accounting_codes.each do |p|
         @data[:totals].each do |o|
           if o[:record_type] == "SAVINGS" and o[:key] == p.savings_type and o[:amount] > 0
-            accounting_code = AccountingCode.find(p.deposit_accounting_code_id)
-            journal_entries << {
-              accounting_code_id: accounting_code.id,
-              code: accounting_code.code,
-              name: accounting_code.name,
-              amount: o[:amount]
-            }
-          end
-        end
-      end
-
-      # INSURANCE DEPOSITS
-      @insurance_accounting_codes.each do |p|
-        @data[:totals].each do |o|
-          if o[:record_type] == "INSURANCE" and o[:key] == p.insurance_type and o[:amount] > 0
             accounting_code = AccountingCode.find(p.deposit_accounting_code_id)
             journal_entries << {
               accounting_code_id: accounting_code.id,
@@ -127,7 +111,7 @@ module DepositCollections
     end
 
     def default_particular
-      "TO RECORD DEPOSIT OF #{@branch.name}"
+      "TO RECORD WITHDRAWAL OF #{@branch.name}"
     end
   end
 end

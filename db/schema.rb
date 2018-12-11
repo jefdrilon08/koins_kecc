@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_11_064049) do
+ActiveRecord::Schema.define(version: 2018_12_11_083059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -434,6 +434,18 @@ ActiveRecord::Schema.define(version: 2018_12_11_064049) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_withdrawal_collections_on_branch_id"
+    t.index ["center_id"], name: "index_withdrawal_collections_on_center_id"
+  end
+
   add_foreign_key "account_transaction_collections", "branches"
   add_foreign_key "account_transaction_collections", "centers"
   add_foreign_key "accounting_entries", "branches"
@@ -466,4 +478,6 @@ ActiveRecord::Schema.define(version: 2018_12_11_064049) do
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "survey_answers", "surveys"
   add_foreign_key "survey_questions", "surveys"
+  add_foreign_key "withdrawal_collections", "branches"
+  add_foreign_key "withdrawal_collections", "centers"
 end

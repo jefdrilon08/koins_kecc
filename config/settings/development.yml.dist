@@ -47,6 +47,14 @@ default_deposit_accounts:
     account_type: "SAVINGS"
     account_subtype: "Golden K"
 
+default_withdrawal_accounts:
+  -
+    account_type: "SAVINGS"
+    account_subtype: "K-IMPOK"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Golden K"
+
 default_member_accounts:
   -
     account_type: "SAVINGS"

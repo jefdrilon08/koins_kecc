@@ -1,15 +1,15 @@
-module DepositCollections
+module WithdrawalCollections
   class RemoveMember
     def initialize(config:)
-      @config                         = config
-      @deposit_collection  = @config[:deposit_collection]
-      @member                         = @config[:member]
-      @user                           = @config[:user]
+      @config             = config
+      @withdrawal_collection = @config[:withdrawal_collection]
+      @member             = @config[:member]
+      @user               = @config[:user]
 
-      @branch = @deposit_collection.branch
-      @data   = @deposit_collection.data.with_indifferent_access
+      @branch = @withdrawal_collection.branch
+      @data   = @withdrawal_collection.data.with_indifferent_access
 
-      @default_deposit_accounts = Settings.default_deposit_accounts
+      @default_withdrawal_accounts = Settings.default_withdrawal_accounts
     end
 
     def execute!
@@ -31,26 +31,25 @@ module DepositCollections
       @data[:totals]          = []
 
       # DEPOSIT
-      @default_deposit_accounts.each do |o|
+      @default_withdrawal_accounts.each do |o|
         total = 0.00
-
         @data[:records].each do |r|
           r[:records].each do |rr|
-            if rr[:account_subtype] == o.name
+            if rr[:record_type] == "SAVINGS" && rr[:account_subtype] == o.name
               total += rr[:amount].to_f.round(2)
             end
           end
         end
 
         @data[:totals] << {
-          record_type: o.account_type,
+          record_type: "SAVINGS",
           key: o.name,
           amount: total
         }
       end
 
       # Load accounting entry
-      @data[:accounting_entry]  = ::DepositCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::WithdrawalCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @branch,
                                       data: @data,
@@ -59,11 +58,11 @@ module DepositCollections
                                   ).execute!
       ##########################
 
-      @deposit_collection.update!(
+      @withdrawal_collection.update!(
         data: @data
       )
 
-      @deposit_collection
+      @withdrawal_collection
     end
   end
 end

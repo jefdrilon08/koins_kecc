@@ -1,20 +1,20 @@
-module DepositCollections
+module WithdrawalCollections
   class ModifyTransactionRecord
     def initialize(config:)
       @config               = config
-      @deposit_collection   = @config[:deposit_collection]
+      @withdrawal_collection   = @config[:withdrawal_collection]
       @current_transaction  = @config[:current_transaction]
       @current_member       = @config[:current_member]
       @user                 = @config[:user]
 
       @original_amount  = false
 
-      @data = @deposit_collection.data.with_indifferent_access
+      @data = @withdrawal_collection.data.with_indifferent_access
     end
 
     def execute!
       # Check record_type
-      update_deposit!
+      update_withdrawal!
 
       # Recompute totals
       recompute_totals!
@@ -26,7 +26,7 @@ module DepositCollections
         activity_type: "modification",
         data: {
           user_id: @user.id,
-          deposit_collection_id: @deposit_collection.id,
+          withdrawal_collection_id: @withdrawal_collection.id,
           current_transaction: @current_transaction,
           current_member: @current_member
         }
@@ -34,20 +34,20 @@ module DepositCollections
       
 
       # Update accounting_entry
-      @data[:accounting_entry]  = ::DepositCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::WithdrawalCollections::BuildAccountingEntry.new(
                                     config: {
-                                      branch: @deposit_collection.branch,
+                                      branch: @withdrawal_collection.branch,
                                       data: @data,
                                       user: @user
                                     }
                                   ).execute!
 
-      # Update deposit_collection
-      @deposit_collection.data = @data
+      # Update withdrawal_collection
+      @withdrawal_collection.data = @data
 
-      @deposit_collection.save!
+      @withdrawal_collection.save!
 
-      @deposit_collection
+      @withdrawal_collection
     end
 
     private
@@ -55,9 +55,11 @@ module DepositCollections
     def construct_log_message!
       content = ""
 
-      member          = Member.find(@current_member[:id])
+      if @current_transaction[:record_type] == "SAVINGS"
+        member          = Member.find(@current_member[:id])
 
-      content = "#{@user.full_name} modified deposit amount from #{@original_amount} to #{@current_transaction[:amount]} of #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
+        content = "#{@user.full_name} modified withdrawal amount from #{@original_amount} to #{@current_transaction[:amount]} of #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
+      end
 
       content
     end
@@ -81,15 +83,6 @@ module DepositCollections
               end
             end
           end
-        elsif t[:record_type] == "INSURANCE"
-          @data[:records].each_with_index do |r, i|
-            r[:records].each_with_index do |rr, j|
-              if rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
-                total_collected += rr[:amount].try(:to_f).round(2)
-                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
-              end
-            end
-          end
         end
       end
 
@@ -108,14 +101,11 @@ module DepositCollections
       end
     end
 
-    def update_deposit!
+    def update_withdrawal!
       @data[:records].each_with_index do |r, i|
         if r[:member][:id] == @current_member[:id]
           r[:records].each_with_index do |rr, j|
             if rr[:record_type] == "SAVINGS" and rr[:account_subtype] == @current_transaction[:account_subtype]
-              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
-              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
-            elsif rr[:record_type] == "INSURANCE" and rr[:account_subtype] == @current_transaction[:account_subtype]
               @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
               @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
             end
