@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_06_030813) do
+ActiveRecord::Schema.define(version: 2018_12_11_061303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -318,6 +318,7 @@ ActiveRecord::Schema.define(version: 2018_12_06_030813) do
     t.datetime "updated_at", null: false
     t.string "access_token"
     t.text "signature_data"
+    t.boolean "modifiable"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
   end

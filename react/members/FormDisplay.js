@@ -30,6 +30,7 @@ export default class FormDisplay extends React.Component {
       authenticityToken: props.authenticityToken,
       branches: [],
       centers: [],
+      authError: false,
       currentBranch: {
         value: "",
         label: ""
@@ -191,10 +192,11 @@ export default class FormDisplay extends React.Component {
       },
       error: function(response) {
         console.log(response);
-        alert("Error in fetching members data");
 
         context.setState({
-          isLoading: true,
+          authError: JSON.parse(response.responseText),
+          errors: JSON.parse(response.responseText),
+          isLoading: false,
           data: false
         });
       }
@@ -247,6 +249,12 @@ export default class FormDisplay extends React.Component {
     if(state.isLoading) {
       return  (
         <SkCubeLoading/>
+      );
+    } else if(state.authError != false) {
+      return  (
+        <div>
+          {this.renderErrorDisplay()}
+        </div>
       );
     } else if(state.data != false) {
       return (

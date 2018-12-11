@@ -106,8 +106,9 @@ module Members
 
       #raise ld_to_remove_ids.inspect
 
-      @member.branch  = @branch
-      @member.center  = @center
+      @member.branch      = @branch
+      @member.center      = @center
+      @member.modifiable  = nil
 
       @member.save!
       @member = Member.find(@member.id)

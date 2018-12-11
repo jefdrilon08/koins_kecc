@@ -5,6 +5,8 @@ module Loans
 
       @loan = config[:loan]
       @user = config[:user]
+
+      @valid_roles  = ["MIS", "BK", "SBK"]
     end
 
     def execute!
@@ -25,7 +27,12 @@ module Loans
           key: "user",
           message: "User not found"
         }
-      end 
+      elsif (@valid_roles & @user.roles).size == 0
+        @errors[:messages] << {
+          key: "user",
+          message: "unauthorized roles: #{@user.roles}"
+        }
+      end
 
       #not_yet_implemented!
 

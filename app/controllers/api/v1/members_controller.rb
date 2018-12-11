@@ -3,6 +3,39 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def unlock
+        member  = Member.find(params[:id])
+        
+        config  = {
+          member: member,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateUnlock.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          member_id         = member.id
+          member_full_name  = member.full_name
+
+          member.update!(modifiable: true)
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} unlocked member #{member_full_name}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def delete
         member  = Member.find(params[:id])
         
@@ -152,14 +185,23 @@ module Api
 
       def fetch
         config  = {
-          id: params[:id]
+          id: params[:id],
+          user: current_user
         }
 
-        data  = ::Members::Fetch.new(
-                  config: config
-                ).execute!
+        errors  = ::Members::ValidateFetch.new(
+                    config: config
+                  ).execute!
 
-        render json: data
+        if errors[:full_messages].size > 0
+          render json: errors, status: 402
+        else
+          data  = ::Members::Fetch.new(
+                    config: config
+                  ).execute!
+
+          render json: data
+        end
       end
 
       def destroy

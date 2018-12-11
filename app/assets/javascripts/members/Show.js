@@ -4,6 +4,7 @@ var Show  = (function() {
   var $modalNewLoan;
   var $modalDelete;
   var $modalCreateSurvey;
+  var $modalUnlock;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -15,6 +16,8 @@ var Show  = (function() {
   var $btnConfirmCreateSurvey;
   var $btnDelete;
   var $btnConfirmDelete;
+  var $btnUnlock;
+  var $btnConfirmUnlock;
   var $selectLoanProduct;
   var $selectSurvey;
   var $message;
@@ -26,6 +29,7 @@ var Show  = (function() {
   var _urlNewLoan             = "/api/v1/loans/apply";
   var _urlCreateSurvey        = "/api/v1/members/create_survey";
   var _urlDelete              = "/api/v1/members/delete";
+  var _urlUnlock              = "/api/v1/members/unlock";
   var _memberId;
   var _authenticityToken;
 
@@ -41,6 +45,7 @@ var Show  = (function() {
     $modalNewLoan                   = $("#modal-new-loan");
     $modalCreateSurvey              = $("#modal-create-survey");
     $modalDelete                    = $("#modal-delete");
+    $modalUnlock                    = $("#modal-unlock");
     $btnGenerateAccessToken         = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature            = $("#btn-confirm-signature");
@@ -52,6 +57,8 @@ var Show  = (function() {
     $btnConfirmNewLoan              = $("#btn-confirm-new-loan");
     $btnDelete                      = $("#btn-delete");
     $btnConfirmDelete               = $("#btn-confirm-delete");
+    $btnUnlock                      = $("#btn-unlock");
+    $btnConfirmUnlock               = $("#btn-confirm-unlock");
     $selectLoanProduct              = $("#select-loan-product");
     $selectSurvey                   = $("#select-survey");
 
@@ -60,6 +67,52 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnUnlock.on("click", function() {
+      $message.html("");
+      $modalUnlock.modal("show");
+    });
+
+    $btnConfirmUnlock.on("click", function() {
+      $message.html("");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmUnlock.prop("disabled", true);
+
+      $.ajax({
+        url: _urlUnlock,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmUnlock.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnDelete.on("click", function() {
       $message.html("");
       $modalDelete.modal("show");

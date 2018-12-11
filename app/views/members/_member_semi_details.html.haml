@@ -30,9 +30,14 @@
         .value.text-muted
           %b
             #{@member.insurance_status.upcase} 
-    = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
-      %i.fa.fa-edit
-      Edit Record
+    - if @member.modifiable
+      = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
+        %i.fa.fa-edit
+        Edit Record
+    - else
+      #btn-unlock.btn.btn-warning.btn-block{ style: "margin-top: 10px" }
+        .fa.fa-unlock
+        Unlock to Modify
 
     %hr
     %h6

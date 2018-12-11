@@ -1,5 +1,5 @@
 module Members
-  class ValidateDelete  < AppValidator
+  class ValidateUnlock  < AppValidator
     def initialize(config:)
       super()
 
@@ -7,26 +7,21 @@ module Members
       @member = @config[:member]
       @user   = @config[:user]
 
-      @valid_roles  = ["MIS", "BK", "SBK"]
+      @valid_roles = ["MIS", "BK", "SBK"]
     end
 
     def execute!
-      if !@member.pending?
+      if @member.modifiable
         @errors[:messages] << {
-          key: "status",
-          message: "member not pending"
+          key: "modifiable",
+          message: "member is already modifiable"
         }
       end
 
-      if @user.blank?
+      if (@user.roles & @valid_roles).size == 0
         @errors[:messages] << {
-          key: "user",
-          message: "User not found"
-        }
-      elsif (@valid_roles & @user.roles).size == 0
-        @errors[:messages] << {
-          key: "user",
-          message: "unauthorized roles: #{@user.roles}"
+          key: "auth",
+          message: "invalid role #{@user.roles}"
         }
       end
 
