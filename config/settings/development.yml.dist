@@ -39,6 +39,14 @@ default_equities_key: "Share Capital"
 default_equities_amount: 100.00
 default_id_fee_accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
 
+default_deposit_accounts:
+  -
+    account_type: "SAVINGS"
+    account_subtype: "K-IMPOK"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Golden K"
+
 default_member_accounts:
   -
     account_type: "SAVINGS"
