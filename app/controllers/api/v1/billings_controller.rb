@@ -118,7 +118,7 @@ module Api
           billing = ::Billings::Approve.new(
                       config: config
                     ).execute!
-
+  
           ActivityLog.create!(
             content: "#{current_user.full_name} approved billing",
             activity_type: "approval",

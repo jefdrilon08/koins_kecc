@@ -32,12 +32,32 @@
 
   %table.table.table-bordered.table-sm
     %tr
-      %th{ colspan: 3 }
-        #{entry[:accounting_code_name]}
+      %th
+        Date
+      %th
+      %th
+        PARTICULAR
       %th.text-right
         Debit
       %th.text-right
         Credit
+      %th.text-right
+        BALANCE
+    %tr
+      %th
+      %th
+      %th
+        #{entry[:accounting_code_name]}
+      %th
+      %th
+      %th
+    %tr
+      %th
+      %th
+      %th
+        BEGINNING BALANCE
+      %th
+      %th
       %th.text-right
         #{number_to_currency(entry[:beginning_balance], unit: '')}
     - entry[:entries].each do |o|
