@@ -16,7 +16,7 @@
       %tr
         %td.text-center
           %strong
-            = link_to "/data_stores/branch_with_centers_loans_stats/#{o.id}" do
+            = link_to "/data_stores/branch_repayment_reports/#{o.id}" do
               #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
         %td
           #{o.meta.with_indifferent_access[:branch_name]}
@@ -27,10 +27,9 @@
           - elsif o.done?
             .badge.badge-success
               Done
-          - elsif o.error?
+          - else
             .badge.badge-danger
-              .fa.fa-times
-              ERROR
+              Error
         %td.text-center
           %small
             #{o.created_at.localtime}

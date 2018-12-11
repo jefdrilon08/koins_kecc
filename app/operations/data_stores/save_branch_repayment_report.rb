@@ -1,5 +1,5 @@
 module DataStores
-  class SaveRepaymentReport
+  class SaveBranchRepaymentReport
     def initialize(config:)
       @config = config
 
@@ -32,6 +32,19 @@ module DataStores
     end
 
     def execute!
+      data_result = ::Reports::GenerateRepaymentReport.new(
+                      config: {
+                        as_of: @as_of,
+                        branch: @branch
+                      }
+                    ).execute!
+
+      @data_store.update!(
+        data: data_result,
+        status: "done"
+      )
+
+      @data_store
     end
   end
 end

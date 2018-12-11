@@ -8,6 +8,8 @@
       %th.text-center
         Status
       %th.text-center
+        Started
+      %th.text-center
         Last Updated
   %thead
     - @records.each do |o|
@@ -25,6 +27,9 @@
           - elsif o.done?
             .badge.badge-success
               Done
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
         %td.text-center
           %small
             #{o.updated_at.localtime}

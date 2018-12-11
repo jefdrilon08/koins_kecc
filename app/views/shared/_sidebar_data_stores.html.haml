@@ -1,5 +1,9 @@
 %li.nav-title
   Data Stores
+%li{ class: "nav-item #{params[:controller] == 'branch_repayment_reports' ? 'active' : ''}" }
+  = link_to "/data_stores/branch_repayment_reports", class: 'nav-link' do
+    %i.nav-icon.fa.fa-database
+    Branch Repayments
 %li{ class: "nav-item #{params[:controller] == 'branch_loans_stats' ? 'active' : ''}" }
   = link_to "/data_stores/branch_loans_stats", class: 'nav-link' do
     %i.nav-icon.fa.fa-database

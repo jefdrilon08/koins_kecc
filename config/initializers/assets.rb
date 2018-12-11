@@ -34,6 +34,7 @@ Rails.application.config.assets.precompile += [
   "membership_payment_collections/Show.js",
   "data_stores/branch_loans_stats/Show.js",
   "data_stores/branch_loans_stats/Index.js",
+  "data_stores/branch_repayment_reports/Index.js",
   "data_stores/member_counts/Index.js",
   "data_stores/branch_with_centers_loans_stats/Show.js",
   "data_stores/branch_with_centers_loans_stats/Index.js",
@@ -57,5 +58,6 @@ Rails.application.config.assets.precompile += [
   "LoanApplicationForm.min.react.js",
   "LoanAccountingEntry.min.react.js",
   "MemberSurveyAnswerUI.min.react.js",
-  "DashboardMain.min.react.js"
+  "DashboardMain.min.react.js",
+  "BranchRepaymentReportShow.min.react.js"
 ]

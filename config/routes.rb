@@ -69,6 +69,9 @@ Rails.application.routes.draw do
     get "/branch_with_centers_loans_stats/:id", to: "branch_with_centers_loans_stats#show"
     delete "/branch_with_centers_loans_stats/:id", to: "branch_with_centers_loans_stats#destroy"
 
+    get "/branch_repayment_reports", to: "branch_repayment_reports#index"
+    get "/branch_repayment_reports/:id", to: "branch_repayment_reports#show"
+    delete "/branch_repayment_reports/:id", to: "branch_repayment_reports#destroy"
   end
 
   namespace :accounting do
