@@ -215,7 +215,7 @@ export default class DashboardOAS extends React.Component {
           <div className="row">
             <div className="col">
               <h6>
-                Overall Par: {numberAsPercent(o.data.par)}
+                Overall PAR: {numberAsPercent(o.data.par)}
               </h6>
               <div className="progress progress-xs">
                 <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.data.par)}}>
