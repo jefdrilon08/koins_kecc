@@ -3,12 +3,12 @@ module WithdrawalCollections
     def initialize(config:)
       @config           = config
       @date_paid        = @config[:date_paid]
-      @withdraw_payment = @config[:withdraw]
+      @withdrawal       = @config[:withdrawal]
       @user             = @config[:user]
       @particular       = @config[:particular]
-      @amount           = @withdraw_payment[:amount].try(:to_f).round(2)
+      @amount           = @withdrawal[:amount].try(:to_f).round(2)
       @transaction_type = "withdraw"
-      @member_account   = MemberAccount.find(@withdraw_payment[:member_account_id])
+      @member_account   = MemberAccount.find(@withdrawal[:member_account_id])
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
