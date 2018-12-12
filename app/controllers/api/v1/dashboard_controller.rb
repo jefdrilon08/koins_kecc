@@ -18,13 +18,25 @@ module Api
         }
 
         if current_user.roles.include?("OAS")
+          # Fetch branch loan stats
           branch_loans_stats        = DataStore.branch_loans_stats.where(
                                         "meta->>'branch_id' = ?", 
                                         branch.id
                                       ).order(
                                         "(meta->>'as_of')::date ASC"
                                       ).last
+
           data[:branch_loans_stats] = branch_loans_stats || false
+
+          # Fetch member counts
+          member_counts = DataStore.member_counts.where(
+                            "meta->>'branch_id' = ?", 
+                            branch.id
+                          ).order(
+                            "(meta->>'as_of')::date ASC"
+                          ).last
+
+          data[:member_counts]  = member_counts
         end
 
         render json: data

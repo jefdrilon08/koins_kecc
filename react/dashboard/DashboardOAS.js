@@ -41,7 +41,8 @@ export default class DashboardOAS extends React.Component {
           branches: response.branches,
           currentBranch: currentBranch,
           data: {
-            branch_loans_stats: response.branch_loans_stats
+            branch_loans_stats: response.branch_loans_stats,
+            member_counts: response.member_counts
           },
           isLoading: false
         });
@@ -115,7 +116,7 @@ export default class DashboardOAS extends React.Component {
 
     return  (
       <div className="row">
-        <div className="col-md-9">
+        <div className="col-md-10">
           <div className="form-group">
             <label>
               Branch
@@ -128,22 +129,20 @@ export default class DashboardOAS extends React.Component {
             />
           </div>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="form-group">
             <label>
               Actions
             </label>
             <br/>
-            <div className="btn-group">
-              <button
-                className="btn btn-primary"
-                onClick={this.handleSyncClicked.bind(this)}
-                disabled={this.state.isLoading}
-              >
-                <span className="fa fa-sync"/>
-                Sync
-              </button>
-            </div>
+            <button
+              className="btn btn-primary btn-block"
+              onClick={this.handleSyncClicked.bind(this)}
+              disabled={this.state.isLoading}
+            >
+              <span className="fa fa-sync"/>
+              Sync
+            </button>
           </div>
         </div>
       </div>
@@ -261,11 +260,126 @@ export default class DashboardOAS extends React.Component {
     }
   }
 
+  renderMemberCounts() {
+    var o = this.state.data.member_counts;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found for member counts.
+        </p>
+      );
+    } else {
+      return  (
+        <div>
+          <h5>
+            Member Counts as of {o.meta.as_of}
+          </h5>
+          <table className="table table-bordered table-sm table-hover">
+            <thead>
+              <tr>
+                <th>
+                </th>
+                <th className="text-center">
+                  Male
+                </th>
+                <th className="text-center">
+                  Female
+                </th>
+                <th className="text-center">
+                  Others
+                </th>
+                <th className="text-center">
+                  TOTAL
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>
+                  Pure Savers
+                </th>
+                <td className="text-center">
+                  {o.data.counts.pure_savers.male}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.pure_savers.female}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.pure_savers.others}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.pure_savers.total}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Active Loaners
+                </th>
+                <td className="text-center">
+                  {o.data.counts.loaners.male}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.loaners.female}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.loaners.others}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.loaners.total}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Active Members
+                </th>
+                <td className="text-center">
+                  {o.data.counts.active_members.male}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.active_members.female}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.active_members.others}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.active_members.total}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Pending Members
+                </th>
+                <td className="text-center">
+                  {o.data.counts.pending_members.male}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.pending_members.female}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.pending_members.others}
+                </td>
+                <td className="text-center">
+                  {o.data.counts.pending_members.total}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+  }
+
   render() {
     return  (
       <div>
         {this.renderControls()}
         {this.renderBranchLoansStats()} 
+        {this.renderMemberCounts()}
       </div>
     );
   }
