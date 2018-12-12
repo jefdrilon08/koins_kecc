@@ -1,0 +1,16 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          .callout.callout-info
+            %p
+              Only non-printed certificates displayed
+          - if @member_shares.size > 0
+            = render partial: "list"
+            = paginate @member_shares
+          - else
+            %p
+              No certificates found
