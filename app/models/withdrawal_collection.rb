@@ -4,7 +4,7 @@ class WithdrawalCollection < ApplicationRecord
     "approved"
   ]
 
-  belongs_to :center
+  belongs_to :center, optional: true
   belongs_to :branch
 
   validates :status, presence: true, inclusion: { in: STATUSES }

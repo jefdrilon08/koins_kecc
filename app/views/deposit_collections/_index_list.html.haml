@@ -4,7 +4,7 @@
       %th
         Collection Date
       %th
-        Center / Branch
+        Branch
       %th.text-right
         Amount Collected
       %th
@@ -18,7 +18,7 @@
             %strong
               #{o.collection_date.strftime("%b %d, %Y")}
         %td
-          #{o.center.name} / #{o.branch}
+          #{o.branch}
         %td.text-right
           %strong
             #{number_to_currency(o.total_collected, unit: "")}

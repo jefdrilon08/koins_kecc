@@ -99,6 +99,7 @@ export default class DashboardOAS extends React.Component {
               options={branchOptions}
               onChange={this.handleBranchChanged.bind(this)}
               value={branch}
+              disabled={this.state.isLoading}
             />
           </div>
         </div>

@@ -10,7 +10,8 @@ module Api
         }
 
         if current_user.roles.include?("OAS")
-          data[:loan_products]  = #
+          branch_loan_stats = DataStore.branch_loans_stats.order("(meta->>'as_of')::date ASC").last
+          data[:branch_loan_stats]  = branch_loans_stats
         end
 
         render json: data

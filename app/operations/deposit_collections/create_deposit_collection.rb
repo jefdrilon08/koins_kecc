@@ -5,14 +5,12 @@ module DepositCollections
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
       @user             = @config[:user]
       @branch           = Branch.where(id: @config[:branch_id]).first
-      @center           = Center.where(id: @config[:center_id]).first
 
       @default_deposit_accounts = Settings.default_deposit_accounts
 
       @deposit_collection  = DepositCollection.new(
                                           collection_date: @collection_date,
-                                          branch: @branch,
-                                          center: @center
+                                          branch: @branch
                                         )
 
       @members  = []

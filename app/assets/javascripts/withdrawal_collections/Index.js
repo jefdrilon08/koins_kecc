@@ -4,7 +4,6 @@ var Index = (function() {
   var $modalNewTransaction;
 
   var $selectBranch;
-  var $selectCenter;
   var $inputCollectionDate;
 
   var $message;
@@ -24,7 +23,6 @@ var Index = (function() {
     $modalNewTransaction      = $("#modal-new-transaction");
 
     $selectBranch         = $("#select-branch");
-    $selectCenter         = $("#select-center");
     $inputCollectionDate  = $("#input-collection-date");
 
     $message  = $(".message");
@@ -40,11 +38,9 @@ var Index = (function() {
     $btnConfirmNewTransaction.on("click", function() {
       var collectionDate  = $inputCollectionDate.val();
       var branchId        = $selectBranch.val();
-      var centerId        = $selectCenter.val();
 
       $btnConfirmNewTransaction.prop("disabled", true);
       $selectBranch.prop("disabled", true);
-      $selectCenter.prop("disabled", true);
       $inputCollectionDate.prop("disabled", true);
 
       $.ajax({
@@ -53,8 +49,7 @@ var Index = (function() {
         data: {
           authenticity_token: _authenticityToken,
           collection_date: collectionDate,
-          branch_id: branchId,
-          center_id: centerId
+          branch_id: branchId
         },
         success: function(response) {
           $message.html(
@@ -80,27 +75,10 @@ var Index = (function() {
 
             $btnConfirmNewTransaction.prop("disabled", false);
             $selectBranch.prop("disabled", false);
-            $selectCenter.prop("disabled", false);
             $inputCollectionDate.prop("disabled", false);
           }
         }
       });
-    });
-
-    $selectBranch.on("change", function() {
-      var branchId  = $(this).val();
-
-      $selectCenter.html("");
-      
-      for(var i = 0; i < branches.length; i++) {
-        if(branches[i].id == branchId) {
-          for(var j = 0; j < branches[i].centers.length; j++) {
-            $selectCenter.append(
-              "<option value='" + branches[i].centers[j].id + "'>" + branches[i].centers[j].name + "</option>"
-            );
-          }
-        }
-      }
     });
   };
 

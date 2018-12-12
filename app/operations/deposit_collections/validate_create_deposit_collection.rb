@@ -5,7 +5,6 @@ module DepositCollections
       @config           = config
       @collection_date  = @config[:collection_date]
       @branch           = Branch.where(id: @config[:branch_id]).first
-      @center           = Center.where(id: @config[:center_id]).first
       @user             = @config[:user]
     end
 
@@ -21,13 +20,6 @@ module DepositCollections
         @errors[:messages] << {
           key: "branch",
           message: "branch not found"
-        }
-      end
-
-      if @center.blank?
-        @errors[:messages] << {
-          key: "center",
-          message: "center not found"
         }
       end
 

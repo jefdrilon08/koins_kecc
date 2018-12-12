@@ -57,7 +57,7 @@ module Api
         deposit_collection = DepositCollection.find(params[:id])
 
         members = Member.active.where(
-                    center_id: deposit_collection.center_id
+                    branch_id: deposit_collection.branch_id
                   ).where.not(
                     id: deposit_collection.member_ids
                   ).order("last_name ASC").map{ |o|
@@ -180,12 +180,10 @@ module Api
       def create
         collection_date = params[:collection_date].try(:to_date)
         branch_id       = params[:branch_id]
-        center_id       = params[:center_id]
 
         config  = {
           collection_date: collection_date,
           branch_id: branch_id,
-          center_id: center_id,
           user: current_user
         }
 
