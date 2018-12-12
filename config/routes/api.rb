@@ -7,6 +7,9 @@ namespace :api do
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
 
+    # Dashboard
+    get "/dashboard", to: "dashboard#index"
+
     # Members
     get "/members", to: "members#index"
     get "/members/fetch", to: "members#fetch"

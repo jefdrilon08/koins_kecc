@@ -3,6 +3,7 @@ import $ from 'jquery';
 import Select from 'react-select';
 
 import SkCubeLoading from '../SkCubeLoading';
+import {numberAsPercent, numberWithCommas} from '../utils/helpers';
 
 export default class DashboardOAS extends React.Component {
   constructor(props) {
@@ -17,14 +18,14 @@ export default class DashboardOAS extends React.Component {
       branches: [],
       data: {
       },
-      isLoading: false
+      isLoading: true
     }
   }
 
   componentDidMount() {
     var context = this;
     $.ajax({
-      url: '/api/v1/branches',
+      url: '/api/v1/dashboard',
       success: function(response) {
         var currentBranch = {
           id: "",
@@ -38,7 +39,11 @@ export default class DashboardOAS extends React.Component {
 
         context.setState({
           branches: response.branches,
-          currentBranch: currentBranch
+          currentBranch: currentBranch,
+          data: {
+            branch_loans_stats: response.branch_loans_stats
+          },
+          isLoading: false
         });
       },
       error: function(response) {
@@ -68,6 +73,26 @@ export default class DashboardOAS extends React.Component {
 
     context.setState({
       isLoading: true
+    });
+
+    $.ajax({
+      url: '/api/v1/dashboard',
+      method: 'GET',
+      data: {
+        branch_id: currentBranch.id
+      },
+      success: function(response) {
+        context.setState({
+          data: {
+            branch_loans_stats: response.branch_loans_stats
+          },
+          isLoading: false
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching data!");
+      }
     });
   }
 
@@ -125,18 +150,122 @@ export default class DashboardOAS extends React.Component {
     );
   }
 
-  renderData() {
-    return  (
-      <div></div>
-    );
+  renderBranchLoansStats() {
+    var o = this.state.data.branch_loans_stats;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found
+        </p>
+      );
+    } else {
+      var loanProductRows = [];
+
+      o.data.loan_products.forEach(function(e) {
+        loanProductRows.push(
+          <tr key={"lp-" + e.loan_product.id}>
+            <td>
+              <strong>
+                {e.loan_product.name}
+              </strong>
+            </td>
+            <td className="text-center">
+              {e.num_loans}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(e.total_principal_portfolio)}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(e.total_past_due)}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(e.total_principal_balance)}
+            </td>
+            <td className="text-center">
+              {numberAsPercent(e.par)}
+            </td>
+            <td className="text-center">
+              {numberAsPercent(e.repayment_rate)}
+            </td>
+          </tr>
+        );
+      });
+
+      return  (
+        <div>
+          <h5>
+            Loans Stats as of {o.meta.as_of}
+          </h5>
+          <table className="table table-bordered table-sm table-hover">
+            <thead>
+              <tr>
+                <th>
+                  Loan Product
+                </th>
+                <th className="text-center">
+                  Active Loans
+                </th>
+                <th className="text-right">
+                  Portfolio
+                </th>
+                <th className="text-right">
+                  Past Due Amount
+                </th>
+                <th className="text-right">
+                  PAR Amount
+                </th>
+                <th className="text-center">
+                  PAR Rate
+                </th>
+                <th className="text-center">
+                  RR
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {loanProductRows}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>
+                  Total
+                </th>
+                <th className="text-center">
+                  {o.data.num_loans}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(o.data.total_principal_portfolio)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(o.data.total_past_due)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(o.data.total_principal_balance)}
+                </th>
+                <th className="text-center">
+                  {numberAsPercent(o.data.par)}
+                </th>
+                <th className="text-center">
+                  {numberAsPercent(o.data.repayment_rate)}
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      );
+    }
   }
 
   render() {
     return  (
       <div>
         {this.renderControls()}
-        <hr/>
-        {this.renderData()} 
+        {this.renderBranchLoansStats()} 
       </div>
     );
   }
