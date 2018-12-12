@@ -7,10 +7,8 @@ module WithdrawalCollections
       @user             = @config[:user]
       @particular       = @config[:particular]
       @amount           = @withdraw_payment[:amount].try(:to_f).round(2)
-
       @transaction_type = "withdraw"
-
-      @member_account = MemberAccount.find(@withdraw_payment[:member_account_id])
+      @member_account   = MemberAccount.find(@withdraw_payment[:member_account_id])
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -37,10 +35,10 @@ module WithdrawalCollections
     def execute!
       # Compute beginning and ending balance
       @data[:beginning_balance] = @member_account.balance.round(2)
-      @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
+      @data[:ending_balance]    = (@data[:beginning_balance] - @amount).round(2)
 
       # Update account balance
-      new_balance = (@member_account.balance + @amount).round(2)
+      new_balance = (@member_account.balance - @amount).round(2)
       @member_account.update(
         balance: new_balance
       )

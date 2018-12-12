@@ -3,21 +3,21 @@ module WithdrawalCollections
     def initialize(config:)
       super()
 
-      @config             = config
-      @deposit_collection = @config[:deposit_collection]
-      @member             = @config[:member]
-      @user               = @config[:user]
+      @config                 = config
+      @withdrawal_collection  = @config[:withdrawal_collection]
+      @member                 = @config[:member]
+      @user                   = @config[:user]
     end
 
     def execute!
-      if @deposit_collection.blank?
+      if @withdrawal_collection.blank?
         @errors[:messages] << {
-          key: "deposit_collection",
+          key: "withdrawal_collection",
           message: "Record not found"
         }
-      elsif @deposit_collection.not_pending?
+      elsif @withdrawal_collection.not_pending?
         @errors[:messages] << {
-          key: "deposit_collection",
+          key: "withdrawal_collection",
           message: "Record not pending"
         }
       end
@@ -34,8 +34,8 @@ module WithdrawalCollections
         }
       end
 
-      if @deposit_collection.present? && @member.present?
-        if @deposit_collection.member_ids.include?(@member.id)
+      if @withdrawal_collection.present? && @member.present?
+        if @withdrawal_collection.member_ids.include?(@member.id)
           @errors[:messages] << {
             key: "member",
             message: "Member already has pending transaction"

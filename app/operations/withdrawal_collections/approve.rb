@@ -1,12 +1,12 @@
 module WithdrawalCollections
   class Approve
     def initialize(config:)
-      @config   = config
+      @config                 = config
       @withdrawal_collection  = @config[:withdrawal_collection]
-      @user     = @config[:user]
+      @user                   = @config[:user]
 
       @data = @withdrawal_collection.try(:data).try(:with_indifferent_access)
-      @data_withdrawals          = @withdrawal_collection.withdrawals
+      @data_withdrawals       = @withdrawal_collection.withdrawals
       @data_accounting_entry  = @withdrawal_collection.accounting_entry
     end
 

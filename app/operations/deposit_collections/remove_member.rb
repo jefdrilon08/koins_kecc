@@ -44,7 +44,7 @@ module DepositCollections
 
         @data[:totals] << {
           record_type: o.account_type,
-          key: o.name,
+          key: o.account_subtype,
           amount: total
         }
       end

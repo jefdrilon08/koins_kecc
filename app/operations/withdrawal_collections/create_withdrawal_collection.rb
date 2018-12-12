@@ -52,7 +52,7 @@ module WithdrawalCollections
         @data[:headers] << c.account_subtype
 
         @data[:totals] << {
-          record_type: "SAVINGS",
+          record_type: c.account_type,
           key: c.account_subtype,
           amount: 0.00
         }

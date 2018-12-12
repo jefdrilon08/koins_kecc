@@ -3,10 +3,10 @@ module WithdrawalCollections
     def initialize(config:)
       super()
 
-      @config             = config
-      @withdrawal_collection = @config[:withdrawal_collection]
-      @member             = @config[:member]
-      @user               = @config[:user]
+      @config                 = config
+      @withdrawal_collection  = @config[:withdrawal_collection]
+      @member                 = @config[:member]
+      @user                   = @config[:user]
     end
 
     def execute!

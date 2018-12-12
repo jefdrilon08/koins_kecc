@@ -88,6 +88,18 @@ namespace :api do
     post "/deposit_collections/add_member", to: "deposit_collections#add_member"
     post "/deposit_collections/remove_member", to: "deposit_collections#remove_member"
 
+    # Withdrawal Collection
+    post "/withdrawal_collections", to: "withdrawal_collections#create"
+    post "/withdrawal_collections/modify_transaction_record", to: "withdrawal_collections#modify_transaction_record"
+    post "/withdrawal_collections/approve", to: "withdrawal_collections#approve"
+    post "/withdrawal_collections/update_or_number", to: "withdrawal_collections#update_or_number"
+    post "/withdrawal_collections/update_ar_number", to: "withdrawal_collections#update_ar_number"
+    post "/withdrawal_collections/update_particular", to: "withdrawal_collections#update_particular"
+    get "/withdrawal_collections/fetch", to: "withdrawal_collections#fetch"
+    get "/withdrawal_collections/fetch_members", to: "withdrawal_collections#fetch_members"
+    post "/withdrawal_collections/add_member", to: "withdrawal_collections#add_member"
+    post "/withdrawal_collections/remove_member", to: "withdrawal_collections#remove_member"
+
     # Survey Answers
     post "/survey_answers", to: "survey_answers#create"
     post "/survey_answers/save", to: "survey_answers#save"

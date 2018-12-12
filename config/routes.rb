@@ -56,6 +56,9 @@ Rails.application.routes.draw do
   # Deposits
   resources :deposit_collections, only: [:index, :show, :destroy]
 
+  # Withdrawals
+  resources :withdrawal_collections, only: [:index, :show, :destroy]
+
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]
 

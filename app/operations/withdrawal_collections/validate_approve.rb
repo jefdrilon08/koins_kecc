@@ -3,9 +3,9 @@ module WithdrawalCollections
     def initialize(config:)
       super()
 
-      @config                         = config
+      @config                 = config
       @withdrawal_collection  = @config[:withdrawal_collection]
-      @user                           = @config[:user]
+      @user                   = @config[:user]
 
       @data = @withdrawal_collection.try(:data).try(:with_indifferent_access)
     end
@@ -18,12 +18,12 @@ module WithdrawalCollections
         }
       end
 
-      if @data.present? and @data[:or_number].blank?
-        @errors[:messages] << {
-          key: "or_number",
-          message: "no or number found"
-        }
-      end
+#      if @data.present? and @data[:or_number].blank?
+#        @errors[:messages] << {
+#          key: "or_number",
+#          message: "no or number found"
+#        }
+#      end
 
       if @data.present? and @data[:accounting_entry][:particular].blank?
         @errors[:messages] << {

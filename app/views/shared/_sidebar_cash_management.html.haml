@@ -11,3 +11,7 @@
       = link_to deposit_collections_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-download
         Deposits
+    %li{ class: "nav-item #{params[:controller] == 'withdrawal_collections' ? 'active' : ''}" }
+      = link_to withdrawal_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-upload
+        Withdrawals

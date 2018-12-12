@@ -1,10 +1,10 @@
 module WithdrawalCollections
   class RemoveMember
     def initialize(config:)
-      @config             = config
-      @withdrawal_collection = @config[:withdrawal_collection]
-      @member             = @config[:member]
-      @user               = @config[:user]
+      @config                 = config
+      @withdrawal_collection  = @config[:withdrawal_collection]
+      @member                 = @config[:member]
+      @user                   = @config[:user]
 
       @branch = @withdrawal_collection.branch
       @data   = @withdrawal_collection.data.with_indifferent_access
@@ -35,15 +35,15 @@ module WithdrawalCollections
         total = 0.00
         @data[:records].each do |r|
           r[:records].each do |rr|
-            if rr[:record_type] == "SAVINGS" && rr[:account_subtype] == o.name
+            if rr[:account_subtype] == o.name
               total += rr[:amount].to_f.round(2)
             end
           end
         end
 
         @data[:totals] << {
-          record_type: "SAVINGS",
-          key: o.name,
+          record_type: o.account_type,
+          key: o.account_subtype,
           amount: total
         }
       end

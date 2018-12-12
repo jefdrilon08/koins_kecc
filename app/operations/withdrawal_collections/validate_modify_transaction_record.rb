@@ -66,7 +66,11 @@ module WithdrawalCollections
               key: "account",
               message: "Account not found"
             }
-          else 
+          elsif (member_account.balance - amount) < member_account.maintaining_balance
+            @errors[:messages] << {
+              key: "balance",
+              message: "Cannot withdraw #{amount} for balance #{member_account.balance} with maintaining balance #{member_account.maintaining_balance}"
+            }
           end
         end
       end

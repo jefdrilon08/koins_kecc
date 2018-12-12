@@ -17,6 +17,7 @@ module.exports = {
     SurveyQuestionUI: "./react/administration/surveys/survey_questions/SurveyQuestionUI.js",
     MembershipPaymentCollectionUI: "./react/membership_payment_collections/MembershipPaymentCollectionUI.js",
     DepositCollectionUI: "./react/deposit_collections/DepositCollectionUI.js",
+    WithdrawalCollectionUI: "./react/withdrawal_collections/WithdrawalCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanApplicationForm: "./react/loans/ApplicationForm.js",

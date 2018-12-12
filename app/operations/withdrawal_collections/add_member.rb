@@ -1,9 +1,9 @@
 module WithdrawalCollections
   class AddMember
     def initialize(config:)
-      @config                         = config
+      @config                 = config
       @withdrawal_collection  = @config[:withdrawal_collection]
-      @member                         = @config[:member]
+      @member                 = @config[:member]
 
       @data = @withdrawal_collection.data.with_indifferent_access
     end

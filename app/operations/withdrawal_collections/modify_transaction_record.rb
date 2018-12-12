@@ -1,11 +1,11 @@
 module WithdrawalCollections
   class ModifyTransactionRecord
     def initialize(config:)
-      @config               = config
-      @withdrawal_collection   = @config[:withdrawal_collection]
-      @current_transaction  = @config[:current_transaction]
-      @current_member       = @config[:current_member]
-      @user                 = @config[:user]
+      @config                 = config
+      @withdrawal_collection  = @config[:withdrawal_collection]
+      @current_transaction    = @config[:current_transaction]
+      @current_member         = @config[:current_member]
+      @user                   = @config[:user]
 
       @original_amount  = false
 
@@ -55,11 +55,8 @@ module WithdrawalCollections
     def construct_log_message!
       content = ""
 
-      if @current_transaction[:record_type] == "SAVINGS"
-        member          = Member.find(@current_member[:id])
-
-        content = "#{@user.full_name} modified withdrawal amount from #{@original_amount} to #{@current_transaction[:amount]} of #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
-      end
+      member  = Member.find(@current_member[:id])
+      content = "#{@user.full_name} modified withdrawal amount from #{@original_amount} to #{@current_transaction[:amount]} of #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
 
       content
     end
@@ -78,6 +75,15 @@ module WithdrawalCollections
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
               if rr[:record_type] == "SAVINGS" and t[:key] == rr[:account_subtype]
+                total_collected += rr[:amount].try(:to_f).round(2)
+                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+              end
+            end
+          end
+        elsif t[:record_type] == "INSURANCE"
+          @data[:records].each_with_index do |r, i|
+            r[:records].each_with_index do |rr, j|
+              if rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end
@@ -106,6 +112,9 @@ module WithdrawalCollections
         if r[:member][:id] == @current_member[:id]
           r[:records].each_with_index do |rr, j|
             if rr[:record_type] == "SAVINGS" and rr[:account_subtype] == @current_transaction[:account_subtype]
+              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+            elsif rr[:record_type] == "INSURANCE" and rr[:account_subtype] == @current_transaction[:account_subtype]
               @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
               @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
             end
