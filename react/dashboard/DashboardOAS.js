@@ -186,10 +186,22 @@ export default class DashboardOAS extends React.Component {
               {numberWithCommas(e.total_principal_balance)}
             </td>
             <td className="text-center">
-              {numberAsPercent(e.par)}
+              <small>
+                {numberAsPercent(e.par)}
+              </small>
+              <div className="progress progress-xs">
+                <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(e.par)}}>
+                </div>
+              </div>
             </td>
             <td className="text-center">
-              {numberAsPercent(e.repayment_rate)}
+              <small>
+                {numberAsPercent(e.repayment_rate)}
+              </small>
+              <div className="progress progress-xs">
+                <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(e.repayment_rate)}}>
+                </div>
+              </div>
             </td>
           </tr>
         );
@@ -248,9 +260,17 @@ export default class DashboardOAS extends React.Component {
                 </th>
                 <th className="text-center">
                   {numberAsPercent(o.data.par)}
+                  <div className="progress progress-xs">
+                    <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.data.par)}}>
+                    </div>
+                  </div>
                 </th>
                 <th className="text-center">
                   {numberAsPercent(o.data.repayment_rate)}
+                  <div className="progress progress-xs">
+                    <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.data.repayment_rate)}}>
+                    </div>
+                  </div>
                 </th>
               </tr>
             </tfoot>
