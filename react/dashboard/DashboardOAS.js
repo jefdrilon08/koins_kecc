@@ -212,6 +212,27 @@ export default class DashboardOAS extends React.Component {
           <h5>
             Loans Stats as of {o.meta.as_of}
           </h5>
+          <div className="row">
+            <div className="col">
+              <h6>
+                Overall Par: {numberAsPercent(o.data.par)}
+              </h6>
+              <div className="progress progress-xs">
+                <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.data.par)}}>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <h6>
+                Overall Repayment Rate: {numberAsPercent(o.data.repayment_rate)}
+              </h6>
+              <div className="progress progress-xs">
+                <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.data.repayment_rate)}}>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
           <table className="table table-bordered table-sm table-hover">
             <thead>
               <tr>
