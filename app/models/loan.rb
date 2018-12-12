@@ -45,6 +45,16 @@ class Loan < ApplicationRecord
     self.principal + self.interest
   end
 
+  def maturity_date
+    last_amort  = self.amortization_schedule_entries.order("due_date ASC").last
+
+    if last_amort.present? && last_amort.due_date.present?
+      return last_amort.due_date.strftime("%b %d, %Y")
+    else
+      return ""
+    end
+  end
+
   def total_paid
     self.principal_paid + self.interest_paid
   end

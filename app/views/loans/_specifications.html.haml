@@ -66,6 +66,12 @@
         #{@loan.date_completed.strftime("%b %d, %Y")}
   %tr
     %th
+      Maturity Date:
+    %td.text-right
+      - if @loan.active? || @loan.paid?
+        #{@loan.maturity_date}
+  %tr
+    %th
       Term:
     %td.text-right
       #{@loan.term}
