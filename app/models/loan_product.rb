@@ -11,6 +11,20 @@ class LoanProduct < ApplicationRecord
     name
   end
 
+  def maintaining_balance
+    if data
+      temp  = self.data.with_indifferent_access
+
+      if temp[:maintaining_balance].present?
+        temp[:maintaining_balance].to_f.round(2)
+      else
+        0.00
+      end
+    else
+      0.00
+    end
+  end
+
   def prerequisite
     if data
       temp  = self.data.with_indifferent_access

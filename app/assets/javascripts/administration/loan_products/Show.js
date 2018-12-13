@@ -8,6 +8,11 @@ var Show  = (function() {
   var $modalPrerequisite;
   var $selectLoanProduct;
 
+  var $btnMaintainingBalance;
+  var $btnConfirmMaintainingBalance;
+  var $modalMaintainingBalance;
+  var $inputMaintainingBalance;
+
   var $message;
 
   var id;
@@ -15,8 +20,9 @@ var Show  = (function() {
 
   var templateErrorList;
 
-  var _urlDelete              = "/api/v1/administration/loan_products/delete";
-  var _urlModifyPrerequisite  = "/api/v1/administration/loan_products/modify_prerequisite";
+  var _urlDelete                    = "/api/v1/administration/loan_products/delete";
+  var _urlModifyPrerequisite        = "/api/v1/administration/loan_products/modify_prerequisite";
+  var _urlModifyMaintainingBalance  = "/api/v1/administration/loan_products/modify_maintaining_balance";
 
   var _cacheDom = function() {
     $btnDelete        = $("#btn-delete");
@@ -28,12 +34,63 @@ var Show  = (function() {
     $modalPrerequisite      = $("#modal-prerequisite");
     $selectLoanProduct      = $("#select-loan-product");
 
+    $btnMaintainingBalance        = $("#btn-maintaining-balance");
+    $btnConfirmMaintainingBalance = $("#btn-confirm-maintaining-balance");
+    $modalMaintainingBalance      = $("#modal-maintaining-balance");
+    $inputMaintainingBalance      = $("#input-maintaining-balance");
+
     templateErrorList = $("#template-error-list").html();
 
     $message  = $(".message");
   };
 
   var _bindEvents = function() {
+    $btnMaintainingBalance.on("click", function() {
+      $modalMaintainingBalance.modal("show");
+      $message.html("");
+    });
+
+    $btnConfirmMaintainingBalance.on("click", function() {
+      $btnConfirmMaintainingBalance.prop("disabled", true);
+
+      var maintainingBalance  = $inputMaintainingBalance.val();
+
+      $.ajax({
+        url: _urlModifyMaintainingBalance,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: id,
+          maintaining_balance: maintainingBalance,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmMaintainingBalance.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnPrerequisite.on("click", function() {
       $modalPrerequisite.modal("show");
       $message.html("");

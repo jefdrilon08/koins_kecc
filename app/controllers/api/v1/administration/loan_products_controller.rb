@@ -4,6 +4,44 @@ module Api
       class LoanProductsController < ApiController
         before_action :authenticate_user!
 
+        def modify_maintaining_balance
+          loan_product        = LoanProduct.where(id: params[:id]).first
+          maintaining_balance = params[:maintaining_balance].try(:to_f)
+
+          config  = {
+            loan_product: loan_product,
+            maintaining_balance: maintaining_balance,
+            user: current_user
+          }
+
+          errors  = ::LoanProducts::ValidateModifyMaintainingBalance.new(
+                      config: config
+                    ).execute!
+
+          if errors[:full_messages].size > 0
+            render json:  errors, status: 400
+          else
+            ::LoanProducts::ModifyMaintainingBalance.new(
+              config: config
+            ).execute!
+
+            ActivityLog.create!(
+              content: "#{current_user.full_name} set maintaining balance of loan product #{loan_product.name} to #{maintaining_balance}",
+              activity_type: "modification",
+              data: {
+                user_id: current_user.id,
+                maintaining_balance: maintaining_balance,
+                loan_product: {
+                  id: loan_product.id,
+                  name: loan_product.name
+                }
+              }
+            )
+
+            render json: { message: "ok" }
+          end
+        end
+
         def modify_prerequisite
           loan_product  = LoanProduct.where(id: params[:id]).first
           prerequisite  = LoanProduct.where(id: params[:loan_product_id]).first
@@ -21,7 +59,6 @@ module Api
           if errors[:full_messages].size > 0
             render json: errors, status: 400
           else
-
             ::LoanProducts::ModifyPrerequisite.new(
               config: config
             ).execute!

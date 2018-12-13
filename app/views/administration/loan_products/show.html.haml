@@ -67,11 +67,22 @@
                     = link_to "#", id: 'btn-prerequisite' do
                       .fa.fa-pencil-alt
                       Modify
+            %tr
+              %th
+                Maintaining Balance
+              %td
+                #{number_to_currency(@loan_product.maintaining_balance, unit: '')}
+                %span
+                  %small
+                    = link_to "#", id: 'btn-maintaining-balance' do
+                      .fa.fa-pencil-alt
+                      Modify
 
 #parameters{ data: { id: @loan_product.id } }
 
 = render partial: "administration/loan_products/modals/delete"
 = render partial: "administration/loan_products/modals/prerequisite"
+= render partial: "administration/loan_products/modals/maintaining_balance"
 = render partial: "templates/error_list"
 
 = javascript_include_tag "administration/loan_products/Show.js"

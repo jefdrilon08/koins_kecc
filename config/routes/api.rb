@@ -144,6 +144,7 @@ namespace :api do
       # Loan Product
       post "/loan_products/delete", to: "loan_products#delete"
       post "/loan_products/modify_prerequisite", to: "loan_products#modify_prerequisite"
+      post "/loan_products/modify_maintaining_balance", to: "loan_products#modify_maintaining_balance"
     end
   end
 end
