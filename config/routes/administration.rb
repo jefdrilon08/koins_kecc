@@ -8,6 +8,7 @@ namespace :administration do
   resources :announcements
   resources :loan_products, except: [:destroy]
   resources :member_shares, only: [:index]
+  resources :project_type_categories
 
   resources :surveys, only: [:index, :show, :edit, :update] do
     get "/survey_question_form", to: "surveys#survey_question_form"
