@@ -54,9 +54,24 @@
               %td
                 #{@loan_product.priority}
 
+            %tr
+              %th
+                Prerequisite
+              %td
+                - if @loan_product.prerequisite.present?
+                  #{@loan_product.prerequisite}
+                - else
+                  No prerequisite yet.
+                %span
+                  %small
+                    = link_to "#", id: 'btn-prerequisite' do
+                      .fa.fa-pencil-alt
+                      Modify
+
 #parameters{ data: { id: @loan_product.id } }
 
 = render partial: "administration/loan_products/modals/delete"
+= render partial: "administration/loan_products/modals/prerequisite"
 = render partial: "templates/error_list"
 
 = javascript_include_tag "administration/loan_products/Show.js"

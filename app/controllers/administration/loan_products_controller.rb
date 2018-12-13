@@ -7,7 +7,8 @@ module Administration
     end
 
     def show
-      @loan_product = LoanProduct.find(params[:id])
+      @loan_product     = LoanProduct.find(params[:id])
+      @prerequisite_id  = @loan_product.prerequisite.try(:id)
     end
 
     def new

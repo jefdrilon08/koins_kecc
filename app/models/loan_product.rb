@@ -10,4 +10,18 @@ class LoanProduct < ApplicationRecord
   def to_s
     name
   end
+
+  def prerequisite
+    if data
+      temp  = self.data.with_indifferent_access
+
+      if temp[:prerequisite_id].present?
+        LoanProduct.where(id: temp[:prerequisite_id]).first
+      else
+        false
+      end
+    else
+      false
+    end
+  end
 end
