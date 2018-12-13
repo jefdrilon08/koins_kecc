@@ -28,7 +28,8 @@ module Billings
         headers: [],
         totals: [],
         total_expected_collections: 0.00,
-        total_collected: 0.00
+        total_collected: 0.00,
+        prepared_by: "#{@user.first_name} #{@user.last_name}"
       }
     end
 

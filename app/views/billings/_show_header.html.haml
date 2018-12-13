@@ -14,6 +14,9 @@
         .fa.fa-print
         Print Billing
       - if @billing.pending?
+        = link_to "#", class: 'btn', id: 'btn-check' do
+          .fa.fa-check
+          Check
         = link_to "#", class: 'btn', id: 'btn-approve' do
           .fa.fa-check
           Approve

@@ -9,8 +9,17 @@
             .callout.callout-info
               %p
                 Pindutin ang amount upang baguhin ito.
+
+          - if !@billing.checked?
+            .callout.callout-danger
+              This billing has not been checked yet.
+          - else
+            .callout.callout-info
+              Checked By: #{@billing.checked_by}
+
           %h5
             Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")}
+
           #billing-content
 
           - if debug?
@@ -22,6 +31,7 @@
 
 = render partial: "shared/modals/print"
 = render partial: "billings/modals/approve"
+= render partial: "billings/modals/check"
 = render partial: "templates/error_list"
 
 #parameters{ data: { id: @billing.id } }

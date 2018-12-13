@@ -11,6 +11,13 @@ module Billings
     end
 
     def execute!
+      if !@billing.checked?
+        @errors[:messages] << {
+          key: "billing",
+          message: "this record has not been checked yet"
+        }
+      end
+
       if @billing.blank?
         @errors[:messages] << {
           key: "billing",

@@ -20,6 +20,32 @@ class Billing < ApplicationRecord
     end
   end
 
+  def checked?
+    temp  = self.data.with_indifferent_access
+
+    temp[:is_checked].present? && temp[:is_checked] == true
+  end
+
+  def prepared_by
+    temp  = self.data.with_indifferent_access
+
+    if temp[:prepared_by].present?
+      return temp[:prepared_by]
+    else
+      return "N/A"
+    end
+  end
+
+  def checked_by
+    temp  = self.data.with_indifferent_access
+
+    if temp[:is_checked].present? && temp[:checker].present?
+      return "#{temp[:checker][:first_name]} #{temp[:checker][:last_name]}"
+    else
+      return "N/A"
+    end
+  end
+
   def total_expected_collections
     self.data["total_expected_collections"]
   end

@@ -70,5 +70,34 @@
     %th
       #{number_to_currency(billing_grand_total, unit: "")}
 
+%br
+%br
+.row
+  .col
+    %strong
+      Prepared By:
+    %br
+    #{@billing[:prepared_by]}
+  .col
+    %strong
+      Collected By:
+    %br
+    #{@billing[:collected_by]}
+  .col
+    %strong
+      Checked By:
+    %br
+    #{@billing[:checked_by]}
+  .col
+    %strong
+      Encoded By:
+    %br
+    #{@billing[:prepared_by]}
+  .col
+    %strong
+      Posted By:
+    %br
+    #{@billing[:approved_by]}
+
 :javascript
   window.print();

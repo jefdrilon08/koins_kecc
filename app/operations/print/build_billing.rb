@@ -9,6 +9,8 @@ module Print
     end
 
     def execute!
+      @collector              = Center.find(@billing.center_id).user
+
       @data[:collection_date] = @billing.collection_date
       @data[:branch]          = Branch.find(@billing.branch_id).to_s
       @data[:center]          = Center.find(@billing.center_id).to_s
@@ -19,6 +21,9 @@ module Print
       @data[:reference_number]  = @billing.reference_number
       @data[:particular]        = @billing.particular
       @data[:approved_by]       = @billing.approved_by
+      @data[:checked_by]        = @billing.checked_by
+      @data[:prepared_by]       = @billing.prepared_by
+      @data[:collected_by]      = "#{@collector.first_name} #{@collector.last_name}"
 
       accounting_entry  = {
         reference_number: @billing.reference_number,
