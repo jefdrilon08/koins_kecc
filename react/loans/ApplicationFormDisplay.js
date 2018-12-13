@@ -539,22 +539,6 @@ export default class ApplicationFormDisplay extends React.Component {
           </div>
           <hr/>
           <h5>
-            Voucher Particular
-          </h5>
-          <div className="row">
-            <div className="col">
-              <div className="form-group">
-                <input
-                  className="form-control"
-                  value={this.state.data.data.voucher.particular}
-                  onChange={this.handleVoucherParticular.bind(this)}
-                  disabled={this.state.isSaving || this.state.isActive}
-                />
-              </div>
-            </div>
-          </div>
-          <hr/>
-          <h5>
             CLIP Beneficiary
           </h5>
           <div className="card">

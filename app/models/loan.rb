@@ -116,7 +116,7 @@ class Loan < ApplicationRecord
   def beneficiary_date_of_birth
     temp  = self.data.with_indifferent_access
 
-    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:date_of_birth]
+    if temp[:clip_beneficiary] and temp[:clip_beneficiary][:date_of_birth].present?
       temp[:clip_beneficiary] and temp[:clip_beneficiary][:date_of_birth].to_date.strftime("%b %d, %Y")
     end
   end
