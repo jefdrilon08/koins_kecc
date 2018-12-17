@@ -1,7 +1,7 @@
 import React from 'react';
 import {numberWithCommas, numberAsPercent} from '../../utils/helpers';
 
-export default class Officer extends React.Component {
+export default class ParOfficer extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -63,9 +63,6 @@ export default class Officer extends React.Component {
             {centers[i].center.name}
           </th>
           <th width="4%">
-            <center>
-              {centers[i].loans.length}
-            </center>
           </th>
           <th className="text-right">
             {numberWithCommas(centers[i].principal)}
@@ -107,6 +104,31 @@ export default class Officer extends React.Component {
     return centerObjects;
   }
 
+  renderHeaders() {
+    var parBinHeaders = this.props.parBinHeaders;
+    console.log(parBinHeaders);
+
+    var headers = [];
+
+    for(var i = 0; i < parBinHeaders.length; i++) {
+      if(i != (parBinHeaders.length - 1)) {
+        headers.push(
+          <th key={"h-" + i} className="text-center">
+            {"" + parBinHeaders[i].min_days + "-" + parBinHeaders[i].max_days}
+          </th>
+        );
+      } else {
+        headers.push(
+          <th key={"h-" + i} className="text-center">
+            {"> " + parBinHeaders[i].min_days}
+          </th>
+        );
+      }
+    }
+
+    return headers;
+  }
+
   render() {
     var data      = this.props.data;
     var fullName  = data.officer.first_name + " " + data.officer.last_name;
@@ -120,83 +142,18 @@ export default class Officer extends React.Component {
           <tbody>
             <tr>
               <th>
+                Name
               </th>
               <th>
-                Date Released
+                Total
               </th>
-              <th>
-                Loan Amt.
-              </th>
-              <th>
-                Princ. Paid
-              </th>
-              <th>
-                Loan Bal.
-              </th>
-              <th>
-                Int Amt.
-              </th>
-              <th>
-                Int Paid
-              </th>
-              <th>
-                Int Bal.
-              </th>
-              <th>
-                Total Paid
-              </th>
-              <th>
-                Cum. Due (P)
-              </th>
-              <th>
-                Cum. Due (P+I)
-              </th>
-              <th>
-                Amt. Past Due (P+I)
-              </th>
-              <th>
-                RR % (P)
-              </th>
+              {this.renderHeaders()}
             </tr>
-            {this.renderCenters()}
             <tr>
               <th>
                 Total for {fullName}
               </th>
               <th>
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.principal)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.principal_paid)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.principal_balance)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.interest)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.interest_paid)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.interest_balance)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.total_paid)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.principal_due)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.total_due)}
-              </th>
-              <th className="text-right">
-                {numberWithCommas(data.total_balance)}
-              </th>
-              <th className="text-right">
-                {numberAsPercent(data.principal_rr)}
               </th>
             </tr>
           </tbody>

@@ -3,4 +3,8 @@ class ProjectType < ApplicationRecord
   validates :code, presence: true
 
   belongs_to :project_type_category
+
+  def to_s
+    name
+  end
 end

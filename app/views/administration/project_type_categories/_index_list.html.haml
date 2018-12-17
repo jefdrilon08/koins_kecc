@@ -3,6 +3,8 @@
     %tr
       %th
         Name
+      %th
+        Code
       %th.text-center
         \# Types
   %tbody
@@ -12,5 +14,7 @@
           = link_to administration_project_type_category_path(o.id) do
             %strong
               #{o.name}
+        %td
+          #{o.code}
         %td.text-center
           #{o.project_types.size}

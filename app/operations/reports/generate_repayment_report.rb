@@ -15,6 +15,12 @@ module Reports
                           @branch.id
                         )
 
+      @par_bins = Settings.par_bins
+
+      if @par_bins.blank?
+        raise "par_bins config not found"
+      end
+
       @data = {
         loan_products: [],
         principal:          0.00,
@@ -32,8 +38,12 @@ module Reports
         principal_rr:       0,
         interest_rr:        0,
         total_rr:           0,
-        par:                0
+        par:                0,
+        par_bins:           []
       }
+
+      # Par bin headers
+      @data[:par_bin_headers] = @par_bins.map{ |o| { min_days: o.min_days, max_days: o.max_days } }
 
       @data_loans = []
     end
@@ -71,7 +81,8 @@ module Reports
           principal_rr:       0,
           interest_rr:        0,
           total_rr:           0,
-          par:                0
+          par:                0,
+          par_bins:           []
         }
 
         if d[:officers].size > 0
@@ -114,6 +125,28 @@ module Reports
 
           # PAR
           d[:par] = (d[:principal_balance] / d[:principal]).round(2)
+
+          if @par_bins.present?
+            @par_bins.each_with_index do |p, i|
+              par_bin_data  = {
+                min: p.min,
+                max: p.max,
+                principal_due: 0.00,
+                interest_due: 0.00,
+                total_due: 0.00,
+                count: 0
+              }
+
+              d[:officers].each do |temp_officer|
+                par_bin_data[:count] += temp_officer[:par_bins][i][:count]
+                par_bin_data[:principal_due] += temp_officer[:par_bins][i][:principal_due]
+                par_bin_data[:interest_due] += temp_officer[:par_bins][i][:interest_due]
+                par_bin_data[:total_due] += temp_officer[:par_bins][i][:total_due]
+              end
+
+              d[:par_bins] << par_bin_data
+            end
+          end
 
           @data[:loan_products] << d
         end
@@ -159,6 +192,28 @@ module Reports
 
         # PAR
         @data[:par] = (@data[:principal_balance] / @data[:principal]).round(2)
+
+        if @par_bins.present?
+          @par_bins.each_with_index do |p, i|
+            par_bin_data  = {
+              min: p.min,
+              max: p.max,
+              principal_due: 0.00,
+              interest_due: 0.00,
+              total_due: 0.00,
+              count: 0
+            }
+
+            @data[:loan_products].each do |temp_loan_product|
+              par_bin_data[:count] += temp_loan_product[:par_bins][i][:count]
+              par_bin_data[:principal_due] += temp_loan_product[:par_bins][i][:principal_due]
+              par_bin_data[:interest_due] += temp_loan_product[:par_bins][i][:interest_due]
+              par_bin_data[:total_due] += temp_loan_product[:par_bins][i][:total_due]
+            end
+
+            @data[:par_bins] << par_bin_data
+          end
+        end
       end
 
       @data
@@ -193,7 +248,8 @@ module Reports
           principal_rr:       0,
           interest_rr:        0,
           total_rr:           0,
-          par:                0
+          par:                0,
+          par_bins:           []
         }
 
         if d[:centers].size > 0
@@ -237,6 +293,28 @@ module Reports
           # PAR
           d[:par] = (d[:principal_balance] / d[:principal]).round(2)
 
+          if @par_bins.present?
+            @par_bins.each_with_index do |p, i|
+              par_bin_data  = {
+                min: p.min,
+                max: p.max,
+                principal_due: 0.00,
+                interest_due: 0.00,
+                total_due: 0.00,
+                count: 0
+              }
+
+              d[:centers].each do |temp_center|
+                par_bin_data[:count] += temp_center[:par_bins][i][:count]
+                par_bin_data[:principal_due] += temp_center[:par_bins][i][:principal_due]
+                par_bin_data[:interest_due] += temp_center[:par_bins][i][:interest_due]
+                par_bin_data[:total_due] += temp_center[:par_bins][i][:total_due]
+              end
+
+              d[:par_bins] << par_bin_data
+            end
+          end
+
           officers << d
         end
       end
@@ -270,7 +348,8 @@ module Reports
           principal_rr:       0,
           interest_rr:        0,
           total_rr:           0,
-          par:                0
+          par:                0,
+          par_bins:           []
         }
 
         if d[:loans].size > 0
@@ -313,6 +392,30 @@ module Reports
 
           # PAR
           d[:par] = (d[:principal_balance] / d[:principal]).round(2)
+
+          if @par_bins.present?
+            @par_bins.each_with_index do |p, i|
+              par_bin_data  = {
+                min: p.min,
+                max: p.max,
+                principal_due: 0.00,
+                interest_due: 0.00,
+                total_due: 0.00,
+                count: 0
+              }
+
+              d[:loans].each do |temp_loan|
+                if temp_loan[:num_days_par] >= p.min_days && temp_loan[:num_days_par] <= p.max_days
+                  par_bin_data[:count] += 1
+                  par_bin_data[:principal_due] += temp_loan[:principal_due]
+                  par_bin_data[:interest_due] += temp_loan[:interest_due]
+                  par_bin_data[:total_due] += temp_loan[:total_due]
+                end
+              end
+
+              d[:par_bins] << par_bin_data
+            end
+          end
 
           data << d
         end

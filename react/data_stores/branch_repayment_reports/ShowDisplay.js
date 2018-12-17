@@ -2,11 +2,14 @@ import React from 'react';
 import $ from 'jquery';
 import moment from 'moment';
 import Select from 'react-select';
+import Toggle from 'react-toggle';
+import "react-toggle/style.css";
 
 import SkCubeLoading from '../../SkCubeLoading';
 import ErrorDisplay from '../../ErrorDisplay';
 
-import LoanProduct from './LoanProduct';
+import RepaymentRateDisplay from './RepaymentRateDisplay';
+import ParDisplay from './ParDisplay';
 
 export default class ShowDisplay extends React.Component {
   constructor(props) {
@@ -15,7 +18,8 @@ export default class ShowDisplay extends React.Component {
     this.state  = {
       isLoading: true,
       data: false,
-      errors: false
+      errors: false,
+      display: "rr"
     };
   }
 
@@ -66,26 +70,58 @@ export default class ShowDisplay extends React.Component {
     return centerOptions;
   }
 
-  buildLoanProductOptions() {
+  buildOptions() {
     var loanProductOptions  = [];
 
     return loanProductOptions;
   }
 
-  renderLoanProductLevel() {
-    var loanProducts  = [];
-    var data          = this.state.data.data;
+  handleToggledRR() {
+    if(this.state.display == "rr") {
+      this.setState({
+        display: "par"
+      });
+    } else {
+      this.setState({
+        display: "rr"
+      });
+    }
+  }
 
-    for(var i = 0; i < data.loan_products.length; i++) {
-      loanProducts.push(
-        <LoanProduct
-          key={"lp" + i}
-          data={data.loan_products[i]}
+  handleToggledPar() {
+    if(this.state.display == "par") {
+      this.setState({
+        display: "rr"
+      });
+    } else {
+      this.setState({
+        display: "par"
+      });
+    }
+  }
+
+  renderDisplay() {
+    if(this.state.display == "rr") {
+      return  (
+        <RepaymentRateDisplay
+          data={this.state.data}
         />
       );
+    } else if(this.state.display == "par") {
+      return  (
+        <ParDisplay
+          data={this.state.data}
+        />
+      );
+    } else {
+      return  (
+        <div>
+          <p>
+            Display not found
+          </p>
+        </div>
+      );
     }
-    
-    return  loanProducts;
   }
 
   render() {
@@ -96,7 +132,32 @@ export default class ShowDisplay extends React.Component {
     } else {
       return  (
         <div>
-          {this.renderLoanProductLevel()}
+          <div className="row">
+            <div className="col">
+              <Toggle
+                checked={this.state.display == "rr"}
+                onChange={this.handleToggledRR.bind(this)}
+                className="btn"
+              />
+              &nbsp;
+              <label>
+                Repayment Rate Display
+              </label>
+            </div>
+            <div className="col">
+              <Toggle
+                checked={this.state.display == "par"}
+                onChange={this.handleToggledPar.bind(this)}
+                className="btn"
+              />
+              &nbsp;
+              <label>
+                PAR Display
+              </label>
+            </div>
+          </div>
+          <hr/>
+          {this.renderDisplay()}
         </div>
       );
     }

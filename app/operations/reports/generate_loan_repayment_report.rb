@@ -65,7 +65,8 @@ module Reports
         principal_rr:       0,
         interest_rr:        0,
         total_rr:           0,
-        par:                0
+        par:                0,
+        num_days_par:       0
       }
     end
 
@@ -117,6 +118,20 @@ module Reports
       # PAR
       par = (principal_balance / principal).round(2)
 
+      last_payment  = @payments.last
+      num_days_par  = (@as_of - @amorts.first.due_date).days
+
+      if last_payment.present?
+        last_paid_date      = last_payment.data.with_indifferent_access[:amort_entries].last[:due_date].to_date
+        latest_unpaid_amort = @amorts.where("due_date >= ?", last_paid_date).order("due_date ASC").first
+
+        if latest_unpaid_amort.present? and par > 0
+          num_days_par  = (@as_of - latest_unpaid_amort.due_date).to_i
+        else
+          num_days_par  = 0
+        end
+      end
+
       @data[:principal]         = principal
       @data[:interest]          = interest
       @data[:total]             = total
@@ -133,6 +148,7 @@ module Reports
       @data[:interest_rr]       = interest_rr
       @data[:total_rr]          = total_rr
       @data[:par]               = par
+      @data[:num_days_par]      = num_days_par
 
       @data
     end
