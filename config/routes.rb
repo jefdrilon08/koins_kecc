@@ -62,6 +62,9 @@ Rails.application.routes.draw do
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]
 
+  # Monthly Closing Collections
+  resources :monthly_closing_collections, only: [:index, :show, :destroy]
+
   # Printing
   get "/print", to: "print#print"
 

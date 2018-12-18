@@ -100,7 +100,8 @@ module MemberAccounts
       @data = {
         interest: 0.00,
         tax: 0.00,
-        records: []
+        records: [],
+        transactions: []
       }
     end
 
@@ -157,7 +158,8 @@ module MemberAccounts
           records << r
         end
 
-        @data[:records] = records
+        @data[:records]       = records
+        @data[:transactions]  = @account_transactions
 
         # Interest and tax total
         interest  = 0.00

@@ -15,3 +15,7 @@
       = link_to withdrawal_collections_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-upload
         Withdrawals
+    %li{ class: "nav-item #{params[:controller] == 'monthly_collection_collections' ? 'active' : ''}" }
+      = link_to monthly_closing_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Monthly Closing Col.

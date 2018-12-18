@@ -1,0 +1,21 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+
+= render partial: "monthly_closing_collections/modals/new"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "monthly_closing_collections/Index.js"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });
