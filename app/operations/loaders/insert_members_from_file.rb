@@ -41,7 +41,7 @@ module Loaders
         ]
 
         #Member.import columns, @data[:members], validate: false
-        Member.import columns, unique_mebers, validate: false
+        Member.import columns, unique_members, validate: false
       end
     end
   end
