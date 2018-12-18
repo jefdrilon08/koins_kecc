@@ -68,6 +68,9 @@ namespace :api do
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
 
+    # Monthly Closing Collection
+    post "/monthly_closing_collections", to: "monthly_closing_collections#create"
+
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"
     post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"

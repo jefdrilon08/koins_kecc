@@ -1,13 +1,23 @@
 var Index = (function() {
   var $btnNew;
+  var $btnConfirmNew;
   var $modalNew;
+
+  var $selectBranch;
+  var $inputClosingDate;
 
   var $message;
   var templateErrorList;
 
+  var authenticityToken;
+
   var _cacheDom = function() {
-    $btnNew   = $("#btn-new");
-    $modalNew = $("#modal-new");
+    $btnNew         = $("#btn-new");
+    $btnConfirmNew  = $("#btn-confirm-new");
+    $modalNew       = $("#modal-new");
+
+    $selectBranch     = $("#select-branch");
+    $inputClosingDate = $("#input-closing-date");
 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
@@ -16,10 +26,60 @@ var Index = (function() {
   var _bindEvents = function() {
     $btnNew.on("click", function() {
       $modalNew.modal("show");
+      $message.html("");
+    });
+
+    $btnConfirmNew.on("click", function() {
+      var branchId    = $selectBranch.val();
+      var closingDate = $inputClosingDate.val();
+
+      $selectBranch.prop("disabled", true);
+      $inputClosingDate.prop("disabled", true);
+      $btnConfirmNew.prop("disabled", true);
+
+      $message.html("Loading...");
+
+      $.ajax({
+        url: "/api/v1/monthly_closing_collections",
+        method: 'POST',
+        data: {
+          branch_id: branchId,
+          closing_date: closingDate,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.href = "/monthly_closing_collections/" + response.id;
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $selectBranch.prop("disabled", false);
+            $inputClosingDate.prop("disabled", false);
+            $btnConfirmNew.prop("disabled", false);
+          }
+        }
+      });
     });
   }
 
-  var init  = function() {
+  var init  = function(options) {
+    authenticityToken = options.authenticityToken;
+
     _cacheDom();
     _bindEvents();
   }

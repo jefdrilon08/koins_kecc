@@ -6,7 +6,17 @@
           New Monthly Collection
       .modal-body
         .modal-body-content
-          .callout.callout-info
+          .row
+            .col
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
+            .col
+              .form-group
+                %label
+                  Closing Date
+                = text_field_tag :closing_date, Date.today, type: 'date', id: 'input-closing-date', class: 'form-control'
           .message
       .modal-footer
         .controls
