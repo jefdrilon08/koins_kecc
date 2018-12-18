@@ -10,7 +10,7 @@ module MonthlyClosingCollections
     end
 
     def execute!
-      not_yet_implemented!
+      #not_yet_implemented!
 
       if @closing_date.blank?
         @errors[:messages] << {

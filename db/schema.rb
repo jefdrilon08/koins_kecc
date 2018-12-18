@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_18_073820) do
+ActiveRecord::Schema.define(version: 2018_12_18_154110) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -367,6 +367,7 @@ ActiveRecord::Schema.define(version: 2018_12_18_073820) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "branch_id"
+    t.string "status"
     t.index ["branch_id"], name: "index_monthly_closing_collections_on_branch_id"
   end
 

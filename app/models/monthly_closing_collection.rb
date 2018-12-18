@@ -1,5 +1,10 @@
 class MonthlyClosingCollection < ApplicationRecord
-  STATUSES  = ["pending", "approved"]
+  STATUSES  = [
+    "processing", 
+    "pending", 
+    "approved",
+    "error"
+  ]
 
   belongs_to :branch
 
@@ -7,6 +12,22 @@ class MonthlyClosingCollection < ApplicationRecord
 
   scope :pending, -> { where(status: "pending") }
   scope :approved, -> { where(status: "approved") }
+
+  def processing?
+    self.status == "processing"
+  end
+
+  def pending?
+    self.status == "pending"
+  end
+
+  def approved?
+    self.status == "approved"
+  end
+
+  def error?
+    self.status == "error"
+  end
 
   def to_s
     closing_date

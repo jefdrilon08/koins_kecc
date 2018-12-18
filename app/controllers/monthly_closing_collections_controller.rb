@@ -9,6 +9,10 @@ class MonthlyClosingCollectionsController < ApplicationController
 
   def show
     @monthly_closing_collection = MonthlyClosingCollection.find(params[:id])
+
+    if @monthly_closing_collection.processing?
+      redirect_to monthly_closing_collections_path
+    end
   end
 
   def destroy

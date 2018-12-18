@@ -20,9 +20,25 @@ module Api
         if errors[:full_messages].size > 0
           render json: errors, status: 400
         else
-          monthly_closing_collection  = ::MonthlyClosingCollections::Create.new(
-                                          config: config
-                                        ).execute!
+          # Create new record
+          monthly_closing_collection  = MonthlyClosingCollection.new(
+                                          branch: branch,
+                                          closing_date: closing_date,
+                                          status: "processing"
+                                        )
+
+          monthly_closing_collection.save!
+
+          # Arguments for job
+          args  = {
+            user_id: current_user.id,
+            branch_id: branch.id,
+            closing_date: closing_date.to_s,
+            monthly_closing_collection_id: monthly_closing_collection.id
+          }
+
+          # Start job
+          ProcessMonthlyClosingCollection.perform_later(args)
 
           render json: { id: monthly_closing_collection.id }
         end

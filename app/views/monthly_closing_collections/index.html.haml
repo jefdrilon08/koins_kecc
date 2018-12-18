@@ -5,6 +5,11 @@
     .col
       .card
         .card-body
+          - if @monthly_closing_collections.size > 0
+            = render partial: "index_list"
+          - else
+            %p
+              No records found
 
 = render partial: "monthly_closing_collections/modals/new"
 = render partial: "templates/error_list"

@@ -42,7 +42,7 @@ module MemberAccounts
                             subsidiary_id: loan_ids
                           ).order("transacted_at ASC").last
 
-        threshold_date  = @closing_date - @dormant_threshold_months.months
+        threshold_date  = @closing_date - @dormant_threshold_months.to_i.months
 
         if latest_payment.transacted_at < threshold_date
           @annual_interest_rate   = @dormant_annual_interest_rate
@@ -98,6 +98,16 @@ module MemberAccounts
       end
 
       @data = {
+        member_account: {
+          id: @member_account.id,
+          account_type: @member_account.account_type,
+          account_subtype: @member_account.account_subtype
+        },
+        member: {
+          id: @member_account.id,
+          first_name: @member_account.member.first_name,
+          last_name: @member_account.member.last_name
+        },
         interest: 0.00,
         tax: 0.00,
         records: [],
