@@ -2,6 +2,15 @@ module Loaders
   class InsertMemberAccountsFromFile < InsertFromFile
     def initialize(params:)
       super(params: params)
+
+      # avoid duplicates
+      @unique_member_accounts = []
+
+      @data[:member_accounts].each do |o|
+        if MemberAccount.where(id: o[:id]).size == 0
+          @unique_member_accounts << o
+        end
+      end
     end
 
     def execute!
@@ -18,7 +27,7 @@ module Loaders
           :maintaining_balance
         ]
 
-        MemberAccount.import columns, @data[:member_accounts], validate: false
+        MemberAccount.import columns, @unique_member_accounts, validate: false
       end
     end
   end

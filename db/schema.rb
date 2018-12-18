@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_11_083059) do
+ActiveRecord::Schema.define(version: 2018_12_18_073820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -359,6 +359,17 @@ ActiveRecord::Schema.define(version: 2018_12_11_083059) do
     t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
   end
 
+  create_table "monthly_closing_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "closing_date"
+    t.date "closed_at"
+    t.jsonb "data"
+    t.jsonb "meta"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "branch_id"
+    t.index ["branch_id"], name: "index_monthly_closing_collections_on_branch_id"
+  end
+
   create_table "project_type_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "code"
@@ -475,6 +486,7 @@ ActiveRecord::Schema.define(version: 2018_12_11_083059) do
   add_foreign_key "membership_payment_collections", "branches"
   add_foreign_key "membership_payment_collections", "centers"
   add_foreign_key "membership_payment_records", "members"
+  add_foreign_key "monthly_closing_collections", "branches"
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "survey_answers", "surveys"
   add_foreign_key "survey_questions", "surveys"
