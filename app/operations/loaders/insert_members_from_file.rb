@@ -4,11 +4,11 @@ module Loaders
       super(params: params)
 
       # avoid duplicates
-      unique_members  = []
+      @unique_members  = []
 
       @data[:members].each do |o|
         if Member.where(id: o[:id]).size == 0
-          unique_members << o
+          @unique_members << o
         end
       end
     end
@@ -41,7 +41,7 @@ module Loaders
         ]
 
         #Member.import columns, @data[:members], validate: false
-        Member.import columns, unique_members, validate: false
+        Member.import columns, @unique_members, validate: false
       end
     end
   end
