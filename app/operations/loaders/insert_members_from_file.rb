@@ -2,6 +2,15 @@ module Loaders
   class InsertMembersFromFile < InsertFromFile
     def initialize(params:)
       super(params: params)
+
+      # avoid duplicates
+      unique_members  = []
+
+      @data[:members].each do |o|
+        if Member.where(id: o[:id]).size == 0
+          unique_members << o
+        end
+      end
     end
 
     def execute!
@@ -31,7 +40,8 @@ module Loaders
           :meta
         ]
 
-        Member.import columns, @data[:members], validate: false
+        #Member.import columns, @data[:members], validate: false
+        Member.import colums, unique_mebers, validate: false
       end
     end
   end
