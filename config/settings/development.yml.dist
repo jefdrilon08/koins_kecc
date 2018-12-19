@@ -9,6 +9,51 @@ company_tin_number: "486-071-201-000"
 ###############################
 
 ###############################
+# INTEREST AND TAX            #
+###############################
+interest_member_accounts:
+  -
+    account_type: "SAVINGS"
+    account_subtype: "K-IMPOK"
+    annual_interest_rate: 0.05
+    annual_tax_rate: 0.0
+    dormant_annual_interest_rate: 0.02
+    dormant_threshold_months: 6
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Golden K"
+    annual_tax_rate: 0.0
+    annual_interest_rate: 0.10
+
+###############################
+
+###############################
+#   REPORTS CONFIGURATION     #
+###############################
+par_bins:
+  -
+    min_days: 1
+    max_days: 15
+  -
+    min_days: 16
+    max_days: 30
+  -
+    min_days: 31
+    max_days: 60
+  -
+    min_days: 61
+    max_days: 90
+  -
+    min_days: 91
+    max_days: 120
+  -
+    min_days: 121
+    max_days: 150
+  -
+    min_days: 151
+    max_days: 99999999
+
+###############################
 #   MEMBERSHIP CONFIGURATION  #
 ###############################
 
@@ -46,6 +91,12 @@ default_deposit_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "Golden K"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Retirement Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Life Insurance Fund"
 
 default_withdrawal_accounts:
   -
@@ -54,6 +105,7 @@ default_withdrawal_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "Golden K"
+
 
 default_member_accounts:
   -
