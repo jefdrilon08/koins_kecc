@@ -41,16 +41,16 @@ module Api
                           status: "processing"
                         }
                       )
-
-            args  = {
-              record: @record,
-              data_store_type: @data_store_type
-            }
-
-            ProcessBranchRepaymentReport.perform_later(args)
-
-            render json: { message: "ok" }
           end
+
+          args  = {
+            record: @record,
+            data_store_type: @data_store_type
+          }
+
+          ProcessBranchRepaymentReport.perform_later(args)
+
+          render json: { message: "ok" }
         end
       end
     end

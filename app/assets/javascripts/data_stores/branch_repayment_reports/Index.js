@@ -49,6 +49,7 @@ var Index  = (function() {
         method: 'POST',
         data: data,
         success: function(response) {
+          console.log(response);
           $message.html("Success! Redirecting...");
           window.location.href="/data_stores/branch_repayment_reports";
         },
