@@ -1,0 +1,17 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    = link_to monthly_closing_collections_path do
+      .fa.fa-file
+      Monthly Closing Collections
+  %li.breadcrumb-item
+    .fa.fa-file
+    Closing for #{@monthly_closing_collection.closing_date.strftime("%b %d, %Y")} - #{@monthly_closing_collection.branch}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      - if @monthly_closing_collection.pending? || @monthly_closing_collection.error?
+        = link_to "#", class: 'btn', id: 'btn-update' do
+          .fa.fa-sync
+          Update
+        = link_to monthly_closing_collection_path(@monthly_closing_collection), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn' do
+          .fa.fa-times
+          Delete

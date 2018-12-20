@@ -69,7 +69,9 @@ module MonthlyClosingCollections
                     }
                   ).execute!
 
-        @data[:records] << result
+        if result[:records].size > 0
+          @data[:records] << result
+        end
       end
 
       # Attach meta

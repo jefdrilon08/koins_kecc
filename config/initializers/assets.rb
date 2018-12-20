@@ -47,6 +47,7 @@ Rails.application.config.assets.precompile += [
   "members/SurveyAnswer.js",
   "members/member_shares/Show.js",
   "monthly_closing_collections/Index.js",
+  "monthly_closing_collections/Show.js",
   "loans/Show.js",
   "MembersIndex.min.react.js",
   "MembersForm.min.react.js",
@@ -66,5 +67,6 @@ Rails.application.config.assets.precompile += [
   "LoanAccountingEntry.min.react.js",
   "MemberSurveyAnswerUI.min.react.js",
   "DashboardMain.min.react.js",
-  "BranchRepaymentReportShow.min.react.js"
+  "BranchRepaymentReportShow.min.react.js",
+  "MonthlyClosingCollectionShow.min.react.js"
 ]

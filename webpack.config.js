@@ -24,7 +24,8 @@ module.exports = {
     LoanAccountingEntry: "./react/loans/AccountingEntry.js",
     MemberSurveyAnswerUI: "./react/members/SurveyAnswerUI.js",
     DashboardMain: "./react/dashboard/Main.js",
-    BranchRepaymentReportShow: "./react/data_stores/branch_repayment_reports/Show.js"
+    BranchRepaymentReportShow: "./react/data_stores/branch_repayment_reports/Show.js",
+    MonthlyClosingCollectionShow: "./react/monthly_closing_collections/Show.js"
   },
   module: {
     rules: [
