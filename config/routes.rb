@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   get "/accounting/books/jvb", to: "accounting#jvb", as: :accounting_books_jvb
   get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
+  get "/accounting/books/misc", to: "accounting#misc", as: :accounting_books_misc
   get "/accounting/form", to: "accounting#form", as: :accounting_form
 
   # Billing

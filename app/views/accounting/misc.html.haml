@@ -1,0 +1,10 @@
+= render partial: "books_header", locals: { book: "MISC", book_title: "Miscellaneous" }
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "filter"
+          = render partial: "book_records", locals: { records: @records }
+          = paginate @records

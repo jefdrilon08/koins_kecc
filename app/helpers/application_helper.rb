@@ -31,6 +31,8 @@ module ApplicationHelper
       return "bg-warning"
     elsif book == "JVB"
       return "bg-info"
+    elsif book == "MISC"
+      return "bg-info"
     end
   end
 
@@ -39,6 +41,8 @@ module ApplicationHelper
       return "CRB"
     elsif book == "Cash Disbursements"
       return "CDB"
+    elsif book == "Miscellaneous"
+      return "MISC"
     else
       return "JVB"
     end

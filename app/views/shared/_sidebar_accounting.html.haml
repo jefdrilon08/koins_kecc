@@ -29,3 +29,7 @@
       = link_to accounting_books_cdb_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-book
         Cash Disbursements
+    %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'misc' ? 'active' : ''}" }
+      = link_to accounting_books_misc_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-book
+        MISC
