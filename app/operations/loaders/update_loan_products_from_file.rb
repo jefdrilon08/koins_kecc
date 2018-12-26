@@ -8,7 +8,7 @@ module Loaders
       @data[:loan_products].each do |o|
         loan_product  = LoanProduct.where(id: o[:id]).first
 
-        if loan_product.present?
+        if loan_product.blank?
           loan_product  = LoanProduct.new
         end
 

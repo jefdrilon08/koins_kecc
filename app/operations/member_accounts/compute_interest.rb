@@ -1,5 +1,5 @@
 module MemberAccounts
-  class ComputeInterestAndTax
+  class ComputeInterest
     def initialize(config:)
       @config = config
 
@@ -13,9 +13,6 @@ module MemberAccounts
       @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
       @annual_interest_rate         = @account_settings.annual_interest_rate
       @monthly_interest_rate        = (@annual_interest_rate / 12.0)
-
-      @annual_tax_rate  = @account_settings.annual_tax_rate
-      @monthly_tax_rate = (@annual_tax_rate / 12.0)
 
       # Check if dormant
       if @dormant_annual_interest_rate.present?
@@ -94,7 +91,6 @@ module MemberAccounts
           last_name: @member_account.member.last_name
         },
         interest: 0.00,
-        tax: 0.00,
         records: [],
         transactions: []
       }
@@ -106,7 +102,6 @@ module MemberAccounts
 
         interest_per_month          = (@ending_balance * @monthly_interest_rate).to_f.round(3)
         interest_earned_on_deposits = ((interest_per_month * @num_days_before_next_transaction) / 30.0).to_f.round(3)
-        withholding_tax_on_deposits = (interest_earned_on_deposits * @monthly_tax_rate).to_f.round(3)
 
         r = {
           transacted_at: @last_working_date,
@@ -117,7 +112,6 @@ module MemberAccounts
           num_days_before_next_transaction: @num_days_before_next_transaction,
           interest_per_month: interest_per_month,
           interest_earned_on_deposits: interest_earned_on_deposits,
-          withholding_tax_on_deposits: withholding_tax_on_deposits
         }
 
         records << r
@@ -137,7 +131,7 @@ module MemberAccounts
 
           interest_per_month          = (ending_balance * @monthly_interest_rate).to_f.round(3)
           interest_earned_on_deposits = ((interest_per_month * num_days_before_next_transaction) / 30.0).to_f.round(3)
-          withholding_tax_on_deposits = (interest_earned_on_deposits * @monthly_tax_rate).to_f.round(3)
+
           r = {
             transacted_at: d,
             beginning_balance: beginning_balance,
@@ -147,7 +141,6 @@ module MemberAccounts
             num_days_before_next_transaction: num_days_before_next_transaction,
             interest_per_month: interest_per_month,
             interest_earned_on_deposits: interest_earned_on_deposits,
-            withholding_tax_on_deposits: withholding_tax_on_deposits
           }
 
           records << r
@@ -163,16 +156,13 @@ module MemberAccounts
                                   }
                                 }
 
-        # Interest and tax total
+        # Interest total
         interest  = 0.00
-        tax       = 0.00
         records.each do |o|
           interest += o[:interest_earned_on_deposits]
-          tax += o[:withholding_tax_on_deposits]
         end
 
         @data[:interest]  = interest.round(2)
-        @data[:tax]       = tax.round(2)
       end
 
       @data
