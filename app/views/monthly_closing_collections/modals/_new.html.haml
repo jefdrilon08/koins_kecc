@@ -1,5 +1,5 @@
 #modal-new.modal.fade{:tabindex => "-1"}
-  .modal-dialog
+  .modal-dialog.modal-lg
     .modal-content
       .modal-header
         %h3.modal-title
@@ -12,6 +12,11 @@
                 %label
                   Branch
                 = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
+            .col
+              .form-group
+                %label
+                  Account Type
+                = select_tag :account_subtype, options_for_select(@account_subtypes), class: 'form-control', id: 'select-account-subtype'
             .col
               .form-group
                 %label

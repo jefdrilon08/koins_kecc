@@ -21,7 +21,8 @@ class ProcessMonthlyClosingCollection < ApplicationJob
       monthly_closing_collection.update!(
         status: "error",
         data: {
-          exception: e
+          exception: e,
+          application_trace: Rails.backtrace_cleaner.clean(e.backtrace)
         }
       )
     end

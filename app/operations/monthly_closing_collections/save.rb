@@ -69,7 +69,7 @@ module MonthlyClosingCollections
                     }
                   ).execute!
 
-        if result[:records].size > 0
+        if result[:interest] > 0
           @data[:records] << result
         end
       end

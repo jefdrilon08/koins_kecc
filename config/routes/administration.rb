@@ -13,4 +13,7 @@ namespace :administration do
   resources :surveys, only: [:index, :show, :edit, :update] do
     get "/survey_question_form", to: "surveys#survey_question_form"
   end
+
+  # Static pages
+  get "/loan_products/download/json", to: "loan_products#download", as: :download_loan_products
 end

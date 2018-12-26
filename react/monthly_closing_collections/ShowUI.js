@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 import SkCubeLoading from '../SkCubeLoading';
 import {numberWithCommas} from '../utils/helpers';
+import MemberRecord from './MemberRecord';
 
 export default class ShowUI extends React.Component {
   constructor(props) {
@@ -46,8 +47,22 @@ export default class ShowUI extends React.Component {
       );
     } else {
       console.log(context.state.data);
+
+      var data          = context.state.data.data;
+      var memberRecords = [];
+
+      for(var i = 0; i < data.records.length; i++) {
+        memberRecords.push(
+          <MemberRecord
+            key={"member-record-" + i}
+            data={data.records[i]}
+          />
+        );
+      }
+
       return  (
         <div>
+          {memberRecords}
         </div>
       );
     }

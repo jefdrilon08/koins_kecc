@@ -7,6 +7,21 @@ class LoanProduct < ApplicationRecord
   scope :entry_point, -> { where(is_entry_point: true) }
   scope :non_entry_point, -> { where.not(is_entry_point: true) }
 
+  def to_h
+    {
+      id: self.id,
+      name: self.name,
+      max_loan_amount: self.max_loan_amount.round(2),
+      min_loan_amount: self.min_loan_amount.round(2),
+      denomination: self.denomination.round(2),
+      insured: self.insured,
+      is_entry_point: self.is_entry_point,
+      monthly_interest_rate: self.monthly_interest_rate,
+      priority: self.priority,
+      data: self.data
+    }
+  end
+
   def to_s
     name
   end

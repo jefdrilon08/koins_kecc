@@ -4,6 +4,7 @@ var Index = (function() {
   var $modalNew;
 
   var $selectBranch;
+  var $selectAccountSubtype;
   var $inputClosingDate;
 
   var $message;
@@ -16,8 +17,9 @@ var Index = (function() {
     $btnConfirmNew  = $("#btn-confirm-new");
     $modalNew       = $("#modal-new");
 
-    $selectBranch     = $("#select-branch");
-    $inputClosingDate = $("#input-closing-date");
+    $selectBranch         = $("#select-branch");
+    $selectAccountSubtype = $("#select-account-subtype");
+    $inputClosingDate     = $("#input-closing-date");
 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
@@ -30,8 +32,9 @@ var Index = (function() {
     });
 
     $btnConfirmNew.on("click", function() {
-      var branchId    = $selectBranch.val();
-      var closingDate = $inputClosingDate.val();
+      var branchId        = $selectBranch.val();
+      var accountSubtype  = $selectAccountSubtype.val();
+      var closingDate     = $inputClosingDate.val();
 
       $selectBranch.prop("disabled", true);
       $inputClosingDate.prop("disabled", true);
@@ -44,6 +47,7 @@ var Index = (function() {
         method: 'POST',
         data: {
           branch_id: branchId,
+          accountSubtype: accountSubtype,
           closing_date: closingDate,
           authenticity_token: authenticityToken
         },

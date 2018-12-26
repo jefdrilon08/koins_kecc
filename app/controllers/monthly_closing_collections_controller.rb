@@ -5,6 +5,16 @@ class MonthlyClosingCollectionsController < ApplicationController
     @monthly_closing_collections  = MonthlyClosingCollection.where(
                                       branch_id: @branches.pluck(:id)
                                     ).order("closing_date DESC")
+
+    @interest_member_accounts = Settings.interest_member_accounts
+
+    if @interest_member_accounts.blank?
+      raise "Settings not found: interest_member_accounts"
+    end
+
+    @account_subtypes = @interest_member_accounts.map{ |o|
+                          o.account_subtype
+                        }
   end
 
   def show

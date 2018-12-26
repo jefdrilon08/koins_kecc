@@ -2,6 +2,22 @@ module Administration
   class LoanProductsController < ApplicationController
     before_action :authenticate_user!
 
+    def download
+      data      = ::LoanProducts::GenerateHashList.new.execute!
+      filename  = "loan-products-#{Time.now.to_i}.json"
+      path      = "#{Rails.root}/tmp"
+
+      file  = ::Utils::WriteToJsonFile.new(
+                config: {
+                  filename: filename,
+                  path: path,
+                  data: data
+                }
+              ).execute!
+
+      send_file file, filename: filename, type: "text/json"
+    end
+
     def index
       @loan_products  = LoanProduct.select("*").order("priority ASC, name ASC")
     end

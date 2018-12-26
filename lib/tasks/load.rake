@@ -116,6 +116,19 @@ namespace :load do
     puts "Done."
   end
 
+  task :update_loan_products_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::UpdateLoanProductsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
   task :loan_products_from_file => :environment do
     puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 
