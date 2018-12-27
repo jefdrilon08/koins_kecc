@@ -7,6 +7,10 @@ import moment from 'moment';
 import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';
 import {numberWithCommas} from '../utils/helpers';
+import {customStyles} from '../utils/consts';
+import Modal from 'react-modal';
+
+Modal.setAppElement("#content");
 
 export default class FormResignationComponent extends React.Component {
   constructor(props) {
@@ -15,6 +19,8 @@ export default class FormResignationComponent extends React.Component {
     this.state  = {
       data: false,
       isLoading: true,
+      isProcessing: false,
+      isModalOpen: false,
       errors: false
     };
   }
@@ -212,6 +218,84 @@ export default class FormResignationComponent extends React.Component {
     return display;
   }
 
+  handleResignBtnClicked() {
+    this.setState({
+      isModalOpen: true
+    });
+  }
+
+  handleCancelClicked() {
+    this.setState({
+      isModalOpen: false
+    });
+  }
+
+  handleConfirmationClicked() {
+    this.setState({
+      isProcessing: true
+    });
+  }
+
+  renderProcessing() {
+    if(this.state.isProcessing) {
+      return  (
+        <div>
+          <SkCubeLoading/>
+          <center>
+            <p>
+              Resigning member. Please wait...
+            </p>
+          </center>
+        </div>
+      );
+    } else {
+      return  (
+        <div></div>
+      );
+    }
+  }
+
+  renderConfirmationModal() {
+    return (
+      <Modal
+        isOpen={this.state.isModalOpen}
+        style={customStyles}
+      >
+        <div className="container">
+          <div className="row">
+            <div className="col">
+              <p>
+                Are you sure you want to resign this member?
+              </p>
+              <hr/>
+              {this.renderProcessing()}
+              <center>
+                <div className="btn-group">
+                  <button
+                    className="btn btn-info"
+                    onClick={this.handleConfirmationClicked.bind(this)}
+                    disabled={this.state.isProcessing}
+                  >
+                    <span className="fa fa-check"/>
+                    Confirm Resignation
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={this.handleCancelClicked.bind(this)}
+                    disabled={this.state.isProcessing}
+                  >
+                    <span className="fa fa-times"/>
+                    Cancel
+                  </button>
+                </div>
+              </center>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
+
   render() {
     console.log(this.state);
     if(this.state.isLoading) {
@@ -318,6 +402,20 @@ export default class FormResignationComponent extends React.Component {
             Accounting Entry
           </h5>
           {this.renderAccountingEntry()}
+          {this.renderConfirmationModal()}
+          <hr/>
+          <div className="callout callout-danger">
+            <h6>
+              Make sure to review all details before resigning member.
+            </h6>
+            <button
+              className="btn btn-danger btn-lg"
+              onClick={this.handleResignBtnClicked.bind(this)}
+            >
+              <span className="fa fa-times"/>
+              Resign Member
+            </button>
+          </div>
         </div>
       );
     } else {
