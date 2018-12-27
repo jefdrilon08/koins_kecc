@@ -7,6 +7,9 @@
     Chart of Accounts
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      = link_to accounting_download_accounting_codes_path, class: 'btn' do
+        .fa.fa-download
+        Download
       = link_to "/accounting/print_chart_of_accounts", class: 'btn' do
         .fa.fa-print
         Print

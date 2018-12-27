@@ -66,3 +66,11 @@
           .card-body
             %center
               %img{ src: @member.signature_data, width: "100", id: "signature-display" }
+    - if @member.active?
+      %hr
+      %h6
+        Resignation
+      %div
+        = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
+          .fa.fa-times
+          Resign Member

@@ -44,8 +44,7 @@ module MemberAccounts
           last_name: @member_account.member.last_name
         },
         interest: 0.00,
-        records: [],
-        transactions: []
+        records: []
       }
     end
 
@@ -72,7 +71,7 @@ module MemberAccounts
         # TODO: O(n^2) --> optimize this
         @transaction_dates.each_with_index do |d, d_index|
           r = {
-            date: d.to_date,
+            date: d.to_date.localtime,
             beginning_balance: 0.00,
             deposits: 0.00,
             withdrawals: 0.00,
@@ -82,28 +81,18 @@ module MemberAccounts
             num_days_before_next_transaction: 0
           }
 
-          @account_transactions.each_with_index do |t, i|
-            data  = t.data.with_indifferent_access
+          current_date_transactions = @account_transactions.where("CAST(transacted_at AS DATE) = ?", d).order("transacted_at ASC")
 
-            if t.transacted_at.to_date == d.to_date
-              if i == 0
-                r[:beginning_balance] = data[:beginning_balance]
-              end
+          r[:beginning_balance] = current_date_transactions.first.data.with_indifferent_access[:beginning_balance].to_f.round(2)
+          r[:deposits]          = current_date_transactions.where(transaction_type: "deposit").sum(:amount)
+          r[:withdrawals]       = current_date_transactions.where(transaction_type: "withdraw").sum(:amount)
+          r[:ending_balance]    = current_date_transactions.last.data.with_indifferent_access[:ending_balance].to_f.round(2)
 
-              if t.transaction_type == "deposit"
-                r[:deposits] += t.amount.to_f.round(2)
-              elsif t.transaction_type == "withdraw"
-                r[:withdrawals] += t.amount.to_f.round(2)
-              end
-            end
-          end
-
-          r[:ending_balance]                    = (r[:ending_balance] + r[:deposits] - r[:withdrawals]).to_f.round(2)
           r[:interest_per_month]                = (@monthly_interest_rate * r[:ending_balance]).to_f.round(2)
           r[:num_days_before_next_transaction]  = 0
 
           if d_index < (@transaction_dates.size - 1)
-            r[:num_days_before_next_transaction]  = (@transaction_dates[d_index + 1] - d).to_i
+            r[:num_days_before_next_transaction]  = (@transaction_dates[d_index + 1].to_date - d.to_date).to_i
           end
 
           r[:interest_earned_on_deposits]       = ((r[:interest_per_month] * r[:num_days_before_next_transaction]) / 30).round(2)

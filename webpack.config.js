@@ -8,6 +8,7 @@ module.exports = {
   entry: {
     MembersIndex: "./react/members/Index.js",
     MembersForm: "./react/members/Form.js",
+    MembersFormResignation: "./react/members/FormResignation.js",
     MemberAccountsSavingsIndex: "./react/member_accounts/savings/Index.js",
     AccountingTrialBalance: "./react/accounting/TrialBalance.js",
     AccountingGeneralLedger: "./react/accounting/GeneralLedger.js",

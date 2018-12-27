@@ -4,7 +4,7 @@ namespace :db do
 
     if branch.present?
       member_ids            = Member.where(branch_id: branch.id).pluck(:id)
-      loan_ids              = Loan.where(branch_id: branch.id).pluck(:id)
+      loan_ids              = Loan.where(member_id: member_ids).pluck(:id)
       member_account_ids    = MemberAccount.where(member_id: member_ids).pluck(:id)
       accounting_entry_ids  = AccountingEntry.where(branch_id: branch.id).pluck(:id)
       center_ids            = Center.where(branch_id: branch.id)
@@ -76,10 +76,6 @@ namespace :db do
       puts "Deleting members..."
       Member.where(branch_id: branch.id).delete_all
 
-      # Delete centers
-      puts "Deleting centers..."
-      Center.where(branch_id: branch.id).delete_all
-
       # Delete user_branches
       puts "Deleting user_branches..."
       UserBranch.where(branch_id: branch.id).delete_all
@@ -89,7 +85,7 @@ namespace :db do
       DataStore.where("meta->>'branch_id' = ?", branch.id).delete_all
 
       # Delete branch
-      branch.destroy!
+      #branch.destroy!
 
     else
       puts "Branch with id #{ENV['BRANCH_ID']} not found!"

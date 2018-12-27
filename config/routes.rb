@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   # Members
   get "/members", to: "members#index"
   get "/members/:id/display", to: "members#show", as: :member
+  get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
   get "/members/form", to: "members#form", as: :member_form
   get "/members/:id/survey_answers/:survey_answer_id", to: "members#survey_answer", as: :member_survey_answer
   get "/members/:id/survey_answers/:survey_answer_id/form", to: "members#survey_answer_form", as: :member_survey_answer_form

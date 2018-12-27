@@ -1,4 +1,28 @@
 module ApplicationHelper
+  def member_resignation_types
+    Settings.member_resignation_types.map{ |o|
+      {
+        name: o.name,
+        particulars: o.particulars.map{ |oo|
+          {
+            code: oo.code,
+            name: oo.name
+          }
+        }
+      }
+    }
+  end
+
+  def resignation_types
+
+    data  = []
+    Settings.member_resignation_types.each do |o|
+      data << o.name
+    end
+
+    data
+  end
+
   def savings_subtypes
     data  = []
 

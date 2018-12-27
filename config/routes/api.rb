@@ -14,6 +14,7 @@ namespace :api do
     get "/members", to: "members#index"
     get "/members/fetch", to: "members#fetch"
     get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
+    get "/members/fetch_resignation_details", to: "members#fetch_resignation_details"
     get "/members/member_co_makers", to: "members#member_co_makers"
     get "/members/member_loan_products", to: "members#member_loan_products"
     post "/members/create_survey", to: "members#create_survey"

@@ -3,6 +3,22 @@ module Accounting
     before_action :authenticate_user!
     before_action :load_accounting_code!, only: [:edit, :update, :show, :destroy]
 
+    def download
+      data      = ::Accounting::AccountingCodes::GenerateHashList.new.execute!
+      filename  = "accounting-codes-#{Time.now.to_i}.json"
+      path      = "#{Rails.root}/tmp"
+
+      file  = ::Utils::WriteToJsonFile.new(
+                config: {
+                  filename: filename,
+                  path: path,
+                  data: data
+                }
+              ).execute!
+
+      send_file file, filename: filename, type: "text/json"
+    end
+
     def index
       @accounting_codes = AccountingCode.select("*").order("code ASC")
     end

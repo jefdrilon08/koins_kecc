@@ -1,0 +1,12 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    = link_to members_path do
+      .fa.fa-users
+      Members
+  %li.breadcrumb-item
+    = link_to member_path(@member) do
+      .fa.fa-user
+      #{@member.full_name}
+  %li.breadcrumb-item
+    .fa.fa-file
+    Resignation Form

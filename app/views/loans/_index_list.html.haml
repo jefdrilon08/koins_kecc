@@ -35,7 +35,8 @@
           - if loan.active_or_paid?
             %center
               %small
-                #{loan.amortization_schedule_entries.order("due_date ASC").last.due_date.strftime("%b %d, %Y")}
+                - if loan.amortization_schedule_entries.order("due_date ASC").last
+                  #{loan.amortization_schedule_entries.order("due_date ASC").last.due_date.strftime("%b %d, %Y")}
         %td.text-right
           %strong
             #{number_to_currency(loan.total_dues, unit: "")}

@@ -19,11 +19,16 @@ namespace :rehash do
 
   task :loans => :environment do
     loans = Loan.active_or_paid
-    size  = loans.size
 
     if ENV['BRANCH_ID'].present?
-      loans = loans.where(branch_id: ENV['BRANCH_ID'])
+      branch  = Branch.find(ENV['BRANCH_ID'])
+      loans   = loans.where(branch_id: branch.id)
+
+      puts "Rehashing loans for branch #{branch.name}"
     end
+
+    size  = loans.size
+
 
     loans.each_with_index do |loan, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)

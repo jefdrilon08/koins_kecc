@@ -3,6 +3,29 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def fetch_resignation_details
+        member  = Member.find(params[:id])
+
+        config  = {
+          member: member,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateFetchResignationDetails.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          data  = ::Members::FetchResignationDetails.new(
+                    config: config
+                  ).execute!
+
+          render json: data
+        end
+      end
+
       def unlock
         member  = Member.find(params[:id])
         

@@ -27,6 +27,16 @@ class AccountingCode < ApplicationRecord
 
   before_validation :load_defaults
 
+  def to_h
+    {
+      id: id,
+      name: name,
+      code: code,
+      category: category,
+      data: data
+    }
+  end
+
   def to_version_2_hash
     {
       id: id,

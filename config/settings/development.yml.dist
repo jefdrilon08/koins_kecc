@@ -9,21 +9,105 @@ company_tin_number: "486-071-201-000"
 ###############################
 
 ###############################
+# RESIGNATION TYPES           #
+###############################
+member_resignation_types:
+  - name: 'automatic'
+    particulars:
+      - code: 'A'
+        name: 'pumanaw'
+      - code: 'B'
+        name: 'TPD / Permanenteng baldado'
+      - code: 'C'
+        name: 'Nawala sa Katinuan'
+      - code: 'D'
+        name: 'Nagkaroon ng kaso sa isang legal na hukuman'
+  - name: 'voluntary'
+    particulars:
+      - code: 'A'
+        name: 'Hindi kailangang umutang dahil sapat na ang puhunan at kinikita sa negosyo'
+      - code: 'B'
+        name: 'Maraming sinalihang MFI kaya nahihirapan magbayad'
+      - code: 'C'
+        name: 'Pahinga muna sa pangungutang'
+      - code: 'D1'
+        name: 'Nalugi ang negosyo dahil kulang sa  kaalaman sa pagpapatakbo ng negosyo'
+      - code: 'D2'
+        name: 'Nalugi ang negosyo dahil nagamit ang puhunan sa gastusin sa bahay'
+      - code: 'D3'
+        name: 'Nalugi ang negosyo dahil maraming kalaban sa lugar (competition sa negosyo)'
+      - code: 'E1'
+        name: 'Hindi pinayagan ng co-maker 1 dahil wala ng trabaho ang co-maker 1'
+      - code: 'E2'
+        name: 'Hindi pinayagan ng co-maker 1 dahil napabayaan ang gawaing bahay'
+      - code: 'E3'
+        name: 'Hindi pinayagan ng co-maker 1 dahil maibibigay na ang kailangang puhunan sa negosyo'
+      - code: 'F1'
+        name: 'Hindi na makadalo ng meeting dahil sa nagkaroon na ng trabaho'
+      - code: 'F2'
+        name: 'Hindi na makadalo ng meeting dahil sa maraming inaalagaan at inaasikaso sa bahay'
+      - code: 'F3'
+        name: 'Hindi na makadalo ng meeting dahil sa ayaw ang araw at oras ng meeting'
+      - code: 'G1'
+        name: 'Lilipat ng bahay o uuwi sa probinsya dahil sa wala ng pagkakakitaan sa lugar'
+      - code: 'G2'
+        name: 'Lilipat ng bahay o uuwi sa probinsya dahil sa nalipat ng trabaho ang kasambahay'
+      - code: 'G3'
+        name: 'Lilipat ng bahay o uuwi sa probinsya dahil sa personal na problema'
+      - code: 'H1'
+        name: 'Wala ng co-maker sa sentro dahil sa wala ng gusting magco-maker sa kanya dahil pasaway siya'
+      - code: 'H2'
+        name: 'Wala ng co-maker sa sentro dahil sa wala na siyang mapiling mahusay na co-maker sa sentro'
+      - code: 'I1'
+        name: 'Hindi nagustuhan ang K-Coop dahil sa mabagal ang proseso ng loan'
+      - code: 'I2'
+        name: 'Hindi nagustuhan ang K-Coop dahil sa hindi mahusay ang mga staff'
+      - code: 'I3'
+        name: 'Hindi nagustuhan ang K-Coop dahil sa hindi maganda ang pamamalakad'
+      - code: 'J1'
+        name: 'Hindi nagustuhan ang KMBA dahil sa hindi malinaw ang mga polisiya'
+      - code: 'J2'
+        name: 'Hindi nagustuhan ang KMBA dahil sa hindi sapat ang benepisyo'
+      - code: 'J3'
+        name: 'Hindi nagustuhan ang KMBA dahil sa malaki ang hulugan lingo-linggo'
+      - code: 'K'
+        name: 'Hindi nagustuhan ang pamamalakad ng mga center officer'
+      - code: 'L'
+        name: 'Nasira ang sentro kaya kailangan isara muna'
+      - code: 'M'
+        name: 'Lilipat ng ibang MFI dahil mas maganda ang pamamalakad'
+  - name: 'involuntary'
+    particulars:
+      - code: 'A'
+        name: 'Hindi pagtangkilik sa anumang serbisyo ng kooperatiba (halimbawa: pag-iimpok, pag-utang atbp.)'
+      - code: 'B'
+        name: 'atuloy na hindi pagtupad sa iyong mga obligasyon bilang kasapi ng kooperatiba (halimbawa: hindi pagdalo sa mga pagpupulong, hindi pagbabayad sa tamang oras, hindi pag-iimpok, hindi paggamit ng halagang hiniram na ayon sa nakapagkasunduan, hindi pagsagot sa co-maker sa panahon na mahirapan sa pagbabayad at hindi pagkakaroon ng mabuting ugali.)'
+      - code: 'C'
+        name: 'Pag-labag sa by-laws at patakaran ng kooperatiba'
+      - code: 'D'
+        name: 'Paggawa o pagkasangkot sa nakapipinsala o nakasasama sa interes at kapakanan ng kooperatiba'
+
+###############################
 # INTEREST AND TAX            #
 ###############################
 interest_member_accounts:
-  -
-    account_type: "SAVINGS"
-    account_subtype: "K-IMPOK"
-    annual_interest_rate: 0.05
-    annual_tax_rate: 0.0
-    dormant_annual_interest_rate: 0.02
-    dormant_threshold_months: 6
-  -
-    account_type: "SAVINGS"
-    account_subtype: "Golden K"
-    annual_tax_rate: 0.0
-    annual_interest_rate: 0.10
+-
+account_type: "SAVINGS"
+account_subtype: "K-IMPOK"
+annual_interest_rate: 0.05
+annual_tax_rate: 0.0
+dormant_annual_interest_rate: 0.02
+dormant_threshold_months: 6
+debit_accounting_code_id:
+credit_accounting_code_id:
+-
+account_type: "SAVINGS"
+account_subtype: "Golden K"
+annual_tax_rate: 0.0
+annual_interest_rate: 0.10
+dormant_threshold_months: 6
+debit_accounting_code_id:
+credit_accounting_code_id:
 
 ###############################
 
@@ -31,27 +115,27 @@ interest_member_accounts:
 #   REPORTS CONFIGURATION     #
 ###############################
 par_bins:
-  -
-    min_days: 1
-    max_days: 15
-  -
-    min_days: 16
-    max_days: 30
-  -
-    min_days: 31
-    max_days: 60
-  -
-    min_days: 61
-    max_days: 90
-  -
-    min_days: 91
-    max_days: 120
-  -
-    min_days: 121
-    max_days: 150
-  -
-    min_days: 151
-    max_days: 99999999
+-
+min_days: 1
+max_days: 15
+-
+min_days: 16
+max_days: 30
+-
+min_days: 31
+max_days: 60
+-
+min_days: 61
+max_days: 90
+-
+min_days: 91
+max_days: 120
+-
+min_days: 121
+max_days: 150
+-
+min_days: 151
+max_days: 99999999
 
 ###############################
 #   MEMBERSHIP CONFIGURATION  #

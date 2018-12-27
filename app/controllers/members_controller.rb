@@ -32,6 +32,10 @@ class MembersController < ApplicationController
     @members  = @members.order("last_name ASC").page(params[:page]).per(20)
   end
 
+  def form_resignation
+    @member = Member.find(params[:id])
+  end
+
   def form
   end
 
