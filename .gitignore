@@ -43,6 +43,7 @@
 # scripts
 /bin/dev_reset.sh
 /bin/update.sh
+/bin/dev_branch_reset.sh
 
 config/settings.local.yml
 config/settings/*.local.yml

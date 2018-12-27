@@ -2,6 +2,29 @@ class SavingsAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @savings_accounts = MemberAccount.savings
+
+    if params[:q].present?
+      @q  = params[:q]
+
+      @savings_accounts = @savings_accounts.joins(:member).where(
+                            "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+                            q: "%#{@q.upcase}%"
+                          )
+    end
+
+    if params[:subtype].present?
+      @subtype  = params[:subtype]
+
+      @savings_accounts = @savings_accounts.where(account_subtype: @subtype)
+    end
+
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+      @savings_accounts = @savings_accounts.where(branch_id: @branch.id)
+    end
+
+    @savings_accounts = @savings_accounts.page(params[:page]).per(20)
   end
 
   def show

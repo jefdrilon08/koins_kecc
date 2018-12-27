@@ -1,3 +1,5 @@
+//= require action_cable
+
 var Index = (function() {
   var $btnNew;
   var $btnConfirmNew;
@@ -11,6 +13,9 @@ var Index = (function() {
   var templateErrorList;
 
   var authenticityToken;
+
+  var cable;
+  var event;
 
   var _cacheDom = function() {
     $btnNew         = $("#btn-new");
@@ -83,6 +88,21 @@ var Index = (function() {
 
   var init  = function(options) {
     authenticityToken = options.authenticityToken;
+
+    cable = ActionCable.createConsumer();
+
+    event = cable.subscriptions.create("MonthlyClosingCollectionsChannel", {
+                connection: function() {
+                  console.log("Connected to MonthlyClosingCollectionsChannel...");
+                },
+                disconnected: function() {
+                },
+                received: function(data) {
+                  console.log("Got data!");
+                  console.log(data);
+                }
+              }
+            )
 
     _cacheDom();
     _bindEvents();

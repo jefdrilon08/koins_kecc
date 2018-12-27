@@ -6,6 +6,7 @@ class AccountTransaction < ApplicationRecord
   scope :savings_withdrawals, -> { where(transaction_type: "withdraw").order("transacted_at ASC") }
   scope :approved_loan_payments, -> { where("transaction_type = ? AND amount > 0", "loan_payment").order("transacted_at ASC") }
   scope :approved, -> { where(status: "approved") }
+  scope :interest, -> { where("transaction_type = ? AND CAST(data->>'is_interest' AS boolean) = ?", "deposit", 't') }
 
   validates :amount, presence: true, numericality: true
 
@@ -15,5 +16,9 @@ class AccountTransaction < ApplicationRecord
 
   def withdraw?
     self.transaction_type == "withdraw"
+  end
+
+  def interest?
+    self.transaction_type == "deposit" and self.data.with_indifferent_access[:is_interest] == true
   end
 end

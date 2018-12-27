@@ -28,7 +28,7 @@ class MonthlyClosingCollectionsController < ApplicationController
   def destroy
     @monthly_closing_collection = MonthlyClosingCollection.find(params[:id])
 
-    if @monthly_closing_collection.pending?
+    if @monthly_closing_collection.pending? || @monthly_closing_collection.error?
       @monthly_closing_collection.destroy!
 
       redirect_to monthly_closing_collections_path

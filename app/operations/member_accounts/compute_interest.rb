@@ -32,53 +32,6 @@ module MemberAccounts
         end
       end
 
-      @last_working_date  = ::Utils::GetLastWorkingDay.new(
-                              some_date: (@closing_date - 1.month)
-                            ).execute!
-
-      # Fetch account transactions
-      @account_transactions = AccountTransaction.approved.where(
-                                "subsidiary_id = ? AND extract(month from transacted_at) = ? AND extract(year from transacted_at) = ?",
-                                @member_account.id,
-                                @closing_date.month,
-                                @closing_date.year
-                              ).order("transacted_at ASC, created_at ASC")
-
-      @last_month_transactions  = AccountTransaction.approved.where(
-                                    "subsidiary_id = ? AND extract(month from transacted_at) = ? AND extract(year from transacted_at) = ?",
-                                    @member_account.id,
-                                    @last_working_date.month,
-                                    @last_working_date.year
-                                  ).order("transacted_at ASC, created_at ASC")
-
-      @latest_transaction = @last_month_transactions.last
-
-      if @latest_transaction.blank?
-        @latest_transaction = AccountTransaction.approved.where(
-                                "subsidiary_id = ? AND transacted_at > ? AND transacted_at < ?",
-                                @member_account.id,
-                                @last_working_date,
-                                @closing_date
-                              ).order("transacted_at ASC, created_at ASC").last
-
-        if @latest_transaction.present?
-          @last_working_date  = @latest_transaction.transacted_at.to_date
-        end
-      end
-
-      @ending_balance = 0.00
-
-      if @latest_transaction.present?
-        @ending_balance = @latest_transaction.data["ending_balance"].to_f.round(2)
-      end
-
-      # Number of days before next transaction
-      @num_days_before_next_transaction = (@closing_date - @last_working_date).to_i
-
-      if @account_transactions.size > 0
-        @num_days_before_next_transaction = (@account_transactions.first.transacted_at.to_date - @last_working_date).to_i
-      end
-
       @data = {
         member_account: {
           id: @member_account.id,
@@ -97,72 +50,84 @@ module MemberAccounts
     end
 
     def execute!
-      if @ending_balance > 0
-        records = []
+      @latest_interest_transaction  = AccountTransaction.interest.where(
+                                        subsidiary_id: @member_account.id
+                                      ).order("transacted_at ASC").last
 
-        interest_per_month          = (@ending_balance * @monthly_interest_rate).to_f.round(3)
-        interest_earned_on_deposits = ((interest_per_month * @num_days_before_next_transaction) / 30.0).to_f.round(3)
+      if @latest_interest_transaction.blank?
+        @latest_interest_transaction  = AccountTransaction.savings_deposits.where(subsidiary_id: @member_account.id).first
+      end
 
-        r = {
-          transacted_at: @last_working_date,
-          beginning_balance: 0.00,
-          ending_balance: @ending_balance,
-          deposits: 0.00,
-          withdrawals: 0.00,
-          num_days_before_next_transaction: @num_days_before_next_transaction,
-          interest_per_month: interest_per_month,
-          interest_earned_on_deposits: interest_earned_on_deposits,
-        }
+      records = []
+      if @latest_interest_transaction.present?
+        @account_transactions = AccountTransaction.savings_deposits.where(
+                                  "subsidiary_id = ? AND transacted_at > ? AND transacted_at <= ?",
+                                  @member_account.id,
+                                  @latest_interest_transaction.transacted_at,
+                                  @closing_date
+                                ).order("transacted_at ASC")
 
-        records << r
+        @transaction_dates  = @account_transactions.pluck(:transacted_at).uniq
 
-        transaction_dates = @account_transactions.pluck(:transacted_at)
-        transaction_dates.each_with_index do |d, i|
-          temp_transactions = @account_transactions.where(transacted_at: d).order("transacted_at ASC, created_at ASC")
+        # TODO: O(n^2) --> optimize this
+        @transaction_dates.each_with_index do |d, d_index|
+          r = {
+            date: d.to_date,
+            beginning_balance: 0.00,
+            deposits: 0.00,
+            withdrawals: 0.00,
+            interest_per_month: 0.00,
+            interest_earned_on_deposits: 0.00,
+            ending_balance: 0.00,
+            num_days_before_next_transaction: 0
+          }
 
-          num_days_before_next_transaction  = (transaction_dates[i+1].to_date - d).to_i
+          @account_transactions.each_with_index do |t, i|
+            data  = t.data.with_indifferent_access
 
-          if i == transaction_dates.cout - 1
-            num_days_before_next_transaction  = (@closing_date - transacted_at.to_date).to_i
+            if t.transacted_at.to_date == d.to_date
+              if i == 0
+                r[:beginning_balance] = data[:beginning_balance]
+              end
+
+              if t.transaction_type == "deposit"
+                r[:deposits] += t.amount.to_f.round(2)
+              elsif t.transaction_type == "withdraw"
+                r[:withdrawals] += t.amount.to_f.round(2)
+              end
+            end
           end
 
-          beginning_balance   = temp_transactions.first.data["beginning_balance"].to_f.round(3)
-          ending_balance      = temp_transactions.last.data["ending_balance"].to_f.round(3)
+          r[:ending_balance]                    = (r[:ending_balance] + r[:deposits] - r[:withdrawals]).to_f.round(2)
+          r[:interest_per_month]                = (@monthly_interest_rate * r[:ending_balance]).to_f.round(2)
+          r[:num_days_before_next_transaction]  = 0
 
-          interest_per_month          = (ending_balance * @monthly_interest_rate).to_f.round(3)
-          interest_earned_on_deposits = ((interest_per_month * num_days_before_next_transaction) / 30.0).to_f.round(3)
+          if d_index < (@transaction_dates.size - 1)
+            r[:num_days_before_next_transaction]  = (@transaction_dates[d_index + 1] - d).to_i
+          end
 
-          r = {
-            transacted_at: d,
-            beginning_balance: beginning_balance,
-            ending_balance: ending_balance,
-            deposits: temp_transactions.savings_deposits.sum(:amount),
-            withdrawals: temp_transactions.savings_withdrawals.sum(:amount),
-            num_days_before_next_transaction: num_days_before_next_transaction,
-            interest_per_month: interest_per_month,
-            interest_earned_on_deposits: interest_earned_on_deposits,
-          }
+          r[:interest_earned_on_deposits]       = ((r[:interest_per_month] * r[:num_days_before_next_transaction]) / 30).round(2)
+
+          @data[:interest] += r[:interest_earned_on_deposits]
 
           records << r
         end
 
-        @data[:records]       = records
-        @data[:transactions]  = @account_transactions.map{ |o|
-                                  {
-                                    id: o.id,
-                                    amount: o.amount,
-                                    transaction_type: o.transaction_type,
-                                    data: o.data
-                                  }
-                                }
+        @data[:records] = records
 
-        # Interest total
-        interest  = 0.00
-        records.each do |o|
-          interest += o[:interest_earned_on_deposits]
-        end
+        @data[:account_transactions]  = @account_transactions.map{ |t|
+                                          {
+                                            id: t.id,
+                                            subsidiary_id: t.subsidiary_id,
+                                            subsidiary_type: t.subsidiary_type,
+                                            amount: t.amount,
+                                            transaction_type: t.transaction_type,
+                                            transacted_at: t.transacted_at,
+                                            status: t.status,
+                                            data: t.data
+                                          }
+                                        }
 
-        @data[:interest]  = interest.round(2)
       end
 
       @data

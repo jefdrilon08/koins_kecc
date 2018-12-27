@@ -8,6 +8,9 @@
           - if @monthly_closing_collection.error?
             = render partial: "error_page"
           - else
+            - if debug?
+              %pre
+                #{JSON.pretty_generate(JSON.parse(@monthly_closing_collection.data.to_json))}
             #content
 
 = render partial: "monthly_closing_collections/modals/update"

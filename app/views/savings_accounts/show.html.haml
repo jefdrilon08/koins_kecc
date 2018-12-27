@@ -5,7 +5,7 @@
     .col
       .card
         .card-body
-          %table.table.table-hover.table-sm
+          %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
                 %th
@@ -25,15 +25,21 @@
                 %tr
                   %td
                     %center
-                      #{o.transacted_at.localtime.strftime("%b %d, %Y")}
+                      %small
+                        #{o.transacted_at.localtime.strftime("%b %d, %Y")}
                   %td
                     %center
                       - if o.deposit?
-                        .badge.badge-success
-                          .fa.fa-download
-                          Deposit
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
                       - elsif o.withdraw?
-                        .badge.badge-info
+                        .badge.badge-danger
                           .fa.fa-upload
                           Withdraw
                   %td.text-right.text-muted

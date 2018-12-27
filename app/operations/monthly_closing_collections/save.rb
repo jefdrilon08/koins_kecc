@@ -24,7 +24,6 @@ module MonthlyClosingCollections
 
       @data = {
         total_interest: 0.00,
-        total_tax: 0.00,
         totals: [],
         records: []
       }
@@ -57,22 +56,64 @@ module MonthlyClosingCollections
       if @monthly_closing_collection.blank?
         @monthly_closing_collection = MonthlyClosingCollection.new
       end
+
+      # Progress
+      @total_accounts = @member_accounts.size
+      @counter        = 0
+      @progress       = 0.00
     end
 
     def execute!
       # Build data
-      @member_accounts.each do |o|
-        result  = ::MemberAccounts::ComputeInterestAndTax.new(
-                    config: {
-                      member_account: o,
-                      closing_date: @closing_date
-                    }
-                  ).execute!
+      @interest_member_accounts.each do |s|
+        total = {
+          account_type: s.account_type,
+          account_subtype: s.account_subtype,
+          interest: 0.00
+        }
 
-        if result[:interest] > 0
-          @data[:records] << result
+        accounts  = @member_accounts.where(
+                      account_type: s.account_type, 
+                      account_subtype: s.account_subtype
+                    )
+
+        accounts.each do |a|
+          result  = ::MemberAccounts::ComputeInterest.new(
+                      config: {
+                        member_account: a,
+                        closing_date: @closing_date,
+                        account_type: s.account_type,
+                        account_subtype: s.account_subtype,
+                        account_settings: s
+                      }
+                    ).execute!
+
+          if result[:interest] > 0
+            total[:interest] += result[:interest].to_f.round(2)
+            @data[:total_interest] += result[:interest].to_f.round(2)
+            @data[:records] << result
+          end
+
+          @counter += 1
+
+          @progress = (@counter.to_f / @total_accounts.to_f) * 100
+
+          # Broadcast progress
+          ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
         end
       end
+
+      # Build accounting entry
+#      @data[:accounting_entry]  = ::MonthlyClosingCollections::BuildAccountingEntry.new(
+#                                    config: {
+#                                      data: @data,
+#                                      branch: @branch,
+#                                      interest_member_accounts: @interest_member_accounts,
+#                                      user: @user,
+#                                      collection_date: @collection_date,
+#                                      closing_date: @closing_date
+#                                    }
+#                                  ).execute!
 
       # Attach meta
       @monthly_closing_collection.meta  = @meta
@@ -80,8 +121,13 @@ module MonthlyClosingCollections
       # Attach data
       @monthly_closing_collection.data  = @data
 
+
       @monthly_closing_collection.status  = "pending"
       @monthly_closing_collection.save!
+
+      @progress = 100
+
+      ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
 
       @monthly_closing_collection
     end

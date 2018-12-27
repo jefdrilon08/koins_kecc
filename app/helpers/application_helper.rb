@@ -1,10 +1,22 @@
 module ApplicationHelper
+  def savings_subtypes
+    data  = []
+
+    Settings.default_member_accounts.each do |o|
+      if o.account_type == "SAVINGS"
+        data << o.account_subtype
+      end
+    end
+
+    data
+  end
+
   def development?
     ENV['RAILS_ENV'] == 'development'
   end
 
   def debug?
-    development? and params[:debug].present?
+    params[:debug].present?
   end
 
   def payment_modes

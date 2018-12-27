@@ -1,0 +1,112 @@
+module MonthlyClosingCollections
+  class BuildAccountingEntry
+    def initialize(config:)
+      @config = config
+
+      @data                       = @config[:data]
+      @branch                     = @config[:branch]
+      @interest_member_accounts   = @config[:interest_member_accounts]
+      @user                       = @config[:user]
+      @collection_date            = @config[:collection_date].try(:to_date) || Date.today
+      @closing_date               = @config[:closing_date]
+
+      @accounting_entry_data  = {
+        book: @config[:book] || "JVB",
+        date_prepared: @collection_date.strftime("%B %d, %Y"),
+        company_name: Settings.company_name,
+        company_address: Settings.company_address,
+        branch: @branch.to_s.upcase,
+        prepared_by: @user.full_name,
+        particular: default_particular,
+        debit_journal_entries: [],
+        credit_journal_entries: [],
+        journal_entries: [],
+        branch_id: @branch.id,
+        branch_name: @branch.name,
+        status: "display",
+        data: {
+          or_number: "",
+          ar_number: ""
+        }
+      }
+    end
+
+    def execute!
+      @accounting_entry_data[:debit_journal_entries]  = build_debit_journal_entries!
+      @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
+
+      # Build journal entries
+      @accounting_entry_data[:debit_journal_entries].each do |j|
+        @accounting_entry_data[:journal_entries] << {
+          id: "",
+          post_type: "DR",
+          accounting_code_id: j[:accounting_code_id],
+          accounting_code_name: j[:name],
+          amount: j[:amount]
+        }
+      end
+
+      @accounting_entry_data[:credit_journal_entries].each do |j|
+        @accounting_entry_data[:journal_entries] << {
+          id: "",
+          post_type: "CR",
+          accounting_code_id: j[:accounting_code_id],
+          accounting_code_name: j[:name],
+          amount: j[:amount]
+        }
+      end
+
+      @accounting_entry_data
+    end
+
+    private
+
+    def default_particular
+      "Monthly closing for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
+    end
+
+    def build_debit_journal_entries!
+      journal_entries = []
+
+      @interest_member_accounts.each do |s|
+        accounting_code = AccountingCode.find(s.debit_accounting_code_id)
+        amount          = 0.00
+
+        @data[:totals].each do |t|
+          if t[:account_subtype] == s.account_subtype && t[:account_type] == s.account_type
+            amount = t[:interest]
+          end
+        end
+
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: accounting_code.code,
+          name: accounting_code.name,
+          amount: amount
+        }
+      end
+    end
+
+    def build_credit_entries!
+      journal_entries = []
+
+      @interest_member_accounts.each do |s|
+        accounting_code = AccountingCode.find(s.credit_accounting_code_id)
+        amount          = 0.00
+
+        @data[:totals].each do |t|
+          if t[:account_subtype] == s.account_subtype && t[:account_type] == s.account_type
+            amount = t[:interest]
+          end
+        end
+
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: accounting_code.code,
+          name: accounting_code.name,
+          amount: amount
+        }
+      end
+    end
+  end
+end
