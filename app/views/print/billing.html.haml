@@ -71,33 +71,48 @@
       #{number_to_currency(billing_grand_total, unit: "")}
 
 %br
+%b
+%label
+  Officers:
+.row
+  .col
+    ______________________________
+  .col
+    ______________________________
+  .col
+    ______________________________
 %br
 .row
   .col
     %strong
       Prepared By:
     %br
+    %br
     #{@billing[:prepared_by]}
   .col
     %strong
       Collected By:
+    %br
     %br
     #{@billing[:collected_by]}
   .col
     %strong
       Checked By:
     %br
-    #{@billing[:checked_by]}
+    %br
+    #{@billing[:data][:checked_by]}
   .col
     %strong
       Encoded By:
+    %br
     %br
     #{@billing[:prepared_by]}
   .col
     %strong
       Posted By:
     %br
-    #{@billing[:approved_by]}
+    %br
+    #{@billing[:data][:approved_by]}
 
 :javascript
   window.print();
