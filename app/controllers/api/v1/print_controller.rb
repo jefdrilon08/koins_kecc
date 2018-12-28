@@ -110,6 +110,24 @@ module Api
                       trial_balance_data: trial_balance_data
                     ).execute!
           end
+        elsif type == "book"
+          filename  = "book-#{Time.now.to_i}.json"
+
+          start_date  = params[:start_date].try(:to_date)
+          end_date    = params[:end_date].try(:to_date)
+          book        = params[:book]
+          branch      = Branch.where(id: params[:branch_id]).first
+
+          config  = {
+            start_date: start_date,
+            end_date: end_date,
+            book: book,
+            branch: branch
+          }
+
+          data  = ::Print::BuildBook.new(
+                    config: config
+                  ).execute!
         end
 
         if errors[:full_messages].size == 0

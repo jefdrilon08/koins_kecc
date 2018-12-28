@@ -8,3 +8,19 @@
           = render partial: "filter"
           = render partial: "book_records", locals: { records: @records }
           = paginate @records
+
+#parameters{ data: { book: "CDB" } }
+= render partial: "shared/modals/print"
+= javascript_include_tag "accounting/BooksIndex"
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var book              = $parameters.data("book");
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    BooksIndex.init({
+      book: book,
+      authenticityToken: authenticityToken
+    });
+  });

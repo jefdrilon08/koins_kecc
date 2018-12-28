@@ -34,6 +34,9 @@ class PrintController < ApplicationController
       @billing  = @data[:data]
 
       render "print/wp", layout: "plain"
+    elsif @data[:type] == "book"
+      @book = @data[:data]
+      render "print/book", layout: "plain"
     else
       raise "Invalid type #{@data[:type]}"
     end

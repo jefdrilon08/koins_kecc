@@ -1,0 +1,56 @@
+:css
+  @page { size: landscape; margin: 15px;}
+
+  table {
+    font-size: 0.8em;
+  }
+
+%small
+  %strong
+    #{Settings.company_name}
+    %br
+    #{Settings.company_address}
+    %br
+    VAT Registration Tin Number: #{Settings.company_tin_number}
+    %br
+    #{@book[:book_display]}
+    %br
+    Period: #{@book[:start_date]} - #{@book[:end_date]}
+
+- @book[:accounting_entries].each do |o|
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th{ width: "10%" }
+          DATE
+        %th{ width: "50%" }
+          ACCOUNTING TITLE
+        %th{ width: "20%" }
+          DEBIT (PHP)
+        %th{ width: "20%" }
+          CREDIT (PHP)
+    %tbody
+      - o[:debit_entries].each_with_index do |j,i|
+        %tr
+          %td
+            - if i == 0
+              #{o[:date_posted]}
+          %td
+            #{j[:accounting_code][:name]}
+          %td.text-right
+            #{j[:debit_amount]}
+          %td.text-right
+      - o[:credit_entries].each_with_index do |j,i|
+        %tr
+          %td
+          %td
+            #{j[:accounting_code][:name]}
+          %td.text-right
+          %td.text-right
+            #{j[:credit_amount]}
+      %tr
+        %td{ colspan: 4 }
+          #{o[:particular]}
+
+:javascript
+  window.print();
