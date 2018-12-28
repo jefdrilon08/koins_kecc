@@ -25,6 +25,13 @@
           %b
             #{@member.status.upcase}
 
+      - if @member.resigned?
+        %li.list-group-item
+          Date Resigned
+          .value.text-muted
+            %b
+              #{@member.date_resigned.strftime("%b %d, %Y")}
+
       %li.list-group-item
         Insurance Status
         .value.text-muted

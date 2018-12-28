@@ -21,7 +21,8 @@ export default class FormResignationComponent extends React.Component {
       isLoading: true,
       isProcessing: false,
       isModalOpen: false,
-      errors: false
+      errors: false,
+      errorsProcessing: false
     };
   }
 
@@ -72,6 +73,8 @@ export default class FormResignationComponent extends React.Component {
     var data        = this.state.data;
     data.particular = event.target.value;
 
+    data.accounting_entry.particular  = event.target.value;
+
     this.setState({
       data: data
     });
@@ -82,6 +85,16 @@ export default class FormResignationComponent extends React.Component {
       return  (
         <ErrorDisplay
           errors={this.state.errors}
+        />
+      );
+    }
+  }
+
+  renderErrorProcessingDisplay() {
+    if(this.state.errorsProcessing) {
+      return  (
+        <ErrorDisplay
+          errors={this.state.errorsProcessing}
         />
       );
     }
@@ -231,8 +244,44 @@ export default class FormResignationComponent extends React.Component {
   }
 
   handleConfirmationClicked() {
+    var authenticityToken = this.props.authenticityToken;
+    var data              = this.state.data;
+    var context           = this;
+
     this.setState({
       isProcessing: true
+    });
+
+    console.log(data);
+
+    $.ajax({
+      url: "/api/v1/members/process_resignation",
+      method: 'POST',
+      data: {
+        data: JSON.stringify(data),
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        window.location.href = "/members/" + context.props.id + "/display";
+      },
+      error: function(response) {
+        console.log(response);
+        try {
+          context.setState({
+            errorsProcessing: JSON.parse(response.responseText),
+            isProcessing: false
+          });
+        } catch(err) {
+          alert("Something went wrong");
+          context.setState({
+            errors: false,
+            errorsProcessing: false,
+            isModalOpen: false,
+            data: false,
+            isLoading: true
+          });
+        }
+      }
     });
   }
 
@@ -269,6 +318,7 @@ export default class FormResignationComponent extends React.Component {
               </p>
               <hr/>
               {this.renderProcessing()}
+              {this.renderErrorProcessingDisplay()}
               <center>
                 <div className="btn-group">
                   <button

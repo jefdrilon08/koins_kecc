@@ -40,11 +40,16 @@ class Member < ApplicationRecord
 
   scope :active, -> { where(status: "active").order("last_name ASC") }
   scope :pending, -> { where(status: "pending").order("last_name ASC") }
+  scope :resigned, -> { where(status: "resigned").order("last_name ASC") }
 
   before_validation :load_defaults
 
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
+  end
+
+  def resigned?
+    self.status == "resigned"
   end
 
   def pending?

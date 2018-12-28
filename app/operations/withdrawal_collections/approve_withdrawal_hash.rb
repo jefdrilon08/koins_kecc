@@ -10,6 +10,8 @@ module WithdrawalCollections
       @transaction_type = "withdraw"
       @member_account   = MemberAccount.find(@withdrawal[:member_account_id])
 
+      @accounting_entry_reference_number  = @config[:accounting_entry_reference_number]
+
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
                                 subsidiary_type: "MemberAccount",
@@ -26,7 +28,7 @@ module WithdrawalCollections
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,
-        accounting_entry_reference_number: nil,
+        accounting_entry_reference_number: @accounting_entry_reference_number,
         beginning_balance: 0.00,
         ending_balance: 0.00
       }

@@ -16,6 +16,9 @@ module Koins
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    config.time_zone = 'Asia/Manila'
+    config.active_record.default_timezone = :local # Or :utc
+
     # Use sidekiq
     config.active_job.queue_adapter = :sidekiq
 

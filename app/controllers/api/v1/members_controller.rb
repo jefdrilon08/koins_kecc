@@ -3,6 +3,29 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def process_resignation
+        data  = JSON.parse(params[:data]).to_h.with_indifferent_access
+
+        config  = {
+          data: data,
+          user: current_user
+        }
+
+        errors  = ::Members::ValidateProcessResignation.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::Members::ProcessResignation.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def fetch_resignation_details
         member  = Member.find(params[:id])
 
