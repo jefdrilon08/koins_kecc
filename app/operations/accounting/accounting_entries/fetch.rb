@@ -8,9 +8,16 @@ module Accounting
         @book             = @config[:book]
         @reference_number = @config[:reference_number]
         @branch           = @config[:branch]
+        @user             = @config[:user]
 
         if @branch.blank?
-          @branch = Branch.first
+          @branch = Branch.where(
+                      id: UserBranch.active.where(user_id: @user.id).first.try(:branch).try(:id)
+                    ).first
+
+          if @branch.blank?
+            @branch = Branch.first
+          end
         end
 
         @accounting_entry = {

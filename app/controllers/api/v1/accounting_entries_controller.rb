@@ -51,7 +51,8 @@ module Api
           id: params[:id],
           book: params[:book],
           reference_number: params[:reference_number],
-          branch: Branch.where(id: params[:branch_id]).first
+          branch: Branch.where(id: params[:branch_id]).first,
+          user: current_user
         }
 
         accounting_entry  = ::Accounting::AccountingEntries::Fetch.new(

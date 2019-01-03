@@ -341,6 +341,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   handleBranchChanged(o) {
+    console.log("handleBranchChanged:");
+    console.log(o);
     var temp  = "";
 
     if(o) {
@@ -353,7 +355,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
     data.branch_name  = o.label;
 
     this.setState({
-      data: data
+      data: data,
+      currentBranch: o
     });
   }
 
@@ -787,6 +790,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
         label: state.branches[i].name
       });
     }
+
+    console.log("branchOptions:");
+    console.log(branchOptions);
 
     for(var i = 0; i < state.accountingCodes.length; i++) {
       accountingCodeOptions.push({
