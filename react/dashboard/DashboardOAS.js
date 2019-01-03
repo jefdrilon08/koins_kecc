@@ -235,7 +235,7 @@ export default class DashboardOAS extends React.Component {
           <br/>
           <table className="table table-bordered table-sm table-hover">
             <thead>
-              <tr>
+              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
                 <th>
                   Loan Product
                 </th>
@@ -263,7 +263,7 @@ export default class DashboardOAS extends React.Component {
               {loanProductRows}
             </tbody>
             <tfoot>
-              <tr>
+              <tr style={{backgroundColor: "#f0f0f0"}}>
                 <th>
                   Total
                 </th>
@@ -322,7 +322,7 @@ export default class DashboardOAS extends React.Component {
           </h5>
           <table className="table table-bordered table-sm table-hover">
             <thead>
-              <tr>
+              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
                 <th>
                 </th>
                 <th className="text-center">

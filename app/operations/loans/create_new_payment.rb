@@ -14,8 +14,8 @@ module Loans
                           is_paid: nil
                         ).order("due_date ASC")
 
-      if !@loan.active?
-        raise "Loan #{@loan.id} is not active. Status: #{@loan.status}"
+      if !["active", "paid"].include?(@loan.status)
+        raise "Loan #{@loan.id} is not active or paid. Status: #{@loan.status}"
       end
     end
 

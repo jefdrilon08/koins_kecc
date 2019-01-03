@@ -279,7 +279,7 @@ export default class BranchLoanProductStatsUI extends React.Component {
               {loanProductRows}
             </tbody>
             <tfoot>
-              <tr key={"total-row"}>
+              <tr key={"total-row"} style={{backgroundColor: "#f0f0f0"}}>
                 <td>
                   <strong>
                     Total
