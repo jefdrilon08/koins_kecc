@@ -1,4 +1,30 @@
 namespace :db do
+  task :correct_member_accounts => :environment do
+    from_account_type     = ENV['FROM_ACCOUNT_TYPE']
+    from_account_subtype  = ENV['FROM_ACCOUNT_SUBTYPE']
+
+    to_account_type     = ENV['TO_ACCOUNT_TYPE']
+    to_account_subtype  = ENV['TO_ACCOUNT_SUBTYPE']
+
+    member_accounts = MemberAccount.where(
+                        account_type: from_account_type,
+                        account_subtype: from_account_subtype
+                      )
+
+    size  = member_accounts.size
+
+    member_accounts.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Correcting member account #{o.id}... #{progress}%%")
+      sleep(0.1)
+
+      o.update!(account_type: to_account_type, account_subtype: to_account_subtype)
+    end
+
+    puts ""
+    puts "Done."
+  end
+
   task :delete_branch => :environment do
     branch  = Branch.where(id: ENV['BRANCH_ID']).first
 

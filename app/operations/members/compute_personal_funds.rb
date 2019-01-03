@@ -1,4 +1,4 @@
-module MemberAccounts
+module Members
   class ComputePersonalFunds
     def initialize(config:)
       @config = config
@@ -87,10 +87,10 @@ module MemberAccounts
 
       # Compute totals
       @data[:accounts].each do |a|
-        @data[:totals] += a[:balance]
+        @data[:total] += a[:balance]
       end
 
-      @data[:totals]  = @data[:totals].to_f.round(2)
+      @data[:total]  = @data[:total].to_f.round(2)
 
       # Setup officer
       officer = @member.center.user
