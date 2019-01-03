@@ -21,7 +21,8 @@ module Loans
         interest_paid: 0.00,
         interest_balance: @loan.interest,
         principal_balance: @loan.principal,
-        status: 'active'
+        status: 'active',
+        first_date_of_payment: @amort_entries.first.due_date
       )
 
       # Reset amortization

@@ -22,9 +22,13 @@ class ProcessBranchLoansStats < ApplicationJob
       data_store  = ::DataStores::SaveBranchLoansStats.new(
                       config: config
                     ).execute!
-    rescue
+    rescue Exception => e
       record.update!(
-        status: "error"
+        status: "error",
+        data: {
+          exception: e,
+          application_trace: Rails.backtrace_cleaner.clean(e.backtrace)
+        }
       )
     end
   end

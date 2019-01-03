@@ -23,7 +23,8 @@ class ProcessBranchRepaymentReport < ApplicationJob
       record.update!(
         status: "error",
         data: {
-          exception: e
+          exception: e,
+          application_trace: Rails.backtrace_cleaner.clean(e.backtrace)
         }
       )
     end

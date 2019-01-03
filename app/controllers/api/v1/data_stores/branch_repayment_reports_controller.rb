@@ -16,7 +16,7 @@ module Api
 
         def queue
           @data_store_type  = "BRANCH_REPAYMENT_REPORT"
-          @as_of            = Date.today
+          @as_of            = params[:as_of].try(:to_date) || Date.today
           @branch           = Branch.find(params[:branch_id])
 
           @record = DataStore.branch_repayment_reports.where(

@@ -20,8 +20,9 @@ module Api
         if current_user.roles.include?("OAS")
           # Fetch branch loan stats
           branch_loans_stats        = DataStore.branch_loans_stats.where(
-                                        "meta->>'branch_id' = ?", 
-                                        branch.id
+                                        "meta->>'branch_id' = ? AND status = ?", 
+                                        branch.id,
+                                        "done"
                                       ).order(
                                         "(meta->>'as_of')::date ASC"
                                       ).last
@@ -30,8 +31,9 @@ module Api
 
           # Fetch member counts
           member_counts = DataStore.member_counts.where(
-                            "meta->>'branch_id' = ?", 
-                            branch.id
+                            "meta->>'branch_id' = ? AND status = ?", 
+                            branch.id,
+                            "done"
                           ).order(
                             "(meta->>'as_of')::date ASC"
                           ).last

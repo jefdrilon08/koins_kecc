@@ -9,10 +9,11 @@ module Reports
       @centers        = @branch.centers.order("name ASC")
       @so_officers    = User.where(id: @centers.pluck(:user_id))
       @loans          = Loan.where(
-                          "(status = ? OR date_completed > ?) AND branch_id = ?",
+                          "(status = ? OR date_completed > ?) AND branch_id = ? AND first_date_of_payment <= ?",
                           'active',
                           @as_of,
-                          @branch.id
+                          @branch.id,
+                          @as_of
                         )
 
       @par_bins = Settings.par_bins

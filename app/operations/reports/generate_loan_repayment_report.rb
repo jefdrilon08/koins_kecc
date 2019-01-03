@@ -119,9 +119,18 @@ module Reports
       par = (principal_balance / principal).round(2)
 
       last_payment  = @payments.last
+
+      if @amorts.size == 0
+        raise "No armotization found for loan #{@loan.id}"
+      end
+
       num_days_par  = (@as_of - @amorts.first.due_date).days
 
       if last_payment.present?
+        if last_payment.data.with_indifferent_access[:amort_entries].try(:last).blank?
+          raise "No data->amort_entries for account transaction #{last_payment.id}"
+        end
+
         last_paid_date      = last_payment.data.with_indifferent_access[:amort_entries].last[:due_date].to_date
         latest_unpaid_amort = @amorts.where("due_date >= ?", last_paid_date).order("due_date ASC").first
 

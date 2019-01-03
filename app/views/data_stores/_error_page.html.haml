@@ -4,4 +4,4 @@
   %h2.text-muted
     #{@record.id}
   %pre
-    #{@record.data}
+    #{JSON.pretty_generate(JSON.parse(@record.data.to_json))}
