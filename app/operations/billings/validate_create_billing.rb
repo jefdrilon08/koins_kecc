@@ -36,11 +36,11 @@ module Billings
           key: "collection_date",
           message: "collection date required"
         }
-      elsif @collection_date.to_date > Date.today
-        @errors[:messages] << {
-          key: "collection_date",
-          message: "collection date should be less than #{Date.today.strftime("%b %d, %Y")}"
-        }
+#      elsif @collection_date.to_date > Date.today
+#        @errors[:messages] << {
+#          key: "collection_date",
+#          message: "collection date should be less than #{Date.today.strftime("%b %d, %Y")}"
+#        }
       end
 
       if @branch and @center and @collection_date
