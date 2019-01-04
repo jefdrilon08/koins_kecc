@@ -67,20 +67,20 @@
               - if rr[:amount].to_f != 0.00
                 #{rr[:amount].to_i}
         %td
-          #{number_to_currency(member_total_cp, unit: "")}
+          #{member_total_cp.to_i}
         %td
-          #{number_to_currency(member_grand_total, unit: "")}
+          #{member_grand_total.to_i}
   %tr
     %th{ width: "2%" }
     %th{ width: "10%" }
       TOTAL
     - @billing[:data][:totals].each do |t|
       %th
-        #{number_to_currency(t[:amount], unit: "")}
+        #{t[:amount].to_i}
     %th
-      #{number_to_currency(billing_total_cp, unit: "")}
+      #{billing_total_cp.to_i}
     %th
-      #{number_to_currency(billing_grand_total, unit: "")}
+      #{billing_grand_total.to_i}
 
 %br
 %b
