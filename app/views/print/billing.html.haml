@@ -61,9 +61,11 @@
             - member_total_cp += rr[:amount].to_f
           %td
             - if rr[:record_type] == "WP"
-              #{number_to_currency(rr[:amount], unit: "")}
+              - if rr[:amount].to_f != 0.00
+                #{number_to_currency(rr[:amount], unit: "")}
             - else
-              #{rr[:amount].to_i}
+              - if rr[:amount].to_f != 0.00
+                #{rr[:amount].to_i}
         %td
           #{number_to_currency(member_total_cp, unit: "")}
         %td
