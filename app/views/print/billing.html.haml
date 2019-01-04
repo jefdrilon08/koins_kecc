@@ -53,7 +53,10 @@
             - member_grand_total += rr[:amount].to_f
             - member_total_cp += rr[:amount].to_f
           %td
-            #{number_to_currency(rr[:amount], unit: "")}
+            - if rr[:record_type] == "WP"
+              #{rr[:amount].to_i}
+            - else
+              #{number_to_currency(rr[:amount], unit: "")}
         %td
           #{number_to_currency(member_total_cp, unit: "")}
         %td

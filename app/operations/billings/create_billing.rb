@@ -47,9 +47,9 @@ module Billings
         totals: [],
         total_expected_collections: 0.00,
         total_collected: 0.00,
-        prepared_by: "#{@user.first_name} #{@user.last_name}",
-        checked_by: "#{fm_user.first_name} #{fm_user.last_name}",
-        approved_by: "#{bk_user.first_name} #{bk_user.last_name}"
+        prepared_by: "#{@user.try(:first_name)} #{@user.try(:last_name)}",
+        checked_by: "#{fm_user.try(:first_name)} #{fm_user.try(:last_name)}",
+        approved_by: "#{bk_user.try(:first_name)} #{bk_user.try(:last_name)}"
       }
     end
 
