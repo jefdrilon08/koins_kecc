@@ -29,7 +29,14 @@
         Member
       - @billing[:data][:totals].each do |t|
         %th
-          #{t[:key]}
+          - if t[:record_type] == "INSURANCE"
+            #{t[:key].split(" ").map{ |o| o.first }.join("")}
+          - elsif t[:record_type] == "LOAN_PAYMENT"
+            #{t[:key].split(" ").map{ |o| o.truncate(7) }.join(" ")}
+          - elsif t[:record_type] == "SAVINGS" and t[:key].split(" ").size > 1
+            #{t[:key].split(" ").map{ |o| o.first }.join("")}
+          - else
+            #{t[:key]}
       %th
         CP
       %th
@@ -54,9 +61,9 @@
             - member_total_cp += rr[:amount].to_f
           %td
             - if rr[:record_type] == "WP"
-              #{rr[:amount].to_i}
-            - else
               #{number_to_currency(rr[:amount], unit: "")}
+            - else
+              #{rr[:amount].to_i}
         %td
           #{number_to_currency(member_total_cp, unit: "")}
         %td

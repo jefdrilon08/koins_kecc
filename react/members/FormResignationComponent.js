@@ -355,6 +355,7 @@ export default class FormResignationComponent extends React.Component {
         </div>
       );
     } else if(!this.state.isLoading) {
+      console.log(this.state.data);
       var member  = this.state.data.member;
       var branch  = this.state.data.branch;
       var center  = this.state.data.center;

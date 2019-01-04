@@ -23,7 +23,7 @@ module Print
       @data[:approved_by]       = @billing.approved_by
       @data[:checked_by]        = @billing.checked_by
       @data[:prepared_by]       = @billing.prepared_by
-      @data[:collected_by]      = "#{@collector.first_name} #{@collector.last_name}"
+      @data[:collected_by]      = "#{@collector.try(:first_name)} #{@collector.try(:last_name)}"
 
       accounting_entry  = {
         reference_number: @billing.reference_number,
