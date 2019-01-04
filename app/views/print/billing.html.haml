@@ -2,7 +2,7 @@
   @page { size: landscape; margin: 15px;}
 
   table {
-    font-size: 0.6em;
+    font-size: 0.8em;
   }
 
 %small
@@ -42,7 +42,7 @@
       %tr
         %td
         %td
-          #{r[:member][:full_name].truncate(20)}
+          #{r[:member][:full_name]}
         - r[:records].each do |rr|
           - if rr[:record_type] == "WP"
             - billing_grand_total += rr[:amount].to_f
