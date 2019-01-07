@@ -1,4 +1,18 @@
 namespace :db do
+  task :check_loan_payments => :environment do
+    as_of   = ENV['AS_OF'].try(:to_date) || Date.today
+    branch  = Branch.find(ENV['BRANCH_ID'])
+
+    invalid_loans = []
+
+    loans = Loan.active_or_paid.where(branch_id: branch.id)
+
+    size  = loans.size
+
+    loans.each_with_index do |o,i|
+    end
+  end
+
   task :correct_member_accounts => :environment do
     from_account_type     = ENV['FROM_ACCOUNT_TYPE']
     from_account_subtype  = ENV['FROM_ACCOUNT_SUBTYPE']

@@ -39,14 +39,64 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
   }
 
   handleGenerateClicked() {
+    var context = this;
+
     var params  = {
       branch_id: this.state.currentBranchId,
       as_of: this.state.asOf
     }
 
     this.setState({
-      isLoading: true
+      isLoading: true,
+      data: false
     });
+
+    $.ajax({
+      url: "/api/v1/monitoring/accounting_entry_subsidiary_balancing",
+      data: params,
+      method: 'GET',
+      success: function(response) {
+        context.setState({
+          isLoading: false,
+          data: response
+        });
+      },
+      error: function(response) {
+        alert("Error in fetching monitoring report...");
+        context.setState({
+          isLoading: false,
+          data: false
+        });
+      }
+    });
+  }
+
+  renderLoansReceivables() {
+    var records = this.state.data.loans_receivables;
+    var rows    = [];
+
+    for(var i = 0; i < records.length; i++) {
+      rows.push(
+        <tr key={"receivable-row-" + i}>
+          <td>
+            <strong>
+              {records[i].accounting_code.name}
+            </strong>
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].accounting_entry_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].subsidiary_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].diff)}
+          </td>
+        </tr>
+      );
+    }
+
+    return rows;
   }
 
   renderResult() {
@@ -57,7 +107,30 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
     } else if(this.state.data) {
       return  (
         <div>
-          RESULT
+          <h5>
+            Loans Receivable
+          </h5>
+          <table className="table table-bordered table-hover table-sm">
+            <thead>
+              <tr>
+                <th>
+                  Loan Product
+                </th>
+                <th className="text-right">
+                  Trial Balance
+                </th>
+                <th className="text-right">
+                  Subsidiary Ledger
+                </th>
+                <th className="text-right">
+                  DIFF
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.renderLoansReceivables()}
+            </tbody>
+          </table>
         </div>
       );
     } else {
@@ -75,7 +148,7 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
 
     for(var i = 0; i < branches.length; i++) {
       options.push(
-        <option value={branches[i].id}>
+        <option value={branches[i].id} key={"branch-" + i}>
           {branches[i].name}
         </option>
       );
