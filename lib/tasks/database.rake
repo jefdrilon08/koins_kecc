@@ -10,7 +10,13 @@ namespace :db do
     size  = loans.size
 
     loans.each_with_index do |o,i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Examining #{o.id}... #{progress}%%")
+      sleep(0.1)
     end
+
+    puts ""
+    puts "Done."
   end
 
   task :correct_member_accounts => :environment do

@@ -262,18 +262,12 @@ export default class BillingUITable extends React.Component {
                 </strong>
               </td>
             );
-
-            // Add grand total
-            grandTotal += parseFloat(paymentRecord.amount);
           } else {
             components.push(
               <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
-
-            // Add grand total
-            grandTotal += parseFloat(paymentRecord.amount);
           }
         } else {
           components.push(
