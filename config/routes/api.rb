@@ -10,6 +10,9 @@ namespace :api do
     # Dashboard
     get "/dashboard", to: "dashboard#index"
 
+    # Monitoring
+    get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing"
+
     # Members
     get "/members", to: "members#index"
     get "/members/fetch", to: "members#fetch"

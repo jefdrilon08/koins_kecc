@@ -152,6 +152,8 @@ module Billings
           r[:records].each_with_index do |rr, j|
             if rr[:record_type] != "WP"
               total_collected_for_member += rr[:amount].try(:to_f).round(2)
+            elsif rr[:record_type] == "WP"
+              total_collected_for_member -= rr[:amount].try(:to_f).round(2)
             end
           end
 

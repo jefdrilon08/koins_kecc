@@ -11,6 +11,9 @@ Rails.application.routes.draw do
 
   root to: "pages#index"
 
+  # Monitoring
+  get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
+
   # Members
   get "/members", to: "members#index"
   get "/members/:id/display", to: "members#show", as: :member

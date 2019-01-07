@@ -1,0 +1,12 @@
+= render partial: "accounting_entry_subsidiary_balancing_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          #content
+
+#parameters{ data: { branches: "#{@branches.to_json}", as_of: "#{Date.today.to_s}" } }
+
+= javascript_include_tag "MonitoringAccountingEntrySubsidiaryBalancing.min.react"

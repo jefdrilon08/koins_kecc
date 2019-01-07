@@ -54,6 +54,7 @@
           - if rr[:record_type] == "WP"
             - billing_grand_total += rr[:amount].to_f
             - member_grand_total += rr[:amount].to_f
+            - member_total_cp -= rr[:amount].to_f
           - else
             - billing_grand_total += rr[:amount].to_f
             - billing_total_cp += rr[:amount].to_f

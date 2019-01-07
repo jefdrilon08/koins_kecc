@@ -71,5 +71,6 @@ Rails.application.config.assets.precompile += [
   "MemberSurveyAnswerUI.min.react.js",
   "DashboardMain.min.react.js",
   "BranchRepaymentReportShow.min.react.js",
-  "MonthlyClosingCollectionShow.min.react.js"
+  "MonthlyClosingCollectionShow.min.react.js",
+  "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js"
 ]

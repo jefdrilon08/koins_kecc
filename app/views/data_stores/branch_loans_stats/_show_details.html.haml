@@ -9,6 +9,10 @@
       %th.text-center
         Active Loans
       %th.text-right
+        Principal
+      %th.text-right
+        Principal Paid
+      %th.text-right
         Portfolio
       %th.text-right
         Past Due Amount
@@ -27,7 +31,14 @@
         %td.text-center
           #{o[:num_loans]}
         %td.text-right
-          #{number_to_currency(o[:total_principal_portfolio], unit: "")}
+          .text-muted
+            #{number_to_currency(o[:principal], unit: "")}
+        %td.text-right
+          .text-muted
+            #{number_to_currency(o[:total_principal_paid], unit: "")}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:total_principal_portfolio], unit: "")}
         %td.text-right
           #{number_to_currency(o[:total_past_due], unit: "")}
         %td.text-right
@@ -44,6 +55,12 @@
       %td.text-center
         %strong
           #{@record.data.with_indifferent_access[:num_loans]}
+      %td.text-right
+        %strong
+          #{number_to_currency(@record.data.with_indifferent_access[:principal], unit: "")}
+      %td.text-right
+        %strong
+          #{number_to_currency(@record.data.with_indifferent_access[:total_principal_paid], unit: "")}
       %td.text-right
         %strong
           #{number_to_currency(@record.data.with_indifferent_access[:total_principal_portfolio], unit: "")}

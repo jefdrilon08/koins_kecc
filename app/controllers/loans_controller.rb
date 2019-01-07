@@ -6,6 +6,7 @@ class LoansController < ApplicationController
     @q                = params[:q]
     @status           = params[:status]
     @loan_product_id  = params[:loan_product_id]
+    @branch_id        = params[:branch_id]
 
     @centers  = @branches.first.centers
 
@@ -17,6 +18,12 @@ class LoansController < ApplicationController
                   )
 
       @loans  = @loans.where(member_id: @members.pluck(:id))
+    end
+
+    if @branch_id.present?
+      @branch = Branch.find(@branch_id)
+
+      @loans  = @loans.where(branch_id: @branch.id)
     end
 
     if @loan_product_id.present?

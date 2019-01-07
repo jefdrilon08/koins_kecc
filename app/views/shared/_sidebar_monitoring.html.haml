@@ -1,0 +1,6 @@
+%li.nav-title
+  Monitoring
+%li.nav-item
+  = link_to monitoring_accounting_entry_subsidiary_balancing_path, class: "nav-link #{params[:controller] == 'monitoring' && params[:action] == 'accounting_entry_subsidiary_balancing'}" do
+    %i.nav-icon.fa.fa-file
+    Balancing
