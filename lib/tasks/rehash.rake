@@ -42,7 +42,7 @@ namespace :rehash do
       ::Loans::Reage.new(
         loan: loan,
         approved_by: "SYSTEM"
-      )
+      ).execute!
     end
 
     puts ""
