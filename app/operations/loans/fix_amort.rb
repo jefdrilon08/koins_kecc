@@ -43,42 +43,45 @@ module Loans
         amort_entries = o.data.with_indifferent_access[:amort_entries]
 
         amort_entries.each do |a|
-          amort = AmortizationScheduleEntry.find(a[:id])
+          #amort = AmortizationScheduleEntry.find(a[:id])
+          amort = AmortizationScheduleEntry.where(id: a[:id]).first
 
-          principal_paid    = amort.principal_paid
-          interest_paid     = amort.interest_paid
-          principal_balance = amort.principal_balance
-          interest_balance  = amort.interest_balance
-          
-          data  = amort.data.with_indifferent_access
+          if amort.present?
+            principal_paid    = amort.principal_paid
+            interest_paid     = amort.interest_paid
+            principal_balance = amort.principal_balance
+            interest_balance  = amort.interest_balance
+            
+            data  = amort.data.with_indifferent_access
 
-          principal_paid += a[:principal_paid].to_f.round(2)
-          interest_paid += a[:interest_paid].to_f.round(2)
+            principal_paid += a[:principal_paid].to_f.round(2)
+            interest_paid += a[:interest_paid].to_f.round(2)
 
-          principal_balance -= a[:principal_paid].to_f.round(2)
-          interest_balance  -= a[:interest_paid].to_f.round(2)
+            principal_balance -= a[:principal_paid].to_f.round(2)
+            interest_balance  -= a[:interest_paid].to_f.round(2)
 
-          is_paid = nil
+            is_paid = nil
 
-          if principal_balance == 0.00 and interest_balance == 0.00
-            is_paid = true
+            if principal_balance == 0.00 and interest_balance == 0.00
+              is_paid = true
+            end
+
+            data[:payments] << {
+              payment_id: o.id,
+              payment_date: o.transacted_at,
+              principal_paid: a[:principal_paid].to_f.round(2),
+              interest_paid: a[:interest_paid].to_f.round(2)
+            }
+
+            amort.update!(
+              principal_paid: principal_paid,
+              interest_paid: interest_paid,
+              principal_balance: principal_balance,
+              interest_balance: interest_balance,
+              data: data,
+              is_paid: is_paid
+            )
           end
-
-          data[:payments] << {
-            payment_id: o.id,
-            payment_date: o.transacted_at,
-            principal_paid: a[:principal_paid].to_f.round(2),
-            interest_paid: a[:interest_paid].to_f.round(2)
-          }
-
-          amort.update!(
-            principal_paid: principal_paid,
-            interest_paid: interest_paid,
-            principal_balance: principal_balance,
-            interest_balance: interest_balance,
-            data: data,
-            is_paid: is_paid
-          )
         end
       end
 
