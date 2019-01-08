@@ -55,8 +55,8 @@ module Loans
           principal_paid += a[:principal_paid].to_f.round(2)
           interest_paid += a[:interest_paid].to_f.round(2)
 
-          principal_balance -= principal_paid
-          interest_balance  -= interest_paid
+          principal_balance -= a[:principal_paid].to_f.round(2)
+          interest_balance  -= a[:interest_paid].to_f.round(2)
 
           is_paid = nil
 
@@ -85,22 +85,17 @@ module Loans
       # Update balances for loan
       @loan = Loan.find(@loan.id)
 
-      @loan_payments  = AccountTransaction.approved_loan_payments.where(
-                          subsidiary_id: @loan.id,
-                          subsidiary_type: 'Loan'
-                        )
-
       principal_paid  = @loan_payments.sum("CAST(data->>'total_principal_paid' AS decimal)").round(2)
       interest_paid   = @loan_payments.sum("CAST(data->>'total_interest_paid' AS decimal)").round(2)
 
-      principal_balance = (@loan.principal_balance - principal_paid).round(2)
-      interest_balance  = (@loan.interest_balance - interest_paid).round(2)
+      principal_balance = (@loan.principal - principal_paid).round(2)
+      interest_balance  = (@loan.interest - interest_paid).round(2)
 
       @loan.update!(
-        principal_paid: (principal_paid + principal_paid).round(2),
-        interest_paid: (interest_paid + interest_paid).round(2),
-        principal_balance: (principal_balance - principal_paid).round(2),
-        interest_balance: (interest_balance - interest_paid).round(2)
+        principal_paid: principal_paid,
+        interest_paid: interest_paid,
+        principal_balance: principal_balance,
+        interest_balance: interest_balance
       )
 
       if @loan.active? and @loan.principal_balance <= 0.00 and @loan.interest_balance <= 0.00

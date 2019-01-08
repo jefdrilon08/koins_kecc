@@ -35,14 +35,14 @@ namespace :rehash do
       printf("\r(#{i+1}/#{size}): Rehasing loan #{loan.id}... #{progress}%%")
       sleep(0.1)
 
-#      ::Loans::FixAmort.new(
-#        loan: loan
-#      ).execute!
-
-      ::Loans::Reage.new(
-        loan: loan,
-        approved_by: "SYSTEM"
+      ::Loans::FixAmort.new(
+        loan: loan
       ).execute!
+
+#      ::Loans::Reage.new(
+#        loan: loan,
+#        approved_by: "SYSTEM"
+#      ).execute!
     end
 
     puts ""
