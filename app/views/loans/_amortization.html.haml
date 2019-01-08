@@ -1,6 +1,10 @@
 %table.table.table-bordered.table-hover.table-sm
   %thead
     %tr
+      - if current_user.roles.include?("MIS")
+        %th
+          %small
+            Ref.
       %th
       %th
         %center
@@ -13,6 +17,9 @@
     - running_balance = @loan.total_dues
     - @amortization_schedule.each do |o|
       %tr
+        - if current_user.roles.include?("MIS")
+          %td
+            #{o.id}
         %td
           %center
             - if o.is_paid
@@ -32,6 +39,8 @@
           - running_balance = (running_balance - o.total_paid)
           = number_to_currency(running_balance, unit: "")
     %tr
+      - if current_user.roles.include?("MIS")
+        %td
       %td
       %td
         %center

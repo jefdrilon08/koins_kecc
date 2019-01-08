@@ -1,18 +1,51 @@
 namespace :db do
   task :check_loan_payments => :environment do
-    as_of   = ENV['AS_OF'].try(:to_date) || Date.today
-    branch  = Branch.find(ENV['BRANCH_ID'])
+    as_of         = ENV['AS_OF'].try(:to_date) || Date.today
+    branch        = Branch.find(ENV['BRANCH_ID'])
+    loan_product  = LoanProduct.find(ENV['LOAN_PRODUCT_ID'])
+
+    puts "Loan Product: #{loan_product.to_s}"
 
     invalid_loans = []
 
-    loans = Loan.active_or_paid.where(branch_id: branch.id)
+    loans = Loan.active_or_paid.where(branch_id: branch.id, loan_product_id: loan_product.id)
 
     size  = loans.size
 
+    total_portfolio = 0.00
     loans.each_with_index do |o,i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Examining #{o.id}... #{progress}%%")
-      sleep(0.1)
+      #sleep(0.1)
+
+      amorts  = AmortizationScheduleEntry.where(
+                  "due_date <= ? AND loan_id = ?",
+                  as_of,
+                  o.id
+                ).order("due_date ASC")
+
+      payments  = AccountTransaction.approved_loan_payments.where(
+                    "DATE(transacted_at) <= ? AND subsidiary_id = ? AND subsidiary_type = ?",
+                    as_of,
+                    o.id,
+                    "Loan"
+                  )
+
+      portfolio = o.amortization_schedule_entries.sum(:principal) - payments.sum("CAST(data->>'total_principal_paid' AS decimal)")
+      total_portfolio += portfolio
+
+      if o.amortization_schedule_entries.sum(:principal).to_f.round(2) != o.principal.to_f.round(2)
+        puts ""
+        puts "Found invalid loan: #{o.id}"
+        invalid_loans << o.id
+      end
+      
+    end
+    puts ""
+    puts "Total portfolio: #{total_portfolio}"
+
+    if invalid_loans.size > 0
+      puts "Found #{invalid_loans.size} invalid loans."
     end
 
     puts ""

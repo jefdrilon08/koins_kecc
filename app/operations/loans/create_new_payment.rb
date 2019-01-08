@@ -47,7 +47,7 @@ module Loans
               id: amort.id,
               interest_paid: interest_paid.to_f,
               principal_paid: 0.00,
-              due_date: amort.due_date.strftime("%B %d, %Y"),
+              due_date: amort.due_date.strftime("%B %d, %Y")
             }
           elsif @amount < amort.interest_balance && @amount != 0 && amort.interest_balance != 0
             interest_paid += @amount
