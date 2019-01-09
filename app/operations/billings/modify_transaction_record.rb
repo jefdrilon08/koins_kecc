@@ -125,6 +125,7 @@ module Billings
             r[:records].each_with_index do |rr, j|
               if rr[:record_type] == "WP"
                 #total_collected += rr[:amount].try(:to_f).round(3)
+                total_collected -= rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end
             end
