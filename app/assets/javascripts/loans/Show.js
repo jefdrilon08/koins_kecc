@@ -13,6 +13,11 @@ var Show  = (function() {
   var $btnConfirmDelete;
   var $modalDelete;
 
+  var $btnChangeBook;
+  var $btnConfirmChangeBook;
+  var $modalChangeBook;
+  var $selectBook;
+
   var $btnFirstDateOfPayment;
   var $btnConfirmFirstDateOfPayment;
   var $modalFirstDateOfPayment;
@@ -30,6 +35,7 @@ var Show  = (function() {
   var _urlFirstDateOfPayment  = "/api/v1/loans/update_first_date_of_payment";
   var _urlDateReleased        = "/api/v1/loans/update_date_released";
   var _urlApprove             = "/api/v1/loans/approve";
+  var _urlChangeBook          = "/api/v1/loans/change_book";
 
   var _loanId;
   var _authenticityToken;
@@ -59,10 +65,63 @@ var Show  = (function() {
     $modalDateReleased      = $("#modal-date-released");
     $inputDateReleased      = $("#input-date-released");
 
+    $btnChangeBook        = $("#btn-change-book");
+    $btnConfirmChangeBook = $("#btn-confirm-change-book");
+    $modalChangeBook      = $("#modal-change-book");
+    $selectBook           = $("#select-book");
+
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnChangeBook.on("click", function() {
+      $modalChangeBook.modal("show");
+    });
+
+    $btnConfirmChangeBook.on("click", function() {
+      var book  = $selectBook.val();
+
+      $btnConfirmChangeBook.prop("disabled", true);
+      $selectBook.prop("disabled", true);
+      $message.html("Loading...");
+
+      $.ajax({
+        url: _urlChangeBook,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: _loanId,
+          book: book,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmChangeBook.prop("disabled", false);
+            $selectBook.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnApprove.on("click", function() {
       $message.html("");
       $modalApprove.modal("show");

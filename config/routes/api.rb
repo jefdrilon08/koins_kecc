@@ -44,6 +44,7 @@ namespace :api do
     post "/accounting_entries/modify_date_posted", to: "accounting_entries#modify_date_posted"
 
     # Loans
+    post "/loans/change_book", to: "loans#change_book"
     post "/loans/approve", to: "loans#approve"
     post "/loans/reage", to: "loans#reage"
     post "/loans/delete", to: "loans#delete"

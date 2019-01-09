@@ -3,6 +3,42 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def change_book
+        loan  = Loan.where(id: params[:id]).first
+        book  = params[:book]
+
+        config  = {
+          loan: loan,
+          book: book,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateChangeBook.new(
+                    config: config
+                  ).execute!
+
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          old_book  = loan.data.with_indifferent_access[:accounting_entry][:book]
+          loan      = ::Loans::ChangeBook.new(
+                        config: config
+                      ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} changed book from #{old_book} to #{book} for loan #{loan.id}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id
+            }
+          )
+
+          render json: { message: "ok", id: loan.id }
+        end
+      end
+
       def approve
         loan  = Loan.where(id: params[:id]).first
 

@@ -18,8 +18,16 @@
             #details.tab-pane.active.show{:role => "tabpanel"}
               = render partial: "details"
               %hr
-              %h5
-                Accounting Entry
+              .row
+                .col
+                  %h5
+                    Accounting Entry
+                - if @loan.pending?
+                  .col
+                    .text-right
+                      #btn-change-book.btn.btn-info.btn-sm
+                        .fa.fa-sync
+                        Change Book
               #loan-accounting-entry-content
             #amortization-table.tab-pane{:role => "tabpanel"}
               = render partial: "amortization_table"
@@ -37,6 +45,7 @@
 = render partial: "loans/modals/delete"
 = render partial: "loans/modals/first_date_of_payment"
 = render partial: "loans/modals/date_released"
+= render partial: "loans/modals/change_book"
 = render partial: "templates/error_list"
 
 #parameters{ data: { id: @loan.id, member_id: @loan.member.id } }

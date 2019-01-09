@@ -99,6 +99,9 @@ module Loans
       # Build accounting entry data
       particular  = "Release of Loan - #{@member.first_name} #{@member.middle_name} #{@member.last_name} cv# #{@loan.voucher_check_voucher_number} ck# #{@loan.voucher_bank_check_number} clip# #{@loan.clip_number}"
 
+      if @loan.data.present? and @loan.data.with_indifferent_access[:accounting_entry].present?
+        @book = @loan.data.with_indifferent_access[:accounting_entry][:book]
+      end
       accounting_entry_data = ::Loans::BuildAccountingEntry.new(
                                 config: {
                                   member: @member,
@@ -107,6 +110,7 @@ module Loans
                                   term: @loan.term,
                                   num_installments: @loan.num_installments,
                                   particular: particular,
+                                  book: @book,
                                   loan: @loan
                                 }
                               ).execute!
