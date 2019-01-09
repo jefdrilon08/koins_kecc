@@ -99,6 +99,34 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
     return rows;
   }
 
+  renderPersonalFunds() {
+    var records = this.state.data.personal_funds;
+    var rows    = [];
+
+    for(var i = 0; i < records.length; i++) {
+      rows.push(
+        <tr key={"presonal-funds-row-" + i}>
+          <td>
+            <strong>
+              {records[i].accounting_code.name}
+            </strong>
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].accounting_entry_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].subsidiary_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].diff)}
+          </td>
+        </tr>
+      );
+    }
+
+    return rows;
+  }
+
   renderResult() {
     if(this.state.isLoading) {
       return  (
@@ -129,6 +157,30 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
             </thead>
             <tbody>
               {this.renderLoansReceivables()}
+            </tbody>
+          </table>
+          <h5>
+            Personal Funds
+          </h5>
+          <table className="table table-bordered table-hover table-sm">
+            <thead>
+              <tr>
+                <th>
+                  Account
+                </th>
+                <th className="text-right">
+                  General Ledger
+                </th>
+                <th className="text-right">
+                  Personal Funds
+                </th>
+                <th className="text-right">
+                  DIFF
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.renderPersonalFunds()}
             </tbody>
           </table>
         </div>

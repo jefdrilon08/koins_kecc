@@ -11,6 +11,15 @@ module Monitoring
         raise "settings_loan_products not found"
       end
 
+      @settings_savings_accounting_codes    = Settings.savings_accounting_codes
+
+      if @settings_savings_accounting_codes.blank?
+        raise "settings_savings_accounting_codes not found"
+      end
+
+      @settings_insurance_accounting_codes  = Settings.insurance_accounting_codes
+      @settings_equity_accounting_codes     = Settings.equity_accounting_codes
+
       @journal_entries  = JournalEntry.joins(:accounting_entry).where(
                             "accounting_entries.status = ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
                             "approved",
@@ -18,13 +27,6 @@ module Monitoring
                             @branch.id
                           ).order("accounting_entries.date_posted ASC")
 
-      @loans  = Loan.where(
-                  "(status = ? OR date_completed > ?) AND branch_id = ? AND first_date_of_payment <= ?",
-                  'active',
-                  @as_of,
-                  @branch.id,
-                  @as_of
-                )
 
 
       @data = {
@@ -35,11 +37,65 @@ module Monitoring
 
     def execute!
       fetch_loans_receivables!
+      #fetch_personal_funds!
 
       @data
     end
 
     private
+
+    def fetch_personal_funds!
+      # SAVINGS
+      @settings_savings_accounting_codes.each do |o|
+        account_type    = "SAVINGS"
+        account_subtype = o.savings_type
+
+        d = {
+          accounting_code: {
+            id: "",
+            name: "",
+            code: ""
+          },
+          account: {
+            account_type: account_type,
+            account_subtype: account_subtype
+          },
+          accounting_entry_balance: 0.00,
+          subsidiary_balance: 0.00,
+          diff: 0.00
+        }
+
+        accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
+        d[:accounting_code][:id]    = accounting_code.id
+        d[:accounting_code][:name]  = accounting_code.name
+        d[:accounting_code][:code]   = accounting_code.code
+
+        debit_amount  = @journal_entries.where(accounting_code_id: accounting_code.id, post_type: 'DR').sum(:amount)
+        credit_amount = @journal_entries.where(accounting_code_id: accounting_code.id, post_type: 'CR').sum(:amount)
+
+        d[:accounting_entry_balance]  = (credit_amount - debit_amount).round(2)
+
+        member_accounts = MemberAccount.where(
+                            account_type: account_type,
+                            account_subtype: account_subtype,
+                            branch_id: @branch.id
+                          )
+
+        account_transactions  = AccountTransaction.savings.where(subsidiary_id: member_accounts.pluck(:id)).where("DATE(transacted_at) <= ?", @as_of).order("transacted_at ASC")
+
+        member_accounts.each do |a|
+          t = AccountTransaction.savings.where(subsidiary_id: a.id).where("DATE(transacted_at) <= ?", @as_of).order("transacted_at ASC, created_at ASC").last
+
+          if t.present?
+            d[:subsidiary_balance] += t.data.with_indifferent_access[:ending_balance].try(:to_f).round(2)
+          end
+        end
+
+        d[:diff]  = (d[:accounting_entry_balance] - d[:subsidiary_balance]).round(2)
+
+        @data[:personal_funds] << d 
+      end
+    end
 
     def fetch_loans_receivables!
       @settings_loan_products.each do |o|

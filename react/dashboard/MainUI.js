@@ -47,15 +47,11 @@ export default class MainUI extends React.Component {
   renderDashboards() {
     var dashboards  = [];
 
-    for(var i = 0; i < this.state.roles.length; i++) {
-      if(this.state.roles[i] == "OAS") {
-        dashboards.push(
-          <DashboardOAS
-            key={"dashboard-OAS"}
-          />
-        );
-      }
-    }
+    dashboards.push(
+      <DashboardOAS
+        key={"dashboard-OAS"}
+      />
+    );
 
     return dashboards;
   }

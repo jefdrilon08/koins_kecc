@@ -353,7 +353,7 @@ export default class BillingUITable extends React.Component {
           </td>
         );
       } else if(totals[i].record_type == "WP") {
-        grandTotal += parseFloat(totals[i].amount);
+        grandTotal -= parseFloat(totals[i].amount);
         
         records.push(
           <td key={"wp-" + totals[i].key} className="text-right">
