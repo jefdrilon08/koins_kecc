@@ -14,6 +14,24 @@ module Loans
       if @loan_data[:id].present?
         @loan = Loan.find(@loan_data[:id])
       end
+
+      # Settings
+      @settings_loan_products = Settings.loan_products
+
+      if @settings_loan_products.blank?
+        raise "settings_loan_products not found"
+      end
+
+      # Actual loan product settings
+      @settings_loan_products.each do |s|
+        if s.loan_product_id == @loan_product.id
+          @settings = s
+        end
+      end
+
+      if @settings.blank?
+        raise "No settings foud for loan_product #{@loan_product.id}"
+      end
     end
 
     def execute!
@@ -31,9 +49,17 @@ module Loans
       @loan.loan_product          = @loan_product
       @loan.monthly_interest_rate = @loan_product.monthly_interest_rate
 
+      if @settings.use_term_interest.present?
+        @settings.use_term_interest.each do |t|
+          if t.term == @loan.term and @loan.num_installments > t.min_num_installments and @loan.num_installments <= t.max_num_installments
+            @loan.monthly_interest_rate = t.monthly_interest_rate
+          end
+        end
+      end
+
       params  = {
         principal: @loan.principal,
-        annual_interest_rate: (@loan_product.monthly_interest_rate * 12),
+        annual_interest_rate: (@loan.monthly_interest_rate * 12),
         num_installments: @loan_data[:num_installments],
         term: @loan_data[:term]
       }
