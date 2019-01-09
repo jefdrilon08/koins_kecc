@@ -8,6 +8,8 @@
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
+                - if current_user.roles.include?("MIS")
+                  %th
                 %th
                   %center
                     Date
@@ -23,6 +25,10 @@
             %tbody
               - @account_transactions.each do |o|
                 %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
                   %td
                     %center
                       %small
