@@ -7,6 +7,8 @@ module Billings
       @billing  = @config[:billing]
       @user     = @config[:user]
 
+      @current_date = @config[:current_date] || Date.today
+
       @data = @billing.try(:data).try(:with_indifferent_access)
     end
 
@@ -29,6 +31,13 @@ module Billings
         @errors[:messages] << {
           key: "or_number",
           message: "no or number found"
+        }
+      end
+
+      if @billing.collection_date.try(:to_date) > @current_date
+        @errors[:messages] << {
+          key: "collection_date",
+          message: "Cannot approve billing dated #{@billing.collection_date} for current date #{@current_date}"
         }
       end
 
