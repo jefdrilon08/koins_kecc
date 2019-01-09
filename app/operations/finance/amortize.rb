@@ -19,35 +19,35 @@ module Finance
       @term                 = @params[:term]
 
       Rails.logger.info("Amortizing loan with params #{@params}")
-
-      if @annual_interest_rate > 0
-        case @term
-        when "yearly"
-          @n_mode             = ::Finance::Amortize::N_YEARLY
-          @periodic_interest  = @annual_interest_rate / @n_mode
-        when "quarterly"
-          @n_mode             = ::Finance::Amortize::N_QUARTERLY
-          @periodic_interest  = @annual_interest_rate / @n_mode
-        when "monthly"
-          @n_mode             = ::Finance::Amortize::N_MONTHLY
-          @periodic_interest  = @annual_interest_rate / @n_mode
-        when "semi-monthly"
-          @n_mode             = ::Finance::Amortize::N_SEMI_MONTHLY
-          @periodic_interest  = @annual_interest_rate / @n_mode
-        when "weekly"
-          @n_mode             = ::Finance::Amortize::N_WEEKLY
-          @periodic_interest  = @annual_interest_rate / @n_mode
-        when "daily"
-          @n_mode             = ::Finance::Amortize::N_DAILY
-          @periodic_interest  = @annual_interest_rate / @n_mode
-        else
-          raise "Unsupported term #{@term}"
-        end
+      case @term
+      when "yearly"
+        @n_mode             = ::Finance::Amortize::N_YEARLY
+        @periodic_interest  = @annual_interest_rate / @n_mode
+      when "quarterly"
+        @n_mode             = ::Finance::Amortize::N_QUARTERLY
+        @periodic_interest  = @annual_interest_rate / @n_mode
+      when "monthly"
+        @n_mode             = ::Finance::Amortize::N_MONTHLY
+        @periodic_interest  = @annual_interest_rate / @n_mode
+      when "semi-monthly"
+        @n_mode             = ::Finance::Amortize::N_SEMI_MONTHLY
+        @periodic_interest  = @annual_interest_rate / @n_mode
+      when "weekly"
+        @n_mode             = ::Finance::Amortize::N_WEEKLY
+        @periodic_interest  = @annual_interest_rate / @n_mode
+      when "daily"
+        @n_mode             = ::Finance::Amortize::N_DAILY
+        @periodic_interest  = @annual_interest_rate / @n_mode
       else
-        raise "0 interest rate not yet implemented"
+        raise "Unsupported term #{@term}"
       end
 
-      @emi  = ((@periodic_interest * @principal) / (1 - (1 + @periodic_interest)**(@num_installments * -1))).round(0)
+      if @annual_interest_rate > 0.00
+        @emi  = ((@periodic_interest * @principal) / (1 - (1 + @periodic_interest)**(@num_installments * -1))).round(0)
+      else
+        @emi  = 0
+        @periodic_interest  = 0
+      end
 
       @schedule = []
     end
@@ -58,24 +58,47 @@ module Finance
       @total_interest   = 0.00
       @total_principal  = 0.00
 
-      @num_installments.times do |i|
-        interest  = (@balance * @periodic_interest).round(0)
-        principal = (@emi - interest).round(0)
+      if @emi == 0
+        periodic_payment  = @balance / @num_installments
 
-        due       = (principal + interest)
+        @num_installments.times do |i|
+          interest  = 0.00
+          principal = periodic_payment
 
-        @total_interest   += interest
-        @total_principal  += principal
+          due = principal
 
-        @balance -= principal
+          @total_principal += principal
 
-        @schedule << {
-          index: i,
-          num: i+1,
-          interest: interest,
-          principal: principal,
-          due: due
-        }
+          @balance -= principal
+
+          @schedule << {
+            index: i,
+            num: i+1,
+            interest: interest,
+            principal: principal,
+            due: due
+          }
+        end
+      else
+        @num_installments.times do |i|
+          interest  = (@balance * @periodic_interest).round(0)
+          principal = (@emi - interest).round(0)
+
+          due       = (principal + interest)
+
+          @total_interest   += interest
+          @total_principal  += principal
+
+          @balance -= principal
+
+          @schedule << {
+            index: i,
+            num: i+1,
+            interest: interest,
+            principal: principal,
+            due: due
+          }
+        end
       end
 
       if @total_principal > @principal

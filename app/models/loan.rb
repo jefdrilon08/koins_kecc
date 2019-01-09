@@ -144,7 +144,7 @@ class Loan < ApplicationRecord
   def voucher_date_of_check
     temp  = self.data.with_indifferent_access[:voucher]
 
-    if temp[:date_of_check]
+    if temp[:date_of_check].present?
       temp[:date_of_check].to_date.strftime("%b %d, %Y")
     end
   end
