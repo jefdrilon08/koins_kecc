@@ -163,12 +163,12 @@ module Billings
       member_account  = MemberAccount.savings.where(id: @current_transaction[:member_account_id]).first
       amount          = @current_transaction[:amount].try(:to_f)
 
-      if member_account.member.loans.active.count == 0
-        @errors[:messages] << {
-          key: "wp",
-          message: "Cannot withdraw payment for no active loans"
-        }
-      end
+#      if member_account.member.loans.active.count == 0
+#        @errors[:messages] << {
+#          key: "wp",
+#          message: "Cannot withdraw payment for no active loans"
+#        }
+#      end
 
       if member_account.blank?
         @errors[:messages] << {

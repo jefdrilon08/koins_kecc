@@ -1,13 +1,30 @@
 :css
   table {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 
-  #book {
+  #book, header {
     margin-left: 60px;
   }
 
-#book
+  header {
+    position: running(header);
+  }
+
+  @media screen {
+    header {
+      display: none;
+    }
+  }
+
+  @media print {
+    header#header {
+      position: fixed;
+      top: 0;
+    }
+  }
+
+%header#header
   %small
     %strong
       #{Settings.company_name}
@@ -20,6 +37,7 @@
       %br
       Period: #{@book[:start_date]} - #{@book[:end_date]}
 
+#book
   - @book[:accounting_entries].each do |o|
     %table.table.table-bordered.table-sm
       %tbody
