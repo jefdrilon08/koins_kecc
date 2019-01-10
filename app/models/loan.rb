@@ -56,10 +56,10 @@ class Loan < ApplicationRecord
   end
 
   def num_weeks
-    if ["active", "paid"].include?(self.status)
-      start_date  = self.amortization_schedule_entries.order("due_date ASC").first.due_date
-      end_date    = self.amortization_schedule_entries.order("due_date ASC").last.due_date
+    start_date  = self.amortization_schedule_entries.order("due_date ASC").first.due_date
+    end_date    = self.amortization_schedule_entries.order("due_date ASC").last.due_date
 
+    if start_date.present? and end_date.present?
       ((end_date - start_date ) / 7).to_i
     else
       0

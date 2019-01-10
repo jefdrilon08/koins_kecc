@@ -7,6 +7,7 @@
             Ref.
       %th
       %th
+      %th
         %center
           Due Date
       %th.text-right
@@ -15,11 +16,14 @@
         Running Balance
   %tbody
     - running_balance = @loan.total_dues
-    - @amortization_schedule.each do |o|
+    - @amortization_schedule.each_with_index do |o, i|
       %tr
         - if current_user.roles.include?("MIS")
           %td
             #{o.id}
+        %td.text-center
+          %small
+            #{i + 1}
         %td
           %center
             - if o.is_paid
@@ -41,6 +45,7 @@
     %tr
       - if current_user.roles.include?("MIS")
         %td
+      %td
       %td
       %td
         %center
