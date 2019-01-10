@@ -65,10 +65,10 @@ module Loans
       end
 
       # Branch related accounting code settings
-      @settings_branch_accounting_codes
+      @settings_branch_accounting_codes = nil
 
       Settings.branch_accounting_codes.each do |o|
-        if o.branch_id = @branch.id
+        if o.branch_id == @branch.id
           @settings_branch_accounting_codes = o
         end
       end
