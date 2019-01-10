@@ -1,4 +1,85 @@
 namespace :load do
+  task :loan_cycles_from_file => :environment do
+    puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    data        = JSON.parse(File.read("#{params[:root]}/#{params[:filename]}")).deep_symbolize_keys!
+    loan_cycles = data[:loan_cycles]
+
+    size  = loan_cycles.size
+
+    loan_cycles.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Processing loan_cycles... #{progress}%%")
+      loan  = Loan.where(id: o[:id]).first
+
+      if loan.present?
+        loan.update!(cycle: o[:cycle])
+      else
+        puts ""
+        puts "Loan #{o[:id]} not found"
+      end
+    end
+
+    puts "Done."
+  end
+
+  task :member_loan_cycles_from_file => :environment do
+    puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    data  = JSON.parse(File.read("#{params[:root]}/#{params[:filename]}")).deep_symbolize_keys!
+
+    member_loan_cycles  = data[:member_loan_cycles]
+
+    size  = member_loan_cycles.size
+
+    member_loan_cycles.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Processing member_loan_cycles... #{progress}%%")
+      member    = Member.where(id: o[:member_id]).first
+
+      if member.present?
+        member_data = member.data.with_indifferent_access
+
+        loan_cycles = member_data[:loan_cycles]
+
+        if loan_cycles.blank?
+          loan_cycles = []
+        end
+
+        update  = false
+        loan_cycles.each_with_index do |lc, i|
+          if lc[:loan_product_id] == o[:loan_product_id]
+            loan_cycles[i][:cycle] = o[:cycle]
+            update  = true
+          end
+        end
+
+        if !update
+          loan_cycles << o
+        end
+
+        member_data[:loan_cycles] = loan_cycles
+
+        member.update!(data: member_data)
+      else
+        puts ""
+        puts "Member #{o[:member_id]} not found"
+      end
+    end
+
+    puts "Done."
+  end
+
   task :member_shares_from_file => :environment do
     puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 

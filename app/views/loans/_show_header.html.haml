@@ -11,6 +11,11 @@
       \-
       #{@loan.pn_number}
       (#{@loan.loan_product})
+      \-
+      - if @loan.cycle.present?
+        Cycle #{@loan.cycle}
+      - else
+        NO LOAN CYCLE PRESENT
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       - if @loan.active?

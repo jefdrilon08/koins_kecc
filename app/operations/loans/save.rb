@@ -15,6 +15,8 @@ module Loans
         @loan = Loan.find(@loan_data[:id])
       end
 
+      @member_data  = @member.data.with_indifferent_access
+
       # Settings
       @settings_loan_products = Settings.loan_products
 
@@ -42,6 +44,26 @@ module Loans
       @loan.num_installments  = @loan_data[:num_installments]
       @loan.term              = @loan_data[:term]
       @loan.data              = @loan_data[:data]
+
+      # Setup loan cycle
+      @loan_cycles  = @member_data[:loan_cycles]
+
+      if @loan_cycles.blank?
+        @loan.cycle = 1
+      else
+        found = false
+
+        @loan_cycles.each do |c|
+          if c[:loan_product_id] == @loan_product.id
+            @loan.cycle = c[:cycle] + 1
+            found       = true
+          end
+        end
+
+        if !found
+          @loan.cycle = 1
+        end
+      end
 
       @loan.member                = @member
       @loan.branch                = @branch

@@ -28,7 +28,7 @@ class Member < ApplicationRecord
   validates :date_of_birth, presence: true
 
   validates :first_name, presence: true
-  validates :middle_name, presence: true
+  #validates :middle_name, presence: true
   validates :last_name, presence: true
 
   validates :identification_number, presence: true, uniqueness: true, if: :active?

@@ -12,6 +12,9 @@ module Loans
       @term             = @loan.term
       
       @current_date = Date.today
+      
+      @member       = @loan.member
+      @member_data  = @member.data.with_indifferent_access
 
       # Main settings for this loan product
       @settings = nil
@@ -34,6 +37,42 @@ module Loans
       post_accounting_entry!
 
       perform_deposits!
+
+      # Setup loan cycle
+      @loan_cycles  = @member_data[:loan_cycles]
+
+      if @loan_cycles.blank?
+        @loan.cycle   = 1
+        @loan_cycles  = [
+          {
+            loan_product_id: @loan_product.id,
+            cycle: 1
+          }
+        ]
+      else
+        found = false
+
+        @loan_cycles.each_with_index do |c, i|
+          if c[:loan_product_id] == @loan_product.id
+            @loan.cycle = c[:cycle] + 1
+            found       = true
+
+            @loan_cycles[i][:cycle] = @loan.cycle
+          end
+        end
+
+        if !found
+          @loan.cycle = 1
+          @loan_cycles << {
+            loan_product_id: @loan_product.id,
+            cycle: @loan.cycle
+          }
+        end
+      end
+
+      # Updat member data
+      @member_data[:loan_cycles]  = @loan_cycles
+      @member.update!(data: @member_data)
 
       @loan.update!(
         status: "active",

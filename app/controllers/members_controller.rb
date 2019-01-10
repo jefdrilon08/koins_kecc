@@ -77,5 +77,7 @@ class MembersController < ApplicationController
                         "data ->> 'member_id' = ?",
                         @member.id
                       ).order("created_at DESC")
+
+    @loan_cycles  = @member.data.with_indifferent_access[:loan_cycles]
   end
 end

@@ -9,6 +9,8 @@
           PN Number
         %th
           Loan Product
+        %th.text-center
+          Cycle 
         %th.text-right
           Total Due
         %th.text-right
@@ -24,6 +26,8 @@
                 #{loan.pn_number}
           %td.text-muted
             #{loan.loan_product}
+          %td.text-center
+            #{loan.cycle}
           %td.text-right
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
@@ -115,3 +119,26 @@
 - else
   %p
     No paid loans found.
+
+%hr
+%h6
+  Loan Cycles
+- if @loan_cycles.present?
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
+      %tr
+        %th
+          Loan Product
+        %th.text-center
+          Cycle Count
+    %tbody
+      - @loan_cycles.each do |o|
+        %tr
+          %td
+            #{LoanProduct.find(o[:loan_product_id]).name}
+          %td.text-center
+            #{o[:cycle]}
+
+- else
+  %p
+    No member loan cycle data found.
