@@ -53,6 +53,8 @@
           PN Number
         %th
           Loan Product
+        %th.text-center
+          Cycle 
         %th.text-right
           Total Due
         %th.text-right
@@ -68,6 +70,8 @@
                 #{loan.pn_number}
           %td.text-muted
             #{loan.loan_product}
+          %td.text-center
+            #{loan.cycle}
           %td.text-right
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
@@ -92,6 +96,8 @@
           PN Number
         %th
           Loan Product
+        %th.text-center
+          Cycle 
         %th.text-right
           Total Due
         %th.text-right
@@ -107,6 +113,8 @@
                 #{loan.pn_number}
           %td.text-muted
             #{loan.loan_product}
+          %td.text-center
+            #{loan.cycle}
           %td.text-right
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}

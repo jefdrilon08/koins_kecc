@@ -13,6 +13,7 @@ class DataStore < ApplicationRecord
   scope :member_counts, -> { where("meta->>'data_store_type' = ?", "MEMBER_COUNTS") }
   scope :branch_repayment_reports, -> { where("meta->>'data_store_type' = ?", "BRANCH_REPAYMENT_REPORT") }
   scope :year_end_records, -> { where("meta->>'data_store_type' = ?", "YEAR_END_RECORD") }
+  scope :personal_funds, -> { where("meta->>'data_store_type' = ?", "PERSONAL_FUNDS") }
 
   before_validation :load_defaults
 
