@@ -75,6 +75,10 @@ Rails.application.routes.draw do
 
   # Data Stores
   namespace :data_stores do
+    get "/personal_funds", to: "personal_funds#index"
+    get "/personal_funds/:id", to: "personal_funds#show"
+    delete "/personal_funds/:id", to: "personal_funds#destroy"
+
     get "/member_counts", to: "member_counts#index"
     get "/member_counts/:id", to: "member_counts#show"
     delete "/member_counts/:id", to: "member_counts#destroy"

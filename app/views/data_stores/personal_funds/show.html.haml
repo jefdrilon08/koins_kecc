@@ -1,0 +1,30 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @record.error?
+            = render partial: "data_stores/error_page"
+          - else
+            = render partial: "show_details"
+
+#parameters{ data: { id: "#{@record.id}" } }
+
+= render partial: "data_stores/personal_funds/modals/update"
+= render partial: "templates/error_list"
+
+- if !@record.error?
+  = javascript_include_tag "data_stores/personal_funds/Show"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var id  = $("#parameters").data('id');
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });

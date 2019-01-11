@@ -38,6 +38,7 @@ Rails.application.config.assets.precompile += [
   "deposit_collections/Show.js",
   "withdrawal_collections/Index.js",
   "withdrawal_collections/Show.js",
+  "data_stores/personal_funds/Index.js",
   "data_stores/branch_loans_stats/Show.js",
   "data_stores/branch_loans_stats/Index.js",
   "data_stores/branch_repayment_reports/Index.js",

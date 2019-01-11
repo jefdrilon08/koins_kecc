@@ -1,5 +1,9 @@
 %li.nav-title
   Data Stores
+%li{ class: "nav-item #{params[:controller] == 'personal_funds' ? 'active' : ''}" }
+  = link_to "/data_stores/personal_funds", class: 'nav-link' do
+    %i.nav-icon.fa.fa-database
+    Personal Funds
 %li{ class: "nav-item #{params[:controller] == 'branch_repayment_reports' ? 'active' : ''}" }
   = link_to "/data_stores/branch_repayment_reports", class: 'nav-link' do
     %i.nav-icon.fa.fa-database

@@ -99,7 +99,6 @@ module Members
         @data[:officer] = {
           id: officer.id,
           first_name: officer.first_name,
-          middle_name: officer.middle_name,
           last_name: officer.last_name,
           identification_number: officer.identification_number
         }
