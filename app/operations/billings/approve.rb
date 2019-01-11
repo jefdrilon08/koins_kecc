@@ -5,6 +5,8 @@ module Billings
       @billing  = @config[:billing]
       @user     = @config[:user]
 
+      @date_approved  = Date.today
+
       @data = @billing.try(:data).try(:with_indifferent_access)
 
       @data_loan_payments     = @billing.loan_payments
@@ -31,6 +33,7 @@ module Billings
 
       @billing.update!(
         status: "approved",
+        date_approved: @date_approved,
         data: @data
       )
 
@@ -43,7 +46,7 @@ module Billings
       @data_loan_payments.each do |o|
         config  = {
           loan_payment: o,
-          date_paid: @billing.collection_date,
+          date_paid: @date_approved,
           user: @user,
           particular: @data_accounting_entry[:particular]
         }
@@ -57,7 +60,7 @@ module Billings
     def process_savings!
       @data_deposits.each do |o|
         config  = {
-          date_paid: @billing.collection_date,
+          date_paid: @date_approved,
           deposit: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
@@ -72,7 +75,7 @@ module Billings
     def process_withdraw_payments!
       @data_withdraw_payments.each do |o|
         config  = { 
-          date_paid: @billing.collection_date,
+          date_paid: @date_approved,
           withdraw_payment: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
@@ -87,7 +90,7 @@ module Billings
     def process_insurance!
       @data_insurance.each do |o|
         config  = {
-          date_paid: @billing.collection_date,
+          date_paid: @date_approved,
           insurance_deposit: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
