@@ -32,6 +32,7 @@ Rails.application.config.assets.precompile += [
   "accounting/BooksIndex.js",
   "billings/Index.js",
   "billings/Show.js",
+  "savings_accounts/Show.js",
   "membership_payment_collections/Index.js",
   "membership_payment_collections/Show.js",
   "deposit_collections/Index.js",
@@ -39,6 +40,7 @@ Rails.application.config.assets.precompile += [
   "withdrawal_collections/Index.js",
   "withdrawal_collections/Show.js",
   "data_stores/personal_funds/Index.js",
+  "data_stores/personal_funds/Show.js",
   "data_stores/branch_loans_stats/Show.js",
   "data_stores/branch_loans_stats/Index.js",
   "data_stores/branch_repayment_reports/Index.js",
@@ -72,6 +74,7 @@ Rails.application.config.assets.precompile += [
   "MemberSurveyAnswerUI.min.react.js",
   "DashboardMain.min.react.js",
   "BranchRepaymentReportShow.min.react.js",
+  "PersonalFundsShow.min.react.js",
   "MonthlyClosingCollectionShow.min.react.js",
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js"
 ]

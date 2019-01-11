@@ -32,6 +32,7 @@ namespace :api do
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
+    post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
 
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
@@ -121,6 +122,7 @@ namespace :api do
 
     namespace :data_stores do
       post "/personal_funds/queue", to: "personal_funds#queue"
+      post "/personal_funds/fetch", to: "personal_funds#fetch"
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"

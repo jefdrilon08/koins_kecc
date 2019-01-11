@@ -11,7 +11,14 @@
     #{@savings_account.account_subtype}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      .btn#btn-sync-maintaining-balance
+        .fa.fa-sync
+        Sync Maintaining Balance
       .btn
         %strong
           Balance:
         #{number_to_currency(@savings_account.balance, unit: "")}
+      .btn
+        %strong
+          Maintaining Balance:
+        #{number_to_currency(@savings_account.maintaining_balance, unit: "")}

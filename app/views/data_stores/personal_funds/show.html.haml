@@ -1,4 +1,5 @@
 = render partial: "show_header"
+#parameters{ data: { id: "#{@record.id}" } }
 
 .container-fluid
   .row
@@ -8,9 +9,7 @@
           - if @record.error?
             = render partial: "data_stores/error_page"
           - else
-            = render partial: "show_details"
-
-#parameters{ data: { id: "#{@record.id}" } }
+            #content
 
 = render partial: "data_stores/personal_funds/modals/update"
 = render partial: "templates/error_list"

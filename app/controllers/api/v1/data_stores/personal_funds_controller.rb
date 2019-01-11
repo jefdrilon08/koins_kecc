@@ -4,6 +4,16 @@ module Api
       class PersonalFundsController < ApplicationController
         before_action :authenticate_user!
 
+        def fetch
+          @record = DataStore.personal_funds.where(id: params[:id]).first
+
+          if @record.blank?
+            render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
+          else
+            render json: @record
+          end
+        end
+
         def queue
           @data_store_type  = params[:data_store_type] || "PERSONAL_FUNDS"
           @include_centers  = false

@@ -54,3 +54,22 @@
                     #{number_to_currency(o.amount, unit: "")}
                   %td.text-right.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
+
+= render partial: "savings_accounts/modals/sync_maintaining_balance"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "savings_accounts/Show.js"
+
+#parameters{ data: { id: @savings_account.id } }
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var id                = $parameters.data("id");
+    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });
