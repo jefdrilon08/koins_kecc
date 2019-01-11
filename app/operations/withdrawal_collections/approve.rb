@@ -8,6 +8,8 @@ module WithdrawalCollections
       @data = @withdrawal_collection.try(:data).try(:with_indifferent_access)
       @data_withdrawals       = @withdrawal_collection.withdrawals
       @data_accounting_entry  = @withdrawal_collection.accounting_entry
+
+      @date_approved  = Date.today
     end
 
     def execute!
@@ -24,6 +26,7 @@ module WithdrawalCollections
 
       @withdrawal_collection.update!(
         status: "approved",
+        date_approved: @date_approved,
         data: @data
       )
 
@@ -35,7 +38,7 @@ module WithdrawalCollections
     def process_withdrawals!
       @data_withdrawals.each do |o|
         config  = {
-          date_paid: @withdrawal_collection.collection_date,
+          date_paid: @date_approved,
           withdrawal: o,
           member: Member.find(o[:member_id]),
           user: @user,

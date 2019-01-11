@@ -1,13 +1,15 @@
 module DepositCollections
   class Approve
     def initialize(config:)
-      @config   = config
-      @deposit_collection  = @config[:deposit_collection]
-      @user     = @config[:user]
+      @config             = config
+      @deposit_collection = @config[:deposit_collection]
+      @user               = @config[:user]
 
       @data = @deposit_collection.try(:data).try(:with_indifferent_access)
       @data_deposits          = @deposit_collection.deposits
       @data_accounting_entry  = @deposit_collection.accounting_entry
+
+      @date_approved  = Date.today
     end
 
     def execute!
@@ -24,6 +26,7 @@ module DepositCollections
 
       @deposit_collection.update!(
         status: "approved",
+        date_approved: @date_approved,
         data: @data
       )
 
@@ -35,7 +38,7 @@ module DepositCollections
     def process_deposits!
       @data_deposits.each do |o|
         config  = {
-          date_paid: @deposit_collection.collection_date,
+          date_paid: @date_approved,
           deposit: o,
           member: Member.find(o[:member_id]),
           user: @user,

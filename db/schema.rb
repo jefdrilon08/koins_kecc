@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_11_055915) do
+ActiveRecord::Schema.define(version: 2019_01_11_060533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(version: 2019_01_11_055915) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
   end
@@ -345,6 +346,7 @@ ActiveRecord::Schema.define(version: 2019_01_11_055915) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date_approved"
     t.index ["branch_id"], name: "index_membership_payment_collections_on_branch_id"
     t.index ["center_id"], name: "index_membership_payment_collections_on_center_id"
   end
@@ -456,6 +458,7 @@ ActiveRecord::Schema.define(version: 2019_01_11_055915) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date_approved"
     t.index ["branch_id"], name: "index_withdrawal_collections_on_branch_id"
     t.index ["center_id"], name: "index_withdrawal_collections_on_center_id"
   end

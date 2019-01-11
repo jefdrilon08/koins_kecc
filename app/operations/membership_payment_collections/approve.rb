@@ -11,6 +11,8 @@ module MembershipPaymentCollections
       @data_membership_payments = @membership_payment_collection.membership_payments
       @data_equities            = @membership_payment_collection.equities
       @data_accounting_entry    = @membership_payment_collection.accounting_entry
+
+      @date_approved  = Date.today
     end
 
     def execute!
@@ -30,6 +32,7 @@ module MembershipPaymentCollections
 
       @membership_payment_collection.update!(
         status: "approved",
+        date_approved: @date_approved,
         data: @data
       )
 
@@ -43,7 +46,7 @@ module MembershipPaymentCollections
       @data_id_payments.each do |o|
         config  = {
           id_payment: o,
-          date_paid: @membership_payment_collection.collection_date,
+          date_paid: @date_approved,
           user: @user,
           particular: @data_accounting_entry[:particular]
         }
@@ -53,7 +56,7 @@ module MembershipPaymentCollections
     def process_membership_payments!
       @data_membership_payments.each do |o|
         config  = {
-          date_paid: @membership_payment_collection.collection_date,
+          date_paid: @date_approved,
           membership_payment: o,
           member: Member.find(o[:member_id]),
           user: @user,
@@ -69,7 +72,7 @@ module MembershipPaymentCollections
     def process_equities!
       @data_equities.each do |o|
         config  = { 
-          date_paid: @membership_payment_collection.collection_date,
+          date_paid: @date_approved,
           equity_payment: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
