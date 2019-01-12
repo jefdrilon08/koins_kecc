@@ -1,6 +1,9 @@
 class AccountTransaction < ApplicationRecord
   belongs_to :subsidiary, polymorphic: true
 
+  scope :personal_funds, -> { where(transaction_type: ["deposit", "withdraw"]) }
+  scope :personal_funds_deposits, -> { where(transaction_type: "deposit") }
+  scope :presonal_funds_withdrawals, -> { where(transaction_type: "withdraw") }
   scope :savings, -> { where(transaction_type: ["deposit", "withdraw"]).order("transacted_at ASC") }
   scope :savings_deposits, -> { where(transaction_type: "deposit").order("transacted_at ASC") }
   scope :savings_withdrawals, -> { where(transaction_type: "withdraw").order("transacted_at ASC") }

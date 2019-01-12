@@ -122,7 +122,7 @@ namespace :api do
 
     namespace :data_stores do
       post "/personal_funds/queue", to: "personal_funds#queue"
-      post "/personal_funds/fetch", to: "personal_funds#fetch"
+      get "/personal_funds/fetch", to: "personal_funds#fetch"
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"

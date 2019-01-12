@@ -63,23 +63,15 @@ module MemberAccounts
           account_type: s.account_type,
           account_subtype: s.account_subtype,
           member_id: @member.id,
-          balance: 0.00,
-          account_transaction_id: ""
+          balance: 0.00
         }
 
         m_account = member_accounts.select{ |o| o[:account_type] == s.account_type && o[:account_subtype] == s.account_subtype }.first
 
         if m_account.present?
-          latest_transaction  = AccountTransaction.approved_member_account_transactions(
-                                  m_account[:id], @as_of
-                                ).order(
-                                  "transacted_at ASC, created_at ASC"
-                                ).last
-
-          if latest_transaction.present?
-            account[:balance]                 = latest_transaction.data.with_indifferent_access[:ending_balance].to_f.round(2)
-            account[:account_transaction_id]  = latest_transaction.id
-          end
+          deposits          = AccountTransaction.personal_funds_deposits.where("subsidiary_id = ? AND transacted_at <= ?", m_account[:id], @as_of).sum(:amount)
+          withdrawals       = AccountTransaction.personal_funds_withdrawals.where("subsidiary_id = ? AND transacted_at <= ?", m_account[:id], @as_of).sum(:amount)
+          account[:balance] = (deposits - withdrawals).round(2)
         end
 
         @data[:accounts] << account
