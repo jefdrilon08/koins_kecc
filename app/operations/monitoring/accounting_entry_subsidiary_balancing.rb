@@ -202,11 +202,9 @@ module Monitoring
         loans = Loan.where(id: [paid_loans.pluck(:id) + active_loans.pluck(:id)])
 
         payments  = AccountTransaction.approved_loan_payments.where(
-                      "DATE(transacted_at) <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
-                      @as_of,
-                      loans.pluck(:id),
-                      "Loan"
-                    ).order("DATE(transacted_at) ASC")
+                      "transacted_at <= ? AND subsidiary_id IN (?)",
+                      @as_of
+                    )
 
         total_principal = loans.sum(:principal).round(2)
         total_interest  = loans.sum(:interest).round(2)

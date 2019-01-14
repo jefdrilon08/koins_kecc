@@ -92,7 +92,7 @@ export default class BillingUIDisplay extends React.Component {
     });
 
     $.ajax({
-      url: "/api/v1/billings/update_particular",
+      url: "/api/v1/billings/update_book",
       method: 'POST',
       data: {
         id: context.state.data.id,
@@ -106,7 +106,7 @@ export default class BillingUIDisplay extends React.Component {
           isSaving: false
         });
 
-        context.props.updateData(data);
+        context.updateData(data);
       },
       error: function(response) {
         alert("Error in updating particular");
