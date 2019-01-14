@@ -4,6 +4,8 @@
       %th
         Collection Date
       %th
+        Date Approved
+      %th
         Center / Branch
       %th.text-right
         Expected Collections
@@ -19,6 +21,9 @@
           = link_to billing_path(o) do
             %strong
               #{o.collection_date.strftime("%b %d, %Y")}
+        %td
+          - if o.date_approved.present?
+            #{o.date_approved.strftime("%b %d, %Y")}
         %td
           #{o.center.name} / #{o.branch}
         %td.text-right

@@ -134,15 +134,6 @@ class Billing < ApplicationRecord
     self.data.with_indifferent_access[:book]
   end
 
-  def date_approved
-    if self.approved?
-      AccountingEntry.where(
-        reference_number: self.reference_number,
-        book: self.book
-      ).first.date_posted.strftime("%B %d, %Y")
-    end
-  end
-
   def book
     self.data.with_indifferent_access[:accounting_entry][:book]
   end
