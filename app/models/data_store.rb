@@ -23,6 +23,14 @@ class DataStore < ApplicationRecord
     end
   end
 
+  def progress_as_percent
+    if meta.present? and meta.with_indifferent_access[:progress].present?
+      "#{meta.with_indifferent_access[:progress]}%"
+    else
+      "0%"
+    end
+  end
+
   def processing?
     self.status == "processing"
   end

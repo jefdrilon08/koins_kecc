@@ -8,9 +8,15 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @members  = Member.active.where(branch_id: @branch.id).order("last_name ASC")
+      @members  = Member.where(branch_id: @branch.id).order("last_name ASC")
 
       @default_member_accounts  = Settings.default_member_accounts
+
+      # For progress update
+      @data_store_id  = @config[:data_store_id]
+      if @data_store_id.present?
+        @data_store = DataStore.find(@data_store_id)
+      end
 
       if @default_member_accounts.blank?
         raise "Settings not found: default_member_accounts"
@@ -37,14 +43,31 @@ module Branches
     end
 
     def execute!
-      @data[:records] = @members.map{ |o| 
-                          ::Members::ComputePersonalFunds.new(
-                            config: {
-                              member: o,
-                              as_of: @as_of
-                            }
-                          ).execute!
-                        }
+      size      = @members.size
+
+      @members.each_with_index do |o, i|
+        @data[:records] <<  ::Members::ComputePersonalFunds.new(
+                              config: {
+                                member: o,
+                                as_of: @as_of
+                              }
+                            ).execute!    
+
+        # Update progress
+        if @data_store.present?
+          meta      = @data_store.meta.with_indifferent_access
+          progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+
+          meta[:progress] = progress
+
+          @data_store.update!(
+            meta: meta
+          )
+        end
+      end
+
+      @data[:officers]  = @data[:records].map{ |mr| mr[:officer] }.uniq
+      @data[:centers]  = @data[:records].map{ |mr| mr[:center] }.uniq
 
 #      @data[:officers]  = @data[:member_records].map{ |mr| mr[:officer] }.uniq.map{ |officer|
 #                            {

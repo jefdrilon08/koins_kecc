@@ -10,6 +10,22 @@ module Api
           if @record.blank?
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
           else
+            records = @record.data.with_indifferent_access[:records]
+
+            if params[:officer_id].present?
+              records = records.select{ |o|
+                          o[:officer][:id] == params[:officer_id]
+                        }
+            end
+
+            if params[:center_id].present?
+              records = records.select{ |o|
+                          o[:center][:id] == params[:center_id]
+                        }
+            end
+
+            @record.data["records"] = records
+
             render json: @record
           end
         end
@@ -28,7 +44,8 @@ module Api
                           branch_id: @branch.id,
                           branch_name: @branch.name,
                           as_of: @as_of,
-                          data_store_type: @data_store_type
+                          data_store_type: @data_store_type,
+                          progress: 0
                         },
                         data: {
                           status: "processing"

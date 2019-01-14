@@ -17,16 +17,33 @@ export default class ShowDisplay extends React.Component {
       isLoading: true,
       data: false,
       errors: false,
-      accountHeaders: []
+      accountHeaders: [],
+      officers: [],
+      centers: [],
+      currentOfficerId: "",
+      currentCenterId: ""
     };
   }
 
-  componentDidMount() {
-    var context = this;
+  fetch(options) {
+    var context   = this;
+    var officerId = options.officerId || "";
+    var centerId  = options.centerId || "";
 
     var data  = {
-      id: this.props.id
+      id: this.props.id,
+      officer_id: officerId,
+      center_id: centerId
     }
+
+    console.log("fetch (data):");
+    console.log(data);
+
+    this.setState({
+      currentOfficerId: officerId,
+      currentCenterId: centerId,
+      isLoading: true
+    });
 
     $.ajax({
       url: "/api/v1/data_stores/personal_funds/fetch",
@@ -35,12 +52,51 @@ export default class ShowDisplay extends React.Component {
       success: function(response) {
         console.log(response);
 
-        // Setup account headers
-        var accountHeaders  = [];
+        context.setState({
+          isLoading: false,
+          data: response
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Something went wrong when fetching data store");
+      }
+    });
+  }
+
+  componentDidMount() {
+    var context = this;
+
+    $.ajax({
+      url: "/api/v1/data_stores/personal_funds/fetch",
+      data: {
+        id: context.props.id
+      },
+      method: 'GET',
+      success: function(response) {
+        console.log(response);
+
+        // Setup account headers, officers and centers
+        var accountHeaders    = [];
+        var officers          = [];
+        var centers           = [];
+
         if(response.data.records.length > 0) {
           for(var i = 0; i < response.data.records[0].accounts.length; i++) {
             accountHeaders.push(
               response.data.records[0].accounts[i].account_subtype
+            );
+          }
+          
+          for(var i = 0; i < response.data.officers.length; i++) {
+            officers.push(
+              response.data.officers[i]
+            );
+          }
+
+          for(var i = 0; i < response.data.centers.length; i++) {
+            centers.push(
+              response.data.centers[i]
             );
           }
         }
@@ -48,7 +104,9 @@ export default class ShowDisplay extends React.Component {
         context.setState({
           isLoading: false,
           accountHeaders: accountHeaders,
-          data: response
+          data: response,
+          officers: officers,
+          centers: centers
         });
       },
       error: function(response) {
@@ -160,7 +218,7 @@ export default class ShowDisplay extends React.Component {
 
     for(var i = 0; i < records.length; i++) {
       for(var j = 0; j < records[i].accounts.length; j++) {
-        totals[j] += records[i].accounts[j].balance;
+        totals[j] += parseFloat(records[i].accounts[j].balance);
       }
     }
 
@@ -173,6 +231,72 @@ export default class ShowDisplay extends React.Component {
     }
 
     return columns;
+  }
+
+  handleOfficerChanged(event) {
+    this.fetch({
+      officerId: event.target.value
+    });
+  }
+
+  handleCenterChanged(event) {
+    this.fetch({
+      centerId: event.target.value
+    });
+  }
+
+  renderFilter() {
+    var officerOptions  = [
+      <option key={"officer-select"} value="">
+        -- SELECT --
+      </option>
+    ];
+    var centerOptions   = [
+      <option key={"center-select"} value="">
+        -- SELECT --
+      </option>
+    ];
+
+    for(var i = 0; i < this.state.officers.length; i++) {
+      officerOptions.push(
+        <option key={"officer-" + i} value={this.state.officers[i].id}>
+          {this.state.officers[i].last_name + ", " + this.state.officers[i].first_name}
+        </option>
+      );
+    }
+
+    for(var i = 0; i < this.state.centers.length; i++) {
+      centerOptions.push(
+        <option key={"center-" + i} value={this.state.centers[i].id}>
+          {this.state.centers[i].name}
+        </option>
+      );
+    }
+
+    return  (
+      <div className="row">
+        <div className="col">
+          <div className="form-group">
+            <label>
+              Officer:
+            </label>
+            <select value={this.state.currentOfficerId} onChange={this.handleOfficerChanged.bind(this)} className="form-control">
+              {officerOptions}
+            </select>
+          </div>
+        </div>
+        <div className="col">
+          <div className="form-group">
+            <label>
+              Center:
+            </label>
+            <select value={this.state.currentCenterId} onChange={this.handleCenterChanged.bind(this)} className="form-control">
+              {centerOptions}
+            </select>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   renderDisplay() {
@@ -205,6 +329,7 @@ export default class ShowDisplay extends React.Component {
     } else {
       return  (
         <div>
+          {this.renderFilter()}
           {this.renderDisplay()}
         </div>
       );

@@ -12,7 +12,8 @@ module DataStores
       data_result = ::Branches::ComputePersonalFunds.new(
                       config: {
                         branch: @branch,
-                        as_of: @as_of
+                        as_of: @as_of,
+                        data_store_id: @config[:id]
                       }
                     ).execute!
 

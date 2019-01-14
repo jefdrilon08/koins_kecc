@@ -24,6 +24,11 @@
           - if o.processing?
             .badge.badge-info
               Processing
+            .progress.progress-xs
+              .progress-bar.bg-success{ style: "width: #{o.progress_as_percent}" }
+            %center
+              %small
+                #{o.progress_as_percent}
           - elsif o.done?
             .badge.badge-success
               Done
