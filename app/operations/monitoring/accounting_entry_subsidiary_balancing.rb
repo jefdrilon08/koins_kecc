@@ -203,7 +203,8 @@ module Monitoring
 
         payments  = AccountTransaction.approved_loan_payments.where(
                       "transacted_at <= ? AND subsidiary_id IN (?)",
-                      @as_of
+                      @as_of,
+                      loans.pluck(:id)
                     )
 
         total_principal = loans.sum(:principal).round(2)
