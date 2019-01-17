@@ -114,15 +114,17 @@ module Closing
       # Expense entries: debit accounts
       @expenses_accounting_codes.each do |a|
         debit_entries = JournalEntry.debit.joins(:accounting_entry).where(
-                          "accounting_entries.status = ? AND accounting_code_id = ?",
+                          "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
                           "approved",
-                          a.id
+                          a.id,
+                          @branch.id
                         )
 
         credit_entries  = JournalEntry.credit.joins(:accounting_entry).where(
-                            "accounting_entries.status = ? AND accounting_code_id = ?",
+                            "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
                             "approved",
-                            a.id
+                            a.id,
+                            @branch.id
                           )
 
 
@@ -131,30 +133,46 @@ module Closing
         net           = (total_debit - total_credit).round(2)
 
         if net != 0
-          @data[:original_entries][:amount_debit] += net
+          if net > 0
+            @data[:original_entries][:amount_debit] += net
 
-          d = {
-            accounting_code: a,
-            debit: net,
-            credit: 0.00
-          }
+            d = {
+              accounting_code: a,
+              debit: net,
+              credit: 0.00
+            }
 
-          @data[:original_entries][:debit] << d
+            @data[:original_entries][:debit] << d
+          else
+            net = net * -1
+
+            @data[:original_entries][:amount_credit] += net
+
+            d = {
+              accounting_code: a,
+              debit: 0.00,
+              credit: net
+            }
+
+            @data[:original_entries][:credit] << d
+          end
         end
       end
 
       # Income entries: credit accounts
       @income_accounting_codes.each do |a|
         debit_entries = JournalEntry.debit.joins(:accounting_entry).where(
-                          "accounting_entries.status = ? AND accounting_code_id = ?",
+                          "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
                           "approved",
-                          a.id
+                          a.id,
+                          @branch.id
                         )
 
         credit_entries  = JournalEntry.credit.joins(:accounting_entry).where(
-                            "accounting_entries.status = ? AND accounting_code_id = ?",
+                            "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
                             "approved",
-                            a.id
+                            a.id,
+                            @branch.id
                           )
 
         total_debit   = debit_entries.sum(:amount).round(2)
@@ -162,15 +180,29 @@ module Closing
         net           = (total_credit - total_debit).round(2)
 
         if net != 0
-          @data[:original_entries][:amount_credit] += net
+          if net > 0
+            @data[:original_entries][:amount_credit] += net
 
-          d = {
-            accounting_code: a,
-            debit: 0.00,
-            credit: net
-          }
+            d = {
+              accounting_code: a,
+              debit: 0.00,
+              credit: net
+            }
 
-          @data[:original_entries][:credit] << d
+            @data[:original_entries][:credit] << d
+          else
+            net = net * -1
+
+            @data[:original_entries][:amount_debit] += net
+
+            d = {
+              accounting_code: a,
+              debit: net,
+              credit: 0.00
+            }
+
+            @data[:original_entries][:debit] << d
+          end
         end
 
       end
