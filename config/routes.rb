@@ -51,6 +51,10 @@ Rails.application.routes.draw do
   get "/accounting/books/misc", to: "accounting#misc", as: :accounting_books_misc
   get "/accounting/form", to: "accounting#form", as: :accounting_form
 
+  namespace :accounting do
+    resources :year_end_closings, only: [:index, :show, :destroy]
+  end
+
   # Billing
   resources :billings, only: [:index, :show, :destroy]
 
