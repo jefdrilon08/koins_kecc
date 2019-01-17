@@ -7,6 +7,10 @@
     For Branch #{@branch} - #{@year}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      = link_to accounting_year_end_closing_path(@record), method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
-        .fa.fa-times
-        Delete
+      - if @record.status == "done"
+        = link_to "#", class: 'btn', id: 'btn-approve' do
+          .fa.fa-check
+          Approve
+        = link_to accounting_year_end_closing_path(@record), method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
+          .fa.fa-times
+          Delete

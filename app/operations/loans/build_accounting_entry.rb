@@ -364,7 +364,7 @@ module Loans
 
               amount  = val * (multiplier + offset)
             else
-              amount  = s_deduction.amount
+              amount  = val
             end
 
             journal_entries << {

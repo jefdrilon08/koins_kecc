@@ -4,6 +4,27 @@ module Api
       class YearEndClosingsController < ApplicationController
         before_action :authenticate_user!
 
+        def approve
+          record  = DataStore.year_end_closings.where(id: params[:id]).first 
+
+          config  = {
+            data_store: record,
+            user: current_user
+          }
+
+          errors  = ::Closing::ValidateApproveYearEndClosing.new(
+                      config: config
+                    ).execute!
+
+          if errors[:full_messages] > 0
+            render json: errors, status: 400
+          else
+            ::Closing::ApproveYearEndClosing.new(
+              config: config
+            ).execute!
+          end
+        end
+
         def queue
           @data_store_type  = "YEAR_END_CLOSING"
           @record           = DataStore.year_end_closings.where(id: params[:id]).first 
