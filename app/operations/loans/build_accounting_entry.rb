@@ -399,6 +399,10 @@ module Loans
       # Cash in bank for amount released
       accounting_code = AccountingCode.find(@settings_branch_accounting_codes.cash_in_bank_accounting_code_id)
 
+      if @settings.amount_released_accounting_code_id.present?
+        accounting_code = AccountingCode.find(@settings.amount_released_accounting_code_id)
+      end
+
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,
