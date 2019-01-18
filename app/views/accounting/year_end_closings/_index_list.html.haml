@@ -35,6 +35,9 @@
           - elsif o.error?
             .badge.badge-danger
               Error
+          - elsif o.closed?
+            .badge.badge-warning
+              Closed
         %td.text-center
           %small
             #{o.created_at.localtime}

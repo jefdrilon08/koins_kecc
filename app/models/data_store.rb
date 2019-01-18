@@ -32,6 +32,10 @@ class DataStore < ApplicationRecord
     end
   end
 
+  def closed?
+    self.status == "closed"
+  end
+
   def processing?
     self.status == "processing"
   end

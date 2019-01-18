@@ -16,7 +16,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages] > 0
+          if errors[:full_messages].size > 0
             render json: errors, status: 400
           else
             ::Closing::ApproveYearEndClosing.new(
