@@ -4,4 +4,8 @@ class MonitoringController < ApplicationController
   def accounting_entry_subsidiary_balancing
     @branches = @branches.map{ |o| { id: o.id, name: o.name } }
   end
+
+  def accounting_entry_precision
+    @branches = @branches.map{ |o| { id: o.id, name: o.name } }
+  end
 end

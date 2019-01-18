@@ -1,0 +1,12 @@
+= render partial: "accounting_entry_precision_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          #content
+
+#parameters{ data: { branches: "#{@branches.to_json}" } }
+
+= javascript_include_tag "MonitoringAccountingEntryPrecision.min.react"
