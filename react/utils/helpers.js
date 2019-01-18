@@ -23,7 +23,7 @@ export function numberAsPercent(x) {
 }
 
 export function numberWithCommas(x) {
-  x = (Math.round(x * 100) / 100).toFixed(2);
+  x = (Math.round(x * 100) / 100).toFixed(3);
 
   if(x < 0) {
     x = x * -1; 

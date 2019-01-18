@@ -27,7 +27,7 @@ module Billings
         }
       end
 
-      if @data.present? and @data[:or_number].blank?
+      if @data.present? and @data[:or_number].blank? and @data[:accounting_entry][:book].present? and @data[:accounting_entry][:book] == "CRB"
         @errors[:messages] << {
           key: "or_number",
           message: "no or number found"
