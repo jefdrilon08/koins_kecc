@@ -36,6 +36,7 @@ module Closing
       @meta[:date_closed] = @current_date
       
       @data[:accounting_entry][:reference_number] = accounting_entry.reference_number
+      @data[:accounting_entry][:id]               = accounting_entry.id
 
       @data_store.update!(
         meta: @meta,
