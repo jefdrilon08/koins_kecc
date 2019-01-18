@@ -82,15 +82,15 @@ module Accounting
         cr_amount = 0.00
 
         if dr_hash.has_key? accounting_code.id.to_s
-          dr_amount = dr_hash[accounting_code.id.to_s].to_f
+          dr_amount = dr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
         if cr_hash.has_key? accounting_code.id.to_s
-          cr_amount = cr_hash[accounting_code.id.to_s].to_f
+          cr_amount = cr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
         if accounting_code.debit_entry?
-          dr_amount = dr_amount - cr_amount
+          dr_amount = (dr_amount - cr_amount).round(2)
           cr_amount = 0.00
 
           if dr_amount < 0
@@ -98,7 +98,7 @@ module Accounting
             dr_amount = 0.00
           end
         elsif accounting_code.credit_entry?
-          cr_amount = cr_amount - dr_amount
+          cr_amount = (cr_amount - dr_amount).round(2)
           dr_amount = 0.00
 
           if cr_amount < 0
@@ -118,6 +118,9 @@ module Accounting
         @data[:total_beginning_debit] += dr_amount
         @data[:total_beginning_credit] += cr_amount
       end
+
+      @data[:total_beginning_debit]   = @data[:total_beginning_debit].round(2)
+      @data[:total_beginning_credit]  = @data[:total_beginning_credit].round(2)
     end
 
     def compute_beginning_income_and_expenses!
@@ -152,15 +155,15 @@ module Accounting
         cr_amount = 0.00
 
         if dr_hash.has_key? accounting_code.id.to_s
-          dr_amount = dr_hash[accounting_code.id.to_s].to_f
+          dr_amount = dr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
         if cr_hash.has_key? accounting_code.id.to_s
-          cr_amount = cr_hash[accounting_code.id.to_s].to_f
+          cr_amount = cr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
         if accounting_code.debit_entry?
-          dr_amount = dr_amount - cr_amount
+          dr_amount = (dr_amount - cr_amount).round(2)
           cr_amount = 0.00
 
           if dr_amount < 0
@@ -168,7 +171,7 @@ module Accounting
             dr_amount = 0.00
           end
         elsif accounting_code.credit_entry?
-          cr_amount = cr_amount - dr_amount
+          cr_amount = (cr_amount - dr_amount).round(2)
           dr_amount = 0.00
 
           if cr_amount < 0
@@ -188,6 +191,9 @@ module Accounting
         @data[:total_beginning_debit] += dr_amount
         @data[:total_beginning_credit] += cr_amount
       end
+
+      @data[:total_beginning_debit]   = @data[:total_beginning_debit].round(2)
+      @data[:total_beginning_credit]  = @data[:total_beginning_credit].round(2)
     end
 
     def compute_current_assets_and_liabilities_and_equities!
@@ -222,11 +228,11 @@ module Accounting
         cr_amount = 0.00
 
         if dr_hash.has_key? accounting_code.id.to_s
-          dr_amount = dr_hash[accounting_code.id.to_s].to_f
+          dr_amount = dr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
         if cr_hash.has_key? accounting_code.id.to_s
-          cr_amount = cr_hash[accounting_code.id.to_s].to_f
+          cr_amount = cr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
 #        if accounting_code.debit_entry?
@@ -258,6 +264,9 @@ module Accounting
         @data[:total_current_debit] += dr_amount
         @data[:total_current_credit] += cr_amount
       end
+
+      @data[:total_current_debit]   = @data[:total_current_debit].round(2)
+      @data[:total_current_credit]  = @data[:total_current_credit].round(2)
     end
 
     def compute_current_income_and_expenses!
@@ -294,11 +303,11 @@ module Accounting
         cr_amount = 0.00
 
         if dr_hash.has_key? accounting_code.id.to_s
-          dr_amount = dr_hash[accounting_code.id.to_s].to_f
+          dr_amount = dr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
         if cr_hash.has_key? accounting_code.id.to_s
-          cr_amount = cr_hash[accounting_code.id.to_s].to_f
+          cr_amount = cr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
 #        if accounting_code.debit_entry?
@@ -330,6 +339,9 @@ module Accounting
         @data[:total_current_debit] += dr_amount
         @data[:total_current_credit] += cr_amount
       end
+
+      @data[:total_current_debit]   = @data[:total_current_debit].round(2)
+      @data[:total_current_credit]  = @data[:total_current_credit].round(2)
     end
 
     def compute_ending!
@@ -344,7 +356,7 @@ module Accounting
         cr_amount = beginning_cr_amount + current_cr_amount
 
         if accounting_code.debit_entry?
-          dr_amount = dr_amount - cr_amount
+          dr_amount = (dr_amount - cr_amount).round(2)
           cr_amount = 0.00
 
           if dr_amount < 0
@@ -352,7 +364,7 @@ module Accounting
             dr_amount = 0.00
           end
         elsif accounting_code.credit_entry?
-          cr_amount = cr_amount - dr_amount
+          cr_amount = (cr_amount - dr_amount).round(2)
           dr_amount = 0.00
 
           if cr_amount < 0
@@ -372,6 +384,9 @@ module Accounting
         @data[:total_ending_debit] += dr_amount
         @data[:total_ending_credit] += cr_amount
       end
+
+      @data[:total_ending_debit]  = @data[:total_ending_debit].round(2)
+      @data[:total_ending_credit] = @data[:total_ending_credit].round(2)
     end
   end
 end
