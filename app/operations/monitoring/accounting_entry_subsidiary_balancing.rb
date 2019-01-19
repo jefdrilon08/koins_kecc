@@ -185,8 +185,7 @@ module Monitoring
         d[:accounting_entry_balance]  = (debit_amount - credit_amount).round(2)
 
         paid_loans  = Loan.paid.where(
-                        "date_approved >= ? AND date_completed <= ? AND branch_id = ? AND loan_product_id = ?",
-                        @as_of,
+                        "date_approved <= ? AND branch_id = ? AND loan_product_id = ?",
                         @as_of,
                         @branch.id,
                         loan_product.id
@@ -199,7 +198,7 @@ module Monitoring
                           loan_product.id
                         )
 
-        loans = Loan.where(id: [paid_loans.pluck(:id) + active_loans.pluck(:id)])
+        loans = paid_loans.or(active_loans)
 
         payments  = AccountTransaction.approved_loan_payments.where(
                       "transacted_at <= ? AND subsidiary_id IN (?)",

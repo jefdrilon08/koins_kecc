@@ -34,12 +34,12 @@ module Billings
         }
       end
 
-      if @billing.collection_date.try(:to_date) > @current_date
-        @errors[:messages] << {
-          key: "collection_date",
-          message: "Cannot approve billing dated #{@billing.collection_date} for current date #{@current_date}"
-        }
-      end
+#      if @billing.collection_date.try(:to_date) > @current_date
+#        @errors[:messages] << {
+#          key: "collection_date",
+#          message: "Cannot approve billing dated #{@billing.collection_date} for current date #{@current_date}"
+#        }
+#      end
 
       if @data.present? and @data[:accounting_entry][:particular].blank?
         @errors[:messages] << {

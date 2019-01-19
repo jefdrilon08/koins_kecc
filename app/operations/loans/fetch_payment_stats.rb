@@ -7,7 +7,9 @@ module Loans
       @date_paid  = @config[:date_paid]
 
       @unpaid_amortization  = @loan.amortization_schedule_entries.unpaid
-      @amount_due           = @unpaid_amortization.where("due_date <= ?", @date_paid).sum("principal_balance + interest_balance").round(2)
+      @amount_due           = @unpaid_amortization.where(
+                                "due_date <= ?", @date_paid
+                              ).sum("principal_balance + interest_balance").round(2)
 
       @data = {
         principal_paid: 0.00,

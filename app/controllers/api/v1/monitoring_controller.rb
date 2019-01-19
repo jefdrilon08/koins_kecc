@@ -21,7 +21,7 @@ module Api
 
       def accounting_entry_subsidiary_balancing
         branch  = Branch.where(id: params[:branch_id]).first
-        as_of   = params[:as_of].try(:to_date) || Date.today
+        as_of   = params[:as_of].try(:to_date)
 
         data  = ::Monitoring::AccountingEntrySubsidiaryBalancing.new(
                   config: {
