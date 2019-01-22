@@ -28,4 +28,8 @@
     %li{ class: "nav-item #{params[:controller] == 'accounting_entries_summaries' ? 'active' : ''}" }
       = link_to "/data_stores/accounting_entries_summaries", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
-        Acc. Entries Summary
+        Voucher Summary
+    %li{ class: "nav-item #{params[:controller] == 'soa_expenses' ? 'active' : ''}" }
+      = link_to "/data_stores/soa_expenses", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        SOA Expenses

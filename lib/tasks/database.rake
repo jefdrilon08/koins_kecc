@@ -1,4 +1,30 @@
 namespace :db do
+  task :update_nil_date_released => :environment do
+    loans = Loan.active_or_paid.where(date_released: nil)
+    size  = loans.size
+
+    puts "Updating #{size} loans with no date_released..."
+
+    loans.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Examining #{o.id}... #{progress}%%")
+
+      branch                = o.branch
+      accounting_entry_data = o.data.with_indifferent_access[:accounting_entry]
+
+      date_released = AccountingEntry.where(
+                        reference_number: accounting_entry_data[:reference_number],
+                        book: accounting_entry_data[:book],
+                        branch_id: branch.id
+                      ).first.date_posted
+
+      o.update!(date_released: date_released)
+    end
+
+    puts ""
+    puts "Done!"
+  end
+
   task :check_loan_payments => :environment do
     as_of         = ENV['AS_OF'].try(:to_date) || Date.today
     branch        = Branch.find(ENV['BRANCH_ID'])

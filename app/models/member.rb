@@ -41,6 +41,7 @@ class Member < ApplicationRecord
   scope :active, -> { where(status: "active").order("last_name ASC") }
   scope :pending, -> { where(status: "pending").order("last_name ASC") }
   scope :resigned, -> { where(status: "resigned").order("last_name ASC") }
+  scope :active_and_resigned, -> { where(status: ["active", "resigned"]).order("last_name ASC") }
 
   before_validation :load_defaults
 

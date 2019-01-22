@@ -103,6 +103,10 @@ Rails.application.routes.draw do
     get "/accounting_entries_summaries", to: "accounting_entries_summaries#index"
     get "/accounting_entries_summaries/:id", to: "accounting_entries_summaries#show"
     delete "/accounting_entries_summaries/:id", to: "accounting_entries_summaries#destroy"
+
+    get "/soa_expenses", to: "soa_expenses#index"
+    get "/soa_expenses/:id", to: "soa_expenses#show"
+    delete "/soa_expenses/:id", to: "soa_expenses#destroy"
   end
 
   namespace :accounting do

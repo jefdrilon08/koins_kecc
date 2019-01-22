@@ -126,6 +126,8 @@ namespace :api do
       get "/personal_funds/fetch", to: "personal_funds#fetch"
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
       post "/accounting_entries_summaries/queue", to: "accounting_entries_summaries#queue"
+      post "/soa_expenses/queue", to: "soa_expenses#queue"
+      get "/soa_expenses/fetch", to: "soa_expenses#fetch"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
       post "/member_counts/queue", to: "member_counts#queue"

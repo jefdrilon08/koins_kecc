@@ -56,7 +56,7 @@ module Api
       def fetch_members
         withdrawal_collection = WithdrawalCollection.find(params[:id])
 
-        members = Member.active.where(
+        members = Member.active_and_resigned.where(
                     branch_id: withdrawal_collection.branch_id
                   ).where.not(
                     id: withdrawal_collection.member_ids

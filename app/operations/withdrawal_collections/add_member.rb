@@ -21,8 +21,8 @@ module WithdrawalCollections
 
       # Build member records
       @records  = []
-      @data[:headers].each_with_index do |o, i|
-        member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o, account_type: "SAVINGS").first
+      @data[:totals].each_with_index do |o, i|
+        member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o[:key], account_type: o[:record_type]).first
         enabled         = false
 
         if member_account
@@ -33,8 +33,8 @@ module WithdrawalCollections
           amount: 0.00,
           enabled: enabled,
           member_id: @member.id,
-          record_type: "SAVINGS",
-          account_subtype: o,
+          record_type: o[:record_type],
+          account_subtype: o[:key],
           member_account_id: member_account.id
         }
       end
