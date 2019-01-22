@@ -1,0 +1,31 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "20%" }
+        Code
+      %th{ width: "30%" }
+        Name
+      %th.text-right{ width: "25%" }
+        Debit
+      %th.text-right{ width: "25%" }
+        Credit
+  %tbody
+    - @data[:records].each do |o|
+      %tr
+        %td
+          %strong
+            #{o[:accounting_code][:code]}
+        %td
+          %strong
+            #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:debit], unit: "")}
+        %td.text-right
+          #{number_to_currency(o[:credit], unit: "")}
+    %tr
+      %th{ colspan: "2" }
+        TOTAL
+      %th.text-right
+        #{number_to_currency(@data[:total_debit], unit: "")}
+      %th.text-right
+        #{number_to_currency(@data[:total_credit], unit: "")}

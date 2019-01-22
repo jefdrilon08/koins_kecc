@@ -9,17 +9,22 @@
           .bs-callout.bs-callout-info
             Create a new data store
           .row
-            .col-md-4.col-xs-12
+            .col-md-3.col-xs-12
               .form-group
                 %label
                   Branch
                 = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
-            .col-md-4.col-xs-12
+            .col-md-3.col-xs-12
+              .form-group
+                %label
+                  Book
+                = select_tag :book, options_for_select(["CRB", "CDB", "JVB", "MISC"]), class: "form-control select-select2", id: "select-book"
+            .col-md-3.col-xs-12
               .form-group
                 %label
                   Start Date
                 = text_field_tag :as_of, @start_date, type: :date, id: "input-start-date", class: 'form-control'
-            .col-md-4.col-xs-12
+            .col-md-3.col-xs-12
               .form-group
                 %label
                   End Date

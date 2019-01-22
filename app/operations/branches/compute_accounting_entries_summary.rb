@@ -12,7 +12,7 @@ module Branches
 
       @accounting_codes = AccountingCode.all.order("code ASC")
 
-      @journal_entries  = JournalEntry.joins(:accounting_entries).where(
+      @journal_entries  = JournalEntry.joins(:accounting_entry).where(
                             "accounting_entries.branch_id = ? AND accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.book = ?",
                             @branch.id,
                             @start_date,
@@ -36,7 +36,9 @@ module Branches
         start_date: @start_date,
         end_date: @end_date,
         book: @book,
-        records: []
+        records: [],
+        total_debit: 0.00,
+        total_credit: 0.00
       }
     end
 
@@ -51,8 +53,13 @@ module Branches
         d[:debit]   = @journal_entries.where(accounting_code_id: a.id, post_type: 'DR').sum(:amount).round(2)
         d[:credit]  = @journal_entries.where(accounting_code_id: a.id, post_type: 'CR').sum(:amount).round(2)
 
-        @data[:records] << d
+        if d[:debit] != 0 || d[:credit] != 0
+          @data[:records] << d
+        end
       end
+
+      @data[:total_debit]   = @journal_entries.where(post_type: 'DR').sum(:amount).round(2)
+      @data[:total_credit]  = @journal_entries.where(post_type: 'CR').sum(:amount).round(2)
 
       @data
     end

@@ -8,22 +8,25 @@ module Api
           data_store_type = params[:data_store_type] || "ACCOUNTING_ENTRIES_SUMMARY"
           start_date      = params[:start_date].try(:to_date)
           end_date        = params[:end_date].try(:to_date)
+          book            = params[:book]
           branch          = @branches.where(id: params[:branch_id]).first
 
           errors  = ::DataStores::ValidateAccountingEntriesSummariesQueue.new(
                       config: {
                         branch: branch,
                         start_date: start_date,
-                        end_date: end_date
+                        end_date: end_date,
+                        book: book
                       }
                     ).execute!
 
-          if errors.empty?
+          if errors[:messages].size == 0
             record  = DataStore.accounting_entries_summaries.where(
-                        "meta->>'branch_id' = ? AND CAST(meta->>'start_date' AS date) = ? AND CAST(meta->>'end_date' AS date) = ?",
+                        "meta->>'branch_id' = ? AND CAST(meta->>'start_date' AS date) = ? AND CAST(meta->>'end_date' AS date) = ? AND meta->>'book' = ?",
                         params[:branch_id],
                         start_date,
-                        end_date
+                        end_date,
+                        book
                       ).first
 
             if record.blank?
@@ -33,6 +36,7 @@ module Api
                             branch_name: branch.name,
                             start_date: start_date,
                             end_date: end_date,
+                            book: book,
                             data_store_type: data_store_type
                           },
                           data: {
@@ -46,7 +50,7 @@ module Api
               data_store_type: data_store_type
             }
 
-            ProcessAccountingEntriesSummaries.perform_later(args)
+            ProcessAccountingEntriesSummary.perform_later(args)
 
             render json: { message: "ok" }
           else

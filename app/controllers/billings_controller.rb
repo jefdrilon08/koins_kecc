@@ -23,7 +23,7 @@ class BillingsController < ApplicationController
       @billings = @billings.where(status: @status)
     end
 
-    @billings = @billings.order("collection_date DESC").page(params[:page]).per(20)
+    @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
   def show

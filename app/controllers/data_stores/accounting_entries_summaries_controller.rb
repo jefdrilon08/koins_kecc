@@ -19,16 +19,18 @@ module DataStores
 
     def show
       @record = DataStore.accounting_entries_summaries.where(id: params[:id]).first
+      @meta   = @record.meta.with_indifferent_access
+      @data   = @record.data.with_indifferent_access
 
       if @record.blank? or @record.processing?
-        redirect_to "/data_stores/accounting_:"
+        redirect_to "/data_stores/accounting_entries_summaries"
       end
     end
 
     def destroy
-      @record = DataStore.branch_loans_stats.where(id: params[:id]).first
+      @record = DataStore.accounting_entries_summaries.where(id: params[:id]).first
       @record.destroy! 
-      redirect_to "/data_stores/branch_loans_stats"
+      redirect_to "/data_stores/accounting_entries_summaries"
     end
   end
 end

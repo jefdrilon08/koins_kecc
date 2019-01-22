@@ -3,6 +3,8 @@
     %tr
       %th
       %th.text-center
+        Book
+      %th.text-center
         Start Date
       %th.text-center
         End Date
@@ -21,6 +23,8 @@
           %strong
             = link_to "/data_stores/accounting_entries_summaries/#{o.id}" do
               .fa.fa-search
+        %td.text-center.text-muted
+          #{o.meta.with_indifferent_access[:book]}
         %td.text-center
           %strong
             #{o.meta.with_indifferent_access[:start_date].to_date.strftime("%b %d, %Y")}

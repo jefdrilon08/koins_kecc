@@ -6,6 +6,7 @@ var Index  = (function() {
   var $btnConfirmNew;
 
   var $selectBranch;
+  var $selectBook;
   var $inputStartDate;
   var $inputEndDate;
 
@@ -18,6 +19,7 @@ var Index  = (function() {
     $btnConfirmNew = $("#btn-confirm-new");
 
     $selectBranch   = $("#select-branch");
+    $selectBook     = $("#select-book");
     $inputStartDate = $("#input-start-date");
     $inputEndDate   = $("#input-end-date");
 
@@ -34,11 +36,13 @@ var Index  = (function() {
     $btnConfirmNew.on("click", function() {
       var startDate = $inputStartDate.val();
       var endDate   = $inputEndDate.val();
-      var branchId  = $selectBranch.val();;
+      var branchId  = $selectBranch.val();
+      var book      = $selectBook.val();
 
       $message.html("Loading...");
       $btnConfirmNew.prop("disabled", true);
       $selectBranch.prop("disabled", true);
+      $selectBook.prop("disabled", true);
       $inputStartDate.prop("disabled", true);
       $inputEndDate.prop("disabled", true);
 
@@ -46,6 +50,7 @@ var Index  = (function() {
         start_date: startDate,
         end_date: endDate,
         branch_id: branchId,
+        book: book,
         authenticity_token: authenticityToken
       }
 
@@ -76,6 +81,7 @@ var Index  = (function() {
 
             $btnConfirmNew.prop("disabled", false);
             $selectBranch.prop("disabled", false);
+            $selectBook.prop("disabled", false);
             $inputStartDate.prop("disabled", false);
             $inputEndDate.prop("disabled", false);
           }

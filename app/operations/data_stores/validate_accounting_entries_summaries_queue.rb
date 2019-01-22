@@ -8,9 +8,24 @@ module DataStores
       @branch     = @config[:branch]
       @start_date = @config[:start_date].try(:to_date)
       @end_date   = @config[:end_date].try(:to_date)
+      @book       = @config[:book]
     end
 
     def execute!
+      if @book.blank?
+        @errors[:messages] << {
+          key: "book",
+          message: "Book not found"
+        }
+      end
+
+      if @book.present? && !["JVB", "CRB", "CDB", "MISC"].include?(@book)
+        @errors[:messages] << {
+          key: "book",
+          message: "Invalid book"
+        }
+      end
+
       if @branch.blank?
         @errors[:messages] << {
           key: "branch",
@@ -44,17 +59,13 @@ module DataStores
         }
       end
 
-      not_yet_implemented!
+      #not_yet_implemented!
 
       @errors[:messages].each do |e|
         @errors[:full_messages] << e[:message]
       end
 
       @errors
-    end
-
-    def empty?
-      @errors[:full_messages] == 0
     end
   end
 end
