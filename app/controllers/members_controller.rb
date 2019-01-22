@@ -13,7 +13,7 @@ class MembersController < ApplicationController
     if @q.present?
       @members  = @members.where(
                     "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
-                    q: "#{@q.upcase}%"
+                    q: "%#{@q.upcase}%"
                   )
     end
 

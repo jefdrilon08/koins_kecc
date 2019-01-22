@@ -15,6 +15,8 @@ class DataStore < ApplicationRecord
   scope :branch_repayment_reports, -> { where("meta->>'data_store_type' = ?", "BRANCH_REPAYMENT_REPORT") }
   scope :year_end_closings, -> { where("meta->>'data_store_type' = ?", "YEAR_END_CLOSING") }
   scope :personal_funds, -> { where("meta->>'data_store_type' = ?", "PERSONAL_FUNDS") }
+  scope :soa_funds, -> { where("meta->>'data_store_type' = ?", "SOA_FUNDS") }
+  scope :accounting_entries_summaries, -> { where("meta->>'data_store_type' = ?", "ACCOUNTING_ENTRIES_SUMMARY") }
 
   before_validation :load_defaults
 

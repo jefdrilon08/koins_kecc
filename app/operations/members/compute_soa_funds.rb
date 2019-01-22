@@ -1,10 +1,13 @@
 module Members
-  class ComputePersonalFunds
+  class ComputeSoaFunds
     def initialize(config:)
       @config = config
-
-      @member = @config[:member]
-      @as_of  = @config[:as_of].try(:to_date) || Date.today
+      
+      @member       = @config[:member]
+      @start_date   = @config[:start_date]
+      @end_date     = @config[:end_date]
+      @deposits     = @config[:deposits]
+      @withdrawals  = @config[:withdrawals]
 
       @default_member_accounts  = Settings.default_member_accounts
 
@@ -21,7 +24,8 @@ module Members
           identification_number: @member.identification_number,
           status: @member.status
         },
-        as_of: @as_of,
+        start_date: @start_date,
+        end_date: @end_date,
         center: {
           id: @member.center.id,
           name: @member.center.name
@@ -37,9 +41,8 @@ module Members
           id: @member.branch.id,
           name: @member.branch.name
         },
-        total: 0.00,
-        accounts: [
-        ]
+        total: [],
+        accounts: []
       }
     end
 
@@ -58,42 +61,39 @@ module Members
                           }
                         } 
 
-      @default_member_accounts.each do |s|
-        account = {
-          account_type: s.account_type,
-          account_subtype: s.account_subtype,
-          member_id: @member.id,
-          balance: 0.00,
-          account_transaction_id: ""
+      (@start_date..@end_date).each do |d|
+        row = {
+          date: d,
+          accounts: []
         }
 
-        m_account = member_accounts.select{ |o| o[:account_type] == s.account_type && o[:account_subtype] == s.account_subtype }.first
-        if m_account.present?
-          deposits          = AccountTransaction.personal_funds_deposits.where("subsidiary_id = ? AND DATE(transacted_at) <= ?", m_account[:id], @as_of).sum(:amount)
-          withdrawals       = AccountTransaction.personal_funds_withdrawals.where("subsidiary_id = ? AND DATE(transacted_at) <= ?", m_account[:id], @as_of).sum(:amount)
-          account[:balance] = (deposits - withdrawals).round(2)
+        @default_member_accounts.each do |s|
+          account = {
+            account_type: s.account_type,
+            account_subtype: s.account_subtype,
+            member_id: @member.id,
+            debit: 0.00,
+            credit: 0.00
+          }
+
+          m_account = member_accounts.select{ |o| o[:account_type] == s.account_type && o[:account_subtype] == s.account_subtype }.first
+
+          if m_account.present?
+            @deposits.select{ |t| t[:subsidiary_id] == s.id }.each do |deposit|
+              account[:credit] += deposit[:amount].to_f.round(2)
+            end
+
+            @withdrawals.select{ |t| t[:subsidiary_id] == s.id }.each do |withdrawal|
+              account[:debit] += withdrawal[:amount].to_f.round(2)
+            end
+#            account[:debit]   = AccountTransaction.personal_funds_deposits.where("subsidiary_id = ? AND DATE(transacted_at) = ?", m_account[:id], d).sum(:amount)
+#            account[:credit]  = AccountTransaction.personal_funds_withdrawals.where("subsidiary_id = ? AND DATE(transacted_at) = ?", m_account[:id], d).sum(:amount)
+          end
+
+          row[:accounts] << account
         end
 
-        @data[:accounts] << account
-      end
-
-      # Compute totals
-      @data[:accounts].each do |a|
-        @data[:total] += a[:balance]
-      end
-
-      @data[:total]  = @data[:total].to_f.round(2)
-
-      # Setup officer
-      officer = @member.center.user
-
-      if officer.present?
-        @data[:officer] = {
-          id: officer.id,
-          first_name: officer.first_name,
-          last_name: officer.last_name,
-          identification_number: officer.identification_number
-        }
+        @data[:accounts] << row
       end
 
       @data

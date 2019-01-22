@@ -40,7 +40,7 @@ module MembershipPaymentCollections
                                   member: @member
                                 ).execute!
 
-        while Member.where(identification_number: identification_number).count > 0 do
+        while Member.where("upper(identification_number) = ?", identification_number.upcase).count > 0 do
           # Update branch counter
           old_counter = @member.branch.member_counter || 0
           new_counter = old_counter + 1
