@@ -58,11 +58,27 @@ var Index  = (function() {
           window.location.href="/data_stores/accounting_entries_summaries";
         },
         error: function(response) {
-          $message.html("Something went wrong...");
-          $btnConfirmNew.prop("disabled", false);
-          $selectBranch.prop("disabled", false);
-          $inputStartDate.prop("disabled", false);
-          $inputEndDate.prop("disabled", false);
+          console.log(response.responseText);
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            console.log(err);
+            errors  = ["Something went wrong"];
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmNew.prop("disabled", false);
+            $selectBranch.prop("disabled", false);
+            $inputStartDate.prop("disabled", false);
+            $inputEndDate.prop("disabled", false);
+          }
         }
       });
     });

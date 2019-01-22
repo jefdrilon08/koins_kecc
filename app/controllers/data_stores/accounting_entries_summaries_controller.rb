@@ -11,6 +11,10 @@ module DataStores
       @records  = @records.order(
                     "CAST(meta->>'start_date' AS date) DESC" 
                   ).page(params[:page]).per(20)
+
+      @current_date = Date.today
+      @start_date   = Date.new(@current_date.year, @current_date.month, 1)
+      @end_date     = Date.new(@current_date.year, @current_date.month, -1)
     end
 
     def show
