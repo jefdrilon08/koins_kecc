@@ -21,12 +21,12 @@ module Members
       end
 
       # Validate middle_name
-      if @member_data[:middle_name].blank?
-        @errors[:messages] << {
-          key: "middle_name",
-          message: "Middle name required"
-        }
-      end
+#      if @member_data[:middle_name].blank?
+#        @errors[:messages] << {
+#          key: "middle_name",
+#          message: "Middle name required"
+#        }
+#      end
 
       # Validate last_name
       if @member_data[:last_name].blank?

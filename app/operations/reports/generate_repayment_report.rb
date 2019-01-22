@@ -51,12 +51,14 @@ module Reports
     def execute!
       # Get loans hash array
       @loans.each do |loan|
-        @data_loans <<  ::Reports::GenerateLoanRepaymentReport.new(
-                          config: {
-                            loan: loan,
-                            as_of: @as_of
-                          }
-                        ).execute!
+        if loan.active? || (loan.paid? and loan.date_completed >= @as_of)
+          @data_loans <<  ::Reports::GenerateLoanRepaymentReport.new(
+                            config: {
+                              loan: loan,
+                              as_of: @as_of
+                            }
+                          ).execute!
+        end
       end
 
       @loan_products.each do |o|

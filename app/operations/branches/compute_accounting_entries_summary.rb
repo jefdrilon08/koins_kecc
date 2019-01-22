@@ -53,6 +53,8 @@ module Branches
 
         @data[:records] << d
       end
+
+      @data
     end
   end
 end

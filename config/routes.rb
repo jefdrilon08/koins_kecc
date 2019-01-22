@@ -99,6 +99,10 @@ Rails.application.routes.draw do
     get "/branch_repayment_reports", to: "branch_repayment_reports#index"
     get "/branch_repayment_reports/:id", to: "branch_repayment_reports#show"
     delete "/branch_repayment_reports/:id", to: "branch_repayment_reports#destroy"
+
+    get "/accounting_entries_summaries", to: "accounting_entries_summaries#index"
+    get "/accounting_entries_summaries/:id", to: "accounting_entries_summaries#show"
+    delete "/accounting_entries_summaries/:id", to: "accounting_entries_summaries#destroy"
   end
 
   namespace :accounting do
