@@ -8,20 +8,12 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @paid_loans = Loan.paid.where(
-                      "date_approved >= ? AND date_completed <= ? AND branch_id = ?",
-                      @as_of,
-                      @as_of,
-                      @branch.id
-                    )
-
-      @active_loans = Loan.active.where(
-                        "branch_id = ? AND date_approved <= ?",
-                        @branch.id,
-                        @as_of
-                      )
-
-      @loans  = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
+      @loans  = ::Loans::FetchActiveAsOf.new(
+                  config: {
+                    as_of: @as_of,
+                    branch: @branch
+                  }
+                ).execute!
 
       @payments = AccountTransaction.approved_loan_payments.where(
                     "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
