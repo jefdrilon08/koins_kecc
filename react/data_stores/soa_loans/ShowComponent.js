@@ -118,11 +118,63 @@ export default class ShowComponent extends React.Component {
           <td className="text-right">
             {numberWithCommas(payment.interest_paid)}
           </td>
+          <td className="text-right">
+            {numberWithCommas(parseFloat(payment.principal_paid) + parseFloat(payment.interest_paid))}
+          </td>
         </tr>
       );
     }
 
     return rows;
+  }
+
+  renderTotals() {
+    var total_principal_paid  = 0.00;
+    var total_interest_paid   = 0.00;
+
+    var records = this.state.data.data.records;
+
+    for(var i = 0; i < records.length; i++) {
+      total_principal_paid += parseFloat(records[i].total_principal_paid);
+      total_interest_paid += parseFloat(records[i].total_interest_paid);
+    }
+
+    var total_paid  = total_principal_paid + total_interest_paid;
+
+    return  (
+      <div className="row">
+        <div className="col">
+          <div className="text-center">
+            <h4>
+              Total Principal Paid
+            </h4>
+            <h5 className="text-muted">
+              {numberWithCommas(total_principal_paid)}
+            </h5>
+          </div>
+        </div>
+        <div className="col">
+          <div className="text-center">
+            <h4>
+              Total Interest Paid
+            </h4>
+            <h5 className="text-muted">
+              {numberWithCommas(total_interest_paid)}
+            </h5>
+          </div>
+        </div>
+        <div className="col">
+          <div className="text-center">
+            <h4>
+              Total Paid
+            </h4>
+            <h5 className="text-muted">
+              {numberWithCommas(total_paid)}
+            </h5>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   renderDataRows() {
@@ -151,6 +203,9 @@ export default class ShowComponent extends React.Component {
                 <th className="text-right">
                   Interest
                 </th>
+                <th className="text-right">
+                  Total
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -166,6 +221,9 @@ export default class ShowComponent extends React.Component {
                 </th>
                 <th className="text-right">
                   {numberWithCommas(r.total_interest_paid)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(parseFloat(r.total_principal_paid) + parseFloat(r.total_interest_paid))}
                 </th>
               </tr>
             </tfoot>
@@ -276,6 +334,9 @@ export default class ShowComponent extends React.Component {
   renderDisplay() {
     return  (
       <div>
+        <hr/>
+        {this.renderTotals()}
+        <hr/>
         {this.renderDataRows()}
       </div>
     );
