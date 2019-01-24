@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_11_060533) do
+ActiveRecord::Schema.define(version: 2019_01_23_053506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -65,7 +65,15 @@ ActiveRecord::Schema.define(version: 2019_01_11_060533) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "accounting_fund_id"
+    t.index ["accounting_fund_id"], name: "index_accounting_entries_on_accounting_fund_id"
     t.index ["branch_id"], name: "index_accounting_entries_on_branch_id"
+  end
+
+  create_table "accounting_funds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -465,6 +473,7 @@ ActiveRecord::Schema.define(version: 2019_01_11_060533) do
 
   add_foreign_key "account_transaction_collections", "branches"
   add_foreign_key "account_transaction_collections", "centers"
+  add_foreign_key "accounting_entries", "accounting_funds"
   add_foreign_key "accounting_entries", "branches"
   add_foreign_key "amortization_schedule_entries", "loans"
   add_foreign_key "beneficiaries", "members"

@@ -7,7 +7,8 @@ module LoanProducts
       @as_of        = @config[:as_of].try(:to_date) || Date.today
 
       @paid_loans = Loan.paid.where(
-                      "date_approved <= ? AND loan_product_id = ?",
+                      "date_approved <= ? AND date_completed >= ? AND loan_product_id = ?",
+                      @as_of,
                       @as_of,
                       @loan_product.id
                     )

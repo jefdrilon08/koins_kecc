@@ -12,6 +12,7 @@ class AccountingEntry < ApplicationRecord
   ]
 
   belongs_to :branch
+  belongs_to :accounting_fund, optional: true
 
   has_many :journal_entries, dependent: :destroy
 
