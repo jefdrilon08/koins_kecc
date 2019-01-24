@@ -17,6 +17,7 @@ class DataStore < ApplicationRecord
   scope :personal_funds, -> { where("meta->>'data_store_type' = ?", "PERSONAL_FUNDS") }
   scope :soa_funds, -> { where("meta->>'data_store_type' = ?", "SOA_FUNDS") }
   scope :soa_expenses, -> { where("meta->>'data_store_type' = ?", "SOA_EXPENSES") }
+  scope :soa_loans, -> { where("meta->>'data_store_type' = ?", "SOA_LOANS") }
   scope :accounting_entries_summaries, -> { where("meta->>'data_store_type' = ?", "ACCOUNTING_ENTRIES_SUMMARY") }
 
   before_validation :load_defaults

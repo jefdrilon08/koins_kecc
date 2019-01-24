@@ -1,0 +1,17 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-database
+    Data Stores
+  %li.breadcrumb-item
+    = link_to "/data_stores/soa_loans" do
+      .fa.fa-database
+      SOA Loans
+  %li.breadcrumb-item
+    .fa.fa-file
+    #{@record.data.with_indifferent_access[:branch][:name]} - 
+    #{@record.meta.with_indifferent_access[:start_date].to_date.strftime("%B %d, %Y")} to #{@record.meta.with_indifferent_access[:end_date].to_date.strftime("%B %d, %Y")}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "/data_stores/soa_loans/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
+        .fa.fa-times
+        Delete

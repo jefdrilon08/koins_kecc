@@ -33,3 +33,7 @@
       = link_to "/data_stores/soa_expenses", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         SOA Expenses
+    %li{ class: "nav-item #{params[:controller] == 'soa_loans' ? 'active' : ''}" }
+      = link_to "/data_stores/soa_loans", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        SOA Loans

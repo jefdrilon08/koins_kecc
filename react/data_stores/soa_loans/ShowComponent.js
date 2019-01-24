@@ -44,7 +44,7 @@ export default class ShowComponent extends React.Component {
     });
 
     $.ajax({
-      url: "/api/v1/data_stores/soa_expenses/fetch",
+      url: "/api/v1/data_stores/soa_loans/fetch",
       data: data,
       method: 'GET',
       success: function(response) {
@@ -66,7 +66,7 @@ export default class ShowComponent extends React.Component {
     var context = this;
 
     $.ajax({
-      url: "/api/v1/data_stores/soa_expenses/fetch",
+      url: "/api/v1/data_stores/soa_loans/fetch",
       data: {
         id: context.props.id
       },
@@ -101,35 +101,76 @@ export default class ShowComponent extends React.Component {
     }
   }
 
+  renderPayments(record) {
+    var rows  = [];
+
+    for(var i = 0; i < record.records.length; i++) {
+      var payment = record.records[i];
+
+      rows.push(
+        <tr key={"payment-" + i}>
+          <td>
+            {payment.date}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(payment.principal_paid)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(payment.interest_paid)}
+          </td>
+        </tr>
+      );
+    }
+
+    return rows;
+  }
+
   renderDataRows() {
     var rows  = [];
     var records = this.state.data.data.records;
 
     for(var i = 0; i < records.length; i++) {
+      var r = records[i];
       rows.push(
-        <tr key={"record-item-" + i}>
-          <td className="text-center">
-            {i + 1}
-          </td>
-          <td>
-            {records[i].member.full_name}
-          </td>
-          <td>
-            {records[i].center.name}
-          </td>
-          <td>
-            {records[i].loan_product.name}
-          </td>
-          <td className="text-right">
-            {numberWithCommas(records[i].principal)}
-          </td>
-          <td>
-            {records[i].date_released}
-          </td>
-          <td>
-            {records[i].bank_check_number}
-          </td>
-        </tr>
+        <div>
+          <h5>
+            {r.member.last_name}, {r.member.first_name} &nbsp;
+            <small className="text-muted">
+              {r.loan_product.name}
+            </small>
+          </h5>
+          <table className="table table-bordered table-sm table-xs table-hover">
+            <thead>
+              <tr>
+                <th>
+                  Date
+                </th>
+                <th className="text-right">
+                  Principal
+                </th>
+                <th className="text-right">
+                  Interest
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.renderPayments(r)}
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>
+                  TOTAL
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(r.total_principal_paid)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(r.total_interest_paid)}
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       );
     }
 
@@ -216,7 +257,7 @@ export default class ShowComponent extends React.Component {
 
     return  (
       <tr>
-        <th colSpan="4">
+        <th colSpan="3">
           TOTAL
         </th>
         <td className="text-right">
@@ -235,38 +276,7 @@ export default class ShowComponent extends React.Component {
   renderDisplay() {
     return  (
       <div>
-        <table className="table table-sm table-bordered table-hover" style={{fontSize: "0.9em"}}>
-          <thead>
-            <tr>
-              <th>
-              </th>
-              <th>
-                Member
-              </th>
-              <th>
-                Center
-              </th>
-              <th>
-                Loan Product
-              </th>
-              <th className="text-right">
-                Amount
-              </th>
-              <th>
-                Date Released
-              </th>
-              <th>
-                Check No.
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderDataRows()}
-          </tbody>
-          <tfoot>
-            {this.renderTotal()}
-          </tfoot>
-        </table>
+        {this.renderDataRows()}
       </div>
     );
   }

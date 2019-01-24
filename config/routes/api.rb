@@ -128,6 +128,8 @@ namespace :api do
       post "/accounting_entries_summaries/queue", to: "accounting_entries_summaries#queue"
       post "/soa_expenses/queue", to: "soa_expenses#queue"
       get "/soa_expenses/fetch", to: "soa_expenses#fetch"
+      post "/soa_loans/queue", to: "soa_loans#queue"
+      get "/soa_loans/fetch", to: "soa_loans#fetch"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
       post "/member_counts/queue", to: "member_counts#queue"

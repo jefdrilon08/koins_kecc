@@ -1,11 +1,11 @@
 module Api
   module V1
     module DataStores
-      class SoaExpensesController < ApplicationController
+      class SoaLoansController < ApplicationController
         before_action :authenticate_user!
 
         def fetch
-          record  = DataStore.soa_expenses.where(id: params[:id]).first
+          record  = DataStore.soa_loans.where(id: params[:id]).first
 
           if record.blank?
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
@@ -31,12 +31,12 @@ module Api
         end
 
         def queue
-          data_store_type = params[:data_store_type] || "SOA_EXPENSES"
+          data_store_type = params[:data_store_type] || "SOA_LOANS"
           start_date      = params[:start_date].try(:to_date)
           end_date        = params[:end_date].try(:to_date)
           branch          = @branches.where(id: params[:branch_id]).first
 
-          errors  = ::DataStores::ValidateSoaExpensesQueue.new(
+          errors  = ::DataStores::ValidateSoaLoansQueue.new(
                       config: {
                         branch: branch,
                         start_date: start_date,
@@ -45,7 +45,7 @@ module Api
                     ).execute!
 
           if errors[:messages].size == 0
-            record  = DataStore.soa_expenses.where(
+            record  = DataStore.soa_loans.where(
                         "meta->>'branch_id' = ? AND CAST(meta->>'start_date' AS date) = ? AND CAST(meta->>'end_date' AS date) = ?",
                         params[:branch_id],
                         start_date,
@@ -72,7 +72,7 @@ module Api
               data_store_type: data_store_type
             }
 
-            ProcessSoaExpenses.perform_later(args)
+            ProcessSoaLoans.perform_later(args)
 
             render json: { message: "ok" }
           else

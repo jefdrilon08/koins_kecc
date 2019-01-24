@@ -34,6 +34,7 @@ module Loans
         },
         principal: @loan.principal.round(2),
         date_released: @loan.date_released.strftime("%B %d, %Y"),
+        bank_check_number: @loan.data.with_indifferent_access[:voucher][:bank_check_number],
         check_number: @loan.data.with_indifferent_access[:voucher][:check_number],
         name_of_person_in_check: @loan.data.with_indifferent_access[:voucher][:payee]
       }
