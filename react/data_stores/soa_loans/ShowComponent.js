@@ -108,7 +108,7 @@ export default class ShowComponent extends React.Component {
       var payment = record.records[i];
 
       rows.push(
-        <tr key={"payment-" + i}>
+        <tr key={"payment-" + payment.id}>
           <td>
             {payment.date}
           </td>
@@ -142,39 +142,22 @@ export default class ShowComponent extends React.Component {
     var total_paid  = total_principal_paid + total_interest_paid;
 
     return  (
-      <div className="row">
-        <div className="col">
-          <div className="text-center">
-            <h4>
-              Total Principal Paid
-            </h4>
-            <h5 className="text-muted">
-              {numberWithCommas(total_principal_paid)}
-            </h5>
-          </div>
-        </div>
-        <div className="col">
-          <div className="text-center">
-            <h4>
-              Total Interest Paid
-            </h4>
-            <h5 className="text-muted">
-              {numberWithCommas(total_interest_paid)}
-            </h5>
-          </div>
-        </div>
-        <div className="col">
-          <div className="text-center">
-            <h4>
-              Total Paid
-            </h4>
-            <h5 className="text-muted">
-              {numberWithCommas(total_paid)}
-            </h5>
-          </div>
-        </div>
-      </div>
+      <tr key="grand-total" style={{backgroundColor: "yellow"}}>
+        <th className="">
+          GRAND TOTAL
+        </th>
+        <th className="text-right">
+          {numberWithCommas(total_principal_paid)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(total_interest_paid)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(total_paid)}
+        </th>
+      </tr>
     );
+
   }
 
   renderDataRows() {
@@ -183,52 +166,63 @@ export default class ShowComponent extends React.Component {
 
     for(var i = 0; i < records.length; i++) {
       var r = records[i];
+
       rows.push(
-        <div>
-          <h5>
-            {r.member.last_name}, {r.member.first_name} &nbsp;
+        <tr key={"member-" + i} style={{backgroundColor: "#d0ccff"}}>
+          <td colSpan="4">
+            <strong>
+              {r.member.last_name}, {r.member.first_name} &nbsp;
+            </strong>
             <small className="text-muted">
               {r.loan_product.name}
             </small>
-          </h5>
-          <table className="table table-bordered table-sm table-xs table-hover">
-            <thead>
-              <tr>
-                <th>
-                  Date
-                </th>
-                <th className="text-right">
-                  Principal
-                </th>
-                <th className="text-right">
-                  Interest
-                </th>
-                <th className="text-right">
-                  Total
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.renderPayments(r)}
-            </tbody>
-            <tfoot>
-              <tr>
-                <th>
-                  TOTAL
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(r.total_principal_paid)}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(r.total_interest_paid)}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(parseFloat(r.total_principal_paid) + parseFloat(r.total_interest_paid))}
-                </th>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+          </td>
+        </tr>
+      );
+
+      rows.push(
+        <tr key={"member-" + i + "-labels"}>
+          <th>
+            Date
+          </th>
+          <th className="text-right">
+            Principal
+          </th>
+          <th className="text-right">
+            Interest
+          </th>
+          <th className="text-right">
+            Total
+          </th>
+        </tr>
+      );
+
+      var memberDataRows  = this.renderPayments(r);
+
+      for(var j = 0; j < memberDataRows.length; j++) {
+        rows.push(memberDataRows[j]);
+      }
+
+      rows.push(
+        <tr key={"member-" + i + "-grand-total"}>
+          <th>
+            <strong>
+              Total for {r.member.last_name}, {r.member.first_name} &nbsp;
+            </strong>
+            <small className="text-muted">
+              {r.loan_product.name}
+            </small>
+          </th>
+          <th className="text-right">
+            {numberWithCommas(r.total_principal_paid)}
+          </th>
+          <th className="text-right">
+            {numberWithCommas(r.total_interest_paid)}
+          </th>
+          <th className="text-right">
+            {numberWithCommas(parseFloat(r.total_principal_paid) + parseFloat(r.total_interest_paid))}
+          </th>
+        </tr>
       );
     }
 
@@ -351,7 +345,16 @@ export default class ShowComponent extends React.Component {
       return  (
         <div>
           {this.renderFilter()}
-          {this.renderDisplay()}
+          <table className="table table-sm table-bordered table-hover">
+            <thead>
+            </thead>
+            <tbody>
+              {this.renderDataRows()}
+            </tbody>
+            <tfoot>
+              {this.renderTotals()}
+            </tfoot>
+          </table>
         </div>
       );
     }

@@ -96,6 +96,7 @@ module Branches
 
       data[:records]  = @payments.select{ |o| o.subsidiary_id == loan.id }.map{ |t|
                           {
+                            id: t.id,
                             date: t.transacted_at.to_date.strftime("%B %d, %Y"),
                             principal_paid: t.data.with_indifferent_access[:total_principal_paid].try(:to_f).round(2),
                             interest_paid: t.data.with_indifferent_access[:total_interest_paid].try(:to_f).round(2)
