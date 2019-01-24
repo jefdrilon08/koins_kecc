@@ -5,31 +5,41 @@ module LoanProducts
 
       @loan_product = @config[:loan_product]
       @as_of        = @config[:as_of].try(:to_date) || Date.today
+      @branch       = Branch.where(id: @config[:branch_id]).first
+      @center       = Center.where(id: @config[:center_id]).first
 
-      @paid_loans = Loan.paid.where(
-                      "date_approved <= ? AND date_completed >= ? AND loan_product_id = ?",
-                      @as_of,
-                      @as_of,
-                      @loan_product.id
-                    )
+#      @paid_loans = Loan.paid.where(
+#                      "date_approved <= ? AND date_completed >= ? AND loan_product_id = ?",
+#                      @as_of,
+#                      @as_of,
+#                      @loan_product.id
+#                    )
+#
+#      @active_loans = Loan.active.where(
+#                        "loan_product_id = ? AND date_approved <= ?",
+#                        @loan_product.id,
+#                        @as_of
+#                      )
+#
+#      @loans  = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
+#
+#      # Filter if branch is included
+#      if @config[:branch_id].present?
+#        @loans  = @loans.where(branch_id: @config[:branch_id])
+#      end
+#
+#      # Filter if center is included
+#      if @config[:center_id].present?
+#        @loans  = @loans.where(center_id: @config[:center_id])
+#      end
 
-      @active_loans = Loan.active.where(
-                        "loan_product_id = ? AND date_approved <= ?",
-                        @loan_product.id,
-                        @as_of
-                      )
-
-      @loans  = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
-
-      # Filter if branch is included
-      if @config[:branch_id].present?
-        @loans  = @loans.where(branch_id: @config[:branch_id])
-      end
-
-      # Filter if center is included
-      if @config[:center_id].present?
-        @loans  = @loans.where(center_id: @config[:center_id])
-      end
+      @loans  = ::Loans::FetchActiveAsOf.new(
+                  config: {
+                    as_of: @as_of,
+                    branch: @branch,
+                    loan_product: @loan_product
+                  }
+                ).execute!
 
       @payments = AccountTransaction.approved_loan_payments.where(
                     "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
