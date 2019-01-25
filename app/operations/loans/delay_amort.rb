@@ -22,7 +22,7 @@ module Loans
       @amorts_to_update = @loan.amortization_schedule_entries.unpaid.where(
                             "due_date > ?",
                             @amort.due_date
-                          ).order("due_date ASC")
+                          ).where.not(id: @amort.id).order("due_date ASC")
     end
 
     def execute!

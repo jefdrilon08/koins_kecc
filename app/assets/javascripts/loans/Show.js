@@ -30,12 +30,24 @@ var Show  = (function() {
 
   var templateErrorList;
 
+  var $oldDate;
+  var $btnDelayAmort;
+  var $btnConfirmDelayAmort;
+  var $modalDelayAmort;
+  var $inputDelayAmort;
+  var $inputReason;
+
+  var reason        = "";
+  var newDate       = "";
+  var curretAmortId = "";
+
   var _urlReage               = "/api/v1/loans/reage";
   var _urlDelete              = "/api/v1/loans/delete";
   var _urlFirstDateOfPayment  = "/api/v1/loans/update_first_date_of_payment";
   var _urlDateReleased        = "/api/v1/loans/update_date_released";
   var _urlApprove             = "/api/v1/loans/approve";
   var _urlChangeBook          = "/api/v1/loans/change_book";
+  var _urlDelayAmort          = "/api/v1/loans/delay_amort";
 
   var _loanId;
   var _authenticityToken;
@@ -70,10 +82,74 @@ var Show  = (function() {
     $modalChangeBook      = $("#modal-change-book");
     $selectBook           = $("#select-book");
 
+    $btnDelayAmort        = $(".btn-delay-amort");
+    $oldDate              = $(".old-date");
+    $btnConfirmDelayAmort = $("#btn-confirm-delay-amort");
+    $modalDelayAmort      = $("#modal-delay-amort");
+    $inputDelayAmort      = $("#input-delay-amort");
+    $inputReason          = $("#input-reason");
+
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnDelayAmort.on("click", function() {
+      var oldDate   = $(this).data("old-date"); 
+      curretAmortId = $(this).data("id");
+
+      $oldDate.html(oldDate);
+
+      $modalDelayAmort.modal("show");
+    });
+
+    $btnConfirmDelayAmort.on("click", function() {
+      var newDate = $inputDelayAmort.val();
+      var reason  = $inputReason.val();
+
+      $inputDelayAmort.prop("disabled", true);
+      $inputReason.prop("disabled", true);
+      $btnConfirmDelayAmort.prop("disabled", true);
+      $message.html("Loading...");
+
+      $.ajax({
+        url: _urlDelayAmort,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: curretAmortId,
+          new_date: newDate,
+          reason: reason,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $inputDelayAmort.prop("disabled", false);
+            $inputReason.prop("disabled", false);
+            $btnConfirmDelayAmort.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnChangeBook.on("click", function() {
       $modalChangeBook.modal("show");
     });

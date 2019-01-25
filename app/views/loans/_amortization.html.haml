@@ -47,7 +47,7 @@
         - if @loan.active?
           %td.text-center
             - if o.is_paid.blank?
-              .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: o.id } }
+              .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: o.id, old_date: "#{o.due_date}" } }
                 .fa.fa-minus
     %tr
       - if current_user.roles.include?("MIS")

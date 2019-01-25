@@ -3,6 +3,44 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def delay_amort
+        amort     = AmortizationScheduleEntry.where(id: params[:id]).first
+        user      = current_user
+        reason    = params[:reason]
+        new_date  = params[:new_date].try(:to_date)
+
+        config  = {
+          amort: amort,
+          user: user,
+          reason: reason,
+          new_date: new_date
+        }
+
+        errors  = ::Loans::ValidateDelayAmort.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          old_date  = amort.due_date
+          loan      = ::Loans::DelayAmort.new(
+                        config: config
+                      ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} changed amortization #{amort.id} from #{old_date} to #{new_date}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              amortization_schedule_entry_id: amort.id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def change_book
         loan  = Loan.where(id: params[:id]).first
         book  = params[:book]
