@@ -30,6 +30,7 @@ namespace :api do
     post "/members/save_survey_answer", to: "members#save_survey_answer"
     post "/members/delete", to: "members#delete"
     post "/members/unlock", to: "members#unlock"
+    post "/members/restore", to: "members#restore"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"

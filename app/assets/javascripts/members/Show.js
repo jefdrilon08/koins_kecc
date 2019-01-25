@@ -4,6 +4,7 @@ var Show  = (function() {
   var $modalNewLoan;
   var $modalDelete;
   var $modalCreateSurvey;
+  var $modalRestore;
   var $modalUnlock;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
@@ -18,6 +19,8 @@ var Show  = (function() {
   var $btnConfirmDelete;
   var $btnUnlock;
   var $btnConfirmUnlock;
+  var $btnRestore;
+  var $btnConfirmRestore;
   var $selectLoanProduct;
   var $selectSurvey;
   var $message;
@@ -30,6 +33,7 @@ var Show  = (function() {
   var _urlCreateSurvey        = "/api/v1/members/create_survey";
   var _urlDelete              = "/api/v1/members/delete";
   var _urlUnlock              = "/api/v1/members/unlock";
+  var _urlRestore             = "/api/v1/members/restore";
   var _memberId;
   var _authenticityToken;
 
@@ -46,6 +50,7 @@ var Show  = (function() {
     $modalCreateSurvey              = $("#modal-create-survey");
     $modalDelete                    = $("#modal-delete");
     $modalUnlock                    = $("#modal-unlock");
+    $modalRestore                   = $("#modal-restore");
     $btnGenerateAccessToken         = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature            = $("#btn-confirm-signature");
@@ -58,6 +63,8 @@ var Show  = (function() {
     $btnDelete                      = $("#btn-delete");
     $btnConfirmDelete               = $("#btn-confirm-delete");
     $btnUnlock                      = $("#btn-unlock");
+    $btnRestore                     = $("#btn-restore");
+    $btnConfirmRestore              = $("#btn-confirm-restore");
     $btnConfirmUnlock               = $("#btn-confirm-unlock");
     $selectLoanProduct              = $("#select-loan-product");
     $selectSurvey                   = $("#select-survey");
@@ -67,6 +74,52 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnRestore.on("click", function() {
+      $message.html("");
+      $modalRestore.modal("show");
+    });
+
+    $btnConfirmRestore.on("click", function() {
+      $message.html("");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmRestore.prop("disabled", true);
+
+      $.ajax({
+        url: _urlRestore,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmRestore.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnUnlock.on("click", function() {
       $message.html("");
       $modalUnlock.modal("show");

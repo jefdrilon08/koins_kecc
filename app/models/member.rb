@@ -65,6 +65,23 @@ class Member < ApplicationRecord
     self.status != "active"
   end
 
+  def resignation_records
+    if self.data.with_indifferent_access[:resignation_records].blank?
+      []
+    else
+      self.data.with_indifferent_access[:resignation_records]
+    end
+  end
+
+  # Fetch the member's resignation details
+  def resignation
+    {
+      identification_number: self.identification_number,
+      date_resigned: self.date_resigned,
+      data: self.data.with_indifferent_access[:resignation]
+    }
+  end
+
   def insurance_pending?
     self.insurance_status == "pending"
   end

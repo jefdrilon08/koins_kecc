@@ -45,6 +45,10 @@
       #btn-unlock.btn.btn-warning.btn-block{ style: "margin-top: 10px" }
         .fa.fa-unlock
         Unlock to Modify
+    - if @member.resigned?
+      = link_to "#", id: "btn-restore", class: "btn btn-danger btn-block" do
+        .fa.fa-sync
+        Balik Kasapi
 
     %hr
     %h6

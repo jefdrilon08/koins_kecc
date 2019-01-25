@@ -3,6 +3,29 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_user!
 
+      def restore
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Members::ValidateRestore.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::Members::Restore.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def process_resignation
         data  = JSON.parse(params[:data]).to_h.with_indifferent_access
 
