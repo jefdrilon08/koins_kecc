@@ -31,6 +31,7 @@ module WithdrawalCollections
       @default_withdrawal_accounts  = Settings.default_withdrawal_accounts
       @savings_accounting_codes     = Settings.savings_accounting_codes
       @insurance_accounting_codes   = Settings.insurance_accounting_codes
+      @equity_accounting_codes      = Settings.equity_accounting_codes
 
       @branch_accounting_code_settings = nil
 
@@ -109,6 +110,21 @@ module WithdrawalCollections
         end
       end
 
+      # EQUITY DEPOSITS
+      @equity_accounting_codes.each do |p|
+        @data[:totals].each do |o|
+          if o[:record_type] == "EQUITY" and o[:key] == p.equity_type and o[:amount] > 0
+            accounting_code = AccountingCode.find(p.withdrawal_accounting_code_id)
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: accounting_code.code,
+              name: accounting_code.name,
+              amount: o[:amount]
+            }
+          end
+        end
+      end
+
       journal_entries
     end
 
@@ -144,6 +160,22 @@ module WithdrawalCollections
           end
         end
       end
+
+      # EQUITY DEPOSITS
+      @equity_accounting_codes.each do |p|
+        @data[:totals].each do |o|
+          if o[:record_type] == "EQUITY" and o[:key] == p.equity_type and o[:amount] > 0
+            accounting_code = AccountingCode.find(p.deposit_accounting_code_id)
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: accounting_code.code,
+              name: accounting_code.name,
+              amount: o[:amount]
+            }
+          end
+        end
+      end
+
 
       journal_entries
     end
