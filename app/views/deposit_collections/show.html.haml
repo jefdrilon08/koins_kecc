@@ -13,6 +13,22 @@
             Deposit Collection for #{@deposit_collection.branch} / #{@deposit_collection.center} - #{@deposit_collection.collection_date.strftime("%b %d, %Y")}
           #deposit-collection-content
 
+          #settings
+            %h5
+              Cash Management Template
+            .card
+              .card-body
+                %p
+                  Currently being used: #{@deposit_collection.cash_management_template}
+                .row
+                  .col-md-10.col-xs-12
+                    = select_tag :status, options_for_select(cash_management_templates, @deposit_collection.cash_management_template), class: "form-control select-select2", id: "select-cash-management-template", prompt: "-- SELECT --"
+                  .col-md-2.col-xs-12
+                    #btn-confirm-cash-management-template.btn.btn-block.btn-warning
+                      .fa.fa-sync
+                      Use Template
+                .message
+
           - if debug?
             %pre
               %code

@@ -18,6 +18,16 @@ class WithdrawalCollection < ApplicationRecord
     self.status != "pending"
   end
 
+  def cash_management_template
+    temp_date = self.data.with_indifferent_access 
+
+    if temp_data[:cash_management_template].present?
+      temp_data[:cash_management_template]
+    else
+      "default"
+    end
+  end
+
   def member_ids
     records = []
     self.data.with_indifferent_access[:records].each do |o|

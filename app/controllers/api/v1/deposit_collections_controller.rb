@@ -3,6 +3,30 @@ module Api
     class DepositCollectionsController < ApplicationController
       before_action :authenticate_user!
 
+      def modify_cash_management_template
+        deposit_collection  = DepositCollection.where(id: params[:id]).first
+        template            = params[:template]
+
+        config  = {
+          template: template,
+          deposit_collection: deposit_collection
+        }
+
+        errors  = ::DepositCollections::ValidateModifyCashManagementTemplate.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::DepositCollections::ModifyCashManagementTemplate.new(
+            config: config
+          ).execute!
+
+          render json: { id: deposit_collection.id }
+        end
+      end
+
       def fetch
         deposit_collection = DepositCollection.find(params[:id])
 

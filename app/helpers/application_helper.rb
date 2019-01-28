@@ -1,4 +1,16 @@
 module ApplicationHelper
+  def cash_management_templates
+    names = []
+
+    if Settings.cash_management_templates.present?
+      Settings.cash_management_templates.each do |o|
+        names << o.name
+      end
+    end
+
+    return names
+  end
+
   def member_resignation_types
     Settings.member_resignation_types.map{ |o|
       {
