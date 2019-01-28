@@ -13,6 +13,9 @@
       = link_to "#", class: 'btn', id: 'btn-print' do
         .fa.fa-print
         Print
+      = link_to "#", class: 'btn', id: 'btn-load-branch' do
+        .fa.fa-sync
+        Load Branch
       - if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
         = link_to deposit_collection_path(@deposit_collection), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times

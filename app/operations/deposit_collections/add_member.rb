@@ -1,9 +1,9 @@
 module DepositCollections
   class AddMember
     def initialize(config:)
-      @config                         = config
-      @deposit_collection  = @config[:deposit_collection]
-      @member                         = @config[:member]
+      @config             = config
+      @deposit_collection = @config[:deposit_collection]
+      @member             = @config[:member]
 
       @data = @deposit_collection.data.with_indifferent_access
 
@@ -39,7 +39,7 @@ module DepositCollections
           member_id: @member.id,
           record_type: o.account_type,
           account_subtype: o.account_subtype,
-          member_account_id: member_account.id
+          member_account_id: member_account.try(:id)
         }
       end
 

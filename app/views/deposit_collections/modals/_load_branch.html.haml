@@ -1,0 +1,21 @@
+#modal-load-branch.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Load Branch
+      .modal-body
+        .modal-body-content
+          .row
+            .col-12
+              .bs-callout.bs-callout-info
+                Are you sure you want to load all members from branch #{@deposit_collection.branch}?
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-load-branch.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

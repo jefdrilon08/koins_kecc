@@ -1,7 +1,8 @@
 class DepositCollection < ApplicationRecord
   STATUSES  = [
     "pending",
-    "approved"
+    "approved",
+    "processing"
   ]
 
   belongs_to :center, optional: true
@@ -16,6 +17,10 @@ class DepositCollection < ApplicationRecord
 
   def not_pending?
     self.status != "pending"
+  end
+
+  def processing?
+    self.status == "processing"
   end
 
   def book

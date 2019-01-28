@@ -2,6 +2,32 @@ module Api
   module V1
     class DepositCollectionsController < ApplicationController
       before_action :authenticate_user!
+
+      def load_branch
+        deposit_collection  = DepositCollection.where(id: params[:id]).first
+
+        config  = {
+          deposit_collection: deposit_collection
+        }
+
+        errors  = ::DepositCollections::ValidateLoadBranch.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          deposit_collection.update!(status: "processing")
+
+          ProcessDepositCollectionLoadBranch.perform_later({ id: deposit_collection.id })
+
+#          ::DepositCollections::LoadBranch.new(
+#            config: config
+#          ).execute!
+
+          render json: { id: deposit_collection.id }
+        end
+      end
       
       def modify_book
         deposit_collection  = DepositCollection.where(id: params[:id]).first
@@ -9,7 +35,8 @@ module Api
 
         config  = {
           book: book,
-          deposit_collection: deposit_collection
+          deposit_collection: deposit_collection,
+          user: current_user
         }
 
         errors  = ::DepositCollections::ValidateModifyBook.new(

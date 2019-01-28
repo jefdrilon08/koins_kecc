@@ -3,9 +3,9 @@ module DepositCollections
     def initialize(config:)
       super()
 
-      @config                         = config
-      @deposit_collection  = @config[:deposit_collection]
-      @user                           = @config[:user]
+      @config             = config
+      @deposit_collection = @config[:deposit_collection]
+      @user               = @config[:user]
 
       @data             = @deposit_collection.try(:data).try(:with_indifferent_access)
       @accounting_entry = @data[:accounting_entry]

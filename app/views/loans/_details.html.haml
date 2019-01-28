@@ -33,7 +33,7 @@
             #{number_to_currency(@loan.total_paid, unit: "")}
 
 .row
-  .col-md-4
+  .col-md-4.col-xs-12
     %h4
       Details
     = render partial: "specifications"
@@ -45,7 +45,7 @@
     %h4
       Insurance Information
     = render partial: "insurance_information"
-  .col-md-8
+  .col-md-8.col-xs-12
     %h4
       Amortization
     = render partial: "amortization"

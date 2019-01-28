@@ -9,12 +9,17 @@ class DepositCollectionsController < ApplicationController
 
   def show
     @deposit_collection = DepositCollection.find(params[:id])
-    @data               = @deposit_collection.data.with_indifferent_access
 
-    @activity_logs  = ActivityLog.where(
-                        "data ->> 'deposit_collection_id' = ?",
-                        @deposit_collection.id
-                      ).order("created_at DESC")
+    if @deposit_collection.processing?
+      redirect_to deposit_collections_path
+    else
+      @data               = @deposit_collection.data.with_indifferent_access
+
+      @activity_logs  = ActivityLog.where(
+                          "data ->> 'deposit_collection_id' = ?",
+                          @deposit_collection.id
+                        ).order("created_at DESC")
+    end
   end
 
   def destroy
