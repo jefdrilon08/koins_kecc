@@ -2,6 +2,30 @@ module Api
   module V1
     class DepositCollectionsController < ApplicationController
       before_action :authenticate_user!
+      
+      def modify_book
+        deposit_collection  = DepositCollection.where(id: params[:id]).first
+        book                = params[:book]
+
+        config  = {
+          book: book,
+          deposit_collection: deposit_collection
+        }
+
+        errors  = ::DepositCollections::ValidateModifyBook.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::DepositCollections::ModifyBook.new(
+            config: config
+          ).execute!
+
+          render json: { id: deposit_collection.id }
+        end
+      end
 
       def modify_cash_management_template
         deposit_collection  = DepositCollection.where(id: params[:id]).first

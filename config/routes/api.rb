@@ -107,6 +107,7 @@ namespace :api do
     post "/deposit_collections/add_member", to: "deposit_collections#add_member"
     post "/deposit_collections/remove_member", to: "deposit_collections#remove_member"
     post "/deposit_collections/modify_cash_management_template", to: "deposit_collections#modify_cash_management_template"
+    post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"

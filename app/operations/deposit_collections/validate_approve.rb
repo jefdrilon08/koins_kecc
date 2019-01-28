@@ -7,7 +7,8 @@ module DepositCollections
       @deposit_collection  = @config[:deposit_collection]
       @user                           = @config[:user]
 
-      @data = @deposit_collection.try(:data).try(:with_indifferent_access)
+      @data             = @deposit_collection.try(:data).try(:with_indifferent_access)
+      @accounting_entry = @data[:accounting_entry]
     end
 
     def execute!
@@ -18,7 +19,7 @@ module DepositCollections
         }
       end
 
-      if @data.present? and @data[:or_number].blank?
+      if @data.present? and @data[:or_number].blank? and @accounting_entry[:book] == "CRB"
         @errors[:messages] << {
           key: "or_number",
           message: "no or number found"

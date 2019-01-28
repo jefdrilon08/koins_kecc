@@ -18,6 +18,12 @@ class DepositCollection < ApplicationRecord
     self.status != "pending"
   end
 
+  def book
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:book]
+  end
+
   def cash_management_template
     temp_data = self.data.with_indifferent_access 
 

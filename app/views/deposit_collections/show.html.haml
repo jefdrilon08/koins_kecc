@@ -15,6 +15,21 @@
 
           #settings
             %h5
+              Accounting Entry Settings
+            .card
+              .card-body
+                %p
+                  Currently book: #{@deposit_collection.book}
+                .row
+                  .col-md-10.col-xs-12
+                    = select_tag :book, options_for_select(["CRB", "JVB"], @deposit_collection.book), class: "form-control select-select2", id: "select-book"
+                  .col-md-2.col-xs-12
+                    #btn-confirm-book.btn.btn-block.btn-warning
+                      .fa.fa-sync
+                      Use Book
+                .message
+            %hr
+            %h5
               Cash Management Template
             .card
               .card-body
@@ -22,7 +37,7 @@
                   Currently being used: #{@deposit_collection.cash_management_template}
                 .row
                   .col-md-10.col-xs-12
-                    = select_tag :status, options_for_select(cash_management_templates, @deposit_collection.cash_management_template), class: "form-control select-select2", id: "select-cash-management-template", prompt: "-- SELECT --"
+                    = select_tag :cash_management_template, options_for_select(cash_management_templates, @deposit_collection.cash_management_template), class: "form-control select-select2", id: "select-cash-management-template", prompt: "-- SELECT --"
                   .col-md-2.col-xs-12
                     #btn-confirm-cash-management-template.btn.btn-block.btn-warning
                       .fa.fa-sync

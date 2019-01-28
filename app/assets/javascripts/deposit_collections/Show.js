@@ -11,13 +11,18 @@ var Show  = (function() {
   var $modalPrint;
 
   var $selectCashManagementTemplate;
+  var $btnConfirmBook;
+  
+  var $selectBook;
   var $btnConfirmCashManagementTemplate;
 
   var $message;
   var templateErrorList;
 
-  var _urlApprove = "/api/v1/deposit_collections/approve";
-  var _urlPrint   = "/api/v1/print/generate_file";
+  var _urlApprove                       = "/api/v1/deposit_collections/approve";
+  var _urlPrint                         = "/api/v1/print/generate_file";
+  var _urlModifyCashManagementTemplate  = "/api/v1/deposit_collections/modify_cash_management_template";
+  var _urlModifyBook                    = "/api/v1/deposit_collections/modify_book";
 
   var _cacheDom = function() {
     $btnApprove         = $("#btn-approve");
@@ -27,6 +32,9 @@ var Show  = (function() {
     $btnPrint   = $("#btn-print");
     $modalPrint = $("#modal-print");
 
+    $selectBook     = $("#select-book");
+    $btnConfirmBook = $("#btn-confirm-book");
+
     $selectCashManagementTemplate     = $("#select-cash-management-template");
     $btnConfirmCashManagementTemplate = $("#btn-confirm-cash-management-template");
 
@@ -35,6 +43,51 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnConfirmBook.on("click", function() {
+      var book  = $selectBook.val();
+
+      $message.html("Loading...");
+
+      $selectBook.prop("disabled", true);
+      $btnConfirmBook.prop("disabled", true);
+
+      $.ajax({
+        url: _urlModifyBook,
+        method: 'POST',
+        data: { 
+          id: depositCollectionId,
+          book: book,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+
+          window.location.reload();
+        },
+        error: function(response) {
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $selectBook.prop("disabled", false);
+            $btnConfirmBook.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnConfirmCashManagementTemplate.on("click", function() {
       var template  = $selectCashManagementTemplate.val();
 
@@ -44,7 +97,7 @@ var Show  = (function() {
       $btnConfirmCashManagementTemplate.prop("disabled", true);
 
       $.ajax({
-        url: "/api/v1/deposit_collections/modify_cash_management_template",
+        url: _urlModifyCashManagementTemplate,
         method: 'POST',
         data: { 
           id: depositCollectionId,
