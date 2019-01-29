@@ -28,6 +28,7 @@ module.exports = {
     BranchRepaymentReportShow: "./react/data_stores/branch_repayment_reports/Show.js",
     SoaExpensesShow: "./react/data_stores/soa_expenses/Show.js",
     SoaLoansShow: "./react/data_stores/soa_loans/Show.js",
+    SoaFundsShow: "./react/data_stores/soa_funds/Show.js",
     PersonalFundsShow: "./react/data_stores/personal_funds/Show.js",
     MonthlyClosingCollectionShow: "./react/monthly_closing_collections/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./react/monitoring/AccountingEntrySubsidiaryBalancing.js",
