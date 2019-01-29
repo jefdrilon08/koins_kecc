@@ -37,6 +37,20 @@ class Loan < ApplicationRecord
     end
   end
 
+  def co_maker_one
+    temp_data = self.data.with_indifferent_access
+
+    if temp_data[:co_maker_one].present?
+      "#{temp_data[:co_maker_one][:last_name]}, #{temp_data[:co_maker_one][:first_name]} #{temp_data[:co_maker_one][:middle_name]}"
+    end
+  end
+
+  def co_maker_two
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:co_maker_two]
+  end
+
   def total_balance
     self.principal_balance + self.interest_balance
   end

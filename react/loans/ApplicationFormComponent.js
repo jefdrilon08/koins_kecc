@@ -7,8 +7,9 @@ import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';
 import ApplicationFormFinancialInformation from './ApplicationFormFinancialInformation';
 import ApplicationFormCLIPBeneficiary from './ApplicationFormCLIPBeneficiary';
+import ApplicationFormProjectType from './ApplicationFormProjectType';
 
-export default class ApplicationFormDisplay extends React.Component {
+export default class ApplicationFormComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -20,7 +21,8 @@ export default class ApplicationFormDisplay extends React.Component {
       loanProducts: [],
       currentLoanProductId: "",
       projectTypeCategories: [],
-      currentProjectTypeId: "",
+      projectTypes: [],
+      currentProjectTypeCategoryId: "",
       data: false,
       errors: false
     };
@@ -81,11 +83,19 @@ export default class ApplicationFormDisplay extends React.Component {
       method: 'GET',
       success: function(response) {
         console.log(response);
-        var currentProjectTypeId  = context.state.currentProjectTypeId;
+        var currentProjectTypeCategoryId  = context.state.currentProjectTypeCategoryId;
+        var projectTypes                  = [];
 
-        if(response.project_type_categories.length > 0) {
-          if(response.project_type_categories[0].project_types.length > 0) {
-            currentProjectTypeId  = response.project_type_categories[0].project_types[0].id
+        if(response.loan.project_type_id) {
+          for(var i = 0; i < response.project_type_categories.length; i++) {
+            for(var j = 0; j < response.project_type_categories[i].project_types.length; j++) {
+              if(response.loan.project_type_id == response.project_type_categories[i].project_types[j].id) {
+                currentProjectTypeCategoryId  = response.project_type_categories[i].id;
+                projectTypes                  = response.project_type_categories[i].project_types; 
+                console.log("projectTypes to be loaded:");
+                console.log(projectTypes);
+              }
+            }
           }
         }
 
@@ -93,7 +103,8 @@ export default class ApplicationFormDisplay extends React.Component {
           isLoading: false,
           data: response.loan,
           projectTypeCategories: response.project_type_categories,
-          currentProjectTypeId: currentProjectTypeId
+          projectTypes: projectTypes,
+          currentProjectTypeCategoryId: currentProjectTypeCategoryId
         });
       },
       error: function(response) {
@@ -361,6 +372,12 @@ export default class ApplicationFormDisplay extends React.Component {
     return termItems;
   }
 
+  handleProjectTypeCategoryChanged(event) {
+    this.setState({
+      currentProjectTypeCategoryId: event.target.value
+    });
+  }
+
   render() {
     if(this.state.isLoading) {
       return  (
@@ -567,6 +584,14 @@ export default class ApplicationFormDisplay extends React.Component {
           </h5>
           <div className="card">
             <div className="card-body">
+              <ApplicationFormProjectType
+                projectTypeCategories={this.state.projectTypeCategories}
+                updateData={this.updateData.bind(this)}
+                currentProjectTypeCategoryId={this.state.currentProjectTypeCategoryId}
+                handleProjectTypeCategoryChanged={this.handleProjectTypeCategoryChanged.bind(this)}
+                disabled={this.state.isSaving || this.state.isActive}
+                data={this.state.data}
+              />
             </div>
           </div>
           <hr/>

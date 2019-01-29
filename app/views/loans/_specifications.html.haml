@@ -6,6 +6,31 @@
       #{@loan.pn_number}
   %tr
     %th
+      Branch:
+    %td.text-right
+      #{@loan.branch}
+  %tr
+    %th
+      Center:
+    %td.text-right
+      #{@loan.center}
+  %tr
+    %th
+      Project Type:
+    %td.text-right
+      #{@loan.project_type}
+  %tr
+    %th
+      Co-maker One: 
+    %td.text-right
+      #{@loan.co_maker_one}
+  %tr
+    %th
+      Co-maker Two:
+    %td.text-right
+      #{@loan.co_maker_two}
+  %tr
+    %th
       Status:
     %td.text-right
       - if @loan.active?

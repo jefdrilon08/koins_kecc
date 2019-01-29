@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import $ from "jquery";
 
-import ApplicationFormDisplay from "./ApplicationFormDisplay";
+import ApplicationFormComponent from "./ApplicationFormComponent";
 
 var $parameters       = $("#parameters");
 var authenticityToken = $("meta[name='csrf-token']").attr('content');
@@ -13,7 +13,7 @@ var banks             = $parameters.data("banks");
 console.log(banks)
 
 ReactDOM.render(
-  <ApplicationFormDisplay
+  <ApplicationFormComponent
     authenticityToken={authenticityToken}
     id={id}
     memberId={memberId}
