@@ -31,7 +31,8 @@
                         #{o.id}
                   %td
                     %center
-                      #{o.transacted_at.localtime.strftime("%B %d, %Y %H:%M")}
+                      %small
+                        #{o.transacted_at.localtime.strftime("%B %d, %Y %H:%M")}
                   %td
                     %center
                       - if o.deposit?
