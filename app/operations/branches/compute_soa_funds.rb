@@ -27,7 +27,15 @@ module Branches
 
     def execute!
       @members.each do |member|
-        @data[:records] << ::Members::BuildSoaFundsObject.new(member: member, start_date: @start_date, end_date: @end_date).execute!
+        member_data = ::Members::BuildSoaFundsObject.new(
+                        member: member, 
+                        start_date: @start_date, 
+                        end_date: @end_date
+                      ).execute!
+
+        if member_data[:records].size > 0
+          @data[:records] << member_data
+        end
       end
 
       # Setup centers
