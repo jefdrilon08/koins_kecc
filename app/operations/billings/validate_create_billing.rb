@@ -51,7 +51,7 @@ module Billings
       end
 
       if @branch and @center and @collection_date
-        if Billing.where(branch_id: @branch.id, center_id: @center.id, collection_date: @collection_date).count > 0
+        if Billing.where(branch_id: @branch.id, center_id: @center.id, collection_date: @collection_date, status: "pending").count > 0
           @errors[:messages] << {
             key: "system",
             message: "billing already present for collection date #{@collection_date.to_s}"
