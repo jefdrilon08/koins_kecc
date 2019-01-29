@@ -45,7 +45,7 @@ class WithdrawalCollection < ApplicationRecord
     records = []
     self.data.with_indifferent_access[:records].each do |o|
       o[:records].each do |oo|
-        if oo[:record_type] == "SAVINGS" and oo[:amount].try(:to_f) > 0
+        if oo[:amount].try(:to_f) > 0
           records << oo
         end
       end
