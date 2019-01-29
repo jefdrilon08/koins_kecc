@@ -5,9 +5,11 @@
     .col
       .card
         .card-body
-          %table.table.table-hover.table-sm
+          %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
+                - if current_user.roles.include?("MIS")
+                  %th
                 %th
                   %center
                     Date
@@ -23,12 +25,28 @@
             %tbody
               - @account_transactions.each do |o|
                 %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
                   %td
                     %center
                       #{o.transacted_at.localtime.strftime("%B %d, %Y %H:%M")}
                   %td
                     %center
-                      #{o.transaction_type}
+                      - if o.deposit?
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        .badge.badge-danger
+                          .fa.fa-upload
+                          Withdraw
                   %td.text-right.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
                   %td.text-right
