@@ -36,21 +36,23 @@ module MembershipPaymentCollections
       @membership_payment_record.save!
 
       if @membership_settings.type == "Cooperative" and @membership_settings.is_main == true
-        if @member.identification_number.blank?
+        identification_number = @member.identification_number
+
+        if identification_number.blank?
           identification_number = ::Members::GenerateMemberIdentificationNumber.new(
                                     member: @member
                                   ).execute!
-        end
 
-        while Member.where("upper(identification_number) = ?", identification_number.upcase).count > 0 do
-          # Update branch counter
-          old_counter = @member.branch.member_counter || 0
-          new_counter = old_counter + 1
-          @member.branch.update!(member_counter: new_counter)
+          while Member.where("upper(identification_number) = ?", identification_number.upcase).count > 0 do
+            # Update branch counter
+            old_counter = @member.branch.member_counter || 0
+            new_counter = old_counter + 1
+            @member.branch.update!(member_counter: new_counter)
 
-          identification_number = ::Members::GenerateMemberIdentificationNumber.new(
-                                    member: @member
-                                  ).execute!
+            identification_number = ::Members::GenerateMemberIdentificationNumber.new(
+                                      member: @member
+                                    ).execute!
+          end
         end
 
         @member.update!(

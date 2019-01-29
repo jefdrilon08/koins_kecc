@@ -19,6 +19,8 @@ export default class ApplicationFormDisplay extends React.Component {
       coMakers: [],
       loanProducts: [],
       currentLoanProductId: "",
+      projectTypeCategories: [],
+      currentProjectTypeId: "",
       data: false,
       errors: false
     };
@@ -79,9 +81,19 @@ export default class ApplicationFormDisplay extends React.Component {
       method: 'GET',
       success: function(response) {
         console.log(response);
+        var currentProjectTypeId  = context.state.currentProjectTypeId;
+
+        if(response.project_type_categories.length > 0) {
+          if(response.project_type_categories[0].project_types.length > 0) {
+            currentProjectTypeId  = response.project_type_categories[0].project_types[0].id
+          }
+        }
+
         context.setState({
           isLoading: false,
-          data: response
+          data: response.loan,
+          projectTypeCategories: response.project_type_categories,
+          currentProjectTypeId: currentProjectTypeId
         });
       },
       error: function(response) {
@@ -548,6 +560,13 @@ export default class ApplicationFormDisplay extends React.Component {
                 updateData={this.updateData.bind(this)}
                 disabled={this.state.isSaving || this.state.isActive}
               />
+            </div>
+          </div>
+          <h5>
+            Project Type
+          </h5>
+          <div className="card">
+            <div className="card-body">
             </div>
           </div>
           <hr/>

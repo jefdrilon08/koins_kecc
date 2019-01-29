@@ -178,7 +178,20 @@ module Api
 
           loan  = ::Loans::Fetch.new(config: config).execute!
 
-          render json: loan
+          project_type_categories = ProjectTypeCategory.all.order("name ASC").map{ |c|
+                                      {
+                                        id: c.id,
+                                        name: c.name,
+                                        project_types: c.project_types.order("name ASC").map{ |p|
+                                          {
+                                            id: p.id,
+                                            name: p.name
+                                          }
+                                        }
+                                      }
+                                    }
+
+          render json: { loan: loan, project_type_categories: project_type_categories }
         end
       end
       
