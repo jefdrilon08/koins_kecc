@@ -240,21 +240,12 @@ export default class ShowComponent extends React.Component {
     });
   }
 
-  handleLoanProductChanged(event) {
-    this.fetch({
-      loanProductId: event.target.value,
-      centerId: this.state.currentCenterId
-    });
-  }
-
   renderFilter() {
     var centerOptions   = [
       <option key={"center-select"} value="">
         -- SELECT --
       </option>
     ];
-
-    console.log(this.state.loanProducts);
 
     for(var i = 0; i < this.state.centers.length; i++) {
       centerOptions.push(
@@ -269,16 +260,6 @@ export default class ShowComponent extends React.Component {
         <div className="col">
           <div className="form-group">
             <label>
-              Loan Product:
-            </label>
-            <select value={this.state.currentLoanProductId} onChange={this.handleLoanProductChanged.bind(this)} className="form-control">
-              {loanProductOptions}
-            </select>
-          </div>
-        </div>
-        <div className="col">
-          <div className="form-group">
-            <label>
               Center:
             </label>
             <select value={this.state.currentCenterId} onChange={this.handleCenterChanged.bind(this)} className="form-control">
@@ -290,39 +271,55 @@ export default class ShowComponent extends React.Component {
     );
   }
 
-  renderTotal() {
-    var total = 0.00;
+  renderTotalsRow() {
+    var settings  = this.state.data.data.settings;
+    var totals    = [];
+    var totalVals = [];
+    var records   = this.state.data.data.records;
 
-    for(var i = 0; i < this.state.data.data.records.length; i++) {
-      total += parseFloat(this.state.data.data.records[i].principal);
+    console.log(records);
+    for(var i = 0; i < settings.length; i++) {
+      totalVals.push({
+        debit: 0.00,
+        credit: 0.00
+      });
+    }
+
+    for(var i = 0; i < records.length; i++) {
+      for(var j = 0; j < records[i].records.length; j++) {
+        for(var k = 0; k < records[i].records[j].records.length; k++) {
+          // Increment debit
+          totalVals[k].debit += parseFloat(records[i].records[j].records[k].debit);
+
+          // Increment credit
+          totalVals[k].credit += parseFloat(records[i].records[j].records[k].credit);
+        }
+      }
+    }
+
+    for(var i = 0; i < settings.length; i++) {
+      totals.push(
+        <td key={"grand-total-" + i + "-debit"} className="text-right">
+          {numberWithCommas(totalVals[i].debit)}
+        </td>
+      );
+
+      totals.push(
+        <td key={"grand-total-" + i + "-credit"} className="text-right">
+          {numberWithCommas(totalVals[i].credit)}
+        </td>
+      );
     }
 
     return  (
-      <tr>
-        <th colSpan="3">
-          TOTAL
-        </th>
-        <td className="text-right">
+      <tr style={{backgroundColor: "yellow"}}>
+        <td>
           <strong>
-            {numberWithCommas(total)}
+            Grand Total
           </strong>
         </td>
-        <td>
-        </td>
-        <td>
-        </td>
+        {totals}
       </tr>
-    );
-  }
-
-  renderDisplay() {
-    return  (
-      <div>
-        <hr/>
-        {this.renderTotals()}
-        <hr/>
-        {this.renderDataRows()}
-      </div>
     );
   }
 
@@ -339,6 +336,7 @@ export default class ShowComponent extends React.Component {
             </thead>
             <tbody>
               {this.renderDataRows()}
+              {this.renderTotalsRow()}
             </tbody>
           </table>
         </div>

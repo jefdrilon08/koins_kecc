@@ -7,7 +7,6 @@ import MainUI from "./MainUI";
 var $parameters       = $("#parameters");
 var authenticityToken = $("meta[name='csrf-token']").attr('content');
 
-
 ReactDOM.render(
   <MainUI
     authenticityToken={authenticityToken}
