@@ -18,7 +18,6 @@ module Reports
                   @loan.id
                 ).order("due_date ASC")
 
-
       date_released = @loan.date_released
 
       if date_released.present?
@@ -50,23 +49,26 @@ module Reports
           id: @loan.center.id,
           name: @loan.center.name
         },
-        principal:          0.00,
-        interest:           0.00,
-        total:              0.00,
-        principal_due:      0.00,
-        interest_due:       0.00,
-        total_due:          0.00,
-        principal_paid:     0.00,
-        interest_paid:      0.00,
-        total_paid:         0.00,
-        principal_balance:  0.00,
-        interest_balance:   0.00,
-        total_balance:      0.00,
-        principal_rr:       0,
-        interest_rr:        0,
-        total_rr:           0,
-        par:                0,
-        num_days_par:       0
+        principal:                  0.00,
+        interest:                   0.00,
+        total:                      0.00,
+        principal_due:              0.00,
+        interest_due:               0.00,
+        total_due:                  0.00,
+        principal_paid:             0.00,
+        interest_paid:              0.00,
+        total_paid:                 0.00,
+        principal_balance:          0.00,
+        interest_balance:           0.00,
+        total_balance:              0.00,
+        overall_principal_balance:  0.00,
+        overall_interest_balance:   0.00,
+        overall_balance:            0.00,
+        principal_rr:               0,
+        interest_rr:                0,
+        total_rr:                   0,
+        par:                        0,
+        num_days_par:               0
       }
     end
 
@@ -96,6 +98,20 @@ module Reports
       end
 
       total_balance     = (principal_balance + interest_balance).round(2)
+
+      overall_principal_balance = (principal - principal_paid).round(2)
+
+      if overall_principal_balance < 0
+        overall_principal_balance = 0.00
+      end
+
+      overall_interest_balance  = (interest - interest_paid).round(2)
+
+      if overall_interest_balance < 0
+        interest_balance  = 0.00
+      end
+
+      overall_balance = (overall_principal_balance + overall_interest_balance).round(2)
 
       # Repayment rate
       principal_rr  = (principal_paid / principal_due).round(2)
@@ -153,6 +169,9 @@ module Reports
       @data[:principal_balance] = principal_balance
       @data[:interest_balance]  = interest_balance
       @data[:total_balance]     = total_balance
+      @data[:overall_principal_balance] = overall_principal_balance
+      @data[:overall_interest_balance]  = overall_interest_balance
+      @data[:ovearall_balance]          = overall_balance
       @data[:principal_rr]      = principal_rr
       @data[:interest_rr]       = interest_rr
       @data[:total_rr]          = total_rr

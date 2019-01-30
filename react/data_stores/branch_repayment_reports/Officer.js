@@ -27,7 +27,7 @@ export default class Officer extends React.Component {
               {numberWithCommas(centers[i].loans[j].principal_paid)}
             </td>
             <td className="text-right" width="7%">
-              {numberWithCommas(centers[i].loans[j].principal_balance)}
+              {numberWithCommas(centers[i].loans[j].overall_principal_balance)}
             </td>
             <td className="text-right" width="7%">
               {numberWithCommas(centers[i].loans[j].interest)}
@@ -36,7 +36,7 @@ export default class Officer extends React.Component {
               {numberWithCommas(centers[i].loans[j].interest_paid)}
             </td>
             <td className="text-right" width="7%">
-              {numberWithCommas(centers[i].loans[j].interest_balance)}
+              {numberWithCommas(centers[i].loans[j].overall_interest_balance)}
             </td>
             <td className="text-right" width="7%">
               {numberWithCommas(centers[i].loans[j].total_paid)}
@@ -74,7 +74,7 @@ export default class Officer extends React.Component {
             {numberWithCommas(centers[i].principal_paid)}
           </th>
           <th className="text-right">
-            {numberWithCommas(centers[i].principal_balance)}
+            {numberWithCommas(centers[i].overall_principal_balance)}
           </th>
           <th className="text-right">
             {numberWithCommas(centers[i].interest)}
@@ -83,7 +83,7 @@ export default class Officer extends React.Component {
             {numberWithCommas(centers[i].interest_paid)}
           </th>
           <th className="text-right">
-            {numberWithCommas(centers[i].interest_balance)}
+            {numberWithCommas(centers[i].overall_interest_balance)}
           </th>
           <th className="text-right">
             {numberWithCommas(centers[i].total_paid)}
@@ -172,7 +172,7 @@ export default class Officer extends React.Component {
                 {numberWithCommas(data.principal_paid)}
               </th>
               <th className="text-right">
-                {numberWithCommas(data.principal_balance)}
+                {numberWithCommas(data.overall_principal_balance)}
               </th>
               <th className="text-right">
                 {numberWithCommas(data.interest)}
@@ -181,7 +181,7 @@ export default class Officer extends React.Component {
                 {numberWithCommas(data.interest_paid)}
               </th>
               <th className="text-right">
-                {numberWithCommas(data.interest_balance)}
+                {numberWithCommas(data.overall_interest_balance)}
               </th>
               <th className="text-right">
                 {numberWithCommas(data.total_paid)}

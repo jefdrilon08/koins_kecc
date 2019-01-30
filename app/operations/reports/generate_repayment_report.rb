@@ -35,6 +35,9 @@ module Reports
         principal_balance:  0.00,
         interest_balance:   0.00,
         total_balance:      0.00,
+        overall_principal_balance:  0.00,
+        overall_interest_balance:   0.00,
+        overall_balance:            0.00,
         principal_rr:       0,
         interest_rr:        0,
         total_rr:           0,
@@ -80,6 +83,9 @@ module Reports
           principal_balance:  0.00,
           interest_balance:   0.00,
           total_balance:      0.00,
+          overall_principal_balance:  0.00,
+          overall_interest_balance:   0.00,
+          overall_balance:            0.00,
           principal_rr:       0,
           interest_rr:        0,
           total_rr:           0,
@@ -100,12 +106,16 @@ module Reports
 
             d[:principal_balance] += temp[:principal_balance]
             d[:interest_balance]  += temp[:interest_balance]
+
+            d[:overall_principal_balance] += temp[:overall_principal_balance]
+            d[:overall_interest_balance]  += temp[:overall_interest_balance]
           end
 
           d[:total]         = (d[:principal] + d[:interest]).round(2)
           d[:total_due]     = (d[:principal_due] + d[:interest_due]).round(2)
           d[:total_paid]    = (d[:principal_paid] + d[:interest_paid]).round(2)
           d[:total_balance] = (d[:principal_balance] + d[:interest_balance]).round(2)
+          d[:overall_balance] = (d[:overall_principal_balance] + d[:overall_interest_balance]).round(2)
 
           # Repayment rate
           d[:principal_rr]  = (d[:principal_paid] / d[:principal_due]).round(2)
@@ -167,12 +177,16 @@ module Reports
 
           @data[:principal_balance] += temp[:principal_balance]
           @data[:interest_balance]  += temp[:interest_balance]
+
+          @data[:overall_principal_balance] += temp[:overall_principal_balance]
+          @data[:overall_interest_balance]  += temp[:overall_interest_balance]
         end
 
         @data[:total]         = (@data[:principal] + @data[:interest]).round(2)
         @data[:total_due]     = (@data[:principal_due] + @data[:interest_due]).round(2)
         @data[:total_paid]    = (@data[:principal_paid] + @data[:interest_paid]).round(2)
         @data[:total_balance] = (@data[:principal_balance] + @data[:interest_balance]).round(2)
+        @data[:overall_balance] = (@data[:overall_principal_balance] + @data[:overall_interest_balance]).round(2)
 
         # Repayment rate
         @data[:principal_rr]  = (@data[:principal_paid] / @data[:principal_due]).round(2)
@@ -247,6 +261,9 @@ module Reports
           principal_balance:  0.00,
           interest_balance:   0.00,
           total_balance:      0.00,
+          overall_principal_balance:  0.00,
+          overall_interest_balance:   0.00,
+          overall_balance:            0.00,
           principal_rr:       0,
           interest_rr:        0,
           total_rr:           0,
@@ -267,12 +284,16 @@ module Reports
 
             d[:principal_balance] += temp[:principal_balance]
             d[:interest_balance]  += temp[:interest_balance]
+
+            d[:overall_principal_balance] += temp[:overall_principal_balance]
+            d[:overall_interest_balance]  += temp[:overall_interest_balance]
           end
 
           d[:total]         = (d[:principal] + d[:interest]).round(2)
           d[:total_due]     = (d[:principal_due] + d[:interest_due]).round(2)
           d[:total_paid]    = (d[:principal_paid] + d[:interest_paid]).round(2)
           d[:total_balance] = (d[:principal_balance] + d[:interest_balance]).round(2)
+          d[:overall_balance] = (d[:overall_principal_balance] + d[:overall_interest_balance]).round(2)
 
           # Repayment rate
           d[:principal_rr]  = (d[:principal_paid] / d[:principal_due]).round(2)
@@ -347,6 +368,9 @@ module Reports
           principal_balance:  0.00,
           interest_balance:   0.00,
           total_balance:      0.00,
+          overall_principal_balance:  0.00,
+          overall_interest_balance:   0.00,
+          overall_balance:            0.00,
           principal_rr:       0,
           interest_rr:        0,
           total_rr:           0,
@@ -367,12 +391,16 @@ module Reports
 
             d[:principal_balance] += temp[:principal_balance]
             d[:interest_balance]  += temp[:interest_balance]
+
+            d[:overall_principal_balance] += temp[:overall_principal_balance]
+            d[:overall_interest_balance]  += temp[:overall_interest_balance]
           end
 
           d[:total]         = (d[:principal] + d[:interest]).round(2)
           d[:total_due]     = (d[:principal_due] + d[:interest_due]).round(2)
           d[:total_paid]    = (d[:principal_paid] + d[:interest_paid]).round(2)
           d[:total_balance] = (d[:principal_balance] + d[:interest_balance]).round(2)
+          d[:overall_balance] = (d[:overall_principal_balance] + d[:overall_interest_balance]).round(2)
 
           # Repayment rate
           d[:principal_rr]  = (d[:principal_paid] / d[:principal_due]).round(2)
