@@ -109,7 +109,7 @@ export default class ShowComponent extends React.Component {
           </td>
           <td>
             <strong>
-              <a href={"/loans/" + records[i].id}>
+              <a href={"/loans/" + records[i].id} target='_blank'>
                 {records[i].member.last_name}, {records[i].member.first_name}
               </a>
             </strong>
