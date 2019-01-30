@@ -50,7 +50,7 @@ export default class LoanProduct extends React.Component {
                 {numberWithCommas(data.principal_paid)}
               </th>
               <th className="text-right" width="7%">
-                {numberWithCommas(data.principal_balance)}
+                {numberWithCommas(data.overall_principal_balance)}
               </th>
               <th className="text-right" width="7%">
                 {numberWithCommas(data.interest)}
@@ -59,7 +59,7 @@ export default class LoanProduct extends React.Component {
                 {numberWithCommas(data.interest_paid)}
               </th>
               <th className="text-right" width="7%">
-                {numberWithCommas(data.interest_balance)}
+                {numberWithCommas(data.overall_interest_balance)}
               </th>
               <th className="text-right" width="7%">
                 {numberWithCommas(data.total_paid)}
