@@ -35,7 +35,7 @@ export default class AccountingEntryDisplay extends React.Component {
         console.log(response);
         context.setState({
           isLoading: false,
-          data: response
+          data: response.loan
         });
       },
       error: function(response) {
