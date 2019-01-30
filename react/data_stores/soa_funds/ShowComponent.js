@@ -18,6 +18,7 @@ export default class ShowComponent extends React.Component {
       data: false,
       errors: false,
       centers: [],
+      officers: [],
       currentCenterId: "",
       currentLoanProductId: ""
     };
@@ -25,12 +26,10 @@ export default class ShowComponent extends React.Component {
 
   fetch(options) {
     var context       = this;
-    var loanProductId = options.loanProductId;
     var centerId      = options.centerId;
 
     var data  = {
       id: this.props.id,
-      loan_product_id: loanProductId,
       center_id: centerId
     }
 
@@ -38,7 +37,6 @@ export default class ShowComponent extends React.Component {
     console.log(data);
 
     this.setState({
-      currentLoanProductId: loanProductId,
       currentCenterId: centerId
     });
 
@@ -73,13 +71,11 @@ export default class ShowComponent extends React.Component {
       success: function(response) {
         console.log(response);
 
-        var loanProducts  = response.data.loan_products;
         var centers       = response.data.centers;
 
         context.setState({
           isLoading: false,
           data: response,
-          loanProducts: loanProducts,
           centers: centers
         });
       },
@@ -127,7 +123,7 @@ export default class ShowComponent extends React.Component {
       var paymentRecords  = payment.records;
 
       rows.push(
-        <tr key={"payment-" + payment.id}>
+        <tr key={"payment-record-" + record.member.id + "-" + i}>
           <td>
             {payment.date}
           </td>
@@ -168,7 +164,7 @@ export default class ShowComponent extends React.Component {
         </td>
       );
       cols.push(
-        <td className="text-right" key={"total-" + id + "-" + i + "-debit"}>
+        <td className="text-right" key={"total-" + id + "-" + i + "-credit"}>
           <strong>
             {totals[i].credit > 0 ? numberWithCommas(totals[i].credit) : ''}
           </strong>
@@ -262,7 +258,11 @@ export default class ShowComponent extends React.Component {
             <label>
               Center:
             </label>
-            <select value={this.state.currentCenterId} onChange={this.handleCenterChanged.bind(this)} className="form-control">
+            <select 
+              value={this.state.currentCenterId} 
+              onChange={this.handleCenterChanged.bind(this)} 
+              className="form-control"
+            >
               {centerOptions}
             </select>
           </div>
@@ -331,6 +331,8 @@ export default class ShowComponent extends React.Component {
     } else {
       return  (
         <div>
+          {this.renderFilter()}
+          <hr/>
           <table className="table table-sm table-bordered table-hover">
             <thead>
             </thead>
