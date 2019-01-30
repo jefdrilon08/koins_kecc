@@ -42,6 +42,7 @@ module Loans
       @loan.date_released     = @loan_data[:date_released]
       @loan.principal         = @loan_data[:principal].to_f.round(2)
       @loan.num_installments  = @loan_data[:num_installments]
+      @loan.project_type_id   = @loan_data[:project_type_id]
       @loan.term              = @loan_data[:term]
       @loan.data              = @loan_data[:data]
 

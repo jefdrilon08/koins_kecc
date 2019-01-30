@@ -44,6 +44,7 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
+        console.log(response);
         context.setState({
           coMakers: response.co_makers
         });

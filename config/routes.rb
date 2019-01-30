@@ -115,6 +115,10 @@ Rails.application.routes.draw do
     get "/soa_funds", to: "soa_funds#index"
     get "/soa_funds/:id", to: "soa_funds#show"
     delete "/soa_funds/:id", to: "soa_funds#destroy"
+
+    get "/watchlists", to: "watchlists#index"
+    get "/watchlists/:id", to: "watchlists#show"
+    delete "/watchlists/:id", to: "watchlists#destroy"
   end
 
   namespace :accounting do

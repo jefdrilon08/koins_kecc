@@ -49,6 +49,11 @@ module Reports
           id: @loan.center.id,
           name: @loan.center.name
         },
+        officer: {
+          id: @loan.center.user.id,
+          first_name: @loan.center.user.first_name,
+          last_name: @loan.center.user.last_name
+        },
         principal:                  0.00,
         interest:                   0.00,
         total:                      0.00,
