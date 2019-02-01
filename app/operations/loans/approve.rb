@@ -31,15 +31,15 @@ module Loans
       if @settings.blank?
         raise "Settings not foud for loan product #{@loan_product.id}: #{@loan_product.name}. Please check production.yml"
       end
+
+      # Setup loan cycle
+      @loan_cycles  = @member_data[:loan_cycles]
     end
 
     def execute!
       post_accounting_entry!
 
       perform_deposits!
-
-      # Setup loan cycle
-      @loan_cycles  = @member_data[:loan_cycles]
 
       if @loan_cycles.blank?
         @loan.cycle   = 1
@@ -99,7 +99,9 @@ module Loans
 
             multiplier  = @num_installments
 
-            if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
+            loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 2 and c[:loan_product_id] == @loan_product.id }.first
+            if loan_cycle.present?
+            #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
               if @term == "weekly"
               elsif @term == "monthly"
                 multiplier  = (multiplier * 4.3333333).ceil.to_i

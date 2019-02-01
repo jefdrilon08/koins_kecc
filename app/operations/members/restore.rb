@@ -13,7 +13,7 @@ module Members
 
     def execute!
       # Reset loan cycle
-      @data[:loan_cycles] = []
+      @data[:loan_cycles] = nil
 
       # Load/archive resignation records
       resignation_records = @member.resignation_records

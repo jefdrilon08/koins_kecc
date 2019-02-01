@@ -12,6 +12,12 @@ module Loans
       @loan_data    = @loan.data.with_indifferent_access
       @voucher_data = @loan_data[:voucher]
 
+      @member       = @loan.member
+      @member_data  = @member.data.with_indifferent_access
+
+      # Setup loan cycle
+      @loan_cycles  = @member_data[:loan_cycles]
+
       @user = @config[:user]
 
       if @user.present?
@@ -345,7 +351,9 @@ module Loans
 
             multiplier  = @num_installments
 
-            if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
+            loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 2 and c[:loan_product_id] == @loan_product.id }.first
+            if loan_cycle.present?
+            #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
               if @term == "weekly"
               elsif @term == "monthly"
                 multiplier  = (multiplier * 4.3333333).ceil.to_i
