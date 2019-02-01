@@ -217,7 +217,8 @@ module Loans
         deduction_type  = s_deduction.deduction_type
 
         if deduction_type == "straight_one_time"
-          if @member.loans.active_or_paid.count == 0
+          #if @member.loans.active_or_paid.count == 0
+          if @loan_cycles.size == 0
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
             amount          = s_deduction.amount
             name            = accounting_code.name
