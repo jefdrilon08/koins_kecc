@@ -1,9 +1,10 @@
 class MembershipPaymentRecord < ApplicationRecord
-  STATUSES  = ["pending", "paid"]
+  STATUSES  = ["pending", "paid", "void"]
 
   belongs_to :member
 
   scope :paid, -> { where("status = ? AND amount > 0", "paid") }
+  scope :void, -> { where("status = ? AND amount > 0", "void") }
 
   validates :membership_type, presence: true
   validates :membership_name, presence: true

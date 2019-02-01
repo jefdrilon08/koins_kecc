@@ -54,7 +54,7 @@ module MembershipPaymentCollections
 
         # MEMBERSHIP
         @membership_parameters.each do |o|
-          if !has_membership_payment_record?(m, o.name)
+          if !has_membership_payment_record?(m, o.name, o.type)
             fee = o.payment_default == true ? o.fee : 0.00
 
             member_data[:records] << {
@@ -123,7 +123,7 @@ module MembershipPaymentCollections
 
     private
 
-    def has_membership_payment_record?(member, membership_name)
+    def has_membership_payment_record?(member, membership_name, membership_type)
       MembershipPaymentRecord.paid.where(
         member_id: member.id,
         membership_name: membership_name

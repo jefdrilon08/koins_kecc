@@ -43,6 +43,14 @@ module Members
         }
       }
 
+      # Void all memberhsip_payment_records
+      MembershipPaymentRecord.where(member_id: @member.id).each do |mpr|
+        mpr.update!(
+          status: "void",
+          date_voided: @current_date
+        )
+      end
+
       @data[:restoration_records] = restoration_records
 
       # Update member

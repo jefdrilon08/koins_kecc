@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_053506) do
+ActiveRecord::Schema.define(version: 2019_02_01_085524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -368,6 +368,7 @@ ActiveRecord::Schema.define(version: 2019_01_23_053506) do
     t.uuid "member_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "date_voided"
     t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
   end
 
