@@ -45,15 +45,9 @@ module Api
       private
 
       def build_branches
-        branches  = Branch.where(
-                      id: UserBranch.active.where(
-                        user_id: current_user.id
-                      ).pluck(:branch_id)
-                    ).order("name ASC")
-
         data  = []
 
-        branches.each do |o|
+        @branches.each do |o|
           centers = []
 
           o.centers.order("name ASC").each do |c|

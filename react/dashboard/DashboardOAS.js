@@ -37,6 +37,8 @@ export default class DashboardOAS extends React.Component {
           currentBranch = response.branches[0]; 
         }
 
+        console.log(response);
+
         context.setState({
           branches: response.branches,
           currentBranch: currentBranch,
@@ -85,7 +87,8 @@ export default class DashboardOAS extends React.Component {
       success: function(response) {
         context.setState({
           data: {
-            branch_loans_stats: response.branch_loans_stats
+            branch_loans_stats: response.branch_loans_stats,
+            member_counts: response.member_counts
           },
           isLoading: false
         });
@@ -303,6 +306,9 @@ export default class DashboardOAS extends React.Component {
 
   renderMemberCounts() {
     var o = this.state.data.member_counts;
+
+    console.log("renderMemberCounts()");
+    console.log(o);
 
     if(this.state.isLoading) {
       return  (
