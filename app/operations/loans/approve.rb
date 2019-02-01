@@ -33,7 +33,7 @@ module Loans
       end
 
       # Setup loan cycle
-      @loan_cycles  = @member_data[:loan_cycles]
+      @loan_cycles  = @member_data[:loan_cycles] || []
     end
 
     def execute!
@@ -99,7 +99,7 @@ module Loans
 
             multiplier  = @num_installments
 
-            loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 2 and c[:loan_product_id] == @loan_product.id }.first
+            loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
             if loan_cycle.present?
             #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
               if @term == "weekly"
