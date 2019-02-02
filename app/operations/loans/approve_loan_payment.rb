@@ -97,11 +97,19 @@ module Loans
         interest_balance: (interest_balance - total_interest_paid).round(2)
       )
 
+      # Check if paid
       if @loan.active? and @loan.principal_balance <= 0.00 and @loan.interest_balance <= 0.00
         @loan.update!(
           date_completed: @account_transaction.transacted_at,
           status: "paid"
         )
+
+        # setup maintaining balance
+        ::Members::SetMaintainingBalance.new(
+          config: {
+            member: @loan.member
+          }
+        ).execute!
       end
     end
   end

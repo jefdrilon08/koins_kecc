@@ -52,6 +52,20 @@
       Monthly I.R.:
     %td.text-right
       #{number_to_currency((@loan.monthly_interest_rate * 100).round(2), unit: "")} %
+
+  / Maintaining balance
+  - if @loan.active?
+    - @loan.member.member_accounts.where("maintaining_balance > 0").each do |a|
+      %tr
+        %th
+          #{a.account_subtype} Balance:
+        %td.text-right
+          #{number_to_currency(a.balance, unit: "")}
+      %tr
+        %th
+          #{a.account_subtype} Maintaining Balance:
+        %td.text-right
+          #{number_to_currency(a.maintaining_balance, unit: "")}
   %tr
     %th
       Date Prepared:

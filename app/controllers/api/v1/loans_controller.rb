@@ -96,6 +96,13 @@ module Api
                     config: config
                   ).execute!
 
+          # setup maintaining balance
+          ::Members::SetMaintainingBalance.new(
+            config: {
+              member: loan.member
+            }
+          ).execute!
+
           ActivityLog.create!(
             content: "#{current_user.full_name} approved loan #{loan.id}",
             activity_type: "approval",
