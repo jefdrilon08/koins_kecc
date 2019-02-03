@@ -20,6 +20,7 @@ class DataStore < ApplicationRecord
   scope :soa_loans, -> { where("meta->>'data_store_type' = ?", "SOA_LOANS") }
   scope :accounting_entries_summaries, -> { where("meta->>'data_store_type' = ?", "ACCOUNTING_ENTRIES_SUMMARY") }
   scope :watchlists, -> { where("meta->>'data_store_type' = ?", "WATCHLIST") }
+  scope :repayment_rates, -> { where("meta->>'data_store_type' = ?", "REPAYMENT_RATES") }
 
   before_validation :load_defaults
 

@@ -30,6 +30,7 @@ module Reports
         id: @loan.id,
         pn_number: @loan.pn_number,
         date_released: date_released,
+        maturity_date: @loan.maturity_date,
         loan_product: {
           id: @loan.loan_product.id,
           name: @loan.loan_product.name
@@ -176,7 +177,7 @@ module Reports
       @data[:total_balance]     = total_balance
       @data[:overall_principal_balance] = overall_principal_balance
       @data[:overall_interest_balance]  = overall_interest_balance
-      @data[:ovearall_balance]          = overall_balance
+      @data[:overall_balance]           = overall_balance
       @data[:principal_rr]      = principal_rr
       @data[:interest_rr]       = interest_rr
       @data[:total_rr]          = total_rr

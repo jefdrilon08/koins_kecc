@@ -139,6 +139,8 @@ namespace :api do
       get "/soa_funds/fetch", to: "soa_funds#fetch"
       post "/watchlists/queue", to: "watchlists#queue"
       get "/watchlists/fetch", to: "watchlists#fetch"
+      post "/repayment_rates/queue", to: "repayment_rates#queue"
+      get "/repayment_rates/fetch", to: "repayment_rates#fetch"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
       post "/member_counts/queue", to: "member_counts#queue"

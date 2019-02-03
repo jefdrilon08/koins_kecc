@@ -1,0 +1,209 @@
+import React from 'react';
+import {numberWithCommas, numberAsPercent} from '../../utils/helpers';
+
+export default class MasterListView extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state  = {
+    }
+  }
+
+  renderDataRows() {
+    var loans = this.props.data.data.records;
+    var rows  = [];
+
+    var totalPrincipal                = 0.00;
+    var totalPrincipalPaid            = 0.00;
+    var totalOverallPrincipalBalance  = 0.00;
+    var totalInterest                 = 0.00;
+    var totalInterestPaid             = 0.00;
+    var totalOverallInterestBalance   = 0.00;
+    var totalTotalPaid                = 0.00;
+    var totalPrincipalDue             = 0.00;
+    var totalTotalDue                 = 0.00;
+    var totalTotalBalance             = 0.00;
+    var totalRR                       = 0;
+
+    for(var i = 0; i < loans.length; i++) {
+      var member      = loans[i].member;
+      var center      = loans[i].center;
+      var loanProduct = loans[i].loan_product;
+
+      rows.push(
+        <tr key={"rr-" + loans[i].id}>
+          <td className="text-center">
+            {i + 1}
+          </td>
+          <td>
+            <a href={"/loans/" + loans[i].id} target="_blank">
+              <strong>
+                {member.last_name}, {member.first_name} {member.middle_name}
+                <br/>
+                <small className="text-muted">
+                  {center.name}
+                </small>
+              </strong>
+            </a>
+          </td>
+          <td>
+            {loanProduct.name}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].principal)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].principal_paid)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].overall_principal_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].interest)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].interest_paid)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].overall_interest_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].total_paid)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].principal_due)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].total_due)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].total_balance)}
+          </td>
+          <td className="text-right">
+            {numberAsPercent(loans[i].principal_rr)}
+          </td>
+        </tr>
+      );
+
+      totalPrincipal                += parseFloat(loans[i].principal);
+      totalPrincipalPaid            += parseFloat(loans[i].principal_paid);
+      totalOverallPrincipalBalance  += parseFloat(loans[i].overall_principal_balance);
+      totalInterest                 += parseFloat(loans[i].interest);
+      totalInterestPaid             += parseFloat(loans[i].interest_paid);
+      totalOverallInterestBalance   += parseFloat(loans[i].overall_interest_balance);
+      totalTotalPaid                += parseFloat(loans[i].total_paid);
+      totalPrincipalDue             += parseFloat(loans[i].principal_due);
+      totalTotalDue                 += parseFloat(loans[i].total_due);
+      totalTotalBalance             += parseFloat(loans[i].total_balance);
+    }
+
+    rows.push(
+      <tr key="rr-grand-total">
+        <th className="text-center">
+        </th>
+        <th colSpan="2">
+          <strong>
+            Total ({loans.length})
+          </strong>
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalPrincipal)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalPrincipalPaid)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalOverallPrincipalBalance)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalInterest)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalInterestPaid)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalOverallInterestBalance)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalTotalPaid)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalPrincipalDue)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalTotalDue)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalTotalBalance)}
+        </th>
+        <th className="text-right">
+          N/A
+        </th>
+        
+      </tr>
+    );
+
+    return rows;
+  }
+
+  render() {
+    return  (
+      <div>
+        <h5>
+          Repayment Rates
+        </h5>
+
+        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.8em"}}>
+          <thead>
+            <tr>
+              <th>
+              </th>
+              <th style={{width: "20%"}}>
+                Name
+              </th>
+              <th>
+                Product
+              </th>
+              <th className="text-right">
+                Principal
+              </th>
+              <th className="text-right">
+                P. Paid
+              </th>
+              <th className="text-right">
+                Balance
+              </th>
+              <th className="text-right">
+                Interest
+              </th>
+              <th className="text-right">
+                I. Paid
+              </th>
+              <th className="text-right">
+                I. Bal.
+              </th>
+              <th className="text-right">
+                Total Paid
+              </th>
+              <th className="text-right">
+                P. Due
+              </th>
+              <th className="text-right">
+                Total Due
+              </th>
+              <th className="text-right">
+                Total Bal.
+              </th>
+              <th className="text-center">
+                RR
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderDataRows()}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}

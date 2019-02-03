@@ -41,7 +41,11 @@
       = link_to "/data_stores/soa_funds", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         SOA Funds
-    %li{ class: "nav-item #{params[:controller] == 'soa_funds' ? 'active' : ''}" }
+    %li{ class: "nav-item #{params[:controller] == 'watchlists' ? 'active' : ''}" }
       = link_to "/data_stores/watchlists", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         Watchlists
+    %li{ class: "nav-item #{params[:controller] == 'repayment_rates' ? 'active' : ''}" }
+      = link_to "/data_stores/repayment_rates", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Repayment Rates
