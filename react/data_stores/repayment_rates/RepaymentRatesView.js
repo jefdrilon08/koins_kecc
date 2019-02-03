@@ -79,7 +79,7 @@ export default class MasterListView extends React.Component {
           <td className="text-right">
             {numberWithCommas(loans[i].total_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-center">
             {numberAsPercent(loans[i].principal_rr)}
           </td>
         </tr>
@@ -96,6 +96,8 @@ export default class MasterListView extends React.Component {
       totalTotalDue                 += parseFloat(loans[i].total_due);
       totalTotalBalance             += parseFloat(loans[i].total_balance);
     }
+
+    totalRR = (totalTotalPaid / totalTotalDue);
 
     rows.push(
       <tr key="rr-grand-total">
@@ -136,8 +138,8 @@ export default class MasterListView extends React.Component {
         <th className="text-right">
           {numberWithCommas(totalTotalBalance)}
         </th>
-        <th className="text-right">
-          N/A
+        <th className="text-center">
+          {numberAsPercent(totalRR)}
         </th>
         
       </tr>

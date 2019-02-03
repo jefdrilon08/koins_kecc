@@ -33,11 +33,13 @@ export default class ShowComponent extends React.Component {
     var context       = this;
     var centerId      = options.centerId;
     var loanProductId = options.loanProductId;
+    var officerId     = options.officerId;
 
     var data  = {
       id: this.props.id,
       center_id: centerId,
-      loan_product_id: loanProductId
+      loan_product_id: loanProductId,
+      officer_id: officerId
     }
 
     console.log("fetch (data):");
@@ -45,7 +47,8 @@ export default class ShowComponent extends React.Component {
 
     this.setState({
       currentCenterId: centerId,
-      currentLoanProductId: loanProductId
+      currentLoanProductId: loanProductId,
+      currentOfficerId: officerId
     });
 
     $.ajax({
@@ -107,6 +110,15 @@ export default class ShowComponent extends React.Component {
   handleCenterChanged(event) {
     this.fetch({
       centerId: event.target.value,
+      officerId: this.state.currentOfficerId,
+      loanProductId: this.state.currentLoanProductId
+    });
+  }
+
+  handleOfficerChanged(event) {
+    this.fetch({
+      centerId: this.state.currentCenterId,
+      officerId: event.target.value,
       loanProductId: this.state.currentLoanProductId
     });
   }
@@ -114,6 +126,7 @@ export default class ShowComponent extends React.Component {
   handleLoanProductChanged(event) {
     this.fetch({
       centerId: this.state.currentCenterId,
+      officerId: this.state.currentOfficerId,
       loanProductId: event.target.value
     });
   }
@@ -159,9 +172,6 @@ export default class ShowComponent extends React.Component {
     });
   }
 
-  handleFilterClicked() {
-  }
-
   render() {
     if(this.state.isLoading) {
       return  (
@@ -174,12 +184,13 @@ export default class ShowComponent extends React.Component {
             currentView={this.state.currentView} 
             handleViewToggled={this.handleViewToggled.bind(this)}
             centers={this.state.data.data.centers}
+            officers={this.state.data.data.officers}
             loanProducts={this.state.data.data.loan_products}
             currentCenterId={this.state.currentCenterId}
             currentLoanProductId={this.state.currentLoanProductId}
             handleCenterChanged={this.handleCenterChanged.bind(this)}
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
-            handleFilterClicked={this.handleFilterClicked.bind(this)}
+            handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
           <RepaymentRatesView
             data={this.state.data}
@@ -193,12 +204,13 @@ export default class ShowComponent extends React.Component {
             currentView={this.state.currentView} 
             handleViewToggled={this.handleViewToggled.bind(this)}
             centers={this.state.data.data.centers}
+            officers={this.state.data.data.officers}
             loanProducts={this.state.data.data.loan_products}
             currentCenterId={this.state.currentCenterId}
             currentLoanProductId={this.state.currentLoanProductId}
             handleCenterChanged={this.handleCenterChanged.bind(this)}
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
-            handleFilterClicked={this.handleFilterClicked.bind(this)}
+            handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
           <div>
             PAR
@@ -212,12 +224,13 @@ export default class ShowComponent extends React.Component {
             currentView={this.state.currentView} 
             handleViewToggled={this.handleViewToggled.bind(this)}
             centers={this.state.data.data.centers}
+            officers={this.state.data.data.officers}
             loanProducts={this.state.data.data.loan_products}
             currentCenterId={this.state.currentCenterId}
             currentLoanProductId={this.state.currentLoanProductId}
             handleCenterChanged={this.handleCenterChanged.bind(this)}
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
-            handleFilterClicked={this.handleFilterClicked.bind(this)}
+            handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
           <MasterListView
             data={this.state.data}

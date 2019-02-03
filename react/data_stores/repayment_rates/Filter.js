@@ -53,6 +53,27 @@ export default class Filter extends React.Component {
     return options;
   }
 
+  renderOfficerOptions() {
+    var officers = this.props.officers;
+    var options = [];
+
+    options.push(
+      <option value="" key={"officer-select"}>
+        -- SELECT --
+      </option>
+    );
+
+    for(var i = 0; i < officers.length; i++) {
+      options.push(
+        <option value={officers[i].id} key={"officer-" + officers[i].id}>
+          {officers[i].last_name}, {officers[i].first_name}
+        </option>
+      );
+    }
+
+    return options;
+  }
+
   render() {
     return  (
       <div className="row">
@@ -129,15 +150,15 @@ export default class Filter extends React.Component {
         <div className="col-md-3 col-xs-12">
           <div className="form-group">
             <label>
-              Actions
+              Officers
             </label>
-            <button
-              className="btn btn-primary btn-block"
-              onClick={this.props.handleFilterClicked.bind(this)}
+            <select
+              className="form-control"
+              value={this.props.currentOfficerId}
+              onChange={this.props.handleOfficerChanged.bind(this)}
             >
-              <span className="fa fa-sync" />
-              Filter
-            </button>
+              {this.renderOfficerOptions()}
+            </select>
           </div>
         </div>
       </div>

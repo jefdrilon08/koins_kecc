@@ -24,6 +24,12 @@ module Api
                         }
             end
 
+            if params[:officer_id].present?
+              records = records.select{ |o|
+                          o[:officer][:id] == params[:officer_id]
+                        }
+            end
+
             record.data["records"] = records
 
             render json: record
