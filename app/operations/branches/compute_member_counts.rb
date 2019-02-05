@@ -64,7 +64,7 @@ module Branches
       @active_members     = @members.where(
                               id: MembershipPaymentRecord.paid.where(
                                     "date_paid <= ?",
-                                    @as__of
+                                    @as_of
                                   ).pluck(:member_id).uniq
                             )
 
