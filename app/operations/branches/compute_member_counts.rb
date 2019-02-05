@@ -84,7 +84,7 @@ module Branches
                             ).execute!
 
       #@active_loans       = Loan.active.where(branch_id: @branch.id)
-      @member_loaners     = @members.where(id: @active_loans.pluck(:member_id).uniq).where.not(id: @active_members.pluck(:id))
+      @member_loaners     = @members.where(id: @active_loans.pluck(:member_id).uniq)
       @member_pure_savers = @members.where.not(id: [@member_loaners.pluck(:id) + @active_members.pluck(:id)])
 
       # Pure Savers
