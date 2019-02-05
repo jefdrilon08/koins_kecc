@@ -4,7 +4,7 @@ class WithdrawalCollectionsController < ApplicationController
   def index
     @withdrawal_collections = WithdrawalCollection.select("*")
 
-    @withdrawal_collections = @withdrawal_collections.order("collection_date DESC").page(params[:page]).per(20)
+    @withdrawal_collections = @withdrawal_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
   def show

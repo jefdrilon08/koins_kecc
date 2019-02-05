@@ -4,7 +4,7 @@ class MembershipPaymentCollectionsController < ApplicationController
   def index
     @membership_payment_collections = MembershipPaymentCollection.select("*")
 
-    @membership_payment_collections = @membership_payment_collections.order("collection_date DESC").page(params[:page]).per(20)
+    @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
   def show

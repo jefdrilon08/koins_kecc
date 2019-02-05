@@ -4,7 +4,7 @@ class DepositCollectionsController < ApplicationController
   def index
     @deposit_collections = DepositCollection.select("*")
 
-    @deposit_collections = @deposit_collections.order("collection_date DESC").page(params[:page]).per(20)
+    @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
   def show
