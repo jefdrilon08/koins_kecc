@@ -8,7 +8,7 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @members          = Member.where(branch_id: @branch.id)
+      @members          = Member.active_and_resigned.where(branch_id: @branch.id)
       @pending_members  = @members.where(status: "pending")
 
       @data = {
@@ -61,8 +61,22 @@ module Branches
     end
 
     def execute!
-      @active_loans       = Loan.active.where(branch_id: @branch.id)
-      @member_loaners     = @members.where(id: @active_loans.pluck(:member_id))
+      @active_members     = @members.where(
+                              id: MembershipPaymentRecord.paid.where(
+                                    "date_paid <= ?",
+                                    @as__of
+                                  ).pluck(:member_id).uniq
+                            )
+
+      @active_loans       = ::Loans::FetchActiveAsOf.new(
+                              config: {
+                                as_of: @as_of,
+                                branch: @branch
+                              }
+                            ).execute!
+
+      #@active_loans       = Loan.active.where(branch_id: @branch.id)
+      @member_loaners     = @members.where(id: @active_loans.pluck(:member_id)).where.not(id: @active_members.pluck(:id))
       @member_pure_savers = @members.where.not(id: @member_loaners.pluck(:id))
 
       # Pure Savers
@@ -88,26 +102,15 @@ module Branches
       @data[:counts][:loaners][:total]  = total
 
       # Active Members = Pure Savers + Loaners
-      total_female  = @data[:counts][:pure_savers][:female] + @data[:counts][:loaners][:female]
-      total_male    = @data[:counts][:pure_savers][:male] + @data[:counts][:loaners][:male]
-      total_others  = @data[:counts][:pure_savers][:others] + @data[:counts][:loaners][:others]
+      total_female  = @active_members.where(gender: "Female").count
+      total_male    = @active_members.where(gender: "Male").count
+      total_others  = @active_members.where(gender: "Others").count
       total         = total_female + total_male + total_others
 
       @data[:counts][:active_members][:female] = total_female
       @data[:counts][:active_members][:male]   = total_male
       @data[:counts][:active_members][:others] = total_others
       @data[:counts][:active_members][:total]  = total
-
-      # Pending
-      total_female  = @pending_members.where(gender: "Female").count
-      total_male    = @pending_members.where(gender: "Male").count
-      total_others  = @pending_members.where(gender: "Others").count
-      total         = total_female + total_male + total_others
-
-      @data[:counts][:pending_members][:female] = total_female
-      @data[:counts][:pending_members][:male]   = total_male
-      @data[:counts][:pending_members][:others] = total_others
-      @data[:counts][:pending_members][:total]  = total
 
       @data
     end

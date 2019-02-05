@@ -13,6 +13,17 @@
       Total
   %tr
     %th
+      Active Members
+    %td.text-center
+      #{@data[:counts][:active_members][:male]}
+    %td.text-center
+      #{@data[:counts][:active_members][:female]}
+    %td.text-center
+      #{@data[:counts][:active_members][:others]}
+    %td.text-center
+      #{@data[:counts][:active_members][:total]}
+  %tr
+    %th
       Pure Savers
     %td.text-center
       #{@data[:counts][:pure_savers][:male]}
@@ -33,25 +44,14 @@
       #{@data[:counts][:loaners][:others]}
     %td.text-center
       #{@data[:counts][:loaners][:total]}
-  %tr.bg-info
+  %tr
     %th
-      Active Members
-    %td.text-center
-      #{@data[:counts][:active_members][:male]}
-    %td.text-center
-      #{@data[:counts][:active_members][:female]}
-    %td.text-center
-      #{@data[:counts][:active_members][:others]}
-    %td.text-center
-      #{@data[:counts][:active_members][:total]}
-  %tr.bg-danger
-    %th
-      Pending
-    %td.text-center
-      #{@data[:counts][:pending_members][:male]}
-    %td.text-center
-      #{@data[:counts][:pending_members][:female]}
-    %td.text-center
-      #{@data[:counts][:pending_members][:others]}
-    %td.text-center
-      #{@data[:counts][:pending_members][:total]}
+      GRAND TOTAL
+    %th.text-center
+      #{@data[:counts][:active_members][:male].to_i + @data[:counts][:pure_savers][:male].to_i + @data[:counts][:loaners][:male].to_i}
+    %th.text-center
+      #{@data[:counts][:active_members][:female].to_i + @data[:counts][:pure_savers][:female].to_i + @data[:counts][:loaners][:female].to_i}
+    %th.text-center
+      #{@data[:counts][:active_members][:others].to_i + @data[:counts][:pure_savers][:others].to_i + @data[:counts][:loaners][:others].to_i}
+    %th.text-center
+      #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
