@@ -6,6 +6,7 @@ var Index  = (function() {
   var $btnConfirmNew;
 
   var $selectBranch;
+  var $inputAsOf;
 
   var $message;
   var templateErrorList;
@@ -16,6 +17,7 @@ var Index  = (function() {
     $btnConfirmNew = $("#btn-confirm-new");
 
     $selectBranch = $("#select-branch");
+    $inputAsOf      = $("#input-as-of");
 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
@@ -28,13 +30,16 @@ var Index  = (function() {
     });
 
     $btnConfirmNew.on("click", function() {
-      var branchId  = $selectBranch.val();;
+      var asOf      = $inputAsOf.val();
+      var branchId  = $selectBranch.val();
 
       $message.html("Loading...");
       $btnConfirmNew.prop("disabled", true);
       $selectBranch.prop("disabled", true);
+      $inputAsOf.prop("disabled", true);
 
       var data  = {
+        as_of: asOf,
         branch_id: branchId,
         authenticity_token: authenticityToken
       }
@@ -51,6 +56,7 @@ var Index  = (function() {
           $message.html("Something went wrong...");
           $btnConfirmNew.prop("disabled", false);
           $selectBranch.prop("disabled", false);
+          $inputAsOf.prop("disabled", false);
         }
       });
     });

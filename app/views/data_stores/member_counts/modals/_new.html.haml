@@ -9,13 +9,16 @@
           .bs-callout.bs-callout-info
             Create a new data store for member counts
           .row
-            .col
-              %h5
-                Date Today: #{Date.today}
+            .col-md-6.col-xs-12
               .form-group
                 %label
                   Branch
                 = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  As Of:
+                = text_field_tag :as_of, Date.today, type: :date, id: "input-as-of", class: 'form-control'
           .message
       .modal-footer
         .controls
