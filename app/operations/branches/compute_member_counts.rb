@@ -8,7 +8,15 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @members          = Member.active_and_resigned.where(branch_id: @branch.id)
+      @members          = Member.active.where(
+                            "branch_id = ?",
+                            @branch.id
+                          )
+
+      @resigned_members = Member.resigned.where("date_resigned > ?", @as_of)
+
+      @members  = Member.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
+
       @pending_members  = @members.where(status: "pending")
 
       @data = {
