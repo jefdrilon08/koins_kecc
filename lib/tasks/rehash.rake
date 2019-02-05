@@ -1,4 +1,15 @@
 namespace :rehash do
+  task :member_account => :environment do
+    member_account  = MemberAccount.find(ENV['ID')
+    puts "Rehashing member_account #{member_account.id}..."
+
+    ::MemberAccounts::Rehash.new(
+      member_account: o
+    ).execute!
+
+    puts "Done."
+  end
+
   task :member_accounts => :environment do
     member_accounts = MemberAccount.all
     size            = member_accounts.size

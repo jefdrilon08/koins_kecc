@@ -1,4 +1,37 @@
 namespace :adjust do
+  task :perform_deposit => :environment do
+    date_paid         = ENV['DATE_PAID'].to_date
+    user              = User.find(ENV['USER_ID'])
+    particular        = ENV['PARTICULAR']
+    member            = Member.find(ENV['MEMBER_ID']) 
+    amount            = ENV['AMOUNT'].to_f
+    record_type       = ENV['RECORD_TYPE']
+    account_subtype   = ENV['ACCOUNT_SUBTYPE']
+    member_account_id = ENV['MEMBER_ACCOUNT_ID']
+    enabled           = true
+
+    config  = {
+      date_paid: date_paid,
+      deposit: {
+        amount: amount,
+        enabled: enabled,
+        member_id: member_id,
+        record_type: record_type,
+        account_subtype: account_subtype,
+        member_account_id: member_account_id
+      },
+      member: member,
+      user: user,
+      particular: particular
+    }
+
+    puts "Performing deposit for account #{member_account_id}"
+
+    ::DepositCollections::ApproveDepositHash.new(
+      config: config
+    ).execute!
+  end
+
   task :perform_deposits => :environement do
     deposit_collection    = DepositCollection.find(ENV['ID'])
     user                  = User.find(ENV['USER_ID'])
