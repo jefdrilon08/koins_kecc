@@ -18,6 +18,18 @@ module Api
                         }
             end
 
+            if params[:loan_product_id].present?
+              records = records.select{ |o|
+                          o[:loan_product][:id] == params[:loan_product_id]
+                        }
+            end
+
+            if params[:officer_id].present?
+              records = records.select{ |o|
+                          o[:officer][:id] == params[:officer_id]
+                        }
+            end
+
             record.data["records"] = records
 
             render json: record
