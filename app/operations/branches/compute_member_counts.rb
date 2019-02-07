@@ -69,19 +69,19 @@ module Branches
     end
 
     def execute!
-      @active_members     = @members.where(
-                              id: MembershipPaymentRecord.paid.where(
-                                    "date_paid <= ?",
-                                    @as_of
-                                  ).pluck(:member_id).uniq
-                            )
-
       @active_loans       = ::Loans::FetchActiveAsOf.new(
                               config: {
                                 as_of: @as_of,
                                 branch: @branch
                               }
                             ).execute!
+
+      @active_members     = @members.where(
+                              id: MembershipPaymentRecord.paid.where(
+                                    "date_paid <= ?",
+                                    @as_of
+                                  ).pluck(:member_id).uniq
+                            ).where.not(id: @active_loans.pluck(:member_id))
 
       #@active_loans       = Loan.active.where(branch_id: @branch.id)
       @member_loaners     = @members.where(id: @active_loans.pluck(:member_id).uniq)
