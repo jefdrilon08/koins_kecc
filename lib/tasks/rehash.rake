@@ -1,6 +1,6 @@
 namespace :rehash do
   task :member_account => :environment do
-    member_account  = MemberAccount.find(ENV['ID')
+    member_account  = MemberAccount.find(ENV['ID'])
     puts "Rehashing member_account #{member_account.id}..."
 
     ::MemberAccounts::Rehash.new(
