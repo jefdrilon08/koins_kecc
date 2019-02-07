@@ -71,7 +71,7 @@ module MemberAccounts
         # TODO: O(n^2) --> optimize this
         @transaction_dates.each_with_index do |d, d_index|
           r = {
-            date: d.to_date.localtime,
+            date: d.to_date,
             beginning_balance: 0.00,
             deposits: 0.00,
             withdrawals: 0.00,
