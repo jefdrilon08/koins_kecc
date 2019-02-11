@@ -99,7 +99,7 @@ module MonthlyClosingCollections
           @progress = (@counter.to_f / @total_accounts.to_f) * 100
 
           # Broadcast progress
-          ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
+          #ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
         end
       end
 
@@ -127,7 +127,7 @@ module MonthlyClosingCollections
 
       @progress = 100
 
-      ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
+      #ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
 
       @monthly_closing_collection
     end

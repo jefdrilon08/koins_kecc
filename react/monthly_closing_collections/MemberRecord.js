@@ -27,7 +27,7 @@ export default class MemberRecord extends React.Component {
       dataRows.push(
         <tr key={"member-" + member.id + "-" + i + "-" + memberAccount.id}>
           <td className="">
-            {records[i].transacted_at}
+            {records[i].date}
           </td>
           <td className="text-right">
             {numberWithCommas(records[i].beginning_balance)}

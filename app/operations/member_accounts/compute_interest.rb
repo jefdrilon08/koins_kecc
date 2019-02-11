@@ -59,7 +59,7 @@ module MemberAccounts
 
       records = []
       if @latest_interest_transaction.present?
-        @account_transactions = AccountTransaction.savings_deposits.where(
+        @account_transactions = AccountTransaction.savings.where(
                                   "subsidiary_id = ? AND transacted_at > ? AND transacted_at <= ?",
                                   @member_account.id,
                                   @latest_interest_transaction.transacted_at,
@@ -106,18 +106,18 @@ module MemberAccounts
 
         @data[:records] = records
 
-        @data[:account_transactions]  = @account_transactions.map{ |t|
-                                          {
-                                            id: t.id,
-                                            subsidiary_id: t.subsidiary_id,
-                                            subsidiary_type: t.subsidiary_type,
-                                            amount: t.amount,
-                                            transaction_type: t.transaction_type,
-                                            transacted_at: t.transacted_at,
-                                            status: t.status,
-                                            data: t.data
-                                          }
-                                        }
+#        @data[:account_transactions]  = @account_transactions.map{ |t|
+#                                          {
+#                                            id: t.id,
+#                                            subsidiary_id: t.subsidiary_id,
+#                                            subsidiary_type: t.subsidiary_type,
+#                                            amount: t.amount,
+#                                            transaction_type: t.transaction_type,
+#                                            transacted_at: t.transacted_at,
+#                                            status: t.status,
+#                                            data: t.data
+#                                          }
+#                                        }
 
       end
 
