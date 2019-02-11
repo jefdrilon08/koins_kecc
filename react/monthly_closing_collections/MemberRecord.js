@@ -1,4 +1,5 @@
 import React from 'react';
+import {numberWithCommas} from '../utils/helpers';
 
 export default class MemberRecord extends React.Component {
   constructor(props) {
@@ -16,7 +17,50 @@ export default class MemberRecord extends React.Component {
   }
 
   renderRecords() {
-    var records = [];
+    var member              = this.state.data.member;
+    var memberAccount       = this.state.data.member_account;
+    var records             = this.state.data.records;
+    var accountTransactions = this.state.data.account_transactions;
+    var dataRows            = [];
+
+    for(var i = 0; i < records.length; i++) {
+      dataRows.push(
+        <tr key={"member-" + member.id + "-" + i + "-" + memberAccount.id}>
+          <td className="">
+            {records[i].transacted_at}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].beginning_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].net_amount)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].ending_balance)}
+          </td>
+        </tr>
+      );
+    }
+
+    // Interest
+    dataRows.push(
+      <tr key={"interest-row-" + memberAccount.id}>
+        <td colSpan="2">
+          <strong>
+            Interest Earned
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(this.state.data.interest)}
+          </strong>
+        </td>
+        <td>
+        </td>
+      </tr>
+    );
+
+    return dataRows;
   }
 
   render() {
@@ -46,9 +90,6 @@ export default class MemberRecord extends React.Component {
               </th>
               <th className="text-right">
                 Amount
-              </th>
-              <th className="text-center">
-                Type
               </th>
               <th className="text-right">
                 Ending Balance

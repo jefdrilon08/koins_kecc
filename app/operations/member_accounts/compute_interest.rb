@@ -75,6 +75,7 @@ module MemberAccounts
             beginning_balance: 0.00,
             deposits: 0.00,
             withdrawals: 0.00,
+            net_amount: 0.00,
             interest_per_month: 0.00,
             interest_earned_on_deposits: 0.00,
             ending_balance: 0.00,
@@ -86,6 +87,7 @@ module MemberAccounts
           r[:beginning_balance] = current_date_transactions.first.data.with_indifferent_access[:beginning_balance].to_f.round(2)
           r[:deposits]          = current_date_transactions.where(transaction_type: "deposit").sum(:amount)
           r[:withdrawals]       = current_date_transactions.where(transaction_type: "withdraw").sum(:amount)
+          r[:net_amount]        = r[:deposits].to_f - r[:withdrawals].to_f
           r[:ending_balance]    = current_date_transactions.last.data.with_indifferent_access[:ending_balance].to_f.round(2)
 
           r[:interest_per_month]                = (@monthly_interest_rate * r[:ending_balance]).to_f.round(2)
