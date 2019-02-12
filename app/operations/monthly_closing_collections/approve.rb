@@ -20,14 +20,19 @@ module MonthlyClosingCollections
         status: "approved",
         closed_at: @current_date
       )
+
+      @monthly_closing_collection
     end
 
     def perform_deposits!
       @data[:records].each do |r|
+        member_account  = MemberAccount.find(r[:member_account][:id])
+        member          = member_account.member
+
         config  = {
           date_paid: @closing_date,
           deposit: r,
-          member: Member.find(r[:member][:id]),
+          member: member,
           user: @user,
           particular: @particular
         }
