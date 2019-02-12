@@ -51,7 +51,11 @@ export default class ShowUI extends React.Component {
       var data          = context.state.data.data;
       var memberRecords = [];
 
+      var totalInterest = 0.00;
+
       for(var i = 0; i < data.records.length; i++) {
+        totalInterest += parseFloat(data.records[i].interest);
+
         memberRecords.push(
           <MemberRecord
             key={"member-record-" + i}
@@ -63,6 +67,19 @@ export default class ShowUI extends React.Component {
       return  (
         <div>
           {memberRecords}
+
+          <table className="table table-bordered table-hover">
+            <tbody>
+              <tr>
+                <th>
+                  Total Interest:
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(totalInterest)}
+                </th>
+              </tr>
+            </tbody>
+          </table>
         </div>
       );
     }
