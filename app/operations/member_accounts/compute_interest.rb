@@ -114,6 +114,12 @@ module MemberAccounts
         r[:interest_earned_on_deposits]       = ((r[:interest_per_month] * r[:num_days_before_next_transaction]) / 30).round(2)
 
         @data[:interest] += r[:interest_earned_on_deposits]
+      else
+        r[:interest_per_month]                = (@monthly_interest_rate * r[:ending_balance]).to_f.round(2)
+        r[:num_days_before_next_transaction]  = (@closing_date - r[:date].to_date).to_i
+        r[:interest_earned_on_deposits]       = ((r[:interest_per_month] * r[:num_days_before_next_transaction]) / 30).round(2)
+
+        @data[:interest] += r[:interest_earned_on_deposits]
       end
 
       # Load first transaction

@@ -5,6 +5,8 @@
         Branch
       %th
         Account
+      %th.text-center
+        Num Members
       %th
         Closing Date
       %th
@@ -20,6 +22,8 @@
               #{o.branch}
         %td
           #{o.account_subtype}
+        %td.text-center
+          #{o.data["records"].size}
         %td
           %small
             #{o.closing_date.strftime("%B %d, %Y")}

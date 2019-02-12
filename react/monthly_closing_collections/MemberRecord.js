@@ -59,8 +59,12 @@ export default class MemberRecord extends React.Component {
           </strong>
         </td>
         <td>
+          <strong>
+            Annual Interest Rate:
+          </strong>
         </td>
-        <td>
+        <td className="text-muted">
+          {this.state.data.annual_interest_rate * 100}%
         </td>
       </tr>
     );
