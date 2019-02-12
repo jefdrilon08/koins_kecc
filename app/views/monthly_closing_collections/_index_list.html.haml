@@ -4,6 +4,8 @@
       %th
         Branch
       %th
+        Account
+      %th
         Closing Date
       %th
         Closed At
@@ -16,6 +18,8 @@
           = link_to monthly_closing_collection_path(o) do
             %strong
               #{o.branch}
+        %td
+          #{o.account_subtype}
         %td
           %small
             #{o.closing_date}
