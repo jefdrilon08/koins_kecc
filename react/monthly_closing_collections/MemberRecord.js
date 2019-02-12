@@ -77,7 +77,9 @@ export default class MemberRecord extends React.Component {
           </div>
           <div className="col">
             <div className="text-right">
-              {this.state.data.member_account.id}
+              <a href={"/savings_accounts/" + this.state.data.member_account.id} target='_blank'>
+                Go to Account
+              </a>
             </div>
           </div>
         </div>
