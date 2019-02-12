@@ -23,7 +23,10 @@
         %td
           #{o.account_subtype}
         %td.text-center
-          #{o.data["records"].size}
+          - if o.pending? || o.approved?
+            #{o.data["records"].size}
+          - else
+            N/A
         %td
           %small
             #{o.closing_date.strftime("%B %d, %Y")}
