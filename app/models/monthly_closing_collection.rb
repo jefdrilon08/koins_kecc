@@ -12,6 +12,8 @@ class MonthlyClosingCollection < ApplicationRecord
 
   scope :pending, -> { where(status: "pending") }
   scope :approved, -> { where(status: "approved") }
+  scope :processing, -> { where(status: "processing") }
+  scope :error, -> { where(status: "error") }
 
   def processing?
     self.status == "processing"
