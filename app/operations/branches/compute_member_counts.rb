@@ -13,7 +13,7 @@ module Branches
                             @branch.id
                           )
 
-      @resigned_members = Member.resigned.where("date_resigned > ?", @as_of)
+      @resigned_members = Member.resigned.where("date_resigned > ? AND branch_id = ?", @as_of, @branch.id)
 
       @members  = Member.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
 
