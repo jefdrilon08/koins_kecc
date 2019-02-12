@@ -48,7 +48,7 @@ export default class MemberRecord extends React.Component {
     // Interest
     dataRows.push(
       <tr key={"interest-row-" + memberAccount.id}>
-        <td colSpan="3">
+        <td colSpan="2">
           <strong>
             Interest Earned
           </strong>
@@ -57,6 +57,8 @@ export default class MemberRecord extends React.Component {
           <strong>
             {numberWithCommas(this.state.data.interest)}
           </strong>
+        </td>
+        <td>
         </td>
         <td>
         </td>
