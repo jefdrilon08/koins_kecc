@@ -52,7 +52,7 @@ var Index = (function() {
         method: 'POST',
         data: {
           branch_id: branchId,
-          accountSubtype: accountSubtype,
+          account_subtype: accountSubtype,
           closing_date: closingDate,
           authenticity_token: authenticityToken
         },

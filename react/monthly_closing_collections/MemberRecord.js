@@ -33,7 +33,10 @@ export default class MemberRecord extends React.Component {
             {numberWithCommas(records[i].beginning_balance)}
           </td>
           <td className="text-right">
-            {numberWithCommas(records[i].net_amount)}
+            {numberWithCommas(records[i].deposits)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].withdrawals)}
           </td>
           <td className="text-right">
             {numberWithCommas(records[i].ending_balance)}
@@ -45,7 +48,7 @@ export default class MemberRecord extends React.Component {
     // Interest
     dataRows.push(
       <tr key={"interest-row-" + memberAccount.id}>
-        <td colSpan="2">
+        <td colSpan="3">
           <strong>
             Interest Earned
           </strong>
@@ -89,7 +92,10 @@ export default class MemberRecord extends React.Component {
                 Beginning Balance
               </th>
               <th className="text-right">
-                Amount
+                Deposit
+              </th>
+              <th className="text-right">
+                Withdrawals
               </th>
               <th className="text-right">
                 Ending Balance

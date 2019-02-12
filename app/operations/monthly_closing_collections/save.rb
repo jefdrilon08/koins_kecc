@@ -8,6 +8,7 @@ module MonthlyClosingCollections
       @branch       = @config[:branch]
       
       @monthly_closing_collection = @config[:monthly_closing_collection]
+      @account_subtype            = @monthly_closing_collection.account_subtype
 
       @meta = {
         prepared_by: {
@@ -34,23 +35,23 @@ module MonthlyClosingCollections
         raise "Config not found: interest_member_accounts"
       end
 
-      account_types     = []
-      account_subtypes  = []
+      @account_settings = nil
 
-      @interest_member_accounts.each do |o|
-        account_types << o.account_type
-        account_subtypes << o.account_subtype
+      @interest_member_accounts.each do |s|
+        if s.account_subtype == @account_subtype
+          @account_settings = s
+        end
       end
 
-      account_types     = account_types.uniq
-      account_subtypes  = account_subtypes.uniq
+      if @account_settings.blank?
+        raise "account_settings not found"
+      end
 
       @member_accounts  = MemberAccount.joins(:member).where(
-                            "members.branch_id = ? AND members.status = ? AND account_type IN (?) AND account_subtype IN (?)",
+                            "members.branch_id = ? AND members.status = ? AND account_subtype = ?",
                             @branch.id,
                             "active",
-                            account_types,
-                            account_subtypes
+                            @account_settings.account_subtype
                           )
 
       if @monthly_closing_collection.blank?
@@ -65,41 +66,24 @@ module MonthlyClosingCollections
 
     def execute!
       # Build data
-      @interest_member_accounts.each do |s|
-        total = {
-          account_type: s.account_type,
-          account_subtype: s.account_subtype,
-          interest: 0.00
-        }
+      accounts  = @member_accounts.where(
+                    account_type: @account_settings.account_type, 
+                  )
 
-        accounts  = @member_accounts.where(
-                      account_type: s.account_type, 
-                      account_subtype: s.account_subtype
-                    )
+      accounts.each do |a|
+        result  = ::MemberAccounts::ComputeInterest.new(
+                    config: {
+                      member_account: a,
+                      closing_date: @closing_date,
+                      account_type: @account_settings.account_type,
+                      account_subtype: @account_settings.account_subtype,
+                      account_settings: @account_settings
+                    }
+                  ).execute!
 
-        accounts.each do |a|
-          result  = ::MemberAccounts::ComputeInterest.new(
-                      config: {
-                        member_account: a,
-                        closing_date: @closing_date,
-                        account_type: s.account_type,
-                        account_subtype: s.account_subtype,
-                        account_settings: s
-                      }
-                    ).execute!
-
-          if result[:interest] > 0
-            total[:interest] += result[:interest].to_f.round(2)
-            @data[:total_interest] += result[:interest].to_f.round(2)
-            @data[:records] << result
-          end
-
-          @counter += 1
-
-          @progress = (@counter.to_f / @total_accounts.to_f) * 100
-
-          # Broadcast progress
-          #ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
+        if result[:interest] > 0
+          @data[:records] << result
+          @data[:total_interest] += result[:interest].to_f.round(2)
         end
       end
 

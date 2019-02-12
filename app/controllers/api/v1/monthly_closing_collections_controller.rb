@@ -40,11 +40,13 @@ module Api
 
       def create
         branch          = Branch.where(id: params[:branch_id]).first
-        closing_date = params[:closing_date].try(:to_date)
+        closing_date    = params[:closing_date].try(:to_date)
+        account_subtype = params[:account_subtype]
 
         config  = {
           branch: branch,
           closing_date: closing_date,
+          account_subtype: account_subtype,
           user: current_user
         }
 
@@ -59,6 +61,7 @@ module Api
           monthly_closing_collection  = MonthlyClosingCollection.new(
                                           branch: branch,
                                           closing_date: closing_date,
+                                          account_subtype: account_subtype,
                                           status: "processing"
                                         )
 
