@@ -22,10 +22,11 @@
           #{o.account_subtype}
         %td
           %small
-            #{o.closing_date}
+            #{o.closing_date.strftime("%B %d, %Y")}
         %td
-          %small
-            #{o.closed_at}
+          - if o.closed_at.present?
+            %small
+              #{o.closed_at.strftime("%B %d, %Y")}
         %td.text-center
           - if o.pending?
             .badge.badge-warning

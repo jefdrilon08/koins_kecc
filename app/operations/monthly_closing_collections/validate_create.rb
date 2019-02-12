@@ -4,9 +4,10 @@ module MonthlyClosingCollections
       super()
       @config = config
 
-      @closing_date = @config[:closing_date]
-      @branch       = @config[:branch]
-      @user         = @config[:user]
+      @closing_date     = @config[:closing_date]
+      @branch           = @config[:branch]
+      @user             = @config[:user]
+      @account_subtype  = @config[:account_subtype]
     end
 
     def execute!
@@ -28,10 +29,11 @@ module MonthlyClosingCollections
 
       if @closing_date.present? and @branch.present?
         if MonthlyClosingCollection.where(
-            "extract(month from closing_date) = ? AND extract(year from closing_date) = ? AND branch_id = ?",
+            "extract(month from closing_date) = ? AND extract(year from closing_date) = ? AND branch_id = ? AND account_subtype = ?",
             @closing_date.month, 
             @closing_date.year,
-            @branch.id
+            @branch.id,
+            @account_subtype
           ).size > 0
 
           @errors[:messages] << {
