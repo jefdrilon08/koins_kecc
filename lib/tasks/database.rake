@@ -1,4 +1,26 @@
 namespace :db do
+  task :fetch_uninterested_members => :environment do
+    monthly_closing_collection  = MonthlyClosingCollection.find(ENV['ID'])
+    branch                      = monthly_closing_collection.branch
+    closing_date                = monthly_closing_collection.closing_date
+    data                        = monthly_closing_collection.data.with_indifferent_access
+
+    puts "Members without interest for monthly closing dated #{closing_date}. ID: #{monthly_closing_collection.id}"
+
+    active_members  = Member.active.where(branch_id: branch.id)
+    member_ids      = []
+
+    data[:records].each do |r|
+      member_ids << r[:member][:id]
+    end
+
+    uninterested_members  = active_members.where.not(id: member_ids).order("last_name ASC")
+
+    uninterested_members.each_with_index do |m, i|
+      puts "#{i + 1},#{m.id},#{m.last_name},#{m.last_name}"
+    end
+  end
+
   task :update_nil_date_released => :environment do
     loans = Loan.active_or_paid.where(date_released: nil)
     size  = loans.size
