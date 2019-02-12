@@ -100,8 +100,50 @@ export default class ShowUI extends React.Component {
         );
       }
 
+      // Other parameters
+      var closingDate = context.state.data.closing_date;
+      var closedAt    = context.state.data.closed_at;
+      var status      = context.state.data.status;
+
       return  (
         <div>
+          <table className="table table-bordered table-hover table-sm">
+            <tbody>
+              <tr>
+                <th>
+                  Closing Date
+                </th>
+                <td>
+                  {closingDate}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Closed At
+                </th>
+                <td>
+                  {closedAt}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Total Interest
+                </th>
+                <td>
+                  {numberWithCommas(totalInterest)}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Number of Members
+                </th>
+                <td>
+                  {data.records.length}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
           {memberRecords}
 
           <table className="table table-bordered table-hover">
