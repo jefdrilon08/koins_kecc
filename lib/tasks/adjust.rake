@@ -1,4 +1,52 @@
 namespace :adjust do
+  task :reload_member_counts => :environment do
+    start_date      = ENV['START_DATE'].to_date
+    end_date        = ENV['END_DATE'].to_date
+    branch          = Branch.find(ENV['BRANCH_ID'])
+    data_store_type = "MEMBER_COUNTS"
+
+    (start_date..end_date).each do |d|
+      puts "Initiating member_counts for branch #{branch.name} for as_of #{d}"
+
+      record = DataStore.member_counts.where(
+                  "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                  branch.id,
+                  d
+                ).first
+
+      if record.blank?
+        record  = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      branch: {
+                        id: branch.id,
+                        name: branch.name
+                      },
+                      as_of: d,
+                      data_store_type: data_store_type
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+      else
+        record.update!(
+          data: {
+            status: "processing"
+          }
+        )
+      end
+
+      args  = {
+        record: record,
+        data_store_type: data_store_type
+      }
+
+      ProcessBranchMemberCounts.perform_later(args)
+    end
+  end
+
   task :perform_deposit => :environment do
     date_paid         = ENV['DATE_PAID'].to_date
     user              = User.find(ENV['USER_ID'])

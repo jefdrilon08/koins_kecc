@@ -1,5 +1,5 @@
 %h5
-  As Of: #{@record.meta.with_indifferent_access[:as_of]}
+  As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
 %table.table.table-bordered.table-hover.table-sm
   %tr
     %th{ width: "50%" }
@@ -55,3 +55,29 @@
       #{@data[:counts][:active_members][:others].to_i + @data[:counts][:pure_savers][:others].to_i + @data[:counts][:loaners][:others].to_i}
     %th.text-center
       #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
+
+%hr
+%ul.nav.nav-tabs{:role => "tablist"}
+  %li.nav-item
+    %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
+      Active Members (#{@data[:counts][:active_members][:total]})
+  %li.nav-item
+    %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
+      Pure Savers (#{@data[:counts][:pure_savers][:total]})
+  %li.nav-item
+    %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#loaners", :role => "tab"}
+      Active Loaners (#{@data[:counts][:loaners][:total]})
+.tab-content
+  #active-members.tab-pane.active.show{:role => "tabpanel"}
+    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:active_members][:members] }
+  #pure-savers.tab-pane{:role => "tabpanel"}
+    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:pure_savers][:members] }
+  #loaners.tab-pane{:role => "tabpanel"}
+    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:loaners][:members] }
+
+:javascript
+  $(document).ready(function() {
+    $(".data-table").DataTable({
+      fixedHeader: true
+    });
+  });

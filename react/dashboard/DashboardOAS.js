@@ -397,23 +397,6 @@ export default class DashboardOAS extends React.Component {
                   {o.data.counts.active_members.total}
                 </td>
               </tr>
-              <tr>
-                <th>
-                  Pending Members
-                </th>
-                <td className="text-center">
-                  {o.data.counts.pending_members.male}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pending_members.female}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pending_members.others}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pending_members.total}
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
