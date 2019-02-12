@@ -42,7 +42,7 @@ module MemberAccounts
           account_subtype: @member_account.account_subtype
         },
         member: {
-          id: @member_account.id,
+          id: @member_account.member.id,
           first_name: @member_account.member.first_name,
           last_name: @member_account.member.last_name
         },
