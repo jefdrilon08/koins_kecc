@@ -54,8 +54,9 @@ class AccountingController < ApplicationController
                   )
     end
 
+
     if @start_date.present? && @end_date.present? && @start_date < @end_date
-      @records  = @records.where("date_prepared >= ? AND date_prepared <= ?", @start_date, @end_date)
+      @records  = @records.where("date_posted >= ? AND date_posted <= ?", @start_date, @end_date)
     end
 
     if params[:status].present?

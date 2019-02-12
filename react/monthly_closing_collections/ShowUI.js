@@ -4,6 +4,7 @@ import $ from 'jquery';
 import SkCubeLoading from '../SkCubeLoading';
 import {numberWithCommas} from '../utils/helpers';
 import MemberRecord from './MemberRecord';
+import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 
 export default class ShowUI extends React.Component {
   constructor(props) {
@@ -36,6 +37,41 @@ export default class ShowUI extends React.Component {
         alert("Error in fetching data");
       }
     });
+  }
+
+  handleRemoveClicked() {
+  }
+
+  renderAccountingEntry() {
+    var context = this;
+
+    if(context.state.data.data.accounting_entry) {
+      var accounting_entry_data = context.state.data.data.accounting_entry;
+      console.log(accounting_entry_data);
+
+      return  (
+        <AccountingEntryPreview
+          book={accounting_entry_data.book}
+          particular={accounting_entry_data.particular}
+          datePrepared={accounting_entry_data.date_prepared}
+          referenceNumber={accounting_entry_data.reference_number}
+          approved_by={accounting_entry_data.approved_by}
+          branch={accounting_entry_data.branch_name}
+          balanced={true}
+          status={accounting_entry_data.status}
+          journalEntries={accounting_entry_data.journal_entries}
+          isLoading={this.state.isLoading}
+          handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+          data={accounting_entry_data.data}
+        />
+      )
+    } else {
+      return  (
+        <h3>
+          No accounting entry data found
+        </h3>
+      );
+    }
   }
 
   render() {
@@ -80,6 +116,8 @@ export default class ShowUI extends React.Component {
               </tr>
             </tbody>
           </table>
+
+          {this.renderAccountingEntry()}
         </div>
       );
     }

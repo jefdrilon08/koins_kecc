@@ -88,16 +88,16 @@ module MonthlyClosingCollections
       end
 
       # Build accounting entry
-#      @data[:accounting_entry]  = ::MonthlyClosingCollections::BuildAccountingEntry.new(
-#                                    config: {
-#                                      data: @data,
-#                                      branch: @branch,
-#                                      interest_member_accounts: @interest_member_accounts,
-#                                      user: @user,
-#                                      collection_date: @collection_date,
-#                                      closing_date: @closing_date
-#                                    }
-#                                  ).execute!
+      @data[:accounting_entry]  = ::MonthlyClosingCollections::BuildAccountingEntry.new(
+                                    config: {
+                                      data: @data,
+                                      branch: @branch,
+                                      settings: @account_settings,
+                                      user: @user,
+                                      collection_date: @closing_date,
+                                      closing_date: @closing_date
+                                    }
+                                  ).execute!
 
       # Attach meta
       @monthly_closing_collection.meta  = @meta
