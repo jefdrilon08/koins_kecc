@@ -4,7 +4,8 @@ class AccountingCode < ApplicationRecord
     "LIABILITIES",  # CR
     "EQUITIES",     # CR
     "EXPENSES",     # DR
-    "INCOME"        # CR 
+    "INCOME",       # CR
+    "FUND BALANCE"  # DR
   ]
 
   validates :name, presence: true, uniqueness: true
@@ -16,11 +17,12 @@ class AccountingCode < ApplicationRecord
   scope :expenses, -> { where(category: "EXPENSES").order("code ASC") }
   scope :income, -> { where(category: "INCOME").order("code ASC") }
   scope :liabilities, -> { where(category: "LIABILITIES").order("code ASC") }
+  scope :fund_balance, -> { where(category: "FUND BALANCE").order("code ASC") }
 
   scope :income_and_expenses, -> { where(category: ["INCOME", "EXPENSES"]).order("code ASC") }
   scope :assets_and_liabilities_and_equities, -> { where(category: ["ASSETS", "EQUITIES", "LIABILITIES"]).order("code ASC") }
 
-  scope :debits, -> { where(category: ["ASSETS", "EXPENSES"]).order("code ASC") }
+  scope :debits, -> { where(category: ["ASSETS", "EXPENSES", "FUND BALANCE"]).order("code ASC") }
   scope :credits, -> { where(category: ["LIABILITIES", "EQUITIES", "INCOME"]).order("code ASC") }
 
   has_many :journal_entries
