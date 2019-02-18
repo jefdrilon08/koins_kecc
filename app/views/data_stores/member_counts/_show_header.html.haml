@@ -11,9 +11,6 @@
     #{@record.data.with_indifferent_access[:branch][:name]}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      = link_to "#", class: 'btn', id: 'btn-update' do
-        .fa.fa-sync
-        Update
       = link_to "/data_stores/member_counts/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
         .fa.fa-times
         Delete

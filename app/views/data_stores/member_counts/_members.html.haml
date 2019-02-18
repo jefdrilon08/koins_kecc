@@ -1,0 +1,15 @@
+%table.table.table-bordered.table-sm.table-hover.data-table
+  %thead
+    %tr
+      %th{ width: "20%" }
+        ID Number
+      %th
+        Member
+  %tbody
+    - members.each_with_index do |m, i|
+      %tr
+        %td
+          = link_to member_path(m[:id]), target: '_blank' do
+            #{m[:identification_number]}
+        %td
+          #{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}

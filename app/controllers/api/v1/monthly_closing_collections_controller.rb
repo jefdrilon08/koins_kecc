@@ -16,6 +16,29 @@ module Api
         render json:  data
       end
 
+      def approve
+        monthly_closing_collection  = MonthlyClosingCollection.find(params[:id])
+
+        config  = {
+          monthly_closing_collection: monthly_closing_collection,
+          user: current_user
+        }
+
+        errors  = ::MonthlyClosingCollections::ValidateApprove.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size == 0
+          monthly_closing_collection  = ::MonthlyClosingCollections::Approve.new(
+                                          config: config
+                                        ).execute!
+
+          render json: { id: monthly_closing_collection.id }
+        else
+          render json: errors, status: 400
+        end
+      end
+
       def update
         monthly_closing_collection  = MonthlyClosingCollection.find(params[:id])
         branch                      = monthly_closing_collection.branch
@@ -40,11 +63,13 @@ module Api
 
       def create
         branch          = Branch.where(id: params[:branch_id]).first
-        closing_date = params[:closing_date].try(:to_date)
+        closing_date    = params[:closing_date].try(:to_date)
+        account_subtype = params[:account_subtype]
 
         config  = {
           branch: branch,
           closing_date: closing_date,
+          account_subtype: account_subtype,
           user: current_user
         }
 
@@ -59,6 +84,7 @@ module Api
           monthly_closing_collection  = MonthlyClosingCollection.new(
                                           branch: branch,
                                           closing_date: closing_date,
+                                          account_subtype: account_subtype,
                                           status: "processing"
                                         )
 

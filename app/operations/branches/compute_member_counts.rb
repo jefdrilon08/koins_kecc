@@ -13,11 +13,25 @@ module Branches
                             @branch.id
                           )
 
-      @resigned_members = Member.resigned.where("date_resigned > ?", @as_of)
+      @resigned_members = Member.resigned.where("date_resigned > ? AND branch_id = ?", @as_of, @branch.id)
 
       @members  = Member.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
 
-      @pending_members  = @members.where(status: "pending")
+      @default_savings_key  = Settings.default_savings_key
+      @member_accounts      = MemberAccount.where(
+                                account_subtype: @default_savings_key,
+                                branch_id: @branch.id
+                              )
+
+      @account_transactions = AccountTransaction.savings.where(
+                                "DATE(transacted_at) <= ? AND subsidiary_id IN (?)",
+                                @as_of,
+                                @member_accounts.pluck(:id)
+                              )
+
+      @valid_member_accounts  = @member_accounts.where(
+                                  id: @account_transactions.pluck(:subsidiary_id).uniq
+                                )
 
       @data = {
         counts: {
@@ -25,31 +39,29 @@ module Branches
             male: 0,
             female: 0,
             others: 0,
-            total: 0
+            total: 0,
+            members: []
           },
           pure_savers: {
             male: 0,
             female: 0,
             others: 0,
-            total: 0
+            total: 0,
+            members: []
           },
           loaners: {
             male: 0,
             female: 0,
             others: 0,
-            total: 0
+            total: 0,
+            members: []
           },
           active_members: {
             male: 0,
             female: 0,
             others: 0,
-            total: 0
-          },
-          pending_members: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0
+            total: 0,
+            members: []
           }
         },
         branch: {
@@ -69,13 +81,6 @@ module Branches
     end
 
     def execute!
-      @active_members     = @members.where(
-                              id: MembershipPaymentRecord.paid.where(
-                                    "date_paid <= ?",
-                                    @as_of
-                                  ).pluck(:member_id).uniq
-                            )
-
       @active_loans       = ::Loans::FetchActiveAsOf.new(
                               config: {
                                 as_of: @as_of,
@@ -85,7 +90,16 @@ module Branches
 
       #@active_loans       = Loan.active.where(branch_id: @branch.id)
       @member_loaners     = @members.where(id: @active_loans.pluck(:member_id).uniq)
-      @member_pure_savers = @members.where.not(id: [@member_loaners.pluck(:id) + @active_members.pluck(:id)])
+
+      # pure savers
+      #@member_pure_savers = @members.where.not(id: [@member_loaners.pluck(:id) + @active_members.pluck(:id)])
+      @member_pure_savers = @members.where(
+                              id: @valid_member_accounts.pluck(:member_id)
+                            ).where.not(
+                              id: @member_loaners.pluck(:id)
+                            )
+
+      @active_members     = @members.where.not(id: [@member_pure_savers.pluck(:id) + @member_loaners.pluck(:id)])
 
       # Pure Savers
       total_female  = @member_pure_savers.where(gender: "Female").count
@@ -98,6 +112,16 @@ module Branches
       @data[:counts][:pure_savers][:others] = total_others
       @data[:counts][:pure_savers][:total]  = total
 
+      @data[:counts][:pure_savers][:members]  = @member_pure_savers.map{ |m|
+                                                  {
+                                                    id: m.id,
+                                                    identification_number: m.identification_number,
+                                                    first_name: m.first_name,
+                                                    middle_name: m.middle_name,
+                                                    last_name: m.last_name
+                                                  }
+                                                }
+
       # Loaners
       total_female  = @member_loaners.where(gender: "Female").count
       total_male    = @member_loaners.where(gender: "Male").count
@@ -109,6 +133,16 @@ module Branches
       @data[:counts][:loaners][:others] = total_others
       @data[:counts][:loaners][:total]  = total
 
+      @data[:counts][:loaners][:members]  = @member_loaners.map{ |m|
+                                              {
+                                                id: m.id,
+                                                identification_number: m.identification_number,
+                                                first_name: m.first_name,
+                                                middle_name: m.middle_name,
+                                                last_name: m.last_name
+                                              }
+                                            }
+
       # Active Members = Pure Savers + Loaners
       total_female  = @active_members.where(gender: "Female").count
       total_male    = @active_members.where(gender: "Male").count
@@ -119,6 +153,16 @@ module Branches
       @data[:counts][:active_members][:male]   = total_male
       @data[:counts][:active_members][:others] = total_others
       @data[:counts][:active_members][:total]  = total
+
+      @data[:counts][:active_members][:members] = @active_members.map{ |m|
+                                                    {
+                                                      id: m.id,
+                                                      identification_number: m.identification_number,
+                                                      first_name: m.first_name,
+                                                      middle_name: m.middle_name,
+                                                      last_name: m.last_name
+                                                    }
+                                                  }
 
       @data
     end

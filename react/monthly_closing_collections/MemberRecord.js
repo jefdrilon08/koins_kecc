@@ -1,4 +1,5 @@
 import React from 'react';
+import {numberWithCommas} from '../utils/helpers';
 
 export default class MemberRecord extends React.Component {
   constructor(props) {
@@ -16,7 +17,59 @@ export default class MemberRecord extends React.Component {
   }
 
   renderRecords() {
-    var records = [];
+    var member              = this.state.data.member;
+    var memberAccount       = this.state.data.member_account;
+    var records             = this.state.data.records;
+    var accountTransactions = this.state.data.account_transactions;
+    var dataRows            = [];
+
+    for(var i = 0; i < records.length; i++) {
+      dataRows.push(
+        <tr key={"member-" + member.id + "-" + i + "-" + memberAccount.id}>
+          <td className="">
+            {records[i].date}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].beginning_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].deposits)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].withdrawals)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(records[i].ending_balance)}
+          </td>
+        </tr>
+      );
+    }
+
+    // Interest
+    dataRows.push(
+      <tr key={"interest-row-" + memberAccount.id}>
+        <td colSpan="2">
+          <strong>
+            Interest Earned
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(this.state.data.interest)}
+          </strong>
+        </td>
+        <td>
+          <strong>
+            Annual Interest Rate:
+          </strong>
+        </td>
+        <td className="text-muted">
+          {this.state.data.annual_interest_rate * 100}%
+        </td>
+      </tr>
+    );
+
+    return dataRows;
   }
 
   render() {
@@ -30,7 +83,9 @@ export default class MemberRecord extends React.Component {
           </div>
           <div className="col">
             <div className="text-right">
-              {this.state.data.member_account.id}
+              <a href={"/savings_accounts/" + this.state.data.member_account.id} target='_blank'>
+                Go to Account
+              </a>
             </div>
           </div>
         </div>
@@ -45,10 +100,10 @@ export default class MemberRecord extends React.Component {
                 Beginning Balance
               </th>
               <th className="text-right">
-                Amount
+                Deposit
               </th>
-              <th className="text-center">
-                Type
+              <th className="text-right">
+                Withdrawals
               </th>
               <th className="text-right">
                 Ending Balance

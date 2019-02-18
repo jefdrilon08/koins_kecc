@@ -5,7 +5,7 @@ module MonthlyClosingCollections
 
       @data                       = @config[:data]
       @branch                     = @config[:branch]
-      @interest_member_accounts   = @config[:interest_member_accounts]
+      @settings                   = @config[:settings]
       @user                       = @config[:user]
       @collection_date            = @config[:collection_date].try(:to_date) || Date.today
       @closing_date               = @config[:closing_date]
@@ -68,45 +68,45 @@ module MonthlyClosingCollections
     def build_debit_journal_entries!
       journal_entries = []
 
-      @interest_member_accounts.each do |s|
-        accounting_code = AccountingCode.find(s.debit_accounting_code_id)
-        amount          = 0.00
+      accounting_code = AccountingCode.find(@settings.debit_accounting_code_id)
+      amount          = 0.00
 
-        @data[:totals].each do |t|
-          if t[:account_subtype] == s.account_subtype && t[:account_type] == s.account_type
-            amount = t[:interest]
-          end
-        end
-
-        journal_entries << {
-          accounting_code_id: accounting_code.id,
-          code: accounting_code.code,
-          name: accounting_code.name,
-          amount: amount
-        }
+      @data[:records].each do |r|
+        amount += r[:interest].to_f
       end
+
+      amount = amount.round(2)
+
+      journal_entries << {
+        accounting_code_id: accounting_code.id,
+        code: accounting_code.code,
+        name: accounting_code.name,
+        amount: amount
+      }
+
+      journal_entries
     end
 
-    def build_credit_entries!
+    def build_credit_journal_entries!
       journal_entries = []
 
-      @interest_member_accounts.each do |s|
-        accounting_code = AccountingCode.find(s.credit_accounting_code_id)
-        amount          = 0.00
+      accounting_code = AccountingCode.find(@settings.credit_accounting_code_id)
+      amount          = 0.00
 
-        @data[:totals].each do |t|
-          if t[:account_subtype] == s.account_subtype && t[:account_type] == s.account_type
-            amount = t[:interest]
-          end
-        end
-
-        journal_entries << {
-          accounting_code_id: accounting_code.id,
-          code: accounting_code.code,
-          name: accounting_code.name,
-          amount: amount
-        }
+      @data[:records].each do |r|
+        amount += r[:interest].to_f
       end
+
+      amount = amount.round(2)
+
+      journal_entries << {
+        accounting_code_id: accounting_code.id,
+        code: accounting_code.code,
+        name: accounting_code.name,
+        amount: amount
+      }
+
+      journal_entries
     end
   end
 end

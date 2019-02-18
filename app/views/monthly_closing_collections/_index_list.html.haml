@@ -4,6 +4,10 @@
       %th
         Branch
       %th
+        Account
+      %th.text-center
+        Num Members
+      %th
         Closing Date
       %th
         Closed At
@@ -17,11 +21,19 @@
             %strong
               #{o.branch}
         %td
-          %small
-            #{o.closing_date}
+          #{o.account_subtype}
+        %td.text-center
+          - if o.pending? || o.approved?
+            #{o.data["records"].size}
+          - else
+            N/A
         %td
           %small
-            #{o.closed_at}
+            #{o.closing_date.strftime("%B %d, %Y")}
+        %td
+          - if o.closed_at.present?
+            %small
+              #{o.closed_at.strftime("%B %d, %Y")}
         %td.text-center
           - if o.pending?
             .badge.badge-warning

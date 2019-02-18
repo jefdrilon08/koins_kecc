@@ -307,9 +307,6 @@ export default class DashboardOAS extends React.Component {
   renderMemberCounts() {
     var o = this.state.data.member_counts;
 
-    console.log("renderMemberCounts()");
-    console.log(o);
-
     if(this.state.isLoading) {
       return  (
         <SkCubeLoading/>
@@ -324,7 +321,9 @@ export default class DashboardOAS extends React.Component {
       return  (
         <div>
           <h5>
-            Member Counts as of {o.meta.as_of}
+            <a href={"/data_stores/member_counts/" + o.id} target='_blank'>
+              Member Counts as of {o.meta.as_of}
+            </a>
           </h5>
           <table className="table table-bordered table-sm table-hover">
             <thead>
@@ -399,20 +398,20 @@ export default class DashboardOAS extends React.Component {
               </tr>
               <tr>
                 <th>
-                  Pending Members
+                  GRAND TOTAL
                 </th>
-                <td className="text-center">
-                  {o.data.counts.pending_members.male}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pending_members.female}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pending_members.others}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pending_members.total}
-                </td>
+                <th className="text-center">
+                  {o.data.counts.active_members.male + o.data.counts.loaners.male + o.data.counts.pure_savers.male}
+                </th>
+                <th className="text-center">
+                  {o.data.counts.active_members.female + o.data.counts.loaners.female + o.data.counts.pure_savers.female}
+                </th>
+                <th className="text-center">
+                  {o.data.counts.active_members.others + o.data.counts.loaners.others + o.data.counts.pure_savers.others}
+                </th>
+                <th className="text-center">
+                  {o.data.counts.active_members.total + o.data.counts.loaners.total + o.data.counts.pure_savers.total}
+                </th>
               </tr>
             </tbody>
           </table>

@@ -82,6 +82,7 @@ namespace :api do
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
     post "/monthly_closing_collections", to: "monthly_closing_collections#create"
     post "/monthly_closing_collections/update", to: "monthly_closing_collections#update"
+    post "/monthly_closing_collections/approve", to: "monthly_closing_collections#approve"
 
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"
