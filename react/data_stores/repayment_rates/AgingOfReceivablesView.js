@@ -196,10 +196,10 @@ export default class AgingOfReceivablesView extends React.Component {
                 1-30
               </th>
               <th className="text-right">
-                31-150
+                31-365
               </th>
               <th className="text-right">
-                150 onwards
+                365 onwards
               </th>
             </tr>
           </thead>
