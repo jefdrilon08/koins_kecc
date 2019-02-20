@@ -57,7 +57,7 @@ export default class AgingOfReceivablesView extends React.Component {
                   {member.last_name}, {member.first_name} {member.middle_name}
                   <br/>
                   <small className="text-muted">
-                    {loans[i].pn_number} {center.name}
+                    PN: {loans[i].pn_number} Center: {center.name}
                   </small>
                 </strong>
               </a>
