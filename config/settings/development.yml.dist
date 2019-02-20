@@ -1,3 +1,9 @@
+###############################     
+# CLOSING VALUES              #     
+###############################                           
+                             
+net_closing_accounting_code_id: "47f7cd1f-4141-445c-ac17-7e4f4966fdcb" 
+
 ###############################
 # STATIC VALUES               #
 ###############################
@@ -9,8 +15,18 @@ company_tin_number: "486-071-201-000"
 ###############################
 
 ###############################
-# RESIGNATION TYPES           #
+
 ###############################
+# RESIGNATION                 #
+###############################
+resignation:
+  cooperative_accounts:
+    -
+      account_type: "EQUITY"
+      account_subtype: "Share Capital"
+      debit_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
+      credit_accounting_code_id: "8efd6fe5-16eb-48df-9601-8bbc109f4a0c"
+
 member_resignation_types:
   - name: 'automatic'
     particulars:
@@ -91,23 +107,24 @@ member_resignation_types:
 # INTEREST AND TAX            #
 ###############################
 interest_member_accounts:
--
-account_type: "SAVINGS"
-account_subtype: "K-IMPOK"
-annual_interest_rate: 0.05
-annual_tax_rate: 0.0
-dormant_annual_interest_rate: 0.02
-dormant_threshold_months: 6
-debit_accounting_code_id:
-credit_accounting_code_id:
--
-account_type: "SAVINGS"
-account_subtype: "Golden K"
-annual_tax_rate: 0.0
-annual_interest_rate: 0.10
-dormant_threshold_months: 6
-debit_accounting_code_id:
-credit_accounting_code_id:
+  -
+    account_type: "SAVINGS"
+    account_subtype: "K-IMPOK"
+    annual_interest_rate: 0.05
+    annual_tax_rate: 0.0
+    dormant_annual_interest_rate: 0.02
+    dormant_threshold_months: 6
+    debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    credit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Golden K"
+    annual_tax_rate: 0.0
+    annual_interest_rate: 0.10
+    dormant_annual_interest_rate: 0.00
+    dormant_threshold_months: 6
+    debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    credit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
 
 ###############################
 
@@ -115,31 +132,35 @@ credit_accounting_code_id:
 #   REPORTS CONFIGURATION     #
 ###############################
 par_bins:
--
-min_days: 1
-max_days: 15
--
-min_days: 16
-max_days: 30
--
-min_days: 31
-max_days: 60
--
-min_days: 61
-max_days: 90
--
-min_days: 91
-max_days: 120
--
-min_days: 121
-max_days: 150
--
-min_days: 151
-max_days: 99999999
+  -
+    min_days: 1
+    max_days: 15
+  -
+    min_days: 16
+    max_days: 30
+  -
+    min_days: 31
+    max_days: 60
+  -
+    min_days: 61
+    max_days: 90
+  -
+    min_days: 91
+    max_days: 120
+  -
+    min_days: 121
+    max_days: 150
+  -
+    min_days: 151
+    max_days: 99999999
 
 ###############################
 #   MEMBERSHIP CONFIGURATION  #
 ###############################
+
+defualt_membership:
+  name: "K-KOOP"
+  type: "Cooperative"
 
 memberships:
   -
@@ -181,6 +202,10 @@ default_deposit_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Life Insurance Fund"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Savings Investment Fund"
+
 
 default_withdrawal_accounts:
   -
@@ -189,6 +214,15 @@ default_withdrawal_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "Golden K"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Savings Investment Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Life Insurance Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Retirement Fund"
 
 
 default_member_accounts:
@@ -210,7 +244,9 @@ default_member_accounts:
   -
     account_type: "EQUITY"
     account_subtype: "CBU"
-
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Savings Investment Fund"
 
 defaults:
   insurance_deposits:
@@ -307,6 +343,42 @@ defaults:
 
 ################################
 
+cash_management_templates:
+  -
+    name: "Example 1"
+    insurance_accounting_codes:
+      -
+        insurance_type: "Life Insurance Fund"
+        deposit_accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
+        withdrawal_accounting_code_id: "819d6e6a-9391-4990-92e0-459ea53821fc"
+      -
+        insurance_type: "Retirement Fund"
+        deposit_accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
+        withdrawal_accounting_code_id: "5e6161d2-c5ef-4647-a10e-44b9d3bed5c3"
+
+    savings_accounting_codes:
+      -
+        savings_type: "K-IMPOK"
+        deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+        withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+      -
+        savings_type: "Golden K"
+        deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
+        withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+      -
+        savings_type: "Savings Investment Fund"
+        deposit_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
+        withdrawal_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
+
+
+    equity_accounting_codes:
+      -
+        equity_type: "Share Capital"
+        deposit_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
+        withdrawal_accounting_code_id: ""
+  -
+    name: "Example 2"
+
 insurance_accounting_codes:
   -
     insurance_type: "Life Insurance Fund"
@@ -326,6 +398,11 @@ savings_accounting_codes:
     savings_type: "Golden K"
     deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
     withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+  -
+    savings_type: "Savings Investment Fund"
+    deposit_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
+    withdrawal_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
+
 
 equity_accounting_codes:
   -
@@ -333,10 +410,21 @@ equity_accounting_codes:
     deposit_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
     withdrawal_accounting_code_id: ""
 
+#north 3
+
 branch_accounting_codes:
   -
-    branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"                              #batasan
-    cash_in_bank_accounting_code_id: "2d5b8dcb-4f00-4672-a44e-e9c315e36dde"
+    branch_id: "18cebed1-4838-4335-9023-ffd35c5e2629"                              #baliuag
+    cash_in_bank_accounting_code_id: "de8f82db-2342-4180-8a93-2271501b18fb"
+    #cash_in_bank_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+  -
+    branch_id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"                              #guiguinto
+    cash_in_bank_accounting_code_id: "32b1eda6-9620-494b-ae08-17e14e4d5244"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+  -
+    branch_id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"                              #pulilan
+    cash_in_bank_accounting_code_id: "da8bd55c-2cf5-4cfe-b7a5-8f9834f304f2"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
 
 ###############################
@@ -349,12 +437,63 @@ loan_products:
     receivable_accounting_code_id: "eab8552e-4eed-41cd-a4d7-f91e120f03da"
     interest_receivable_accounting_code_id: "63e0514b-9c52-465b-9899-2d5d2d478695"
     default_amount: 7000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.1
     deductions:
       -
         name: "ID Fee"
         accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
         amount: 100.00
         deduction_type: "straight_one_time"
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.03
+              -
+                num_installments: 35
+                ratio: 0.045
+              -
+                num_installments: 50
+                ratio: 0.6
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -471,56 +610,6 @@ loan_products:
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
-      -
-        name: "Members Benefit"
-        accounting_code_id: "1ce652e2-2347-4666-be64-fc78fd801656"
-        amount: 0.00
-        deduction_type: "additional_amount_branch_term_map"
-        meta:
-          branches:
-            -
-              branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"           #batasan
-              complimentary_accounting_code_id: "c371befd-7315-4667-af3b-8358285465ca"
-          term_map:
-            weekly:
-              -
-                num_installments: 15
-                ratio: 0.0035
-              -
-                num_installments: 25
-                ratio: 0.007
-              -
-                num_installments: 35
-                ratio: 0.0105
-              -
-                num_installments: 50
-                ratio: 0.0140
-            monthly:
-              -
-                num_installments: 3
-                ratio: 0.0035
-              -
-                num_installments: 6
-                ratio: 0.007
-              -
-                num_installments: 9
-                ratio: 0.0105
-              -
-                num_installments: 12
-                ratio: 0.0140
-            semi_monthly:
-              -
-                num_installments: 6
-                ratio: 0.0035
-              -
-                num_installments: 12
-                ratio: 0.007
-              -
-                num_installments: 18
-                ratio: 0.0105
-              -
-                num_installments: 24
-                ratio: 0.0140
       -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
@@ -849,13 +938,17 @@ loan_products:
     loan_product_id: "b9535f97-c423-458a-849a-dd9a3e0b56bc"                         # K-BENEPISYO W1
     receivable_accounting_code_id: "df50f41a-a191-486b-b1cf-eb36fdb728cc"
     interest_receivable_accounting_code_id: "189a0bfe-605e-4476-8931-a9838aca0ec6"
+    amount_released_accounting_code_id: "186be541-cd56-450a-953e-749e0a64029b"
     default_amount: 5000.00
+    deductions: []
 
   -
     loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a"                         # K-BENEPISYO W2
     receivable_accounting_code_id: "6e3d53a1-befb-4691-98c1-2a4c203351c4"
     interest_receivable_accounting_code_id: "f27b0547-8407-49f5-9de2-fcc193c8db07"
+    amount_released_accounting_code_id: "186be541-cd56-450a-953e-749e0a64029b"
     default_amount: 5000.00
+    deductions: []
 
 
 
@@ -1069,49 +1162,116 @@ loan_products:
     receivable_accounting_code_id: "693ea122-0819-440e-9de4-cf443adfb32c"
     interest_receivable_accounting_code_id: "846b6de0-d489-4d1c-bfee-41de569fe8f4"
     default_amount: 5000.00
+    deductions: []
 
 
   -
     loan_product_id: "edf1be2e-ff70-4ccb-afb3-0bf6ec700204"                         # K-KALUSUGAN W1
     receivable_accounting_code_id: "b6b8f234-f2cf-4a6e-b22a-e0fbce25d6da"
     interest_receivable_accounting_code_id: "cff0a2d5-0b06-474a-bf89-a646e50ca694"
+    amount_released_accounting_code_id: "9189221b-0626-4085-aea3-b76a1faf94a4"
     default_amount: 5000.00
+    deductions: []
 
   -
     loan_product_id: "6b967738-dc57-467d-a51b-7a77de62468f"                         # K-KALUSUGAN W2
     receivable_accounting_code_id: "637df4c9-1d41-4b87-bc16-a8e70e1b93fc"
     interest_receivable_accounting_code_id: "d5f69b05-c770-4ae3-9513-9c1fa081f834"
     default_amount: 5000.00
+    deductions: []
 
   -
     loan_product_id: "22f9d132-820f-4c3d-830e-aaee1c0b206c"                         # K-KALUSUGAN W3
     receivable_accounting_code_id: "93686bcf-7e20-4968-8d9b-c20032a41280"
     interest_receivable_accounting_code_id: "ab8050bd-e2fe-4e87-bcb3-74eeb1c48a0b"
+    amount_released_accounting_code_id: "725c4a36-5baa-4f3a-ba30-3ecc00233b06"
     default_amount: 5000.00
+    deductions: []
 
   -
     loan_product_id: "8b1b3103-2e3b-4308-bc76-cf5fec772f2e"                         # K-KALUSUGAN W4
     receivable_accounting_code_id: "43a0c6bc-9305-4811-a691-cba2e73a8a65"
     interest_receivable_accounting_code_id: "9e68cb72-2253-492e-b502-2801830f5d13"
+    amount_released_accounting_code_id: "c119b339-6918-4fb2-89d3-62c6fcbadbed"
     default_amount: 5000.00
+    deductions: []
 
   -
     loan_product_id: "ae07e628-b99a-4a4a-a798-252446d59df9"                         # K-KALUSUGAN W5
     receivable_accounting_code_id: "46fc3298-a3b4-4468-86b7-eb2ebe1bbdef"
     interest_receivable_accounting_code_id: "18a6e070-14e5-4a90-a5ef-b9619e86364c"
+    amount_released_accounting_code_id: "186be541-cd56-450a-953e-749e0a64029b"
     default_amount: 5000.00
+    deductions: []
+    use_term_interest:
+      -
+        term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.1265
+      -
+        term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.078
+      -
+        term: "weekly"
+        min_num_installments: 17
+        max_num_installments: 35
+        monthly_interest_rate: 0.056
+      -
+        term: "weekly"
+        min_num_installments: 36
+        max_num_installments: 50
+        monthly_interest_rate: 0.04
 
   -
     loan_product_id: "7813ee07-2666-4936-830b-611ac0cb626c"                         # K-KALUSUGAN W6
     receivable_accounting_code_id: "a92a52af-bd41-4da8-8410-658e9c4f2fff"
     interest_receivable_accounting_code_id: "e9e01050-3c68-4e0c-8d42-531684291596"
+    amount_released_accounting_code_id: "186be541-cd56-450a-953e-749e0a64029b"
     default_amount: 5000.00
+    deductions: []
+    use_term_interest:
+      -
+        term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.1265
+      -
+        term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.078
+      -
+        term: "weekly"
+        min_num_installments: 17
+        max_num_installments: 35
+        monthly_interest_rate: 0.056
+      -
+        term: "weekly"
+        min_num_installments: 36
+        max_num_installments: 50
+        monthly_interest_rate: 0.04
 
   -
     loan_product_id: "091a5859-021e-4b98-8751-19ec08ade079"                         # K-KALUSUGAN W7
     receivable_accounting_code_id: "b9010916-aa39-405a-9058-02a3d6113cf3"
     interest_receivable_accounting_code_id: "605bd7bb-7ca5-458d-b7df-3a3b75d80939"
+    amount_released_accounting_code_id: "186be541-cd56-450a-953e-749e0a64029b"
     default_amount: 5000.00
+    deductions: []
+    use_term_interest:
+      -
+        term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.1275
+      -
+        term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.0775
 
   -
     loan_product_id: "52a44657-62fb-441e-b844-b77d59f5c4ca"                         # K-KASAL
@@ -1216,7 +1376,7 @@ loan_products:
 
   -
     loan_product_id: "da9b8bc1-8b9b-4e47-b753-9ae4edd0e6e1"                         # K-KASANGKAPAN
-    receivable_accounting_code_id: "26ae332d-36c2-4540-8030-e95bf4fc5744"
+    receivable_accounting_code_id: "72605994-d42a-47d1-89b5-ce14a7c05aeb"
     interest_receivable_accounting_code_id: "b8227a39-f435-4a9a-af14-51c73e2dd3d4"
     default_amount: 5000.00
     deductions:
@@ -2168,7 +2328,7 @@ loan_product_accounting_codes:
     interest_receivable_accounting_code_id: "dddffa96-82f8-4b4e-ab8a-9b82c102dee4"
   -
     loan_product_id: "da9b8bc1-8b9b-4e47-b753-9ae4edd0e6e1"                         # K-Kasangkapan
-    receivable_accounting_code_id: "26ae332d-36c2-4540-8030-e95bf4fc5744"
+    receivable_accounting_code_id: "72605994-d42a-47d1-89b5-ce14a7c05aeb"
     interest_receivable_accounting_code_id: "b8227a39-f435-4a9a-af14-51c73e2dd3d4"
   -
     loan_product_id: "1830bd55-6629-46ab-8a39-665840c7962f"                         # K-Manggagawa

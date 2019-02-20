@@ -21,6 +21,7 @@ class DataStore < ApplicationRecord
   scope :accounting_entries_summaries, -> { where("meta->>'data_store_type' = ?", "ACCOUNTING_ENTRIES_SUMMARY") }
   scope :watchlists, -> { where("meta->>'data_store_type' = ?", "WATCHLIST") }
   scope :repayment_rates, -> { where("meta->>'data_store_type' = ?", "REPAYMENT_RATES") }
+  scope :monthly_new_and_resigned, -> { where("meta->>'data_store_type' = ?", "MONTHLY_NEW_AND_RESIGNED") }
 
   before_validation :load_defaults
 

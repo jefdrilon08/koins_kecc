@@ -96,13 +96,13 @@ export default class Filter extends React.Component {
               </div>
               <div className="col">
                 <Toggle
-                  checked={this.props.currentView == "PAR"}
-                  onChange={this.props.handleViewToggled.bind(this, "PAR")}
+                  checked={this.props.currentView == "AOR"}
+                  onChange={this.props.handleViewToggled.bind(this, "AOR")}
                   className="btn"
                 />
                 <br/>
                 <label>
-                  PAR
+                  AoR
                 </label>
               </div>
               <div className="col">

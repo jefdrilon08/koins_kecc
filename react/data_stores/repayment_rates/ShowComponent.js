@@ -11,6 +11,7 @@ import {numberWithCommas} from '../../utils/helpers';
 import Filter from './Filter';
 import MasterListView from './MasterListView';
 import RepaymentRatesView from './RepaymentRatesView';
+import AgingOfReceivablesView from './AgingOfReceivablesView';
 
 export default class ShowComponent extends React.Component {
   constructor(props) {
@@ -197,7 +198,7 @@ export default class ShowComponent extends React.Component {
           />
         </div>
       );
-    } else if(this.state.currentView == "PAR") {
+    } else if(this.state.currentView == "AOR") {
       return  (
         <div>
           <Filter
@@ -212,9 +213,9 @@ export default class ShowComponent extends React.Component {
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
             handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
-          <div>
-            PAR
-          </div>
+          <AgingOfReceivablesView
+            data={this.state.data}
+          />
         </div>
       );
     } else if(this.state.currentView == "ML") {
