@@ -130,32 +130,40 @@ export default class AgingOfReceivablesView extends React.Component {
           </strong>
         </td>
         <td className="text-right">
-          {numberWithCommas(totalPastDueAmount)}
-          <br/>
-          {numberWithCommas(totalParAmount)}
-          <br/>
-          {counter}
+          <strong>
+            {numberWithCommas(totalPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalParAmount)}
+            <br/>
+            {counter}
+          </strong>
         </td>
         <td className="text-right">
-          {numberWithCommas(totalCategoryAPastDueAmount)}
-          <br/>
-          {numberWithCommas(totalCategoryAParAmount)}
-          <br/>
-          {categoryACounter}
+          <strong>
+            {numberWithCommas(totalCategoryAPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalCategoryAParAmount)}
+            <br/>
+            {categoryACounter}
+          </strong>
         </td>
         <td className="text-right">
-          {numberWithCommas(totalCategoryBPastDueAmount)}
-          <br/>
-          {numberWithCommas(totalCategoryBParAmount)}
-          <br/>
-          {categoryBCounter}
+          <strong>
+            {numberWithCommas(totalCategoryBPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalCategoryBParAmount)}
+            <br/>
+            {categoryBCounter}
+          </strong>
         </td>
         <td className="text-right">
-          {numberWithCommas(totalCategoryCPastDueAmount)}
-          <br/>
-          {numberWithCommas(totalCategoryCParAmount)}
-          <br/>
-          {categoryCCounter}
+          <strong>
+            {numberWithCommas(totalCategoryCPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalCategoryCParAmount)}
+            <br/>
+            {categoryCCounter}
+          </strong>
         </td>
       </tr>
     );
