@@ -14,6 +14,19 @@ export default class AgingOfReceivablesView extends React.Component {
     var rows    = [];
     var counter = 0;
 
+    var totalCategoryAPastDueAmount = 0.00;
+    var totalCategoryAParAmount     = 0.00;
+
+    var totalCategoryBPastDueAmount = 0.00;
+    var totalCategoryBParAmount     = 0.00;
+
+    var totalCategoryCPastDueAmount = 0.00;
+    var totalCategoryCParAmount     = 0.00;
+
+    var categoryACounter  = 0;
+    var categoryBCounter  = 0;
+    var categoryCCounter  = 0;
+
     for(var i = 0; i < loans.length; i++) {
       var member      = loans[i].member;
       var center      = loans[i].center;
@@ -32,19 +45,34 @@ export default class AgingOfReceivablesView extends React.Component {
 
       var numDaysPar  = parseInt(loans[i].num_days_par);
 
-      if(numDaysPar >= 1 && numDaysPar <= 30) {
-        categoryAPastDueAmount  = parseFloat(loans[i].principal_balance);
-        categoryAParAmount      = parseFloat(loans[i].overall_principal_balance);
-      } else if(numDaysPar >= 31 && numDaysPar <= 150) {
-        categoryBPastDueAmount  = parseFloat(loans[i].principal_balance);
-        categoryBParAmount      = parseFloat(loans[i].overall_principal_balance);
-      } else if(numDaysPar >= 151) {
-        categoryCPastDueAmount  = parseFloat(loans[i].principal_balance);
-        categoryCParAmount      = parseFloat(loans[i].overall_principal_balance);
-      }
-
       if(numDaysPar > 0) {
         counter++;
+
+        if(numDaysPar >= 1 && numDaysPar <= 30) {
+          categoryAPastDueAmount  = parseFloat(loans[i].principal_balance);
+          categoryAParAmount      = parseFloat(loans[i].overall_principal_balance);
+
+          totalCategoryAPastDueAmount += categoryAPastDueAmount;
+          totalCategoryAParAmount     += categoryAParAmount;
+
+          categoryACounter++;
+        } else if(numDaysPar >= 31 && numDaysPar <= 365) {
+          categoryBPastDueAmount  = parseFloat(loans[i].principal_balance);
+          categoryBParAmount      = parseFloat(loans[i].overall_principal_balance);
+
+          totalCategoryBPastDueAmount += categoryBPastDueAmount;
+          totalCategoryBParAmount     += categoryBParAmount;
+
+          categoryBCounter++;
+        } else if(numDaysPar >= 365) {
+          categoryCPastDueAmount  = parseFloat(loans[i].principal_balance);
+          categoryCParAmount      = parseFloat(loans[i].overall_principal_balance);
+
+          totalCategoryCPastDueAmount += categoryCPastDueAmount;
+          totalCategoryCParAmount     += categoryCParAmount;
+
+          categoryCCounter++;
+        }
 
         rows.push(
           <tr key={"aor-" + loans[i].id}>
@@ -88,6 +116,49 @@ export default class AgingOfReceivablesView extends React.Component {
       }
     }
 
+    // TOTAL
+    var totalPastDueAmount  = totalCategoryAPastDueAmount + totalCategoryBPastDueAmount + totalCategoryCPastDueAmount;
+    var totalParAmount      = totalCategoryAParAmount + totalCategoryBParAmount + totalCategoryCParAmount;
+
+    rows.push(
+      <tr key={"aor-total"}>
+        <td className="text-center">
+        </td>
+        <td colSpan="2">
+          <strong>
+            Grand Total
+          </strong>
+        </td>
+        <td className="text-right">
+          {numberWithCommas(totalPastDueAmount)}
+          <br/>
+          {numberWithCommas(totalParAmount)}
+          <br/>
+          {counter}
+        </td>
+        <td className="text-right">
+          {numberWithCommas(totalCategoryAPastDueAmount)}
+          <br/>
+          {numberWithCommas(totalCategoryAParAmount)}
+          <br/>
+          {categoryACounter}
+        </td>
+        <td className="text-right">
+          {numberWithCommas(totalCategoryBPastDueAmount)}
+          <br/>
+          {numberWithCommas(totalCategoryBParAmount)}
+          <br/>
+          {categoryBCounter}
+        </td>
+        <td className="text-right">
+          {numberWithCommas(totalCategoryCPastDueAmount)}
+          <br/>
+          {numberWithCommas(totalCategoryCParAmount)}
+          <br/>
+          {categoryCCounter}
+        </td>
+      </tr>
+    );
     return rows;
   }
 
