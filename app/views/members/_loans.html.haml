@@ -1,5 +1,7 @@
 %h6
   Active Loans
+  %small.text-muted
+    Entry Point Loan Cycle Count: #{@member.entry_point_loan_cycle_count}
 
 - if @active_loans.size > 0
   %table.table.table-bordered.table-hover.table-sm

@@ -47,17 +47,30 @@ module Loans
       @loan.data              = @loan_data[:data]
 
       # Setup loan cycle
-      @loan_cycles  = @member_data[:loan_cycles]
+      @loan_cycles            = @member_data[:loan_cycles]
+      @entry_point_loan_cycle = @member_data[:entry_point_loan_cycle]
+
+      if @entry_point_loan_cycle.blank?
+        @entry_point_loan_cycle = 0
+      end
 
       if @loan_cycles.blank?
         @loan.cycle = 1
       else
         found = false
 
+        if @loan_product.is_entry_point
+          @loan.cycle = @entry_point_loan_cycle + 1
+          found       = true
+        end
+
         @loan_cycles.each do |c|
           if c[:loan_product_id] == @loan_product.id
+            found = true
+          end
+
+          if c[:loan_product_id] == @loan_product.id and !@loan_product.is_entry_point
             @loan.cycle = c[:cycle] + 1
-            found       = true
           end
         end
 

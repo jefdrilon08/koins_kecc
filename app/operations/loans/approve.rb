@@ -33,7 +33,8 @@ module Loans
       end
 
       # Setup loan cycle
-      @loan_cycles  = @member_data[:loan_cycles] || []
+      @loan_cycles            = @member_data[:loan_cycles] || []
+      @entry_point_loan_cycle = @member_data[:entry_point_loan_cycle] || 0
     end
 
     def execute!
@@ -52,12 +53,20 @@ module Loans
       else
         found = false
 
+        if @loan_product.is_entry_point
+          @entry_point_loan_cycle = @entry_point_loan_cycle + 1
+          @loan.cycle             = @entry_point_loan_cycle
+          found                   = true
+        end
+
         @loan_cycles.each_with_index do |c, i|
           if c[:loan_product_id] == @loan_product.id
-            @loan.cycle = c[:cycle] + 1
-            found       = true
+            @loan_cycles[i][:cycle] =c[:cycle] + 1
+            found = true
+          end
 
-            @loan_cycles[i][:cycle] = @loan.cycle
+          if c[:loan_product_id] == @loan_product.id and !@loan_product.is_entry_point
+            @loan.cycle = c[:cycle] + 1
           end
         end
 
@@ -71,7 +80,8 @@ module Loans
       end
 
       # Updat member data
-      @member_data[:loan_cycles]  = @loan_cycles
+      @member_data[:loan_cycles]            = @loan_cycles
+      @member_data[:entry_point_loan_cycle] = @entry_point_loan_cycle
       @member.update!(data: @member_data)
 
       @loan.update!(

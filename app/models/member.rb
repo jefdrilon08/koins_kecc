@@ -65,6 +65,10 @@ class Member < ApplicationRecord
     self.status != "active"
   end
 
+  def entry_point_loan_cycle_count
+    self.data.with_indifferent_access[:entry_point_loan_cycle] || 0
+  end
+
   def resignation_records
     if self.data.with_indifferent_access[:resignation_records].blank?
       []
