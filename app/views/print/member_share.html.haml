@@ -1,19 +1,22 @@
 :css
   .member-details {
-    margin: 116px 0px 0px 250px;
+    margin: 150px 0px 0px 375px;
+    font-size: 20px;
   }
 
   .member-name {
-    margin-top: 265px;
+    margin-top: 245px;
+    margin-left: 80px;
     max-width: 900px;
+    font-size: 45px;
   }
 
   .member-recognition-month {
-    margin-left: 105px;
+    margin-left: 110px;
   }
 
   .member-recognition-year {
-    margin-left: 135px;
+    margin-left: 155px;
   }
 
   #member-certificate {
@@ -22,7 +25,7 @@
 #member-certificate
   .member-name
     %center
-      %h1
+      %p
         #{@member_share_data[:member_full_name]}
   .member-details
     %label
