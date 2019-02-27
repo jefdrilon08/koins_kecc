@@ -68,10 +68,10 @@ export default class LoanProduct extends React.Component {
                 {numberWithCommas(data.principal_due)}
               </th>
               <th className="text-right" width="7%">
-                {numberWithCommas(data.total_due)}
+                {numberWithCommas(data.total_balance)}
               </th>
               <th className="text-right" width="7%">
-                {numberWithCommas(data.total_balance)}
+                {numberWithCommas(data.total_due)}
               </th>
               <th className="text-right" width="7%">
                 {numberAsPercent(data.principal_rr)}

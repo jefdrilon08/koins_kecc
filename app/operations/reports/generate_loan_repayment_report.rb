@@ -13,7 +13,7 @@ module Reports
                   ).order("transacted_at ASC")
 
       @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id = ?",
+                  "due_date < ? AND loan_id = ?",
                   @as_of,
                   @loan.id
                 ).order("due_date ASC")
@@ -129,12 +129,24 @@ module Reports
         principal_rr = 1
       end
 
+      if principal_rr >= 1 and principal_paid < principal_due
+        principal_rr = 0.99
+      end
+
       if interest_rr > 1
         interest_rr = 1
       end
 
+      if interest_rr >= 1 and interest_paid < interest_due
+        interest_rr = 0.99
+      end
+
       if total_rr > 1
         total_rr = 1
+      end
+
+      if total_rr >= 1 and total_paid < total_due
+        total_rr = 0.99
       end
 
       # PAR

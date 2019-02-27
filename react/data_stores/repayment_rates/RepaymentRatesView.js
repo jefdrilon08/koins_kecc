@@ -71,13 +71,13 @@ export default class MasterListView extends React.Component {
             {numberWithCommas(loans[i].total_paid)}
           </td>
           <td className="text-right">
-            {numberWithCommas(loans[i].principal_due)}
-          </td>
-          <td className="text-right">
-            {numberWithCommas(loans[i].total_due)}
+            {numberWithCommas(loans[i].principal_balance)}
           </td>
           <td className="text-right">
             {numberWithCommas(loans[i].total_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].total_due)}
           </td>
           <td className="text-center">
             {numberAsPercent(loans[i].principal_rr)}
@@ -133,10 +133,10 @@ export default class MasterListView extends React.Component {
           {numberWithCommas(totalPrincipalDue)}
         </th>
         <th className="text-right">
-          {numberWithCommas(totalTotalDue)}
+          {numberWithCommas(totalTotalBalance)}
         </th>
         <th className="text-right">
-          {numberWithCommas(totalTotalBalance)}
+          {numberWithCommas(totalTotalDue)}
         </th>
         <th className="text-center">
           {numberAsPercent(totalRR)}
@@ -191,7 +191,7 @@ export default class MasterListView extends React.Component {
                 P. Due
               </th>
               <th className="text-right">
-                Total Due
+                Cum. Due
               </th>
               <th className="text-right">
                 Total Bal.
