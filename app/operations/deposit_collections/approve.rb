@@ -10,6 +10,10 @@ module DepositCollections
       @data_accounting_entry  = @deposit_collection.accounting_entry
 
       @date_approved  = Date.today
+
+      if Settings.current_date.present?
+        @date_approved  = Settings.current_date.to_date
+      end
     end
 
     def execute!
