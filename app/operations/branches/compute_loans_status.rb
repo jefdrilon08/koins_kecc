@@ -23,7 +23,7 @@ module Branches
                   ).order("transacted_at ASC")
 
       @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id IN (?)",
+                  "due_date < ? AND loan_id IN (?)",
                   @as_of,
                   @loans.pluck(:id)
                 ).order("due_date ASC")

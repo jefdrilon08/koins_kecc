@@ -101,6 +101,10 @@ export default class MasterListView extends React.Component {
 
     totalRR = (totalTotalPaid / totalTotalDue);
 
+    console.log("totalTotalPaid: " + totalTotalPaid);
+    console.log("totalTotalDue: " + totalTotalDue);
+    console.log("totalRR: " + totalRR);
+
     rows.push(
       <tr key="rr-grand-total">
         <th className="text-center">

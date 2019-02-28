@@ -12,6 +12,10 @@ module Loans
       @term             = @loan.term
       
       @current_date = Date.today
+
+      if Settings.current_date.present?
+        @current_date = Settings.current_date.to_date
+      end
       
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
@@ -61,7 +65,7 @@ module Loans
 
         @loan_cycles.each_with_index do |c, i|
           if c[:loan_product_id] == @loan_product.id
-            @loan_cycles[i][:cycle] =c[:cycle] + 1
+            @loan_cycles[i][:cycle] = c[:cycle] + 1
             found = true
           end
 

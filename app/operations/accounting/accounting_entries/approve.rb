@@ -10,6 +10,10 @@ module Accounting
         @user             = @config[:user]
 
         @current_date = Date.today
+
+        if Settings.current_date.present?
+          @current_date = Settings.current_date.to_date
+        end
       end
 
       def execute!
