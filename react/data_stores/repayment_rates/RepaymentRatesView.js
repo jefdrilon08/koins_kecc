@@ -205,10 +205,10 @@ export default class MasterListView extends React.Component {
                 Paid Due
               </th>
               <th className="text-right">
-                Past Due
+                Cum. Due
               </th>
               <th className="text-right">
-                Cum. Due
+                Past Due
               </th>
               <th className="text-right">
                 Total Bal.
