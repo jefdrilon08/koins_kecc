@@ -34,9 +34,16 @@ export default class MasterListView extends React.Component {
       var loanProduct = loans[i].loan_product;
 
       var paid_due  = parseFloat(loans[i].total_due) - (parseFloat(loans[i].principal_balance) + parseFloat(loans[i].interest_balance));
+      var actual_rr = (parseFloat(paid_due) - (parseFloat(loans[i].principal_balance) + parseFloat(loans[i].interest_balance))) / parseFloat(paid_due);
+
+      var backgroundColor = "#fff";
+      
+      if(loans[i].total_paid > paid_due) {
+        backgroundColor = "#e9ecfd";
+      }
 
       rows.push(
-        <tr key={"rr-" + loans[i].id}>
+        <tr key={"rr-" + loans[i].id} style={{ backgroundColor: backgroundColor }}>
           <td className="text-center">
             {i + 1}
           </td>
@@ -104,6 +111,7 @@ export default class MasterListView extends React.Component {
       totalTotalDue                 += parseFloat(loans[i].total_due);
       totalTotalBalance             += parseFloat(loans[i].total_balance);
       totalPrincipalBalance         += parseFloat(loans[i].principal_balance);
+      totalPaidDue                  += parseFloat(paid_due);
     }
 
     totalOverallBalance = totalOverallPrincipalBalance + totalOverallInterestBalance;
@@ -111,7 +119,10 @@ export default class MasterListView extends React.Component {
 
     console.log("totalTotalPaid: " + totalTotalPaid);
     console.log("totalTotalDue: " + totalTotalDue);
+    console.log("totalPaidDue: " + totalPaidDue);
     console.log("totalRR: " + totalRR);
+
+    var backgroundColor = "#fff";
 
     rows.push(
       <tr key="rr-grand-total">
@@ -144,7 +155,7 @@ export default class MasterListView extends React.Component {
           {numberWithCommas(totalTotalPaid)}
         </th>
         <th className="text-right">
-          [TOTAL PAID DUE]
+          {numberWithCommas(totalPaidDue)}
         </th>
         <th className="text-right">
           {numberWithCommas(totalTotalDue)}
@@ -172,7 +183,7 @@ export default class MasterListView extends React.Component {
           Repayment Rates
         </h5>
 
-        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.8em"}}>
+        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.75em"}}>
           <thead>
             <tr>
               <th>
