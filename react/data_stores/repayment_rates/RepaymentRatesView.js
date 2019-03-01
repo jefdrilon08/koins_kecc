@@ -25,12 +25,15 @@ export default class MasterListView extends React.Component {
     var totalTotalBalance             = 0.00;
     var totalPrincipalBalance         = 0.00;
     var totalOverallBalance           = 0.00;
+    var totalPaidDue                  = 0.00;
     var totalRR                       = 0;
 
     for(var i = 0; i < loans.length; i++) {
       var member      = loans[i].member;
       var center      = loans[i].center;
       var loanProduct = loans[i].loan_product;
+
+      var paid_due  = parseFloat(loans[i].total_due) - (parseFloat(loans[i].principal_balance) + parseFloat(loans[i].interest_balance));
 
       rows.push(
         <tr key={"rr-" + loans[i].id}>
@@ -73,7 +76,7 @@ export default class MasterListView extends React.Component {
             {numberWithCommas(loans[i].total_paid)}
           </td>
           <td className="text-right">
-            [PAID DUE]
+            {numberWithCommas(paid_due)}
           </td>
           <td className="text-right">
             {numberWithCommas(loans[i].total_due)}
