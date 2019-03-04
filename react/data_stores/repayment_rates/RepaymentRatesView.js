@@ -43,6 +43,14 @@ export default class MasterListView extends React.Component {
         backgroundColor = "#ffe1e1";
       }
 
+      var principalPaid     = parseFloat(loans[i].principal_due) - parseFloat(loans[i].principal_balance);
+
+      var actualPrincipalRR = 0.00;
+      if(principalPaid > 0)
+        actualPrincipalRR = (principalPaid - parseFloat(loans[i].principal_balance)) / principalPaid;
+
+      console.log("actualPrincipalRR: " + actualPrincipalRR);
+
       rows.push(
         <tr key={"rr-" + loans[i].id} style={{ backgroundColor: backgroundColor }}>
           <td className="text-center">
@@ -96,7 +104,7 @@ export default class MasterListView extends React.Component {
             {numberWithCommas(loans[i].overall_balance)}
           </td>
           <td className="text-center">
-            {numberAsPercent(loans[i].principal_rr)}
+            {numberAsPercent(actualPrincipalRR)}
           </td>
         </tr>
       );
