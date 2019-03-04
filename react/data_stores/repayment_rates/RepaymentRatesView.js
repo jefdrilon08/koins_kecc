@@ -180,9 +180,35 @@ export default class MasterListView extends React.Component {
   render() {
     return  (
       <div>
-        <h5>
-          Repayment Rates
-        </h5>
+        <div className="row">
+          <div className="col-md-6">
+            <h5>
+              Repayment Rates
+            </h5>
+          </div>
+          <div className="col-md-6">
+            <div className="text-right">
+              <label style={{marginRight: "12px"}}>
+                Total Records: 
+                <span className="badge badge-secondary">
+                  0
+                </span>
+              </label>
+              <label style={{marginRight: "12px"}}>
+                Number of Past Due:
+                <span className="badge badge-danger">
+                  0
+                </span>
+              </label>
+              <label>
+                Number of Advanced:
+                <span className="badge badge-info">
+                  0
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
 
         <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.75em"}}>
           <thead>

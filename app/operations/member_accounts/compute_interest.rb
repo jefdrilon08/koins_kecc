@@ -61,10 +61,10 @@ module MemberAccounts
       @data[:starting_transaction][:transacted_at]  = month_before
 
       @latest_transaction = AccountTransaction.savings.where(
-                              "subsidiary_id = ? AND transacted_at < ?",
+                              "subsidiary_id = ? AND DATE(transacted_at) <= ?",
                               @member_account.id,
                               month_before
-                            ).order("transacted_at ASC").last
+                            ).order("transacted_at ASC, created_at ASC").last
 
       if @latest_transaction.present?
         @data[:starting_transaction][:id]             = @latest_transaction.id

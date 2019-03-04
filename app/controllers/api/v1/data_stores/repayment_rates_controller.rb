@@ -76,7 +76,7 @@ module Api
 
             ProcessRepaymentRates.perform_later(args)
 
-            render json: { message: "ok" }
+            render json: { message: "ok", id: record.id, status: "processing" }
           else
             render json: errors, status: 400
           end
