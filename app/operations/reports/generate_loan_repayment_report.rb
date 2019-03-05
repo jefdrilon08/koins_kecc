@@ -63,6 +63,9 @@ module Reports
         total_due:                  0.00,
         principal_paid:             0.00,
         interest_paid:              0.00,
+        principal_paid_due:         0.00,
+        interest_paid_due:          0.00,
+        total_paid_due:             0.00,
         total_paid:                 0.00,
         principal_balance:          0.00,
         interest_balance:           0.00,
@@ -104,6 +107,21 @@ module Reports
       end
 
       total_balance     = (principal_balance + interest_balance).round(2)
+
+      # Compute paid due
+      if principal_paid >= principal_due
+        principal_paid_due  = principal_due
+      else
+        principal_paid_due  = principal_paid
+      end
+
+      if interest_paid >= interest_due
+        interest_paid_due  = interest_due
+      else
+        interest_paid_due  = interest_paid
+      end
+
+      total_paid_due  = (principal_paid_due + interest_paid_due).round(2)
 
       overall_principal_balance = (principal - principal_paid).round(2)
 
@@ -190,6 +208,9 @@ module Reports
       @data[:overall_principal_balance] = overall_principal_balance
       @data[:overall_interest_balance]  = overall_interest_balance
       @data[:overall_balance]           = overall_balance
+      @data[:principal_paid_due]        = principal_paid_due
+      @data[:interest_paid_due]         = interest_paid_due
+      @data[:total_paid_due]            = total_paid_due
       @data[:principal_rr]      = principal_rr
       @data[:interest_rr]       = interest_rr
       @data[:total_rr]          = total_rr
