@@ -142,6 +142,25 @@ module Reports
       interest_rr   = (interest_paid / interest_due).round(2)
       total_rr      = (total_paid / total_due).round(2) 
 
+      # Repayment rate
+      if principal_paid_due > 0
+        principal_rr  = (principal_paid_due - principal_balance) / (principal_paid_due)
+      else
+        principal_rr  = 0.00;
+      end
+
+      if interest_paid_due > 0
+        interest_rr  = (interest_paid_due - interest_balance) / (interest_paid_due)
+      else
+        interest_rr  = 0.00;
+      end
+
+      if total_paid_due > 0
+        total_rr  = (total_paid_due - total_balance) / (total_paid_due)
+      else
+        total_rr  = 0.00;
+      end
+
       # Clear repayment rates
       if principal_rr > 1
         principal_rr = 1

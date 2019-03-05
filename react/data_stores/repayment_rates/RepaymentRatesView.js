@@ -25,8 +25,11 @@ export default class MasterListView extends React.Component {
     var totalTotalBalance             = 0.00;
     var totalPrincipalBalance         = 0.00;
     var totalOverallBalance           = 0.00;
-    var totalPaidDue                  = 0.00;
     var totalRR                       = 0;
+
+    var totalPrincipalPaidDue = 0.00;
+    var totalInterestPaidDue  = 0.00;
+    var totalPaidDue          = 0.00;
 
     for(var i = 0; i < loans.length; i++) {
       var member      = loans[i].member;
@@ -42,14 +45,6 @@ export default class MasterListView extends React.Component {
       } else if(loans[i].principal_rr < 1) {
         backgroundColor = "#ffe1e1";
       }
-
-      var principalPaid     = parseFloat(loans[i].principal_due) - parseFloat(loans[i].principal_balance);
-
-      var actualPrincipalRR = 0.00;
-      if(principalPaid > 0)
-        actualPrincipalRR = (principalPaid - parseFloat(loans[i].principal_balance)) / principalPaid;
-
-      console.log("actualPrincipalRR: " + actualPrincipalRR);
 
       rows.push(
         <tr key={"rr-" + loans[i].id} style={{ backgroundColor: backgroundColor }}>
@@ -92,7 +87,7 @@ export default class MasterListView extends React.Component {
             {numberWithCommas(loans[i].total_paid)}
           </td>
           <td className="text-right">
-            {numberWithCommas(paid_due)}
+            {numberWithCommas(loans[i].principal_paid_due)}
           </td>
           <td className="text-right">
             {numberWithCommas(loans[i].total_due)}
@@ -104,7 +99,7 @@ export default class MasterListView extends React.Component {
             {numberWithCommas(loans[i].overall_balance)}
           </td>
           <td className="text-center">
-            {numberAsPercent(actualPrincipalRR)}
+            {numberAsPercent(loans[i].principal_rr)}
           </td>
         </tr>
       );
@@ -120,11 +115,14 @@ export default class MasterListView extends React.Component {
       totalTotalDue                 += parseFloat(loans[i].total_due);
       totalTotalBalance             += parseFloat(loans[i].total_balance);
       totalPrincipalBalance         += parseFloat(loans[i].principal_balance);
-      totalPaidDue                  += parseFloat(paid_due);
+      totalPaidDue                  += parseFloat(loans[i].total_paid_due);
     }
 
     totalOverallBalance = totalOverallPrincipalBalance + totalOverallInterestBalance;
     totalRR = (totalTotalPaid / totalTotalDue);
+
+    totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
+    totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalBalance;
 
     console.log("totalTotalPaid: " + totalTotalPaid);
     console.log("totalTotalDue: " + totalTotalDue);
@@ -176,7 +174,7 @@ export default class MasterListView extends React.Component {
           {numberWithCommas(totalOverallBalance)}
         </th>
         <th className="text-center">
-          {numberAsPercent(totalRR)}
+          {numberAsPercent(totalPrincipalRR)}
         </th>
         
       </tr>
