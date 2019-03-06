@@ -26,6 +26,7 @@ export default class MasterListView extends React.Component {
     var totalPrincipalBalance         = 0.00;
     var totalOverallBalance           = 0.00;
     var totalRR                       = 0;
+    var totalPrincipalRR              = 0;
 
     var totalPrincipalPaidDue = 0.00;
     var totalInterestPaidDue  = 0.00;
