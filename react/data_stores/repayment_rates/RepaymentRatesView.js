@@ -130,6 +130,8 @@ export default class MasterListView extends React.Component {
     console.log("totalTotalPaid: " + totalTotalPaid);
     console.log("totalTotalDue: " + totalTotalDue);
     console.log("totalPaidDue: " + totalPaidDue);
+    console.log("totalPrincipalPaidDue: " + totalPrincipalPaidDue);
+    console.log("totalPrincipalBalance: " + totalPrincipalBalance);
     console.log("totalRR: " + totalRR);
 
     var backgroundColor = "#fff";
