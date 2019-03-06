@@ -124,7 +124,7 @@ export default class MasterListView extends React.Component {
     totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
     totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalPaidDue;
 
-    if(totalPrincipalRR > 1) {
+    if(totalPrincipalRR > 1)  {
       totalPrincipalRR = 1;
     }
 
@@ -190,6 +190,22 @@ export default class MasterListView extends React.Component {
   }
 
   render() {
+    var numRecords  = 0;
+    var numPastDue  = 0;
+    var numAdvanced = 0;
+
+    var loans = this.props.data.data.records;
+
+    numRecords  = loans.length;
+
+    for(var i = 0; i < loans.length; i++) {
+      if(loans[i].total_paid > loans[i].total_paid_due) {
+        numAdvanced++;
+      } else if(loans[i].principal_rr < 1) {
+        numPastDue++;
+      }
+    }
+
     return  (
       <div>
         <div className="row">
@@ -203,19 +219,19 @@ export default class MasterListView extends React.Component {
               <label style={{marginRight: "12px"}}>
                 Total Records: 
                 <span className="badge badge-secondary">
-                  0
+                  {numRecords}
                 </span>
               </label>
               <label style={{marginRight: "12px"}}>
                 Number of Past Due:
                 <span className="badge badge-danger">
-                  0
+                  {numPastDue}
                 </span>
               </label>
               <label>
                 Number of Advanced:
                 <span className="badge badge-info">
-                  0
+                  {numAdvanced}
                 </span>
               </label>
             </div>
