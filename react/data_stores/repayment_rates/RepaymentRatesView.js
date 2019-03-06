@@ -36,11 +36,9 @@ export default class MasterListView extends React.Component {
       var center      = loans[i].center;
       var loanProduct = loans[i].loan_product;
 
-      var paid_due  = parseFloat(loans[i].total_due) - (parseFloat(loans[i].principal_balance) + parseFloat(loans[i].interest_balance));
-
       var backgroundColor = "#fff";
       
-      if(loans[i].total_paid > paid_due) {
+      if(loans[i].total_paid > loans[i].total_paid_due) {
         backgroundColor = "#e9ecfd";
       } else if(loans[i].principal_rr < 1) {
         backgroundColor = "#ffe1e1";
@@ -123,6 +121,10 @@ export default class MasterListView extends React.Component {
 
     totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
     totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalBalance;
+
+    if(totalPrincipalRR > 1) {
+      totalPrincipalRR = 1;
+    }
 
     console.log("totalTotalPaid: " + totalTotalPaid);
     console.log("totalTotalDue: " + totalTotalDue);

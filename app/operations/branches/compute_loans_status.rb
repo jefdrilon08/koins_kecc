@@ -16,7 +16,7 @@ module Branches
                 ).execute!
 
       @payments = AccountTransaction.approved_loan_payments.where(
-                    "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
+                    "DATE(transacted_at) <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
                     @as_of,
                     @loans.pluck(:id),
                     "Loan"
