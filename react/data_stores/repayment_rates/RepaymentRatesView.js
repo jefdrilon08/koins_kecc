@@ -105,6 +105,7 @@ export default class MasterListView extends React.Component {
 
       totalPrincipal                += parseFloat(loans[i].principal);
       totalPrincipalPaid            += parseFloat(loans[i].principal_paid);
+      totalPrincipalPaidDue         += parseFloat(loans[i].principal_paid_due);
       totalOverallPrincipalBalance  += parseFloat(loans[i].overall_principal_balance);
       totalInterest                 += parseFloat(loans[i].interest);
       totalInterestPaid             += parseFloat(loans[i].interest_paid);
@@ -121,7 +122,7 @@ export default class MasterListView extends React.Component {
     totalRR = (totalTotalPaid / totalTotalDue);
 
     totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
-    totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalBalance;
+    totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalPaidDue;
 
     if(totalPrincipalRR > 1) {
       totalPrincipalRR = 1;
