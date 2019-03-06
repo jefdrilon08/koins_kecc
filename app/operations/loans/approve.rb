@@ -102,7 +102,23 @@ module Loans
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
 
-        if deduction_type == "deposit"
+        if deduction_type == "membership_fee"
+          membership_payment_record = MembershipPaymentRecord.paid.where(
+                                        membership_type: s_deduction.membership_type,
+                                        member_id: @loan.member.id
+                                      ).first
+
+          if membership_payment_record.blank?
+            MembershipPaymentRecord.create!(
+              member: @loan.member,
+              membership_type: s_deduction.membership_type,
+              membership_name: s_deduction.meta.membership_name,
+              amount: s_deduction.amount,
+              status: "paid",
+              date_paid: @date_paid
+            )
+          end
+        elsif deduction_type == "deposit"
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
             offset          = s_deduction.meta.offset
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
