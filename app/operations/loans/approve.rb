@@ -117,6 +117,8 @@ module Loans
               status: "paid",
               date_paid: @date_paid
             )
+
+            @member_data[:recognition_date] = @date_paid
           end
         elsif deduction_type == "deposit"
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
