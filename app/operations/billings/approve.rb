@@ -52,7 +52,7 @@ module Billings
       @data_loan_payments.each do |o|
         config  = {
           loan_payment: o,
-          date_paid: @collection_date,
+          date_paid: @date_approved,
           user: @user,
           particular: @data_accounting_entry[:particular]
         }
@@ -66,7 +66,7 @@ module Billings
     def process_savings!
       @data_deposits.each do |o|
         config  = {
-          date_paid: @collection_date,
+          date_paid: @date_approved,
           deposit: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
@@ -81,7 +81,7 @@ module Billings
     def process_withdraw_payments!
       @data_withdraw_payments.each do |o|
         config  = { 
-          date_paid: @collection_date,
+          date_paid: @date_approved,
           withdraw_payment: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
@@ -96,7 +96,7 @@ module Billings
     def process_insurance!
       @data_insurance.each do |o|
         config  = {
-          date_paid: @collection_date,
+          date_paid: @date_approved,
           insurance_deposit: o,
           user: @user,
           particular: @data_accounting_entry[:particular]
