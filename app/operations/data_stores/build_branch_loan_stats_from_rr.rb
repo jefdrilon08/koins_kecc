@@ -50,7 +50,7 @@ module DataStores
             portfolio                 = o[:principal].to_f - o[:principal_paid].to_f
             past_due_amount           = o[:total_balance]
             principal_past_due_amount = o[:principal_balance]
-            par_amount                = o[:principal_balance]
+            par_amount                = o[:overall_principal_balance]
             par_rate                  = o[:par]
             rr                        = o[:rr]
 
