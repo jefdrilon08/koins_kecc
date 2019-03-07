@@ -3,7 +3,7 @@ module DataStores
     before_action :authenticate_user!
 
     def index
-      @records  = DataStore.branch_loans_stats.where(
+      @records  = DataStore.repayment_rates.where(
                     "meta->>'branch_id' IN (?)",
                     @branches.pluck(:id)
                   )
@@ -14,7 +14,10 @@ module DataStores
     end
 
     def show
-      @record = DataStore.branch_loans_stats.where(id: params[:id]).first
+      @record = DataStore.repayment_rates.where(id: params[:id]).first
+      @data   = ::DataStores::BuildBranchLoanStatsFromRr.new(
+                  rr_data: @record.data.with_indifferent_access
+                ).execute!
 
       if @record.blank? or @record.processing?
         redirect_to "/data_stores/branch_loans_stats"
@@ -22,7 +25,7 @@ module DataStores
     end
 
     def destroy
-      @record = DataStore.branch_loans_stats.where(id: params[:id]).first
+      @record = DataStore.repayment_rates.where(id: params[:id]).first
       @record.destroy! 
       redirect_to "/data_stores/branch_loans_stats"
     end
