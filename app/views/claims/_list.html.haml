@@ -1,0 +1,35 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th
+        Member
+      %th
+        Branch
+      %th
+        Name Insured
+      %th
+        Insurance Policy
+      %th
+        Classification
+      %th
+        Face Amount
+      %th
+        Date Prepared
+  %tbody
+    - @claims.each do |c|
+      %tr
+        %td
+          = link_to member_path(c) do 
+            #{c.full_name}
+        %td
+          #{c.member.branch.name}
+        %td 
+          #{c.name_of_insured}
+        %td
+          #{c.type_of_insurance_policy}
+        %td 
+          #{c.classification_of_insured}
+        %td
+          #{c.face_amount}
+        %td
+          #{c.date_prepared.strftime("%b %d %Y")}

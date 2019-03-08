@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_12_023033) do
+ActiveRecord::Schema.define(version: 2019_03_06_031352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -183,6 +183,38 @@ ActiveRecord::Schema.define(version: 2019_02_12_023033) do
     t.integer "meeting_day"
     t.uuid "user_id"
     t.index ["branch_id"], name: "index_centers_on_branch_id"
+  end
+
+  create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "member_id"
+    t.integer "center_id"
+    t.integer "branch_id"
+    t.date "date_prepared"
+    t.string "policy_number"
+    t.string "type_of_insurance_policy"
+    t.string "name_of_insured"
+    t.string "beneficiary"
+    t.string "classification_of_insured"
+    t.date "date_of_birth"
+    t.string "gender"
+    t.date "date_of_policy_issue"
+    t.decimal "face_amount"
+    t.date "date_of_death_tpd_accident"
+    t.decimal "arrears"
+    t.text "cause_of_death_tpd_accident"
+    t.decimal "amount_benefit_payable"
+    t.decimal "equity_value"
+    t.decimal "retirement_fund"
+    t.string "prepared_by"
+    t.string "length_of_stay"
+    t.decimal "returned_contribution"
+    t.decimal "total_amount_payable"
+    t.string "order_of_child"
+    t.string "category_of_cause_of_death_tpd_accident"
+    t.date "date_reported"
+    t.date "date_paid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "clusters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

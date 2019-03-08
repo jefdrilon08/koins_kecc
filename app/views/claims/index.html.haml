@@ -1,0 +1,31 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Microinsurance
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Claims Register
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", class: 'btn', id: 'btn-new-transaction' do
+        .fa.fa-plus
+        New Claims
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "claims/list"
+
+= render partial: "claims/modals/new_transaction"
+
+= javascript_include_tag "claims/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

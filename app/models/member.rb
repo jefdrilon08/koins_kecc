@@ -23,6 +23,7 @@ class Member < ApplicationRecord
   has_many :beneficiaries
   has_many :member_accounts
   has_many :member_shares
+  has_many :claims, dependent: :delete_all
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -132,5 +133,13 @@ class Member < ApplicationRecord
     self.first_name   = self.first_name.upcase
     self.last_name    = self.last_name.upcase
     self.middle_name  = self.middle_name.upcase
+  end
+
+  def equity_value
+    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)/2
+  end
+
+  def rf_amount
+    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").sum(:balance)
   end
 end

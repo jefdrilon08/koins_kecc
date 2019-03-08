@@ -1,0 +1,15 @@
+%section.content-header
+  %h1
+    Claims Form
+    %br
+    %small 
+      .ui
+        Edit Record for: #{link_to @member.full_name, member_path(@member), target: '_blank'}
+  %ol.breadcrumb
+    %li
+      = link_to claims_path do
+        .fa.fa-arrow-left
+        Back to Claims
+%section.content
+  .ui.grey.segment
+    = render partial: "members/claims/form", locals: { claim: @claim }

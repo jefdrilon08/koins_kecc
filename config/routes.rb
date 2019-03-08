@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
 
   root to: "pages#index"
+  #Microinsurance
+  get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members
 
   # Monitoring
   get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
@@ -23,10 +25,12 @@ Rails.application.routes.draw do
   get "/members/:id/survey_answers/:survey_answer_id", to: "members#survey_answer", as: :member_survey_answer
   get "/members/:id/survey_answers/:survey_answer_id/form", to: "members#survey_answer_form", as: :member_survey_answer_form
 
+  post "/new_claim_application", to: "claims#new_claim_application", as: :new_claim_application
+
   resources :members, only: [] do
     resources :member_shares, except: [:index], controller: "members/member_shares"
+    resources :claims, controller: 'members/claims'
   end
-
   # Loans
   resources :loans, only: [:index, :show] do
   end
@@ -137,7 +141,8 @@ Rails.application.routes.draw do
   end
 
   get "/download_backup", to: "pages#download_backup"
-
+  get "/download_exit_age", to: "pages#download_exit_age"
+  get "/claims", to: "claims#index"
   draw :administration
   draw :accounting
   draw :api

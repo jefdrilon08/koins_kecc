@@ -63,6 +63,9 @@ namespace :api do
     get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
 
+    # Centers
+    get "/centers", to: "centers#index"
+  
     # Print Services
     post "/print/generate_file", to: "print#generate_file"
 

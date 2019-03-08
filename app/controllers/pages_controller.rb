@@ -23,4 +23,22 @@ class PagesController < ApplicationController
   def login
     render 'pages/login', layout: 'plain'
   end
+
+  def insurance_exit_age_members 
+    @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
+  end
+
+  def download_exit_age
+    @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
+    excel     = Members::GenerateInsuranceExitAgeReportExcel.new(
+                  members: @members
+                ).execute!
+
+    filename  = "insurance_exit_age_members.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+  end
+
+ 
 end
