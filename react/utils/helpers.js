@@ -17,9 +17,9 @@ export function buildBillingTableData(o) {
 }
 
 export function numberAsPercent(x) {
-  x = ((Math.round(x * 100) / 100) * 100).toFixed(2);
+  //x = ((Math.round(x * 100) / 100) * 100).toFixed(2);
 
-  return x + "%";
+  return parseFloat(x * 100).toFixed(2) + "%";
 }
 
 export function numberWithCommas(x) {

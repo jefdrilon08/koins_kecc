@@ -16,14 +16,14 @@ module Branches
                 ).execute!
 
       @payments = AccountTransaction.approved_loan_payments.where(
-                    "transacted_at <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
+                    "DATE(transacted_at) <= ? AND subsidiary_id IN (?) AND subsidiary_type = ?",
                     @as_of,
                     @loans.pluck(:id),
                     "Loan"
                   ).order("transacted_at ASC")
 
       @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id IN (?)",
+                  "due_date < ? AND loan_id IN (?)",
                   @as_of,
                   @loans.pluck(:id)
                 ).order("due_date ASC")

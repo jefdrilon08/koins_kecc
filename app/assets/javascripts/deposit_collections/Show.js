@@ -20,6 +20,11 @@ var Show  = (function() {
   var $btnConfirmLoadBranch;
   var $modalLoadBranch;
 
+  var $btnLoadCenter;
+  var $btnConfirmLoadCenter;
+  var $modalLoadCenter;
+  var $selectCenter;
+
   var $message;
   var templateErrorList;
 
@@ -28,6 +33,7 @@ var Show  = (function() {
   var _urlModifyCashManagementTemplate  = "/api/v1/deposit_collections/modify_cash_management_template";
   var _urlModifyBook                    = "/api/v1/deposit_collections/modify_book";
   var _urlLoadBranch                    = "/api/v1/deposit_collections/load_branch";
+  var _urlLoadCenter                    = "/api/v1/deposit_collections/load_center";
 
   var _cacheDom = function() {
     $btnApprove         = $("#btn-approve");
@@ -47,11 +53,64 @@ var Show  = (function() {
     $btnConfirmLoadBranch = $("#btn-confirm-load-branch");
     $modalLoadBranch      = $("#modal-load-branch");
 
+    $btnLoadCenter        = $("#btn-load-center");
+    $btnConfirmLoadCenter = $("#btn-confirm-load-center");
+    $modalLoadCenter      = $("#modal-load-center");
+    $selectCenter         = $("#select-center");
+
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnLoadCenter.on("click", function() {
+      $modalLoadCenter.modal("show");
+    });
+
+    $btnConfirmLoadCenter.on("click", function() {
+      var centerId  = $selectCenter.val();
+
+      $message.html("Loading....");
+      $btnConfirmLoadBranch.prop("disabled", true);
+      $selectCenter.prop("disabled", true);
+
+      $.ajax({
+        url: _urlLoadCenter,
+        method: 'POST',
+        data: { 
+          id: depositCollectionId,
+          center_id: centerId,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+
+          window.location.reload();
+        },
+        error: function(response) {
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmLoadCenter.prop("disabled", false);
+            $selectCenter.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnLoadBranch.on("click", function() {
       $modalLoadBranch.modal("show");
     });

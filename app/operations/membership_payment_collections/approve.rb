@@ -13,6 +13,10 @@ module MembershipPaymentCollections
       @data_accounting_entry    = @membership_payment_collection.accounting_entry
 
       @date_approved  = Date.today
+
+      if Settings.current_date.present?
+        @date_approved  = Settings.current_date.to_date
+      end
     end
 
     def execute!

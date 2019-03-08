@@ -14,6 +14,7 @@ class DepositCollectionsController < ApplicationController
       redirect_to deposit_collections_path
     else
       @data               = @deposit_collection.data.with_indifferent_access
+      @centers            = @deposit_collection.branch.centers.order("name ASC")
 
       @activity_logs  = ActivityLog.where(
                           "data ->> 'deposit_collection_id' = ?",

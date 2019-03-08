@@ -23,15 +23,30 @@ export default class MasterListView extends React.Component {
     var totalPrincipalDue             = 0.00;
     var totalTotalDue                 = 0.00;
     var totalTotalBalance             = 0.00;
+    var totalPrincipalBalance         = 0.00;
+    var totalOverallBalance           = 0.00;
     var totalRR                       = 0;
+    var totalPrincipalRR              = 0;
+
+    var totalPrincipalPaidDue = 0.00;
+    var totalInterestPaidDue  = 0.00;
+    var totalPaidDue          = 0.00;
 
     for(var i = 0; i < loans.length; i++) {
       var member      = loans[i].member;
       var center      = loans[i].center;
       var loanProduct = loans[i].loan_product;
 
+      var backgroundColor = "#fff";
+      
+      if(loans[i].total_paid > loans[i].total_paid_due) {
+        backgroundColor = "#e9ecfd";
+      } else if(loans[i].principal_rr < 1) {
+        backgroundColor = "#ffe1e1";
+      }
+
       rows.push(
-        <tr key={"rr-" + loans[i].id}>
+        <tr key={"rr-" + loans[i].id} style={{ backgroundColor: backgroundColor }}>
           <td className="text-center">
             {i + 1}
           </td>
@@ -71,13 +86,16 @@ export default class MasterListView extends React.Component {
             {numberWithCommas(loans[i].total_paid)}
           </td>
           <td className="text-right">
-            {numberWithCommas(loans[i].principal_due)}
+            {numberWithCommas(loans[i].principal_paid_due)}
           </td>
           <td className="text-right">
             {numberWithCommas(loans[i].total_due)}
           </td>
           <td className="text-right">
-            {numberWithCommas(loans[i].total_balance)}
+            {numberWithCommas(loans[i].principal_balance)}
+          </td>
+          <td className="text-right">
+            {numberWithCommas(loans[i].overall_balance)}
           </td>
           <td className="text-center">
             {numberAsPercent(loans[i].principal_rr)}
@@ -87,6 +105,7 @@ export default class MasterListView extends React.Component {
 
       totalPrincipal                += parseFloat(loans[i].principal);
       totalPrincipalPaid            += parseFloat(loans[i].principal_paid);
+      totalPrincipalPaidDue         += parseFloat(loans[i].principal_paid_due);
       totalOverallPrincipalBalance  += parseFloat(loans[i].overall_principal_balance);
       totalInterest                 += parseFloat(loans[i].interest);
       totalInterestPaid             += parseFloat(loans[i].interest_paid);
@@ -95,9 +114,28 @@ export default class MasterListView extends React.Component {
       totalPrincipalDue             += parseFloat(loans[i].principal_due);
       totalTotalDue                 += parseFloat(loans[i].total_due);
       totalTotalBalance             += parseFloat(loans[i].total_balance);
+      totalPrincipalBalance         += parseFloat(loans[i].principal_balance);
+      totalPaidDue                  += parseFloat(loans[i].total_paid_due);
     }
 
+    totalOverallBalance = totalOverallPrincipalBalance + totalOverallInterestBalance;
     totalRR = (totalTotalPaid / totalTotalDue);
+
+    totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
+    totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalPaidDue;
+
+    if(totalPrincipalRR > 1)  {
+      totalPrincipalRR = 1;
+    }
+
+    console.log("totalTotalPaid: " + totalTotalPaid);
+    console.log("totalTotalDue: " + totalTotalDue);
+    console.log("totalPaidDue: " + totalPaidDue);
+    console.log("totalPrincipalPaidDue: " + totalPrincipalPaidDue);
+    console.log("totalPrincipalBalance: " + totalPrincipalBalance);
+    console.log("totalRR: " + totalRR);
+
+    var backgroundColor = "#fff";
 
     rows.push(
       <tr key="rr-grand-total">
@@ -130,16 +168,19 @@ export default class MasterListView extends React.Component {
           {numberWithCommas(totalTotalPaid)}
         </th>
         <th className="text-right">
-          {numberWithCommas(totalPrincipalDue)}
+          {numberWithCommas(totalPaidDue)}
         </th>
         <th className="text-right">
           {numberWithCommas(totalTotalDue)}
         </th>
         <th className="text-right">
-          {numberWithCommas(totalTotalBalance)}
+          {numberWithCommas(totalPrincipalBalance)}
+        </th>
+        <th className="text-right">
+          {numberWithCommas(totalOverallBalance)}
         </th>
         <th className="text-center">
-          {numberAsPercent(totalRR)}
+          {numberAsPercent(totalPrincipalRR)}
         </th>
         
       </tr>
@@ -149,13 +190,55 @@ export default class MasterListView extends React.Component {
   }
 
   render() {
+    var numRecords  = 0;
+    var numPastDue  = 0;
+    var numAdvanced = 0;
+
+    var loans = this.props.data.data.records;
+
+    numRecords  = loans.length;
+
+    for(var i = 0; i < loans.length; i++) {
+      if(loans[i].total_paid > loans[i].total_paid_due) {
+        numAdvanced++;
+      } else if(loans[i].principal_rr < 1) {
+        numPastDue++;
+      }
+    }
+
     return  (
       <div>
-        <h5>
-          Repayment Rates
-        </h5>
+        <div className="row">
+          <div className="col-md-6">
+            <h5>
+              Repayment Rates
+            </h5>
+          </div>
+          <div className="col-md-6">
+            <div className="text-right">
+              <label style={{marginRight: "12px"}}>
+                Total Records: 
+                <span className="badge badge-secondary">
+                  {numRecords}
+                </span>
+              </label>
+              <label style={{marginRight: "12px"}}>
+                Number of Past Due:
+                <span className="badge badge-danger">
+                  {numPastDue}
+                </span>
+              </label>
+              <label>
+                Number of Advanced:
+                <span className="badge badge-info">
+                  {numAdvanced}
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
 
-        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.8em"}}>
+        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.75em"}}>
           <thead>
             <tr>
               <th>
@@ -173,7 +256,7 @@ export default class MasterListView extends React.Component {
                 P. Paid
               </th>
               <th className="text-right">
-                Balance
+                P. Bal
               </th>
               <th className="text-right">
                 Interest
@@ -188,10 +271,13 @@ export default class MasterListView extends React.Component {
                 Total Paid
               </th>
               <th className="text-right">
-                P. Due
+                Paid Due
               </th>
               <th className="text-right">
-                Total Due
+                Cum. Due
+              </th>
+              <th className="text-right">
+                Past Due
               </th>
               <th className="text-right">
                 Total Bal.

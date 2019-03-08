@@ -22,3 +22,12 @@
 //= require datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4
 //= require signature_pad/dist/signature_pad
 //= require cocoon
+
+var encodeQueryData = function(data) {
+  var ret = []
+  for(var d in data) {
+    ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+  }
+
+  return ret.join("&");
+};

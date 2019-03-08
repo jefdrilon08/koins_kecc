@@ -34,4 +34,10 @@ class MonthlyClosingCollection < ApplicationRecord
   def to_s
     closing_date
   end
+
+  def member_account_ids
+    self.data.with_indifferent_access[:records].map{ |r|
+      r[:member_account][:id]
+    }
+  end
 end

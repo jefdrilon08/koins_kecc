@@ -7,6 +7,10 @@ module Billings
 
       @date_approved  = Date.today
 
+      if Settings.current_date.present?
+        @date_approved  = Settings.current_date.to_date
+      end
+
       @data = @billing.try(:data).try(:with_indifferent_access)
 
       @data_loan_payments     = @billing.loan_payments
@@ -14,6 +18,8 @@ module Billings
       @data_insurance         = @billing.insurance
       @data_withdraw_payments = @billing.withdraw_payments
       @data_accounting_entry  = @billing.accounting_entry
+
+      @collection_date  = @billing.collection_date
     end
 
     def execute!

@@ -128,6 +128,8 @@ module Api
           data  = ::Print::BuildBook.new(
                     config: config
                   ).execute!
+        elsif type == "deposit_collection"
+          filename = "deposit-collection-#{Time.now.to_i}.json"
         end
 
         if errors[:full_messages].size == 0

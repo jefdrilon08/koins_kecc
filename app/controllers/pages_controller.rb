@@ -40,5 +40,6 @@ class PagesController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
   end
 
- 
+  def export_tools
+  end
 end

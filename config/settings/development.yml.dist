@@ -158,7 +158,7 @@ par_bins:
 #   MEMBERSHIP CONFIGURATION  #
 ###############################
 
-defualt_membership:
+default_membership:
   name: "K-KOOP"
   type: "Cooperative"
 

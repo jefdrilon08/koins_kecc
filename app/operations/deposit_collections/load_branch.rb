@@ -9,11 +9,11 @@ module DepositCollections
 
     def execute!
       record_member_ids = @deposit_collection.member_ids
-      members_to_add    = Member.active.where.not(
-                            id: record_member_ids,
-                            branch_id: @branch
-                          ).order("last_name ASC")
-
+      members           = Member.active.where(branch_id: @branch)
+      members_to_add    = members.where.not(
+                                id: record_member_ids
+                                ).order("last_name ASC")
+      
       members_to_add.each do |member|
         config  = {
           deposit_collection: @deposit_collection,

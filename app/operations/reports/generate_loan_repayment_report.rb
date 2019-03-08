@@ -13,7 +13,7 @@ module Reports
                   ).order("transacted_at ASC")
 
       @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id = ?",
+                  "due_date < ? AND loan_id = ?",
                   @as_of,
                   @loan.id
                 ).order("due_date ASC")
@@ -63,6 +63,9 @@ module Reports
         total_due:                  0.00,
         principal_paid:             0.00,
         interest_paid:              0.00,
+        principal_paid_due:         0.00,
+        interest_paid_due:          0.00,
+        total_paid_due:             0.00,
         total_paid:                 0.00,
         principal_balance:          0.00,
         interest_balance:           0.00,
@@ -105,6 +108,21 @@ module Reports
 
       total_balance     = (principal_balance + interest_balance).round(2)
 
+      # Compute paid due
+      if principal_paid >= principal_due
+        principal_paid_due  = principal_due
+      else
+        principal_paid_due  = principal_paid
+      end
+
+      if interest_paid >= interest_due
+        interest_paid_due  = interest_due
+      else
+        interest_paid_due  = interest_paid
+      end
+
+      total_paid_due  = (principal_paid_due + interest_paid_due).round(2)
+
       overall_principal_balance = (principal - principal_paid).round(2)
 
       if overall_principal_balance < 0
@@ -124,17 +142,48 @@ module Reports
       interest_rr   = (interest_paid / interest_due).round(2)
       total_rr      = (total_paid / total_due).round(2) 
 
+      # Repayment rate
+      if principal_paid_due > 0
+        principal_rr  = (principal_paid_due - principal_balance) / (principal_paid_due)
+      else
+        principal_rr  = 0.00;
+      end
+
+      if interest_paid_due > 0
+        interest_rr  = (interest_paid_due - interest_balance) / (interest_paid_due)
+      else
+        interest_rr  = 0.00;
+      end
+
+      if total_paid_due > 0
+        total_rr  = (total_paid_due - total_balance) / (total_paid_due)
+      else
+        total_rr  = 0.00;
+      end
+
       # Clear repayment rates
       if principal_rr > 1
         principal_rr = 1
+      end
+
+      if principal_rr >= 1 and principal_paid < principal_due
+        principal_rr = 0.99
       end
 
       if interest_rr > 1
         interest_rr = 1
       end
 
+      if interest_rr >= 1 and interest_paid < interest_due
+        interest_rr = 0.99
+      end
+
       if total_rr > 1
         total_rr = 1
+      end
+
+      if total_rr >= 1 and total_paid < total_due
+        total_rr = 0.99
       end
 
       # PAR
@@ -178,6 +227,9 @@ module Reports
       @data[:overall_principal_balance] = overall_principal_balance
       @data[:overall_interest_balance]  = overall_interest_balance
       @data[:overall_balance]           = overall_balance
+      @data[:principal_paid_due]        = principal_paid_due
+      @data[:interest_paid_due]         = interest_paid_due
+      @data[:total_paid_due]            = total_paid_due
       @data[:principal_rr]      = principal_rr
       @data[:interest_rr]       = interest_rr
       @data[:total_rr]          = total_rr

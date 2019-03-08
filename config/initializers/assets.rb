@@ -92,5 +92,6 @@ Rails.application.config.assets.precompile += [
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js",
   "MonitoringAccountingEntryPrecision.min.react.js",
   "claims/Index.js",
-  "claims_form.js"
+  "claims_form.js",
+  "exports/Exports.js"
 ]

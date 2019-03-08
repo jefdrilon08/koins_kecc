@@ -1,5 +1,5 @@
 %h5
-  As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
+  As Of: #{@data[:as_of].to_date.strftime("%B %d, %Y")}
 %hr
 %table.table.table-sm.table-hover.table-bordered
   %thead
@@ -23,30 +23,30 @@
       %th.text-center
         RR
   %tbody
-    - @record.data.with_indifferent_access[:loan_products].each do |o|
+    - @data[:loan_products].each do |o|
       %tr
         %td
           %strong
-            #{o[:loan_product][:name]}
+            #{o[:name]}
         %td.text-center
-          #{o[:num_loans]}
+          #{o[:active_loans]}
         %td.text-right
           .text-muted
             #{number_to_currency(o[:principal], unit: "")}
         %td.text-right
           .text-muted
-            #{number_to_currency(o[:total_principal_paid], unit: "")}
+            #{number_to_currency(o[:principal_paid], unit: "")}
         %td.text-right
           %strong
-            #{number_to_currency(o[:total_principal_portfolio], unit: "")}
+            #{number_to_currency(o[:portfolio], unit: "")}
         %td.text-right
-          #{number_to_currency(o[:total_past_due], unit: "")}
+          #{number_to_currency(o[:past_due_amount], unit: "")}
         %td.text-right
-          #{number_to_currency(o[:total_principal_balance], unit: "")}
+          #{number_to_currency(o[:par_amount], unit: "")}
         %td.text-center
-          #{number_to_currency(o[:par].to_f * 100, unit: "")} %
+          #{number_to_currency(o[:par_rate].to_f * 100, unit: "")} %
         %td.text-center
-          #{number_to_currency(o[:repayment_rate].to_f * 100, unit: "")} %
+          #{number_to_currency(o[:rr].to_f * 100, unit: "")} %
   %tfoot
     %tr
       %td
@@ -54,26 +54,26 @@
           Total
       %td.text-center
         %strong
-          #{@record.data.with_indifferent_access[:num_loans]}
+          #{@data[:total_active_loans]}
       %td.text-right
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:principal], unit: "")}
+          #{number_to_currency(@data[:total_principal], unit: "")}
       %td.text-right
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:total_principal_paid], unit: "")}
+          #{number_to_currency(@data[:total_principal_paid], unit: "")}
       %td.text-right
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:total_principal_portfolio], unit: "")}
+          #{number_to_currency(@data[:total_portfolio], unit: "")}
       %td.text-right
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:total_past_due], unit: "")}
+          #{number_to_currency(@data[:total_past_due_amount], unit: "")}
       %td.text-right
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:total_principal_balance], unit: "")}
+          #{number_to_currency(@data[:total_par_amount], unit: "")}
       %td.text-center
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:par].to_f * 100, unit: "")} %
+          #{number_to_currency(@data[:total_par_rate].to_f * 100, unit: "")} %
       %td.text-center
         %strong
-          #{number_to_currency(@record.data.with_indifferent_access[:repayment_rate].to_f * 100, unit: "")} %
+          #{number_to_currency(@data[:total_rr].to_f * 100, unit: "")} %
 

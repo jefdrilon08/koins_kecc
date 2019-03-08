@@ -12,6 +12,10 @@ module Loans
       @term             = @loan.term
       
       @current_date = Date.today
+
+      if Settings.current_date.present?
+        @current_date = Settings.current_date.to_date
+      end
       
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
@@ -33,7 +37,8 @@ module Loans
       end
 
       # Setup loan cycle
-      @loan_cycles  = @member_data[:loan_cycles] || []
+      @loan_cycles            = @member_data[:loan_cycles] || []
+      @entry_point_loan_cycle = @member_data[:entry_point_loan_cycle] || 0
     end
 
     def execute!
@@ -52,12 +57,20 @@ module Loans
       else
         found = false
 
+        if @loan_product.is_entry_point
+          @entry_point_loan_cycle = @entry_point_loan_cycle + 1
+          @loan.cycle             = @entry_point_loan_cycle
+          found                   = true
+        end
+
         @loan_cycles.each_with_index do |c, i|
           if c[:loan_product_id] == @loan_product.id
-            @loan.cycle = c[:cycle] + 1
-            found       = true
+            @loan_cycles[i][:cycle] = c[:cycle] + 1
+            found = true
+          end
 
-            @loan_cycles[i][:cycle] = @loan.cycle
+          if c[:loan_product_id] == @loan_product.id and !@loan_product.is_entry_point
+            @loan.cycle = c[:cycle] + 1
           end
         end
 
@@ -71,7 +84,8 @@ module Loans
       end
 
       # Updat member data
-      @member_data[:loan_cycles]  = @loan_cycles
+      @member_data[:loan_cycles]            = @loan_cycles
+      @member_data[:entry_point_loan_cycle] = @entry_point_loan_cycle
       @member.update!(data: @member_data)
 
       @loan.update!(
@@ -88,7 +102,25 @@ module Loans
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
 
-        if deduction_type == "deposit"
+        if deduction_type == "membership_fee"
+          membership_payment_record = MembershipPaymentRecord.paid.where(
+                                        membership_type: s_deduction.membership_type,
+                                        member_id: @loan.member.id
+                                      ).first
+
+          if membership_payment_record.blank?
+            MembershipPaymentRecord.create!(
+              member: @loan.member,
+              membership_type: s_deduction.membership_type,
+              membership_name: s_deduction.meta.membership_name,
+              amount: s_deduction.amount,
+              status: "paid",
+              date_paid: @date_paid
+            )
+
+            @member_data[:recognition_date] = @date_paid
+          end
+        elsif deduction_type == "deposit"
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
             offset          = s_deduction.meta.offset
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)

@@ -1,0 +1,22 @@
+#modal-load-center.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Load Center
+      .modal-body
+        .modal-body-content
+          .row
+            .col-12
+              %label
+                Select a center
+              = select_tag :center_id, options_from_collection_for_select(@centers, :id, :name, @center.try(:id)), class: "form-control select-select2", id: "select-center"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-load-center.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

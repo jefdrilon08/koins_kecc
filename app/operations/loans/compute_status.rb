@@ -13,7 +13,7 @@ module Loans
       @area         = @cluster.area
 
       @amorts = AmortizationScheduleEntry.where(
-                  "due_date <= ? AND loan_id = ?",
+                  "due_date < ? AND loan_id = ?",
                   @as_of,
                   @loan.id
                 ).order("due_date ASC")
@@ -125,12 +125,24 @@ module Loans
         @data[:principal_repayment_rate] = 1
       end
 
+      if @data[:principal_repayment_rate] >= 1 and @data[:total_principal_paid] < @data[:total_principal_due]
+        @data[:principal_repayment_rate] = 0.99
+      end
+
       if @data[:interest_repayment_rate] > 1
         @data[:interest_repayment_rate] = 1
       end
 
+      if @data[:interest_repayment_rate] >= 1 and @data[:total_interest_paid] < @data[:total_interest_due]
+        @data[:interest_repayment_rate] = 0.99
+      end
+
       if @data[:repayment_rate] > 1
         @data[:repayment_rate] = 1
+      end
+
+      if @data[:repayment_rate] >= 1 and @data[:total_paid] < @data[:total_due]
+        @data[:repayment_rate] = 0.99
       end
 
       # Compute for PAR

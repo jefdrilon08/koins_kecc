@@ -9,6 +9,16 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
+  # export tools page
+  get "/export_tools", to: "pages#export_tools"
+
+  # EXPORTS
+  get "/exports/members", to: "exports#members", as: :export_members
+  get "/exports/beneficiaries", to: "exports#beneficiaries", as: :export_beneficiaries
+  get "/exports/legal_dependents", to: "exports#legal_dependents", as: :export_legal_dependents
+  get "/exports/member_accounts", to: "exports#member_accounts", as: :export_member_accounts
+  get "/exports/account_transactions", to: "exports#account_transactions", as: :export_account_transactions
+
   root to: "pages#index"
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members

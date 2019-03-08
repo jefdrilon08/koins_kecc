@@ -28,6 +28,7 @@ gem 'cocoon'
 gem 'redis'
 gem 'axlsx_rails'
 gem 'zip'
+gem 'hirb'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
