@@ -7,7 +7,7 @@ module DepositCollections
 
       @data = @deposit_collection.data.with_indifferent_access
 
-      @default_deposit_accounts = Settings.default_deposit_accounts
+      @default_deposit_accounts = Settings.default_deposit_accounts.reverse
     end
 
     def execute!
@@ -31,10 +31,16 @@ module DepositCollections
           enabled = true
         end
 
+        if member_account.account_subtype == "Retirement Fund"
+          amount = 5.00
+        elsif member_account.account_subtype == "Life Insurance Fund"
+          amount = 15.00
+        end
+
         record_type = o.account_type
 
         @records << {
-          amount: 0.00,
+          amount: amount,
           enabled: enabled,
           member_id: @member.id,
           record_type: o.account_type,

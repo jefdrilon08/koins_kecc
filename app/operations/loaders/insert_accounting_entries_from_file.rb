@@ -17,6 +17,7 @@ module Loaders
           :approved_by,
           :prepared_by,
           :status,
+          :accounting_fund_id,
           :data
         ]
 

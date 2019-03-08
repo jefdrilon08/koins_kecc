@@ -4,7 +4,6 @@
   = link_to administration_users_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-users
     User Management
-
 %li{ class: "nav-item nav-dropdown" }
   = link_to "#", class: "nav-link nav-dropdown-toggle" do
     %i.nav-icon.fa.fa-cogs
@@ -45,3 +44,13 @@
   = link_to administration_member_shares_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-file
     Member Shares
+-if Settings.activate_microloans  
+  %li{ class: "nav-item nav-dropdown" }
+    = link_to "#", class: "nav-link nav-dropdown-toggle" do
+      %i.nav-icon.fa.fa-cogs
+      System Tools
+    %ul.nav-dropdown-items
+      %li{ class: "nav-item #{params[:controller] == '/export_tools' ? 'active' : ''}" }
+        = link_to export_tools_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Export Tools

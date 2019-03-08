@@ -23,4 +23,7 @@ class PagesController < ApplicationController
   def login
     render 'pages/login', layout: 'plain'
   end
+
+  def export_tools
+  end
 end
