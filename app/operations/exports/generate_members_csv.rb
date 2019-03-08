@@ -35,7 +35,7 @@ module Exports
                             :phil_health_number,
                             :cellphone_number,
                             :uuid,
-                            :meta_id,
+                            :meta_id, 
                             :date_resigned,
                             :resignation_type,
                             :resignation_code,
