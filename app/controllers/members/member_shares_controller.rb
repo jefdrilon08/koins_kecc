@@ -44,7 +44,7 @@ module Members
       if @member_share.update(member_share_params)
 
         ActivityLog.create!(
-          content: "#{current_user.full_name} updated member_share #{member_share.certificate_number} of #{@member.full_name}",
+          content: "#{current_user.full_name} updated member_share #{@member_share.certificate_number} of #{@member.full_name}",
           activity_type: "modification",
           data: {
             user_id: current_user.id,
