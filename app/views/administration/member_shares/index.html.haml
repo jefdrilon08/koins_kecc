@@ -5,31 +5,31 @@
     .col
       .card
         .card-body
-          %h5
-            Non-printed Certificates
-          .callout.callout-info
-            %p
-              Only non-printed certificates displayed
-          - if @member_shares.size > 0
-            = render partial: "list"
-            = paginate @member_shares
-          - else
-            %p
-              No certificates found
-          %h5
-            Members Without Certificates
-          %table.table.table-sm.table-bordered
-            %thead
-              %tr
-                %th
-                  Member
-                %th
-                  Branch
-            %tbody
-              - @members.each do |m|
-                %tr
-                  %td
-                    = link_to member_path(m.id), target: '_blank' do
-                      #{m.full_name}
-                  %td
-                    #{m.branch.to_s}
+          .row
+            .col
+              %h5
+                Non-printed Certificates (#{@member_shares.count})
+              - if @member_shares.size > 0
+                = render partial: "list"
+                = paginate @member_shares
+              - else
+                %p
+                  No certificates found
+            .col
+              %h5
+                Members Without Certificates (#{@members.count})
+              %table.table.table-sm.table-bordered
+                %thead
+                  %tr
+                    %th
+                      Member
+                    %th
+                      Branch
+                %tbody
+                  - @members.each do |m|
+                    %tr
+                      %td
+                        = link_to member_path(m.id), target: '_blank' do
+                          #{m.full_name}
+                      %td
+                        #{m.branch.to_s}
