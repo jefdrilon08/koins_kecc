@@ -5,6 +5,8 @@
     .col
       .card
         .card-body
+          %h5
+            Non-printed Certificates
           .callout.callout-info
             %p
               Only non-printed certificates displayed
@@ -14,3 +16,20 @@
           - else
             %p
               No certificates found
+          %h5
+            Members Without Certificates
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                  Member
+                %th
+                  Branch
+            %tbody
+              - @members.each do |m|
+                %tr
+                  %td
+                    = link_to member_path(m.id), target: '_blank' do
+                      #{m.full_name}
+                  %td
+                    #{m.branch.to_s}
