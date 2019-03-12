@@ -37,11 +37,23 @@ module Members
       @member_share = MemberShare.find(params[:id])
     end
 
+    def flag_as_printed
+      @member_share = MemberShare.find(params[:member_share_id])
+      @member_share.update!(data: { is_printed: true, date_printed: Date.today})
+
+      redirect_to member_member_share_path(@member_share.member.id, @member_share.id)
+    end
+
     def update
       @member_share         = MemberShare.find(params[:id])
       @member_share.member  = @member
 
       if @member_share.update(member_share_params)
+        data  = @member_share.data.with_indifferent_access
+
+        data[:is_printed] = false
+
+        @member_share.update!(data: data)
 
         ActivityLog.create!(
           content: "#{current_user.full_name} updated member_share #{@member_share.certificate_number} of #{@member.full_name}",
