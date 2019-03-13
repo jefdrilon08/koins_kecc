@@ -1,0 +1,26 @@
+= render partial: "no_certificates_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          .row
+            .col
+              %h5
+                Members Without Certificates (#{@members.count})
+              %table.table.table-sm.table-bordered
+                %thead
+                  %tr
+                    %th
+                      Member
+                    %th
+                      Branch
+                %tbody
+                  - @members.each do |m|
+                    %tr
+                      %td
+                        = link_to member_path(m.id), target: '_blank' do
+                          #{m.full_name}
+                      %td
+                        #{m.branch.to_s}

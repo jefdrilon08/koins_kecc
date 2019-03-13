@@ -7,7 +7,12 @@ namespace :administration do
   resources :centers
   resources :announcements
   resources :loan_products, except: [:destroy]
+  
   resources :member_shares, only: [:index]
+  get "/member_shares/not_printed", to: "member_shares#not_printed"
+  get "/member_shares/printed", to: "member_shares#printed"
+  get "/member_shares/no_certificates", to: "member_shares#no_certificates"
+
   resources :project_type_categories
 
   resources :surveys, only: [:index, :show, :edit, :update] do
