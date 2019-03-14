@@ -5,7 +5,7 @@ module Members
       
     def new
       date_of_issued  = @member.membership_payment_records.paid.order("date_paid ASC").last.try(:date_paid)
-      @member_share   = MemberShare.new(date_of_issued: date_of_issue)
+      @member_share   = MemberShare.new(date_of_issue: date_of_issue)
     end
 
     def create
