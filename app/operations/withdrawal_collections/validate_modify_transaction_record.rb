@@ -60,16 +60,17 @@ module WithdrawalCollections
           }
         else
           member_account  = MemberAccount.find(@current_transaction[:member_account_id])
+          result          = (member_account.balance - amount).round(2)
           
           if member_account.blank?
             @errors[:messages] << {
               key: "account",
               message: "Account not found"
             }
-          elsif (member_account.balance - amount) < member_account.maintaining_balance
+          elsif result < member_account.maintaining_balance
             @errors[:messages] << {
               key: "balance",
-              message: "Cannot withdraw #{amount} for balance #{member_account.balance} with maintaining balance #{member_account.maintaining_balance}"
+              message: "Cannot withdraw #{amount} for balance #{member_account.balance} (Result: #{result}) with maintaining balance #{member_account.maintaining_balance}"
             }
           end
         end

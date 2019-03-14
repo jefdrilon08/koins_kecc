@@ -13,6 +13,10 @@
     Member Share
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      - if @member_share.data["is_printed"].to_s == "false"
+        = link_to member_member_share_flag_as_printed_path(@member, @member_share), class: 'btn', data: { confirm: 'Are you sure?' } do
+          .fa.fa-check
+          Flag as Printed
       = link_to edit_member_member_share_path(@member, @member_share), class: 'btn' do
         .fa.fa-pencil-alt
         Edit

@@ -44,6 +44,15 @@
   = link_to administration_member_shares_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-file
     Member Shares
+  = link_to administration_member_shares_not_printed_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Not Printed Cert.
+  = link_to administration_member_shares_printed_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Printed Cert.
+  = link_to administration_member_shares_no_certificates_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    No Cert.
 -if Settings.activate_microloans  
   %li{ class: "nav-item nav-dropdown" }
     = link_to "#", class: "nav-link nav-dropdown-toggle" do

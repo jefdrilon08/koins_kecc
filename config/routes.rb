@@ -38,7 +38,9 @@ Rails.application.routes.draw do
   post "/new_claim_application", to: "claims#new_claim_application", as: :new_claim_application
 
   resources :members, only: [] do
-    resources :member_shares, except: [:index], controller: "members/member_shares"
+    resources :member_shares, except: [:index], controller: "members/member_shares" do
+      get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
+    end
     resources :claims, controller: 'members/claims'
   end
   # Loans

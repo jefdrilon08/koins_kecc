@@ -15,6 +15,13 @@
                   Date of Issue:
                   - if @member_share.date_of_issue
                     #{@member_share.date_of_issue.strftime("%B %d, %Y")}
+          %hr
+          .row
+            .col
+              - if @member_share.data["is_printed"].to_s == "true"
+                Date Printed: #{@member_share.data["date_printed"]}
+              - else
+                Not yet printed
 
 = render partial: "shared/modals/print"
 

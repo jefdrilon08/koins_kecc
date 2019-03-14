@@ -11,7 +11,7 @@
     - @member_shares.each do |o|
       %tr
         %td
-          = link_to member_path(o.certificate_number) do
+          = link_to member_member_share_path(o.member, o.id) do
             #{o.certificate_number}
         %td
           = link_to member_path(o.member.id) do
