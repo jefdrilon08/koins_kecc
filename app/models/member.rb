@@ -23,6 +23,7 @@ class Member < ApplicationRecord
   has_many :beneficiaries
   has_many :member_accounts
   has_many :member_shares
+  has_many :membership_payment_records
   has_many :claims, dependent: :delete_all
 
   validates :gender, presence: true

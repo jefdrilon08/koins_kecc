@@ -36,6 +36,11 @@ namespace :api do
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
 
+    # /api/
+    # Member Parameter
+    # 
+    get "/insurance_accounts/fetch_insurance_status", to: "insurance_accounts#fetch_insurance_status"
+
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
     get "/accounting/fetch_general_ledger", to: "accounting#fetch_general_ledger"
@@ -113,6 +118,7 @@ namespace :api do
     post "/deposit_collections/modify_cash_management_template", to: "deposit_collections#modify_cash_management_template"
     post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
+    post "/deposit_collections/load_center", to: "deposit_collections#load_center"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"

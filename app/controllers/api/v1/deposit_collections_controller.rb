@@ -43,7 +43,7 @@ module Api
         else
           deposit_collection.update!(status: "processing")
 
-          ProcessDepositCollectionLoadBranch.perform_later({ id: deposit_collection.id })
+          ProcessDepositCollectionLoadBranch.perform_later({ id: deposit_collection.id, user_id: current_user.id })
 
           render json: { id: deposit_collection.id }
         end
