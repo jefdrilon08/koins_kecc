@@ -21,6 +21,7 @@ module DepositCollections
         journal_entries: [],
         branch_id: @branch.id,
         branch_name: @branch.name,
+        accounting_fund_id: "",
         status: "display",
         data: {
           or_number: "",
@@ -113,6 +114,19 @@ module DepositCollections
         @data[:totals].each do |o|
           if o[:record_type] == "INSURANCE" and o[:key] == p.insurance_type and o[:amount] > 0
             accounting_code = AccountingCode.find(p.deposit_accounting_code_id)
+
+            if @data[:cash_management_template].present?
+              Settings.cash_management_templates.each do |template|
+                if template.name == @data[:cash_management_template]
+                  template.insurance_accounting_codes.each do |a|
+                    if a.insurance_type == p.insurance_type
+                      accounting_code = AccountingCode.find(a.deposit_accounting_code_id)
+                    end
+                  end
+                end
+              end
+            end
+
             journal_entries << {
               accounting_code_id: accounting_code.id,
               code: accounting_code.code,

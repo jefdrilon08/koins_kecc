@@ -61,7 +61,10 @@ module DataStores
             @data[:loan_products][i][:portfolio]          += portfolio.to_f.round(2)
             @data[:loan_products][i][:past_due_amount]    += past_due_amount.to_f.round(2)
             @data[:loan_products][i][:principal_past_due_amount] += principal_past_due_amount.to_f.round(2)
-            @data[:loan_products][i][:par_amount]         += par_amount.to_f.round(2)
+
+            if(o[:num_days_par].to_i > 0)
+              @data[:loan_products][i][:par_amount] += par_amount.to_f.round(2)
+            end
 
             @data[:total_active_loans]              = @data[:total_active_loans] + 1
             @data[:total_principal]                 += principal.to_f.round(2)
@@ -70,7 +73,10 @@ module DataStores
             @data[:total_portfolio]                 += portfolio.to_f.round(2)
             @data[:total_past_due_amount]           += past_due_amount.to_f.round(2)
             @data[:total_principal_past_due_amount] += principal_past_due_amount.to_f.round(2)
-            @data[:total_par_amount]                += par_amount.to_f.round(2)
+
+            if(o[:num_days_par].to_i > 0)
+              @data[:total_par_amount]  += par_amount.to_f.round(2)
+            end
           end
         end
 
@@ -82,7 +88,7 @@ module DataStores
         end
 
         # Compute PAR Rate
-        @data[:loan_products][i][:par_rate]  = @data[:loan_products][i][:principal_past_due_amount] / @data[:loan_products][i][:principal]
+        @data[:loan_products][i][:par_rate]  = @data[:loan_products][i][:par_amount] / @data[:loan_products][i][:principal]
       end
 
       # Compute total par rate and total rr

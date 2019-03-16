@@ -13,6 +13,8 @@
           Certificate Number
         %th
           Date of Issue
+        %th.text-center
+          Is Void
     %tbody
       - member_shares.each do |o|
         %tr
@@ -22,3 +24,7 @@
           %td
             - if o.date_of_issue
               #{o.date_of_issue.strftime("%B %d, %Y")}
+          %td.text-center
+            - if o.is_void
+              .badge.badge-danger
+                .fa.fa-check

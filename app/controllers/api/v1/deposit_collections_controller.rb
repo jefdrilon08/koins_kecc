@@ -80,7 +80,8 @@ module Api
 
         config  = {
           template: template,
-          deposit_collection: deposit_collection
+          deposit_collection: deposit_collection,
+          user: current_user
         }
 
         errors  = ::DepositCollections::ValidateModifyCashManagementTemplate.new(

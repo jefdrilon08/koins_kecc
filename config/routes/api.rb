@@ -68,6 +68,9 @@ namespace :api do
     get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
 
+    # Accounting Funds
+    get "/accounting_funds", to: "accounting_funds#index"
+
     # Centers
     get "/centers", to: "centers#index"
   

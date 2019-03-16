@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_06_031352) do
+ActiveRecord::Schema.define(version: 2019_03_16_030621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -344,6 +344,7 @@ ActiveRecord::Schema.define(version: 2019_03_06_031352) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "date_of_issue"
+    t.boolean "is_void"
     t.index ["member_id"], name: "index_member_shares_on_member_id"
   end
 

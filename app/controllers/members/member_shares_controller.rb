@@ -5,6 +5,30 @@ module Members
       
     def new
       date_of_issue = @member.membership_payment_records.paid.order("date_paid ASC").last.try(:date_paid)
+
+      settings  = nil
+
+      Settings.default_member_accounts.each do |s|
+        if s.account_type == "EQUITY" and s.account_subtype == "Share Capital"
+          settings  = s
+
+          member_account  = MemberAccount.where(
+                              member_id: @member.id,
+                              account_type: s.account_type,
+                              account_subtype: s.account_subtype
+                            ).first
+
+          if member_account.present?
+            latest_transaction  = AccountTransaction.personal_funds.where(
+                                    "subsidiary_id = ? AND amount > 0",
+                                    member_account.id
+                                  ).order("transacted_at ASC").last
+
+            date_of_issue = latest_transaction.transacted_at.to_date
+          end
+        end
+      end
+
       @member_share = MemberShare.new(date_of_issue: date_of_issue)
     end
 
