@@ -7,7 +7,7 @@ module DepositCollections
 
       @data = @deposit_collection.data.with_indifferent_access
 
-      @default_deposit_accounts = Settings.default_deposit_accounts.reverse
+      @default_deposit_accounts = Settings.default_deposit_accounts
     end
 
     def execute!
