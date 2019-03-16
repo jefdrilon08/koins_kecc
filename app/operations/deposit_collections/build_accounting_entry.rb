@@ -21,6 +21,7 @@ module DepositCollections
         journal_entries: [],
         branch_id: @branch.id,
         branch_name: @branch.name,
+        accounting_fund_id: "",
         status: "display",
         data: {
           or_number: "",
