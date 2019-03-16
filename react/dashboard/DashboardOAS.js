@@ -155,6 +155,9 @@ export default class DashboardOAS extends React.Component {
   renderBranchLoansStats() {
     var o = this.state.data.branch_loans_stats;
 
+    console.log("Branch Loans Stats");
+    console.log(o);
+
     if(this.state.isLoading) {
       return  (
         <SkCubeLoading/>
@@ -168,41 +171,47 @@ export default class DashboardOAS extends React.Component {
     } else {
       var loanProductRows = [];
 
-      o.data.loan_products.forEach(function(e) {
+      o.loan_products.forEach(function(e) {
         loanProductRows.push(
-          <tr key={"lp-" + e.loan_product.id}>
+          <tr key={"lp-" + e.id}>
             <td>
               <strong>
-                {e.loan_product.name}
+                {e.name}
               </strong>
             </td>
             <td className="text-center">
-              {e.num_loans}
+              {e.active_loans}
             </td>
             <td className="text-right">
-              {numberWithCommas(e.total_principal_portfolio)}
+              {numberWithCommas(e.principal)}
             </td>
             <td className="text-right">
-              {numberWithCommas(e.total_past_due)}
+              {numberWithCommas(e.principal_paid)}
             </td>
             <td className="text-right">
-              {numberWithCommas(e.total_principal_balance)}
+              {numberWithCommas(e.portfolio)}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(e.principal_past_due_amount)}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(e.par_amount)}
             </td>
             <td className="text-center">
               <small>
-                {numberAsPercent(e.par)}
+                {numberAsPercent(e.par_rate)}
               </small>
               <div className="progress progress-xs">
-                <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(e.par)}}>
+                <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(e.par_rate)}}>
                 </div>
               </div>
             </td>
             <td className="text-center">
               <small>
-                {numberAsPercent(e.repayment_rate)}
+                {numberAsPercent(e.rr)}
               </small>
               <div className="progress progress-xs">
-                <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(e.repayment_rate)}}>
+                <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(e.rr)}}>
                 </div>
               </div>
             </td>
@@ -213,24 +222,24 @@ export default class DashboardOAS extends React.Component {
       return  (
         <div>
           <h5>
-            Loans Stats as of {o.meta.as_of}
+            Loans Stats as of {o.as_of}
           </h5>
           <div className="row">
             <div className="col">
               <h6>
-                Overall PAR: {numberAsPercent(o.data.par)}
+                Overall PAR: {numberAsPercent(o.total_par_rate)}
               </h6>
               <div className="progress progress-xs">
-                <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.data.par)}}>
+                <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.total_par_rate)}}>
                 </div>
               </div>
             </div>
             <div className="col">
               <h6>
-                Overall Repayment Rate: {numberAsPercent(o.data.repayment_rate)}
+                Overall Repayment Rate: {numberAsPercent(o.total_rr)}
               </h6>
               <div className="progress progress-xs">
-                <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.data.repayment_rate)}}>
+                <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.total_rr)}}>
                 </div>
               </div>
             </div>
@@ -246,16 +255,22 @@ export default class DashboardOAS extends React.Component {
                   Active Loans
                 </th>
                 <th className="text-right">
+                  Principal
+                </th>
+                <th className="text-right">
+                  Principal Paid
+                </th>
+                <th className="text-right">
                   Portfolio
                 </th>
                 <th className="text-right">
                   Past Due Amount
                 </th>
                 <th className="text-right">
-                  PAR Amount
+                  Par Amount
                 </th>
                 <th className="text-center">
-                  PAR Rate
+                  Par Rate
                 </th>
                 <th className="text-center">
                   RR
@@ -271,28 +286,34 @@ export default class DashboardOAS extends React.Component {
                   Total
                 </th>
                 <th className="text-center">
-                  {o.data.num_loans}
+                  {o.total_active_loans}
                 </th>
                 <th className="text-right">
-                  {numberWithCommas(o.data.total_principal_portfolio)}
+                  {numberWithCommas(o.total_principal)}
                 </th>
                 <th className="text-right">
-                  {numberWithCommas(o.data.total_past_due)}
+                  {numberWithCommas(o.total_principal_paid)}
                 </th>
                 <th className="text-right">
-                  {numberWithCommas(o.data.total_principal_balance)}
+                  {numberWithCommas(o.total_portfolio)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(o.total_principal_past_due_amount)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(o.total_par_amount)}
                 </th>
                 <th className="text-center">
-                  {numberAsPercent(o.data.par)}
+                  {numberAsPercent(o.total_par_rate)}
                   <div className="progress progress-xs">
-                    <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.data.par)}}>
+                    <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.total_par_rate)}}>
                     </div>
                   </div>
                 </th>
                 <th className="text-center">
-                  {numberAsPercent(o.data.repayment_rate)}
+                  {numberAsPercent(o.total_rr)}
                   <div className="progress progress-xs">
-                    <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.data.repayment_rate)}}>
+                    <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.total_rr)}}>
                     </div>
                   </div>
                 </th>

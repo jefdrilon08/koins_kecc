@@ -17,14 +17,29 @@ module Api
           branches: build_branches
         }
 
+        # Fetch repayment rates
+        rr_data = DataStore.repayment_rates.where(
+                    "meta->>'branch_id' = ? AND status = ?",
+                    branch.id,
+                    "done"
+                  ).order(
+                    "(meta->>'as_of')::date ASC"
+                  ).last
+
         # Fetch branch loan stats
-        branch_loans_stats        = DataStore.branch_loans_stats.where(
-                                      "meta->>'branch_id' = ? AND status = ?", 
-                                      branch.id,
-                                      "done"
-                                    ).order(
-                                      "(meta->>'as_of')::date ASC"
-                                    ).last
+#        branch_loans_stats        = DataStore.branch_loans_stats.where(
+#                                      "meta->>'branch_id' = ? AND status = ?", 
+#                                      branch.id,
+#                                      "done"
+#                                    ).order(
+#                                      "(meta->>'as_of')::date ASC"
+#                                    ).last
+
+        if rr_data.present?
+          branch_loans_stats  = ::DataStores::BuildBranchLoanStatsFromRr.new(
+                                  rr_data: rr_data.data.with_indifferent_access
+                                ).execute!
+        end
 
         data[:branch_loans_stats] = branch_loans_stats || false
 

@@ -62,7 +62,7 @@ module DataStores
             @data[:loan_products][i][:past_due_amount]    += past_due_amount.to_f.round(2)
             @data[:loan_products][i][:principal_past_due_amount] += principal_past_due_amount.to_f.round(2)
 
-            if(principal_past_due_amount.to_f.round(2) > 0)
+            if(o[:num_days_par].to_i > 0)
               @data[:loan_products][i][:par_amount] += par_amount.to_f.round(2)
             end
 
@@ -74,7 +74,7 @@ module DataStores
             @data[:total_past_due_amount]           += past_due_amount.to_f.round(2)
             @data[:total_principal_past_due_amount] += principal_past_due_amount.to_f.round(2)
 
-            if(principal_past_due_amount.to_f.round(2) > 0)
+            if(o[:num_days_par].to_i > 0)
               @data[:total_par_amount]  += par_amount.to_f.round(2)
             end
           end
