@@ -42,3 +42,7 @@
       = link_to "/data_stores/watchlists", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         Watchlists
+    %li{ class: "nav-item #{params[:controller] == 'monthly_new_and_resigned' ? 'active' : ''}" }
+      = link_to "/data_stores/monthly_new_and_resigned", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Monthly New/Res.

@@ -5,6 +5,7 @@ module Branches
       @year   = @config[:year]
       @month  = @config[:month]
       @branch = @config[:branch]
+      @as_of  = Date.new(@year, @month, -1)
 
       @members  = Member.active_and_resigned.where(
                     branch_id: @branch.id
@@ -22,6 +23,7 @@ module Branches
       @data = {
         year: @year,
         month: @month,
+        as_of: @as_of,
         branch: {
           id: @branch.id,
           name: @branch.name
@@ -84,8 +86,23 @@ module Branches
                                   }
 
       # Format new members
-      @data[:new_members] = @membership_payment_records.joins(:member).where(
-                            )
+      @data[:new_members] = @new_members.map{ |m|
+                              {
+                                id: m.id,
+                                first_name: m.first_name,
+                                middle_name: m.middle_name,
+                                last_name: m.last_name,
+                                identifiction_number: m.identification_number,
+                                center: {
+                                  id: m.center.id,
+                                  name: m.center.name
+                                },
+                                branch: {
+                                  id: m.branch.id,
+                                  name: m.branch.name
+                                }
+                              }
+                            }
 
       @data
     end

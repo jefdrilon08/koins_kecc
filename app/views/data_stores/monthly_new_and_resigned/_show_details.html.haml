@@ -1,0 +1,56 @@
+.row
+  .col-md-6.col-xs-12
+    %h5
+      New Members (#{@data[:num_new]})
+
+    - if @data[:num_new].to_i > 0
+      %table.table.table-sm.table-bordered
+        %thead
+          %tr
+            %th.text-center
+            %th
+              Name
+            %th
+              Center
+        %tbody
+          - @data[:new_members].each_with_index do |o, i|
+            %tr
+              %td.text-center
+                #{i + 1}
+              %td
+                = link_to member_path(o[:id]) do
+                  #{o[:last_name]}, #{o[:first_name]} #{o[:middle_name]}
+              %td.text-muted
+                #{o[:center][:name]}
+    - else
+      %p
+        No new members
+  .col-md-6.col-xs-12
+    %h5
+      Resigned Members (#{@data[:num_resigned]})
+    - if @data[:num_resigned].to_i > 0
+      %table.table.table-sm.table-bordered
+        %thead
+          %tr
+            %th.text-center
+            %th
+              Name
+            %th
+              Center
+            %th
+              Date Resigned
+        %tbody
+          - @data[:resigned_members].each_with_index do |o, i|
+            %tr
+              %td.text-center
+                #{i + 1}
+              %td
+                = link_to member_path(o[:id]) do
+                  #{o[:last_name]}, #{o[:first_name]} #{o[:middle_name]}
+              %td.text-muted
+                #{o[:center][:name]}
+              %td
+                #{o[:date_resigned]}
+    - else
+      %p
+        No resigned members
