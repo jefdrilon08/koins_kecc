@@ -18,7 +18,7 @@
               %td.text-center
                 #{i + 1}
               %td
-                = link_to member_path(o[:id]) do
+                = link_to member_path(o[:id]), target: '_blank' do
                   #{o[:last_name]}, #{o[:first_name]} #{o[:middle_name]}
               %td.text-muted
                 #{o[:center][:name]}
@@ -45,7 +45,7 @@
               %td.text-center
                 #{i + 1}
               %td
-                = link_to member_path(o[:id]) do
+                = link_to member_path(o[:id]), target: '_blank' do
                   #{o[:last_name]}, #{o[:first_name]} #{o[:middle_name]}
               %td.text-muted
                 #{o[:center][:name]}
