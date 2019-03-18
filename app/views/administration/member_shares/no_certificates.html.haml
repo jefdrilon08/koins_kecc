@@ -16,12 +16,19 @@
                       Member
                     %th
                       Branch
+                    %th
+                      Center
+                    %th
+                      Date of Issue
                 %tbody
-                  - @members.each do |m|
+                  - @member_records.each do |m|
                     %tr
                       %td
-                        = link_to member_path(m.id), target: '_blank' do
-                          #{m.full_name}
+                        = link_to member_path(m[:id]), target: '_blank' do
+                          #{m[:full_name]}
                       %td
-                        #{m.branch.to_s}
-              = paginate @members
+                        #{m[:branch][:name]}
+                      %td
+                        #{m[:center][:name]}
+                      %td
+                        #{m[:date_of_issue]}
