@@ -11,7 +11,7 @@ module Api
           @branch           = Branch.find(params[:branch_id])
 
           @record = DataStore.x_weeks_to_pay.where(
-                      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ? AND CAST(meta->>'x' AS int)",
+                      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ? AND CAST(meta->>'x' AS int) = ?",
                       @branch.id,
                       @as_of,
                       @x
@@ -39,7 +39,7 @@ module Api
           args  = {
             data_store_id: @record.id,
             branch_id: @branch.id,
-            as_of: @as_of,
+            as_of: @as_of.to_s,
             x: @x
           }
 

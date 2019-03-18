@@ -7,7 +7,7 @@ module Branches
       @branch = @config[:branch]
       @as_of  = Date.new(@year, @month, -1)
 
-      @members  = Member.active_and_resigned.where(
+      @members  = Member.active_and_resigned_and_pending.where(
                     branch_id: @branch.id
                   )
 

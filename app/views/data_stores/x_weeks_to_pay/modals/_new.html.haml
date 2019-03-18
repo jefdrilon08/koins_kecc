@@ -9,17 +9,18 @@
           .bs-callout.bs-callout-info
             Create a new data store for X Weeks to Pay
           .row
-            .col-md-4.col-xs-12
+            .col-md-12.col-xs-12
               .form-group
                 %label
                   Branch
                 = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
-            .col-md-4.col-xs-12
+          .row
+            .col-md-6.col-xs-12
               .form-group
                 %label
                   As Of:
                 = text_field_tag :as_of, Date.today, type: :date, id: "input-as-of", class: 'form-control'
-            .col-md-4
+            .col-md-6.col-xs-12
               .form-group
                 %label
                   Num Weeks

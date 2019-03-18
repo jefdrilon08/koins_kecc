@@ -1,6 +1,6 @@
 namespace :adjust do
   task :update_previous_date_resigned => :environment do
-    members = Member.active_and_resigned
+    members = Member.active_and_resigned_and_pending
 
     if ENV['BRANCH_ID'].present?
       members = members.where(branch_id: ENV['BRANCH_ID'])
@@ -10,7 +10,7 @@ namespace :adjust do
 
     members.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
-      printf("\r(#{i+1}/#{size}): Processing maturity date of loans... #{progress}%%")
+      printf("\r(#{i+1}/#{size}): Processing previous_date_resigned updates... #{progress}%%")
 
       data  = o.data.with_indifferent_access
 
