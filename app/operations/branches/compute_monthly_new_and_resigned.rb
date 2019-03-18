@@ -47,15 +47,15 @@ module Branches
                                     )
 
       @resigned_members = @members.where(
-                            "extract(month FROM date_resigned) = ? AND extract(year FROM date_resigned) = ?",
+                            "(extract(month FROM date_resigned) = ? AND extract(year FROM date_resigned) = ?) OR (extract(month FROM previous_date_resigned) = ? AND extract(year FROM previous_date_resigned) = ?)",
+                            @month,
+                            @year,
                             @month,
                             @year
                           ).order("last_name ASC")
 
       @new_members  = @members.where(
                         id: @membership_payment_records.pluck(:member_id)
-                      ).where.not(
-                        id: @resigned_members.pluck(:id)
                       ).order("last_name ASC")
 
 
@@ -67,13 +67,19 @@ module Branches
 
       # Format resigned members
       @data[:resigned_members]  = @resigned_members.map{ |m|
+                                    date_resigned = m.date_resigned
+
+                                    if date_resigned.blank?
+                                      date_resigned = m.previous_date_resigned
+                                    end
+
                                     {
                                       id: m.id,
                                       first_name: m.first_name,
                                       middle_name: m.middle_name,
                                       last_name: m.last_name,
                                       identifiction_number: m.identification_number,
-                                      date_resigned: m.date_resigned.strftime("%B %d, %Y"),
+                                      date_resigned: date_resigned.strftime("%B %d, %Y"),
                                       center: {
                                         id: m.center.id,
                                         name: m.center.name

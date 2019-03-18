@@ -1,4 +1,50 @@
 namespace :adjust do
+  task :update_previous_date_resigned => :environment do
+    members = Member.active_and_resigned
+
+    if ENV['BRANCH_ID'].present?
+      members = members.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    size  = members.count
+
+    members.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Processing maturity date of loans... #{progress}%%")
+
+      data  = o.data.with_indifferent_access
+
+      if data[:resignation_records].present? and data[:resignation_records].last.present?
+        o.update!(
+          previous_date_resigned: data[:resignation_records].last[:date_resigned]
+        )
+      end
+    end
+
+    puts "\nDone."
+  end
+
+  task :update_loan_maturity_dates => :environment do
+    loans = Loan.active_or_paid.where(maturity_date: nil)
+
+    if ENV['BRANCH_ID'].present?
+      loans = loans.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    size  = loans.count
+
+    loans.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Processing maturity date of loans... #{progress}%%")
+
+      ::Loans::UpdateMaturityDate.new(
+        loan: o
+      ).execute!
+    end
+
+    puts "\nDone."
+  end
+
   task :reload_member_counts => :environment do
     start_date      = ENV['START_DATE'].to_date
     end_date        = ENV['END_DATE'].to_date

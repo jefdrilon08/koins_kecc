@@ -1,0 +1,35 @@
+#modal-new.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          New Data Store: X Weeks to Pay
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Create a new data store for X Weeks to Pay
+          .row
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  As Of:
+                = text_field_tag :as_of, Date.today, type: :date, id: "input-as-of", class: 'form-control'
+            .col-md-4
+              .form-group
+                %label
+                  Num Weeks
+                = select_tag :x, options_for_select([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 4), class: "form-control select-select2", id: "select-x"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

@@ -158,6 +158,7 @@ namespace :api do
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
+      post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"
       post "/year_end_closings/queue", to: "year_end_closings#queue"
       post "/year_end_closings/approve", to: "year_end_closings#approve"
     end
