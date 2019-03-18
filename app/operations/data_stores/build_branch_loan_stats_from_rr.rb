@@ -88,11 +88,11 @@ module DataStores
         end
 
         # Compute PAR Rate
-        @data[:loan_products][i][:par_rate]  = @data[:loan_products][i][:par_amount] / @data[:loan_products][i][:principal]
+        @data[:loan_products][i][:par_rate]  = @data[:loan_products][i][:par_amount] / @data[:loan_products][i][:portfolio]
       end
 
       # Compute total par rate and total rr
-      @data[:total_par_rate]  = @data[:total_principal_past_due_amount] / @data[:total_principal]
+      @data[:total_par_rate]  = @data[:total_principal_past_due_amount] / @data[:total_portfolio]
 
       if @data[:total_principal_paid_due] == 0.00
         @data[:total_rr]  = 0
