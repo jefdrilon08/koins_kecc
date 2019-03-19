@@ -61,4 +61,58 @@
 
 %hr
 %h5
-  #{@deposit_collection[:data][:accounting_entry][:book]} | #{}
+  #{@deposit_collection[:data][:accounting_entry][:book]} | #{@deposit_collection[:data][:accounting_entry][:reference_number]}
+
+%br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "50%" }
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Debit
+      %th.text-right{ width: "25%" }
+        Credit
+  %tbody
+    - @deposit_collection[:data][:accounting_entry][:debit_journal_entries].each do |a|
+      %tr
+        %td
+          #{a[:code]} - #{a[:name]}
+        %td.text-right
+          #{number_to_currency(a[:amount], unit: "")}
+        %td.text-right
+    - @deposit_collection[:data][:accounting_entry][:credit_journal_entries].each do |a|
+      %tr
+        %td
+          #{a[:code]} - #{a[:name]}
+        %td.text-right
+        %td.text-right
+          #{number_to_currency(a[:amount], unit: "")}
+
+%p
+  %span
+    %strong
+      Particular: 
+  #{@deposit_collection[:data][:accounting_entry][:particular]}
+%br
+%br
+%br
+%br
+.row
+  .col
+    %center
+      %strong
+        #{@deposit_collection[:data][:accounting_entry][:prepared_by]}
+      %br
+      Prepared By:
+  .col
+    %center
+      %br
+      Reviewed By:
+  .col
+    %center
+      %strong
+        #{@deposit_collection[:data][:accounting_entry][:approved_by]}
+      %br
+      Approved By:
