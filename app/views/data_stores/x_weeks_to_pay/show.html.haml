@@ -1,4 +1,5 @@
 = render partial: "show_header"
+#parameters{ data: { id: "#{@record.id}" } }
 
 .container-fluid
   .row
@@ -8,4 +9,5 @@
           - if @record.error?
             = render partial: "data_stores/error_page"
           - else
-            = render partial: "show_details"
+            #content
+            = javascript_include_tag "XWeeksToPayShow.min.react"

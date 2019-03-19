@@ -85,6 +85,7 @@ Rails.application.config.assets.precompile += [
   "DashboardMain.min.react.js",
   "BranchRepaymentReportShow.min.react.js",
   "PersonalFundsShow.min.react.js",
+  "XWeeksToPayShow.min.react.js",
   "SoaExpensesShow.min.react.js",
   "SoaLoansShow.min.react.js",
   "SoaFundsShow.min.react.js",
