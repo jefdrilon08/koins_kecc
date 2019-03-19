@@ -37,6 +37,13 @@
         .value.text-muted
           %b
             #{@member.insurance_status.upcase} 
+
+      %li.list-group-item
+        Member Type
+        .value.text-muted
+          %b
+            = link_to "#", id: "btn-change-member-type" do
+              #{@member.member_type.upcase}
     - if @member.modifiable
       = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
         %i.fa.fa-edit
