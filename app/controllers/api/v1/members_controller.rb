@@ -322,6 +322,18 @@ module Api
         end
       end
 
+      def generate_missing_accounts
+        member  = Member.find(params[:id])
+
+        ::Members::GenerateMissingAccounts.new(
+          config: {
+            member: member
+          }
+        ).execute!
+
+        render json: { message: "ok" }
+      end
+
       def save_signature
         member  = Member.find(params[:id])
 

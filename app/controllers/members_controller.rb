@@ -80,5 +80,11 @@ class MembersController < ApplicationController
                       ).order("created_at DESC")
 
     @loan_cycles  = @member.data.with_indifferent_access[:loan_cycles]
+
+    @missing_accounts = ::Members::FetchMissingAccounts.new(
+                          config: {
+                            member: @member
+                          }
+                        ).execute!
   end
 end

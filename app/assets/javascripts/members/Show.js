@@ -21,19 +21,21 @@ var Show  = (function() {
   var $btnConfirmUnlock;
   var $btnRestore;
   var $btnConfirmRestore;
+  var $btnGenerateMissingAccounts;
   var $selectLoanProduct;
   var $selectSurvey;
   var $message;
 
   var templateErrorList;
 
-  var _urlGenerateAccessToken = "/api/v1/members/generate_access_token";
-  var _urlSaveSignature       = "/api/v1/members/save_signature";
-  var _urlNewLoan             = "/api/v1/loans/apply";
-  var _urlCreateSurvey        = "/api/v1/members/create_survey";
-  var _urlDelete              = "/api/v1/members/delete";
-  var _urlUnlock              = "/api/v1/members/unlock";
-  var _urlRestore             = "/api/v1/members/restore";
+  var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
+  var _urlSaveSignature           = "/api/v1/members/save_signature";
+  var _urlNewLoan                 = "/api/v1/loans/apply";
+  var _urlCreateSurvey            = "/api/v1/members/create_survey";
+  var _urlDelete                  = "/api/v1/members/delete";
+  var _urlUnlock                  = "/api/v1/members/unlock";
+  var _urlRestore                 = "/api/v1/members/restore";
+  var _urlGenerateMissingAccounts = "/api/v1/members/generate_missing_accounts";
   var _memberId;
   var _authenticityToken;
 
@@ -66,6 +68,7 @@ var Show  = (function() {
     $btnRestore                     = $("#btn-restore");
     $btnConfirmRestore              = $("#btn-confirm-restore");
     $btnConfirmUnlock               = $("#btn-confirm-unlock");
+    $btnGenerateMissingAccounts     = $("#btn-generate-missing-accounts");
     $selectLoanProduct              = $("#select-loan-product");
     $selectSurvey                   = $("#select-survey");
 
@@ -74,6 +77,47 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnGenerateMissingAccounts.on("click", function() {
+      $message.html("Generating missing accounts...");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnGenerateMissingAccounts.prop("disabled", true);
+
+      $.ajax({
+        url: _urlGenerateMissingAccounts,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnGenerateMissingAccounts.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnRestore.on("click", function() {
       $message.html("");
       $modalRestore.modal("show");
