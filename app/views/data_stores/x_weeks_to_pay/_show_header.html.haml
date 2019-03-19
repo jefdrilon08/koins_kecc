@@ -13,7 +13,7 @@
     - if @record.done?
       %li.breadcrumb-item
         .fa.fa-file
-        As Of: #{@record.data.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")} until #{@record.data.with_indifferent_access[:date_until].to_date.strftime("%B %d, %Y")}
+        As Of: #{@record.data.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")} until #{@record.data.with_indifferent_access[:date_until].to_date.strftime("%B %d, %Y")} (#{@record.data.with_indifferent_access[:x]} Weeks)
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       = link_to "/data_stores/x_weeks_to_pay/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
