@@ -14,9 +14,15 @@
           %td
             #{o[:date_resigned].to_date.strftime("%B %d, %Y")}
           %td
-            #{o[:data][:type]}
+            - if o[:data].present?
+              #{o[:data][:type]}
+            - else
+              #{o[:member_resignation_type][:name]}
           %td
-            #{o[:data][:reason]}
+            - if o[:data].present?
+              #{o[:data][:reason]}
+            - else
+              #{o[:member_resignation_type][:particular][:name]}
 - else
   %p
     No resignation records
