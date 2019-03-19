@@ -150,6 +150,15 @@ module Api
           billing = ::Billings::Approve.new(
                       config: config
                     ).execute!
+
+          # Set maintaining balance for members
+          Member.where(id: billing.member_ids).each do |m|
+            ::Members::SetMaintainingBalance.new(
+              config: {
+                member: m
+              }
+            ).execute!
+          end
   
           ActivityLog.create!(
             content: "#{current_user.full_name} approved billing",

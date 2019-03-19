@@ -109,6 +109,10 @@ class Billing < ApplicationRecord
     records
   end
 
+  def member_ids
+    self.data.with_indifferent_access[:records].map{ |o| o[:member][:id] }
+  end
+
   def withdraw_payments
     records = []
     self.data.with_indifferent_access[:records].each do |o|

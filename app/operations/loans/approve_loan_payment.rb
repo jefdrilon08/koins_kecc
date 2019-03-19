@@ -103,13 +103,6 @@ module Loans
           date_completed: @account_transaction.transacted_at,
           status: "paid"
         )
-
-        # setup maintaining balance
-        ::Members::SetMaintainingBalance.new(
-          config: {
-            member: @loan.member
-          }
-        ).execute!
       end
     end
   end
