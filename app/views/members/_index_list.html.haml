@@ -9,9 +9,10 @@
         Branch
       %th
         Center
-      %th
-        %center
-          Status
+      %th.text-center
+        Type
+      %th.text-center
+        Status
   %tbody
     - members.each do |o|
       %tr
@@ -24,14 +25,15 @@
           = link_to member_path(o) do
             %strong
               #{o.full_name}
-        %td
-          .text-muted
-            %small
-              #{o.branch.name}
-        %td
-          .text-muted
-            %small
-              #{o.center.name}
+        %td.text-muted
+          %small
+            #{o.branch.name}
+        %td.text-muted
+          %small
+            #{o.center.name}
+        %td.text-center
+          %small
+            #{o.member_type}
         %td
           %center
             - if o.active?
