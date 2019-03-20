@@ -23,7 +23,7 @@ class Member < ApplicationRecord
   has_many :beneficiaries
   has_many :member_accounts
   has_many :member_shares
-  has_many :claims, dependent: :delete_all
+  has_many :claims
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -45,9 +45,13 @@ class Member < ApplicationRecord
   scope :active_and_resigned, -> { where(status: ["active", "resigned"]).order("last_name ASC") }
 
   before_validation :load_defaults
+  
+  def check_name
+    "#{first_name.upcase} #{middle_name.upcase} #{last_name.upcase}"
+  end
 
   def full_name
-    "#{last_name}, #{first_name} #{middle_name}"
+    "#{self.last_name}, #{self.first_name}, #{self.middle_name}"
   end
 
   def resigned?

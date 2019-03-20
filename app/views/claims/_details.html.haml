@@ -1,0 +1,91 @@
+%section.content-header
+  %h3
+    %strong
+      Claims Form
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Date Prepared
+      %td
+        = @claim.date_prepared.try(:strftime, "%B %d, %Y")
+      %th Date of Policy Issue
+      %td
+        = @claim.date_of_policy_issue.strftime("%B %d, %Y")
+    %tr
+      %th Date Reported/Notice
+      %td 
+        =@claim.date_reported.try(:strftime, "%B %d, %Y")
+      %th Date Paid
+      %td 
+        =@claim.date_paid.try(:strftime, "%B %d, %Y")
+      %tr
+        %th Member Name
+        %td 
+          = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
+        %th Length of Stay
+        %td 
+          = @claim.length_of_stay  
+      %tr
+        %th PN Number
+        %td
+          = @claim.policy_number
+        %th Date of Death/TPD/Accident 
+        %td
+          = @claim.date_of_death_tpd_accident.try(:strftime, "%B %d, %Y")
+      %tr
+        %th Type of Insurance Policy 
+        %td
+          = @claim.type_of_insurance_policy
+
+        %th Classification of Insured
+        %td
+          = @claim.classification_of_insured
+      %tr
+        %th Name of Insured
+        %td
+          = @claim.name_of_insured
+        %th Gender
+        %td
+          = @claim.gender   
+      %tr
+        %th Age
+        %td
+          = @claim.age
+        %th Date of Birth
+        %td
+          = @claim.date_of_birth.try(:strftime, "%B %d, %Y")    
+      %tr
+        %th Face Amount 
+        %td
+          = @claim.face_amount
+        %th Beneficiary
+        %td
+          = @claim.beneficiary
+      %tr
+        %th Equity Value
+        %td
+          = @claim.equity_value
+        %th Retirement Fund 
+        %td
+          = @claim.retirement_fund
+      %tr
+        %th Returned Contribution
+        %td
+          = @claim.returned_contribution
+        %th Category of Cause of Death/TPD/Accident
+        %td
+          = @claim.category_of_cause_of_death_tpd_accident
+      %tr
+        %th Arrears
+        %td
+          = @claim.arrears
+        %th Cause of Death/TPD/Accident
+        %td
+          = @claim.cause_of_death_tpd_accident
+      %tr
+        %th Prepared By
+        %td
+          = @claim.prepared_by
+        %th Order of Child
+        %td
+          = @claim.order_of_child

@@ -8,12 +8,8 @@ class Claim < ApplicationRecord
 	belongs_to :center
 	belongs_to :member
 
-	validates :member, presence: true
-	validates	:date_reported, presence: true
-	# validates :branch, presence: true
-	# validates :center, presence: true
-
-
+  validates :date_reported, presence: true
+  validates :member, presence: true
 	def age
     	if self.date_of_birth.nil?
       		"Please set date of birth"

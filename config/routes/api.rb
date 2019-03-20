@@ -31,10 +31,12 @@ namespace :api do
     post "/members/delete", to: "members#delete"
     post "/members/unlock", to: "members#unlock"
     post "/members/restore", to: "members#restore"
-
+  
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
+
+    get "/insurance_accounts/fetch_insurance_status" , to: "insurance_accounts#fetch_insurance_status"
 
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"

@@ -24,7 +24,6 @@ var Show  = (function() {
   var $selectLoanProduct;
   var $selectSurvey;
   var $message;
-
   var templateErrorList;
 
   var _urlGenerateAccessToken = "/api/v1/members/generate_access_token";
