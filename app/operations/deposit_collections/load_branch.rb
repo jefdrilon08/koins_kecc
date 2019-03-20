@@ -5,6 +5,7 @@ module DepositCollections
 
       @deposit_collection = @config[:deposit_collection]
       @branch             = @deposit_collection.branch
+      @user               = @config[:user]
     end
 
     def execute!
@@ -23,6 +24,25 @@ module DepositCollections
         ::DepositCollections::AddMember.new(
           config: config
         ).execute!
+
+
+
+        @deposit_collection = DepositCollection.find(@deposit_collection.id)
+
+        r_config = {
+          current_member: {
+            id: member.id
+          },
+          data: @deposit_collection.data.with_indifferent_access,
+          user: @user,
+          deposit_collection: @deposit_collection
+        }
+
+        data  = ::DepositCollections::RecomputeTotals.new(
+                  config: r_config
+                ).execute!
+
+        @deposit_collection.update!(data: data)
       end
 
       @deposit_collection

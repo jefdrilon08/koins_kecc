@@ -43,7 +43,7 @@ module Api
         else
           deposit_collection.update!(status: "processing")
 
-          ProcessDepositCollectionLoadBranch.perform_later({ id: deposit_collection.id })
+          ProcessDepositCollectionLoadBranch.perform_later({ id: deposit_collection.id, user_id: current_user.id })
 
           render json: { id: deposit_collection.id }
         end
@@ -80,7 +80,8 @@ module Api
 
         config  = {
           template: template,
-          deposit_collection: deposit_collection
+          deposit_collection: deposit_collection,
+          user: current_user
         }
 
         errors  = ::DepositCollections::ValidateModifyCashManagementTemplate.new(
@@ -158,7 +159,11 @@ module Api
                   ).order("last_name ASC").map{ |o|
                     {
                       id: o.id,
-                      name: o.full_name
+                      name: o.full_name,
+                      center: {
+                        id: o.center.id,
+                        name: o.center.name
+                      }
                     }
                   }
 

@@ -31,12 +31,17 @@ namespace :api do
     post "/members/delete", to: "members#delete"
     post "/members/unlock", to: "members#unlock"
     post "/members/restore", to: "members#restore"
-  
+    post "/members/generate_missing_accounts", to: "members#generate_missing_accounts"
+    post "/members/change_member_type", to: "members#change_member_type"
+
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
 
-    get "/insurance_accounts/fetch_insurance_status" , to: "insurance_accounts#fetch_insurance_status"
+    # /api/
+    # Member Parameter
+    # 
+    get "/insurance_accounts/fetch_insurance_status", to: "insurance_accounts#fetch_insurance_status"
 
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
@@ -64,6 +69,9 @@ namespace :api do
     get "/branches", to: "branches#index"
     get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
+
+    # Accounting Funds
+    get "/accounting_funds", to: "accounting_funds#index"
 
     # Centers
     get "/centers", to: "centers#index"
@@ -115,6 +123,7 @@ namespace :api do
     post "/deposit_collections/modify_cash_management_template", to: "deposit_collections#modify_cash_management_template"
     post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
+    post "/deposit_collections/load_center", to: "deposit_collections#load_center"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"
@@ -150,6 +159,9 @@ namespace :api do
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
+      post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
+      post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"
+      get "/x_weeks_to_pay/fetch", to: "x_weeks_to_pay#fetch"
       post "/year_end_closings/queue", to: "year_end_closings#queue"
       post "/year_end_closings/approve", to: "year_end_closings#approve"
     end

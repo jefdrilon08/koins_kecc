@@ -129,7 +129,16 @@ module Api
                     config: config
                   ).execute!
         elsif type == "deposit_collection"
-          filename = "deposit-collection-#{Time.now.to_i}.json"
+          deposit_collection  = DepositCollection.find(params[:id])
+          filename            = "deposit-collection-#{Time.now.to_i}.json"
+
+          config  = {
+            deposit_collection: deposit_collection
+          }
+
+          data  = ::Print::BuildDepositCollection.new(
+                    config: config
+                  ).execute!
         end
 
         if errors[:full_messages].size == 0

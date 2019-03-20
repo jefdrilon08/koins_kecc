@@ -1,0 +1,28 @@
+- if @data[:resignation_records].present?
+  %table.table.table-sm.table-bordered
+    %thead
+      %tr
+        %th
+          Date Resigned
+        %th
+          Type
+        %th
+          Reason
+    %tbody
+      - @data[:resignation_records].each do |o|
+        %tr
+          %td
+            #{o[:date_resigned].to_date.strftime("%B %d, %Y")}
+          %td
+            - if o[:data].present?
+              #{o[:data][:type]}
+            - else
+              #{o[:member_resignation_type][:name]}
+          %td
+            - if o[:data].present?
+              #{o[:data][:reason]}
+            - else
+              #{o[:member_resignation_type][:particular][:name]}
+- else
+  %p
+    No resignation records

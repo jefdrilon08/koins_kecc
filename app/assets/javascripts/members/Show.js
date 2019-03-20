@@ -6,6 +6,7 @@ var Show  = (function() {
   var $modalCreateSurvey;
   var $modalRestore;
   var $modalUnlock;
+  var $modalChangeMemberType;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -21,18 +22,24 @@ var Show  = (function() {
   var $btnConfirmUnlock;
   var $btnRestore;
   var $btnConfirmRestore;
+  var $btnGenerateMissingAccounts;
+  var $btnChangeMemberType;
+  var $btnConfirmChangeMemberType;
   var $selectLoanProduct;
   var $selectSurvey;
+  var $selectMemberType;
   var $message;
   var templateErrorList;
 
-  var _urlGenerateAccessToken = "/api/v1/members/generate_access_token";
-  var _urlSaveSignature       = "/api/v1/members/save_signature";
-  var _urlNewLoan             = "/api/v1/loans/apply";
-  var _urlCreateSurvey        = "/api/v1/members/create_survey";
-  var _urlDelete              = "/api/v1/members/delete";
-  var _urlUnlock              = "/api/v1/members/unlock";
-  var _urlRestore             = "/api/v1/members/restore";
+  var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
+  var _urlSaveSignature           = "/api/v1/members/save_signature";
+  var _urlNewLoan                 = "/api/v1/loans/apply";
+  var _urlCreateSurvey            = "/api/v1/members/create_survey";
+  var _urlDelete                  = "/api/v1/members/delete";
+  var _urlUnlock                  = "/api/v1/members/unlock";
+  var _urlRestore                 = "/api/v1/members/restore";
+  var _urlGenerateMissingAccounts = "/api/v1/members/generate_missing_accounts";
+  var _urlChangeMemberType        = "/api/v1/members/change_member_type";
   var _memberId;
   var _authenticityToken;
 
@@ -50,6 +57,7 @@ var Show  = (function() {
     $modalDelete                    = $("#modal-delete");
     $modalUnlock                    = $("#modal-unlock");
     $modalRestore                   = $("#modal-restore");
+    $modalChangeMemberType          = $("#modal-change-member-type");
     $btnGenerateAccessToken         = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature            = $("#btn-confirm-signature");
@@ -65,6 +73,10 @@ var Show  = (function() {
     $btnRestore                     = $("#btn-restore");
     $btnConfirmRestore              = $("#btn-confirm-restore");
     $btnConfirmUnlock               = $("#btn-confirm-unlock");
+    $btnGenerateMissingAccounts     = $("#btn-generate-missing-accounts");
+    $btnChangeMemberType            = $("#btn-change-member-type");
+    $btnConfirmChangeMemberType     = $("#btn-confirm-change-member-type");
+    $selectMemberType               = $("#select-member-type");
     $selectLoanProduct              = $("#select-loan-product");
     $selectSurvey                   = $("#select-survey");
 
@@ -73,6 +85,94 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnChangeMemberType.on("click", function() {
+      $message.html(""); 
+      $modalChangeMemberType.modal("show");
+    });
+
+    $btnConfirmChangeMemberType.on("click", function() {
+      $message.html("Changing member type...");
+
+      var data  = {
+        id: _memberId,
+        member_type: $selectMemberType.val(),
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmChangeMemberType.prop("disabled", true);
+
+      $.ajax({
+        url: _urlChangeMemberType,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmChangeMemberType.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnGenerateMissingAccounts.on("click", function() {
+      $message.html("Generating missing accounts...");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnGenerateMissingAccounts.prop("disabled", true);
+
+      $.ajax({
+        url: _urlGenerateMissingAccounts,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnGenerateMissingAccounts.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnRestore.on("click", function() {
       $message.html("");
       $modalRestore.modal("show");

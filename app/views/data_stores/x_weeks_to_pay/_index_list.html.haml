@@ -1,0 +1,46 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th.text-center
+        Date
+      %th.text-center
+        Until
+      %th
+        Branch
+      %th.text-center
+        X Weeks
+      %th.text-center
+        Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          %strong
+            = link_to "/data_stores/x_weeks_to_pay/#{o.id}" do
+              #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
+        %td.text-center
+          #{o.data.with_indifferent_access[:date_until].to_date.strftime("%b %d, %Y")}
+        %td
+          #{o.meta.with_indifferent_access[:branch_name]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:x]}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.badge-success
+              Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}

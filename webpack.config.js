@@ -32,6 +32,7 @@ module.exports = {
     WatchlistsShow: "./react/data_stores/watchlists/Show.js",
     RepaymentRatesShow: "./react/data_stores/repayment_rates/Show.js",
     PersonalFundsShow: "./react/data_stores/personal_funds/Show.js",
+    XWeeksToPayShow: "./react/data_stores/x_weeks_to_pay/Show.js",
     MonthlyClosingCollectionShow: "./react/monthly_closing_collections/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./react/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision: "./react/monitoring/AccountingEntryPrecision.js",

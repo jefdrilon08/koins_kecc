@@ -4,7 +4,32 @@ module Members
     before_action :load_member!
       
     def new
-      @member_share = MemberShare.new
+      date_of_issue = @member.membership_payment_records.paid.order("date_paid ASC").last.try(:date_paid)
+
+      settings  = nil
+
+      Settings.default_member_accounts.each do |s|
+        if s.account_type == "EQUITY" and s.account_subtype == "Share Capital"
+          settings  = s
+
+          member_account  = MemberAccount.where(
+                              member_id: @member.id,
+                              account_type: s.account_type,
+                              account_subtype: s.account_subtype
+                            ).first
+
+          if member_account.present?
+            latest_transaction  = AccountTransaction.personal_funds.where(
+                                    "subsidiary_id = ? AND amount > 0",
+                                    member_account.id
+                                  ).order("transacted_at ASC").last
+
+            date_of_issue = latest_transaction.transacted_at.to_date
+          end
+        end
+      end
+
+      @member_share = MemberShare.new(date_of_issue: date_of_issue)
     end
 
     def create
@@ -37,14 +62,26 @@ module Members
       @member_share = MemberShare.find(params[:id])
     end
 
+    def flag_as_printed
+      @member_share = MemberShare.find(params[:member_share_id])
+      @member_share.update!(data: { printed: true, date_printed: Date.today})
+
+      redirect_to member_member_share_path(@member_share.member.id, @member_share.id)
+    end
+
     def update
       @member_share         = MemberShare.find(params[:id])
       @member_share.member  = @member
 
       if @member_share.update(member_share_params)
+        data  = @member_share.data.with_indifferent_access
+
+        data[:printed] = false
+
+        @member_share.update!(data: data)
 
         ActivityLog.create!(
-          content: "#{current_user.full_name} updated member_share #{member_share.certificate_number} of #{@member.full_name}",
+          content: "#{current_user.full_name} updated member_share #{@member_share.certificate_number} of #{@member.full_name}",
           activity_type: "modification",
           data: {
             user_id: current_user.id,

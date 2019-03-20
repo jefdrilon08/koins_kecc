@@ -5,6 +5,10 @@
     %i.nav-icon.fa.fa-store-alt
     Branch Level
   %ul.nav-dropdown-items
+    %li{ class: "nav-item #{params[:controller] == 'repayment_rates' ? 'active' : ''}" }
+      = link_to "/data_stores/repayment_rates", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Repayment Rates
     %li{ class: "nav-item #{params[:controller] == 'personal_funds' ? 'active' : ''}" }
       = link_to "/data_stores/personal_funds", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
@@ -38,7 +42,11 @@
       = link_to "/data_stores/watchlists", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         Watchlists
-    %li{ class: "nav-item #{params[:controller] == 'repayment_rates' ? 'active' : ''}" }
-      = link_to "/data_stores/repayment_rates", class: 'nav-link' do
+    %li{ class: "nav-item #{params[:controller] == 'monthly_new_and_resigned' ? 'active' : ''}" }
+      = link_to "/data_stores/monthly_new_and_resigned", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
-        Repayment Rates
+        Monthly New/Res.
+    %li{ class: "nav-item #{params[:controller] == 'x_weeks_to_pay' ? 'active' : ''}" }
+      = link_to "/data_stores/x_weeks_to_pay", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        X Weeks to Pay

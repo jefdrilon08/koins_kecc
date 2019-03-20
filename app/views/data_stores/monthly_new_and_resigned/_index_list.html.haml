@@ -1,0 +1,48 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th.text-center
+        Date
+      %th
+        Branch
+      %th.text-center
+        \# New
+      %th.text-center
+        \# Resigned
+      %th.text-center
+        Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          %strong
+            = link_to "/data_stores/monthly_new_and_resigned/#{o.id}" do
+              #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%B %Y")}
+        %td
+          #{o.meta.with_indifferent_access[:branch_name]}
+        %td.text-center
+          - if o.done?
+            #{o.data.with_indifferent_access[:num_new]}
+        %td.text-center
+          - if o.done?
+            #{o.data.with_indifferent_access[:num_resigned]}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.badge-success
+              Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}

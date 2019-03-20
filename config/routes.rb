@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   post "/new_claim_application", to: "claims#new_claim_application", as: :new_claim_application
   post "/new_clip_claim_application", to: "clip_claims#new_clip_claim_application", as: :new_clip_claim_application
 
+
   resources :claims do
     get "/claim_validation_pdf", to: "claims#claim_validation_pdf"
     get "/claim_loa_pdf", to: "claims#claim_loa_pdf"
@@ -48,8 +49,11 @@ Rails.application.routes.draw do
     get "/clip_claim_loa_pdf", to: "clip_claims#clip_claim_loa_pdf"
   end
 
-  resources :members do
-    resources :member_shares, except: [:index], controller: "members/member_shares"
+  resources :members, only: [] do
+    resources :member_shares, except: [:index], controller: "members/member_shares" do
+      get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
+    end
+
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
   end
@@ -113,6 +117,14 @@ Rails.application.routes.draw do
     get "/member_counts", to: "member_counts#index"
     get "/member_counts/:id", to: "member_counts#show"
     delete "/member_counts/:id", to: "member_counts#destroy"
+
+    get "/monthly_new_and_resigned", to: "monthly_new_and_resigned#index"
+    get "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#show"
+    delete "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#destroy"
+
+    get "/x_weeks_to_pay", to: "x_weeks_to_pay#index"
+    get "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#show"
+    delete "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#destroy"
 
     get "/branch_loans_stats", to: "branch_loans_stats#index"
     get "/branch_loans_stats/:id", to: "branch_loans_stats#show"

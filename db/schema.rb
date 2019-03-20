@@ -345,6 +345,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_013927) do
     t.datetime "updated_at", null: false
     t.date "first_date_of_payment"
     t.integer "cycle"
+    t.date "maturity_date"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
@@ -376,6 +377,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_013927) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "date_of_issue"
+    t.boolean "is_void"
     t.index ["member_id"], name: "index_member_shares_on_member_id"
   end
 
@@ -406,6 +408,7 @@ ActiveRecord::Schema.define(version: 2019_03_19_013927) do
     t.string "access_token"
     t.text "signature_data"
     t.boolean "modifiable"
+    t.date "previous_date_resigned"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
   end

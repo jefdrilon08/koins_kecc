@@ -20,7 +20,7 @@ var Index = (function() {
 
   var urlBranches       = "/api/v1/branches";
   var urlCenters       = "/api/v1/centers";
-  var urlCreateClaims = "/api/v1/claims";
+  var urlCreateClaims = "/api/v1/clip_claims";
 
   var _authenticityToken;
 
@@ -56,45 +56,6 @@ var Index = (function() {
       $selectBranch.prop("disabled", true);
       $selectCenter.prop("disabled", true);
       $selectMember.prop("disabled", true)
-
-      $.ajax({
-        url: urlCreateClaims,
-        method: 'POST',
-        data: {
-          authenticity_token: _authenticityToken,
-          branch_id: branchId,
-          center_id: centerId,
-          member_id: memberId
-        },
-        success: function(response) {
-          $message.html(
-            "Success! Redirecting..."
-          );
-
-          window.location.href="/claims/" + response.id;
-        },
-        error: function(response) {
-          var errors  = [];
-
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"]
-          } finally {
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnConfirmNewTransaction.prop("disabled", false);
-            $selectBranch.prop("disabled", false);
-            $selectCenter.prop("disabled", false);
-            $selectMember.prop("disabled", false);
-          }
-        }
-      });
     });
 
     $selectBranch.on("change", function() {

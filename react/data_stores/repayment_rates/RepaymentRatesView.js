@@ -41,7 +41,7 @@ export default class MasterListView extends React.Component {
       
       if(loans[i].total_paid > loans[i].total_paid_due) {
         backgroundColor = "#e9ecfd";
-      } else if(loans[i].principal_rr < 1) {
+      } else if(loans[i].principal_balance > 0) {
         backgroundColor = "#ffe1e1";
       }
 
@@ -201,7 +201,7 @@ export default class MasterListView extends React.Component {
     for(var i = 0; i < loans.length; i++) {
       if(loans[i].total_paid > loans[i].total_paid_due) {
         numAdvanced++;
-      } else if(loans[i].principal_rr < 1) {
+      } else if(loans[i].principal_balance > 0) {
         numPastDue++;
       }
     }

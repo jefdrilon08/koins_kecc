@@ -1,0 +1,27 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @records.size > 0
+            = render partial: "index_list"
+            = paginate @records
+          - else
+            %p
+              No records
+
+= render partial: "data_stores/monthly_new_and_resigned/modals/new"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "data_stores/monthly_new_and_resigned/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

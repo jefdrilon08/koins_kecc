@@ -1,0 +1,121 @@
+:css
+  @page { size: landscape; margin: 15px;}
+
+  table {
+    font-size: 0.9em;
+  }
+
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  Branch: #{@deposit_collection[:branch][:name]}
+  %br
+  Collection Date: #{@deposit_collection[:collection_date].to_date.strftime("%B %d, %Y")}
+%hr
+
+%h5
+  OR Number: #{@deposit_collection[:data][:or_number]} 
+  |
+  Book: #{@deposit_collection[:data][:accounting_entry][:book]}
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "3%" }
+      %th{ width: "25%" }
+        Member
+      %th
+        Center
+      - @deposit_collection[:data][:totals].each do |h|
+        %th.text-right
+          #{h[:key]}
+      %th.text-right
+        Amt Rec.
+  %tbody
+    - @deposit_collection[:data][:records].each_with_index do |r, i|
+      %tr
+        %td.text-center
+          #{i + 1}
+        %td
+          #{r[:member][:full_name]}
+        %td
+          #{Member.find(r[:member][:id]).center.name}
+        - r[:records].each do |rr|
+          %td.text-right
+            #{number_to_currency(rr[:amount], unit: '')}
+        %td.text-right
+          #{number_to_currency(r[:total_collected], unit: '')}
+    %tr
+      %th
+      %th
+      %th
+        TOTAL
+      - @deposit_collection[:data][:totals].each do |t|
+        %th.text-right
+          #{number_to_currency(t[:amount], unit: '')}
+      %th.text-right
+        #{number_to_currency(@deposit_collection[:data][:total_collected], unit: '')}
+
+%hr
+%h5
+  #{@deposit_collection[:data][:accounting_entry][:book]} | #{@deposit_collection[:data][:accounting_entry][:reference_number]}
+
+%br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "50%" }
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Debit
+      %th.text-right{ width: "25%" }
+        Credit
+  %tbody
+    - @deposit_collection[:data][:accounting_entry][:debit_journal_entries].each do |a|
+      %tr
+        %td
+          #{a[:code]} - #{a[:name]}
+        %td.text-right
+          #{number_to_currency(a[:amount], unit: "")}
+        %td.text-right
+    - @deposit_collection[:data][:accounting_entry][:credit_journal_entries].each do |a|
+      %tr
+        %td
+          #{a[:code]} - #{a[:name]}
+        %td.text-right
+        %td.text-right
+          #{number_to_currency(a[:amount], unit: "")}
+
+%p
+  %span
+    %strong
+      Particular: 
+  #{@deposit_collection[:data][:accounting_entry][:particular]}
+%br
+%br
+%br
+%br
+.row
+  .col
+    %center
+      %strong
+        #{@deposit_collection[:data][:accounting_entry][:prepared_by]}
+      %br
+      Prepared By:
+  .col
+    %center
+      %br
+      Reviewed By:
+  .col
+    %center
+      %strong
+        #{@deposit_collection[:data][:accounting_entry][:approved_by]}
+      %br
+      Approved By:
+
+:javascript
+  window.print();
