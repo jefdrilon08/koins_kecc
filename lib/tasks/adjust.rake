@@ -1,4 +1,96 @@
 namespace :adjust do
+  task :entry_level_loan_cycle_counts => :environment do
+    members = Member.active_and_resigned
+
+    if ENV['BRANCH_ID'].present?
+      members = members.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    if ENV['CENTER_ID'].present?
+      members = members.where(center_id: ENV['CENTER_ID'])
+    end
+
+    size  = members.count
+
+    members.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Updating loan cycle counts for member #{o.id}... #{progress}%%")
+
+      data  = o.data.with_indifferent_access
+
+      # --> Loan cycle computation
+      loans               = Loan.active_or_paid.where(member_id: o.id)
+      entry_loan_products = LoanProduct.entry_point.where(id: loans.pluck(:loan_product_id).uniq)
+      loans               = loans.where(loan_product_id: entry_loan_products.pluck(:id)).order("date_approved ASC")
+
+      loan_cycles = data[:loan_cycles] || []
+
+      # Repair loan_cycles
+      entry_loan_products.each do |elp|
+        found = false
+
+        loan_cycles.each do |lc|
+          if lc[:loan_product_id] == elp.id
+            found = true
+          end
+        end
+
+        if !found
+          loan_cycles << {
+            loan_product_id: elp.id,
+            cycle: loans.where(loan_product_id: elp.id).order("cycle ASC").count
+          }
+          
+          start_counter = loan_cycles.last[:cycle].to_i - loans.where(loan_product_id: elp.id).count
+          loans.where(loan_product_id: elp.id).order("date_approved ASC").each do |temp_loan|
+            start_counter += 1
+            temp_loan.update!(cycle: start_counter)
+          end
+        end
+      end
+
+      data[:loan_cycles]  = loan_cycles
+      o.update!(data: data)
+
+      data        = o.data.with_indifferent_access
+      loan_cycles = data[:loan_cycles] || []
+
+      if loan_cycles.size > 0
+        loan_cycles.each do |lc|
+          temp_loans  = loans.where(loan_product_id: lc[:loan_product_id]).order("date_approved ASC")
+
+          if temp_loans.size > 0
+            cycle_count     = lc[:cycle].to_i
+            starting_cycle  = cycle_count - temp_loans.size
+
+            temp_loans.each do |l|
+              starting_cycle = starting_cycle + 1
+              l.update!(cycle: starting_cycle)
+            end
+          end
+        end
+      end
+
+      # --> Entry point loan cycle count
+      #entry_point_loan_cycle  = data[:entry_point_loan_cycle] || 0
+      entry_point_loan_cycle  = 0
+
+      entry_loan_products.each do |lp|
+        max_cycle_loan  = Loan.active_or_paid.where(member_id: o.id, loan_product_id: lp.id).order("cycle ASC").last
+
+        if max_cycle_loan.present?
+          entry_point_loan_cycle += max_cycle_loan.cycle.to_i
+        end
+      end
+
+      data[:entry_point_loan_cycle] = entry_point_loan_cycle
+
+      o.update!(data: data)
+    end
+
+    puts "\nDone."
+  end
+
   task :update_recognition_date_by_loans => :environment do
     members = Member.active_and_resigned
 
