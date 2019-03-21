@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_19_013927) do
+ActiveRecord::Schema.define(version: 2019_03_20_052114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -186,9 +186,9 @@ ActiveRecord::Schema.define(version: 2019_03_19_013927) do
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "member_id"
-    t.uuid "center_id"
-    t.uuid "branch_id"
+    t.integer "member_id"
+    t.integer "center_id"
+    t.integer "branch_id"
     t.date "date_prepared"
     t.string "policy_number"
     t.string "type_of_insurance_policy"
@@ -215,9 +215,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_013927) do
     t.date "date_paid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["branch_id"], name: "index_claims_on_branch_id"
-    t.index ["center_id"], name: "index_claims_on_center_id"
-    t.index ["member_id"], name: "index_claims_on_member_id"
   end
 
   create_table "clip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -613,9 +610,6 @@ ActiveRecord::Schema.define(version: 2019_03_19_013927) do
   add_foreign_key "billings", "centers"
   add_foreign_key "branches", "clusters"
   add_foreign_key "centers", "branches"
-  add_foreign_key "claims", "branches"
-  add_foreign_key "claims", "centers"
-  add_foreign_key "claims", "members"
   add_foreign_key "clip_claims", "branches"
   add_foreign_key "clip_claims", "centers"
   add_foreign_key "clip_claims", "members"
