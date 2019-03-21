@@ -53,6 +53,8 @@ Rails.application.config.assets.precompile += [
   "data_stores/repayment_rates/Index.js",
   "data_stores/branch_repayment_reports/Index.js",
   "data_stores/member_counts/Index.js",
+  "data_stores/monthly_new_and_resigned/Index.js",
+  "data_stores/x_weeks_to_pay/Index.js",
   "data_stores/branch_with_centers_loans_stats/Show.js",
   "data_stores/branch_with_centers_loans_stats/Index.js",
   "members/Show.js",
@@ -83,6 +85,7 @@ Rails.application.config.assets.precompile += [
   "DashboardMain.min.react.js",
   "BranchRepaymentReportShow.min.react.js",
   "PersonalFundsShow.min.react.js",
+  "XWeeksToPayShow.min.react.js",
   "SoaExpensesShow.min.react.js",
   "SoaLoansShow.min.react.js",
   "SoaFundsShow.min.react.js",
@@ -93,9 +96,13 @@ Rails.application.config.assets.precompile += [
   "MonitoringAccountingEntryPrecision.min.react.js",
   "claims/Index.js",
   "claims_form.js",
+  "claims.js",
   "exports/Exports.js",
   "MemberAccountInsuranceStatus.min.react.js",
   "member_account_validation/Index.js",
   "member_account_validation/MemberAccountValidations.js",
-  "member_account_validation/MemberAccountValidationForm.js"
+  "member_account_validation/MemberAccountValidationForm.js",
+  "clip_claims/Index.js",
+  "clip_claims.js",
+  "clip_claims_form.js"
 ]

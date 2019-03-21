@@ -1,4 +1,4 @@
-%table#data-table.display.table.table-bordered.table-hover.table-sm
+%table.table.table-sm.table-hover
   %thead
     %tr
       %th
@@ -10,26 +10,27 @@
       %th
         Insurance Policy
       %th
-        Classification
+        Classification 
       %th
         Face Amount
       %th
         Date Prepared
   %tbody
-    - @claims.each do |c|
+    - @claims.each do |claim|
       %tr
         %td
-          = link_to member_path(c) do 
-            #{c.full_name}
+          = link_to claim_path(claim) do
+            %strong
+              #{claim.member.full_name}
         %td
-          #{c.member.branch.name}
+          #{claim.branch.name}
+        %td
+          #{claim.name_of_insured}
+        %td
+          #{claim.type_of_insurance_policy}
         %td 
-          #{c.name_of_insured}
-        %td
-          #{c.type_of_insurance_policy}
+          #{claim.classification_of_insured}
         %td 
-          #{c.classification_of_insured}
+          #{claim.face_amount}
         %td
-          #{c.face_amount}
-        %td
-          #{c.date_prepared.strftime("%b %d %Y")}
+          #{claim.date_prepared.strftime("%B %d, %Y")}

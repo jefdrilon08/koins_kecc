@@ -1,15 +1,101 @@
-= simple_form_for [@member, claim], defaults: { wrapper_html: { class: 'form-group' }, input_html: { class: 'form-control' } }, html: { multipart: true, novalidate: true } do |f|
+= simple_form_for [@member, claim] do |f|
   = hidden_field_tag 'memberId', "#{@member.id}"
+  #{@errors}
+  .row
+    .col
+      .form-group
+        %h3
+          Claims Information
+  .row
+    .col
+      .form-group
+        = f.input :date_prepared, input_html: { class: 'form-control', id: 'date-prepared', value: Time.now.to_date, type: 'date' }, as: :string ,label: "Date Prepared"
+    .col
+      .form-group
+        = f.input :date_reported, input_html: { class: 'form-control', id: 'date-reported', type: 'date' }, as: :string, label: "Date Reported/Notice"
+  .row
+    .col
+      .form-group 
+        = f.input :date_paid, input_html: { class: 'form-control ', id: 'date-paid', type: 'date' }, as: :string 
+    .col
+      .form-group
+        = f.input :date_of_policy_issue, input_html: { class: 'form-control datepick', id: 'date-of-policy-issue', value: @member.data.with_indifferent_access[:recognition_date], type: 'date' }, as: :string, label: "Date of Policy Issue"
+  .row
+    .col
+      .form-group
+        = f.input :type_of_insurance_policy, input_html: { class: 'form-control', id: 'type-of-insurance-policy' }, as: :select, collection: Claim::INSURANCE_POLICY_TYPES, include_blank: false , prompt: "-- Select --"
+    .col
+      .form-group
+        = f.input :classification_of_insured, input_html: { class: 'form-control', id: 'classification-of-insured' }, as: :select, collection: Claim::INSURED_CLASSIFICATION, include_blank: false , prompt: "-- Select --"
+  .row
+    .col
+      .form-group
+        = f.input :date_of_death_tpd_accident, input_html: { class: 'form-control datepick', id: 'date-of-death-tpd-accident', type: 'date' }, as: :string
+    .col
+      .form-group
+        = f.input :length_of_stay, input_html: { class: 'form-control', id: 'length-of-stay'}
+  .row
+    .col
+      .form-group
+        = f.input :equity_value, input_html: { class: 'form-control', id: 'equity-value', value: @member.equity_value }, as: :string
+    .col
+      .form-group    
+        = f.input :retirement_fund, input_html: { class: 'form-control', id: 'retirement-fund', value: @member.rf_amount }, as: :string
+  .row
+    .col
+      .form-group
+        = f.input :policy_number, input_html: { class: 'form-control', id: 'policy-number', value: @member.identification_number }, as: :string
+    .col
+      .form-group
+        = f.input :face_amount, input_html: { class: 'form-control', id: 'face-amount'}, as: :string
+  .row
+    .col
+      .form-group
+        = f.input :name_of_insured, input_html: { class: 'form-control', id: 'name-of-insured' }, as: :string
+    .col
+      .form-group
+        %label
+        = f.input :date_of_birth, input_html: { class: 'form-control datepick', id: 'date-of-birth', type: 'date' }, as: :string
+  .row
+    .col-sm-6 
+      .form-group.order-of-child-field
+        = f.input :order_of_child, input_html: { class: 'form-control', id: 'order-of-child'}, as: :select, collection: ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"] 
+  .row
+    .col
+      .form-group
+        = f.input :gender, :collection => ["Male", "Female"], :label => "Gender", input_html: { class: 'form-control', id: 'gender' }
+    .col
+      .form-group
+        = f.input :beneficiary, input_html: { class: 'form-control', id: 'beneficiary' }, as: :string        
+  .row
+    .col
+      .form-group
+        = f.input :returned_contribution, input_html: { class: 'form-control', id: 'returned-contribution'}, as: :string
+    .col
+      .form-group
+        = f.input :total_amount_payable, input_html: { class: 'form-control', id: 'total-amount-payable'}, as: :string
+  .row
+    .col
+      .form-group
+        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.full_name.titleize}
+    .col
+      .form-group
+        = f.input :arrears, input_html: { class: 'form-control', id: 'arrears'}, as: :string
+  .row
+    .col
+      .form-group
+        = f.input :category_of_cause_of_death_tpd_accident, as: :select, collection: Claim::CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT, include_blank: false, input_html: { class: 'form-control', id: 'cause-of-death-tpd-accident' }
+    .col
+      .form-group
+      = f.input :cause_of_death_tpd_accident, as: :text, input_html: { class: 'form-control', style: 'height: 70px', id: 'cause-of-death-tpd-accident' }
+  .row
+    .col
+      .form-actions
+      = button_tag type: 'submit', class: 'btn btn-primary', data: { confirm: "Are you sure?" } do
+        .fa.fa-check
+        Submit
+      = link_to claims_path, class: 'btn btn-default' do
+        .fa.fa-times
+        Cancel
 
-  = render partial: "members/claims/form_claim_information", locals: { f: f }
-  
-  .form-actions
-    = button_tag type: 'submit', class: 'btn btn-primary', data: { confirm: "Are you sure?" } do
-      .fa.fa-check
-      Submit
-    = link_to claims_path, class: 'btn btn-default' do
-      .fa.fa-times
-      Cancel
-
-#parameters{data: { member_id: @member.id } }
-/ = javascript_include_tag 'claim_application'
+= javascript_include_tag "claims_form"

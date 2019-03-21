@@ -322,6 +322,54 @@ module Api
         end
       end
 
+      def change_member_type
+        member      = Member.find(params[:id])
+        member_type = params[:member_type]
+
+        old_member_type = member.member_type
+
+        config  = {
+          member: member,
+          user: current_user,
+          member_type: member_type
+        }
+
+        errors  = ::Members::ValidateChangeMemberType.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].size > 0
+          render json: errors, status: 400
+        else
+          member.update!(member_type: member_type)
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified member #{member.full_name}'s member_type from #{old_member_type} to #{member_type}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member.id,
+              old_member_type: old_member_type,
+              member_type: member_type
+            }
+          )
+
+          render json: { id: member.id }
+        end
+      end
+
+      def generate_missing_accounts
+        member  = Member.find(params[:id])
+
+        ::Members::GenerateMissingAccounts.new(
+          config: {
+            member: member
+          }
+        ).execute!
+
+        render json: { message: "ok" }
+      end
+
       def save_signature
         member  = Member.find(params[:id])
 

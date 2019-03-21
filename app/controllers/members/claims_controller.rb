@@ -2,7 +2,6 @@ module Members
   class ClaimsController < ApplicationController
     before_action :authenticate_user!
     before_action :load_defaults
-    
 
     def load_defaults
       @member = Member.find(params[:member_id])
@@ -19,13 +18,15 @@ module Members
     def create
       @claim = Claim.new(claim_params)
       @claim.member = @member
+      @claim.branch = @member.branch
+      @claim.center = @member.center
       @errors = []
       @errors = Claims::ValidateClaimDuplication.new(claim: @claim).execute!
 
       if @errors.count <= 0
         if @claim.save
           flash[:success] = "Successfully created claim"
-           redirect_to claim_path(@claim)
+          redirect_to claim_path(@claim)
         else
           flash[:error] = "Error in creating claim"
           render :new
@@ -38,23 +39,18 @@ module Members
 
     def edit
       @claim = Claim.find(params[:id])
-      
     end
 
     def show
-      @claim = Claim.find(params[:id])
-      
+     @claim = Claim.find(params[:id])
     end
 
     def update
       @claim = Claim.find(params[:id])
-      @claim.member = @member
       
-
       if @claim.update(claim_params)
-        
-        # update the remaining balance
-        flash[:success] = "Successfully updated claim"
+       # update the remaining balance
+
         redirect_to claim_path(@claim)
       else
         flash[:error] = "Error in saving claim"

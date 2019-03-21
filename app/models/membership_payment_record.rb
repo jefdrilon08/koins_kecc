@@ -3,8 +3,8 @@ class MembershipPaymentRecord < ApplicationRecord
 
   belongs_to :member
 
-  scope :paid, -> { where("status = ? AND amount > 0", "paid") }
-  scope :void, -> { where("status = ? AND amount > 0", "void") }
+  scope :paid, -> { where("membership_payment_records.status = ? AND amount > 0", "paid") }
+  scope :void, -> { where("membership_payment_records.status = ? AND amount > 0", "void") }
 
   validates :membership_type, presence: true
   validates :membership_name, presence: true

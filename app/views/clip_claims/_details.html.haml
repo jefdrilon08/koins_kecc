@@ -1,0 +1,62 @@
+%section.content-header
+  %h3
+    %strong
+      Clip Claims Form
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Debtors Name (Member)
+      %td 
+        = link_to "#{@clip_claim.member.full_name} (#{@clip_claim.member.identification_number})", member_path(@clip_claim.member), target: "_blank"
+      %th Beneficiary
+      %td 
+        = @clip_claim.beneficiary
+    %tr
+      %th Date of Birth
+      %td 
+        = @clip_claim.date_of_birth.try(:strftime, "%B %d, %Y")
+      %th Age
+      %td 
+        = @clip_claim.age
+    %tr
+      %th Creditors Name
+      %td 
+        = @clip_claim.creditors_name
+      %th CLIP Policy Number
+      %td 
+        = @clip_claim.policy_number  
+    %tr
+      %th Date of Death
+      %td
+        = @clip_claim.date_of_death.try(:strftime, "%B %d, %Y")
+      %th Cause of Death
+      %td
+        = @clip_claim.cause_of_death
+    %tr
+      %th Type of Loan
+      %td
+        = @clip_claim.type_of_loan
+      %th Terms
+      %td
+        = @clip_claim.terms
+    %tr
+      %th Effective Date of Coverage
+      %td
+        = @clip_claim.effective_date_of_coverage.try(:strftime, "%B %d, %Y")
+      %th Expiration Date of Coverage
+      %td
+        = @clip_claim.expiration_date_of_coverage.try(:strftime, "%B %d, %Y")
+    %tr
+      %th Amount of Loan
+      %td
+        = @clip_claim.amount_of_loan
+      %th Amount Payable to Beneficiary (Paid Amount)
+      %td
+        = @clip_claim.amount_payable_to_beneficiary
+    %tr  
+      %th Amount Payable to Creditor (Balance)
+      %td
+        = @clip_claim.amount_payable_to_creditor
+      %th Prepared By
+      %td
+        = @clip_claim.prepared_by

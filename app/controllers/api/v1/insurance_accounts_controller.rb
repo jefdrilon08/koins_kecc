@@ -1,6 +1,7 @@
 module Api
 	module V1
 		class InsuranceAccountsController < ApplicationController
+
 			def fetch_insurance_status
 				member_account = MemberAccount.find(params[:member_account_id])
 
@@ -9,11 +10,12 @@ module Api
 				}
 
 				data = ::MemberAccounts::FetchInsuranceStatus.new(
-						config: config
+					config: config
 					).execute!
-
 				render json: data
 			end
+
 		end
+
 	end
 end

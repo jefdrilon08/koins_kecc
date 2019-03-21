@@ -14,13 +14,53 @@ module Administration
         @members        = @members.where(branch_id: @branch.id)
       end
 
-      @member_shares  = @member_shares.page(params[:page]).per(20)
+      #@member_shares  = @member_shares.page(params[:page]).per(20)
     end
 
     def no_certificates
       @members        = Member.active.where.not(id: MemberShare.all.pluck(:member_id).uniq).where(branch_id: @branches.pluck(:id)).order("last_name ASC")
 
-      @members  = @members.page(params[:page]).per(20)
+      @member_accounts  = MemberAccount.where(
+                            member_id: @members.pluck(:id),
+                            account_type: "EQUITY",
+                            account_subtype: "Share Capital"
+                          )
+
+      @member_records = @members.map{ |m|
+                          member_account  = MemberAccount.where(
+                                              member_id: m.id,
+                                              account_type: "EQUITY",
+                                              account_subtype: "Share Capital"
+                                            ).first
+
+                          latest_transaction  = AccountTransaction.personal_funds.where(
+                                                  "subsidiary_id = ? AND amount > 0",
+                                                  member_account.id
+                                                ).order("transacted_at ASC").last
+
+                          date_of_issue = latest_transaction.transacted_at.to_date
+
+                          {
+                            id: m.id,
+                            first_name: m.first_name,
+                            middle_name: m.middle_name,
+                            last_name: m.last_name,
+                            full_name: m.full_name,
+                            date_of_issue: date_of_issue,
+                            branch: {
+                              id: m.branch.id,
+                              name: m.branch.name
+                            },
+                            center: {
+                              id: m.center.id,
+                              name: m.center.name
+                            }
+                          }
+                        }
+
+      @member_records = @member_records.sort_by{ |k, v|
+                          k[:date_of_issue].to_date
+                        }
     end
 
     def not_printed

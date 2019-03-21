@@ -37,6 +37,13 @@
         .value.text-muted
           %b
             #{@member.insurance_status.upcase} 
+
+      %li.list-group-item
+        Member Type
+        .value.text-muted
+          %b
+            = link_to "#", id: "btn-change-member-type" do
+              #{@member.member_type.upcase}
     - if @member.modifiable
       = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
         %i.fa.fa-edit
@@ -85,3 +92,11 @@
         = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
           .fa.fa-times
           Resign Member
+    - if @missing_accounts.size > 0
+      %hr
+      %h6
+        Generate Missing Accounts
+      #btn-generate-missing-accounts.btn.btn-warning.btn-block
+        .fa.fa-sync
+        Generate Missing Accounts
+      .message

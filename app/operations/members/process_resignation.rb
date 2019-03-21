@@ -47,6 +47,10 @@ module Members
         data: @member_data
       )
 
+      # Update all member shares
+      @member.member_shares.each do |s|
+        s.update!(is_void: true)
+      end
     end
 
     private

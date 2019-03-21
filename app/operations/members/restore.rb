@@ -54,10 +54,12 @@ module Members
       @data[:restoration_records] = restoration_records
 
       # Update member
+      previous_date_resigned  = @member.date_resigned
       @member.update!(
         status: "pending",
         insurance_status: "pending",
         date_resigned: nil,
+        previous_date_resigned: previous_date_resigned,
         data: @data
       )
 

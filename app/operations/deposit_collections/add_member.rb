@@ -31,15 +31,7 @@ module DepositCollections
           enabled = true
         end
 
-        amount = 0.00
-
-        if Settings.activate_microinsurance
-          if member_account.account_subtype == "Retirement Fund"
-            amount = 5.00
-          elsif member_account.account_subtype == "Life Insurance Fund"
-            amount = 15.00
-          end
-        end
+        amount  = 0.00
 
         record_type = o.account_type
 

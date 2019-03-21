@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KOINS</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= favicon_link_tag "logo_thumb.png" %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      background-image: url('<%= asset_path("#{Settings.landing_background_image}") %>');
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body>
+
+<%= render partial: "shared/notification" %>
+<%= yield %>
+
+</body>
+</html>

@@ -32,6 +32,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
       branches: [],
       accountingCodes: [],
       accountingCodeId: "",
+      accountingFundId: "",
       accountingCodeObject: {},
       accountingCodeName: "",
       postType: "DR",
@@ -77,6 +78,10 @@ export default class AccountingEntryFormDisplay extends React.Component {
     this.fetchAccountingEntry();
     this.fetchBranches();
     this.fetchAccountingCodes();
+    this.fetchAccountingFunds();
+  }
+
+  fetchAccountingFunds() {
   }
 
   fetchAccountingEntry() {

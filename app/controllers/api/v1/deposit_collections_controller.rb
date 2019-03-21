@@ -80,7 +80,8 @@ module Api
 
         config  = {
           template: template,
-          deposit_collection: deposit_collection
+          deposit_collection: deposit_collection,
+          user: current_user
         }
 
         errors  = ::DepositCollections::ValidateModifyCashManagementTemplate.new(
@@ -158,7 +159,11 @@ module Api
                   ).order("last_name ASC").map{ |o|
                     {
                       id: o.id,
-                      name: o.full_name
+                      name: o.full_name,
+                      center: {
+                        id: o.center.id,
+                        name: o.center.name
+                      }
                     }
                   }
 

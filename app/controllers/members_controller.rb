@@ -52,6 +52,7 @@ class MembersController < ApplicationController
 
   def show
     @member = Member.find(params[:id])
+    @data   = @member.data.with_indifferent_access
 
     @active_loans   = Loan.active.where(member_id: params[:id])
     @paid_loans     = Loan.paid.where(member_id: params[:id])
@@ -60,6 +61,7 @@ class MembersController < ApplicationController
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
     @equity_accounts    = MemberAccount.equities.where(member_id: @member.id)
+    
 
     @member_shares  = @member.member_shares.order("created_at ASC")
 
@@ -79,5 +81,11 @@ class MembersController < ApplicationController
                       ).order("created_at DESC")
 
     @loan_cycles  = @member.data.with_indifferent_access[:loan_cycles]
+
+    @missing_accounts = ::Members::FetchMissingAccounts.new(
+                          config: {
+                            member: @member
+                          }
+                        ).execute!
   end
 end
