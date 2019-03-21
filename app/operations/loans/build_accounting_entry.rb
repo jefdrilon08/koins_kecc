@@ -19,7 +19,7 @@ module Loans
       @member_data  = @loan.member.data.with_indifferent_access
       @loan_cycles  = @member_data[:loan_cycles] || []
     
-      @entry_point_loan_cycle_count = @member_data.entry_point_loan_cycle_count
+      @entry_point_loan_cycle_count = @member.entry_point_loan_cycle_count
 
       @user = @config[:user]
 
