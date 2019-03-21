@@ -55,22 +55,16 @@ module Loans
           }
         ]
       else
-        found = false
-
         if @loan_product.is_entry_point
           @entry_point_loan_cycle = @entry_point_loan_cycle + 1
-          @loan.cycle             = @entry_point_loan_cycle
-          found                   = true
         end
 
+        found = false
         @loan_cycles.each_with_index do |c, i|
           if c[:loan_product_id] == @loan_product.id
             @loan_cycles[i][:cycle] = c[:cycle] + 1
-            found = true
-          end
-
-          if c[:loan_product_id] == @loan_product.id and !@loan_product.is_entry_point
             @loan.cycle = c[:cycle] + 1
+            found = true
           end
         end
 

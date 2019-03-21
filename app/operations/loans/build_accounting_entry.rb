@@ -18,6 +18,8 @@ module Loans
       # Setup loan cycle
       @member_data  = @loan.member.data.with_indifferent_access
       @loan_cycles  = @member_data[:loan_cycles] || []
+    
+      @entry_point_loan_cycle_count = @member_data.entry_point_loan_cycle_count
 
       @user = @config[:user]
 
@@ -354,7 +356,8 @@ module Loans
             multiplier  = @num_installments
 
             loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
-            if loan_cycle.present?
+
+            if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
             #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
               if @term == "weekly"
               elsif @term == "monthly"
