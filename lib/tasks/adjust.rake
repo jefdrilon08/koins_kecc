@@ -1,4 +1,33 @@
 namespace :adjust do
+  task :update_recognition_date_by_loans => :environment do
+    members = Member.active_and_resigned
+
+    if ENV['BRANCH_ID'].present?
+      members = members.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    size  = members.count
+
+    members.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Updating recognition date for insurance for member #{o.id}... #{progress}%%")
+
+      data  = o.data.with_indifferent_access
+
+      if data[:recognition_date].blank?
+        earliest_loan = o.loans.active_or_paid.order("date_approved ASC").first
+
+        if earliest_loan.present?
+          data[:recognition_date] = earliest_loan.date_approved
+
+          o.update!(data: data)
+        end
+      end
+    end
+
+    puts "\nDone."
+  end
+
   task :update_previous_date_resigned => :environment do
     members = Member.active_and_resigned_and_pending
 

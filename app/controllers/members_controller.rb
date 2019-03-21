@@ -51,8 +51,9 @@ class MembersController < ApplicationController
   end
 
   def show
-    @member = Member.find(params[:id])
-    @data   = @member.data.with_indifferent_access
+    @member           = Member.find(params[:id])
+    @data             = @member.data.with_indifferent_access
+    @recognition_date = @data[:recognition_date]
 
     @active_loans   = Loan.active.where(member_id: params[:id])
     @paid_loans     = Loan.paid.where(member_id: params[:id])

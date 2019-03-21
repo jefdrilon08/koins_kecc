@@ -33,6 +33,7 @@ namespace :api do
     post "/members/restore", to: "members#restore"
     post "/members/generate_missing_accounts", to: "members#generate_missing_accounts"
     post "/members/change_member_type", to: "members#change_member_type"
+    post "/members/change_recognition_date", to: "members#change_recognition_date"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"

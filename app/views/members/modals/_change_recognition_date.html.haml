@@ -1,0 +1,25 @@
+#modal-change-recognition-date.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Change Recognition Date
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Change this member's recognition date
+          .row
+            .col
+              .form-group
+                %label
+                  Input Recognition Date
+                = date_field_tag :recognition_date, @recognition_date, class: "form-control", id: "input-recognition-date"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-change-recognition-date.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

@@ -44,6 +44,17 @@
           %b
             = link_to "#", id: "btn-change-member-type" do
               #{@member.member_type.upcase}
+
+      %li.list-group-item
+        Recognition Date
+        .value.text-muted
+          %b
+            = link_to "#", id: "btn-change-recognition-date" do
+              - if @member.recognition_date.present?
+                #{@member.recognition_date.strftime("%b %d, %Y")}
+              - else
+                N / A
+
     - if @member.modifiable
       = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
         %i.fa.fa-edit

@@ -7,6 +7,7 @@ var Show  = (function() {
   var $modalRestore;
   var $modalUnlock;
   var $modalChangeMemberType;
+  var $modalChangeRecognitionDate;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -24,7 +25,10 @@ var Show  = (function() {
   var $btnConfirmRestore;
   var $btnGenerateMissingAccounts;
   var $btnChangeMemberType;
+  var $btnChangeRecognitionDate;
   var $btnConfirmChangeMemberType;
+  var $btnConfirmChangeRecognitionDate;
+  var $inputRecognitionDate;
   var $selectLoanProduct;
   var $selectSurvey;
   var $selectMemberType;
@@ -41,6 +45,7 @@ var Show  = (function() {
   var _urlRestore                 = "/api/v1/members/restore";
   var _urlGenerateMissingAccounts = "/api/v1/members/generate_missing_accounts";
   var _urlChangeMemberType        = "/api/v1/members/change_member_type";
+  var _urlChangeRecognitionDate   = "/api/v1/members/change_recognition_date";
   var _memberId;
   var _authenticityToken;
 
@@ -51,41 +56,92 @@ var Show  = (function() {
     _canvas       = document.querySelector("#signature-canvas");
     _signaturePad = new SignaturePad(_canvas);
 
-    $modalGenerateAccessToken       = $("#modal-generate-access-token");
-    $modalSignature                 = $("#modal-signature");
-    $modalNewLoan                   = $("#modal-new-loan");
-    $modalCreateSurvey              = $("#modal-create-survey");
-    $modalDelete                    = $("#modal-delete");
-    $modalUnlock                    = $("#modal-unlock");
-    $modalRestore                   = $("#modal-restore");
-    $modalChangeMemberType          = $("#modal-change-member-type");
-    $btnGenerateAccessToken         = $("#btn-generate-access-token");
-    $btnConfirmGenerateAccessToken  = $("#btn-confirm-generate-access-token");
-    $btnConfirmSignature            = $("#btn-confirm-signature");
-    $btnGenerateSignature           = $("#btn-generate-signature");
-    $btnClearSignature              = $("#btn-clear-signature");
-    $btnNewLoan                     = $("#btn-new-loan");
-    $btnCreateSurvey                = $("#btn-create-survey");
-    $btnConfirmCreateSurvey         = $("#btn-confirm-create-survey");
-    $btnConfirmNewLoan              = $("#btn-confirm-new-loan");
-    $btnDelete                      = $("#btn-delete");
-    $btnConfirmDelete               = $("#btn-confirm-delete");
-    $btnUnlock                      = $("#btn-unlock");
-    $btnRestore                     = $("#btn-restore");
-    $btnConfirmRestore              = $("#btn-confirm-restore");
-    $btnConfirmUnlock               = $("#btn-confirm-unlock");
-    $btnGenerateMissingAccounts     = $("#btn-generate-missing-accounts");
-    $btnChangeMemberType            = $("#btn-change-member-type");
-    $btnConfirmChangeMemberType     = $("#btn-confirm-change-member-type");
-    $selectMemberType               = $("#select-member-type");
-    $selectLoanProduct              = $("#select-loan-product");
-    $selectSurvey                   = $("#select-survey");
+    $modalGenerateAccessToken         = $("#modal-generate-access-token");
+    $modalSignature                   = $("#modal-signature");
+    $modalNewLoan                     = $("#modal-new-loan");
+    $modalCreateSurvey                = $("#modal-create-survey");
+    $modalDelete                      = $("#modal-delete");
+    $modalUnlock                      = $("#modal-unlock");
+    $modalRestore                     = $("#modal-restore");
+    $modalChangeMemberType            = $("#modal-change-member-type");
+    $modalChangeRecognitionDate       = $("#modal-change-recognition-date");
+    $btnGenerateAccessToken           = $("#btn-generate-access-token");
+    $btnConfirmGenerateAccessToken    = $("#btn-confirm-generate-access-token");
+    $btnConfirmSignature              = $("#btn-confirm-signature");
+    $btnGenerateSignature             = $("#btn-generate-signature");
+    $btnClearSignature                = $("#btn-clear-signature");
+    $btnNewLoan                       = $("#btn-new-loan");
+    $btnCreateSurvey                  = $("#btn-create-survey");
+    $btnConfirmCreateSurvey           = $("#btn-confirm-create-survey");
+    $btnConfirmNewLoan                = $("#btn-confirm-new-loan");
+    $btnDelete                        = $("#btn-delete");
+    $btnConfirmDelete                 = $("#btn-confirm-delete");
+    $btnUnlock                        = $("#btn-unlock");
+    $btnRestore                       = $("#btn-restore");
+    $btnConfirmRestore                = $("#btn-confirm-restore");
+    $btnConfirmUnlock                 = $("#btn-confirm-unlock");
+    $btnGenerateMissingAccounts       = $("#btn-generate-missing-accounts");
+    $btnChangeMemberType              = $("#btn-change-member-type");
+    $btnChangeRecognitionDate         = $("#btn-change-recognition-date");
+    $btnConfirmChangeMemberType       = $("#btn-confirm-change-member-type");
+    $btnConfirmChangeRecognitionDate  = $("#btn-confirm-change-recognition-date");
+    $inputRecognitionDate             = $("#input-recognition-date");
+    $selectMemberType                 = $("#select-member-type");
+    $selectLoanProduct                = $("#select-loan-product");
+    $selectSurvey                     = $("#select-survey");
 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   }
 
   var _bindEvents = function() {
+    $btnChangeRecognitionDate.on("click", function() {
+      $message.html(""); 
+      $modalChangeRecognitionDate.modal("show");
+    });
+
+    $btnConfirmChangeRecognitionDate.on("click", function() {
+      $message.html("Changing member recognition date...");
+
+      var data  = {
+        id: _memberId,
+        recognition_date: $inputRecognitionDate.val(),
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmChangeRecognitionDate.prop("disabled", true);
+
+      $.ajax({
+        url: _urlChangeRecognitionDate,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmChangeRecognitionDate.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnChangeMemberType.on("click", function() {
       $message.html(""); 
       $modalChangeMemberType.modal("show");

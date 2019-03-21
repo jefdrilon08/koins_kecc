@@ -322,6 +322,48 @@ module Api
         end
       end
 
+      def change_recognition_date
+        member            = Member.find(params[:id])
+        recognition_date  = params[:recognition_date]
+
+        old_recognition_date  = member.recognition_date
+
+        config  = {
+          member: member,
+          user: current_user,
+          recognition_date: recognition_date
+        }
+
+        errors  = ::Members::ValidateChangeRecognitionDate.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].size > 0
+          render json: errors, status: 400
+        else
+          data  = member.data.with_indifferent_access
+          
+          data[:recognition_date] = recognition_date
+
+          member.update!(
+            data: data
+          )
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified member #{member.full_name}'s recognition_date from #{old_recognition_date} to #{recognition_date}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member.id,
+              old_recognition_date: old_recognition_date,
+              recognition_date: recognition_date
+            }
+          )
+
+          render json: { id: member.id }
+        end
+      end
+
       def change_member_type
         member      = Member.find(params[:id])
         member_type = params[:member_type]

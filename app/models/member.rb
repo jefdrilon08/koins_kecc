@@ -53,6 +53,14 @@ class Member < ApplicationRecord
     "#{last_name}, #{first_name} #{middle_name}"
   end
 
+  def recognition_date
+    if self.data.with_indifferent_access[:recognition_date].present?
+      return self.data.with_indifferent_access[:recognition_date].to_date
+    else
+      return nil
+    end
+  end
+
   def resigned?
     self.status == "resigned"
   end
