@@ -1,0 +1,62 @@
+#parameters{ data: { member_account_validation_id: @member_account_validation.id } }
+
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-file
+      Member Account Validation
+    %small
+      #{@member_account_validation.date_prepared}
+    %small.badge.badge-light
+      #{@member_account_validation.status.upcase}  
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      #{link_to "Member Account Validations", member_account_validations_path}
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @member_account_validation.for_validation?
+            .bs-callout.bs-callout-danger
+              %h3
+                .fa.fa-warning
+                This has already been checked by #{@member_account_validation.checked_by} on #{@member_account_validation.date_checked}"
+            %hr
+          - if @member_account_validation.for_approval?
+            .bs-callout.bs-callout-danger
+              %h3
+                .fa.fa-warning
+                This has already been validated by #{@member_account_validation.validated_by} on #{@member_account_validation.date_validated}"      
+            %hr
+          - if @member_account_validation.cancelled?
+            .bs-callout.bs-callout-danger
+              %h3
+                .fa.fa-warning
+                This has been cancelled by #{@member_account_validation.cancelled_by} on #{@member_account_validation.date_cancelled}"      
+            %hr
+          - if @member_account_validation.reversed?
+            .bs-callout.bs-callout-danger
+              %h3
+                .fa.fa-warning
+                Warning: This transaction has been reversed.
+          = render partial: "actions", locals: { member_account_validation: @member_account_validation, role: @role }
+          = render partial: "member_account_validation_records", locals: { member_account_validation: @member_account_validation }
+          - if @member_account_validation.member_account_validation_cancellations.count > 0
+            = render partial: "member_account_validation_cancellations", locals: { member_account_validation: @member_account_validation }
+          - if !@voucher.nil?
+            = render partial: "shared/voucher", locals: { voucher: @voucher }
+
+/ = render partial: "shared/errors_template"
+/ = render partial: "shared/success_template"
+/ = render partial: "modal_approve_confirmation"
+/ = render partial: "modal_reverse_confirmation"
+/ = render partial: "modal_validate"
+/ = render partial: "modal_check"
+/ = render partial: "modal_cancel"
+
+= javascript_include_tag "member_account_validation/MemberAccountValidations"
+
+:javascript
+  $(document).ready(function() {
+    memberAccountValidations.init();
+  });

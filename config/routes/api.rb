@@ -111,8 +111,10 @@ namespace :api do
     post "/deposit_collections/update_or_number", to: "deposit_collections#update_or_number"
     post "/deposit_collections/update_ar_number", to: "deposit_collections#update_ar_number"
     post "/deposit_collections/update_particular", to: "deposit_collections#update_particular"
+    post "/deposit_collections/update_accounting_fund", to: "deposit_collections#update_accounting_fund"
     get "/deposit_collections/fetch", to: "deposit_collections#fetch"
     get "/deposit_collections/fetch_members", to: "deposit_collections#fetch_members"
+    get "/deposit_collections/fetch_accounting_funds", to: "deposit_collections#fetch_accounting_funds"
     post "/deposit_collections/add_member", to: "deposit_collections#add_member"
     post "/deposit_collections/remove_member", to: "deposit_collections#remove_member"
     post "/deposit_collections/modify_cash_management_template", to: "deposit_collections#modify_cash_management_template"
@@ -131,6 +133,18 @@ namespace :api do
     get "/withdrawal_collections/fetch_members", to: "withdrawal_collections#fetch_members"
     post "/withdrawal_collections/add_member", to: "withdrawal_collections#add_member"
     post "/withdrawal_collections/remove_member", to: "withdrawal_collections#remove_member"
+
+    #Member Account Validations
+    post 'member_account_validations/generate_transaction', to: 'member_account_validations#generate_transaction'
+    post 'member_account_validations/add_member', to: 'member_account_validations#add_member'
+    post 'member_account_validations/delete_member_account_validation_record', to: 'member_account_validations#delete_member_account_validation_record'
+    post 'member_account_validations/approve', to: 'member_account_validations#approve'
+    post 'member_account_validations/validate', to: 'member_account_validations#validate'
+    post 'member_account_validations/check', to: 'member_account_validations#check'
+    post 'member_account_validations/cancel', to: 'member_account_validations#cancel'
+    post 'member_account_validations/reverse', to: 'member_account_validations#reverse'
+    post 'member_account_validations/cancel', to: 'member_account_validations#cancel'
+    post 'member_account_validations/cancel_member', to: 'member_account_validations#cancel_member'
 
     # Survey Answers
     post "/survey_answers", to: "survey_answers#create"

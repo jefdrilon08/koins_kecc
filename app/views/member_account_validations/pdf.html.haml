@@ -1,0 +1,136 @@
+:css
+  .print-text {
+    font-size: 1em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: 1.1em;
+    font-family: calibri;
+  }
+
+  table.insurance th.header{
+    text-align: left;
+    font-weight: bold;
+  }
+
+%span.print-text
+  %center
+    %br
+    %p
+      %b
+        #{Settings.company}
+      %br  
+      %b
+        #{Settings.company_address}
+      %br  
+      %b
+        Insurance Account Validation
+%left
+  %br
+  %span.print-text-sub
+    %p
+      %b
+        Prepared : #{@insurance_account_validation.date_prepared}  |  Checked : #{@insurance_account_validation.date_checked}  |  Validated : #{@insurance_account_validation.date_validated}  |  Approved : #{@insurance_account_validation.date_approved} 
+  %p
+  %table.insurance{"border:" => "", :none => ""}
+    %tr
+      %th.header{width: 30}
+      %th.header{width: 370} Member
+      %th.header.curr{width: 100} RF
+      %th.header.curr{width: 100} 50% LIFE
+      %th.header.curr{width: 100} Equity Interest
+      %th.header.curr{width: 110} Adv LIF
+      %th.header.curr{width: 110} Adv RF
+      %th.header.curr{width: 90} Interest
+      %th.header.curr{width: 90} Total
+
+    - @insurance_account_validation.insurance_account_validation_records.joins(:member).order("members.last_name ASC").each_with_index do |insurance_account_validation_record, i|
+      %tr
+        %td #{i + 1}
+        %td
+          #{insurance_account_validation_record.member.full_name}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.rf, unit: "")}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.lif_50_percent, unit: "")}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.equity_interest, unit: "")}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.advance_lif, unit: "")}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.advance_rf, unit: "")}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.interest, unit: "")}
+        %td.curr
+          #{number_to_currency(insurance_account_validation_record.total, unit: "")}      
+    %tr
+      %th.header
+      %th.header Total
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total_rf, unit: "")}
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total_50_percent_lif, unit: "")}
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total_equity_interest, unit: "")}
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total_advance_lif, unit: "")}
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total_advance_rf, unit: "")}
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total_interest, unit: "")}
+      %th.header.curr #{number_to_currency(@insurance_account_validation.total, unit: "")}
+  
+  %hr 
+  %span   
+  %left
+    %p
+      .pull-left
+        %b
+          #{"(#{@voucher.id})" if current_user.role == "MIS"}#{@voucher.book} | Ref No.: #{@voucher.reference_number}
+          - if @voucher.accounting_fund and @voucher.sub_reference_number
+            |
+            #{@voucher.accounting_fund}
+            .pull-right
+              = @voucher.date_prepared.strftime("%B %d, %Y") if !@voucher.date_prepared.nil?
+              |
+              Approved By: #{@voucher.approved_by}
+      %br
+    %table.voucher{"border:" => "", :none => ""}
+      %thead
+        %tr
+          %th.account-header{width: 800} Accounting Code
+          %th.debit.header{width: 300} Debit
+          %th.credit.header{width: 300} Credit
+      %tbody
+        - @voucher.journal_entries.sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
+          - if journal_entry.post_type == "DR" and journal_entry.amount > 0
+            %tr
+              %td.accnt_code
+                #{journal_entry.accounting_code}
+              %td.debit= number_to_currency(journal_entry.amount, unit: "")
+              %td.credit
+        - @voucher.journal_entries.sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
+          - if journal_entry.post_type == "CR" and journal_entry.amount > 0
+            %tr
+              %td.accnt_code
+                #{journal_entry.accounting_code}
+              %td.debit
+              %td.credit= number_to_currency(journal_entry.amount, unit: "")
+  %hr
+  %left  
+    %p
+      %b
+        Particular:
+      #{@voucher.particular}
+    %br
+    %br
+    %br
+    %table.signatories{"border:" => "", :none => ""}
+      %tr
+        %th{width: 250} #{@insurance_account_validation.prepared_by}
+        %th{width: 250} #{@insurance_account_validation.checked_by}
+        %th{width: 250} #{@insurance_account_validation.validated_by}
+        %th{width: 250} #{@insurance_account_validation.approved_by}
+      %tr
+        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Validated by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+    %br
+    %br
+    %br

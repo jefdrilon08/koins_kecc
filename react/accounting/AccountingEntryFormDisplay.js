@@ -59,6 +59,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         reference_number: "",
         date_prepared: moment(),
         status: "pending",
+        accounting_fund: "",
         data: {
           or_number: "",
           check_number: "",
@@ -221,7 +222,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
           data: accounting_entry_data.data,
           journal_entries: accounting_entry_data.journal_entries,
           particular: accounting_entry_data.particular,
-          reference_number: accounting_entry_data.reference_number
+          reference_number: accounting_entry_data.reference_number,
+          accounting_fund_id: accounting_entry_data.accounting_fund_id
         }
       });
 

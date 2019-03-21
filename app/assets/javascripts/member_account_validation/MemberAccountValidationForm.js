@@ -1,0 +1,267 @@
+var MemberAccountValidationForm = (function() {
+  var options;
+  var authenticityToken;
+
+  var $parameters                      = $("#parameters");
+  var insuranceAccountValidationId     = $parameters.data('insurance-account-validation-id');
+  var insuranceAccountValidationStatus = $parameters.data('insurance-account-validation-status');
+
+  var $totalRf                         = $(".total-rf");
+  var $total50PercentLif               = $(".total-50-percent-lif");
+  var $totalEquityInterest             = $(".total-equity-interest");
+  var $totalAdvanceLif                 = $(".total-advance-lif");
+  var $totalAdvanceRf                  = $(".total-advance-rf");
+  var $totalInterest                   = $(".total-interest");
+  var $grandTotal                      = $(".grand-total");
+  
+  var $section                         = $(".transaction-table");
+  var $btnDelete                       = $(".btn-delete");
+  // var $modalLoading                    = $("#modal-loading");
+  var $memberSelect                    = $("#member-select");
+  var $resignationDate                 = $("#resignation-date");
+  var $btnAddMember                    = $("#btn-add-member");
+  var $modalMemberCancellation         = $("#modal-member-cancellation");
+  var $btnConfirmMemberCancellation    = $("#btn-confirm-member-cancellation");
+  var $inputDateCancelled              = $("#input-date-cancelled");
+  var $inputReason                     = $("#input-reason");
+  var $memberClassification            = $("#member-classification");
+
+  var $message                         = $(".message");
+
+  templateErrorList                     = $("#template-error-list").html();
+
+  
+
+  // Hide controls
+  //$(".modal-loading").find('.controls').hide();
+
+  var urlDeletememberAccountValidationRecord    = "/api/v1/member_account_validations/delete_member_account_validation_record";
+  var urlAddMember                              = "/api/v1/member_account_validations/add_member";
+  var urlCancelValidation                       = "/api/v1/member_account_validations/cancel_member";
+
+  var _bindEvents = function() {
+    $btnAddMember.on("click", function() {
+      $btnAddMember.prop("disabled", true);
+
+      var memberId = $memberSelect.val();
+      var resignationDate = $resignationDate.val();
+      var memberClassification = $memberClassification.val();
+
+      alert(memberAccountValidationStatus);
+      $.ajax({
+        url: urlAddMember,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: memberAccountValidationId,
+          authenticity_token: authenticityToken,
+          member_id: memberId,
+          resignation_date: resignationDate,
+          member_classification: memberClassification
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnAddMember.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnDelete.on('click', function() {
+      
+      var $btn = $(this);
+      $btn.addClass('loading');
+      $btn.addClass('disabled');
+      var memberAccountValidationRecordId = $btn.data('member-account-validation-record-id');
+      var memberId = $btn.data('member-id');
+
+      if (memberAccountValidationStatus == "cancelled"){
+        $modalMemberCancellation.modal("show");
+
+        $btnConfirmMemberCancellation.on("click", function() {
+        $btnConfirmMemberCancellation.prop("disabled", true);
+
+        $modalLoading.modal("show");
+
+        $.ajax({
+          url: urlCancelValidation,
+          method: 'POST',
+          dataType: 'json',
+          data: {
+            authenticity_token: authenticityToken,
+            member_id: memberId,
+            id: memberAccountValidationId,
+            date_cancelled: $inputDateCancelled.val(),
+            reason: $inputReason.val(),
+            member_account_validation_record_id: memberAccountValidationRecordId,
+          },
+          success: function(responseContent) {
+            toastr.success("Successfully created member account validation cancellation record");
+            //window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
+          },
+          error: function(responseContent) {
+            toastr.error("Cannot create member account validation cancellation record");
+            $btn.removeClass('loading');
+            $btn.removeClass('disabled');
+            $modalLoading.modal('hide');
+          }
+        });
+
+        $.ajax({
+          url: urlDeletememberAccountValidationRecord,
+          method: 'POST',
+          dataType: 'json',
+          data: { 
+            member_account_validation_record_id: memberAccountValidationRecordId 
+          },
+          success: function(responseContent) {
+            toastr.success("Successfully deleted record");
+            window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
+          },
+          error: function(responseContent) {
+            toastr.error("Cannot delete this record");
+            $btn.removeClass('loading');
+            $btn.removeClass('disabled');
+            $modalLoading.modal('hide');
+          }
+        }); 
+
+        $btnConfirmMemberCancellation.prop("disabled", false);
+      });
+      }
+      else{
+
+        $modalLoading.modal("show");
+
+        $.ajax({
+          url: urlDeletememberAccountValidationRecord,
+          method: 'POST',
+          dataType: 'json',
+          data: { 
+            member_account_validation_record_id: memberAccountValidationRecordId 
+          },
+          success: function(responseContent) {
+            toastr.success("Successfully deleted record");
+            window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
+          },
+          error: function(responseContent) {
+            toastr.error("Cannot delete this record");
+            $btn.removeClass('loading');
+            $btn.removeClass('disabled');
+            $modalLoading.modal('hide');
+          }
+        });
+      }
+
+    });
+
+    _computeTotalRf($section);
+    _computeTotal50PercentLif($section);
+    _computeTotalEquityInterest($section);
+    _computeTotalAdvanceLif($section);
+    _computeTotalAdvanceRf($section);
+    _computeTotalInterest($section);
+    _computeTotalAmt($section);
+  }
+
+  var _computeTotalRf = function($section) {
+    var totalRf = 0.00;
+
+    $.each($section.find(".rf"), function() {
+      totalRf += parseFloat($(this).val());
+    });
+
+    $section.find(".total-rf").val(totalRf);
+  }
+
+  var _computeTotal50PercentLif = function($section) {
+    var total50PercentLif = 0.00;
+
+    $.each($section.find(".lif-50-percent"), function() {
+      total50PercentLif += parseFloat($(this).val());
+    });
+
+    $section.find(".total-50-percent-lif").val(total50PercentLif);
+  }
+
+  var _computeTotalEquityInterest = function($section) {
+    var totalEquityInterest = 0.00;
+
+    $.each($section.find(".equity-interest"), function() {
+      totalEquityInterest += parseFloat($(this).val());
+    });
+
+    $section.find(".total-equity-interest").val(totalEquityInterest);
+  }
+
+  var _computeTotalAdvanceLif = function($section) {
+    var totalAdvanceLif = 0.00;
+
+    $.each($section.find(".advance-lif"), function() {
+      totalAdvanceLif += parseFloat($(this).val());
+    });
+
+    $section.find(".total-advance-lif").val(totalAdvanceLif);
+  }
+
+  var _computeTotalAdvanceRf = function($section) {
+    var totalAdvanceRf = 0.00;
+
+    $.each($section.find(".advance-rf"), function() {
+      totalAdvanceRf += parseFloat($(this).val());
+    });
+
+    $section.find(".total-advance-rf").val(totalAdvanceRf);
+  }
+
+  var _computeTotalInterest = function($section) {
+    var totalInterest = 0.00;
+
+    $.each($section.find(".interest"), function() {
+      totalInterest += parseFloat($(this).val());
+    });
+
+    $section.find(".total-interest").val(totalInterest);
+  }
+
+  var _computeTotalAmt = function($section) {
+    var grandTotal = 0.00;
+
+    $.each($section.find(".total-amount"), function() {
+      grandTotal += parseFloat($(this).val());
+    });
+
+    $section.find(".grand-total").val(grandTotal);
+  }
+
+  var init = function(options) {
+    authenticityToken = options.authenticityToken;
+    memberAccountValidationId = options.memberAccountValidationId;
+    memberAccountValidationStatus = options.memberAccountValidationStatus;
+
+    _bindEvents();
+  }
+
+  return {
+    init: init
+  };
+})();

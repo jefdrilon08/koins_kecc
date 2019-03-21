@@ -1,0 +1,38 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-file
+      Member Account Validation
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", id: "btn-new-transaction", class: 'btn' do
+        .fa.fa-plus
+        New Member Account Validation
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          .errors_template
+            = render partial: "member_account_validations/filter"
+            - if @member_account_validations.size > 0
+              = render partial: "member_account_validations/list", locals: { member_account_validations: @member_account_validations }
+              = paginate @member_account_validations
+            - else
+              No records found.
+
+= render partial: "member_account_validations/modals/new_transaction"
+= render partial: "shared/errors_template"
+= render partial: "shared/success_template"
+
+= render partial: "templates/error_list"
+
+= javascript_include_tag "member_account_validation/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

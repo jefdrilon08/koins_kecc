@@ -1,0 +1,71 @@
+%table.ui.green.table.transaction-table
+  %thead
+    %tr
+      %th{width: "2%"}
+      %th{width: "20%"} Member
+      %th Classification
+      %th Recognition Date (MII)
+      %th Center
+      - if member_account_validation.approved?
+        %th Trans #
+      %th Resignation Date
+      %th.curr RF
+      %th.curr 50% LIFE
+      %th.curr Equity Interest
+      %th.curr Advance LIFE
+      %th.curr Advance RF
+      %th.curr Interest
+      %th.curr Total
+      %th Actions
+  %tbody
+    - member_account_validation.member_account_validation_records.joins(:member).order("members.last_name ASC").each_with_index do |member_account_validation_record, i|
+      %tr
+        %td #{i + 1}
+        %td
+          = link_to "#{member_account_validation_record.member.full_name}", member_path(member_account_validation_record.member), target: "_blank"
+        %td
+          #{member_account_validation_record.member_classification}  
+        %td
+          #{member_account_validation_record.member.previous_mii_member_since}
+        %td
+          #{member_account_validation_record.member.center}
+        - if member_account_validation_record.approved?
+          %td
+            #{member_account_validation_record.transaction_number}
+        %td
+          #{member_account_validation_record.resignation_date}  
+        %td.curr
+          #{number_to_currency(member_account_validation_record.rf, unit: "")}
+        %td.curr
+          #{number_to_currency(member_account_validation_record.lif_50_percent, unit: "")}
+        %td.curr
+          #{number_to_currency(member_account_validation_record.equity_interest, unit: "")}
+        %td.curr
+          #{number_to_currency(member_account_validation_record.advance_lif, unit: "")}
+        %td.curr
+          #{number_to_currency(member_account_validation_record.advance_rf, unit: "")}
+        %td.curr
+          #{number_to_currency(member_account_validation_record.interest, unit: "")}
+        %td.curr
+          #{number_to_currency(member_account_validation_record.total, unit: "")}
+        %td
+          = link_to member_account_validation_withdrawal_pdf_path(member_account_validation,member_account_validation_record), target: "_blank", class: "btn", id: "btn-print-pdf" do
+            .fa.fa-print
+  %thead
+    %tr
+      %th
+      %th{width: "20%"} Total
+      %th
+      %th
+      %th
+      - if member_account_validation.approved?
+        %th
+      %th
+      %th.curr #{number_to_currency(member_account_validation.total_rf, unit: "P")}
+      %th.curr #{number_to_currency(member_account_validation.total_50_percent_lif, unit: "P")}
+      %th.curr #{number_to_currency(member_account_validation.total_equity_interest, unit: "P")}
+      %th.curr #{number_to_currency(member_account_validation.total_advance_lif, unit: "P")}
+      %th.curr #{number_to_currency(member_account_validation.total_advance_rf, unit: "P")}
+      %th.curr #{number_to_currency(member_account_validation.total_interest, unit: "P")}
+      %th.curr #{number_to_currency(member_account_validation.total, unit: "P")}
+      %th

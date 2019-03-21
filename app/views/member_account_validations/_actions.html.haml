@@ -1,0 +1,48 @@
+- if member_account_validation.pending? || member_account_validation.cancelled?  
+  - if role == "OAS" || role == "MIS" || role == "REMOTE-OAS" || role == "REMOTE-BK"
+    = link_to edit_member_account_validation_path(member_account_validation), class: "btn btn-warning btn-lg" do
+      .fa.fa-edit
+      Edit
+    = link_to member_account_validation_path(member_account_validation), class: "btn btn-danger btn-lg", method: :Delete, data: { confirm: "Are you sure?" } do
+      .fa.fa-times
+      Delete
+  - if role == "CM" || role == "FM" || role == "MIS" || role == "REMOTE-FM"
+    = link_to "#", class: "btn btn-primary btn-lg", id: "btn-check" do
+      .fa.fa-check
+      Check    
+- if member_account_validation.for_validation?
+  - if role == "REMOTE-OM" || role == "MIS" || role == "AO"
+    = link_to "#", class: "btn btn-primary btn-lg", id: "btn-validate" do
+      .fa.fa-check
+      Validate
+  - if role == "CM" || role == "MIS" || role == "FM" || role == "REMOTE-FM" || role == "AO" || role == "REMOTE-OM"
+    = link_to "#", class: "btn btn-app bg-red", id: "btn-cancel" do
+      .fa.fa-times
+      Cancel  
+- if member_account_validation.for_approval?  
+  - if role == "BK" || role == "MIS"
+    = link_to "#", class: "btn btn-primary btn-lg", id: "btn-approve" do
+      .fa.fa-check
+      Approve
+  - if role == "AO" || role == "MIS" || role == "REMOTE-OM" 
+    = link_to "#", class: "btn btn-app bg-red", id: "btn-cancel" do
+      .fa.fa-times
+      Cancel
+- if member_account_validation.approved?
+  = link_to member_account_validation_pdf_path(member_account_validation), target: "_blank", class: "btn btn-light btn-lg", id: "btn-print-pdf" do
+    .fa.fa-print
+    Print PDF
+- if member_account_validation.cancelled? && role == "AO"
+  = link_to edit_member_account_validation_path(member_account_validation), class: "btn btn-warning btn-lg" do
+    .fa.fa-edit
+    Edit
+  = link_to "#", class: "btn btn-primary btn-lg", id: "btn-validate" do
+    .fa.fa-check
+    Validate
+- if member_account_validation.cancelled? && role == "REMOTE-OM"
+  = link_to edit_member_account_validation_path(member_account_validation), class: "btn btn-warning btn-lg" do
+    .fa.fa-edit
+    Edit
+  = link_to "#", class: "btn btn-primary btn-lg", id: "btn-validate" do
+    .fa.fa-check
+    Validate

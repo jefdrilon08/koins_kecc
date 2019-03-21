@@ -47,6 +47,14 @@ Rails.application.routes.draw do
   resources :loans, only: [:index, :show] do
   end
 
+  resources :member_account_validations do
+    get "approve", to: "member_account_validations#approve", as: :approve
+    get "reverse", to: "member_account_validations#reverse", as: :reverse
+
+    get "/:member_account_validation_record_id/withdrawal_pdf", to: "member_account_validations#withdrawal_pdf", as: :withdrawal_pdf
+    get "/pdf", to: "member_account_validations#pdf", as: :pdf
+  end
+
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
 
   # Accounts

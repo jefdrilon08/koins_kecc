@@ -21,11 +21,12 @@ module DepositCollections
         journal_entries: [],
         branch_id: @branch.id,
         branch_name: @branch.name,
+        accounting_fund_id: "",
         status: "display",
         data: {
           or_number: "",
           ar_number: ""
-        }
+        }       
       }
 
       @default_deposit_accounts   = Settings.default_deposit_accounts

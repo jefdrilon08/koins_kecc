@@ -1,0 +1,21 @@
+.row
+  .col-md-3
+    .form-group
+      %label Classification
+      = select_tag :member_classification, options_for_select(MemberAccountValidationRecord::MEMBER_CLASSIFICATION, @member_classification), id: "member-classification", class: "form-control select-select2"
+  .col-md-3
+    .form-group
+      // = text_field_tag :resignation_date, @resignation_date, class: "datepick form-control", placeholder: "Resignation Date", id: "resignation-date"
+      %label Date Resigned
+      = text_field_tag :resignation_date, Date.today.strftime("%Y-%m-%d"), class: "form-control", type: "date", id: "resignation-date"
+  .col-md-5
+    .form-group
+      %label Member
+      = select_tag :member_id, options_for_select(@members.collect{ |o| [o.full_name, o.id] }), class: "select-select2 form-control", id: "member-select"
+  .col-md-1
+    .form-group
+      .pull-right
+        %br
+        = link_to "#", class: "btn btn-primary", id: "btn-add-member" do
+          .fa.fa-plus
+          Add Member
