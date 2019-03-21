@@ -47,7 +47,6 @@ module Loans
       perform_deposits!
 
       if @loan_cycles.blank?
-        @loan.cycle   = 1
         @loan_cycles  = [
           {
             loan_product_id: @loan_product.id,
@@ -63,7 +62,6 @@ module Loans
         @loan_cycles.each_with_index do |c, i|
           if c[:loan_product_id] == @loan_product.id
             @loan_cycles[i][:cycle] = c[:cycle] + 1
-            @loan.cycle = c[:cycle] + 1
             found = true
           end
         end
