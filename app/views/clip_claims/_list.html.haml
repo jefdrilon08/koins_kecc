@@ -1,0 +1,28 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Member
+      %th
+        Creditors Name
+      %th
+        Type of Loan
+      %th
+        Branch
+      %th
+        Date Prepared 
+  %tbody
+    - @clip_claims.each do |clip_claim|
+      %tr
+        %td
+          = link_to clip_claim_path(clip_claim) do
+            %strong
+              #{clip_claim.member.full_name}
+        %td
+          #{clip_claim.creditors_name}
+        %td
+          #{clip_claim.type_of_loan}
+        %td
+          #{clip_claim.member.branch.name}
+        %td 
+          #{clip_claim.date_prepared.strftime("%B %d, %Y")}

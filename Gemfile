@@ -29,6 +29,7 @@ gem 'redis'
 gem 'axlsx_rails'
 gem 'zip'
 gem 'hirb'
+gem 'numbers_and_words'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

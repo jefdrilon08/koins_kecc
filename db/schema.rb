@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_18_071410) do
+ActiveRecord::Schema.define(version: 2019_03_20_052114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -217,6 +217,35 @@ ActiveRecord::Schema.define(version: 2019_03_18_071410) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "clip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "date_prepared"
+    t.string "creditors_name"
+    t.string "policy_number"
+    t.date "date_of_birth"
+    t.string "member_name"
+    t.string "beneficiary"
+    t.string "gender"
+    t.string "age"
+    t.date "date_of_death"
+    t.text "cause_of_death"
+    t.date "effective_date_of_coverage"
+    t.date "expiration_date_of_coverage"
+    t.decimal "amount_of_loan"
+    t.string "terms"
+    t.decimal "amount_payable_to_beneficiary"
+    t.string "prepared_by"
+    t.decimal "amount_payable_to_creditor"
+    t.string "type_of_loan"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_clip_claims_on_branch_id"
+    t.index ["center_id"], name: "index_clip_claims_on_center_id"
+    t.index ["member_id"], name: "index_clip_claims_on_member_id"
+  end
+
   create_table "clusters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "area_id"
     t.string "name"
@@ -319,6 +348,69 @@ ActiveRecord::Schema.define(version: 2019_03_18_071410) do
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
     t.index ["member_id"], name: "index_loans_on_member_id"
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
+  end
+
+  create_table "member_account_validation_cancellations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_account_validation_id"
+    t.uuid "member_id"
+    t.uuid "branch_id"
+    t.text "reason"
+    t.date "date_cancelled"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_member_account_validation_cancellations_on_branch_id"
+    t.index ["member_account_validation_id"], name: "index_member_account_validation_cancellations_uniqueness"
+    t.index ["member_id"], name: "index_member_account_validation_cancellations_on_member_id"
+  end
+
+  create_table "member_account_validation_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_account_validation_id"
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.string "status"
+    t.string "transaction_number"
+    t.decimal "rf"
+    t.decimal "lif_50_percent"
+    t.decimal "advance_rf"
+    t.decimal "interest"
+    t.decimal "equity_interest"
+    t.decimal "total"
+    t.date "resignation_date"
+    t.string "member_classification"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["center_id"], name: "index_member_account_validation_records_on_center_id"
+    t.index ["member_account_validation_id"], name: "index_member_account_validation_records_uniqueness"
+    t.index ["member_id"], name: "index_member_account_validation_records_on_member_id"
+  end
+
+  create_table "member_account_validations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id"
+    t.date "date_prepared"
+    t.string "status"
+    t.string "prepared_by"
+    t.string "approved_by"
+    t.text "particular"
+    t.string "reference_number"
+    t.decimal "total"
+    t.string "or_number"
+    t.date "date_approved"
+    t.date "date_validated"
+    t.string "validated_by"
+    t.date "date_checked"
+    t.string "checked_by"
+    t.date "date_cancelled"
+    t.string "cancelled_by"
+    t.boolean "is_remote"
+    t.decimal "total_rf"
+    t.decimal "total_50_percent_lif"
+    t.decimal "total_advance_lif"
+    t.decimal "total_advance_rf"
+    t.decimal "total_interest"
+    t.decimal "total_equity_interest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_member_account_validations_on_branch_id"
   end
 
   create_table "member_accounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -518,6 +610,9 @@ ActiveRecord::Schema.define(version: 2019_03_18_071410) do
   add_foreign_key "billings", "centers"
   add_foreign_key "branches", "clusters"
   add_foreign_key "centers", "branches"
+  add_foreign_key "clip_claims", "branches"
+  add_foreign_key "clip_claims", "centers"
+  add_foreign_key "clip_claims", "members"
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
@@ -529,6 +624,13 @@ ActiveRecord::Schema.define(version: 2019_03_18_071410) do
   add_foreign_key "loans", "loan_products"
   add_foreign_key "loans", "members"
   add_foreign_key "loans", "project_types"
+  add_foreign_key "member_account_validation_cancellations", "branches"
+  add_foreign_key "member_account_validation_cancellations", "member_account_validations"
+  add_foreign_key "member_account_validation_cancellations", "members"
+  add_foreign_key "member_account_validation_records", "centers"
+  add_foreign_key "member_account_validation_records", "member_account_validations"
+  add_foreign_key "member_account_validation_records", "members"
+  add_foreign_key "member_account_validations", "branches"
   add_foreign_key "member_accounts", "branches"
   add_foreign_key "member_accounts", "centers"
   add_foreign_key "member_accounts", "members"

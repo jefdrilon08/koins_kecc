@@ -36,15 +36,37 @@ Rails.application.routes.draw do
   get "/members/:id/survey_answers/:survey_answer_id/form", to: "members#survey_answer_form", as: :member_survey_answer_form
 
   post "/new_claim_application", to: "claims#new_claim_application", as: :new_claim_application
+  post "/new_clip_claim_application", to: "clip_claims#new_clip_claim_application", as: :new_clip_claim_application
+
+
+  resources :claims do
+    get "/claim_validation_pdf", to: "claims#claim_validation_pdf"
+    get "/claim_loa_pdf", to: "claims#claim_loa_pdf"
+  end
+
+  resources :clip_claims do
+    get "/clip_claim_validation_pdf", to: "clip_claims#clip_claim_validation_pdf"
+    get "/clip_claim_loa_pdf", to: "clip_claims#clip_claim_loa_pdf"
+  end
 
   resources :members, only: [] do
     resources :member_shares, except: [:index], controller: "members/member_shares" do
       get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
     end
+
     resources :claims, controller: 'members/claims'
+    resources :clip_claims, controller: 'members/clip_claims'
   end
   # Loans
   resources :loans, only: [:index, :show] do
+  end
+
+  resources :member_account_validations do
+    get "approve", to: "member_account_validations#approve", as: :approve
+    get "reverse", to: "member_account_validations#reverse", as: :reverse
+
+    get "/:member_account_validation_record_id/withdrawal_pdf", to: "member_account_validations#withdrawal_pdf", as: :withdrawal_pdf
+    get "/pdf", to: "member_account_validations#pdf", as: :pdf
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
@@ -162,7 +184,7 @@ Rails.application.routes.draw do
 
   get "/download_backup", to: "pages#download_backup"
   get "/download_exit_age", to: "pages#download_exit_age"
-  get "/claims", to: "claims#index"
+  resources :claims
   draw :administration
   draw :accounting
   draw :api

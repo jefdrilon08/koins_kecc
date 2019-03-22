@@ -1,0 +1,20 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+      Clip Claims Information
+  %li.breadcrumb-item
+    .fa.fa-user
+      Edit Record for: #{link_to @member.full_name, member_path(@member), target: '_blank'}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to clip_claims_path do
+        .fa.fa-arrow-left
+        Back to Clip Claims
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "members/clip_claims/form", locals: { clip_claim: @clip_claim }
+

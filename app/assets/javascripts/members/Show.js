@@ -33,7 +33,6 @@ var Show  = (function() {
   var $selectSurvey;
   var $selectMemberType;
   var $message;
-
   var templateErrorList;
 
   var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";

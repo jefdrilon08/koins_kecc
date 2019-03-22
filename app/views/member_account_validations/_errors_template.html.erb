@@ -1,0 +1,10 @@
+<script id="errors-template" type="x-tmpl-mustache">
+  <div class="bs-callout bs-callout-danger">
+    <p><b>The following errors have occured:</b></p>
+    <ul id="error-list">
+      {{#errors}}
+        <li>{{.}}</li>
+      {{/errors}}
+    </ul>
+  </div>
+</script>

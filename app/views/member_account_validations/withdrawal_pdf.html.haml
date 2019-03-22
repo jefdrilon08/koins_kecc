@@ -1,0 +1,97 @@
+:css
+  .print-text {
+    font-size: .9em;
+    font-family: arial;
+  }
+
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: arial;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  table, th, td {
+    border: 1.5px solid black;
+  }
+
+  hr {
+    border-color: black;
+  }
+
+  .content{
+    height: 90px;
+    width: 100%;
+    float: left;
+    padding: 15px 20px 20px 40px;
+  }
+
+%span.print-text
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  .content
+    %span{style: "font-size: .7em;"}
+      %p
+        Member's Name: #{@member_account_validation_record.member.full_name_titleize}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Center: #{@member_account_validation_record.member.center}
+      %p
+        Recognition Date: #{@member_account_validation_record.member.previous_mii_member_since.strftime("%b %d, %Y")}&emsp;&emsp;Trans#: #{@member_account_validation_record.transaction_number}
+      %p
+        Resignation Date: #{@member_account_validation_record.resignation_date.strftime("%b %d, %Y")}&emsp;&emsp;Date Prepared: #{@member_account_validation_record.member_account_validation.date_prepared.strftime("%b %d, %Y")}&emsp;&emsp;
+      %table
+        %tr
+          %th{style: "width: 68px; text-align: center;"} RF
+          %th{style: "width: 68px; text-align: center;"} 50% LIFE
+          %th{style: "width: 53px; text-align: center;"} Adv. Life
+          %th{style: "width: 53px; text-align: center;"} Adv. RF
+          %th{style: "width: 53px; text-align: center;"} TOTAL
+          %th{style: "width: 103px; text-align: center;"} Remarks
+        %tr
+          %td{style: "text-align: center;"} #{number_to_currency(@member_account_validation_record.rf, unit: "")}
+          %td{style: "text-align: center;"} #{number_to_currency(@member_account_validation_record.lif_50_percent, unit: "")}
+          %td{style: "text-align: center;"} #{number_to_currency(@member_account_validation_record.advance_lif, unit: "")}
+          %td{style: "text-align: center;"} #{number_to_currency(@member_account_validation_record.advance_rf, unit: "")}
+          %td{style: "text-align: center;"} #{number_to_currency(@member_account_validation_record.total, unit: "")}
+          %td{style: "text-align: center;"} #{@member_account_validation_record.member.length_of_stay.titleize}
+        %tr
+          %td{style: "text-align: center;", :colspan => "6"} *** #{@member_account_validation_record.total.to_f.to_words.titleize} Only ***          
+      %p
+        This is system generated Computation of Benefit, signature is not required
+        %br
+          &emsp;&emsp;_____________________________________________________________________
+      %p
+        #{@member_account_validation_record.member.full_name_titleize}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Trans#: #{@member_account_validation_record.transaction_number}&emsp;&emsp;&emsp;&emsp;
+      %table
+        %tr
+          %td{style: "width: 18px; text-align: center;"}
+          %td{style: "width: 55px; text-align: center;"} Rec'l fr MBA
+          %td{style: "width: 43px; text-align: center;"} #{number_to_currency(@member_account_validation_record.interest, unit: "")}
+          %td{style: "width: 282px; text-align: center;", :colspan => "3"} *** #{@member_account_validation_record.interest.to_f.to_words.titleize} Only ***
+      %p
+        This is system generated Computation of Benefit, signature is not required
+      %table
+        %tr
+          %td{style: "width: 170px; text-align: center; font-weight: bold; font-size: 1.2em; bgcolor: blue"} Total Withdrawal Php #{@member_account_validation_record.total}
+      %p{style: "font-size: .69em;"}
+        %br
+          Date Printed: #{Time.now.strftime("%b %d, %Y %H:%M%p")}

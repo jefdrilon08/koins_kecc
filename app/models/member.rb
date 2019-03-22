@@ -27,6 +27,7 @@ class Member < ApplicationRecord
   has_many :claims, dependent: :delete_all
   has_many :membership_payment_records
 
+
   validates :gender, presence: true
   validates :date_of_birth, presence: true
 
@@ -48,9 +49,13 @@ class Member < ApplicationRecord
   scope :active_and_resigned_and_pending, -> { where(status: ["active", "resigned", "pending"]).order("last_name ASC") }
 
   before_validation :load_defaults
+  
+  def check_name
+    "#{first_name.upcase} #{middle_name.upcase} #{last_name.upcase}"
+  end
 
   def full_name
-    "#{last_name}, #{first_name} #{middle_name}"
+    "#{self.last_name}, #{self.first_name}, #{self.middle_name}"
   end
 
   def recognition_date

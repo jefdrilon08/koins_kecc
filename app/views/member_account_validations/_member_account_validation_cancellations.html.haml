@@ -1,0 +1,20 @@
+.ui.grey.segment
+  %h4
+    %font{:color => "#FF0000"} Cancelled Members
+%table.ui.green.table.transaction-table
+  %thead
+    %tr
+      %th{width: "2%"}
+      %th{width: "20%"} Member
+      %th{width: "20%"} Date Cancelled
+      %th{width: "55%"} Reason
+  %tbody
+    - member_account_validation.member_account_validation_cancellations.joins(:member).order("members.last_name ASC").each_with_index do |member_account_validation_cancellation, i|
+      %tr
+        %td #{i + 1}
+        %td
+          = link_to "#{member_account_validation_cancellation.member.full_name}", member_path(member_account_validation_cancellation.member), target: "_blank"
+        %td
+          #{member_account_validation_cancellation.date_cancelled}
+        %td
+          #{member_account_validation_cancellation.reason}

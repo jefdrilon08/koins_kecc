@@ -170,6 +170,17 @@ module Api
         render json: { members: members }
       end
 
+      def fetch_accounting_funds
+        accounting_funds = AccountingFund.all.map{ |o|
+                    {
+                      id: o.id,
+                      name: o.name
+                    }
+                  }
+
+        render json: { accounting_funds: accounting_funds }
+      end
+
       def update_particular
         deposit_collection = DepositCollection.find(params[:id])
         data                          = deposit_collection.try(:data).try(:with_indifferent_access)
@@ -215,6 +226,25 @@ module Api
         if deposit_collection.pending?
           data[:ar_number]                            = ar_number
           data[:accounting_entry][:data][:ar_number]  = ar_number
+
+          deposit_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
+      def update_accounting_fund
+        deposit_collection   = DepositCollection.find(params[:id])
+        data                 = deposit_collection.try(:data).try(:with_indifferent_access)
+        accounting_fund_id   = params[:accounting_fund_id]
+
+        if deposit_collection.pending?
+          data[:accounting_fund_id]                     = accounting_fund_id
+          data[:accounting_entry][:accounting_fund_id]  = accounting_fund_id
 
           deposit_collection.update!(
             data: data

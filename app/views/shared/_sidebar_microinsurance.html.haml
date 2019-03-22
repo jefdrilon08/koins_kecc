@@ -1,9 +1,16 @@
 %li.nav-title
   Microinsurance
+  %li{ class: "nav-item #{params[:controller] == "member_account_validations" || params[:controller] == "members/member_account_validations" ? 'active' : '' }" }
+  = link_to member_account_validations_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Validations
   %li{ class: "nav-item #{params[:controller] == 'pages' and params[:action] == 'insurance_exit_age_members' ? 'active' : ''}" }
   = link_to insurance_exit_age_members_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-users
     Members for Exit Age
   = link_to claims_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-money-check
-    Claims
+    Claims Register(BLIP)
+  = link_to clip_claims_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-money-check
+    Claims Register(CLIP)

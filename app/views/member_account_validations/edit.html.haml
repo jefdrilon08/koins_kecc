@@ -1,0 +1,23 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-file
+      Member Account Validation Form
+    %small
+      #{@member_account_validation.date_prepared}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      .btn
+        %strong
+          #{link_to "Member Account Validations", member_account_validations_path}
+    .btn-group
+      .btn
+        %strong
+          #{link_to "Show", member_account_validation_path(@member_account_validation)}
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "form", locals: { member_account_validation: @member_account_validation }
+
+= render partial: "templates/error_list"

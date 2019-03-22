@@ -298,4 +298,24 @@ namespace :adjust do
 
     puts "Done."
   end
+
+  task :upload_members_recognition_date => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      recognition_date = row['recognition_date']
+
+      member = Member.where(identification_number: identification_number).first
+
+      if !member.nil?
+        puts "Uploading recognition date: #{recognition_date} for #{member.full_name}"   
+        member_data = member.data.with_indifferent_access
+        member_data[:recognition_date] = recognition_date
+        member.update!(data: member_data)
+      end
+    end
+    puts "Done!"
+  end
 end

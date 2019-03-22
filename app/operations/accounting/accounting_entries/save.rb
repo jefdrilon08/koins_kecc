@@ -32,6 +32,11 @@ module Accounting
         @accounting_entry.date_prepared = @accounting_entry_data[:date_prepared]
         @accounting_entry.prepared_by   = @user.full_name
 
+        # Get accounting fund if present
+        if @accounting_entry_data[:accounting_fund_id].present?
+          @accounting_entry.accounting_fund = AccountingFund.find(@accounting_entry_data[:accounting_fund_id])
+        end
+
         # Remove unwanted journal entries
         if !@accounting_entry.new_record?
           existing_journal_entry_ids  = @accounting_entry.journal_entries.pluck(:id)

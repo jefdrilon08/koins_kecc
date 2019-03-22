@@ -1,13 +1,20 @@
 %ol.breadcrumb
   %li.breadcrumb-item
     .fa.fa-money-check
-    Claims Form
+      Claims
   %li.breadcrumb-item
-    New Record for #{link_to @member.full_name, member_path(@member), target: '_blank', style: "color: #000" } 
+    .fa.fa-user
+    = link_to members_path(@member) do
+      #{@member.full_name} 
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      = link_to claims_path  class: 'btn' do
+      = link_to claims_path do
         .fa.fa-arrow-left
         Back to Claims
-        
-= render partial: "members/claims/form", locals: { claim: @claim }
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "members/claims/form", locals: { claim: @claim }

@@ -26,7 +26,7 @@ module DepositCollections
         data: {
           or_number: "",
           ar_number: ""
-        }
+        }       
       }
 
       @default_deposit_accounts   = Settings.default_deposit_accounts

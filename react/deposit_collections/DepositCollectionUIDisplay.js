@@ -6,6 +6,7 @@ import SkCubeLoading from '../SkCubeLoading';
 import DepositCollectionUITable from './DepositCollectionUITable';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import AddRecord from './AddRecord';
+import AddAccountingFund from './AddAccountingFund';
 import {numberWithCommas} from '../utils/helpers';
 
 export default class DepositCollectionUIDisplay extends React.Component {
@@ -318,6 +319,17 @@ export default class DepositCollectionUIDisplay extends React.Component {
                   {this.renderParticular()}
                 </td>
               </tr>
+              <tr>
+                <th>
+                  Accounting Fund:
+                </th>
+                <td className="text-right">
+                  <AddAccountingFund
+                    data={this.state.data}
+                    authenticityToken={this.props.authenticityToken}
+                  />
+                </td>
+              </tr>
             </tbody>
           </table>
           <AddRecord
@@ -348,6 +360,7 @@ export default class DepositCollectionUIDisplay extends React.Component {
             isLoading={this.state.isLoading}
             handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             data={accounting_entry_data.data}
+            accountingFundId={accounting_entry_data.accounting_fund_id}
           />
         </div>
       );

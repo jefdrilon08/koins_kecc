@@ -4,7 +4,7 @@ namespace :rehash do
     puts "Rehashing member_account #{member_account.id}..."
 
     ::MemberAccounts::Rehash.new(
-      member_account: o
+      member_account: member_account
     ).execute!
 
     puts "Done."

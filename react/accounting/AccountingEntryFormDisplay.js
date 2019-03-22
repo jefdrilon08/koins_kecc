@@ -31,6 +31,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
       branchId: props.branchId,
       branches: [],
       accountingCodes: [],
+      accountingFunds: [],
       accountingCodeId: "",
       accountingFundId: "",
       accountingCodeObject: {},
@@ -60,6 +61,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         reference_number: "",
         date_prepared: moment(),
         status: "pending",
+        accounting_fund_id: "",
         data: {
           or_number: "",
           check_number: "",
@@ -81,6 +83,38 @@ export default class AccountingEntryFormDisplay extends React.Component {
   }
 
   fetchAccountingFunds() {
+    var context = this;
+
+    $.ajax({
+      url: "/api/v1/accounting_funds",
+      method: "GET",
+      data: {
+        
+      },
+      dataType: 'json',
+      success: function(response) {
+        // Set currentAccountingFundId
+        var data  = context.state.data;
+
+        if(response.accounting_funds.length > 0) {
+          data.accounting_fund_id = response.accounting_funds[0].id;  
+        }
+
+        context.setState({
+          accountingFunds: response.accounting_funds,
+          data: data
+        });
+
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching accounting_funds");
+
+        context.setState({
+          accountingFunds: []
+        });
+      }
+    });
   }
 
   fetchAccountingEntry() {
@@ -226,7 +260,8 @@ export default class AccountingEntryFormDisplay extends React.Component {
           data: accounting_entry_data.data,
           journal_entries: accounting_entry_data.journal_entries,
           particular: accounting_entry_data.particular,
-          reference_number: accounting_entry_data.reference_number
+          reference_number: accounting_entry_data.reference_number,
+          accounting_fund_id: accounting_entry_data.accounting_fund_id
         }
       });
 
@@ -391,6 +426,15 @@ export default class AccountingEntryFormDisplay extends React.Component {
   handleParticularChanged(event) {
     var data        = this.state.data;
     data.particular = event.target.value;
+
+    this.setState({
+      data: data
+    });
+  }
+
+  handleAccountingFundChanged(event) {
+    var data                = this.state.data;
+    data.accounting_fund_id = event.target.value;
 
     this.setState({
       data: data
@@ -786,6 +830,10 @@ export default class AccountingEntryFormDisplay extends React.Component {
     var data                  = state.data;
     var branchOptions         = [];
     var accountingCodeOptions = [];
+    var accountingFundOptions = [];
+
+    console.log("DATA:");
+    console.log(data);
 
     console.log(state.branches);
 
@@ -804,6 +852,15 @@ export default class AccountingEntryFormDisplay extends React.Component {
         value: state.accountingCodes[i].id,
         label: state.accountingCodes[i].name
       });
+    }
+
+    // Build accountingFundOptions as <option> tags
+    for(var i = 0; i < state.accountingFunds.length; i++) {
+      accountingFundOptions.push(
+        <option value={state.accountingFunds[i].id} key={"accounting-fund-" + state.accountingFunds[i].id}>
+          {state.accountingFunds[i].name}
+        </option>
+      );
     }
 
     var bookOptions = [
@@ -885,6 +942,20 @@ export default class AccountingEntryFormDisplay extends React.Component {
                 className="form-control"
               />
               <br/>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <div className="form-group">
+              <label>Accounting Fund</label>
+              <select
+                value={data.accounting_fund_id}
+                className="form-control"
+                onChange={this.handleAccountingFundChanged.bind(this)}
+              >
+                {accountingFundOptions}
+              </select>
             </div>
           </div>
         </div>

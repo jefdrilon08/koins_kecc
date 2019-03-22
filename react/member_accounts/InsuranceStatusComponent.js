@@ -4,6 +4,7 @@ import $ from "jquery";
 import SkCubeLoading from '../SkCubeLoading';
 
 export default class InsuranceStatusComponent extends React.Component {
+
 	constructor(props) {
 		super(props);
 
@@ -27,7 +28,6 @@ export default class InsuranceStatusComponent extends React.Component {
 			},
 			success: function(response){
 				console.log(response);
-
 				context.setState({
 					isLoading: false,
 					data: response
@@ -41,7 +41,6 @@ export default class InsuranceStatusComponent extends React.Component {
 
 	handleInputChange(event) {
 		var newMessage = event.target.value;
-
 		this.setState({
 			message: newMessage
 		});
@@ -186,5 +185,4 @@ export default class InsuranceStatusComponent extends React.Component {
 		);
 	}
 	}
-
 }

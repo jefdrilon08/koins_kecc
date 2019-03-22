@@ -1,9 +1,9 @@
 class CreateClaims < ActiveRecord::Migration[5.2]
   def change
     create_table :claims, id: :uuid do |t|
-      	t.integer :member_id
-    	t.integer :center_id
-      	t.integer :branch_id
+      	t.references :member, type: :uuid, foreign_key: true
+    	  t.references :center, type: :uuid, foreign_key: true
+        t.references :branch, type: :uuid, foreign_key: true
       	t.date :date_prepared
       	t.string :policy_number
       	t.string :type_of_insurance_policy

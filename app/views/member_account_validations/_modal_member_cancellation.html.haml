@@ -1,0 +1,25 @@
+#modal-member-cancellation.modal.fade.modal-fade.modal-cancellation
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type:'button', data:{dismiss:'modal'}}
+          %span{aria:{hidden:'true'}}
+            %i.fa.fa-close
+          %span.sr-only Close
+        %h4.modal-title
+          Member Cancellation
+      .modal-body
+        %label
+          Date
+        = text_field_tag :input_date_resigned, Date.today, id: "input-date-cancelled", class: "form-control datepick"
+        %label
+          Reason
+        %textarea{ id: "input-reason", class: "form-control" }
+        .message
+        %hr
+        %button#btn-confirm-member-cancellation.btn.btn-primary
+          .fa.fa-check
+          Confirm
+        %button.btn.btn-default{ type: 'button', data: { dismiss: 'modal' } }
+          .fa.fa-times
+          Cancel

@@ -1,0 +1,17 @@
+.table-responsive.no-padding
+  %table.table-bordered.table{:style => "margin-top: 10px;"}
+    %thead
+      %tr
+        %th Date Prepared
+        %th Branch
+        %th Status
+        %th Prepared By
+        %th Total
+    %tbody
+      - member_account_validations.each do |member_account_validation|
+        %tr{class: "#{member_account_validation.status == 'pending' || member_account_validation.status == 'reversed' || member_account_validation.status == 'for-approval' || member_account_validation.status == 'for-validation' ? 'negative' : 'positive'} clickable", data: { transaction_id: "#{member_account_validation.id}" } }
+          %td.date-prepared= member_account_validation.date_prepared
+          %td.branch= member_account_validation.branch
+          %td.status= member_account_validation.status
+          %td.prepared-by= member_account_validation.prepared_by
+          %td.prepared-by= member_account_validation.total
