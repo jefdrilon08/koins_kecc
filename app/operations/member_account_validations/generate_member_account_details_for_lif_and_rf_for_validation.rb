@@ -1,4 +1,4 @@
-module MemberAccountValidation
+module MemberAccountValidations
   class GenerateMemberAccountDetailsForLifAndRfForValidation
     def initialize(lif_insurance_account:, rf_insurance_account:, member:, resignation_date:)
       @lif_insurance_account  = lif_insurance_account

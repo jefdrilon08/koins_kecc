@@ -54,6 +54,8 @@ module Api
 
         data[:member_counts]  = member_counts
 
+        # Fetch watchlist
+
         render json: data
       end
 
