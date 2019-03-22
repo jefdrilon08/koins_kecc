@@ -55,6 +55,13 @@ module Api
         data[:member_counts]  = member_counts
 
         # Fetch watchlist
+        if rr_data.present?
+          watchlist = ::DataStores::BuildWatchlistFromRr.new(
+                        rr_data: rr_data.data.with_indifferent_access
+                      ).execute!
+        end
+
+        data[:watchlist]  = watchlist || false
 
         render json: data
       end

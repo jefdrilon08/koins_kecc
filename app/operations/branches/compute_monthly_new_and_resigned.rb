@@ -84,6 +84,11 @@ module Branches
                                         id: m.center.id,
                                         name: m.center.name
                                       },
+                                      officer: {
+                                        id: m.center.user.id,
+                                        first_name: m.center.user.first_name,
+                                        last_name: m.center.user.last_name
+                                      },
                                       branch: {
                                         id: m.branch.id,
                                         name: m.branch.name
@@ -102,6 +107,11 @@ module Branches
                                 center: {
                                   id: m.center.id,
                                   name: m.center.name
+                                },
+                                officer: {
+                                  id: m.center.user.id,
+                                  first_name: m.center.user.first_name,
+                                  last_name: m.center.user.last_name
                                 },
                                 branch: {
                                   id: m.branch.id,

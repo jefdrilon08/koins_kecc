@@ -44,7 +44,8 @@ export default class DashboardOAS extends React.Component {
           currentBranch: currentBranch,
           data: {
             branch_loans_stats: response.branch_loans_stats,
-            member_counts: response.member_counts
+            member_counts: response.member_counts,
+            watchlist: response.watchlist
           },
           isLoading: false
         });
@@ -325,6 +326,102 @@ export default class DashboardOAS extends React.Component {
     }
   }
 
+  renderWatchlist() {
+    var o = this.state.data.watchlist;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found for member counts.
+        </p>
+      );
+    } else {
+      var rows  = [];
+
+      for(var i = 0; i < o.records.length; i++) {
+        rows.push(
+          <tr key={"watchlist-record-" + o.records[i].id}>
+            <td className="text-center">
+              {i + 1}
+            </td>
+            <td>
+              <strong>
+                <a href={"/loans/" + o.records[i].id}>
+                  {o.records[i].member.last_name}, {o.records[i].member.first_name} {o.records[i].member.middle_name}
+                </a>
+              </strong>
+            </td>
+            <td>
+              {o.records[i].center.name}
+            </td>
+            <td>
+              {o.records[i].officer.last_name}, {o.records[i].officer.first_name}
+            </td>
+            <td>
+              {o.records[i].loan_product.name}
+            </td>
+            <td className="text-right text-muted">
+              {numberWithCommas(o.records[i].principal_balance)}
+            </td>
+            <td className="text-right text-muted">
+              {numberWithCommas(o.records[i].interest_balance)}
+            </td>
+            <td className="text-right">
+              <strong>
+                {numberWithCommas(o.records[i].total_balance)}
+              </strong>
+            </td>
+          </tr>
+        );
+      }
+
+      return  (
+        <div>
+          <h5>
+            Watchlist as of {o.as_of} ({o.records.length})
+          </h5>
+
+          <table className="table table-bordered table-sm table-hover">
+            <thead>
+              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                <th>
+                </th>
+                <th>
+                  Member
+                </th>
+                <th>
+                  Center
+                </th>
+                <th>
+                  Officer
+                </th>
+                <th>
+                  Loan Product
+                </th>
+                <th className="text-right">
+                  Principal Past Due
+                </th>
+                <th className="text-right">
+                  Interest Past Due
+                </th>
+                <th className="text-right">
+                  Total Past Due
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+  }
+
   renderMemberCounts() {
     var o = this.state.data.member_counts;
 
@@ -447,6 +544,7 @@ export default class DashboardOAS extends React.Component {
         {this.renderControls()}
         {this.renderBranchLoansStats()} 
         {this.renderMemberCounts()}
+        {this.renderWatchlist()}
       </div>
     );
   }
