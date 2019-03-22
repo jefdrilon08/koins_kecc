@@ -107,7 +107,6 @@ module Loans
       @loan.principal_balance = @loan.principal
       @loan.interest_balance  = result[:interest]
       @loan.interest          = result[:interest]
-      @loan.interest_balance  = 0.00
       @loan.principal_paid    = 0.00
       @loan.interest_paid     = 0.00
 
