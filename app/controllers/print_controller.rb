@@ -42,6 +42,10 @@ class PrintController < ApplicationController
       @deposit_collection = @data[:data]
 
       render "print/deposit_collection", layout: "plain"
+    elsif @data[:type] == "withdrawal_collection"
+      @withdrawal_collection = @data[:data]
+
+      render "print/withdrawal_collection", layout: "plain"
     else
       raise "Invalid type #{@data[:type]}"
     end

@@ -139,6 +139,19 @@ module Api
           data  = ::Print::BuildDepositCollection.new(
                     config: config
                   ).execute!
+        elsif type == "withdrawal_collection"
+          withdrawal_collection = WithdrawalCollection.find(params[:id])
+          filename              = "withdrawal-collection-#{Time.now.to_i}.json"
+
+          config  = {
+            withdrawal_collection: withdrawal_collection
+          }
+
+          data  = ::Print::BuildWithdrawalCollection.new(
+                    config: config
+                  ).execute!
+        else
+          raise "Invalid type: #{type}"
         end
 
         if errors[:full_messages].size == 0
