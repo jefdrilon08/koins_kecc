@@ -289,7 +289,7 @@ export default class BillingUITable extends React.Component {
       //alert(grandTotal);
 
       records.push(
-        <tr key={"member-row-" + i} style={{ backgroundColor: (record.attendance ? '' : '#FFC6C7') }}>
+        <tr key={"member-row-" + i} style={{ backgroundColor: (record.attendance ? '' : '') }}>
           {components}
         </tr>
       );
