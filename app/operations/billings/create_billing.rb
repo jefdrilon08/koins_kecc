@@ -75,7 +75,8 @@ module Billings
                                     config: {
                                       branch: @branch,
                                       data: @data,
-                                      user: @user
+                                      user: @user,
+                                      center: @center
                                     }
                                   ).execute!
 

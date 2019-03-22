@@ -4,6 +4,8 @@
       %th
         Collection Date
       %th
+        OR Number
+      %th
         Date Approved
       %th
         Center / Branch
@@ -21,6 +23,10 @@
           = link_to billing_path(o) do
             %strong
               #{o.collection_date.strftime("%b %d, %Y")}
+        %td
+          = link_to billing_path(o) do
+            %strong
+              #{o.or_number}
         %td
           - if o.date_approved.present?
             #{o.date_approved.strftime("%b %d, %Y")}

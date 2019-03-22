@@ -10,6 +10,8 @@ module Billings
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
       @data             = @config[:data].with_indifferent_access
 
+      @center           = @config[:center]
+
       @accounting_entry_data  = {
         book: @config[:book] || "CRB",
         date_prepared: @collection_date.strftime("%B %d, %Y"),
@@ -274,7 +276,7 @@ module Billings
     end
 
     def default_particular
-      "Default particular for billing"
+      "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
     end
   end
 end

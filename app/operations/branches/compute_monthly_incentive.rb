@@ -7,8 +7,16 @@ module Branches
       @branch = @config[:branch]
       @as_of  = Date.new(@year, @month, -1)
 
-      @ds_repayment_rate
-      @ds_monthly_new_and_resigned
+      @ds_repayment_rate  = DataStore.repayment_rates.where(
+                              "meta->>'branch_id' = ?",
+                              @branch.id
+                            ).order(
+                              "CAST(meta->>'as_of' AS DATE) ASC"
+                            ).last
+
+      @ds_monthly_new_and_resigned  = DataStore.month
+
+      # Check if we have the necessary information
 
       @data = {
         year: @year,

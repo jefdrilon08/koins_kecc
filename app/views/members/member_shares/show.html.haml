@@ -18,7 +18,7 @@
           %hr
           .row
             .col
-              - if @member_share.data["is_printed"].to_s == "true"
+              - if @member_share.data["printed"].to_s == "true"
                 Date Printed: #{@member_share.data["date_printed"]}
               - else
                 Not yet printed

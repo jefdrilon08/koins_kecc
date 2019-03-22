@@ -29,7 +29,7 @@ class MembersController < ApplicationController
       @members  = @members.where(status: @status)
     end
 
-    @members  = @members.order("last_name ASC").page(params[:page]).per(20)
+    @members  = @members.order("last_name ASC").page(params[:page]).per(100)
   end
 
   def form_resignation
