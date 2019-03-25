@@ -24,7 +24,9 @@ module Members
             maintaining_balance = 0.00
             
             @active_loans.where(loan_product_id: s.loan_product_id).each do |loan|
-              maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
+              if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
+                maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
+              end
             end
 
             member_account.update!(maintaining_balance: maintaining_balance.round(2))
