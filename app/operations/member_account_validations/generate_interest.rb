@@ -6,7 +6,7 @@ module MemberAccountValidations
       @insured_amount     = insured_amount
       @num_weeks          = num_weeks
       @num_weeks_past_due = num_weeks_past_due
-      @recognition_date   = @member.previous_mii_member_since
+      @recognition_date   = @member.data.with_indifferent_access[:recognition_date].try(:to_date)
       @current_date       = Date.today
       @amount             = 0.00
       @data               = {}
@@ -36,14 +36,14 @@ module MemberAccountValidations
 
       @num_months       = (@num_weeks.to_f / 4.0).to_i
 
-      @periodic_payment = @member_account.member_type.default_periodic_payment.round(0) * 4
+      @periodic_payment = 5 * 4
 
       @current_balance  = @member_account.balance
 
       @interest_table   = {}
 
       # For weekly computation
-      @periodic_p = @member_account.member_type.default_periodic_payment.round(0)
+      @periodic_p = 5
     end
 
     def execute!
@@ -52,17 +52,17 @@ module MemberAccountValidations
 
       # For weekly computation
       @num_weeks.times do |i|
-        running_balance       = (@periodic_p.round(0) * (i + 1)) + running_interest
-        tmp                   = {}
-        c                     = i + 1
-        tmp[:weekly_index]     = c
-        tmp[:running_balance] = running_balance
-        tmp[:interest]        = (running_balance * @interest_rate * @weekly).round(2)
-        running_interest      += tmp[:interest].round(2)
+        running_balance                     = (@periodic_p.round(0) * (i + 1)) + running_interest
+        tmp                                 = {}
+        c                                   = i + 1
+        tmp[:weekly_index]                  = c
+        tmp[:running_balance]               = running_balance
+        tmp[:interest]                      = (running_balance * @interest_rate * @weekly).round(2)
+        running_interest                    += tmp[:interest].round(2)
         tmp[:running_balance_save_interest] = (tmp[:running_balance] + running_interest).round(2)
-        tmp[:running_interest] = running_interest
+        tmp[:running_interest]              = running_interest
 
-        running_balance       += running_balance + tmp[:interest]
+        running_balance                     += running_balance + tmp[:interest]
 
         @data[:interest_table] << tmp
       end

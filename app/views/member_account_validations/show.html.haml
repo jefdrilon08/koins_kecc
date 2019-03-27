@@ -43,8 +43,8 @@
           = render partial: "member_account_validation_records", locals: { member_account_validation: @member_account_validation }
           - if @member_account_validation.member_account_validation_cancellations.count > 0
             = render partial: "member_account_validation_cancellations", locals: { member_account_validation: @member_account_validation }
-          - if !@voucher.nil?
-            = render partial: "shared/voucher", locals: { voucher: @voucher }
+          - if !@member_account_validation.data.nil?
+            = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
 
 / = render partial: "shared/errors_template"
 / = render partial: "shared/success_template"

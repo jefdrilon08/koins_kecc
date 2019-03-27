@@ -47,7 +47,7 @@ var MemberAccountValidationForm = (function() {
       var resignationDate = $resignationDate.val();
       var memberClassification = $memberClassification.val();
 
-      alert(memberAccountValidationStatus);
+      alert(memberClassification);
       $.ajax({
         url: urlAddMember,
         method: 'POST',
@@ -61,7 +61,7 @@ var MemberAccountValidationForm = (function() {
         },
         success: function(response) {
           $message.html("Success! Redirecting...");
-          window.location.reload();
+          window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
         },
         error: function(response) {
           console.log(response);

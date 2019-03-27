@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_20_052114) do
+ActiveRecord::Schema.define(version: 2019_03_22_084416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -379,6 +379,8 @@ ActiveRecord::Schema.define(version: 2019_03_20_052114) do
     t.string "member_classification"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "advance_lif"
+    t.json "data"
     t.index ["center_id"], name: "index_member_account_validation_records_on_center_id"
     t.index ["member_account_validation_id"], name: "index_member_account_validation_records_uniqueness"
     t.index ["member_id"], name: "index_member_account_validation_records_on_member_id"
@@ -410,6 +412,7 @@ ActiveRecord::Schema.define(version: 2019_03_20_052114) do
     t.decimal "total_equity_interest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "data"
     t.index ["branch_id"], name: "index_member_account_validations_on_branch_id"
   end
 

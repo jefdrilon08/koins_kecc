@@ -168,26 +168,29 @@ module Api
         member = Member.find(params[:member_id])
         resignation_date = params[:resignation_date]
         member_classification = params[:member_classification]
+
+        config = {
+          member_account_validation: member_account_validation,
+          member: member,
+          resignation_date: resignation_date,
+          member_classification: member_classification,
+          user: current_user
+        }
         
         errors  = MemberAccountValidations::ValidateMember.new(
-                    member: member, 
-                    member_account_validation: member_account_validation, 
-                    resignation_date: resignation_date
+                   config: config
                   ).execute!
 
-        if errors.length == 0
+        # if errors[:messages].size > 0
+        #   render json: { errors: errors }, status: 400
+        # else
           member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
-                                                  member_account_validation: member_account_validation, 
-                                                  member: member, 
-                                                  resignation_date: resignation_date,
-                                                  member_classification: member_classification
+                                                  config: config
                                                 ).execute!
 
           member_account_validation_record.save!
-          render json: { message: "Successfully added member" }
-        else
-          render json: { errors: errors } , status: 401
-        end
+          render json: member_account_validation_record
+        # end
       end
 
       def approve

@@ -26,7 +26,7 @@
         %td
           #{member_account_validation_record.member_classification}  
         %td
-          #{member_account_validation_record.member.previous_mii_member_since}
+          #{member_account_validation_record.member.data.with_indifferent_access[:recognition_date]}
         %td
           #{member_account_validation_record.member.center}
         - if member_account_validation_record.approved?

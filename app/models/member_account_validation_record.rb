@@ -2,7 +2,7 @@ class MemberAccountValidationRecord < ApplicationRecord
 	MEMBER_CLASSIFICATION = ["RESIGNED", "DECEASED", "EXIT AGE (Cash)", "EXIT AGE (GK)"]
 	
 	belongs_to :member
- 	belongs_to :insurance_account_validation
+ 	belongs_to :member_account_validation
 
 	validates :member, presence: true
 	validates :resignation_date, presence: true
