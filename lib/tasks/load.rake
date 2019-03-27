@@ -365,4 +365,17 @@ namespace :load do
 
     puts "Done."
   end
+
+  task :accounting_funds_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertAccountingFundsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
 end

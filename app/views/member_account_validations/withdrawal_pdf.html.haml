@@ -50,12 +50,21 @@
   %br
   %br
   %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
   .content
-    %span{style: "font-size: .7em;"}
+    %span{style: "font-size: .8em;"}
       %p
         Member's Name: #{@member_account_validation_record.member.full_name_titleize}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Center: #{@member_account_validation_record.member.center}
       %p
-        Recognition Date: #{@member_account_validation_record.member.previous_mii_member_since.strftime("%b %d, %Y")}&emsp;&emsp;Trans#: #{@member_account_validation_record.transaction_number}
+        Recognition Date: #{@member_account_validation_record.member.data.with_indifferent_access[:recognition_date].to_date.strftime("%b %d, %Y")}&emsp;&emsp;Trans#: #{@member_account_validation_record.transaction_number}
       %p
         Resignation Date: #{@member_account_validation_record.resignation_date.strftime("%b %d, %Y")}&emsp;&emsp;Date Prepared: #{@member_account_validation_record.member_account_validation.date_prepared.strftime("%b %d, %Y")}&emsp;&emsp;
       %table

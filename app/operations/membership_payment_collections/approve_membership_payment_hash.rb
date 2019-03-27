@@ -69,7 +69,7 @@ module MembershipPaymentCollections
 
       if @membership_settings.type == "Insurance" and @membership_settings.is_main == true
         @member.update!(
-          insurance_status: "active"
+          insurance_status: "inforce"
         )
       end
 

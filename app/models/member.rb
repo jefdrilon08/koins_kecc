@@ -58,6 +58,10 @@ class Member < ApplicationRecord
     "#{self.last_name}, #{self.first_name}, #{self.middle_name}"
   end
 
+  def full_name_titleize
+    "#{last_name.titleize}, #{first_name.titleize} #{middle_name.titleize}"  
+  end
+
   def resigned?
     self.status == "resigned"
   end
@@ -153,5 +157,50 @@ class Member < ApplicationRecord
 
   def rf_amount
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").sum(:balance)
+  end
+
+  def length_of_stay
+    if self.data.with_indifferent_access[:recognition_date].present?
+      now = Time.now
+      seconds_between = (now.to_time - self.data.with_indifferent_access[:recognition_date].to_time).abs 
+      days_between = seconds_between / 60 / 60 / 24
+      number_of_days = days_between.floor
+      number_of_months = (days_between / 30.44).floor
+      years = (days_between / 365.242199).floor
+      months = number_of_months - (years * 12)
+      if years < 1
+        if months > 1
+          "#{months} MONTHS"
+        elsif months == 1
+          "#{months} MONTH"
+        elsif months < 1
+          if number_of_days == 1 
+            "#{number_of_days} DAY"
+          elsif number_of_days > 1
+            "#{number_of_days} DAYS"
+          elsif number_of_days < 1
+            nil          
+          end
+        end    
+      else
+        if years == 1 && months == 0 
+          "#{years} YEAR"
+        elsif years == 1 && months == 1
+          "#{years} YEAR, #{months} MONTH"
+        elsif years == 1 && months > 1
+          "#{years} YEAR, #{months} MONTHS"
+        elsif years > 1 && months > 1
+          "#{years} YEARS, #{months} MONTHS"
+        elsif years > 1 && months == 1
+          "#{years} YEARS, #{months} MONTH"
+        elsif years > 1 && months < 1
+          "#{years} YEARS"    
+        end
+      end
+    end
+  end
+
+  def full_name_formatted
+    "#{first_name.titleize} #{middle_name.titleize} #{last_name.titleize}"  
   end
 end

@@ -50,11 +50,10 @@ class MemberAccountValidationsController < ApplicationController
 
   def show 
     @member_account_validation = MemberAccountValidation.find(params[:id])
-
-    # @voucher  = MemberAccountValidations::ProduceVoucherForInterestDeposit.new(
-    #               member_account_validation: @member_account_validation,
-    #               is_remote: @member_account_validation.is_remote
-    #             ).execute!
+    
+    if !@member_account_validation.data.nil?
+      @accounting_entry_data = @member_account_validation.data.with_indifferent_access[:accounting_entry]
+    end
 
     @members = Member.where(branch_id: @member_account_validation.branch.id).all
     @role = current_user.roles.last

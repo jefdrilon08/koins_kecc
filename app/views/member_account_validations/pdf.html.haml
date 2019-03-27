@@ -9,7 +9,7 @@
     font-family: calibri;
   }
 
-  table.insurance th.header{
+  table.member th.header{
     text-align: left;
     font-weight: bold;
   }
@@ -25,15 +25,15 @@
         #{Settings.company_address}
       %br  
       %b
-        Insurance Account Validation
+        member Account Validation
 %left
   %br
   %span.print-text-sub
     %p
       %b
-        Prepared : #{@insurance_account_validation.date_prepared}  |  Checked : #{@insurance_account_validation.date_checked}  |  Validated : #{@insurance_account_validation.date_validated}  |  Approved : #{@insurance_account_validation.date_approved} 
+        Prepared : #{@member_account_validation.date_prepared}  |  Checked : #{@member_account_validation.date_checked}  |  Validated : #{@member_account_validation.date_validated}  |  Approved : #{@member_account_validation.date_approved} 
   %p
-  %table.insurance{"border:" => "", :none => ""}
+  %table.member{"border:" => "", :none => ""}
     %tr
       %th.header{width: 30}
       %th.header{width: 370} Member
@@ -45,35 +45,35 @@
       %th.header.curr{width: 90} Interest
       %th.header.curr{width: 90} Total
 
-    - @insurance_account_validation.insurance_account_validation_records.joins(:member).order("members.last_name ASC").each_with_index do |insurance_account_validation_record, i|
+    - @member_account_validation.member_account_validation_records.joins(:member).order("members.last_name ASC").each_with_index do |member_account_validation_record, i|
       %tr
         %td #{i + 1}
         %td
-          #{insurance_account_validation_record.member.full_name}
+          #{member_account_validation_record.member.full_name}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.rf, unit: "")}
+          #{number_to_currency(member_account_validation_record.rf, unit: "")}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.lif_50_percent, unit: "")}
+          #{number_to_currency(member_account_validation_record.lif_50_percent, unit: "")}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.equity_interest, unit: "")}
+          #{number_to_currency(member_account_validation_record.equity_interest, unit: "")}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.advance_lif, unit: "")}
+          #{number_to_currency(member_account_validation_record.advance_lif, unit: "")}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.advance_rf, unit: "")}
+          #{number_to_currency(member_account_validation_record.advance_rf, unit: "")}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.interest, unit: "")}
+          #{number_to_currency(member_account_validation_record.interest, unit: "")}
         %td.curr
-          #{number_to_currency(insurance_account_validation_record.total, unit: "")}      
+          #{number_to_currency(member_account_validation_record.total, unit: "")}      
     %tr
       %th.header
       %th.header Total
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total_rf, unit: "")}
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total_50_percent_lif, unit: "")}
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total_equity_interest, unit: "")}
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total_advance_lif, unit: "")}
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total_advance_rf, unit: "")}
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total_interest, unit: "")}
-      %th.header.curr #{number_to_currency(@insurance_account_validation.total, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total_rf, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total_50_percent_lif, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total_equity_interest, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total_advance_lif, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total_advance_rf, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total_interest, unit: "")}
+      %th.header.curr #{number_to_currency(@member_account_validation.total, unit: "")}
   
   %hr 
   %span   
@@ -122,10 +122,10 @@
     %br
     %table.signatories{"border:" => "", :none => ""}
       %tr
-        %th{width: 250} #{@insurance_account_validation.prepared_by}
-        %th{width: 250} #{@insurance_account_validation.checked_by}
-        %th{width: 250} #{@insurance_account_validation.validated_by}
-        %th{width: 250} #{@insurance_account_validation.approved_by}
+        %th{width: 250} #{@member_account_validation.prepared_by}
+        %th{width: 250} #{@member_account_validation.checked_by}
+        %th{width: 250} #{@member_account_validation.validated_by}
+        %th{width: 250} #{@member_account_validation.approved_by}
       %tr
         %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
         %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;

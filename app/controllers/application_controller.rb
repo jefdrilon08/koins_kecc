@@ -10,23 +10,20 @@ class ApplicationController < ActionController::Base
       @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
     end
   end
-
+  
   FOR_PDF_PATH = [
-    "claims"
+    "clip_claims",
+    "claims",
+    "member_account_validations"
   ]
 
   FOR_PDF = [
     "claim_validation_pdf",
-    "claim_loa_pdf"
-  ]
-
-  FOR_PDF_PATH = [
-    "clip_claims"
-  ]
-
-  FOR_PDF = [
+    "claim_loa_pdf",
     "clip_claim_validation_pdf",
-    "clip_claim_loa_pdf"
+    "clip_claim_loa_pdf",
+    "withdrawal_pdf",
+    "pdf"
   ]
 
   def layout_by_resource

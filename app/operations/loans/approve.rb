@@ -102,11 +102,17 @@ module Loans
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
 
+        if s_deduction.name == "KMBA Membership Fee"
+          @date_paid = @loan.date_released
+        end 
+
+
         if deduction_type == "membership_fee"
           membership_payment_record = MembershipPaymentRecord.paid.where(
                                         membership_type: s_deduction.membership_type,
                                         member_id: @loan.member.id
                                       ).first
+
 
           if membership_payment_record.blank?
             MembershipPaymentRecord.create!(
@@ -120,6 +126,8 @@ module Loans
 
             @member_data[:recognition_date] = @date_paid
           end
+
+          @member.update!(insurance_status: "inforce")
         elsif deduction_type == "deposit"
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
             offset          = s_deduction.meta.offset
