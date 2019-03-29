@@ -116,7 +116,12 @@ module Loans
               date_paid: @date_paid
             )
 
-            @member_data[:recognition_date] = @date_paid
+            # Check if we already have loans (for old accounts transferred form 1.0)
+            if @member.loans.active_or_paid.count > 0
+              @member_data[:recognition_date] = @member.loans.active_or_paid.order("date_approved ASC").first.date_approved
+            else
+              @member_data[:recognition_date] = @date_paid
+            end
           end
 
           @member.update!(insurance_status: "inforce")
