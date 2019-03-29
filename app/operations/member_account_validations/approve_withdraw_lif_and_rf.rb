@@ -1,21 +1,15 @@
 module MemberAccountValidations
-  class ApproveRfMemberDeposit
+  class ApproveWithdrawLifAndRf
     def initialize(config:)
       @config                           = config
 
-      @member_account_validation_record = @config[:member_account_validation_record]
-      @member                           = @member_account_validation_record.member
+      @member_account                   = @config[:member_account]
+      @member                           = @config[:member]
       @date_paid                        = @config[:date_paid]
-      @particular                       = "Interest of Retirement Fund per annum"
-      @amount                           = @config[:amount]
-
-      @member_account                   = MemberAccount.where(
-                                                        member_id: @member.id,
-                                                        account_type: "INSURANCE",
-                                                        account_subtype: "Retirement Fund"
-                                                        ).first
-
-      @transaction_type = "interest"
+      @amount                           = @config[:balance]
+      @particular                       = "Withdrawal of #{@member_account.account_subtype}"
+     
+      @transaction_type                 = "withdraw"
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -45,7 +39,7 @@ module MemberAccountValidations
       @data[:ending_balance]    = (@data[:beginning_balance] - @amount).round(2)
 
       # Update account balance
-      new_balance = (@member_account.balance + @amount).round(2)
+      new_balance = (@member_account.balance - @amount).round(2)
       @member_account.update(
         balance: new_balance
       )

@@ -1,21 +1,14 @@
 module MemberAccountValidations
-  class ApproveRfMemberDeposit
+  class ApproveDepositToSavings
     def initialize(config:)
       @config                           = config
 
-      @member_account_validation_record = @config[:member_account_validation_record]
-      @member                           = @member_account_validation_record.member
+      @member_account                   = @config[:member_account]
       @date_paid                        = @config[:date_paid]
-      @particular                       = "Interest of Retirement Fund per annum"
+      @particular                       = "Deposit of savings"
       @amount                           = @config[:amount]
 
-      @member_account                   = MemberAccount.where(
-                                                        member_id: @member.id,
-                                                        account_type: "INSURANCE",
-                                                        account_subtype: "Retirement Fund"
-                                                        ).first
-
-      @transaction_type = "interest"
+      @transaction_type                 = "deposit"
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,

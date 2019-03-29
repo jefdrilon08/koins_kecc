@@ -3,7 +3,12 @@
     .row
       .col-md-6
         %strong
-          Pending
+          - if accounting_entry[:status] == "approved"
+            #{accounting_entry[:book]}
+            #{accounting_entry[:reference_number]} - 
+            #{accounting_entry[:approved_by]}
+          - else
+            Pending
       .col-md-6
         .text-right
           .text-muted

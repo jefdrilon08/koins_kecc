@@ -1,18 +1,18 @@
 module MemberAccountValidations
-  class ApproveRfMemberDeposit
+  class ApproveLifMemberDeposit
     def initialize(config:)
       @config                           = config
 
       @member_account_validation_record = @config[:member_account_validation_record]
       @member                           = @member_account_validation_record.member
       @date_paid                        = @config[:date_paid]
-      @particular                       = "Interest of Retirement Fund per annum"
-      @amount                           = @config[:amount]
+      @particular                       = "Interest of Equity per week"
+      @amount                           = @member_account_validation_record.interest
 
       @member_account                   = MemberAccount.where(
                                                         member_id: @member.id,
                                                         account_type: "INSURANCE",
-                                                        account_subtype: "Retirement Fund"
+                                                        account_subtype: "Life Insurance Fund"
                                                         ).first
 
       @transaction_type = "interest"

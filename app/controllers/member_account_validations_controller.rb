@@ -80,7 +80,11 @@ class MemberAccountValidationsController < ApplicationController
 
   def pdf
     @member_account_validation = MemberAccountValidation.find(params[:member_account_validation_id])
-    @voucher = MemberAccountValidations::ProduceVoucherForInterestDeposit.new(member_account_validation: @member_account_validation).execute!
+    @accounting_entry = AccountingEntry.where(
+                                        reference_number: @member_account_validation.reference_number,
+                                        book: @member_account_validation.data.with_indifferent_access[:accounting_entry][:book],
+                                        branch_id: @member_account_validation.data.with_indifferent_access[:accounting_entry][:branch_id]
+                                        ).first
   end
 
   def load_defaults
