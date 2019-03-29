@@ -14,6 +14,10 @@ namespace :rehash do
     member_accounts = MemberAccount.all
     size            = member_accounts.size
 
+    if ENV["ACCOUNT_TYPE"].present?
+      member_accounts = member_accounts.where(account_type: ENV["ACCOUNT_TYPE"])
+    end
+
     member_accounts.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing member account #{o.id}... #{progress}%%")
