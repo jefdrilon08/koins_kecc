@@ -64,24 +64,57 @@ module Api
         end
       end
 
+      def add_member
+        member_account_validation = MemberAccountValidation.find(params[:id])
+        member = Member.find(params[:member_id])
+        resignation_date = params[:resignation_date]
+        member_classification = params[:member_classification]
+
+        config = {
+          member_account_validation: member_account_validation,
+          member: member,
+          resignation_date: resignation_date,
+          member_classification: member_classification,
+          user: current_user
+        }
+        
+        errors  = MemberAccountValidations::ValidateMember.new(
+                   config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: { errors: errors }, status: 400
+        else
+          member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
+                                                  config: config
+                                                ).execute!
+
+          member_account_validation_record.save!
+          render json: member_account_validation_record
+        end
+      end
+
       def check
         member_account_validation = MemberAccountValidation.find(params[:id])
-        errors = []
 
-        if ["MIS", "CM", "FM", "REMOTE-FM"].include? current_user.role
+        config = {
+          member_account_validation: member_account_validation,
+          user: current_user
+        }
+
+        if ["MIS", "CM", "FM", "REMOTE-FM"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationForChecking.new(
-                      member_account_validation: member_account_validation
+                      config: config
                     ).execute!
 
-          if errors.size == 0
+          if errors[:messages].size > 0
+            render json: { errors: errors }, status: 400
+          else
             member_account_validation  = MemberAccountValidations::CheckMemberAccountValidation.new(
-                                              member_account_validation: member_account_validation, 
-                                              user:  current_user
+                                              config: config
                                             ).execute!
 
             render json: { message: "Successfully checked Member Account Validation" }
-          else
-            render json: { message: "Cannot check this transaction", errors: errors }, status: 401
           end
         else
           errors << "Unauthorized to perform this transaction"
@@ -90,31 +123,6 @@ module Api
         end
       end
 
-      def validate
-        member_account_validation = MemberAccountValidation.find(params[:id])
-        errors = []
-
-        if ["MIS", "REMOTE-OM", "AO"].include? current_user.role
-          errors  = MemberAccountValidations::ValidateMemberAccountValidationForValidation.new(
-                      member_account_validation: member_account_validation
-                    ).execute!
-
-          if errors.size == 0
-            member_account_validation  = MemberAccountValidations::ValidateMemberAccountValidation.new(
-                                              member_account_validation: member_account_validation, 
-                                              user:  current_user
-                                              )
-          
-            render json: { message: "Successfully validated Member Account Validation" }
-          else
-            render json: { message: "Cannot validate this transaction", errors: errors }, status: 401
-          end
-        else
-          errors << "Unauthorized to perform this transaction"
-
-          render json: { message: "Unauthorized", errors: errors }, status: 401
-        end
-      end
 
       def generate_transaction
         branch_id              = params[:branch_id] 
@@ -157,59 +165,75 @@ module Api
       def delete_member_account_validation_record
         member_account_validation_record = MemberAccountValidationRecord.find(params[:member_account_validation_record_id])
         member_account_validation = member_account_validation_record.member_account_validation
+        data = member_account_validation.data.with_indifferent_access
         member_account_validation_record.destroy!
-        member_account_validation.update!(updated_at: Time.now)
+        # member_account_validation.update!(updated_at: Time.now)
+
+        data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+                                    config: {
+                                      branch: member_account_validation.branch,
+                                      member_account_validation: member_account_validation,
+                                      is_remote: false,
+                                      user: current_user
+                                    }
+                                  ).execute!
+
+        member_account_validation.data = data
+        member_account_validation.save!
 
         render json: { message: "ok" }
       end
 
-      def add_member
+      def validate
         member_account_validation = MemberAccountValidation.find(params[:id])
-        member = Member.find(params[:member_id])
-        resignation_date = params[:resignation_date]
-        member_classification = params[:member_classification]
 
         config = {
           member_account_validation: member_account_validation,
-          member: member,
-          resignation_date: resignation_date,
-          member_classification: member_classification,
           user: current_user
         }
-        
-        errors  = MemberAccountValidations::ValidateMember.new(
-                   config: config
-                  ).execute!
 
-        # if errors[:messages].size > 0
-        #   render json: { errors: errors }, status: 400
-        # else
-          member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
-                                                  config: config
-                                                ).execute!
+        if ["MIS", "REMOTE-OM", "AO"].include? current_user.roles.last
+          errors  = MemberAccountValidations::ValidateMemberAccountValidationForValidation.new(
+                      config: config
+                    ).execute!
 
-          member_account_validation_record.save!
-          render json: member_account_validation_record
-        # end
+          if errors[:messages].size > 0
+            render json: { errors: errors }, status: 400
+          else
+            member_account_validation  = MemberAccountValidations::ValidateMemberAccountValidation.new(
+                                              config: config
+                                              ).execute!
+          
+            render json: { message: "Successfully validated Member Account Validation" }
+          end
+        else
+          errors[:messages] << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
       end
 
       def approve
         member_account_validation = MemberAccountValidation.find(params[:id])
-        errors = []
 
-        if ["MIS", "BK"].include? current_user.role
+        config = {
+          member_account_validation: member_account_validation,
+          user: current_user
+        }
+
+        if ["MIS", "BK"].include? current_user.roles.last
           errors =  MemberAccountValidations::ValidateMemberAccountValidationForApproval.new(
-                      member_account_validation: member_account_validation
+                      config: config
                     ).execute!
-          if errors.size == 0
+          
+          if errors[:messages].size > 0
+            render json: { errors: errors }, status: 400
+          else
             member_account_validation  = MemberAccountValidations::ApproveMemberAccountValidation.new(
-                                              member_account_validation: member_account_validation, 
-                                              user:  current_user
+                                              config: config
                                             ).execute!
 
             render json: { message: "Successfully approved Member Account Validation" }
-          else
-            render json: { message: "Cannot approve this transaction", errors: errors }, status: 401
           end
         else
           errors << "Unauthorized to perform this transaction"

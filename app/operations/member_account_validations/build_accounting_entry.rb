@@ -120,12 +120,14 @@ module MemberAccountValidations
         dr_accounting_code = AccountingCode.find('5db5e14d-0fcb-45a7-b468-c4cefe1ad041')
       end
 
-      journal_entries << {
-        accounting_code_id: dr_accounting_code.id,
-        code: dr_accounting_code.code,
-        name: dr_accounting_code.name,
-        amount: amount
-      }
+      if amount > 0
+        journal_entries << {
+          accounting_code_id: dr_accounting_code.id,
+          code: dr_accounting_code.code,
+          name: dr_accounting_code.name,
+          amount: amount
+        }
+      end
 
       journal_entries
     end
