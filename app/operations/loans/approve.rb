@@ -53,6 +53,10 @@ module Loans
             cycle: 1
           }
         ]
+
+        if @loan_product.is_entry_point
+          @entry_point_loan_cycle = @entry_point_loan_cycle + 1
+        end
       else
         if @loan_product.is_entry_point
           @entry_point_loan_cycle = @entry_point_loan_cycle + 1

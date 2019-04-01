@@ -37,6 +37,10 @@ namespace :adjust do
       members = members.where(center_id: ENV['CENTER_ID'])
     end
 
+    if ENV['MEMBER_ID'].present?
+      members = members.where(id: ENV['MEMBER_ID'])
+    end
+
     size  = members.count
 
     members.each_with_index do |o, i|
