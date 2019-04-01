@@ -47,6 +47,11 @@ namespace :adjust do
 
       # --> Loan cycle computation
       loans               = Loan.active_or_paid.where(member_id: o.id)
+
+      if o.is_returning?
+        loans = loans.where("date_approved > ?", o.previous_date_resigned)
+      end
+
       entry_loan_products = LoanProduct.entry_point.where(id: loans.pluck(:loan_product_id).uniq)
       loans               = loans.where(loan_product_id: entry_loan_products.pluck(:id)).order("date_approved ASC")
 
