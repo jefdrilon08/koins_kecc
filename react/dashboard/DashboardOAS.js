@@ -89,7 +89,8 @@ export default class DashboardOAS extends React.Component {
         context.setState({
           data: {
             branch_loans_stats: response.branch_loans_stats,
-            member_counts: response.member_counts
+            member_counts: response.member_counts,
+            watchlist: response.watchlist
           },
           isLoading: false
         });
