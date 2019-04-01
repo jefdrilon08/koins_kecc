@@ -84,6 +84,13 @@ module Finance
           interest  = (@balance * @periodic_interest).round(0)
           principal = (@emi - interest).round(0)
 
+          # Patch for negative values
+          if interest < 0
+            diff      = interest * -1
+            interest  = 0.00
+            principal -= diff
+          end
+
           due       = (principal + interest)
 
           @total_interest   += interest

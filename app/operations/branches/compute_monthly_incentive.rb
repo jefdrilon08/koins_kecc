@@ -14,9 +14,17 @@ module Branches
                               "CAST(meta->>'as_of' AS DATE) ASC"
                             ).last
 
-      @ds_monthly_new_and_resigned  = DataStore.month
+      @ds_monthly_new_and_resigned  = DataStore.monthly_new_and_resigned.where(
+                                        "meta->>'branch_id' = ?",
+                                        @branch.id
+                                      ).order(
+                                        "CAST(meta->>'as_of' AS DATE) ASC"
+                                      ).last
 
       # Check if we have the necessary information
+
+      @rr_date  = @ds_repayment_rate.data.with_indifferent_access
+      @officers = @rr_date.map{ |o| o[:officer] }.uniq
 
       @data = {
         year: @year,
