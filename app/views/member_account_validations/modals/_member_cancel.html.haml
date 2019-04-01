@@ -1,0 +1,24 @@
+#modal-member-cancellation.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Member Cancellation
+      .modal-body
+        .modal-body-content
+          .callout.callout-info
+            %label
+              Date
+            = text_field_tag :input_date_resigned, Date.today, id: "input-date-cancelled", class: "form-control datepick"
+            %label
+              Reason
+            %textarea{ id: "input-reason", class: "form-control" }
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-member-cancellation.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

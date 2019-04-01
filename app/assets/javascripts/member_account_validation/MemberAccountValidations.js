@@ -126,29 +126,43 @@ var MemberAccountValidations = (function() {
       });
     });
 
+    // Cancel
     $btnApproveCancellation.on("click", function() {
-      if(!$btnApproveCancellation.hasClass('loading')) {
-        _addLoadingToConfirmationBtns();
-        $.ajax({
-          url: urlCancelTransaction,
-          method: 'POST',
-          dataType: 'json',
-          data: { id: memberAccountValidationId },
-          success: function(responseContent) {
-            $modalControls.hide();
-            window.location.href = "/member_account_validations/" + memberAccountValidationId;
-          },
-          error: function(responseContent) {
-            var errorMessages = JSON.parse(responseContent.responseText).errors;
-            console.log(errorMessages);
-            $modalErrorsCancel.html(Mustache.render($errorsTemplate.html(), { errors: errorMessages }));
-            toastr.error("Something went wrong when trying to cancel member account validation: " + errorMessages);
-            _removeLoadingToConfirmationBtns();
+      $btnApproveCancellation.prop("disabled", true);
+
+      $.ajax({
+        url: urlCancelTransaction,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: memberAccountValidationId,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnApproveCancellation.prop("disabled", false);
           }
-        });
-      } else {
-        toastr.info("Still loading");
-      }
+        }
+      });
     });
 
     // Approve
@@ -209,14 +223,10 @@ var MemberAccountValidations = (function() {
       $message.html("");
     });
 
+    // Cancel
     $btnCancel.on("click", function() {
-      $modalCancel.open();
-    });
-
-    $btnCancelCancellation.on('click', function() {
-      if(!$btnCancelCancellation.hasClass('loading')) {
-        $modalCancel.close();
-      }
+      $modalCancel.modal("show");
+      $message.html("");
     });
 
     $btnReverseConfirmation.on('click', function() {
@@ -286,7 +296,7 @@ var MemberAccountValidations = (function() {
     $modalCheck                  = $("#modal-check-confirmation");
     $modalApprove                = $("#modal-approve-confirmation");
     $modalReverse                = $(".modal-reverse-confirmation");
-    $modalCancel                 = $(".modal-cancel-confirmation");
+    $modalCancel                 = $("#modal-cancel-confirmation");
 
     $modalErrorsApproval          = $(".modal-approve").find(".errors");
     $modalErrorsReverse           = $(".modal-reverse").find(".errors");

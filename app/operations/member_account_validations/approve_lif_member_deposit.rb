@@ -15,7 +15,7 @@ module MemberAccountValidations
                                                         account_subtype: "Life Insurance Fund"
                                                         ).first
 
-      @transaction_type = "interest"
+      @transaction_type = "deposit"
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -27,9 +27,9 @@ module MemberAccountValidations
                               )
 
       @data = {
-        is_withdraw_payment: true,
+        is_withdraw_payment: false,
         is_fund_transfer: false,
-        is_interest: false,
+        is_interest: true,
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,

@@ -147,7 +147,6 @@ namespace :api do
     post 'member_account_validations/approve', to: 'member_account_validations#approve'
     post 'member_account_validations/validate', to: 'member_account_validations#validate'
     post 'member_account_validations/check', to: 'member_account_validations#check'
-    post 'member_account_validations/cancel', to: 'member_account_validations#cancel'
     post 'member_account_validations/reverse', to: 'member_account_validations#reverse'
     post 'member_account_validations/cancel', to: 'member_account_validations#cancel'
     post 'member_account_validations/cancel_member', to: 'member_account_validations#cancel_member'

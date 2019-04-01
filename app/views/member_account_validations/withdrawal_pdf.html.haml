@@ -93,14 +93,14 @@
       %table
         %tr
           %td{style: "width: 18px; text-align: center;"}
-          %td{style: "width: 55px; text-align: center;"} Rec'l fr MBA
+          %td{style: "width: 65px; text-align: center;"} Rec'l fr MBA
           %td{style: "width: 43px; text-align: center;"} #{number_to_currency(@member_account_validation_record.interest, unit: "")}
           %td{style: "width: 282px; text-align: center;", :colspan => "3"} *** #{@member_account_validation_record.interest.to_f.to_words.titleize} Only ***
       %p
         This is system generated Computation of Benefit, signature is not required
       %table
         %tr
-          %td{style: "width: 170px; text-align: center; font-weight: bold; font-size: 1.2em; bgcolor: blue"} Total Withdrawal Php #{@member_account_validation_record.total}
+          %td{style: "width: 170px; text-align: center; font-weight: bold; font-size: 1.1em; bgcolor: blue"} Total Withdrawal Php #{@member_account_validation_record.total}
       %p{style: "font-size: .69em;"}
         %br
           Date Printed: #{Time.now.strftime("%b %d, %Y %H:%M%p")}

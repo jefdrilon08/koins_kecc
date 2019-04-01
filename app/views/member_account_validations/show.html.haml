@@ -48,11 +48,11 @@
 
 / = render partial: "shared/errors_template"
 / = render partial: "shared/success_template"
-= render partial: "member_account_validations/modals/approve"
 / = render partial: "modal_reverse_confirmation"
+= render partial: "member_account_validations/modals/approve"
 = render partial: "member_account_validations/modals/validate"
 = render partial: "member_account_validations/modals/check"
-/ = render partial: "modal_cancel"
+= render partial: "member_account_validations/modals/cancel"
 
 = javascript_include_tag "member_account_validation/MemberAccountValidations"
 

@@ -15,7 +15,7 @@ module MemberAccountValidations
                                                         account_subtype: "Retirement Fund"
                                                         ).first
 
-      @transaction_type = "interest"
+      @transaction_type = "deposit"
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -29,7 +29,7 @@ module MemberAccountValidations
       @data = {
         is_withdraw_payment: true,
         is_fund_transfer: false,
-        is_interest: false,
+        is_interest: true,
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,

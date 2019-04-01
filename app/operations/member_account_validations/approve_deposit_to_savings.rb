@@ -20,7 +20,7 @@ module MemberAccountValidations
                               )
 
       @data = {
-        is_withdraw_payment: true,
+        is_withdraw_payment: false,
         is_fund_transfer: false,
         is_interest: false,
         is_adjustment: false,

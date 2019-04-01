@@ -41,7 +41,6 @@ var MemberAccountValidationForm = (function() {
       var resignationDate = $resignationDate.val();
       var memberClassification = $memberClassification.val();
 
-      alert(memberClassification);
       $.ajax({
         url: urlAddMember,
         method: 'POST',
@@ -83,64 +82,53 @@ var MemberAccountValidationForm = (function() {
     $btnDelete.on('click', function() {
       $btnDelete.prop("disabled", true);
       
-      var $btn = $(this);
-      var memberAccountValidationRecordId = $btn.data('member-account-validation-record-id');
-      var memberId = $btn.data('member-id');
+      // var $btn = $(this);
+      // var memberAccountValidationRecordId = $btn.data('member-account-validation-record-id');
+      // var memberId = $btn.data('member-id');
 
-      // if (memberAccountValidationStatus == "cancelled"){
-      //   $modalMemberCancellation.modal("show");
+      if (memberAccountValidationStatus == "cancelled"){
+        $modalMemberCancellation.modal("show");
+        $message.html("");
 
-      //   $btnConfirmMemberCancellation.on("click", function() {
-      //   $btnConfirmMemberCancellation.prop("disabled", true);
+        $btnConfirmMemberCancellation.on("click", function() {
+          $btnConfirmMemberCancellation.prop("disabled", true);
 
-
-      //   $.ajax({
-      //     url: urlCancelValidation,
-      //     method: 'POST',
-      //     dataType: 'json',
-      //     data: {
-      //       authenticity_token: authenticityToken,
-      //       member_id: memberId,
-      //       id: memberAccountValidationId,
-      //       date_cancelled: $inputDateCancelled.val(),
-      //       reason: $inputReason.val(),
-      //       member_account_validation_record_id: memberAccountValidationRecordId,
-      //     },
-      //     success: function(responseContent) {
-      //       toastr.success("Successfully created member account validation cancellation record");
-      //       //window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
-      //     },
-      //     error: function(responseContent) {
-      //       toastr.error("Cannot create member account validation cancellation record");
-      //       $btn.removeClass('loading');
-      //       $btn.removeClass('disabled');
-      //       $modalLoading.modal('hide');
-      //     }
-      //   });
-
-      //   $.ajax({
-      //     url: urlDeletememberAccountValidationRecord,
-      //     method: 'POST',
-      //     dataType: 'json',
-      //     data: { 
-      //       member_account_validation_record_id: memberAccountValidationRecordId 
-      //     },
-      //     success: function(responseContent) {
-      //       toastr.success("Successfully deleted record");
-      //       window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
-      //     },
-      //     error: function(responseContent) {
-      //       toastr.error("Cannot delete this record");
-      //       $btn.removeClass('loading');
-      //       $btn.removeClass('disabled');
-      //       $modalLoading.modal('hide');
-      //     }
-      //   }); 
-
-      //   $btnConfirmMemberCancellation.prop("disabled", false);
-      // });
-      // }
-      // else{
+        $.ajax({
+          url: urlCancelValidation,
+          method: 'POST',
+          dataType: 'json',
+          data: {
+            authenticity_token: authenticityToken,
+            member_id: deleteMemberId,
+            id: memberAccountValidationId,
+            date_cancelled: $inputDateCancelled.val(),
+            reason: $inputReason.val(),
+            member_account_validation_record_id: memberAccountValidationRecordId,
+          },
+          success: function(response) {
+            $message.html("Successfully created member account validation cancellation record");
+            window.location.reload();
+          },
+          error: function(response) {
+            alert(date_cancelled);
+            console.log(response);
+            var errors  = [];
+            try {
+              errors  = JSON.parse(response.responseText).full_messages;
+            } catch(err) {
+              errors  = ["Something went wrong"];
+              console.log(err);
+            } finally {
+              console.log(errors);
+              $message.html(
+                Mustache.render(
+                  templateErrorList,
+                  { errors: errors }
+                )
+              );
+            }
+          }
+        });
 
         $.ajax({
           url: urlDeletememberAccountValidationRecord,
@@ -152,7 +140,7 @@ var MemberAccountValidationForm = (function() {
           },
           success: function(response) {
           $message.html("Success! Redirecting...");
-          window.location.href = "/member_account_validations/" + memberAccountValidationId + "/edit";
+          window.location.reload();
           },
           error: function(response) {
             console.log(response);
@@ -171,12 +159,48 @@ var MemberAccountValidationForm = (function() {
                 )
               );
 
-              $btnAddMember.prop("disabled", false);
+              $btnConfirmMemberCancellation.prop("disabled", false);
             }
           }
         });
-      // }
+      });
+      }
+      else{
+        $.ajax({
+          url: urlDeletememberAccountValidationRecord,
+          method: 'POST',
+          dataType: 'json',
+          data: { 
+            authenticity_token: authenticityToken,
+            member_account_validation_record_id: memberAccountValidationRecordId 
+          },
+          success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+          },
+          error: function(response) {
+            console.log(response);
+            var errors  = [];
+            try {
+              errors  = JSON.parse(response.responseText).full_messages;
+            } catch(err) {
+              errors  = ["Something went wrong"];
+              console.log(err);
+            } finally {
+              console.log(errors);
+              $message.html(
+                Mustache.render(
+                  templateErrorList,
+                  { errors: errors }
+                )
+              );
 
+              $btnDelete.prop("disabled", false);
+            }
+          }
+        });
+       // end
+       }
     });
 
     _computeTotalRf($section);
@@ -262,6 +286,8 @@ var MemberAccountValidationForm = (function() {
     authenticityToken = options.authenticityToken;
     memberAccountValidationId = options.memberAccountValidationId;
     memberAccountValidationStatus = options.memberAccountValidationStatus;
+    deleteMemberId = options.deleteMemberId;
+    memberAccountValidationRecordId = options.memberAccountValidationRecordId;
 
     _bindEvents();
   }

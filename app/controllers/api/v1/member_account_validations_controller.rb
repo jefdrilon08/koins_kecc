@@ -5,22 +5,25 @@ module Api
 
       def cancel
         member_account_validation = MemberAccountValidation.find(params[:id])
-        errors = []
+        
+        config = {
+          member_account_validation: member_account_validation,
+          user: current_user
+        }
 
-        if ["MIS", "AO", "CM", "FM", "REMOTE-FM", "REMOTE-OM"].include? current_user.roles
+        if ["MIS", "AO", "CM", "FM", "REMOTE-FM", "REMOTE-OM"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationForCancellation.new(
-                      member_account_validation: member_account_validation
+                      config: config
                     ).execute!
 
-          if errors.size == 0
-            member_account_validation  = MemberAccountValidations::CancelmemberAccountValidation.new(
-                                              member_account_validation: member_account_validation,
-                                              user:  current_user
+          if errors[:messages].size > 0
+            render json: { errors: errors }, status: 400
+          else
+            member_account_validation  = MemberAccountValidations::CancelMemberAccountValidation.new(
+                                              config: config
                                             ).execute!
 
             render json: { message: "Successfully cancelled Member Account Validation" }
-          else
-            render json: { message: "Cannot cancel this transaction", errors: errors }, status: 401
           end
         else
           errors << "Unauthorized to perform this transaction"
@@ -30,32 +33,33 @@ module Api
       end
 
       def cancel_member
-        member         = Member.where(id: params[:member_id]).first
-        member_account_validation_record = MemberAccountValidationRecord.where(id: params[:member_account_validation_record_id]).first
-        member_account_validation = MemberAccountValidation.find(params[:id])
-        date_cancelled = params[:date_cancelled]
-        reason         = params[:reason]
-        errors = []
+        member                           = Member.find(params[:member_id])
+        member_account_validation_record = MemberAccountValidationRecord.find(params[:member_account_validation_record_id])
+        member_account_validation        = MemberAccountValidation.find(params[:id])
+        date_cancelled                   = params[:date_cancelled]
+        reason                           = params[:reason]
+        
+        config = {
+          member_account_validation: member_account_validation,
+          reason: reason,
+          date_cancelled: date_cancelled,
+          member: member,
+          user: current_user
+        }
 
-        if ["MIS", "OAS", "REMOTE-OAS", "REMOTE-BK", "AO", "REMOTE-OM"].include? current_user.role
+        if ["MIS", "OAS", "REMOTE-OAS", "REMOTE-BK", "AO", "REMOTE-OM"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationMemberForCancellation.new(
-                      member: member,
-                      date_cancelled: date_cancelled,
-                      reason:reason,
+                     config: config
                     ).execute!
 
-          if errors.size == 0
+          if errors[:messages].size > 0
+            render json: { errors: errors }, status: 400
+          else
             member_account_validation  = MemberAccountValidations::CancelMemberToMemberAccountValidation.new(
-                                              member_account_validation_id: member_account_validation.id,
-                                              member: member.id,
-                                              date_cancelled: date_cancelled,
-                                              reason:reason, 
-                                              user:  current_user
+                                              config: config
                                             ).execute!
 
             render json: { message: "Successfully cancelled member to Member Account Validation" }
-          else
-            render json: { message: "Cannot cancel this transaction", errors: errors }, status: 401
           end
         else
           errors << "Unauthorized to perform this transaction"
@@ -156,9 +160,9 @@ module Api
             render json: { errors: errors } , status: 401
           end
         else
-          errors << "Unauthorized to perform this transaction"
+          errors[:messages] << "Unauthorized to perform this transaction"
 
-          render json: { message: "Unauthorized", errors: errors }, status: 401
+          render json: { messages: "Unauthorized", errors: errors }, status: 401
         end      
       end
       
