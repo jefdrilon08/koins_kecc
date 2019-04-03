@@ -16,7 +16,7 @@
       .fa.fa-check
       Validate
   - if role == "CM" || role == "MIS" || role == "FM" || role == "REMOTE-FM" || role == "AO" || role == "REMOTE-OM"
-    = link_to "#", class: "btn btn-app bg-red", id: "btn-cancel" do
+    = link_to "#", class: "btn btn-danger btn-lg", id: "btn-cancel" do
       .fa.fa-times
       Cancel  
 - if member_account_validation.for_approval?  
@@ -25,7 +25,7 @@
       .fa.fa-check
       Approve
   - if role == "AO" || role == "MIS" || role == "REMOTE-OM" 
-    = link_to "#", class: "btn btn-app bg-red", id: "btn-cancel" do
+    = link_to "#", class: "btn btn-danger btn-lg", id: "btn-cancel" do
       .fa.fa-times
       Cancel
 - if member_account_validation.approved?

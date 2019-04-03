@@ -1,20 +1,21 @@
 class MemberAccountValidationsController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_defaults, :authenticate_user!
+  #before_action :load_defaults, :authenticate_user!
   before_action :load_record, only: [:edit, :update, :destroy, :show]
-  before_action :load_types
+  #before_action :load_types
 
   def load_record
     @member_account_validation = MemberAccountValidation.find(params[:id])
   end
 
-  def load_types
-    @branches         = Branch.all
-    @centers          = Center.all
-  end
+  # def load_types
+  #   @branches         = Branch.all
+  #   @centers          = Center.all
+  # end
 
   def index
-    @member_account_validations = MemberAccountValidation.all.order("date_prepared DESC")
+    # @member_account_validations = MemberAccountValidation.all.order("date_prepared DESC")
+    @member_account_validations = MemberAccountValidation.where("branch_id IN (?)", @branches.pluck(:id))
     @member_account_validations = @member_account_validations.page(params[:page]).per(20)
     
     if params[:q].present?
@@ -80,27 +81,31 @@ class MemberAccountValidationsController < ApplicationController
 
   def pdf
     @member_account_validation = MemberAccountValidation.find(params[:member_account_validation_id])
-    @voucher = MemberAccountValidations::ProduceVoucherForInterestDeposit.new(member_account_validation: @member_account_validation).execute!
+    @accounting_entry = AccountingEntry.where(
+                                        reference_number: @member_account_validation.reference_number,
+                                        book: @member_account_validation.data.with_indifferent_access[:accounting_entry][:book],
+                                        branch_id: @member_account_validation.data.with_indifferent_access[:accounting_entry][:branch_id]
+                                        ).first
   end
 
-  def load_defaults
-    @centers = Center.all
+  # def load_defaults
+  #   @centers = Center.all
    
-    if params[:action] == 'index'
-      if params[:q].present?
-        @q = params[:q]
-      end
+  #   if params[:action] == 'index'
+  #     if params[:q].present?
+  #       @q = params[:q]
+  #     end
 
-      if params[:status].present?
-        @status = params[:status]
-      end
+  #     if params[:status].present?
+  #       @status = params[:status]
+  #     end
 
-      if params[:branch_id].present?
-        @branch_id = params[:branch_id]
-        @branch = Branch.find(@branch_id)
-      end
-    end
-  end
+  #     if params[:branch_id].present?
+  #       @branch_id = params[:branch_id]
+  #       @branch = Branch.find(@branch_id)
+  #     end
+  #   end
+  # end
 
   def member_account_validation_params
     params.require(:member_account_validation).permit!

@@ -15,7 +15,8 @@ class User < ApplicationRecord
     "FM",
     "AM",
     "MIS",
-    "ACC"
+    "ACC",
+    "AO"
   ]
 
   validates :username, presence: true, uniqueness: true

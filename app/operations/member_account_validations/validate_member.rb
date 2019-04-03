@@ -1,9 +1,8 @@
 module MemberAccountValidations
-	class ValidateMember
+	class ValidateMember < AppValidator
 		def initialize(config:)
 			@config						   = config
 	     	@member                        = @config[:member]
-	     	# @resignation_date            = @config[:resignation_date]
 	     	@member_account_validation     = @config[:member_account_validation]
 	      	
 	      	super()
