@@ -5,7 +5,6 @@ class ProcessMonthlyNewAndResigned < ApplicationJob
     begin
       record  = DataStore.monthly_new_and_resigned.find(args[:data_store_id])
 
-      user    = User.find(args[:user_id])
       branch  = Branch.find(args[:branch_id])
       year    = args[:year]
       month   = args[:month]

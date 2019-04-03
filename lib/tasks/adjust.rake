@@ -202,6 +202,65 @@ namespace :adjust do
     puts "\nDone."
   end
 
+  task :reload_new_and_resigned => :environment do
+    start_date      = ENV['START_DATE'].to_date
+    end_date        = ENV['END_DATE'].to_date
+    branches        = Branch.all.order("name ASC")
+
+    if ENV['BRANCH_ID'].present?
+      branches  = branches.where(id: ENV['BRANCH_ID'])
+    end
+
+    data_store_type = "MONTHLY_NEW_AND_RESIGNED"
+
+    branches.each do |branch|
+      (start_date..end_date).each do |d|
+        puts "Initiating monthly_new_and_resigned for branch #{branch.name} for as_of #{d}"
+
+        record = DataStore.monthly_new_and_resigned.where(
+                    "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                    branch.id,
+                    d
+                  ).first
+
+        if record.blank?
+          record  = DataStore.create!(
+                      meta: {
+                        branch_id: branch.id,
+                        branch_name: branch.name,
+                        branch: {
+                          id: branch.id,
+                          name: branch.name
+                        },
+                        as_of: d,
+                        data_store_type: data_store_type
+                      },
+                      data: {
+                        status: "processing"
+                      }
+                    )
+        else
+          record.update!(
+            data: {
+              status: "processing"
+            }
+          )
+        end
+
+        args  = {
+          record: record,
+          data_store_type: data_store_type,
+          data_store_id: record.id,
+          branch_id: branch.id,
+          year: d.year,
+          month: d.month
+        }
+
+        ProcessMonthlyNewAndResigned.perform_later(args)
+      end
+    end
+  end
+
   task :reload_member_counts => :environment do
     start_date      = ENV['START_DATE'].to_date
     end_date        = ENV['END_DATE'].to_date

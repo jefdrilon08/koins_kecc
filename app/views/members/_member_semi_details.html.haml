@@ -32,6 +32,13 @@
             %b
               #{@member.date_resigned.strftime("%b %d, %Y")}
 
+      - if @member.previous_date_resigned.present?
+        %li.list-group-item
+          Previous Date Resigned
+          .value.text-muted
+            %b
+              #{@member.previous_date_resigned.strftime("%b %d, %Y")}
+
       %li.list-group-item
         Insurance Status
         .value.text-muted
