@@ -35,13 +35,6 @@ module Branches
 
       @data = {
         counts: {
-          active_members: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0,
-            members: []
-          },
           pure_savers: {
             male: 0,
             female: 0,

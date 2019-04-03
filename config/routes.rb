@@ -130,6 +130,10 @@ Rails.application.routes.draw do
     get "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#show"
     delete "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#destroy"
 
+    get "/monthly_incentives", to: "monthly_incentives#index"
+    get "/monthly_incentives/:id", to: "monthly_incentives#show"
+    delete "/monthly_incentives/:id", to: "monthly_incentives#destroy"
+
     get "/x_weeks_to_pay", to: "x_weeks_to_pay#index"
     get "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#show"
     delete "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#destroy"
