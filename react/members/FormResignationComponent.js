@@ -269,7 +269,8 @@ export default class FormResignationComponent extends React.Component {
         try {
           context.setState({
             errorsProcessing: JSON.parse(response.responseText),
-            isProcessing: false
+            isProcessing: false,
+            errors: true
           });
         } catch(err) {
           alert("Something went wrong");
