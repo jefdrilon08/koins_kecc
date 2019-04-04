@@ -10,19 +10,20 @@
           Reason
     %tbody
       - @data[:resignation_records].each do |o|
-        %tr
-          %td
-            #{o[:date_resigned].to_date.strftime("%B %d, %Y")}
-          %td
-            - if o[:data].present?
-              #{o[:data][:type]}
-            - else
-              #{o[:member_resignation_type][:name]}
-          %td
-            - if o[:data].present?
-              #{o[:data][:reason]}
-            - else
-              #{o[:member_resignation_type][:particular][:name]}
+        - if o[:data].present?
+          %tr
+            %td
+              #{o[:date_resigned].to_date.strftime("%B %d, %Y")}
+            %td
+              - if o[:data].present?
+                #{o[:data][:type]}
+              - else
+                #{o[:member_resignation_type][:name]}
+            %td
+              - if o[:data].present?
+                #{o[:data][:reason]}
+              - else
+                #{o[:member_resignation_type][:particular][:name]}
 - else
   %p
     No resignation records

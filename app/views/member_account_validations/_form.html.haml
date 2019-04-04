@@ -1,84 +1,80 @@
 .container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "add_member_actions", locals: { member_account_validation: @member_account_validation }
-= simple_form_for member_account_validation, defaults: { wrapper_html: { class: 'form-group' }, input_html: { class: 'form-control' } }, html: { novalidate: true } do |f|
-  / .row
-  /   .col-md-6
-  /     = f.input :or_number, as: :string, label: "OR Number"
-  %table.ui.green.table.transaction-table
-    %thead
-      %tr
-        %th{width: "25%"} Member
-        %th{width: "8%"} Classificatiom
-        %th Transaction Number
-        %th Resignation Date
-        %th RF
-        %th 50% LIFE
-        %th Equity Interest
-        %th Advance LIFE
-        %th Advance RF
-        %th Interest
-        %th Total
-        %th Actions
-    %tbody
-      = f.simple_fields_for :member_account_validation_records, f.object.member_account_validation_records.joins(:member).order("members.last_name ASC") do |ff|
-        %tr
-          %td #{link_to ff.object.member.full_name, member_path(ff.object.member), target: "_blank"}
-          %td
-            = ff.input :member_classification, as: :string, input_html: { class: "form-control" }, label: false, disabled: true
-          %td
-            = ff.input :transaction_number, as: :string, input_html: { class: "form-control" }, label: false, disabled: true
-          %td
-            = ff.input :resignation_date, as: :string, input_html: { class: "form-control" }, label: false, disabled: true  
-          %td
-            = ff.input :rf, as: :string, input_html: { class: "form-control numeric rf" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
-          %td
-            = ff.input :lif_50_percent, as: :string, input_html: { class: "form-control numeric lif-50-percent" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
-          %td
-            = ff.input :equity_interest, as: :string, input_html: { class: "form-control numeric equity-interest" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true  
-          %td
-            = ff.input :advance_lif, as: :string, input_html: { class: "form-control numeric advance-lif" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
-          %td
-            = ff.input :advance_rf, as: :string, input_html: { class: "form-control numeric advance-rf" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
-          %td
-            = ff.input :interest, as: :string, input_html: { class: "form-control numeric interest" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
-          %td
-            = ff.input :total, as: :string, input_html: { class: "form-control numeric total-amount" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true          
-          %td
-            = link_to "#", class: "btn btn-danger btn-delete", data: { member_account_validation_record_id: ff.object.id, delete_member_id: ff.object.member.id } do
-              .fa.fa-times   
-              Delete
+  = render partial: "add_member_actions", locals: { member_account_validation: @member_account_validation }
+  = simple_form_for member_account_validation, defaults: { wrapper_html: { class: 'form-group' }, input_html: { class: 'form-control' } }, html: { novalidate: true } do |f|
+    / .row
+    /   .col-md-6
+    /     = f.input :or_number, as: :string, label: "OR Number"
+    %table.ui.green.table.transaction-table
       %thead
         %tr
-          %th{width: "20%"} Total
-          %th
-          %th
-          %th
-          %th 
-            %input{type: "text", class: "form-control numeric total-rf", disabled: true, value: 0.00}
-          %th 
-            %input{type: "text", class: "form-control numeric total-50-percent-lif", disabled: true, value: 0.00}
-          %th 
-            %input{type: "text", class: "form-control numeric total-equity-interest", disabled: true, value: 0.00}
-          %th 
-            %input{type: "text", class: "form-control numeric total-advance-lif", disabled: true, value: 0.00}
-          %th 
-            %input{type: "text", class: "form-control numeric total-advance-rf", disabled: true, value: 0.00}
-          %th 
-            %input{type: "text", class: "form-control numeric total-interest", disabled: true, value: 0.00}
-          %th 
-            %input{type: "text", class: "form-control numeric grand-total", disabled: true, value: 0.00}
-  %hr
-  .form-actions
-    = button_tag(type: "submit", class: "btn btn-primary") do
-      .fa.fa-check
-      Save
-    = link_to member_account_validation_path(@member_account_validation), class: "btn btn-danger" do
-      .fa.fa-times
-      Cancel
+          %th{width: "25%"} Member
+          %th{width: "8%"} Classificatiom
+          %th Transaction Number
+          %th Resignation Date
+          %th RF
+          %th 50% LIFE
+          %th Equity Interest
+          %th Advance LIFE
+          %th Advance RF
+          %th Interest
+          %th Total
+          %th Actions
+      %tbody
+        = f.simple_fields_for :member_account_validation_records, f.object.member_account_validation_records.joins(:member).order("members.last_name ASC") do |ff|
+          %tr
+            %td #{link_to ff.object.member.full_name, member_path(ff.object.member), target: "_blank"}
+            %td
+              = ff.input :member_classification, as: :string, input_html: { class: "form-control" }, label: false, disabled: true
+            %td
+              = ff.input :transaction_number, as: :string, input_html: { class: "form-control" }, label: false, disabled: true
+            %td
+              = ff.input :resignation_date, as: :string, input_html: { class: "form-control" }, label: false, disabled: true  
+            %td
+              = ff.input :rf, as: :string, input_html: { class: "form-control numeric rf" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
+            %td
+              = ff.input :lif_50_percent, as: :string, input_html: { class: "form-control numeric lif-50-percent" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
+            %td
+              = ff.input :equity_interest, as: :string, input_html: { class: "form-control numeric equity-interest" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true  
+            %td
+              = ff.input :advance_lif, as: :string, input_html: { class: "form-control numeric advance-lif" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
+            %td
+              = ff.input :advance_rf, as: :string, input_html: { class: "form-control numeric advance-rf" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
+            %td
+              = ff.input :interest, as: :string, input_html: { class: "form-control numeric interest" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
+            %td
+              = ff.input :total, as: :string, input_html: { class: "form-control numeric total-amount" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true          
+            %td
+              = link_to "#", class: "btn btn-danger btn-delete", data: { member_account_validation_record_id: ff.object.id, delete_member_id: ff.object.member.id } do
+                .fa.fa-times   
+                Delete
+        %thead
+          %tr
+            %th{width: "20%"} Total
+            %th
+            %th
+            %th
+            %th 
+              %input{type: "text", class: "form-control numeric total-rf", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric total-50-percent-lif", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric total-equity-interest", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric total-advance-lif", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric total-advance-rf", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric total-interest", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric grand-total", disabled: true, value: 0.00}
+    %hr
+    .form-actions
+      = button_tag(type: "submit", class: "btn btn-primary") do
+        .fa.fa-check
+        Save
+      = link_to member_account_validation_path(@member_account_validation), class: "btn btn-danger" do
+        .fa.fa-times
+        Cancel
 
 #parameters{data: {member_account_validation_id: @member_account_validation.id, member_account_validation_status: @member_account_validation.status}}
 = render partial: "member_account_validations/modals/member_cancel"

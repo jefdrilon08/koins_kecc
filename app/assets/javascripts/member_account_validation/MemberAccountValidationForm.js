@@ -20,9 +20,9 @@ var MemberAccountValidationForm = (function() {
   var $inputReason                     = $("#input-reason");
   var $memberClassification            = $("#member-classification");
 
-  var $message                         = $(".message");
-
-  templateErrorList                     = $("#template-error-list").html();
+  var $message                        = $(".message");
+  var templateErrorList               = $("#template-error-list").html();
+  console.log(templateErrorList);
 
   
 
@@ -61,6 +61,7 @@ var MemberAccountValidationForm = (function() {
           var errors  = [];
           try {
             errors  = JSON.parse(response.responseText).full_messages;
+            alert(errors);
           } catch(err) {
             errors  = ["Something went wrong"];
             console.log(err);

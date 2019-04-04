@@ -129,7 +129,7 @@ module Billings
       end
 
       if @total_wp > @total_savings
-        diff  = (@total_wp - @total_savings).to_f
+        diff  = (@total_wp - @total_savings)
 
         journal_entries << {
           accounting_code_id: accounting_code.id,

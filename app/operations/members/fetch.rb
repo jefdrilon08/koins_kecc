@@ -61,7 +61,9 @@ module Members
         religion: @member.religion || "",
         data: @member.new_record? ? data : @member.data,
         branch_id: @member.branch.try(:id) || "",
+        branch_name: @member.branch.try(:name) || "",
         center_id: @member.center.try(:id) || "",
+        center_name: @member.center.try(:name) || "",
         legal_dependents: @member.legal_dependents,
         beneficiaries: @member.beneficiaries
       }

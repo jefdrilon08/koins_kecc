@@ -48,16 +48,24 @@ export default class FormDisplay extends React.Component {
   }
 
   updateCurrentCenter(o) {
-    console.log("Update Current Center");
-    console.log(o);
-    var data  = false;
+    var data          = false;
+    var currentCenter = o;
+
     if(this.state.data) {
       data  = this.state.data;
       data.center_id = o.value;
+
+      currentCenter = {
+        value: data.center_id,
+        label: data.center_name
+      }
     }
 
+    console.log("Update Current Center:");
+    console.log(currentCenter);
+
     this.setState({
-      currentCenter: o,
+      currentCenter: currentCenter,
       data: data
     });
   }
@@ -246,6 +254,11 @@ export default class FormDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
+    var currentCenter = state.currentCenter;
+
+    console.log("render(): Current Center:");
+    console.log(currentCenter);
+
     if(state.isLoading) {
       return  (
         <SkCubeLoading/>
@@ -257,6 +270,8 @@ export default class FormDisplay extends React.Component {
         </div>
       );
     } else if(state.data != false) {
+      console.log("FormDisplay: Current Center:");
+      console.log(state.currentCenter);
       return (
         <div>
           <h2>Member Form</h2>
@@ -267,7 +282,7 @@ export default class FormDisplay extends React.Component {
               <FormApplicationHeader
                 data={state.data}
                 currentBranch={state.currentBranch}
-                currentCenter={state.currentCenter}
+                currentCenter={currentCenter}
                 branches={state.branches}
                 centers={state.centers}
                 updateData={this.updateData.bind(this)}
