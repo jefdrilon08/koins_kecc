@@ -46,6 +46,10 @@
       = link_to "/data_stores/monthly_new_and_resigned", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         Monthly New/Res.
+    %li{ class: "nav-item #{params[:controller] == 'monthly_incentives' ? 'active' : ''}" }
+      = link_to "/data_stores/monthly_incentives", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Monthly Incentives
     %li{ class: "nav-item #{params[:controller] == 'x_weeks_to_pay' ? 'active' : ''}" }
       = link_to "/data_stores/x_weeks_to_pay", class: 'nav-link' do
         %i.nav-icon.fa.fa-database

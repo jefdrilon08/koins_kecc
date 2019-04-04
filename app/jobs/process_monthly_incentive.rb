@@ -1,10 +1,11 @@
-class ProcessMonthlyNewAndResigned < ApplicationJob
+class ProcessMonthlyIncentive < ApplicationJob
   queue_as :default
 
   def perform(args)
     begin
-      record  = DataStore.monthly_new_and_resigned.find(args[:data_store_id])
+      record  = DataStore.monthly_incentives.find(args[:data_store_id])
 
+      user    = User.find(args[:user_id])
       branch  = Branch.find(args[:branch_id])
       year    = args[:year]
       month   = args[:month]
@@ -17,7 +18,7 @@ class ProcessMonthlyNewAndResigned < ApplicationJob
         month: month
       }
 
-      data_result = ::Branches::ComputeMonthlyNewAndResigned.new(
+      data_result = ::Branches::ComputeMonthlyIncentive.new(
                       config: config
                     ).execute!
 

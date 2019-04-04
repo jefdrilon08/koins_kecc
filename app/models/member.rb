@@ -47,8 +47,13 @@ class Member < ApplicationRecord
   scope :resigned, -> { where(status: "resigned").order("last_name ASC") }
   scope :active_and_resigned, -> { where(status: ["active", "resigned"]).order("last_name ASC") }
   scope :active_and_resigned_and_pending, -> { where(status: ["active", "resigned", "pending"]).order("last_name ASC") }
+  scope :returning, -> { where("status = ? AND previous_date_resigned IS NOT NULL", "active").order("last_name ASC") }
 
   before_validation :load_defaults
+
+  def is_returning?
+    self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].size > 0))
+  end
   
   def check_name
     "#{first_name.upcase} #{middle_name.upcase} #{last_name.upcase}"

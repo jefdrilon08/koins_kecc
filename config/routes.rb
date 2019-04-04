@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   get "/members", to: "members#index"
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
+
+  # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
   get "/members/:id/survey_answers/:survey_answer_id", to: "members#survey_answer", as: :member_survey_answer
   get "/members/:id/survey_answers/:survey_answer_id/form", to: "members#survey_answer_form", as: :member_survey_answer_form
@@ -131,6 +133,10 @@ Rails.application.routes.draw do
     get "/monthly_new_and_resigned", to: "monthly_new_and_resigned#index"
     get "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#show"
     delete "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#destroy"
+
+    get "/monthly_incentives", to: "monthly_incentives#index"
+    get "/monthly_incentives/:id", to: "monthly_incentives#show"
+    delete "/monthly_incentives/:id", to: "monthly_incentives#destroy"
 
     get "/x_weeks_to_pay", to: "x_weeks_to_pay#index"
     get "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#show"

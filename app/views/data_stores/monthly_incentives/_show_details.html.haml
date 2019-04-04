@@ -1,0 +1,96 @@
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        SO Name
+      - @data[:officers].each do |o|
+        %th
+          #{o[:last_name]}, #{o[:first_name]}
+  %tbody
+    %tr
+      %td
+        %strong
+          Active Loaners
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center 
+          #{@data[:records][i][:count_loaners]}
+
+    %tr
+      %td
+        %strong
+          Repayment Rate
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{(@data[:records][i][:principal_rr] * 100).round(2)} %
+
+    %tr
+      %td
+        %strong
+          Portfolio
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:principal_portfolio], unit: "")}
+
+    %tr
+      %td
+        %strong
+          Loan Disbursements
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:amount_disbursed], unit: "")}
+
+    %tr
+      %td
+        %strong
+          PAR Rate
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{(@data[:records][i][:par] * 100).round(2)} %
+
+    %tr
+      %td
+        %strong
+          PAR Amount
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:principal_balance], unit: "")}
+
+    %tr
+      %td
+        %strong
+          Overall Principal Bal.
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:overall_principal_balance], unit: "")}
+
+    %tr
+      %td
+        %strong
+          New Members
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{@data[:records][i][:count_new_members]}
+
+    %tr
+      %td
+        %strong
+          Resigned Members
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{@data[:records][i][:count_resigned_members]}
+
+    %tr
+      %td
+        %strong
+          Pure Savers
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{@data[:records][i][:count_pure_savers]}
+
+    %tr
+      %td
+        %strong
+          Active Members
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{@data[:records][i][:count_active_members]}

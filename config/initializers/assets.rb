@@ -54,6 +54,7 @@ Rails.application.config.assets.precompile += [
   "data_stores/branch_repayment_reports/Index.js",
   "data_stores/member_counts/Index.js",
   "data_stores/monthly_new_and_resigned/Index.js",
+  "data_stores/monthly_incentives/Index.js",
   "data_stores/x_weeks_to_pay/Index.js",
   "data_stores/branch_with_centers_loans_stats/Show.js",
   "data_stores/branch_with_centers_loans_stats/Index.js",

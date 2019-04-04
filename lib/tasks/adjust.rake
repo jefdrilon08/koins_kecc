@@ -37,6 +37,10 @@ namespace :adjust do
       members = members.where(center_id: ENV['CENTER_ID'])
     end
 
+    if ENV['MEMBER_ID'].present?
+      members = members.where(id: ENV['MEMBER_ID'])
+    end
+
     size  = members.count
 
     members.each_with_index do |o, i|
@@ -47,6 +51,11 @@ namespace :adjust do
 
       # --> Loan cycle computation
       loans               = Loan.active_or_paid.where(member_id: o.id)
+
+      if o.is_returning?
+        loans = loans.where("date_approved > ?", o.previous_date_resigned)
+      end
+
       entry_loan_products = LoanProduct.entry_point.where(id: loans.pluck(:loan_product_id).uniq)
       loans               = loans.where(loan_product_id: entry_loan_products.pluck(:id)).order("date_approved ASC")
 
@@ -193,51 +202,117 @@ namespace :adjust do
     puts "\nDone."
   end
 
+  task :reload_new_and_resigned => :environment do
+    start_date      = ENV['START_DATE'].to_date
+    end_date        = ENV['END_DATE'].to_date
+    branches        = Branch.all.order("name ASC")
+
+    if ENV['BRANCH_ID'].present?
+      branches  = branches.where(id: ENV['BRANCH_ID'])
+    end
+
+    data_store_type = "MONTHLY_NEW_AND_RESIGNED"
+
+    branches.each do |branch|
+      (start_date..end_date).each do |d|
+        puts "Initiating monthly_new_and_resigned for branch #{branch.name} for as_of #{d}"
+
+        record = DataStore.monthly_new_and_resigned.where(
+                    "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                    branch.id,
+                    d
+                  ).first
+
+        if record.blank?
+          record  = DataStore.create!(
+                      meta: {
+                        branch_id: branch.id,
+                        branch_name: branch.name,
+                        branch: {
+                          id: branch.id,
+                          name: branch.name
+                        },
+                        as_of: d,
+                        data_store_type: data_store_type
+                      },
+                      data: {
+                        status: "processing"
+                      }
+                    )
+        else
+          record.update!(
+            data: {
+              status: "processing"
+            }
+          )
+        end
+
+        args  = {
+          record: record,
+          data_store_type: data_store_type,
+          data_store_id: record.id,
+          branch_id: branch.id,
+          year: d.year,
+          month: d.month
+        }
+
+        ProcessMonthlyNewAndResigned.perform_later(args)
+      end
+    end
+  end
+
   task :reload_member_counts => :environment do
     start_date      = ENV['START_DATE'].to_date
     end_date        = ENV['END_DATE'].to_date
-    branch          = Branch.find(ENV['BRANCH_ID'])
+    branches        = Branch.all.order("name ASC")
+
+    if ENV['BRANCH_ID'].present?
+      branches  = branches.where(id: ENV['BRANCH_ID'])
+    end
+
     data_store_type = "MEMBER_COUNTS"
 
-    (start_date..end_date).each do |d|
-      puts "Initiating member_counts for branch #{branch.name} for as_of #{d}"
+    branches.each do |branch|
+      (start_date..end_date).each do |d|
+        puts "Initiating member_counts for branch #{branch.name} for as_of #{d}"
 
-      record = DataStore.member_counts.where(
-                  "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
-                  branch.id,
-                  d
-                ).first
+        record = DataStore.member_counts.where(
+                    "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                    branch.id,
+                    d
+                  ).first
 
-      if record.blank?
-        record  = DataStore.create!(
-                    meta: {
-                      branch_id: branch.id,
-                      branch_name: branch.name,
-                      branch: {
-                        id: branch.id,
-                        name: branch.name
+        if record.blank?
+          record  = DataStore.create!(
+                      meta: {
+                        branch_id: branch.id,
+                        branch_name: branch.name,
+                        branch: {
+                          id: branch.id,
+                          name: branch.name
+                        },
+                        as_of: d,
+                        data_store_type: data_store_type
                       },
-                      as_of: d,
-                      data_store_type: data_store_type
-                    },
-                    data: {
-                      status: "processing"
-                    }
-                  )
-      else
-        record.update!(
-          data: {
-            status: "processing"
-          }
-        )
+                      data: {
+                        status: "processing"
+                      }
+                    )
+        else
+          record.update!(
+            data: {
+              status: "processing"
+            }
+          )
+        end
+
+        args  = {
+          record: record,
+          data_store_type: data_store_type
+        }
+
+        ProcessBranchMemberCounts.perform_later(args)
       end
-
-      args  = {
-        record: record,
-        data_store_type: data_store_type
-      }
-
-      ProcessBranchMemberCounts.perform_later(args)
     end
   end
 
