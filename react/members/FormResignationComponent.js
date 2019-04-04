@@ -46,6 +46,7 @@ export default class FormResignationComponent extends React.Component {
         try {
           context.setState({
             errors: JSON.parse(response.responseText),
+            errorsProcessing: true,
             isLoading: false
           });
         } catch(err) {
@@ -355,7 +356,7 @@ export default class FormResignationComponent extends React.Component {
           <SkCubeLoading/>
         </div>
       );
-    } else if(!this.state.isLoading) {
+    } else if(!this.state.isLoading && !this.state.errorsProcessing) {
       console.log(this.state.data);
       var member  = this.state.data.member;
       var branch  = this.state.data.branch;
