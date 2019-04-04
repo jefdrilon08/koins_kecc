@@ -1,15 +1,17 @@
 module MemberAccountValidations
   class ApproveLifMemberDeposit
     def initialize(config:)
-      @config                           = config
+      @config                             = config
 
-      @member_account_validation_record = @config[:member_account_validation_record]
-      @member                           = @member_account_validation_record.member
-      @date_paid                        = @config[:date_paid]
-      @particular                       = "Interest of Equity per week"
-      @amount                           = @member_account_validation_record.interest
+      @member_account_validation_record   = @config[:member_account_validation_record]
+      @date_paid                          = @config[:date_paid]
+      @accounting_entry_reference_number  = @config[:accounting_entry_reference_number]
+      @member                             = @member_account_validation_record.member
+      @particular                         = "Interest of Equity per week"
+      @amount                             = @member_account_validation_record.interest
 
-      @member_account                   = MemberAccount.where(
+
+      @member_account                     = MemberAccount.where(
                                                         member_id: @member.id,
                                                         account_type: "INSURANCE",
                                                         account_subtype: "Life Insurance Fund"
@@ -33,7 +35,7 @@ module MemberAccountValidations
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,
-        accounting_entry_reference_number: nil,
+        accounting_entry_reference_number: @accounting_entry_reference_number,
         beginning_balance: 0.00,
         ending_balance: 0.00
       }

@@ -1,15 +1,16 @@
 module MemberAccountValidations
   class ApproveWithdrawLifAndRf
     def initialize(config:)
-      @config                           = config
+      @config                             = config
 
-      @member_account                   = @config[:member_account]
-      @member                           = @config[:member]
-      @date_paid                        = @config[:date_paid]
-      @amount                           = @config[:balance]
-      @particular                       = "Withdrawal of #{@member_account.account_subtype}"
+      @member_account                     = @config[:member_account]
+      @member                             = @config[:member]
+      @date_paid                          = @config[:date_paid]
+      @amount                             = @config[:balance]
+      @accounting_entry_reference_number  = @config[:accounting_entry_reference_number]
+      @particular                         = "Withdrawal of #{@member_account.account_subtype}"
      
-      @transaction_type                 = "withdraw"
+      @transaction_type                   = "withdraw"
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -27,7 +28,7 @@ module MemberAccountValidations
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,
-        accounting_entry_reference_number: nil,
+        accounting_entry_reference_number: @accounting_entry_reference_number,
         beginning_balance: 0.00,
         ending_balance: 0.00
       }

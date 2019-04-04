@@ -120,7 +120,7 @@ module MemberAccountValidations
                                     config: {
                                       branch: @member_account_validation.branch,
                                       member_account_validation: @member_account_validation,
-                                      is_remote: false,
+                                      is_remote: @member_account_validation.is_remote,
                                       user: @user
                                     }
                                   ).execute!

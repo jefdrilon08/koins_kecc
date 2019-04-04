@@ -42,4 +42,23 @@ class PagesController < ApplicationController
 
   def export_tools
   end
+
+  def validations_report
+    branch = params[:branch]
+    status = params[:status]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+  
+    excel = MemberAccountValidations::GenerateValidationsReportExcel.new(
+                                                branch: branch,
+                                                status: status,
+                                                start_date: start_date,
+                                                end_date: end_date
+                                                ).execute!
+
+    filename  = "#{status}_validations_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
 end

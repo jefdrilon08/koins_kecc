@@ -12,15 +12,18 @@ module MemberAccountValidations
       @particular                   = build_particular
       @current_date                 = Date.today
       @book                         = 'JVB'
-      @accounting_fund              = AccountingFund.where(name: "Mutual Benefit Fund").first
+      @accounting_fund              = ""
+
+      if Settings.activate_microinsurance
+        @accounting_fund            = AccountingFund.where(name: "Mutual Benefit Fund").first
+      end
 
       @members  = Member.where(id: @member_account_validation.member_account_validation_records.pluck(:member_id))
 
       @lif_member_accounts    = MemberAccount.where("account_type = ? AND account_subtype = ? AND member_accounts.member_id IN (?)", "INSURANCE", "Life Insurance Fund", @members.pluck(:id))
       @total_lif_balance      = @lif_member_accounts.sum(:balance)
 
-      if @member_account_validation.pending? || @member_account_validation.for_approval? || @member_account_validation.for_validation? || @member_account_validation.cancelled? 
-        # if Settings.activate_microloans  
+      if @member_account_validation.pending? || @member_account_validation.for_approval? || @member_account_validation.for_validation? || @member_account_validation.cancelled?   
           @accounting_entry_data  = {
             book: @book,
             date_prepared: @current_date.strftime("%B %d, %Y"),
@@ -35,12 +38,12 @@ module MemberAccountValidations
             branch_id: @branch.id,
             branch_name: @branch.name,
             status: "display",
+            accounting_fund_id: @accounting_fund.id,
             data: {
               or_number: "",
               ar_number: ""
             }
           }
-        # elsif Settings.activate_microinsurance 
       else
         raise "Invalid member account validation"
       end
@@ -49,10 +52,6 @@ module MemberAccountValidations
     def execute!
       @accounting_entry_data[:debit_journal_entries]  = build_debit_entries
       @accounting_entry_data[:credit_journal_entries] = build_credit_entries
-
-      # if @member_account_validation.pending? || @member_account_validation.for_approval? || @member_account_validation.for_validation? || @member_account_validation.cancelled?
-      #   build_entries
-      # end
 
       # Build journal entries
       @accounting_entry_data[:debit_journal_entries].each do |j|
@@ -102,11 +101,6 @@ module MemberAccountValidations
       particular
     end
 
-    # def build_entries
-    #   build_debit_entries
-    #   build_credit_entries
-    # end
-
     def compute_rf_interest
       journal_entries = []
 
@@ -114,7 +108,7 @@ module MemberAccountValidations
 
       # TODO: Make this configurable
       if @is_remote
-        dr_accounting_code = AccountingCode.where(id: 164).first
+        dr_accounting_code = AccountingCode.find( '1f305ae6-2b7b-4c72-89cf-470c1ca91781')
       else
         # RECEIVABLE FROM MBA
         dr_accounting_code = AccountingCode.find('5db5e14d-0fcb-45a7-b468-c4cefe1ad041')
@@ -138,7 +132,7 @@ module MemberAccountValidations
       # TODO: Config accounting code for total_lif_accounting_code
       if @is_remote
         total_lif_amount          = @member_account_validation.member_account_validation_records.sum(:lif_50_percent)
-        total_lif_accounting_code = AccountingCode.find(160)
+        total_lif_accounting_code = AccountingCode.find('da7a9fa2-6b75-48a3-83f9-4c40347ab405')
       else
         total_lif_amount          = @lif_member_accounts.sum(:balance)
 
@@ -159,14 +153,16 @@ module MemberAccountValidations
       journal_entries = []
 
       amount          = @member_account_validation.member_account_validation_records.sum(:advance_lif)
-      accounting_code = AccountingCode.find(136)
+      accounting_code = AccountingCode.find('87286b3b-7ca8-4ba4-a377-292a34c5e011')
 
-      journal_entries << {
-        accounting_code_id: accounting_code.id,
-        code: accounting_code.code,
-        name: accounting_code.name,
-        amount: amount
-      }
+      if amount > 0
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: accounting_code.code,
+          name: accounting_code.name,
+          amount: amount
+        }
+      end
 
       journal_entries
     end
@@ -178,7 +174,7 @@ module MemberAccountValidations
       rf_and_interest_amount          = @member_account_validation.member_account_validation_records.sum(:rf) + @member_account_validation.member_account_validation_records.sum(:advance_rf) + @member_account_validation.member_account_validation_records.sum(:interest)
 
       if @is_remote
-        rf_and_interest_accounting_code = AccountingCode.find(95)
+        rf_and_interest_accounting_code = AccountingCode.find('01d46c5f-12a1-428d-ad4f-5ad7bc798b6b')
       else
         rf_and_interest_accounting_code = AccountingCode.find('714153eb-0a0b-4127-9e62-2643f10a6d96')
       end
@@ -200,7 +196,7 @@ module MemberAccountValidations
 
       # TODO: Make this configurable
       if @is_remote
-        dr_accounting_code = AccountingCode.where(id: 164).first
+        dr_accounting_code = AccountingCode.find('1f305ae6-2b7b-4c72-89cf-470c1ca91781')
       else
         dr_accounting_code = AccountingCode.where(id: Settings.receivable_from_mba_id).first
       end
@@ -264,7 +260,7 @@ module MemberAccountValidations
       journal_entries = []
 
       if @is_remote
-        cr_accounting_code  = AccountingCode.where(id: 95).first
+        cr_accounting_code  = AccountingCode.find('01d46c5f-12a1-428d-ad4f-5ad7bc798b6b')
       else
         cr_accounting_code  = AccountingCode.find('714153eb-0a0b-4127-9e62-2643f10a6d96')
       end
@@ -287,7 +283,7 @@ module MemberAccountValidations
       journal_entries = []
 
       if @is_remote
-        cr_accounting_code  = AccountingCode.where(id: 95).first
+        cr_accounting_code  = AccountingCode.find('01d46c5f-12a1-428d-ad4f-5ad7bc798b6b')
       else
         cr_accounting_code  = AccountingCode.find('714153eb-0a0b-4127-9e62-2643f10a6d96')
       end
@@ -330,7 +326,7 @@ module MemberAccountValidations
       savings_amount          = 0.00
 
       if @is_remote
-        savings_accounting_code = AccountingCode.find(171)
+        savings_accounting_code = AccountingCode.find('905c35b2-2388-4458-8de7-60636e10952f')
       else
         savings_accounting_code = AccountingCode.find('b7c23e58-e44e-46ae-a3ec-b5081d6eed32')
       end

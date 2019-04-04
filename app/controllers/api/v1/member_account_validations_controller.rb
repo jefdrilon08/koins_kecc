@@ -143,7 +143,7 @@ module Api
                                               branch: Branch.find(branch_id), 
                                               date_prepared: date_prepared, 
                                               prepared_by: prepared_by,
-                                              is_remote: nil
+                                              is_remote: User::REMOTE_ROLES.include?(current_user.roles.last)
                                             ).execute!
 
             if member_account_validation.valid?
@@ -177,7 +177,7 @@ module Api
                                     config: {
                                       branch: member_account_validation.branch,
                                       member_account_validation: member_account_validation,
-                                      is_remote: false,
+                                      is_remote: User::REMOTE_ROLES.include?(current_user.roles.last),
                                       user: current_user
                                     }
                                   ).execute!

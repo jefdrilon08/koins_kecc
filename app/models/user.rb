@@ -6,6 +6,13 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable
 
+  REMOTE_ROLES = [
+    "REMOTE-OAS",
+    "REMOTE-BK",
+    "REMOTE-MIS",
+    "REMOTE-FM"
+  ]
+
   ROLES = [
     "OAS",
     "BK",
@@ -16,7 +23,11 @@ class User < ApplicationRecord
     "AM",
     "MIS",
     "ACC",
-    "AO"
+    "AO",
+    "REMOTE-OAS",
+    "REMOTE-BK",
+    "REMOTE-MIS",
+    "REMOTE-FM"
   ]
 
   validates :username, presence: true, uniqueness: true

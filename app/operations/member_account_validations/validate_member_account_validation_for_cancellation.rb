@@ -2,7 +2,7 @@ module MemberAccountValidations
   class ValidateMemberAccountValidationForCancellation < AppValidator
 
     def initialize(config:)
-      super ()
+      super()
 
       @config                    = config
       @member_account_validation = @config[:member_account_validation]

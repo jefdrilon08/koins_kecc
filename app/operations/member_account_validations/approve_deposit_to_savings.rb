@@ -1,14 +1,15 @@
 module MemberAccountValidations
   class ApproveDepositToSavings
     def initialize(config:)
-      @config                           = config
+      @config                             = config
 
-      @member_account                   = @config[:member_account]
-      @date_paid                        = @config[:date_paid]
-      @particular                       = "Deposit of savings"
-      @amount                           = @config[:amount]
+      @member_account                     = @config[:member_account]
+      @date_paid                          = @config[:date_paid]
+      @amount                             = @config[:amount]
+      @accounting_entry_reference_number  = @config[:accounting_entry_reference_number]
+      @particular                         = "Deposit of savings"
 
-      @transaction_type                 = "deposit"
+      @transaction_type                   = "deposit"
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -26,7 +27,7 @@ module MemberAccountValidations
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,
-        accounting_entry_reference_number: nil,
+        accounting_entry_reference_number: @accounting_entry_reference_number,
         beginning_balance: 0.00,
         ending_balance: 0.00
       }

@@ -15,10 +15,6 @@ module MemberAccountValidations
     end
 
     def execute!
-      # if @interest_amount > 0
-      #   @voucher.save!
-      #   @voucher = Accounting::ApproveVoucher.new(voucher: @voucher, user: @user).execute!
-      # end
 
       post_accounting_entry!
 
@@ -46,7 +42,7 @@ module MemberAccountValidations
 
       if Settings.activate_microloans
         withdraw_lif_and_rf_deposit_to_savings!
-      elsif Settings.activate_micromember
+      elsif Settings.activate_microinsurance
         withdraw_lif_and_rf_deposit_to_zero_out_account!
       end
 
@@ -127,7 +123,8 @@ module MemberAccountValidations
           amount: interest, 
           date_paid: @c_working_date,
           member_account_validation_record: member_account_validation_record,
-          user: @user
+          user: @user,
+          accounting_entry_reference_number: @data_accounting_entry[:reference_number]
         }
 
         if interest > 0
@@ -144,7 +141,8 @@ module MemberAccountValidations
         config  = {
           date_paid: @c_working_date,
           member_account_validation: member_account_validation_record,
-          user: @user
+          user: @user,
+          accounting_entry_reference_number: @data_accounting_entry[:reference_number]
         }
 
         ::MemberAccountValidations::ApproveLifMemberDeposit.new(
@@ -164,10 +162,11 @@ module MemberAccountValidations
             member: member,
             user: @user,
             balance: member_account.balance,
-            member_account: member_account
+            member_account: member_account,
+            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
             }
 
-          ::MemberAccountValidations::ApproveWithdrawLifAndRfDepositToZeroOutAcccount.new(
+          ::MemberAccountValidations::ApproveWithdrawLifAndRfDepositToZeroOutAccount.new(
             config: config
           ).execute!
         end
@@ -185,7 +184,8 @@ module MemberAccountValidations
             member: member,
             user: @user,
             balance: member_account.balance,
-            member_account: member_account
+            member_account: member_account,
+            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
             }
 
           ::MemberAccountValidations::ApproveWithdrawLifAndRf.new(
@@ -204,6 +204,7 @@ module MemberAccountValidations
             member_account: savings_account,
             user: @user,
             amount: due_to_members,
+            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
             }
 
             ::MemberAccountValidations::ApproveDepositToSavings.new(
@@ -217,6 +218,7 @@ module MemberAccountValidations
             member_account: savings_account,
             user: @user,
             amount: due_to_members,
+            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
             }
 
           ::MemberAccountValidations::ApproveDepositToSavings.new(

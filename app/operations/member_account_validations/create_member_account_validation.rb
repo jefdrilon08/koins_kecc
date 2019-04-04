@@ -22,7 +22,6 @@ module MemberAccountValidations
                                           prepared_by: @prepared_by,
                                           date_prepared: @date_prepared,
                                           is_remote: @is_remote
-                                          # or_number: "#{Time.now.to_i}-CHANGE-ME"
                                         )
 
         @member_account_validation

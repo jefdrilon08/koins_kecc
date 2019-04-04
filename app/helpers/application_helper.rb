@@ -51,6 +51,14 @@ module ApplicationHelper
     ENV['RAILS_ENV'] == 'development'
   end
 
+  def microloans?
+    Settings.activate_microloans.present? and Settings.activate_microloans == true
+  end
+
+  def microinsurance?
+    Settings.activate_microinsurance.present? and Settings.activate_microinsurance == true
+  end
+
   def debug?
     params[:debug].present?
   end
