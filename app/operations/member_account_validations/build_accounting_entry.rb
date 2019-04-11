@@ -12,10 +12,10 @@ module MemberAccountValidations
       @particular                   = build_particular
       @current_date                 = Date.today
       @book                         = 'JVB'
-      @accounting_fund              = ""
+      @accounting_fund_id           = ""
 
       if Settings.activate_microinsurance
-        @accounting_fund            = AccountingFund.where(name: "Mutual Benefit Fund").first
+        @accounting_fund_id            = AccountingFund.where(name: "Mutual Benefit Fund").first.id
       end
 
       @members  = Member.where(id: @member_account_validation.member_account_validation_records.pluck(:member_id))
@@ -38,7 +38,7 @@ module MemberAccountValidations
             branch_id: @branch.id,
             branch_name: @branch.name,
             status: "display",
-            accounting_fund_id: @accounting_fund.id,
+            accounting_fund_id: @accounting_fund_id,
             data: {
               or_number: "",
               ar_number: ""
@@ -108,7 +108,7 @@ module MemberAccountValidations
 
       # TODO: Make this configurable
       if @is_remote
-        dr_accounting_code = AccountingCode.find( '1f305ae6-2b7b-4c72-89cf-470c1ca91781')
+        dr_accounting_code = AccountingCode.find('1f305ae6-2b7b-4c72-89cf-470c1ca91781')
       else
         # RECEIVABLE FROM MBA
         dr_accounting_code = AccountingCode.find('5db5e14d-0fcb-45a7-b468-c4cefe1ad041')
