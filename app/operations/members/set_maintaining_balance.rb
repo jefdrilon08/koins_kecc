@@ -20,16 +20,20 @@ module Members
                               o.account_type == s.maintaining_balance.account_type and o.account_subtype == s.maintaining_balance.account_subtype 
                             }.first
 
-          if member_account.present?
+          current_loans = @active_loans.where(loan_product_id: s.loan_product_id)
+
+          if member_account.present? and current_loans.size > 0
             maintaining_balance = 0.00
             
-            @active_loans.where(loan_product_id: s.loan_product_id).each do |loan|
+            current_loans.each do |loan|
               if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
                 maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
               end
             end
 
-            member_account.update!(maintaining_balance: maintaining_balance.round(2))
+            mb  = maintaining_balance.to_f.round(2)
+
+            member_account.update!(maintaining_balance: mb)
           end
         end
       end
