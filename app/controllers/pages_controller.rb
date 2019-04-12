@@ -43,6 +43,9 @@ class PagesController < ApplicationController
   def export_tools
   end
 
+  def upload_deposit
+  end
+
   def validations_report
     branch = params[:branch]
     status = params[:status]
