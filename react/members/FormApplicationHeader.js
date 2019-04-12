@@ -39,12 +39,7 @@ export default class FormApplicationHeader extends React.Component {
         value: this.props.branches[i].id,
         label: this.props.branches[i].name
       });
-
-      console.log(centerOptions);
     }
-
-    console.log("Current Center:");
-    console.log(this.props.currentCenter);
 
     return  (
       <div className="card">

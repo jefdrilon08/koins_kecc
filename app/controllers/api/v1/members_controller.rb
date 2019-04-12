@@ -270,6 +270,34 @@ module Api
                     config: config
                   ).execute!
 
+          # Configure branches
+          branches  = Branch.where(
+                        id: UserBranch.active.where(
+                          user_id: current_user.id
+                        ).pluck(:branch_id)
+                      ).order("name ASC")
+
+          branches_data = []
+
+          branches.each do |o|
+            centers = []
+
+            o.centers.order("name ASC").each do |c|
+              centers << {
+                id: c.id,
+                name: c.name
+              }
+            end
+
+            branches_data << {
+              id: o.id,
+              name: o.name,
+              centers: centers
+            }
+          end
+
+          data[:branches] = branches_data
+
           render json: data
         end
       end

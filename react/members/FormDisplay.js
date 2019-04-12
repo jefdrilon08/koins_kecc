@@ -53,7 +53,8 @@ export default class FormDisplay extends React.Component {
 
     if(this.state.data) {
       data  = this.state.data;
-      data.center_id = o.value;
+      data.center_id    = o.value;
+      data.center_name  = o.label;
 
       currentCenter = {
         value: data.center_id,
@@ -80,10 +81,14 @@ export default class FormDisplay extends React.Component {
       }
     }
 
+    console.log("Updating current branch to:");
+    console.log(o);
+
     var data  = false;
     if(this.state.data) {
-      data  = this.state.data;
-      data.branch_id = o.value;
+      data              = this.state.data;
+      data.branch_id    = o.value;
+      data.branch_name  = o.label;
     }
 
     var currentCenter = {
@@ -192,11 +197,27 @@ export default class FormDisplay extends React.Component {
       dataType: 'json',
       success: function(response) {
         console.log(response);
+
+        var centers = [];
+
+        if(response.branches.length > 0) {
+          centers = response.branches[0].centers;
+        }
+
         context.setState({
           isLoading: false,
-          data: response
+          data: response,
+          branches: response.branches,
+          centers: centers,
+          currentBranch: {
+            value: response.branch_id,
+            label: response.branch_name
+          },
+          currentCenter: {
+            value: response.center_id,
+            label: response.center_name
+          }
         });
-        context.fetchBranches();
       },
       error: function(response) {
         console.log(response);
@@ -255,9 +276,7 @@ export default class FormDisplay extends React.Component {
     var state   = context.state;
 
     var currentCenter = state.currentCenter;
-
-    console.log("render(): Current Center:");
-    console.log(currentCenter);
+    var currentBranch = state.currentBranch;
 
     if(state.isLoading) {
       return  (
@@ -270,8 +289,6 @@ export default class FormDisplay extends React.Component {
         </div>
       );
     } else if(state.data != false) {
-      console.log("FormDisplay: Current Center:");
-      console.log(state.currentCenter);
       return (
         <div>
           <h2>Member Form</h2>
@@ -281,7 +298,7 @@ export default class FormDisplay extends React.Component {
             <div className="col">
               <FormApplicationHeader
                 data={state.data}
-                currentBranch={state.currentBranch}
+                currentBranch={currentBranch}
                 currentCenter={currentCenter}
                 branches={state.branches}
                 centers={state.centers}
