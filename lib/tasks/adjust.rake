@@ -1,4 +1,35 @@
 namespace :adjust do
+  task :generate_missing_accounts => :environment do
+    members = Member.all
+
+    if ENV['BRANCH_ID'].present?
+      members = members.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    if ENV['CENTER_ID'].present?
+      members = members.where(center_id: ENV['CENTER_ID'])
+    end
+
+    if ENV['MEMBER_ID'].present?
+      members = members.where(id: ENV['MEMBER_ID'])
+    end
+
+    size  = members.count
+
+    members.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Generating missing accounts for member #{o.id}... #{progress}%%")
+
+      ::Members::GenerateMissingAccounts.new(
+        config: {
+          member: o
+        }
+      ).execute!
+    end
+
+    puts "\nDone."
+  end
+
   task :update_maintaining_balance => :environment do
     members = Member.active
 

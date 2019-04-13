@@ -7,6 +7,6 @@
         .card-body
           #content
 
-#parameters{ data: { id: "#{params[:id]}" } }
+#parameters{ data: { id: "#{params[:id]}", member_types: Settings.default_member_types } }
 
 = javascript_include_tag "MembersForm.min.react"

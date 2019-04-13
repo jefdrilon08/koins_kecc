@@ -39,12 +39,23 @@ export default class FormDisplay extends React.Component {
         value: "",
         label: ""
       },
+      currentMemberType: "Regular",
       errors: false
     };
   }
 
   componentDidMount() {
     this.fetch();
+  }
+
+  updateCurrentMemberType(o) {
+    var data          = this.state.data;
+    data.member_type  = o;
+
+    this.setState({
+      currentMemberType: data.member_type,
+      data: data
+    });
   }
 
   updateCurrentCenter(o) {
@@ -209,6 +220,7 @@ export default class FormDisplay extends React.Component {
           data: response,
           branches: response.branches,
           centers: centers,
+          currentMemberType: response.member_type,
           currentBranch: {
             value: response.branch_id,
             label: response.branch_name
@@ -275,8 +287,11 @@ export default class FormDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
-    var currentCenter = state.currentCenter;
-    var currentBranch = state.currentBranch;
+    var currentCenter     = state.currentCenter;
+    var currentBranch     = state.currentBranch;
+    var currentMemberType = state.currentMemberType;
+
+    var memberTypes = this.props.memberTypes;
 
     if(state.isLoading) {
       return  (
@@ -300,12 +315,15 @@ export default class FormDisplay extends React.Component {
                 data={state.data}
                 currentBranch={currentBranch}
                 currentCenter={currentCenter}
+                currentMemberType={currentMemberType}
                 branches={state.branches}
                 centers={state.centers}
+                memberTypes={memberTypes}
                 updateData={this.updateData.bind(this)}
                 formDisabled={state.formDisabled}
                 updateCurrentBranch={this.updateCurrentBranch.bind(this)}
                 updateCurrentCenter={this.updateCurrentCenter.bind(this)}
+                updateCurrentMemberType={this.updateCurrentMemberType.bind(this)}
               />
 
               <div className="card">
