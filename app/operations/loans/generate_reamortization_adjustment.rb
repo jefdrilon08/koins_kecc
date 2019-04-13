@@ -25,6 +25,11 @@ module Loans
         raise "No settings foud for loan_product #{@loan_product.id}"
       end
 
+      @original_monthly_interest_rate = @loan.monthly_interest_rate
+      @original_principal             = @loan.principal
+      @original_interest              = @loan.interest
+      @original_principal_paid        = @loan.principal_paid
+
       @data = {
         meta: {
           subsidiary_id: @loan.id,
@@ -43,6 +48,7 @@ module Loans
 
     def execute!
       build_original_amortization!
+      
       @data
     end
 
