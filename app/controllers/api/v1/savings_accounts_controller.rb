@@ -10,7 +10,8 @@ module Api
 
         config  = {
           savings_account: savings_account,
-          maintaining_balance: maintaining_balance
+          maintaining_balance: maintaining_balance,
+          user: current_user
         }
 
         errors  = ::SavingsAccounts::ValidateSyncMaintainingBalance.new(

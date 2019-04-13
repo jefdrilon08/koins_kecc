@@ -88,9 +88,9 @@ module MemberAccountValidations
         members_for_particular << iavr.member.full_name_formatted
       end
 
-      if Settings.activate_microloans
-        particular = "Transfer of RF, Equity Value and RF Interest to savings account of #{members_for_particular.join(', ')} - #{branch.name}"
-      elsif Settings.activate_microinsurance
+      particular = "Transfer of RF, Equity Value and RF Interest to savings account of #{members_for_particular.join(', ')} - #{branch.name}"
+
+      if Settings.activate_microinsurance
         particular = "Withdrawal of RF, LIFE and RF Interest of #{members_for_particular.join(', ')} - #{branch.name}"
       end
 
