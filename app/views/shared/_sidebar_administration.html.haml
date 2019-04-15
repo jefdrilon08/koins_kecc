@@ -62,3 +62,8 @@
       = link_to export_tools_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
         Export Tools
+    - if microinsurance?    
+      %li{ class: "nav-item #{params[:controller] == '/upload_deposit' ? 'active' : ''}" }
+        = link_to upload_deposit_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Upload Deposit

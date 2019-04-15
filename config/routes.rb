@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 
+  # upload-deposit page
+  get "/upload_deposit", to: "pages#upload_deposit"
+  
   # EXPORTS
   get "/exports/members", to: "exports#members", as: :export_members
   get "/exports/beneficiaries", to: "exports#beneficiaries", as: :export_beneficiaries
@@ -106,7 +109,9 @@ Rails.application.routes.draw do
   ################################
 
   # Deposits
-  resources :deposit_collections, only: [:index, :show, :destroy]
+  resources :deposit_collections, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
 
   # Withdrawals
   resources :withdrawal_collections, only: [:index, :show, :destroy]
