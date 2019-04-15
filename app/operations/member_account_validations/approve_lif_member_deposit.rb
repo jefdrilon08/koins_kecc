@@ -44,7 +44,7 @@ module MemberAccountValidations
     def execute!
       # Compute beginning and ending balance
       @data[:beginning_balance] = @member_account.balance.round(2)
-      @data[:ending_balance]    = (@data[:beginning_balance] - @amount).round(2)
+      @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
 
       # Update account balance
       new_balance = (@member_account.balance + @amount).round(2)
