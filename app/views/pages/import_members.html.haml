@@ -1,0 +1,20 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-tachometer-alt
+    Import Members
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = form_tag import_members_path, multipart: true do
+            .row
+              .col-md-6
+                %label
+                  File
+                = file_field_tag :file, class: "form-control"
+              .col-md-6
+                %label
+                  Actions
+                %br  
+                = submit_tag "Import Members Information", :class => "btn btn-primary"    

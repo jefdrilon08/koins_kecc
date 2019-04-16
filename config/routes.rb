@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 
+   # import members
+  get "/import_members", to: "pages#import_members"
+
   # upload-deposit page
   get "/upload_deposit", to: "pages#upload_deposit"
   

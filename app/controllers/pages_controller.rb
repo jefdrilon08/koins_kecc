@@ -46,6 +46,9 @@ class PagesController < ApplicationController
   def upload_deposit
   end
 
+  def import_members
+  end
+
   def validations_report
     branch = params[:branch]
     status = params[:status]

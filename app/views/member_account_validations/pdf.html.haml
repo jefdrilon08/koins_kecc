@@ -77,19 +77,57 @@
   
   %hr 
   %span   
-  %left
-    %p
-      .pull-left
-        %b
-          #{"(#{@accounting_entry.id})" if current_user.roles.last == "MIS"}#{@accounting_entry.book} | Ref No.: #{@accounting_entry.reference_number}
-          - if @accounting_entry.accounting_fund and @accounting_entry.data.with_indifferent_access[:sub_reference_number]
-            |
-            #{@accounting_entry.accounting_fund} | #{@accounting_entry.data.with_indifferent_access[:sub_reference_number]} 
-            .pull-right
+  - if @member_account_validation.approved? 
+    %left
+      %p
+        .pull-left
+          %b
+            #{"(#{@accounting_entry.id})" if current_user.roles.last == "MIS"} | #{@accounting_entry.book} | Ref No.: #{@accounting_entry.reference_number}
+            - if @accounting_entry.accounting_fund and @accounting_entry.data.with_indifferent_access[:sub_reference_number]
+              |
+              #{@accounting_entry.accounting_fund} | #{@accounting_entry.data.with_indifferent_access[:sub_reference_number]} 
+            .float-right
               = @accounting_entry.date_prepared.strftime("%B %d, %Y") if !@accounting_entry.date_prepared.nil?
               |
               Approved By: #{@accounting_entry.approved_by}
-      %br
+      %table.accounting_entry{"border:" => "", :none => ""}
+        %thead
+          %tr
+            %th.account-header{width: 800} Accounting Code
+            %th.debit.header{width: 300} Debit
+            %th.credit.header{width: 300} Credit
+        %tbody
+          - @accounting_entry.journal_entries.sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
+            - if journal_entry.post_type == "DR" and journal_entry.amount > 0
+              %tr
+                %td.accnt_code
+                  #{journal_entry.accounting_code}
+                %td.debit= number_to_currency(journal_entry.amount, unit: "")
+                %td.credit
+          - @accounting_entry.journal_entries.sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
+            - if journal_entry.post_type == "CR" and journal_entry.amount > 0
+              %tr
+                %td.accnt_code
+                  #{journal_entry.accounting_code}
+                %td.debit
+                %td.credit= number_to_currency(journal_entry.amount, unit: "")
+    %hr
+    %left  
+      %p
+        %b
+          Particular:
+        #{@accounting_entry.particular}
+  - else
+    %left
+    %p
+      .pull-left
+        %b
+          #{@accounting_entry[:book]} | #{@accounting_entry[:date_prepared].to_date} | #{@accounting_entry[:branch]}
+          - if @accounting_entry[:accounting_fund]
+            |
+            #{@accounting_entry.accounting_fund} 
+            .float-right
+              = @accounting_entry[:date_prepared].to_date if !@accounting_entry[:date_prepared].nil?
     %table.accounting_entry{"border:" => "", :none => ""}
       %thead
         %tr
@@ -97,40 +135,41 @@
           %th.debit.header{width: 300} Debit
           %th.credit.header{width: 300} Credit
       %tbody
-        - @accounting_entry.journal_entries.sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
-          - if journal_entry.post_type == "DR" and journal_entry.amount > 0
+        - @accounting_entry[:journal_entries].sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
+          - if journal_entry[:post_type] == "DR" and journal_entry[:amount].to_f > 0
             %tr
               %td.accnt_code
-                #{journal_entry.accounting_code}
-              %td.debit= number_to_currency(journal_entry.amount, unit: "")
+                #{journal_entry[:accounting_code_name]}
+              %td.debit= number_to_currency(journal_entry[:amount], unit: "")
               %td.credit
-        - @accounting_entry.journal_entries.sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
-          - if journal_entry.post_type == "CR" and journal_entry.amount > 0
+        - @accounting_entry[:journal_entries].sort_by{ |e| e[:accounting_code_id] }.each do |journal_entry|
+          - if journal_entry[:post_type] == "CR" and journal_entry[:amount].to_f > 0
             %tr
               %td.accnt_code
-                #{journal_entry.accounting_code}
+                #{journal_entry[:accounting_code_name]}
               %td.debit
-              %td.credit= number_to_currency(journal_entry.amount, unit: "")
-  %hr
-  %left  
-    %p
-      %b
-        Particular:
-      #{@accounting_entry.particular}
-    %br
-    %br
-    %br
-    %table.signatories{"border:" => "", :none => ""}
-      %tr
-        %th{width: 250} #{@member_account_validation.prepared_by}
-        %th{width: 250} #{@member_account_validation.checked_by}
-        %th{width: 250} #{@member_account_validation.validated_by}
-        %th{width: 250} #{@member_account_validation.approved_by}
-      %tr
-        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Validated by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
-    %br
-    %br
-    %br
+              %td.credit= number_to_currency(journal_entry[:amount], unit: "")
+    %hr
+    %left  
+      %p
+        %b
+          Particular:
+        #{@accounting_entry[:particular]}
+
+  %br
+  %br
+  %br
+  %table.signatories{"border:" => "", :none => ""}
+    %tr
+      %th{width: 250} #{@member_account_validation.prepared_by}
+      %th{width: 250} #{@member_account_validation.checked_by}
+      %th{width: 250} #{@member_account_validation.validated_by}
+      %th{width: 250} #{@member_account_validation.approved_by}
+    %tr
+      %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+      %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;
+      %td.overline &emsp;&emsp;Validated by:&emsp;&emsp;
+      %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  %br
+  %br
+  %br
