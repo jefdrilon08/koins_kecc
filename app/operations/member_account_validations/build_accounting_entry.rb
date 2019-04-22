@@ -10,7 +10,13 @@ module MemberAccountValidations
       @is_remote                    = @config[:is_remote]
       @branch                       = @member_account_validation.branch
       @particular                   = build_particular
-      @current_date                 = Date.today
+
+      @current_date = ::Utils::GetCurrentDate.new(
+                        config: {
+                          branch: @branch
+                        }
+                      ).execute!
+
       @book                         = 'JVB'
       @accounting_fund_id           = ""
 

@@ -7,10 +7,15 @@ module Loans
       @branch       = @member.branch
       @loan_product = @config[:loan_product]
       @amount       = @config[:amount].to_f.round(2)
-      @current_date = @config[:current_date] || Date.today
       @book         = @config[:book] || "CDB"
       @loan_data    = @loan.data.with_indifferent_access
       @voucher_data = @loan_data[:voucher]
+
+      @current_date = ::Utils::GetCurrentDate.new(
+                        config: {
+                          branch: @branch
+                        }
+                      ).execute!
 
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access

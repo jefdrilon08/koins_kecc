@@ -3,6 +3,8 @@ module MembershipPaymentCollections
     def initialize(config:)
       @config   = config
       @membership_payment_collection  = @config[:membership_payment_collection]
+
+      @branch   = @membership_payment_collection.branch
       @user     = @config[:user]
 
       @data = @membership_payment_collection.try(:data).try(:with_indifferent_access)
@@ -12,11 +14,11 @@ module MembershipPaymentCollections
       @data_equities            = @membership_payment_collection.equities
       @data_accounting_entry    = @membership_payment_collection.accounting_entry
 
-      @date_approved  = Date.today
-
-      if Settings.current_date.present?
-        @date_approved  = Settings.current_date.to_date
-      end
+      @date_approved  = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
     end
 
     def execute!
