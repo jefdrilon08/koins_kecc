@@ -366,7 +366,7 @@ module Loans
             #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
               if @term == "weekly"
               elsif @term == "monthly"
-                multiplier  = (multiplier * 4.3333333).ceil.to_i
+                multiplier  = (multiplier * 4.3333333).to_i
               elsif @term == "semi-monthly"
                 # weird unique rule for 12 semi-monthly
                 if @num_installments ==  12
