@@ -173,13 +173,13 @@ export default class MasterListView extends React.Component {
           {numberWithCommas(totalOverallBalance)}
         </th>
         <th className="text-right">
-          {numberWithCommas(totalPaidDue)}
+          {numberWithCommas(totalPrincipalPaidDue)}
         </th>
         <th className="text-right">
           {numberWithCommas(totalPrincipalBalance)}
         </th>
         <th className="text-right">
-          {numberWithCommas(totalTotalDue)}
+          {numberWithCommas(totalPrincipalDue)}
         </th>
         <th className="text-center">
           {numberAsPercent(totalPrincipalRR)}
