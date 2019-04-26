@@ -11,6 +11,7 @@ module DataStores
         total_principal: 0.00,
         total_principal_paid: 0.00,
         total_principal_paid_due: 0.00,
+        total_principal_due: 0.00,
         total_portfolio: 0.00,
         total_past_due_amount: 0.00,
         total_principal_past_due_amount: 0.00,
@@ -30,6 +31,7 @@ module DataStores
           principal: 0.00,
           principal_paid: 0.00,
           principal_paid_due: 0.00,
+          principal_due: 0.00,
           portfolio: 0.00,
           past_due_amount: 0.00,
           principal_past_due_amount: 0.00,
@@ -46,6 +48,7 @@ module DataStores
           if lp.id == o[:loan_product][:id]
             principal                 = o[:principal]
             principal_paid_due        = o[:principal_paid_due] || 0.00
+            principal_due             = o[:principal_due]
             principal_paid            = o[:principal_paid]
             portfolio                 = o[:principal].to_f - o[:principal_paid].to_f
             past_due_amount           = o[:total_balance]
@@ -58,6 +61,7 @@ module DataStores
             @data[:loan_products][i][:principal]          += principal.to_f.round(2)
             @data[:loan_products][i][:principal_paid]     += principal_paid.to_f.round(2)
             @data[:loan_products][i][:principal_paid_due] += principal_paid_due.to_f.round(2)
+            @data[:loan_products][i][:principal_due]      += principal_due.to_f.round(2)
             @data[:loan_products][i][:portfolio]          += portfolio.to_f.round(2)
             @data[:loan_products][i][:past_due_amount]    += past_due_amount.to_f.round(2)
             @data[:loan_products][i][:principal_past_due_amount] += principal_past_due_amount.to_f.round(2)
@@ -70,6 +74,7 @@ module DataStores
             @data[:total_principal]                 += principal.to_f.round(2)
             @data[:total_principal_paid]            += principal_paid.to_f.round(2)
             @data[:total_principal_paid_due]        += principal_paid_due.to_f.round(2)
+            @data[:total_principal_due]             += principal_due.to_f.round(2)
             @data[:total_portfolio]                 += portfolio.to_f.round(2)
             @data[:total_past_due_amount]           += past_due_amount.to_f.round(2)
             @data[:total_principal_past_due_amount] += principal_past_due_amount.to_f.round(2)
@@ -84,7 +89,8 @@ module DataStores
         if @data[:loan_products][i][:principal_paid_due] == 0.00
           @data[:loan_products][i][:rr] = 0
         else
-          @data[:loan_products][i][:rr] = (@data[:loan_products][i][:principal_paid_due] - @data[:loan_products][i][:principal_past_due_amount]) / @data[:loan_products][i][:principal_paid_due]
+          #@data[:loan_products][i][:rr] = (@data[:loan_products][i][:principal_paid_due] - @data[:loan_products][i][:principal_past_due_amount]) / @data[:loan_products][i][:principal_paid_due]
+          @data[:loan_products][i][:rr] = (@data[:loan_products][i][:principal_paid_due] / @data[:loan_products][i][:principal_due])
         end
 
         # Compute PAR Rate
@@ -97,7 +103,7 @@ module DataStores
       if @data[:total_principal_paid_due] == 0.00
         @data[:total_rr]  = 0
       else
-        @data[:total_rr]  = (@data[:total_principal_paid_due] - @data[:total_principal_past_due_amount]) / @data[:total_principal_paid_due]
+        @data[:total_rr]  = (@data[:total_principal_paid_due] / @data[:total_principal_due])
       end
 
       @data[:loan_products] = @data[:loan_products].select{ |o|

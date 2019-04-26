@@ -119,10 +119,12 @@ export default class MasterListView extends React.Component {
     }
 
     totalOverallBalance = totalOverallPrincipalBalance + totalOverallInterestBalance;
-    totalRR = (totalTotalPaid / totalTotalDue);
+    //totalRR = (totalTotalPaid / totalTotalDue);
+    totalRR = (totalPaidDue / totalTotalDue);
 
-    totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
-    totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalPaidDue;
+    //totalRR = (totalPaidDue - totalTotalBalance) / totalPaidDue;
+    //totalPrincipalRR  = (totalPrincipalPaidDue - totalPrincipalBalance) / totalPrincipalPaidDue;
+    totalPrincipalRR  = (totalPrincipalPaidDue / totalPrincipalDue);
 
     if(totalPrincipalRR > 1)  {
       totalPrincipalRR = 1;

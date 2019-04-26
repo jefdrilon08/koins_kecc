@@ -51,6 +51,9 @@ module LoanProducts
         total_principal_paid: 0.00,
         total_interest_paid: 0.00,
         total_paid: 0.00,
+        total_principal_paid_due: 0.00,
+        total_interest_paid_due: 0.00,
+        total_paid_due: 0.00,
         total_principal_past_due: 0.00,
         total_interest_past_due: 0.00,
         total_past_due: 0.00,
@@ -98,10 +101,25 @@ module LoanProducts
       @data[:total_interest_past_due]   = @data[:total_interest_balance] > 0 ? @data[:total_interest_balance] : 0.00
       @data[:total_past_due]            = (@data[:total_principal_past_due] + @data[:total_interest_past_due]).round(2)
 
+      # Compute paid due
+      if @data[:total_principal_paid] >= @data[:total_principal_due]
+        @data[:total_principal_past_due] = @data[:total_principal_due]
+      else
+        @data[:total_principal_past_due] = @data[:total_principal_paid]
+      end
+
+      if @data[:total_interest_paid] >= @data[:total_interest_due]
+        @data[:total_interest_past_due] = @data[:total_interest_due]
+      else
+        @data[:total_interest_past_due] = @data[:total_interest_paid]
+      end
+
+      @data[:total_paid_due] = (@data[:total_principal_paid_due] + @data[:total_interest_paid_due])
+
       # Compute repayment rate
-      @data[:principal_repayment_rate]  = @data[:total_principal_paid] / @data[:total_principal_due]
-      @data[:interest_repayment_rate]   = @data[:total_interest_paid] / @data[:total_interest_due]
-      @data[:repayment_rate]            = @data[:total_paid] / @data[:total_due]
+      @data[:principal_repayment_rate]  = @data[:total_principal_paid_due] / @data[:total_principal_due]
+      @data[:interest_repayment_rate]   = @data[:total_interest_paid_due] / @data[:total_interest_due]
+      @data[:repayment_rate]            = @data[:total_paid_due] / @data[:total_due]
 
       # Clean repayment rates
       if @data[:principal_repayment_rate] > 1
