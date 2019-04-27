@@ -1,4 +1,25 @@
 namespace :adjust do
+  task :reload_repayment_rates => :environment do
+    repayment_rates = DataStore.repayment_rates
+
+    size  = repayment_rates.size
+    puts "Reloading #{size} RR data stores..."
+
+    repayment_rates.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Reloading #{o.id}... #{progress}%%")
+
+      args  = {
+        id: o.id,
+        data_store_type: "REPAYMENT_RATES"
+      }
+
+      ProcessRepaymentRates.perform_later(args)
+    end
+
+    puts "Done."
+  end
+
   task :generate_missing_accounts => :environment do
     members = Member.all
 
