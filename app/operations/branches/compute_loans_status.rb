@@ -101,7 +101,7 @@ module Branches
         @data[:total_interest_paid_due] = @data[:total_interest_paid]
       end
 
-      @data[:total_paid_due]  = (@data[:total_principal_paid_due] + @data[:total_interest_paid_due]
+      @data[:total_paid_due]  = (@data[:total_principal_paid_due] + @data[:total_interest_paid_due])
 
       # Compute portfolio
       @data[:total_principal_portfolio] = (@data[:principal] - @data[:total_principal_paid]).round(2)
