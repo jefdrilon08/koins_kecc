@@ -1,0 +1,365 @@
+import React from "react";
+
+import Modal from 'react-modal';
+
+Modal.setAppElement("body");
+
+const customStyles  = {
+  content : {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+}
+
+export default class FormAttachmentFiles extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state  = {
+      modalIsOpen: false,
+      errors: [],
+      validateCurrentLegalDependentDependent: {
+        id: "",
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        date_of_birth: "",
+        relationship: "Child",
+        data: {
+          educational_attainment: "",
+          course: ""
+        }
+      }
+    }
+  }
+
+  validateCurrentLegalDependent() {
+    var o       = this.state.currentLegalDependent;
+    var errors  = [];
+
+    if(!o.first_name) {
+      errors.push("first name required");
+    }
+
+    if(!o.last_name) {
+      errors.push("last name required");
+    }
+
+    if(!o.date_of_birth) {
+      errors.push("date of birth required");
+    }
+
+    this.setState({
+      errors: errors
+    });
+
+    return errors;
+  }
+
+  handleCancelClicked() {
+    this.setState({
+      modalIsOpen: false,
+      currentLegalDependent: {
+        id: "",
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        date_of_birth: "",
+        relationship: "",
+        data: {
+          educational_attainment: "",
+          course: ""
+        }
+      }
+    });
+  }
+
+  handleDeleteClicked(index) {
+    var data  = this.props.data;
+
+    data.legal_dependents.splice(index, 1);
+
+    this.props.updateData(data);
+  };
+
+  handleAddClicked() {
+    this.setState({
+      modalIsOpen: true,
+      errors: [],
+      currentLegalDependent: {
+        id: "",
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        date_of_birth: "",
+        relationship: "Child",
+        data: {
+          educational_attainment: "",
+          course: ""
+        }
+      }
+    });
+  }
+
+  handleConfirmSaveClicked() {
+    var data    = this.props.data;
+    var errors  = this.validateCurrentLegalDependent();
+
+    if(errors.length == 0) {
+      data.legal_dependents.push(this.state.currentLegalDependent);
+      this.props.updateData(data);
+
+      this.setState({
+        modalIsOpen: false,
+        currentLegalDependent: {
+          id: "",
+          first_name: "",
+          middle_name: "",
+          last_name: "",
+          date_of_birth: "",
+          relationship: "",
+          data: {
+            educational_attainment: "",
+            course: ""
+          }
+        }
+      });
+    }
+  };
+
+  handleFirstNameChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.first_name  = event.target.value.toUpperCase();
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleMiddleNameChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.middle_name  = event.target.value.toUpperCase();
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleLastNameChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.last_name  = event.target.value.toUpperCase();
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleDateOfBirthChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.date_of_birth  = event.target.value;
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleRelationshipChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.relationship  = event.target.value;
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleEducationalAttainmentChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.data.educational_attainment = event.target.value;
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleCourseChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.course  = event.target.value.toUpperCase();
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  renderErrors() {
+    var errors  = this.state.errors;
+
+    if(errors.length > 0) {
+      var errorItems  = [];
+
+      for(var i = 0; i < errors.length; i++) {
+        errorItems.push(
+          <li key={"e-" + i}>
+            {errors[i]}
+          </li>
+        );
+      }
+
+      return  (
+        <div className="callout callout-danger">
+          <ul>
+            {errorItems}
+          </ul>
+        </div>
+      );
+    }
+  }
+
+  renderRecords() {
+    var legalDependents = this.props.data.legal_dependents;
+
+    if(legalDependents.length > 0) {
+      var records = [];
+
+      for(var i = 0; i < legalDependents.length; i++) {
+        var name          = legalDependents[i].last_name + ", " + legalDependents[i].first_name;
+        var relationship  = legalDependents[i].relationship;
+
+        records.push(
+          <tr key={"ld-record-" + i}>
+            <td>
+              {name}
+            </td>
+            <td>
+              {relationship}
+            </td>
+            <td>
+              <center>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={this.handleDeleteClicked.bind(this, i)}
+                >
+                  <span className="fa fa-minus"/>
+                  Del
+                </button>
+              </center>
+            </td>
+          </tr>
+        );
+      }
+
+      return  (
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Relationship</th>
+              <th>
+                <center>
+                  Actions
+                </center>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {records}
+          </tbody>
+        </table>
+      );
+    } else {
+      return  (
+        <p>
+          No attachment files
+        </p>
+      );
+    }
+  }
+
+  render() {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    return (
+      <div>
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          style={customStyles}
+        >
+          <h5>
+            Attachment File Information
+          </h5>
+          <div className="row">
+            <div className="col">
+              <div className="form-group">
+                <label>TITLE</label>
+                <select
+                  className="form-control"
+                  value={currentLegalDependent.educational_attainment}
+                  onChange={this.handleEducationalAttainmentChanged.bind(this)}
+                >
+                  <option value="">-- SELECT --</option>
+                  <option value="BLIPFORM">BLIPFORM</option>
+                  <option value="ID">ID</option>
+                  <option value="BC">BC</option>
+                  <option value="MC">MC</option>
+                  <option value="COHABITATION">COHABITATION</option>
+                  <option value="OTHERFILE">OTHERFILE</option>
+                </select>
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>FILE</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  value={currentLegalDependent.course}
+                  onChange={this.handleCourseChanged.bind(this)}
+                />
+              </div>
+            </div>      
+          </div>
+          {this.renderErrors()}
+          <hr/>
+          <center>
+            <div className="btn-group">
+              <button
+                className="btn btn-primary"
+                onClick={this.handleConfirmSaveClicked.bind(this)}
+              >
+                <span className="fa fa-check"/>
+                Confirm
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={this.handleCancelClicked.bind(this)}
+              >
+                <span className="fa fa-times"/>
+                Cancel
+              </button>
+            </div>
+          </center>
+        </Modal>
+
+        {this.renderRecords()}
+
+        <button
+          className="btn btn-info btn-sm"
+          onClick={this.handleAddClicked.bind(this)}
+        >
+          <span className="fa fa-plus"/>
+          Add
+        </button>
+      </div>
+    );
+  }
+}
