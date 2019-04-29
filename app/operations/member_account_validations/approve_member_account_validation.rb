@@ -15,7 +15,6 @@ module MemberAccountValidations
     end
 
     def execute!
-
       post_accounting_entry!
 
       @data[:approved_by] = @user.full_name

@@ -30,6 +30,9 @@ Rails.application.routes.draw do
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members
   get "/validations", to: "pages#validations", as: :validations
+  get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
+  get "/seriatim", to: "pages#seriatim", as: :seriatim
+  get "/pages/seriatim_report", to: "pages#seriatim_report", as: :pages_seriatim_report
 
   # Monitoring
   get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
@@ -60,6 +63,7 @@ Rails.application.routes.draw do
   end
 
   resources :members, only: [] do
+    collection { post :import_members }
     resources :member_shares, except: [:index], controller: "members/member_shares" do
       get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
     end
@@ -200,7 +204,6 @@ Rails.application.routes.draw do
 
   get "/download_backup", to: "pages#download_backup"
   get "/download_exit_age", to: "pages#download_exit_age"
-  get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
   resources :claims
   draw :administration
   draw :accounting
