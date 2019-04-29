@@ -98,7 +98,8 @@ module DataStores
       end
 
       # Compute total par rate and total rr
-      @data[:total_par_rate]  = @data[:total_principal_past_due_amount] / @data[:total_portfolio]
+      #@data[:total_par_rate]  = @data[:total_principal_past_due_amount] / @data[:total_portfolio]
+      @data[:total_par_rate]  = @data[:total_par_amount] / @data[:total_portfolio]
 
       if @data[:total_principal_paid_due] == 0.00
         @data[:total_rr]  = 0
