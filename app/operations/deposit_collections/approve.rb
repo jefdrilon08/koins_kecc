@@ -9,11 +9,13 @@ module DepositCollections
       @data_deposits          = @deposit_collection.deposits
       @data_accounting_entry  = @deposit_collection.accounting_entry
 
-      @date_approved  = Date.today
+      @branch = @deposit_collection.branch
 
-      if Settings.current_date.present?
-        @date_approved  = Settings.current_date.to_date
-      end
+      @date_approved  = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
     end
 
     def execute!

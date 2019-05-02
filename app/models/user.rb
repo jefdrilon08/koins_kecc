@@ -43,6 +43,12 @@ class User < ApplicationRecord
 
   attr_accessor :login
 
+  def current_roles
+    self.roles.select{ |o|
+      o.present?
+    }
+  end
+
   def is_mis?
     roles.include?("MIS")
   end

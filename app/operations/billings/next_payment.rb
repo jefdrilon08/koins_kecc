@@ -4,7 +4,8 @@ module Billings
 
     SAVINGS_SUBTYPES = [
       "K-IMPOK",
-      "Golden K"
+      "Golden K",
+      "Personal Savings Account"
     ]
 
     INSURANCE_SUBTYPES  = [
