@@ -33,6 +33,18 @@ module DepositCollections
 
         amount  = 0.00
 
+        if Settings.activate_microinsurance
+          defaults  = Settings.try(:defaults).try(:insurance_deposits)
+
+          if defaults.present?
+            defaults.each do |o|
+              if o.account_subtype == member_account.account_subtype
+                amount = o.amount
+              end
+            end
+          end
+        end
+
         record_type = o.account_type
 
         @records << {

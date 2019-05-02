@@ -6,6 +6,10 @@
     = link_to member_account_validation_path(member_account_validation), class: "btn btn-danger btn-lg", method: :Delete, data: { confirm: "Are you sure?" } do
       .fa.fa-times
       Delete
+    - if member_account_validation.data.present?   
+      = link_to member_account_validation_pdf_path(member_account_validation), target: "_blank", class: "btn btn-light btn-lg", id: "btn-print-pdf" do
+        .fa.fa-print
+        Print PDF  
   - if role == "CM" || role == "FM" || role == "MIS" || role == "REMOTE-FM"
     = link_to "#", class: "btn btn-primary btn-lg", id: "btn-check" do
       .fa.fa-check
@@ -24,6 +28,9 @@
     = link_to "#", class: "btn btn-primary btn-lg", id: "btn-approve" do
       .fa.fa-check
       Approve
+    = link_to member_account_validation_pdf_path(member_account_validation), target: "_blank", class: "btn btn-light btn-lg", id: "btn-print-pdf" do
+      .fa.fa-print
+      Print PDF  
   - if role == "AO" || role == "MIS" || role == "REMOTE-OM" 
     = link_to "#", class: "btn btn-danger btn-lg", id: "btn-cancel" do
       .fa.fa-times

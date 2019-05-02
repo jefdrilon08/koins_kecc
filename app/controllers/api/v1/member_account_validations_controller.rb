@@ -170,7 +170,6 @@ module Api
         member_account_validation_record = MemberAccountValidationRecord.find(params[:member_account_validation_record_id])
         member_account_validation = member_account_validation_record.member_account_validation
         data = member_account_validation.data.with_indifferent_access
-        member_account_validation_record.destroy!
         # member_account_validation.update!(updated_at: Time.now)
 
         data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
@@ -184,6 +183,8 @@ module Api
 
         member_account_validation.data = data
         member_account_validation.save!
+
+        member_account_validation_record.destroy!
 
         render json: { message: "ok" }
       end

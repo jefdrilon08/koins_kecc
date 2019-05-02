@@ -46,6 +46,24 @@ class PagesController < ApplicationController
   def upload_deposit
   end
 
+  def import_members
+  end
+
+  def seriatim_report
+    branch = params[:branch]
+    as_of = params[:as_of]
+  
+    excel = Reports::GenerateSeriatimReportExcel.new(
+                                                branch: branch,
+                                                as_of: as_of
+                                                ).execute!
+
+    filename  = "seriatim_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
   def validations_report
     branch = params[:branch]
     status = params[:status]

@@ -67,3 +67,8 @@
         = link_to upload_deposit_path, class: 'nav-link' do
           %i.nav-icon.fa.fa-file
           Upload Deposit
+    %li{ class: "nav-item #{params[:controller] == '/import_members' ? 'active' : ''}" }
+      = link_to import_members_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Import Members
+    

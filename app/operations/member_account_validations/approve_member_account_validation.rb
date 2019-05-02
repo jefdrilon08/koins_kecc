@@ -6,16 +6,19 @@ module MemberAccountValidations
       @member_account_validation = @config[:member_account_validation]
       @user                      = @config[:user]
       @interest_amount           = @member_account_validation.member_account_validation_records.sum(:interest)
-
+      @branch                    = @member_account_validation.branch
       @data                      = @member_account_validation.try(:data).try(:with_indifferent_access)
 
       @data_accounting_entry     = @data[:accounting_entry]
       
-      @c_working_date            = Date.today
+      @c_working_date            = ::Utils::GetCurrentDate.new(
+                                    config: {
+                                      branch: @branch
+                                    }
+                                  ).execute!
     end
 
     def execute!
-
       post_accounting_entry!
 
       @data[:approved_by] = @user.full_name
