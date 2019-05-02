@@ -123,6 +123,9 @@ Rails.application.routes.draw do
   # Withdrawals
   resources :withdrawal_collections, only: [:index, :show, :destroy]
 
+  # Insurance Withdrawals
+  resources :insurance_withdrawal_collections, only: [:index, :show, :destroy]
+
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]
 

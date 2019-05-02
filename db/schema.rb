@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_13_022847) do
+ActiveRecord::Schema.define(version: 2019_05_01_021303) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -105,15 +105,6 @@ ActiveRecord::Schema.define(version: 2019_04_13_022847) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "adjustment_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.jsonb "meta"
-    t.jsonb "data"
-    t.string "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "adjustment_type"
-  end
-
   create_table "amortization_schedule_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.decimal "amount_due"
     t.decimal "principal"
@@ -195,9 +186,9 @@ ActiveRecord::Schema.define(version: 2019_04_13_022847) do
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer "member_id"
-    t.integer "center_id"
-    t.integer "branch_id"
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
     t.date "date_prepared"
     t.string "policy_number"
     t.string "type_of_insurance_policy"
@@ -224,6 +215,9 @@ ActiveRecord::Schema.define(version: 2019_04_13_022847) do
     t.date "date_paid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_claims_on_branch_id"
+    t.index ["center_id"], name: "index_claims_on_center_id"
+    t.index ["member_id"], name: "index_claims_on_member_id"
   end
 
   create_table "clip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -283,6 +277,19 @@ ActiveRecord::Schema.define(version: 2019_04_13_022847) do
     t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
+  end
+
+  create_table "insurance_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_insurance_withdrawal_collections_on_branch_id"
+    t.index ["center_id"], name: "index_insurance_withdrawal_collections_on_center_id"
   end
 
   create_table "journal_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -622,12 +629,17 @@ ActiveRecord::Schema.define(version: 2019_04_13_022847) do
   add_foreign_key "billings", "centers"
   add_foreign_key "branches", "clusters"
   add_foreign_key "centers", "branches"
+  add_foreign_key "claims", "branches"
+  add_foreign_key "claims", "centers"
+  add_foreign_key "claims", "members"
   add_foreign_key "clip_claims", "branches"
   add_foreign_key "clip_claims", "centers"
   add_foreign_key "clip_claims", "members"
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "insurance_withdrawal_collections", "branches"
+  add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
   add_foreign_key "legal_dependents", "members"

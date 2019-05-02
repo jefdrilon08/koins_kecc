@@ -22,35 +22,23 @@ export default class FormAttachmentFiles extends React.Component {
     this.state  = {
       modalIsOpen: false,
       errors: [],
-      validateCurrentLegalDependentDependent: {
-        id: "",
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        date_of_birth: "",
-        relationship: "Child",
-        data: {
-          educational_attainment: "",
-          course: ""
-        }
+      currentAttachmentFile: {
+        name: "",
+        attachment_file: "",
       }
     }
   }
 
-  validateCurrentLegalDependent() {
-    var o       = this.state.currentLegalDependent;
+  validateCurrentAttachmentFile() {
+    var o       = this.state.currentAttachmentFile;
     var errors  = [];
 
-    if(!o.first_name) {
-      errors.push("first name required");
+    if(!o.attachment_file) {
+      errors.push("attachment file required");
     }
 
-    if(!o.last_name) {
-      errors.push("last name required");
-    }
-
-    if(!o.date_of_birth) {
-      errors.push("date of birth required");
+    if(!o.name) {
+      errors.push("name required");
     }
 
     this.setState({
@@ -63,17 +51,9 @@ export default class FormAttachmentFiles extends React.Component {
   handleCancelClicked() {
     this.setState({
       modalIsOpen: false,
-      currentLegalDependent: {
-        id: "",
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        date_of_birth: "",
-        relationship: "",
-        data: {
-          educational_attainment: "",
-          course: ""
-        }
+      currentAttachmentFile: {
+        name: "",
+        attachment_file: ""
       }
     });
   }
@@ -81,7 +61,7 @@ export default class FormAttachmentFiles extends React.Component {
   handleDeleteClicked(index) {
     var data  = this.props.data;
 
-    data.legal_dependents.splice(index, 1);
+    data.attachment_files.splice(index, 1);
 
     this.props.updateData(data);
   };
@@ -90,114 +70,49 @@ export default class FormAttachmentFiles extends React.Component {
     this.setState({
       modalIsOpen: true,
       errors: [],
-      currentLegalDependent: {
-        id: "",
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        date_of_birth: "",
-        relationship: "Child",
-        data: {
-          educational_attainment: "",
-          course: ""
-        }
+      currentAttachmentFile: {
+        name: "",
+        attachment_file: ""
       }
     });
   }
 
   handleConfirmSaveClicked() {
     var data    = this.props.data;
-    var errors  = this.validateCurrentLegalDependent();
+    var errors  = this.validateCurrentAttachmentFile();
 
+    alert(data);
     if(errors.length == 0) {
-      data.legal_dependents.push(this.state.currentLegalDependent);
+      data.attachment_files.push(this.state.currentAttachmentFile);
       this.props.updateData(data);
 
       this.setState({
         modalIsOpen: false,
-        currentLegalDependent: {
-          id: "",
-          first_name: "",
-          middle_name: "",
-          last_name: "",
-          date_of_birth: "",
-          relationship: "",
-          data: {
-            educational_attainment: "",
-            course: ""
-          }
+        currentAttachmentFile: {
+          name: "",
+          attachment_file: ""
         }
       });
     }
   };
 
-  handleFirstNameChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
+  handleNameChanged(event) {
+    var currentAttachmentFile = this.state.currentAttachmentFile;
 
-    currentLegalDependent.first_name  = event.target.value.toUpperCase();
+    currentAttachmentFile.name = event.target.value;
 
     this.setState({
-      currentLegalDependent: currentLegalDependent
+      currentAttachmentFile: currentAttachmentFile
     });
   }
 
-  handleMiddleNameChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
+  handleAttachmentFileChanged(event) {
+    var currentAttachmentFile = this.state.currentAttachmentFile;
 
-    currentLegalDependent.middle_name  = event.target.value.toUpperCase();
-
-    this.setState({
-      currentLegalDependent: currentLegalDependent
-    });
-  }
-
-  handleLastNameChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
-
-    currentLegalDependent.last_name  = event.target.value.toUpperCase();
+    currentAttachmentFile.attachment_file  = event.target.value;
 
     this.setState({
-      currentLegalDependent: currentLegalDependent
-    });
-  }
-
-  handleDateOfBirthChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
-
-    currentLegalDependent.date_of_birth  = event.target.value;
-
-    this.setState({
-      currentLegalDependent: currentLegalDependent
-    });
-  }
-
-  handleRelationshipChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
-
-    currentLegalDependent.relationship  = event.target.value;
-
-    this.setState({
-      currentLegalDependent: currentLegalDependent
-    });
-  }
-
-  handleEducationalAttainmentChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
-
-    currentLegalDependent.data.educational_attainment = event.target.value;
-
-    this.setState({
-      currentLegalDependent: currentLegalDependent
-    });
-  }
-
-  handleCourseChanged(event) {
-    var currentLegalDependent = this.state.currentLegalDependent;
-
-    currentLegalDependent.course  = event.target.value.toUpperCase();
-
-    this.setState({
-      currentLegalDependent: currentLegalDependent
+      currentAttachmentFile: currentAttachmentFile
     });
   }
 
@@ -226,56 +141,52 @@ export default class FormAttachmentFiles extends React.Component {
   }
 
   renderRecords() {
-    var legalDependents = this.props.data.legal_dependents;
+    var attachmentFiles = this.props.data.attachment_files;
+    if(attachmentFiles){  
+      if(attachmentFiles.length > 0) {
+        var records = [];
 
-    if(legalDependents.length > 0) {
-      var records = [];
+        for(var i = 0; i < attachmentFiles.length; i++) {
+          var name          = attachmentFiles[i].name;
+          
+          records.push(
+            <tr key={"ld-record-" + i}>
+              <td>
+                {name}
+              </td>
+              <td>
+                <center>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={this.handleDeleteClicked.bind(this, i)}
+                  >
+                    <span className="fa fa-minus"/>
+                    Del
+                  </button>
+                </center>
+              </td>
+            </tr>
+          );
+        }
 
-      for(var i = 0; i < legalDependents.length; i++) {
-        var name          = legalDependents[i].last_name + ", " + legalDependents[i].first_name;
-        var relationship  = legalDependents[i].relationship;
-
-        records.push(
-          <tr key={"ld-record-" + i}>
-            <td>
-              {name}
-            </td>
-            <td>
-              {relationship}
-            </td>
-            <td>
-              <center>
-                <button
-                  className="btn btn-sm btn-danger"
-                  onClick={this.handleDeleteClicked.bind(this, i)}
-                >
-                  <span className="fa fa-minus"/>
-                  Del
-                </button>
-              </center>
-            </td>
-          </tr>
+        return  (
+          <table className="table table-sm">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>
+                  <center>
+                    Actions
+                  </center>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {records}
+            </tbody>
+          </table>
         );
       }
-
-      return  (
-        <table className="table table-sm">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Relationship</th>
-              <th>
-                <center>
-                  Actions
-                </center>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {records}
-          </tbody>
-        </table>
-      );
     } else {
       return  (
         <p>
@@ -286,7 +197,7 @@ export default class FormAttachmentFiles extends React.Component {
   }
 
   render() {
-    var currentLegalDependent = this.state.currentLegalDependent;
+    var currentAttachmentFile = this.state.currentAttachmentFile;
 
     return (
       <div>
@@ -300,11 +211,11 @@ export default class FormAttachmentFiles extends React.Component {
           <div className="row">
             <div className="col">
               <div className="form-group">
-                <label>TITLE</label>
+                <label>FILE NAME</label>
                 <select
                   className="form-control"
-                  value={currentLegalDependent.educational_attainment}
-                  onChange={this.handleEducationalAttainmentChanged.bind(this)}
+                  value={currentAttachmentFile.name}
+                  onChange={this.handleNameChanged.bind(this)}
                 >
                   <option value="">-- SELECT --</option>
                   <option value="BLIPFORM">BLIPFORM</option>
@@ -322,8 +233,8 @@ export default class FormAttachmentFiles extends React.Component {
                 <input
                   type="file"
                   className="form-control"
-                  value={currentLegalDependent.course}
-                  onChange={this.handleCourseChanged.bind(this)}
+                  value={currentAttachmentFile.attachment_file}
+                  onChange={this.handleAttachmentFileChanged.bind(this)}
                 />
               </div>
             </div>      
