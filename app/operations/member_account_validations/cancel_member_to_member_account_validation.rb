@@ -8,7 +8,11 @@ module MemberAccountValidations
       @member_account_validation      = @config[:member_account_validation]
       @date_cancelled                 = @config[:date_cancelled]
       @user                           = @config[:user]
-      @c_working_date                 = Date.today
+      @c_working_date               = ::Utils::GetCurrentDate.new(
+                                        config: {
+                                          branch: @member_account_validation.branch
+                                        }
+                                      ).execute!
     end
 
     def execute!

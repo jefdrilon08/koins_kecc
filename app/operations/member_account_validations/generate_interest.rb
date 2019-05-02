@@ -7,7 +7,7 @@ module MemberAccountValidations
       @num_weeks          = num_weeks
       @num_weeks_past_due = num_weeks_past_due
       @recognition_date   = @member.data.with_indifferent_access[:recognition_date].try(:to_date)
-      @current_date       = Date.today
+      #@current_date       = Date.today
       @amount             = 0.00
       @data               = {}
 

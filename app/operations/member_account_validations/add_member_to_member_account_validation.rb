@@ -64,7 +64,12 @@ module MemberAccountValidations
       end  
 
       # Check if member is 3 years above in KMBA
-        @current_date = Date.today
+        @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @member_account_validation.branch
+                          }
+                        ).execute!
+
         @recognition_date = @member.data.with_indifferent_access[:recognition_date].try(:to_date)
 
         if !@recognition_date.nil?  
