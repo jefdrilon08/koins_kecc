@@ -30,6 +30,7 @@ gem 'axlsx_rails'
 gem 'zip'
 gem 'hirb'
 gem 'numbers_and_words'
+gem 'tty-table'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
