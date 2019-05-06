@@ -13,6 +13,8 @@
             %li.nav-item
               %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#payments-table", :role => "tab"} Payments
             %li.nav-item
+              %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#adjustments", :role => "tab"} Adjustments
+            %li.nav-item
               %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#activity-logs", :role => "tab"} Activity Logs
           .tab-content
             #details.tab-pane.active.show{:role => "tabpanel"}
@@ -33,6 +35,8 @@
               = render partial: "amortization_table"
             #payments-table.tab-pane{:role => "tabpanel"}
               = render partial: "transaction_table"
+            #adjustments.tab-pane{:role => "tabpanel"}
+              = render partial: "adjustments"
             #activity-logs.tab-pane{:role => "tabpanel"}
               = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
           - if debug?
@@ -47,6 +51,7 @@
 = render partial: "loans/modals/date_released"
 = render partial: "loans/modals/change_book"
 = render partial: "loans/modals/delay_amort"
+= render partial: "loans/modals/new_adjustment"
 = render partial: "templates/error_list"
 
 #parameters{ data: { id: @loan.id, member_id: @loan.member.id } }

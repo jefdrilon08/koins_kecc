@@ -1,6 +1,10 @@
 var Show  = (function() {
   var $message;
 
+  var $btnNewAdjustment;
+  var $btnConfirmNewAdjustment;
+  var $modalNewAdjustment;
+
   var $btnApprove;
   var $btnConfirmApprove;
   var $modalApprove;
@@ -54,6 +58,10 @@ var Show  = (function() {
 
   var _cacheDom = function() {
     $message          = $(".message");
+
+    $btnNewAdjustment         = $("#btn-new-adjustment");
+    $btnConfirmNewAdjustment  = $("#btn-confirm-new-adjustment");
+    $modalNewAdjustment       = $("#modal-new-adjustment");
 
     $btnApprove         = $("#btn-approve");
     $btnConfirmApprove  = $("#btn-confirm-approve");

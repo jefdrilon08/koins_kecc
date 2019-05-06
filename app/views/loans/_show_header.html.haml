@@ -18,10 +18,6 @@
         NO LOAN CYCLE PRESENT
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      - if @loan.active?
-        .btn#btn-reage
-          .fa.fa-sync
-          Reage
       - if @loan.pending?
         #btn-approve.btn
           .fa.fa-check

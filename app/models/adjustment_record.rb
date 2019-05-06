@@ -5,7 +5,8 @@ class AdjustmentRecord < ApplicationRecord
   ]
 
   ADJUSTMENT_TYPES  = [
-    "reamortization"
+    "reamortization",
+    "subsidiary"
   ]
 
   validates :meta, presence: true

@@ -26,6 +26,12 @@ module MemberAccounts
 
         threshold_date  = @closing_date - @dormant_threshold_months.to_i.months
 
+        # No latest transaction
+        if latest_payment.blank?
+          @annual_interest_rate   = @dormant_annual_interest_rate
+          @monthly_interest_rate  = (@annual_interest_rate / 12.0)
+        end
+
         if latest_payment.present? && latest_payment.transacted_at < threshold_date
           @annual_interest_rate   = @dormant_annual_interest_rate
           @monthly_interest_rate  = (@annual_interest_rate / 12.0)
