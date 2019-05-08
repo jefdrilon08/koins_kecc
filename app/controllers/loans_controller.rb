@@ -61,5 +61,10 @@ class LoansController < ApplicationController
                         "data ->> 'loan_id' = ?",
                         @loan.id
                       ).order("created_at DESC")
+
+    @adjustment_records = AdjustmentRecord.reamortization.where(
+                            "meta->>'loan_id' = ?",
+                            @loan.id
+                          ).order("created_at DESC")
   end
 end

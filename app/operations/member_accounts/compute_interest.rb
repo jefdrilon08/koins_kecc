@@ -43,7 +43,7 @@ module MemberAccounts
       @latest_transaction = AccountTransaction.savings.where(
                               "subsidiary_id = ? AND DATE(transacted_at) <= ?",
                               @member_account.id,
-                              month_before
+                              @closing_date
                             ).order("transacted_at ASC, created_at ASC").last
 
       if @latest_transaction.present? and @zero_interest_threshold.present?

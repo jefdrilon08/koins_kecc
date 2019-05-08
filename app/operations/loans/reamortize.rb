@@ -96,7 +96,11 @@ module Loans
         remaining_balance: 0.00,
         should_be_principal: @should_be_principal,
         should_be_interest: @should_be_interest,
-        should_be_dues: @should_be_dues
+        should_be_dues: @should_be_dues,
+        p_principal: @p_principal,
+        p_monthly_interest_rate: @p_monthly_interest_rate,
+        p_num_installments: @p_num_installments,
+        p_term: @p_term
       }
     end
 

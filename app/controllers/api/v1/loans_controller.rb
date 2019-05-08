@@ -6,7 +6,33 @@ module Api
       def new_adjustment
         loan  = Loan.find(params[:id])
 
-        p_principal = params[:p_principal].try(:to_f)
+        p_principal             = params[:p_principal].try(:to_f)
+        p_monthly_interest_rate = params[:p_monthly_interest_rate].try(:to_f)
+        p_num_installments      = params[:p_num_installments].try(:to_i)
+        p_term                  = params[:p_term]
+
+        config  = {
+          loan: loan,
+          user: current_user,
+          p_principal: p_principal,
+          p_monthly_interest_rate: p_monthly_interest_rate,
+          p_num_installments: p_num_installments,
+          p_term: p_term
+        }
+
+        errors  = ::Loans::ValidateReamortize.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          adjustment_record = ::Loans::GenerateReamortizationAdjustment.new(
+                                config: config  
+                              ).execute!
+
+          render json: { message: "ok", id: adjustment_record.id }
+        end
       end
 
       def delay_amort
