@@ -1,5 +1,5 @@
 .row
   .col
-    #btn-new-adjustment.btn.btn-primary
+    #btn-new-adjustment.btn.btn-primary{ data: { principal: @loan.principal, monthly_interest_rate: @loan.monthly_interest_rate, num_installments: @loan.num_installments, term: @loan.term } }
       .fa.fa-plus
       New Adjustment

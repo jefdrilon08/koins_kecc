@@ -3,6 +3,12 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def new_adjustment
+        loan  = Loan.find(params[:id])
+
+        p_principal = params[:p_principal].try(:to_f)
+      end
+
       def delay_amort
         amort     = AmortizationScheduleEntry.where(id: params[:id]).first
         user      = current_user

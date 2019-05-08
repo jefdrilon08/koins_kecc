@@ -12,6 +12,7 @@ module MemberAccounts
       @dormant_threshold_months     = @account_settings.dormant_threshold_months
       @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
       @annual_interest_rate         = @account_settings.annual_interest_rate
+      @zero_interest_threshold      = @account_settings.zero_interest_threshold
       @monthly_interest_rate        = (@annual_interest_rate / 12.0)
 
       # Check if dormant
@@ -35,6 +36,22 @@ module MemberAccounts
         if latest_payment.present? && latest_payment.transacted_at < threshold_date
           @annual_interest_rate   = @dormant_annual_interest_rate
           @monthly_interest_rate  = (@annual_interest_rate / 12.0)
+        end
+      end
+
+      # Check if zero_interest_threshold is applicable
+      @latest_transaction = AccountTransaction.savings.where(
+                              "subsidiary_id = ? AND DATE(transacted_at) <= ?",
+                              @member_account.id,
+                              month_before
+                            ).order("transacted_at ASC, created_at ASC").last
+
+      if @latest_transaction.present? and @zero_interest_threshold.present?
+        threshold_date  = @closing_date - @zero_interest_threshold.to_i.months
+
+        if @latest_transaction.transacted_at.to_date < threshold_date
+          @annual_interest_rate   = 0
+          @monthly_interest_rate  = 0
         end
       end
 

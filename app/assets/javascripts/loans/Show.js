@@ -4,6 +4,10 @@ var Show  = (function() {
   var $btnNewAdjustment;
   var $btnConfirmNewAdjustment;
   var $modalNewAdjustment;
+  var $inputPrincipal;
+  var $inputMonthlyInterestRate;
+  var $inputNumInstallments;
+  var $selectTerm;
 
   var $btnApprove;
   var $btnConfirmApprove;
@@ -52,6 +56,7 @@ var Show  = (function() {
   var _urlApprove             = "/api/v1/loans/approve";
   var _urlChangeBook          = "/api/v1/loans/change_book";
   var _urlDelayAmort          = "/api/v1/loans/delay_amort";
+  var _urlNewAdjustment       = "/api/v1/loans/new_adjustment";
 
   var _loanId;
   var _authenticityToken;
@@ -62,6 +67,10 @@ var Show  = (function() {
     $btnNewAdjustment         = $("#btn-new-adjustment");
     $btnConfirmNewAdjustment  = $("#btn-confirm-new-adjustment");
     $modalNewAdjustment       = $("#modal-new-adjustment");
+    $inputPrincipal           = $("#input-principal");
+    $inputMonthlyInterestRate = $("#input-monthly-interest-rate");
+    $inputNumInstallments     = $("#input-num-installments");
+    $selectTerm               = $("#select-term");
 
     $btnApprove         = $("#btn-approve");
     $btnConfirmApprove  = $("#btn-confirm-approve");
@@ -101,6 +110,69 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnNewAdjustment.on("click", function() {
+      $modalNewAdjustment.modal("show");
+    });
+
+    $btnConfirmNewAdjustment.on("click", function() {
+      var principal           = $inputPrincipal.val();
+      var monthlyInterestRate = $inputMonthlyInterestRate.val();
+      var numInstallments     = $inputNumInstallments.val();
+      var term                = $selectTerm.val();
+
+      var data = {
+        p_principal: principal,
+        p_monthly_interest_rate: monthlyInterestRate,
+        p_num_installments: numInstallments,
+        p_term: term,
+        id: _loanId,
+        authenticity_token: _authenticityToken
+      }
+
+      $inputPrincipal.prop("disabled", true);
+      $inputMonthlyInterestRate.prop("disabled", true);
+      $inputNumInstallments.prop("disabled", true);
+      $selectTerm.prop("disabled", true);
+      $btnConfirmNewAdjustment.prop("disabled", true);
+
+      $message.html("Loading...");
+
+      $.ajax({
+        url: _urlNewAdjustment,
+        method: 'POST',
+        dataType: 'json',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $inputPrincipal.prop("disabled", false);
+            $inputMonthlyInterestRate.prop("disabled", false);
+            $inputNumInstallments.prop("disabled", false);
+            $selectTerm.prop("disabled", false);
+            $btnConfirmNewAdjustment.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnDelayAmort.on("click", function() {
       var oldDate   = $(this).data("old-date"); 
       curretAmortId = $(this).data("id");

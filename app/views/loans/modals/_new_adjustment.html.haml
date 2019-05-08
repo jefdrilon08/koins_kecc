@@ -6,6 +6,24 @@
           New Adjustment
       .modal-body
         .modal-body-content
+          .row
+            .col
+              .form-group
+                %label
+                  Principal
+                = number_field_tag :principal, @loan.principal, class: 'form-control', id: 'input-principal'
+              .form-group
+                %label
+                  Monthly Interest Rate
+                = number_field_tag :monthly_interest_rate, @loan.monthly_interest_rate, class: 'form-control', id: 'input-monthly-interest-rate'
+              .form-group
+                %label
+                  Num Installments
+                = number_field_tag :num_installments, @loan.num_installments, class: 'form-control', id: 'input-num-installments'
+              .form-group
+                %label
+                  Term
+                = select_tag :term, options_for_select(["weekly", "monthly"], @loan.term), class: "form-control", id: "select-term"
           .message
       .modal-footer
         .controls
