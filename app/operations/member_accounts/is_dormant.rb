@@ -28,7 +28,7 @@ module MemberAccounts
         last_paid_loan  = Loan.paid.where(
                             member_id: @member.id
                           ).order(
-                            "date_paid ASC"
+                            "date_completed ASC"
                           ).last
 
         if last_paid_loan.present?
