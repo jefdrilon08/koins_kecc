@@ -71,8 +71,10 @@ Rails.application.routes.draw do
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
   end
+
   # Loans
-  resources :loans, only: [:index, :show] do
+  resources :loans, only: [:index, :show] do  
+    get "/adjustment/:adjustment_record_id", to: "loans#adjustment", as: :adjustment
   end
 
   resources :member_account_validations do

@@ -1,6 +1,6 @@
 .row
   .col
-    #btn-new-adjustment.btn.btn-primary{ data: { principal: @loan.principal, monthly_interest_rate: @loan.monthly_interest_rate, num_installments: @loan.num_installments, term: @loan.term } }
+    #btn-new-adjustment.btn.btn-primary
       .fa.fa-plus
       New Adjustment
 
@@ -22,9 +22,9 @@
           Num Installments
         %th.text-center
           Term
-        %th
+        %th.text-center
           Status
-        %th
+        %th.text-center
           Actions
     %tbody
       - @adjustment_records.each do |o|
@@ -34,4 +34,18 @@
           %td
             #{o.meta["generated_by"]["last_name"]}, #{o.meta["generated_by"]["first_name"]}
           %td.text-right
-            #{o.data}
+            #{number_to_currency(o.data["p_principal"], unit: "")}
+          %td.text-center
+            #{o.data["p_monthly_interest_rate"]}
+          %td.text-center
+            #{o.data["p_num_installments"]}
+          %td.text-center
+            #{o.data["p_term"]}
+          %td.text-center
+            #{o.status}
+          %td.text-center
+            = link_to loan_adjustment_path(@loan, o), class: 'btn btn-primary' do
+              .fa.fa-search
+- else
+  %p
+    No adjustment records found for this loan

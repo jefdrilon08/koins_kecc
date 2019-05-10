@@ -9,6 +9,10 @@ var Show  = (function() {
   var $inputNumInstallments;
   var $selectTerm;
 
+  var $btnDeleteAdjustmentRecord;
+  var $btnConfirmDeleteAdjustmentRecord;
+  var $modalDeleteAdjustmentRecord;
+
   var $btnApprove;
   var $btnConfirmApprove;
   var $modalApprove;
@@ -72,6 +76,10 @@ var Show  = (function() {
     $inputNumInstallments     = $("#input-num-installments");
     $selectTerm               = $("#select-term");
 
+    $btnDeleteAdjustmentRecord        = $("#btn-delete-adjustment-record");
+    $btnConfirmDeleteAdjustmentRecord = $("#btn-confirm-delete-adjustment-record");
+    $modalDeleteAdjustmentRecord      = $("#modal-delete-adjustment-record");
+
     $btnApprove         = $("#btn-approve");
     $btnConfirmApprove  = $("#btn-confirm-approve");
     $modalApprove       = $("#modal-approve");
@@ -110,6 +118,10 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnDeleteAdjustmentRecord.on("click", function() {
+      $modalDeleteAdjustmentRecord.modal("show");
+    });
+
     $btnNewAdjustment.on("click", function() {
       $modalNewAdjustment.modal("show");
     });

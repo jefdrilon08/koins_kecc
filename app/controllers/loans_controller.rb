@@ -46,6 +46,14 @@ class LoansController < ApplicationController
     end
   end
 
+  def adjustment
+    @loan               = Loan.find(params[:loan_id])
+    @adjustment_record  = AdjustmentRecord.reamortization.find(params[:adjustment_record_id])
+
+    @data = @adjustment_record.data.with_indifferent_access
+    @meta = @adjustment_record.data.with_indifferent_access
+  end
+
   def show
     @loan                   = Loan.find(params[:id])
     @amortization_schedule  = @loan.amortization_schedule_entries.order(
