@@ -67,6 +67,7 @@ Rails.application.config.assets.precompile += [
   "monthly_closing_collections/Index.js",
   "monthly_closing_collections/Show.js",
   "loans/Show.js",
+  "loans/adjustments/Show.js",
   "MembersIndex.min.react.js",
   "MembersForm.min.react.js",
   "MembersFormResignation.min.react.js",

@@ -65,6 +65,7 @@ namespace :api do
     post "/loans/update_date_released", to: "loans#update_date_released"
     post "/loans/delay_amort", to: "loans#delay_amort"
     post "/loans/new_adjustment", to: "loans#new_adjustment"
+    post "/loans/delete_adjustment", to: "loans#delete_adjustment"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches

@@ -25,6 +25,20 @@ module Loans
         }
       end
 
+      # Check if we have other pending adjustments for this loan
+      pending_adjustments = AdjustmentRecord.reamortization.where(
+                              "meta->>'loan_id' = ? AND status = ?",
+                              @loan.id,
+                              "pending"
+                            )
+
+      if pending_adjustments.size > 0
+        @errors[:messages] << {
+          key: "adjustments",
+          message: "There are still pending adjustments for this loan"
+        }
+      end
+
       #not_yet_implemented!
 
       @errors[:messages].each do |o|

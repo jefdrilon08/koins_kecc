@@ -114,8 +114,8 @@ module Loans
 
     def build_reamortized_data!
       if @total_paid >= @should_be_dues
-        @data[:excess_principal_paid] = (@should_be_principal - @principal_paid).round(2)
-        @data[:excess_interest_paid]  = (@should_be_interest - @interest_paid).round(2)
+        @data[:excess_principal_paid] = (@should_be_principal - @principal_paid).round(2).abs
+        @data[:excess_interest_paid]  = (@should_be_interest - @interest_paid).round(2).abs
         @data[:excess_paid]           = (@data[:excess_principal_paid] + @data[:excess_interest_paid]).round(2)
 
         # loop against new amortization and flag paid
