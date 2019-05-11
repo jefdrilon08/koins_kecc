@@ -3,6 +3,29 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def approve_adjustment
+        adjustment_record = AdjustmentRecord.find(params[:id])
+
+        config  = {
+          adjustment_record: adjustment_record,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateApproveAdjustmentRecord.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          adjustment_record = ::Loasn::ApproveAdjustmentRecord.new(
+                                config: config
+                              ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def delete_adjustment
         adjustment_record = AdjustmentRecord.find(params[:id])
 

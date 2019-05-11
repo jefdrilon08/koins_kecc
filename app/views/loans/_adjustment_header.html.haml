@@ -22,6 +22,9 @@
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       - if @adjustment_record.pending?
+        .btn#btn-approve
+          .fa.fa-check
+          Approve
         .btn#btn-delete
           .fa.fa-times
           Delete

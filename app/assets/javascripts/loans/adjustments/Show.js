@@ -11,6 +11,7 @@ var Show  = (function() {
 
   var templateErrorList;
   var _urlDelete  = "/api/v1/loans/delete_adjustment";
+  var _urlApprove = "/api/v1/loans/approve_adjustment";
 
   var _id;
   var _loanId;
@@ -31,6 +32,49 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnApprove.on("click", function() {
+      $message.html("");
+      $modalApprove.modal("show");
+    });
+
+    $btnConfirmApprove.on("click", function() {
+      $btnConfirmApprove.prop("disabled", true);
+
+      $.ajax({
+        url: _urlApprove,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: _id,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.href="/loans/" + _loanId;
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmApprove.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnDelete.on("click", function() {
       $message.html("");
       $modalDelete.modal("show");

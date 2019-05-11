@@ -42,7 +42,12 @@
           %td.text-center
             #{o.data["p_term"]}
           %td.text-center
-            #{o.status}
+            - if o.pending?
+              .badge.badge-danger
+                Pending
+            - elsif o.approved?
+              .badge.badge-success
+                Approved
           %td.text-center
             = link_to loan_adjustment_path(@loan, o), class: 'btn btn-primary' do
               .fa.fa-search

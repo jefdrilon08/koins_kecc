@@ -1,0 +1,21 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+
+= render partial: "adjustments/subsidiary_adjustments/modals/new"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "adjustments/subsidiary_adjustments/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });
