@@ -61,8 +61,8 @@ module Loans
                               id: @unpaid_amort.pluck(:id)
                             ).order("due_date ASC")
 
-      @principal_paid = @paid_amortization.sum(:principal_paid).round(2)
-      @interest_paid  = @paid_amortization.sum(:interest_paid).round(2)
+      @principal_paid = @amortization_schedule_entries.sum(:principal_paid).round(2)
+      @interest_paid  = @amortization_schedule_entries.sum(:interest_paid).round(2)
       @total_paid     = (@principal_paid + @interest_paid).to_f.round(2)
 
       @data = {
@@ -94,6 +94,9 @@ module Loans
         remaining_principal_balance: 0.00,
         remaining_interest_balance: 0.00,
         remaining_balance: 0.00,
+        total_principal_paid: @principal_paid,
+        total_interest_paid: @interest_paid,
+        total_paid: (@principal_paid + @interest_paid).round(2),
         should_be_principal: @should_be_principal,
         should_be_interest: @should_be_interest,
         should_be_dues: @should_be_dues,
@@ -132,6 +135,8 @@ module Loans
         buffer_principal_paid = @principal_paid
         buffer_interest_paid  = @interest_paid
 
+        #raise "Principal Paid: #{@principal_paid} Interest Paid: #{@interest_paid} Total Paid: #{@principal_paid + @interest_paid}"
+
         @new_amortization.each_with_index do |o, i|
           if buffer_interest_paid >= o[:interest]
             @new_amortization[i][:interest_paid]    = o[:interest] 
@@ -162,8 +167,10 @@ module Loans
           end
         end
 
-        @data[:remaining_principal_balance]
-        @data[:remaining_interest_balance]
+        #raise "Buffer Principal Paid: #{buffer_principal_paid} Buffer Interest Paid: #{buffer_interest_paid}"
+
+        @data[:remaining_principal_balance] = 0.00
+        @data[:remaining_interest_balance]  = 0.00
 
         @new_amortization.each do |o|
           @data[:remaining_principal_balance] += o[:principal_balance]
