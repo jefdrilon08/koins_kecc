@@ -17,6 +17,7 @@ import FormExperience from './FormExperience';
 import FormBankAccounts from './FormBankAccounts';
 import FormLegalDependents from './FormLegalDependents';
 import FormBeneficiaries from './FormBeneficiaries';
+import FormAttachmentFiles from './FormAttachmentFiles';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -39,6 +40,7 @@ export default class FormDisplay extends React.Component {
         value: "",
         label: ""
       },
+      currentMemberType: "Regular",
       errors: false
     };
   }
@@ -47,13 +49,24 @@ export default class FormDisplay extends React.Component {
     this.fetch();
   }
 
+  updateCurrentMemberType(o) {
+    var data          = this.state.data;
+    data.member_type  = o;
+
+    this.setState({
+      currentMemberType: data.member_type,
+      data: data
+    });
+  }
+
   updateCurrentCenter(o) {
     var data          = false;
     var currentCenter = o;
 
     if(this.state.data) {
       data  = this.state.data;
-      data.center_id = o.value;
+      data.center_id    = o.value;
+      data.center_name  = o.label;
 
       currentCenter = {
         value: data.center_id,
@@ -80,10 +93,14 @@ export default class FormDisplay extends React.Component {
       }
     }
 
+    console.log("Updating current branch to:");
+    console.log(o);
+
     var data  = false;
     if(this.state.data) {
-      data  = this.state.data;
-      data.branch_id = o.value;
+      data              = this.state.data;
+      data.branch_id    = o.value;
+      data.branch_name  = o.label;
     }
 
     var currentCenter = {
@@ -192,11 +209,28 @@ export default class FormDisplay extends React.Component {
       dataType: 'json',
       success: function(response) {
         console.log(response);
+
+        var centers = [];
+
+        if(response.branches.length > 0) {
+          centers = response.branches[0].centers;
+        }
+
         context.setState({
           isLoading: false,
-          data: response
+          data: response,
+          branches: response.branches,
+          centers: centers,
+          currentMemberType: response.member_type,
+          currentBranch: {
+            value: response.branch_id,
+            label: response.branch_name
+          },
+          currentCenter: {
+            value: response.center_id,
+            label: response.center_name
+          }
         });
-        context.fetchBranches();
       },
       error: function(response) {
         console.log(response);
@@ -254,10 +288,11 @@ export default class FormDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
-    var currentCenter = state.currentCenter;
+    var currentCenter     = state.currentCenter;
+    var currentBranch     = state.currentBranch;
+    var currentMemberType = state.currentMemberType;
 
-    console.log("render(): Current Center:");
-    console.log(currentCenter);
+    var memberTypes = this.props.memberTypes;
 
     if(state.isLoading) {
       return  (
@@ -270,8 +305,6 @@ export default class FormDisplay extends React.Component {
         </div>
       );
     } else if(state.data != false) {
-      console.log("FormDisplay: Current Center:");
-      console.log(state.currentCenter);
       return (
         <div>
           <h2>Member Form</h2>
@@ -281,14 +314,17 @@ export default class FormDisplay extends React.Component {
             <div className="col">
               <FormApplicationHeader
                 data={state.data}
-                currentBranch={state.currentBranch}
+                currentBranch={currentBranch}
                 currentCenter={currentCenter}
+                currentMemberType={currentMemberType}
                 branches={state.branches}
                 centers={state.centers}
+                memberTypes={memberTypes}
                 updateData={this.updateData.bind(this)}
                 formDisabled={state.formDisabled}
                 updateCurrentBranch={this.updateCurrentBranch.bind(this)}
                 updateCurrentCenter={this.updateCurrentCenter.bind(this)}
+                updateCurrentMemberType={this.updateCurrentMemberType.bind(this)}
               />
 
               <div className="card">
@@ -380,6 +416,19 @@ export default class FormDisplay extends React.Component {
                 </div>
                 <div className="card-body">
                   <FormExperience
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Attachment Files
+                </div>
+                <div className="card-body">
+                  <FormAttachmentFiles
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}

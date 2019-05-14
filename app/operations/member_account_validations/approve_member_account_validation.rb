@@ -6,16 +6,19 @@ module MemberAccountValidations
       @member_account_validation = @config[:member_account_validation]
       @user                      = @config[:user]
       @interest_amount           = @member_account_validation.member_account_validation_records.sum(:interest)
-
+      @branch                    = @member_account_validation.branch
       @data                      = @member_account_validation.try(:data).try(:with_indifferent_access)
 
       @data_accounting_entry     = @data[:accounting_entry]
       
-      @c_working_date            = Date.today
+      @c_working_date            = ::Utils::GetCurrentDate.new(
+                                    config: {
+                                      branch: @branch
+                                    }
+                                  ).execute!
     end
 
     def execute!
-
       post_accounting_entry!
 
       @data[:approved_by] = @user.full_name
@@ -156,19 +159,20 @@ module MemberAccountValidations
         member          = member_account_validation_record.member
         member.member_accounts.each do |member_account|
 
+          if member_account.account_subtype == 'Life Insurance Fund' || member_account.account_subtype == 'Retirement Fund'
+            config  = {
+              date_paid: @c_working_date,
+              member: member,
+              user: @user,
+              balance: member_account.balance,
+              member_account: member_account,
+              accounting_entry_reference_number: @data_accounting_entry[:reference_number]
+              }
 
-          config  = {
-            date_paid: @c_working_date,
-            member: member,
-            user: @user,
-            balance: member_account.balance,
-            member_account: member_account,
-            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
-            }
-
-          ::MemberAccountValidations::ApproveWithdrawLifAndRfDepositToZeroOutAccount.new(
-            config: config
-          ).execute!
+            ::MemberAccountValidations::ApproveWithdrawLifAndRfDepositToZeroOutAccount.new(
+              config: config
+            ).execute!
+          end
         end
       end
     end
@@ -178,19 +182,20 @@ module MemberAccountValidations
         member          = member_account_validation_record.member
         member.member_accounts.each do |member_account|
 
+          if member_account.account_subtype == 'Life Insurance Fund' || member_account.account_subtype == 'Retirement Fund'
+            config  = {
+              date_paid: @c_working_date,
+              member: member,
+              user: @user,
+              balance: member_account.balance,
+              member_account: member_account,
+              accounting_entry_reference_number: @data_accounting_entry[:reference_number]
+              }
 
-          config  = {
-            date_paid: @c_working_date,
-            member: member,
-            user: @user,
-            balance: member_account.balance,
-            member_account: member_account,
-            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
-            }
-
-          ::MemberAccountValidations::ApproveWithdrawLifAndRf.new(
-            config: config
-          ).execute!
+            ::MemberAccountValidations::ApproveWithdrawLifAndRf.new(
+              config: config
+            ).execute!
+          end
         end
 
         # half_adv_lif = member_account_validation_record.try(:advance_lif) / 2 

@@ -21,6 +21,39 @@
 
   #member-certificate {
   }
+  .pangulo-sign{
+    margin-left:245px;
+    margin-right:325px;
+  }
+
+  .sign{
+    margin-top:-10px;
+  }
+
+  .name{
+    margin-top: -60px;
+  }
+
+  .kalihim-name{
+    font-size: 15px;
+    margin-left:230px;
+    margin-right:270px;
+  }
+
+  .pangulo-name{
+    font-size: 15px;
+  }
+
+  .kalihim-pos{
+    
+    margin-left:280px;
+    margin-right:375px;
+  }
+
+  .pos{
+    font-size: 12px;
+    margin-top: -10px;
+  }
 
 #member-certificate
   .member-name
@@ -34,3 +67,18 @@
       #{::Utils::MonthToFilipino.new(@member_share_data[:date_of_issue_month].to_i).execute!.capitalize}
     %label{ class: "member-recognition-year" }
       #{@member_share_data[:date_of_issue_year]}
+  .sign
+    %label.pangulo-sign
+      = image_tag "signatures/kalihim.bmp", class: "img-responsive" , size: "110"
+    %label
+      = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "110"
+  .name
+    %label.kalihim-name
+      #{Settings.kalihim}
+    %label.pangulo-name
+      #{Settings.taga_pangulo}
+  .pos
+    %label.kalihim-pos
+      Kalihim
+    %label.pangulo-pos
+      Taga Pangulo

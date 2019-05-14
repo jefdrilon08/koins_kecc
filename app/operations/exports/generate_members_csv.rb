@@ -63,10 +63,8 @@ module Exports
                         meta_id = ""
                     end
 
-                    date_paid = MembershipPaymentRecord.paid.where("member_id = ? AND membership_name = ?", m.id, "K-MBA").first.try(:date_paid)
-                    if !date_paid.nil?
-                        recognition_date = date_paid
-                    else
+                    recognition_date = m.data.with_indifferent_access[:recognition_date]
+                    if recognition_date.nil?
                         recognition_date = nil
                     end
 

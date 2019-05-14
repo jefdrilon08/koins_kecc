@@ -82,10 +82,10 @@ var MemberAccountValidationForm = (function() {
 
     $btnDelete.on('click', function() {
       $btnDelete.prop("disabled", true);
-      
-      // var $btn = $(this);
-      // var memberAccountValidationRecordId = $btn.data('member-account-validation-record-id');
-      // var memberId = $btn.data('member-id');
+
+      var $btn = $(this);
+      var memberAccountValidationRecordId = $btn.data('member-account-validation-record-id');
+      var deleteMemberId = $btn.data('delete-member-id');
 
       if (memberAccountValidationStatus == "cancelled"){
         $modalMemberCancellation.modal("show");

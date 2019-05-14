@@ -5,11 +5,13 @@ module Billings
       @billing  = @config[:billing]
       @user     = @config[:user]
 
-      @date_approved  = Date.today
+      @branch = @billing.branch
 
-      if Settings.current_date.present?
-        @date_approved  = Settings.current_date.to_date
-      end
+      @date_approved  = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
 
       @data = @billing.try(:data).try(:with_indifferent_access)
 

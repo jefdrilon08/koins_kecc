@@ -14,11 +14,11 @@ module Accounting
           @data = {}
         end
 
-        @current_date = Date.today
-
-        if Settings.current_date.present?
-          @current_date = Settings.current_date.to_date
-        end
+        @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
       end
 
       def execute!

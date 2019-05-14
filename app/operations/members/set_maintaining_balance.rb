@@ -14,22 +14,25 @@ module Members
     end
 
     def execute!
-      @settings_loan_products.each do |s|
-        if s.maintaining_balance.present?
-          member_account  = @member_accounts.select{ |o| 
-                              o.account_type == s.maintaining_balance.account_type and o.account_subtype == s.maintaining_balance.account_subtype 
-                            }.first
+      @member_accounts.each do |member_account|
+        maintaining_balance = 0.00
 
-          if member_account.present?
-            maintaining_balance = 0.00
-            
-            @active_loans.where(loan_product_id: s.loan_product_id).each do |loan|
-              if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
-                maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
+        @settings_loan_products.each do |s|
+          if s.maintaining_balance.present? and member_account.account_type == s.maintaining_balance.account_type and member_account.account_subtype == s.maintaining_balance.account_subtype
+            current_loans = @active_loans.where(loan_product_id: s.loan_product_id)
+
+            if member_account.present? and current_loans.size > 0
+              
+              current_loans.each do |loan|
+                if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
+                  maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
+                end
               end
-            end
 
-            member_account.update!(maintaining_balance: maintaining_balance.round(2))
+              mb  = maintaining_balance.to_f.round(2)
+
+              member_account.update!(maintaining_balance: mb)
+            end
           end
         end
       end

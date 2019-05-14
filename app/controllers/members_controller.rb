@@ -36,6 +36,10 @@ class MembersController < ApplicationController
     @member = Member.find(params[:id])
   end
 
+  def form_attachment
+    @member = Member.find(params[:id])
+  end
+
   def form
   end
 
@@ -88,5 +92,28 @@ class MembersController < ApplicationController
                             member: @member
                           }
                         ).execute!
+  end
+
+  def import_members
+    file = params[:file]
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      config = {  
+        member: row.to_hash
+      }
+
+      @errors = Members::ValidateImportMembersCsvFile.new(config: config).execute!
+    end
+
+    if @errors[:messages].size > 0
+      redirect_to import_members_path
+      flash[:error] = "Error Importing Members"
+    else
+      Members::ImportMembersFromCsvFile.new(
+                          file: file
+                    ).execute!
+      flash[:success] = "Successfully Import Member Record."
+      redirect_to members_path
+    end  
   end
 end

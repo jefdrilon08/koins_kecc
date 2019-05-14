@@ -12,6 +12,18 @@ Rails.application.routes.draw do
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 
+   # import members
+  get "/import_members", to: "pages#import_members"
+
+  # upload-deposit page
+  get "/upload_deposit", to: "pages#upload_deposit"
+
+  # Adjustments
+  namespace :adjustments do
+    get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
+    get "/subsidiary_adjustments/:id", to: "subsidiary_adjustments#show", as: :subsidiary_adjustment
+  end
+  
   # EXPORTS
   get "/exports/members", to: "exports#members", as: :export_members
   get "/exports/beneficiaries", to: "exports#beneficiaries", as: :export_beneficiaries
@@ -24,6 +36,9 @@ Rails.application.routes.draw do
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members
   get "/validations", to: "pages#validations", as: :validations
+  get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
+  get "/seriatim", to: "pages#seriatim", as: :seriatim
+  get "/pages/seriatim_report", to: "pages#seriatim_report", as: :pages_seriatim_report
 
   # Monitoring
   get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
@@ -54,6 +69,7 @@ Rails.application.routes.draw do
   end
 
   resources :members, only: [] do
+    collection { post :import_members }
     resources :member_shares, except: [:index], controller: "members/member_shares" do
       get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
     end
@@ -61,8 +77,10 @@ Rails.application.routes.draw do
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
   end
+
   # Loans
-  resources :loans, only: [:index, :show] do
+  resources :loans, only: [:index, :show] do  
+    get "/adjustment/:adjustment_record_id", to: "loans#adjustment", as: :adjustment
   end
 
   resources :member_account_validations do
@@ -106,10 +124,15 @@ Rails.application.routes.draw do
   ################################
 
   # Deposits
-  resources :deposit_collections, only: [:index, :show, :destroy]
+  resources :deposit_collections, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
 
   # Withdrawals
   resources :withdrawal_collections, only: [:index, :show, :destroy]
+
+  # Insurance Withdrawals
+  resources :insurance_withdrawal_collections, only: [:index, :show, :destroy]
 
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]
@@ -192,7 +215,6 @@ Rails.application.routes.draw do
 
   get "/download_backup", to: "pages#download_backup"
   get "/download_exit_age", to: "pages#download_exit_age"
-  get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
   resources :claims
   draw :administration
   draw :accounting

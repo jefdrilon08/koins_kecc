@@ -87,15 +87,10 @@
     var memberAccountValidationId         = $parameters.data('member-account-validation-id');
     var memberAccountValidationStatus     = $parameters.data('member-account-validation-status');
     var authenticityToken                 = $("meta[name='csrf-token']").attr('content');
-    var $delete                           = $(".btn-delete");
-    var memberAccountValidationRecordId   = $delete.data('member-account-validation-record-id');
-    var deleteMemberId                    = $delete.data('delete-member-id');
 
     MemberAccountValidationForm.init({
       memberAccountValidationId: memberAccountValidationId,
       memberAccountValidationStatus: memberAccountValidationStatus,
-      authenticityToken: authenticityToken,
-      deleteMemberId: deleteMemberId,
-      memberAccountValidationRecordId: memberAccountValidationRecordId
+      authenticityToken: authenticityToken
     });
   });

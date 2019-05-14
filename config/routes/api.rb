@@ -3,6 +3,11 @@ namespace :api do
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
+    # Adjustments
+    namespace :adjustments do
+      post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"
+    end
+
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
@@ -64,6 +69,9 @@ namespace :api do
     post "/loans/update_first_date_of_payment", to: "loans#update_first_date_of_payment"
     post "/loans/update_date_released", to: "loans#update_date_released"
     post "/loans/delay_amort", to: "loans#delay_amort"
+    post "/loans/new_adjustment", to: "loans#new_adjustment"
+    post "/loans/delete_adjustment", to: "loans#delete_adjustment"
+    post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches
@@ -139,6 +147,16 @@ namespace :api do
     get "/withdrawal_collections/fetch_members", to: "withdrawal_collections#fetch_members"
     post "/withdrawal_collections/add_member", to: "withdrawal_collections#add_member"
     post "/withdrawal_collections/remove_member", to: "withdrawal_collections#remove_member"
+
+    # Insurance Withdrawal Collection
+    post "/insurance_withdrawal_collections", to: "insurance_withdrawal_collections#create"
+    post "/insurance_withdrawal_collections/modify_transaction_record", to: "insurance_withdrawal_collections#modify_transaction_record"
+    post "/insurance_withdrawal_collections/approve", to: "insurance_withdrawal_collections#approve"
+    post "/insurance_withdrawal_collections/update_particular", to: "insurance_withdrawal_collections#update_particular"
+    get "/insurance_withdrawal_collections/fetch", to: "insurance_withdrawal_collections#fetch"
+    get "/insurance_withdrawal_collections/fetch_members", to: "insurance_withdrawal_collections#fetch_members"
+    post "/insurance_withdrawal_collections/add_member", to: "insurance_withdrawal_collections#add_member"
+    post "/insurance_withdrawal_collections/remove_member", to: "insurance_withdrawal_collections#remove_member"
 
     #Member Account Validations
     post 'member_account_validations/generate_transaction', to: 'member_account_validations#generate_transaction'

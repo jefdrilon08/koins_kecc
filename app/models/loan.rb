@@ -48,7 +48,7 @@ class Loan < ApplicationRecord
                     particular: self.data.with_indifferent_access[:accounting_entry][:particular]
                     ).try(:first)
   end
-  
+
   def load_defaults
     if self.new_record?
       self.status = "pending"

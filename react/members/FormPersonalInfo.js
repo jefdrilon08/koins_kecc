@@ -114,7 +114,6 @@ export default class FormPersonalInfo extends React.Component {
   }
 
   render() {
-    console.log(this.props.data);
     var housingType       = this.props.data.data.housing.type;
     var housingNumYears   = this.props.data.data.housing.num_years;
     var housingNumMonths  = this.props.data.data.housing.num_months;

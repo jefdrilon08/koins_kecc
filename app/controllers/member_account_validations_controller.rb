@@ -82,11 +82,15 @@ class MemberAccountValidationsController < ApplicationController
 
   def pdf
     @member_account_validation = MemberAccountValidation.find(params[:member_account_validation_id])
-    @accounting_entry = AccountingEntry.where(
+    if @member_account_validation.approved?
+      @accounting_entry = AccountingEntry.where(
                                         reference_number: @member_account_validation.reference_number,
                                         book: @member_account_validation.data.with_indifferent_access[:accounting_entry][:book],
                                         branch_id: @member_account_validation.data.with_indifferent_access[:accounting_entry][:branch_id]
                                         ).first
+    else 
+      @accounting_entry = @member_account_validation.data.with_indifferent_access[:accounting_entry]
+    end
   end
 
   def member_account_validation_params
