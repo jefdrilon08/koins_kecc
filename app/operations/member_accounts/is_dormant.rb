@@ -32,11 +32,11 @@ module MemberAccounts
                           ).last
 
         if last_paid_loan.present?
-          date_paid = last_paid_loan.date_paid
+          date_completed = last_paid_loan.date_completed
 
           threshold_date  = @closing_date - @dormant_threshold_months.to_i.months
 
-          if date_paid < threshold_date
+          if date_completed < threshold_date
             return true
           else
             return false
