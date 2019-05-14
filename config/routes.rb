@@ -197,4 +197,22 @@ Rails.application.routes.draw do
   draw :administration
   draw :accounting
   draw :api
+
+  #reports
+  get '/reports/insured_loans', to: 'reports#insured_loans', as: :insured_loans
+  get "/reports/print_insured_loans", to: "reports#print_insured_loans", as: :reports_print_insured_loans
+  get '/reports/member_reports', to: 'reports#member_reports', as: :member_reports
+  get "/reports/collections_clip_reports", to: "reports#collections_clip_reports", as: :collections_clip_reports
+  get "/reports/collections_clip", to: "reports#collections_clip", as: :collections_clip
+  get "/reports/collections_blip_reports", to: "reports#collections_blip_reports", as: :collections_blip_reports
+  get "/reports/collections_blip", to: "reports#collections_blip", as: :collections_blip
+  get "/reports/member_dependent_reports", to: "reports#member_dependent_reports", as: :member_dependent_reports
+  get "/reports/member_dependent", to: "reports#member_dependent", as: :member_dependent
+  get "/reports/cic_reports", to: "reports#cic_reports", as: :cic_reports
+  get "/reports/cic", to: "reports#cic", as: :cic
+  get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
+  
+  resources :insurance_accounts do
+    get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
+  end
 end

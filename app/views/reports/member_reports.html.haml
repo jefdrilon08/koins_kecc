@@ -1,0 +1,17 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-chart-pie
+    Report 
+  %li.breadcrumb-item
+    .fa.fa-users
+    Member Reports
+    %small as of #{Time.now.localtime.strftime("%b %d, %Y")}
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "member_reports_form"
+
+
+

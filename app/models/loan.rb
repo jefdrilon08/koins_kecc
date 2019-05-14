@@ -4,6 +4,17 @@ class Loan < ApplicationRecord
     "active",
     "paid"
   ]
+  LOAN_STATUSES = [
+    "pending",
+    "active",
+    "paid",
+    "writeoff",
+    "lay_low",
+    "inactive",
+    "deleted",
+    "for-transfer",
+    "transferred"
+  ]
 
   belongs_to :center
   belongs_to :branch
@@ -30,6 +41,14 @@ class Loan < ApplicationRecord
 
   before_validation :load_defaults
 
+  def accounting_entry
+    AccountingEntry.where(
+                    book: self.data.with_indifferent_access[:accounting_entry][:book],
+                    reference_number: self.data.with_indifferent_access[:accounting_entry][:reference_number],
+                    particular: self.data.with_indifferent_access[:accounting_entry][:particular]
+                    ).try(:first)
+  end
+  
   def load_defaults
     if self.new_record?
       self.status = "pending"
