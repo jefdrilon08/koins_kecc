@@ -317,7 +317,21 @@ module Loans
           name                = accounting_code.name
           code                = accounting_code.code
 
-          if @member.member_type  == target_member_type
+          # Special: business_permit_available
+          if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true
+
+            amount  = s_deduction.business_permit_amount
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
+            temp_amount -= amount
+
+          elsif @member.member_type  == target_member_type
             if @term == "weekly"
               s_deduction.meta.term_map.weekly.each do |s|
                 if s.num_installments == @num_installments

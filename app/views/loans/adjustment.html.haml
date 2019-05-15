@@ -232,7 +232,7 @@
                         #{number_to_currency(o[:principal_paid], unit: '')}
                       %td.text-right
                         #{number_to_currency(o[:interest_paid], unit: '')}
-                      %td.text_right
+                      %td.text-right
                         #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
