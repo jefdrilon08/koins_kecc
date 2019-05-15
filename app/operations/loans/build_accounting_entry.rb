@@ -318,8 +318,7 @@ module Loans
           code                = accounting_code.code
 
           # Special: business_permit_available
-          if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true
-
+          if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
             amount  = s_deduction.business_permit_amount
 
             journal_entries << {
