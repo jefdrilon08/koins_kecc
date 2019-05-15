@@ -39,13 +39,6 @@ module Api
                           ).execute!
           end
 
-#          data  = ::Branches::ComputeLoansStatus.new(
-#                    config: {
-#                      branch: branch,
-#                      as_of: as_of
-#                    }
-#                  ).execute!
-
           render json: data_store.data
         end
       end

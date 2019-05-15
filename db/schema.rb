@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_22_084416) do
+ActiveRecord::Schema.define(version: 2019_04_13_022847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -103,6 +103,15 @@ ActiveRecord::Schema.define(version: 2019_03_22_084416) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "adjustment_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.jsonb "meta"
+    t.jsonb "data"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "adjustment_type"
   end
 
   create_table "amortization_schedule_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -277,6 +286,19 @@ ActiveRecord::Schema.define(version: 2019_03_22_084416) do
     t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
+  end
+
+  create_table "insurance_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_insurance_withdrawal_collections_on_branch_id"
+    t.index ["center_id"], name: "index_insurance_withdrawal_collections_on_center_id"
   end
 
   create_table "journal_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -625,6 +647,8 @@ ActiveRecord::Schema.define(version: 2019_03_22_084416) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "insurance_withdrawal_collections", "branches"
+  add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
   add_foreign_key "legal_dependents", "members"

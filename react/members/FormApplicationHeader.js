@@ -21,9 +21,23 @@ export default class FormApplicationHeader extends React.Component {
     }
   }
 
+  handleMemberTypeChanged(event) {
+    this.props.updateCurrentMemberType(event.target.value);
+  }
+
   render() {
     var branchOptions = [];
     var centerOptions = [];
+
+    var memberTypeOptions = [];
+
+    for(var i = 0; i < this.props.memberTypes.length; i++) {
+      memberTypeOptions.push(
+        <option key={"member-type-" + i} value={this.props.memberTypes[i]}>
+          {this.props.memberTypes[i]}
+        </option>
+      );
+    }
 
     for(var i = 0; i < this.props.branches.length; i++) {
       if(this.props.branches[i].id == this.props.currentBranch.value) {
@@ -39,12 +53,7 @@ export default class FormApplicationHeader extends React.Component {
         value: this.props.branches[i].id,
         label: this.props.branches[i].name
       });
-
-      console.log(centerOptions);
     }
-
-    console.log("Current Center:");
-    console.log(this.props.currentCenter);
 
     return  (
       <div className="card">
@@ -53,7 +62,7 @@ export default class FormApplicationHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="row">
-            <div className="col">
+            <div className="col-md-4 col-xs-12">
               <div className="form-group">
                 <label>Branch</label>
                 <Select
@@ -65,7 +74,7 @@ export default class FormApplicationHeader extends React.Component {
                 <br/>
               </div>
             </div>
-            <div className="col">
+            <div className="col-md-4 col-xs-12">
               <div className="form-group">
                 <label>Center</label>
                 <Select
@@ -74,6 +83,20 @@ export default class FormApplicationHeader extends React.Component {
                   onChange={this.handleCenterChanged.bind(this)}
                   disabled={this.props.formDisabled}
                 />
+                <br/>
+              </div>
+            </div>
+            <div className="col-md-4 col-xs-12">
+              <div className="form-group">
+                <label>Member Type</label>
+                <select 
+                  value={this.props.currentMemberType} 
+                  onChange={this.handleMemberTypeChanged.bind(this)}
+                  disabled={this.props.formDisabled}
+                  className={"form-control"}
+                >
+                  {memberTypeOptions}
+                </select>
                 <br/>
               </div>
             </div>

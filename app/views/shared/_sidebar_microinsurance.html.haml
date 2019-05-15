@@ -12,6 +12,9 @@
   = link_to insurance_exit_age_members_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-users
     Members for Exit Age
+  = link_to seriatim_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    Seriatim  
   - if microinsurance?
     = link_to claims_path, class: 'nav-link' do
       %i.nav-icon.fa.fa-money-check

@@ -11,14 +11,15 @@ module Loans
       @num_installments = @loan.num_installments
       @term             = @loan.term
       
-      @current_date = Date.today
-
-      if Settings.current_date.present?
-        @current_date = Settings.current_date.to_date
-      end
-      
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
+      @branch       = @member.branch
+
+      @current_date = ::Utils::GetCurrentDate.new(
+                        config: {
+                          branch: @branch
+                        }
+                      ).execute!
 
       # Main settings for this loan product
       @settings = nil

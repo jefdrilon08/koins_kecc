@@ -10,12 +10,18 @@ module MemberAccountValidations
       @is_remote                    = @config[:is_remote]
       @branch                       = @member_account_validation.branch
       @particular                   = build_particular
-      @current_date                 = Date.today
+
+      @current_date = ::Utils::GetCurrentDate.new(
+                        config: {
+                          branch: @branch
+                        }
+                      ).execute!
+
       @book                         = 'JVB'
-      @accounting_fund              = ""
+      @accounting_fund_id           = ""
 
       if Settings.activate_microinsurance
-        @accounting_fund            = AccountingFund.where(name: "Mutual Benefit Fund").first
+        @accounting_fund_id            = AccountingFund.where(name: "Mutual Benefit Fund").first.id
       end
 
       @members  = Member.where(id: @member_account_validation.member_account_validation_records.pluck(:member_id))
@@ -38,7 +44,7 @@ module MemberAccountValidations
             branch_id: @branch.id,
             branch_name: @branch.name,
             status: "display",
-            accounting_fund_id: @accounting_fund.id,
+            accounting_fund_id: @accounting_fund_id,
             data: {
               or_number: "",
               ar_number: ""
@@ -88,9 +94,9 @@ module MemberAccountValidations
         members_for_particular << iavr.member.full_name_formatted
       end
 
-      if Settings.activate_microloans
-        particular = "Transfer of RF, Equity Value and RF Interest to savings account of #{members_for_particular.join(', ')} - #{branch.name}"
-      elsif Settings.activate_microinsurance
+      particular = "Transfer of RF, Equity Value and RF Interest to savings account of #{members_for_particular.join(', ')} - #{branch.name}"
+
+      if Settings.activate_microinsurance
         particular = "Withdrawal of RF, LIFE and RF Interest of #{members_for_particular.join(', ')} - #{branch.name}"
       end
 
@@ -108,7 +114,7 @@ module MemberAccountValidations
 
       # TODO: Make this configurable
       if @is_remote
-        dr_accounting_code = AccountingCode.find( '1f305ae6-2b7b-4c72-89cf-470c1ca91781')
+        dr_accounting_code = AccountingCode.find('1f305ae6-2b7b-4c72-89cf-470c1ca91781')
       else
         # RECEIVABLE FROM MBA
         dr_accounting_code = AccountingCode.find('5db5e14d-0fcb-45a7-b468-c4cefe1ad041')

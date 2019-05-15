@@ -1,0 +1,39 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-tachometer-alt
+    Seriatim Report
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %h5
+            Seriatim
+          #filter  
+          = form_tag seriatim_path, html: { novalidate: true }, method: "GET" do
+            .row
+              .col-md-4
+                .form-group
+                  %label Branch
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch_id), class: "form-control select-select2", id: "branch-select"
+              .col-md-4
+                .form-group
+                  %label As of
+                  = date_field_tag :as_of, @as_of, class: "form-control", placeholder: "yyyy-mm-dd", id: "as-of"
+              .col-md-4
+                .form-group
+                  %br
+                  = link_to "#", id: 'download-btn', class: "btn btn-primary btn-lg" do
+                    .fa.fa-download
+                    Download
+
+= javascript_include_tag "Seriatim"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Seriatim.init({
+      authenticityToken: authenticityToken
+    });
+  })

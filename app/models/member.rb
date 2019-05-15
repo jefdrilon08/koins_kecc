@@ -29,6 +29,8 @@ class Member < ApplicationRecord
   has_many :claims, dependent: :delete_all
   has_many :membership_payment_records
 
+  # ActiveStorage
+  has_many_attached :attachment_files
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -63,6 +65,10 @@ class Member < ApplicationRecord
 
   def full_name
     "#{self.last_name}, #{self.first_name}, #{self.middle_name}"
+  end
+
+  def full_name_with_center
+    "#{self.last_name}, #{self.first_name}, #{self.middle_name} (#{self.center})"
   end
 
   def recognition_date
@@ -159,6 +165,11 @@ class Member < ApplicationRecord
     if self.new_record?
       self.status = "pending"
       self.insurance_status = "pending"
+    
+      if self.data.with_indifferent_access[:recognition_date].present?
+        self.status = "active"
+        self.insurance_status = "dormant"
+      end
     end
 
     self.first_name   = self.first_name.upcase

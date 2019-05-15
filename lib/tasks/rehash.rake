@@ -1,4 +1,33 @@
 namespace :rehash do
+  
+  task :member_account_rehash => :environment do
+    id = ENV['ID']
+    beginning_balance = 0
+    ending_balance = 0
+
+    a =  AccountTransaction.where(subsidiary_id: id).order(:transacted_at)
+
+    a.each do |f|
+    
+      beginning_balance = beginning_balance
+      
+      if f.deposit?
+        ending_balance = beginning_balance + f.amount
+      else
+        ending_balance = beginning_balance - f.amount                 
+      end 
+      data = f.data.with_indifferent_access
+      data[:beginning_balance] = beginning_balance
+      data[:ending_balance] = ending_balance 
+      f.update(data: data)
+                            
+      beginning_balance = ending_balance
+    end
+    
+    MemberAccount.find(id).update(balance: a.last.data.with_indifferent_access[:ending_balance] )
+
+  end
+
   task :member_account => :environment do
     member_account  = MemberAccount.find(ENV['ID'])
     puts "Rehashing member_account #{member_account.id}..."

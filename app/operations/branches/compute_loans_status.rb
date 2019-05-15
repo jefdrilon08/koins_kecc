@@ -55,6 +55,9 @@ module Branches
         total_principal_paid: 0.00,
         total_interest_paid: 0.00,
         total_paid: 0.00,
+        total_principal_paid_due: 0.00,
+        total_interest_paid_due: 0.00,
+        total_paid_due: 0.00,
         total_principal_past_due: 0.00,
         total_interest_past_due: 0.00,
         total_past_due: 0.00,
@@ -85,6 +88,21 @@ module Branches
       @data[:total_interest_paid]   = @payments.sum("CAST(data->>'total_interest_paid' AS decimal)").round(2)
       @data[:total_paid]            = (@data[:total_principal_paid] + @data[:total_interest_paid]).round(2)
 
+      # Compute total paid due
+      if @data[:total_principal_paid] >= @data[:total_principal_due]
+        @data[:total_principal_paid_due]  = @data[:total_principal_due]
+      else
+        @data[:total_principal_paid_due]  = @data[:total_principal_paid]
+      end
+
+      if @data[:total_interest_paid] >= @data[:total_interest_due]
+        @data[:total_interest_paid_due] = @data[:total_interest_due]
+      else
+        @data[:total_interest_paid_due] = @data[:total_interest_paid]
+      end
+
+      @data[:total_paid_due]  = (@data[:total_principal_paid_due] + @data[:total_interest_paid_due])
+
       # Compute portfolio
       @data[:total_principal_portfolio] = (@data[:principal] - @data[:total_principal_paid]).round(2)
       @data[:total_interest_portfolio]  = (@data[:interest] - @data[:total_interest_paid]).round(2)
@@ -111,9 +129,13 @@ module Branches
       @data[:total_past_due]            = (@data[:total_principal_past_due] + @data[:total_interest_past_due]).round(2)
 
       # Compute repayment rate
-      @data[:principal_repayment_rate]  = @data[:total_principal_paid] / @data[:total_principal_due]
-      @data[:interest_repayment_rate]   = @data[:total_interest_paid] / @data[:total_interest_due]
-      @data[:repayment_rate]            = @data[:total_paid] / @data[:total_due]
+#      @data[:principal_repayment_rate]  = @data[:total_principal_paid] / @data[:total_principal_due]
+#      @data[:interest_repayment_rate]   = @data[:total_interest_paid] / @data[:total_interest_due]
+#      @data[:repayment_rate]            = @data[:total_paid] / @data[:total_due]
+
+      @data[:principal_repayment_rate]  = @data[:total_principal_paid_due] / @data[:total_principal_due]
+      @data[:interest_repayment_rate]   = @data[:total_interest_paid_due] / @data[:total_interest_due]
+      @data[:repayment_rate]            = @data[:total_paid_due] / @data[:total_due]
 
       # Clean repayment rates
       if @data[:principal_repayment_rate] > 1

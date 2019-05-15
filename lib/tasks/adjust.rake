@@ -1,4 +1,56 @@
 namespace :adjust do
+  task :reload_repayment_rates => :environment do
+    repayment_rates = DataStore.repayment_rates
+
+    size  = repayment_rates.size
+    puts "Reloading #{size} RR data stores..."
+
+    repayment_rates.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Reloading #{o.id}... #{progress}%%")
+
+      args  = {
+        id: o.id,
+        data_store_type: "REPAYMENT_RATES"
+      }
+
+      ProcessRepaymentRates.perform_later(args)
+    end
+
+    puts "Done."
+  end
+
+  task :generate_missing_accounts => :environment do
+    members = Member.all
+
+    if ENV['BRANCH_ID'].present?
+      members = members.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    if ENV['CENTER_ID'].present?
+      members = members.where(center_id: ENV['CENTER_ID'])
+    end
+
+    if ENV['MEMBER_ID'].present?
+      members = members.where(id: ENV['MEMBER_ID'])
+    end
+
+    size  = members.count
+
+    members.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Generating missing accounts for member #{o.id}... #{progress}%%")
+
+      ::Members::GenerateMissingAccounts.new(
+        config: {
+          member: o
+        }
+      ).execute!
+    end
+
+    puts "\nDone."
+  end
+
   task :update_maintaining_balance => :environment do
     members = Member.active
 
@@ -8,6 +60,10 @@ namespace :adjust do
 
     if ENV['CENTER_ID'].present?
       members = members.where(center_id: ENV['CENTER_ID'])
+    end
+
+    if ENV['MEMBER_ID'].present?
+      members = members.where(id: ENV['MEMBER_ID'])
     end
 
     size  = members.count
