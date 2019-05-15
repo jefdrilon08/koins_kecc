@@ -103,4 +103,11 @@ module ApplicationHelper
       return "JVB"
     end
   end
+
+  def tr_status(status)
+    if status == "pending"
+      'rejected'
+    end
+  end
+  
 end

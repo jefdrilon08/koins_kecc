@@ -14,7 +14,9 @@ class Member < ApplicationRecord
     "transferred",
     "cleared"
   ]
-
+  INSURANCE_STATUS = ["inforce", "lapsed", "resigned", "dormant", "pending", "cleared"]
+  MEMBER_TYPES = ["Regular", "GK", "Kaagapay"]
+  
   belongs_to :center
   belongs_to :branch
 
@@ -216,4 +218,17 @@ class Member < ApplicationRecord
   def full_name_formatted
     "#{first_name.titleize} #{middle_name.titleize} #{last_name.titleize}"  
   end
+
+   def spouse_age
+    if self.data['spouse']['date_of_birth'].nil?
+      0
+    else
+      begin
+        ((Time.zone.now - self.data['spouse']['date_of_birth'].to_time) / 1.year.seconds).floor
+      rescue Exception
+        "Invalid date of birth: #{self.data['spouse']['date_of_birth']}"
+      end
+    end
+  end
+
 end

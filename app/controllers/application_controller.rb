@@ -14,7 +14,8 @@ class ApplicationController < ActionController::Base
   FOR_PDF_PATH = [
     "clip_claims",
     "claims",
-    "member_account_validations"
+    "member_account_validations",
+    "insurance_accounts"
   ]
 
   FOR_PDF = [
@@ -23,7 +24,9 @@ class ApplicationController < ActionController::Base
     "clip_claim_validation_pdf",
     "clip_claim_loa_pdf",
     "withdrawal_pdf",
-    "pdf"
+    "pdf",
+    "claims_copy_pdf",
+    "insurance_account_pdf"
   ]
 
   def layout_by_resource
