@@ -200,10 +200,25 @@
                       Interest
                     %th.text-right
                       Total
+                    %th.text-right
+                      Paid Principal
+                    %th.text-right
+                      Paid Interest
+                    %th.text-right
+                      Paid
                     %th.text-center
                       Status
                 %tbody
+                  - total_principal       = 0.00
+                  - total_interest        = 0.00
+                  - total_principal_paid  = 0.00
+                  - total_interest_paid   = 0.00
                   - @data[:original_amortization_schedule_entries].each_with_index do |o, i|
+                    - total_principal       += o[:principal].to_f.round(2)
+                    - total_interest        += o[:interest].to_f.round(2)
+                    - total_principal_paid  += o[:principal_paid].to_f.round(2)
+                    - total_interest_paid   += o[:interest_paid].to_f.round(2)
+
                     %tr
                       %td.text-center
                         #{i + 1}
@@ -213,6 +228,12 @@
                         #{number_to_currency(o[:interest], unit: '')}
                       %td.text-right
                         #{number_to_currency(o[:amount_due], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:principal_paid], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:interest_paid], unit: '')}
+                      %td.text_right
+                        #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
                           .badge.badge-success
@@ -220,6 +241,20 @@
                         - else
                           .badge.badge-danger
                             Due
+                  %tr
+                    %th
+                    %th.text-right
+                      #{number_to_currency(total_principal, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_interest, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_principal + total_interest, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_principal_paid, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_interest_paid, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_principal_paid + total_interest_paid, unit: '')}
             .col-md-6.col-xs-12
               %h3
                 Should be Amortization
