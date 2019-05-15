@@ -12,25 +12,67 @@ module MemberAccounts
       @dormant_threshold_months     = @account_settings.dormant_threshold_months
       @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
       @annual_interest_rate         = @account_settings.annual_interest_rate
+      @zero_interest_threshold      = @account_settings.zero_interest_threshold
       @monthly_interest_rate        = (@annual_interest_rate / 12.0)
 
-      # Check if dormant
-      if @dormant_annual_interest_rate.present?
-        loan_ids  = Loan.active_or_paid.where(
-                      member_id: @member_account.member.id
-                    ).pluck(:id)
+      # Check if zero_interest_threshold is applicable
+      @latest_transaction = AccountTransaction.savings.where(
+                              "subsidiary_id = ? AND DATE(transacted_at) <= ?",
+                              @member_account.id,
+                              @closing_date
+                            ).where.not(
+                              "data->>'is_interest' = ?",
+                              'true'
+                            ).order("transacted_at ASC, created_at ASC").last
 
-        latest_payment  = AccountTransaction.approved_loan_payments.where(
-                            subsidiary_id: loan_ids
-                          ).order("transacted_at ASC").last
+      if @latest_transaction.present? and @zero_interest_threshold.present?
+        threshold_date  = @closing_date - @zero_interest_threshold.to_i.months
 
-        threshold_date  = @closing_date - @dormant_threshold_months.to_i.months
+        #raise "#{@latest_transaction.transacted_at.to_date < threshold_date} Latest Transaction: #{@latest_transaction.transacted_at.to_date} Threshold Date: #{threshold_date}"
 
-        if latest_payment.present? && latest_payment.transacted_at < threshold_date
+        if @latest_transaction.transacted_at.to_date < threshold_date
+          @annual_interest_rate   = 0
+          @monthly_interest_rate  = 0
+        end
+      else
+        # Check if dormant
+        is_dormant  = ::MemberAccounts::IsDormant.new(
+                        config: {
+                          member_account: @member_account,
+                          closing_date: @closing_date,
+                          account_settings: @account_settings
+                        }
+                      ).execute!
+
+        if is_dormant
           @annual_interest_rate   = @dormant_annual_interest_rate
           @monthly_interest_rate  = (@annual_interest_rate / 12.0)
         end
       end
+
+#      if @dormant_annual_interest_rate.present?
+#        loan_ids  = Loan.active_or_paid.where(
+#                      member_id: @member_account.member.id
+#                    ).pluck(:id)
+#
+#        latest_payment  = AccountTransaction.approved_loan_payments.where(
+#                            subsidiary_id: loan_ids
+#                          ).order("transacted_at ASC").last
+#
+#        threshold_date  = @closing_date - @dormant_threshold_months.to_i.months
+#
+#        # No latest transaction
+#        if latest_payment.blank?
+#          @annual_interest_rate   = @dormant_annual_interest_rate
+#          @monthly_interest_rate  = (@annual_interest_rate / 12.0)
+#        end
+#
+#        if latest_payment.present? && latest_payment.transacted_at < threshold_date
+#          @annual_interest_rate   = @dormant_annual_interest_rate
+#          @monthly_interest_rate  = (@annual_interest_rate / 12.0)
+#        end
+#      end
+
 
       @data = {
         closing_date: @closing_date,

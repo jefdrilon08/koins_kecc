@@ -476,4 +476,108 @@ namespace :adjust do
     end
     puts "Done!"
   end
+  task :update_member_insurance_status => :environment do
+    puts "Updating member insurance status"
+    members = Member.all.order("members.id DESC")
+    current_date = Date.today
+    
+    member_accounts      = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
+    account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id)).order("transacted_at ASC")
+
+    default_periodic_payment = 15.0 
+    size  = members.size
+
+    members.each_with_index do |member, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Validating #{member.id}... #{progress}%%")
+
+      puts "Updating #{member.id} - #{member.full_name}"
+      start_date = member.data.with_indifferent_access[:recognition_date].try(:to_date)
+
+      # if start_date.blank?
+      #   insurance_membership_type_name = Settings.type ||= "Insurance"
+      #   member.membership.each do |membership|
+      #     if membership[:type][:name] == insurance_membership_type_name
+      #       if membership[:paid] == true 
+      #         if !membership[:membership_payment][:paid_at].nil?
+      #           start_date = membership[:membership_payment][:paid_at].try(:to_date)
+      #         end
+      #       end          
+      #     end
+      #   end
+      # end
+
+      if start_date.present?
+        #member_account = member.member_accounts.joins(:insurance_type).where("insurance_types.code = ?", member_account_code).first
+        member_account = member_accounts.select{ |o| o[:member_id] == member.id }.first
+
+        transactions  = account_transactions.select{ |o| o[:subsidiary_id] == member_account.id }
+        
+        #if member_account.account_transactions.count >= 1
+        if transactions.size > 0
+#          latest_payment           = member_account.account_transactions.where("member_account_id = ? and amount > 0", member_account.id).last
+#          last_payment_date        = member_account.account_transactions.where("member_account_id = ? and amount > 0", member_account.id).last.transacted_at.to_date
+
+          latest_payment    = transactions.last
+          last_payment_date = transactions.last[:transacted_at].to_date
+
+          current_balance          = latest_payment ? latest_payment.data.with_indifferent_access[:ending_balance].to_f : 0.00
+
+          # Code
+          num_days                 = (current_date - start_date).to_i
+          num_weeks                = (num_days / 7).to_i
+          insured_amount           = num_weeks * default_periodic_payment
+          latest_transaction_date  = latest_payment ? latest_payment.transacted_at.to_date : start_date
+
+          num_days_insured         = (latest_transaction_date.to_date  - start_date).to_i
+          num_weeks_insured        = (num_days_insured / 7).to_i
+
+          insured_amount           = num_weeks  * default_periodic_payment
+          coverage_date            = (start_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
+          amt_past_due             = (current_balance - insured_amount) * -1
+          num_weeks_past_due       = (amt_past_due / default_periodic_payment).to_i
+
+          days_lapsed = (current_date - last_payment_date).to_i
+
+          
+          if current_balance == 0.00 && latest_payment.data.with_indifferent_access[:is_withdraw_payment] == true
+            member.update(insurance_status: "dormant")
+          elsif current_balance == 0.00
+            member.update(insurance_status: "dormant")
+          elsif days_lapsed <= 45 && current_balance >= insured_amount
+            member.update(insurance_status: "inforce")
+          elsif days_lapsed > 45 && current_balance >= insured_amount
+            member.update(insurance_status: "inforce")
+          elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
+            member.update(insurance_status: "inforce")
+          elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
+            member.update(insurance_status: "lapsed")  
+          elsif days_lapsed > 45 && current_balance < insured_amount
+            member.update(insurance_status: "lapsed")
+          end
+        elsif transactions.size == 0
+          member.update(insurance_status: "dormant")
+        end
+      else
+        member.update(insurance_status: "pending") 
+      end
+
+      if member.member_type == "GK"
+        member.update(insurance_status: "resigned")
+      elsif member.status == "resigned"
+        if member.data.with_indifferent_access[:recognition_date].nil?
+          member.update(insurance_status: "pending")
+        else
+          member.update(insurance_status: "resigned")
+        end
+      elsif member.status == "pending"
+        member.update(insurance_status: "pending")
+      elsif member.status == "archived"
+        member.update(insurance_status: "dormant")
+      elsif member.status == "cleared"
+        member.update(insurance_status: "cleared")
+      end
+    end
+    puts "Done!"
+  end
 end

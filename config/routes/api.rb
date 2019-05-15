@@ -3,6 +3,11 @@ namespace :api do
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
+    # Adjustments
+    namespace :adjustments do
+      post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"
+    end
+
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
@@ -64,6 +69,9 @@ namespace :api do
     post "/loans/update_first_date_of_payment", to: "loans#update_first_date_of_payment"
     post "/loans/update_date_released", to: "loans#update_date_released"
     post "/loans/delay_amort", to: "loans#delay_amort"
+    post "/loans/new_adjustment", to: "loans#new_adjustment"
+    post "/loans/delete_adjustment", to: "loans#delete_adjustment"
+    post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches

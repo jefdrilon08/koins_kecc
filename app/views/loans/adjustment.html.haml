@@ -1,0 +1,233 @@
+= render partial: "adjustment_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %h3
+            Summary
+          %table.table.table-sm.table-bordered
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Excess Principal Paid:
+                %td
+                  #{number_to_currency(@data[:excess_principal_paid], unit: "")}
+              %tr
+                %th
+                  Excess Interest Paid:
+                %td
+                  #{number_to_currency(@data[:excess_interest_paid], unit: "")}
+              %tr
+                %th
+                  Excess Total Paid:
+                %td
+                  #{number_to_currency(@data[:excess_paid], unit: "")}
+              %tr
+                %th{ width: "25%" }
+                  Remaining Principal Balance:
+                %td
+                  #{number_to_currency(@data[:remaining_principal_balance], unit: "")}
+              %tr
+                %th
+                  Remaining Interest Balance:
+                %td
+                  #{number_to_currency(@data[:remaining_interest_balance], unit: "")}
+              %tr
+                %th
+                  Remaining Total Balance:
+                %td
+                  #{number_to_currency(@data[:remaining_balance], unit: "")}
+
+              %tr
+                %th
+                  Total Principal Paid:
+                %td
+                  #{number_to_currency(@data[:total_principal_paid], unit: "")}
+              %tr
+                %th
+                  Total Interest Paid:
+                %td
+                  #{number_to_currency(@data[:total_interest_paid], unit: "")}
+              %tr
+                %th
+                  Total Paid:
+                %td
+                  #{number_to_currency(@data[:total_principal_paid].to_f + @data[:total_interest_paid].to_f, unit: "")}
+          %hr
+
+          .row
+            .col-md-6.col-xs-12
+              %h3
+                Original Values
+              %table.table.table-sm.table-bordered
+                %tbody
+                  %tr
+                    %th{ width: "25%" }
+                      Principal:
+                    %td
+                      #{number_to_currency(@data[:loan][:principal], unit: "")}
+                  %tr
+                    %th
+                      Interest:
+                    %td
+                      #{number_to_currency(@data[:loan][:interest], unit: "")}
+                  %tr
+                    %th
+                      Monthly Interest Rate:
+                    %td
+                      #{@data[:loan][:monthly_interest_rate]}
+                  %tr
+                    %th
+                      Num Installments:
+                    %td
+                      #{@data[:loan][:num_installments]}
+                  %tr
+                    %th
+                      Term:
+                    %td
+                      #{@data[:loan][:term]}
+              %table.table.table-sm.table-bordered
+                %thead
+                  %tr
+                    %th.text-center
+                      \#
+                    %th.text-right
+                      Principal
+                    %th.text-right
+                      Interest
+                    %th.text-right
+                      Total
+                    %th.text-center
+                      Status
+                %tbody
+                  - @data[:original_amortization_schedule_entries].each_with_index do |o, i|
+                    %tr
+                      %td.text-center
+                        #{i + 1}
+                      %td.text-right
+                        #{number_to_currency(o[:principal], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:interest], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:amount_due], unit: '')}
+                      %td.text-center
+                        - if o[:is_paid] == true
+                          .badge.badge-success
+                            Paid
+                        - else
+                          .badge.badge-danger
+                            Due
+            .col-md-6.col-xs-12
+              %h3
+                Adjusted Values
+              %table.table.table-sm.table-bordered
+                %tbody
+                  %tr
+                    %th{ width: "25%" }
+                      Principal:
+                    %td
+                      #{number_to_currency(@data[:p_principal], unit: "")}
+                  %tr
+                    %th
+                      Interest:
+                    %td
+                      #{number_to_currency(@data[:should_be_interest], unit: "")}
+                  %tr
+                    %th
+                      Monthly Interest Rate:
+                    %td
+                      #{@data[:p_monthly_interest_rate]}
+                  %tr
+                    %th
+                      Num Installments:
+                    %td
+                      #{@data[:p_num_installments]}
+                  %tr
+                    %th
+                      Term:
+                    %td
+                      #{@data[:p_term]}
+              %table.table.table-sm.table-bordered
+                %thead
+                  %tr
+                    %th.text-center
+                      \#
+                    %th.text-right
+                      Principal
+                    %th.text-right
+                      Interest
+                    %th.text-right
+                      Total
+                    %th.text-right
+                      Paid Principal
+                    %th.text-right
+                      Paid Interest
+                    %th.text-right
+                      Paid
+                    %th.text-center
+                      Status
+                %tbody
+                  - total_principal_paid  = 0.00
+                  - total_interest_paid   = 0.00
+
+                  - @data[:reamortized].each_with_index do |o, i|
+                    %tr
+                      %td.text-center
+                        #{i + 1}
+                      %td.text-right
+                        #{number_to_currency(o[:principal], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:interest], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:principal] + o[:interest], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:principal_paid], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:interest_paid], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
+                      %td.text-center
+                        - if o[:is_paid] == true
+                          .badge.badge-success
+                            Paid
+                        - else
+                          .badge.badge-danger
+                            Due
+                  %tr
+                    %th.text-center
+                      TOTAL
+                    %th.text-right
+                      #{number_to_currency(@data[:p_principal], unit: "")}
+                    %th.text-right
+                      #{number_to_currency(@data[:should_be_interest], unit: "")}
+                    %th.text-right
+                      #{number_to_currency(@data[:should_be_dues], unit: "")}
+                    %th.text-right
+                      #{number_to_currency(@data[:total_principal_paid], unit: "")}
+                    %th.text-right
+                      #{number_to_currency(@data[:total_interest_paid], unit: "")}
+                    %th.text-right
+                      #{number_to_currency(@data[:total_principal_paid].to_f + @data[:total_interest_paid].to_f, unit: "")}
+
+= render partial: "loans/adjustments/modals/delete"
+= render partial: "loans/adjustments/modals/approve"
+= render partial: "templates/error_list"
+
+#parameters{ data: { id: @adjustment_record.id, loan_id: @loan.id } }
+
+= javascript_include_tag "loans/adjustments/Show.js"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var loanId            = $("#parameters").data('loan-id');
+    var id                = $("#parameters").data('id');
+
+    Show.init({
+      id: id,
+      loanId: loanId,
+      authenticityToken: authenticityToken
+    });
+  });
