@@ -1,6 +1,5 @@
 class AccountTransaction < ApplicationRecord
   belongs_to :subsidiary, polymorphic: true
-  belongs_to :member_account
 
   scope :personal_funds, -> { where(transaction_type: ["deposit", "withdraw"]) }
   scope :personal_funds_deposits, -> { where(transaction_type: "deposit") }

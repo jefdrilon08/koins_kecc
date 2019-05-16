@@ -28,15 +28,6 @@ module MemberAccountValidations
       @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
       @data[:accounting_entry][:status]           = @accounting_entry.status
       @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
-
-      @member_account_validation.update!(
-        status: "approved",
-        reference_number: @accounting_entry.reference_number,
-        updated_at: @c_working_date,
-        approved_by: @user,
-        date_approved: @c_working_date,
-        data: @data
-      )
        
       create_rf_member_deposits!
 
@@ -51,6 +42,15 @@ module MemberAccountValidations
 
       approved_member_account_validation_record_status!     
     
+      @member_account_validation.update!(
+        status: "approved",
+        reference_number: @accounting_entry.reference_number,
+        updated_at: @c_working_date,
+        approved_by: @user,
+        date_approved: @c_working_date,
+        data: @data
+      )
+
       @member_account_validation
     end
 
