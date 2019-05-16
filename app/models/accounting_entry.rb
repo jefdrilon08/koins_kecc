@@ -30,7 +30,8 @@ class AccountingEntry < ApplicationRecord
   scope :misc, -> { includes(:journal_entries).where(book: "MISC").order("date_prepared DESC") }
 
   before_validation :load_defaults
-
+  
+  
   def load_defaults
     if self.new_record?
       self.status = "pending"

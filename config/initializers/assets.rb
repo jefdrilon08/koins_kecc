@@ -32,6 +32,8 @@ Rails.application.config.assets.precompile += [
   "administration/loan_products/Show.js",
   "administration/loan_products/Index.js",
   "accounting/BooksIndex.js",
+  "adjustments/subsidiary_adjustments/Index.js",
+  "adjustments/subsidiary_adjustments/Show.js",
   "billings/Index.js",
   "billings/Show.js",
   "savings_accounts/Show.js",
@@ -67,6 +69,7 @@ Rails.application.config.assets.precompile += [
   "monthly_closing_collections/Index.js",
   "monthly_closing_collections/Show.js",
   "loans/Show.js",
+  "loans/adjustments/Show.js",
   "MembersIndex.min.react.js",
   "MembersForm.min.react.js",
   "MembersFormResignation.min.react.js",
@@ -110,5 +113,11 @@ Rails.application.config.assets.precompile += [
   "clip_claims/Index.js",
   "clip_claims.js",
   "clip_claims_form.js",
+  "reports/InsuredLoans.js",
+  "member_reports.js",
+  "reports/CollectionsClipReport.js",
+  "reports/CollectionsBlipReport.js",
+  "reports/MemberDependentReport.js",
+  "reports/CicReport.js",
   "Seriatim.js"
 ]

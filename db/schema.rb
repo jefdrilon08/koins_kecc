@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(version: 2019_05_01_021303) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "adjustment_type"
+    t.date "date_approved"
+    t.string "approved_by"
   end
 
   create_table "amortization_schedule_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -195,9 +197,12 @@ ActiveRecord::Schema.define(version: 2019_05_01_021303) do
   end
 
   create_table "claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+<<<<<<< HEAD
     t.integer "member_id"
     t.integer "center_id"
     t.integer "branch_id"
+=======
+>>>>>>> d04afee84e8ceff4402983dc89b5b8ff78ef5db8
     t.date "date_prepared"
     t.string "policy_number"
     t.string "type_of_insurance_policy"
@@ -224,6 +229,15 @@ ActiveRecord::Schema.define(version: 2019_05_01_021303) do
     t.date "date_paid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+<<<<<<< HEAD
+=======
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.index ["branch_id"], name: "index_claims_on_branch_id"
+    t.index ["center_id"], name: "index_claims_on_center_id"
+    t.index ["member_id"], name: "index_claims_on_member_id"
+>>>>>>> d04afee84e8ceff4402983dc89b5b8ff78ef5db8
   end
 
   create_table "clip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

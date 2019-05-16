@@ -3,6 +3,82 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def approve_adjustment
+        adjustment_record = AdjustmentRecord.find(params[:id])
+
+        config  = {
+          adjustment_record: adjustment_record,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateApproveAdjustmentRecord.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          adjustment_record = ::Loasn::ApproveAdjustmentRecord.new(
+                                config: config
+                              ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def delete_adjustment
+        adjustment_record = AdjustmentRecord.find(params[:id])
+
+        config  = {
+          adjustment_record: adjustment_record,
+          user: current_user
+        }
+
+        errors  = ::Loans::ValidateDeleteAdjustmentRecord.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          adjustment_record.destroy!
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def new_adjustment
+        loan  = Loan.find(params[:id])
+
+        p_principal             = params[:p_principal].try(:to_f)
+        p_monthly_interest_rate = params[:p_monthly_interest_rate].try(:to_f)
+        p_num_installments      = params[:p_num_installments].try(:to_i)
+        p_term                  = params[:p_term]
+
+        config  = {
+          loan: loan,
+          user: current_user,
+          p_principal: p_principal,
+          p_monthly_interest_rate: p_monthly_interest_rate,
+          p_num_installments: p_num_installments,
+          p_term: p_term
+        }
+
+        errors  = ::Loans::ValidateReamortize.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          adjustment_record = ::Loans::GenerateReamortizationAdjustment.new(
+                                config: config  
+                              ).execute!
+
+          render json: { message: "ok", id: adjustment_record.id }
+        end
+      end
+
       def delay_amort
         amort     = AmortizationScheduleEntry.where(id: params[:id]).first
         user      = current_user

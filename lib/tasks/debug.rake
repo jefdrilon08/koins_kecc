@@ -1,4 +1,176 @@
 namespace :debug do
+  task :loan_reamortize => :environment do
+    loan                    = Loan.find(ENV['ID'])
+    p_principal             = ENV['P_PRINCIPAL'].to_f.round(2)
+    p_monthly_interest_rate = ENV['P_MONTHLY_INTEREST_RATE'].to_f
+    p_num_installments      = ENV['P_NUM_INSTALLMENTS']
+    p_term                  = ENV['P_TERM']
+
+    config  = {
+      loan: loan,
+      p_principal: p_principal,
+      p_monthly_interest_rate: p_monthly_interest_rate,
+      p_num_installments: p_num_installments,
+      p_term: p_term
+    }
+
+    data  = ::Loans::Reamortize.new(
+              config: config
+            ).execute!
+
+    puts "Loan:"
+    puts "========================"
+    puts "ID: #{data[:loan][:id]}"
+    puts "Loan Product: #{data[:loan_product][:name]}"
+    puts "PN Number: #{data[:loan][:pn_number]}"
+    puts "Monthly Interest Rate: #{data[:loan][:monthly_interest_rate]}"
+    puts "Num Installments: #{data[:loan][:num_installments]}"
+    puts "Term: #{data[:loan][:term]}"
+    puts "Principal: #{data[:loan][:principal]}"
+    puts "Interest: #{data[:loan][:interest]}"
+    puts "Principal Paid: #{data[:loan][:principal_paid]}"
+    puts "Interest Paid: #{data[:loan][:interest_paid]}"
+    puts "Principal Balance: #{data[:loan][:principal_balance]}"
+    puts "Interest Balance: #{data[:loan][:interest_balance]}"
+    puts ""
+
+    puts "Original Amortization:"
+    puts "========================"
+
+    values  = []
+    total_principal         = 0.00
+    total_interest          = 0.00
+    total_principal_paid    = 0.00
+    total_interest_paid     = 0.00
+    total_principal_balance = 0.00
+    total_interest_balance  = 0.00
+
+    data[:original_amortization_schedule_entries].each do |a|
+      total_principal         += a.principal
+      total_interest          += a.interest
+      total_principal_paid    += a.principal_paid
+      total_interest_paid     += a.interest_paid
+      total_principal_balance += a.principal_balance
+      total_interest_balance  += a.interest_balance
+
+      values << [
+        a.due_date.strftime("%B %d, %Y"),
+        a.principal, 
+        a.interest,
+        a.principal_paid,
+        a.interest_paid,
+        a.principal_balance,
+        a.interest_balance,
+        a.is_paid ? 'Yes' : 'No'
+      ]
+    end
+
+    values << [
+      'TOTAL',
+      total_principal,
+      total_interest,
+      total_principal_paid,
+      total_interest_paid,
+      total_principal_balance,
+      total_interest_balance,
+      ''
+    ]
+
+    original_amortization_table = TTY::Table.new(
+                                    [
+                                      'Due Date',
+                                      'Principal',
+                                      'Interest',
+                                      'Principal Paid',
+                                      'Interest Paid',
+                                      'Principal Balance',
+                                      'Interest Balance',
+                                      'Is Paid'
+                                    ],
+                                    values
+                                  )
+
+
+    puts original_amortization_table.render :ascii
+
+    puts ""
+
+    puts "Reamortized"
+    puts "========================"
+
+    values  = []
+    total_principal         = 0.00
+    total_interest          = 0.00
+    total_principal_paid    = 0.00
+    total_interest_paid     = 0.00
+    total_principal_balance = 0.00
+    total_interest_balance  = 0.00
+
+    data[:reamortized].each_with_index do |a, i|
+      total_principal         += a[:principal]
+      total_interest          += a[:interest]
+      total_principal_paid    += a[:principal_paid]
+      total_interest_paid     += a[:interest_paid]
+      total_principal_balance += a[:principal_balance]
+      total_interest_balance  += a[:interest_balance]
+
+      values << [
+        "Payment #{i + 1}",
+        a[:principal], 
+        a[:interest],
+        a[:principal_paid],
+        a[:interest_paid],
+        a[:principal_balance],
+        a[:interest_balance],
+        a[:is_paid] ? 'Yes' : 'No'
+      ]
+    end
+
+    values << [
+      'TOTAL',
+      total_principal,
+      total_interest,
+      total_principal_paid,
+      total_interest_paid,
+      total_principal_balance,
+      total_interest_balance,
+      ''
+    ]
+
+    reamortized_amortization_table  = TTY::Table.new(
+                                        [
+                                          'Due Date',
+                                          'Principal',
+                                          'Interest',
+                                          'Principal Paid',
+                                          'Interest Paid',
+                                          'Principal Balance',
+                                          'Interest Balance',
+                                          'Is Paid'
+                                        ],
+                                        values
+                                      )
+
+
+    puts reamortized_amortization_table.render :ascii
+
+    puts ""
+
+    puts "Summary"
+    puts "========================"
+    puts "Principal: #{data[:loan][:principal]}"
+    puts "Interest: #{data[:loan][:interest]}"
+    puts "Remaining Principal Balance: #{data[:remaining_principal_balance]}"
+    puts "Remaining Interest Balance: #{data[:remaining_interest_balance]}"
+    puts "Remaining Total Balance: #{data[:remaining_balance]}"
+    puts "Excess Principal Paid: #{data[:excess_principal_paid]}"
+    puts "Excess Interest Paid: #{data[:excess_interest_paid]}"
+    puts "Should Be Principal: #{data[:should_be_principal]}"
+    puts "Should Be Interest: #{data[:should_be_interest]}"
+    puts "Should Be Dues: #{data[:should_be_dues]}"
+
+  end
+
   task :loan_repayment_rate => :environment do
     as_of = ENV['AS_OF'].to_date
     loan  = Loan.find(ENV['LOAN_ID'])

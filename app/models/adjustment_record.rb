@@ -5,7 +5,8 @@ class AdjustmentRecord < ApplicationRecord
   ]
 
   ADJUSTMENT_TYPES  = [
-    "reamortization"
+    "reamortization",
+    "subsidiary"
   ]
 
   validates :meta, presence: true
@@ -17,6 +18,15 @@ class AdjustmentRecord < ApplicationRecord
   scope :approved, -> { where(status: "approved") }
 
   scope :reamortization, -> { where(adjustment_type: "reamortization") }
+  scope :subsidiary, -> { where(adjustment_type: "subsidiary") }
+
+  before_validation :load_defaults
+
+  def load_defaults
+    if self.status.blank?
+      self.status = "pending"
+    end
+  end
 
   def pending?
     status == "pending"

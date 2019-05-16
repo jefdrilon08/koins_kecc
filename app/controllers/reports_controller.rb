@@ -1,0 +1,127 @@
+class ReportsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :load_defaults
+
+  def load_defaults
+    if params[:start_date].present? and params[:end_date].present?
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+    end
+
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+    end
+    @branches = Branch.all
+  end
+
+  def insured_loans
+    if params[:start_date].present? and params[:end_date].present? and params[:loan_status].present? and params[:branch_id].present?
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @loan_status = params[:loan_status]
+      @branch_id = params[:branch_id]
+
+      @data = Insurance::FetchInsuredLoans.new(start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: @branch_id).execute!
+    end
+  end
+
+  def print_insured_loans
+    @data = Insurance::FetchInsuredLoans.new(start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: params[:branch_id]).execute!
+
+    if params[:start_date].present? and params[:end_date].present? and params[:loan_status].present? and params[:branch_id].present?
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @loan_status = params[:loan_status]
+      @branch     = Branch.find(params[:branch_id])
+
+      @data = Insurance::FetchInsuredLoans.new(start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: @branch.id).execute!
+    end
+
+    filename = "#{@branch}_insured_loans.xlsx"
+    report_package = Reports::GenerateExcelForInsuredLoans.new(data: @data, start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: @branch.id).execute!
+    report_package.serialize "#{Rails.root}/tmp/#{filename}"
+
+   
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  
+  def member_reports
+    if params[:download].present?
+      branch_id     = params[:branch_id]
+      insurance_status = params[:insurance_status]
+      member_type = params[:member_type]
+      status = params[:member_status]
+      start_date    = params[:start_date]
+      end_date      = params[:end_date]
+
+
+      data = Reports::MemberReports.new(
+                  branch_id: branch_id,
+                  status: status,
+                  member_type: member_type,
+                  insurance_status: insurance_status,
+                  start_date: start_date,
+                  end_date: end_date
+                ).execute!
+
+      filename = "member_report.xlsx"
+      report_package = Reports::MemberReportsExcel.new(data: data, status: status, start_date: start_date, end_date: end_date).execute!
+      report_package.serialize "#{Rails.root}/tmp/#{filename}"
+
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    else
+      render "reports/member_reports"
+    end
+  end
+
+  def collections_clip_reports
+    branch = params[:branch]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch_name = Branch.where(id: branch).first.name
+
+    excel = Reports::GenerateCollectionsClipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "#{branch_name}_collections_clip_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def collections_blip_reports
+    branch = params[:branch]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch_name = Branch.where(id: branch).first.name
+  
+    excel = Reports::GenerateCollectionsBlipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "#{branch_name}_collections_blip_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def member_dependent_reports
+    branch = params[:branch]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch_name = Branch.where(id: branch).first.name
+  
+    excel = Reports::GenerateMemberDependentReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+    filename  = "#{branch_name}_member_dependent_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  def cic_reports
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
+    @provider_code = params[:provider_code]
+
+    excel = Reports::GenerateCicReportExcel.new(provider_code: @provider_code, start_date: @start_date, end_date: @end_date).execute!
+    filename  = "cic_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  
+end

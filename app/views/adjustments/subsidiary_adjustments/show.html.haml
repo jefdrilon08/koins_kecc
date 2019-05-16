@@ -1,0 +1,24 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card-body
+
+#parameters{ data: { id: @adjustment_record.id } }
+
+= render partial: "adjustments/subsidiary_adjustments/modals/delete"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "adjustments/subsidiary_adjustments/Show"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var id                = $("#parameters").data("id");
+
+    Show.init({
+      authenticityToken: authenticityToken,
+      id: id
+    });
+  });

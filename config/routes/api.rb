@@ -3,6 +3,11 @@ namespace :api do
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
+    # Adjustments
+    namespace :adjustments do
+      post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"
+    end
+
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
@@ -64,6 +69,9 @@ namespace :api do
     post "/loans/update_first_date_of_payment", to: "loans#update_first_date_of_payment"
     post "/loans/update_date_released", to: "loans#update_date_released"
     post "/loans/delay_amort", to: "loans#delay_amort"
+    post "/loans/new_adjustment", to: "loans#new_adjustment"
+    post "/loans/delete_adjustment", to: "loans#delete_adjustment"
+    post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches
@@ -223,5 +231,10 @@ namespace :api do
       post "/loan_products/modify_prerequisite", to: "loan_products#modify_prerequisite"
       post "/loan_products/modify_maintaining_balance", to: "loan_products#modify_maintaining_balance"
     end
+    get 'reports/member_reports', to: 'reports#member_reports'
+    get 'reports/collections_clip_reports', to: 'reports#collections_clip_reports'
+    get 'reports/collections_blip_reports', to: 'reports#collections_blip_reports'
+    get 'reports/member_dependent_reports', to: 'reports#member_dependent_reports'
+    get 'reports/cic_reports', to: 'reports#cic_reports'
   end
 end
