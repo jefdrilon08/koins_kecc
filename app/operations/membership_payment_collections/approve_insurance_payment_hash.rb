@@ -7,7 +7,7 @@ module MembershipPaymentCollections
       @user               = @config[:user]
       @particular         = @config[:particular]
 
-      raise @insurance_payment.inspect
+      #raise @insurance_payment.inspect
       @amount             = @insurance_payment[:amount].try(:to_f).round(2)
 
       @transaction_type = "deposit"
