@@ -191,33 +191,32 @@ module Loans
         # loop against new amortization and flag paid
         buffer_principal_paid = @principal_paid
         buffer_interest_paid  = @interest_paid
-        buffer_total          = @principal_paid + @interest_paid
 
         #raise "Principal Paid: #{@principal_paid} Interest Paid: #{@interest_paid} Total Paid: #{@principal_paid + @interest_paid}"
 
         @new_amortization.each_with_index do |o, i|
-          if buffer_total >= o[:interest]
+          if buffer_interest_paid >= o[:interest]
             @new_amortization[i][:interest_paid]    = o[:interest]
             @new_amortization[i][:interest_balance] = 0.00
 
-            buffer_total -= o[:interest].to_f.round(2)
-          elsif o[:interest] > buffer_total
-            @new_amortization[i][:interest_paid]    = buffer_total
-            @new_amortization[i][:interest_balance] -= buffer_total
+            buffer_interest_paid -= o[:interest].to_f.round(2)
+          elsif o[:interest] > buffer_interest_paid
+            @new_amortization[i][:interest_paid]    = buffer_interest_paid
+            @new_amortization[i][:interest_balance] -= buffer_interest_paid
 
-            buffer_total  = 0.00
+            buffer_interest_paid  = 0.00
           end
 
-          if buffer_total >= o[:principal]
+          if buffer_principal_paid >= o[:principal]
             @new_amortization[i][:principal_paid]     = o[:principal]
             @new_amortization[i][:principal_balance]  = 0.00
 
-            buffer_total -= o[:principal].to_f.round(2)
-          elsif o[:principal] > buffer_total
-            @new_amortization[i][:principal_paid]     = buffer_total
-            @new_amortization[i][:principal_balance]  -= buffer_total
+            buffer_principal_paid -= o[:principal].to_f.round(2)
+          elsif o[:principal] > buffer_principal_paid
+            @new_amortization[i][:principal_paid]     = buffer_principal_paid
+            @new_amortization[i][:principal_balance]  -= buffer_principal_paid
 
-            buffer_total = 0.00
+            buffer_principal_paid = 0.00
           end
 
           if @new_amortization[i][:principal_balance] == 0.00 and @new_amortization[i][:interest_balance] == 0.00
