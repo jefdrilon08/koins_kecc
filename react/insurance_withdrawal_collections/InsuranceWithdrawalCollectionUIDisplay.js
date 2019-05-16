@@ -58,7 +58,7 @@ export default class InsuranceWithdrawalCollectionUIDisplay extends React.Compon
   saveParticular() {
     var context       = this;
     var data          = context.state.data;
-    var newParticular = "data.data.accounting_entry.particular";
+    var newParticular = data.data.particular;
 
     context.setState({
       isSaving: true
@@ -96,7 +96,7 @@ export default class InsuranceWithdrawalCollectionUIDisplay extends React.Compon
   }
 
   renderParticular() {
-    var particular  = "this.state.data.data.accounting_entry.particular";
+    var particular  = this.state.data.data.particular;
 
     if(this.state.data.status == "pending") {
       return  (

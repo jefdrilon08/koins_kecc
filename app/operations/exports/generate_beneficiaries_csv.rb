@@ -6,7 +6,7 @@ module Exports
 
 		def execute!
 			CSV.generate do |csv|
-        csv << [
+              csv << [
                 :first_name, 
                 :middle_name, 
                 :last_name,
@@ -19,17 +19,25 @@ module Exports
                 
                 ]
         @beneficiaries.each do |b|
-          csv << [
-            b.first_name,
-            b.middle_name,
-            b.last_name,
-            b.is_primary,
-            b.date_of_birth,            
-            b.relationship,
-            "",
-            b.member.identification_number,
-            b.id
-          ]
+          if b.member.identification_number.present?
+              if b.is_primary.nil?
+                is_pri = "false"
+              else
+                is_pri = b.is_primary
+              end    
+
+              csv << [
+                b.first_name,
+                b.middle_name,
+                b.last_name,
+                is_pri,
+                b.date_of_birth,            
+                b.relationship,
+                nil,
+                b.member.identification_number,
+                b.id
+              ]
+          end
         end
       end
 		end
