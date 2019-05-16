@@ -5,11 +5,20 @@
     .col
       .card
         .card-body
-          = render partial: "form_add"
+          - if @adjustment_record.pending?
+            = render partial: "form_add"
+          .message
+
+          - if @data[:records].size > 0
+            = render partial: "members_table"
+          - else
+            %p
+              No records found.
 
 #parameters{ data: { id: @adjustment_record.id } }
 
 = render partial: "adjustments/subsidiary_adjustments/modals/delete"
+= render partial: "adjustments/subsidiary_adjustments/modals/delete_member"
 = render partial: "templates/error_list"
 
 = javascript_include_tag "adjustments/subsidiary_adjustments/Show"

@@ -6,6 +6,9 @@ namespace :api do
     # Adjustments
     namespace :adjustments do
       post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"
+      post "/subsidiary_adjustments/destroy", to: "subsidiary_adjustments#destroy"
+      post "/subsidiary_adjustments/add_member", to: "subsidiary_adjustments#add_member"
+      post "/subsidiary_adjustments/delete_member", to: "subsidiary_adjustments#delete_member"
     end
 
     # Users
