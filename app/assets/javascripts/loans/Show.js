@@ -144,7 +144,7 @@ var Show  = (function() {
         data: data,
         success: function(response) {
           $message.html("Success! Redirecting...");
-          window.location.reload();
+          window.location.href = "/loans/" + _loanId + "/adjustment/" + response.id;
         },
         error: function(response) {
           console.log(response);

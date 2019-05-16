@@ -56,6 +56,13 @@ module MembershipPaymentCollections
       if @equity_settings.blank?
         raise "No equity settings found"
       end
+
+      # Insurance accounting codes
+      @insurance_accounting_codes = Settings.insurance_accounting_codes
+
+      if @insurance_accounting_codes.blank?
+        raise "No insurance_accounting_codes found in settings"
+      end
     end 
 
     def execute!
@@ -148,6 +155,22 @@ module MembershipPaymentCollections
             name: equity_accounting_code.name,
             amount: o[:amount]
           }
+        end
+      end
+
+      # INSURANCE
+      @insurance_accounting_codes.each do |s|
+        @data[:totals].each do |o|
+          if o[:record_type] == "INSURANCE" and o[:key] == s.insurance_type and o[:amount] > 0
+            accounting_code = AccountingCode.find(s.deposit_accounting_code_id)
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: accounting_code.code,
+              name: accounting_code.name,
+              amount: o[:amount]
+            }
+          end
         end
       end
 

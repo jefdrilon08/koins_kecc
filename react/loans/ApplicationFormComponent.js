@@ -379,6 +379,16 @@ export default class ApplicationFormComponent extends React.Component {
     });
   }
 
+  handleBusinessPermitAvailableChanged(event) {
+    const target  = event.target;
+    const value   = target.type === 'checkbox' ? target.checked : target.value;
+
+    var data  = this.state.data;
+    data.data.business_permit_available  = value || false;
+
+    this.setState({ data: data });
+  }
+
   render() {
     if(this.state.isLoading) {
       return  (
@@ -390,6 +400,8 @@ export default class ApplicationFormComponent extends React.Component {
         value: data.data.co_maker_one.id,
         label: data.data.co_maker_one.last_name + ", " + data.data.co_maker_one.first_name
       };
+
+      var businessPermitAvailable = this.state.data.data.business_permit_available || false;
 
       return  (
         <div>
@@ -593,6 +605,22 @@ export default class ApplicationFormComponent extends React.Component {
                 disabled={this.state.isSaving || this.state.isActive}
                 data={this.state.data}
               />
+            </div>
+          </div>
+          <hr/>
+          <h5>
+            Other Parameters
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <input 
+                type="checkbox" 
+                checked={businessPermitAvailable}
+                onChange={this.handleBusinessPermitAvailableChanged.bind(this)}
+              />
+              <label>
+                Business Permit Available
+              </label>
             </div>
           </div>
           <hr/>

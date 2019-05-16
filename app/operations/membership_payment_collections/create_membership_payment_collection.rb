@@ -19,6 +19,8 @@ module MembershipPaymentCollections
 
       @default_equities_key = Settings.default_equities_key
 
+      @default_insurance_deposits = Settings.defaults.insurance_deposits
+
       @data = {
         or_number: "",
         ar_number: "",
@@ -99,6 +101,22 @@ module MembershipPaymentCollections
           member_account_id: member_account.try(:id),
           amount: amount
         }
+
+        # INSURANCE
+        @default_insurance_deposits.each do |o|
+          member_account  = MemberAccount.insurance.where(
+                              member_id: m.id,
+                              account_subtype: o.account_subtype
+                            ).first
+
+          member_data[:records] << {
+            record_type: "INSURANCE",
+            account_subtype: o.account_subtype,
+            enabled: member_account.present?,
+            member_account_id: member_account.try(:id),
+            amount: 0.00
+          }
+        end
 
         @data[:total_collected] += amount
         @data[:records] << member_data
@@ -186,6 +204,17 @@ module MembershipPaymentCollections
         key: @default_equities_key,
         amount: equities_total
       }
+
+      # INSURANCE
+      @default_insurance_deposits.each do |o|
+        @data[:headers] << o.account_subtype
+
+        @data[:totals] << {
+          record_type: "INSURANCE",
+          key: o.account_subtype,
+          amount: 0.00
+        }
+      end
     end
   end
 end

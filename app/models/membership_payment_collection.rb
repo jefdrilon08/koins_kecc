@@ -70,6 +70,17 @@ class MembershipPaymentCollection < ApplicationRecord
     records
   end
 
+  def insurance
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:record_type] == "INSURNACE" and oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+  end
+
   def total_collected
     self.data["total_collected"]
   end
