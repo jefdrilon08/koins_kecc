@@ -3,7 +3,9 @@
 .container-fluid
   .row
     .col
-      .card-body
+      .card
+        .card-body
+          = render partial: "form_add"
 
 #parameters{ data: { id: @adjustment_record.id } }
 

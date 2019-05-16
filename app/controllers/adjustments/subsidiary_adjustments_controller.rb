@@ -13,6 +13,8 @@ module Adjustments
 
       @meta = @adjustment_record.meta.with_indifferent_access
       @data = @adjustment_record.data.with_indifferent_access
+
+      @non_subsidiary_members = @adjustment_record.non_subsidiary_members
     end
   end
 end
