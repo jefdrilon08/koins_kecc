@@ -8,4 +8,15 @@ class LegalDependent < ApplicationRecord
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
   end
+  def age
+    if self.date_of_birth.nil?
+      "Please set date of birth"
+    else
+      begin
+        ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
+      rescue Exception
+        "ERR IN AGE"
+      end
+    end
+  end
 end

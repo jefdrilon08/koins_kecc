@@ -1,0 +1,26 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th Member
+      %th PN Number
+      %th Loan Product
+      %th.accounting-curr Amount
+      %th.accounting-curr Insured Amount
+      %th Num Installments
+      %th Date Released
+      %th Maturity Date
+      %th Status
+  %tbody
+    -if !@data.nil?  
+      - @data.each_with_index do |loan_data, i|
+        %tr{class: "#{loan_data[:loan].override_installment_interval ? "danger" : ""}"}
+          %td #{i + 1}
+          %td #{loan_data[:member]}
+          %td #{link_to loan_data[:pn_number], loan_path(loan_data[:loan].id), target: "_blank"}
+          %td #{loan_data[:loan_product]}
+          %td.curr #{number_to_currency(loan_data[:amount], unit: "")}
+          %td.curr #{number_to_currency(loan_data[:insured_amount], unit: "") if loan_data[:insured_amount].is_a? Numeric}
+          %td #{loan_data[:num_installments]}
+          %td #{loan_data[:approximated_date_released]}
+          %td #{loan_data[:maturity_date]}
+          %td #{loan_data[:status]}

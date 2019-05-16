@@ -27,9 +27,10 @@ gem 'sidekiq'
 gem 'cocoon'
 gem 'redis'
 gem 'axlsx_rails'
-gem 'zip'
+gem 'axlsx'
 gem 'hirb'
 gem 'numbers_and_words'
+gem 'zip-zip'
 gem 'tty-table'
 
 group :development, :test do

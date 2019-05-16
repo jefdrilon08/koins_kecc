@@ -1,0 +1,38 @@
+module Api
+  module V1
+    class ReportsController < ActionController::API
+      def member_reports
+        branch_id     = params[:branch_id]
+        insurance_status = params[:insurance_status]
+        member_type = params[:member_type]
+        status = params[:status]
+        start_date    = params[:start_date]
+        end_date      = params[:end_date]
+
+
+        data = Reports::MemberReports.new(
+                  branch_id: branch_id,
+                  member_type: member_type,
+                  insurance_status: insurance_status,
+                  status: status,
+                  start_date: start_date,
+                  end_date: end_date
+                ).execute!
+
+        data[:download_url] = member_reports_path(
+                                branch_id: branch_id,
+                                member_type: member_type,
+                                insurance_status: insurance_status,
+                                status: status,
+                                start_date: start_date,
+                                download: true,
+                                end_date: end_date
+                              )
+
+        render json: data
+      end
+      
+    end
+  end
+end
+

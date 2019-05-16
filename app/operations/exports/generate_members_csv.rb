@@ -47,76 +47,78 @@ module Exports
                             
                         ]
                 @members.each do |m|
-                    if m.fetch_government_id("tin_number").present?
-                        tin = m.fetch_government_id("tin_number").split("-").join("")
-                    elsif m.fetch_government_id("sss_number").present?
-                        sss = m.fetch_government_id("sss_number").split("-").join("")
-                    elsif m.fetch_government_id("pag_ibig_number").present?
-                        pag_ibig = m.fetch_government_id("pag_ibig_number").split("-").join("")
-                    elsif m.fetch_government_id("phil_health_number").present?
-                        phil_health = m.fetch_government_id("phil_health_number").split("-").join("")
-                    end
+                    if m.identification_number.present?
+                        if m.fetch_government_id("tin_number").present?
+                            tin = m.fetch_government_id("tin_number").split("-").join("")
+                        elsif m.fetch_government_id("sss_number").present?
+                            sss = m.fetch_government_id("sss_number").split("-").join("")
+                        elsif m.fetch_government_id("pag_ibig_number").present?
+                            pag_ibig = m.fetch_government_id("pag_ibig_number").split("-").join("")
+                        elsif m.fetch_government_id("phil_health_number").present?
+                            phil_health = m.fetch_government_id("phil_health_number").split("-").join("")
+                        end
 
-                    if m.meta
-                        meta_id = m.meta
-                    else
-                        meta_id = ""
-                    end
+                        if m.meta
+                            meta_id = m.meta
+                        else
+                            meta_id = ""
+                        end
 
-                    recognition_date = m.data.with_indifferent_access[:recognition_date]
-                    if recognition_date.nil?
-                        recognition_date = nil
-                    end
+                        recognition_date = m.data.with_indifferent_access[:recognition_date]
+                        if recognition_date.nil?
+                            recognition_date = nil
+                        end
 
-                    if !m.data.with_indifferent_access[:resignation].nil?
-                        resignation_type = m.data.with_indifferent_access[:resignation][:type]
-                        resignation_code = m.data.with_indifferent_access[:resignation][:code]
-                        resignation_reason = m.data.with_indifferent_access[:resignation][:reason]
-                    else
-                        resignation_type = nil
-                        resignation_code = nil
-                        resignation_reason = nil
-                    end
+                        if !m.data.with_indifferent_access[:resignation].nil?
+                            resignation_type = m.data.with_indifferent_access[:resignation][:type]
+                            resignation_code = m.data.with_indifferent_access[:resignation][:code]
+                            resignation_reason = m.data.with_indifferent_access[:resignation][:reason]
+                        else
+                            resignation_type = nil
+                            resignation_code = nil
+                            resignation_reason = nil
+                        end
 
-                    csv << [
-                    m.identification_number,
-                    m.member_type,
-                    m.status,
-                    m.insurance_status,    
-                    m.first_name,
-                    m.middle_name,
-                    m.last_name,
-                    recognition_date,
-                    m.center,
-                    m.branch,
-                    m.gender,
-                    m.date_of_birth,
-                    m.place_of_birth,
-                    m.civil_status,
-                    m.data[:number_children],
-                    m.data.with_indifferent_access[:spouse][:first_name],
-                    m.data.with_indifferent_access[:spouse][:last_name],
-                    m.data.with_indifferent_access[:spouse][:middle_name],
-                    m.data.with_indifferent_access[:spouse][:date_of_birth],
-                    m.data.with_indifferent_access[:address][:street],
-                    m.data.with_indifferent_access[:address][:district],
-                    m.data.with_indifferent_access[:address][:city],
-                    sss,
-                    tin,
-                    pag_ibig,
-                    phil_health,
-                    m.mobile_number,
-                    m.try(:uuid),
-                    meta_id,
-                    m.date_resigned,
-                    resignation_type,
-                    resignation_code,
-                    resignation_reason,
-                    m.date_resigned,
-                    "",
-                    "",
-                    ""
-                    ]
+                        csv << [
+                        m.identification_number,
+                        m.member_type,
+                        m.status,
+                        m.insurance_status,    
+                        m.first_name,
+                        m.middle_name,
+                        m.last_name,
+                        recognition_date,
+                        m.center,
+                        m.branch,
+                        m.gender,
+                        m.date_of_birth,
+                        m.place_of_birth,
+                        m.civil_status,
+                        m.data[:number_children],
+                        m.data.with_indifferent_access[:spouse][:first_name],
+                        m.data.with_indifferent_access[:spouse][:last_name],
+                        m.data.with_indifferent_access[:spouse][:middle_name],
+                        m.data.with_indifferent_access[:spouse][:date_of_birth],
+                        m.data.with_indifferent_access[:address][:street],
+                        m.data.with_indifferent_access[:address][:district],
+                        m.data.with_indifferent_access[:address][:city],
+                        sss,
+                        tin,
+                        pag_ibig,
+                        phil_health,
+                        m.mobile_number,
+                        m.try(:uuid),
+                        meta_id,
+                        m.date_resigned,
+                        resignation_type,
+                        resignation_code,
+                        resignation_reason,
+                        m.date_resigned,
+                        "",
+                        "",
+                        ""
+                        ]
+                    end
                 end
             end
 		end

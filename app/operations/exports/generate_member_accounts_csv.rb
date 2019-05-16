@@ -18,22 +18,24 @@ module Exports
                         ]
 
                 @member_accounts.each do |ma|
-                    if ma.account_subtype == "Retirement Fund"
-                        code = "RF"
-                    elsif ma.account_subtype == "Life Insurance Fund"
-                        code = "LIF"
-                    end
+                    if ma.member.identification_number.present?
+                        if ma.account_subtype == "Retirement Fund"
+                            code = "RF"
+                        elsif ma.account_subtype == "Life Insurance Fund"
+                            code = "LIF"
+                        end
 
-                    csv << [
-                    code,
-                    ma.balance,
-                    ma.member.identification_number,
-                    "",
-                    ma.status,
-                    ma.branch,
-                    ma.center,
-                    ma.id
-                    ]
+                        csv << [
+                        code,
+                        ma.balance,
+                        ma.member.identification_number,
+                        nil,
+                        ma.status,
+                        ma.branch,
+                        ma.center,
+                        ma.id
+                        ]
+                    end
                 end
             end
 		end

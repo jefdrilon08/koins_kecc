@@ -476,4 +476,26 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :repair_validation_accounting_entry_by_id => :environment do
+    puts "Repairing ..."
+    member_account_validation = MemberAccountValidation.find(ENV['VALIDATION_ID'])
+    data = member_account_validation.data.with_indifferent_access
+    last_name = member_account_validation.prepared_by.split(", ").first
+    first_name = member_account_validation.prepared_by.split(", ").last
+    current_user = User.where(last_name: last_name, first_name: first_name).first
+    data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+                                        config: 
+                                        {
+                                          branch: member_account_validation.branch,
+                                          member_account_validation: member_account_validation,
+                                          is_remote: false,
+                                          user: current_user
+                                        }
+                                ).execute!
+    member_account_validation.data = data
+    member_account_validation.save!
+
+    puts "Done!"
+  end
 end

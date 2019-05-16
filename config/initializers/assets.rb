@@ -113,5 +113,11 @@ Rails.application.config.assets.precompile += [
   "clip_claims/Index.js",
   "clip_claims.js",
   "clip_claims_form.js",
+  "reports/InsuredLoans.js",
+  "member_reports.js",
+  "reports/CollectionsClipReport.js",
+  "reports/CollectionsBlipReport.js",
+  "reports/MemberDependentReport.js",
+  "reports/CicReport.js",
   "Seriatim.js"
 ]

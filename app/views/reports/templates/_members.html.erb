@@ -1,0 +1,97 @@
+<script id="reports-members-template" type="x-tmpl-mustache">
+  <table class='ui very basic collapsing celled table'>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Recognition Date</th>
+        <th>Branch</th>
+        <th>Center</th>
+        <th>Status</th>
+        <th>Number of Dependents</th>
+        <th class='accounting-curr'>Dependent Coverage Value</th>
+        <th class='accounting-curr'>Coverage Value</th>
+        <th class='accounting-curr'>LIF</th>
+        <th class='accounting-curr'>RF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#records}}
+        <tr>
+          <td>{{index}}</td>
+          <td>{{name}}</td>
+          <td>{{recognition_date}}</td>
+          <td>{{branch}}</td>
+          <td>{{center}}</td>
+          <td>{{status}}</td>
+          <td>{{number_of_dependents}}</td>
+          <td class='curr'>{{value_dependents}}</td>
+          <td class='curr'>{{coverage_value}}</td>
+          <td class='curr'>{{lif}}</td>
+          <td class='curr'>{{rf}}</td>
+        </tr>
+      {{/records}}
+    </tbody>
+  </table> 
+  <hr>
+  <table class='ui very basic collapsing celled table'>
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Total Dependents</th>
+        <th class='accounting-curr'>Dependent Coverage Value</th>
+        <th class='accounting-curr'>Coverage Value</th>
+        <th class='accounting-curr'>LIF</th>
+        <th class='accounting-curr'>RF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#totals}}
+        <tr class='leader'>
+          <td>{{total_member_count}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Total</td>
+          <td>{{total_dependents}}</td>
+          <td class='curr'>{{total_dependents_value}}</td>
+          <td class='curr'>{{total_coverage}}</td>
+          <td class='curr'>{{total_lif}}</td>
+          <td class='curr'>{{total_rf}}</td>
+        </tr>
+      {{/totals}}
+    </tbody>
+  </table>
+</script>
