@@ -3,6 +3,9 @@ module Adjustments
     before_action :authenticate_user!
 
     def index
+      @adjustment_records = AdjustmentRecord.subsidiary
+
+      @adjustment_records = @adjustment_records.page(params[:page]).per(50)
     end
 
     def show

@@ -21,17 +21,26 @@ module MembershipPaymentCollections
 
       # Build member records
       @records  = []
-      @data[:headers].each_with_index do |o, i|
-        if i == 0
+
+      @data[:totals].each_with_index do |o, i|
+        if o[:record_type] == "ID"
           @records << {
             amount: 0.00,
             enabled: true,
             member_id: @member.id,
             record_type: "ID"
           }
-        elsif i == (@data[:headers].size - 1)
+        elsif o[:record_type] == "MEMBERSHIP_PAYMENT"
+          @records << {
+            amount: 0.00,
+            enabled: false,
+            member_id: @member.id,
+            record_type: "MEMBERSHIP_PAYMENT",
+            account_subtype: o[:key]
+          }
+        elsif o[:record_type] == "EQUITY"
           record_type     = "EQUITY"
-          account_subtype = o
+          account_subtype = o[:key]
           member_account  = MemberAccount.where(member_id: @member.id, account_subtype: account_subtype, account_type: record_type).first
           @records << {
             amount: 0.00,
@@ -40,13 +49,16 @@ module MembershipPaymentCollections
             account_subtype: account_subtype,
             member_account_id: member_account.try(:id)
           }
-        else
+        elsif o[:record_type] == "INSURANCE"
+          record_type     = "INSURANCE"
+          account_subtype = o[:key]
+          member_account  = MemberAccount.where(member_id: @member.id, account_subtype: account_subtype, account_type: record_type).first
           @records << {
             amount: 0.00,
-            enabled: false,
-            member_id: @member.id,
-            record_type: "MEMBERSHIP_PAYMENT",
-            account_subtype: o
+            enabled: true,
+            record_type: record_type,
+            account_subtype: account_subtype,
+            member_account_id: member_account.try(:id)
           }
         end
       end
