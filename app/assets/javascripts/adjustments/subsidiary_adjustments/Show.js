@@ -2,6 +2,10 @@ var Show = (function() {
   var _authenticityToken;
   var _id;
 
+  var $btnApprove;
+  var $btnConfirmApprove;
+  var $modalApprove;
+
   var $btnDelete;
   var $btnConfirmDelete;
   var $modalDelete;
@@ -16,8 +20,19 @@ var Show = (function() {
   var $btnConfirmDeleteMember;
   var $modalDeleteMember;
 
+  var $selectAccountingCode;
+  var $inputAmount;
+  var $selectPostType;
+  var $btnAddAccountingCode;
+
+  var $btnDeleteAccountingEntry;
+  var $btnConfirmDeleteAccountingEntry;
+  var $modalDeleteAccountingEntry;
+
   var $displayMember;
   var $displayAccountSubtype;
+  var $displayPostType;
+  var $displayAccountingCode;
 
   var $message;
 
@@ -26,12 +41,29 @@ var Show = (function() {
   var currentMember           = "";
   var currentMemberAccountId  = "";
   var currentAccountSubtype   = "";
+  var currentAccountingCodeId = "";
+  var currentPostType         = "";
 
-  var _urlDelete        = "/api/v1/adjustments/subsidiary_adjustments/destroy";
-  var _urlAdd           = "/api/v1/adjustments/subsidiary_adjustments/add_member";
-  var _urlDeleteMember  = "/api/v1/adjustments/subsidiary_adjustments/delete_member";
+  var _urlApprove               = "/api/v1/adjustments/subsidiary_adjustments/approve";
+  var _urlDelete                = "/api/v1/adjustments/subsidiary_adjustments/destroy";
+  var _urlAdd                   = "/api/v1/adjustments/subsidiary_adjustments/add_member";
+  var _urlDeleteMember          = "/api/v1/adjustments/subsidiary_adjustments/delete_member";
+  var _urlAddAccountingCode     = "/api/v1/adjustments/subsidiary_adjustments/add_accounting_code";
+  var _urlDeleteAccountingCode  = "/api/v1/adjustments/subsidiary_adjustments/delete_accounting_code";
 
   var _cacheDom = function() {
+    $btnDeleteAccountingEntry   = $("#btn-delete-accounting-entry");
+    $modalDeleteAccountingEntry = $("#modal-delete-accounting-entry");
+
+    $selectAccountingCode   = $("#select-accounting-code");
+    $inputAccountingAmount  = $("#input-accounting-amount");
+    $selectPostType         = $("#select-post-type");
+    $btnAddAccountingCode   = $("#btn-add-accounting-code");
+
+    $btnApprove         = $("#btn-approve");
+    $btnConfirmApprove  = $("#btn-confirm-approve");
+    $modalApprove       = $("#modal-approve");
+
     $btnDelete         = $("#btn-delete");
     $btnConfirmDelete  = $("#btn-confirm-delete");
     $modalDelete       = $("#modal-delete");
@@ -46,8 +78,14 @@ var Show = (function() {
     $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
     $modalDeleteMember      = $("#modal-delete-member");
 
+    $btnDeleteAccountingEntry         = $(".btn-delete-accounting-entry");
+    $btnConfirmDeleteAccountingEntry  = $("#btn-confirm-delete-accounting-entry");
+    $modalDeleteAccountingEntry       = $("#modal-delete-accounting-entry");
+
     $displayMember          = $(".display-member");
     $displayAccountSubtype  = $(".display-account-subtype");
+    $displayPostType        = $(".display-post-type");
+    $displayAccountingCode  = $(".display-accounting-code");
 
     $message  = $(".message");
 
@@ -55,6 +93,161 @@ var Show = (function() {
   };
 
   var _bindEvents = function() {
+    $btnApprove.on("click", function() {
+      $message.html("");
+      $modalApprove.modal("show");
+    });
+
+    $btnConfirmApprove.on("click", function() {
+      $message.html("Loading...");
+
+      var data  = {
+        id: _id,
+        authenticity_token: _authenticityToken
+      };
+
+      $btnConfirmApprove.prop("disabled", true);
+
+      $.ajax({
+        url: _urlApprove,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+          
+          window.location.reload();
+        },
+        error: function(response) {
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"]
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmApprove.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnDeleteAccountingEntry.on("click", function() {
+      $message.html("");
+      $modalDeleteAccountingEntry.modal("show");
+
+      $displayPostType.html($(this).data("post-type"));
+      $displayAccountingCode.html($(this).data("accounting-code-name"));
+
+      currentAccountingCodeId = $(this).data("accounting-code-id");
+      currentPostType         = $(this).data("post-type");
+    });
+
+    $btnConfirmDeleteAccountingEntry.on("click", function() {
+      var data  = {
+        id: _id,
+        accounting_code_id: currentAccountingCodeId,
+        post_type: currentPostType,
+        authenticity_token: _authenticityToken
+      };
+
+      $btnConfirmDeleteAccountingEntry.prop("disabled", true);
+
+      $.ajax({
+        url: _urlDeleteAccountingCode,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+          
+          window.location.reload();
+        },
+        error: function(response) {
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"]
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmDeleteAccountingEntry.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnAddAccountingCode.on("click", function() {
+      $message.html("Loading...");
+
+      var accountingCodeId  = $selectAccountingCode.val();
+      var amount            = $inputAccountingAmount.val();
+      var postType          = $selectPostType.val();
+
+      var data  = {
+        id: _id,
+        authenticity_token: _authenticityToken,
+        accounting_code_id: accountingCodeId,
+        amount: amount,
+        post_type: postType
+      };
+
+      $selectAccountingCode.prop("disabled", true);
+      $inputAccountingAmount.prop("disabled", true);
+      $selectPostType.prop("disabled", true);
+      $btnAddAccountingCode.prop("disabled", true);
+
+      $.ajax({
+        url: _urlAddAccountingCode,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+          
+          window.location.reload();
+        },
+        error: function(response) {
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"]
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $selectAccountingCode.prop("disabled", false);
+            $inputAccountingAmount.prop("disabled", false);
+            $selectPostType.prop("disabled", false);
+            $btnAddAccountingCode.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnDeleteMember.on("click", function() {
       $message.html("");
 

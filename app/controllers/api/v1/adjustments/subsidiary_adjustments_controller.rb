@@ -4,6 +4,58 @@ module Api
       class SubsidiaryAdjustmentsController < ApplicationController
         before_action :authenticate_user!
 
+        def add_accounting_code
+          adjustment_record = AdjustmentRecord.subsidiary.where(id: params[:id]).first
+          accounting_code   = AccountingCode.where(id: params[:accounting_code_id]).first
+          amount            = params[:amount].try(:to_f)
+          post_type         = params[:post_type]
+
+          config  = {
+            adjustment_record: adjustment_record,
+            accounting_code: accounting_code,
+            amount: amount,
+            post_type: post_type,
+            user: current_user
+          }
+
+          errors  = ::Adjustments::SubsidiaryAdjustments::ValidateAddAccountingCode.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].size > 0
+            render json: errors, status: 400
+          else
+            ::Adjustments::SubsidiaryAdjustments::AddAccountingCode.new(
+              config: config
+            ).execute!
+          end
+        end
+
+        def delete_accounting_code
+          adjustment_record = AdjustmentRecord.subsidiary.where(id: params[:id]).first
+          accounting_code   = AccountingCode.where(id: params[:accounting_code_id]).first
+          post_type         = params[:post_type]
+
+          config  = {
+            adjustment_record: adjustment_record,
+            accounting_code: accounting_code,
+            post_type: post_type,
+            user: current_user
+          }
+
+          errors  = ::Adjustments::SubsidiaryAdjustments::ValidateDeleteAccountingCode.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].size > 0
+            render json: errors, status: 400
+          else
+            ::Adjustments::SubsidiaryAdjustments::DeleteAccountingCode.new(
+              config: config
+            ).execute!
+          end
+        end
+
         def delete_member
           adjustment_record = AdjustmentRecord.subsidiary.where(id: params[:id]).first
           member_account    = MemberAccount.where(id: params[:member_account_id]).first
@@ -58,6 +110,29 @@ module Api
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::AddMember.new(
+              config: config
+            ).execute!
+
+            render json: { message: "ok" }
+          end
+        end
+
+        def approve
+          adjustment_record = AdjustmentRecord.find(params[:id])
+
+          config  = {
+            adjustment_record: adjustment_record,
+            user: current_user
+          }
+
+          errors  = ::Adjustments::SubsidiaryAdjustments::ValidateApprove.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].size > 0
+            render json: errors, status: 400
+          else
+            ::Adjustments::SubsidiaryAdjustments::Approve.new(
               config: config
             ).execute!
 
