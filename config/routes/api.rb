@@ -12,6 +12,7 @@ namespace :api do
       post "/subsidiary_adjustments/delete_member", to: "subsidiary_adjustments#delete_member"
       post "/subsidiary_adjustments/add_accounting_code", to: "subsidiary_adjustments#add_accounting_code"
       post "/subsidiary_adjustments/delete_accounting_code", to: "subsidiary_adjustments#delete_accounting_code"
+      post "/subsidiary_adjustments/update_accounting_entry_particular", to: "subsidiary_adjustments#update_accounting_entry_particular"
     end
 
     # Users

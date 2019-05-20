@@ -20,3 +20,17 @@
         Actions
       #btn-add-accounting-code.btn.btn-primary.btn-block
         .fa.fa-plus
+
+.row
+  .col-md-10.col-xs-12
+    .form-group
+      %label
+        Particular
+      = text_field_tag "", @accounting_entry[:particular], class: "form-control select select2", id: "input-particular"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Actions
+      #btn-update-accounting-entry-particular.btn.btn-success.btn-block
+        .fa.fa-check
+        Save Particular

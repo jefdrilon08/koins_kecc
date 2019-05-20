@@ -40,6 +40,13 @@ module Adjustments
       end
 
       def validate_accounting_entry!
+        if @accounting_entry[:particular].blank?
+          @errors[:messages] << {
+            key: "accounting_entry",
+            message: "No particular found"
+          }
+        end
+
         if @accounting_entry[:journal_entries].size == 0
           @errors[:messages] << {
             key: "accounting_entry",

@@ -4,6 +4,31 @@ module Api
       class SubsidiaryAdjustmentsController < ApplicationController
         before_action :authenticate_user!
 
+        def update_accounting_entry_particular
+          adjustment_record = AdjustmentRecord.subsidiary.where(id: params[:id]).first
+          particular        = params[:particular]
+
+          config  = {
+            adjustment_record: adjustment_record,
+            user: current_user,
+            particular: params[:particular]
+          }
+
+          errors  = ::Adjustments::SubsidiaryAdjustments::ValidateUpdateAccountingEntryParticular.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].size > 0
+            render json: errors, status: 400
+          else
+            ::Adjustments::SubsidiaryAdjustments::UpdateAccountingEntryParticular.new(
+              config: config
+            ).execute!
+
+            render json: { message: "ok" }
+          end
+        end
+
         def add_accounting_code
           adjustment_record = AdjustmentRecord.subsidiary.where(id: params[:id]).first
           accounting_code   = AccountingCode.where(id: params[:accounting_code_id]).first

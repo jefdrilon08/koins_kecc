@@ -29,6 +29,9 @@ var Show = (function() {
   var $btnConfirmDeleteAccountingEntry;
   var $modalDeleteAccountingEntry;
 
+  var $inputParticular;
+  var $btnUpdateAccountingEntryParticular;
+
   var $displayMember;
   var $displayAccountSubtype;
   var $displayPostType;
@@ -44,14 +47,18 @@ var Show = (function() {
   var currentAccountingCodeId = "";
   var currentPostType         = "";
 
-  var _urlApprove               = "/api/v1/adjustments/subsidiary_adjustments/approve";
-  var _urlDelete                = "/api/v1/adjustments/subsidiary_adjustments/destroy";
-  var _urlAdd                   = "/api/v1/adjustments/subsidiary_adjustments/add_member";
-  var _urlDeleteMember          = "/api/v1/adjustments/subsidiary_adjustments/delete_member";
-  var _urlAddAccountingCode     = "/api/v1/adjustments/subsidiary_adjustments/add_accounting_code";
-  var _urlDeleteAccountingCode  = "/api/v1/adjustments/subsidiary_adjustments/delete_accounting_code";
+  var _urlApprove                         = "/api/v1/adjustments/subsidiary_adjustments/approve";
+  var _urlDelete                          = "/api/v1/adjustments/subsidiary_adjustments/destroy";
+  var _urlAdd                             = "/api/v1/adjustments/subsidiary_adjustments/add_member";
+  var _urlDeleteMember                    = "/api/v1/adjustments/subsidiary_adjustments/delete_member";
+  var _urlAddAccountingCode               = "/api/v1/adjustments/subsidiary_adjustments/add_accounting_code";
+  var _urlDeleteAccountingCode            = "/api/v1/adjustments/subsidiary_adjustments/delete_accounting_code";
+  var _urlUpdateAccountingEntryParticular = "/api/v1/adjustments/subsidiary_adjustments/update_accounting_entry_particular";
 
   var _cacheDom = function() {
+    $inputParticular                    = $("#input-particular");
+    $btnUpdateAccountingEntryParticular = $("#btn-update-accounting-entry-particular");
+
     $btnDeleteAccountingEntry   = $("#btn-delete-accounting-entry");
     $modalDeleteAccountingEntry = $("#modal-delete-accounting-entry");
 
@@ -93,6 +100,53 @@ var Show = (function() {
   };
 
   var _bindEvents = function() {
+    $btnUpdateAccountingEntryParticular.on("click", function() {
+      $message.html("Loading...");
+
+      var particular  = $inputParticular.val();
+
+      var data  = {
+        id: _id,
+        authenticity_token: _authenticityToken,
+        particular: particular
+      };
+
+      $btnUpdateAccountingEntryParticular.prop("disabled", true);
+      $inputParticular.prop("disabled", true);
+
+      $.ajax({
+        url: _urlUpdateAccountingEntryParticular,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+          
+          window.location.reload();
+        },
+        error: function(response) {
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"]
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnUpdateAccountingEntryParticular.prop("disabled", false);
+            $inputParticular.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnApprove.on("click", function() {
       $message.html("");
       $modalApprove.modal("show");
