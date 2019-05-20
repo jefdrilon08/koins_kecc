@@ -6,8 +6,8 @@ module Adjustments
         @adjustment_record  = @config[:adjustment_record]
         @user               = @config[:user]
 
-        @data = @adjustment_record.with_indifferent_access
-        @meta = @adjustment_record.with_indifferent_access
+        @data = @adjustment_record.data.with_indifferent_access
+        @meta = @adjustment_record.meta.with_indifferent_access
 
         @branch = Branch.find(@meta[:branch][:id])
 
@@ -46,6 +46,12 @@ module Adjustments
         end
 
         # Approve accounting entry
+        approved_entry  = post_accounting_entry!
+
+        @accounting_entry[:status]            = "approved"
+        @accounting_entry[:date_posted]       = approved_entry.date_posted
+        @accounting_entry[:approved_by]       = approved_entry.approved_by
+        @accounting_entry[:reference_number]  = approved_entry.reference_number
 
         @data[:accounting_entry]  = @accounting_entry
 
@@ -56,6 +62,30 @@ module Adjustments
           approved_by: @user.to_s,
           date_approved: @date_approved
         )
+      end
+
+      def post_accounting_entry!
+        # Create new accounting entry
+        config  = {
+          accounting_entry_data: @accounting_entry,
+          user: @user
+        }
+
+        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                              config: config
+                            ).execute!
+
+        # Post to books
+        config  = {
+          accounting_entry: accounting_entry,
+          user: @user
+        }
+
+        accounting_entry  = ::Accounting::AccountingEntries::Approve.new(
+                              config: config
+                            ).execute!
+
+        accounting_entry
       end
     end
   end

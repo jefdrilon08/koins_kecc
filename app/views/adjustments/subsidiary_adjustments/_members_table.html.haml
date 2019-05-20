@@ -17,7 +17,8 @@
       %tr
         %td
           %strong
-            #{o[:member][:last_name]}, #{o[:member][:first_name]}
+            = link_to member_path(o[:member][:id]), target: '_blank' do
+              #{o[:member][:last_name]}, #{o[:member][:first_name]}
         %td
           #{o[:member_account][:account_subtype]}
         %td.text-center

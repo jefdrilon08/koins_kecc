@@ -19,7 +19,7 @@ module Adjustments
         validate_adjustments!
         validate_accounting_entry!
 
-        not_yet_implemented!
+        #not_yet_implemented!
 
         @errors[:messages].each do |o|
           @errors[:full_messages] << o[:message]
