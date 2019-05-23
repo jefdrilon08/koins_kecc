@@ -498,4 +498,51 @@ namespace :adjust do
 
     puts "Done!"
   end
+
+  task :upload_attachment_files_from_dir => :environment do
+    dir_location  = ENV['DIR_LOCATION']
+    puts "Searching in directory #{dir_location}"
+
+    Dir["#{dir_location}/*"].each do |f|
+      if File.directory? f
+        sub_dir_name  = f.split('/').last
+
+        member  = Member.where(identification_number: sub_dir_name).first
+
+        if member
+          puts "Found directory for member #{member.full_name}"
+          Dir["#{f}/*"].each do |ff|
+            if !File.directory? ff
+              filename  = ff.split('/').last.split('.').first
+              
+              attachments = member.attachment_files  
+              attachment = attachments.where(file_name: filename).first
+              if attachment.nil?
+                attachment_file  = AttachmentFile.new(
+                                      file_name: filename,
+                                      member: member,
+                                      file: File.open(ff)
+                                   )
+
+                if attachment_file.save
+                  puts "Successfully uploaded file #{ff.split('/').last} for #{member.identification_number}"
+                else
+                  puts "Error in attaching file #{ff}"
+                end
+              else
+                attachment.update(
+                  file_name: filename,
+                  member: member,
+                  file: File.open(ff)
+                  )
+                puts "Successfully updated file #{ff.split('/').last} for #{member.identification_number}"
+              end
+            end
+          end
+        else
+          puts "Member #{sub_dir_name} not found"
+        end
+      end
+    end
+  end
 end

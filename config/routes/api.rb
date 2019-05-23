@@ -165,6 +165,16 @@ namespace :api do
     post "/insurance_withdrawal_collections/add_member", to: "insurance_withdrawal_collections#add_member"
     post "/insurance_withdrawal_collections/remove_member", to: "insurance_withdrawal_collections#remove_member"
 
+    # Insurance Fund Transfer Collection
+    post "/insurance_fund_transfer_collections", to: "insurance_fund_transfer_collections#create"
+    post "/insurance_fund_transfer_collections/modify_transaction_record", to: "insurance_fund_transfer_collections#modify_transaction_record"
+    post "/insurance_fund_transfer_collections/approve", to: "insurance_fund_transfer_collections#approve"
+    post "/insurance_fund_transfer_collections/update_particular", to: "insurance_fund_transfer_collections#update_particular"
+    get "/insurance_fund_transfer_collections/fetch", to: "insurance_fund_transfer_collections#fetch"
+    get "/insurance_fund_transfer_collections/fetch_members", to: "insurance_fund_transfer_collections#fetch_members"
+    post "/insurance_fund_transfer_collections/add_member", to: "insurance_fund_transfer_collections#add_member"
+    post "/insurance_fund_transfer_collections/remove_member", to: "insurance_fund_transfer_collections#remove_member"
+
     #Member Account Validations
     post 'member_account_validations/generate_transaction', to: 'member_account_validations#generate_transaction'
     post 'member_account_validations/add_member', to: 'member_account_validations#add_member'

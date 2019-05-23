@@ -1,0 +1,28 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @insurance_fund_transfer_collections.size > 0
+            = render partial: "index_list", locals: { insurance_fund_transfer_collections: @insurance_fund_transfer_collections }
+            = paginate @insurance_fund_transfer_collections
+          - else
+            %p
+              No insurance_fund_transfer_collections found
+
+= render partial: "insurance_fund_transfer_collections/modals/new_transaction"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+= javascript_include_tag "insurance_fund_transfer_collections/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });
