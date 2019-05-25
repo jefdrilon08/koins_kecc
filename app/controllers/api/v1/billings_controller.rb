@@ -132,6 +132,39 @@ module Api
         end
       end
 
+      def zero_out
+        billing = Billing.where(id: params[:id]).first
+
+        config  = {
+          billing: billing,
+          user: current_user
+        }
+
+        errors  = ::Billings::ValidateZeroOut.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          billing = ::Billings::ZeroOut.new(
+                      config: config
+                    ).execute!
+
+  
+          ActivityLog.create!(
+            content: "#{current_user.full_name} zero out billing",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              billing_id: billing.id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def approve
         billing = Billing.where(id: params[:id]).first
 
