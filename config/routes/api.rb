@@ -6,6 +6,13 @@ namespace :api do
     # Adjustments
     namespace :adjustments do
       post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"
+      post "/subsidiary_adjustments/approve", to: "subsidiary_adjustments#approve"
+      post "/subsidiary_adjustments/destroy", to: "subsidiary_adjustments#destroy"
+      post "/subsidiary_adjustments/add_member", to: "subsidiary_adjustments#add_member"
+      post "/subsidiary_adjustments/delete_member", to: "subsidiary_adjustments#delete_member"
+      post "/subsidiary_adjustments/add_accounting_code", to: "subsidiary_adjustments#add_accounting_code"
+      post "/subsidiary_adjustments/delete_accounting_code", to: "subsidiary_adjustments#delete_accounting_code"
+      post "/subsidiary_adjustments/update_accounting_entry_particular", to: "subsidiary_adjustments#update_accounting_entry_particular"
     end
 
     # Users
@@ -160,6 +167,16 @@ namespace :api do
     get "/insurance_withdrawal_collections/fetch_members", to: "insurance_withdrawal_collections#fetch_members"
     post "/insurance_withdrawal_collections/add_member", to: "insurance_withdrawal_collections#add_member"
     post "/insurance_withdrawal_collections/remove_member", to: "insurance_withdrawal_collections#remove_member"
+
+    # Insurance Fund Transfer Collection
+    post "/insurance_fund_transfer_collections", to: "insurance_fund_transfer_collections#create"
+    post "/insurance_fund_transfer_collections/modify_transaction_record", to: "insurance_fund_transfer_collections#modify_transaction_record"
+    post "/insurance_fund_transfer_collections/approve", to: "insurance_fund_transfer_collections#approve"
+    post "/insurance_fund_transfer_collections/update_particular", to: "insurance_fund_transfer_collections#update_particular"
+    get "/insurance_fund_transfer_collections/fetch", to: "insurance_fund_transfer_collections#fetch"
+    get "/insurance_fund_transfer_collections/fetch_members", to: "insurance_fund_transfer_collections#fetch_members"
+    post "/insurance_fund_transfer_collections/add_member", to: "insurance_fund_transfer_collections#add_member"
+    post "/insurance_fund_transfer_collections/remove_member", to: "insurance_fund_transfer_collections#remove_member"
 
     #Member Account Validations
     post 'member_account_validations/generate_transaction', to: 'member_account_validations#generate_transaction'

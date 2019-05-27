@@ -1,0 +1,36 @@
+.row
+  .col-md-4.col-xs-12
+    .form-group
+      %label
+        Accounting Code
+      = select_tag :accounting_code, options_from_collection_for_select(@accounting_codes, :id, :name), class: "form-control select-select2", id: "select-accounting-code"
+  .col-md-3.col-xs-12
+    .form-group
+      %label
+        Amount
+      = number_field_tag :amount, 0.00, class: "form-control", id: "input-accounting-amount"
+  .col-md-3.col-xs-12
+    .form-group
+      %label
+        Post Type
+      = select_tag :post_type, options_for_select(["DR", "CR"]), class: "form-control select-select2", id: "select-post-type"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Actions
+      #btn-add-accounting-code.btn.btn-primary.btn-block
+        .fa.fa-plus
+
+.row
+  .col-md-10.col-xs-12
+    .form-group
+      %label
+        Particular
+      = text_field_tag "", @accounting_entry[:particular], class: "form-control select select2", id: "input-particular"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Actions
+      #btn-update-accounting-entry-particular.btn.btn-success.btn-block
+        .fa.fa-check
+        Save Particular

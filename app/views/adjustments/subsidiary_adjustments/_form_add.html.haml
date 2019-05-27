@@ -1,0 +1,28 @@
+.row
+  .col-md-4.col-xs-12
+    .form-group
+      %label
+        Member
+      = select_tag :member, options_for_select(@non_subsidiary_members.map{ |o| ["#{o[:last_name]}, #{o[:first_name]} (#{o[:center][:name]})", o[:id]] }), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Account
+      = select_tag :account, options_for_select(Settings.default_member_accounts.pluck(:account_subtype)), class: "form-control select-select2", id: "select-account"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Adjustment
+      = select_tag :adjustment, options_for_select(["ADD", "DEDUCT"]), class: "form-control select-select2", id: "select-adjustment"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Amount
+      = number_field_tag :amount, 0.00, class: "form-control", id: "input-amount"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Actions
+      #btn-add.btn.btn-block.btn-success
+        .fa.fa-plus
+        Add

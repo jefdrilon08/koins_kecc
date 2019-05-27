@@ -20,6 +20,7 @@ module.exports = {
     DepositCollectionUI: "./react/deposit_collections/DepositCollectionUI.js",
     WithdrawalCollectionUI: "./react/withdrawal_collections/WithdrawalCollectionUI.js",
     InsuranceWithdrawalCollectionUI: "./react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUI.js",
+    InsuranceFundTransferCollectionUI: "./react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanApplicationForm: "./react/loans/ApplicationForm.js",
