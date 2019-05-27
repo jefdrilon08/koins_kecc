@@ -60,6 +60,17 @@ module MembershipPaymentCollections
             account_subtype: account_subtype,
             member_account_id: member_account.try(:id)
           }
+        elsif o[:record_type] == "SAVINGS"
+          record_type     = "SAVINGS"
+          account_subtype = o[:key]
+          member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: account_subtype, account_type: record_type).first
+          @records << {
+            amount: 0.00,
+            record_type: record_type,
+            enabled: member_account.present?,
+            account_subtype: account_subtype,
+            member_account_id: member_account.try(:id)
+          }
         end
       end
 

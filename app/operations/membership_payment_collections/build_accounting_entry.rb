@@ -63,6 +63,13 @@ module MembershipPaymentCollections
       if @insurance_accounting_codes.blank?
         raise "No insurance_accounting_codes found in settings"
       end
+
+      # Savings accounting codes
+      @savings_accounting_codes = Settings.savings_accounting_codes
+
+      if @savings_accounting_codes.blank?
+        raise "No savings_accounting_codes found in settings"
+      end
     end 
 
     def execute!
@@ -162,6 +169,22 @@ module MembershipPaymentCollections
       @insurance_accounting_codes.each do |s|
         @data[:totals].each do |o|
           if o[:record_type] == "INSURANCE" and o[:key] == s.insurance_type and o[:amount] > 0
+            accounting_code = AccountingCode.find(s.deposit_accounting_code_id)
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: accounting_code.code,
+              name: accounting_code.name,
+              amount: o[:amount]
+            }
+          end
+        end
+      end
+
+      # SAVINGS
+      @savings_accounting_codes.each do |s|
+        @data[:totals].each do |o|
+          if o[:record_type] == "SAVINGS" and o[:key] == s.savings_type and o[:amount] > 0
             accounting_code = AccountingCode.find(s.deposit_accounting_code_id)
 
             journal_entries << {

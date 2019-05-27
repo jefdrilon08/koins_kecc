@@ -92,6 +92,8 @@ namespace :api do
     post "/billings", to: "billings#create"
     post "/billings/modify_transaction_record", to: "billings#modify_transaction_record"
     post "/billings/toggle_attendance", to: "billings#toggle_attendance"
+    post "/billings/toggle_attendance_on", to: "billings#toggle_attendance_on"
+    post "/billings/toggle_attendance_off", to: "billings#toggle_attendance_off"
     post "/billings/approve", to: "billings#approve"
     post "/billings/zero_out", to: "billings#zero_out"
     post "/billings/check", to: "billings#check"

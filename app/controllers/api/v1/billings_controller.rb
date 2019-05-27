@@ -83,6 +83,36 @@ module Api
         end
       end
 
+      def toggle_attendance_off
+        billing = Billing.find(params[:id])
+        data    = billing.data.with_indifferent_access
+
+        data[:records].each_with_index do |o, i|
+          data[:records][i][:attendance]  = false
+        end
+
+        billing.update!(
+          data: data
+        )
+        
+        render json: billing
+      end
+
+      def toggle_attendance_on
+        billing = Billing.find(params[:id])
+        data    = billing.data.with_indifferent_access
+
+        data[:records].each_with_index do |o, i|
+          data[:records][i][:attendance]  = true
+        end
+
+        billing.update!(
+          data: data
+        )
+        
+        render json: billing
+      end
+
       def toggle_attendance
         billing = Billing.find(params[:id])
         data    = billing.data.with_indifferent_access

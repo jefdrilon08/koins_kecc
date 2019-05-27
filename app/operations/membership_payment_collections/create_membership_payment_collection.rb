@@ -123,7 +123,7 @@ module MembershipPaymentCollections
         # SAVINGS
         @default_membership_savings_deposits.each do |o|
           member_account  = MemberAccount.savings.where(
-                              member-id: m.id,
+                              member_id: m.id,
                               account_subtype: o.account_subtype
                             ).first
           
