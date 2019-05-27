@@ -25,7 +25,14 @@ module Stats
     def execute!
       @members.each do |m|
         # Check if we have paid loans
-        if Loan.active.where(member_id: m.id).count == 0
+        active_loans  = ::Loans::FetchActiveAsOf.new(
+                          config: {
+                            member: m,
+                            as_of: @as_of
+                          }
+                        ).execute!
+
+        if active_loans.size == 0
           member_accounts = MemberAccount.savings.where(
                               "members.id = ?", m.id
                             )

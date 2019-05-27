@@ -7,6 +7,12 @@ module Loans
       @branch       = @config[:branch]
       @center       = @config[:center]
       @loan_product = @config[:loan_product]
+      @member       = @config[:member]
+
+      if @member.present?
+        @branch = @member.branch
+        @center = @member.center
+      end
 
       @data = {
         loans: []
@@ -24,6 +30,10 @@ module Loans
                         "date_approved <= ?",
                         @as_of
                       )
+      if @member.present?
+        @paid_loans   = @paid_loans.where(member_id: @member.id)
+        @active_loans = @active_loans.where(member_id: @member.id)
+      end
 
       if @branch.present?
         @paid_loans   = @paid_loans.where(branch_id: @branch.id)
