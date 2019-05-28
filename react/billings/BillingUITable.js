@@ -37,6 +37,21 @@ export default class BillingUITable extends React.Component {
           <small>
             Attend.
           </small>
+          <br/>
+          <div className="btn-group">
+            <div 
+              className="btn btn-success btn-sm"
+              onClick={this.handleToggleAllOn.bind(this)}
+            >
+              <span className="fa fa-check"/>
+            </div>
+            <div 
+              className="btn btn-danger btn-sm"
+              onClick={this.handleToggleAllOff.bind(this)}
+            >
+              <span className="fa fa-times"/>
+            </div>
+          </div>
         </center>
       </th>
     );
@@ -76,6 +91,50 @@ export default class BillingUITable extends React.Component {
     );
 
     return headers;
+  }
+
+  handleToggleAllOn() {
+    var context = this;
+
+    var data  = {
+      id: this.props.id,
+      authenticity_token: this.props.authenticityToken
+    };
+
+    $.ajax({
+      url: "/api/v1/billings/toggle_attendance_on",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        context.props.updateData(response);
+        window.location.reload();
+      },
+      error: function(response) {
+        alert("Error in toggling attendance (all on)");
+      }
+    });
+  }
+
+  handleToggleAllOff() {
+    var context = this;
+
+    var data  = {
+      id: this.props.id,
+      authenticity_token: this.props.authenticityToken
+    };
+
+    $.ajax({
+      url: "/api/v1/billings/toggle_attendance_off",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        context.props.updateData(response);
+        window.location.reload();
+      },
+      error: function(response) {
+        alert("Error in toggling attendance (all off)");
+      }
+    });
   }
 
   handleToggled(memberId) {

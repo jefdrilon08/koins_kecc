@@ -15,11 +15,16 @@ var Show  = (function() {
   var $btnPrintWp;
   var $modalPrint;
 
+  var $btnZeroOut;
+  var $btnConfirmZeroOut;
+  var $modalZeroOut;
+
   var $message;
   var templateErrorList;
 
   var _urlApprove = "/api/v1/billings/approve";
   var _urlCheck   = "/api/v1/billings/check";
+  var _urlZeroOut = "/api/v1/billings/zero_out";
   var _urlPrint   = "/api/v1/print/generate_file";
 
   var _cacheDom = function() {
@@ -35,11 +40,60 @@ var Show  = (function() {
     $btnPrintWp = $("#btn-print-wp");
     $modalPrint = $("#modal-print");
 
+    $btnZeroOut         = $("#btn-zero-out");
+    $btnConfirmZeroOut  = $("#btn-confirm-zero-out");
+    $modalZeroOut       = $("#modal-zero-out");
+
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnZeroOut.on("click", function() {
+      $modalZeroOut.modal("show");
+      $message.html("");
+    });
+
+    $btnConfirmZeroOut.on("click", function() {
+      $message.html("Loading...");
+
+      $btnConfirmZeroOut.prop("disabled", true);
+
+      $.ajax({
+        url: _urlZeroOut,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: billingId,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmZeroOut.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnCheck.on("click", function() {
       $modalCheck.modal("show");
       $message.html("");
@@ -140,6 +194,8 @@ var Show  = (function() {
     });
 
     $btnConfirmApprove.on("click", function() {
+      $message.html("Loading...");
+
       $btnConfirmApprove.prop("disabled", true);
 
       $.ajax({
