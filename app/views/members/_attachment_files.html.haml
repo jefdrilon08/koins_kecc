@@ -14,8 +14,12 @@
             #{attachment_file.file_name}  
       %tbody
         %tr
-          %td        
-            = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true), width: "1135", height: "1000"
+          %td
+            - if attachment_file.file.attached?        
+              = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true), width: "1135", height: "1000"
+            - else
+              %p
+                No image found
     = link_to edit_member_attachment_file_path(@member, attachment_file), class: 'btn btn-warning btn-sm' do
       .fa.fa-pencil-alt
       Edit

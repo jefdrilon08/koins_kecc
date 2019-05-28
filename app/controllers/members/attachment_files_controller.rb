@@ -44,7 +44,7 @@ module Members
 
     def destroy
       @attachment_file    = AttachmentFile.find(params[:id])
-      
+      @attachment_file.file.purge
       @attachment_file.destroy!
 
       redirect_to member_path(@attachment_file.member)

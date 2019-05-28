@@ -520,22 +520,24 @@ namespace :adjust do
               if attachment.nil?
                 attachment_file  = AttachmentFile.new(
                                       file_name: filename,
-                                      member: member,
-                                      file: File.open(ff)
+                                      member: member
                                    )
 
+                attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+
                 if attachment_file.save
-                  puts "Successfully uploaded file #{ff.split('/').last} for #{member.identification_number}"
+                  puts "Successfully uploaded file #{ff} for #{member.identification_number}"
                 else
                   puts "Error in attaching file #{ff}"
                 end
               else
+                attachment.file.purge
+                attachment.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
                 attachment.update(
                   file_name: filename,
                   member: member,
-                  file: File.open(ff)
                   )
-                puts "Successfully updated file #{ff.split('/').last} for #{member.identification_number}"
+                puts "Successfully updated file #{ff} for #{member.identification_number}"
               end
             end
           end
