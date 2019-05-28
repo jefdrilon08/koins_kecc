@@ -13,7 +13,11 @@ module Branches
                             @branch.id
                           )
 
-      @resigned_members = Member.resigned.where("date_resigned > ? AND branch_id = ?", @as_of, @branch.id)
+      @resigned_members = Member.resigned.where(
+                            "date_resigned > ? AND branch_id = ?", 
+                            @as_of, 
+                            @branch.id
+                          )
 
       @members  = Member.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
 
@@ -33,7 +37,14 @@ module Branches
                                   id: @account_transactions.pluck(:subsidiary_id).uniq
                                 )
 
+      @member_types = Settings.default_member_types
+
+      if @member_types.blank?
+        raise "default_member_types not found"
+      end
+
       @data = {
+        member_type_counts: [],
         counts: {
           pure_savers: {
             male: 0,
@@ -95,39 +106,6 @@ module Branches
       @active_members     = @members.where.not(id: [@member_pure_savers.pluck(:id) + @member_loaners.pluck(:id)])
 
       # Pure Savers
-#      total_female  = @member_pure_savers.where(gender: "Female").count
-#      total_male    = @member_pure_savers.where(gender: "Male").count
-#      total_others  = @member_pure_savers.where(gender: "Others").count
-#      total         = total_female + total_male + total_others
-#
-#      @data[:counts][:pure_savers][:female] = total_female
-#      @data[:counts][:pure_savers][:male]   = total_male
-#      @data[:counts][:pure_savers][:others] = total_others
-#      @data[:counts][:pure_savers][:total]  = total
-#
-#      @data[:counts][:pure_savers][:members]  = @member_pure_savers.map{ |m|
-#                                                  {
-#                                                    id: m.id,
-#                                                    identification_number: m.identification_number,
-#                                                    first_name: m.first_name,
-#                                                    middle_name: m.middle_name,
-#                                                    last_name: m.last_name,
-#                                                    branch: {
-#                                                      id: m.branch.id,
-#                                                      name: m.branch.name
-#                                                    },
-#                                                    center: {
-#                                                      id: m.center.id,
-#                                                      name: m.center.name
-#                                                    },
-#                                                    officer: {
-#                                                      id: m.center.user.id,
-#                                                      first_name: m.center.user.first_name,
-#                                                      last_name: m.center.user.last_name
-#                                                    }
-#                                                  }
-#                                                }
-
       @data[:counts][:pure_savers]  = ::Stats::ComputePureSavers.new(
                                         config: {
                                           as_of: @as_of,
@@ -153,6 +131,7 @@ module Branches
                                                 first_name: m.first_name,
                                                 middle_name: m.middle_name,
                                                 last_name: m.last_name,
+                                                member_type: m.member_type,
                                                 branch: {
                                                   id: m.branch.id,
                                                   name: m.branch.name
@@ -187,6 +166,7 @@ module Branches
                                                       first_name: m.first_name,
                                                       middle_name: m.middle_name,
                                                       last_name: m.last_name,
+                                                      member_type: m.member_type,
                                                       branch: {
                                                         id: m.branch.id,
                                                         name: m.branch.name
@@ -203,7 +183,44 @@ module Branches
                                                     }
                                                   }
 
+
+      compute_member_types!
+
       @data
+    end
+
+    private
+
+    def compute_member_types!
+      @member_types.each do |m|
+        m_data  = {
+          member_type: m,
+          members: [],
+          count: 0
+        }
+
+        @data[:counts][:active_members][:members].select{ |o|
+          o[:member_type] == m
+        }.each do |o|
+          m_data[:members] << o
+        end
+
+        @data[:counts][:pure_savers][:members].select{ |o|
+          o[:member_type] == m
+        }.each do |o|
+          m_data[:members] << o
+        end
+
+        @data[:counts][:loaners][:members].select{ |o|
+          o[:member_type] == m
+        }.each do |o|
+          m_data[:members] << o
+        end
+
+        m_data[:count]  = m_data[:members].size
+
+        @data[:member_type_counts] << m_data
+      end
     end
   end
 end

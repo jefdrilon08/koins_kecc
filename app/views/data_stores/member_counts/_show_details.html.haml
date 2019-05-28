@@ -57,6 +57,22 @@
       #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
 
 %hr
+- if @data[:member_type_counts].present?
+  %h5
+    Member Type Count
+  %table.table.table-bordered.table-hover.table-sm
+    %tbody
+      - @data[:member_type_counts].each do |o|
+        %tr
+          %th{ width: "50%" }
+            #{o[:member_type]}
+          %td
+            #{o[:count]}
+- else
+  %p
+    No membership type counts.
+
+%hr
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
     %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}

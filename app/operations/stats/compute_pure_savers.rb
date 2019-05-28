@@ -70,6 +70,7 @@ module Stats
               first_name: m.first_name,
               middle_name: m.middle_name,
               last_name: m.last_name,
+              member_type: m.member_type,
               branch: {
                 id: m.branch.id,
                 name: m.branch.name

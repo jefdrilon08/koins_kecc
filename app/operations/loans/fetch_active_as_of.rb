@@ -30,6 +30,7 @@ module Loans
                         "date_approved <= ?",
                         @as_of
                       )
+
       if @member.present?
         @paid_loans   = @paid_loans.where(member_id: @member.id)
         @active_loans = @active_loans.where(member_id: @member.id)
