@@ -198,6 +198,48 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
               </td>
             );
           }
+        } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
+          if(this.props.data.status == "pending") {
+            components.push(
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+                <strong>
+                  <a
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
+        } else if(paymentRecord.record_type == "SAVINGS" && paymentRecord.enabled == true) {
+          if(this.props.data.status == "pending") {
+            components.push(
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
         } else {
           components.push(
             <td key={"na-" + member.id + "-" + j}>
@@ -256,6 +298,22 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
       } else if(totals[i].record_type == "EQUITY") {
         records.push(
           <td key={"total-equity-" + totals[i].key} className="text-right">
+            <strong>
+              {numberWithCommas(totals[i].amount)}
+            </strong>
+          </td>
+        );
+      } else if(totals[i].record_type == "INSURANCE") {
+        records.push(
+          <td key={"total-insurance-" + totals[i].key} className="text-right">
+            <strong>
+              {numberWithCommas(totals[i].amount)}
+            </strong>
+          </td>
+        );
+      } else if(totals[i].record_type == "SAVINGS") {
+        records.push(
+          <td key={"total-savings-" + i} className="text-right">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>

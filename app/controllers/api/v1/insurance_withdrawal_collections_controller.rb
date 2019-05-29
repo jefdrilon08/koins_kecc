@@ -80,7 +80,7 @@ module Api
         particular                      = params[:particular]
 
         if insurance_withdrawal_collection.pending?
-          data[:accounting_entry][:particular]  = particular
+          data[:particular]  = particular
 
           insurance_withdrawal_collection.update!(
             data: data

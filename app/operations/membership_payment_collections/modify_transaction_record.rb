@@ -20,6 +20,10 @@ module MembershipPaymentCollections
         update_membership_payment!
       elsif @current_transaction[:record_type] == "EQUITY"
         update_equity!
+      elsif @current_transaction[:record_type] == "INSURANCE"
+        update_insurance!
+      elsif @current_transaction[:record_type] == "SAVINGS"
+        update_savings!
       else
         raise "invalid record_type #{@current_transaction[:record_type]}"
       end
@@ -76,6 +80,15 @@ module MembershipPaymentCollections
         member_account  = MemberAccount.find(@current_transaction[:member_account_id])
 
         content = "#{@user.full_name} modified EQUITY amount from #{@original_amount} to #{@current_transaction[:amount]} for EQUITY account (#{member_account.account_subtype}) of member #{member.full_name}"
+      elsif @current_transaction[:record_type] == "INSURANCE"
+        member  = Member.find(@current_member[:id])
+
+        content = "#{@user.full_name} modified INSURANCE amount from #{@original_amount} to #{@current_transaction[:amount]} for insurance account (#{@current_transaction[:membership_type]} - #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
+      elsif @current_transaction[:record_type] == "SAVINGS"
+        member          = Member.find(@current_member[:id])
+        member_account  = MemberAccount.find(@current_transaction[:member_account_id])
+
+        content = "#{@user.full_name} modified SAVINGS amount from #{@original_amount} to #{@current_transaction[:amount]} for savings account (#{@current_transaction[:membership_type]} - #{@current_transaction[:account_subtype]}) of member #{member.full_name}"
       else
         raise "invalid record_type #{@current_transaction[:record_type]}:#{@current_transaction[:enabled]} in construct_log_message!"
       end
@@ -115,6 +128,24 @@ module MembershipPaymentCollections
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
               if rr[:record_type] == "EQUITY"
+                total_collected += rr[:amount].try(:to_f).round(2)
+                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+              end
+            end
+          end
+        elsif t[:record_type] == "INSURANCE"
+          @data[:records].each_with_index do |r, i|
+            r[:records].each_with_index do |rr, j|
+              if rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
+                total_collected += rr[:amount].try(:to_f).round(2)
+                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+              end
+            end
+          end
+        elsif t[:record_type] == "SAVINGS"
+          @data[:records].each_with_index do |r, i|
+            r[:records].each_with_index do |rr, j|
+              if rr[:record_type] == "SAVINGS" and t[:key] == rr[:account_subtype]
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end
@@ -171,6 +202,32 @@ module MembershipPaymentCollections
         if r[:member][:id] == @current_member[:id]
           r[:records].each_with_index do |rr, j|
             if rr[:record_type] == "EQUITY"
+              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+            end
+          end
+        end
+      end
+    end
+
+    def update_insurance!
+      @data[:records].each_with_index do |r, i|
+        if r[:member][:id] == @current_member[:id]
+          r[:records].each_with_index do |rr, j|
+            if rr[:record_type] == "INSURANCE" and rr[:account_subtype] == @current_transaction[:account_subtype]
+              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+            end
+          end
+        end
+      end
+    end
+
+    def update_savings!
+      @data[:records].each_with_index do |r, i|
+        if r[:member][:id] == @current_member[:id]
+          r[:records].each_with_index do |rr, j|
+            if rr[:record_type] == "SAVINGS" and rr[:account_subtype] == @current_transaction[:account_subtype]
               @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
               @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
             end

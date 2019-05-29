@@ -1,0 +1,38 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "30%" }
+        Member
+      %th
+        Account
+      %th.text-center
+        Adjustment
+      %th.text-right
+        Amount
+      - if @adjustment_record.pending?
+        %th.text-center
+          Actions
+  %tbody
+    - @data[:records].each_with_index do |o, i|
+      %tr
+        %td
+          %strong
+            = link_to member_path(o[:member][:id]), target: '_blank' do
+              #{o[:member][:last_name]}, #{o[:member][:first_name]}
+        %td
+          #{o[:member_account][:account_subtype]}
+        %td.text-center
+          - if o[:adjustment] == "ADD"
+            .badge.badge-success
+              .fa.fa-plus
+              Add
+          - elsif o[:adjustment] == "DEDUCT"
+            .badge.badge-danger
+              .fa.fa-minus
+              Deduct
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: '')}
+        - if @adjustment_record.pending?
+          %td.text-center
+            .btn.btn-danger.btn-delete-member.btn-sm{ data: { member_name: "#{o[:member][:last_name]}, #{o[:member][:first_name]}", member_account_id: o[:member_account][:id], account_subtype: o[:member_account][:account_subtype] } }
+              .fa.fa-times

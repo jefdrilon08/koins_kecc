@@ -12,6 +12,8 @@ module MembershipPaymentCollections
       @data_id_payments         = @membership_payment_collection.id_payments
       @data_membership_payments = @membership_payment_collection.membership_payments
       @data_equities            = @membership_payment_collection.equities
+      @data_insurance           = @membership_payment_collection.insurance
+      @data_savings             = @membership_payment_collection.savings
       @data_accounting_entry    = @membership_payment_collection.accounting_entry
 
       @date_approved  = ::Utils::GetCurrentDate.new(
@@ -27,6 +29,8 @@ module MembershipPaymentCollections
       process_id_payments!
       process_membership_payments!
       process_equities!
+      process_insurance!
+      process_savings!
 
       @data[:approved_by] = @user.full_name
 
@@ -85,6 +89,36 @@ module MembershipPaymentCollections
         }
 
         ::MembershipPaymentCollections::ApproveEquityPaymentHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
+    def process_insurance!
+      @data_insurance.each do |o|
+        config  = {
+          date_paid: @date_approved,
+          insurance_payment: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::MembershipPaymentCollections::ApproveInsurancePaymentHash.new(
+          config: config
+        ).execute!
+      end
+    end
+
+    def process_savings!
+      @data_savings.each do |o|
+        config  = {
+          date_paid: @date_approved,
+          savings_payment: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+        ::MembershipPaymentCollections::ApproveSavingsPaymentHash.new(
           config: config
         ).execute!
       end

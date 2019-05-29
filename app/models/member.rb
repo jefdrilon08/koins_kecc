@@ -28,9 +28,7 @@ class Member < ApplicationRecord
   has_many :membership_payment_records
   has_many :claims, dependent: :delete_all
   has_many :membership_payment_records
-
-  # ActiveStorage
-  has_many_attached :attachment_files
+  has_many :attachment_files
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true

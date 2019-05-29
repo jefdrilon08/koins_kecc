@@ -1,0 +1,22 @@
+#modal-delete-accounting-entry.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Delete Accounting Entry
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Are you sure you want to delete entry 
+            %span.display-post-type
+            %span.display-accounting-code
+            ?
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-delete-accounting-entry.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

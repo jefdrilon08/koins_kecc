@@ -21,6 +21,7 @@ module Loans
                   project_type_id: "",
                   status: "pending",
                   data: {
+                    business_permit_available: false,
                     clip_beneficiary: {
                       first_name: "",
                       middle_name: "",

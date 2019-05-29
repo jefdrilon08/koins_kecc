@@ -17,7 +17,6 @@ import FormExperience from './FormExperience';
 import FormBankAccounts from './FormBankAccounts';
 import FormLegalDependents from './FormLegalDependents';
 import FormBeneficiaries from './FormBeneficiaries';
-import FormAttachmentFiles from './FormAttachmentFiles';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -423,18 +422,6 @@ export default class FormDisplay extends React.Component {
                 </div>
               </div>
 
-              <div className="card">
-                <div className="card-header">
-                  Attachment Files
-                </div>
-                <div className="card-body">
-                  <FormAttachmentFiles
-                    data={state.data}
-                    updateData={this.updateData.bind(this)}
-                    formDisabled={state.formDisabled}
-                  />
-                </div>
-              </div>
             </div>
           </div>
           <div className="row">

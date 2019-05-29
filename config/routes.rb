@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
     end
 
+    resources :attachment_files, controller: 'members/attachment_files'
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
   end
@@ -133,6 +134,9 @@ Rails.application.routes.draw do
 
   # Insurance Withdrawals
   resources :insurance_withdrawal_collections, only: [:index, :show, :destroy]
+
+  # Insurance Fund Transfer
+  resources :insurance_fund_transfer_collections, only: [:index, :show, :destroy]
 
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]

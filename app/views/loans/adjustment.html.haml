@@ -57,6 +57,107 @@
                   #{number_to_currency(@data[:total_principal_paid].to_f + @data[:total_interest_paid].to_f, unit: "")}
           %hr
 
+          %h3
+            Corrected Amortization
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                %th
+                  Due Date
+                %th.text-right
+                  Principal
+                %th.text-right
+                  Interest
+                %th.text-right
+                  Total
+                %th.text-right
+                  Principal Paid
+                %th.text-right
+                  Interest Paid
+                %th.text-right
+                  Total
+                %th.text-right
+                  Principal Balance
+                %th.text-right
+                  Interest Balance
+                %th.text-right
+                  Total
+                %th.text-center
+                  Status
+            %tbody
+              - total_principal         = 0.00
+              - total_interest          = 0.00
+              - total_principal_paid    = 0.00
+              - total_interest_paid     = 0.00
+              - total_principal_balance = 0.00
+              - total_interest_balance  = 0.00
+
+              - @data[:corrected_amortization].each_with_index do |o, i|
+                - total_principal         += o[:principal].to_f.round(2)
+                - total_interest          += o[:interest].to_f.round(2)
+                - total_principal_paid    += o[:principal_paid].to_f.round(2)
+                - total_interest_paid     += o[:interest_paid].to_f.round(2)
+                - total_principal_balance += o[:principal_balance].to_f.round(2)
+                - total_interest_balance  += o[:interest_balance].to_f.round(2)
+
+                %tr
+                  %td.text-center
+                    #{i + 1}
+                  %td
+                    #{o[:due_date].to_date.strftime("%b %d, %Y")}
+                  %td.text-right
+                    #{number_to_currency(o[:principal], unit: '')}
+                  %td.text-right
+                    #{number_to_currency(o[:interest], unit: '')}
+                  %td.text-right
+                    %strong
+                      #{number_to_currency(o[:amount_due], unit: '')}
+                  %td.text-right
+                    #{number_to_currency(o[:principal_paid], unit: '')}
+                  %td.text-right
+                    #{number_to_currency(o[:interest_paid], unit: '')}
+                  %td.text-right
+                    %strong
+                      #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
+                  %td.text-right
+                    #{number_to_currency(o[:principal_balance], unit: '')}
+                  %td.text-right
+                    #{number_to_currency(o[:interest_balance], unit: '')}
+                  %td.text-right
+                    %strong
+                      #{number_to_currency(o[:principal_balance].to_f + o[:interest_balance].to_f, unit: '')}
+                  %td.text-center
+                    - if o[:is_paid] == true
+                      .badge.badge-success
+                        Paid
+                    - else
+                      .badge.badge-danger
+                        Due
+              %tr
+                %th{ colspan: 2 }
+                  Total
+                %th.text-right
+                  #{number_to_currency(total_principal, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_interest, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_principal + total_interest, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_principal_paid, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_interest_paid, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_principal_paid + total_interest_paid, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_principal_balance, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_interest_balance, unit: '')}
+                %th.text-right
+                  #{number_to_currency(total_principal_balance + total_interest_balance, unit: '')}
+
+          %hr
+
           .row
             .col-md-6.col-xs-12
               %h3
@@ -99,10 +200,25 @@
                       Interest
                     %th.text-right
                       Total
+                    %th.text-right
+                      Paid Principal
+                    %th.text-right
+                      Paid Interest
+                    %th.text-right
+                      Paid
                     %th.text-center
                       Status
                 %tbody
+                  - total_principal       = 0.00
+                  - total_interest        = 0.00
+                  - total_principal_paid  = 0.00
+                  - total_interest_paid   = 0.00
                   - @data[:original_amortization_schedule_entries].each_with_index do |o, i|
+                    - total_principal       += o[:principal].to_f.round(2)
+                    - total_interest        += o[:interest].to_f.round(2)
+                    - total_principal_paid  += o[:principal_paid].to_f.round(2)
+                    - total_interest_paid   += o[:interest_paid].to_f.round(2)
+
                     %tr
                       %td.text-center
                         #{i + 1}
@@ -112,6 +228,12 @@
                         #{number_to_currency(o[:interest], unit: '')}
                       %td.text-right
                         #{number_to_currency(o[:amount_due], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:principal_paid], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:interest_paid], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
                           .badge.badge-success
@@ -119,9 +241,23 @@
                         - else
                           .badge.badge-danger
                             Due
+                  %tr
+                    %th
+                    %th.text-right
+                      #{number_to_currency(total_principal, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_interest, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_principal + total_interest, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_principal_paid, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_interest_paid, unit: '')}
+                    %th.text-right
+                      #{number_to_currency(total_principal_paid + total_interest_paid, unit: '')}
             .col-md-6.col-xs-12
               %h3
-                Adjusted Values
+                Should be Amortization
               %table.table.table-sm.table-bordered
                 %tbody
                   %tr

@@ -1,16 +1,17 @@
-module InsuranceWithdrawalCollections
-  class ApproveInsuranceWithdrawalHash
+module MembershipPaymentCollections
+  class ApproveSavingsPaymentHash
     def initialize(config:)
-      @config                     = config
-      @date_paid                  = @config[:date_paid]
-      @insurance_withdrawal       = @config[:insurance_withdrawal]
-      @user                       = @config[:user]
-      @particular                 = @config[:particular]
-      @amount                     = @insurance_withdrawal[:amount].try(:to_f).round(2)
-      @transaction_type           = "withdraw"
-      @member_account             = MemberAccount.find(@insurance_withdrawal[:member_account_id])
+      @config             = config
+      @date_paid          = @config[:date_paid]
+      @savings_payment    = @config[:savings_payment]
+      @user               = @config[:user]
+      @particular         = @config[:particular]
 
-      @accounting_entry_reference_number  = @config[:accounting_entry_reference_number]
+      @amount             = @savings_payment[:amount].try(:to_f).round(2)
+
+      @transaction_type = "deposit"
+
+      @member_account = MemberAccount.find(@savings_payment[:member_account_id])
 
       @account_transaction  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
@@ -28,7 +29,7 @@ module InsuranceWithdrawalCollections
         is_adjustment: false,
         is_for_exit_age: false,
         is_for_loan_payments: false,
-        accounting_entry_reference_number: @accounting_entry_reference_number,
+        accounting_entry_reference_number: nil,
         beginning_balance: 0.00,
         ending_balance: 0.00
       }
@@ -37,10 +38,10 @@ module InsuranceWithdrawalCollections
     def execute!
       # Compute beginning and ending balance
       @data[:beginning_balance] = @member_account.balance.round(2)
-      @data[:ending_balance]    = (@data[:beginning_balance] - @amount).round(2)
+      @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
 
       # Update account balance
-      new_balance = (@member_account.balance - @amount).round(2)
+      new_balance = (@member_account.balance + @amount).round(2)
       @member_account.update(
         balance: new_balance
       )

@@ -20,7 +20,8 @@ module InsuranceWithdrawalCollections
         records: [],
         headers: [],
         totals: [],
-        total_collected: 0.00
+        total_collected: 0.00,
+        particular: "TO RECORD INSURANCE WITHDRAWAL OF #{@branch.name}"
       }
     end
 
