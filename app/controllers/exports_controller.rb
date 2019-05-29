@@ -88,4 +88,15 @@ class ExportsController < ApplicationController
       send_data Exports::GenerateAccountTransactionsCsv.new(account_transactions: @account_transactions).execute!, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=insurance account transactions.csv"
     end   
   end
+
+  def members_per_branch_excel
+    branch        = Branch.where(id: params[:branch_id]).first
+    members       = Member.where(branch_id: branch.id).order("created_at asc")
+    excel         = Members::GenerateMembersPerBranchExcel.new(members: members, branch: branch).execute!
+    filename      = "members_#{branch.try(:to_s)}.xlsx"
+    
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
 end

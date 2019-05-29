@@ -1,0 +1,67 @@
+<script id="member-quarterly-reports-template" type="x-tmpl-mustache">
+  <table class='ui very basic collapsing celled table'>
+    <thead>
+      <tr>
+        <th width='20%'>Branch</th>
+        <th width='10%'>Active Members</th>
+        <th width='10%'>Active Inforce Members</th>
+        <th width='10%'>Active Lapsed Members</th>
+        <th width='10%'>New Members</th>
+        <th width='10%'>Resigned Members</th>
+        <th width='10%'>Female</th>
+        <th width='10%'>Male</th>
+        <th width='10%'>Spouse</th>
+        <th width='10%'>Dep</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#members}}
+        <tr>
+          <td>{{branch}}</td>
+          <td>{{active_count}}</td>
+          <td>{{active_inforce_count}}</td>
+          <td>{{active_lapsed_count}}</td>
+          <td>{{new_count}}</td>
+          <td>{{resigned_count}}</td>
+          <td>{{female_count}}</td>
+          <td>{{male_count}}</td>
+          <td>{{member_with_spouse_count}}</td>
+          <td>{{valid_dependent_count}}</td>
+        </tr>
+      {{/members}}
+    </tbody>
+  </table> 
+  <hr>
+  <table class='ui very basic collapsing celled table'>
+    <thead>
+      <tr>
+        <th width='20%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#total_members}}
+        <tr class='leader'>
+          <td>Total:</td>
+          <td>{{total_active}}</td>
+          <td>{{total_active_inforce}}</td>
+          <td>{{total_active_lapsed}}</td>
+          <td>{{total_new}}</td>
+          <td>{{total_resigned}}</td>
+          <td>{{total_female}}</td>
+          <td>{{total_male}}</td>
+          <td>{{total_with_spouse}}</td>
+          <td>{{total_valid_dependent}}</td>
+        </tr>
+      {{/total_members}}
+    </tbody>
+  </table>
+</script>

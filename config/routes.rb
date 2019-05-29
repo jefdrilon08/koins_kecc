@@ -142,6 +142,7 @@ Rails.application.routes.draw do
 
   # Printing
   get "/print", to: "print#print"
+  get "/download_file", to: "pages#download_file"
 
   # Data Stores
   namespace :data_stores do
@@ -200,6 +201,8 @@ Rails.application.routes.draw do
     get "/repayment_rates", to: "repayment_rates#index"
     get "/repayment_rates/:id", to: "repayment_rates#show"
     delete "/repayment_rates/:id", to: "repayment_rates#destroy"
+
+
   end
 
   namespace :accounting do
@@ -233,7 +236,9 @@ Rails.application.routes.draw do
   get "/reports/cic_reports", to: "reports#cic_reports", as: :cic_reports
   get "/reports/cic", to: "reports#cic", as: :cic
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
-  
+  get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
+  get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
+
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

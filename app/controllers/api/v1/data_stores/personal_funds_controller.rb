@@ -4,6 +4,38 @@ module Api
       class PersonalFundsController < ApplicationController
         before_action :authenticate_user!
 
+        def download_excel
+          record = DataStore.personal_funds.where(id: params[:id]).first
+
+          if record.blank?
+            render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
+          else
+            records = record.data.with_indifferent_access[:records]
+
+            if params[:officer_id].present?
+              records = records.select{ |o|
+                          o[:officer][:id] == params[:officer_id]
+                        }
+            end
+
+            if params[:center_id].present?
+              records = records.select{ |o|
+                          o[:center][:id] == params[:center_id]
+                        }
+            end
+
+            record.data["records"] = records
+
+            # Gumawa ng file
+            excel_file  = ::DataStores::GeneratePersonalFundReportExcel.new(config: { record: record }).execute!
+            filename    = "personal_funds_#{Time.now.to_i}.xlsx"
+
+            excel_file.serialize "#{Rails.root}/tmp/#{filename}"
+
+            render json: { filename: filename }
+          end
+        end
+
         def fetch
           @record = DataStore.personal_funds.where(id: params[:id]).first
 
@@ -63,6 +95,7 @@ module Api
           render json: { message: "ok" }
         end
       end
+      
     end
   end
 end

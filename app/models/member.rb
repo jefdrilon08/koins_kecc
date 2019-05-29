@@ -242,6 +242,14 @@ class Member < ApplicationRecord
     end
   end
 
+  def full_name_middle_initial
+    if self.middle_name == ""
+      "#{last_name.titleize}, #{first_name.titleize}"
+    else
+      "#{last_name.titleize}, #{first_name.titleize} #{middle_name[0].try(:titleize)}."
+    end
+  end
+
 end
 
            

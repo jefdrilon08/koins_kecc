@@ -64,6 +64,7 @@ export default class ShowDisplay extends React.Component {
     });
   }
 
+
   componentDidMount() {
     var context = this;
 
@@ -108,6 +109,35 @@ export default class ShowDisplay extends React.Component {
           officers: officers,
           centers: centers
         });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Something went wrong when fetching data store");
+      }
+    });
+  }
+
+  handleDownloadExcel() {
+    var context   = this;
+    var officerId = context.state.currentOfficerId || "";
+    var centerId  = context.state.currentCenterId || "";
+
+    var data  = {
+      id: this.props.id,
+      officer_id: officerId,
+      center_id: centerId
+    }
+
+    $.ajax({
+      url: "/api/v1/data_stores/personal_funds/download_excel",
+      data: data,
+      method: 'GET',
+      success: function(response) {
+        console.log(response);
+
+        var filename = response.filename;
+
+        window.location.href = "/download_file?filename=" + filename;
       },
       error: function(response) {
         console.log(response);
@@ -295,8 +325,20 @@ export default class ShowDisplay extends React.Component {
             </select>
           </div>
         </div>
+        <div className="col">
+          <div className="form-group">
+          <label> 
+            Action:
+          </label>
+          <br></br>
+            <button className='btn btn-primary btn-block' href='#' onClick={this.handleDownloadExcel.bind(this)}>Download Excel</button>
+          </div>
+        </div>
       </div>
     );
+    
+      
+    
   }
 
   renderDisplay() {

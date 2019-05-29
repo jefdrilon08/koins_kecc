@@ -57,4 +57,5 @@ class DataStore < ApplicationRecord
   def error?
     self.status == "error"
   end
+
 end

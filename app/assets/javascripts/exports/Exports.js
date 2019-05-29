@@ -16,15 +16,19 @@ Exports = (function() {
   var urlExportMemberAccount     = "/exports/member_accounts";
   var urlExportAccountTransaction     = "/exports/account_transactions";
 
+  var urlExportMemberPerBranch = "/exports/members_per_branch_excel";
+  var $btnDownloadMemberPerBranch = $("#export-member-per-branch-segment").find(".btn-download-member-per-branch");
+
   var init  = function() {
-    $btnDownloadMember.on('click', function() {
+
+     $btnDownloadMemberPerBranch.on('click', function() {
       var params    = {
         start_date:  $startDate.val(),
         end_date:  $endDate.val(),
-        branch: $branch.val()
+        branch_id: $branch.val()
       }
 
-      window.location = urlExportMember + "?" + encodeQueryData(params);
+      window.location = urlExportMemberPerBranch + "?" + encodeQueryData(params);
     });
 
     $btnDownloadBeneficiary.on('click', function() {
@@ -68,6 +72,17 @@ Exports = (function() {
 
       window.location = urlExportAccountTransaction + "?" + encodeQueryData(params);
     });
+
+    $btnDownloadMember.on('click', function() {
+      var params    = {
+        start_date:  $startDate.val(),
+        end_date:  $endDate.val(),
+        branch: $branch.val()
+      }
+
+      window.location = urlExportMember + "?" + encodeQueryData(params);
+    });
+
   };
 
   return {
