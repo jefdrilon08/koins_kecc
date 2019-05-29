@@ -1,0 +1,17 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-database
+    Data Stores
+  %li.breadcrumb-item
+    = link_to "/data_stores/patronage_refund" do
+      .fa.fa-database
+      Patronage Refund
+  %li.breadcrumb-item
+    .fa.fa-file
+    - if @record.data.with_indifferent_access[:branch].present?
+      #{@record.data.with_indifferent_access[:branch][:name]}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "/data_stores/patronage_refund/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
+        .fa.fa-times
+        Delete

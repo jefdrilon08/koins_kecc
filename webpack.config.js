@@ -37,7 +37,8 @@ module.exports = {
     MonthlyClosingCollectionShow: "./react/monthly_closing_collections/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./react/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision: "./react/monitoring/AccountingEntryPrecision.js",
-    MemberAccountInsuranceStatus: "./react/member_accounts/FetchInsuranceStatus.js"
+    MemberAccountInsuranceStatus: "./react/member_accounts/FetchInsuranceStatus.js",
+    IcprShow: "./react/data_stores/icpr/Show.js"
   },
   module: {
     rules: [

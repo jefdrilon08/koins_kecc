@@ -25,6 +25,8 @@ class DataStore < ApplicationRecord
   scope :x_weeks_to_pay,  -> { where("meta->>'data_store_type' = ?", "X_WEEKS_TO_PAY") }
   scope :monthly_incentives, -> { where("meta->>'data_store_type' = ?", "MONTHLY_INCENTIVE") }
   scope :dropout_rates, -> { where("meta->>'data_store_type' = ?", "DROPOUT_RATE") }
+  scope :icpr, -> { where("meta->>'data_store_type' = ?", "ICPR") }
+  scope :patronage_refund, -> { where("meta->>'data_store_type' = ?", "PATRONAGE_REFUND") }
 
   before_validation :load_defaults
 
