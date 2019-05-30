@@ -7,6 +7,7 @@ module Accounting
       @previous_year                        = @start_date.year - 1
       @member                               = Member.where("status IN (?) and branch_id = ?", ["active","resigned"], branch_id)
       #@member                               = Member.where("status IN (?) and branch_id = ? and center_id = ?", ["active"], branch_id, "5c38d52f-5535-4f96-8a79-4a0eb3c2c7de")
+      #@member                               = Member.find("b9f30f57-1284-4577-9f9c-87e2c5338969")
       @data                                 = {}
       @data[:details]                       = []
       @data[:total_monthly_amount]          = 0
@@ -16,8 +17,9 @@ module Accounting
     end
     def execute!
       last_loop = 0
+      member = @member
       @member.each do |member|
-      
+      #if member
       
         temp                        = {}
         temp[:member_id]            = member.id
@@ -75,7 +77,7 @@ module Accounting
                                                            member_account.id,
                                                            start_date_year,
                                                            start_date_month
-                                                         ).last
+                                                         ).order("transacted_at ASC").last
 
                                                           
             

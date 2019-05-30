@@ -68,7 +68,7 @@ module Accounting
         end
         
         
-        tmp[:total_member_interest]   = ( tmp[:details].sum{ |d| d[:sample].to_f} ).round(2)
+        tmp[:total_member_interest]   = (tmp[:details].sum{ |d| d[:sample].to_f} ).round(2)
         tmp[:member_interest_average] = (tmp[:total_member_interest] * @patronage_rate).round(2)
         tmp[:member_savings_total]    = (tmp[:member_interest_average] * 0.9).round(2)
         tmp[:member_cbu_total]        = (tmp[:member_interest_average] * 0.1).round(2)
