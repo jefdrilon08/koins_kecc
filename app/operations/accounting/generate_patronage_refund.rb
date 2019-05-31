@@ -6,9 +6,9 @@ module Accounting
       @patronage_rate = (patronage_rate / 100)
       @start_date = start_date.to_date
       @end_date = end_date.to_date
-      member_status = ["active","resigned"]
+      member_status = ["active","resigned","pending"]
       @member = Member.where("branch_id = ? and status IN (?)",branch_id, member_status)
-      #@member = Member.find("4efaa853-2e66-42f9-be88-4aa89798c90b")
+      #@member = Member.find("417b1732-e05d-4591-8850-d153d04055af")
         
     
     end
@@ -52,16 +52,16 @@ module Accounting
                                            "approved")
             at.each do |a|
               atDetails           = {}
-              atDetails[:amount]  = a.data.with_indifferent_access[:total_interest_paid]
+              atDetails[:amount]  = (a.data.with_indifferent_access[:total_interest_paid].to_f).round(2)
               lDetails[:payment]  << atDetails
             end
 
             jef               = lDetails[:payment].sum{ |x| x[:amount].to_f}
-            lDetails[:month_total_amount] = jef 
+            lDetails[:month_total_amount] = (jef.to_f).round(2)
             d[:loan_details]  << lDetails
 
           end
-          d[:sample] = d[:loan_details].sum{ |x| x[:month_total_amount].to_i }
+          d[:sample] = d[:loan_details].sum{ |x| x[:month_total_amount].to_f }
         
           tmp[:details]       << d
           start_date_details  = start_date_details + 1.month
