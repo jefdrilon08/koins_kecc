@@ -14,7 +14,7 @@ module Epassbook
     end
 
     def execute!
-      @savings_accounts.each do |o|
+      @savings_accounts.each do |o| 
         last_transaction  = AccountTransaction.where(
                               subsidiary_id: o.id,
                               subsidiary_type: 'MemberAccount',
