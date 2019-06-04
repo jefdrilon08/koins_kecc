@@ -1,5 +1,5 @@
 class DataStore < ApplicationRecord
-  STATUSES = ["processing", "done", "error", "closed"]
+  STATUSES = ["processing", "done", "error", "closed", "approved"]
 
   validates :meta, presence: true
   validates :data, presence: true
@@ -8,6 +8,7 @@ class DataStore < ApplicationRecord
   scope :processing, -> { where(status: "processing") }
   scope :done, -> { where(status: "done") }
   scope :closed, -> { where(status: "closed") }
+  scope :approved, -> { where(status: "approved") }
 
   scope :branch_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_LOANS_STATS") }
   scope :branch_with_centers_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_WITH_CENTERS_LOANS_STATS") }
@@ -58,5 +59,8 @@ class DataStore < ApplicationRecord
 
   def error?
     self.status == "error"
+  end
+  def approved?
+    self.status == "approved"
   end
 end

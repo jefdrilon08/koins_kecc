@@ -84,6 +84,22 @@
 
 
 
+= render partial: "/data_stores/patronage_refund/modals/approve"
+
+
+= javascript_include_tag "data_stores/patronage_refund/Show.js"
+
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var id                = $("#parameters").data('id');
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });
 
 
 

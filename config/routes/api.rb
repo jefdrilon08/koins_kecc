@@ -186,8 +186,10 @@ namespace :api do
     namespace :data_stores do
       post "/icpr/queue", to: "icpr#queue"
       get "/icpr/fetch", to: "icpr#fetch"
+      post "/icpr/approve", to: "icpr#approve"
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
+      post "/patronage_refund/approve", to: "patronage_refund#approve"
       post "/personal_funds/queue", to: "personal_funds#queue"
       get "/personal_funds/fetch", to: "personal_funds#fetch"
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"

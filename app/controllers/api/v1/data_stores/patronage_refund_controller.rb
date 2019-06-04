@@ -50,6 +50,36 @@ module Api
 
           render json: { message: "ok" }
         end
+
+        
+        def approve
+          patronage_refund  = DataStore.find(params[:id])
+        
+          config  = {
+            patronage_refund: patronage_refund,
+            user: current_user
+          }
+
+  #       errors  = ::MonthlyClosingCollections::ValidateApprove.new(
+  #                   config: config
+  #                 ).execute!
+
+  #       if errors[:messages].size == 0
+
+          icpr  = ::DataStores::ApprovePatronageRefund.new(
+                                          config: config
+                                        ).execute!
+
+          render json: { id: patronage_refund.id }
+ #       else
+ #         render json: errors, status: 400
+ #       end
+      end
+
+
+
+
+
       end
     end
   end

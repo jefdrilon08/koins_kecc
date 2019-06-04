@@ -44,12 +44,43 @@ module Api
           args = {
             id: @record.id,
             data_store_type: @data_store_type
+            #closing_date: Date.today
           }
 
           ProcessIcpr.perform_later(args)
 
           render json: { message: "ok" }
         end
+
+
+      def approve
+        icpr  = DataStore.find(params[:id])
+      
+        config  = {
+          icpr: icpr,
+          user: current_user
+        }
+
+ #       errors  = ::MonthlyClosingCollections::ValidateApprove.new(
+ #                   config: config
+ #                 ).execute!
+
+ #       if errors[:messages].size == 0
+          icpr  = ::DataStores::ApproveIcpr.new(
+                                          config: config
+                                        ).execute!
+
+          render json: { id: icpr.id }
+ #       else
+ #         render json: errors, status: 400
+ #       end
+      end
+
+
+
+
+
+
       end
     end
   end

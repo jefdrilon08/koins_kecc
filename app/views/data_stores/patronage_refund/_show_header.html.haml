@@ -12,6 +12,11 @@
       #{@record.data.with_indifferent_access[:branch][:name]}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      - if @record.done?
+        = link_to "#", class: 'btn', id: 'btn-approve' do
+          .fa.fa-check
+          Approve
+
       = link_to "/data_stores/patronage_refund/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
         .fa.fa-times
         Delete
