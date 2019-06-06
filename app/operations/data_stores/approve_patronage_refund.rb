@@ -71,7 +71,7 @@ module DataStores
         
         r[:final_count].each do |fc|
           
-          #if fc[:total_member_interest]
+          if fc[:total_member_interest]
         
             account_subtype = ["K-IMPOK", "CBU"]
           
@@ -100,7 +100,7 @@ module DataStores
             ).execute!
           end
           #raise "jef".inspect
-        #end
+        end
         end
 
       end
