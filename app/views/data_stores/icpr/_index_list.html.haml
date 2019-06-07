@@ -1,0 +1,49 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th.text-center
+        Date
+      %th.text-center
+        Interest Rate
+      %th
+        Branch
+      %th.text-center
+        Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          %strong
+            = link_to "/data_stores/icpr/#{o.id}" do
+              #{o.meta.with_indifferent_access[:start_date].to_date.strftime("%b %d, %Y")}
+              \-
+              #{o.meta.with_indifferent_access[:end_date].to_date.strftime("%b %d, %Y")}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:equity_rate]}
+        %td
+          #{o.meta.with_indifferent_access[:branch_name]}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+            .progress.progress-xs
+              .progress-bar.bg-success{ style: "width: #{o.progress_as_percent}" }
+            %center
+              %small
+                #{o.progress_as_percent}
+          - elsif o.done?
+            .badge.badge-success
+              Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}
