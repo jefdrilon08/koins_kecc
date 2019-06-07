@@ -13,6 +13,12 @@ module Reports
         @male_members           = @active_members.where(gender: "Male")
         @female_members         = @active_members.where(gender: "Female")
         @members_with_spouse    = @active_members.where("data ->> 'spouse'  is not NULL AND data ->> 'spouse' <> ''")
+        @single_members         = @active_members.where(civil_status: "Single")
+        @married_members        = @active_members.where(civil_status: "Kasal") 
+        @maykinakasama_members  = @active_members.where(civil_status: "May Kinakasama")
+        @hiwalay_members        = @active_members.where(civil_status: 'Hiwalay')
+        @biyuda_members         = @active_members.where(civil_status: "Biyudo/a")
+
       else
         @all_members            = Member.all.order("last_name ASC")
       end
@@ -32,6 +38,11 @@ module Reports
       @total_male = 0
       @total_with_spouse = 0
       @total_valid_dependent = 0
+      @total_single = 0
+      @total_married = 0
+      @total_maykinakasama = 0
+      @total_hiwalay = 0
+      @total_biyuda = 0
 
       Branch.all.order("cluster_id ASC").each do |branch|
         member = {}
@@ -46,6 +57,11 @@ module Reports
         member[:female_count] = @female_members.where(branch_id: branch).count
         member[:member_with_spouse_count] = @members_with_spouse.where(branch_id: branch).count
         member[:valid_dependent_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        member[:single] = @single_members.where(branch_id: branch).count
+        member[:married] = @married_members.where(branch_id: branch).count
+        member[:maykinakasama] = @maykinakasama_members.where(branch_id: branch).count
+        member[:hiwalay] = @hiwalay_members.where(branch_id: branch).count
+        member[:biyuda] = @biyuda_members.where(branch_id: branch).count
 
         @total_resigned += @resigned_members.where(branch_id: branch).count
         @total_new += @new_members.where(branch_id: branch).count
@@ -56,8 +72,12 @@ module Reports
         @total_female += @female_members.where(branch_id: branch).count
         @total_with_spouse += @members_with_spouse.where(branch_id: branch).count
         @total_female += @female_members.where(branch_id: branch).count
-         @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
-
+        @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        @total_single += @single_members.where(branch_id: branch).count
+        @total_married += @married_members.where(branch_id: branch).count
+        @total_maykinakasama += @maykinakasama_members.where(branch_id: branch).count
+        @total_hiwalay += @hiwalay_members.where(branch_id: branch).count
+        @total_biyuda += @biyuda_members.where(branch_id: branch).count
         @data[:members] << member
       end
 
@@ -71,6 +91,11 @@ module Reports
       total[:total_female] = @total_female
       total[:total_with_spouse] = @total_with_spouse
       total[:total_valid_dependent] = @total_valid_dependent
+      total[:total_single] = @total_single
+      total[:total_married] = @total_married
+      total[:total_maykinakasama] = @total_maykinakasama
+      total[:total_hiwalay] = @total_hiwalay
+      total[:total_biyuda] = @total_biyuda
 
       @data[:total_members] << total
 

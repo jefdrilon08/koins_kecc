@@ -1,5 +1,5 @@
 <script id="member-quarterly-reports-template" type="x-tmpl-mustache">
-  <table class='ui very basic collapsing celled table'>
+  <table class='ui small teal table sticky'>
     <thead>
       <tr>
         <th width='20%'>Branch</th>
@@ -12,6 +12,11 @@
         <th width='10%'>Male</th>
         <th width='10%'>Spouse</th>
         <th width='10%'>Dep</th>
+        <th width='10%'>Single</th>
+        <th width='10%'>Married</th>
+        <th width='10%'>May Kinakasama</th>
+        <th width='10%'>Hiwalay</th>
+        <th width='10%'>Biyuda/o</th>
       </tr>
     </thead>
     <tbody>
@@ -27,15 +32,25 @@
           <td>{{male_count}}</td>
           <td>{{member_with_spouse_count}}</td>
           <td>{{valid_dependent_count}}</td>
+          <td>{{single}}</td>
+          <td>{{married}}</td>
+          <td>{{maykinakasama}}</td>
+          <td>{{hiwalay}}</td>
+          <td>{{biyuda}}</td>
         </tr>
       {{/members}}
     </tbody>
   </table> 
   <hr>
-  <table class='ui very basic collapsing celled table'>
+  <table class='ui small blue table'>
     <thead>
       <tr>
         <th width='20%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
+        <th width='10%'></th>
         <th width='10%'></th>
         <th width='10%'></th>
         <th width='10%'></th>
@@ -60,6 +75,11 @@
           <td>{{total_male}}</td>
           <td>{{total_with_spouse}}</td>
           <td>{{total_valid_dependent}}</td>
+          <td>{{total_single}}</td>
+          <td>{{total_married}}</td>
+          <td>{{total_maykinakasama}}</td>
+          <td>{{total_hiwalay}}</td>
+          <td>{{total_biyuda}}</td>
         </tr>
       {{/total_members}}
     </tbody>
