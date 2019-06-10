@@ -39,6 +39,8 @@ Rails.application.config.assets.precompile += [
   "savings_accounts/Show.js",
   "membership_payment_collections/Index.js",
   "membership_payment_collections/Show.js",
+  "time_deposit_collections/Index.js",
+  "time_deposit_collections/Show.js",
   "deposit_collections/Index.js",
   "deposit_collections/Show.js",
   "withdrawal_collections/Index.js",
@@ -86,6 +88,7 @@ Rails.application.config.assets.precompile += [
   "SurveyQuestionUI.min.react.js",
   "MembershipPaymentCollectionUI.min.react.js",
   "DepositCollectionUI.min.react.js",
+  "TimeDepositCollectionUI.min.react.js",
   "WithdrawalCollectionUI.min.react.js",
   "InsuranceWithdrawalCollectionUI.min.react.js",
   "BranchManager.min.react.js",
@@ -125,5 +128,4 @@ Rails.application.config.assets.precompile += [
   "reports/MemberDependentReport.js",
   "reports/CicReport.js",
   "Seriatim.js"
-
 ]

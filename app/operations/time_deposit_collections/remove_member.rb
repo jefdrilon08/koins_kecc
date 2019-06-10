@@ -1,15 +1,16 @@
-module DepositCollections
+module TimeDepositCollections
   class RemoveMember
     def initialize(config:)
-      @config                         = config
-      @deposit_collection  = @config[:deposit_collection]
-      @member                         = @config[:member]
-      @user                           = @config[:user]
+      @config                   = config
+      @time_deposit_collection  = @config[:time_deposit_collection]
+      @member                   = @config[:member]
+      @user                     = @config[:user]
 
-      @branch = @deposit_collection.branch
-      @data   = @deposit_collection.data.with_indifferent_access
+      @branch = @time_deposit_collection.branch
+      @data   = @time_deposit_collection.data.with_indifferent_access
 
-      @default_deposit_accounts = Settings.default_deposit_accounts
+      @settings         = Settings.time_deposit
+      @account_subtype  = @settings.account_subtype
     end
 
     def execute!
@@ -30,7 +31,7 @@ module DepositCollections
       recompute_totals!
 
       # Load accounting entry
-      @data[:accounting_entry]  = ::DepositCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::TimeDepositCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @branch,
                                       data: @data,
@@ -39,11 +40,11 @@ module DepositCollections
                                   ).execute!
       ##########################
 
-      @deposit_collection.update!(
+      @time_deposit_collection.update!(
         data: @data
       )
 
-      @deposit_collection
+      @time_deposit_collection
     end
 
     private

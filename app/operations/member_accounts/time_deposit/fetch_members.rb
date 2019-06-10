@@ -32,9 +32,11 @@ module MemberAccounts
           accounts  = accounts.where(center_id: @center.id)
         end
 
-        members = Member.where(
+        members = Member.active.where(
                     id: accounts.pluck(:member_id).uniq
                   ).order("last_name ASC")
+
+        members
       end
     end
   end

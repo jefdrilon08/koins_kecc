@@ -146,6 +146,19 @@ namespace :api do
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
     post "/deposit_collections/load_center", to: "deposit_collections#load_center"
 
+    # Time Deposit Collection
+    post "/time_deposit_collections", to: "time_deposit_collections#create"
+    post "/time_deposit_collections/approve", to: "time_deposit_collections#approve"
+    get "/time_deposit_collections/fetch", to: "time_deposit_collections#fetch"
+    get "/time_deposit_collections/fetch_members", to: "time_deposit_collections#fetch_members"
+    post "/time_deposit_collections/update_or_number", to: "time_deposit_collections#update_or_number"
+    post "/time_deposit_collections/update_ar_number", to: "time_deposit_collections#update_ar_number"
+    post "/time_deposit_collections/update_particular", to: "time_deposit_collections#update_particular"
+    post "/time_deposit_collections/modify_cash_management_template", to: "time_deposit_collections#modify_cash_management_template"
+    post "/time_deposit_collections/modify_book", to: "time_deposit_collections#modify_book"
+    post "/time_deposit_collections/add_member", to: "time_deposit_collections#add_member"
+    post "/time_deposit_collections/remove_member", to: "time_deposit_collections#remove_member"
+
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"
     post "/withdrawal_collections/modify_transaction_record", to: "withdrawal_collections#modify_transaction_record"

@@ -1,0 +1,35 @@
+%table.table.table-sm.table-hover.table-bordered
+  %thead
+    %tr
+      %th
+        Collection Date
+      %th
+        Branch
+      %th.text-right
+        Amount Collected
+      %th
+        %center
+          Status
+  %tbody
+    - @time_deposit_collections.each do |o|
+      %tr
+        %td
+          = link_to time_deposit_collection_path(o) do
+            %strong
+              #{o.collection_date.strftime("%b %d, %Y")}
+        %td
+          #{o.branch}
+        %td.text-right
+          %strong
+            #{number_to_currency(o.total_collected, unit: "")}
+        %td
+          %center
+            - if o.pending?
+              .badge.badge-danger
+                Pending
+            - elsif o.approved?
+              .badge.badge-success
+                Approved
+            - elsif o.processing?
+              .badge.badge-warning
+                Processing

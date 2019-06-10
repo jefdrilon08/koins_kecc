@@ -42,6 +42,10 @@ class PrintController < ApplicationController
       @deposit_collection = @data[:data]
 
       render "print/deposit_collection", layout: "plain"
+    elsif @data[:type] == "time_deposit_collection"
+      @deposit_collection = @data[:data]
+
+      render "print/deposit_collection", layout: "plain"
     elsif @data[:type] == "withdrawal_collection"
       @withdrawal_collection = @data[:data]
 

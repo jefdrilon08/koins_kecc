@@ -23,3 +23,7 @@
       = link_to monthly_closing_collections_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
         Monthly Closing Col.
+    %li{ class: "nav-item #{params[:controller] == 'time_deposit_collections' ? 'active' : ''}" }
+      = link_to time_deposit_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-clock
+        Time Deposits

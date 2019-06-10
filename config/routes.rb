@@ -128,6 +128,10 @@ Rails.application.routes.draw do
     collection { post :upload }
   end
 
+  # Time Deposit
+  resources :time_deposit_collections, only: [:index, :show, :destroy] do
+  end
+
   # Withdrawals
   resources :withdrawal_collections, only: [:index, :show, :destroy]
 

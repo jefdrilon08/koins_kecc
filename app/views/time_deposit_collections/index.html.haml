@@ -1,0 +1,28 @@
+= render partial: "index_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @time_deposit_collections.size > 0
+            = render partial: "index_list", locals: { time_deposit_collections: @time_deposit_collections }
+            = paginate @time_deposit_collections
+          - else
+            %p
+              No time_deposit_collections found
+
+= render partial: "time_deposit_collections/modals/new_transaction"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+= javascript_include_tag "time_deposit_collections/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });
