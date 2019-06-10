@@ -6,7 +6,8 @@ class AdjustmentRecord < ApplicationRecord
 
   ADJUSTMENT_TYPES  = [
     "reamortization",
-    "subsidiary"
+    "subsidiary",
+    "batch_moratorium"
   ]
 
   validates :meta, presence: true
@@ -19,6 +20,7 @@ class AdjustmentRecord < ApplicationRecord
 
   scope :reamortization, -> { where(adjustment_type: "reamortization") }
   scope :subsidiary, -> { where(adjustment_type: "subsidiary") }
+  scope :batch_moratorium, -> { where(adjustment_type: "batch_moratorium") }
 
   before_validation :load_defaults
 

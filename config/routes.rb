@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   namespace :adjustments do
     get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
     get "/subsidiary_adjustments/:id", to: "subsidiary_adjustments#show", as: :subsidiary_adjustment
+
+    get "/batch_moratorium_adjustments", to: "batch_moratorium_adjustments#index", as: :batch_moratorium_adjustments
+    get "/batch_moratorium_adjustments/:id", to: "batch_moratorium_adjustments#show", as: :batch_moratorium_adjustment
   end
   
   # EXPORTS
