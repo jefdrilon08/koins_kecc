@@ -17,7 +17,8 @@ Rails.application.routes.draw do
 
   # upload-deposit page
   get "/upload_deposit", to: "pages#upload_deposit"
-
+  get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
+  get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
   # Adjustments
   namespace :adjustments do
     get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
@@ -133,10 +134,14 @@ Rails.application.routes.draw do
   resources :withdrawal_collections, only: [:index, :show, :destroy]
 
   # Insurance Withdrawals
-  resources :insurance_withdrawal_collections, only: [:index, :show, :destroy]
+  resources :insurance_withdrawal_collections, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
 
   # Insurance Fund Transfer
-  resources :insurance_fund_transfer_collections, only: [:index, :show, :destroy]
+  resources :insurance_fund_transfer_collections, only: [:index, :show, :destroy] do
+    collection { post :upload}
+  end
 
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]

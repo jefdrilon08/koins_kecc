@@ -53,6 +53,12 @@ class PagesController < ApplicationController
   def upload_deposit
   end
 
+  def upload_insurance_withdrawal
+  end
+
+  def upload_fund_transfer
+  end
+
   def import_members
   end
 

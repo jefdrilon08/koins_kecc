@@ -71,4 +71,12 @@
       = link_to import_members_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
         Import Members
+    %li{ class: "nav-item #{params[:controller] == '/upload_fund_transfer' ? 'active' : ''}" }
+      = link_to upload_fund_transfer_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Upload Fund Transfer
+    %li{ class: "nav-item #{params[:controller] == '/upload_insurance_withdrawal' ? 'active' : ''}" }
+      = link_to upload_insurance_withdrawal_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Upload Insurance Withdrawal
     
