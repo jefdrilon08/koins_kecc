@@ -106,7 +106,7 @@ module MemberAccounts
                               "subsidiary_id = ? AND DATE(transacted_at) <= ?",
                               @member_account.id,
                               month_before
-                            ).order("transacted_at ASC, created_at ASC").last
+                            ).order("transacted_at DESC, created_at ASC").last
 
       if @latest_transaction.present?
         @data[:starting_transaction][:id]             = @latest_transaction.id
