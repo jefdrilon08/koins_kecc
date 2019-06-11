@@ -14,7 +14,7 @@ module Adjustments
       def execute!
         validate_general!
 
-        not_yet_implemented!
+        #not_yet_implemented!
 
         @errors[:messages].each do |o|
           @errors[:full_messages] << o[:message]

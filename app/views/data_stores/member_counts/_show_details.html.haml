@@ -87,7 +87,7 @@
   #active-members.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:active_members][:members] }
   #pure-savers.tab-pane{:role => "tabpanel"}
-    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:pure_savers][:members] }
+    = render partial: "data_stores/member_counts/members_with_savings", locals: { members: @data[:counts][:pure_savers][:members] }
   #loaners.tab-pane{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:loaners][:members] }
 

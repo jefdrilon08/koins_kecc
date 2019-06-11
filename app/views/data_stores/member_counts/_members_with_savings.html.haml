@@ -1,0 +1,24 @@
+%table.table.table-bordered.table-sm.table-hover.data-table
+  %thead
+    %tr
+      %th{ width: "20%" }
+        ID Number
+      %th
+        Member
+      %th.text-right
+        Savings
+      %th
+        Member Type
+  %tbody
+    - members.each_with_index do |m, i|
+      %tr
+        %td
+          = link_to member_path(m[:id]), target: '_blank' do
+            #{m[:identification_number]}
+        %td
+          #{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}
+        %td.text-right
+          - if m[:total_balance].present?
+            #{number_to_currency(m[:total_balance], unit: '')}
+        %td
+          #{m[:member_type]}
