@@ -38,11 +38,33 @@ class AdjustmentRecord < ApplicationRecord
     status == "approved"
   end
 
+  def selectable_subsidiary_members
+    temp_meta             = self.meta.with_indifferent_access
+    subsidiary_member_ids = self.subsidiary_members.pluck(:id)
+
+    Member.active.where(branch_id: temp_meta[:branch][:id]).order("last_name ASC").map{ |o|
+      {
+        id: o.id,
+        first_name: o.first_name,
+        middle_name: o.middle_name,
+        last_name: o.last_name,
+        branch: {
+          id: o.branch.id,
+          name: o.branch.name
+        },
+        center: {
+          id: o.center.id,
+          name: o.center.name
+        }
+      }
+    }
+  end
+
   def non_subsidiary_members
     temp_meta             = self.meta.with_indifferent_access
     subsidiary_member_ids = self.subsidiary_members.pluck(:id)
 
-    Member.where(branch_id: temp_meta[:branch][:id]).where.not(id: subsidiary_member_ids).order("last_name ASC").map{ |o|
+    Member.active.where(branch_id: temp_meta[:branch][:id]).where.not(id: subsidiary_member_ids).order("last_name ASC").map{ |o|
       {
         id: o.id,
         first_name: o.first_name,
