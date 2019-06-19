@@ -237,7 +237,9 @@ Rails.application.routes.draw do
   get "/reports/cic_reports", to: "reports#cic_reports", as: :cic_reports
   get "/reports/cic", to: "reports#cic", as: :cic
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
-  
+  get "/reports/monthly_collection", to: "reports#monthly_collection", as: :monthly_collection
+  get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
+
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

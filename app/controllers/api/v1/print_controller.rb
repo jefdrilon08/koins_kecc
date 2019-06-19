@@ -19,6 +19,14 @@ module Api
           data  = ::Print::BuildAccountingEntry.new(
                     accounting_entry: accounting_entry
                   ).execute!
+        elsif type == "deposit_collection_accounting_entry"
+          deposit_collection = DepositCollection.find(params[:id])
+          accounting_entry   = deposit_collection.approved_accounting_entry
+          filename           = "deposit-collection-accounting-entry-#{Time.now.to_i}.json"
+
+          data  = ::Print::BuildAccountingEntry.new(
+                    accounting_entry: accounting_entry
+                  ).execute!
         elsif type == "member_share"
           member_share  = MemberShare.find(params[:id])
           filename      = "member-share-#{Time.now.to_i}.json"

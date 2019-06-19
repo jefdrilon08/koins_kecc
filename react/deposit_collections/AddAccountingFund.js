@@ -4,10 +4,13 @@ import ErrorDisplay from '../ErrorDisplay';
 export default class AddAccountingFund extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props.data);
+    var accountingFundId = props.data.data.accounting_entry.accounting_fund_id;
+    //alert(accountingFundId);
 
     this.state  = {
       accountingFunds: [],
-      accountingFundId: "",
+      accountingFundId: accountingFundId,
       message: "Loading...",
       isLoading: true,
       errors: false

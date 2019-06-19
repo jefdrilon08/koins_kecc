@@ -10,6 +10,10 @@ class PrintController < ApplicationController
       @accounting_entry_data  = @data[:data]
 
       render "print/accounting_entry", layout: "plain"
+    elsif @data[:type] == "deposit_collection_accounting_entry"
+      @accounting_entry_data  = @data[:data]
+
+      render "print/accounting_entry", layout: "plain"
     elsif @data[:type] == "member_share"
       @member_share_data  = @data[:data]
 

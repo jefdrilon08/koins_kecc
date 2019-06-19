@@ -7,7 +7,9 @@ var Show  = (function() {
   var $btnConfirmApprove;
   var $modalApprove;
 
+
   var $btnPrint;
+  var $btnPrintAccountingEntry;
   var $modalPrint;
 
   var $selectCashManagementTemplate;
@@ -40,8 +42,9 @@ var Show  = (function() {
     $btnConfirmApprove  = $("#btn-confirm-approve");
     $modalApprove       = $("#modal-approve");
 
-    $btnPrint   = $("#btn-print");
-    $modalPrint = $("#modal-print");
+    $btnPrint                  = $("#btn-print");
+    $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
+    $modalPrint                = $("#modal-print");
 
     $selectBook     = $("#select-book");
     $btnConfirmBook = $("#btn-confirm-book");
@@ -253,6 +256,31 @@ var Show  = (function() {
         data: { 
           id: depositCollectionId,
           type: "deposit_collection",
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+
+          $modalPrint.modal("hide");
+          window.open("/print?filename=" + response.filename, '_blank');
+        },
+        error: function(response) {
+          $message.html("Error!");
+        }
+      });
+    });
+
+    $btnPrintAccountingEntry.on("click", function() {
+      $modalPrint.modal("show");
+
+      $.ajax({
+        url: "/api/v1/print/generate_file",
+        method: 'POST',
+        data: { 
+          id: depositCollectionId,
+          type: "deposit_collection_accounting_entry",
           authenticity_token: authenticityToken
         },
         success: function(response) {
