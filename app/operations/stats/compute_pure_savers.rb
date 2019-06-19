@@ -44,9 +44,7 @@ module Stats
                                     "DATE(transacted_at) <= ? AND subsidiary_id = ?",
                                     @as_of,
                                     a.id
-                                  ).order(
-                                    "transacted_at DESC"
-                                  ).first
+                                  ).last
 
             if latest_transaction.present?
               total_balance += latest_transaction.data["ending_balance"].to_f.round(2)
@@ -71,6 +69,7 @@ module Stats
               middle_name: m.middle_name,
               last_name: m.last_name,
               member_type: m.member_type,
+              total_balance: total_balance,
               branch: {
                 id: m.branch.id,
                 name: m.branch.name

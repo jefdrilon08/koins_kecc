@@ -17,7 +17,7 @@ module Accounting
     end
     def execute!
       last_loop = 0
-      member = @member
+      #member = @member
       @member.each do |member|
       #if member
       
@@ -114,14 +114,32 @@ module Accounting
           temp[:member_total_equity]          = monthly_final_total_amount.to_f
           temp[:member_average_equity]        = (temp[:member_total_equity] / 12).round(2) 
          
-          temp[:total_equity_interest_amount] = (temp[:member_average_equity] * @equity_rate).round(2)
-        
-          @data[:total_equity_interest_amount] += temp[:total_equity_interest_amount].round(2)
-           
-          temp[:total_savings_distribute]     = (temp[:total_equity_interest_amount] * 0.9).round(2)
-          temp[:total_cbu_distribute]         = (temp[:total_equity_interest_amount] * 0.1).round(2)  
+          total_equity_interest_amount = (temp[:member_average_equity] * @equity_rate).round(2)
+       
+          temp[:total_savings_distribute]     = (total_equity_interest_amount * 0.9).round(2)
+          temp[:total_cbu_distribute]         = (total_equity_interest_amount * 0.1).round(2) 
+
+          sum_total_equity_amount = temp[:total_savings_distribute] + temp[:total_cbu_distribute]
+          
+          if sum_total_equity_amount > total_equity_interest_amount
+
+            temp[:total_equity_interest_amount] = sum_total_equity_amount 
+          
+          else
+
+            temp[:total_equity_interest_amount] = total_equity_interest_amount
+          
+          end
+
+
+          
           @data[:total_savings_distribute]    += temp[:total_savings_distribute].round(2)
           @data[:total_cbu_distribute]        += (temp[:total_cbu_distribute]).round(2)
+
+
+
+          @data[:total_equity_interest_amount] += temp[:total_equity_interest_amount].round(2)
+           
            
         end #end ng member account
 

@@ -18,7 +18,11 @@ module DepositCollections
         first_name: @member.first_name,
         middle_name: @member.middle_name,
         last_name: @member.last_name,
-        identification_number: @member.identification_number
+        identification_number: @member.identification_number,
+        center: {
+          id: @member.center.id,
+          name: @member.center.name
+        }
       }
 
       # Build member records

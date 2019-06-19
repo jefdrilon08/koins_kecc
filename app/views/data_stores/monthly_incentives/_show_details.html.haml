@@ -18,6 +18,15 @@
     %tr
       %td
         %strong
+          Pure Savers
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{@data[:records][i][:count_pure_savers]}
+
+
+    %tr
+      %td
+        %strong
           Repayment Rate
       - @data[:officers].each_with_index do |o, i|
         %td.text-center
@@ -28,7 +37,7 @@
         %strong
           Portfolio
       - @data[:officers].each_with_index do |o, i|
-        %td.text-right
+        %td.text-center
           #{number_to_currency(@data[:records][i][:principal_portfolio], unit: "")}
 
     %tr
@@ -36,7 +45,7 @@
         %strong
           Loan Disbursements
       - @data[:officers].each_with_index do |o, i|
-        %td.text-right
+        %td.text-center
           #{number_to_currency(@data[:records][i][:amount_disbursed], unit: "")}
 
     %tr
@@ -52,7 +61,7 @@
         %strong
           PAR Amount
       - @data[:officers].each_with_index do |o, i|
-        %td.text-right
+        %td.text-center
           #{number_to_currency(@data[:records][i][:principal_balance], unit: "")}
 
     %tr
@@ -60,8 +69,16 @@
         %strong
           Overall Principal Bal.
       - @data[:officers].each_with_index do |o, i|
-        %td.text-right
+        %td.text-center
           #{number_to_currency(@data[:records][i][:overall_principal_balance], unit: "")}
+
+    %tr
+      %td
+        %strong
+          Previous Member Count
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-center
+          #{@data[:records][i][:previous_member_count]}
 
     %tr
       %td

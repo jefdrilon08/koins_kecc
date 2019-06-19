@@ -122,12 +122,19 @@ export default class DepositCollectionUITable extends React.Component {
         );
       }
 
+      var center      = this.props.data.data.records[i].member.center;
+      var centerName  = "";
+
+      if(center) {
+        centerName = center.name;
+      }
+
       components.push(
         <td key={"c-member-" + member.id}>
           {btnDelete}
           <strong>
             <a href={"/members/" + member.id + "/display"} target="_blank">
-              {this.props.data.data.records[i].member.full_name}
+              {this.props.data.data.records[i].member.full_name} - {centerName}
             </a>
           </strong>
         </td>

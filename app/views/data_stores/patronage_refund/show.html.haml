@@ -50,7 +50,7 @@
                     CBU Distribute
               %tbody
                 - @record.data.with_indifferent_access[:details].each_with_index do |record, i|
-                  - record[:final_count].each do |final_count|
+                  - record[:final_count].each_with_index do |final_count, i|
                     %tr
                       %td
                         #{ i + 1}

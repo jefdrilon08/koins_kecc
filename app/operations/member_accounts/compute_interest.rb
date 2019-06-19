@@ -33,6 +33,20 @@ module MemberAccounts
         if @latest_transaction.transacted_at.to_date < threshold_date
           @annual_interest_rate   = 0
           @monthly_interest_rate  = 0
+        else
+          # Check if dormant
+          is_dormant  = ::MemberAccounts::IsDormant.new(
+                          config: {
+                            member_account: @member_account,
+                            closing_date: @closing_date,
+                            account_settings: @account_settings
+                          }
+                        ).execute!
+
+          if is_dormant
+            @annual_interest_rate   = @dormant_annual_interest_rate
+            @monthly_interest_rate  = (@annual_interest_rate / 12.0)
+          end
         end
       else
         # Check if dormant
@@ -106,7 +120,7 @@ module MemberAccounts
                               "subsidiary_id = ? AND DATE(transacted_at) <= ?",
                               @member_account.id,
                               month_before
-                            ).order("transacted_at ASC, created_at ASC").last
+                            ).order("transacted_at DESC, created_at ASC").last
 
       if @latest_transaction.present?
         @data[:starting_transaction][:id]             = @latest_transaction.id

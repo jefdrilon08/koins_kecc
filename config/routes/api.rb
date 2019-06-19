@@ -13,6 +13,10 @@ namespace :api do
       post "/subsidiary_adjustments/add_accounting_code", to: "subsidiary_adjustments#add_accounting_code"
       post "/subsidiary_adjustments/delete_accounting_code", to: "subsidiary_adjustments#delete_accounting_code"
       post "/subsidiary_adjustments/update_accounting_entry_particular", to: "subsidiary_adjustments#update_accounting_entry_particular"
+
+      post "/batch_moratorium_adjustments/create", to: "batch_moratorium_adjustments#create"
+      post "/batch_moratorium_adjustments/approve", to: "batch_moratorium_adjustments#approve"
+      post "/batch_moratorium_adjustments/destroy", to: "batch_moratorium_adjustments#destroy"
     end
 
     # Users
@@ -145,6 +149,19 @@ namespace :api do
     post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
     post "/deposit_collections/load_center", to: "deposit_collections#load_center"
+
+    # Time Deposit Collection
+    post "/time_deposit_collections", to: "time_deposit_collections#create"
+    post "/time_deposit_collections/approve", to: "time_deposit_collections#approve"
+    get "/time_deposit_collections/fetch", to: "time_deposit_collections#fetch"
+    get "/time_deposit_collections/fetch_members", to: "time_deposit_collections#fetch_members"
+    post "/time_deposit_collections/update_or_number", to: "time_deposit_collections#update_or_number"
+    post "/time_deposit_collections/update_ar_number", to: "time_deposit_collections#update_ar_number"
+    post "/time_deposit_collections/update_particular", to: "time_deposit_collections#update_particular"
+    post "/time_deposit_collections/modify_cash_management_template", to: "time_deposit_collections#modify_cash_management_template"
+    post "/time_deposit_collections/modify_book", to: "time_deposit_collections#modify_book"
+    post "/time_deposit_collections/add_member", to: "time_deposit_collections#add_member"
+    post "/time_deposit_collections/remove_member", to: "time_deposit_collections#remove_member"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"

@@ -30,6 +30,9 @@ class Member < ApplicationRecord
   has_many :membership_payment_records
   has_many :attachment_files
 
+  # ActiveStorage
+  has_many_attached :attachment_files
+
   validates :gender, presence: true
   validates :date_of_birth, presence: true
 

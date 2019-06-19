@@ -6,15 +6,24 @@ module DataStores
       @icpr = @config[:icpr]
       #@closing_date               = @monthly_closing_collection.closing_date
       @data                       = @icpr.data.with_indifferent_access
-      #raise @data.inspect
+      
+      @meta = @icpr.meta.with_indifferent_access
+      @branch = Branch.find(@meta[:branch_id])
+
+     # raise @data[:details].inspect
       
       @user                       = @config[:user]
-      @current_date               = Date.today
+      @current_date               = ::Utils::GetCurrentDate.new(
+                                        config: {
+                                          branch: @branch
+                                        }
+                                      ).execute!
 
       @data_accounting_entry  = @data[:accounting_entry]
 
       # Change this
-      @particular = "To record declaration of Interest for Share Capital 2018"
+      @particular = "To record declaration of Interest for Share Capital #{@current_date.year}"
+
     end
 
     def execute!
@@ -67,7 +76,9 @@ module DataStores
     def perform_deposits!
      
       @data[:details].each do |r|
-        if r[:member_total_amount]
+        #raise r[:member_name].inspect
+        if r[:member_total_equity] 
+        
           #  raise r[:member_id].inspect
           #end
           account_subtype = ["K-IMPOK", "CBU"]

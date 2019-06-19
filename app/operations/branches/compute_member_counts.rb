@@ -97,13 +97,12 @@ module Branches
 
       # pure savers
       #@member_pure_savers = @members.where.not(id: [@member_loaners.pluck(:id) + @active_members.pluck(:id)])
-      @member_pure_savers = @members.where(
-                              id: @valid_member_accounts.pluck(:member_id)
-                            ).where.not(
-                              id: @member_loaners.pluck(:id)
-                            )
+#      @member_pure_savers = @members.where(
+#                              id: @valid_member_accounts.pluck(:member_id)
+#                            ).where.not(
+#                              id: @member_loaners.pluck(:id)
+#                            )
 
-      @active_members     = @members.where.not(id: [@member_pure_savers.pluck(:id) + @member_loaners.pluck(:id)])
 
       # Pure Savers
       @data[:counts][:pure_savers]  = ::Stats::ComputePureSavers.new(
@@ -112,6 +111,14 @@ module Branches
                                           branch: @branch
                                         }
                                       ).execute!
+
+      @member_pure_savers = Member.where(
+                              id: @data[:counts][:pure_savers][:members].map{ |o|
+                                    o[:id]
+                                  }
+                            )
+
+      @active_members     = @members.where.not(id: [@member_pure_savers.pluck(:id) + @member_loaners.pluck(:id)])
 
       # Loaners
       total_female  = @member_loaners.where(gender: "Female").count
