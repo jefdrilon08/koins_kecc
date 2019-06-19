@@ -17,7 +17,8 @@ Rails.application.routes.draw do
 
   # upload-deposit page
   get "/upload_deposit", to: "pages#upload_deposit"
-
+  get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
+  get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
   # Adjustments
   namespace :adjustments do
     get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
@@ -133,10 +134,14 @@ Rails.application.routes.draw do
   resources :withdrawal_collections, only: [:index, :show, :destroy]
 
   # Insurance Withdrawals
-  resources :insurance_withdrawal_collections, only: [:index, :show, :destroy]
+  resources :insurance_withdrawal_collections, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
 
   # Insurance Fund Transfer
-  resources :insurance_fund_transfer_collections, only: [:index, :show, :destroy]
+  resources :insurance_fund_transfer_collections, only: [:index, :show, :destroy] do
+    collection { post :upload}
+  end
 
   # Memberhsip Payment Collections
   resources :membership_payment_collections, only: [:index, :show, :destroy]
@@ -146,9 +151,19 @@ Rails.application.routes.draw do
 
   # Printing
   get "/print", to: "print#print"
+  get "/download_file", to: "pages#download_file"
 
   # Data Stores
   namespace :data_stores do
+    get "/icpr", to: "icpr#index"
+    get "/icpr/:id", to: "icpr#show"
+    delete "/icpr/:id", to: "icpr#destroy"
+
+
+    get "/patronage_refund", to: "patronage_refund#index"
+    get "/patronage_refund/:id", to: "patronage_refund#show"
+    delete "/patronage_refund/:id", to: "patronage_refund#destroy"
+
     get "/personal_funds", to: "personal_funds#index"
     get "/personal_funds/:id", to: "personal_funds#show"
     delete "/personal_funds/:id", to: "personal_funds#destroy"
@@ -204,6 +219,8 @@ Rails.application.routes.draw do
     get "/repayment_rates", to: "repayment_rates#index"
     get "/repayment_rates/:id", to: "repayment_rates#show"
     delete "/repayment_rates/:id", to: "repayment_rates#destroy"
+
+
   end
 
   namespace :accounting do
@@ -239,6 +256,8 @@ Rails.application.routes.draw do
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
   get "/reports/monthly_collection", to: "reports#monthly_collection", as: :monthly_collection
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
+  get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
+  get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
 
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"

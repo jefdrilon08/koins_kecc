@@ -16,7 +16,10 @@ module Api
           AccountTransaction.where(
             subsidiary_id: account.id,
             subsidiary_type: 'MemberAccount'
-          ).order("transacted_at ASC").each do |o|
+          ).where(
+            "EXTRACT(year FROM transacted_at) = ?",
+            Date.today.year
+          ).order("transacted_at DESC, created_at DESC").each do |o|
             interest_html = ""
 
             if o.data["is_interest"] == true

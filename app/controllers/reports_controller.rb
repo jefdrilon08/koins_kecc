@@ -44,35 +44,6 @@ class ReportsController < ApplicationController
    
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-  
-  def member_reports
-    if params[:download].present?
-      branch_id     = params[:branch_id]
-      insurance_status = params[:insurance_status]
-      member_type = params[:member_type]
-      status = params[:member_status]
-      start_date    = params[:start_date]
-      end_date      = params[:end_date]
-
-
-      data = Reports::MemberReports.new(
-                  branch_id: branch_id,
-                  status: status,
-                  member_type: member_type,
-                  insurance_status: insurance_status,
-                  start_date: start_date,
-                  end_date: end_date
-                ).execute!
-
-      filename = "member_report.xlsx"
-      report_package = Reports::MemberReportsExcel.new(data: data, status: status, start_date: start_date, end_date: end_date).execute!
-      report_package.serialize "#{Rails.root}/tmp/#{filename}"
-
-      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    else
-      render "reports/member_reports"
-    end
-  end
 
   def collections_clip_reports
     branch = params[:branch]

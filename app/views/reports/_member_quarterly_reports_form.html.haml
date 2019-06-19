@@ -1,0 +1,25 @@
+= form_tag member_quarterly_reports_path, html: { novalidate: true }, method: "GET" do
+  .row
+    .col-sm-4
+      .form-group
+        %label Start Date
+        = text_field_tag :start_date, @start_date, class: "form-control", type: "date", id: "start-date"
+    .col-sm-4
+      .form-group
+        %label End Date
+        = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end-date"
+    .col-sm-4
+      .form-group
+        %label Action
+        = link_to "#", class: 'btn btn-primary btn-block', id: 'search-btn' do
+          .fa.fa-search
+          Generate
+  .row
+    .col-md-12
+      .sixteen.wide.column
+        #member-quarterly-reports-section     
+          = render partial: "reports/templates/members_quarterly"
+= javascript_include_tag "member_quarterly_reports"
+
+
+

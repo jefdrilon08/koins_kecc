@@ -28,4 +28,32 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
       redirect_to insurance_withdrawal_collection_path(@insurance_withdrawal_collection)
     end
   end
+  def upload
+    file = params[:file]
+    branch = Branch.find(params[:branch_id])
+    paid_at = params[:paid_at]
+    prepared_by = current_user
+    
+    config = {
+      file: file,
+      branch: branch,
+      paid_at: paid_at,
+      prepared_by: prepared_by
+    }
+
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      insurance_withdrawal_collection = row.to_hash
+      @errors = InsuranceWithdrawalCollections::ValidateInsuranceWithdrawalFromCsvFile.new(insurance_withdrawal_collection: insurance_withdrawal_collection, config: config).execute!
+    end
+
+    if @errors[:messages].size > 0
+      redirect_to upload_insurance_withdrawal_path
+      flash[:error] = @errors[:messages]
+    else
+      @insurance_withdrawal_collection = InsuranceWithdrawalCollections::LoadInsuranceWithdrawalFromCsvFile.new(config: config).execute!
+      flash[:success] = "Successfully upload deposit."
+      redirect_to insurance_withdrawal_collection_path(@insurance_withdrawal_collection)
+    end
+  end
 end

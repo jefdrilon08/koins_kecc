@@ -194,8 +194,15 @@ namespace :api do
     post "/survey_answers/save", to: "survey_answers#save"
 
     namespace :data_stores do
+      post "/icpr/queue", to: "icpr#queue"
+      get "/icpr/fetch", to: "icpr#fetch"
+      post "/icpr/approve", to: "icpr#approve"
+      post "/patronage_refund/queue", to: "patronage_refund#queue"
+      get "/patronage_refund/fetch", to: "patronage_refund#fetch"
+      post "/patronage_refund/approve", to: "patronage_refund#approve"
       post "/personal_funds/queue", to: "personal_funds#queue"
       get "/personal_funds/fetch", to: "personal_funds#fetch"
+      get "/personal_funds/download_excel", to: "personal_funds#download_excel"
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
       post "/accounting_entries_summaries/queue", to: "accounting_entries_summaries#queue"
       post "/soa_expenses/queue", to: "soa_expenses#queue"
@@ -256,5 +263,7 @@ namespace :api do
     get 'reports/collections_blip_reports', to: 'reports#collections_blip_reports'
     get 'reports/member_dependent_reports', to: 'reports#member_dependent_reports'
     get 'reports/cic_reports', to: 'reports#cic_reports'
+    get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
+
   end
 end

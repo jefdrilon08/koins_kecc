@@ -147,6 +147,17 @@ module Api
           data  = ::Print::BuildDepositCollection.new(
                     config: config
                   ).execute!
+        elsif type == "insurance_fund_transfer_collection"
+          insurance_fund_transfer_collection  = InsuranceFundTransferCollection.find(params[:id])
+          filename            = "insurance_fund_transfer_collection-#{Time.now.to_i}.json"
+
+          config  = {
+            insurance_fund_transfer_collection: insurance_fund_transfer_collection
+          }
+
+          data  = ::Print::BuildFundTransferCollection.new(
+                    config: config
+                  ).execute!
         elsif type == "withdrawal_collection"
           withdrawal_collection = WithdrawalCollection.find(params[:id])
           filename              = "withdrawal-collection-#{Time.now.to_i}.json"

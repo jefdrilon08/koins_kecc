@@ -16,6 +16,13 @@ class PagesController < ApplicationController
     send_file destination_file, filename: filename
   end
 
+  def download_file
+    filename = params[:filename]
+    destination_file = "#{Rails.root}/tmp/#{filename}"
+
+    send_file destination_file, filename: filename
+  end
+
   def index
     @announcements = Announcement.all
   end
@@ -44,6 +51,12 @@ class PagesController < ApplicationController
   end
 
   def upload_deposit
+  end
+
+  def upload_insurance_withdrawal
+  end
+
+  def upload_fund_transfer
   end
 
   def import_members

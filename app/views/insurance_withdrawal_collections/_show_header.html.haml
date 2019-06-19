@@ -10,9 +10,9 @@
     Insurance Withdrawal: #{@insurance_withdrawal_collection.id}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      = link_to "#", class: 'btn', id: 'btn-print' do
-        .fa.fa-print
-        Print
+      / = link_to "#", class: 'btn', id: 'btn-print' do
+      /   .fa.fa-print
+      /   Print
       - if @insurance_withdrawal_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
         = link_to insurance_withdrawal_collection_path(@insurance_withdrawal_collection), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times

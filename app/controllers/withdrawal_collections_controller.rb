@@ -28,4 +28,7 @@ class WithdrawalCollectionsController < ApplicationController
       redirect_to withdrawal_collection_path(@withdrawal_collection)
     end
   end
+
+  
+
 end
