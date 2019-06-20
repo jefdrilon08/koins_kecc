@@ -116,6 +116,8 @@ module Branches
                               id: @data[:counts][:pure_savers][:members].map{ |o|
                                     o[:id]
                                   }
+                            ).where.not(
+                              id: @member_loans.pluck(:id).uniq
                             )
 
       @active_members     = @members.where.not(id: [@member_pure_savers.pluck(:id) + @member_loaners.pluck(:id)])
