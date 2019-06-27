@@ -52,7 +52,8 @@ module Adjustments
             message: "Invalid adjustment #{@adjustment}"
           }
         elsif @adjustment == "DEDUCT" and @member_account.present? and @amount.present?
-          if (@member_account.balance - @amount) < @member_account.maintaining_balance
+        
+          if (@member_account.balance.to_f - @amount) < @member_account.maintaining_balance
             @errors[:messages] << {
               key: "amount",
               message: "Insufficient funds to withdraw #{@amount}. Maintaining balance: #{@member_account.maintaining_balance}"

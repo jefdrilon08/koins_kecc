@@ -1,4 +1,156 @@
 namespace :load do
+
+  task :load_member_project_type => :environment do
+      branch = ENV['BRANCH']
+      data = ::Reports::GenerateMemberProjectType.new(branch: branch).execute!
+      data[:list].each do |l|
+        puts "-- | #{l[:category_name]} | #{l[:category_count]}"
+        l[:list].each do |type_detail|
+          puts " - |#{type_detail[:type_name]} | #{type_detail[:loan_detail_count]} | -"
+          type_detail[:loan_details].each_with_index do |ld, i|
+            puts "#{ i + 1} | #{ ld[:member_name] } | #{ ld[:principal]}"
+          end
+        end
+      end
+
+  end
+
+
+
+  task :manual_member_count_pure_savers => :environment do
+    branch = ENV['BRANCH_ID']
+    
+    
+    kaagapay = Member.where(member_type: "Kaagapay", status: "active", branch_id:branch)
+    puts "ID | Member Name | Gender"
+
+    member_id = Loan.where("loans.status = ? and loans.branch_id = ? and loans.member_id NOT IN (?) ", "active", branch, kaagapay.ids).pluck(:member_id).uniq
+    
+    a = Member.where('id NOT IN (?) and id NOT IN (?) and branch_id = ? and status = ?', member_id,kaagapay.ids , branch,"active")
+    
+    memAcc = MemberAccount.where("member_id IN (?) and account_subtype = ? and balance > 0.0", a.ids, "K-IMPOK").pluck(:member_id)
+    
+    memAcc.each do |mi|
+      mem = Member.find(mi)
+      puts "#{mem.identification_number} | #{mem.full_name} | #{mem.gender}"
+    end
+
+
+  end
+
+
+  task :manual_member_count_active_member => :environment do
+    branch = ENV['BRANCH_ID']
+    
+    
+    kaagapay = Member.where(member_type: "Kaagapay", status: "active", branch_id:branch)
+    puts "ID | Member Name | Gender"
+
+    member_id = Loan.where("loans.status = ? and loans.branch_id = ? and loans.member_id NOT IN (?) ", "active", branch, kaagapay.ids).pluck(:member_id).uniq
+    
+    a = Member.where('id NOT IN (?) and id NOT IN (?) and branch_id = ? and status = ?', member_id,kaagapay.ids , branch,"active")
+    
+    memAcc = MemberAccount.where("member_id IN (?) and account_subtype = ? and balance = 0.0", a.ids, "K-IMPOK").pluck(:member_id)
+    
+    memAcc.each do |mi|
+      mem = Member.find(mi)
+      puts "#{mem.identification_number} | #{mem.full_name} | #{mem.gender}"
+    end
+
+
+  end
+
+
+  task :manual_member_count_active_loaner => :environment do
+    branch = ENV['BRANCH_ID']
+    
+    
+    kaagapay = Member.where(member_type: "Kaagapay", status: "active", branch_id:branch)
+    puts "ID | Member Name | Gender"
+
+    member_id = Loan.where("loans.status = ? and loans.branch_id = ? and loans.member_id NOT IN (?) ", "active", branch, kaagapay.ids).pluck(:member_id).uniq
+    member_id.each do |mi|
+      mem = Member.find(mi)
+      puts "#{mem.identification_number} | #{mem.full_name} | #{mem.gender}"
+    end
+
+
+  end
+
+
+
+  task :manual_member_count_kaagapay => :environment do
+    branch = ENV['BRANCH_ID']
+  
+    
+    kaagapay = Member.where(member_type: "Kaagapay", status: "active", branch_id:branch)
+  
+    puts "KAAGAPAY"
+    puts "ID | Member Name | Gender"
+    kaagapay.each do |k|
+      mem = Member.find(k.id)
+      puts "#{mem.identification_number} | #{mem.full_name} | #{mem.gender}"
+      
+    end
+
+
+  end
+
+
+  task :cda => :environment do
+    member= Member.where(center_id: "1604d890-7ebd-4c25-877a-219619c274ee", status: "active")
+    member.each do |m|
+      
+      memberShare = MemberShare.where(member_id: m.id)
+      memberShareCount = MemberShare.where(member_id: m.id, is_void: nil).count
+    
+      memberShare.each do |z|
+        puts "#{z.date_of_issue} |#{m.full_name} |  #{m.data.with_indifferent_access[:address][:street]}, #{m.data.with_indifferent_access[:address][:city]}| #{z.certificate_number}  | #{memberShareCount} | 100  "
+      end
+    end
+  
+  end
+  task :loan_member_age => :environment do
+    member_id = Member.where(
+                              "status = ? and 
+                               extract(year from date_of_birth) >= ? and 
+                               extract(year from date_of_birth) <= ? and 
+                               extract(month from date_of_birth) <= ? and 
+                               branch_id = ? ", 
+                               "active", 
+                               "1993", 
+                               "2001", 
+                               5, 
+                               "3726405b-777c-4b61-b6a5-7a4b48db62b6"
+                            )
+
+    member_id.each do |m|
+      loan_details = Loan.where(member_id: m.id, status: "active")
+      d = []
+      loan_details.each do |g|
+        if g
+          #raise  g.project_type.inspect
+          if g.project_type_id
+            
+            x = g.project_type.name
+          end
+          h  = "#{g.loan_product.name} | #{x} "
+          d << h
+        end
+      end
+
+      membership_account = MemberAccount.where(member_id: m.id, account_subtype: "Share Capital")
+      membetship_date = AccountTransaction.where(subsidiary_id: membership_account.ids).order(:transacted_at).last.transacted_at
+
+    
+    
+
+      puts "#{m.id} | #{m.status}| #{m.full_name} | #{m.date_of_birth} | #{Center.find(m.center_id).name} | #{m.data.with_indifferent_access[:address][:street]}, #{m.data.with_indifferent_access[:address][:city]}| #{membetship_date} | #{d}"
+    end
+  end
+
+
+
   task :loan_cycles_from_file => :environment do
     puts "reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 
