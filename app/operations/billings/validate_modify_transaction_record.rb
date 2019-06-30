@@ -162,7 +162,7 @@ module Billings
     def validate_wp!
       member_account  = MemberAccount.savings.where(id: @current_transaction[:member_account_id]).first
       amount          = @current_transaction[:amount].try(:to_f)
-
+    
 #      if member_account.member.loans.active.count == 0
 #        @errors[:messages] << {
 #          key: "wp",
@@ -175,7 +175,7 @@ module Billings
           key: "member_account",
           message: "member_account for withdraw payment not found"
         }
-      elsif member_account.balance - amount < member_account.maintaining_balance
+      elsif member_account.balance.to_f - amount < member_account.maintaining_balance
         @errors[:messages] << {
           key: "member_account",
           message: "not enough funds to withdraw #{amount}. Balance: #{member_account.balance}. Maintaning balance: #{member_account.maintaining_balance}"
