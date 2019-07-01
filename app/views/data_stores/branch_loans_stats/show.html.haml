@@ -9,6 +9,8 @@
             = render partial: "data_stores/error_page"
           - else
             = render partial: "show_details"
+            %hr
+            = render partial: "show_officer_details"
 
 #parameters{ data: { id: "#{@record.id}" } }
 

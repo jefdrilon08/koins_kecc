@@ -15,9 +15,14 @@ module DataStores
 
     def show
       @record = DataStore.repayment_rates.where(id: params[:id]).first
-      @data   = ::DataStores::BuildBranchLoanStatsFromRr.new(
-                  rr_data: @record.data.with_indifferent_access
-                ).execute!
+
+      @data = ::DataStores::BuildBranchLoanStatsFromRr.new(
+                rr_data: @record.data.with_indifferent_access
+              ).execute!
+
+      @officer_data = ::DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(
+                        rr_data: @record.data.with_indifferent_access
+                      ).execute!
 
       if @record.blank? or @record.processing?
         redirect_to "/data_stores/branch_loans_stats"

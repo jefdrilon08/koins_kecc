@@ -92,16 +92,7 @@ module Branches
                               }
                             ).execute!
 
-      #@active_loans       = Loan.active.where(branch_id: @branch.id)
       @member_loaners     = @members.where(id: @active_loans.pluck(:member_id).uniq)
-
-      # pure savers
-      #@member_pure_savers = @members.where.not(id: [@member_loaners.pluck(:id) + @active_members.pluck(:id)])
-#      @member_pure_savers = @members.where(
-#                              id: @valid_member_accounts.pluck(:member_id)
-#                            ).where.not(
-#                              id: @member_loaners.pluck(:id)
-#                            )
 
 
       # Pure Savers
@@ -141,6 +132,7 @@ module Branches
                                                 middle_name: m.middle_name,
                                                 last_name: m.last_name,
                                                 member_type: m.member_type,
+                                                gender: m.gender,
                                                 branch: {
                                                   id: m.branch.id,
                                                   name: m.branch.name
@@ -176,6 +168,7 @@ module Branches
                                                       middle_name: m.middle_name,
                                                       last_name: m.last_name,
                                                       member_type: m.member_type,
+                                                      gender: m.gender,
                                                       branch: {
                                                         id: m.branch.id,
                                                         name: m.branch.name

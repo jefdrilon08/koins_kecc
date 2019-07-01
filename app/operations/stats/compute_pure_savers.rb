@@ -49,6 +49,7 @@ module Stats
             middle_name: m.middle_name,
             last_name: m.last_name,
             member_type: m.member_type,
+            gender: m.gender,
             total_balance: total_balance,
             branch: {
               id: m.branch.id,
