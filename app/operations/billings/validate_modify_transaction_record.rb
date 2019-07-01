@@ -92,7 +92,7 @@ module Billings
 
     def validate_loan_payment!
       loan  = Loan.where(id: @current_transaction[:loan_id]).first
-
+      
       if loan.blank?
         @errors[:messages] << {
           key: "loan",
@@ -105,8 +105,9 @@ module Billings
         }
       else
         loan_payment    = @current_transaction[:amount].try(:to_f)
-        current_balance = loan.total_balance
-
+        
+        current_balance = loan.total_balance.to_f
+        
         if loan_payment > current_balance
           @errors[:messages] << {
             key: "loan",
