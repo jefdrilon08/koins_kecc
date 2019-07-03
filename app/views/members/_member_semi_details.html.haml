@@ -25,6 +25,12 @@
           %b
             #{@member.status.upcase}
 
+      %li.list-group-item
+        Date of Membership
+        .value.text-muted
+          %b
+            #{@member.date_of_membership}
+
       - if @member.resigned?
         %li.list-group-item
           Date Resigned

@@ -104,7 +104,7 @@ module Branches
                                 recognition_date  = recognition_date.strftime("%b %d, %Y")
                               end
 
-                              membership_payment_record = @membership_payment_records.select{ |o| o.member_id == m.id }.first
+                              membership_payment_record = @membership_payment_records.order("date_paid DESC").select{ |o| o.member_id == m.id }.first
 
                               if membership_payment_record.present?
                                 membership_date = membership_payment_record.date_paid.strftime("%b %d, %Y")
