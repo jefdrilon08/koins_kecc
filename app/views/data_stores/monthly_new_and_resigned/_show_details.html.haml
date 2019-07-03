@@ -12,6 +12,8 @@
               Name
             %th
               Center
+            %th
+              Membership Date
         %tbody
           - @data[:new_members].each_with_index do |o, i|
             %tr
@@ -22,6 +24,8 @@
                   #{o[:last_name]}, #{o[:first_name]} #{o[:middle_name]}
               %td.text-muted
                 #{o[:center][:name]}
+              %td
+                #{o[:membership_date]}
     - else
       %p
         No new members
