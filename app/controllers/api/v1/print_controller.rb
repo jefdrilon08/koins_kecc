@@ -156,6 +156,8 @@ module Api
           }
 
           data  = ::Print::BuildFundTransferCollection.new(
+                                                config: config
+                                                ).execute!
         elsif type == "time_deposit_collection"
           time_deposit_collection   = TimeDepositCollection.find(params[:id])
           filename                  = "time-deposit-collection-#{Time.now.to_i}.json"

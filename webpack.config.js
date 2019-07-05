@@ -40,7 +40,8 @@ module.exports = {
     MonitoringAccountingEntrySubsidiaryBalancing: "./react/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision: "./react/monitoring/AccountingEntryPrecision.js",
     MemberAccountInsuranceStatus: "./react/member_accounts/FetchInsuranceStatus.js",
-    IcprShow: "./react/data_stores/icpr/Show.js"
+    IcprShow: "./react/data_stores/icpr/Show.js",
+    DashboardMainMii: "./react/dashboard/MainMii.js"
   },
   module: {
     rules: [

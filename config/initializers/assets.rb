@@ -135,5 +135,6 @@ Rails.application.config.assets.precompile += [
   "Seriatim.js",
   "reports/MonthlyCollectionReport.js",
   "member_quarterly_reports.js",
-  "data_stores/personal_funds/personal_fund_report.js"
+  "data_stores/personal_funds/personal_fund_report.js",
+  "DashboardMainMii.min.react.js"
 ]

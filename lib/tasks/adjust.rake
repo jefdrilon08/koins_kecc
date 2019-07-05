@@ -184,7 +184,11 @@ namespace :adjust do
   end
 
   task :update_recognition_date_by_loans => :environment do
-    members = Member.active_and_resigned
+    if ENV['INSURANCE_STATUS'].present? && ENV['STATUS'].present?
+      members = Member.where(insurance_status: ENV['insurance_status'], status: ENV['STATUS'])
+    else
+      members = Member.active_and_resigned
+    end
 
     if ENV['BRANCH_ID'].present?
       members = members.where(branch_id: ENV['BRANCH_ID'])
@@ -549,13 +553,13 @@ namespace :adjust do
   end
   task :update_member_insurance_status => :environment do
     puts "Updating member insurance status"
-    members = Member.all.order("members.id DESC")
+    members = Member.all
     current_date = Date.today
     
     member_accounts      = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
     account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id)).order("transacted_at ASC")
 
-    default_periodic_payment = 15.0 
+    default_periodic_payment = 15
     size  = members.size
 
     members.each_with_index do |member, i|
@@ -576,27 +580,28 @@ namespace :adjust do
           latest_payment    = transactions.last
           last_payment_date = transactions.last[:transacted_at].to_date
 
-          current_balance          = latest_payment ? latest_payment.data.with_indifferent_access[:ending_balance].to_f : 0.00
+          current_balance          = latest_payment ? latest_payment.data.with_indifferent_access[:ending_balance].to_i : 0.00
 
           # Code
           num_days                 = (current_date - start_date).to_i
           num_weeks                = (num_days / 7).to_i
           insured_amount           = num_weeks * default_periodic_payment
-          latest_transaction_date  = latest_payment ? latest_payment.transacted_at.to_date : start_date
+         
+          # latest_transaction_date  = latest_payment ? latest_payment.transacted_at.to_date : start_date
 
-          num_days_insured         = (latest_transaction_date.to_date  - start_date).to_i
-          num_weeks_insured        = (num_days_insured / 7).to_i
+          # num_days_insured         = (latest_transaction_date.to_date  - start_date).to_i
+          # num_weeks_insured        = (num_days_insured / 7).to_i
 
-          insured_amount           = num_weeks  * default_periodic_payment
-          coverage_date            = (start_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
-          amt_past_due             = (current_balance - insured_amount) * -1
-          num_weeks_past_due       = (amt_past_due / default_periodic_payment).to_i
+          # insured_amount           = num_weeks  * default_periodic_payment.to_i
+          # coverage_date            = (start_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
+          amt_past_due             = (current_balance - insured_amount).to_i * -1
+          # num_weeks_past_due       = (amt_past_due / default_periodic_payment).to_i
 
           days_lapsed = (current_date - last_payment_date).to_i
 
           
           if current_balance == 0.00 && latest_payment.data.with_indifferent_access[:is_withdraw_payment] == true
-            member.update(insurance_status: "dormant")
+            member.update(insurance_status: "resigned")
           elsif current_balance == 0.00
             member.update(insurance_status: "dormant")
           elsif days_lapsed <= 45 && current_balance >= insured_amount
@@ -607,8 +612,10 @@ namespace :adjust do
             member.update(insurance_status: "inforce")
           elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
             member.update(insurance_status: "lapsed")  
-          elsif days_lapsed > 45 && current_balance < insured_amount
+          elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
             member.update(insurance_status: "lapsed")
+          elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
+            member.update(insurance_status: "inforce")  
           end
         elsif transactions.size == 0
           member.update(insurance_status: "dormant")
