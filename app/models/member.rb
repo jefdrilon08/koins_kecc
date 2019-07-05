@@ -104,6 +104,20 @@ class Member < ApplicationRecord
     self.data.with_indifferent_access[:entry_point_loan_cycle] || 0
   end
 
+  def date_of_membership
+    record  = MembershipPaymentRecord.paid.where(
+                member_id: self.id
+              ).order(
+                "date_paid DESC"
+              ).first
+
+    if record.present?
+      record.date_paid.strftime("%b %d, %Y")
+    else
+      ""
+    end
+  end
+
   def resignation_records
     if self.data.with_indifferent_access[:resignation_records].blank?
       []

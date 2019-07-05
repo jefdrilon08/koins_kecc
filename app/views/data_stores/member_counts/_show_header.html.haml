@@ -6,9 +6,10 @@
     = link_to "/data_stores/member_counts" do
       .fa.fa-database
       Member Counts
-  %li.breadcrumb-item
-    .fa.fa-file
-    #{@record.data.with_indifferent_access[:branch][:name]}
+  - if !@record.error?
+    %li.breadcrumb-item
+      .fa.fa-file
+      #{@record.data.with_indifferent_access[:branch][:name]}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       = link_to "/data_stores/member_counts/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do

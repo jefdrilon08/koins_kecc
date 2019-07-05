@@ -1,0 +1,80 @@
+%h3
+  Officers
+
+- @officer_data[:officers].each do |o|
+  %h5
+    #{o[:officer][:last_name]}, #{o[:officer][:first_name]}
+
+  %table.table.table-sm.table-hover.table-bordered
+    %thead
+      %tr
+        %th
+          Loan Product
+        %th.text-center
+          Active Loans
+        %th.text-right
+          Principal
+        %th.text-right
+          Principal Paid
+        %th.text-right
+          Portfolio
+        %th.text-right
+          Past Due Amount
+        %th.text-right
+          Par Amount
+        %th.text-center
+          Par Rate
+        %th.text-center
+          RR
+    %tbody
+      - o[:loan_products].each do |o_lp|
+        %tr
+          %td
+            %strong
+              #{o_lp[:name]}
+          %td.text-center
+            #{o_lp[:active_loans]}
+          %td.text-right
+            .text-muted
+              #{number_to_currency(o_lp[:principal], unit: "")}
+          %td.text-right
+            .text-muted
+              #{number_to_currency(o_lp[:principal_paid], unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(o_lp[:portfolio], unit: "")}
+          %td.text-right
+            #{number_to_currency(o_lp[:principal_past_due_amount], unit: "")}
+          %td.text-right
+            #{number_to_currency(o_lp[:par_amount], unit: "")}
+          %td.text-center
+            #{number_to_currency(o_lp[:par_rate].to_f * 100, unit: "")} %
+          %td.text-center
+            #{number_to_currency(o_lp[:rr].to_f * 100, unit: "")} %
+    %tfoot
+      %tr
+        %td
+          %strong
+            TOTAL
+        %td.text-center
+          %strong
+            #{o[:active_loans]}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:principal], unit: "")}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:principal_paid], unit: "")}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:portfolio], unit: "")}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:principal_past_due_amount], unit: "")}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:par_amount], unit: "")}
+        %td.text-center
+          #{number_to_currency(o[:par_rate].to_f * 100, unit: "")} %
+        %td.text-center
+          #{number_to_currency(o[:rr].to_f * 100, unit: "")} %
