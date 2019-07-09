@@ -70,6 +70,8 @@ class MembersController < ApplicationController
 
     @member_shares  = @member.member_shares.order("created_at ASC")
 
+    @membership_payments  = @member.membership_payment_records.where("amount > 0").order("date_paid ASC")
+
     @surveys        = Survey.all.order("name ASC")
     @survey_answers = SurveyAnswer.where(
                         "meta -> 'member' ->> 'id' = ?",

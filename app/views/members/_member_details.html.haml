@@ -21,6 +21,9 @@
     %a.nav-link{"aria-controls" => "member_shares", "aria-selected" => "false", "data-toggle" => "tab", :href => "#member_shares", :role => "tab"}
       Shares
   %li.nav-item
+    %a.nav-link{"aria-controls" => "membership_payments", "aria-selected" => "false", "data-toggle" => "tab", :href => "#membership_payments", :role => "tab"}
+      Membership Payments
+  %li.nav-item
     %a.nav-link{"aria-controls" => "activity_logs", "aria-selected" => "false", "data-toggle" => "tab", :href => "#activity_logs", :role => "tab"}
       Activity Logs
 .tab-content
@@ -38,5 +41,7 @@
     = render partial: "members/survey_answers", locals: { survey_answers: @survey_answers }
   #member_shares.tab-pane{:role => "tabpanel"}
     = render partial: "members/member_shares", locals: { member_shares: @member_shares }
+  #membership_payments.tab-pane{:role => "tabpanel"}
+    = render partial: "members/membership_payments", locals: { membership_payments: @membership_payments }
   #activity_logs.tab-pane{:role => "tabpanel"}
     = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }

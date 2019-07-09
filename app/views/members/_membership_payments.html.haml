@@ -1,0 +1,36 @@
+- if membership_payments.size == 0
+  %p
+    No membership payments for this member
+- else
+  %table.table.table-bordered.table-sm.table-hover
+    %thead
+      %tr
+        - if current_user.roles.include?("MIS")
+          %th
+            ID
+        %th
+          Date Approved
+        %th
+          Name
+        %th
+          Type
+        %th.text-right
+          Amount
+        %th.text-center
+          Status
+    %tbody
+      - membership_payments.each do |o|
+        %tr
+          - if current_user.roles.include?("MIS")
+            %td
+              #{o.id}
+          %td
+            #{o.date_paid.strftime("%B %d, %Y")}
+          %td
+            #{o.membership_name}
+          %td
+            #{o.membership_type}
+          %td.text-right
+            #{number_to_currency(o.amount, unit: "")}
+          %td.text-center
+            #{o.status}
