@@ -108,19 +108,19 @@ class Member < ApplicationRecord
 
     if default_membership_name.present? and default_membership_type.present?
       record  = MembershipPaymentRecord.paid.where(
-                  "member_id = ?",
-                  self.id
-                ).order(
-                  "date_paid ASC"
-                ).first
-    else
-      record  = MembershipPaymentRecord.paid.where(
                   "member_id = ? AND membership_type = ? AND membership_name = ?",
                   self.id,
                   default_membership_type,
                   default_membership_name
                 ).order(
-                  "date_paid ASC"
+                  "date_paid DESC"
+                ).first
+    else
+      record  = MembershipPaymentRecord.paid.where(
+                  "member_id = ?",
+                  self.id
+                ).order(
+                  "date_paid DESC"
                 ).first
     end
 
