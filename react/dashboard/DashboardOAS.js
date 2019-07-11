@@ -423,6 +423,26 @@ export default class DashboardOAS extends React.Component {
     }
   }
 
+  renderMemberTypeCounts(memberTypeCounts) {
+    console.log("Member Type Counts");
+    console.log(memberTypeCounts);
+    return (
+      <div className="row">
+        {
+          memberTypeCounts.map((o) => (
+              <div className='col' key={"mem-type-" + o.member_type}>
+                <label>{o.member_type}:&nbsp;</label>
+                <span className="text-muted">
+                  {o.count}
+                </span>
+              </div>
+            )
+          )
+        }
+      </div>
+    );
+  }
+
   renderMemberCounts() {
     var o = this.state.data.member_counts;
 
@@ -444,6 +464,7 @@ export default class DashboardOAS extends React.Component {
               Member Counts as of {o.meta.as_of}
             </a>
           </h5>
+          {this.renderMemberTypeCounts(o.data.member_type_counts)}
           <table className="table table-bordered table-sm table-hover">
             <thead>
               <tr style={{backgroundColor: "#797979", color: "#fff"}}>
