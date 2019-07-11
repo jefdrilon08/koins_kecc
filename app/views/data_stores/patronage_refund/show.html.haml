@@ -17,6 +17,10 @@
                   %th
                     Member Name
                   %th
+                    Member_id
+                  %th
+                    Center
+                  %th
                     Jan.
                   %th
                     Feb.
@@ -56,6 +60,9 @@
                         #{ i + 1}
                       %td
                         #{final_count[:member_name]}
+                      %td #{Member.find(final_count[:member_id]).identification_number}
+                      %td #{Member.joins(:center).find(final_count[:member_id]).center.name}
+
                       - final_count[:details].each do |a|
                         %td
                           #{a[:sample]}
