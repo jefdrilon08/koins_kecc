@@ -113,14 +113,14 @@ class Member < ApplicationRecord
                   default_membership_type,
                   default_membership_name
                 ).order(
-                  "date_paid DESC"
+                  "date_paid ASC"
                 ).first
     else
       record  = MembershipPaymentRecord.paid.where(
                   "member_id = ?",
                   self.id
                 ).order(
-                  "date_paid DESC"
+                  "date_paid ASC"
                 ).first
     end
 
