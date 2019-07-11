@@ -18,6 +18,8 @@
           Amount
         %th.text-center
           Status
+        %th.text-center
+          Actions
     %tbody
       - membership_payments.each do |o|
         %tr
@@ -34,3 +36,6 @@
             #{number_to_currency(o.amount, unit: "")}
           %td.text-center
             #{o.status}
+          %td.text-center
+            = link_to membership_payment_record_path(o), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do
+              .fa.fa-times
