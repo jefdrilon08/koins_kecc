@@ -98,12 +98,26 @@ module Branches
 
       # Format new members
       @data[:new_members] = @new_members.map{ |m|
+                              recognition_date  = m.recognition_date
+                              
+                              if recognition_date.present?
+                                recognition_date  = recognition_date.strftime("%b %d, %Y")
+                              end
+
+                              membership_payment_record = @membership_payment_records.order("date_paid DESC").select{ |o| o.member_id == m.id }.first
+
+                              if membership_payment_record.present?
+                                membership_date = membership_payment_record.date_paid.strftime("%b %d, %Y")
+                              end
+
                               {
                                 id: m.id,
                                 first_name: m.first_name,
                                 middle_name: m.middle_name,
                                 last_name: m.last_name,
                                 identifiction_number: m.identification_number,
+                                recognition_date: recognition_date,
+                                membership_date: membership_date,
                                 center: {
                                   id: m.center.id,
                                   name: m.center.name

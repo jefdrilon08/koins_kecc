@@ -7,6 +7,8 @@ class MemberAccountValidation < ApplicationRecord
 	has_many :member_account_validation_cancellations, dependent: :destroy
  	accepts_nested_attributes_for :member_account_validation_records
 
+ 	scope :approved, -> { where(status: "approved") }
+
 	validates :branch, presence: true
 	validates :date_prepared, presence: true
 	validates :prepared_by, presence: true

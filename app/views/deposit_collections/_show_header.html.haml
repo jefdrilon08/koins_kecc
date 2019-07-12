@@ -10,6 +10,9 @@
     Deposit: #{@deposit_collection.id}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
+      = link_to "#", class: 'btn', id: 'btn-print-accounting-entry' do
+        .fa.fa-print
+        Print Accounting Entry
       = link_to "#", class: 'btn', id: 'btn-print' do
         .fa.fa-print
         Print

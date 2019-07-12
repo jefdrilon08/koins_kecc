@@ -83,7 +83,7 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-
+  
   def cic_reports
     @start_date = params[:start_date]
     @end_date = params[:end_date]
@@ -95,5 +95,23 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-  
+
+  def monthly_collection_reports
+    @start_date = params[:start_date]
+    @end_date   = params[:end_date]
+    @branch     = Branch.find(params[:branch])
+
+
+    excel = Reports::GenerateMonthlyCollectionReportExcel.new(branch: @branch, start_date: @start_date, end_date: @end_date).execute!
+    
+    if @branch.present?
+      filename  = "#{@branch}_monthly_collection_reports.xlsx"
+    else
+      filename  = "monthly_collection_reports.xlsx"
+    end
+
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
 end

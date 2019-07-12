@@ -1,0 +1,61 @@
+%h3
+  Officers
+
+- @data_officers[:officers].each do |o|
+  %h5
+    #{o[:last_name]}, #{o[:first_name]}
+  %table.table.table-bordered.table-hover.table-sm
+    %tr
+      %th{ width: "50%" }
+      %th.text-center
+        Male
+      %th.text-center
+        Female
+      %th.text-center
+        Others
+      %th.text-center
+        Total
+    %tr
+      %th
+        Active Members
+      %td.text-center
+        #{o[:counts][:active_members][:male]}
+      %td.text-center
+        #{o[:counts][:active_members][:female]}
+      %td.text-center
+        #{o[:counts][:active_members][:others]}
+      %td.text-center
+        #{o[:counts][:active_members][:total]}
+    %tr
+      %th
+        Pure Savers
+      %td.text-center
+        #{o[:counts][:pure_savers][:male]}
+      %td.text-center
+        #{o[:counts][:pure_savers][:female]}
+      %td.text-center
+        #{o[:counts][:pure_savers][:others]}
+      %td.text-center
+        #{o[:counts][:pure_savers][:total]}
+    %tr
+      %th
+        Active Loaners
+      %td.text-center
+        #{o[:counts][:loaners][:male]}
+      %td.text-center
+        #{o[:counts][:loaners][:female]}
+      %td.text-center
+        #{o[:counts][:loaners][:others]}
+      %td.text-center
+        #{o[:counts][:loaners][:total]}
+    %tr
+      %th
+        GRAND TOTAL
+      %th.text-center
+        #{o[:counts][:active_members][:male].to_i + o[:counts][:pure_savers][:male].to_i + o[:counts][:loaners][:male].to_i}
+      %th.text-center
+        #{o[:counts][:active_members][:female].to_i + o[:counts][:pure_savers][:female].to_i + o[:counts][:loaners][:female].to_i}
+      %th.text-center
+        #{o[:counts][:active_members][:others].to_i + o[:counts][:pure_savers][:others].to_i + o[:counts][:loaners][:others].to_i}
+      %th.text-center
+        #{o[:counts][:active_members][:total].to_i + o[:counts][:pure_savers][:total].to_i + o[:counts][:loaners][:total].to_i}

@@ -19,6 +19,14 @@ module Api
           data  = ::Print::BuildAccountingEntry.new(
                     accounting_entry: accounting_entry
                   ).execute!
+        elsif type == "deposit_collection_accounting_entry"
+          deposit_collection = DepositCollection.find(params[:id])
+          accounting_entry   = deposit_collection.approved_accounting_entry
+          filename           = "deposit-collection-accounting-entry-#{Time.now.to_i}.json"
+
+          data  = ::Print::BuildAccountingEntry.new(
+                    accounting_entry: accounting_entry
+                  ).execute!
         elsif type == "member_share"
           member_share  = MemberShare.find(params[:id])
           filename      = "member-share-#{Time.now.to_i}.json"
@@ -148,6 +156,17 @@ module Api
           }
 
           data  = ::Print::BuildFundTransferCollection.new(
+                                                config: config
+                                                ).execute!
+        elsif type == "time_deposit_collection"
+          time_deposit_collection   = TimeDepositCollection.find(params[:id])
+          filename                  = "time-deposit-collection-#{Time.now.to_i}.json"
+
+          config  = {
+            time_deposit_collection: time_deposit_collection
+          }
+
+          data  = ::Print::BuildTimeDepositCollection.new(
                     config: config
                   ).execute!
         elsif type == "withdrawal_collection"

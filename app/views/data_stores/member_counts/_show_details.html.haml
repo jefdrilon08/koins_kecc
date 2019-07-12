@@ -3,6 +3,13 @@
 %table.table.table-bordered.table-hover.table-sm
   %tr
     %th{ width: "50%" }
+    - if microinsurance?
+      %th.text-center
+        Inforce
+      %th.text-center
+        Lapsed
+      %th.text-center
+        Pending
     %th.text-center
       Male
     %th.text-center
@@ -14,6 +21,13 @@
   %tr
     %th
       Active Members
+    - if microinsurance?
+      %td.text-center
+        #{@data[:counts][:active_members][:inforce]}
+      %td.text-center
+        #{@data[:counts][:active_members][:lapsed]}
+      %td.text-center
+        #{@data[:counts][:active_members][:pending]}    
     %td.text-center
       #{@data[:counts][:active_members][:male]}
     %td.text-center
@@ -22,31 +36,39 @@
       #{@data[:counts][:active_members][:others]}
     %td.text-center
       #{@data[:counts][:active_members][:total]}
-  %tr
-    %th
-      Pure Savers
-    %td.text-center
-      #{@data[:counts][:pure_savers][:male]}
-    %td.text-center
-      #{@data[:counts][:pure_savers][:female]}
-    %td.text-center
-      #{@data[:counts][:pure_savers][:others]}
-    %td.text-center
-      #{@data[:counts][:pure_savers][:total]}
-  %tr
-    %th
-      Active Loaners
-    %td.text-center
-      #{@data[:counts][:loaners][:male]}
-    %td.text-center
-      #{@data[:counts][:loaners][:female]}
-    %td.text-center
-      #{@data[:counts][:loaners][:others]}
-    %td.text-center
-      #{@data[:counts][:loaners][:total]}
+  - if microloans?
+    %tr
+      %th
+        Pure Savers
+      %td.text-center
+        #{@data[:counts][:pure_savers][:male]}
+      %td.text-center
+        #{@data[:counts][:pure_savers][:female]}
+      %td.text-center
+        #{@data[:counts][:pure_savers][:others]}
+      %td.text-center
+        #{@data[:counts][:pure_savers][:total]}
+    %tr
+      %th
+        Active Loaners
+      %td.text-center
+        #{@data[:counts][:loaners][:male]}
+      %td.text-center
+        #{@data[:counts][:loaners][:female]}
+      %td.text-center
+        #{@data[:counts][:loaners][:others]}
+      %td.text-center
+        #{@data[:counts][:loaners][:total]}
   %tr
     %th
       GRAND TOTAL
+    - if microinsurance?
+      %th.text-center
+        #{@data[:counts][:active_members][:inforce].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:lapsed].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:pending].to_i}  
     %th.text-center
       #{@data[:counts][:active_members][:male].to_i + @data[:counts][:pure_savers][:male].to_i + @data[:counts][:loaners][:male].to_i}
     %th.text-center
@@ -77,17 +99,18 @@
   %li.nav-item
     %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
       Active Members (#{@data[:counts][:active_members][:total]})
-  %li.nav-item
-    %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
-      Pure Savers (#{@data[:counts][:pure_savers][:total]})
-  %li.nav-item
-    %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#loaners", :role => "tab"}
-      Active Loaners (#{@data[:counts][:loaners][:total]})
+  - if microloans?  
+    %li.nav-item
+      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
+        Pure Savers (#{@data[:counts][:pure_savers][:total]})
+    %li.nav-item
+      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#loaners", :role => "tab"}
+        Active Loaners (#{@data[:counts][:loaners][:total]})
 .tab-content
   #active-members.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:active_members][:members] }
   #pure-savers.tab-pane{:role => "tabpanel"}
-    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:pure_savers][:members] }
+    = render partial: "data_stores/member_counts/members_with_savings", locals: { members: @data[:counts][:pure_savers][:members] }
   #loaners.tab-pane{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:loaners][:members] }
 

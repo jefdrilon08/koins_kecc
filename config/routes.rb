@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   namespace :adjustments do
     get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
     get "/subsidiary_adjustments/:id", to: "subsidiary_adjustments#show", as: :subsidiary_adjustment
+
+    get "/batch_moratorium_adjustments", to: "batch_moratorium_adjustments#index", as: :batch_moratorium_adjustments
+    get "/batch_moratorium_adjustments/:id", to: "batch_moratorium_adjustments#show", as: :batch_moratorium_adjustment
   end
   
   # EXPORTS
@@ -130,6 +133,10 @@ Rails.application.routes.draw do
   # Deposits
   resources :deposit_collections, only: [:index, :show, :destroy] do
     collection { post :upload }
+  end
+
+  # Time Deposit
+  resources :time_deposit_collections, only: [:index, :show, :destroy] do
   end
 
   # Withdrawals
@@ -256,6 +263,8 @@ Rails.application.routes.draw do
   get "/reports/cic_reports", to: "reports#cic_reports", as: :cic_reports
   get "/reports/cic", to: "reports#cic", as: :cic
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
+  get "/reports/monthly_collection", to: "reports#monthly_collection", as: :monthly_collection
+  get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
   resources :insurance_accounts do

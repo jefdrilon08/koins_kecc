@@ -9,10 +9,7 @@ module Loans
       @loan_product = @config[:loan_product]
       @member       = @config[:member]
 
-      if @member.present?
-        @branch = @member.branch
-        @center = @member.center
-      end
+      # TODO: ONly include branch and center from config passed to it.
 
       @data = {
         loans: []

@@ -30,6 +30,9 @@ class Member < ApplicationRecord
   has_many :membership_payment_records
   has_many :attachment_files
 
+  # ActiveStorage
+  has_many_attached :attachment_files
+
   validates :gender, presence: true
   validates :date_of_birth, presence: true
 
@@ -99,6 +102,20 @@ class Member < ApplicationRecord
 
   def entry_point_loan_cycle_count
     self.data.with_indifferent_access[:entry_point_loan_cycle] || 0
+  end
+
+  def date_of_membership
+    record  = MembershipPaymentRecord.paid.where(
+                member_id: self.id
+              ).order(
+                "date_paid DESC"
+              ).first
+
+    if record.present?
+      record.date_paid.strftime("%b %d, %Y")
+    else
+      ""
+    end
   end
 
   def resignation_records

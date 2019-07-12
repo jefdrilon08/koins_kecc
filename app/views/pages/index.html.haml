@@ -7,4 +7,7 @@
         .card-body
           #dashboard-content
 
-= javascript_include_tag "DashboardMain.min.react"
+- if microloans?
+  = javascript_include_tag "DashboardMain.min.react"
+- elsif microinsurance?
+  = javascript_include_tag "DashboardMainMii.min.react"

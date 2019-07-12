@@ -3,7 +3,7 @@
     .form-group
       %label
         Member
-      = select_tag :member, options_for_select(@non_subsidiary_members.map{ |o| ["#{o[:last_name]}, #{o[:first_name]} (#{o[:center][:name]})", o[:id]] }), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+      = select_tag :member, options_for_select(@subsidiary_members.map{ |o| ["#{o[:last_name]}, #{o[:first_name]} (#{o[:center][:name]})", o[:id]] }), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
   .col-md-2.col-xs-12
     .form-group
       %label

@@ -1,4 +1,16 @@
 module ApplicationHelper
+  def has_time_deposit?(member)
+    account_subtype = Settings.time_deposit.try(:account_subtype)
+    
+    member_account  = MemberAccount.where(
+                        account_type: "SAVINGS", 
+                        account_subtype: account_subtype,
+                        member_id: member.id
+                      ).first
+
+    return member_account.present?
+  end
+
   def cash_management_templates
     names = []
 
@@ -57,6 +69,20 @@ module ApplicationHelper
 
   def microinsurance?
     Settings.activate_microinsurance.present? and Settings.activate_microinsurance == true
+  end
+
+  def current_month_start
+    d = Date.today
+    current_month = d.month - 1
+    current_year  = d.year
+    Date.civil(current_year, current_month, 1).strftime("%Y-%m-%d")
+  end
+
+  def current_month_end
+    d = Date.today
+    current_month = d.month - 1
+    current_year  = d.year
+    Date.civil(current_year, current_month, -1).strftime("%Y-%m-%d")
   end
 
   def debug?

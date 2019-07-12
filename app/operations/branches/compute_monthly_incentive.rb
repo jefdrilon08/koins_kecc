@@ -7,6 +7,13 @@ module Branches
       @branch = @config[:branch]
       @as_of  = Date.new(@year, @month, -1)
 
+      prev_month  = @as_of - 1.month
+
+      @previous_as_of = Date.new(prev_month.year, prev_month.month, -1)
+      @previous_year  = @previous_as_of.year
+      @previous_month = @previous_as_of.month
+      @previous_day   = @previous_as_of.day
+
       @ds_repayment_rate  = DataStore.repayment_rates.where(
                               "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS DATE) <= ?",
                               @branch.id,
@@ -31,6 +38,22 @@ module Branches
                             "CAST(data->>'as_of' AS DATE) ASC"
                           ).last
 
+      @prev_ds_monthly_new_and_resigned = DataStore.monthly_new_and_resigned.where(
+                                            "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS DATE) <= ?",
+                                            @branch.id,
+                                            @previous_as_of
+                                          ).order(
+                                            "CAST(meta->>'as_of' AS DATE) ASC"
+                                          ).last
+
+      @prev_ds_member_counts  = DataStore.member_counts.where(
+                                  "data->'branch'->>'id' = ? AND CAST(data->>'as_of' AS DATE) <= ?",
+                                  @branch.id,
+                                  @previous_as_of
+                                ).order(
+                                  "CAST(data->>'as_of' AS DATE) ASC"
+                                ).last
+
       # Check if we have the necessary information
       if @ds_repayment_rate.blank? || @ds_repayment_rate.meta.with_indifferent_access[:as_of].try(:to_date).year.to_i != @year.to_i || @ds_repayment_rate.meta.with_indifferent_access[:as_of].try(:to_date).month.to_i != @month.to_i
         raise "no repayment rate report found. as_of: #{@as_of}"
@@ -44,12 +67,22 @@ module Branches
         raise "no member counts found. as_of: #{@as_of}"
       end
 
+      if @prev_ds_monthly_new_and_resigned.blank? || @prev_ds_monthly_new_and_resigned.meta.with_indifferent_access[:as_of].try(:to_date).year.to_i != @previous_year.to_i || @prev_ds_monthly_new_and_resigned.meta.with_indifferent_access[:as_of].try(:to_date).month.to_i != @previous_month.to_i
+        raise "no preivous monthly new and resigned found. as_of: #{@as_of}"
+      end
+
+      if @prev_ds_member_counts.blank? || @prev_ds_member_counts.data.with_indifferent_access[:as_of].try(:to_date).year.to_i != @previous_year.to_i || @prev_ds_member_counts.data.with_indifferent_access[:as_of].try(:to_date).month.to_i != @previous_month.to_i
+        raise "no previous member counts found. as_of: #{@as_of}"
+      end
+
       @data_rr  = @ds_repayment_rate.data.with_indifferent_access
       @officers = @data_rr[:records].map{ |o| o[:officer] }.uniq
 
-      @data_monthly_new_and_resigned  = @ds_monthly_new_and_resigned.data.with_indifferent_access
+      @data_monthly_new_and_resigned          = @ds_monthly_new_and_resigned.data.with_indifferent_access
+      @previous_data_monthly_new_and_resigned = @prev_ds_monthly_new_and_resigned.data.with_indifferent_access
 
-      @data_member_counts = @ds_member_counts.data.with_indifferent_access
+      @data_member_counts           = @ds_member_counts.data.with_indifferent_access
+      @previous_data_member_counts  = @prev_ds_member_counts.data.with_indifferent_access
 
       @data = {
         year: @year,
@@ -117,13 +150,23 @@ module Branches
                                             m[:officer][:id] == officer[:id]
                                           }
 
-        officer_data[:count_resigned_members] = officer_data[:resigned_members].size
+        officer_data[:previous_resigned_members]  = @previous_data_monthly_new_and_resigned[:resigned_members].select{ |m|
+                                                      m[:officer][:id] == officer[:id]
+                                                    }
+
+        officer_data[:count_resigned_members]           = officer_data[:resigned_members].size
+        officer_data[:previous_count_resigned_members]  = officer_data[:previous_resigned_members].size
 
         officer_data[:new_members]  = @data_monthly_new_and_resigned[:new_members].select{ |m|
                                         m[:officer][:id] == officer[:id]
                                       }
 
-        officer_data[:count_new_members]  = officer_data[:new_members].size
+        officer_data[:previous_new_members] = @previous_data_monthly_new_and_resigned[:new_members].select{ |m|
+                                                m[:officer][:id] == officer[:id]
+                                              }
+
+        officer_data[:count_new_members]          = officer_data[:new_members].size
+        officer_data[:previous_count_new_members] = officer_data[:previous_new_members].size
 
         # Loan disbursements
         officer_data[:loan_disbursements]       = compute_loan_disbursements!(officer)
@@ -136,13 +179,25 @@ module Branches
         officer_data[:loaners]       = compute_loaners!(officer)
         officer_data[:count_loaners] = officer_data[:loaners].size
 
+        officer_data[:previous_loaners]       = compute_previous_loaners!(officer)
+        officer_data[:previous_count_loaners] = officer_data[:previous_loaners].size
+
         # Pure savers
         officer_data[:pure_savers]        = compute_pure_savers!(officer)
         officer_data[:count_pure_savers]  = officer_data[:pure_savers].size
 
+        officer_data[:previous_pure_savers]       = compute_previous_pure_savers!(officer)
+        officer_data[:previous_count_pure_savers] = officer_data[:previous_pure_savers].size
+
         # Active members
         officer_data[:active_members]        = compute_active_members!(officer)
         officer_data[:count_active_members]  = officer_data[:active_members].size
+
+        officer_data[:previous_active_members]        = compute_previous_active_members!(officer)
+        officer_data[:previous_count_active_members]  = officer_data[:previous_active_members].size
+
+        # Previous count
+        officer_data[:previous_member_count]  = officer_data[:previous_count_loaners] + officer_data[:previous_count_pure_savers] + officer_data[:previous_count_active_members]
 
         # Loans (from repayment rates)
         officer_data[:loans]  = compute_loans!(officer)
@@ -240,6 +295,12 @@ module Branches
       }
     end
 
+    def compute_previous_loaners!(officer)
+      @previous_data_member_counts[:counts][:loaners][:members].select{ |o|
+        o[:officer][:id] == officer[:id]
+      }
+    end
+
     def compute_loaners!(officer)
       @data_member_counts[:counts][:loaners][:members].select{ |o|
         o[:officer][:id] == officer[:id]
@@ -252,8 +313,20 @@ module Branches
       }
     end
 
+    def compute_previous_pure_savers!(officer)
+      @previous_data_member_counts[:counts][:pure_savers][:members].select{ |o|
+        o[:officer][:id] == officer[:id]
+      }
+    end
+
     def compute_active_members!(officer)
       @data_member_counts[:counts][:active_members][:members].select{ |o|
+        o[:officer][:id] == officer[:id]
+      }
+    end
+
+    def compute_previous_active_members!(officer)
+      @previous_data_member_counts[:counts][:active_members][:members].select{ |o|
         o[:officer][:id] == officer[:id]
       }
     end

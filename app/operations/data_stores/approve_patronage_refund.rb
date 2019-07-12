@@ -6,15 +6,20 @@ module DataStores
       @patronage_refund = @config[:patronage_refund]
       #@closing_date               = @monthly_closing_collection.closing_date
       @data                       = @patronage_refund.data.with_indifferent_access
+      @meta = @icpr.meta.with_indifferent_access
+      @branch = Branch.find(@meta[:branch_id])
       #raise @data.inspect
       
       @user                       = @config[:user]
-      @current_date               = Date.today
-
+      @current_date               = ::Utils::GetCurrentDate.new(
+                                        config: {
+                                          branch: @branch
+                                        }
+                                      ).execute!
       @data_accounting_entry  = @data[:accounting_entry]
 
       # Change this
-      @particular = "To record declaration of Patronage Refund 2018"
+      @particular = "To record declaration of Patronage Refund #{@current_date.year}"
 
     
     end

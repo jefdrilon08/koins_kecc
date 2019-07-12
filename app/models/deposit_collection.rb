@@ -73,6 +73,14 @@ class DepositCollection < ApplicationRecord
     self.data.with_indifferent_access[:accounting_entry]
   end
 
+  def approved_accounting_entry
+    AccountingEntry.approved.where(
+                          book: self.data.with_indifferent_access[:accounting_entry][:book],
+                          reference_number: self.data.with_indifferent_access[:accounting_entry][:reference_number],
+                          particular: self.data.with_indifferent_access[:accounting_entry][:particular]
+                          ).try(:first)
+  end
+
   def load_defaults
     if self.status.blank?
       self.status = "pending"

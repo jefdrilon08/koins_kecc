@@ -15,7 +15,8 @@ module Adjustments
       @data = @adjustment_record.data.with_indifferent_access
       @accounting_entry = @data[:accounting_entry]
 
-      @non_subsidiary_members = @adjustment_record.non_subsidiary_members
+      #@non_subsidiary_members = @adjustment_record.non_subsidiary_members
+      @subsidiary_members = @adjustment_record.selectable_subsidiary_members
 
       @accounting_codes = AccountingCode.order("code ASC")
     end
