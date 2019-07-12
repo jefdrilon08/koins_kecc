@@ -33,7 +33,13 @@ var Show  = (function() {
   var $selectSurvey;
   var $selectMemberType;
   var $message;
+  var $btnResignFromInsurance;   
+  var $modalResignFromInsurance; 
+  var $btnConfirmInsuranceResign;
+  var $inputDateResigned;
+  var $inputReason;
   var templateErrorList;
+
 
   var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
   var _urlSaveSignature           = "/api/v1/members/save_signature";
@@ -45,6 +51,7 @@ var Show  = (function() {
   var _urlGenerateMissingAccounts = "/api/v1/members/generate_missing_accounts";
   var _urlChangeMemberType        = "/api/v1/members/change_member_type";
   var _urlChangeRecognitionDate   = "/api/v1/members/change_recognition_date";
+  var _urlResignFromInsurance     = "/api/v1/members/resign";
   var _memberId;
   var _authenticityToken;
 
@@ -88,6 +95,11 @@ var Show  = (function() {
     $selectMemberType                 = $("#select-member-type");
     $selectLoanProduct                = $("#select-loan-product");
     $selectSurvey                     = $("#select-survey");
+    $btnResignFromInsurance           = $("#btn-resign-from-insurance");
+    $modalResignFromInsurance         = $("#modal-resign-from-insurance");
+    $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
+    $inputDateResigned                = $("#input-date-resigned");
+    $inputReason                      = $("#input-reason");
 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
@@ -498,6 +510,7 @@ var Show  = (function() {
       $modalSignature.modal("show");
     });
 
+
     $btnGenerateAccessToken.on("click", function() {
       $modalGenerateAccessToken.modal("show");
     });
@@ -524,6 +537,40 @@ var Show  = (function() {
         }
       });
     });
+
+    $btnResignFromInsurance.on("click", function() {
+      $modalResignFromInsurance.modal("show");
+
+      $btnConfirmInsuranceResign.on("click", function() {
+        $btnConfirmInsuranceResign.prop("disabled", true);
+        //alert("hello");
+          $.ajax({
+          url: _urlResignFromInsurance,
+          method: 'POST',
+          dataType: 'json',
+          data: { 
+            member_id: _memberId,
+            date_resigned: $inputDateResigned.val(),
+            reason: $inputReason.val(),
+            authenticity_token: _authenticityToken
+          },
+          success: function(response) {
+            $message.html("Successfully resigned member");
+            window.location.reload();
+          },
+          error: function(response) {
+            $message.html("Error in generating access_token");
+            $btnConfirmInsuranceResign.prop("disabled", false);
+          }
+        });
+
+      });
+    });
+
+
+
+    
+    
   }
 
   var init  = function(memberId, authenticityToken) {

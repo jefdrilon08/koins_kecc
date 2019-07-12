@@ -46,7 +46,7 @@ namespace :api do
     post "/members/generate_missing_accounts", to: "members#generate_missing_accounts"
     post "/members/change_member_type", to: "members#change_member_type"
     post "/members/change_recognition_date", to: "members#change_recognition_date"
-
+    post "/members/resign", to: "members#resign"
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
@@ -264,6 +264,6 @@ namespace :api do
     get 'reports/member_dependent_reports', to: 'reports#member_dependent_reports'
     get 'reports/cic_reports', to: 'reports#cic_reports'
     get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
-
+    get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
   end
 end

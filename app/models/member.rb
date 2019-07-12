@@ -179,6 +179,9 @@ class Member < ApplicationRecord
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)/2
   end
 
+  def lif_amount
+    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)
+  end
   def rf_amount
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").sum(:balance)
   end

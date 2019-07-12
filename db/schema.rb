@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_21_105608) do
+ActiveRecord::Schema.define(version: 2019_06_11_092628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -521,6 +521,7 @@ ActiveRecord::Schema.define(version: 2019_05_21_105608) do
     t.text "signature_data"
     t.boolean "modifiable"
     t.date "previous_date_resigned"
+    t.date "insurance_date_resigned"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
   end
@@ -607,6 +608,19 @@ ActiveRecord::Schema.define(version: 2019_05_21_105608) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status"
+  end
+
+  create_table "time_deposit_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_time_deposit_collections_on_branch_id"
+    t.index ["center_id"], name: "index_time_deposit_collections_on_center_id"
   end
 
   create_table "user_branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -704,6 +718,8 @@ ActiveRecord::Schema.define(version: 2019_05_21_105608) do
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "survey_answers", "surveys"
   add_foreign_key "survey_questions", "surveys"
+  add_foreign_key "time_deposit_collections", "branches"
+  add_foreign_key "time_deposit_collections", "centers"
   add_foreign_key "withdrawal_collections", "branches"
   add_foreign_key "withdrawal_collections", "centers"
 end

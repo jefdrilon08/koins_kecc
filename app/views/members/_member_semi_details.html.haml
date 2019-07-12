@@ -102,7 +102,15 @@
           .card-body
             %center
               %img{ src: @member.signature_data, width: "100", id: "signature-display" }
-    - if @member.active?
+    - if Settings.activate_microinsurance and @member.active? 
+      %hr
+      %h6
+        Resign from Insurance
+      %div
+        #btn-resign-from-insurance.btn.btn-danger.btn-block
+          .fa.fa-times
+          Resign from Insurance
+    - else 
       %hr
       %h6
         Resignation
@@ -110,11 +118,13 @@
         = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
           .fa.fa-times
           Resign Member
-    - if @missing_accounts.size > 0
-      %hr
-      %h6
-        Generate Missing Accounts
-      #btn-generate-missing-accounts.btn.btn-warning.btn-block
-        .fa.fa-sync
-        Generate Missing Accounts
-      .message
+      - if @missing_accounts.size > 0
+        %hr
+        %h6
+          Generate Missing Accounts
+        #btn-generate-missing-accounts.btn.btn-warning.btn-block
+          .fa.fa-sync
+          Generate Missing Accounts
+        .message
+
+        
