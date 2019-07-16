@@ -5,6 +5,8 @@ module Reports
       @as_of  = @config[:as_of].try(:to_date) || Date.today
       @loan   = @config[:loan]
 
+      @manual_aging = @config[:manual_aging] || false
+
       @payments = AccountTransaction.approved_loan_payments.where(
                     "transacted_at <= ? AND subsidiary_id = ? AND subsidiary_type = ?",
                     @as_of,
@@ -12,11 +14,19 @@ module Reports
                     "Loan"
                   ).order("transacted_at ASC")
 
-      @amorts = AmortizationScheduleEntry.where(
-                  "due_date < ? AND loan_id = ?",
-                  @as_of,
-                  @loan.id
-                ).order("due_date ASC")
+      if @manual_aging.present?
+        @amorts = AmortizationScheduleEntry.where(
+                    "due_date <= ? AND loan_id = ?",
+                    @as_of,
+                    @loan.id
+                  ).order("due_date ASC")
+      else
+        @amorts = AmortizationScheduleEntry.where(
+                    "due_date < ? AND loan_id = ?",
+                    @as_of,
+                    @loan.id
+                  ).order("due_date ASC")
+      end
 
       date_released = @loan.date_released
 

@@ -9,6 +9,10 @@
       = link_to "/data_stores/repayment_rates", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         Repayment Rates
+    %li{ class: "nav-item #{params[:controller] == 'manual_aging' ? 'active' : ''}" }
+      = link_to "/data_stores/manual_aging", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Manual Aging
     %li{ class: "nav-item #{params[:controller] == 'personal_funds' ? 'active' : ''}" }
       = link_to "/data_stores/personal_funds", class: 'nav-link' do
         %i.nav-icon.fa.fa-database

@@ -220,6 +220,10 @@ Rails.application.routes.draw do
     get "/repayment_rates", to: "repayment_rates#index"
     get "/repayment_rates/:id", to: "repayment_rates#show"
     delete "/repayment_rates/:id", to: "repayment_rates#destroy"
+
+    get "/manual_aging", to: "manual_aging#index"
+    get "/manual_aging/:id", to: "manual_aging#show"
+    delete "/manual_aging/:id", to: "manual_aging#destroy"
   end
 
   namespace :accounting do

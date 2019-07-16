@@ -221,6 +221,8 @@ namespace :api do
       get "/watchlists/fetch", to: "watchlists#fetch"
       post "/repayment_rates/queue", to: "repayment_rates#queue"
       get "/repayment_rates/fetch", to: "repayment_rates#fetch"
+      post "/manual_aging/queue", to: "manual_aging#queue"
+      get "/manual_aging/fetch", to: "manual_aging#fetch"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
