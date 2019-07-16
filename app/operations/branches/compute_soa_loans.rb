@@ -59,6 +59,8 @@ module Branches
       center        = loan.center
       loan_product  = loan.loan_product
 
+      officer = center.user
+
       data  = {
         loan: {
           id: loan.id,
@@ -84,6 +86,12 @@ module Branches
         center: {
           id: center.id,
           name: center.name
+        },
+        officer: {
+          id: officer.id,
+          first_name: officer.first_name,
+          last_name: officer.last_name,
+          full_name: "#{officer.last_name}, #{officer.first_name}"
         },
         loan_product: {
           id: loan_product.id,

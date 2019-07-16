@@ -18,9 +18,11 @@ export default class ShowComponent extends React.Component {
       data: false,
       errors: false,
       centers: [],
+      officers: [],
       currentCenterId: "",
       loanProducts: [],
-      currentLoanProductId: ""
+      currentLoanProductId: "",
+      currentOfficerId: ""
     };
   }
 
@@ -28,19 +30,19 @@ export default class ShowComponent extends React.Component {
     var context       = this;
     var loanProductId = options.loanProductId;
     var centerId      = options.centerId;
+    var officerId     = options.officerId;
 
     var data  = {
       id: this.props.id,
       loan_product_id: loanProductId,
-      center_id: centerId
+      center_id: centerId,
+      officer_id: officerId
     }
-
-    console.log("fetch (data):");
-    console.log(data);
 
     this.setState({
       currentLoanProductId: loanProductId,
-      currentCenterId: centerId
+      currentCenterId: centerId,
+      currentOfficerId: officerId
     });
 
     $.ajax({
@@ -48,15 +50,12 @@ export default class ShowComponent extends React.Component {
       data: data,
       method: 'GET',
       success: function(response) {
-        console.log(response);
-
         context.setState({
           isLoading: false,
           data: response
         });
       },
       error: function(response) {
-        console.log(response);
         alert("Something went wrong when fetching data store");
       }
     });
@@ -76,12 +75,14 @@ export default class ShowComponent extends React.Component {
 
         var loanProducts  = response.data.loan_products;
         var centers       = response.data.centers;
+        var officers      = response.data.officers;
 
         context.setState({
           isLoading: false,
           data: response,
           loanProducts: loanProducts,
-          centers: centers
+          centers: centers,
+          officers: officers
         });
       },
       error: function(response) {
@@ -232,14 +233,24 @@ export default class ShowComponent extends React.Component {
   handleCenterChanged(event) {
     this.fetch({
       centerId: event.target.value,
-      loanProductId: this.state.currentLoanProductId
+      loanProductId: this.state.currentLoanProductId,
+      officerId: this.state.currentOfficerId
     });
   }
 
   handleLoanProductChanged(event) {
     this.fetch({
       loanProductId: event.target.value,
-      centerId: this.state.currentCenterId
+      centerId: this.state.currentCenterId,
+      officerId: this.state.currentOfficerId
+    });
+  }
+
+  handleOfficerChanged(event) {
+    this.fetch({
+      loanProductId: this.state.currentLoanProductId,
+      centerId: this.state.currentCenterId,
+      officerId: event.target.value
     });
   }
 
@@ -256,7 +267,11 @@ export default class ShowComponent extends React.Component {
       </option>
     ];
 
-    console.log(this.state.loanProducts);
+    var officerOptions  = [
+      <option key={"officer-select"} value="">
+        -- SELECT --
+      </option>
+    ];
 
     for(var i = 0; i < this.state.loanProducts.length; i++) {
       loanProductOptions.push(
@@ -270,6 +285,14 @@ export default class ShowComponent extends React.Component {
       centerOptions.push(
         <option key={"center-" + i} value={this.state.centers[i].id}>
           {this.state.centers[i].name}
+        </option>
+      );
+    }
+
+    for(var i = 0; i < this.state.officers.length; i++) {
+      officerOptions.push(
+        <option key={"officer-" + i} value={this.state.officers[i].id}>
+          {this.state.officers[i].last_name}, {this.state.officers[i].first_name}
         </option>
       );
     }
@@ -293,6 +316,16 @@ export default class ShowComponent extends React.Component {
             </label>
             <select value={this.state.currentCenterId} onChange={this.handleCenterChanged.bind(this)} className="form-control">
               {centerOptions}
+            </select>
+          </div>
+        </div>
+        <div className="col">
+          <div className="form-group">
+            <label>
+              Officer:
+            </label>
+            <select value={this.state.currentOfficerId} onChange={this.handleOfficerChanged.bind(this)} className="form-control">
+              {officerOptions}
             </select>
           </div>
         </div>

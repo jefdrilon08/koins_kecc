@@ -12,6 +12,11 @@ module Api
           else
             records = record.data.with_indifferent_access[:records]
 
+            # Get officers
+            record.data["officers"] = records.select{ |o| 
+                                        o[:officer].present? 
+                                      }.map{ |o| o[:officer] }.uniq
+
             if params[:loan_product_id].present?
               records = records.select{ |o|
                           o[:loan_product][:id] == params[:loan_product_id]
@@ -21,6 +26,14 @@ module Api
             if params[:center_id].present?
               records = records.select{ |o|
                           o[:center][:id] == params[:center_id]
+                        }
+            end
+
+            if params[:officer_id].present?
+              records = records.select{ |o|
+                          o[:officer].present?
+                        }.select{ |o|
+                          o[:officer][:id] == params[:officer_id]
                         }
             end
 

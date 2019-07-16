@@ -13,7 +13,9 @@ module Api
             records = record.data.with_indifferent_access[:records]
 
             # Get officers
-            record.data["officers"] = records.select{ |o| o[:officer].present? }.map{ |o| o[:officer] }.uniq
+            record.data["officers"] = records.select{ |o| 
+                                        o[:officer].present? 
+                                      }.map{ |o| o[:officer] }.uniq
 
             if params[:loan_product_id].present?
               records = records.select{ |o|
