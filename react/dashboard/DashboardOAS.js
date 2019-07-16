@@ -16,6 +16,7 @@ export default class DashboardOAS extends React.Component {
         centers: []
       },
       branches: [],
+      centers: [],
       data: {
       },
       isLoading: true
@@ -45,7 +46,8 @@ export default class DashboardOAS extends React.Component {
           data: {
             branch_loans_stats: response.branch_loans_stats,
             member_counts: response.member_counts,
-            watchlist: response.watchlist
+            watchlist: response.watchlist,
+            centers: response.centers
           },
           isLoading: false
         });
@@ -443,6 +445,73 @@ export default class DashboardOAS extends React.Component {
     );
   }
 
+  renderCenters() {
+    var o = this.state.data.centers;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found for centers.
+        </p>
+      );
+    } else {
+      var centerRecords = [];
+      var centers       = this.state.data.centers.centers;
+
+      for(var i = 0; i < centers.length; i++) {
+        centerRecords.push(
+          <tr key={"center-meeting-day-" + i}>
+            <td>
+              {centers[i].name}
+            </td>
+            <td>
+              {centers[i].officer.last_name}, {centers[i].officer.first_name}
+            </td>
+            <td className="text-center">
+              {centers[i].active_count} | {centers[i].pending_count}
+            </td>
+            <td>
+              {centers[i].meeting_day_display}
+            </td>
+          </tr>
+        );
+      }
+
+      return (
+        <div>
+          <h5>
+            Center Meeting Days
+          </h5>
+          <table className="table table-bordered table-sm table-hover">
+            <thead>
+              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Officer
+                </th>
+                <th className="text-center">
+                  A | P
+                </th>
+                <th>
+                  Meeting Day
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {centerRecords}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+  }
+
   renderMemberCounts() {
     var o = this.state.data.member_counts;
 
@@ -567,6 +636,7 @@ export default class DashboardOAS extends React.Component {
         {this.renderBranchLoansStats()} 
         {this.renderMemberCounts()}
         {this.renderWatchlist()}
+        {this.renderCenters()}
       </div>
     );
   }

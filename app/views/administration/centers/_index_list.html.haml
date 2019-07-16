@@ -8,6 +8,8 @@
       %th
         SO
       %th
+        Meeting Day
+      %th
         Actions
   %tbody
     - @centers.each do |center|
@@ -18,7 +20,8 @@
           #{center.branch.to_s}
         %td
           #{center.user}
-
+        %td
+          #{center.meeting_day_display}
         %td
           .btn-group
             = link_to administration_center_path(center), class: 'btn btn-sm btn-primary' do

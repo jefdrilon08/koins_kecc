@@ -63,6 +63,13 @@ module Api
 
         data[:watchlist]  = watchlist || false
 
+        # Fetch center meeting days
+        data[:centers]  = ::Branches::FetchCenters.new(
+                            config: {
+                              branch: branch
+                            }
+                          ).execute!
+
         render json: data
       end
 
