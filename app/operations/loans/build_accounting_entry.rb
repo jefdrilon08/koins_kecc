@@ -255,7 +255,7 @@ module Loans
             }
 
             temp_amount -= amount
-          elsif s_deduction.membership_type == "Insurance" and @member.status == "pending"
+          elsif s_deduction.membership_type == "Insurance" and @member.insurance_status == "pending"
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
             amount          = s_deduction.amount
             name            = accounting_code.name
