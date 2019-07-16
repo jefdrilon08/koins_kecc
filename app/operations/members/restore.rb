@@ -15,6 +15,9 @@ module Members
       # Reset loan cycle
       @data[:loan_cycles] = nil
 
+      # Reset entry_point_loan_cycle
+      @data[:entry_point_loan_cycle] = 0
+
       # Load/archive resignation records
       resignation_records = @member.resignation_records
 
