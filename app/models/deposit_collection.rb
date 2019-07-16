@@ -23,6 +23,10 @@ class DepositCollection < ApplicationRecord
     self.status == "processing"
   end
 
+  def or_number
+    self.data.with_indifferent_access[:or_number]
+  end
+
   def book
     temp_data = self.data.with_indifferent_access
 
