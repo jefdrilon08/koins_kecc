@@ -20,24 +20,25 @@ export default class ShowComponent extends React.Component {
       centers: [],
       officers: [],
       currentCenterId: "",
-      currentLoanProductId: ""
+      currentLoanProductId: "",
+      currentOfficerId: ""
     };
   }
 
   fetch(options) {
-    var context       = this;
-    var centerId      = options.centerId;
+    var context   = this;
+    var centerId  = options.centerId;
+    var officerId = options.officerId;
 
     var data  = {
       id: this.props.id,
-      center_id: centerId
+      center_id: centerId,
+      officer_id: officerId
     }
 
-    console.log("fetch (data):");
-    console.log(data);
-
     this.setState({
-      currentCenterId: centerId
+      currentCenterId: centerId,
+      currentOfficerId: officerId
     });
 
     $.ajax({
@@ -71,12 +72,14 @@ export default class ShowComponent extends React.Component {
       success: function(response) {
         console.log(response);
 
-        var centers       = response.data.centers;
+        var centers   = response.data.centers;
+        var officers  = response.data.officers;
 
         context.setState({
           isLoading: false,
           data: response,
-          centers: centers
+          centers: centers,
+          officers: officers
         });
       },
       error: function(response) {
@@ -232,7 +235,16 @@ export default class ShowComponent extends React.Component {
   handleCenterChanged(event) {
     this.fetch({
       centerId: event.target.value,
-      loanProductId: this.state.currentLoanProductId
+      loanProductId: this.state.currentLoanProductId,
+      officerId: this.state.currentOfficerId
+    });
+  }
+
+  handleOfficerChanged(event) {
+    this.fetch({
+      centerId: this.state.currentCenterId,
+      loanProductId: this.state.currentLoanProductId,
+      officerId: event.target.value
     });
   }
 
@@ -251,6 +263,20 @@ export default class ShowComponent extends React.Component {
       );
     }
 
+    var officerOptions  = [
+      <option key={"officer-select"} value="">
+        -- SELECT --
+      </option>
+    ];
+
+    for(var i = 0; i < this.state.officers.length; i++) {
+      officerOptions.push(
+        <option key={"officer-" + i} value={this.state.officers[i].id}>
+          {this.state.officers[i].last_name}, {this.state.officers[i].first_name}
+        </option>
+      );
+    }
+
     return  (
       <div className="row">
         <div className="col">
@@ -264,6 +290,20 @@ export default class ShowComponent extends React.Component {
               className="form-control"
             >
               {centerOptions}
+            </select>
+          </div>
+        </div>
+        <div className="col">
+          <div className="form-group">
+            <label>
+              Officer:
+            </label>
+            <select 
+              value={this.state.currentOfficerId} 
+              onChange={this.handleOfficerChanged.bind(this)} 
+              className="form-control"
+            >
+              {officerOptions}
             </select>
           </div>
         </div>
