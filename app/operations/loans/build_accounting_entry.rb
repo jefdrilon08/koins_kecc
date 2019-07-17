@@ -413,19 +413,19 @@ module Loans
       end
 
       # Insurance membership
-      if @member.insurance_pending?
-        accounting_code = AccountingCode.find(@settings_insurance_membership.accounting_code_id)
-        amount          = @settings_insurance_membership.fee
-
-        journal_entries << {
-          accounting_code_id: accounting_code.id,
-          code: accounting_code.code,
-          name: accounting_code.name,
-          amount: amount
-        }
-
-        temp_amount -= amount
-      end
+#      if @member.insurance_pending?
+#        accounting_code = AccountingCode.find(@settings_insurance_membership.accounting_code_id)
+#        amount          = @settings_insurance_membership.fee
+#
+#        journal_entries << {
+#          accounting_code_id: accounting_code.id,
+#          code: accounting_code.code,
+#          name: accounting_code.name,
+#          amount: amount
+#        }
+#
+#        temp_amount -= amount
+#      end
 
       # Cash in bank for amount released
       accounting_code = AccountingCode.find(@settings_branch_accounting_codes.cash_in_bank_accounting_code_id)
