@@ -1,9 +1,25 @@
 import React from 'react';
 import $ from 'jquery';
 import Select from 'react-select';
+import Modal from 'react-modal';
 
 import SkCubeLoading from '../SkCubeLoading';
 import {numberAsPercent, numberWithCommas} from '../utils/helpers';
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    height                : '50%',
+    overlfow              : 'scroll'
+  }
+};
+
+Modal.setAppElement('#dashboard-content');
 
 export default class DashboardOAS extends React.Component {
   constructor(props) {
@@ -19,7 +35,9 @@ export default class DashboardOAS extends React.Component {
       centers: [],
       data: {
       },
-      isLoading: true
+      currentMemberList: [],
+      isLoading: true,
+      modalCycleCountSummaryIsOpen: false
     }
   }
 
@@ -58,6 +76,42 @@ export default class DashboardOAS extends React.Component {
         alert("Error in fetching branches!");
       }
     });
+  }
+
+  closeCycleCountSummaryModal() {
+    this.setState({
+      modalCycleCountSummaryIsOpen: false
+    });
+  }
+
+  openCycleCountSummaryModal() {
+    this.setState({
+      modalCycleCountSummaryIsOpen: true
+    });
+  }
+
+  handleCycleCountClicked(loanProductId, cycle) {
+    var o = this.state.data.cycle_count_summary;
+
+    var members = [];
+
+    for(var i = 0; i < o.records.length; i++) {
+      for(var j = 0; j < o.records[i].loan_products.length; j++) {
+        if(o.records[i].loan_products[j].id == loanProductId && o.records[i].cycle == cycle) {
+          for(var k = 0; k < o.records[i].loan_products[j].records.length; k++) {
+            members.push(o.records[i].loan_products[j].records[k]);
+          }
+        }
+      }
+    }
+
+    this.setState({
+      currentMemberList: members
+    });
+
+    console.log(members);
+
+    this.openCycleCountSummaryModal();
   }
 
   handleBranchChanged(o) {
@@ -351,7 +405,9 @@ export default class DashboardOAS extends React.Component {
         for(var j = 0; j < o.records[i].loan_products.length; j++) {
           cols.push(
             <td key={"row-" + i + "-" + o.records[i].loan_products[j].id} className="text-center">
-              {o.records[i].loan_products[j].count}
+              <a href="#" onClick={this.handleCycleCountClicked.bind(this, o.records[i].loan_products[j].id, o.records[i].cycle)}>
+                {o.records[i].loan_products[j].count}
+              </a>
             </td>
           );
         }
@@ -371,6 +427,53 @@ export default class DashboardOAS extends React.Component {
 
       return (
         <div>
+          <Modal
+            isOpen={this.state.modalCycleCountSummaryIsOpen}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <h2>
+              Member List
+            </h2>
+            <hr/>
+            <table className="table table-sm table-bordered">
+              <thead>
+                <tr>
+                  <th width={"5%"}>
+                  </th>
+                  <th>
+                    Name
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  this.state.currentMemberList.map((m, index) => (
+                      <tr key={"member-" + index}>
+                        <td className="text-center">
+                          <a href={"/members/" + m.member.id + "/display"}>
+                            <span className="fa fa-search"/>
+                          </a>
+                        </td>
+                        <td>
+                          {m.member.last_name}, {m.member.first_name}
+                        </td>
+                      </tr>
+                    )
+                  )
+                }
+              </tbody>
+            </table>
+            <hr/>
+            <button 
+              onClick={this.closeCycleCountSummaryModal.bind(this)}
+              className="btn btn-danger btn-sm"
+            >
+              <span className="fa fa-times"/>
+              Close
+            </button>
+          </Modal>
+
           <h5>
             Loan Cycle Count Summary
           </h5>
@@ -506,8 +609,6 @@ export default class DashboardOAS extends React.Component {
   }
 
   renderMemberTypeCounts(memberTypeCounts) {
-    console.log("Member Type Counts");
-    console.log(memberTypeCounts);
     return (
       <div className="row">
         {
