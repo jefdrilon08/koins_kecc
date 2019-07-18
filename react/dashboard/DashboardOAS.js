@@ -93,7 +93,9 @@ export default class DashboardOAS extends React.Component {
           data: {
             branch_loans_stats: response.branch_loans_stats,
             member_counts: response.member_counts,
-            watchlist: response.watchlist
+            watchlist: response.watchlist,
+            centers: response.centers,
+            cycle_count_summary: response.cycle_count_summary
           },
           isLoading: false
         });
