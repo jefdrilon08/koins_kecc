@@ -478,35 +478,37 @@ export default class DashboardOAS extends React.Component {
             Loan Cycle Count Summary
           </h5>
 
-          <table className="table table-bordered table-sm">
-            <thead>
-              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
-                {
-                  o.headers.map((h, index) => (
-                      <th key={"header-" + index} className="text-center">
-                        {h}
-                      </th>
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm">
+              <thead>
+                <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                  {
+                    o.headers.map((h, index) => (
+                        <th key={"header-" + index} className="text-center" style={{whiteSpace: "nowrap"}}>
+                          {h}
+                        </th>
+                      )
                     )
-                  )
-                }
-              </tr>
-            </thead>
-            <tbody>
-              {rows}
-            </tbody>
-            <tfoot>
-              <tr style={{backgroundColor: "#f0f0f0"}}>
-                {
-                  o.totals.map((t, index) => (
-                      <th key={"total-" + index} className="text-center">
-                        {t}
-                      </th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {rows}
+              </tbody>
+              <tfoot>
+                <tr style={{backgroundColor: "#f0f0f0"}}>
+                  {
+                    o.totals.map((t, index) => (
+                        <th key={"total-" + index} className="text-center">
+                          {t}
+                        </th>
+                      )
                     )
-                  )
-                }
-              </tr>
-            </tfoot>
-          </table>
+                  }
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       );
     }
