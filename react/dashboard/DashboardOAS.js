@@ -47,7 +47,8 @@ export default class DashboardOAS extends React.Component {
             branch_loans_stats: response.branch_loans_stats,
             member_counts: response.member_counts,
             watchlist: response.watchlist,
-            centers: response.centers
+            centers: response.centers,
+            cycle_count_summary: response.cycle_count_summary
           },
           isLoading: false
         });
@@ -158,9 +159,6 @@ export default class DashboardOAS extends React.Component {
 
   renderBranchLoansStats() {
     var o = this.state.data.branch_loans_stats;
-
-    console.log("Branch Loans Stats");
-    console.log(o);
 
     if(this.state.isLoading) {
       return  (
@@ -321,6 +319,86 @@ export default class DashboardOAS extends React.Component {
                     </div>
                   </div>
                 </th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      );
+    }
+  }
+
+  renderCycleCountSummary() {
+    var o = this.state.data.cycle_count_summary;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found for cycle count summary.
+        </p>
+      );
+    } else {
+      var rows  = [];
+
+      for(var i = 0; i < o.records.length; i++) {
+        var cols = [];
+
+        for(var j = 0; j < o.records[i].loan_products.length; j++) {
+          cols.push(
+            <td key={"row-" + i + "-" + o.records[i].loan_products[j].id} className="text-center">
+              {o.records[i].loan_products[j].count}
+            </td>
+          );
+        }
+
+        rows.push(
+          <tr key={"cycle-count-summary-" + i}>
+            <td key={"cycle-val-" + i} className="text-center">
+              {o.records[i].cycle}
+            </td>
+            {cols}
+            <td key={"cycle-total-" + i} className="text-center">
+              {o.records[i].total}
+            </td>
+          </tr>
+        );
+      }
+
+      return (
+        <div>
+          <h5>
+            Loan Cycle Count Summary
+          </h5>
+
+          <table className="table table-bordered table-sm">
+            <thead>
+              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                {
+                  o.headers.map((h, index) => (
+                      <th key={"header-" + index} className="text-center">
+                        {h}
+                      </th>
+                    )
+                  )
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+            <tfoot>
+              <tr style={{backgroundColor: "#f0f0f0"}}>
+                {
+                  o.totals.map((t, index) => (
+                      <th key={"total-" + index} className="text-center">
+                        {t}
+                      </th>
+                    )
+                  )
+                }
               </tr>
             </tfoot>
           </table>
@@ -637,6 +715,7 @@ export default class DashboardOAS extends React.Component {
         {this.renderMemberCounts()}
         {this.renderWatchlist()}
         {this.renderCenters()}
+        {this.renderCycleCountSummary()}
       </div>
     );
   }

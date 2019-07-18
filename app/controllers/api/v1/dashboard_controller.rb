@@ -70,6 +70,13 @@ module Api
                             }
                           ).execute!
 
+        # Loan product cycle count summary
+        data[:cycle_count_summary]  = ::Branches::ComputeLoanCycleCountSummary.new(
+                                        config: {
+                                          branch: branch
+                                        }
+                                      ).execute!
+
         render json: data
       end
 
