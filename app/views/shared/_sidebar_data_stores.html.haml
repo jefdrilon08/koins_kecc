@@ -9,6 +9,10 @@
       = link_to "/data_stores/repayment_rates", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         Repayment Rates
+    %li{ class: "nav-item #{params[:controller] == 'manual_aging' ? 'active' : ''}" }
+      = link_to "/data_stores/manual_aging", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Manual Aging
     %li{ class: "nav-item #{params[:controller] == 'personal_funds' ? 'active' : ''}" }
       = link_to "/data_stores/personal_funds", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
@@ -65,15 +69,15 @@
 %li{ class: "nav-item" }
   = link_to "/reports/collections_clip", class: 'nav-link' do
     %i.nav-icon.fa.fa-book.icon
-    Collection CLIP Reports
+    CLIP Reports
 %li{ class: "nav-item" }
   = link_to "/reports/collections_blip", class: 'nav-link' do
     %i.nav-icon.fa.fa-book.icon
-    Collection BLIP Reports
+    BLIP Reports
 %li{ class: "nav-item" }
   = link_to "/reports/member_dependent", class: 'nav-link' do
     %i.nav-icon.fa.fa-book.icon
-    Member Dependent Reports
+    Member Dependents
 %li{ class: "nav-item" }
   = link_to "/reports/member_quarterly_reports", class: 'nav-link' do
     %i.nav-icon.fa.fa-book.icon
@@ -86,3 +90,4 @@
   = link_to "/reports/monthly_collection", class: 'nav-link' do
     %i.nav-icon.fa.fa-book.icon
     Monthly Collection
+

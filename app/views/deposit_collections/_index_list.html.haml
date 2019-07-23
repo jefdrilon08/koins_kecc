@@ -1,8 +1,13 @@
 %table.table.table-sm.table-hover.table-bordered
   %thead
     %tr
+      %th{ width: "5%" }
+      %th
+        OR Number
       %th
         Collection Date
+      %th
+        Date Approved
       %th
         Branch
       %th.text-right
@@ -13,10 +18,18 @@
   %tbody
     - @deposit_collections.each do |o|
       %tr
-        %td
+        %td.text-center
           = link_to deposit_collection_path(o) do
+            .fa.fa-search
+        %td
+          #{o.or_number}
+        %td
+          %strong
+            #{o.collection_date.strftime("%b %d, %Y")}
+        %td
+          - if o.date_approved.present?
             %strong
-              #{o.collection_date.strftime("%b %d, %Y")}
+              #{o.date_approved.strftime("%b %d, %Y")}
         %td
           #{o.branch}
         %td.text-right

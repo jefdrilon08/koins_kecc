@@ -6,6 +6,8 @@ module Loans
       @branch = @loan.branch
       @center = @loan.center
 
+      @officer    = @center.user
+
       @loan_product = @loan.loan_product
 
       @data = {
@@ -31,6 +33,12 @@ module Loans
         loan_product: {
           id: @loan_product.id,
           name: @loan_product.name
+        },
+        officer: {
+          id: @officer.id,
+          first_name: @officer.first_name,
+          last_name: @officer.last_name,
+          full_name: "#{@officer.last_name}, #{@officer.first_name}"
         },
         principal: @loan.principal.round(2),
         date_released: @loan.date_released.strftime("%B %d, %Y"),

@@ -9,6 +9,10 @@
         Branch
       %th
         Center
+      %th
+        Membership Date
+      %th
+        Recognition Date
       %th.text-center
         Type
       %th.text-center
@@ -31,6 +35,13 @@
         %td.text-muted
           %small
             #{o.center.name}
+        %td.text-muted
+          %small
+            #{o.date_of_membership}
+        %td.text-muted
+          - if o.recognition_date.present?
+            %small
+              #{o.recognition_date.strftime("%b %d, %Y")}
         %td.text-center
           %small
             #{o.member_type}

@@ -1,8 +1,11 @@
 %table.table.table-sm.table-hover.table-bordered
   %thead
     %tr
+      %th{ width: "5%" }
       %th
         Collection Date
+      %th
+        Date Approved
       %th
         Branch
       %th.text-right
@@ -13,10 +16,16 @@
   %tbody
     - @withdrawal_collections.each do |o|
       %tr
-        %td
+        %td.text-center
           = link_to withdrawal_collection_path(o) do
+            .fa.fa-search
+        %td
+          %strong
+            #{o.collection_date.strftime("%b %d, %Y")}
+        %td
+          - if o.date_approved.present?
             %strong
-              #{o.collection_date.strftime("%b %d, %Y")}
+              #{o.date_approved.strftime("%b %d, %Y")}
         %td
           #{o.branch}
         %td.text-right

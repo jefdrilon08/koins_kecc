@@ -349,6 +349,20 @@ namespace :load do
     puts "Done."
   end
 
+  task :membership_payments_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertMembershipPaymentsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
+
   task :update_loan_products_from_file => :environment do
     puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
 

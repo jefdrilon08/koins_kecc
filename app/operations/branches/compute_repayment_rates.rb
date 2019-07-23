@@ -5,6 +5,8 @@ module Branches
       @branch = @config[:branch]
       @as_of  = @config[:as_of] || Date.today
 
+      @manual_aging = @config[:manual_aging] || false
+
       @data = {
         branch: {
           id: @branch.id,
@@ -30,7 +32,8 @@ module Branches
         temp_loan = ::Reports::GenerateLoanRepaymentReport.new(
                       config: {
                         loan: loan,
-                        as_of: @as_of
+                        as_of: @as_of,
+                        manual_aging: @manual_aging
                       }
                     ).execute!
 

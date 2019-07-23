@@ -18,6 +18,10 @@ class MembershipPaymentCollection < ApplicationRecord
     self.status != "pending"
   end
 
+  def or_number
+    self.data.with_indifferent_access[:or_number]
+  end
+
   def member_ids
     records = []
     self.data.with_indifferent_access[:records].each do |o|

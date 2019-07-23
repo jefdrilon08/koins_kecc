@@ -255,7 +255,7 @@ module Loans
             }
 
             temp_amount -= amount
-          elsif s_deduction.membership_type == "Insurance" and @member.status == "pending"
+          elsif s_deduction.membership_type == "Insurance" and @member.insurance_status == "pending"
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
             amount          = s_deduction.amount
             name            = accounting_code.name
@@ -413,19 +413,19 @@ module Loans
       end
 
       # Insurance membership
-      if @member.insurance_pending?
-        accounting_code = AccountingCode.find(@settings_insurance_membership.accounting_code_id)
-        amount          = @settings_insurance_membership.fee
-
-        journal_entries << {
-          accounting_code_id: accounting_code.id,
-          code: accounting_code.code,
-          name: accounting_code.name,
-          amount: amount
-        }
-
-        temp_amount -= amount
-      end
+#      if @member.insurance_pending?
+#        accounting_code = AccountingCode.find(@settings_insurance_membership.accounting_code_id)
+#        amount          = @settings_insurance_membership.fee
+#
+#        journal_entries << {
+#          accounting_code_id: accounting_code.id,
+#          code: accounting_code.code,
+#          name: accounting_code.name,
+#          amount: amount
+#        }
+#
+#        temp_amount -= amount
+#      end
 
       # Cash in bank for amount released
       accounting_code = AccountingCode.find(@settings_branch_accounting_codes.cash_in_bank_accounting_code_id)

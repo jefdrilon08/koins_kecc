@@ -28,6 +28,7 @@ class DataStore < ApplicationRecord
   scope :dropout_rates, -> { where("meta->>'data_store_type' = ?", "DROPOUT_RATE") }
   scope :icpr, -> { where("meta->>'data_store_type' = ?", "ICPR") }
   scope :patronage_refund, -> { where("meta->>'data_store_type' = ?", "PATRONAGE_REFUND") }
+  scope :manual_aging, -> { where("meta->>'data_store_type' = ?", "MANUAL_AGING") }
 
   before_validation :load_defaults
 

@@ -7,7 +7,7 @@ module DataStores
       @start_date       = @config[:start_date]
       @end_date         = @config[:end_date]
       @branch           = @config[:branch]
-      @data_store_type  = @config[:data_store_type] || "SOA_LOANS"
+      @data_store_type  = @config[:data_store_type] || "SOA_FUNDS"
 
       if @config.has_key?(:id)
         @data_store = DataStore.find(config[:id])

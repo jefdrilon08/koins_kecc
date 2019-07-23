@@ -1,10 +1,16 @@
 = form_tag "", method: 'GET' do
   .row
-    .col-md-5
+    .col-md-4
       .form-group
         %label
           Query
         = text_field_tag :q, @q, class: 'form-control', placeholder: 'Name / ID Number'
+    .col-md-1
+      .form-group
+        %label
+          Restored
+        %br
+        = check_box_tag :restored, false, @restored, class: 'form-control'
     .col-md-2
       .form-group
         %label

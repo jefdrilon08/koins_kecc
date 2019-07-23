@@ -105,11 +105,26 @@ class Member < ApplicationRecord
   end
 
   def date_of_membership
-    record  = MembershipPaymentRecord.paid.where(
-                member_id: self.id
-              ).order(
-                "date_paid DESC"
-              ).first
+    default_membership_name = Settings.try(:default_membership).try(:name)
+    default_membership_type = Settings.try(:default_membership).try(:type)
+
+    if default_membership_name.present? and default_membership_type.present?
+      record  = MembershipPaymentRecord.paid.where(
+                  "member_id = ? AND membership_type = ? AND membership_name = ?",
+                  self.id,
+                  default_membership_type,
+                  default_membership_name
+                ).order(
+                  "date_paid DESC"
+                ).first
+    else
+      record  = MembershipPaymentRecord.paid.where(
+                  "member_id = ?",
+                  self.id
+                ).order(
+                  "date_paid DESC"
+                ).first
+    end
 
     if record.present?
       record.date_paid.strftime("%b %d, %Y")

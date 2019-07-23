@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   # Monitoring
   get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
   get "/monitoring/accounting_entry_precision", to: "monitoring#accounting_entry_precision", as: :monitoring_accounting_entry_precision
+  get "/monitoring/no_membership_payments", to: "monitoring#no_membership_payments"
 
   # Members
   get "/members", to: "members#index"
@@ -109,6 +110,9 @@ Rails.application.routes.draw do
 
   get "/equity_accounts", to: "equity_accounts#index"
   get "/equity_accounts/:id", to: "equity_accounts#show", as: :equity_account
+
+  # Membership payment records
+  resources :membership_payment_records, only: [:destroy]
 
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
@@ -229,6 +233,9 @@ Rails.application.routes.draw do
     get "/repayment_rates/:id", to: "repayment_rates#show"
     delete "/repayment_rates/:id", to: "repayment_rates#destroy"
 
+    get "/manual_aging", to: "manual_aging#index"
+    get "/manual_aging/:id", to: "manual_aging#show"
+    delete "/manual_aging/:id", to: "manual_aging#destroy"
 
   end
 
