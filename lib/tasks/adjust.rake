@@ -591,38 +591,6 @@ namespace :adjust do
           num_weeks_past_due       = (amt_past_due / default_periodic_payment)
           days_lapsed              = (current_date - last_payment_date).to_i
           
-          
-# =======
-#         member_account = member_accounts.select{ |o| o[:member_id] == member.id }.first
-
-#         transactions  = account_transactions.select{ |o| o[:subsidiary_id] == member_account.id }
-
-#         if transactions.size > 0
-#           latest_payment    = transactions.last
-#           last_payment_date = transactions.last[:transacted_at].to_date
-
-#           current_balance          = latest_payment ? latest_payment.data.with_indifferent_access[:ending_balance].to_i : 0.00
-
-#           # Code
-#           num_days                 = (current_date - start_date).to_i
-#           num_weeks                = (num_days / 7).to_i
-#           insured_amount           = num_weeks * default_periodic_payment
-         
-#           # latest_transaction_date  = latest_payment ? latest_payment.transacted_at.to_date : start_date
-
-#           # num_days_insured         = (latest_transaction_date.to_date  - start_date).to_i
-#           # num_weeks_insured        = (num_days_insured / 7).to_i
-
-#           # insured_amount           = num_weeks  * default_periodic_payment.to_i
-#           # coverage_date            = (start_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
-#           amt_past_due             = (current_balance - insured_amount).to_i * -1
-#           # num_weeks_past_due       = (amt_past_due / default_periodic_payment).to_i
-
-#           days_lapsed = (current_date - last_payment_date).to_i
-
-          
-#           if current_balance == 0.00 && latest_payment.data.with_indifferent_access[:is_withdraw_payment] == true
-# >>>>>>> a4aa6ad75740c4750b934166cb9a3130e2f41165
           if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true
             member.update(insurance_status: "resigned")
           elsif current_balance == 0.00
@@ -665,4 +633,31 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :insert_child_as_legal_dependent => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      record = LegalDependent.where(first_name: row['first_name'], middle_name: row['middle_name'], last_name: row['last_name']).first
+
+      if record.nil?
+        legal_dependent = LegalDependent.new
+        legal_dependent.first_name = row['first_name']
+        legal_dependent.middle_name = row['middle_name']
+        legal_dependent.last_name = row['last_name']
+        legal_dependent.date_of_birth = row['dob']
+        # legal_dependent.relationship = 'Child'
+        legal_dependent.member_id = member.id
+
+        legal_dependent.save!
+      else
+        record.update!(date_of_birth: row['dob'])
+      end
+      puts "Updating dependents of #{identification_number}...#{member.full_name}..."
+    end
+  end
+
 end

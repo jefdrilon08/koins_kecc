@@ -37,6 +37,7 @@ module DataStores
             "Golden-K",
             "Savings Investment Fund",
             "Personal Savings Account",
+            "Time Deposit",
             "Retirement Fund",
             "Life Insurance Fund",
             "Share Capital",
@@ -49,11 +50,12 @@ module DataStores
           @goldenk_total = 0
           @sifund_total = 0
           @psa_total = 0
+          @timed_total = 0
           @rt_total = 0
           @lif_total = 0
           @sc_total = 0
           @cbu_total = 0
-
+          
 
           @records.each_with_index do |record, i|
             
@@ -63,19 +65,19 @@ module DataStores
             row << "#{record[:center][:name]}"
               record[:accounts].each do |a|
                 row << a[:balance]
-                @kimpok_total = row[:balance] + a[:balance]
               end
               
-            #@kimpok_total += record[:accounts][0][:balance].to_d
+            @kimpok_total += record[:accounts][0][:balance].to_d
             @goldenk_total += record[:accounts][1][:balance].to_d
             @sifund_total += record[:accounts][2][:balance].to_d
             @psa_total += record[:accounts][3][:balance].to_d
-            @rt_total += record[:accounts][4][:balance].to_d
-            @lif_total += record[:accounts][5][:balance].to_d
-            @sc_total  += record[:accounts][6][:balance].to_d
-            @cbu_total += record[:accounts][7][:balance].to_d
+            @timed_total += record[:accounts][4][:balance].to_d
+            @rt_total += record[:accounts][5][:balance].to_d
+            @lif_total += record[:accounts][6][:balance].to_d
+            @sc_total  += record[:accounts][7][:balance].to_d
+            @cbu_total += record[:accounts][8][:balance].to_d
             @count += 1
-            sheet.add_row row    
+            sheet.add_row row      
           end
       
           sheet.add_row []
@@ -87,13 +89,14 @@ module DataStores
             @goldenk_total, 
             @sifund_total,
             @psa_total,
+            @timed_total,
             @rt_total,
             @lif_total,
             @sc_total,
             @cbu_total,
             ""
             ],
-          style: [label_cell, count_cell, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold,currency_cell_right_bold]
+          style: [label_cell, count_cell, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold]
            
           sheet.add_row []
         end
