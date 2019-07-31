@@ -1,0 +1,32 @@
+= render partial: "no_membership_payments_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                  Member
+                %th
+                  Branch
+                %th
+                  Center
+                %th
+                  Date of Equity Transaction
+            %tbody
+              - @data[:members].each do |m|
+                %tr
+                  %td
+                    = link_to member_path(m[:member][:id]), target: '_blank' do
+                      #{m[:member][:last_name]}, #{m[:member][:first_name]} #{m[:member][:middle_name]}
+                  %td
+                    #{m[:branch][:name]}
+                  %td
+                    #{m[:center][:name]}
+                  %td
+                    #{m[:date_of_equity_transaction]}
+
+          = paginate @members

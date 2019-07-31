@@ -1,7 +1,7 @@
 import React from 'react';
 import {numberWithCommas, numberAsPercent} from '../../utils/helpers';
 
-export default class MasterListView extends React.Component {
+export default class RepaymentRatesView extends React.Component {
   constructor(props) {
     super(props);
 

@@ -10,3 +10,6 @@
       = link_to "download_backup", class: "btn" do
         .fa.fa-download
         Download Backup
+      = link_to members_path(status: 'pending'), class: "btn" do
+        .fa.fa-arrow-right
+        Pending Records (#{pending_count(@branches)})

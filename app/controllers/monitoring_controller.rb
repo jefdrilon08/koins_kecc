@@ -8,4 +8,23 @@ class MonitoringController < ApplicationController
   def accounting_entry_precision
     @branches = @branches.map{ |o| { id: o.id, name: o.name } }
   end
+
+  def no_membership_payments
+    @members  = Member.active
+
+    if @branches.present?
+      @members  = @members.where(branch_id: @branches.pluck(:id))
+    end
+
+    @members  = @members.where.not(id: MembershipPaymentRecord.all.pluck(:member_id).uniq)
+
+    @members  = @members.order("last_name ASC").page(@page).per(100)
+
+    @data = ::Monitoring::FetchMembersWithNoMembershipPaymentRecords.new(
+              config: {
+                branches: @branches,
+                members: @members
+              }
+            ).execute!
+  end
 end

@@ -5,6 +5,7 @@ class MembersController < ApplicationController
     @members  = Member.select("*").where(branch_id: @branches.pluck(:id))
     @q        = params[:q]
     @status   = params[:status]
+    @restored = params[:restored].present?
     @center   = Center.where(id: params[:center_id]).first
     @branch   = Branch.where(id: params[:branch_id]).first
 
@@ -27,6 +28,10 @@ class MembersController < ApplicationController
 
     if @status.present?
       @members  = @members.where(status: @status)
+    end
+
+    if @restored.present?
+      @members  = @members.where("data->'restoration_records' IS NOT NULL")
     end
 
     @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(100)
@@ -73,6 +78,8 @@ class MembersController < ApplicationController
     
 
     @member_shares  = @member.member_shares.order("created_at ASC")
+
+    @membership_payments  = @member.membership_payment_records.where("amount > 0").order("date_paid ASC")
 
     @surveys        = Survey.all.order("name ASC")
     @survey_answers = SurveyAnswer.where(

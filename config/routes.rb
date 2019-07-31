@@ -43,10 +43,13 @@ Rails.application.routes.draw do
   get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
   get "/seriatim", to: "pages#seriatim", as: :seriatim
   get "/pages/seriatim_report", to: "pages#seriatim_report", as: :pages_seriatim_report
-
+  get "/daily_report_insurance_account_status", to: "pages#daily_report_insurance_account_status", as: :daily_report_insurance_account_status
+  get "/pages/daily_report_insurance_account_status_excel", to: "pages#daily_report_insurance_account_status_excel", as: :daily_report_insurance_account_status_excel
+  
   # Monitoring
   get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
   get "/monitoring/accounting_entry_precision", to: "monitoring#accounting_entry_precision", as: :monitoring_accounting_entry_precision
+  get "/monitoring/no_membership_payments", to: "monitoring#no_membership_payments"
 
   # Members
   get "/members", to: "members#index"
@@ -108,6 +111,9 @@ Rails.application.routes.draw do
 
   get "/equity_accounts", to: "equity_accounts#index"
   get "/equity_accounts/:id", to: "equity_accounts#show", as: :equity_account
+
+  # Membership payment records
+  resources :membership_payment_records, only: [:destroy]
 
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
@@ -228,6 +234,9 @@ Rails.application.routes.draw do
     get "/repayment_rates/:id", to: "repayment_rates#show"
     delete "/repayment_rates/:id", to: "repayment_rates#destroy"
 
+    get "/manual_aging", to: "manual_aging#index"
+    get "/manual_aging/:id", to: "manual_aging#show"
+    delete "/manual_aging/:id", to: "manual_aging#destroy"
 
   end
 
@@ -266,8 +275,8 @@ Rails.application.routes.draw do
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
-
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
+
 end

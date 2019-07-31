@@ -108,7 +108,15 @@
           .card-body
             %center
               %img{ src: @member.signature_data, width: "100", id: "signature-display" }
-    - if @member.active?
+    - if Settings.activate_microinsurance and @member.active? 
+      %hr
+      %h6
+        Resign from Insurance
+      %div
+        #btn-resign-from-insurance.btn.btn-danger.btn-block
+          .fa.fa-times
+          Resign from Insurance
+    - else 
       %hr
       %h6
         Resignation

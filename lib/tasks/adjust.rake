@@ -553,13 +553,16 @@ namespace :adjust do
   end
   task :update_member_insurance_status => :environment do
     puts "Updating member insurance status"
-    members = Member.all
-    current_date = Date.today
-    
-    member_accounts      = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
-    account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id)).order("transacted_at ASC")
+    members = Member.all.order("members.id DESC")
+    # =======
+    #     members = Member.all
+    #     current_date = Date.today
+        
+    #     member_accounts      = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
+    #     account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id)).order("transacted_at ASC")
 
-    default_periodic_payment = 15
+    #     default_periodic_payment = 15
+    # >>>>>>> a4aa6ad75740c4750b934166cb9a3130e2f41165
     size  = members.size
 
     members.each_with_index do |member, i|
@@ -567,40 +570,28 @@ namespace :adjust do
       printf("\r(#{i+1}/#{size}): Validating #{member.id}... #{progress}%%")
 
       puts "Updating #{member.id} - #{member.full_name}"
-      start_date = member.data.with_indifferent_access[:recognition_date].try(:to_date)
+      default_periodic_payment  = 15
+      recognition_date          = member.recognition_date
+      current_date              = Date.today
 
+      if recognition_date.present?
+          member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).last
+          account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id).order("transacted_at ASC")
 
-      if start_date.present?
-       
-        member_account = member_accounts.select{ |o| o[:member_id] == member.id }.first
-
-        transactions  = account_transactions.select{ |o| o[:subsidiary_id] == member_account.id }
-
-        if transactions.size > 0
-          latest_payment    = transactions.last
-          last_payment_date = transactions.last[:transacted_at].to_date
-
-          current_balance          = latest_payment ? latest_payment.data.with_indifferent_access[:ending_balance].to_i : 0.00
-
-          # Code
-          num_days                 = (current_date - start_date).to_i
-          num_weeks                = (num_days / 7).to_i
+        if account_transactions.size > 0
+          latest_payment    = member_accounts
+          latest            = account_transactions.last
+          last_payment_date = account_transactions.last[:transacted_at].to_date
+           # Code
+          current_balance          = latest_payment.balance.to_i
+          num_days                 = (current_date - recognition_date).to_i
+          num_weeks                = (num_days / 7).to_i + 1
           insured_amount           = num_weeks * default_periodic_payment
-         
-          # latest_transaction_date  = latest_payment ? latest_payment.transacted_at.to_date : start_date
-
-          # num_days_insured         = (latest_transaction_date.to_date  - start_date).to_i
-          # num_weeks_insured        = (num_days_insured / 7).to_i
-
-          # insured_amount           = num_weeks  * default_periodic_payment.to_i
-          # coverage_date            = (start_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
           amt_past_due             = (current_balance - insured_amount).to_i * -1
-          # num_weeks_past_due       = (amt_past_due / default_periodic_payment).to_i
-
-          days_lapsed = (current_date - last_payment_date).to_i
-
+          num_weeks_past_due       = (amt_past_due / default_periodic_payment)
+          days_lapsed              = (current_date - last_payment_date).to_i
           
-          if current_balance == 0.00 && latest_payment.data.with_indifferent_access[:is_withdraw_payment] == true
+          if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true
             member.update(insurance_status: "resigned")
           elsif current_balance == 0.00
             member.update(insurance_status: "dormant")
@@ -617,7 +608,7 @@ namespace :adjust do
           elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
             member.update(insurance_status: "inforce")  
           end
-        elsif transactions.size == 0
+        elsif account_transactions.size == 0
           member.update(insurance_status: "dormant")
         end
       else
@@ -627,7 +618,7 @@ namespace :adjust do
       if member.member_type == "GK"
         member.update(insurance_status: "resigned")
       elsif member.status == "resigned"
-        if member.data.with_indifferent_access[:recognition_date].nil?
+        if member.recognition_date.nil?
           member.update(insurance_status: "pending")
         else
           member.update(insurance_status: "resigned")
@@ -642,4 +633,31 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :insert_child_as_legal_dependent => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      record = LegalDependent.where(first_name: row['first_name'], middle_name: row['middle_name'], last_name: row['last_name']).first
+
+      if record.nil?
+        legal_dependent = LegalDependent.new
+        legal_dependent.first_name = row['first_name']
+        legal_dependent.middle_name = row['middle_name']
+        legal_dependent.last_name = row['last_name']
+        legal_dependent.date_of_birth = row['dob']
+        # legal_dependent.relationship = 'Child'
+        legal_dependent.member_id = member.id
+
+        legal_dependent.save!
+      else
+        record.update!(date_of_birth: row['dob'])
+      end
+      puts "Updating dependents of #{identification_number}...#{member.full_name}..."
+    end
+  end
+
 end

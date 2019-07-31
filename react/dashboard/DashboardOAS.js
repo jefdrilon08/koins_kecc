@@ -1,9 +1,25 @@
 import React from 'react';
 import $ from 'jquery';
 import Select from 'react-select';
+import Modal from 'react-modal';
 
 import SkCubeLoading from '../SkCubeLoading';
 import {numberAsPercent, numberWithCommas} from '../utils/helpers';
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    height                : '50%',
+    overlfow              : 'scroll'
+  }
+};
+
+Modal.setAppElement('#dashboard-content');
 
 export default class DashboardOAS extends React.Component {
   constructor(props) {
@@ -16,9 +32,12 @@ export default class DashboardOAS extends React.Component {
         centers: []
       },
       branches: [],
+      centers: [],
       data: {
       },
-      isLoading: true
+      currentMemberList: [],
+      isLoading: true,
+      modalCycleCountSummaryIsOpen: false
     }
   }
 
@@ -45,7 +64,9 @@ export default class DashboardOAS extends React.Component {
           data: {
             branch_loans_stats: response.branch_loans_stats,
             member_counts: response.member_counts,
-            watchlist: response.watchlist
+            watchlist: response.watchlist,
+            centers: response.centers,
+            cycle_count_summary: response.cycle_count_summary
           },
           isLoading: false
         });
@@ -55,6 +76,42 @@ export default class DashboardOAS extends React.Component {
         alert("Error in fetching branches!");
       }
     });
+  }
+
+  closeCycleCountSummaryModal() {
+    this.setState({
+      modalCycleCountSummaryIsOpen: false
+    });
+  }
+
+  openCycleCountSummaryModal() {
+    this.setState({
+      modalCycleCountSummaryIsOpen: true
+    });
+  }
+
+  handleCycleCountClicked(loanProductId, cycle) {
+    var o = this.state.data.cycle_count_summary;
+
+    var members = [];
+
+    for(var i = 0; i < o.records.length; i++) {
+      for(var j = 0; j < o.records[i].loan_products.length; j++) {
+        if(o.records[i].loan_products[j].id == loanProductId && o.records[i].cycle == cycle) {
+          for(var k = 0; k < o.records[i].loan_products[j].records.length; k++) {
+            members.push(o.records[i].loan_products[j].records[k]);
+          }
+        }
+      }
+    }
+
+    this.setState({
+      currentMemberList: members
+    });
+
+    console.log(members);
+
+    this.openCycleCountSummaryModal();
   }
 
   handleBranchChanged(o) {
@@ -90,7 +147,9 @@ export default class DashboardOAS extends React.Component {
           data: {
             branch_loans_stats: response.branch_loans_stats,
             member_counts: response.member_counts,
-            watchlist: response.watchlist
+            watchlist: response.watchlist,
+            centers: response.centers,
+            cycle_count_summary: response.cycle_count_summary
           },
           isLoading: false
         });
@@ -156,9 +215,6 @@ export default class DashboardOAS extends React.Component {
 
   renderBranchLoansStats() {
     var o = this.state.data.branch_loans_stats;
-
-    console.log("Branch Loans Stats");
-    console.log(o);
 
     if(this.state.isLoading) {
       return  (
@@ -327,6 +383,137 @@ export default class DashboardOAS extends React.Component {
     }
   }
 
+  renderCycleCountSummary() {
+    var o = this.state.data.cycle_count_summary;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found for cycle count summary.
+        </p>
+      );
+    } else {
+      var rows  = [];
+
+      for(var i = 0; i < o.records.length; i++) {
+        var cols = [];
+
+        for(var j = 0; j < o.records[i].loan_products.length; j++) {
+          cols.push(
+            <td key={"row-" + i + "-" + o.records[i].loan_products[j].id} className="text-center">
+              <a href="#" onClick={this.handleCycleCountClicked.bind(this, o.records[i].loan_products[j].id, o.records[i].cycle)}>
+                {o.records[i].loan_products[j].count}
+              </a>
+            </td>
+          );
+        }
+
+        rows.push(
+          <tr key={"cycle-count-summary-" + i}>
+            <td key={"cycle-val-" + i} className="text-center">
+              {o.records[i].cycle}
+            </td>
+            {cols}
+            <td key={"cycle-total-" + i} className="text-center">
+              {o.records[i].total}
+            </td>
+          </tr>
+        );
+      }
+
+      return (
+        <div>
+          <Modal
+            isOpen={this.state.modalCycleCountSummaryIsOpen}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <h2>
+              Member List
+            </h2>
+            <hr/>
+            <table className="table table-sm table-bordered">
+              <thead>
+                <tr>
+                  <th width={"5%"}>
+                  </th>
+                  <th>
+                    Name
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  this.state.currentMemberList.map((m, index) => (
+                      <tr key={"member-" + index}>
+                        <td className="text-center">
+                          <a href={"/members/" + m.member.id + "/display"}>
+                            <span className="fa fa-search"/>
+                          </a>
+                        </td>
+                        <td>
+                          {m.member.last_name}, {m.member.first_name}
+                        </td>
+                      </tr>
+                    )
+                  )
+                }
+              </tbody>
+            </table>
+            <hr/>
+            <button 
+              onClick={this.closeCycleCountSummaryModal.bind(this)}
+              className="btn btn-danger btn-sm"
+            >
+              <span className="fa fa-times"/>
+              Close
+            </button>
+          </Modal>
+
+          <h5>
+            Loan Cycle Count Summary
+          </h5>
+
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm">
+              <thead>
+                <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                  {
+                    o.headers.map((h, index) => (
+                        <th key={"header-" + index} className="text-center" style={{whiteSpace: "nowrap"}}>
+                          {h}
+                        </th>
+                      )
+                    )
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                {rows}
+              </tbody>
+              <tfoot>
+                <tr style={{backgroundColor: "#f0f0f0"}}>
+                  {
+                    o.totals.map((t, index) => (
+                        <th key={"total-" + index} className="text-center">
+                          {t}
+                        </th>
+                      )
+                    )
+                  }
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      );
+    }
+  }
+
   renderWatchlist() {
     var o = this.state.data.watchlist;
 
@@ -423,6 +610,91 @@ export default class DashboardOAS extends React.Component {
     }
   }
 
+  renderMemberTypeCounts(memberTypeCounts) {
+    return (
+      <div className="row">
+        {
+          memberTypeCounts.map((o) => (
+              <div className='col' key={"mem-type-" + o.member_type}>
+                <label>{o.member_type}:&nbsp;</label>
+                <span className="text-muted">
+                  {o.count}
+                </span>
+              </div>
+            )
+          )
+        }
+      </div>
+    );
+  }
+
+  renderCenters() {
+    var o = this.state.data.centers;
+
+    if(this.state.isLoading) {
+      return  (
+        <SkCubeLoading/>
+      );
+    } else if(!o) {
+      return  (
+        <p>
+          No data found for centers.
+        </p>
+      );
+    } else {
+      var centerRecords = [];
+      var centers       = this.state.data.centers.centers;
+
+      for(var i = 0; i < centers.length; i++) {
+        centerRecords.push(
+          <tr key={"center-meeting-day-" + i}>
+            <td>
+              {centers[i].name}
+            </td>
+            <td>
+              {centers[i].officer.last_name}, {centers[i].officer.first_name}
+            </td>
+            <td className="text-center">
+              {centers[i].active_count} | {centers[i].pending_count}
+            </td>
+            <td>
+              {centers[i].meeting_day_display}
+            </td>
+          </tr>
+        );
+      }
+
+      return (
+        <div>
+          <h5>
+            Center Meeting Days
+          </h5>
+          <table className="table table-bordered table-sm table-hover">
+            <thead>
+              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                <th>
+                  Name
+                </th>
+                <th>
+                  Officer
+                </th>
+                <th className="text-center">
+                  A | P
+                </th>
+                <th>
+                  Meeting Day
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {centerRecords}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+  }
+
   renderMemberCounts() {
     var o = this.state.data.member_counts;
 
@@ -444,6 +716,7 @@ export default class DashboardOAS extends React.Component {
               Member Counts as of {o.meta.as_of}
             </a>
           </h5>
+          {this.renderMemberTypeCounts(o.data.member_type_counts)}
           <table className="table table-bordered table-sm table-hover">
             <thead>
               <tr style={{backgroundColor: "#797979", color: "#fff"}}>
@@ -546,6 +819,8 @@ export default class DashboardOAS extends React.Component {
         {this.renderBranchLoansStats()} 
         {this.renderMemberCounts()}
         {this.renderWatchlist()}
+        {this.renderCenters()}
+        {this.renderCycleCountSummary()}
       </div>
     );
   }

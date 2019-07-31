@@ -65,6 +65,7 @@ Rails.application.config.assets.precompile += [
   "data_stores/soa_funds/Index.js",
   "data_stores/watchlists/Index.js",
   "data_stores/repayment_rates/Index.js",
+  "data_stores/manual_aging/Index.js",
   "data_stores/branch_repayment_reports/Index.js",
   "data_stores/member_counts/Index.js",
   "data_stores/monthly_new_and_resigned/Index.js",
@@ -111,6 +112,7 @@ Rails.application.config.assets.precompile += [
   "SoaFundsShow.min.react.js",
   "WatchlistsShow.min.react.js",
   "RepaymentRatesShow.min.react.js",
+  "ManualAgingShow.min.react.js",
   "MonthlyClosingCollectionShow.min.react.js",
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js",
   "MonitoringAccountingEntryPrecision.min.react.js",
@@ -136,5 +138,6 @@ Rails.application.config.assets.precompile += [
   "reports/MonthlyCollectionReport.js",
   "member_quarterly_reports.js",
   "data_stores/personal_funds/personal_fund_report.js",
+  "insurance_account_status.js",
   "DashboardMainMii.min.react.js"
 ]
