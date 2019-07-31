@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   get "/members", to: "members#index"
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
+  get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form

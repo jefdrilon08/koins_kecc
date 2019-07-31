@@ -43,6 +43,10 @@ class MembersController < ApplicationController
   def form
   end
 
+  def blip_form_pdf
+    @member = Member.find(params[:id])
+  end
+
   def survey_answer
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])

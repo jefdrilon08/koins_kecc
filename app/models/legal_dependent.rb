@@ -8,6 +8,11 @@ class LegalDependent < ApplicationRecord
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
   end
+  
+  def full_name_upcase
+    "#{first_name.try(:upcase)} #{middle_name.try(:upcase)} #{last_name.try(:upcase)}"
+  end
+
   def age
     if self.date_of_birth.nil?
       "Please set date of birth"

@@ -72,6 +72,10 @@ class Member < ApplicationRecord
     "#{self.last_name}, #{self.first_name}, #{self.middle_name} (#{self.center})"
   end
 
+  def full_address_upcase
+    "#{self.data.with_indifferent_access[:address][:street].upcase}, #{self.data.with_indifferent_access[:address][:district].upcase}, #{self.data.with_indifferent_access[:address][:city].upcase}, PH"
+  end
+
   def recognition_date
     if self.data.with_indifferent_access[:recognition_date].present?
       return self.data.with_indifferent_access[:recognition_date].to_date
