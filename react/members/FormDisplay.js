@@ -385,7 +385,7 @@ export default class FormDisplay extends React.Component {
 
               <div className="card">
                 <div className="card-header">
-                  Personal na Impormasyon ng mga Anak
+                  Personal na Impormasyon ng mga Legal na Dependents
                 </div>
                 <div className="card-body">
                   <FormLegalDependents

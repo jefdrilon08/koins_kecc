@@ -8,4 +8,16 @@ class Beneficiary < ApplicationRecord
   def full_name_upcase
     "#{first_name.try(:upcase)} #{middle_name.try(:upcase)} #{last_name.try(:upcase)}"
   end
+
+  def age
+    if self.date_of_birth.nil?
+      "Please set date of birth"
+    else
+      begin
+        ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
+      rescue Exception
+        "ERR IN AGE"
+      end
+    end
+  end
 end

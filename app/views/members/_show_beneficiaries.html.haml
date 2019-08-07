@@ -1,18 +1,29 @@
-%table.table.table-sm.table-hover
-  %thead
-    %tr
-      %th
-        Name
-      %th
-        Relationship
-      %th
-        Date of Birth
-  %tbody
-    - @member.beneficiaries.each do |o|
+- @member.beneficiaries.each do |o|
+  %span
+    - if o.is_primary
+      .badge.badge-primary
+        Primary
+    - else
+      .badge.badge-warning
+        Secondary
+  %table.table.table-sm.table-hover
+    %thead
       %tr
-        %td
+        %th{:width => "40%"}
+          Name
+        %th{:width => "23%"}
+          Date of Birth
+        %th{:width => "13%"}
+          Age
+        %th{:width => "23%"}
+          Relationship
+    %tbody  
+      %tr       
+        %td  
           #{o.full_name}
         %td
-          #{o.relationship}
-        %td
           #{o.date_of_birth}
+        %td
+          #{o.age}
+        %td
+          #{o.relationship}

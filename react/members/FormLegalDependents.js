@@ -28,7 +28,7 @@ export default class FormLegalDependents extends React.Component {
         middle_name: "",
         last_name: "",
         date_of_birth: "",
-        relationship: "Child",
+        relationship: "",
         data: {
           educational_attainment: "",
           course: ""
@@ -51,6 +51,10 @@ export default class FormLegalDependents extends React.Component {
 
     if(!o.date_of_birth) {
       errors.push("date of birth required");
+    }
+
+    if(!o.relationship) {
+      errors.push("relationship required");
     }
 
     this.setState({
@@ -96,7 +100,7 @@ export default class FormLegalDependents extends React.Component {
         middle_name: "",
         last_name: "",
         date_of_birth: "",
-        relationship: "Child",
+        relationship: "",
         data: {
           educational_attainment: "",
           course: ""
@@ -194,7 +198,7 @@ export default class FormLegalDependents extends React.Component {
   handleCourseChanged(event) {
     var currentLegalDependent = this.state.currentLegalDependent;
 
-    currentLegalDependent.course  = event.target.value.toUpperCase();
+    currentLegalDependent.data.course  = event.target.value.toUpperCase();
 
     this.setState({
       currentLegalDependent: currentLegalDependent
@@ -232,8 +236,12 @@ export default class FormLegalDependents extends React.Component {
       var records = [];
 
       for(var i = 0; i < legalDependents.length; i++) {
-        var name          = legalDependents[i].last_name + ", " + legalDependents[i].first_name;
-        var relationship  = legalDependents[i].relationship;
+        var name                    = legalDependents[i].last_name + ", " + legalDependents[i].first_name;
+        var relationship            = legalDependents[i].relationship;
+        var date_of_birth           = legalDependents[i].date_of_birth;
+        var educational_attainment  = legalDependents[i].educational_attainment;
+        var course                  = legalDependents[i].course;
+        var age                     = legalDependents[i].age;
 
         records.push(
           <tr key={"ld-record-" + i}>
@@ -241,7 +249,19 @@ export default class FormLegalDependents extends React.Component {
               {name}
             </td>
             <td>
+              {date_of_birth}
+            </td>
+            <td>
+              {age}
+            </td>
+            <td>
               {relationship}
+            </td>
+            <td>
+              {educational_attainment}
+            </td>
+            <td>
+              {course}
             </td>
             <td>
               <center>
@@ -263,7 +283,11 @@ export default class FormLegalDependents extends React.Component {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Date of Birth</th>
+              <th>Age</th>
               <th>Relationship</th>
+              <th>Educational Attainment</th>
+              <th>Course</th>
               <th>
                 <center>
                   Actions
@@ -295,7 +319,7 @@ export default class FormLegalDependents extends React.Component {
           style={customStyles}
         >
           <h5>
-            Impormasyon ng Anak
+            Impormasyon ng legal na dependent
           </h5>
           <div className="row">
             <div className="col">
@@ -364,6 +388,22 @@ export default class FormLegalDependents extends React.Component {
                   value={currentLegalDependent.course}
                   onChange={this.handleCourseChanged.bind(this)}
                 />
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>Relasyon</label>
+                <select
+                  className="form-control"
+                  value={currentLegalDependent.relationship}
+                  onChange={this.handleRelationshipChanged.bind(this)}
+                >
+                  <option value="">-- SELECT --</option>
+                  <option value="Child">ANAK</option>
+                  <option value="Spouse">ASAWA</option>
+                  <option value="Parent">MAGULANG</option>
+                  <option value="Sibling">KAPATID</option>
+                </select>
               </div>
             </div>
           </div>
