@@ -54,8 +54,7 @@ module Members
                               date_of_birth: o.date_of_birth,
                               relationship: o.relationship,
                               age: o.age,
-                              educational_attainment: o.data.with_indifferent_access[:educational_attainment],
-                              course: o.data.with_indifferent_access[:course]
+                              data: o.data.with_indifferent_access
                             }
                           }
 

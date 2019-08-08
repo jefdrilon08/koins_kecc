@@ -29,6 +29,7 @@ export default class FormLegalDependents extends React.Component {
         last_name: "",
         date_of_birth: "",
         relationship: "",
+        age: "",
         data: {
           educational_attainment: "",
           course: ""
@@ -101,6 +102,7 @@ export default class FormLegalDependents extends React.Component {
         last_name: "",
         date_of_birth: "",
         relationship: "",
+        age: "",
         data: {
           educational_attainment: "",
           course: ""
@@ -112,6 +114,9 @@ export default class FormLegalDependents extends React.Component {
   handleConfirmSaveClicked() {
     var data    = this.props.data;
     var errors  = this.validateCurrentLegalDependent();
+
+    console.log("Adding current legal dependent:");
+    console.log(this.state.currentLegalDependent);
 
     if(errors.length == 0) {
       data.legal_dependents.push(this.state.currentLegalDependent);
@@ -168,11 +173,24 @@ export default class FormLegalDependents extends React.Component {
   handleDateOfBirthChanged(event) {
     var currentLegalDependent = this.state.currentLegalDependent;
 
-    currentLegalDependent.date_of_birth  = event.target.value;
+    currentLegalDependent.date_of_birth = event.target.value;
+    currentLegalDependent.age           = this.getAge(currentLegalDependent.date_of_birth);
 
     this.setState({
       currentLegalDependent: currentLegalDependent
     });
+  }
+
+  getAge(dateString) 
+  {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
   }
 
   handleRelationshipChanged(event) {
@@ -239,8 +257,8 @@ export default class FormLegalDependents extends React.Component {
         var name                    = legalDependents[i].last_name + ", " + legalDependents[i].first_name;
         var relationship            = legalDependents[i].relationship;
         var date_of_birth           = legalDependents[i].date_of_birth;
-        var educational_attainment  = legalDependents[i].educational_attainment;
-        var course                  = legalDependents[i].course;
+        var educational_attainment  = legalDependents[i].data.educational_attainment;
+        var course                  = legalDependents[i].data.course;
         var age                     = legalDependents[i].age;
 
         records.push(
