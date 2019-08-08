@@ -16,6 +16,15 @@ Exports = (function() {
   var urlExportMemberAccount     = "/exports/member_accounts";
   var urlExportAccountTransaction     = "/exports/account_transactions";
 
+  var encodeQueryData = function(data) {
+    var ret = []
+    for(var d in data) {
+      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+    }
+
+    return ret.join("&");
+  };
+
   var init  = function() {
     $btnDownloadMember.on('click', function() {
       var params    = {
