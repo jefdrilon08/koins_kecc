@@ -11,7 +11,7 @@ module Insurance
     private
 
     def load_csv_file!
-      CSV.foreach(@file, headers: true) do |row|
+      CSV.foreach(@file.path, headers: true) do |row|
         member_id = row['member_id']
         member = Member.where(identification_number: member_id).first
 
