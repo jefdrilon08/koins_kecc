@@ -87,19 +87,40 @@ class InsuranceAccountsController < ApplicationController
     if @errors[:messages].size > 0
       redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
-      # file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
-      # File.write(file_path_to_save, file.read)
 
-      # args = {
-      #   file: file_path_to_save,
-      #   user_full_name: current_user.full_name
-      # }
+      file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
 
-      # ProcessImportInsuranceAccountTransaction.perform_later(args)
-      Insurance::ImportInsuranceAccountTransactionsFromCsvFile.new(file: file).execute!
+      data_store  = DataStore.new(
+                      status: "processing",
+                      meta: {
+                        data_store_type: "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS",
+                        user: {
+                          id: current_user.id,
+                          username: current_user.username,
+                          email: current_user.email,
+                          first_name: current_user.first_name,
+                          last_name: current_user.last_name
+                        },
+                        time_start: Time.now.to_i,
+                        time_end: nil
+                      },
+                      data: {
+                        file_path_to_save: file_path_to_save
+                      }
+                    ) 
+
+      data_store.save!
+      File.write(file_path_to_save, file.read.force_encoding("UTF-8"))
+
+      args = {
+        file: file_path_to_save,
+        data_store_id: data_store.id
+      }
+
+      ProcessImportInsuranceAccountTransaction.perform_later(args)
       flash[:success] = "Successfully Import Insurance Account Transactions For Members."
       
-      redirect_to members_path
+      redirect_to import_insurance_account_transactions_path
     end  
   end
 end

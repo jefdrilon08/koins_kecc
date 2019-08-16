@@ -13,7 +13,7 @@ module Insurance
     def load_csv_file!
       insurance_account_ids = []
 
-      CSV.foreach(@file.path, headers: true) do |row|
+      CSV.foreach(@file, headers: true) do |row|
         uuid = row['uuid']
         insurance_account_transaction_record = AccountTransaction.where(id: uuid).first
 
