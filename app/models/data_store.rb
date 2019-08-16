@@ -61,7 +61,9 @@ class DataStore < ApplicationRecord
   def error?
     self.status == "error"
   end
+
   def approved?
     self.status == "approved"
   end
+
 end

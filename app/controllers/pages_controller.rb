@@ -16,6 +16,13 @@ class PagesController < ApplicationController
     send_file destination_file, filename: filename
   end
 
+  def download_file
+    filename = params[:filename]
+    destination_file = "#{Rails.root}/tmp/#{filename}"
+
+    send_file destination_file, filename: filename
+  end
+
   def index
     @announcements = Announcement.all
   end
@@ -46,7 +53,25 @@ class PagesController < ApplicationController
   def upload_deposit
   end
 
+  def upload_insurance_withdrawal
+  end
+
+  def upload_fund_transfer
+  end
+
   def import_members
+  end
+
+  def import_beneficiaries
+  end
+
+  def import_legal_dependents
+  end
+
+  def import_insurance_accounts
+  end
+
+  def import_insurance_account_transactions
   end
 
   def seriatim_report
@@ -82,4 +107,18 @@ class PagesController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+
+
+  def daily_report_insurance_account_status_excel
+    branch = params[:branch]
+    excel = Pages::GenerateDailyReportInsuranceAccountStatus.new(
+                                                branch: branch
+                                                ).execute!
+
+    filename  = "insurance_account_status.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
 end

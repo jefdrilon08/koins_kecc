@@ -67,8 +67,42 @@
         = link_to upload_deposit_path, class: 'nav-link' do
           %i.nav-icon.fa.fa-file
           Upload Deposit
-    %li{ class: "nav-item #{params[:controller] == '/import_members' ? 'active' : ''}" }
-      = link_to import_members_path, class: 'nav-link' do
+    %li{ class: "nav-item nav-dropdown" }
+      = link_to "#", class: "nav-link nav-dropdown-toggle" do
+        %i.nav-icon.fa.fa-cogs
+        Import Tools
+      %ul.nav-dropdown-items
+        %li{ class: "nav-item #{params[:controller] == '/import_members' ? 'active' : ''}" }
+          = link_to import_members_path, class: 'nav-link' do
+            %i.nav-icon.fa.fa-file
+            Import Members
+        %li{ class: "nav-item #{params[:controller] == '/import_beneficiaries' ? 'active' : ''}" }
+          = link_to import_beneficiaries_path, class: 'nav-link' do
+            %i.nav-icon.fa.fa-file
+            Import Beneficiaries
+        %li{ class: "nav-item #{params[:controller] == '/import_legal_dependents' ? 'active' : ''}" }
+          = link_to import_legal_dependents_path, class: 'nav-link' do
+            %i.nav-icon.fa.fa-file
+            Import Dependents
+    %li{ class: "nav-item nav-dropdown" }
+      = link_to "#", class: "nav-link nav-dropdown-toggle" do
+        %i.nav-icon.fa.fa-cogs
+        Import Transactions
+      %ul.nav-dropdown-items
+        %li{ class: "nav-item #{params[:controller] == '/import_insurance_accounts' ? 'active' : ''}" }
+          = link_to import_insurance_accounts_path, class: 'nav-link' do
+            %i.nav-icon.fa.fa-file
+            Import Insurance Accounts
+        %li{ class: "nav-item #{params[:controller] == '/import_insurance_account_transactions' ? 'active' : ''}" }
+          = link_to import_insurance_account_transactions_path, class: 'nav-link' do
+            %i.nav-icon.fa.fa-file
+            Import Insurance Account Transactions
+    %li{ class: "nav-item #{params[:controller] == '/upload_fund_transfer' ? 'active' : ''}" }
+      = link_to upload_fund_transfer_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
-        Import Members
+        Upload Fund Transfer
+    %li{ class: "nav-item #{params[:controller] == '/upload_insurance_withdrawal' ? 'active' : ''}" }
+      = link_to upload_insurance_withdrawal_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Upload Insurance Withdrawal
     

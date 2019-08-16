@@ -49,6 +49,8 @@ Rails.application.config.assets.precompile += [
   "withdrawal_collections/Show.js",
   "insurance_withdrawal_collections/Index.js",
   "insurance_withdrawal_collections/Show.js",
+  "insurance_fund_transfer_collections/Index.js",
+  "insurance_fund_transfer_collections/Show.js",
   "data_stores/icpr/Index.js",
   "data_stores/icpr/Show.js",
   "data_stores/patronage_refund/Index.js",
@@ -94,6 +96,7 @@ Rails.application.config.assets.precompile += [
   "TimeDepositCollectionUI.min.react.js",
   "WithdrawalCollectionUI.min.react.js",
   "InsuranceWithdrawalCollectionUI.min.react.js",
+  "InsuranceFundTransferCollectionUI.min.react.js",
   "BranchManager.min.react.js",
   "BranchLoanProductStats.min.react.js",
   "LoanApplicationForm.min.react.js",
@@ -131,5 +134,10 @@ Rails.application.config.assets.precompile += [
   "reports/CollectionsBlipReport.js",
   "reports/MemberDependentReport.js",
   "reports/CicReport.js",
-  "Seriatim.js"
+  "Seriatim.js",
+  "reports/MonthlyCollectionReport.js",
+  "member_quarterly_reports.js",
+  "data_stores/personal_funds/personal_fund_report.js",
+  "insurance_account_status.js",
+  "DashboardMainMii.min.react.js"
 ]

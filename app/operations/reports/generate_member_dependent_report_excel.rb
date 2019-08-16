@@ -43,7 +43,7 @@ module Reports
             "GENDER",
             "DOB",
             "AGE",
-            "BRACH",
+            "BRANCH",
             "CENTER"
           ], style: header
 
@@ -77,53 +77,166 @@ module Reports
             end
           
 
-            if member.data['spouse']['first_name'].present? 
-              if member.civil_status == "Kasal" || member.civil_status.try(:upcase) == "MARRIED" || member.civil_status == "May Kinakasama"
-                if member.spouse_age.to_i < 65
-                  dependent_last_name = member.data['spouse']['last_name'].upcase
-                  dependent_first_name = member.data['spouse']['first_name'].upcase
-                  dependent_middle_name = member.data['spouse']['middle_name'].upcase
-                  dependent_date_of_birth = member.data['spouse']['date_of_birth'].try(:upcase) 
-                  dependent_civil_status = civil_status
-                  dependent_gender = gender_spouse
-                  dependent_relationship_to_member = "SPOUSE"
-                  dependent_age = member.spouse_age
-                else
-                  if member.legal_dependents.count > 0
-                    valid_dependents = []
+            # if member.data['spouse']['first_name'].present? 
+            #   if member.civil_status == "Kasal" || member.civil_status.try(:upcase) == "MARRIED" || member.civil_status == "May Kinakasama"
+            #     if member.spouse_age.to_i < 65
+            #       dependent_last_name = member.data['spouse']['last_name'].upcase
+            #       dependent_first_name = member.data['spouse']['first_name'].upcase
+            #       dependent_middle_name = member.data['spouse']['middle_name'].upcase
+            #       dependent_date_of_birth = member.data['spouse']['date_of_birth'].try(:upcase) 
+            #       dependent_civil_status = civil_status
+            #       dependent_gender = gender_spouse
+            #       dependent_relationship_to_member = "SPOUSE"
+            #       dependent_age = member.spouse_age
+            #     else
+            #       if member.legal_dependents.count > 0
+            #         valid_dependents = []
                     
-                  member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
-                      if dependent.age <= 20 
-                        valid_dependents << dependent
-                      end
-                    end
+            #       member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
+            #           if dependent.age <= 20 
+            #             valid_dependents << dependent
+            #           end
+            #         end
                 
-                    if valid_dependents.count > 0
-                      dependent_last_name = valid_dependents.first.last_name.upcase
-                      dependent_first_name = valid_dependents.first.first_name.upcase
-                      dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
-                      dependent_date_of_birth = valid_dependents.first.date_of_birth
-                      dependent_civil_status = "SINGLE"
-                      dependent_gender = "MALE"
-                      dependent_relationship_to_member = "CHILD"
-                      dependent_age = valid_dependents.first.age
-                    else
-                      dependent_last_name = ""
-                      dependent_first_name = ""
-                      dependent_middle_name = ""
-                      dependent_date_of_birth = ""
-                      dependent_civil_status = ""
-                      dependent_gender = ""
-                      dependent_relationship_to_member = ""
-                      dependent_age = "" 
-                    end
+            #         if valid_dependents.count > 0
+            #           dependent_last_name = valid_dependents.first.last_name.upcase
+            #           dependent_first_name = valid_dependents.first.first_name.upcase
+            #           dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+            #           dependent_date_of_birth = valid_dependents.first.date_of_birth
+            #           dependent_civil_status = "SINGLE"
+            #           dependent_gender = "MALE"
+            #           dependent_relationship_to_member = "CHILD"
+            #           dependent_age = valid_dependents.first.age
+            #         else
+            #           dependent_last_name = ""
+            #           dependent_first_name = ""
+            #           dependent_middle_name = ""
+            #           dependent_date_of_birth = ""
+            #           dependent_civil_status = ""
+            #           dependent_gender = ""
+            #           dependent_relationship_to_member = ""
+            #           dependent_age = "" 
+            #         end
+            #       end
+            #     end
+            #   elsif member.civil_status == "Single" || member.civil_status.try(:upcase) == "SINGLE"
+            #     if member.legal_dependents.count > 0    
+            #       valid_dependents = []
+
+            #      member.legal_dependents.order("date_of_birth ASC").each do |dependent|
+            #         if dependent.age >= 60 && dependent.age < 65 
+            #           valid_dependents << dependent
+            #         elsif dependent.age <= 20
+            #           valid_dependents << dependent  
+            #         end
+            #       end
+
+            #       if valid_dependents.count > 0
+            #         if valid_dependents.first.age > 60 
+            #           dependent_last_name = valid_dependents.first.last_name.upcase
+            #           dependent_first_name = valid_dependents.first.first_name.upcase
+            #           dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+            #           dependent_date_of_birth = valid_dependents.first.date_of_birth
+            #           dependent_civil_status = "MARRIED"
+            #           dependent_gender = "FEMALE"
+            #           dependent_relationship_to_member = "PARENT"
+            #           dependent_age = valid_dependents.first.age
+            #         else  
+            #           dependent_last_name = valid_dependents.first.last_name.upcase
+            #           dependent_first_name = valid_dependents.first.first_name.upcase
+            #           dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+            #           dependent_date_of_birth = valid_dependents.first.date_of_birth
+            #           dependent_civil_status = "SINGLE"
+            #           dependent_gender = "MALE"
+            #           dependent_relationship_to_member = "CHILD"
+            #           dependent_age = valid_dependents.first.age
+            #         end
+            #       else
+            #         dependent_last_name = ""
+            #         dependent_first_name = ""
+            #         dependent_middle_name = ""
+            #         dependent_date_of_birth = ""
+            #         dependent_civil_status = ""
+            #         dependent_gender = ""
+            #         dependent_relationship_to_member = ""
+            #         dependent_age = "" 
+            #       end                 
+            #     end
+            #   else
+            #     if member.legal_dependents.count > 0
+            #       valid_dependents = []
+                  
+            #       member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
+            #         if dependent.age <= 20
+            #           valid_dependents << dependent
+            #         end
+            #       end
+              
+            #       if valid_dependents.count > 0
+            #         dependent_last_name = valid_dependents.first.last_name.upcase
+            #         dependent_first_name = valid_dependents.first.first_name.upcase
+            #         dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+            #         dependent_date_of_birth = valid_dependents.first.date_of_birth
+            #         dependent_civil_status = "SINGLE"
+            #         dependent_gender = "MALE"
+            #         dependent_relationship_to_member = "CHILD"
+            #         dependent_age = valid_dependents.first.age
+            #       else
+            #         dependent_last_name = ""
+            #         dependent_first_name = ""
+            #         dependent_middle_name = ""
+            #         dependent_date_of_birth = ""
+            #         dependent_civil_status = ""
+            #         dependent_gender = ""
+            #         dependent_relationship_to_member = ""
+            #         dependent_age = "" 
+            #       end
+            #     end  
+            #   end
+            if member.member_type == "Kaagapay"
+              dependent_last_name = ""
+              dependent_first_name = ""
+              dependent_middle_name = ""
+              dependent_date_of_birth = ""
+              dependent_civil_status = ""
+              dependent_gender = ""
+              dependent_relationship_to_member = ""
+              dependent_age = ""
+            elsif member.legal_dependents.count > 0  
+              valid_dependents = []
+              
+              if member.civil_status == "Kasal" || member.civil_status.try(:upcase) == "MARRIED" || member.civil_status == "MAY Kinakasama" 
+      
+                member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
+                  if dependent.age <= 20
+                    valid_dependents << dependent
                   end
+                end
+                
+                if valid_dependents.count > 0
+                  dependent_last_name = valid_dependents.first.last_name.upcase
+                  dependent_first_name = valid_dependents.first.first_name.upcase
+                  dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+                  dependent_date_of_birth = valid_dependents.first.date_of_birth
+                  dependent_civil_status = "SINGLE"
+                  dependent_gender = "MALE"
+                  dependent_relationship_to_member = "CHILD"
+                  dependent_age = valid_dependents.first.age
+                else
+                  dependent_last_name = ""
+                  dependent_first_name = ""
+                  dependent_middle_name = ""
+                  dependent_date_of_birth = ""
+                  dependent_civil_status = ""
+                  dependent_gender = ""
+                  dependent_relationship_to_member = ""
+                  dependent_age = "" 
                 end
               elsif member.civil_status == "Single" || member.civil_status.try(:upcase) == "SINGLE"
                 if member.legal_dependents.count > 0    
                   valid_dependents = []
 
-                 member.legal_dependents.order("date_of_birth ASC").each do |dependent|
+                  member.legal_dependents.order("date_of_birth ASC").each do |dependent|
                     if dependent.age >= 60 && dependent.age < 65 
                       valid_dependents << dependent
                     elsif dependent.age <= 20
@@ -171,111 +284,6 @@ module Reports
                       valid_dependents << dependent
                     end
                   end
-              
-                  if valid_dependents.count > 0
-                    dependent_last_name = valid_dependents.first.last_name.upcase
-                    dependent_first_name = valid_dependents.first.first_name.upcase
-                    dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
-                    dependent_date_of_birth = valid_dependents.first.date_of_birth
-                    dependent_civil_status = "SINGLE"
-                    dependent_gender = "MALE"
-                    dependent_relationship_to_member = "CHILD"
-                    dependent_age = valid_dependents.first.age
-                  else
-                    dependent_last_name = ""
-                    dependent_first_name = ""
-                    dependent_middle_name = ""
-                    dependent_date_of_birth = ""
-                    dependent_civil_status = ""
-                    dependent_gender = ""
-                    dependent_relationship_to_member = ""
-                    dependent_age = "" 
-                  end
-                end  
-              end
-            elsif member.legal_dependents.count > 0
-              valid_dependents = []
-              
-              if member.civil_status == "Kasal" || member.civil_status.try(:upcase) == "MARRIED" || member.civil_status == "MAY Kinakasama" 
-        
-                member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
-                  if dependent.age <= 20 
-                    valid_dependents << dependent
-                  end
-                end
-                
-                if valid_dependents.count > 0
-                  dependent_last_name = valid_dependents.first.last_name.upcase
-                  dependent_first_name = valid_dependents.first.first_name.upcase
-                  dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
-                  dependent_date_of_birth = valid_dependents.first.date_of_birth
-                  dependent_civil_status = "SINGLE"
-                  dependent_gender = "MALE"
-                  dependent_relationship_to_member = "CHILD"
-                  dependent_age = valid_dependents.first.age
-                else
-                  dependent_last_name = ""
-                  dependent_first_name = ""
-                  dependent_middle_name = ""
-                  dependent_date_of_birth = ""
-                  dependent_civil_status = ""
-                  dependent_gender = ""
-                  dependent_relationship_to_member = ""
-                  dependent_age = "" 
-                end
-              elsif member.civil_status == "Single" || member.civil_status.try(:upcase) == "SINGLE"
-                if member.legal_dependents.count > 0    
-                  valid_dependents = []
-
-                  member.legal_dependents.order("date_of_birth ASC").each do |dependent|
-                    if dependent.age >= 60 && dependent.age < 65
-                      valid_dependents << dependent
-                    elsif dependent.age <= 20
-                        valid_dependents << dependent  
-                    end
-                  end
-
-                  if valid_dependents.count > 0
-                    if valid_dependents.first.age > 60 
-                      dependent_last_name = valid_dependents.first.last_name.upcase
-                      dependent_first_name = valid_dependents.first.first_name.upcase
-                      dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
-                      dependent_date_of_birth = valid_dependents.first.date_of_birth
-                      dependent_civil_status = "MARRIED"
-                      dependent_gender = "FEMALE"
-                      dependent_relationship_to_member = "PARENT"
-                      dependent_age = valid_dependents.first.age
-                    else  
-                      dependent_last_name = valid_dependents.first.last_name.upcase
-                      dependent_first_name = valid_dependents.first.first_name.upcase
-                      dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
-                      dependent_date_of_birth = valid_dependents.first.date_of_birth
-                      dependent_civil_status = "SINGLE"
-                      dependent_gender = "MALE"
-                      dependent_relationship_to_member = "CHILD"
-                      dependent_age = valid_dependents.first.age
-                    end
-                  else
-                    dependent_last_name = ""
-                    dependent_first_name = ""
-                    dependent_middle_name = ""
-                    dependent_date_of_birth = ""
-                    dependent_civil_status = ""
-                    dependent_gender = ""
-                    dependent_relationship_to_member = ""
-                    dependent_age = "" 
-                  end                 
-                end
-              else
-                if member.legal_dependents.count > 0
-                  valid_dependents = []
-                  
-                  member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
-                      if dependent.age <= 20 
-                        valid_dependents << dependent
-                      end
-                    end
-              
               
                   if valid_dependents.count > 0
                     dependent_last_name = valid_dependents.first.last_name.upcase
@@ -376,22 +384,6 @@ module Reports
                       member.branch,
                       member.center.to_s,
                     ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
-                # else
-                #    sheet.add_row [
-                #       "",
-                #       "",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #       "N/A",
-                #     ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil]  
-                # end
             end
           end
         end

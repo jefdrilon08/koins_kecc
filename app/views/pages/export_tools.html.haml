@@ -23,7 +23,7 @@
               .col-md-4
                 .form-group
                   %label End Date
-                  = date_field_tag :end_date, @start_date, class: "form-control", placeholder: "yyyy-mm-dd", id: "filter-end-date"
+                  = date_field_tag :end_date, @end_date, class: "form-control", placeholder: "yyyy-mm-dd", id: "filter-end-date"
           %h5
             CSV Export Personal Informations
           %hr
@@ -85,6 +85,23 @@
                           %i.fa.fa-download
                             %span.info-box-text
                               Export Account Transactions Information
+          %hr
+          %h5
+            Excel Download Tools
+          %hr
+          .box
+            .box-body      
+              #export-member-per-branch-segment
+                .row
+                  .col-md-12
+                    .form-group
+                      = link_to "#", class: 'btn-download-member-per-branch' do
+                        .info-box
+                          %span.info-box-icon.bg-blue
+                          %i.fa.fa-download
+                            %span.info-box-text
+                              Member Excel Download Tools
+
 = javascript_include_tag "exports/Exports"
 
 :javascript

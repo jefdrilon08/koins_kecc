@@ -27,6 +27,8 @@ class Member < ApplicationRecord
   has_many :member_shares
   has_many :membership_payment_records
   has_many :claims, dependent: :delete_all
+  has_many :membership_payment_records
+  has_many :attachment_files
 
   # ActiveStorage
   has_many_attached :attachment_files
@@ -68,6 +70,10 @@ class Member < ApplicationRecord
 
   def full_name_with_center
     "#{self.last_name}, #{self.first_name}, #{self.middle_name} (#{self.center})"
+  end
+
+  def full_address_upcase
+    "#{self.data.with_indifferent_access[:address][:street].upcase}, #{self.data.with_indifferent_access[:address][:district].upcase}, #{self.data.with_indifferent_access[:address][:city].upcase}, PH"
   end
 
   def recognition_date
@@ -209,6 +215,9 @@ class Member < ApplicationRecord
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)/2
   end
 
+  def lif_amount
+    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)
+  end
   def rf_amount
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").sum(:balance)
   end
@@ -267,6 +276,14 @@ class Member < ApplicationRecord
       rescue Exception
         "Invalid date of birth: #{self.data['spouse']['date_of_birth']}"
       end
+    end
+  end
+
+  def full_name_middle_initial
+    if self.middle_name == ""
+      "#{last_name.titleize}, #{first_name.titleize}"
+    else
+      "#{last_name.titleize}, #{first_name.titleize} #{middle_name[0].try(:titleize)}."
     end
   end
 

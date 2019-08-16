@@ -21,6 +21,7 @@ module.exports = {
     TimeDepositCollectionUI: "./react/time_deposit_collections/TimeDepositCollectionUI.js",
     WithdrawalCollectionUI: "./react/withdrawal_collections/WithdrawalCollectionUI.js",
     InsuranceWithdrawalCollectionUI: "./react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUI.js",
+    InsuranceFundTransferCollectionUI: "./react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanApplicationForm: "./react/loans/ApplicationForm.js",
@@ -40,7 +41,8 @@ module.exports = {
     MonitoringAccountingEntrySubsidiaryBalancing: "./react/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision: "./react/monitoring/AccountingEntryPrecision.js",
     MemberAccountInsuranceStatus: "./react/member_accounts/FetchInsuranceStatus.js",
-    IcprShow: "./react/data_stores/icpr/Show.js"
+    IcprShow: "./react/data_stores/icpr/Show.js",
+    DashboardMainMii: "./react/dashboard/MainMii.js"
   },
   module: {
     rules: [

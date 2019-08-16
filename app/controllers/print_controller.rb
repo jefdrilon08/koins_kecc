@@ -10,6 +10,10 @@ class PrintController < ApplicationController
       @accounting_entry_data  = @data[:data]
 
       render "print/accounting_entry", layout: "plain"
+    elsif @data[:type] == "deposit_collection_accounting_entry"
+      @accounting_entry_data  = @data[:data]
+
+      render "print/accounting_entry", layout: "plain"
     elsif @data[:type] == "member_share"
       @member_share_data  = @data[:data]
 
@@ -42,6 +46,10 @@ class PrintController < ApplicationController
       @deposit_collection = @data[:data]
 
       render "print/deposit_collection", layout: "plain"
+    elsif @data[:type] == "insurance_fund_transfer_collection"
+      @insurance_fund_transfer_collection = @data[:data]
+
+      render "print/insurance_fund_transfer_collection", layout: "plain"
     elsif @data[:type] == "time_deposit_collection"
       @deposit_collection = @data[:data]
 

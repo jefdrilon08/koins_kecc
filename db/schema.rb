@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_10_030741) do
+ActiveRecord::Schema.define(version: 2019_06_11_092628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -146,6 +146,15 @@ ActiveRecord::Schema.define(version: 2019_06_10_030741) do
     t.string "short_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "attachment_files", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.string "file_name"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_attachment_files_on_member_id"
   end
 
   create_table "beneficiaries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -288,6 +297,19 @@ ActiveRecord::Schema.define(version: 2019_06_10_030741) do
     t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
+  end
+
+  create_table "insurance_fund_transfer_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_insurance_fund_transfer_collections_on_branch_id"
+    t.index ["center_id"], name: "index_insurance_fund_transfer_collections_on_center_id"
   end
 
   create_table "insurance_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -499,6 +521,7 @@ ActiveRecord::Schema.define(version: 2019_06_10_030741) do
     t.text "signature_data"
     t.boolean "modifiable"
     t.date "previous_date_resigned"
+    t.date "insurance_date_resigned"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
   end
@@ -648,6 +671,7 @@ ActiveRecord::Schema.define(version: 2019_06_10_030741) do
   add_foreign_key "accounting_entries", "accounting_funds"
   add_foreign_key "accounting_entries", "branches"
   add_foreign_key "amortization_schedule_entries", "loans"
+  add_foreign_key "attachment_files", "members"
   add_foreign_key "beneficiaries", "members"
   add_foreign_key "billings", "branches"
   add_foreign_key "billings", "centers"
@@ -662,6 +686,8 @@ ActiveRecord::Schema.define(version: 2019_06_10_030741) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "insurance_fund_transfer_collections", "branches"
+  add_foreign_key "insurance_fund_transfer_collections", "centers"
   add_foreign_key "insurance_withdrawal_collections", "branches"
   add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"

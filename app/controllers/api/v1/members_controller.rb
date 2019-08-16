@@ -466,6 +466,30 @@ module Api
         render json: { members: data }
       end
 
+      def resign
+          member        = Member.where(id: params[:member_id]).first
+          date_resigned = params[:date_resigned]
+          reason        = params[:reason]
+          errors        = ::Members::ValidateResign.new(
+                            member: member,
+                            date_resigned: date_resigned
+                          ).execute!
+
+          if errors.size == 0
+            ::Members::Resign.new(
+              member: member,
+              date_resigned: date_resigned,
+              reason: reason,
+              resigned_by: current_user.full_name
+            ).execute!
+
+            render json: { id: member.id }
+          else
+            render json: { errors: errors }, status: 402
+          end
+        end
+
+
       def generate_access_token
         member  = Member.where(id: params[:id]).first
 

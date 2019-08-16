@@ -184,7 +184,11 @@ namespace :adjust do
   end
 
   task :update_recognition_date_by_loans => :environment do
-    members = Member.active_and_resigned
+    if ENV['INSURANCE_STATUS'].present? && ENV['STATUS'].present?
+      members = Member.where(insurance_status: ENV['insurance_status'], status: ENV['STATUS'])
+    else
+      members = Member.active_and_resigned
+    end
 
     if ENV['BRANCH_ID'].present?
       members = members.where(branch_id: ENV['BRANCH_ID'])
@@ -498,4 +502,163 @@ namespace :adjust do
 
     puts "Done!"
   end
+
+  task :upload_attachment_files_from_dir => :environment do
+    dir_location  = ENV['DIR_LOCATION']
+    puts "Searching in directory #{dir_location}"
+
+    Dir["#{dir_location}/*"].each do |f|
+      if File.directory? f
+        sub_dir_name  = f.split('/').last
+
+        member  = Member.where(identification_number: sub_dir_name).first
+
+        if member
+          puts "Found directory for member #{member.full_name}"
+          Dir["#{f}/*"].each do |ff|
+            if !File.directory? ff
+              filename  = ff.split('/').last.split('.').first
+              
+              attachments = member.attachment_files  
+              attachment = attachments.where(file_name: filename).first
+              if attachment.nil?
+                attachment_file  = AttachmentFile.new(
+                                      file_name: filename,
+                                      member: member
+                                   )
+
+                attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+
+                if attachment_file.save
+                  puts "Successfully uploaded file #{ff} for #{member.identification_number}"
+                else
+                  puts "Error in attaching file #{ff}"
+                end
+              else
+                attachment.file.purge
+                attachment.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                attachment.update(
+                  file_name: filename,
+                  member: member,
+                  )
+                puts "Successfully updated file #{ff} for #{member.identification_number}"
+              end
+            end
+          end
+        else
+          puts "Member #{sub_dir_name} not found"
+        end
+      end
+    end
+  end
+  
+  task :update_member_insurance_status => :environment do
+    puts "Updating member insurance status"
+    members = Member.all.order("members.id DESC")
+    # =======
+    #     members = Member.all
+    #     current_date = Date.today
+        
+    #     member_accounts      = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
+    #     account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id)).order("transacted_at ASC")
+
+    #     default_periodic_payment = 15
+    # >>>>>>> a4aa6ad75740c4750b934166cb9a3130e2f41165
+    size  = members.size
+
+    members.each_with_index do |member, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Validating #{member.id}... #{progress}%%")
+
+      puts "Updating #{member.id} - #{member.full_name}"
+      default_periodic_payment  = 15
+      recognition_date          = member.recognition_date
+      current_date              = Date.today
+
+      if recognition_date.present?
+          member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).last
+          account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id).order("transacted_at ASC")
+
+        if account_transactions.size > 0
+          latest_payment    = member_accounts
+          latest            = account_transactions.last
+          last_payment_date = account_transactions.last[:transacted_at].to_date
+           # Code
+          current_balance          = latest_payment.balance.to_i
+          num_days                 = (current_date - recognition_date).to_i
+          num_weeks                = (num_days / 7).to_i + 1
+          insured_amount           = num_weeks * default_periodic_payment
+          amt_past_due             = (current_balance - insured_amount).to_i * -1
+          num_weeks_past_due       = (amt_past_due / default_periodic_payment)
+          days_lapsed              = (current_date - last_payment_date).to_i
+          
+          if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true
+            member.update(insurance_status: "resigned")
+          elsif current_balance == 0.00
+            member.update(insurance_status: "dormant")
+          elsif days_lapsed <= 45 && current_balance >= insured_amount
+            member.update(insurance_status: "inforce")
+          elsif days_lapsed > 45 && current_balance >= insured_amount
+            member.update(insurance_status: "inforce")
+          elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
+            member.update(insurance_status: "inforce")
+          elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
+            member.update(insurance_status: "lapsed")  
+          elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
+            member.update(insurance_status: "lapsed")
+          elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
+            member.update(insurance_status: "inforce")  
+          end
+        elsif account_transactions.size == 0
+          member.update(insurance_status: "dormant")
+        end
+      else
+        member.update(insurance_status: "pending") 
+      end
+
+      if member.member_type == "GK"
+        member.update(insurance_status: "resigned")
+      elsif member.status == "resigned"
+        if member.recognition_date.nil?
+          member.update(insurance_status: "pending")
+        else
+          member.update(insurance_status: "resigned")
+        end
+      elsif member.status == "pending"
+        member.update(insurance_status: "pending")
+      elsif member.status == "archived"
+        member.update(insurance_status: "dormant")
+      elsif member.status == "cleared"
+        member.update(insurance_status: "cleared")
+      end
+    end
+    puts "Done!"
+  end
+
+  task :insert_child_as_legal_dependent => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      record = LegalDependent.where(first_name: row['first_name'], middle_name: row['middle_name'], last_name: row['last_name']).first
+
+      if record.nil?
+        legal_dependent = LegalDependent.new
+        legal_dependent.first_name = row['first_name']
+        legal_dependent.middle_name = row['middle_name']
+        legal_dependent.last_name = row['last_name']
+        legal_dependent.date_of_birth = row['dob']
+        # legal_dependent.relationship = 'Child'
+        legal_dependent.member_id = member.id
+
+        legal_dependent.save!
+      else
+        record.update!(date_of_birth: row['dob'])
+      end
+      puts "Updating dependents of #{identification_number}...#{member.full_name}..."
+    end
+  end
+
 end

@@ -17,6 +17,11 @@ module Members
 
         if member_record.nil?
           member = Member.new
+
+          if !row['uuid'].nil?
+            member.id = row['uuid']
+          end
+
           insurance_status = row['insurance_status']
 
           member.first_name = row['first_name']
@@ -61,7 +66,14 @@ module Members
             end
           elsif recognition_date.nil?
             member.insurance_status = insurance_status
-            member.status = "pending"
+            
+            if status == "archived"
+              member.status = "archived"
+            elsif status == "resigned"
+              member.status = "resigned"
+            else
+              member.status = "pending"
+            end
           end
 
           birthday = row['date_of_birth']
@@ -152,9 +164,16 @@ module Members
 
           branch_name = row['branch']
           branch = Branch.where(name: branch_name).first
-          cluster = Cluster.first
+
           if branch.nil?
+            if identification_number.present?
+              cluster = Cluster.where(short_name: identification_number[0..1]).first
+            else
+              cluster = Cluster.first
+            end
+
             branch =  Branch.new
+            branch.id = row['branch_id']
             branch.name = row['branch']
             name_branch = row['branch']
             branch.short_name = name_branch[0..3].upcase
@@ -170,6 +189,7 @@ module Members
           center = Center.where(name: center_name, branch_id: branch.id).first
           if center.nil?
             center = Center.new
+            center.id = row['center_id']
             center.name = row['center'].upcase
             center.short_name = row['center'].upcase
             center.meeting_day = 1
@@ -180,12 +200,17 @@ module Members
             member.center = center
           end
 
-          member.identification_number = ::Members::GenerateMemberIdentificationNumber.new(
+          if identification_number.present?
+            member.identification_number = identification_number
+          else
+            member.identification_number = ::Members::GenerateMemberIdentificationNumber.new(
                                                 member: member
                                                 ).execute!
-          
+          end
+
           member.save!
-          member.branch.update(member_counter: member.branch.member_counter + 1)
+          c = member.branch.try(:member_counter) || 0
+          member.branch.update(member_counter: c + 1)
           Members::GenerateMissingAccounts.new(
                           config: { member: member } 
                     ).execute!

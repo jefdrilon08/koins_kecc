@@ -42,7 +42,7 @@ module Members
           proof: ""
         },
         banks: [],
-        legal_dependents: [],
+        # legal_dependents: [],
         beneficiaries: []
       }
 
@@ -51,8 +51,10 @@ module Members
                               id: o.id,
                               first_name: o.first_name,
                               last_name: o.last_name,
+                              date_of_birth: o.date_of_birth,
                               relationship: o.relationship,
-                              age: o.age
+                              age: o.age,
+                              data: o.data.with_indifferent_access
                             }
                           }
 

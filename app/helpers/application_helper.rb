@@ -75,6 +75,20 @@ module ApplicationHelper
     Settings.activate_microinsurance.present? and Settings.activate_microinsurance == true
   end
 
+  def current_month_start
+    d = Date.today
+    current_month = d.month - 1
+    current_year  = d.year
+    Date.civil(current_year, current_month, 1).strftime("%Y-%m-%d")
+  end
+
+  def current_month_end
+    d = Date.today
+    current_month = d.month - 1
+    current_year  = d.year
+    Date.civil(current_year, current_month, -1).strftime("%Y-%m-%d")
+  end
+
   def debug?
     params[:debug].present?
   end

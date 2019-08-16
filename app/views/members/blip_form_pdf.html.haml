@@ -1,0 +1,278 @@
+:css
+  .print-text {
+    font-size: 1.41em;
+    font-family: calibri;
+  }
+
+
+  .print-text-sub {
+    font-size: 1.28em;
+    font-family: calibri;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  table, th, td {
+    border: 1.5px solid black;
+  }
+
+  #kmba{
+    float: left;
+    padding: -100px 5px 5px 5px;
+    width: 12.5%;
+  }
+
+  #micr{
+    float: right;
+    padding: -10px 5px 0px 5px;
+    width: 22%;
+  }
+
+  hr {
+    border-color: black;
+  }
+
+  .header{
+    height: auto;
+    width: auto;
+    border-color: black;
+    border-style: solid;
+    border-width: 3px 3px 1.5px 3px;
+    padding: 5px 5px 5px 5px;
+  }
+
+  .branch_center{
+    height: auto;
+    width: auto ;
+    border-color: black;
+    border-style: solid;
+    border-width: 1.5px 3px 1.5px 3px;
+    padding: 5px 0px 0px 0px;
+  }
+
+  .info{
+    height: auto;
+    width: 100%;
+    border-color: black;
+    border-style: solid;
+    border-width: 1.5px 3px 1.5px 3px;
+    padding: 0px 0px 0px 0px;
+  }
+
+  .sign{
+    height: auto;
+    width: 100%;
+    border-color: black;
+    border-style: solid;
+    border-width: 1.5px 3px 1.5px 3px;
+  }
+
+  .signatories{
+    height: auto;
+    width: 100%;
+    border-color: black;
+    border-style: solid;
+    border-width: 1.5px 3px 1.5px 3px;
+  }
+
+%span.print-text
+  .header
+    %center
+      = image_tag("kmba.ico", :alt => "kmba img", id: "kmba")
+      = image_tag("micr.png", :alt => "micro img", id: "micr")
+      %p
+        %span{style: "font-size: 1.3em;"}
+          KASAGANA-KA Mutual Benefit Association, Inc.
+        %br  
+        5 Don Fracisco Street, Don Enrique Heights, Barangay Holy Spirit, Quezon City
+        %br
+        Tel. No. 990-7915/Fax No. 931-4335 
+        %br
+        E-mail: kasaganaka.mba@gmail.com TIN 246-220-351-000
+%span.print-text-sub
+  .branch_center
+    %left
+      %p
+        %span{style: "font-size: 1.5em; padding: 0px 0px 0px 15px;"}
+          %b
+            %i
+              APPLICATION FOR MEMBERSHIP&emsp;&emsp;
+        DATE FILED:&emsp;&emsp;
+        DATE OF PAYMENT OF FIRST CONTRIBUTION:
+      %p
+        %span{style: "font-size: 1em; padding: 0px 0px 0px 10px;"}
+        %b
+          BRANCH:&nbsp;&nbsp;
+        #{@member.branch.name.upcase}&emsp;&emsp;
+        %b
+          CENTER:&nbsp;&nbsp;
+        #{@member.center.name.upcase}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        %b
+          #{@member.data.with_indifferent_access['recognition_date'].to_date.strftime("%b %d, %Y")}
+%span.print-text  
+  .info
+    %table
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} 
+        %th{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"} APPLICANT
+        %th{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"} SPOUSE (if any)
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} FIRST NAME
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.first_name.upcase}
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.data.with_indifferent_access['spouse']['first_name'].try(:upcase)}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} MIDDLE NAME
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.middle_name.upcase}
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.data.with_indifferent_access['spouse']['middle_name'].try(:upcase)}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} LAST NAME
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.last_name.upcase}
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.data.with_indifferent_access['spouse']['last_name'].try(:upcase)}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} SEX
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.gender.upcase}
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} CIVIL STATUS
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.civil_status.upcase}
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} DATE OF BIRTH
+        %td{style: "width: 25%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.date_of_birth.strftime("%b %d, %Y")}
+        %td{style: "width: 15%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} AGE:&nbsp;#{@member.age}
+        %td{style: "width: 20%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.try(:spouse_date_of_birth)}
+        %td{style: "width: 20%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} AGE:&nbsp;#{@member.spouse_age}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} PLACE OF BIRTH
+        %td{:colspan => "2", style: "width: 80%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.place_of_birth}
+        //%td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} HOME ADDRESS
+        %td{:colspan => "4", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.full_address_upcase}
+        //%td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} CONTACT NUMBER
+        %td{:colspan => "2", style: "width: 36%; text-align: left; height: 25px; padding: 0px 0px 0px 10px;"} #{@member.mobile_number}
+        %td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} OCCUPATION
+        %td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"}
+        %td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"} #{@member.data.with_indifferent_access['spouse']['occupation'].try(:upcase)}
+      %tr
+        %th{style: "width: 20%; text-align: center; height: 25px;"} BUSINESS ADDRESS
+        %td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"}
+        %td{:colspan => "2", style: "width: 36%; text-align: center; height: 25px;"}
+      %tr
+        %th{:colspan => "3", style: "width: 60%; text-align: center; height: 30px;"} LEGAL DEPENDENTS
+        %th{style: "width: 20%; text-align: center; height: 30px;"} BIRTHDATE
+        %th{style: "width: 20%; text-align: center; height: 30px;"} RELATIONSHIP
+      %tr
+        %td{:colspan => "3", style: "width: 60%; text-align: center; height: 30px;"}= @member.legal_dependents.first.try(:full_name_upcase)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.first.try(:date_of_birth)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.first.try(:relationship).try(:upcase)
+      %tr
+        %td{:colspan => "3", style: "width: 60%; text-align: center; height: 30px;"}= @member.legal_dependents.second.try(:full_name_upcase)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.second.try(:date_of_birth)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.second.try(:relationship).try(:upcase)
+      %tr
+        %td{:colspan => "3", style: "width: 60%; text-align: center; height: 30px;"}= @member.legal_dependents.third.try(:full_name_upcase)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.third.try(:date_of_birth)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.third.try(:relationship).try(:upcase)
+      %tr
+        %td{:colspan => "3", style: "width: 60%; text-align: center; height: 30px;"}= @member.legal_dependents.fourth.try(:full_name_upcase)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.fourth.try(:date_of_birth)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.fourth.try(:relationship).try(:upcase)
+      %tr
+        %td{:colspan => "3", style: "width: 60%; text-align: center; height: 30px;"}= @member.legal_dependents.fifth.try(:full_name_upcase)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.fifth.try(:date_of_birth)
+        %td{style: "width: 20%; text-align: center; height: 30px;"}= @member.legal_dependents.fifth.try(:relationship).try(:upcase)
+      %tr
+        %td{:colspan => "5", style: "width: 100%; text-align: center; height: 25px; padding: 5px 25px 5px 25px;"} If married, please attach the Marriage Contract of the applicant and Birth Certificate/s of legal and legally adopted child/ren (if any). If unmerried, please attach the Birth Certificate of the applicant and Marriage Contract of legal parents (if any).
+      %tr
+        %th{:colspan => "3", style: "width: 45%; text-align: center; height: 25px;"} DESIGNATED BENEFICIARIES
+        %th{style: "width: 20%; text-align: center; height: 25px;"} BIRTHDATE
+        %th{style: "width: 20%; text-align: center; height: 25px;"} RELATIONSHIP
+      - if @member.beneficiaries.count == 0
+        %tr
+          %th{style: "width: 15%; text-align: center; height: 25px;"} PRIMARY BENEFICIARY
+          %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}
+          %td{style: "width: 20%; text-align: center; height: 25px;"}
+          %td{style: "width: 20%; text-align: center; height: 25px;"}
+        %tr
+          %th{style: "width: 15%; text-align: center; height: 25px;"} SECONDARY BENEFICIARY
+          %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}
+          %td{style: "width: 20%; text-align: center; height: 25px;"}
+          %td{style: "width: 20%; text-align: center; height: 25px;"}
+      - elsif @member.beneficiaries.count == 1
+        - @member.beneficiaries.each do |bene|
+          - if bene.is_primary
+            %tr
+              %th{style: "width: 15%; text-align: center; height: 25px;"} PRIMARY BENEFICIARY
+              %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}= bene.full_name_upcase
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.date_of_birth.strftime("%b %d, %Y")
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.relationship.try(:upcase)
+          - elsif !bene.is_primary
+            %tr
+              %th{style: "width: 15%; text-align: center; height: 25px;"} PRIMARY BENEFICIARY
+              %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}= bene.full_name_upcase
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.date_of_birth.strftime("%b %d, %Y")
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.relationship.try(:upcase)
+        %tr
+          %th{style: "width: 15%; text-align: center; height: 25px;"} SECONDARY BENEFICIARY
+          %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}
+          %td{style: "width: 20%; text-align: center; height: 25px;"}
+          %td{style: "width: 20%; text-align: center; height: 25px;"}
+      - elsif @member.beneficiaries.count > 1
+        - if !@member.beneficiaries.where(is_primary: true).nil?
+          - @member.beneficiaries.where(is_primary: true).each do |bene|
+            %tr
+              %th{style: "width: 15%; text-align: center; height: 25px;"} PRIMARY BENEFICIARY
+              %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}= bene.full_name_upcase
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.date_of_birth.strftime("%b %d, %Y")
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.relationship.try(:upcase)
+        - else
+        %tr
+          %th{style: "width: 15%; text-align: center; height: 25px;"} SECONDARY BENEFICIARY
+          - @member.beneficiaries.each do |bene|
+            - if !bene.is_primary
+              %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}= bene.full_name_upcase
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.date_of_birth.strftime("%b %d, %Y")
+              %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.relationship.try(:upcase)
+  .sign
+    %center
+      %p{:style => "padding: 7px 7px 7px 7px;"}
+        I hereby state and declare that all the answers contained herein are true and correct and I fully understand that any willful misstatement in this application that would render me eligible for insurance when I would otherwise be ineligible shall be sufficient cause for the cancellation of my membership in the Association at any time such misstatement is known. In addition, the Association has no obligation on whatever claims I will file, except fr the refund of my contributions, if misstatement is known durong claims validation. And I am fully aware that my legal dependents and I are covered by one year waiting period.
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;____________________________________
+        %br
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;SIGNATURE OF THE APPLICANT
+        %br
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;DATE SIGNED: __________________
+        %br  
+  .signatories
+    %table{:style => "width:100%;"}
+      %tr
+        %td{:width => "33%", :height => "33", style: "text-align: center; padding: 15px 0px 15px 0px;"}
+          PROCESSED BY:
+          %br
+          %br
+          ______________________
+          %br
+          TECHNICAL OFFICER
+        %td{:width => "33%", :height => "33",style: "text-align: center; padding: 15px 0px 15px 0px;"}
+          APPROVED BY:
+          %br
+          %br
+          ______________________
+          %br
+          BRANCH MANAGER
+        %td{:width => "33%", :height => "33",style: "text-align: center; padding: 15px 0px 15px 0px;"}
+          CONCURRED BY:
+          %br
+          %br
+            %u
+              SILVIDA REYES ANTIQUERA
+          KMBA GENERAL MANAGER
+
+

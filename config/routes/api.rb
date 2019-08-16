@@ -50,7 +50,7 @@ namespace :api do
     post "/members/generate_missing_accounts", to: "members#generate_missing_accounts"
     post "/members/change_member_type", to: "members#change_member_type"
     post "/members/change_recognition_date", to: "members#change_recognition_date"
-
+    post "/members/resign", to: "members#resign"
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
@@ -185,6 +185,16 @@ namespace :api do
     post "/insurance_withdrawal_collections/add_member", to: "insurance_withdrawal_collections#add_member"
     post "/insurance_withdrawal_collections/remove_member", to: "insurance_withdrawal_collections#remove_member"
 
+    # Insurance Fund Transfer Collection
+    post "/insurance_fund_transfer_collections", to: "insurance_fund_transfer_collections#create"
+    post "/insurance_fund_transfer_collections/modify_transaction_record", to: "insurance_fund_transfer_collections#modify_transaction_record"
+    post "/insurance_fund_transfer_collections/approve", to: "insurance_fund_transfer_collections#approve"
+    post "/insurance_fund_transfer_collections/update_particular", to: "insurance_fund_transfer_collections#update_particular"
+    get "/insurance_fund_transfer_collections/fetch", to: "insurance_fund_transfer_collections#fetch"
+    get "/insurance_fund_transfer_collections/fetch_members", to: "insurance_fund_transfer_collections#fetch_members"
+    post "/insurance_fund_transfer_collections/add_member", to: "insurance_fund_transfer_collections#add_member"
+    post "/insurance_fund_transfer_collections/remove_member", to: "insurance_fund_transfer_collections#remove_member"
+
     #Member Account Validations
     post 'member_account_validations/generate_transaction', to: 'member_account_validations#generate_transaction'
     post 'member_account_validations/add_member', to: 'member_account_validations#add_member'
@@ -209,6 +219,7 @@ namespace :api do
       post "/patronage_refund/approve", to: "patronage_refund#approve"
       post "/personal_funds/queue", to: "personal_funds#queue"
       get "/personal_funds/fetch", to: "personal_funds#fetch"
+      get "/personal_funds/download_excel", to: "personal_funds#download_excel"
       post "/branch_loans_stats/queue", to: "branch_loans_stats#queue"
       post "/accounting_entries_summaries/queue", to: "accounting_entries_summaries#queue"
       post "/soa_expenses/queue", to: "soa_expenses#queue"
@@ -271,5 +282,7 @@ namespace :api do
     get 'reports/collections_blip_reports', to: 'reports#collections_blip_reports'
     get 'reports/member_dependent_reports', to: 'reports#member_dependent_reports'
     get 'reports/cic_reports', to: 'reports#cic_reports'
+    get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
+    get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
   end
 end

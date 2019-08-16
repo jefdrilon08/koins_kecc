@@ -1,0 +1,29 @@
+= link_to new_member_attachment_file_path(@member), class: "btn btn-primary btn-sm" do
+  .fa.fa-plus
+  New Attachment File
+%hr
+- if @member.attachment_files.size == 0
+  %p
+    No attachment files for this member
+- else
+  - @member.attachment_files.each do |attachment_file|
+    %table.table.table-bordered.table-sm.table-hover
+      %thead
+        %tr
+          %th
+            #{attachment_file.file_name}  
+      %tbody
+        %tr
+          %td
+            - if attachment_file.file.attached?        
+              = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true), width: "1135", height: "1000"
+            - else
+              %p
+                No image found
+    = link_to edit_member_attachment_file_path(@member, attachment_file), class: 'btn btn-warning btn-sm' do
+      .fa.fa-pencil-alt
+      Edit
+    = link_to member_attachment_file_path(@member, attachment_file), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: "Are you sure?" } do
+      .fa.fa-times
+      Delete
+    %hr

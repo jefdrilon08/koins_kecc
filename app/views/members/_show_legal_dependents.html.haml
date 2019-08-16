@@ -4,15 +4,27 @@
       %th
         Name
       %th
+        Date of Birth
+      %th
+        Age
+      %th
         Relationship
       %th
-        Date of Birth
+        Educational Attaintment
+      %th
+        Course
   %tbody
     - @member.legal_dependents.each do |o|
       %tr
         %td
           #{o.full_name}
         %td
+          #{o.date_of_birth}
+        %td
+          #{o.age}  
+        %td
           #{o.relationship}
         %td
-          #{o.date_of_birth}
+          #{o.data.with_indifferent_access['educational_attainment']}
+        %td
+          #{o.data.with_indifferent_access['course']}

@@ -13,7 +13,7 @@ var Show  = (function() {
     $modalUpdate      = $("#modal-update");
     $btnUpdate        = $("#btn-update");
     $btnConfirmUpdate = $("#btn-confirm-update");
-
+ 
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   }
