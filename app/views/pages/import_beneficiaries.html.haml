@@ -1,0 +1,21 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-tachometer-alt
+    Import Beneficiaries
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %p#error= flash[:error]
+          = form_tag import_beneficiaries_members_path, multipart: true do
+            .row
+              .col-md-6
+                %label
+                  File
+                = file_field_tag :file, class: "form-control"
+              .col-md-6
+                %label
+                  Actions
+                %br  
+                = submit_tag "Import Beneficiaries Information", :class => "btn btn-primary"

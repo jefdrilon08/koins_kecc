@@ -551,6 +551,7 @@ namespace :adjust do
       end
     end
   end
+  
   task :update_member_insurance_status => :environment do
     puts "Updating member insurance status"
     members = Member.all.order("members.id DESC")

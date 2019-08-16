@@ -23,7 +23,12 @@ module Exports
                             :beginning_balance,
                             :ending_balance,
                             :transaction_date,
-                            :is_adjustment
+                            :is_adjustment,
+                            :is_for_loan_payments,
+                            :is_for_exit_age,
+                            :is_withdraw_payment,
+                            :is_fund_transfer,
+                            :is_interest
                         ]
 
                 @account_transactions.each do |at|
@@ -46,7 +51,12 @@ module Exports
                         at.data.with_indifferent_access[:beginning_balance],
                         at.data.with_indifferent_access[:ending_balance],
                         at.transacted_at.strftime("%Y-%m-%d"),
-                        at.data.with_indifferent_access[:is_adjustment]
+                        at.data.with_indifferent_access[:is_adjustment],
+                        at.data.with_indifferent_access[:is_for_loan_payments],
+                        at.data.with_indifferent_access[:is_for_exit_age],
+                        at.data.with_indifferent_access[:is_withdraw_payment],
+                        at.data.with_indifferent_access[:is_fund_transfer],
+                        at.data.with_indifferent_access[:is_interest]
                         ]
                     end
                 end

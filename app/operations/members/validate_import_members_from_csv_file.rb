@@ -1,5 +1,5 @@
 module Members
-  class ValidateImportMembersCsvFile < AppValidator
+  class ValidateImportMembersFromCsvFile < AppValidator
     def initialize(config:)
       super()
 

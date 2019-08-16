@@ -62,6 +62,18 @@ class PagesController < ApplicationController
   def import_members
   end
 
+  def import_beneficiaries
+  end
+
+  def import_legal_dependents
+  end
+
+  def import_insurance_accounts
+  end
+
+  def import_insurance_account_transactions
+  end
+
   def seriatim_report
     branch = params[:branch]
     as_of = params[:as_of]
