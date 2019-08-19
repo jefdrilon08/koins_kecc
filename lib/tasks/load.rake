@@ -544,4 +544,54 @@ namespace :load do
 
     puts "Done."
   end
+  task :clipclaims_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertClipClaimsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
+  task :blipclaims_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertBlipClaimsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+  task :validations_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertValidationsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+  task :validation_records_from_file => :environment do
+    puts "Reading file #{ENV['FILENAME']} from #{ENV['ROOT']}..."
+
+    params  = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+    }
+
+    ::Loaders::InsertValidationRecordsFromFile.new(params: params).execute!
+
+    puts "Done."
+  end
+
 end

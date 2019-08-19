@@ -1,0 +1,28 @@
+= form_tag summary_of_certificates_and_policies_path, html: { novalidate: true }, method: "GET" do
+  .row
+    .col-sm-3
+      .form-group
+        %label Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
+    .col-sm-3
+      .form-group
+        %label Plan Type
+        = select_tag :plan, options_for_select(["Less than 3 months", "3 months but less than 1 year", "1 year but less than 2 years", "2 years but less than 3 years", "3 years or more"], @plan), class: "form-control select-select2", id: 'plan-type-select', prompt: "-- SELECT --"  
+    .col-sm-3
+      .form-group
+        %label As of
+        = text_field_tag :as_of, nil,  class: "form-control",type: "date" , id: "as-of" 
+    .col-sm-3
+      .form-group
+        %label Actions
+        = link_to "#", id: 'search-btn', class: 'btn btn-primary btn-block' do
+          .fa.fa-download
+          Generate 
+  .row
+    .col-sm-12
+      .sixteen.wide.column
+        #reports-summary-of-certificates-and-policies-section     
+          = render partial: "reports/templates/summary_of_certificates_and_policies"
+= javascript_include_tag "summary_cert_policies"
+
+
