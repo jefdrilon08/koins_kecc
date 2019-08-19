@@ -42,9 +42,21 @@ module Members
           proof: ""
         },
         banks: [],
-        legal_dependents: [],
+        # legal_dependents: [],
         beneficiaries: []
       }
+
+      legal_dependents  = @member.legal_dependents.map{ |o|
+                            {
+                              id: o.id,
+                              first_name: o.first_name,
+                              last_name: o.last_name,
+                              date_of_birth: o.date_of_birth,
+                              relationship: o.relationship,
+                              age: o.age,
+                              data: o.data.with_indifferent_access
+                            }
+                          }
 
       @member_data  = {
         id: @member.id || "",
@@ -64,8 +76,8 @@ module Members
         branch_name: @member.branch.try(:name) || "",
         center_id: @member.center.try(:id) || "",
         center_name: @member.center.try(:name) || "",
-        legal_dependents: @member.legal_dependents,
-        beneficiaries: @member.beneficiaries
+        beneficiaries: @member.beneficiaries,
+        legal_dependents: legal_dependents
       }
 
       @member_data

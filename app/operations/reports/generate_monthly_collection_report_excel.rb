@@ -48,17 +48,17 @@ module Reports
         if d[:name] == "Payable to MBA - RF"
           @dr_ret_fee = trial_balance_data[:current_entries][i][:dr_amount]
           @cr_ret_fee = trial_balance_data[:current_entries][i][:cr_amount]
-          @ret_fee = @cr_ret_fee - @dr_ret_fee
-          if @ret_fee == 0
+          # @ret_fee = @cr_ret_fee - @dr_ret_fee
+          # if @ret_fee == 0
             @ret_fee = @cr_ret_fee
-          end
+          # end
         elsif d[:name] == "Payable to MBA-LIF"
           @dr_life = trial_balance_data[:current_entries][i][:dr_amount]
           @cr_life = trial_balance_data[:current_entries][i][:cr_amount]
-          @life = @cr_life - @dr_life
-          if @life == 0
+          # @life = @cr_life - @dr_life
+          # if @life == 0
             @life = @cr_life
-          end
+          # end
         elsif d[:name] == "Payable to MBA Mem. Fee "
           @dr_mem_fee = trial_balance_data[:current_entries][i][:dr_amount]
           @cr_mem_fee = trial_balance_data[:current_entries][i][:cr_amount]  

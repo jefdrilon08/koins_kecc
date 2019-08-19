@@ -48,6 +48,10 @@ class MembersController < ApplicationController
   def form
   end
 
+  def blip_form_pdf
+    @member = Member.find(params[:id])
+  end
+
   def survey_answer
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
@@ -109,17 +113,60 @@ class MembersController < ApplicationController
         member: row.to_hash
       }
 
-      @errors = Members::ValidateImportMembersCsvFile.new(config: config).execute!
+      @errors = Members::ValidateImportMembersFromCsvFile.new(config: config).execute!
     end
 
     if @errors[:messages].size > 0
-      redirect_to import_members_path
-      flash[:error] = "Error Importing Members"
+      redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       Members::ImportMembersFromCsvFile.new(
                           file: file
                     ).execute!
-      flash[:success] = "Successfully Import Member Record."
+      flash[:success] = "Successfully Imported Members Record."
+      redirect_to members_path
+    end  
+  end
+
+  def import_legal_dependents
+    file = params[:file]
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      config = {  
+        legal_dependent: row.to_hash
+      }
+
+      @errors = Members::ValidateImportLegalDependentsFromCsvFile.new(config: config).execute!
+    end
+
+    if @errors[:messages].size > 0
+      redirect_to import_legal_dependents_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+    else
+      Members::ImportLegalDependentsFromCsvFile.new(
+                          file: file
+                    ).execute!
+      flash[:success] = "Successfully Imported Legal Dependents Record."
+      redirect_to members_path
+    end  
+  end
+
+  def import_beneficiaries
+    file = params[:file]
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      config = {  
+        beneficiary: row.to_hash
+      }
+
+      @errors = Members::ValidateImportBeneficiariesFromCsvFile.new(config: config).execute!
+    end
+
+    if @errors[:messages].size > 0
+      redirect_to import_beneficiaries_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+    else
+      Members::ImportBeneficiariesFromCsvFile.new(
+                          file: file
+                    ).execute!
+      flash[:success] = "Successfully Imported Beneficiaries Record."
       redirect_to members_path
     end  
   end

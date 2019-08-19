@@ -208,7 +208,7 @@ module Reports
               if member.civil_status == "Kasal" || member.civil_status.try(:upcase) == "MARRIED" || member.civil_status == "MAY Kinakasama" 
       
                 member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
-                  if dependent.age <= 21 
+                  if dependent.age <= 20
                     valid_dependents << dependent
                   end
                 end
@@ -239,7 +239,7 @@ module Reports
                   member.legal_dependents.order("date_of_birth ASC").each do |dependent|
                     if dependent.age >= 60 && dependent.age < 65 
                       valid_dependents << dependent
-                    elsif dependent.age <= 21
+                    elsif dependent.age <= 20
                       valid_dependents << dependent  
                     end
                   end
@@ -280,7 +280,7 @@ module Reports
                   valid_dependents = []
                   
                   member.legal_dependents.order("date_of_birth ASC").each do |dependent|  
-                    if dependent.age <= 21 
+                    if dependent.age <= 20
                       valid_dependents << dependent
                     end
                   end

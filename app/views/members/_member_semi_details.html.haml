@@ -124,13 +124,19 @@
         = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
           .fa.fa-times
           Resign Member
-      - if @missing_accounts.size > 0
-        %hr
-        %h6
-          Generate Missing Accounts
-        #btn-generate-missing-accounts.btn.btn-warning.btn-block
-          .fa.fa-sync
-          Generate Missing Accounts
-        .message
-
-        
+    - if @missing_accounts.size > 0
+      %hr
+      %h6
+        Generate Missing Accounts
+      #btn-generate-missing-accounts.btn.btn-warning.btn-block
+        .fa.fa-sync
+        Generate Missing Accounts
+      .message
+    %hr
+    %h6
+      BLIP Form
+    %div
+      #btn.btn-warning.btn-block
+        = link_to member_blip_form_pdf_path(@member), target: "_blank", class: "btn btn-default btn-block" do
+          .fa.fa-download
+          Generate BLIP Form

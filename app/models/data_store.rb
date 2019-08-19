@@ -29,6 +29,7 @@ class DataStore < ApplicationRecord
   scope :icpr, -> { where("meta->>'data_store_type' = ?", "ICPR") }
   scope :patronage_refund, -> { where("meta->>'data_store_type' = ?", "PATRONAGE_REFUND") }
   scope :manual_aging, -> { where("meta->>'data_store_type' = ?", "MANUAL_AGING") }
+  scope :import_insurance_account_transactions, -> { where("meta->>'data_store_type' = ?", "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS") }
 
   before_validation :load_defaults
 

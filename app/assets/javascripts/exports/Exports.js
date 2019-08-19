@@ -16,6 +16,15 @@ Exports = (function() {
   var urlExportMemberAccount     = "/exports/member_accounts";
   var urlExportAccountTransaction     = "/exports/account_transactions";
 
+  var encodeQueryData = function(data) {
+    var ret = []
+    for(var d in data) {
+      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+    }
+
+    return ret.join("&");
+  };
+
   var urlExportMemberPerBranch = "/exports/members_per_branch_excel";
   var $btnDownloadMemberPerBranch = $("#export-member-per-branch-segment").find(".btn-download-member-per-branch");
 

@@ -50,6 +50,10 @@ export default class FormBeneficiaries extends React.Component {
       errors.push("date of birth required");
     }
 
+    if(!o.relationship) {
+      errors.push("relationship required");
+    }
+
     this.setState({
       errors: errors
     });
@@ -205,12 +209,16 @@ export default class FormBeneficiaries extends React.Component {
 
       for(var i = 0; i < beneficiaries.length; i++) {
         var name          = beneficiaries[i].last_name + ", " + beneficiaries[i].first_name;
+        var date_of_birth = beneficiaries[i].date_of_birth;
         var relationship  = beneficiaries[i].relationship;
 
         records.push(
           <tr key={"ld-record-" + i}>
             <td>
               {name}
+            </td>
+            <td>
+              {date_of_birth}
             </td>
             <td>
               {relationship}
@@ -235,6 +243,7 @@ export default class FormBeneficiaries extends React.Component {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Date of Birth</th>
               <th>Relationship</th>
               <th>
                 <center>

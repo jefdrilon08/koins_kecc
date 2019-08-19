@@ -43,7 +43,9 @@ module Exports
                             :insurance_date_resigned,
                             :is_reinstate,
                             :old_previous_mii_member_since,
-                            :is_balik_kasapi
+                            :is_balik_kasapi,
+                            :center_id,
+                            :branch_id
                             
                         ]
                 @members.each do |m|
@@ -116,7 +118,9 @@ module Exports
                         m.date_resigned,
                         "",
                         "",
-                        ""
+                        "",
+                        m.center.id,
+                        m.branch.id
                         ]
                     end
                 end

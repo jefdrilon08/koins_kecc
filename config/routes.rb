@@ -12,13 +12,18 @@ Rails.application.routes.draw do
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 
-   # import members
+   # import
   get "/import_members", to: "pages#import_members"
+  get "/import_beneficiaries", to: "pages#import_beneficiaries"
+  get "/import_legal_dependents", to: "pages#import_legal_dependents"
+  get "/import_insurance_accounts", to: "pages#import_insurance_accounts"
+  get "/import_insurance_account_transactions", to: "pages#import_insurance_account_transactions"
 
   # upload-deposit page
   get "/upload_deposit", to: "pages#upload_deposit"
   get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
+  
   # Adjustments
   namespace :adjustments do
     get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
@@ -55,6 +60,7 @@ Rails.application.routes.draw do
   get "/members", to: "members#index"
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
+  get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
@@ -77,6 +83,8 @@ Rails.application.routes.draw do
 
   resources :members, only: [] do
     collection { post :import_members }
+    collection { post :import_beneficiaries }
+    collection { post :import_legal_dependents }
     resources :member_shares, except: [:index], controller: "members/member_shares" do
       get "/flag_as_printed", to: "members/member_shares#flag_as_printed"
     end
@@ -84,6 +92,13 @@ Rails.application.routes.draw do
     resources :attachment_files, controller: 'members/attachment_files'
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
+  end
+  
+  # Insurance Accounts
+  resources :insurance_accounts do
+    get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
+    collection { post :import_insurance_accounts }
+    collection { post :import_insurance_account_transactions }
   end
 
   # Loans
@@ -105,8 +120,8 @@ Rails.application.routes.draw do
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
 
-  get "/insurance_accounts", to: "insurance_accounts#index"
-  get "/insurance_accounts/:id", to: "insurance_accounts#show", as: :insurance_account
+  # get "/insurance_accounts", to: "insurance_accounts#index"
+  # get "/insurance_accounts/:id", to: "insurance_accounts#show", as: :insurance_account
 
   get "/equity_accounts", to: "equity_accounts#index"
   get "/equity_accounts/:id", to: "equity_accounts#show", as: :equity_account
@@ -274,9 +289,12 @@ Rails.application.routes.draw do
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
+<<<<<<< HEAD
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
 
+=======
+>>>>>>> bd1f9b691f602890fc62923b78bc01d0ca47b77e
 end
