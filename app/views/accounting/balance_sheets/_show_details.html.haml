@@ -1,103 +1,88 @@
-%h4
-  Assets
-
 %table.table.table-sm.table-bordered
-  %thead
+  %tr
+    %th{ colspan: 2 }
+      Assets
+  %tr
+    %th
+      Accounting Code
+    %th.text-right{ width: "25%" }
+      Amount
+  - @data[:assets].each do |o|
     %tr
-      %th
-        Accounting Code
-      %th.text-right{ width: "25%" }
-        Amount
-  %tbody
-    - @data[:assets].each do |o|
+      %td.text-bold
+        #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+      %td.text-right
+        #{number_to_currency(o[:amount], unit: "")}
+  %tr
+    %th
+      Total Assets
+    %th.text-right
+      #{number_to_currency(@data[:total_assets], unit: '')}
+  %tr
+    %th{ colspan: 2 }
+      Liabilities
+  %tr
+    %th
+      Accounting Code
+    %th.text-right{ width: "25%" }
+      Amount
+  - @data[:liabilities].each do |o|
+    %tr
+      %td.text-bold
+        #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+      %td.text-right
+        #{number_to_currency(o[:amount], unit: "")}
+  %tr
+    %th
+      Total Liabilities
+    %th.text-right
+      #{number_to_currency(@data[:total_liabilities], unit: '')}
+  %tr
+    %th{ colspan: 2 }
+      Equity
+  %tr
+    %th
+      Accounting Code
+    %th.text-right{ width: "25%" }
+      Amount
+  - @data[:equities].each do |o|
+    %tr
+      %td.text-bold
+        #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+      %td.text-right
+        #{number_to_currency(o[:amount], unit: "")}
+  %tr
+    %th
+      Total Equity
+    %th.text-right
+      #{number_to_currency(@data[:total_equities], unit: '')}
+  - if @data[:fund_balance].size > 0
+    %tr
+      %th{ colspan: 2 }
+        Fund Balance
+    - @data[:fund_balance].each do |o|
       %tr
         %td.text-bold
           #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
         %td.text-right
           #{number_to_currency(o[:amount], unit: "")}
-
-%h4
-  Liabilities
-%table.table.table-sm.table-bordered
-  %thead
     %tr
       %th
-        Accounting Code
-      %th.text-right{ width: "25%" }
-        Amount
-  %tbody
-    - @data[:liabilities].each do |o|
-      %tr
-        %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
-        %td.text-right
-          #{number_to_currency(o[:amount], unit: "")}
-
-%h4
-  Equities
-%table.table.table-sm.table-bordered
-  %thead
-    %tr
-      %th
-        Accounting Code
-      %th.text-right{ width: "25%" }
-        Amount
-  %tbody
-    - @data[:equities].each do |o|
-      %tr
-        %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
-        %td.text-right
-          #{number_to_currency(o[:amount], unit: "")}
-
-%h4
-  Income
-%table.table.table-sm.table-bordered
-  %thead
-    %tr
-      %th
-        Accounting Code
-      %th.text-right{ width: "25%" }
-        Amount
-  %tbody
-    - @data[:income].each do |o|
-      %tr
-        %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
-        %td.text-right
-          #{number_to_currency(o[:amount], unit: "")}
-
-%h4
-  Expenses
-%table.table.table-sm.table-bordered
-  %thead
-    %tr
-      %th
-        Accounting Code
-      %th.text-right{ width: "25%" }
-        Amount
-  %tbody
-    - @data[:expenses].each do |o|
-      %tr
-        %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
-        %td.text-right
-          #{number_to_currency(o[:amount], unit: "")}
-
-- if @data[:fund_balance].size > 0
-  %h4
-    Fund Balance
-  %table.table.table-sm.table-bordered
-    %thead
-      %tr
-        %th
-          Accounting Code
-        %th.text-right{ width: "25%" }
-          Amount
-    %tbody
-      - @data[:fund_balance].each do |o|
-        %tr
-          %td.text-bold
-            #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
-          %td.text-right
-            #{number_to_currency(o[:amount], unit: "")}
+        Total Fund Balance
+      %th.text-right
+        #{number_to_currency(@data[:total_fund_balance], unit: '')}
+  %tr
+    %th
+      Total Income
+    %th.text-right
+      #{number_to_currency(@data[:total_income], unit: '')}
+  %tr
+    %th
+      Total Expenses
+    %th.text-right
+      #{number_to_currency(@data[:total_expenses], unit: '')}
+  %tr
+    %th
+      Net Income
+    %th.text-right
+      #{number_to_currency(@data[:total_income] - @data[:total_expenses], unit: '')}
