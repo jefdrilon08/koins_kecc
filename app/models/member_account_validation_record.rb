@@ -27,3 +27,5 @@ class MemberAccountValidationRecord < ApplicationRecord
 		self.status == "approved"
 	end
 end
+
+

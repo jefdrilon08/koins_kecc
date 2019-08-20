@@ -2,12 +2,9 @@ module DataStores
   class GeneratePersonalFundReportExcel
     def initialize(config:)
       @config = config
-      
       @record   = @config[:record]
       @p        = Axlsx::Package.new
-
       @data = @record.data.with_indifferent_access
-
       @records = @data[:records]
     end
 
@@ -65,17 +62,35 @@ module DataStores
             row << "#{record[:center][:name]}"
               record[:accounts].each do |a|
                 row << a[:balance]
+                if a[:account_subtype] == "K-IMPOK"
+                  @kimpok_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Golden K"
+                  @goldenk_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Savings Investment Fund"
+                  @sifund_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Personal Savings Account"
+                  @psa_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Time Deposit"
+                  @timed_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Retirement Fund"
+                  @rt_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Life Insurance Fund"
+                  @lif_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Share Capital"
+                  @sc_total += a[:balance].to_d
+                elsif a[:account_subtype] == "CBU"
+                  @cbu_total += a[:balance].to_d    
+                end
               end
-              
-            @kimpok_total += record[:accounts][0][:balance].to_d
-            @goldenk_total += record[:accounts][1][:balance].to_d
-            @sifund_total += record[:accounts][2][:balance].to_d
-            @psa_total += record[:accounts][3][:balance].to_d
-            @timed_total += record[:accounts][4][:balance].to_d
-            @rt_total += record[:accounts][5][:balance].to_d
-            @lif_total += record[:accounts][6][:balance].to_d
-            @sc_total  += record[:accounts][7][:balance].to_d
-            @cbu_total += record[:accounts][8][:balance].to_d
+            
+            # @goldenk_total += record[:accounts][1][:balance].to_d
+            # @sifund_total += record[:accounts][2][:balance].to_d
+            # @psa_total += record[:accounts][3][:balance].to_d
+            # @timed_total += record[:accounts][4][:balance].to_d
+            # @rt_total += record[:accounts][5][:balance].to_d
+            # @lif_total += record[:accounts][6][:balance].to_d
+            # @sc_total  += record[:accounts][7][:balance].to_d
+            # @cbu_total += record[:accounts][8][:balance].to_d
             @count += 1
             sheet.add_row row      
           end
@@ -85,7 +100,7 @@ module DataStores
             "TOTAL",
             @count, 
             "", 
-            @kimpok_total, 
+            @kimpok_total,
             @goldenk_total, 
             @sifund_total,
             @psa_total,

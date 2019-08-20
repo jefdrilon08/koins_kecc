@@ -19,3 +19,32 @@
                   Actions
                 %br  
                 = submit_tag "Import Insurance Account Transactions Information", :class => "btn btn-primary"
+          %hr
+          - if @records.size > 0
+            %table.table.table-bordered.table-sm
+              %thead
+                %tr
+                  %th
+                    ID
+                  %th
+                    Time Start
+                  %th
+                    Time Stop
+                  %th
+                    Status
+              %tbody
+                - @records.each do |o|
+                  %tr
+                    %td
+                      #{o.id}
+                    %td
+                      - if o.data["time_start"].present?
+                        #{o.data["time_start"]}
+                    %td
+                      - if o.data["time_stop"].present?
+                        #{o.data["time_stop"]}
+                    %td
+                      #{o.status}
+          - else
+            %p
+              No records found

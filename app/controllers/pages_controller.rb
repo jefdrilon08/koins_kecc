@@ -72,6 +72,7 @@ class PagesController < ApplicationController
   end
 
   def import_insurance_account_transactions
+    @records  = DataStore.import_insurance_account_transactions
   end
 
   def seriatim_report
