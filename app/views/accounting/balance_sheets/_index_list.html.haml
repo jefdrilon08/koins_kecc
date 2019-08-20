@@ -1,0 +1,33 @@
+%table.table.table-sm.table-bordered
+  %thead
+    %th{ width: "5%" }
+    %th
+      Year
+    %th
+      Branch
+    %th
+      Created At
+    %th.text-center
+      Status
+  %tbody
+    - @balance_sheets.each do |o|
+      %tr
+        %td.text-center
+          = link_to accounting_balance_sheet_path(o.id) do
+            .fa.fa-search
+        %td
+          #{o.meta["year"]}
+        %td
+          #{o.meta["branch_name"]}
+        %td
+          #{o.created_at.strftime("%B %d, %Y %r")}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.badge-success
+              Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error

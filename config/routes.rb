@@ -140,6 +140,7 @@ Rails.application.routes.draw do
 
   namespace :accounting do
     resources :year_end_closings, only: [:index, :show, :destroy]
+    resources :balance_sheets, only: [:index, :show, :destroy]
   end
 
   # Billing
