@@ -1,63 +1,11 @@
 %h4
   Accounting Entry
 %hr
-%div{ id: "accounting-entry", class: "card border-danger" }
-  %div{ class: "card-header border-danger" }
-    .row
-      .col-md-6
-        %strong
-          #{@data[:accounting_entry][:book]} 
-          #{@data[:accounting_entry][:reference_number]}
-      .col-md-6
-        .text-right
-          .text-muted
-            .fa.fa-store
-            #{@data[:accounting_entry][:book]} - #{@branch}
-  .card-body
-    %table.table.table-sm
-      %tr
-        %th{ width: "50%" }
-          Accounting Code
-        %th.text-right{ width: "25%" }
-          Debit
-        %th.text-right{ width: "25%" }
-          Credit
-      - @data[:accounting_entry][:debit_journal_entries].each do |o|
-        %tr
-          %td
-            #{o[:code]} - #{o[:name]}
-          %td.text-right
-            #{number_to_currency(o[:amount], unit: "")}
-          %td
-      - @data[:accounting_entry][:credit_journal_entries].each do |o|
-        %tr
-          %td
-            #{o[:code]} - #{o[:name]}
-          %td
-          %td.text-right
-            #{number_to_currency(o[:amount], unit: "")}
+= render partial: "accounting/year_end_closings/accounting_entry"
 
 %h4
   Net Entry
-.row
-  .col
-    %table.table.table-bordered.table-sm.table-hover
-      %thead
-        %tr
-          %th{ width: "50%" }
-            Accounting Code
-          %th.text-right{ widith: "25%" }
-            Debit
-          %th.text-right{ widith: "25%" }
-            Credit
-      %tbody
-        %tr
-          %th
-            #{@data[:net_entry][:accounting_code][:name]}
-          %td.text-right
-            #{number_to_currency(@data[:net_entry][:debit], unit: "")}
-          %td.text-right
-            #{number_to_currency(@data[:net_entry][:credit], unit: "")}
+= render partial: "accounting/year_end_closings/net_entry"
 
 %hr
 

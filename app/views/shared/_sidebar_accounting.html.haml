@@ -4,6 +4,7 @@
   = link_to "/accounting/trial_balance", class: 'nav-link' do
     %i.nav-icon.fa.fa-balance-scale
     Trial Balance
+%li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'general_ledger' ? 'active' : ''}" }
   = link_to "/accounting/general_ledger", class: 'nav-link' do
     %i.nav-icon.fa.fa-atlas
     General Ledger
@@ -11,6 +12,7 @@
   = link_to accounting_accounting_codes_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-file
     Chart of Acc.
+%li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
   = link_to accounting_year_end_closings_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-file
     Year End Closing
@@ -45,3 +47,7 @@
       = link_to accounting_books_misc_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-book
         MISC
+%li{ class: "nav-item #{params[:controller] == 'accounting/balance_sheets' ? 'active' : ''}" }
+  = link_to accounting_balance_sheets_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-book
+    Balance Sheets

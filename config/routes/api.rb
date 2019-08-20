@@ -243,6 +243,7 @@ namespace :api do
       get "/x_weeks_to_pay/fetch", to: "x_weeks_to_pay#fetch"
       post "/year_end_closings/queue", to: "year_end_closings#queue"
       post "/year_end_closings/approve", to: "year_end_closings#approve"
+      post "/balance_sheets/queue", to: "balance_sheets#queue"
     end
 
     namespace :epassbook do

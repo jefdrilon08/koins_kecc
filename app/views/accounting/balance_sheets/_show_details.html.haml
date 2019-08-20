@@ -1,0 +1,103 @@
+%h4
+  Assets
+
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Amount
+  %tbody
+    - @data[:assets].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+
+%h4
+  Liabilities
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Amount
+  %tbody
+    - @data[:liabilities].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+
+%h4
+  Equities
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Amount
+  %tbody
+    - @data[:equities].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+
+%h4
+  Income
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Amount
+  %tbody
+    - @data[:income].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+
+%h4
+  Expenses
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Amount
+  %tbody
+    - @data[:expenses].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+
+- if @data[:fund_balance].size > 0
+  %h4
+    Fund Balance
+  %table.table.table-sm.table-bordered
+    %thead
+      %tr
+        %th
+          Accounting Code
+        %th.text-right{ width: "25%" }
+          Amount
+    %tbody
+      - @data[:fund_balance].each do |o|
+        %tr
+          %td.text-bold
+            #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+          %td.text-right
+            #{number_to_currency(o[:amount], unit: "")}

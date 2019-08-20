@@ -1,0 +1,28 @@
+module Accounting
+  class BalanceSheetsController < ApplicationController
+    before_action :authenticate_user!
+
+    def index
+      @balance_sheets = DataStore.balance_sheets.where(
+                          "meta->>'branch_id' IN (?)",
+                          @branches.pluck(:id)
+                        )
+
+      @balance_sheets = @balance_sheets.page(params[:page]).per(20)
+    end
+
+    def show
+      @balance_sheet  = DataStore.balance_sheets.find(params[:id])
+      @record         = @balance_sheet
+      @meta           = @balance_sheet.meta.with_indifferent_access
+      @data           = @balance_sheet.data.with_indifferent_access
+    end
+
+    def destroy
+      @balance_sheet  = DataStore.balance_sheets.find(params[:id])
+      @balance_sheet.destroy!
+
+      redirect_to accounting_balance_sheets_path
+    end
+  end
+end

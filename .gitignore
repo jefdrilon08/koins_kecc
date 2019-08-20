@@ -52,4 +52,6 @@ config/environments/*.local.yml
 config/settings/production.yml
 config/settings/development.yml
 
+# Stray files
 dump.rdb
+*.csv
