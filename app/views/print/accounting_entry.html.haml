@@ -1,42 +1,65 @@
 :css
-  .print-text {
-    font-size: 1.2em;
-    font-family: calibri;
+  .print-text{
+    font-size: 1.5em;
   }
-
-  .print-text-book {
-    font-size: 1.4em;
-    font-family: calibri;
+  .print-text.p{
+    font-family: Calibri;
   }
-
-  .print-text-sub {
-    font-size: .9em;
-    font-family: calibri;
+  .print-text-book.p {
+    font-family: Calibri;
   }
-
+  .print-text-book{
+    font-size: 1.5em;
+  }
+  .print-text-sub.p {
+    font-family: Calibri;
+  }
+  .print-text-sub{
+    font-size: 1.1em;
+  }
+      
   table.voucher td.amount{
     text-align: right;
   }
 
   table.voucher th.amount{
     text-align: right;
+    font-size: 1.5em;
   }
-
+  table.voucher th{
+    text-align: right;
+    font-size: 1.5em;
+  }
   table.voucher td.code{
     text-align: center;
+    font-size: 1.5em;
   }
-
+  table.voucher td{
+    text-align: left;
+    font-size: 1.5em;
+  }
   table.voucher th.header{
+    font-size: 1.5em;
     text-align: center;
     text-decoration: underline;
   }
 
   table.signatories td.overline{
     text-decoration: overline;
+    font-size: 1.5em;
   }
-
+  table.signatories th
+    {
+    font-size: 1.5em;
+    }
   hr {
     border-color: black;
+  }
+  p.signatories{
+    font-size: 1.5em;
+  }
+  b.nothing{
+    font-size: 1.5em;
   }
 
 %span.print-text
@@ -79,10 +102,10 @@
         %th{:width => "17%"} Reference No:
         %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
         %th{:width => "18%"} Doc. No:
-        - if @accounting_entry_data[:book] == "CRB"
+        -if @accounting_entry_data[:book] == "CRB"
           %th{:width => "17%"} OR Number:
           %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
-        - else
+        -else
           %th{:width => "17%"} Check No:
           %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
       %tr
@@ -97,76 +120,80 @@
           %th{:width => "17%"} Payee:
           %th{:width => "20%"} #{@accounting_entry_data[:data][:payee]}
     %hr
-  %table.voucher{"border:" => "", :none => ""}
-    %tr
-      %th.header{width: 220} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
-      %th.header{width: 450} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
-      %th.header{width: 100} 
-      %th.header{width: 160} &emsp;&emsp;Debit(PHP)&emsp;&emsp;
-      %th.header{width: 160} &emsp;&emsp;Credit(PHP)&emsp;
+  %center
+    %table.voucher{"border:" => "", :none => ""}
+      %tr
+        %th.header{width: 250} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
+        %th.header{width: 650} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
+        %th.header{width: 50} 
+        %th.header{width: 180} &emsp;Debit(PHP)&emsp;
+        %th.header{width: 190} &emsp;Credit(PHP)&emsp;
 
-    - @accounting_entry_data[:debit_journal_entries].each do |o|
+      - @accounting_entry_data[:debit_journal_entries].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td.amount
+            #{o[:amount]}
+          %td 
+      - @accounting_entry_data[:credit_journal_entries].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td
+          %td.amount
+            #{o[:amount]}
       %tr
-        %td.code #{o[:code]}
-        %td #{o[:name]}
-        %td
-        %td.amount
-          #{o[:amount]}
-        %td 
-    - @accounting_entry_data[:credit_journal_entries].each do |o|
+        %th
+        %th
+        %th 
+        %th.amount ___________
+        %th.amount ___________
       %tr
-        %td.code #{o[:code]}
-        %td #{o[:name]}
-        %td
-        %td
-        %td.amount
-          #{o[:amount]}
-    %tr
-      %th
-      %th
-      %th 
-      %th.amount ___________
-      %th.amount ___________
-    %tr
-      %th
-      %th
-      %th Total 
-      %th.amount
-        #{@accounting_entry_data[:total_debit]}
-      %th.amount
-        #{@accounting_entry_data[:total_credit]}
+        %th
+        %th
+        %th Total 
+        %th.amount
+          #{@accounting_entry_data[:total_debit]}
+        %th.amount
+          #{@accounting_entry_data[:total_credit]}
 %center
   %p
     __________________________________________________________
     %br 
-    %b
+    %b.nothing
       *** Nothing Follows ***      
 %left  
   %hr
-  %p
+  %p.signatories
     %b
       Particular:
     #{@accounting_entry_data[:particular]}
   %br
-  %br  
-  %table.signatories{"border:" => "", :none => ""}
-    %tr
-      %th{width: 255} 
-        #{@accounting_entry_data[:prepared_by]}
-      %th{width: 255}
-      %th{width: 255} #{@accounting_entry_data[:approved_by]}
-    %tr
-      %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
-      %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
-      %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  %br
+  %center
+    %table.signatories{"border:" => "", :none => ""}
+      %tr
+        %th{width: 350} 
+          #{@accounting_entry_data[:prepared_by]}
+        %th{width: 350}
+        -if Settings.activate_microinsurance
+          %th{width: 350} #{"ANTIQUERA, SILVIDA"}
+        -else
+          %th{width: 350} #{@accounting_entry_data[:approved_by]}
+      %tr
+        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
   %br
   %br
-  %p
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    ______________________________________________
-    %br
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    Recieved By:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date:
+  %center
+    %p.signatories
+      ______________________________________________
+      %br
+      Recieved By:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date:
 
 :javascript
   window.print();
