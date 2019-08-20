@@ -49,7 +49,26 @@ module Api
         render json: data
       end
       
-      
+      def summary_of_certificates_and_policies
+        branch_id     = params[:branch_id]
+        plan_type = params[:plan_type]
+        as_of      = params[:as_of]
+
+        data = Reports::SummaryOfCertificatesAndPolicies.new(
+                  branch_id: branch_id,
+                  as_of: as_of,
+                  plan_type: plan_type
+                ).execute!
+
+        data[:download_url] = summary_of_certificates_and_policies_path(
+                                branch_id: branch_id,
+                                plan_type: plan_type,
+                                download: true,
+                                as_of: as_of
+                              )
+
+        render json: data
+      end
 
 
     end

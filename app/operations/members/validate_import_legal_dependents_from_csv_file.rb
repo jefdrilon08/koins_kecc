@@ -9,6 +9,7 @@ module Members
     def execute!
       validate_if_member_present!
       validate_if_identification_number_present!
+      validate_if_relationship_present!
       validate_if_uuid_present!
       @errors
     end
@@ -30,6 +31,15 @@ module Members
         @errors[:messages] << {
           key: "identification_number",
           message: "Member Identification Number can't be blank."
+        }
+      end
+    end
+
+    def validate_if_relationship_present!
+      if @legal_dependent['relationship'].nil?
+        @errors[:messages] << {
+          key: "relationship",
+          message: "Relationship can't be blank."
         }
       end
     end
