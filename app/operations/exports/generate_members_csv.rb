@@ -109,7 +109,7 @@ module Exports
                         pag_ibig,
                         phil_health,
                         m.mobile_number,
-                        m.try(:uuid),
+                        m.id,
                         meta_id,
                         m.date_resigned,
                         resignation_type,
