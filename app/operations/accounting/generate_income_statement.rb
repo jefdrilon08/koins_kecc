@@ -66,7 +66,7 @@ module Accounting
 
         amount  = (total_debit - total_credit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:expenses] << {
             accounting_code: {
               id: o.id,
@@ -106,7 +106,7 @@ module Accounting
 
         amount  = (total_credit - total_debit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:income] << {
             accounting_code: {
               id: o.id,
