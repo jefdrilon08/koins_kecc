@@ -6,7 +6,9 @@
     - @data[:income].each do |o|
       %tr
         %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+          #{o[:accounting_code][:code]} 
+          %span.text-muted
+            #{o[:accounting_code][:name]}
         %td.text-right
           #{number_to_currency(o[:amount], unit: "")}
     %tr
@@ -20,7 +22,9 @@
     - @data[:expenses].each do |o|
       %tr
         %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+          #{o[:accounting_code][:code]} 
+          %span.text-muted
+            #{o[:accounting_code][:name]}
         %td.text-right
           #{number_to_currency(o[:amount], unit: "")}
     %tr

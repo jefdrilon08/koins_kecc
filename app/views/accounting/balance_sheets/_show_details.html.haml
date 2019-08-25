@@ -9,8 +9,10 @@
       Amount
   - @data[:assets].each do |o|
     %tr
-      %td.text-bold
-        #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+      %td
+        #{o[:accounting_code][:code]} 
+        %span.text-muted
+          #{o[:accounting_code][:name]}
       %td.text-right
         #{number_to_currency(o[:amount], unit: "")}
   %tr
@@ -28,8 +30,10 @@
       Amount
   - @data[:liabilities].each do |o|
     %tr
-      %td.text-bold
-        #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+      %td
+        #{o[:accounting_code][:code]} 
+        %span.text-muted
+          #{o[:accounting_code][:name]}
       %td.text-right
         #{number_to_currency(o[:amount], unit: "")}
   %tr
@@ -47,8 +51,10 @@
       Amount
   - @data[:equities].each do |o|
     %tr
-      %td.text-bold
-        #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+      %td
+        #{o[:accounting_code][:code]} 
+        %span.text-muted
+          #{o[:accounting_code][:name]}
       %td.text-right
         #{number_to_currency(o[:amount], unit: "")}
   %tr
@@ -62,8 +68,10 @@
         Fund Balance
     - @data[:fund_balance].each do |o|
       %tr
-        %td.text-bold
-          #{o[:accounting_code][:code]} #{o[:accounting_code][:name]}
+        %td
+          #{o[:accounting_code][:code]} 
+          %span.text-muted
+            #{o[:accounting_code][:name]}
         %td.text-right
           #{number_to_currency(o[:amount], unit: "")}
     %tr
