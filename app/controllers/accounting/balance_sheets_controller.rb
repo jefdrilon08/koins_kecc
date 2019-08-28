@@ -16,6 +16,19 @@ module Accounting
       @record         = @balance_sheet
       @meta           = @balance_sheet.meta.with_indifferent_access
       @data           = @balance_sheet.data.with_indifferent_access
+
+      @net_income = @data[:total_income] - @data[:total_expenses]
+
+      # Get statutory funds (beginning)
+      ac  = AccountingCode.where(id: Settings.try(:defaults).try(:statutory_fund_id)).try(:first)
+
+      if ac.present?
+        sf = @data[:equities].select{ |o| o[:accounting_code][:code] == ac.code }.first
+
+        if sf.present?
+          @statutory_funds_beginning = sf
+        end
+      end
     end
 
     def destroy

@@ -41,27 +41,58 @@
       Total Liabilities
     %th.text-right
       #{number_to_currency(@data[:total_liabilities], unit: '')}
-  %tr
-    %th{ colspan: 2 }
-      Equity
-  %tr
-    %th
-      Accounting Code
-    %th.text-right{ width: "25%" }
-      Amount
-  - @data[:equities].each do |o|
+  - if @statutory_funds_beginning.present?
+    %tr
+      %th{ colspan: 2 }
+        Equity
+    %tr
+      %th
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Amount
+    - @data[:equities].each do |o|
+      - if o[:accounting_code][:code] != @statutory_funds_beginning[:accounting_code][:code]
+        %tr
+          %td
+            #{o[:accounting_code][:code]} 
+            %span.text-muted
+              #{o[:accounting_code][:name]}
+          %td.text-right
+            #{number_to_currency(o[:amount], unit: "")}
+    / Statutory Funds beginning
     %tr
       %td
-        #{o[:accounting_code][:code]} 
-        %span.text-muted
-          #{o[:accounting_code][:name]}
+        %b
+          Statutory Funds, Beg
       %td.text-right
-        #{number_to_currency(o[:amount], unit: "")}
+        #{number_to_currency(@statutory_funds_beginning[:amount], unit: '')}
+    / Statutory Funds from income
+    %tr
+      %td
+        %b
+          Statutory Funds, Current
+      %td.text-right
+        #{number_to_currency(@net_income, unit: '')}
+    / Statutory Funds end
+    - if @statutory_funds_beginning.present?
+      %tr
+        %td
+          %b
+            Statutory Funds, End
+        %td.text-right
+          #{number_to_currency(@statutory_funds_beginning[:amount].to_f + @net_income, unit: '')}
+    %tr
+      %th.text-right
+        Total Equity
+      %th.text-right
+        #{number_to_currency(@data[:total_equities].to_f + @net_income, unit: '')}
   %tr
-    %th
-      Total Equity
-    %th.text-right
-      #{number_to_currency(@data[:total_equities], unit: '')}
+    %td
+      %b
+        TOTAL LIABILITIES AND EQUITY
+    %td.text-right
+      %b
+        #{number_to_currency(@data[:total_equities].to_f + @net_income + @data[:total_liabilities], unit: '')}
   - if @data[:fund_balance].size > 0
     %tr
       %th{ colspan: 2 }
@@ -79,18 +110,3 @@
         Total Fund Balance
       %th.text-right
         #{number_to_currency(@data[:total_fund_balance], unit: '')}
-  %tr
-    %th
-      Total Income
-    %th.text-right
-      #{number_to_currency(@data[:total_income], unit: '')}
-  %tr
-    %th
-      Total Expenses
-    %th.text-right
-      #{number_to_currency(@data[:total_expenses], unit: '')}
-  %tr
-    %th
-      Net Income
-    %th.text-right
-      #{number_to_currency(@data[:total_income] - @data[:total_expenses], unit: '')}
