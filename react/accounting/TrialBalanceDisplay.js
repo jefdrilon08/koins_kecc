@@ -172,7 +172,12 @@ export default class TrialBalanceDisplay extends React.Component {
         <tr key={"gl-entry-" + i}>
           <td>
             <strong>
-              {entry.name}
+              {entry.code}
+            </strong>
+          </td>
+          <td>
+            <strong>
+              {entry.name} 
             </strong>
           </td>
           <td className="text-right">
@@ -204,6 +209,9 @@ export default class TrialBalanceDisplay extends React.Component {
             <tr>
               <th>
                 Accounting Code
+              </th>
+              <th>
+                Accounting Name
               </th>
               <th className="text-right">
                 Beginning DR
