@@ -8,6 +8,8 @@
               #{accounting_entry.book}
               #{accounting_entry.reference_number} - 
               #{accounting_entry.date_posted.strftime("%B %d, %Y")}
+              -if Settings.activate_microinsurance
+                #{accounting_entry.sub_reference_number}
             - else
               Pending
       .col-md-6
