@@ -38,6 +38,10 @@ class AccountingEntry < ApplicationRecord
     end
   end
 
+  def sub_reference_number
+    self.data.with_indifferent_access[:sub_reference_number]
+  end
+
   def approved?
     self.status == "approved"
   end
