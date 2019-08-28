@@ -4,6 +4,7 @@ class ProcessBalanceSheet < ApplicationJob
   def perform(args)
     record        = DataStore.find(args[:id])
     branch        = Branch.find(record.meta.with_indifferent_access[:branch_id])
+    month         = record.meta.with_indifferent_access[:month]
     year          = record.meta.with_indifferent_access[:year]
     
     record.update!(status: "processing")
@@ -11,6 +12,7 @@ class ProcessBalanceSheet < ApplicationJob
     begin
       config  = {
         year: year,
+        month: month,
         branch: branch
       }
 

@@ -66,6 +66,7 @@ module Accounting
                     @fund_balance_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -78,6 +79,7 @@ module Accounting
                     @fund_balance_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -137,6 +139,7 @@ module Accounting
                     @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -149,6 +152,7 @@ module Accounting
                     @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -209,6 +213,7 @@ module Accounting
                     @year,
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -282,6 +287,7 @@ module Accounting
                     @fund_balance_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -295,6 +301,7 @@ module Accounting
                     @fund_balance_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -355,6 +362,7 @@ module Accounting
                     @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -368,6 +376,7 @@ module Accounting
                     @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -429,6 +438,7 @@ module Accounting
                     @year,
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 
@@ -443,6 +453,7 @@ module Accounting
                     @year,
                     @branch.id
                   )
+                  .where.not("accounting_entries.book = ?", "MISC")
                   .group("journal_entries.accounting_code_id")
                   .sum("journal_entries.amount")
 

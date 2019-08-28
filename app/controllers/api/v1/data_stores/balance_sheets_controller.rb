@@ -7,12 +7,14 @@ module Api
         def queue
           @data_store_type  = "BALANCE_SHEET"
           @record           = DataStore.balance_sheets.where(id: params[:id]).first 
+          @month            = params[:month].try(:to_i)
           @year             = params[:year]
           @branch           = Branch.where(id: params[:branch_id]).first
 
           @errors = ::Accounting::ValidateBalanceSheetGenerate.new(
                       config: {
                         branch: @branch,
+                        month: @month,
                         year: @year
                       }
                     ).execute!
@@ -23,6 +25,7 @@ module Api
             @record = DataStore.create!(
                         meta: {
                           branch_id: @branch.id,
+                          month: @month,
                           branch_name: @branch.name,
                           year: @year,
                           data_store_type: @data_store_type,

@@ -2,6 +2,8 @@
   %thead
     %th{ width: "5%" }
     %th
+      Month
+    %th
       Year
     %th
       Branch
@@ -15,6 +17,8 @@
         %td.text-center
           = link_to accounting_balance_sheet_path(o.id) do
             .fa.fa-search
+        %td
+          #{(Time.now + o.meta["month"].to_i).strftime("%B")}
         %td
           #{o.meta["year"]}
         %td

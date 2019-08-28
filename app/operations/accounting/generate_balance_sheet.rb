@@ -3,10 +3,11 @@ module Accounting
     def initialize(config:)
       @config = config
       @year   = @config[:year].to_i
+      @month  = @config[:month]
       @branch = @config[:branch]
 
-      @start_date = Date.new(@year)
-      @end_date   = Date.new(@year, 12, 31)
+      @start_date = Date.new(@year, @month, 1)
+      @end_date   = Date.new(@year, @month, -1)
 
       @accounting_code_assets       = AccountingCode.assets
       @accounting_code_liabilities  = AccountingCode.liabilities
@@ -21,6 +22,9 @@ module Accounting
                             @end_date,
                             @branch.id,
                             "approved"
+                          ).where.not(
+                            "accounting_entries.book = ?",
+                            "MISC"
                           )
 
       @journal_entries_all  = JournalEntry.joins(:accounting_entry).where(
@@ -28,6 +32,9 @@ module Accounting
                                 @end_date,
                                 @branch.id,
                                 "approved"
+                              ).where.not(
+                                "accounting_entries.book = ?",
+                                "MISC"
                               )
 
       @data = {
