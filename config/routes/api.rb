@@ -244,6 +244,7 @@ namespace :api do
       post "/year_end_closings/queue", to: "year_end_closings#queue"
       post "/year_end_closings/approve", to: "year_end_closings#approve"
       post "/balance_sheets/queue", to: "balance_sheets#queue"
+      post "/income_statements/queue", to: "income_statements#queue"
     end
 
     namespace :epassbook do

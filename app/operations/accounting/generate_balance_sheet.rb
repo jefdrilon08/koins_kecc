@@ -38,7 +38,13 @@ module Accounting
         equities: [],
         expenses: [],
         income: [],
-        fund_balance: []
+        fund_balance: [],
+        total_assets: 0.00,
+        total_liabilities: 0.00,
+        total_equities: 0.00,
+        total_expenses: 0.00,
+        total_income: 0.00,
+        total_fund_balance: 0.00
       }
     end
 
@@ -78,8 +84,8 @@ module Accounting
 
         amount  = (total_debit - total_credit).round(2)
 
-        if amount > 0
-          @data[:expenses] << {
+        if amount != 0
+          @data[:fund_balance] << {
             accounting_code: {
               id: o.id,
               name: o.name,
@@ -89,6 +95,8 @@ module Accounting
             },
             amount: amount
           }
+
+          @data[:total_fund_balance] += amount
         end
       end
     end
@@ -116,7 +124,7 @@ module Accounting
 
         amount  = (total_debit - total_credit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:expenses] << {
             accounting_code: {
               id: o.id,
@@ -127,6 +135,8 @@ module Accounting
             },
             amount: amount
           }
+
+          @data[:total_expenses] += amount
         end
       end
     end
@@ -154,7 +164,7 @@ module Accounting
 
         amount  = (total_credit - total_debit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:income] << {
             accounting_code: {
               id: o.id,
@@ -165,6 +175,8 @@ module Accounting
             },
             amount: amount
           }
+
+          @data[:total_income] += amount
         end
       end
     end
@@ -192,7 +204,7 @@ module Accounting
 
         amount  = (total_credit - total_debit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:equities] << {
             accounting_code: {
               id: o.id,
@@ -203,6 +215,8 @@ module Accounting
             },
             amount: amount
           }
+
+          @data[:total_equities] += amount
         end
       end
     end
@@ -230,7 +244,7 @@ module Accounting
 
         amount  = (total_credit - total_debit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:liabilities] << {
             accounting_code: {
               id: o.id,
@@ -241,6 +255,8 @@ module Accounting
             },
             amount: amount
           }
+
+          @data[:total_liabilities] += amount
         end
       end
     end
@@ -268,7 +284,7 @@ module Accounting
 
         amount  = (total_debit - total_credit).round(2)
 
-        if amount > 0
+        if amount != 0
           @data[:assets] << {
             accounting_code: {
               id: o.id,
@@ -279,6 +295,8 @@ module Accounting
             },
             amount: amount
           }
+
+          @data[:total_assets] += amount
         end
       end
     end

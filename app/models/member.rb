@@ -135,6 +135,12 @@ class Member < ApplicationRecord
     else
       ""
     end
+
+    if Settings.try(:use_recognition_date) == true and self.recognition_date.present?
+      self.recognition_date.strftime("%b %d, %Y")
+    else
+      ""
+    end
   end
 
   def resignation_records
