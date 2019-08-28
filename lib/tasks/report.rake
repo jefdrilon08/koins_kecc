@@ -1,5 +1,17 @@
 namespace :report do
+  task :pending_insurance => :environment do
+    Member.where("insurance_status = 'pending' and status = 'active' and data->>'recognition_date' IS NOT NULL").each do |pi|
+      Member.find(pi.id).update(insurance_status: 'inforce')
+      puts "#{pi.last_name}|#{pi.first_name}|#{pi.middle_name}|#{pi.recognition_date}"
+      #MembershipPaymentRecord.where("membership_type = 'Insurance' and member_id = ?" , pi.id).date_paid
+    end
+  end
 ##### LIST OF ADDITIONAL SHARE CAPITAL ver 2.0#####
+  task :project_type => :environment do
+    ProjectType.all.each do |pt|
+      puts "#{pt.name}|#{pt.id}"
+    end
+  end
   task :generate_list_for_additional_share_capitalx => :environment do
     require 'csv'
     s_date= ENV['s_date']

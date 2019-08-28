@@ -29,6 +29,7 @@ module Accounting
           @data[:entries] << {
             id: o[:id],
             name: o[:name],
+            code: o[:code],
             beginning_debit: @trial_balance_data[:beginning_entries][i][:dr_amount],
             beginning_credit: @trial_balance_data[:beginning_entries][i][:cr_amount],
             current_debit: @trial_balance_data[:current_entries][i][:dr_amount],
