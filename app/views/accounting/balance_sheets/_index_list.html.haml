@@ -18,7 +18,7 @@
           = link_to accounting_balance_sheet_path(o.id) do
             .fa.fa-search
         %td
-          #{(Time.now + o.meta["month"].to_i).strftime("%B")}
+          #{Date::MONTHNAMES[o.meta["month"].to_i]}
         %td
           #{o.meta["year"]}
         %td
