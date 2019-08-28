@@ -6,7 +6,7 @@ module Accounting
       @month  = @config[:month]
       @branch = @config[:branch]
 
-      @start_date = Date.new(@year, @month, 1)
+      @start_date = Date.new(@year, 1, 1)
       @end_date   = Date.new(@year, @month, -1)
 
       @accounting_code_assets       = AccountingCode.assets
