@@ -5,12 +5,14 @@ class ProcessIncomeStatement < ApplicationJob
     record        = DataStore.find(args[:id])
     branch        = Branch.find(record.meta.with_indifferent_access[:branch_id])
     year          = record.meta.with_indifferent_access[:year]
+    month         = record.meta.with_indifferent_access[:month]
     
     record.update!(status: "processing")
 
     begin
       config  = {
         year: year,
+        month: month,
         branch: branch
       }
 

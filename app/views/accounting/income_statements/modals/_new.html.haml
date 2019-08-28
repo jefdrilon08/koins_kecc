@@ -15,6 +15,11 @@
             .col
               .form-group
                 %label
+                  Month
+                = select_month Date.today, {}, class: "form-control", id: "select-month"
+            .col
+              .form-group
+                %label
                   Year
                 = select_tag :year, options_for_select([Date.today.year, Date.today.year - 1], Date.today.year), class: "form-control", id: "select-year"
           .message
