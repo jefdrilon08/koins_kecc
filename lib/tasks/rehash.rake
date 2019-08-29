@@ -39,6 +39,19 @@ namespace :rehash do
     puts "Done."
   end
 
+  task :member_account_by_branch => :environment do
+    member_accounts = MemberAccount.where(branch_id: ENV['BRANCH_ID'])
+    member_accounts.each do |member_account|  
+      puts "Rehashing member_account #{member_account.id}..."
+
+      ::MemberAccounts::Rehash.new(
+        member_account: member_account
+      ).execute!
+    end
+
+    puts "Done."
+  end
+
   task :member_accounts => :environment do
     member_accounts = MemberAccount.all
     size            = member_accounts.size
