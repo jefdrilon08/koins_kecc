@@ -7,12 +7,14 @@ module Api
         def queue
           @data_store_type  = "INCOME_STATEMENT"
           @record           = DataStore.income_statements.where(id: params[:id]).first 
+          @month            = params[:month]
           @year             = params[:year]
           @branch           = Branch.where(id: params[:branch_id]).first
 
           @errors = ::Accounting::ValidateIncomeStatementGenerate.new(
                       config: {
                         branch: @branch,
+                        month: @month,
                         year: @year
                       }
                     ).execute!
@@ -24,6 +26,7 @@ module Api
                         meta: {
                           branch_id: @branch.id,
                           branch_name: @branch.name,
+                          month: @month,
                           year: @year,
                           data_store_type: @data_store_type,
                           progress: 0

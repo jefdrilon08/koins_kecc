@@ -3,10 +3,11 @@ module Accounting
     def initialize(config:)
       @config = config
       @year   = @config[:year].to_i
+      @month  = @config[:month].to_i
       @branch = @config[:branch]
 
-      @start_date = Date.new(@year)
-      @end_date   = Date.new(@year, 12, 31)
+      @start_date = Date.new(@year, 1, 1)
+      @end_date   = Date.new(@year, @month, -1)
 
       @accounting_code_expenses     = AccountingCode.expenses
       @accounting_code_income       = AccountingCode.income

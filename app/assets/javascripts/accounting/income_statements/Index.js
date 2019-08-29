@@ -4,6 +4,7 @@ var Index = (function() {
   var $modalNew;
 
   var $selectBranch;
+  var $selectMonth;
   var $selectYear;
 
   var authenticityToken;
@@ -26,6 +27,7 @@ var Index = (function() {
     $btnConfirmNew  = $("#btn-confirm-new");
     $modalNew       = $("#modal-new");
     $selectBranch   = $("#select-branch");
+    $selectMonth    = $("#select-month");
     $selectYear     = $("#select-year");
 
     $message  = $(".message");
@@ -40,6 +42,7 @@ var Index = (function() {
 
     $btnConfirmNew.on("click", function() {
       var branchId  = $selectBranch.val();
+      var month     = $selectMonth.val();
       var year      = $selectYear.val();
 
       $message.html(
@@ -47,6 +50,7 @@ var Index = (function() {
       );
 
       $selectBranch.prop("disabled", true);
+      $selectMonth.prop("disabled", true);
       $selectYear.prop("disabled", true);
       $btnConfirmNew.prop("disabled", true);
 
@@ -56,6 +60,7 @@ var Index = (function() {
         data: {
           authenticity_token: authenticityToken,
           branch_id: branchId,
+          month: month,
           year: year
         },
         success: function(response) {
@@ -81,6 +86,7 @@ var Index = (function() {
             );
 
             $selectBranch.prop("disabled", false);
+            $selectMonth.prop("disabled", false);
             $selectYear.prop("disabled", false);
             $btnConfirmNew.prop("disabled", false);
           }

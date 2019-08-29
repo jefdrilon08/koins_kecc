@@ -6,6 +6,8 @@
       %th
         Member
       %th
+        Name
+      %th
         Member Type
   %tbody
     - members.each_with_index do |m, i|
@@ -15,5 +17,7 @@
             #{m[:identification_number]}
         %td
           #{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}
+        %td
+          #{m[:center][:name]}
         %td
           #{m[:member_type]}
