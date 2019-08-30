@@ -4,7 +4,7 @@ class LegalDependent < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
-  validates :relationship, presence: true
+  # validates :relationship, presence: true
   
   def full_name
     "#{last_name}, #{first_name} #{middle_name}"
