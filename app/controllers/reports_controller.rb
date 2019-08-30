@@ -114,4 +114,18 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+
+  def personal_document_reports
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch = params[:branch]
+    branch_name = Branch.where(id: branch).first.name
+  
+    excel = Reports::GeneratePersonalDocumentsReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+    filename  = "#{branch_name}_personal_documents_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
 end

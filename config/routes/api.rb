@@ -286,6 +286,7 @@ namespace :api do
     get 'reports/cic_reports', to: 'reports#cic_reports'
     get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
     get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
-    get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies'  
+    get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
+     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
   end
 end

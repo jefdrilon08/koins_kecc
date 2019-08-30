@@ -142,5 +142,6 @@ Rails.application.config.assets.precompile += [
   "data_stores/personal_funds/personal_fund_report.js",
   "insurance_account_status.js",
   "DashboardMainMii.min.react.js",
-  "summary_cert_policies.js"
+  "summary_cert_policies.js",
+  "reports/PersonalDocumentReport.js"
 ]

@@ -554,18 +554,15 @@ namespace :adjust do
   
   task :update_member_insurance_status => :environment do
     puts "Updating member insurance status"
-    members = Member.all.order("members.id DESC")
-    # =======
-    #     members = Member.all
-    #     current_date = Date.today
-        
-    #     member_accounts      = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
-    #     account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id)).order("transacted_at ASC")
 
-    #     default_periodic_payment = 15
-    # >>>>>>> a4aa6ad75740c4750b934166cb9a3130e2f41165
+    if ENV['BRANCH_ID'].present?
+      members = Member.where(branch_id: ENV['BRANCH_ID'])
+    else
+      members = Member.all
+    end
+
     size  = members.size
-
+    
     members.each_with_index do |member, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Validating #{member.id}... #{progress}%%")
@@ -576,13 +573,13 @@ namespace :adjust do
       current_date              = Date.today
 
       if recognition_date.present?
-          member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).last
-          account_transactions  = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id).order("transacted_at ASC")
+        member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
+        transactions          = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id).order("transacted_at ASC")
 
-        if account_transactions.size > 0
+        if transactions.size > 0
           latest_payment    = member_accounts
-          latest            = account_transactions.last
-          last_payment_date = account_transactions.last[:transacted_at].to_date
+          latest            = transactions.last
+          last_payment_date = transactions.last[:transacted_at].to_date
            # Code
           current_balance          = latest_payment.balance.to_i
           num_days                 = (current_date - recognition_date).to_i
@@ -609,7 +606,7 @@ namespace :adjust do
           elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
             member.update(insurance_status: "inforce")  
           end
-        elsif account_transactions.size == 0
+        elsif transactions.size == 0
           member.update(insurance_status: "dormant")
         end
       else
