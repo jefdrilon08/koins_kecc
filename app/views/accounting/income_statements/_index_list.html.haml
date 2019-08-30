@@ -12,10 +12,10 @@
     %th.text-center
       Status
   %tbody
-    - @balance_sheets.each do |o|
+    - @income_statements.each do |o|
       %tr
         %td.text-center
-          = link_to accounting_balance_sheet_path(o.id) do
+          = link_to accounting_income_statement_path(o.id) do
             .fa.fa-search
         %td
           #{Date::MONTHNAMES[o.meta["month"].to_i]}

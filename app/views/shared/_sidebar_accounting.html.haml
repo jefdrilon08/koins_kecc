@@ -51,3 +51,7 @@
   = link_to accounting_balance_sheets_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-book
     Balance Sheets
+%li{ class: "nav-item #{params[:controller] == 'accounting/income_statements' ? 'active' : ''}" }
+  = link_to accounting_income_statements_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-book
+    Income Statements

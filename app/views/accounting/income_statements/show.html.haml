@@ -1,0 +1,14 @@
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @income_statement.error?
+            = render partial: "data_stores/error_page"
+          - elsif @income_statement.processing?
+            %p
+              Still processing...
+          - elsif @income_statement.done?
+            = render partial: "show_details"

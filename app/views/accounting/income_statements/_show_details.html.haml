@@ -1,0 +1,39 @@
+%table.table.table-bordered.table-sm
+  %tbody
+    %tr
+      %th{ colspan: 2 }
+        Income
+    - @data[:income].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} 
+          %span.text-muted
+            #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+    %tr
+      %th
+        Total Income
+      %th.text-right{ width: "25%" }
+        #{number_to_currency(@data[:total_income], unit: '')}
+    %tr
+      %th{ colspan: 2 }
+        Expenses
+    - @data[:expenses].each do |o|
+      %tr
+        %td.text-bold
+          #{o[:accounting_code][:code]} 
+          %span.text-muted
+            #{o[:accounting_code][:name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: "")}
+    %tr
+      %th
+        Total Expenses
+      %th.text-right{ width: "25%" }
+        #{number_to_currency(@data[:total_expenses], unit: '')}
+    %tr
+      %th
+        Net Income
+      %th.text-right{ width: "25%" }
+        #{number_to_currency(@data[:total_net_income], unit: '')}

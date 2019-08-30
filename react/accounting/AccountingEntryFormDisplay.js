@@ -193,10 +193,19 @@ export default class AccountingEntryFormDisplay extends React.Component {
         }
 
         if(response.branches.length > 0) {
-          tempCurrentBranch = {
-            value: response.branches[0].id,
-            label: response.branches[0].name
-          };
+          console.log("DEFAULT BRANCH:");
+          console.log(context.props.defaultBranch);
+          if(context.props.defaultBranch) {
+            tempCurrentBranch = context.props.defaultBranch;
+          } else {
+            tempCurrentBranch = {
+              value: response.branches[0].id,
+              label: response.branches[0].name
+            };
+          }
+
+          console.log("TEMP CURRENT BRANCH");
+          console.log(tempCurrentBranch);
 
           context.setState({
             branches: response.branches,
@@ -880,6 +889,13 @@ export default class AccountingEntryFormDisplay extends React.Component {
 
     var currentAccountingCodeId = this.state.accountingCodeId;
 
+    console.log("CURRENT BRANCH IN RENDER");
+    console.log(this.state.currentBranch);
+    var tempCurrentBranch = {
+      value: this.state.currentBranch.id,
+      label: this.state.currentBranch.name
+    };
+
     return (
       <div>
         <Modal
@@ -924,7 +940,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
             <div className="form-group">
               <label>Branch</label>
               <Select
-                value={this.state.currentBranch}
+                value={tempCurrentBranch}
                 options={branchOptions}
                 onChange={this.handleBranchChanged.bind(this)}
                 disabled={state.isLoading}

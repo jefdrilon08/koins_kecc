@@ -13,7 +13,7 @@ var Index = (function() {
 
   var templateErrorList;
 
-  var _urlCreate  = "/api/v1/data_stores/balance_sheets/queue";
+  var _urlCreate  = "/api/v1/data_stores/income_statements/queue";
 
   var init  = function(options) {
     authenticityToken = options.authenticityToken;
@@ -59,8 +59,8 @@ var Index = (function() {
         method: 'POST',
         data: {
           authenticity_token: authenticityToken,
-          month: month,
           branch_id: branchId,
+          month: month,
           year: year
         },
         success: function(response) {

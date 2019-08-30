@@ -1,11 +1,10 @@
 module Accounting
-  class ValidateBalanceSheetGenerate < AppValidator
+  class ValidateIncomeStatementGenerate < AppValidator
     def initialize(config:)
       super()
 
       @config = config
       @branch = @config[:branch]
-      @month  = @config[:month]
       @year   = @config[:year]
     end
 
@@ -14,13 +13,6 @@ module Accounting
         @errors[:messages] << {
           key: "year",
           message: "year required"
-        }
-      end
-
-      if @month.blank?
-        @errors[:messages] << {
-          key: "month",
-          message: "month required"
         }
       end
 

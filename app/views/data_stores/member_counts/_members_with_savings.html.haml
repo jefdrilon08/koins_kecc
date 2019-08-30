@@ -5,6 +5,8 @@
         ID Number
       %th
         Member
+      %th
+        Center
       %th.text-right
         Savings
       %th
@@ -17,6 +19,8 @@
             #{m[:identification_number]}
         %td
           #{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}
+        %td
+          #{m[:center][:name]}
         %td.text-right
           - if m[:total_balance].present?
             #{number_to_currency(m[:total_balance], unit: '')}

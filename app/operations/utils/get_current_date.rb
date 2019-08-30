@@ -7,7 +7,7 @@ module Utils
     end
 
     def execute!
-      if @branch.present?
+      if @branch.present? and Settings.branch_config.present?
         branch_config = Settings.branch_config.select{ |o|
                           o.id == @branch.id
                         }.first

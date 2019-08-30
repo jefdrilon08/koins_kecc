@@ -1,17 +1,17 @@
 module Api
   module V1
     module DataStores
-      class BalanceSheetsController < ApplicationController
+      class IncomeStatementsController < ApplicationController
         before_action :authenticate_user!
 
         def queue
-          @data_store_type  = "BALANCE_SHEET"
-          @record           = DataStore.balance_sheets.where(id: params[:id]).first 
-          @month            = params[:month].try(:to_i)
+          @data_store_type  = "INCOME_STATEMENT"
+          @record           = DataStore.income_statements.where(id: params[:id]).first 
+          @month            = params[:month]
           @year             = params[:year]
           @branch           = Branch.where(id: params[:branch_id]).first
 
-          @errors = ::Accounting::ValidateBalanceSheetGenerate.new(
+          @errors = ::Accounting::ValidateIncomeStatementGenerate.new(
                       config: {
                         branch: @branch,
                         month: @month,
@@ -25,8 +25,8 @@ module Api
             @record = DataStore.create!(
                         meta: {
                           branch_id: @branch.id,
-                          month: @month,
                           branch_name: @branch.name,
+                          month: @month,
                           year: @year,
                           data_store_type: @data_store_type,
                           progress: 0
@@ -41,7 +41,7 @@ module Api
               data_store_type: @data_store_type
             }
 
-            ProcessBalanceSheet.perform_later(args)
+            ProcessIncomeStatement.perform_later(args)
 
             render json: { message: "ok" }
           end
