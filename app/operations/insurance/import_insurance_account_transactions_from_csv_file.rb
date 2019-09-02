@@ -40,8 +40,7 @@ module Insurance
         
           statuses = ["active", "inactive"]
           insurance_account = MemberAccount.where("id = ? AND status IN (?)", row['insurance_account_uuid'], statuses).first
-          # insurance_account = InsuranceAccount.where("uuid = ? AND status = ?", insurance_account_uuid, "active").first
-
+         
           insurance_account_transaction.subsidiary_id = insurance_account.id
           insurance_account_transaction.subsidiary_type = "MemberAccount"
           insurance_account_transaction.transaction_type = row['transaction_type']
