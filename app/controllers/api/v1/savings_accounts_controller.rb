@@ -3,6 +3,68 @@ module Api
     class SavingsAccountsController < ApiController
       before_action :authenticate_user!
 
+      def request_time_deposit_withdrawal
+        member_account  = MemberAccount.savings.where(id: params[:id]).first
+        branch          = member_account.branch
+        
+        config  = {
+          member_account: member_account,
+          branch: branch,
+          user: current_user
+        }
+
+        errors  = ::MemberAccounts::TimeDeposit::ValidateRequestTimeDepositWithdrawal.new(
+                    config: config 
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          data  = ::MemberAccouts::TimeDeposit::RequestTimeDepositWithdrawal.new(
+                    config: config
+                  ).execute!
+
+          center  = member_account.center
+          branch  = member_account.branch
+          member  = member_account.member
+
+          meta = {
+            data_store_type: "TIME_DEPOSIT_WITHDRAWAL",
+            member_account: {
+              id: member_account.id,
+              balance: member_account.balance,
+              maintaining_balance: member_account.maintaining_balance,
+              account_type: member_account.account_type,
+              account_subtype: member_account.account_subtype,
+              center: {
+                id: center.id,
+                name: center.name
+              },
+              branch: {
+                id: branch.id,
+                name: branch.name
+              },
+              member: {
+                id: member.id,
+                first_name: member.first_name,
+                middle_name: member.middle_name,
+                last_name: member.last_name
+              }
+            }
+          }
+
+          data_store  = DataStore.new(
+                          meta: meta,
+                          data: data,
+                          status: "pending"
+                        )
+
+          data_store.save!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def sync_maintaining_balance
         savings_account         = MemberAccount.savings.where(id: params[:id]).first
         old_maintaining_balance = savings_account.maintaining_balance
