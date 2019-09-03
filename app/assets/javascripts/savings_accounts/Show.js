@@ -8,9 +8,15 @@ var Show  = (function() {
   var $btnConfirmRequestTimeDepositWithdrawal;
   var $modalRequestTimeDepositWithdrawal;
 
+  var $btnDeleteWithdrawalRequest;
+  var $btnConfirmDeleteWithdrawalRequest;
+  var $modalDeleteWithdrawalRequest;
+
   var id;
   var templateErrorList;
   var authenticityToken;
+
+  var _currentWithdrawalRequestId;
 
   var $message;
 
@@ -23,6 +29,10 @@ var Show  = (function() {
   };
 
   var _cacheDom = function() {
+    $btnDeleteWithdrawalRequest         = $(".btn-delete-withdrawal-request");
+    $btnConfirmDeleteWithdrawalRequest  = $("#btn-confirm-delete-withdrawal-request");
+    $modalDeleteWithdrawalRequest       = $("#modal-delete-withdrawal-request");
+
     $btnSyncMaintaningBalance         = $("#btn-sync-maintaining-balance");
     $btnConfirmSyncMaintainingBalance = $("#btn-confirm-sync-maintaining-balance");
     $modalSyncMaintainingBalance      = $("#modal-sync-maintaining-balance");
@@ -37,6 +47,52 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnDeleteWithdrawalRequest.on("click", function() {
+      _currentWithdrawalRequestId = $(this).data("id");
+      $message.html("");
+
+      $modalDeleteWithdrawalRequest.modal("show");
+    });
+
+    $btnConfirmDeleteWithdrawalRequest.on("click", function() {
+      $btnConfirmDeleteWithdrawalRequest.prop("disabled", true);
+      $message.html("Loading...");
+
+      $.ajax({
+        url: "/api/v1/savings_accounts/delete_withdrawal_request",
+        method: 'POST',
+        data: {
+          id: id,
+          data_store_id: _currentWithdrawalRequestId,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmDeleteWithdrawalRequest.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnRequestTimeDepositWithdrawal.on("click", function() {
       $message.html("");
       $modalRequestTimeDepositWithdrawal.modal("show");

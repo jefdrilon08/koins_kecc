@@ -3,6 +3,29 @@ module Api
     class SavingsAccountsController < ApiController
       before_action :authenticate_user!
 
+      def delete_withdrawal_request
+        member_account  = MemberAccount.savings.where(id: params[:id]).first
+        data_store      = DataStore.where(id: params[:data_store_id]).first
+
+        config  = {
+          member_account: member_account,
+          data_store: data_store,
+          user: current_user
+        }
+
+        errors  = ::MemberAccounts::TimeDeposit::ValidateDeleteWithdrawalRequest.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          data_store.destroy!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def request_time_deposit_withdrawal
         member_account  = MemberAccount.savings.where(id: params[:id]).first
         branch          = member_account.branch

@@ -1,0 +1,48 @@
+- if @pending_requests.size > 0
+  %h4
+    Withdrawal Request
+  .card
+    .card-body
+      - @pending_requests.each do |o|
+        %table.table.table-bordered.table-sm
+          %tr
+            %th{ width: "25%" }
+              Amount to Withdraw:
+            %td
+              #{number_to_currency(o[:data]["amount_to_withdraw"], unit: "")}
+          %tr
+            %th
+              Start Date:
+            %td
+              #{o[:data]["start_date"].to_date.strftime("%B %d, %Y")}
+          %tr
+            %th
+              End Date:
+            %td
+              #{o[:data]["end_date"].to_date.strftime("%B %d, %Y")}
+          %tr
+            %th
+              Number of Days Outstanding:
+            %td
+              #{o[:data]["num_days_outstanding"]}
+          %tr
+            %th
+              Interest Rate per Month
+            %td
+              #{o[:data]["interest_rate_per_month"].to_f * 100}
+          %tr
+            %th
+              Interest Garnered
+            %td
+              #{number_to_currency(o[:data]["interest_amount"], unit: "")}
+        %hr
+        .text-right
+          .btn-delete-withdrawal-request.btn.btn-danger{ data: { id: o[:id] } }
+            .fa.fa-times
+            Delete Request
+
+  - if params[:debug].present?
+    %pre
+      #{JSON.pretty_generate(@pending_requests)}
+- else
+  No current pending withdrawal requests.

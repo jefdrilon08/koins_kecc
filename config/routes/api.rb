@@ -56,6 +56,7 @@ namespace :api do
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
     post "/savings_accounts/request_time_deposit_withdrawal", to: "savings_accounts#request_time_deposit_withdrawal"
+    post "/savings_accounts/delete_withdrawal_request", to: "savings_accounts#delete_withdrawal_request"
 
     # /api/
     # Member Parameter

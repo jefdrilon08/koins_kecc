@@ -41,9 +41,9 @@ class SavingsAccountsController < ApplicationController
                                 }
                               ).execute!
 
-      @pending_withdrawals  = @withdrawal_requests[:records].select{ |o|
-                                o[:status] == "pending"
-                              }
+      @pending_requests = @withdrawal_requests[:records].select{ |o|
+                            o[:status] == "pending"
+                          }
     end
   end
 end
