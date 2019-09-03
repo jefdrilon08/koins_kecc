@@ -61,7 +61,7 @@ class Member < ApplicationRecord
   end
   
   def check_name
-    "#{first_name.upcase} #{middle_name.upcase} #{last_name.upcase}"
+    "#{first_name.try(:upcase)} #{middle_name.try(:upcase)} #{last_name.try(:upcase)}"
   end
 
   def full_name
@@ -212,9 +212,9 @@ class Member < ApplicationRecord
       end
     end
 
-    self.first_name   = self.first_name.upcase
-    self.last_name    = self.last_name.upcase
-    self.middle_name  = self.middle_name.upcase
+    self.first_name   = self.first_name.try(:upcase)
+    self.last_name    = self.last_name.try(:upcase)
+    self.middle_name  = self.middle_name.try(:upcase)
   end
 
   def equity_value
