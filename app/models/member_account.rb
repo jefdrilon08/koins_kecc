@@ -8,6 +8,8 @@ class MemberAccount < ApplicationRecord
   scope :insurance, -> { joins(:member).where("account_type = ?", "INSURANCE").order("members.last_name ASC") }
   scope :equities, -> { joins(:member).where("account_type = ?", "EQUITY").order("members.last_name ASC") }
 
+  scope :time_deposits, -> { joins(:member).where("account_subtype = ?", "Time Deposit").order("members.last_name ASC") }
+
   def savings?
     self.account_type == "SAVINGS"
   end
@@ -18,5 +20,9 @@ class MemberAccount < ApplicationRecord
 
   def equity?
     self.account_type == "EQUITY"
+  end
+
+  def time_deposit?
+    self.account_subtype == "Time Deposit"
   end
 end

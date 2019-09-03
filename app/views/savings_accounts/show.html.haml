@@ -5,57 +5,13 @@
     .col
       .card
         .card-body
-          %table.table.table-hover.table-sm.table-bordered
-            %thead
-              %tr
-                - if current_user.roles.include?("MIS")
-                  %th
-                %th
-                  %center
-                    Date
-                %th
-                  %center
-                    Type
-                %th.text-right
-                  Beginning Balance
-                %th.text-right
-                  Amount
-                %th.text-right
-                  Ending Balance
-            %tbody
-              - @account_transactions.each do |o|
-                %tr
-                  - if current_user.roles.include?("MIS")
-                    %td
-                      %small
-                        #{o.id}
-                  %td
-                    %center
-                      %small
-                        #{o.transacted_at.localtime.strftime("%b %d, %Y")}
-                  %td
-                    %center
-                      - if o.deposit?
-                        - if o.interest?
-                          .badge.badge-info
-                            .fa.fa-plus
-                            Interest
-                        - else
-                          .badge.badge-success
-                            .fa.fa-download
-                            Deposit
-                      - elsif o.withdraw?
-                        .badge.badge-danger
-                          .fa.fa-upload
-                          Withdraw
-                  %td.text-right.text-muted
-                    #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
-                    #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
-                    #{number_to_currency(o.data["ending_balance"], unit: "")}
+          = render partial: "show_details"
+          - if @savings_account.time_deposit?
+            = render partial: "show_time_deposit_actions"
+            = render partial: "show_time_deposit_display"
 
 = render partial: "savings_accounts/modals/sync_maintaining_balance"
+= render partial: "savings_accounts/modals/request_time_deposit_withdrawal"
 = render partial: "templates/error_list"
 
 = javascript_include_tag "savings_accounts/Show.js"

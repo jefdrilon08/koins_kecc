@@ -1,5 +1,5 @@
 class DataStore < ApplicationRecord
-  STATUSES = ["processing", "done", "error", "closed", "approved"]
+  STATUSES = ["processing", "done", "error", "closed", "approved", "pending"]
 
   validates :meta, presence: true
   validates :data, presence: true
@@ -9,6 +9,7 @@ class DataStore < ApplicationRecord
   scope :done, -> { where(status: "done") }
   scope :closed, -> { where(status: "closed") }
   scope :approved, -> { where(status: "approved") }
+  scope :pending, -> { where(status: "pending") }
 
   scope :branch_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_LOANS_STATS") }
   scope :branch_with_centers_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_WITH_CENTERS_LOANS_STATS") }
@@ -32,6 +33,7 @@ class DataStore < ApplicationRecord
   scope :patronage_refund, -> { where("meta->>'data_store_type' = ?", "PATRONAGE_REFUND") }
   scope :manual_aging, -> { where("meta->>'data_store_type' = ?", "MANUAL_AGING") }
   scope :import_insurance_account_transactions, -> { where("meta->>'data_store_type' = ?", "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS") }
+  scope :time_deposit_withdrawal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_WITHDRAWAL") }
 
   before_validation :load_defaults
 
