@@ -20,7 +20,7 @@ module Api
         if errors[:messages].size > 0
           render json: errors, status: 400
         else
-          data  = ::MemberAccouts::TimeDeposit::RequestTimeDepositWithdrawal.new(
+          data  = ::MemberAccounts::TimeDeposit::GenerateWithdrawalRequest.new(
                     config: config
                   ).execute!
 
