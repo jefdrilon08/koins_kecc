@@ -36,6 +36,9 @@ module Members
               if status == "cleared"
                 member.status = "cleared"
                 member.insurance_status = "cleared"
+              elsif status == "resigned"
+                member.status = "resigned"
+                member.insurance_status = resigned
               else  
                 member.status = "active"
                 member.insurance_status = insurance_status
