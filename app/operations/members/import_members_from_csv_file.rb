@@ -36,6 +36,9 @@ module Members
               if status == "cleared"
                 member.status = "cleared"
                 member.insurance_status = "cleared"
+              elsif status == "resigned"
+                member.status = "resigned"
+                member.insurance_status = resigned
               else  
                 member.status = "active"
                 member.insurance_status = insurance_status
@@ -107,7 +110,7 @@ module Members
           member.mobile_number = row['cellphone_number']
           member.gender = row['gender']
           member.civil_status = row['civil_status']
-          member.date_resigned = row['date_resigned']
+          member.date_resigned = row['insurance_date_resigned']
           
           member.data = { 
                           address: 
@@ -299,6 +302,7 @@ module Members
             member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
   
           member_record.update!(
+            id: row['uuid'],
             member_type: row['member_type'],
             status: status,
             insurance_status: insurance_status,
@@ -310,7 +314,7 @@ module Members
             civil_status: row['civil_status'],
             place_of_birth: row['place_of_birth'],
             mobile_number: row['cellphone_number'],
-            date_resigned: row['date_resigned'],
+            date_resigned: row['insurance_date_resigned'],
             data: member_data
             )
         end       

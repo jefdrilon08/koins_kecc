@@ -71,6 +71,13 @@ module Exports
                             recognition_date = nil
                         end
 
+
+                        if m.data.with_indifferent_access[:insurance_resignation].nil?
+                            insurance_date_resigned = nil
+                        else
+                            insurance_date_resigned = m.data.with_indifferent_access[:insurance_resignation][:date_resigned]                        
+                        end    
+
                         if !m.data.with_indifferent_access[:resignation].nil?
                             resignation_type = m.data.with_indifferent_access[:resignation][:type]
                             resignation_code = m.data.with_indifferent_access[:resignation][:code]
@@ -115,7 +122,7 @@ module Exports
                         resignation_type,
                         resignation_code,
                         resignation_reason,
-                        m.date_resigned,
+                        insurance_date_resigned,
                         "",
                         "",
                         "",
