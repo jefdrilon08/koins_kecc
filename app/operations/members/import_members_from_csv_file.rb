@@ -176,7 +176,7 @@ module Members
             branch.id = row['branch_id']
             branch.name = row['branch']
             name_branch = row['branch']
-            branch.short_name = name_branch[0..3].upcase
+            branch.short_name = name_branch[0..3].try(:upcase)
             branch.cluster_id = cluster.id
             branch.member_counter = 0
             branch.save!
@@ -185,13 +185,13 @@ module Members
             member.branch = branch
           end 
 
-          center_name = row['center'].upcase
+          center_name = row['center'].try(:upcase)
           center = Center.where(name: center_name, branch_id: branch.id).first
           if center.nil?
             center = Center.new
             center.id = row['center_id']
-            center.name = row['center'].upcase
-            center.short_name = row['center'].upcase
+            center.name = row['center'].try(:upcase)
+            center.short_name = row['center'].try(:upcase)
             center.meeting_day = 1
             center.branch = branch
             center.save!
