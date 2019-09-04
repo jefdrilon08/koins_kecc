@@ -2,6 +2,14 @@ module Accounting
   class AccountingCodesController < ApplicationController
     before_action :authenticate_user!
     before_action :load_accounting_code!, only: [:edit, :update, :show, :destroy]
+    
+    #######
+    def excel
+    data = ::Accounting::AccountingCodes::DownloadExcelChartOfAccounts.new.execute!
+    filename= "chart_of_accounts.xlsx"
+    data.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    end
 
     def download
       data      = ::Accounting::AccountingCodes::GenerateHashList.new.execute!
