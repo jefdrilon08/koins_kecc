@@ -669,8 +669,24 @@ namespace :adjust do
       
       puts "Updating #{identification_number}...#{member.full_name}"   
       
-      if member.nil?
+      if !member.nil?
         member.update!(date_of_birth: dob)
+      end
+    end
+  end
+
+  task :update_member_id => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      
+      puts "Updating #{identification_number}...#{member.full_name}"   
+      
+      if !member.nil?
+        member.update!(id: row['uuid'])
       end
     end
   end

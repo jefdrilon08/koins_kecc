@@ -302,7 +302,6 @@ module Members
             member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
   
           member_record.update!(
-            id: row['uuid'],
             member_type: row['member_type'],
             status: status,
             insurance_status: insurance_status,
