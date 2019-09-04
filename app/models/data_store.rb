@@ -51,6 +51,10 @@ class DataStore < ApplicationRecord
     end
   end
 
+  def pending?
+    self.status == "pending"
+  end
+
   def closed?
     self.status == "closed"
   end

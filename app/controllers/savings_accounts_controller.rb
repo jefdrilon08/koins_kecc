@@ -35,6 +35,15 @@ class SavingsAccountsController < ApplicationController
                             ).order("transacted_at ASC, updated_at ASC")
 
     if @savings_account.time_deposit?
+      @withdrawal_requests  = ::MemberAccounts::TimeDeposit::FetchWithdrawalRequests.new(
+                                config: {
+                                  member_account: @savings_account
+                                }
+                              ).execute!
+
+      @pending_requests = @withdrawal_requests[:records].select{ |o|
+                            o[:status] == "pending"
+                          }
     end
   end
 end

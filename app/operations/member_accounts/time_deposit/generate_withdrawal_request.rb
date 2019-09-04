@@ -55,6 +55,7 @@ module MemberAccounts
           interest_rate_per_month: @interest_rate_per_month,
           premature_interest_rate_per_month: @premature_interest_rate_per_month,
           start_date: @start_date,
+          end_date: @current_date,
           withdrawal_date: @current_date,
           num_days_outstanding: 0,
           interest_amount: 0.00,

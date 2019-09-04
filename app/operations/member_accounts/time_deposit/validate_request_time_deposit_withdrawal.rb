@@ -16,6 +16,23 @@ module MemberAccounts
             key: "member_account",
             message: "Member account not found"
           }
+        else
+          withdrawal_requests = ::MemberAccounts::TimeDeposit::FetchWithdrawalRequests.new(
+                                  config: {
+                                    member_account: @member_account
+                                  }
+                                ).execute!
+
+          pending_requests  = withdrawal_requests[:records].select{ |o|
+                                o[:status] == "pending"
+                              }
+
+          if pending_requests.size > 0
+            @errors[:messages] << {
+              key: "member_account",
+              message: "account still has pending requests"
+            }
+          end
         end
 
         if @branch.blank?
@@ -32,7 +49,7 @@ module MemberAccounts
           }
         end
 
-        not_yet_implemented!
+        #not_yet_implemented!
 
         @errors[:messages].each do |o|
           @errors[:full_messages] << o[:message]
