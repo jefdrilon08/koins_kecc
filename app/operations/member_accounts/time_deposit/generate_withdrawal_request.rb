@@ -81,7 +81,7 @@ module MemberAccounts
         @num_days                           = @lock_in_period[:num_days]
         @num_months                         = @lock_in_period[:num_months]
 
-        @maturity_date  = @start_date + @num_months.months
+        @maturity_date  = @start_date + @num_days.days
 
         @data = {
           branch: {
@@ -97,6 +97,8 @@ module MemberAccounts
           withdrawal_date: @current_date,
           num_days_outstanding: 0,
           interest_amount: 0.00,
+          maturity_date: @maturity_date.to_date.strftime("%B %d, %Y"),
+          current_date: @current_date.to_date.strftime("%B %d, %Y"),
           lock_in_period: @lock_in_period,
           accounting_entry: {
             book: "JVB",
