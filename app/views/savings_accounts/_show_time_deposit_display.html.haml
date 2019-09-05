@@ -35,6 +35,29 @@
               Interest Garnered
             %td
               #{number_to_currency(o[:data]["interest_amount"], unit: "")}
+        %h5.text-muted
+          Lock-In Period Information
+        %table.table.table.table-bordered.table-sm
+          %tr
+            %th{ width: "25%" }
+              Num Days
+            %td
+              #{o[:data]["lock_in_period"]["num_days"]}
+          %tr
+            %th
+              Num Months
+            %td
+              #{o[:data]["lock_in_period"]["num_months"]}
+          %tr
+            %th
+              Expected Interest Rate
+            %td
+              #{o[:data]["lock_in_period"]["interest_rate"].to_f * 100}
+          %tr
+            %th
+              Expected Interest Amount
+            %td
+              #{number_to_currency(o[:data]["lock_in_period"]["expected_interest"], unit: '')}
         %hr
         .text-right
           .btn-delete-withdrawal-request.btn.btn-danger{ data: { id: o[:id] } }

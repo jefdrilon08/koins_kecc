@@ -59,6 +59,7 @@ module MemberAccounts
           withdrawal_date: @current_date,
           num_days_outstanding: 0,
           interest_amount: 0.00,
+          lock_in_period: @lock_in_period,
           accounting_entry: {
           }
         }
