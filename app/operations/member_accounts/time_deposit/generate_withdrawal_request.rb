@@ -145,11 +145,7 @@ module MemberAccounts
         if @current_date < (@start_date + 1.month)
           @data[:interest_rate_per_month] = 0.00
         elsif @current_date < @maturity_date
-          if @active_loans.size > 0
-            @data[:interest_amount] = ((@data[:premature_interest_rate_with_loans] * @data[:num_days_outstanding]) / 30) * @data[:balance]
-          else
-            @data[:interest_amount] = ((@data[:premature_interest_rate_per_month] * @data[:num_days_outstanding]) / 30) * @data[:balance]
-          end
+          @data[:interest_amount] = ((@data[:premature_interest_rate_per_month] * @data[:num_days_outstanding]) / 30) * @data[:balance]
         elsif @current_date >= @maturity_date
           @data[:interest_rate_per_month] = @interest_rate_per_month
           @data[:interest_amount]         = @lock_in_period[:expected_interest]

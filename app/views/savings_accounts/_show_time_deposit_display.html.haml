@@ -29,11 +29,6 @@
               #{sprintf("%0.2f", o[:data]["premature_interest_rate_per_month"].to_f * 100)}
           %tr
             %th
-              Premature Withdrawal Interest Rate / Month (w/ active loans)
-            %td
-              #{sprintf("%0.2f", o[:data]["premature_interest_rate_with_loans"].to_f * 100)}
-          %tr
-            %th
               Expected Interest Amount
             %td
               #{number_to_currency(o[:data]["lock_in_period"]["expected_interest"], unit: '')}
