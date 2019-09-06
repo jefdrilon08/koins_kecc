@@ -55,6 +55,8 @@ module TimeDepositCollections
           num_days: @lock_in_period,
           num_months: lock_in_period.num_months,
           interest_rate: lock_in_period.interest_rate,
+          premature_interest_rate: lock_in_period.premature_interest_rate,
+          premature_interest_rate_with_loans: lock_in_period.premature_interest_rate_with_loans,
           expected_interest: (lock_in_period.num_months * lock_in_period.interest_rate * @amount).round(2)
         }
       }

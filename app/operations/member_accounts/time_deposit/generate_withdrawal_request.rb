@@ -9,6 +9,8 @@ module MemberAccounts
 
         @member = @member_account.member
 
+        @active_loans = Loan.active.where(member_id: @member)
+
         if @member_account.account_subtype != "Time Deposit"
           raise "Account #{@member_account.id} is not a Time Deposit account"
         end
@@ -78,6 +80,7 @@ module MemberAccounts
         @lock_in_period                     = @data[:lock_in_period]
         @interest_rate_per_month            = @lock_in_period[:interest_rate]
         @premature_interest_rate_per_month  = @lock_in_period[:premature_interest_rate] || 0.0016
+        @premature_interest_rate_with_loans = @lock_in_period[:premature_interest_rate_with_loans] || 0.001
         @num_days                           = @lock_in_period[:num_days]
         @num_months                         = @lock_in_period[:num_months]
 
@@ -92,6 +95,7 @@ module MemberAccounts
           balance: @latest_ending_balance,
           interest_rate_per_month: @interest_rate_per_month,
           premature_interest_rate_per_month: @premature_interest_rate_per_month,
+          premature_interest_rate_with_loans: @premature_interest_rate_with_loans,
           start_date: @start_date,
           end_date: @current_date,
           withdrawal_date: @current_date,
@@ -141,7 +145,11 @@ module MemberAccounts
         if @current_date < (@start_date + 1.month)
           @data[:interest_rate_per_month] = 0.00
         elsif @current_date < @maturity_date
-          @data[:interest_amount] = ((@data[:premature_interest_rate_per_month] * @data[:num_days_outstanding]) / 30) * @data[:balance]
+          if @active_loans.size > 0
+            @data[:interest_amount] = ((@data[:premature_interest_rate_with_loans] * @data[:num_days_outstanding]) / 30) * @data[:balance]
+          else
+            @data[:interest_amount] = ((@data[:premature_interest_rate_per_month] * @data[:num_days_outstanding]) / 30) * @data[:balance]
+          end
         elsif @current_date >= @maturity_date
           @data[:interest_rate_per_month] = @interest_rate_per_month
           @data[:interest_amount]         = @lock_in_period[:expected_interest]
