@@ -59,7 +59,7 @@ module MemberAccounts
 
         # Update account balance
         new_balance = (@member_account.balance - @amount_to_withdraw).round(2)
-        @member_account.update(
+        @member_account.update!(
           balance: new_balance
         )
 
@@ -93,8 +93,8 @@ module MemberAccounts
         data[:ending_balance]    = (data[:beginning_balance] + @interest_amount).round(2)
 
         # Update account balance
-        new_balance = (@member_account.balance + @amount_to_withdraw).round(2)
-        @member_account.update(
+        new_balance = (@member_account.balance + @interest_amount).round(2)
+        @member_account.update!(
           balance: new_balance
         )
 

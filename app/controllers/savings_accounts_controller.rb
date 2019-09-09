@@ -27,6 +27,11 @@ class SavingsAccountsController < ApplicationController
     @savings_accounts = @savings_accounts.page(params[:page]).per(20)
   end
 
+  def time_deposit_withdrawal
+    @savings_account  = MemberAccount.find(params[:id])
+    @data_store       = DataStore.find(params[:data_store_id])
+  end
+
   def show
     @savings_account  = MemberAccount.savings.where(id: params[:id]).first
 
@@ -44,6 +49,10 @@ class SavingsAccountsController < ApplicationController
       @pending_requests = @withdrawal_requests[:records].select{ |o|
                             o[:status] == "pending"
                           }
+
+      @approved_requests  = @withdrawal_requests[:records].select{ |o|
+                              o[:status] == "approved"
+                            }
     end
   end
 end

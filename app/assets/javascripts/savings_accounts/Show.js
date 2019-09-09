@@ -16,6 +16,9 @@ var Show  = (function() {
   var $btnConfirmApproveWithdrawalRequest;
   var $modalApproveWithdrawalRequest;
 
+  var $btnPrintWithdrawalRequest;
+  var $modalPrint;
+
   var id;
   var templateErrorList;
   var authenticityToken;
@@ -50,11 +53,42 @@ var Show  = (function() {
     $btnConfirmRequestTimeDepositWithdrawal = $("#btn-confirm-request-time-deposit-withdrawal");
     $modalRequestTimeDepositWithdrawal      = $("#modal-request-time-deposit-withdrawal");
 
+    $btnPrintWithdrawalRequest  = $(".btn-print-withdrawal-request");
+    $modalPrint                 = $("#modal-print");
+
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnPrintWithdrawalRequest.on("click", function() {
+      _currentWithdrawalRequestId = $(this).data("id");
+      $message.html("");
+
+      $modalPrint.modal("show");
+
+      $.ajax({
+        url: "/api/v1/print/generate_file",
+        method: "POST",
+        data: {
+          id: _currentWithdrawalRequestId,
+          type: "withdrawal_request",
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html(
+            "Success! Redirecting..."
+          );
+
+          $modalPrint.modal("hide");
+          window.open("/print?filename=" + response.filename, '_blank');
+        },
+        error: function(response) {
+          $message.html("Error in printing withdrawal request!");
+        }
+      });
+    });
+
     $btnApproveWithdrawalRequest.on("click", function() {
       _currentWithdrawalRequestId = $(this).data("id");
       $message.html("");

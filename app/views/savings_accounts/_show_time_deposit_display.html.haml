@@ -1,85 +1,17 @@
 - if @pending_requests.size > 0
   %h4
     Withdrawal Request
-  .card
-    .card-body
-      - @pending_requests.each do |o|
-        %h5.text-muted
-          Lock-In Period Information
-        %table.table.table.table-bordered.table-sm
-          %tr
-            %th{ width: "25%" }
-              Num Days
-            %td
-              #{o[:data]["lock_in_period"]["num_days"]}
-          %tr
-            %th
-              Num Months
-            %td
-              #{o[:data]["lock_in_period"]["num_months"]}
-          %tr
-            %th
-              Expected Interest Rate
-            %td
-              #{o[:data]["lock_in_period"]["interest_rate"].to_f * 100}
-          %tr
-            %th
-              Premature Withdrawal Interest Rate / Month 
-            %td
-              #{sprintf("%0.2f", o[:data]["premature_interest_rate_per_month"].to_f * 100)}
-          %tr
-            %th
-              Expected Interest Amount
-            %td
-              #{number_to_currency(o[:data]["lock_in_period"]["expected_interest"], unit: '')}
-        %h5.text-muted
-          Withdrawal Information
-        %table.table.table-bordered.table-sm
-          %tr
-            %th{ width: "25%" }
-              Amount to Withdraw:
-            %td
-              #{number_to_currency(o[:data]["amount_to_withdraw"], unit: "")}
-          %tr
-            %th
-              Start Date:
-            %td
-              #{o[:data]["start_date"].to_date.strftime("%B %d, %Y")}
-          %tr
-            %th
-              End Date:
-            %td
-              #{o[:data]["end_date"].to_date.strftime("%B %d, %Y")}
-          %tr
-            %th
-              Number of Days Outstanding:
-            %td
-              #{o[:data]["num_days_outstanding"]}
-          %tr
-            %th
-              Interest Rate per Month
-            %td
-              #{o[:data]["interest_rate_per_month"].to_f * 100}
-          %tr
-            %th
-              Interest Garnered
-            %td
-              #{number_to_currency(o[:data]["interest_amount"], unit: "")}
-        %hr
-        %h5.text-muted
-          Accounting Entry
-        = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: o[:data].with_indifferent_access[:accounting_entry] }
-        %hr
-        .text-right
-          .btn-approve-withdrawal-request.btn.btn-success{ data: { id: o[:id] } }
-            .fa.fa-check
-            Approve
-          .btn-delete-withdrawal-request.btn.btn-danger{ data: { id: o[:id] } }
-            .fa.fa-times
-            Delete Request
+  = render partial: "savings_accounts/time_deposit/pending_requests"
 
   - if params[:debug].present?
     %pre
       #{JSON.pretty_generate(@pending_requests)}
 - else
   No current pending withdrawal requests.
+%hr
+- if @approved_requests.size > 0
+  %h4
+    Approved Withdrawals
+  = render partial: "savings_accounts/time_deposit/approved_requests"
+- else
+  No current approved withdrawals.
