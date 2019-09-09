@@ -136,7 +136,7 @@ module MemberAccounts
       private
 
       def default_particular
-        "Time deposit withdrawal"
+        "To record time deposit withdrawal of #{@branch.name} - #{@member.full_name}"
       end
 
       def build_withdrawal_data!

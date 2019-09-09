@@ -3,6 +3,31 @@ module Api
     class SavingsAccountsController < ApiController
       before_action :authenticate_user!
 
+      def approve_withdrawal_request
+        member_account  = MemberAccount.savings.where(id: params[:id]).first
+        data_store      = DataStore.where(id: params[:data_store_id]).first
+
+        config  = {
+          member_account: member_account,
+          data_store: data_store,
+          user: current_user
+        }
+
+        errors  = ::MemberAccounts::TimeDeposit::ValidateApproveWithdrawalRequest.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::MemberAccounts::TimeDeposit::ApproveWithdrawalRequest.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def delete_withdrawal_request
         member_account  = MemberAccount.savings.where(id: params[:id]).first
         data_store      = DataStore.where(id: params[:data_store_id]).first

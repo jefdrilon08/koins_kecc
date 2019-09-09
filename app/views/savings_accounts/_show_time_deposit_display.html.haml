@@ -71,6 +71,9 @@
         = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: o[:data].with_indifferent_access[:accounting_entry] }
         %hr
         .text-right
+          .btn-approve-withdrawal-request.btn.btn-success{ data: { id: o[:id] } }
+            .fa.fa-check
+            Approve
           .btn-delete-withdrawal-request.btn.btn-danger{ data: { id: o[:id] } }
             .fa.fa-times
             Delete Request

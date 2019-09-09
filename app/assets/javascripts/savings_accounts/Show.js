@@ -12,6 +12,10 @@ var Show  = (function() {
   var $btnConfirmDeleteWithdrawalRequest;
   var $modalDeleteWithdrawalRequest;
 
+  var $btnApproveWithdrawalRequest;
+  var $btnConfirmApproveWithdrawalRequest;
+  var $modalApproveWithdrawalRequest;
+
   var id;
   var templateErrorList;
   var authenticityToken;
@@ -33,6 +37,10 @@ var Show  = (function() {
     $btnConfirmDeleteWithdrawalRequest  = $("#btn-confirm-delete-withdrawal-request");
     $modalDeleteWithdrawalRequest       = $("#modal-delete-withdrawal-request");
 
+    $btnApproveWithdrawalRequest        = $(".btn-approve-withdrawal-request");
+    $btnConfirmApproveWithdrawalRequest = $("#btn-confirm-approve-withdrawal-request");
+    $modalApproveWithdrawalRequest      = $("#modal-approve-withdrawal-request");
+
     $btnSyncMaintaningBalance         = $("#btn-sync-maintaining-balance");
     $btnConfirmSyncMaintainingBalance = $("#btn-confirm-sync-maintaining-balance");
     $modalSyncMaintainingBalance      = $("#modal-sync-maintaining-balance");
@@ -47,6 +55,52 @@ var Show  = (function() {
   };
 
   var _bindEvents = function() {
+    $btnApproveWithdrawalRequest.on("click", function() {
+      _currentWithdrawalRequestId = $(this).data("id");
+      $message.html("");
+
+      $modalApproveWithdrawalRequest.modal("show");
+    });
+
+    $btnConfirmApproveWithdrawalRequest.on("click", function() {
+      $btnConfirmApproveWithdrawalRequest.prop("disabled", true);
+      $message.html("Loading...");
+
+      $.ajax({
+        url: "/api/v1/savings_accounts/approve_withdrawal_request",
+        method: 'POST',
+        data: {
+          id: id,
+          data_store_id: _currentWithdrawalRequestId,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmApproveWithdrawalRequest.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnDeleteWithdrawalRequest.on("click", function() {
       _currentWithdrawalRequestId = $(this).data("id");
       $message.html("");
