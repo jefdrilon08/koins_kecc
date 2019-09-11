@@ -1,11 +1,12 @@
 module MemberAccounts
   module TimeDeposit
-    class ApproveWithdrawalRequest
+    class ApproveAutorenewal
       def initialize(config:)
         @config         = config
         @data_store     = @config[:data_store]
         @member_account = @config[:member_account]
         @user           = @config[:user]
+        @lock_in_period = @config[:lock_in_period]
 
         @branch = @member_account.branch
 
@@ -18,12 +19,7 @@ module MemberAccounts
       end
 
       def execute!
-        if @interest_amount > 0
-          perform_deposit!
-        end
-
-        perform_withdrawal!
-
+        perform_deposit!
         post_accounting_entry!
 
         @data_store.update!(
@@ -32,41 +28,6 @@ module MemberAccounts
       end
 
       private
-
-      def perform_withdrawal!
-        account_transaction = AccountTransaction.new(
-                                subsidiary_id: @member_account.id,
-                                subsidiary_type: "MemberAccount",
-                                amount: @amount_to_withdraw,
-                                transaction_type: "withdraw",
-                                transacted_at: @current_date,
-                                status: "approved"
-                              )
-        data = {
-          is_withdraw_payment: false,
-          is_fund_transfer: false,
-          is_interest: false,
-          is_adjustment: false,
-          is_for_exit_age: false,
-          is_for_loan_payments: false,
-          beginning_balance: 0.00,
-          ending_balance: 0.00
-        }
-
-        # Compute beginning and ending balance
-        data[:beginning_balance] = @member_account.balance.round(2)
-        data[:ending_balance]    = (data[:beginning_balance] - @amount_to_withdraw).round(2)
-
-        # Update account balance
-        new_balance = (@member_account.balance - @amount_to_withdraw).round(2)
-        @member_account.update!(
-          balance: new_balance
-        )
-
-        account_transaction.data = data
-
-        account_transaction.save!
-      end
 
       def perform_deposit!
         account_transaction = AccountTransaction.new(
@@ -85,7 +46,15 @@ module MemberAccounts
           is_for_exit_age: false,
           is_for_loan_payments: false,
           beginning_balance: 0.00,
-          ending_balance: 0.00
+          ending_balance: 0.00,
+          lock_in_period: {
+            num_days: @lock_in_period[:num_days],
+            num_months: @lock_in_period[:num_months],
+            interest_rate: @lock_in_period[:interest_rate],
+            premature_interest_rate: @lock_in_period[:premature_interest_rate],
+            premature_interest_rate_with_loans: @lock_in_period[:premature_interest_rate_with_loans],
+            expected_interest: 0.00
+          }
         }
 
         # Compute beginning and ending balance
@@ -98,6 +67,13 @@ module MemberAccounts
           balance: new_balance
         )
 
+        # Compute expected_interest
+        lock_in_period  = data[:lock_in_period]
+
+        lock_in_period[:expected_interest] = (lock_in_period[:num_months].to_i * lock_in_period[:interest_rate].to_f.round(2) * new_balance).round(2)
+
+        data[:lock_in_period] = lock_in_period
+
         account_transaction.data = data
 
         account_transaction.save!
@@ -105,6 +81,7 @@ module MemberAccounts
 
       def post_accounting_entry!
         accounting_entry_data = @data[:accounting_entry]
+        puts accounting_entry_data
 
         accounting_entry  = ::Accounting::AccountingEntries::Save.new(
                               config: {
@@ -116,7 +93,7 @@ module MemberAccounts
 
         accounting_entry  = ::Accounting::AccountingEntries::Approve.new(
                               config: {
-                                accounting_entry: accounting_entry,
+                                accounting_entry: accounting_entry_data,
                                 user: @user
                               }
                             ).execute!
