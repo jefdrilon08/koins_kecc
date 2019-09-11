@@ -65,6 +65,17 @@ module MemberAccounts
                 key: "latest_transaction",
                 message: "No deposit found"
               }
+            else
+              lock_in_period  = latest_transaction.data.with_indifferent_access[:lock_in_period]
+
+              maturity_date = latest_transaction.transacted_at + lock_in_period[:num_days].days
+
+              if @current_date >= maturity_date
+                @errors[:messages] << {
+                  key: "maturity_date",
+                  message: "Time deposit is already past maturity date"
+                }
+              end
             end
           end
         end

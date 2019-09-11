@@ -1,3 +1,8 @@
+- if @lock_in_period
+  %h4
+    Current Lock-In Period
+  %hr
+  = render partial: "savings_accounts/time_deposit/lock_in_period"
 - if @pending_requests.size > 0
   %h4
     Withdrawal Request

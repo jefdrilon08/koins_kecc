@@ -1,0 +1,29 @@
+%table.table.table-bordered.table-sm
+  %tr
+    %th{ width: "25%" }
+      Start Date
+    %td
+      #{@lock_in_period[:start_date].to_date.strftime("%B %d, %Y")}
+  %tr
+    %th
+      Maturity Date
+    %td
+      #{@lock_in_period[:maturity_date].to_date.strftime("%B %d, %Y")}
+  %tr
+    %th
+      Number of Days
+    %td
+      #{@lock_in_period[:num_days]}
+  %tr
+    %th
+      Interest Rate / month
+    %td
+      #{@lock_in_period[:interest_rate]}
+  %tr
+    %th
+      Expected Interest
+    %td
+      #{number_to_currency(@lock_in_period[:expected_interest], unit: '')}
+- if params[:debug].present?
+  %pre
+    = @lock_in_period

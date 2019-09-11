@@ -53,6 +53,12 @@ class SavingsAccountsController < ApplicationController
       @approved_requests  = @withdrawal_requests[:records].select{ |o|
                               o[:status] == "approved"
                             }
+
+      @lock_in_period = ::MemberAccounts::TimeDeposit::FetchLockInPeriod.new(
+                          config: {
+                            member_account: @savings_account
+                          }
+                        ).execute!
     end
   end
 end

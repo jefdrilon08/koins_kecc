@@ -45,6 +45,7 @@ module MemberAccounts
           is_adjustment: false,
           is_for_exit_age: false,
           is_for_loan_payments: false,
+          is_time_deposit: true,
           beginning_balance: 0.00,
           ending_balance: 0.00,
           lock_in_period: {
@@ -56,6 +57,8 @@ module MemberAccounts
             expected_interest: 0.00
           }
         }
+
+        #raise @lock_in_period.inspect
 
         # Compute beginning and ending balance
         data[:beginning_balance] = @member_account.balance.round(2)
@@ -70,7 +73,7 @@ module MemberAccounts
         # Compute expected_interest
         lock_in_period  = data[:lock_in_period]
 
-        lock_in_period[:expected_interest] = (lock_in_period[:num_months].to_i * lock_in_period[:interest_rate].to_f.round(2) * new_balance).round(2)
+        lock_in_period[:expected_interest] = (lock_in_period[:num_months].to_i * lock_in_period[:interest_rate].to_f * new_balance).round(2)
 
         data[:lock_in_period] = lock_in_period
 
@@ -93,7 +96,7 @@ module MemberAccounts
 
         accounting_entry  = ::Accounting::AccountingEntries::Approve.new(
                               config: {
-                                accounting_entry: accounting_entry_data,
+                                accounting_entry: accounting_entry,
                                 user: @user
                               }
                             ).execute!
