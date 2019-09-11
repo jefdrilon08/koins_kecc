@@ -11,11 +11,22 @@
   #{Settings.company_address}
   %br
   VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  Branch: #{@withdrawal_request["branch"]["name"]}
+  %br
+  Withdrawal Date: #{@withdrawal_request["withdrawal_date"].to_date.strftime("%B %d, %Y")}
+  %br
+  Type of Transaction: Time Deposit Withdrawal
 
 %hr
 %h5.text-muted
   Lock-In Period Information
 %table.table.table.table-bordered.table-sm
+  %tr
+    %th
+      Lock-In Amount
+    %td
+      #{number_to_currency(@withdrawal_request["balance"], unit: "")}
   %tr
     %th{ width: "25%" }
       Num Days
@@ -28,14 +39,14 @@
       #{@withdrawal_request["lock_in_period"]["num_months"]}
   %tr
     %th
-      Expected Interest Rate
+      Expected Interest Rate / Month
     %td
-      #{@withdrawal_request["lock_in_period"]["interest_rate"].to_f * 100}
+      #{@withdrawal_request["lock_in_period"]["interest_rate"].to_f * 100}%
   %tr
     %th
       Premature Withdrawal Interest Rate / Month 
     %td
-      #{sprintf("%0.2f", @withdrawal_request["premature_interest_rate_per_month"].to_f * 100)}
+      #{sprintf("%0.2f", @withdrawal_request["premature_interest_rate_per_month"].to_f * 100)}%
   %tr
     %th
       Expected Interest Amount
@@ -66,11 +77,6 @@
       #{@withdrawal_request["num_days_outstanding"]}
   %tr
     %th
-      Interest Rate per Month
-    %td
-      #{@withdrawal_request["interest_rate_per_month"].to_f * 100}
-  %tr
-    %th
       Interest Garnered
     %td
       #{number_to_currency(@withdrawal_request["interest_amount"], unit: "")}
@@ -79,6 +85,23 @@
   Accounting Entry
 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @withdrawal_request.with_indifferent_access[:accounting_entry] }
 %hr
+%br
+%br
+%br
+%br
+.row
+  .col
+    %center
+      %strong
+        #{@withdrawal_request["accounting_entry"]["prepared_by"]}
+      %br
+      Prepared By:
+  .col
+    %center
+      %strong
+        #{@withdrawal_request["accounting_entry"]["approved_by"]}
+      %br
+      Approved By:
 
 :javascript
   window.print();
