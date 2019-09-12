@@ -121,6 +121,49 @@ export default class GeneralLedgerDisplay extends React.Component {
       }
     });
   }
+   DownloadExcel() {
+    var context           = this;
+    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
+    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var branchId          = context.state.currentBranchId;
+    var accountingCodeIds = context.state.accountingCodeIds;
+
+    $.ajax({
+      url: "/accounting/general_ledger_excel_url",
+      method: "GET",
+      data: {
+        start_date: start_date,
+        end_date: end_date,
+        branch_id: branchId,
+        accounting_code_ids: accountingCodeIds
+      },
+      dataType: 'json',
+      success: function(response) {
+        window.open(response.download_url,"_blank")
+        console.log(response);
+        var data  = response.data;
+        context.setState({
+          isLoading: false,
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        //alert("Error in fetching general ledger data");
+
+        var errors  = JSON.parse(response.responseText);
+        console.log(errors);
+
+        context.setState({
+          isLoading: false,
+          data: false,
+          errors: errors
+        });
+      }
+    });
+  }
+
+
+  
 
   handleStartDateChanged(o) {
     this.setState({
@@ -143,6 +186,17 @@ export default class GeneralLedgerDisplay extends React.Component {
 
     context.fetch();
   }
+
+handleDownloadClicked() {
+    var context = this;
+    
+    context.setState({
+      isLoading: true
+    });
+
+    context.DownloadExcel();
+  }
+
 
   handlePrintClicked() {
     var context = this;
@@ -367,6 +421,15 @@ export default class GeneralLedgerDisplay extends React.Component {
                   <span className="fa fa-print"/>
                   Print
                 </button>
+                  <button
+                  className="btn btn-success"
+                  onClick={context.handleDownloadClicked.bind(this)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-download"/>
+                  Excel
+                </button>
+
               </div>
             </div>
           </div>
