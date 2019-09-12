@@ -133,6 +133,8 @@ Rails.application.routes.draw do
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
   get "/accounting/general_ledger", to: "accounting#general_ledger"
+  get "/accounting/general_ledger_excel_url", to: "accounting#general_ledger_excel_url"
+  get "/accounting/general_ledger_excel", to: "accounting#general_ledger_excel", as: :general_ledger_excel_url
   get "/accounting/books/jvb", to: "accounting#jvb", as: :accounting_books_jvb
   get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb

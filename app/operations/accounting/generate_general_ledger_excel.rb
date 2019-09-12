@@ -1,23 +1,28 @@
 module Accounting
-  class GenerateGeneralLedger
+  class GenerateGeneralLedgerExcel
     def initialize(config:)
-      @config = config
+      @p = Axlsx::Package.new
+      @gl = []
+      @config              = config
+      @start_date          = @config[:start_date]
+      @end_date            = @config[:end_date]
+      @branch              = @config[:branch]
+      @accounting_code_ids = @config[:accounting_code_ids] || []
+      #raise @branch.id.inspect
+      
+      #raise @branch.inspect 
 
-      @start_date = @config[:start_date]
-      @end_date   = @config[:end_date]
-      @branch     = @config[:branch]
-
-      @accounting_code_ids  = @config[:accounting_code_ids] || []
 
       @data = {
-        start_date: @start_date.strftime("%b %d, %Y"),
-        end_date: @end_date.strftime("%b %d, %Y"),
-        branch: {
-          id: @branch.id,
-          name: @branch.name
-        },
-        entries: []
-      }
+            :start_date =>  @start_date.strftime("%B %d, %Y"),
+            :end_date   =>  @end_date.strftime("%B %d, %Y"),
+              branch: {
+                    :id => @branch,
+                    :name => @branch,
+                },
+                entries: []
+              }             
+
     end
 
     def execute!
@@ -146,7 +151,58 @@ module Accounting
       end
 
       @data[:entries]  = entries
+      
       @data
+
+      @data[:branch].each do |key , value|
+        @branch_name =  "#{value}"
+      end
+      
+      @p.workbook do |wb|
+        wb.add_worksheet do |sheet|
+           @header_cells    = wb.styles.add_style(alignment:{horizontal: :left}, b:true)
+           @currency_cells_account_title  = wb.styles.add_style(bg_color: "ff9933",b: true, alignment:{horizontal: :right}, format_code: "#,##0.00", border: Axlsx::STYLE_THIN_BORDER)
+           @currency_cells      = wb.styles.add_style(alignment:{horizontal: :right}, format_code: "#,##0.00", border: Axlsx::STYLE_THIN_BORDER)
+           @nil                 = wb.styles.add_style(bg_color: "ff9933",border: Axlsx::STYLE_THIN_BORDER)
+           @title_cells         = wb.styles.add_style(bg_color:"99ceff", alignment:{horizontal: :left}, b:true,border: Axlsx::STYLE_THIN_BORDER)
+           @account_title       = wb.styles.add_style(bg_color:"ff9933", alignment:{horizontal: :left}, b:true,border: Axlsx::STYLE_THIN_BORDER)
+           @def_cell            = wb.styles.add_style(alignment: {horizontal: :left}, border: Axlsx::STYLE_THIN_BORDER)
+           @def_currency_cells  = wb.styles.add_style(alignment: {horizontal: :right},format_code: "#,##0.00",border: Axlsx::STYLE_THIN_BORDER)
+           @ending_cell         = wb.styles.add_style(bg_color: "66ff66",alignment:{horizontal: :left},b:true, border: Axlsx::STYLE_THIN_BORDER)
+           @nil_ending_balance  = wb.styles.add_style(bg_color: "66ff66", border: Axlsx::STYLE_THIN_BORDER)
+           @currency_ending     = wb.styles.add_style(bg_color: "66ff66", alignment:{horizontal: :right}, format_code: "#,##0.00",b: true, border: Axlsx::STYLE_THIN_BORDER)
+            center = wb.styles.add_style(alignment: {horizontal: :center})
+            sheet.add_row ["GENERAL LEDGER"],style: @header_cells
+            sheet.add_row ["#{Settings.company_name}"],style: @header_cells
+            sheet.add_row ["#{Settings.company_address}"],style: @header_cells
+            sheet.add_row ["Vat Registration TIN Number: #{Settings.company_tin_number}"],style: @header_cells
+            sheet.add_row ["#{@data[:start_date]} - #{@data[:end_date]}"],style: @header_cells
+            sheet.add_row ["#{@branch_name}"],style: @header_cells
+            sheet.add_row [""]
+            sheet.add_row ["DATE","REFERENCE NUMBER","BOOK","PARTICULAR","DEBIT","CREDIT",""], :style=> @title_cells
+ 
+              @data[:entries].each do |key , value|
+                                sheet.add_row ["#{key[:accounting_code_name]}","","","","","","#{key[:beginning_balance]}"], style: [@account_title,@nil,@nil,@nil,@nil,@nil,@currency_cells_account_title]
+          
+                key[:entries].each do |a , b|
+                  sheet.add_row ["#{a[:date_posted]}","##{a[:reference_number].rjust(10,'0')}","#{a[:book]}","#{a[:particular]}","#{a[:dr_amount]}","#{a[:cr_amount]}","#{a[:running_balance]}"],
+                  style: [
+                  @def_cell,
+                  @def_cell,
+                  @def_cell,
+                  @def_cell,
+                  @def_currency_cells,
+                  @def_currency_cells,
+                  @def_currency_cells
+                  ]
+                  
+                end
+                sheet.add_row ["ENDING BALANCE","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
+              end
+        end
+      end
+      @p  
     end
+    
   end
 end
