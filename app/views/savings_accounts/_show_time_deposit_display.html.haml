@@ -20,3 +20,10 @@
   = render partial: "savings_accounts/time_deposit/approved_requests"
 - else
   No current approved withdrawals.
+%hr
+- if @autorenewals.size > 0
+  %h4
+    Autorenewals
+  = render partial: "savings_accounts/time_deposit/autorenewals"
+- else
+  No autorenewals.

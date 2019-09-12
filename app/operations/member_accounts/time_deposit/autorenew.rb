@@ -23,7 +23,7 @@ module MemberAccounts
                 ).execute!
 
         meta = {
-          data_store_type: "TIME_DEPOSIT_RENEWAL",
+          data_store_type: "TIME_DEPOSIT_AUTORENEWAL",
           member_account: {
             id: @member_account.id,
             balance: @member_account.balance,

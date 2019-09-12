@@ -46,6 +46,7 @@ module MemberAccounts
           is_for_exit_age: false,
           is_for_loan_payments: false,
           is_time_deposit: true,
+          is_autorenewal: true,
           beginning_balance: 0.00,
           ending_balance: 0.00,
           lock_in_period: {
@@ -84,7 +85,6 @@ module MemberAccounts
 
       def post_accounting_entry!
         accounting_entry_data = @data[:accounting_entry]
-        puts accounting_entry_data
 
         accounting_entry  = ::Accounting::AccountingEntries::Save.new(
                               config: {

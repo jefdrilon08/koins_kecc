@@ -59,6 +59,11 @@ class SavingsAccountsController < ApplicationController
                             member_account: @savings_account
                           }
                         ).execute!
+
+      @autorenewals = DataStore.time_deposit_autorenewal.where(
+                        "meta->'member_account'->>'id' = ?",
+                        @savings_account.id
+                      )
     end
   end
 end
