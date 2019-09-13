@@ -17,6 +17,10 @@ class MemberAccountValidationsController < ApplicationController
     # @member_account_validations = MemberAccountValidation.all.order("date_prepared DESC")
     @member_account_validations = MemberAccountValidation.where("branch_id IN (?)", @branches.pluck(:id))
     
+    if params[:start_date].present? and params[:end_date].present?
+      @member_account_validations = @member_account_validations.where("date_prepared >= ? AND date_prepared <= ?", params[:start_date], params[:end_date])
+    end
+    
     if params[:q].present?
       @q = params[:q]
       @member_account_validations = MemberAccountValidation.all.joins(member_account_validation_records: :member).where(" lower(members.first_name) LIKE :q OR lower(members.last_name) LIKE :q OR lower(members.middle_name) LIKE :q", q: "%#{@q.downcase}%")

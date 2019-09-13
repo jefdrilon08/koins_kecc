@@ -4,6 +4,27 @@ class MembershipPaymentCollectionsController < ApplicationController
   def index
     @membership_payment_collections = MembershipPaymentCollection.select("*")
 
+    if params[:start_date].present? and params[:end_date].present?
+      @membership_payment_collections = @membership_payment_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )
+    end
+
+    if params[:branch_id].present?
+      @branch   = Branch.find(params[:branch_id])
+      @membership_payment_collections = @membership_payment_collections.where(branch_id: @branch.id)
+    end
+
+    if params[:center_id].present?
+      @center = Center.find(params[:center_id])
+    
+      @membership_payment_collections = @membership_payment_collections.where(center_id: @center.id)
+
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @membership_payment_collections = @membership_payment_collections.where(status: @status)
+    end
+
     @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 

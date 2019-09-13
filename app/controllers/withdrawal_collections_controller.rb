@@ -4,6 +4,25 @@ class WithdrawalCollectionsController < ApplicationController
   def index
     @withdrawal_collections = WithdrawalCollection.select("*")
 
+    if params[:start_date].present? and params[:end_date].present?
+      @withdrawal_collections = @withdrawal_collections.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
+    end
+
+    if params[:branch_id].present?
+      @branch   = Branch.find(params[:branch_id])
+      @withdrawal_collections = @withdrawal_collections.where(branch_id: @branch.id)
+    end
+
+    if params[:center_id].present?
+      @center   = Center.find(params[:center_id])
+      @withdrawal_collections = @withdrawal_collections.where(center_id: @center.id)
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @withdrawal_collections = @withdrawal_collections.where(status: @status)
+    end
+
     @withdrawal_collections = @withdrawal_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
