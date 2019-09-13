@@ -14,6 +14,7 @@ module Api
               id: member.id,
               first_name: member.first_name,
               middle_name: member.middle_name,
+              status: member.status,
               last_name: member.last_name,
               full_name: member.full_name,
               branch: member.branch.to_s,

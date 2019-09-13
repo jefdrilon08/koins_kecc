@@ -11,7 +11,7 @@ class AccountTransaction < ApplicationRecord
   scope :approved, -> { where(status: "approved") }
   scope :interest, -> { where("transaction_type = ? AND CAST(data->>'is_interest' AS boolean) = ?", "deposit", 't') }
 
-  scope :approved_member_account_transactions, -> (subsidiary_id, as_of, types = ["deposit", "withdraw"]) { where("subsidiary_id = ? AND status = ? AND transaction_type IN (?) AND transacted_at <= ?", subsidiary_id, "approved", types, as_of) }
+  scope :approved_member_account_transactions, -> (subsidiary_id, as_of, types = ["deposit", "withdraw"]) { where("subsidiary_id = ? AND status = ? AND transaction_type IN (?) AND transacted_at <= ?", subsidiary_id, "approved", types, as_of).order("transacted_at ASC") }
 
   validates :amount, presence: true, numericality: true
 

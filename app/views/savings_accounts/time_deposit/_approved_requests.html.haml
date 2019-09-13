@@ -1,0 +1,23 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+        Withdrawal Date
+      %th.text-right
+        Interest Amount
+      %th.text-right
+        Total Amount Withdrawn
+      %th.text-center
+        Actions
+  %tbody
+    - @approved_requests.each do |o|
+      %tr
+        %td
+          #{o[:data]["withdrawal_date"].to_date.strftime("%B %d, %Y")}
+        %td.text-right
+          #{number_to_currency(o[:data]["interest_amount"], unit: '')}
+        %td.text-right
+          #{number_to_currency(o[:data]["amount_to_withdraw"], unit: '')}
+        %td.text-center
+          = link_to savings_account_time_deposit_withdrawal_path(@savings_account.id, o[:id]) do
+            .fa.fa-search

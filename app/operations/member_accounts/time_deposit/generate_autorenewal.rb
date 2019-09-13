@@ -1,6 +1,6 @@
 module MemberAccounts
   module TimeDeposit
-    class GenerateWithdrawalRequest
+    class GenerateAutorenewal
       def initialize(config:)
         @config         = config
         @member_account = @config[:member_account]
@@ -8,8 +8,6 @@ module MemberAccounts
         @user           = @config[:user]
 
         @member = @member_account.member
-
-        @active_loans = Loan.active.where(member_id: @member)
 
         if @member_account.account_subtype != "Time Deposit"
           raise "Account #{@member_account.id} is not a Time Deposit account"
@@ -86,6 +84,10 @@ module MemberAccounts
 
         @maturity_date  = @start_date + @num_days.days
 
+        if @current_date < @maturity_date
+          raise "Account not yet matured"
+        end
+
         @data = {
           branch: {
             id: @branch.id,
@@ -127,7 +129,7 @@ module MemberAccounts
       end
 
       def execute!
-        build_withdrawal_data!
+        build_deposit_data!
         build_accounting_entry!
 
         @data
@@ -136,23 +138,12 @@ module MemberAccounts
       private
 
       def default_particular
-        "To record time deposit withdrawal of #{@branch.name} - #{@member.full_name}"
+        "To record time deposit autorenewal of #{@branch.name} - #{@member.full_name}"
       end
 
-      def build_withdrawal_data!
-        @data[:num_days_outstanding]  = (@current_date - @start_date).to_i
-
-        if @current_date < (@start_date + 1.month)
-          @data[:interest_rate_per_month] = 0.00
-        elsif @current_date < @maturity_date
-          @data[:interest_amount] = ((@data[:premature_interest_rate_per_month] * @data[:num_days_outstanding]) / 30) * @data[:balance]
-        elsif @current_date >= @maturity_date
-          @data[:interest_rate_per_month] = @interest_rate_per_month
-          @data[:interest_amount]         = @lock_in_period[:expected_interest]
-        end
-
-        @data[:interest_amount]     = @data[:interest_amount].round(2)
-        @data[:amount_to_withdraw]  = @data[:balance] + @data[:interest_amount]
+      def build_deposit_data!
+        @data[:interest_rate_per_month] = @interest_rate_per_month
+        @data[:interest_amount]         = @lock_in_period[:expected_interest]
       end
 
       def build_accounting_entry!
@@ -186,25 +177,12 @@ module MemberAccounts
       def build_debit_journal_entries!
         journal_entries = []
 
-        # Debit interest expense
-        if @data[:interest_amount].to_f > 0
-          journal_entries << {
-            accounting_code_id: @accounting_code_interest_expense.id,
-            code: @accounting_code_interest_expense.code,
-            name: @accounting_code_interest_expense.name,
-            amount: @data[:interest_amount]
-          }
-        end
-
-        # Debit savings deposit time deposit
-        if @data[:amount_to_withdraw].to_f > 0
-          journal_entries << {
-            accounting_code_id: @accounting_code_time_deposit.id,
-            code: @accounting_code_time_deposit.code,
-            name: @accounting_code_time_deposit.name,
-            amount: @data[:amount_to_withdraw]
-          }
-        end
+        journal_entries << {
+          accounting_code_id: @accounting_code_interest_expense.id,
+          code: @accounting_code_interest_expense.code,
+          name: @accounting_code_interest_expense.name,
+          amount: @data[:interest_amount]
+        }
 
         journal_entries
       end
@@ -212,25 +190,12 @@ module MemberAccounts
       def build_credit_journal_entries!
         journal_entries = []
 
-        # Credit savings deposit time deposit
-        if @data[:interest_amount].to_f > 0
-          journal_entries << {
-            accounting_code_id: @accounting_code_time_deposit.id,
-            code: @accounting_code_time_deposit.code,
-            name: @accounting_code_time_deposit.name,
-            amount: @data[:interest_amount]
-          }
-        end
-
-        # Credit cash in bank (whole amount)
-        if @data[:amount_to_withdraw].to_f > 0
-          journal_entries << {
-            accounting_code_id: @accounting_code_cash_in_bank.id,
-            code: @accounting_code_cash_in_bank.code,
-            name: @accounting_code_cash_in_bank.name,
-            amount: @data[:amount_to_withdraw]
-          }
-        end
+        journal_entries << {
+          accounting_code_id: @accounting_code_time_deposit.id,
+          code: @accounting_code_time_deposit.code,
+          name: @accounting_code_time_deposit.name,
+          amount: @data[:interest_amount]
+        }
 
         journal_entries
       end

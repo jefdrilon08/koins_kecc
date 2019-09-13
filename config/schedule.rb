@@ -21,4 +21,8 @@ every :day, at: '6pm' do
   rake "adjust:update_member_insurance_status"
 end
 
+every :day, at: '6am' do
+  rake "finance:autorenew_time_deposit_accounts"
+end
+
 # Learn more: http://github.com/javan/whenever

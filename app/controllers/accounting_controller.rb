@@ -4,6 +4,38 @@ class AccountingController < ApplicationController
   def trial_balance
   end
 
+  def general_ledger_excel_url
+  if params[:branch_id].present?
+    branch = Branch.find(params[:branch_id])
+  end
+  if params[:accounting_code_ids].present?
+    accounting_code_ids = params[:accounting_code_ids]
+  end
+
+  render json: { download_url: "#{general_ledger_excel_url_path(start_date: params[:start_date],end_date: params[:end_date], branch_id: branch.try(:id))}"}
+
+  end
+  def general_ledger_excel
+        start_date          = params[:start_date].try(:to_date)
+        end_date            = params[:end_date].try(:to_date)
+        branch_id           = params[:branch_id]
+        accounting_code_ids = params[:accounting_code_ids] || []
+        branch              = Branch.where(id: branch_id).first
+          config  = {
+          start_date: start_date,
+          end_date: end_date,
+          branch: branch,
+          accounting_code_ids: accounting_code_ids
+        }
+        data  = ::Accounting::GenerateGeneralLedgerExcel.new(
+                                  config: config
+                                ).execute!
+         filename= "general_ledger.xlsx"
+         data.serialize "#{Rails.root}/tmp/#{filename}"
+        send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  
+      end
+
   def general_ledger
   end
 
