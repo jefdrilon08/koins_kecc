@@ -374,8 +374,30 @@ module Api
           
           data[:recognition_date] = recognition_date
 
+          if member.pending? && member.insurance_pending?
+            status = "active"
+            insurance_status = "dormant"
+          else
+            status = member.status
+            insurance_status = member.status
+          end
+
+          if member.identification_number.present?
+            identification_number = member.identification_number
+          else
+            identification_number = ::Members::GenerateMemberIdentificationNumber.new(
+                                              member: member
+                                              ).execute!
+
+            c = member.branch.try(:member_counter) || 0
+            member.branch.update(member_counter: c + 1)
+          end
+
           member.update!(
-            data: data
+            data: data,
+            status: status,
+            insurance_status: insurance_status,
+            identification_number: identification_number
           )
 
           ActivityLog.create!(

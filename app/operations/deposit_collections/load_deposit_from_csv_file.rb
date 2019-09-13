@@ -28,7 +28,7 @@ module DepositCollections
     private
 
     def recompute_totals!
-      @deposit_collection = DepositCollection.find(@deposit_collection.id)
+      #@deposit_collection = DepositCollection.find(@deposit_collection.id)
 
         r_config = {
           current_member: {
@@ -61,6 +61,8 @@ module DepositCollections
           identification_number: @member.identification_number
         }
 
+        @total_collected = 0.00
+
         # Build member records
         @records  = []
         @default_deposit_accounts.each_with_index do |o, i|
@@ -89,12 +91,14 @@ module DepositCollections
             account_subtype: o.account_subtype,
             member_account_id: member_account.try(:id)
           }
+
+          @total_collected += amount.to_f
         end
 
         @data[:records] << {
           member: @member_object,
           records: @records,
-          total_collected: 0.00
+          total_collected: @total_collected
         }
 
         @deposit_collection.update!(

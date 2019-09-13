@@ -67,7 +67,13 @@
                 #{@member.recognition_date.strftime("%b %d, %Y")}
               - else
                 N / A
-
+      / %li.list-group-item
+      /   Insurance Active
+      /   .value.text-muted
+      /     %b
+      /       %label.switch
+      /         %input{:type => "checkbox"}/
+      /         %span.slider.round
     - if @member.modifiable
       = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
         %i.fa.fa-edit

@@ -62,11 +62,6 @@
       = link_to export_tools_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
         Export Tools
-    - if microinsurance?    
-      %li{ class: "nav-item #{params[:controller] == '/upload_deposit' ? 'active' : ''}" }
-        = link_to upload_deposit_path, class: 'nav-link' do
-          %i.nav-icon.fa.fa-file
-          Upload Deposit
     %li{ class: "nav-item nav-dropdown" }
       = link_to "#", class: "nav-link nav-dropdown-toggle" do
         %i.nav-icon.fa.fa-cogs
@@ -97,6 +92,11 @@
           = link_to import_insurance_account_transactions_path, class: 'nav-link' do
             %i.nav-icon.fa.fa-file
             Import Insurance Account Transactions
+    - if microinsurance?    
+      %li{ class: "nav-item #{params[:controller] == '/upload_deposit' ? 'active' : ''}" }
+        = link_to upload_deposit_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Upload Deposit
     %li{ class: "nav-item #{params[:controller] == '/upload_fund_transfer' ? 'active' : ''}" }
       = link_to upload_fund_transfer_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file

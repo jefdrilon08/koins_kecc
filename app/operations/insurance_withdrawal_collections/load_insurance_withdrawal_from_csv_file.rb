@@ -61,6 +61,8 @@ module InsuranceWithdrawalCollections
           identification_number: @member.identification_number
         }
 
+        @total_collected = 0.00
+
         # Build member records
         @records  = []
         @default_withdrawal_accounts.each_with_index do |o, i|
@@ -89,12 +91,14 @@ module InsuranceWithdrawalCollections
             account_subtype: o.account_subtype,
             member_account_id: member_account.try(:id)
           }
+
+          @total_collected += amount.to_f
         end
 
         @data[:records] << {
           member: @member_object,
           records: @records,
-          total_collected: 0.00
+          total_collected: @total_collected
         }
 
         @insurance_withdrawal_collection.update!(
