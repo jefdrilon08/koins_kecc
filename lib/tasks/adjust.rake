@@ -561,6 +561,12 @@ namespace :adjust do
       members = Member.all
     end
 
+    if ENV['CURRENT_DATE'].present?
+      current_date = ENV['CURRENT_DATE'].to_date
+    else
+      current_date = Date.today
+    end    
+
     size  = members.size
     
     members.each_with_index do |member, i|
@@ -570,7 +576,6 @@ namespace :adjust do
       puts "Updating #{member.id} - #{member.full_name}"
       default_periodic_payment  = 15
       recognition_date          = member.recognition_date
-      current_date              = Date.today
 
       if recognition_date.present?
         member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
