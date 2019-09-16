@@ -4,6 +4,22 @@ module Adjustments
 
     def index
       @adjustment_records = AdjustmentRecord.subsidiary
+    
+      if params[:start_date].present? and params[:end_date].present?
+        @adjustment_records = @adjustment_records.where("date_approved >= ? AND date_approved <= ?", params[:start_date], params[:end_date])
+      end
+
+      if params[:branch_id].present?
+        @branch   = Branch.find(params[:branch_id])
+        @adjustment_records = @adjustment_records.where("meta #>> '{branch, id}' = ?", @branch.id)
+      end
+
+    
+
+      if params[:status].present?
+        @status = params[:status]
+        @adjustment_records = @adjustment_records.where(status: @status)
+      end
 
       @adjustment_records = @adjustment_records.page(params[:page]).per(50)
     end

@@ -5,6 +5,7 @@
     .col
       .card
         .card-body
+          = render partial: "index_filter"
           - if @withdrawal_collections.size > 0
             = render partial: "index_list", locals: { withdrawal_collections: @withdrawal_collections }
             = paginate @withdrawal_collections
