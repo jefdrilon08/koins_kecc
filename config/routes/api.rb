@@ -252,6 +252,7 @@ namespace :api do
     end
 
     namespace :epassbook do
+      get "/members/status", to: "members#status"
       get "/members/show", to: "members#show"
       get "/active_loans", to: "loans#active_loans"
       get "/savings", to: "savings#index"
