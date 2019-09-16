@@ -140,6 +140,11 @@ Rails.application.routes.draw do
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
   get "/accounting/books/misc", to: "accounting#misc", as: :accounting_books_misc
   get "/accounting/form", to: "accounting#form", as: :accounting_form
+  
+  #books
+  get "/books/excel", to: "books#excel"
+  get "/books/books_download_excel", to: "books#books_download_excel", as: :books_download_excel
+
 
   namespace :accounting do
     resources :year_end_closings, only: [:index, :show, :destroy]

@@ -4,6 +4,25 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
   def index
     @insurance_withdrawal_collections = InsuranceWithdrawalCollection.select("*")
 
+    if params[:start_date].present? and params[:end_date].present?
+      @insurance_withdrawal_collections = @insurance_withdrawal_collections.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
+    end
+
+    if params[:branch_id].present?
+      @branch   = Branch.find(params[:branch_id])
+      @insurance_withdrawal_collections = @insurance_withdrawal_collections.where(branch_id: @branch.id)
+    end
+
+    if params[:center_id].present?
+      @center   = Center.find(params[:center_id])
+      @insurance_withdrawal_collections = @insurance_withdrawal_collections.where(center_id: @center.id)
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @insurance_withdrawal_collections = @insurance_withdrawal_collections.where(status: @status)
+    end
+
     @insurance_withdrawal_collections = @insurance_withdrawal_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 

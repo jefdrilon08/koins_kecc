@@ -4,6 +4,26 @@ class DepositCollectionsController < ApplicationController
   def index
     @deposit_collections = DepositCollection.select("*")
 
+    if params[:start_date].present? and params[:end_date].present?
+      @deposit_collections = @deposit_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )
+    end
+
+    if params[:branch_id].present?
+      @branch   = Branch.find(params[:branch_id])
+       @deposit_collections = @deposit_collections.where(branch_id: @branch.id)
+    end
+
+    if params[:center_id].present?
+      @center = Center.find(params[:center_id])
+    
+      @deposit_collections = @deposit_collections.where(center_id: @center.id)
+
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @deposit_collections = @deposit_collections.where(status: @status)
+    end
     @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 

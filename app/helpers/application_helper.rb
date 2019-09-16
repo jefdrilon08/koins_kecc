@@ -1,4 +1,13 @@
 module ApplicationHelper
+  def accounting_funds
+    AccountingFund.all.map{ |o|
+      {
+        id: o.id,
+        name: o.name
+      }
+    }
+  end
+
   def pending_count(branches)
     Member.pending.where(branch_id: branches.pluck(:id)).count
   end

@@ -1,10 +1,11 @@
 module Accounting
   class GenerateTrialBalance
     def initialize(config:)
-      @config     = config
-      @start_date = @config[:start_date]
-      @end_date   = @config[:end_date]
-      @branch     = @config[:branch]
+      @config           = config
+      @start_date       = @config[:start_date]
+      @end_date         = @config[:end_date]
+      @branch           = @config[:branch]
+      @accounting_fund  = @config[:accounting_fund]
 
       @year = @end_date.year
       
@@ -57,31 +58,61 @@ module Accounting
     private
 
     def compute_beginning_fund_balances!
-      dr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'DR', 
-                    @start_date,
-                    @fund_balance_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+      if @accounting_fund.present?
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'DR', 
+                      @start_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
 
-      cr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'CR', 
-                    @start_date,
-                    @fund_balance_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'CR', 
+                      @start_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      else
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'DR', 
+                      @start_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'CR', 
+                      @start_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      end
 
       @fund_balance_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
@@ -130,31 +161,61 @@ module Accounting
     end
 
     def compute_beginning_assets_and_liabilities_and_equities!
-      dr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'DR', 
-                    @start_date,
-                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+      if @accounting_fund.present?
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'DR', 
+                      @start_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
 
-      cr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'CR', 
-                    @start_date,
-                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'CR', 
+                      @start_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      else
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'DR', 
+                      @start_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'CR', 
+                      @start_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      end
 
       @assets_and_liabilities_and_equities_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
@@ -203,32 +264,63 @@ module Accounting
     end
 
     def compute_beginning_income_and_expenses!
-      dr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
-                    'DR', 
-                    @start_date,
-                    @income_and_expenses_accounting_codes.pluck(:id),
-                    @year,
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+      if @accounting_fund.present?
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'DR', 
+                      @start_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
 
-      cr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
-                    'CR', 
-                    @start_date,
-                    @income_and_expenses_accounting_codes.pluck(:id),
-                    @year,
-                    @branch.id
-                  )
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'CR', 
+                      @start_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      else
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
+                      'DR', 
+                      @start_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
+                      'CR', 
+                      @start_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id
+                    )
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      end
 
       @income_and_expenses_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
@@ -277,33 +369,66 @@ module Accounting
     end
 
     def compute_current_fund_balances!
-      dr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'DR', 
-                    @start_date, 
-                    @end_date,
-                    @fund_balance_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+      if @accounting_fund.present?
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'DR', 
+                      @start_date, 
+                      @end_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
 
-      cr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'CR', 
-                    @start_date, 
-                    @end_date,
-                    @fund_balance_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'CR', 
+                      @start_date, 
+                      @end_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      else
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'DR', 
+                      @start_date, 
+                      @end_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'CR', 
+                      @start_date, 
+                      @end_date,
+                      @fund_balance_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+      end
 
       @fund_balance_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
@@ -352,33 +477,65 @@ module Accounting
     end
 
     def compute_current_assets_and_liabilities_and_equities!
-      dr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'DR', 
-                    @start_date, 
-                    @end_date,
-                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+      if @accounting_fund.present?
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'DR', 
+                      @start_date, 
+                      @end_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
 
-      cr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
-                    'CR', 
-                    @start_date, 
-                    @end_date,
-                    @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'CR', 
+                      @start_date, 
+                      @end_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      else
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'DR', 
+                      @start_date, 
+                      @end_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?", 
+                      'CR', 
+                      @start_date, 
+                      @end_date,
+                      @assets_and_liabilities_and_equities_accounting_codes.pluck(:id),
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      end
 
       @assets_and_liabilities_and_equities_accounting_codes.each do |accounting_code|
         dr_amount = 0.00
@@ -427,35 +584,69 @@ module Accounting
     end
 
     def compute_current_income_and_expenses!
-      dr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
-                    'DR', 
-                    @start_date, 
-                    @end_date,
-                    @income_and_expenses_accounting_codes.pluck(:id),
-                    @year,
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+      if @accounting_fund.present?
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'DR', 
+                      @start_date, 
+                      @end_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
 
-      cr_hash = AccountingEntry
-                  .includes(journal_entries: :accounting_code)
-                  .where(
-                    "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
-                    'CR', 
-                    @start_date, 
-                    @end_date,
-                    @income_and_expenses_accounting_codes.pluck(:id),
-                    @year,
-                    @branch.id
-                  )
-                  .where.not("accounting_entries.book = ?", "MISC")
-                  .group("journal_entries.accounting_code_id")
-                  .sum("journal_entries.amount")
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?", 
+                      'CR', 
+                      @start_date, 
+                      @end_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id,
+                      @accounting_fund.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      else
+        dr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
+                      'DR', 
+                      @start_date, 
+                      @end_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+
+        cr_hash = AccountingEntry
+                    .includes(journal_entries: :accounting_code)
+                    .where(
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND extract(year FROM date_posted) = ? AND accounting_entries.branch_id = ?", 
+                      'CR', 
+                      @start_date, 
+                      @end_date,
+                      @income_and_expenses_accounting_codes.pluck(:id),
+                      @year,
+                      @branch.id
+                    )
+                    .where.not("accounting_entries.book = ?", "MISC")
+                    .group("journal_entries.accounting_code_id")
+                    .sum("journal_entries.amount")
+      end
 
       @income_and_expenses_accounting_codes.each do |accounting_code|
         dr_amount = 0.00

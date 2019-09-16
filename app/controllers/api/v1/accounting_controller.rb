@@ -41,6 +41,8 @@ module Api
         end_date    = params[:end_date].try(:to_date)
         branch      = Branch.where(id: params[:branch_id]).first
 
+        accounting_fund = AccountingFund.where(id: params[:accounting_fund_id]).first
+
         errors  = []
 
         if start_date.blank?
@@ -57,7 +59,8 @@ module Api
           config  = {
             start_date: start_date,
             end_date: end_date,
-            branch: branch
+            branch: branch,
+            accounting_fund: accounting_fund
           }
 
           trial_balance_data  = ::Accounting::GenerateTrialBalance.new(
