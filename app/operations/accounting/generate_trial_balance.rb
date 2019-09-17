@@ -47,11 +47,6 @@ module Accounting
 
       compute_ending!
 
-      # Flatten Total
-#      result  = (@data[:total_beginning_debit] - @data[:total_beginning_credit]).abs
-#      @data[:total_beginning_debit]   = result
-#      @data[:total_beginning_credit]  = result
-
       @data
     end
 
