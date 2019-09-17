@@ -32,14 +32,14 @@ module Billings
           member = Member.find(record[:member][:id])
           record[:records].each do |rec|
             if rec[:record_type] == "INSURANCE" and rec[:amount] > 0 and member.member_account_validation_records.count > 0
-              # member.insurance_account_validation_records.each do |insurance_account_validation_record|
-                # if member_account_validation_record.datais_void != true
-                @errors[:messages] << {
-                  key: "validation",
-                  message: "#{member.full_name} has already been validated!"
-                }
-                # end
-              # end
+              member.member_account_validation_records.each do |member_account_validation_record|
+                if member_account_validation_record.data.with_indifferent_access[:is_void] != true
+                  @errors[:messages] << {
+                    key: "validation",
+                    message: "#{member.full_name} has already been validated!"
+                  }
+                end
+              end
             end      
           end
         end 
