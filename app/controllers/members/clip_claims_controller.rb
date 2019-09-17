@@ -54,7 +54,6 @@ module Members
         flash[:success] = "Successfully updated claim"
         redirect_to clip_claim_path(@clip_claim)
       else
-        UserActivity.create!(user_id: current_user.id, role: current_user.role, content: "Failed to update clip claim for #{@member.to_s}.", email: current_user.email, username: current_user.username, record_reference_id: @clip_claim.id)
         flash[:error] = "Error in saving clip claim"
         render :new
       end

@@ -1,16 +1,6 @@
 :css
   .print-text {
-    font-size: 1.7em;
-    font-family: calibri;
-  }
-
-  .print-text-book {
-    font-size: 1.4em;
-    font-family: calibri;
-  }
-
-  .print-text-sub {
-    font-size: .9em;
+    font-size: 1.2em;
     font-family: calibri;
   }
 
@@ -29,7 +19,9 @@
   hr {
     border-color: black;
   }
-
+  tr td {
+    font-size: 1em;
+  }
 
 %span.print-text
   %center
@@ -42,7 +34,7 @@
     %p
       CLAIMS VALIDATION:
       %u
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.type_of_insurance_policy}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BLIP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       %br
       %br
       %b
@@ -57,13 +49,15 @@
         DATE:&nbsp;&nbsp;&nbsp;&nbsp
       - if !@claim.date_reported.nil?
         #{@claim.date_reported}
+        #{Time.now.strftime("%H:%M:%S")}
       - else
         #{@claim.date_prepared}
+        #{Time.now.strftime("%H:%M:%S")}
       %hr
     .body1
       %p
         %b
-          For the following details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submitted Documents
+          For the following details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submitted Documents
       %br
       %table{:border => "0"}
         %tr

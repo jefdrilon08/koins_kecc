@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.7em;
+    font-size: 1.2em;
     font-family: calibri;
   }
 
@@ -29,7 +29,9 @@
   hr {
     border-color: black;
   }
-
+  tr td {
+    font-size: 1em;
+  }
 
 %span.print-text
   %center
@@ -55,7 +57,7 @@
       %br
       %b
         DATE:&nbsp;&nbsp;&nbsp;&nbsp;
-      #{Time.now.to_date}
+      #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
       %hr
     .body1
       %p

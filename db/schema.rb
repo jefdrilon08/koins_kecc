@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_11_092628) do
+ActiveRecord::Schema.define(version: 2019_09_13_040402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -297,6 +297,33 @@ ActiveRecord::Schema.define(version: 2019_06_11_092628) do
     t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
+  end
+
+  create_table "hiip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "date_posted"
+    t.decimal "amount"
+    t.text "mode_of_payment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "policy_number"
+    t.date "effective_date_of_coverage"
+    t.date "expiration_date_of_coverage"
+    t.date "date_admitted"
+    t.date "date_discharged"
+    t.string "number_ofdays_tobepaid"
+    t.date "date_of_birth"
+    t.string "age"
+    t.text "reason_of_confinement"
+    t.text "diagnosis"
+    t.string "check_payee"
+    t.string "prepared_by"
+    t.decimal "balance"
+    t.index ["branch_id"], name: "index_hiip_claims_on_branch_id"
+    t.index ["center_id"], name: "index_hiip_claims_on_center_id"
+    t.index ["member_id"], name: "index_hiip_claims_on_member_id"
   end
 
   create_table "insurance_fund_transfer_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -686,6 +713,9 @@ ActiveRecord::Schema.define(version: 2019_06_11_092628) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "hiip_claims", "branches"
+  add_foreign_key "hiip_claims", "centers"
+  add_foreign_key "hiip_claims", "members"
   add_foreign_key "insurance_fund_transfer_collections", "branches"
   add_foreign_key "insurance_fund_transfer_collections", "centers"
   add_foreign_key "insurance_withdrawal_collections", "branches"

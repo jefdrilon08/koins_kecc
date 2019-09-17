@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
   post "/new_claim_application", to: "claims#new_claim_application", as: :new_claim_application
   post "/new_clip_claim_application", to: "clip_claims#new_clip_claim_application", as: :new_clip_claim_application
+  post "/new_hiip_claim_application", to: "hiip_claims#new_hiip_claim_application", as: :new_hiip_claim_application
 
 
   resources :claims do
@@ -79,6 +80,10 @@ Rails.application.routes.draw do
   resources :clip_claims do
     get "/clip_claim_validation_pdf", to: "clip_claims#clip_claim_validation_pdf"
     get "/clip_claim_loa_pdf", to: "clip_claims#clip_claim_loa_pdf"
+  end
+  
+  resources :hiip_claims do
+    get "/hiip_claim_validation_pdf", to: "hiip_claims#hiip_claim_validation_pdf"
   end
 
   resources :members, only: [] do
@@ -92,6 +97,7 @@ Rails.application.routes.draw do
     resources :attachment_files, controller: 'members/attachment_files'
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
+    resources :hiip_claims, controller: 'members/hiip_claims'
   end
   
   # Insurance Accounts

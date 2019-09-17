@@ -1,0 +1,35 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Date Posted 
+      %th
+        Member
+      %th
+        Branch
+      %th
+        Center
+      %th
+        Amount
+      %th
+        Balance
+  %tbody
+    - @hiip_claims.each do |hiip_claim|
+      %tr
+        %td 
+          #{hiip_claim.date_posted.strftime("%B %d, %Y")}
+        %td
+          = link_to hiip_claim_path(hiip_claim) do
+            %strong
+              #{hiip_claim.member.full_name}
+        %td
+          #{hiip_claim.member.branch.name}
+        %td
+          #{hiip_claim.member.center.name}
+        %td
+          #{hiip_claim.amount}
+        %td
+          #{hiip_claim.total_balance}
+
+        
+        
