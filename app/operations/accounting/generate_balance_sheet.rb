@@ -17,20 +17,18 @@ module Accounting
       @accounting_code_fund_balance = AccountingCode.fund_balance
 
       @journal_entries  = JournalEntry.joins(:accounting_entry).where(
-                            "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ? AND accounting_entries.status = ? AND accounting_entries.book <> ?",
+                            "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ? AND accounting_entries.status = ?",
                             @start_date,
                             @end_date,
                             @branch.id,
-                            "approved",
-                            "MISC"
+                            "approved"
                           )
 
       @journal_entries_all  = JournalEntry.joins(:accounting_entry).where(
-                                "accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ? AND accounting_entries.status = ? AND accounting_entries.book <> ?",
+                                "accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ? AND accounting_entries.status = ?",
                                 @end_date,
                                 @branch.id,
-                                "approved",
-                                "MISC"
+                                "approved"
                               )
 
       @data = {
