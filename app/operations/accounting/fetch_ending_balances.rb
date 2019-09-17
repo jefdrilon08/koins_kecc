@@ -1,5 +1,5 @@
 module Accounting
-  class FetchBeginningBalances
+  class FetchEndingBalances
     def initialize(config:)
       @config = config
 
@@ -29,9 +29,9 @@ module Accounting
       @data = {
         start_date: @start_date,
         end_date: @end_date,
-        beginning_entries: [],
-        total_beginning_debit: 0.00,
-        total_beginning_credit: 0.00
+        ending_entries: [],
+        total_ending_debit: 0.00,
+        total_ending_credit: 0.00
       }
     end
 
@@ -40,12 +40,10 @@ module Accounting
         compute_overall!
       elsif ["INCOME", "EXPENSES"].include?(@category)
         compute_yearly!
-      else
-        raise "Invalid category #{@category}"
       end
 
-      @data[:total_beginning_debit]   = @data[:total_beginning_debit].round(2)
-      @data[:total_beginning_credit]  = @data[:total_beginning_credit].round(2)
+      @data[:total_ending_debit]   = @data[:total_ending_debit].round(2)
+      @data[:total_ending_credit]  = @data[:total_ending_credit].round(2)
 
       @data
     end
@@ -55,10 +53,10 @@ module Accounting
         dr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
                       "DR",
-                      @start_date,
-                      @start_date.year,
+                      @end_date,
+                      @end_date.year,
                       @accounting_codes.pluck(:id),
                       @branch.id,
                       @accounting_fund.id
@@ -69,10 +67,10 @@ module Accounting
         cr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
                       "CR",
-                      @start_date,
-                      @start_date.year,
+                      @end_date,
+                      @end_date.year,
                       @accounting_codes.pluck(:id),
                       @branch.id,
                       @accounting_fund.id
@@ -83,10 +81,10 @@ module Accounting
         dr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
                       "DR",
-                      @start_date,
-                      @start_date.year,
+                      @end_date,
+                      @end_date.year,
                       @accounting_codes.pluck(:id),
                       @branch.id
                     )
@@ -96,10 +94,10 @@ module Accounting
         cr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
                       "CR",
-                      @start_date,
-                      @start_date.year,
+                      @end_date,
+                      @end_date.year,
                       @accounting_codes.pluck(:id),
                       @branch.id
                     )
@@ -143,10 +141,10 @@ module Accounting
           cr_amount: cr_amount
         }
 
-        @data[:beginning_entries] << entry
+        @data[:ending_entries] << entry
 
-        @data[:total_beginning_debit] += dr_amount
-        @data[:total_beginning_credit] += cr_amount
+        @data[:total_ending_debit] += dr_amount
+        @data[:total_ending_credit] += cr_amount
       end
     end
 
@@ -155,9 +153,9 @@ module Accounting
         dr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
                       "DR",
-                      @start_date,
+                      @end_date,
                       @accounting_codes.pluck(:id),
                       @branch.id,
                       @accounting_fund.id
@@ -168,9 +166,9 @@ module Accounting
         cr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
                       "CR",
-                      @start_date,
+                      @end_date,
                       @accounting_codes.pluck(:id),
                       @branch.id,
                       @accounting_fund.id
@@ -181,9 +179,9 @@ module Accounting
         dr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
                       "DR",
-                      @start_date,
+                      @end_date,
                       @accounting_codes.pluck(:id),
                       @branch.id
                     )
@@ -193,9 +191,9 @@ module Accounting
         cr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted < ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
                       "CR",
-                      @start_date,
+                      @end_date,
                       @accounting_codes.pluck(:id),
                       @branch.id
                     )
@@ -239,10 +237,10 @@ module Accounting
           cr_amount: cr_amount
         }
 
-        @data[:beginning_entries] << entry
+        @data[:ending_entries] << entry
 
-        @data[:total_beginning_debit] += dr_amount
-        @data[:total_beginning_credit] += cr_amount
+        @data[:total_ending_debit] += dr_amount
+        @data[:total_ending_credit] += cr_amount
       end
     end
   end
