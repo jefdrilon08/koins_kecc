@@ -19,7 +19,6 @@ module Accounting
                             @branch.id,
                             "approved"
                           )
-                          .where.not("accounting_entries.book = ?", "MISC")
 
       @data = {
         start_date: @start_date,
