@@ -14,7 +14,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import {numberWithCommas} from '../utils/helpers';
 
-export default class TrialBalanceDisplay extends React.Component {
+export default class TrialBalanceComponent extends React.Component {
   constructor(props) {
     super(props);
     
@@ -29,13 +29,21 @@ export default class TrialBalanceDisplay extends React.Component {
       start_date: moment(firstDay),
       end_date: moment(lastDay),
       currentBranchId: "",
+      currentAccountingFundId: "",
       branches: [],
+      accountingFunds: props.accountingFunds,
       data: false
     };
   }
 
   componentDidMount() {
     this.fetchBranches();
+
+    if(this.state.accountingFunds.length > 0) {
+      this.setState({
+        currentAccountingFundId: this.state.accountingFunds[0].id
+      });
+    }
   }
 
   fetchBranches() {
@@ -76,7 +84,8 @@ export default class TrialBalanceDisplay extends React.Component {
       data: {
         start_date: start_date,
         end_date: end_date,
-        branch_id: context.state.currentBranchId
+        branch_id: context.state.currentBranchId,
+        accounting_fund_id: context.state.currentAccountingFundId
       },
       dataType: 'json',
       success: function(response) {
@@ -247,6 +256,12 @@ export default class TrialBalanceDisplay extends React.Component {
     });
   }
 
+  handleAccountingFundChanged(event) {
+    this.setState({
+      currentAccountingFundId: event.target.value
+    });
+  }
+
   renderContent() {
     var context = this;
     var state   = context.state;
@@ -284,10 +299,18 @@ export default class TrialBalanceDisplay extends React.Component {
       );
     }
 
-    var currentBranchId = state.currentBranchId;
+    var accountingFundOptions = [];
 
-    console.log(branchOptions);
-    console.log("currentBranchId: " + this.state.currentBranchId);
+    for(var i = 0; i < state.accountingFunds.length; i++) {
+      accountingFundOptions.push(
+        <option value={state.accountingFunds[i].id} key={"acc-fund-" + i}>
+          {state.accountingFunds[i].name}
+        </option>
+      );
+    }
+
+    var currentBranchId         = state.currentBranchId;
+    var currentAccountingFundId = state.currentAccountingFundId;
 
     return  (
       <div>
@@ -323,6 +346,19 @@ export default class TrialBalanceDisplay extends React.Component {
                 onChange={this.handleBranchChanged.bind(this)}
               >
                 {branchOptions}
+              </select>
+              <br/>
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-group">
+              <label>Accounting Fund</label>
+              <select 
+                className="form-control" 
+                value={currentAccountingFundId}
+                onChange={this.handleAccountingFundChanged.bind(this)}
+              >
+                {accountingFundOptions}
               </select>
               <br/>
             </div>

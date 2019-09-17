@@ -29,6 +29,7 @@ class Member < ApplicationRecord
   has_many :claims, dependent: :delete_all
   has_many :membership_payment_records
   has_many :attachment_files
+  has_many :member_account_validation_records
 
   # ActiveStorage
   has_many_attached :attachment_files

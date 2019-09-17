@@ -34,6 +34,7 @@ class DataStore < ApplicationRecord
   scope :manual_aging, -> { where("meta->>'data_store_type' = ?", "MANUAL_AGING") }
   scope :import_insurance_account_transactions, -> { where("meta->>'data_store_type' = ?", "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS") }
   scope :time_deposit_withdrawal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_WITHDRAWAL") }
+  scope :time_deposit_autorenewal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_AUTORENEWAL") }
 
   before_validation :load_defaults
 

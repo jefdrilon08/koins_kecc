@@ -125,6 +125,7 @@ Rails.application.routes.draw do
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
+  get "/savings_accounts/:id/:data_store_id/time_deposit_withdrawal", to: "savings_accounts#time_deposit_withdrawal", as: :savings_account_time_deposit_withdrawal
 
   # get "/insurance_accounts", to: "insurance_accounts#index"
   # get "/insurance_accounts/:id", to: "insurance_accounts#show", as: :insurance_account
@@ -138,11 +139,18 @@ Rails.application.routes.draw do
   # Accounting
   get "/accounting/trial_balance", to: "accounting#trial_balance"
   get "/accounting/general_ledger", to: "accounting#general_ledger"
+  get "/accounting/general_ledger_excel_url", to: "accounting#general_ledger_excel_url"
+  get "/accounting/general_ledger_excel", to: "accounting#general_ledger_excel", as: :general_ledger_excel_url
   get "/accounting/books/jvb", to: "accounting#jvb", as: :accounting_books_jvb
   get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
   get "/accounting/books/misc", to: "accounting#misc", as: :accounting_books_misc
   get "/accounting/form", to: "accounting#form", as: :accounting_form
+  
+  #books
+  get "/books/excel", to: "books#excel"
+  get "/books/books_download_excel", to: "books#books_download_excel", as: :books_download_excel
+
 
   namespace :accounting do
     resources :year_end_closings, only: [:index, :show, :destroy]

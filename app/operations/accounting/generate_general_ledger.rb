@@ -146,7 +146,6 @@ module Accounting
       end
 
       @data[:entries]  = entries
-      
       @data
     end
   end

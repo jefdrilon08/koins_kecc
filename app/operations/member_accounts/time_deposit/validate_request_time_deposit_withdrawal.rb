@@ -8,6 +8,17 @@ module MemberAccounts
         @member_account = @config[:member_account]
         @branch         = @config[:branch]
         @user           = @config[:user]
+
+        @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
+
+        @account_transactions = AccountTransaction.approved_member_account_transactions(
+                                  @member_account.id,
+                                  @current_date
+                                )
       end
 
       def execute!
@@ -17,6 +28,13 @@ module MemberAccounts
             message: "Member account not found"
           }
         else
+          if @member_account.balance == 0
+            @errors[:messages] << {
+              key: "member_account",
+              message: "Account has no balance"
+            }
+          end
+
           withdrawal_requests = ::MemberAccounts::TimeDeposit::FetchWithdrawalRequests.new(
                                   config: {
                                     member_account: @member_account
@@ -32,6 +50,33 @@ module MemberAccounts
               key: "member_account",
               message: "account still has pending requests"
             }
+          end
+
+          if @account_transactions.size == 0
+            @errors[:messages] << {
+              key: "account_transactions",
+              message: "No transactions found"
+            }
+          else
+            latest_transaction = @account_transactions.last
+
+            if !latest_transaction.deposit?
+              @errors[:messages] << {
+                key: "latest_transaction",
+                message: "No deposit found"
+              }
+            else
+              lock_in_period  = latest_transaction.data.with_indifferent_access[:lock_in_period]
+
+              maturity_date = latest_transaction.transacted_at + lock_in_period[:num_days].days
+
+              if @current_date >= maturity_date
+                @errors[:messages] << {
+                  key: "maturity_date",
+                  message: "Time deposit is already past maturity date"
+                }
+              end
+            end
           end
         end
 

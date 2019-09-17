@@ -54,8 +54,8 @@ module DepositCollections
 	        end
 	      end
 
-	      # Update accounting_entry
-      @data[:accounting_entry]  = ::DepositCollections::BuildAccountingEntry.new(
+	     # Update accounting_entry
+      	@data[:accounting_entry]  = ::DepositCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @deposit_collection.branch,
                                       data: @data,

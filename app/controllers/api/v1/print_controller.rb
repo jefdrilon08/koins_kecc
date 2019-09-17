@@ -180,6 +180,17 @@ module Api
           data  = ::Print::BuildWithdrawalCollection.new(
                     config: config
                   ).execute!
+        elsif type == "withdrawal_request"
+          data_store  = DataStore.find(params[:id])
+          filename    = "withdrawal-request-#{Time.now.to_i}.json"
+
+          config  = {
+            data_store: data_store
+          }
+
+          data  = ::Print::BuildWithdrawalRequest.new(
+                    config: config
+                  ).execute!
         else
           raise "Invalid type: #{type}"
         end

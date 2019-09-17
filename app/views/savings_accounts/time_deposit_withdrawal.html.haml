@@ -1,0 +1,109 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    = link_to savings_accounts_path do
+      .fa.fa-piggy-bank
+      Savings
+  %li.breadcrumb-item
+    = link_to member_path(@savings_account.member) do
+      .fa.fa-user
+      #{@savings_account.member.full_name}
+  %li.breadcrumb-item
+    = link_to savings_account_path(@savings_account.id) do
+      #{@savings_account.account_subtype}
+  %li.breadcrumb-item
+    Withdrawal Record
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      .btn#btn-print-withdrawal-request
+        .fa.fa-print
+        Print
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          %h5.text-muted
+            Lock-In Period Information
+          %table.table.table.table-bordered.table-sm
+            %tr
+              %th{ width: "25%" }
+                Num Days
+              %td
+                #{@data_store.data["lock_in_period"]["num_days"]}
+            %tr
+              %th
+                Num Months
+              %td
+                #{@data_store.data["lock_in_period"]["num_months"]}
+            %tr
+              %th
+                Expected Interest Rate
+              %td
+                #{@data_store.data["lock_in_period"]["interest_rate"].to_f * 100}
+            %tr
+              %th
+                Premature Withdrawal Interest Rate / Month 
+              %td
+                #{sprintf("%0.2f", @data_store.data["premature_interest_rate_per_month"].to_f * 100)}
+            %tr
+              %th
+                Expected Interest Amount
+              %td
+                #{number_to_currency(@data_store.data["lock_in_period"]["expected_interest"], unit: '')}
+          %h5.text-muted
+            Withdrawal Information
+          %table.table.table-bordered.table-sm
+            %tr
+              %th{ width: "25%" }
+                Amount to Withdraw:
+              %td
+                #{number_to_currency(@data_store.data["amount_to_withdraw"], unit: "")}
+            %tr
+              %th
+                Start Date:
+              %td
+                #{@data_store.data["start_date"].to_date.strftime("%B %d, %Y")}
+            %tr
+              %th
+                End Date:
+              %td
+                #{@data_store.data["end_date"].to_date.strftime("%B %d, %Y")}
+            %tr
+              %th
+                Number of Days Outstanding:
+              %td
+                #{@data_store.data["num_days_outstanding"]}
+            %tr
+              %th
+                Interest Rate per Month
+              %td
+                #{@data_store.data["interest_rate_per_month"].to_f * 100}
+            %tr
+              %th
+                Interest Garnered
+              %td
+                #{number_to_currency(@data_store.data["interest_amount"], unit: "")}
+          %hr
+          %h5.text-muted
+            Accounting Entry
+          = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @data_store.data.with_indifferent_access[:accounting_entry] }
+
+= render partial: "shared/modals/print"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "savings_accounts/ShowWithdrawalRequest.js"
+
+#parameters{ data: { id: @data_store.id } }
+
+:javascript
+  $(document).ready(function() {
+    var $parameters       = $("#parameters");
+    var id                = $parameters.data("id");
+    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
+
+    ShowWithdrawalRequest.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });

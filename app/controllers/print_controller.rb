@@ -58,6 +58,10 @@ class PrintController < ApplicationController
       @withdrawal_collection = @data[:data]
 
       render "print/withdrawal_collection", layout: "plain"
+    elsif @data[:type] == "withdrawal_request"
+      @withdrawal_request = @data[:data]
+
+      render "print/withdrawal_request", layout: "plain"
     else
       raise "Invalid type #{@data[:type]}"
     end

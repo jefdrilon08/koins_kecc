@@ -5,12 +5,12 @@ var BooksIndex  = (function() {
   var $selectBranch;
   var $modalPrint;
   var $message;
-
+  var $btndownload;
   var book;
   var authenticityToken;
 
   var _urlPrint = "/api/v1/print/generate_file";
-
+  var _urlDownload = "/books/excel";
   var _cacheDom = function() {
     $btnPrint       = $("#btn-print");
     $inputStartDate = $("#input-start-date");
@@ -18,9 +18,48 @@ var BooksIndex  = (function() {
     $selectBranch   = $("#select-branch");
     $modalPrint     = $("#modal-print");
     $message        = $(".message");
+    $btndownload    = $("#btn-download")
   };
 
   var _bindEvents = function() {
+      
+
+      $btndownload.on("click", function() {
+      var startDate = $inputStartDate.val();
+      var endDate   = $inputEndDate.val();
+      var branchId  = $selectBranch.val();
+
+      if(!startDate) {
+        alert("Start date required");
+      }
+
+      if(!endDate) {
+        alert("End date required");
+      }
+      $.ajax({
+        url: _urlDownload,
+        method: 'GET',
+        data: {
+          start_date: startDate,
+          end_date: endDate,
+          branch_id: branchId,
+          book: book,
+          type: "book",
+          authenticity_token: authenticityToken
+        },
+        dataType: 'json',
+        success: function(response) {
+          window.open(response.download_url, '_blank');
+        },
+        error: function(response) {
+          $message.html("Error!");
+        }
+      });
+    });
+
+
+
+
     $btnPrint.on("click", function() {
       var startDate = $inputStartDate.val();
       var endDate   = $inputEndDate.val();
@@ -61,7 +100,9 @@ var BooksIndex  = (function() {
         }
       });
     });
-  };
+
+   
+}
 
   var init  = function(options) {
     authenticityToken = options.authenticityToken;
