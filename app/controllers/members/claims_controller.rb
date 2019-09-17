@@ -50,7 +50,7 @@ module Members
       
       if @claim.update(claim_params)
        # update the remaining balance
-
+        flash[:success] = "Successfully updated claim"
         redirect_to claim_path(@claim)
       else
         flash[:error] = "Error in saving claim"

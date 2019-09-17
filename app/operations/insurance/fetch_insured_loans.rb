@@ -40,7 +40,7 @@ module Insurance
         end
       else
         # @entry_level_loans  = Loan.joins(:member).insured.order("members.last_name ASC")
-        Loan.all.joins(:member).order("members.last_name ASC").each do |loan|
+        Loan.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, @branch_id).each do |loan|
           accounting_entry = loan.accounting_entry
           if !accounting_entry.nil?
             clip = accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
@@ -70,6 +70,8 @@ module Insurance
         record[:first_date_of_payment]  = loan.first_date_of_payment.strftime("%B %d, %Y")
         record[:id]  = loan.id
         record[:status] = loan.status
+        record[:gender] = loan.member.gender
+        record[:date_of_birth]  = loan.member.date_of_birth
         record[:amount] = loan.principal
         record[:num_installments] = loan.try(:num_installments)
         record[:maturity_date]  = loan.maturity_date

@@ -1,0 +1,32 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Microinsurance
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    HIIP
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", class: 'btn', id: 'btn-new-transaction' do
+        .fa.fa-plus
+        New HIIP
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "hiip_claims/list"
+
+= render partial: "hiip_claims/new_transaction"
+
+= javascript_include_tag "hiip_claims/Index"
+= javascript_include_tag "hiip_claims"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });
