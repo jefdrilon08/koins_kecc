@@ -780,12 +780,28 @@ namespace :adjust do
     puts "Done!"
   end
 
-  task :void_validation_record => :environment do
+  task :void_validation_record_by_ids => :environment do
     puts "Updating ..."
     member_account_validation_record = MemberAccountValidation.find(ENV['MEMBER_ACCOUNT_VALIDATION_ID']).member_account_validation_records.where("member_id = ? AND data ->> 'is_void' = ?", ENV['MEMBER_ID'], 'false').order("created_at ASC").last
     member_account_validation_record_data = member_account_validation_record.data.with_indifferent_access
     member_account_validation_record_data[:is_void] = true
     member_account_validation_record.update!(data: member_account_validation_record_data)
+    puts "Done"
+  end
+
+  task :void_validation_record_of_balik_kasapi => :environment do
+    puts "Updating ..."
+    Member.active.each do |member|
+      if member.data.with_indifferent_access[:restoration_records].present?
+        member_account_validation_record = MemberAccountValidationRecord.where("member_id = ? AND data ->> 'is_void' = ?", member.id, 'false').order("created_at ASC").last
+        if !member_account_validation_record.nil?
+          puts "Voiding member account validation record of #{member.full_name}"
+          member_account_validation_record_data = member_account_validation_record.data.with_indifferent_access
+          member_account_validation_record_data[:is_void] = true
+          member_account_validation_record.update!(data: member_account_validation_record_data)
+        end
+      end
+    end
     puts "Done"
   end
 end
