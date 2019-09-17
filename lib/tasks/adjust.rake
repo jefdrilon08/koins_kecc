@@ -787,6 +787,5 @@ namespace :adjust do
     member_account_validation_record_data[:is_void] = true
     member_account_validation_record.update!(data: member_account_validation_record_data)
     puts "Done"
-    end
   end
 end
