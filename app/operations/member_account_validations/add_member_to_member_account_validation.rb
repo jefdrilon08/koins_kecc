@@ -151,8 +151,10 @@ module MemberAccountValidations
                             advance_rf: @advance_rf,
                             interest: @interest_amount,
                             total: @total,
-                            equity_interest: @equity_interest_amount
-
+                            equity_interest: @equity_interest_amount,
+                            data: {
+                              is_void: false
+                            }
    			)
    		@member_account_validation.member_account_validation_records << member_account_validation_record
     end
