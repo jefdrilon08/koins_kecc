@@ -26,7 +26,7 @@ module Reports
 
           sheet.add_row ["Credit Life Summary"], style: title_cell
           sheet.add_row ["#{Settings.company_name}"], style: title_cell
-          sheet.add_row ["#{@loan_status.upcase} Loans As of: #{@start_date} - #{@end_date}"], style: title_cell
+          sheet.add_row ["#{@loan_status} Loans As of: #{@start_date} - #{@end_date}"], style: title_cell
           sheet.add_row []
           sheet.add_row [
             "Identification Number",
@@ -40,7 +40,9 @@ module Reports
             "Insured Amount", 
             "Amount", 
             "Loan Product",
-            "Status" ], 
+            "Status",
+            "Gender",
+            "Date Of Birth"], 
             style: label_cell
 
           @insured_amount_total = 0.00
@@ -62,7 +64,9 @@ module Reports
               data[:insured_amount], 
               data[:amount],
               data[:loan_product],
-              data[:status]
+              data[:status],
+              data[:gender],
+              data[:date_of_birth]
               ],  
               style: [nil, nil, nil, nil, nil,  date_format_cell, date_format_cell, nil, currency_cell, currency_cell, nil, nil]
               @insured_amount_total = @insured_amount_total + data[:insured_amount] 

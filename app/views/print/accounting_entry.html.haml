@@ -179,7 +179,7 @@
         %th{width: 350} 
           #{@accounting_entry_data[:prepared_by]}
         %th{width: 350}
-        -if Settings.activate_microinsurance
+        -if Settings.activate_microinsurance == true
           %th{width: 350} #{"ANTIQUERA, SILVIDA"}
         -else
           %th{width: 350} #{@accounting_entry_data[:approved_by]}

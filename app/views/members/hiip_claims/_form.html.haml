@@ -1,0 +1,82 @@
+= simple_form_for [@member, @hiip_claim] do |f|
+  = hidden_field_tag 'memberId', "#{@member.id}"
+  #{@errors}
+  .row
+    .col
+      .form-group
+        %h3
+          HIIP Information
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :date_posted, input_html: { class: 'form-control ', id: 'date-posted', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date"
+    .col
+      .form-group
+        %label
+        = f.input :policy_number, input_html: { class: 'form-control', id: 'policy-number', value: @member.identification_number }, as: :string, label: "HIIP Policy Number"
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :date_of_birth, input_html: { class: 'form-control', id: 'date-of-birth', value: @member.date_of_birth, type: 'date'}, as: :string, label: "Date of Birth"
+    .col
+      .form-group
+        %label
+        = f.input :age, input_html: { class: 'form-control', id: 'age', value: @member.age}, as: :string, label: "Age" 
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :effective_date_of_coverage, input_html: { class: 'form-control', id: 'effective-date-of-coverage', type: 'date'}, as: :string, label: "Effective Date of Coverage"
+    .col
+      .form-group
+        %label
+        = f.input :expiration_date_of_coverage, input_html: { class: 'form-control', id: 'expiration-date-of-coverage', type: 'date'}, as: :string, label: "Expiration Date of Coverage" 
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :number_ofdays_tobepaid, input_html: { class: 'form-control', id: 'number-ofdays-tobepaid'}, as: :string, label: "Number of Days to be paid"
+    .col
+      .form-group
+        %label
+        = f.input :amount, input_html: { class: 'form-control', id: 'amount'}, as: :string, label: "Amount"    
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :date_admitted, input_html: { class: 'form-control', id: 'date-admitted', type: 'date'}, as: :string, label: "Date Admitted"
+    .col
+      .form-group
+        %label
+        = f.input :date_discharged, input_html: { class: 'form-control', id: 'date-discharged', type: 'date'}, as: :string, label: "Date Discharged"    
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :reason_of_confinement, input_html: { class: 'form-control', id: 'reason-of-confinement'}, as: :string, label: "Reason of Confinement"
+    .col
+      .form-group
+        %label
+        = f.input :diagnosis, input_html: { class: 'form-control', id: 'date-discharged'}, as: :string, label: "Diagnosis" 
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :check_payee, input_html: { class: 'form-control', id: 'check-payee'}, as: :string, label: "Name of Claimant"     
+    .col
+      .form-group
+        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.full_name.titleize}      
+  .row
+    .col
+      .form-actions
+      = button_tag type: 'submit', class: 'btn btn-primary', data: { confirm: "Are you sure?" } do
+        .fa.fa-check
+        Submit
+      = link_to hiip_claims_path, class: 'btn btn-default' do
+        .fa.fa-times
+        Cancel
+
+
+= javascript_include_tag "hiip_claims_form"
