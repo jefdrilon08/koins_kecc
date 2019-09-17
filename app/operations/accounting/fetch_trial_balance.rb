@@ -180,88 +180,123 @@ module Accounting
 
     def build_entries!
       @data[:beginning_assets][:beginning_entries].each_with_index do |o, i|
-        @data[:entries] << {
+        entry = {
           id: o[:accounting_code][:id],
           name: o[:accounting_code][:name],
           code: o[:accounting_code][:code],
-          beginning_debit: o[:total_beginning_debit],
-          beginning_credit: o[:total_beginning_credit],
-          current_debit: @data[:current_assets][:current_entries][i][:total_current_debit],
-          current_credit: @data[:current_assets][:current_entries][i][:total_current_credit],
-          ending_debit: @data[:ending_assets][:ending_entries][i][:total_ending_debit],
-          ending_credit: @data[:ending_assets][:ending_entries][i][:total_ending_credit]
+          beginning_debit: o[:dr_amount],
+          beginning_credit: o[:cr_amount],
+          current_debit: @data[:current_assets][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_assets][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_assets][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_assets][:ending_entries][i][:cr_amount]
         }
+
+        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
+          @data[:entries] << entry
+        end
       end
 
       @data[:beginning_liabilities][:beginning_entries].each_with_index do |o, i|
-        @data[:entries] << {
+        entry = {
           id: o[:accounting_code][:id],
           name: o[:accounting_code][:name],
           code: o[:accounting_code][:code],
-          beginning_debit: o[:total_beginning_debit],
-          beginning_credit: o[:total_beginning_credit],
-          current_debit: @data[:current_liabilities][:current_entries][i][:total_current_debit],
-          current_credit: @data[:current_liabilities][:current_entries][i][:total_current_credit],
-          ending_debit: @data[:ending_liabilities][:ending_entries][i][:total_ending_debit],
-          ending_credit: @data[:ending_liabilities][:ending_entries][i][:total_ending_credit]
+          beginning_debit: o[:dr_amount],
+          beginning_credit: o[:cr_amount],
+          current_debit: @data[:current_liabilities][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_liabilities][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_liabilities][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_liabilities][:ending_entries][i][:cr_amount]
         }
+
+        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
+          @data[:entries] << entry
+        end
       end
 
       @data[:beginning_equities][:beginning_entries].each_with_index do |o, i|
-        @data[:entries] << {
+        entry = {
           id: o[:accounting_code][:id],
           name: o[:accounting_code][:name],
           code: o[:accounting_code][:code],
-          beginning_debit: o[:total_beginning_debit],
-          beginning_credit: o[:total_beginning_credit],
-          current_debit: @data[:current_equities][:current_entries][i][:total_current_debit],
-          current_credit: @data[:current_equities][:current_entries][i][:total_current_credit],
-          ending_debit: @data[:ending_equities][:ending_entries][i][:total_ending_debit],
-          ending_credit: @data[:ending_equities][:ending_entries][i][:total_ending_credit]
+          beginning_debit: o[:dr_amount],
+          beginning_credit: o[:cr_amount],
+          current_debit: @data[:current_equities][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_equities][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_equities][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_equities][:ending_entries][i][:cr_amount]
         }
+
+        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
+          @data[:entries] << entry
+        end
       end
 
       @data[:beginning_income][:beginning_entries].each_with_index do |o, i|
-        @data[:entries] << {
+        entry = {
           id: o[:accounting_code][:id],
           name: o[:accounting_code][:name],
           code: o[:accounting_code][:code],
-          beginning_debit: o[:total_beginning_debit],
-          beginning_credit: o[:total_beginning_credit],
-          current_debit: @data[:current_income][:current_entries][i][:total_current_debit],
-          current_credit: @data[:current_income][:current_entries][i][:total_current_credit],
-          ending_debit: @data[:ending_income][:ending_entries][i][:total_ending_debit],
-          ending_credit: @data[:ending_income][:ending_entries][i][:total_ending_credit]
+          beginning_debit: o[:dr_amount],
+          beginning_credit: o[:cr_amount],
+          current_debit: @data[:current_income][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_income][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_income][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_income][:ending_entries][i][:cr_amount]
         }
+
+        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
+          @data[:entries] << entry
+        end
       end
 
       @data[:beginning_expenses][:beginning_entries].each_with_index do |o, i|
-        @data[:entries] << {
+        entry = {
           id: o[:accounting_code][:id],
           name: o[:accounting_code][:name],
           code: o[:accounting_code][:code],
-          beginning_debit: o[:total_beginning_debit],
-          beginning_credit: o[:total_beginning_credit],
-          current_debit: @data[:current_expenses][:current_entries][i][:total_current_debit],
-          current_credit: @data[:current_expenses][:current_entries][i][:total_current_credit],
-          ending_debit: @data[:ending_expenses][:ending_entries][i][:total_ending_debit],
-          ending_credit: @data[:ending_expenses][:ending_entries][i][:total_ending_credit]
+          beginning_debit: o[:dr_amount],
+          beginning_credit: o[:cr_amount],
+          current_debit: @data[:current_expenses][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_expenses][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_expenses][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_expenses][:ending_entries][i][:cr_amount]
         }
+
+        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
+          @data[:entries] << entry
+        end
       end
 
       @data[:beginning_fund_balances][:beginning_entries].each_with_index do |o, i|
-        @data[:entries] << {
+        entry = {
           id: o[:accounting_code][:id],
           name: o[:accounting_code][:name],
           code: o[:accounting_code][:code],
-          beginning_debit: o[:total_beginning_debit],
-          beginning_credit: o[:total_beginning_credit],
-          current_debit: @data[:current_fund_balance][:current_entries][i][:total_current_debit],
-          current_credit: @data[:current_fund_balance][:current_entries][i][:total_current_credit],
-          ending_debit: @data[:ending_fund_balance][:ending_entries][i][:total_ending_debit],
-          ending_credit: @data[:ending_fund_balance][:ending_entries][i][:total_ending_credit]
+          beginning_debit: o[:dr_amount],
+          beginning_credit: o[:cr_amount],
+          current_debit: @data[:current_fund_balance][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_fund_balance][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_fund_balance][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_fund_balance][:ending_entries][i][:cr_amount]
         }
+
+        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
+          @data[:entries] << entry
+        end
       end
+
+      @data[:entries] << {
+        id: "",
+        name: "TOTAL",
+        beginning_debit: @data[:total_beginning_debit],
+        beginning_credit: @data[:total_beginning_credit],
+        current_debit: @data[:total_current_debit],
+        current_credit: @data[:total_current_credit],
+        ending_debit: @data[:total_ending_debit],
+        ending_credit: @data[:total_ending_credit]
+      }
     end
   end
 end

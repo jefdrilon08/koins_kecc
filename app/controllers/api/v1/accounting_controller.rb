@@ -63,12 +63,15 @@ module Api
             accounting_fund: accounting_fund
           }
 
-          trial_balance_data  = ::Accounting::GenerateTrialBalance.new(
-                                  config: config
-                                ).execute!
-
-          data  = ::Accounting::FormatTrialBalance.new(
-                    trial_balance_data: trial_balance_data
+#          trial_balance_data  = ::Accounting::GenerateTrialBalance.new(
+#                                  config: config
+#                                ).execute!
+#
+#          data  = ::Accounting::FormatTrialBalance.new(
+#                    trial_balance_data: trial_balance_data
+#                  ).execute!
+          data  = ::Accounting::FetchTrialBalance.new(
+                    config: config
                   ).execute!
 
           render json: { data: data }
