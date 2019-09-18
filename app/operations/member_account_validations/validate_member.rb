@@ -49,24 +49,14 @@ module MemberAccountValidations
 		def validate_member_balik_kasapi!
 	    	member_account_validation_records = MemberAccountValidationRecord.where("status = ?", "approved")
 	    	member_account_validation_records.each do |rec|
-	    		if rec.member.meta.nil?
-	    			if rec.member.identification_number == @member.identification_number
-	    				@errors[:messages] << {
-		         				key: "member_account_validation_record",
-		          				message: "Member's member Account is already validated"
-		       				}
-		    		end
-		    	else
-		    		member_account_validation_recordss = MemberAccountValidationRecord.where("status = ? OR status = ? OR status = ?", "for-approval", "for-validation", "pending")
-		    		member_account_validation_recordss.each do |recc|
-	    				if recc.member.identification_number == @member.identification_number
-	    					@errors[:messages] << {
-		         				key: "member_account_validation_record",
-		          				message: "Member's member Account is already validated"
-		       				}
-		    			end
-	    			end
-		    	end
+    			if rec.member.identification_number == @member.identification_number
+    				if !rec.is_void?
+    					@errors[:messages] << {
+	         				key: "member_account_validation_record",
+	          				message: "Member's member Account is already validated"
+	       				}
+	       			end
+	    		end
 	    	end
 		end	
 

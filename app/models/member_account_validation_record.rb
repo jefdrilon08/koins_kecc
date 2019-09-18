@@ -26,6 +26,10 @@ class MemberAccountValidationRecord < ApplicationRecord
 	def approved?
 		self.status == "approved"
 	end
+
+	def is_void?
+		self.data.with_indifferent_access[:is_void] == true
+	end
 end
 
 

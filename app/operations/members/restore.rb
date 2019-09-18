@@ -54,6 +54,14 @@ module Members
         )
       end
 
+      # Void previous validation if any
+      member_account_validation_record = MemberAccountValidationRecord.where("member_id = ? AND data ->> 'is_void' = ?", @member.id, 'false').order("created_at ASC").last
+      if !member_account_validation_record.nil?
+        member_account_validation_record_data = member_account_validation_record.data.with_indifferent_access
+        member_account_validation_record_data[:is_void] = true
+        member_account_validation_record.update!(data: member_account_validation_record_data)
+      end
+
       @data[:restoration_records] = restoration_records
 
       # Update member
