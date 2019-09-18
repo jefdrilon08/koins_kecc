@@ -14,22 +14,41 @@ module Members
           id: @branch.id,
           name: @branch.name
         },
-        automatic: [],
-        voluntary: [],
-        involuntary: []
+        records: []
       }
     end
 
     def execute!
-      @data[:automatic]   = build_records!("automatic")
-      @data[:voluntary]   = build_records!("voluntary")
-      @data[:involuntary] = build_records!("involuntary")
+      Settings.member_resignation_types.each do |setting|
+        record  = {
+          name: setting.name,
+          particulars: []
+        }
+
+        particulars = setting.particulars
+
+        particulars.each do |p|
+          record_particular = {
+            code: p.code,
+            name: p.name,
+            records: []
+          }
+
+          record_particular[:records] = build_records!(setting.name, p.code)
+
+          record[:particulars] << record_particular
+        end
+
+        @data[:records] << record
+      end
+
+      @data
     end
 
     private
 
-    def build_records!(type)
-      sql     = "SELECT * FROM members m WHERE EXISTS (SELECT 1 FROM json_array_elements(m.data->'resignation_records') elem WHERE DATE(elem ->> 'date_resigned') >= '#{@start_date}' AND DATE(elem ->> 'date_resigned') <= '#{@end_date}' AND elem -> 'member_resignation_type' ->> 'name' = '#{type}')"
+    def build_records!(type, code)
+      sql     = "SELECT * FROM members m WHERE EXISTS (SELECT 1 FROM json_array_elements(m.data->'resignation_records') elem WHERE DATE(elem ->> 'date_resigned') >= '#{@start_date}' AND DATE(elem ->> 'date_resigned') <= '#{@end_date}' AND elem -> 'member_resignation_type' ->> 'name' = '#{type}' AND elem -> 'member_resignation_type' -> 'particular' ->> 'code' = '#{code}')"
 
       results = ActiveRecord::Base.connection.execute(sql)
 
