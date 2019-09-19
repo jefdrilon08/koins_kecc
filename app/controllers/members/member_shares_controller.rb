@@ -5,8 +5,8 @@ module Members
       
     def new
       date_of_issue = @member.membership_payment_records.paid.order("date_paid ASC").last.try(:date_paid)
-
       settings  = nil
+     number_of_shares = 1
 
       Settings.default_member_accounts.each do |s|
         if s.account_type == "EQUITY" and s.account_subtype == "Share Capital"
@@ -29,7 +29,7 @@ module Members
         end
       end
 
-      @member_share = MemberShare.new(date_of_issue: date_of_issue)
+      @member_share = MemberShare.new(date_of_issue: date_of_issue , number_of_shares: number_of_shares)
     end
 
     def create

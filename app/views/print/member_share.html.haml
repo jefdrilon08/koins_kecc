@@ -11,6 +11,11 @@
     font-size: 45px;
   }
 
+  .member-no-of-share {
+    font-size: 20px;
+    margin: 33px 0px 0px 250px;
+  }
+
   .member-recognition-month {
     margin-left: 110px;
   }
@@ -60,6 +65,19 @@
     %center
       %p
         #{@member_share_data[:member_full_name]}
+  .member-no-of-share
+    - if @member_share_data[:number_of_shares] == "1"
+      %label
+        isang (1)
+    - if @member_share_data[:number_of_shares] == "2"
+      %label
+        dalawang (2)
+    - if @member_share_data[:number_of_shares] == "3"
+      %label
+        tatlong (3)
+
+
+
   .member-details
     %label
       #{@member_share_data[:date_of_issue_day]}

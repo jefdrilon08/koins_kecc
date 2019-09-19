@@ -104,9 +104,6 @@ module Branches
                             "branch_id = ?",
                             @branch.id
                           )
-      #MEMBER_TYPE_COUNTS
-      total_regular_male = @active_members.where(member_type: "Kaagapay" , gender: "Male").count
-
       # Active Members = Pure Savers + Loaners
       total_inforce = @active_members.where(insurance_status: "inforce").count
       total_lapsed  = @active_members.where(insurance_status: "lapsed").count
