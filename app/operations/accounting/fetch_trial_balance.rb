@@ -276,10 +276,10 @@ module Accounting
           code: o[:accounting_code][:code],
           beginning_debit: o[:dr_amount],
           beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_fund_balance][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_fund_balance][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_fund_balance][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_fund_balance][:ending_entries][i][:cr_amount]
+          current_debit: @data[:current_fund_balances][:current_entries][i][:dr_amount],
+          current_credit: @data[:current_fund_balances][:current_entries][i][:cr_amount],
+          ending_debit: @data[:ending_fund_balances][:ending_entries][i][:dr_amount],
+          ending_credit: @data[:ending_fund_balances][:ending_entries][i][:cr_amount]
         }
 
         if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0

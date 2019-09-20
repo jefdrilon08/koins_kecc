@@ -68,7 +68,7 @@ module Accounting
         cr_hash = AccountingEntry
                     .joins(journal_entries: :accounting_code)
                     .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted =< ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
                       "CR",
                       @start_date,
                       @end_date,
