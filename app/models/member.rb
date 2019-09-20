@@ -134,13 +134,11 @@ class Member < ApplicationRecord
     if record.present?
       record.date_paid.strftime("%b %d, %Y")
     else
-      ""
-    end
-
-    if Settings.try(:use_recognition_date) == true and self.recognition_date.present?
-      self.recognition_date.strftime("%b %d, %Y")
-    else
-      ""
+      if Settings.try(:use_recognition_date) == true and self.recognition_date.present?
+        self.recognition_date.strftime("%b %d, %Y")
+      else
+        ""
+      end
     end
   end
 

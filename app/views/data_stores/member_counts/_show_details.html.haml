@@ -18,24 +18,6 @@
       Others
     %th.text-center
       Total
-  %tr
-    %th
-      Active Members
-    - if microinsurance?
-      %td.text-center
-        #{@data[:counts][:active_members][:inforce]}
-      %td.text-center
-        #{@data[:counts][:active_members][:lapsed]}
-      %td.text-center
-        #{@data[:counts][:active_members][:pending]}    
-    %td.text-center
-      #{@data[:counts][:active_members][:male]}
-    %td.text-center
-      #{@data[:counts][:active_members][:female]}
-    %td.text-center
-      #{@data[:counts][:active_members][:others]}
-    %td.text-center
-      #{@data[:counts][:active_members][:total]}
   - if microloans?
     %tr
       %th
@@ -61,6 +43,24 @@
         #{@data[:counts][:loaners][:total]}
   %tr
     %th
+      Active Members
+    - if microinsurance?
+      %td.text-center
+        #{@data[:counts][:active_members][:inforce]}
+      %td.text-center
+        #{@data[:counts][:active_members][:lapsed]}
+      %td.text-center
+        #{@data[:counts][:active_members][:pending]}    
+    %td.text-center
+      #{@data[:counts][:active_members][:male]}
+    %td.text-center
+      #{@data[:counts][:active_members][:female]}
+    %td.text-center
+      #{@data[:counts][:active_members][:others]}
+    %td.text-center
+      #{@data[:counts][:active_members][:total]}
+  %tr
+    %th
       GRAND TOTAL
     - if microinsurance?
       %th.text-center
@@ -84,6 +84,7 @@
     Member Type Count
   %table.table.table-bordered.table-hover.table-sm
     %tbody
+      %tr
       - @data[:member_type_counts].each do |o|
         %tr
           %th{ width: "50%" }

@@ -517,6 +517,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_040402) do
     t.datetime "updated_at", null: false
     t.date "date_of_issue"
     t.boolean "is_void"
+    t.integer "number_of_shares"
     t.index ["member_id"], name: "index_member_shares_on_member_id"
   end
 

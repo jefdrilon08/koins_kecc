@@ -22,8 +22,12 @@
       %th Edad
       %td
         #{@member.age} (#{@member.date_of_birth.strftime("%B %d, %Y").try(:upcase)})
-
-
+    %tr
+      %th Address
+      %td= @addressVal.join(', ')
+ 
+        
+      
 %h3.text-muted
   Other Information
 
