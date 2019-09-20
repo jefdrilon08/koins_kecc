@@ -268,6 +268,9 @@ Rails.application.routes.draw do
     get "/manual_aging/:id", to: "manual_aging#show"
     delete "/manual_aging/:id", to: "manual_aging#destroy"
 
+    get "/branch_resignations", to: "branch_resignations#index"
+    get "/branch_resignations/:id", to: "branch_resignations#show"
+    delete "/branch_resignations/:id", to: "branch_resignations#destroy"
   end
 
   namespace :accounting do

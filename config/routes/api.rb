@@ -240,6 +240,8 @@ namespace :api do
       get "/manual_aging/fetch", to: "manual_aging#fetch"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
+      post "/branch_resignations/queue", to: "branch_resignations#queue"
+      get "/branch_resignations/fetch", to: "branch_resignations#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
