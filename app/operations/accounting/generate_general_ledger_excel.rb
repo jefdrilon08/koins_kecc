@@ -175,14 +175,14 @@ module Accounting
             sheet.add_row ["GENERAL LEDGER"],style: @header_cells
             sheet.add_row ["#{Settings.company_name}"],style: @header_cells
             sheet.add_row ["#{Settings.company_address}"],style: @header_cells
-            sheet.add_row ["Vat Registration TIN Number: #{Settings.company_tin_number}"],style: @header_cells
+            sheet.add_row ["TIN Number: #{Settings.company_tin_number}"],style: @header_cells
             sheet.add_row ["#{@data[:start_date]} - #{@data[:end_date]}"],style: @header_cells
             sheet.add_row ["#{@branch_name}"],style: @header_cells
             sheet.add_row [""]
-            sheet.add_row ["DATE","REFERENCE NUMBER","BOOK","PARTICULAR","DEBIT","CREDIT",""], :style=> @title_cells
+            sheet.add_row ["DATE","REF. NUMBER","BOOK","PARTICULAR","DEBIT","CREDIT",""], :style=> @title_cells
  
               @data[:entries].each do |key , value|
-                                sheet.add_row ["#{key[:accounting_code_name]}","","","","","","#{key[:beginning_balance]}"], style: [@account_title,@nil,@nil,@nil,@nil,@nil,@currency_cells_account_title]
+                                sheet.add_row ["#{key[:accounting_code_name]} - Beginning Balance","","","","","","#{key[:beginning_balance]}"], style: [@account_title,@nil,@nil,@nil,@nil,@nil,@currency_cells_account_title]
           
                 key[:entries].each do |a , b|
                   sheet.add_row ["#{a[:date_posted]}","##{a[:reference_number].rjust(10,'0')}","#{a[:book]}","#{a[:particular]}","#{a[:dr_amount]}","#{a[:cr_amount]}","#{a[:running_balance]}"],
@@ -197,7 +197,7 @@ module Accounting
                   ]
                   
                 end
-                sheet.add_row ["ENDING BALANCE","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
+                sheet.add_row ["#{key[:accounting_code_name]} - ENDING BALANCE","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
               end
         end
       end
