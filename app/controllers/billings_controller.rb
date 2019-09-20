@@ -1,6 +1,7 @@
 class BillingsController < ApplicationController
   before_action :authenticate_user!
-
+  
+    
   def index
     @billings = Billing.select("*").where(branch_id: @branches.pluck(:id))
 
@@ -28,6 +29,7 @@ class BillingsController < ApplicationController
 
   def show
     @billing  = Billing.find(params[:id])
+   
     @data     = @billing.data.with_indifferent_access
 
     @activity_logs  = ActivityLog.where(
@@ -47,4 +49,18 @@ class BillingsController < ApplicationController
       redirect_to billing_path(@billing)
     end
   end
+
+  def excel
+    render json: {download_url: "#{billing_download_excel_path(billing: params[:id])}"} 
+  end
+ 
+  def billing_excel
+  
+    #billing_excel = ::Billings::BillingDownloadExcel.new(billing: params[:billing]).execute!
+    #filename = "billing.xlsx"
+    #billing_excel.serialize "#{Rails.root}/tmp/#{filename}"
+    #send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+  end
+
 end

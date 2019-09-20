@@ -26,6 +26,7 @@ var Show  = (function() {
   var _urlCheck   = "/api/v1/billings/check";
   var _urlZeroOut = "/api/v1/billings/zero_out";
   var _urlPrint   = "/api/v1/print/generate_file";
+  var _urlDownload= "/billings/excel";
 
   var _cacheDom = function() {
     $btnApprove         = $("#btn-approve");
@@ -39,7 +40,7 @@ var Show  = (function() {
     $btnPrint   = $("#btn-print");
     $btnPrintWp = $("#btn-print-wp");
     $modalPrint = $("#modal-print");
-
+    $btnExcel   = $("#btn-excel");
     $btnZeroOut         = $("#btn-zero-out");
     $btnConfirmZeroOut  = $("#btn-confirm-zero-out");
     $modalZeroOut       = $("#modal-zero-out");
@@ -162,6 +163,27 @@ var Show  = (function() {
         }
       });
     });
+
+      $btnExcel.on("click", function() {
+      
+      $.ajax({
+        url: _urlDownload,
+        method: 'GET',
+        data: {
+          id: billingId,
+          authenticity_token: authenticityToken
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log(response);
+          window.open(response.download_url, '_blank');
+        },
+        error: function(response) {
+          $message.html("Error!");
+        }
+      });
+    });
+
 
     $btnPrint.on("click", function() {
       $modalPrint.modal("show");

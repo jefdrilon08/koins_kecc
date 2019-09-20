@@ -150,17 +150,20 @@ Rails.application.routes.draw do
   #books
   get "/books/excel", to: "books#excel"
   get "/books/books_download_excel", to: "books#books_download_excel", as: :books_download_excel
-
-
+  
   namespace :accounting do
     resources :year_end_closings, only: [:index, :show, :destroy]
     resources :balance_sheets, only: [:index, :show, :destroy]
     resources :income_statements, only: [:index, :show, :destroy]
   end
+  
 
+  
   # Billing
+  get "/billings/excel", to: "billings#excel"
+  get "/billings/billing_excel", to: "billings#billing_excel", as: :billing_download_excel
   resources :billings, only: [:index, :show, :destroy]
-
+  
   ################################
   # CASH MANAGEMENT
   ################################
