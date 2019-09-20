@@ -55,8 +55,8 @@ module Billings
             @val  << t[:key]
           end
         end
-        raise @val[1].inspect
-        sheet.add_row ["Attendance","#{@val[0].shift}"]
+        #raise @val[1].inspect
+        #sheet.add_row ["Attendance","#{@val[0].shift}"]
 
 
 

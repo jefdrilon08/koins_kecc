@@ -56,10 +56,10 @@ class BillingsController < ApplicationController
  
   def billing_excel
   
-    #billing_excel = ::Billings::BillingDownloadExcel.new(billing: params[:billing]).execute!
-    #filename = "billing.xlsx"
-    #billing_excel.serialize "#{Rails.root}/tmp/#{filename}"
-    #send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    billing_excel = ::Billings::BillingDownloadExcel.new(billing: params[:billing]).execute!
+    filename = "billing.xlsx"
+    billing_excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
   end
 
