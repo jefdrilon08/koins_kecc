@@ -104,7 +104,6 @@ module Accounting
 
         running_balance = beginning_balance
         if journal_entries_by_accounting_code[a].present?
-
           mapped_entries  = journal_entries_by_accounting_code[a].map{ |x|
                               dr_amount       = x.post_type == "DR" ? x.amount.to_f : 0.00
                               cr_amount       = x.post_type == "CR" ? x.amount.to_f : 0.00
@@ -132,17 +131,19 @@ module Accounting
                                 running_balance: running_balance.to_f
                               }
                             }
-
-          entries << {
-            accounting_code_id: a,
-            accounting_code_name: accounting_code_name,
-            dr_sum: dr_sum.to_f,
-            cr_sum: cr_sum.to_f,
-            beginning_balance: beginning_balance.to_f,
-            ending_balance: running_balance.to_f,
-            entries: mapped_entries
-          }
+        else
+          mapped_entries = []
         end
+
+        entries << {
+          accounting_code_id: a,
+          accounting_code_name: accounting_code_name,
+          dr_sum: dr_sum.to_f,
+          cr_sum: cr_sum.to_f,
+          beginning_balance: beginning_balance.to_f,
+          ending_balance: running_balance.to_f,
+          entries: mapped_entries
+        }
       end
 
       @data[:entries]  = entries
