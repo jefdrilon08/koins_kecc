@@ -135,15 +135,17 @@ module Accounting
           mapped_entries = []
         end
 
-        entries << {
-          accounting_code_id: a,
-          accounting_code_name: accounting_code_name,
-          dr_sum: dr_sum.to_f,
-          cr_sum: cr_sum.to_f,
-          beginning_balance: beginning_balance.to_f,
-          ending_balance: running_balance.to_f,
-          entries: mapped_entries
-        }
+        if beginning_balance.to_f.round(2) != 0 and running_balance.to_f.round(2) != 0
+          entries << {
+            accounting_code_id: a,
+            accounting_code_name: accounting_code_name,
+            dr_sum: dr_sum.to_f,
+            cr_sum: cr_sum.to_f,
+            beginning_balance: beginning_balance.to_f,
+            ending_balance: running_balance.to_f,
+            entries: mapped_entries
+          }
+        end
       end
 
       @data[:entries]  = entries
