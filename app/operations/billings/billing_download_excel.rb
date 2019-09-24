@@ -38,9 +38,9 @@ module Billings
       @p.workbook do |wb|
         wb.add_worksheet do |sheet|
         @header_cells    = wb.styles.add_style(alignment:{horizontal: :left}, b:true)
-        @grand_total_cells  = wb.styles.add_style(alignment: {horizontal: :right}, b:true, border: Axlsx::STYLE_THIN_BORDER)
+        @grand_total_cells  = wb.styles.add_style(alignment: {horizontal: :right}, b:true, border: Axlsx::STYLE_THIN_BORDER,format_code: "#,##0.00")
         @title_cells = wb.styles.add_style(alignment: {horizontal: :center}, b: true, border: Axlsx::STYLE_THIN_BORDER)
-        @row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER)
+        @row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER, format_code: "#,##0.00")
         sheet.add_row ["BILLING"] , style: @header_cells
         sheet.add_row ["#{Settings.company_name}"], style: @header_cells
         sheet.add_row ["#{Settings.company_address}"], style: @header_cells
@@ -99,11 +99,11 @@ module Billings
           sheet.add_row []
           sheet.add_row []
           sheet.add_row []
-          sheet.add_row ["OFFICERS:","","Collected By: ","","Prepared By:"]
-          sheet.add_row ["__________","","__________","","__________"]
+          sheet.add_row ["","OFFICERS:","","Collected By: ","","Prepared By:"]
+          sheet.add_row ["","__________","","__________","","__________"]
           sheet.add_row []
-          sheet.add_row ["Checked By: ","","Encoded By:","","Posted By:"]
-          sheet.add_row ["__________","","__________","","__________"]
+          sheet.add_row ["","Checked By: ","","Encoded By:","","Posted By:"]
+          sheet.add_row ["","__________","","__________","","__________"]
         end
       end
 
