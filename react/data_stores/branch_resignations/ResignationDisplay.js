@@ -8,10 +8,12 @@ export default class ResignationDisplay extends React.Component {
     };
   }
 
+  handleDetailsClicked(members) {
+    this.props.handleDetailsClicked(members);
+  }
+
   render() {
     var data  = this.props.data;
-
-    console.log(data);
 
     var rowCounts = [];
     var total     = 0;
@@ -30,6 +32,7 @@ export default class ResignationDisplay extends React.Component {
           <td className="text-center">
             <button
               className="btn btn-sm btn-info"
+              onClick={this.handleDetailsClicked.bind(this, data.particulars[i].records)}
             >
               Details
             </button>
