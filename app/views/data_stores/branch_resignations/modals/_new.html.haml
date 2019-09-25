@@ -22,7 +22,7 @@
             .col
               .form-group
                 %label
-                  Start Date
+                  End Date
                 = text_field_tag :end_date, Date.new(Date.today.year, Date.today.month, -1), type: :date, id: "input-end-date", class: 'form-control'
           .message
       .modal-footer

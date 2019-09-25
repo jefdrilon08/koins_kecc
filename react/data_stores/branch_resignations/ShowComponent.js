@@ -1,12 +1,10 @@
 import React from 'react';
 import $ from 'jquery';
-import moment from 'moment';
-import Select from 'react-select';
-import Toggle from 'react-toggle';
-import "react-toggle/style.css";
 
 import SkCubeLoading from '../../SkCubeLoading';
 import ErrorDisplay from '../../ErrorDisplay';
+
+import ResignationDisplay from './ResignationDisplay';
 
 export default class ShowComponent extends React.Component {
   constructor(props) {
@@ -15,6 +13,7 @@ export default class ShowComponent extends React.Component {
     this.state  = {
       isLoading: true,
       data: false,
+      meta: false,
       errors: false
     };
   }
@@ -34,7 +33,8 @@ export default class ShowComponent extends React.Component {
         console.log(response);
         context.setState({
           isLoading: false,
-          data: response
+          data: response.data,
+          meta: response.meta
         });
       },
       error: function(response) {
@@ -54,6 +54,23 @@ export default class ShowComponent extends React.Component {
     }
   }
 
+  renderRecords() {
+    var data    = this.state.data;
+    var records = [];
+
+    for(var i = 0; i < data.records.length; i++) {
+      records.push(
+        <ResignationDisplay 
+          index={i}
+          key={"category-" + i}
+          data={data.records[i]}
+        />
+      );
+    }
+
+    return records;
+  };
+
   render() {
     if(this.state.isLoading) {
       return  (
@@ -62,9 +79,13 @@ export default class ShowComponent extends React.Component {
     } else {
       return  (
         <div>
-          <h1>
-            Branch Resignations
-          </h1>
+          <h2>
+            {this.state.meta.branch_name} Resignations 
+          </h2>
+          <small className="text-muted">
+            {this.state.meta.start_date} to {this.state.meta.end_date}
+          </small>
+          {this.renderRecords()}
         </div>
       );
     }
