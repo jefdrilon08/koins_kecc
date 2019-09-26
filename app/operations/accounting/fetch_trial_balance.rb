@@ -4,12 +4,14 @@ module Accounting
       @config           = config
       @start_date       = @config[:start_date]
       @end_date         = @config[:end_date]
-      @branch           = @config[:branch]
+      @branch           = @config[:branch][:name]
+      
       @accounting_fund  = @config[:accounting_fund]
 
       @data = {
         start_date: @start_date,
         end_date: @end_date,
+        branch: @branch,
         beginning_assets: {},
         beginning_liabilities: {},
         beginning_equities: {},
