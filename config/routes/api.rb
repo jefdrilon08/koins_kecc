@@ -25,6 +25,7 @@ namespace :api do
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"
+    get "/dashboard/overview", to: "dashboard#overview"
 
     # Monitoring
     get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing"

@@ -56,8 +56,6 @@ export default class DashboardOAS extends React.Component {
           currentBranch = response.branches[0]; 
         }
 
-        console.log(response);
-
         context.setState({
           branches: response.branches,
           currentBranch: currentBranch,
