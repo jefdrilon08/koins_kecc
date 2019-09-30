@@ -3,6 +3,7 @@ module Dashboard
     def initialize(config:)
       @config = config
       @user   = @config[:user]
+      @as_of  = @config[:as_of].try(:to_date) || Date.today
 
       @branches = Branch.where(
                     id: UserBranch.active.where(
@@ -48,15 +49,17 @@ module Dashboard
 
       @branches.each do |branch|
         data_store  = DataStore.repayment_rates.where(
-                        "meta->>'branch_id' = ?",
-                        branch.id
+                        "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ?",
+                        branch.id,
+                        @as_of
                       ).order(
                         "DATE(meta->>'as_of') ASC"
                       ).last
 
         ds_member_counts  = DataStore.member_counts.where(
-                              "meta->>'branch_id' = ?",
-                              branch.id
+                              "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ?",
+                              branch.id,
+                              @as_of
                             ).order(
                               "DATE(meta->>'as_of') ASC"
                             ).last

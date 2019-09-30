@@ -10,21 +10,31 @@ export default class ManagementOverview extends React.Component {
 
     this.state  = {
       isLoading: true,
-      data: false
+      isFetching: false,
+      data: false,
+      asOf: "",
     }
   }
 
   componentDidMount() {
+    this.fetch();
+  }
+
+  fetch() {
     var context = this;
 
     $.ajax({
       method: 'GET',
       url: '/api/v1/dashboard/overview',
+      data: {
+        as_of: context.state.asOf
+      },
       success: function(response) {
         console.log(response);
 
         context.setState({
           isLoading: false,
+          isFetching: false,
           data: response
         });
       },
@@ -32,6 +42,20 @@ export default class ManagementOverview extends React.Component {
         console.log(response);
         alert("Error in fetching overview data");
       }
+    });
+  }
+
+  handleSyncClicked() {
+    this.setState({
+      isFetching: true
+    });
+
+    this.fetch();
+  }
+
+  handleAsOfChanged(event) {
+    this.setState({
+      asOf: event.target.value
     });
   }
 
@@ -177,6 +201,31 @@ export default class ManagementOverview extends React.Component {
           <h4>
             Overview
           </h4>
+          <div className="row">
+            <div className="col-md-9 col-xs-12">
+              <div className="form-group">
+                <input
+                  type="date"
+                  className="form-control"
+                  disabled={this.state.isFetching}
+                  value={this.state.asOf}
+                  onChange={this.handleAsOfChanged.bind(this)}
+                />
+              </div>
+            </div>
+            <div className="col-md-3 col-xs-12">
+              <div className="form-group">
+                <button 
+                  className="btn btn-info btn-block"
+                  disabled={this.state.isFetching}
+                  onClick={this.handleSyncClicked.bind(this)}
+                >
+                  <span className="fa fa-sync"/>
+                  Sync
+                </button>
+              </div>
+            </div>
+          </div>
           {this.renderOverviewTable()}
         </div>
       );

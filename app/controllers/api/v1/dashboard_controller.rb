@@ -5,7 +5,8 @@ module Api
 
       def overview
         config  = {
-          user: current_user
+          user: current_user,
+          as_of: params[:as_of] || Date.today
         }
 
         data  = ::Dashboard::BuildOverview.new(
