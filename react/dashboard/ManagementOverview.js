@@ -90,6 +90,15 @@ export default class ManagementOverview extends React.Component {
 
         var branches  = clusters[j].branches;
 
+        var cPrincipal      = 0.00;
+        var cPrincipalPaid  = 0.00;
+        var cPortfolio      = 0.00;
+        var cPastDueAmount  = 0.00;
+        var cParAmount      = 0.00;
+        var cPureSavers     = 0;
+        var cActiveLoaners  = 0;
+        var cActiveMembers  = 0;
+
         for(var k = 0; k < branches.length; k++) {
           if(k == 0) {
             rows.push(
@@ -131,6 +140,15 @@ export default class ManagementOverview extends React.Component {
             );
           }
 
+          cPrincipal      += branches[k].data.principal;
+          cPrincipalPaid  += branches[k].data.principal_paid;
+          cPortfolio      += branches[k].data.portfolio;
+          cPastDueAmount  += branches[k].data.principal_balance;
+          cParAmount      += branches[k].data.par_amount;
+          cPureSavers     += branches[k].data.pure_savers.total;
+          cActiveLoaners  += branches[k].data.loaners.total;
+          cActiveMembers  += branches[k].data.active_members.total;
+
           rows.push(
             <tr key={"branch-" + branches[k].id}>
               <td>
@@ -171,6 +189,61 @@ export default class ManagementOverview extends React.Component {
             </tr>
           );
         }
+
+        // Cluster level total
+        rows.push(
+          <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: clusterColor}}>
+            <td>
+              <strong>
+                {clusters[j].name} Total
+              </strong>
+            </td>
+            <td className="text-right">
+              <strong>
+                {numberWithCommas(cPrincipal)}
+              </strong>
+            </td>
+            <td className="text-right">
+              <strong>
+                {numberWithCommas(cPrincipalPaid)}
+              </strong>
+            </td>
+            <td className="text-right">
+              <strong>
+                {numberWithCommas(cPortfolio)}
+              </strong>
+            </td>
+            <td className="text-right">
+              <strong>
+                {numberWithCommas(cPastDueAmount)}
+              </strong>
+            </td>
+            <td className="text-right">
+              <strong>
+                {numberWithCommas(cParAmount)}
+              </strong>
+            </td>
+            <td className="text-right">
+            </td>
+            <td className="text-center">
+              <strong>
+                {cPureSavers}
+              </strong>
+            </td>
+            <td className="text-center">
+              <strong>
+                {cActiveLoaners}
+              </strong>
+            </td>
+            <td className="text-center">
+              <strong>
+                {cActiveMembers}
+              </strong>
+            </td>
+            <td>
+            </td>
+          </tr>
+        );
       }
     }
 
