@@ -54,8 +54,16 @@ module Dashboard
                         "DATE(meta->>'as_of') ASC"
                       ).last
 
+        ds_member_counts  = DataStore.member_counts.where(
+                              "meta->>'branch_id' = ?",
+                              branch.id
+                            ).order(
+                              "DATE(meta->>'as_of') ASC"
+                            ).last
+
         d = {
           as_of: "",
+          member_counts_as_of: "",
           principal: 0.00,
           interest: 0.00,
           total: 0.00,
@@ -80,7 +88,25 @@ module Dashboard
           total_rr: 0.00,
           par_amount: 0.00,
           par: 0.00,
-          num_days_par: 0
+          num_days_par: 0,
+          pure_savers: {
+            male: 0,
+            female: 0,
+            others: 0,
+            total: 0
+          },
+          loaners: {
+            male: 0,
+            female: 0,
+            others: 0,
+            total: 0
+          },
+          active_members: {
+            male: 0,
+            female: 0,
+            others: 0,
+            total: 0
+          }
         }
 
         if data_store.present?
@@ -114,6 +140,28 @@ module Dashboard
               d[:par_amount] += o[:overall_principal_balance].to_f.round(2)
             end
           end
+        end
+
+        if ds_member_counts.present?
+          data  = ds_member_counts.data.with_indifferent_access
+          meta  = ds_member_counts.meta.with_indifferent_access
+
+          d[:member_counts_as_of] = meta[:as_of]
+
+          d[:pure_savers][:male]    = data[:counts][:pure_savers][:male]
+          d[:pure_savers][:female]  = data[:counts][:pure_savers][:female]
+          d[:pure_savers][:others]  = data[:counts][:pure_savers][:others]
+          d[:pure_savers][:total]   = data[:counts][:pure_savers][:total]
+
+          d[:loaners][:male]    = data[:counts][:loaners][:male]
+          d[:loaners][:female]  = data[:counts][:loaners][:female]
+          d[:loaners][:others]  = data[:counts][:loaners][:others]
+          d[:loaners][:total]   = data[:counts][:loaners][:total]
+
+          d[:active_members][:male]    = data[:counts][:active_members][:male]
+          d[:active_members][:female]  = data[:counts][:active_members][:female]
+          d[:active_members][:others]  = data[:counts][:active_members][:others]
+          d[:active_members][:total]   = data[:counts][:active_members][:total]
         end
 
         branches << {

@@ -38,7 +38,7 @@ export default class ManagementOverview extends React.Component {
   renderOverviewTable() {
     var areas   = this.state.data.areas;
     var rows    = [];
-    var colSpan = 7;
+    var colSpan = 11;
 
     var areaColor     = "#bad5fd";
     var clusterColor  = "#c5ffc1";
@@ -91,6 +91,18 @@ export default class ManagementOverview extends React.Component {
                 <th>
                   As Of
                 </th>
+                <th className="text-center">
+                  Pure Savers
+                </th>
+                <th className="text-center">
+                  Active Loaners
+                </th>
+                <th className="text-center">
+                  Active Members
+                </th>
+                <th>
+                  As Of (Member Counts)
+                </th>
               </tr>
             );
           }
@@ -119,6 +131,18 @@ export default class ManagementOverview extends React.Component {
               </td>
               <td>
                 {branches[k].data.as_of}
+              </td>
+              <td className="text-center">
+                {branches[k].data.pure_savers.total}
+              </td>
+              <td className="text-center">
+                {branches[k].data.loaners.total}
+              </td>
+              <td className="text-center">
+                {branches[k].data.active_members.total}
+              </td>
+              <td>
+                {branches[k].data.member_counts_as_of}
               </td>
             </tr>
           );
