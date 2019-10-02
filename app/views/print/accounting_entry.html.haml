@@ -102,12 +102,22 @@
         %th{:width => "17%"} Reference No:
         %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
         %th{:width => "18%"} Doc. No:
-        -if @accounting_entry_data[:book] == "CRB"
-          %th{:width => "17%"} OR Number:
-          %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
+        -if Settings.activate_microinsurance == true
+          %th{:width => "25%"} #{@accounting_entry_data[:data][:sub_reference_number]}
+          -if @accounting_entry_data[:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
+          -else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
         -else
-          %th{:width => "17%"} Check No:
-          %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
+          %th{:width => "20%"} #{@accounting_entry_data[:id]}
+          -if @accounting_entry_data[:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
+          -else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
       %tr
         %th{:width => "17%"} Date Approved:
         %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
@@ -178,9 +188,12 @@
       %tr
         %th{width: 350} 
           #{@accounting_entry_data[:prepared_by]}
-        %th{width: 350}
         -if Settings.activate_microinsurance == true
-          %th{width: 350} #{"ANTIQUERA, SILVIDA"}
+          %th{width: 255} #{"EVELYN LAGMAY"}
+        -else
+          %th{width: 255}
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{"SILVIDA ANTIQUERA"}
         -else
           %th{width: 350} #{@accounting_entry_data[:approved_by]}
       %tr

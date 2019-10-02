@@ -6,10 +6,14 @@ class HiipClaim < ApplicationRecord
 	validates :member, presence: true
 	validates :amount, numericality: { less_than_or_equal_to: 6000,  only_integer: true, message: 'Exceed amount limit' }
 
-	def total_balance
-		total_hiip = 6000.0
-		self.balance = total_hiip - self.amount
+	before_validation :load_defaults
+
+	def load_defaults
+	    if self.new_record? && self.balance.blank?
+	      	6000.00 - self.amount
+		else
+		   	self.balance - self.amount
+		end
 	end
 
 end
-	
