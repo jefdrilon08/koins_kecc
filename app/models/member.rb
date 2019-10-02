@@ -32,7 +32,7 @@ class Member < ApplicationRecord
   has_many :member_account_validation_records
 
   # ActiveStorage
-  has_many_attached :attachment_files
+  #has_many_attached :attachment_files
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -193,7 +193,8 @@ class Member < ApplicationRecord
     else
       begin
         now = Time.now.utc.to_date
-        now.year - self.date_of_birth.year - (self.date_of_birth.to_date.change(:year => now.year) > now ? 1 : 0)
+        now.year - self.date_of_birth.year - ((now.month > self.date_of_birth.month || (now.month == self.date_of_birth.month && now.day >= self.date_of_birth.day)) ? 0 : 1)
+        #now.year - self.date_of_birth.year - (self.date_of_birth.to_date.change(:year => now.year) > now ? 1 : 0)
       rescue Exception
         "Invalid date of birth: #{self.date_of_birth}"
       end 
@@ -273,11 +274,13 @@ class Member < ApplicationRecord
   end
 
  def spouse_age
-    if self.data['spouse']['date_of_birth'].nil?
+    if self.data.with_indifferent_access[:spouse][:date_of_birth].nil?
       0
     else
       begin
-        ((Time.zone.now - self.data['spouse']['date_of_birth'].to_time) / 1.year.seconds).floor
+        now = Time.now.utc.to_date
+        now.year - self.data.with_indifferent_access[:spouse][:date_of_birth].to_date.year - ((now.month > self.data.with_indifferent_access[:spouse][:date_of_birth].to_date.month || (now.month == self.data.with_indifferent_access[:spouse][:date_of_birth].to_date.month && now.day >= self.data.with_indifferent_access[:spouse][:date_of_birth].to_date.day)) ? 0 : 1)
+        #((Time.zone.now - self.data['spouse']['date_of_birth'].to_time) / 1.year.seconds).floor
       rescue Exception
         "Invalid date of birth: #{self.data['spouse']['date_of_birth']}"
       end
