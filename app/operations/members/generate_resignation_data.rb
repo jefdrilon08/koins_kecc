@@ -48,13 +48,18 @@ module Members
     private
 
     def build_records!(type, code)
-      sql     = "SELECT * FROM members m WHERE EXISTS (SELECT 1 FROM json_array_elements(m.data->'resignation_records') elem WHERE DATE(elem ->> 'date_resigned') >= '#{@start_date}' AND DATE(elem ->> 'date_resigned') <= '#{@end_date}' AND elem -> 'member_resignation_type' ->> 'name' = '#{type}' AND elem -> 'member_resignation_type' -> 'particular' ->> 'code' = '#{code}')"
+      sql     = "SELECT * FROM members m WHERE m.branch_id = '#{@branch.id}' AND EXISTS (SELECT 1 FROM json_array_elements(m.data->'resignation_records') elem WHERE DATE(elem ->> 'date_resigned') >= '#{@start_date}' AND DATE(elem ->> 'date_resigned') <= '#{@end_date}' AND elem -> 'member_resignation_type' ->> 'name' = '#{type}' AND elem -> 'member_resignation_type' -> 'particular' ->> 'code' = '#{code}')"
 
       results = ActiveRecord::Base.connection.execute(sql)
 
       results.to_a.map{ |o|
         {
-          id: o["id"]
+          id: o["id"],
+          identification_number: o["identification_number"],
+          first_name: o["first_name"],
+          middle_name: o["middle_name"],
+          last_name: o["last_name"],
+          data: JSON.parse(o["data"])
         }
       }
     end

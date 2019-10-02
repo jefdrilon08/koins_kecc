@@ -58,6 +58,10 @@
       = link_to "/data_stores/x_weeks_to_pay", class: 'nav-link' do
         %i.nav-icon.fa.fa-database
         X Weeks to Pay
+    %li{ class: "nav-item #{params[:controller] == 'branch_resignations' ? 'active' : ''}" }
+      = link_to "/data_stores/branch_resignations", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Branch Resignations
 %li{ class: "nav-item" }
   = link_to "/reports/insured_loans", class: 'nav-link' do
     %i.nav-icon.fa.fa-book.icon

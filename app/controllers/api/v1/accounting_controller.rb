@@ -53,6 +53,25 @@ module Api
           errors << "End date required"
         end
 
+        # Check for closing entries
+        if start_date.present? and end_date.present? and branch.present?
+          latest_closing_record = DataStore.year_end_closings.where(
+                                    "status = ? AND meta->>'branch_id' = ?",
+                                    "closed",
+                                    branch.id
+                                  ).order(
+                                    "created_at ASC"
+                                  ).last
+
+          if latest_closing_record.present?
+            date_closed = latest_closing_record.meta["date_closed"].to_date
+
+            if start_date < date_closed and end_date > date_closed
+              errors << "Closing date #{date_closed} is in between start and end dates"
+            end
+          end
+        end
+
         if errors.size > 0
           render json: { errors: errors }, status: 400
         else

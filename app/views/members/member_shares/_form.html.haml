@@ -3,6 +3,9 @@
     = f.input :certificate_number, input_html: { class: 'form-control' }
   .form-group
     = f.input :date_of_issue, as: :string, input_html: { class: 'form-control', type: 'date' }
+  .form-group
+    = f.input :number_of_shares, as: :string, input_html: { class: 'form-control', type: 'integer' }
+ 
   %hr
   .btn-group
     %button.btn.btn-primary{ type: "submit" }

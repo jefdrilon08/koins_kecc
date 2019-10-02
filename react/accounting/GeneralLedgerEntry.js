@@ -84,21 +84,21 @@ export default class GeneralLedgerComponent extends React.Component {
         <table className="table table-bordered table-sm">
           <thead>
             <tr className="bg-info">
-              <th colspan={2}>
+              <th colspan={2} width="22%">
                 {this.props.data.accounting_code_name}
               </th>
-              <th className="">
+              <th className="" width="8%">
                 Book
               </th>
-              <th>
+              <th width="50%">
               </th>
-              <th className="text-right">
+              <th className="text-right" width="8%">
                 Debit
               </th>
-              <th className="text-right">
+              <th className="text-right" width="8%">
                 Credit
               </th>
-              <th className="text-right">
+              <th className="text-right" width="10%">
                 {this.numberWithCommas(this.props.data.beginning_balance)}
               </th>
             </tr>

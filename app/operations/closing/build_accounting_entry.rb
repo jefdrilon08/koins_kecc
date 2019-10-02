@@ -31,7 +31,8 @@ module Closing
           check_voucher_number: "",
           date_of_check: "",
           sub_reference_number: "",
-          payee: ""
+          payee: "",
+          is_closing_record: true
         }
       }
     end

@@ -26,6 +26,18 @@ module Accounting
         raise "Invalid category #{@category}"
       end
 
+      @latest_closing_record  = DataStore.year_end_closings.where(
+                                  "status = ? AND meta->>'branch_id' = ?",
+                                  "closed",
+                                  @branch.id
+                                ).order(
+                                  "created_at ASC"
+                                ).last
+
+      if @latest_closing_record.present?
+        @closing_date = @latest_closing_record.meta["date_closed"].to_date
+      end
+
       @data = {
         start_date: @start_date,
         end_date: @end_date,
@@ -50,61 +62,101 @@ module Accounting
 
     def compute_yearly!
       if @accounting_fund.present?
-        dr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
-                      "DR",
-                      @start_date,
-                      @end_date,
-                      @start_date.year,
-                      @accounting_codes.pluck(:id),
-                      @branch.id,
-                      @accounting_fund.id
-                    )
+        dr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                          "DR",
+                          @start_date,
+                          @end_date,
+                          @start_date.year,
+                          @accounting_codes.pluck(:id),
+                          @branch.id,
+                          @accounting_fund.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          dr_entries  = dr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        dr_hash = dr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
 
-        cr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted =< ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
-                      "CR",
-                      @start_date,
-                      @end_date,
-                      @start_date.year,
-                      @accounting_codes.pluck(:id),
-                      @branch.id,
-                      @accounting_fund.id
-                    )
+        cr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                          "CR",
+                          @start_date,
+                          @end_date,
+                          @start_date.year,
+                          @accounting_codes.pluck(:id),
+                          @branch.id,
+                          @accounting_fund.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          cr_entries  = cr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        cr_hash = cr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
       else
-        dr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
-                      "DR",
-                      @start_date,
-                      @end_date,
-                      @start_date.year,
-                      @accounting_codes.pluck(:id),
-                      @branch.id
-                    )
+        dr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                          "DR",
+                          @start_date,
+                          @end_date,
+                          @start_date.year,
+                          @accounting_codes.pluck(:id),
+                          @branch.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          dr_entries  = dr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        dr_hash = dr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
 
-        cr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
-                      "CR",
-                      @start_date,
-                      @end_date,
-                      @start_date.year,
-                      @accounting_codes.pluck(:id),
-                      @branch.id
-                    )
+        cr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND extract(year from date_posted) = ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                          "CR",
+                          @start_date,
+                          @end_date,
+                          @start_date.year,
+                          @accounting_codes.pluck(:id),
+                          @branch.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          cr_entries  = cr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        cr_hash = cr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
       end
@@ -121,23 +173,23 @@ module Accounting
           cr_amount = cr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
-        if accounting_code.debit_entry?
-          dr_amount = (dr_amount - cr_amount).round(2)
-          cr_amount = 0.00
-
-          if dr_amount < 0
-            cr_amount = dr_amount * -1
-            dr_amount = 0.00
-          end
-        elsif accounting_code.credit_entry?
-          cr_amount = (cr_amount - dr_amount).round(2)
-          dr_amount = 0.00
-
-          if cr_amount < 0
-            dr_amount = cr_amount * -1
-            cr_amount = 0.00
-          end
-        end
+#        if accounting_code.debit_entry?
+#          dr_amount = (dr_amount - cr_amount).round(2)
+#          cr_amount = 0.00
+#
+#          if dr_amount < 0
+#            cr_amount = dr_amount * -1
+#            dr_amount = 0.00
+#          end
+#        elsif accounting_code.credit_entry?
+#          cr_amount = (cr_amount - dr_amount).round(2)
+#          dr_amount = 0.00
+#
+#          if cr_amount < 0
+#            dr_amount = cr_amount * -1
+#            cr_amount = 0.00
+#          end
+#        end
 
         entry = {
           accounting_code: accounting_code,
@@ -154,57 +206,97 @@ module Accounting
 
     def compute_overall!
       if @accounting_fund.present?
-        dr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
-                      "DR",
-                      @start_date,
-                      @end_date,
-                      @accounting_codes.pluck(:id),
-                      @branch.id,
-                      @accounting_fund.id
-                    )
+        dr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                          "DR",
+                          @start_date,
+                          @end_date,
+                          @accounting_codes.pluck(:id),
+                          @branch.id,
+                          @accounting_fund.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          dr_entries  = dr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        dr_hash = dr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
 
-        cr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
-                      "CR",
-                      @start_date,
-                      @end_date,
-                      @accounting_codes.pluck(:id),
-                      @branch.id,
-                      @accounting_fund.id
-                    )
+        cr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ? AND accounting_entries.accounting_fund_id = ?",
+                          "CR",
+                          @start_date,
+                          @end_date,
+                          @accounting_codes.pluck(:id),
+                          @branch.id,
+                          @accounting_fund.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          cr_entries  = cr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        cr_hash = cr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
       else
-        dr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
-                      "DR",
-                      @start_date,
-                      @end_date,
-                      @accounting_codes.pluck(:id),
-                      @branch.id
-                    )
+        dr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                          "DR",
+                          @start_date,
+                          @end_date,
+                          @accounting_codes.pluck(:id),
+                          @branch.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          dr_entries  = dr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        dr_hash = dr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
 
-        cr_hash = AccountingEntry
-                    .joins(journal_entries: :accounting_code)
-                    .where(
-                      "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
-                      "CR",
-                      @start_date,
-                      @end_date,
-                      @accounting_codes.pluck(:id),
-                      @branch.id
-                    )
+        cr_entries  = AccountingEntry
+                        .joins(journal_entries: :accounting_code)
+                        .where(
+                          "accounting_entries.status = 'approved' AND journal_entries.post_type = ? AND date_posted >= ? AND date_posted <= ? AND accounting_codes.id IN (?) AND accounting_entries.branch_id = ?",
+                          "CR",
+                          @start_date,
+                          @end_date,
+                          @accounting_codes.pluck(:id),
+                          @branch.id
+                        )
+
+        if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
+          cr_entries  = cr_entries.where.not(
+                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+                          "true",
+                          @closing_date
+                        )
+        end
+
+        cr_hash = cr_entries
                     .group("journal_entries.accounting_code_id")
                     .sum("journal_entries.amount")
       end
@@ -221,23 +313,23 @@ module Accounting
           cr_amount = cr_hash[accounting_code.id.to_s].to_f.round(2)
         end
 
-        if accounting_code.debit_entry?
-          dr_amount = (dr_amount - cr_amount).round(2)
-          cr_amount = 0.00
-
-          if dr_amount < 0
-            cr_amount = dr_amount * -1
-            dr_amount = 0.00
-          end
-        elsif accounting_code.credit_entry?
-          cr_amount = (cr_amount - dr_amount).round(2)
-          dr_amount = 0.00
-
-          if cr_amount < 0
-            dr_amount = cr_amount * -1
-            cr_amount = 0.00
-          end
-        end
+#        if accounting_code.debit_entry?
+#          dr_amount = (dr_amount - cr_amount).round(2)
+#          cr_amount = 0.00
+#
+#          if dr_amount < 0
+#            cr_amount = dr_amount * -1
+#            dr_amount = 0.00
+#          end
+#        elsif accounting_code.credit_entry?
+#          cr_amount = (cr_amount - dr_amount).round(2)
+#          dr_amount = 0.00
+#
+#          if cr_amount < 0
+#            dr_amount = cr_amount * -1
+#            cr_amount = 0.00
+#          end
+#        end
 
         entry = {
           accounting_code: accounting_code,
