@@ -1,5 +1,5 @@
 module MemberAccountValidations
-  class ApproveLifMemberDeposit
+  class ApproveEquityInterestDeposit
     def initialize(config:)
       @config                             = config
 
@@ -8,7 +8,7 @@ module MemberAccountValidations
       @accounting_entry_reference_number  = @config[:accounting_entry_reference_number]
       @member                             = @member_account_validation_record.member
       @particular                         = "Interest of Equity per week"
-      @amount                             = @member_account_validation_record.interest
+      @amount                             = @member_account_validation_record.equity_interest
 
 
       @member_account                     = MemberAccount.where(

@@ -16,7 +16,7 @@
         .text-right
           .text-muted
             .fa.fa-store
-            #{accounting_entry.book} - #{accounting_entry.branch.to_s}
+            #{accounting_entry.book} - #{accounting_entry.branch.to_s} - #{accounting_entry.try(:accounting_fund).try(:name)}
   .card-body
     %table.table.table-sm
       %tr

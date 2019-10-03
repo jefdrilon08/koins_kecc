@@ -65,4 +65,5 @@ class AccountingEntry < ApplicationRecord
   def misc?
     self.book == "MISC"
   end
+  
 end
