@@ -411,7 +411,7 @@ handleDownloadClicked() {
                   disabled={this.state.isLoading}
                 >
                   <span className="fa fa-sync"/>
-                  Generate
+                  
                 </button>
                 <button
                   className="btn btn-info"
@@ -419,7 +419,7 @@ handleDownloadClicked() {
                   disabled={this.state.isLoading}
                 >
                   <span className="fa fa-print"/>
-                  Print
+                  
                 </button>
                   <button
                   className="btn btn-success"
@@ -427,7 +427,7 @@ handleDownloadClicked() {
                   disabled={this.state.isLoading}
                 >
                   <span className="fa fa-download"/>
-                  Excel
+                  
                 </button>
 
               </div>
