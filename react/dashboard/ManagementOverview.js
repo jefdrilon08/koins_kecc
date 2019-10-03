@@ -68,6 +68,15 @@ export default class ManagementOverview extends React.Component {
     var clusterColor  = "#c5ffc1";
     var branchColor   = "#797979";
 
+    var tPrincipal      = 0.00;
+    var tPrincipalPaid  = 0.00;
+    var tPortfolio      = 0.00;
+    var tPastDueAmount  = 0.00;
+    var tParAmount      = 0.00;
+    var tPureSavers     = 0;
+    var tActiveLoaners  = 0;
+    var tActiveMembers  = 0;
+
     for(var i = 0; i < areas.length; i++) {
       rows.push(
         <tr key={"area-" + areas[i].id} style={{backgroundColor: areaColor}}>
@@ -78,6 +87,15 @@ export default class ManagementOverview extends React.Component {
       );
      
       var clusters    = areas[i].clusters;
+
+      var aPrincipal      = 0.00;
+      var aPrincipalPaid  = 0.00;
+      var aPortfolio      = 0.00;
+      var aPastDueAmount  = 0.00;
+      var aParAmount      = 0.00;
+      var aPureSavers     = 0;
+      var aActiveLoaners  = 0;
+      var aActiveMembers  = 0;
 
       for(var j = 0; j < clusters.length; j++) {
         rows.push(
@@ -148,6 +166,24 @@ export default class ManagementOverview extends React.Component {
           cPureSavers     += branches[k].data.pure_savers.total;
           cActiveLoaners  += branches[k].data.loaners.total;
           cActiveMembers  += branches[k].data.active_members.total;
+
+          aPrincipal      += branches[k].data.principal;
+          aPrincipalPaid  += branches[k].data.principal_paid;
+          aPortfolio      += branches[k].data.portfolio;
+          aPastDueAmount  += branches[k].data.principal_balance;
+          aParAmount      += branches[k].data.par_amount;
+          aPureSavers     += branches[k].data.pure_savers.total;
+          aActiveLoaners  += branches[k].data.loaners.total;
+          aActiveMembers  += branches[k].data.active_members.total;
+
+          tPrincipal      += branches[k].data.principal;
+          tPrincipalPaid  += branches[k].data.principal_paid;
+          tPortfolio      += branches[k].data.portfolio;
+          tPastDueAmount  += branches[k].data.principal_balance;
+          tParAmount      += branches[k].data.par_amount;
+          tPureSavers     += branches[k].data.pure_savers.total;
+          tActiveLoaners  += branches[k].data.loaners.total;
+          tActiveMembers  += branches[k].data.active_members.total;
 
           rows.push(
             <tr key={"branch-" + branches[k].id}>
@@ -245,7 +281,117 @@ export default class ManagementOverview extends React.Component {
           </tr>
         );
       }
+
+      // Area level total
+      rows.push(
+        <tr key={"area-total-" + areas[i].id} style={{backgroundColor: areaColor}}>
+          <td>
+            <strong>
+              {areas[i].name} Total
+            </strong>
+          </td>
+          <td className="text-right">
+            <strong>
+              {numberWithCommas(aPrincipal)}
+            </strong>
+          </td>
+          <td className="text-right">
+            <strong>
+              {numberWithCommas(aPrincipalPaid)}
+            </strong>
+          </td>
+          <td className="text-right">
+            <strong>
+              {numberWithCommas(aPortfolio)}
+            </strong>
+          </td>
+          <td className="text-right">
+            <strong>
+              {numberWithCommas(aPastDueAmount)}
+            </strong>
+          </td>
+          <td className="text-right">
+            <strong>
+              {numberWithCommas(aParAmount)}
+            </strong>
+          </td>
+          <td className="text-right">
+          </td>
+          <td className="text-center">
+            <strong>
+              {aPureSavers}
+            </strong>
+          </td>
+          <td className="text-center">
+            <strong>
+              {aActiveLoaners}
+            </strong>
+          </td>
+          <td className="text-center">
+            <strong>
+              {aActiveMembers}
+            </strong>
+          </td>
+          <td>
+          </td>
+        </tr>
+      );
     }
+
+    // Grand total
+    rows.push(
+      <tr key={"grand-total"} style={{backgroundColor: "#000", color: "#fff"}}>
+        <td>
+          <strong>
+            Grand Total
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(tPrincipal)}
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(tPrincipalPaid)}
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(tPortfolio)}
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(tPastDueAmount)}
+          </strong>
+        </td>
+        <td className="text-right">
+          <strong>
+            {numberWithCommas(tParAmount)}
+          </strong>
+        </td>
+        <td className="text-right">
+        </td>
+        <td className="text-center">
+          <strong>
+            {tPureSavers}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tActiveLoaners}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tActiveMembers}
+          </strong>
+        </td>
+        <td>
+        </td>
+      </tr>
+    );
 
     return (
       <table className="table table-sm table-bordered">
