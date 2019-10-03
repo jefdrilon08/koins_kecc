@@ -135,7 +135,7 @@ module Accounting
           mapped_entries = []
         end
 
-        if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0
+        if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0 || mapped_entries.size > 0
           entries << {
             accounting_code_id: a,
             accounting_code_name: accounting_code_name,
