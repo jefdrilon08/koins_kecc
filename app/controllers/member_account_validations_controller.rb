@@ -15,7 +15,7 @@ class MemberAccountValidationsController < ApplicationController
 
   def index
     # @member_account_validations = MemberAccountValidation.all.order("date_prepared DESC")
-    @member_account_validations = MemberAccountValidation.where("branch_id IN (?)", @branches.pluck(:id))
+    @member_account_validations = MemberAccountValidation.select("*").where(branch_id: @branches.pluck(:id))
     
     if params[:start_date].present? and params[:end_date].present?
       @member_account_validations = @member_account_validations.where("date_prepared >= ? AND date_prepared <= ?", params[:start_date], params[:end_date])

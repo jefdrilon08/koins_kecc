@@ -2,7 +2,7 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @insurance_withdrawal_collections = InsuranceWithdrawalCollection.select("*")
+    @insurance_withdrawal_collections = InsuranceWithdrawalCollection.select("*").where(branch_id: @branches.pluck(:id))
 
     if params[:start_date].present? and params[:end_date].present?
       @insurance_withdrawal_collections = @insurance_withdrawal_collections.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
