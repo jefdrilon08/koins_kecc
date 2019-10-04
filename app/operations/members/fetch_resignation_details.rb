@@ -16,6 +16,42 @@ module Members
       @resignation_settings     = Settings.resignation
       @member_resignation_types = Settings.member_resignation_types
 
+      if @resignation_settings.blank?
+        raise "Config: resignation_settings not found"
+      end
+
+      if @member_resignation_types.blank?
+        raise "Config: member_resignation_types not found"
+      end
+
+      @settings_savings_account = @resignation_settings.savings_account
+
+      if @settings_savings_account.blank?
+        raise "Config: resignation.savings_account not found"
+      end
+
+      @savings_account  = MemberAccount.where(
+                            member_id: @member.id,
+                            account_type: @settings_savings_account.account_type,
+                            account_subtype: @settings_savings_account.account_subtype
+                          ).first
+
+      if @savings_account.blank?
+        raise "Savings account for account type #{@settings_savings_account.account_type} and account subtype #{@settings_savings_account.account_subtype} not found"
+      end
+
+      @settings_equity_accounts = Settings.resignation.equity_accounts
+
+      if @settings_equity_accounts.blank?
+        raise "settings_equity_accounts not found"
+      end
+
+      @closing_fee                  = @resignation_settings.closing_fee
+      @closing_fee_accounting_code  = AccountingCode.find(@resignation_settings.closing_fee_accounting_code_id)
+      @deposits_accounting_code     = AccountingCode.find(@resignation_settings.deposits_accounting_code_id)
+
+      @savings_credit_accounting_code = AccountingCode.find(@settings_savings_account.credit_accounting_code_id)
+
       @data = {
         member: {
           id: @member.id,
@@ -48,13 +84,13 @@ module Members
     def execute!
       @member_accounts  = [] 
 
-      @resignation_settings.cooperative_accounts.each do |s|
+      @settings_equity_accounts.each do |s_eq|
         member_account  = MemberAccount.where(
                             member_id: @member.id,
-                            account_type: s.account_type,
-                            account_subtype: s.account_subtype
+                            account_type: s_eq.account_type,
+                            account_subtype: s_eq.account_subtype
                           ).first
-        
+
         if member_account.present? and member_account.balance > 0
           @data[:equity_accounts] << {
             id: member_account.id,
@@ -127,16 +163,16 @@ module Members
     def build_debit_journal_entries!
       journal_entries = []
 
-      @resignation_settings.cooperative_accounts.each do |s|
-        member_account  = MemberAccount.where(
+      @settings_equity_accounts.each do |s_eq|
+        equity_account  = MemberAccount.where(
                             member_id: @member.id,
-                            account_type: s.account_type,
-                            account_subtype: s.account_subtype
+                            account_type: s_eq.account_type,
+                            account_subtype: s_eq.account_subtype
                           ).first
 
-        if member_account.present? and member_account.balance > 0
-          accounting_code = AccountingCode.find(s.debit_accounting_code_id)
-          amount          = member_account.balance
+        if equity_account.present? and equity_account.balance > 0
+          amount          = equity_account.balance
+          accounting_code = AccountingCode.find(s_eq.debit_accounting_code_id)
 
           journal_entries << {
             accounting_code_id: accounting_code.id,
@@ -153,25 +189,45 @@ module Members
     def build_credit_journal_entries!
       journal_entries = []
 
-      @resignation_settings.cooperative_accounts.each do |s|
-        member_account  = MemberAccount.where(
+      # Closing fee
+      journal_entries << {
+        accounting_code_id: @closing_fee_accounting_code.id,
+        code: @closing_fee_accounting_code.code,
+        name: @closing_fee_accounting_code.name,
+        amount: @closing_fee
+      }
+
+      # Deposit amount
+      deposit_amount  = 0.00
+
+      @settings_equity_accounts.each do |s_eq|
+        equity_account  = MemberAccount.where(
                             member_id: @member.id,
-                            account_type: s.account_type,
-                            account_subtype: s.account_subtype
+                            account_type: s_eq.account_type,
+                            account_subtype: s_eq.account_subtype
                           ).first
 
-        if member_account.present? and member_account.balance > 0
-          accounting_code = AccountingCode.find(s.credit_accounting_code_id)
-          amount          = member_account.balance
-
-          journal_entries << {
-            accounting_code_id: accounting_code.id,
-            code: accounting_code.code,
-            name: accounting_code.name,
-            amount: amount
-          }
+        if equity_account.present? and equity_account.balance > 0
+          deposit_amount += equity_account.balance
         end
       end
+
+      deposit_amount  = deposit_amount - @closing_fee
+
+      if deposit_amount > 0
+        journal_entries << {
+          accounting_code_id: @deposits_accounting_code.id,
+          code: @deposits_accounting_code.code,
+          name: @deposits_accounting_code.name,
+          amount: deposit_amount
+        }
+      end
+
+      # Store deposit amount
+      @data[:deposit] = {
+        amount: deposit_amount,
+        member_account_id: @savings_account.id
+      }
 
       journal_entries
     end

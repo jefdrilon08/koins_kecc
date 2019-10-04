@@ -421,7 +421,7 @@ export default class ManagementOverview extends React.Component {
             Overview
           </h4>
           <div className="row">
-            <div className="col-md-9 col-xs-12">
+            <div className="col-md-10 col-xs-12">
               <div className="form-group">
                 <input
                   type="date"
@@ -432,7 +432,7 @@ export default class ManagementOverview extends React.Component {
                 />
               </div>
             </div>
-            <div className="col-md-3 col-xs-12">
+            <div className="col-md-2 col-xs-12">
               <div className="form-group">
                 <button 
                   className="btn btn-info btn-block"
