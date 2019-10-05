@@ -1,4 +1,12 @@
 namespace :debug do
+  task :load_date_completed => :environment do
+    Loan.where("branch_id = ? and status = ? and date_completed IS NULL ", "3cccd843-3fa8-4693-b60c-dea2505c6b57", "paid" ).each do |l|
+      account_transaction = AccountTransaction.where(subsidiary_id: l.id).order(:transacted_at).last
+      Loan.find(l.id).update(date_completed: account_transaction.transacted_at)
+      puts "#{l.id}"
+    end
+    puts "Done"
+  end
   task :loan_reamortize => :environment do
     loan                    = Loan.find(ENV['ID'])
     p_principal             = ENV['P_PRINCIPAL'].to_f.round(2)
