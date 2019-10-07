@@ -72,6 +72,18 @@ module ApplicationHelper
     data
   end
 
+  def equity_subtypes
+    data  = []
+
+    Settings.default_member_accounts.each do |o|
+      if o.account_type == "EQUITY"
+        data << o.account_subtype
+      end
+    end
+
+    data
+  end
+
   def development?
     ENV['RAILS_ENV'] == 'development'
   end

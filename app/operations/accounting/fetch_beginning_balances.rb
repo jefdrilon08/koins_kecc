@@ -34,6 +34,16 @@ module Accounting
                                   "created_at ASC"
                                 ).last
 
+      if @accounting_fund.present?
+        @latest_closing_entry = AccountingEntry.year_end_closing.where(accounting_fund_id: @accounting_fund.id).order("date_posted DESC").first
+      else
+        @latest_closing_entry = AccountingEntry.year_end_closing.order("date_posted DESC").first
+      end
+
+      if @latest_closing_entry.present?
+        @closing_date = @latest_closing_entry.date_posted
+      end
+
       if @latest_closing_record.present?
         @closing_date = @latest_closing_record.meta["date_closed"].to_date
       end

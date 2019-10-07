@@ -1,4 +1,18 @@
 namespace :debug do
+  task :load_date_completed => :environment do
+    branch_id = ENV['BRANCH_ID']
+    loans = Loan.where("branch_id = ? and status = ? and date_completed IS NULL ", branch_id, "paid" )
+    size = loans.size
+
+    loans.each_with_index do |l,i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): date completed #{l.id}... #{progress}%%")
+      account_transaction = AccountTransaction.where(subsidiary_id: l.id).order(:transacted_at).last
+      Loan.find(l.id).update(date_completed: account_transaction.transacted_at)
+      
+    end
+    puts "Done"
+  end
   task :loan_reamortize => :environment do
     loan                    = Loan.find(ENV['ID'])
     p_principal             = ENV['P_PRINCIPAL'].to_f.round(2)
