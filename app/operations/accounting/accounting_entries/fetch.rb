@@ -16,7 +16,13 @@ module Accounting
                     ).first
 
           if @branch.blank?
-            @branch = Branch.first
+            default_branch_id = Settings.try(:defaults).try(:default_branch).try(:id)
+            
+            if default_branch_id.present?
+              @branch = Branch.find(default_branch_id)
+            else
+              @branch = Branch.first
+            end
           end
         end
 

@@ -152,7 +152,7 @@ export default class AddAccountingFund extends React.Component {
         </div>
       );
     } else {
-      return "" + this.props.data.data.accounting_fund_id;
+      return "" + this.props.data.data.accounting_fund_name;
     }
   }
 }

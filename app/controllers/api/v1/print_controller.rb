@@ -110,12 +110,15 @@ module Api
                     ).execute!
 
           if errors[:full_messages].size == 0
-            trial_balance_data  = ::Accounting::GenerateTrialBalance.new(
+            trial_balance_data  = ::Accounting::FetchTrialBalance.new(
                                     config: config
                                   ).execute!
 
-            data  = ::Accounting::FormatTrialBalance.new(
-                      trial_balance_data: trial_balance_data
+            #data  = ::Accounting::FormatTrialBalance.new(
+            #          trial_balance_data: trial_balance_data
+            #        ).execute!
+            data  = ::Accounting::FetchTrialBalance.new(
+                      config: config
                     ).execute!
           end
         elsif type == "book"

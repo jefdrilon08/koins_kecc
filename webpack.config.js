@@ -29,6 +29,7 @@ module.exports = {
     MemberSurveyAnswerUI: "./react/members/SurveyAnswerUI.js",
     DashboardMain: "./react/dashboard/Main.js",
     BranchRepaymentReportShow: "./react/data_stores/branch_repayment_reports/Show.js",
+    BranchResignationShow: "./react/data_stores/branch_resignations/Show.js",
     SoaExpensesShow: "./react/data_stores/soa_expenses/Show.js",
     SoaLoansShow: "./react/data_stores/soa_loans/Show.js",
     SoaFundsShow: "./react/data_stores/soa_funds/Show.js",

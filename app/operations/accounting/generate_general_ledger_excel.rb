@@ -176,10 +176,11 @@ module Accounting
             sheet.add_row ["GENERAL LEDGER"],style: @header_cells
             sheet.add_row ["#{Settings.company_name}"],style: @header_cells
             sheet.add_row ["#{Settings.company_address}"],style: @header_cells
-            sheet.add_row ["Vat Registration TIN Number: #{Settings.company_tin_number}"],style: @header_cells
+            sheet.add_row ["TIN Number: #{Settings.company_tin_number}"],style: @header_cells
             sheet.add_row ["#{@data[:start_date]} - #{@data[:end_date]}"],style: @header_cells
             sheet.add_row ["#{@branch_name}"],style: @header_cells
             sheet.add_row [""]
+
             sheet.add_row ["DATE","REFERENCE NUMBER","SUB REFERENCE NUMBER","BOOK","PARTICULAR","DEBIT","CREDIT",""], :style=> @title_cells
  
               @data[:entries].each do |key , value|
@@ -196,10 +197,10 @@ module Accounting
                   @def_currency_cells,
                   @def_currency_cells,
                   @def_currency_cells
-                  ]
-                  
+                  ]               
                 end
-                sheet.add_row ["ENDING BALANCE","","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
+                sheet.add_row ["#{key[:accounting_code_name]} - ENDING BALANCE","","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
+
               end
         end
       end

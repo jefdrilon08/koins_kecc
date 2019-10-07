@@ -7,7 +7,7 @@ module MemberAccountValidations
       @resignation_date                     = @config[:resignation_date]
       @member_classification                = @config[:member_classification]
       @member_account_validation            = @config[:member_account_validation]
-      @equity_interest_implementation_date  = "2019-12-01".to_date
+      @equity_interest_implementation_date  = "2019-01-01".to_date
       @lif_50_percent                       = 0.00
       @advance_lif                          = 0.00
       @advance_rf                           = 0.00
@@ -102,7 +102,7 @@ module MemberAccountValidations
       w = ((@resignation_date.to_date - @equity_interest_implementation_date).to_i)/7
       if w >= 1
         @equity_interest        = ::MemberAccountValidations::GenerateEquityInterest.new(
-                                          lif_50_percent: @lif_50_percent,
+                                          lif_member_account: @lif_member_account,
                                           resignation_date: @resignation_date,
                                           equity_interest_implementation_date: @equity_interest_implementation_date
                                           ).execute!

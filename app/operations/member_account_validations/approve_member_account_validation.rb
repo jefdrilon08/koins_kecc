@@ -32,7 +32,7 @@ module MemberAccountValidations
       create_rf_member_deposits!
 
       # COMMMENT OUT
-      # create_lif_member_deposits!
+      create_equity_interest_deposits!
 
       if Settings.activate_microloans
         withdraw_lif_and_rf_deposit_to_savings!
@@ -138,17 +138,17 @@ module MemberAccountValidations
       end
     end
 
-    def create_lif_member_deposits!
+    def create_equity_interest_deposits!
       @member_account_validation.member_account_validation_records.each do |member_account_validation_record|
           
         config  = {
           date_paid: @c_working_date,
-          member_account_validation: member_account_validation_record,
+          member_account_validation_record: member_account_validation_record,
           user: @user,
           accounting_entry_reference_number: @data_accounting_entry[:reference_number]
         }
 
-        ::MemberAccountValidations::ApproveLifMemberDeposit.new(
+        ::MemberAccountValidations::ApproveEquityInterestDeposit.new(
           config: config
         ).execute!
       end
@@ -199,7 +199,7 @@ module MemberAccountValidations
         end
 
         # half_adv_lif = member_account_validation_record.try(:advance_lif) / 2 
-        due_to_members = (member_account_validation_record.try(:interest) + member_account_validation_record.try(:rf) + member_account_validation_record.try(:advance_rf) + member_account_validation_record.try(:lif_50_percent) + member_account_validation_record.try(:advance_lif))
+        due_to_members = (member_account_validation_record.try(:equity_interest) + member_account_validation_record.try(:interest) + member_account_validation_record.try(:rf) + member_account_validation_record.try(:advance_rf) + member_account_validation_record.try(:lif_50_percent) + member_account_validation_record.try(:advance_lif))
         
         if member_account_validation_record.member_classification == "EXIT AGE (GK)"
           savings_account    = MemberAccount.where(account_type: "SAVINGS", account_subtype: "Golden K", member_id: member.id).first

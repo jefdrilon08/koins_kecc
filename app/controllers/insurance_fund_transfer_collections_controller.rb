@@ -2,7 +2,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @insurance_fund_transfer_collections = InsuranceFundTransferCollection.select("*")
+    @insurance_fund_transfer_collections = InsuranceFundTransferCollection.select("*").where(branch_id: @branches.pluck(:id))
 
     @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end

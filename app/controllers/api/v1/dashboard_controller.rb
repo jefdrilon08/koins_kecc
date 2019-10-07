@@ -3,6 +3,19 @@ module Api
     class DashboardController < ApiController
       before_action :authenticate_user!
 
+      def overview
+        config  = {
+          user: current_user,
+          as_of: params[:as_of] || Date.today
+        }
+
+        data  = ::Dashboard::BuildOverview.new(
+                  config: config
+                ).execute!
+
+        render json: data
+      end
+
       def index
         branches  = build_branches
         branch    = nil

@@ -7,7 +7,14 @@ class ApplicationController < ActionController::Base
 
     if user_signed_in?
       # TODO: Only fetch user assigned branches
-      @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
+      @default_branch_name = Settings.try(:defaults).try(:default_branch).try(:name)
+      
+      if @default_branch_name.present?
+        @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
+        @branches = @branches.sort_by { |e| [ e.name == @default_branch_name ? 0 : 1 , e ] }
+      else
+        @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
+      end
     end
   end
   

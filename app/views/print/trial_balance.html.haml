@@ -6,7 +6,7 @@
     %br
     VAT Registration Tin Number: #{Settings.company_tin_number}
     %br
-    #{@trial_balance[:branch][:name]}
+    #{@trial_balance[:branch]}
     %br
     Trial Balance from #{@trial_balance[:start_date].to_date.strftime("%B %d, %Y")} to #{@trial_balance[:end_date].to_date.strftime("%B %d, %Y")}
 

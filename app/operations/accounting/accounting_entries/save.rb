@@ -30,7 +30,7 @@ module Accounting
         @accounting_entry.branch        = @branch
         @accounting_entry.data          = @accounting_entry_data[:data]
         @accounting_entry.date_prepared = @accounting_entry_data[:date_prepared]
-        @accounting_entry.prepared_by   = @user.full_name
+        @accounting_entry.prepared_by   = @accounting_entry_data[:prepared_by]
 
         # Get accounting fund if present
         if @accounting_entry_data[:accounting_fund_id].present?

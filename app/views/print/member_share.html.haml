@@ -1,6 +1,6 @@
 :css
   .member-details {
-    margin: 150px 0px 0px 375px;
+    margin: 85px 0px 0px 375px;
     font-size: 20px;
   }
 
@@ -9,6 +9,11 @@
     margin-left: 80px;
     max-width: 900px;
     font-size: 45px;
+  }
+
+  .member-no-of-share {
+    font-size: 20px;
+    margin: 33px 0px 0px 370px;
   }
 
   .member-recognition-month {
@@ -60,6 +65,19 @@
     %center
       %p
         #{@member_share_data[:member_full_name]}
+  .member-no-of-share
+    - if @member_share_data[:number_of_shares] == "1"
+      %label
+        isang (1)
+    - if @member_share_data[:number_of_shares] == "2"
+      %label
+        dalawang (2)
+    - if @member_share_data[:number_of_shares] == "3"
+      %label
+        tatlong (3)
+
+
+
   .member-details
     %label
       #{@member_share_data[:date_of_issue_day]}

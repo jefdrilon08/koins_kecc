@@ -13,6 +13,8 @@
           Certificate Number
         %th
           Date of Issue
+        %th
+          number of shares
         %th.text-center
           Is Void
     %tbody
@@ -24,6 +26,8 @@
           %td
             - if o.date_of_issue
               #{o.date_of_issue.strftime("%B %d, %Y")}
+          %td
+            #{o.number_of_shares}
           %td.text-center
             - if o.is_void
               .badge.badge-danger
