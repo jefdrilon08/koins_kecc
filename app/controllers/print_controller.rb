@@ -8,7 +8,8 @@ class PrintController < ApplicationController
 
     if @data[:type] == "accounting_entry"
       @accounting_entry_data  = @data[:data]
-
+      @deposit_collection = @data[:data]
+      
       render "print/accounting_entry", layout: "plain"
     elsif @data[:type] == "deposit_collection_accounting_entry"
       @accounting_entry_data  = @data[:data]
@@ -44,7 +45,7 @@ class PrintController < ApplicationController
       render "print/book", layout: "plain"
     elsif @data[:type] == "deposit_collection"
       @deposit_collection = @data[:data]
-
+      
       render "print/deposit_collection", layout: "plain"
     elsif @data[:type] == "insurance_fund_transfer_collection"
       @insurance_fund_transfer_collection = @data[:data]

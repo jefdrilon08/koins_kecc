@@ -40,6 +40,9 @@
               %th
                 Date
               %th
+              %th   
+              %th
+                Book
               %th
                 PARTICULAR
               %th.text-right
@@ -49,18 +52,22 @@
               %th.text-right
                 BALANCE
             %tr
-              %th
-              %th
-              %th
+              %th{ width: "20%" }
                 #{entry[:accounting_code_name]}
+              %th
+              %th
+              %th
+              %th
               %th
               %th
               %th
             %tr
               %th
-              %th
-              %th
                 BEGINNING BALANCE
+              %th
+              %th
+              %th
+              %th
               %th
               %th
               %th.text-right
@@ -73,6 +80,10 @@
                 %td.text-center{ width: "8%" }
                   %small
                     #{o[:date_posted]}
+                %td{ width: "2%" }
+                  #{o[:reference_number]} 
+                %td{ width: "2%" }
+                  #{o[:sub_reference_number]}    
                 %td{ width: "2%" }
                   #{o[:book]}
                 %td{ width: "50%" }
@@ -87,6 +98,8 @@
             %tr
               %th{ colspan: 3 }
                 Ending for #{entry[:accounting_code_name]}
+              %th
+              %th
               %th.text-right
                 #{number_to_currency(current_dr_sum, unit: '')}
               %th.text-right

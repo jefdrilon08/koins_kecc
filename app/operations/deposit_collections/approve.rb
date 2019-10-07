@@ -25,10 +25,11 @@ module DepositCollections
       @data[:approved_by] = @user.full_name
 
       # Update accounting entry with reference number
-      @data[:accounting_entry][:id]               = @accounting_entry.id
-      @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
-      @data[:accounting_entry][:status]           = @accounting_entry.status
-      @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
+      @data[:accounting_entry][:id]                         = @accounting_entry.id
+      @data[:accounting_entry][:reference_number]           = @accounting_entry.reference_number
+      @data[:accounting_entry][:status]                     = @accounting_entry.status
+      @data[:accounting_entry][:approved_by]                = @accounting_entry.approved_by
+      @data[:accounting_entry][:sub_reference_number]       = @accounting_entry.sub_reference_number
 
       @deposit_collection.update!(
         status: "approved",
