@@ -29,6 +29,8 @@ class AccountingEntry < ApplicationRecord
   scope :cdb, -> { includes(:journal_entries).where(book: "CDB").order("date_prepared DESC") }
   scope :misc, -> { includes(:journal_entries).where(book: "MISC").order("date_prepared DESC") }
 
+  scope :year_end_closing, -> { where("book = ? AND status = ? AND data->>'is_closing_record' = ?", "MISC", "approved", "true").order("date_prepared DESC") }
+
   before_validation :load_defaults
   
   

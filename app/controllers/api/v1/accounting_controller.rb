@@ -70,6 +70,21 @@ module Api
               errors << "Closing date #{date_closed} is in between start and end dates"
             end
           end
+
+          # Check according to accounting entry closing record
+          if accounting_fund.present?
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).where(accounting_fund_id: accounting_fund.id).order("date_posted DESC").first
+          else
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).order("date_posted DESC").first
+          end
+
+          if latest_closing_entry.present?
+            date_closed = latest_closing_entry.date_posted
+
+            if start_date < date_closed and end_date > date_closed
+              errors << "Closing date #{date_closed} is in between start and end dates"
+            end
+          end
         end
 
         if errors.size > 0

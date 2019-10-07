@@ -6,8 +6,6 @@ module Members
       @data = @config[:data]
       @user = @config[:user]
 
-      puts @data
-
       @member = Member.find(@data[:member][:id])
 
       @member_data  = @member.data.with_indifferent_access
@@ -17,6 +15,7 @@ module Members
       accounting_entry  = post_accounting_entry!
 
       process_withdrawals!(accounting_entry.reference_number)
+      process_deposits!(accounting_entry.reference_number)
 
       resignation_data  = {
         type: @data[:member_resignation_type][:name],
@@ -54,6 +53,25 @@ module Members
     end
 
     private
+
+    def process_deposits!(accounting_entry_reference_number)
+      config  = {
+        date_paid: @data[:date_resigned],
+        deposit: {
+          amount: @data[:deposit][:amount],
+          member_account_id: @data[:deposit][:member_account_id],
+          lock_in_period: {}
+        },
+        member: @member,
+        user: @user,
+        particular: @data[:accounting_entry][:particular],
+        accounting_entry_reference_number: accounting_entry_reference_number
+      }
+
+      ::DepositCollections::ApproveDepositHash.new(
+        config: config
+      ).execute!
+    end
 
     def process_withdrawals!(accounting_entry_reference_number)
       @data[:equity_accounts].each do |o|
