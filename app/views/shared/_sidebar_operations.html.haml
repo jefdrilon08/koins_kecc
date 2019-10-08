@@ -8,26 +8,27 @@
   = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
     %i.nav-icon.fa.fa-users
     Members
-%li.nav-item
-  = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
-    %i.nav-icon.fa.fa-money-check
-    Loans
-%li{ class: "nav-item #{params[:controller] == 'billings' ? 'active' : ''}" }
-  = link_to billings_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-download
-    Billing
-%li{ class: "nav-item nav-dropdown" }
-  = link_to "#", class: "nav-link nav-dropdown-toggle" do
-    %i.nav-icon.fa.fa-money-check
-    Accounts
-  %ul.nav-dropdown-items
-    %li{ class: "nav-item #{params[:controller] == 'savings_accounts' ? 'active' : ''}" }
-      = link_to savings_accounts_path, class: 'nav-link' do
-        %i.nav-icon.fa.fa-piggy-bank
-        Savings
-    %li{ class: "nav-item #{params[:controller] == 'equity_accounts' ? 'active' : ''}" }
-      = link_to equity_accounts_path, class: 'nav-link' do
-        %i.nav-icon.fa.fa-piggy-bank
-        Equities
+- if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+  %li.nav-item
+    = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
+      %i.nav-icon.fa.fa-money-check
+      Loans
+  %li{ class: "nav-item #{params[:controller] == 'billings' ? 'active' : ''}" }
+    = link_to billings_path, class: 'nav-link' do
+      %i.nav-icon.fa.fa-download
+      Billing
+  %li{ class: "nav-item nav-dropdown" }
+    = link_to "#", class: "nav-link nav-dropdown-toggle" do
+      %i.nav-icon.fa.fa-money-check
+      Accounts
+    %ul.nav-dropdown-items
+      %li{ class: "nav-item #{params[:controller] == 'savings_accounts' ? 'active' : ''}" }
+        = link_to savings_accounts_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-piggy-bank
+          Savings
+      %li{ class: "nav-item #{params[:controller] == 'equity_accounts' ? 'active' : ''}" }
+        = link_to equity_accounts_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-piggy-bank
+          Equities
 
 = render partial: "shared/sidebar_cash_management"
