@@ -1,4 +1,16 @@
 namespace :report do
+  task :mem_share => :environment do
+    x = Member.where("status = 'active' and branch_id = '3726405b-777c-4b61-b6a5-7a4b48db62b6'")
+    x.each do |y|
+      total_share = MemberAccount.where(member_id: y.id , account_type: 'EQUITY' , account_subtype: 'Share Capital').sum(:balance)
+      mem_cert = Member.joins(:member_shares).where("members.id = ? and member_shares.is_void IS NULL" , y.id).sum(:number_of_shares)
+      total_share_count = (total_share/100).to_i
+      if total_share_count > mem_cert
+        puts y.full_name , mem_cert , total_share_count
+      end
+    end
+  end
+  
   task :pending_insurance => :environment do
     Member.where("insurance_status = 'pending' and status = 'active' and data->>'recognition_date' IS NOT NULL").each do |pi|
       Member.find(pi.id).update(insurance_status: 'inforce')
