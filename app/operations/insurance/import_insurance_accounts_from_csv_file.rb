@@ -13,7 +13,8 @@ module Insurance
     def load_csv_file!
       CSV.foreach(@file.path, headers: true) do |row|
         member_id = row['member_id']
-        member = Member.where(identification_number: member_id).first
+        member_uuid = row['member_uuid']
+        member = Member.where(id: member_uuid).first
 
         if row['insurance_type'] == "LIF"
           acc_subtype = "Life Insurance Fund"

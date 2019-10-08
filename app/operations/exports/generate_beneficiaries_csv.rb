@@ -15,7 +15,8 @@ module Exports
                 :relationship,
                 :reference_number,
                 :member_identification_number,
-                :uuid
+                :uuid,
+                :member_uuid
                 
                 ]
         @beneficiaries.each do |b|
@@ -35,7 +36,8 @@ module Exports
                 b.relationship,
                 nil,
                 b.member.identification_number,
-                b.id
+                b.id,
+                b.member.id
               ]
           end
         end
