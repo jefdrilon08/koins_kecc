@@ -1,4 +1,33 @@
 = render partial: "printed_header"
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body 
+          = form_tag "", method: 'GET' do
+            .row
+              .col-md-2
+                .form-group
+                  %label
+                    Equity Payment Start Date
+                  = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
+              .col-md-2
+                .form-group
+                  %label
+                    Equity Payment End Date
+                  = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
+              .col-md-2
+                .form-group
+                  %label
+                    SATO
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --" 
+              .col-md-2
+                .form-group
+                  %label
+                    Actions
+                  = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+                    .fa.fa-search
+ 
 
 .container-fluid
   .row
@@ -8,11 +37,13 @@
           .row
             .col
               %h5
-                Printed Certificates (#{@member_shares.count})
-              - if @member_shares.size > 0
+                Printed Certificates
+              - if @member_shares != nil
                 %table.table.table-sm.table-bordered
                   %thead
                     %tr
+                      %th
+                        
                       %th
                         Number
                       %th
@@ -20,10 +51,12 @@
                       %th
                         Branch
                       %th
-                        Date Issued
+                        Date Printed
                   %tbody
-                    - @member_shares.each do |m|
+                    - @member_shares.each_with_index do |m , i|
                       %tr
+                        %td
+                          #{i + 1}
                         %td
                           = link_to member_member_share_path(m.member.id, m.id), target: '_blank' do
                             #{m.certificate_number}
@@ -32,9 +65,9 @@
                         %td
                           #{m.member.branch.to_s}
                         %td
-                          #{m.date_of_issue}
+                          #{m.data["date_printed"]}
                           
-                = paginate @member_shares
+                //= paginate @member_shares
               - else
                 %p
                   No certificates found
