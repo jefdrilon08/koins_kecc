@@ -1,4 +1,16 @@
 namespace :debug do
+  task :repair_cbu_account => :environment do 
+    ma = MemberAccount.where(account_type: "SAVINGS", account_subtype: "CBU")
+    size = ma.size
+    ma.each_with_index do |m,i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Member Account #{m.id}... #{progress}%%")
+      MemberAccount.find(m.id).update!(account_type: "EQUITY")
+      
+    end
+  
+  end
+
   task :delete_loan_payment => :environment do
     loans = Loan.where(branch_id: "3cccd843-3fa8-4693-b60c-dea2505c6b57")
     size = loans.size
