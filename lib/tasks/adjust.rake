@@ -804,4 +804,34 @@ namespace :adjust do
     end
     puts "Done"
   end
+
+  task :update_center_name => :environment do
+    file_location = ENV['CENTERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      center = Center.find(row['center_id'])
+
+      if !center.nil?
+        puts "Updating: #{center.name}"  
+        center.update!(name: row['center_name'])
+      end
+    end
+    puts "Done!"
+  end
+
+  task :update_identification_number_by_uuid => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['uuid'])
+
+      if !member.nil?
+        puts "Updating: #{member.full_name}"  
+        member.update!(identification_number: row['identification_number'])
+      end
+    end
+    puts "Done!"
+  end
 end

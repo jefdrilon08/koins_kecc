@@ -33,7 +33,8 @@ module Members
             beneficiary.is_deceased = row['is_deceased']
 
             member_identification_number = row['member_identification_number']
-            member = Member.where(identification_number: member_identification_number).first
+            member_uuid = row['member_uuid']
+            member = Member.where(id: member_uuid).first
             member_id = member.id
             beneficiary.member_id = member_id
 

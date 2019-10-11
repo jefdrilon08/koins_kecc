@@ -138,7 +138,11 @@ module Accounting
                                 running_balance: running_balance.to_f
                               }
                             }
-
+          else 
+            mapped_entries = []
+          end
+       
+          if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0|| mapped_entries.size > 0
           entries << {
             accounting_code_id: a,
             accounting_code_name: accounting_code_name,
@@ -148,6 +152,7 @@ module Accounting
             ending_balance: running_balance.to_f,
             entries: mapped_entries
           }
+         
         end
       end
 

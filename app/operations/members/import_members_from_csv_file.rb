@@ -13,7 +13,8 @@ module Members
     def load_csv_file!
       CSV.foreach(@file.path, headers: true) do |row|
         identification_number = row['identification_number']
-        member_record = Member.where(identification_number: identification_number).first
+        uuid = row['uuid']
+        member_record = Member.where(id: uuid).first
 
         if member_record.nil?
           member = Member.new
@@ -302,6 +303,7 @@ module Members
             member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
   
           member_record.update!(
+            identification_number: identification_number,
             member_type: row['member_type'],
             status: status,
             insurance_status: insurance_status,
