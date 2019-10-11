@@ -819,4 +819,19 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :update_identification_number_by_uuid => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['uuid'])
+
+      if !member.nil?
+        puts "Updating: #{member.full_name}"  
+        member.update!(identification_number: row['identification_number'])
+      end
+    end
+    puts "Done!"
+  end
 end
