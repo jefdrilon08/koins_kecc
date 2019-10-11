@@ -42,13 +42,13 @@ module Accounting
         @accounting_entry.update!(
           status: "approved",
           date_posted: @current_date,
-          approved_by: @user.full_name,
+          approved_by: @user.print_full_name,
           reference_number: new_reference_number,
           data: @data
         )
 
         ActivityLog.create!(
-          content: "#{@user.full_name} approved accounting entry #{@accounting_entry.id}",
+          content: "#{@user.print_full_name} approved accounting entry #{@accounting_entry.id}",
           activity_type: "approval",
           data: {
             user_id: @user.id,

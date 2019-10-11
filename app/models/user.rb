@@ -74,6 +74,10 @@ class User < ApplicationRecord
     "#{last_name.upcase}, #{first_name.upcase}"
   end
 
+  def print_full_name
+    "#{first_name.upcase} #{last_name.upcase}"
+  end
+
   def login=(login)
     @login  = login
   end

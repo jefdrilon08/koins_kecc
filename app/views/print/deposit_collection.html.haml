@@ -123,7 +123,10 @@
   .col
     %center
       %strong
-        #{@deposit_collection[:data][:accounting_entry][:approved_by]}
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{"SILVIDA ANTIQUERA"}
+        -else
+          %th{width: 350} #{@deposit_collection[:data][:accounting_entry][:approved_by]}
       %br
       Approved By:
 
