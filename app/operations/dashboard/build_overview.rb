@@ -143,6 +143,25 @@ module Dashboard
               d[:par_amount] += o[:overall_principal_balance].to_f.round(2)
             end
           end
+
+          # Compute principal
+          d[:principal_rr]  = (d[:principal_paid_due] / d[:principal_due]).round(4)
+
+          if d[:principal_paid_due] > 0
+          else
+            d[:principal_rr] = 0.00
+          end
+
+          if d[:principal_rr] > 1
+            d[:principal_rr] = 1
+          end
+
+          if d[:principal_rr] >= 1 and d[:principal_paid] < d[:principal_due]
+            d[:principal_rr] = 0.99
+          end
+
+          # Compute par
+          d[:par] = (d[:principal_balance] / d[:principal]).round(2)
         end
 
         if ds_member_counts.present?
