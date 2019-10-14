@@ -27,6 +27,9 @@ module DepositCollections
 
       # Build member records
       @records  = []
+
+      total_collected = 0.00
+
       @default_deposit_accounts.each_with_index do |o, i|
         member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o.account_subtype, account_type: o.account_type).first
         enabled         = false
@@ -49,6 +52,8 @@ module DepositCollections
           end
         end
 
+        total_collected += amount
+
         record_type = o.account_type
 
         @records << {
@@ -64,7 +69,7 @@ module DepositCollections
       @data[:records] << {
         member: @member_object,
         records: @records,
-        total_collected: 0.00
+        total_collected: total_collected
       }
 
       @deposit_collection.update!(

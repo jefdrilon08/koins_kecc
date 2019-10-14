@@ -17,7 +17,7 @@ class AccountingEntry < ApplicationRecord
   has_many :journal_entries, dependent: :destroy
 
   validates :particular, presence: true
-  validates :reference_number, presence: true, uniqueness: { scope: [:branch_id, :book] }, if: :approved?
+  #validates :reference_number, presence: true, uniqueness: { scope: [:branch_id, :book] }, if: :approved?
   validates :date_prepared, presence: true
   validates :status, presence: true
 

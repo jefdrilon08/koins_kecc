@@ -1,5 +1,6 @@
 import React from 'react';
 import ErrorDisplay from '../ErrorDisplay';
+import Select from 'react-select';
 
 export default class AddRecord extends React.Component {
   constructor(props) {
@@ -40,9 +41,10 @@ export default class AddRecord extends React.Component {
     });
   }
 
-  handleMemberChanged(event) {
+  handleMemberChanged(o) {
     this.setState({
-      memberId: event.target.value
+      memberId: o.value,
+      currentMember: o
     });
   }
 
@@ -135,6 +137,15 @@ export default class AddRecord extends React.Component {
 
   render() {
     if(this.props.data.status == "pending") {
+      var members       = this.state.members;
+      var memberOptions = [];
+
+      for(var i = 0; i < members.length; i++) {
+        memberOptions.push(
+          { value: members[i].id, label: members[i].name + " " + members[i].center.name }
+        );
+      }
+
       return  (
         <div>
           <h5>
@@ -145,14 +156,11 @@ export default class AddRecord extends React.Component {
               {this.renderErrorDisplay()}
               <div className="row">
                 <div className="col-md-10">
-                  <select
-                    className="form-control"
+                  <Select
+                    value={this.state.currentMember}
                     onChange={this.handleMemberChanged.bind(this)}
-                    value={this.state.memberId}
-                    disabled={this.state.isLoading}
-                  >
-                    {this.renderOptions()}
-                  </select>
+                    options={memberOptions}
+                  />
                   <div>
                     {this.state.message}
                   </div>
