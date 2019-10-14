@@ -9,6 +9,12 @@ module MemberAccountValidations
       @member_account_validation    = @config[:member_account_validation]
       @is_remote                    = @config[:is_remote]
       @branch                       = @member_account_validation.branch
+      
+      if Settings.activate_microinsurance
+        branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.where(id: branch_id).first
+      end
+
       @particular                   = build_particular
 
       @current_date = ::Utils::GetCurrentDate.new(

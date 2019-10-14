@@ -4,6 +4,13 @@ module DepositCollections
       @config = config
 
       @branch = @config[:branch]
+
+      if Settings.activate_microinsurance
+        branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.where(id: branch_id).first
+      end
+
+
       @data   = @config[:data].with_indifferent_access
       @user   = @config[:user]
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
@@ -141,7 +148,7 @@ module DepositCollections
     end
 
     def default_particular
-      "TO RECORD DEPOSIT OF #{@branch.name}"
+      "TO RECORD DEPOSIT OF #{@config[:branch].name}"
     end
   end
 end
