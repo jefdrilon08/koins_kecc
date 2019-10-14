@@ -87,12 +87,9 @@ export default class GeneralLedgerComponent extends React.Component {
         <table className="table table-bordered table-sm">
           <thead>
             <tr className="bg-info">
-              <th colspan={2} width="22%">
+              <th colspan={3} width="22%">
                 {this.props.data.accounting_code_name}
               </th>
-              <th className="">  
-              </th>
-              <th className=""></th>
               <th className="" width="8%">
                 Book
               </th>

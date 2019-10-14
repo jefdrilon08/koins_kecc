@@ -8,7 +8,10 @@ module Api
         end_date            = params[:end_date].try(:to_date)
         branch_id           = params[:branch_id]
         accounting_code_ids = params[:accounting_code_ids] || []
-        branch              = Branch.where(id: branch_id).first
+
+        if branch_id.present?
+          branch              = Branch.where(id: branch_id).first
+        end
 
         config  = {
           start_date: start_date,
