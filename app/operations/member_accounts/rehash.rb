@@ -15,37 +15,54 @@ module MemberAccounts
     def execute!
       running_balance = 0.00
 
+      beginning_balance = 0
+      ending_balance = 0
       # Clear the beginning and ending balance
       @account_transactions.each do |o|
-        temp_data = o.data.try(:to_json)
-
-        if temp_data.blank?
-          temp_data = {}.to_json
-        end
-
-        temp_data = JSON.parse(temp_data).with_indifferent_access
-
-        temp_data[:beginning_balance] = running_balance
-        temp_data[:ending_balance]    = 0.00
-
+        
+        beginning_balance = beginning_balance
+      
         if o.deposit?
-          running_balance += o.amount
-        elsif o.withdraw?
-          running_balance -= o.amount
+          ending_balance = beginning_balance + o.amount
         else
-          raise "invalid transaction_type #{o.transaction_type} for #{o.id}"
-        end
+          ending_balance = beginning_balance - o.amount                 
+        end 
+        data = o.data.with_indifferent_access
+        data[:beginning_balance] = beginning_balance
+        data[:ending_balance] = ending_balance 
+        o.update(data: data)
+                            
+        beginning_balance = ending_balance
+#        temp_data = o.data.try(:to_json)
 
-        temp_data[:ending_balance] = running_balance 
+#        if temp_data.blank?
+#          temp_data = {}.to_json
+#        end
 
-        o.update!(
-          data: temp_data
-        )
+#        temp_data = JSON.parse(temp_data).with_indifferent_access
+
+#        temp_data[:beginning_balance] = running_balance
+#        temp_data[:ending_balance]    = 0.00
+
+#        if o.deposit?
+#          running_balance += o.amount
+#        elsif o.withdraw?
+#          running_balance -= o.amount
+#        else
+#          raise "invalid transaction_type #{o.transaction_type} for #{o.id}"
+#        end
+
+#        temp_data[:ending_balance] = running_balance 
+
+#        o.update!(
+#          data: temp_data
+#        )
       end
 
       @member_account.update!(
-        balance: running_balance
+        balance: ending_balance
       )
     end
+  
   end
 end

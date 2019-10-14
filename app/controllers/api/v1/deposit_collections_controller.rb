@@ -102,6 +102,10 @@ module Api
       def fetch
         deposit_collection = DepositCollection.find(params[:id])
 
+        if deposit_collection.data["accounting_fund_id"].present?
+          deposit_collection.data["accounting_fund_name"] = AccountingFund.find(deposit_collection.data["accounting_fund_id"]).name
+        end
+
         render json: deposit_collection
       end
 

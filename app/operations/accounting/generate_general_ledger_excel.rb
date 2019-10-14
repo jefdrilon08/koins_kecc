@@ -129,6 +129,7 @@ module Accounting
                                 date_posted: x.accounting_entry.date_posted.strftime("%b %d, %Y"),
                                 accounting_entry_id: x.accounting_entry.id,
                                 reference_number: x.accounting_entry.reference_number,
+                                sub_reference_number: x.accounting_entry.sub_reference_number,
                                 book: x.accounting_entry.book,
                                 particular: x.accounting_entry.particular,
                                 dr_amount: dr_amount,
@@ -137,7 +138,11 @@ module Accounting
                                 running_balance: running_balance.to_f
                               }
                             }
-
+          else 
+            mapped_entries = []
+          end
+       
+          if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0|| mapped_entries.size > 0
           entries << {
             accounting_code_id: a,
             accounting_code_name: accounting_code_name,
@@ -147,6 +152,7 @@ module Accounting
             ending_balance: running_balance.to_f,
             entries: mapped_entries
           }
+         
         end
       end
 
@@ -179,14 +185,16 @@ module Accounting
             sheet.add_row ["#{@data[:start_date]} - #{@data[:end_date]}"],style: @header_cells
             sheet.add_row ["#{@branch_name}"],style: @header_cells
             sheet.add_row [""]
-            sheet.add_row ["DATE","REF. NUMBER","BOOK","PARTICULAR","DEBIT","CREDIT",""], :style=> @title_cells
+
+            sheet.add_row ["DATE","REFERENCE NUMBER","SUB REFERENCE NUMBER","BOOK","PARTICULAR","DEBIT","CREDIT",""], :style=> @title_cells
  
               @data[:entries].each do |key , value|
-                                sheet.add_row ["#{key[:accounting_code_name]} - Beginning Balance","","","","","","#{key[:beginning_balance]}"], style: [@account_title,@nil,@nil,@nil,@nil,@nil,@currency_cells_account_title]
+                                sheet.add_row ["#{key[:accounting_code_name]}","","","","","","","#{key[:beginning_balance]}"], style: [@account_title,@nil,@nil,@nil,@nil,@nil,@nil,@currency_cells_account_title]
           
                 key[:entries].each do |a , b|
-                  sheet.add_row ["#{a[:date_posted]}","##{a[:reference_number].rjust(10,'0')}","#{a[:book]}","#{a[:particular]}","#{a[:dr_amount]}","#{a[:cr_amount]}","#{a[:running_balance]}"],
+                  sheet.add_row ["#{a[:date_posted]}","#{a[:reference_number].rjust(10,'0')}","#{a[:sub_reference_number]}","#{a[:book]}","#{a[:particular]}","#{a[:dr_amount]}","#{a[:cr_amount]}","#{a[:running_balance]}"],
                   style: [
+                  @def_cell,
                   @def_cell,
                   @def_cell,
                   @def_cell,
@@ -194,10 +202,10 @@ module Accounting
                   @def_currency_cells,
                   @def_currency_cells,
                   @def_currency_cells
-                  ]
-                  
+                  ]               
                 end
-                sheet.add_row ["#{key[:accounting_code_name]} - ENDING BALANCE","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
+                sheet.add_row ["#{key[:accounting_code_name]} - ENDING BALANCE","","","","","","","#{key[:ending_balance]}"], style: [@ending_cell,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@nil_ending_balance,@currency_ending]
+
               end
         end
       end

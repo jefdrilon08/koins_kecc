@@ -94,8 +94,8 @@
         %tr
           %td{style: "width: 18px; text-align: center;"}
           %td{style: "width: 65px; text-align: center;"} Rec'l fr MBA
-          %td{style: "width: 43px; text-align: center;"} #{number_to_currency(@member_account_validation_record.interest, unit: "")}
-          %td{style: "width: 282px; text-align: center;", :colspan => "3"} *** #{@member_account_validation_record.interest.to_f.to_words.titleize} Only ***
+          %td{style: "width: 43px; text-align: center;"} #{number_to_currency((@member_account_validation_record.interest + @member_account_validation_record.equity_interest), unit: "")}
+          %td{style: "width: 282px; text-align: center;", :colspan => "3"} *** #{(@member_account_validation_record.interest + @member_account_validation_record.equity_interest).to_f.to_words.titleize} Only ***
       %p
         This is system generated Computation of Benefit, signature is not required
       %table
