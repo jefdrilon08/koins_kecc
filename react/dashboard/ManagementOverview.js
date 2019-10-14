@@ -62,20 +62,22 @@ export default class ManagementOverview extends React.Component {
   renderOverviewTable() {
     var areas   = this.state.data.areas;
     var rows    = [];
-    var colSpan = 11;
+    var colSpan = 12;
 
     var areaColor     = "#bad5fd";
     var clusterColor  = "#c5ffc1";
     var branchColor   = "#797979";
 
-    var tPrincipal      = 0.00;
-    var tPrincipalPaid  = 0.00;
-    var tPortfolio      = 0.00;
-    var tPastDueAmount  = 0.00;
-    var tParAmount      = 0.00;
-    var tPureSavers     = 0;
-    var tActiveLoaners  = 0;
-    var tActiveMembers  = 0;
+    var tPrincipal        = 0.00;
+    var tPrincipalPaid    = 0.00;
+    var tPortfolio        = 0.00;
+    var tPastDueAmount    = 0.00;
+    var tParAmount        = 0.00;
+    var tPrincipalPaidDue = 0.00;
+    var tPrincipalDue     = 0.00;
+    var tPureSavers       = 0;
+    var tActiveLoaners    = 0;
+    var tActiveMembers    = 0;
 
     for(var i = 0; i < areas.length; i++) {
       rows.push(
@@ -88,14 +90,16 @@ export default class ManagementOverview extends React.Component {
      
       var clusters    = areas[i].clusters;
 
-      var aPrincipal      = 0.00;
-      var aPrincipalPaid  = 0.00;
-      var aPortfolio      = 0.00;
-      var aPastDueAmount  = 0.00;
-      var aParAmount      = 0.00;
-      var aPureSavers     = 0;
-      var aActiveLoaners  = 0;
-      var aActiveMembers  = 0;
+      var aPrincipal        = 0.00;
+      var aPrincipalPaid    = 0.00;
+      var aPortfolio        = 0.00;
+      var aPastDueAmount    = 0.00;
+      var aParAmount        = 0.00;
+      var aPrincipalPaidDue = 0.00;
+      var aPrincipalDue     = 0.00;
+      var aPureSavers       = 0;
+      var aActiveLoaners    = 0;
+      var aActiveMembers    = 0;
 
       for(var j = 0; j < clusters.length; j++) {
         rows.push(
@@ -108,14 +112,16 @@ export default class ManagementOverview extends React.Component {
 
         var branches  = clusters[j].branches;
 
-        var cPrincipal      = 0.00;
-        var cPrincipalPaid  = 0.00;
-        var cPortfolio      = 0.00;
-        var cPastDueAmount  = 0.00;
-        var cParAmount      = 0.00;
-        var cPureSavers     = 0;
-        var cActiveLoaners  = 0;
-        var cActiveMembers  = 0;
+        var cPrincipal        = 0.00;
+        var cPrincipalPaid    = 0.00;
+        var cPortfolio        = 0.00;
+        var cPastDueAmount    = 0.00;
+        var cParAmount        = 0.00;
+        var cPrincipalPaidDue = 0.00;
+        var cPrincipalDue     = 0.00;
+        var cPureSavers       = 0;
+        var cActiveLoaners    = 0;
+        var cActiveMembers    = 0;
 
         for(var k = 0; k < branches.length; k++) {
           if(k == 0) {
@@ -139,6 +145,9 @@ export default class ManagementOverview extends React.Component {
                 <th className="text-right">
                   Par Amount
                 </th>
+                <th className="">
+                  RR
+                </th>
                 <th>
                   As Of
                 </th>
@@ -158,32 +167,38 @@ export default class ManagementOverview extends React.Component {
             );
           }
 
-          cPrincipal      += branches[k].data.principal;
-          cPrincipalPaid  += branches[k].data.principal_paid;
-          cPortfolio      += branches[k].data.portfolio;
-          cPastDueAmount  += branches[k].data.principal_balance;
-          cParAmount      += branches[k].data.par_amount;
-          cPureSavers     += branches[k].data.pure_savers.total;
-          cActiveLoaners  += branches[k].data.loaners.total;
-          cActiveMembers  += branches[k].data.active_members.total;
+          cPrincipal        += branches[k].data.principal;
+          cPrincipalPaid    += branches[k].data.principal_paid;
+          cPortfolio        += branches[k].data.portfolio;
+          cPastDueAmount    += branches[k].data.principal_balance;
+          cParAmount        += branches[k].data.par_amount;
+          cPrincipalPaidDue += branches[k].data.principal_paid_due;
+          cPrincipalDue     += branches[k].data.principal_due;
+          cPureSavers       += branches[k].data.pure_savers.total;
+          cActiveLoaners    += branches[k].data.loaners.total;
+          cActiveMembers    += branches[k].data.active_members.total;
 
-          aPrincipal      += branches[k].data.principal;
-          aPrincipalPaid  += branches[k].data.principal_paid;
-          aPortfolio      += branches[k].data.portfolio;
-          aPastDueAmount  += branches[k].data.principal_balance;
-          aParAmount      += branches[k].data.par_amount;
-          aPureSavers     += branches[k].data.pure_savers.total;
-          aActiveLoaners  += branches[k].data.loaners.total;
-          aActiveMembers  += branches[k].data.active_members.total;
+          aPrincipal        += branches[k].data.principal;
+          aPrincipalPaid    += branches[k].data.principal_paid;
+          aPortfolio        += branches[k].data.portfolio;
+          aPastDueAmount    += branches[k].data.principal_balance;
+          aParAmount        += branches[k].data.par_amount;
+          aPrincipalPaidDue += branches[k].data.principal_paid_due;
+          aPrincipalDue     += branches[k].data.principal_due;
+          aPureSavers       += branches[k].data.pure_savers.total;
+          aActiveLoaners    += branches[k].data.loaners.total;
+          aActiveMembers    += branches[k].data.active_members.total;
 
-          tPrincipal      += branches[k].data.principal;
-          tPrincipalPaid  += branches[k].data.principal_paid;
-          tPortfolio      += branches[k].data.portfolio;
-          tPastDueAmount  += branches[k].data.principal_balance;
-          tParAmount      += branches[k].data.par_amount;
-          tPureSavers     += branches[k].data.pure_savers.total;
-          tActiveLoaners  += branches[k].data.loaners.total;
-          tActiveMembers  += branches[k].data.active_members.total;
+          tPrincipal        += branches[k].data.principal;
+          tPrincipalPaid    += branches[k].data.principal_paid;
+          tPortfolio        += branches[k].data.portfolio;
+          tPastDueAmount    += branches[k].data.principal_balance;
+          tParAmount        += branches[k].data.par_amount;
+          tPrincipalPaidDue += branches[k].data.principal_paid_due;
+          tPrincipalDue     += branches[k].data.principal_due;
+          tPureSavers       += branches[k].data.pure_savers.total;
+          tActiveLoaners    += branches[k].data.loaners.total;
+          tActiveMembers    += branches[k].data.active_members.total;
 
           rows.push(
             <tr key={"branch-" + branches[k].id}>
@@ -207,6 +222,9 @@ export default class ManagementOverview extends React.Component {
               <td className="text-right">
                 {numberWithCommas(branches[k].data.par_amount)}
               </td>
+              <td className="">
+                {numberAsPercent(branches[k].data.principal_rr)}
+              </td>
               <td>
                 {branches[k].data.as_of}
               </td>
@@ -227,6 +245,20 @@ export default class ManagementOverview extends React.Component {
         }
 
         // Cluster level total
+        var cPrincipalRR  = (cPrincipalPaidDue / cPrincipalDue);
+
+        if(cPrincipalPaidDue <= 0) {
+          cPrincipalRR = 0.00;
+        }
+
+        if(cPrincipalRR > 1) {
+          cPrincipalRR = 1;
+        }
+
+        if(cPrincipalRR >= 1 && cPrincipalPaid < cPrincipalDue) {
+          cPrincipalRR = 0.99;
+        }
+
         rows.push(
           <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: clusterColor}}>
             <td>
@@ -259,6 +291,9 @@ export default class ManagementOverview extends React.Component {
                 {numberWithCommas(cParAmount)}
               </strong>
             </td>
+            <td>
+              {numberAsPercent(cPrincipalRR)}
+            </td>
             <td className="text-right">
             </td>
             <td className="text-center">
@@ -283,6 +318,20 @@ export default class ManagementOverview extends React.Component {
       }
 
       // Area level total
+      var aPrincipalRR  = (aPrincipalPaidDue / aPrincipalDue);
+
+      if(aPrincipalPaidDue <= 0) {
+        aPrincipalRR = 0.00;
+      }
+
+      if(aPrincipalRR > 1) {
+        aPrincipalRR = 1;
+      }
+
+      if(aPrincipalRR >= 1 && aPrincipalPaid < aPrincipalDue) {
+        aPrincipalRR = 0.99;
+      }
+
       rows.push(
         <tr key={"area-total-" + areas[i].id} style={{backgroundColor: areaColor}}>
           <td>
@@ -315,6 +364,9 @@ export default class ManagementOverview extends React.Component {
               {numberWithCommas(aParAmount)}
             </strong>
           </td>
+          <td>
+            {numberAsPercent(aPrincipalRR)}
+          </td>
           <td className="text-right">
           </td>
           <td className="text-center">
@@ -339,6 +391,20 @@ export default class ManagementOverview extends React.Component {
     }
 
     // Grand total
+    var tPrincipalRR  = (tPrincipalPaidDue / tPrincipalDue);
+
+    if(tPrincipalPaidDue <= 0) {
+      tPrincipalRR = 0.00;
+    }
+
+    if(tPrincipalRR > 1) {
+      tPrincipalRR = 1;
+    }
+
+    if(tPrincipalRR >= 1 && tPrincipalPaid < tPrincipalDue) {
+      tPrincipalRR = 0.99;
+    }
+
     rows.push(
       <tr key={"grand-total"} style={{backgroundColor: "#000", color: "#fff"}}>
         <td>
@@ -370,6 +436,9 @@ export default class ManagementOverview extends React.Component {
           <strong>
             {numberWithCommas(tParAmount)}
           </strong>
+        </td>
+        <td>
+          {numberAsPercent(tPrincipalRR)}
         </td>
         <td className="text-right">
         </td>

@@ -340,6 +340,12 @@ handleDownloadClicked() {
     var state   = context.state;
 
     var branchOptions = [];
+
+    branchOptions.push(
+      <option value="" key={"b-blank"}>
+        -- SELECT ALL --
+      </option>
+    );
     
     for(var i = 0; i < state.branches.length; i++) {
       branchOptions.push(
