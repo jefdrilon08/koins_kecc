@@ -218,7 +218,7 @@ class Member < ApplicationRecord
   end
 
   def equity_value
-    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)/2
+    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)
   end
 
   def lif_amount
