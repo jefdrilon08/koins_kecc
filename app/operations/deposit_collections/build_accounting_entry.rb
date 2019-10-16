@@ -31,7 +31,8 @@ module DepositCollections
         status: "display",
         data: {
           or_number: "",
-          ar_number: ""
+          ar_number: "",
+          payee: @config[:branch].name
         }       
       }
 
