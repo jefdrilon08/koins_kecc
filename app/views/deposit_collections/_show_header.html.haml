@@ -27,11 +27,17 @@
         = link_to deposit_collection_path(@deposit_collection), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times
           Delete
-      - if @deposit_collection.pending? && (current_user.roles.include?("REMOTE-BK")) && !@deposit_collection.finalized?
+      - if @deposit_collection.pending? && !@deposit_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS"))
         = link_to "#", class: 'btn', id: 'btn-finalize' do
           .fa.fa-check
           Finalize
       - if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))    
-        = link_to "#", class: 'btn', id: 'btn-approve' do
-          .fa.fa-check
-          Approve
+        - if Settings.activate_microinsurance
+          - if @deposit_collection.finalized?
+            = link_to "#", class: 'btn', id: 'btn-approve' do
+              .fa.fa-check
+              Approve  
+        - else
+          = link_to "#", class: 'btn', id: 'btn-approve' do
+            .fa.fa-check
+            Approve
