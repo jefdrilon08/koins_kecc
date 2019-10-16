@@ -578,20 +578,20 @@ namespace :adjust do
       recognition_date          = member.recognition_date
 
       if recognition_date.present?
-        member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
-        transactions          = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id).order("transacted_at ASC")
+        member_accounts       = MemberAccount.where("account_subtype = ? AND member_id = ?", "Life Insurance Fund", member.id).first
+        transactions           = AccountTransaction.savings.where("amount > 0 AND subsidiary_id = ?", member_accounts.id)
 
         if transactions.size > 0
-          latest_payment    = member_accounts
+          # latest_payment    = member_accounts
           latest            = transactions.last
           last_payment_date = transactions.last[:transacted_at].to_date
-           # Code
-          current_balance          = latest_payment.balance.to_i
+          # Code
+          current_balance          = member_accounts.balance.to_i
           num_days                 = (current_date - recognition_date).to_i
           num_weeks                = (num_days / 7).to_i + 1
           insured_amount           = num_weeks * default_periodic_payment
           amt_past_due             = (current_balance - insured_amount).to_i * -1
-          num_weeks_past_due       = (amt_past_due / default_periodic_payment)
+          # num_weeks_past_due       = (amt_past_due / default_periodic_payment)
           days_lapsed              = (current_date - last_payment_date).to_i
           
           if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true

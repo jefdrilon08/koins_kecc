@@ -24,6 +24,13 @@ module DepositCollections
         }
       end
 
+      if @deposit_collection.finalized?
+        @errors[:messages] << {
+          key: "deposit_collection",
+          message: "Deposit Collection already finalized!"
+        }
+      end
+
       # Validate presence of current_transaction
       if @current_transaction.blank?
         @errors[:messages] << {

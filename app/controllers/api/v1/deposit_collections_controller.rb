@@ -241,6 +241,23 @@ module Api
         end
       end
 
+      def finalize
+        deposit_collection   = DepositCollection.find(params[:id])
+        data      = deposit_collection.try(:data).try(:with_indifferent_access)
+        
+        if deposit_collection.pending?
+          data[:finalize]                             = true
+
+          deposit_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
       def update_accounting_fund
         deposit_collection   = DepositCollection.find(params[:id])
         data                 = deposit_collection.try(:data).try(:with_indifferent_access)

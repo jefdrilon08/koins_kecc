@@ -4,7 +4,7 @@ module DepositCollections
       @config             = config
       @deposit_collection = @config[:deposit_collection]
       @member             = @config[:member]
-
+      @user               = @config[:user]
       @data = @deposit_collection.data.with_indifferent_access
 
       @default_deposit_accounts = Settings.default_deposit_accounts
@@ -75,6 +75,23 @@ module DepositCollections
       @deposit_collection.update!(
         data: @data
       )
+
+      if Settings.activate_microinsurance
+        r_config = {
+          current_member: {
+            id: @member.id
+          },
+          data: @deposit_collection.data.with_indifferent_access,
+          user: @user,
+          deposit_collection: @deposit_collection
+        }
+
+        data  = ::DepositCollections::RecomputeTotals.new(
+                  config: r_config
+                ).execute!
+
+        @deposit_collection.update!(data: data)
+      end
 
       @deposit_collection
     end

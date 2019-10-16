@@ -95,6 +95,10 @@ class DepositCollection < ApplicationRecord
     self.status == "pending"
   end
 
+  def finalized?
+    self.data.with_indifferent_access[:finalize] == true
+  end
+
   def approved?
     self.status == "approved"
   end

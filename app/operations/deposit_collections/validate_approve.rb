@@ -26,6 +26,22 @@ module DepositCollections
         }
       end
 
+      if Settings.activate_microinsurance
+        if @data.present? and @data[:accounting_fund_id].blank?
+          @errors[:messages] << {
+            key: "accounting_fund_id",
+            message: "no accounting fund found"
+          }
+        end
+
+        if @data.present? and @data[:or_number].blank? and @accounting_entry[:book] == "JVB"
+          @errors[:messages] << {
+            key: "or_number",
+            message: "no or number found"
+          }
+        end
+      end  
+
       if @data.present? and @data[:accounting_entry][:particular].blank?
         @errors[:messages] << {
           key: "particular",
