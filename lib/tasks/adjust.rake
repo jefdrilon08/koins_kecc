@@ -569,6 +569,9 @@ namespace :adjust do
 
     size  = members.size
     
+    member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id))
+
     members.each_with_index do |member, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Validating #{member.id}... #{progress}%%")
@@ -578,15 +581,15 @@ namespace :adjust do
       recognition_date          = member.recognition_date
 
       if recognition_date.present?
-        member_accounts       = MemberAccount.where("account_subtype = ? AND member_id = ?", "Life Insurance Fund", member.id).first
-        transactions           = AccountTransaction.savings.where("amount > 0 AND subsidiary_id = ?", member_accounts.id)
+        current_member_account = member_accounts.select{ |o| o.member_id == member.id }.first
+        transactions = account_transactions.select{ |o| o.subsidiary_id == current_member_account.id }
 
         if transactions.size > 0
           # latest_payment    = member_accounts
           latest            = transactions.last
           last_payment_date = transactions.last[:transacted_at].to_date
           # Code
-          current_balance          = member_accounts.balance.to_i
+          current_balance          = current_member_account.balance.to_i
           num_days                 = (current_date - recognition_date).to_i
           num_weeks                = (num_days / 7).to_i + 1
           insured_amount           = num_weeks * default_periodic_payment
