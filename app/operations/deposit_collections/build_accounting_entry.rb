@@ -10,7 +10,6 @@ module DepositCollections
         @branch = Branch.where(id: branch_id).first
       end
 
-
       @data   = @config[:data].with_indifferent_access
       @user   = @config[:user]
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
@@ -43,7 +42,7 @@ module DepositCollections
       @branch_accounting_code_settings = nil
 
       Settings.branch_accounting_codes.each do |o|
-        if o.branch_id == @branch.id
+        if o.branch_id == @config[:branch].id
           @branch_accounting_code_settings = o
         end
       end
