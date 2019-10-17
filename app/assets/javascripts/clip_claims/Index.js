@@ -20,6 +20,7 @@ var Index = (function() {
 
   var urlBranches       = "/api/v1/branches";
   var urlCenters       = "/api/v1/centers";
+  var urlMembers      ="/api/v1/members";
 
   var _authenticityToken;
 
@@ -114,6 +115,18 @@ var Index = (function() {
       error: function(response) {
         console.log(response);
         alert("Error in fetching centers");
+      }
+    });
+
+    $.ajax({
+      url: urlMembers,
+      method: 'GET',
+      success: function(response) {
+        members  = response.members;
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching members");
       }
     });
 
