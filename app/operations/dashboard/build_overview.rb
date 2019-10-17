@@ -49,17 +49,19 @@ module Dashboard
 
       @branches.each do |branch|
         data_store  = DataStore.repayment_rates.where(
-                        "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ?",
+                        "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ? AND status = ?",
                         branch.id,
-                        @as_of
+                        @as_of,
+                        "done"
                       ).order(
                         "DATE(meta->>'as_of') ASC"
                       ).last
 
         ds_member_counts  = DataStore.member_counts.where(
-                              "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ?",
+                              "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ? AND status = ?",
                               branch.id,
-                              @as_of
+                              @as_of,
+                              "done"
                             ).order(
                               "DATE(meta->>'as_of') ASC"
                             ).last
