@@ -9,6 +9,12 @@ module MemberAccountValidations
       @member_account_validation    = @config[:member_account_validation]
       @is_remote                    = @config[:is_remote]
       @branch                       = @member_account_validation.branch
+      
+      if Settings.activate_microinsurance
+        branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.where(id: branch_id).first
+      end
+
       @particular                   = build_particular
 
       @current_date = ::Utils::GetCurrentDate.new(
@@ -201,12 +207,14 @@ module MemberAccountValidations
         rf_and_interest_accounting_code = AccountingCode.find('714153eb-0a0b-4127-9e62-2643f10a6d96')
       end
 
-      journal_entries << {
-        accounting_code_id: rf_and_interest_accounting_code.id,
-        code: rf_and_interest_accounting_code.code,
-        name: rf_and_interest_accounting_code.name,
-        amount: rf_and_interest_amount
-      }
+      if rf_and_interest_amount > 0
+        journal_entries << {
+          accounting_code_id: rf_and_interest_accounting_code.id,
+          code: rf_and_interest_accounting_code.code,
+          name: rf_and_interest_accounting_code.name,
+          amount: rf_and_interest_amount
+        }
+      end  
 
       journal_entries
     end
@@ -220,12 +228,14 @@ module MemberAccountValidations
       # TODO: Make this configurable
       dr_accounting_code = AccountingCode.find('aa11e0c4-c894-45f8-8be2-1715e23e223f')
 
-      journal_entries << {
-        accounting_code_id: dr_accounting_code.id,
-        code: dr_accounting_code.code,
-        name: dr_accounting_code.name,
-        amount: amount
-      }
+      if amount > 0
+        journal_entries << {
+          accounting_code_id: dr_accounting_code.id,
+          code: dr_accounting_code.code,
+          name: dr_accounting_code.name,
+          amount: amount
+        }
+      end
 
       journal_entries
     end
@@ -364,11 +374,11 @@ module MemberAccountValidations
       # savings_amount += @total_lif_balance / 2
 
       journal_entries << {
-            accounting_code_id: savings_accounting_code.id,
-            code: savings_accounting_code.code,
-            name: savings_accounting_code.name,
-            amount: savings_amount
-          }
+        accounting_code_id: savings_accounting_code.id,
+        code: savings_accounting_code.code,
+        name: savings_accounting_code.name,
+        amount: savings_amount
+      }
 
       journal_entries
     end

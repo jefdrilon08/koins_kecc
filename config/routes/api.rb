@@ -141,6 +141,7 @@ namespace :api do
     post "/deposit_collections", to: "deposit_collections#create"
     post "/deposit_collections/modify_transaction_record", to: "deposit_collections#modify_transaction_record"
     post "/deposit_collections/approve", to: "deposit_collections#approve"
+    post "/deposit_collections/finalize", to: "deposit_collections#finalize"
     post "/deposit_collections/update_or_number", to: "deposit_collections#update_or_number"
     post "/deposit_collections/update_ar_number", to: "deposit_collections#update_ar_number"
     post "/deposit_collections/update_particular", to: "deposit_collections#update_particular"

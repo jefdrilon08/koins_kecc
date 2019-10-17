@@ -18,6 +18,7 @@ module DepositCollections
       @data = {
         or_number: "",
         ar_number: "",
+        finalize: false,
         records: [],
         headers: [],
         totals: [],
