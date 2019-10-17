@@ -52,18 +52,6 @@ module Branches
                                 as_of: @as_of
                               }
                             ).execute!    
-
-        # Update progress
-        if @data_store.present?
-          meta      = @data_store.meta.with_indifferent_access
-          progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
-
-          meta[:progress] = progress
-
-          @data_store.update!(
-            meta: meta
-          )
-        end
       end
 
       @data[:officers]  = @data[:records].map{ |mr| mr[:officer] }.uniq
