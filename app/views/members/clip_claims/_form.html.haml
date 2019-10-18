@@ -69,7 +69,7 @@
   .row
     .col
       .form-group
-        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.full_name.titleize}, as: :string, label: "PREPARED BY"       
+        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize}, as: :string, label: "PREPARED BY"       
   .row
     .col
       .form-actions

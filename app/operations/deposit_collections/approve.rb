@@ -22,7 +22,7 @@ module DepositCollections
       post_accounting_entry!
       process_deposits!
 
-      @data[:approved_by] = @user.print_full_name
+      @data[:approved_by] = @user.full_name
 
       # Update accounting entry with reference number
       @data[:accounting_entry][:id]                         = @accounting_entry.id
