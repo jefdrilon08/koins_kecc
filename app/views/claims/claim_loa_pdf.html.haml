@@ -92,7 +92,7 @@
               Recognition Date:
             %td{:width => "25%"}
               %u  
-                #{@claim.date_of_policy_issue.strftime("%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@claim.date_of_policy_issue.try(:strftime, "%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Life:
@@ -118,7 +118,7 @@
               Date of Death/TPD/MVAH:
             %td{:width => "25%"}
               %u  
-                #{@claim.date_of_death_tpd_accident.strftime("%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@claim.date_of_death_tpd_accident.try(:strftime,"%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Length of Membership:
@@ -225,7 +225,7 @@
           %br
           %br
           %u
-            #{@claim.prepared_by.upcase}
+            #{@claim.prepared_by}
           %br
           Account Officer
         %td{:width => "25%"}

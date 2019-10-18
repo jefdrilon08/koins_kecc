@@ -132,7 +132,7 @@ module Reports
         end  
 
         record[:index] = i+1
-        record[:name] = member.full_name_titleize
+        record[:name] = member.full_name
         record[:recognition_date] = member.recognition_date
         record[:branch] = member.branch.name
         record[:center] = member.center.name
