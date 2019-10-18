@@ -63,7 +63,7 @@ module Branches
                         ).select(
                           "DISTINCT ON(member_accounts.id, account_transactions.transacted_at, member_accounts.member_id) member_accounts.id, member_accounts.member_id, member_accounts.account_type, member_accounts.account_subtype, DATE(transacted_at), account_transactions.data"
                         ).order(
-                          "account_transactions.transacted_at ASC"
+                          "account_transactions.transacted_at DESC"
                         )
 
       branches  = Branch.where(id: @members.pluck(:branch_id))
