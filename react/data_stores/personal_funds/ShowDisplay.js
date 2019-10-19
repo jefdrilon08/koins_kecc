@@ -196,7 +196,7 @@ export default class ShowDisplay extends React.Component {
     var columns = [];
 
     for(var i = 0; i < accounts.length; i++) {
-      if(accounts[i].account_type == "SAVINGS" && accounts[i].id && accounts[i].transacted_at) {
+      if(accounts[i].account_type == "SAVINGS" && accounts[i].id) {
         columns.push(
           <td className="text-right">
             <a href={"/savings_accounts/" + accounts[i].id} target="_blank">
