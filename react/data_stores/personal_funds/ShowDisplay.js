@@ -196,11 +196,15 @@ export default class ShowDisplay extends React.Component {
     var columns = [];
 
     for(var i = 0; i < accounts.length; i++) {
-      if(accounts[i].account_type == "SAVINGS" && accounts[i].id) {
+      if(accounts[i].account_type == "SAVINGS" && accounts[i].id && accounts[i].transacted_at) {
         columns.push(
           <td className="text-right">
             <a href={"/savings_accounts/" + accounts[i].id} target="_blank">
               {numberWithCommas(accounts[i].balance)}
+              <br/>
+              <small>
+                {accounts[i].transacted_at}
+              </small>
             </a>
           </td>
         );

@@ -64,11 +64,13 @@ module Branches
                         ).joins(
                           "INNER JOIN users ON centers.user_id = users.id"
                         ).where(
-                          "account_transactions.transacted_at <= ? AND member_accounts.member_id IN (?)", 
+                          "DATE(account_transactions.transacted_at) <= ? AND member_accounts.member_id IN (?) AND account_transactions.transaction_type IN (?) AND account_transactions.status = ?", 
                           @as_of,
-                          @members.pluck(:id)
+                          @members.pluck(:id),
+                          ["deposit", "withdraw"],
+                          "approved"
                         ).select(
-                          "DISTINCT ON(member_accounts.id, account_transactions.transacted_at, member_accounts.member_id, account_transactions.updated_at) member_accounts.id, member_accounts.member_id, member_accounts.account_type, member_accounts.account_subtype, DATE(transacted_at), account_transactions.data, branches.id AS branch_id, branches.name AS branch_name, centers.id AS center_id, centers.name AS center_name, users.id AS officer_id, users.first_name AS officer_first_name, users.last_name AS officer_last_name, users.identification_number AS officer_identification_number"
+                          "DISTINCT ON(member_accounts.id, account_transactions.transacted_at, member_accounts.member_id, account_transactions.updated_at) member_accounts.id, member_accounts.member_id, member_accounts.account_type, member_accounts.account_subtype, DATE(transacted_at), account_transactions.data, branches.id AS branch_id, branches.name AS branch_name, centers.id AS center_id, centers.name AS center_name, users.id AS officer_id, users.first_name AS officer_first_name, users.last_name AS officer_last_name, users.identification_number AS officer_identification_number, account_transactions.id AS account_transaction_id"
                         ).order(
                           "account_transactions.transacted_at DESC, account_transactions.updated_at DESC"
                         )
@@ -113,7 +115,8 @@ module Branches
             account_subtype: s.account_subtype,
             member_id: o.id,
             balance: 0.00,
-            account_transaction_id: ""
+            account_transaction_id: "",
+            transacted_at: ""
           }
 
           m_account = member_accounts_for_member.select{ |temp_m_ac|
@@ -121,8 +124,9 @@ module Branches
                       }.first
 
           if m_account.present?
-            account[:id]      = m_account[:id]
-            account[:balance] = m_account[:data]["ending_balance"].to_f.round(2)
+            account[:id]            = m_account[:id]
+            account[:transacted_at] = m_account[:transacted_at]
+            account[:balance]       = m_account[:data]["ending_balance"].to_f.round(2)
 
             temp_data[:center] = {
               id: m_account[:center_id],
