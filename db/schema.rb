@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_040402) do
+ActiveRecord::Schema.define(version: 2019_10_19_052051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2019_09_13_040402) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
+    t.index ["transaction_type"], name: "index_account_transactions_on_transaction_type"
   end
 
   create_table "accounting_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
