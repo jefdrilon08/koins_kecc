@@ -331,6 +331,45 @@ module Loans
             temp_amount -= amount
 
           #elsif @member.member_type  == target_member_type
+          elsif s_deduction.for_primary_loan.present? and s_deduction.for_primary_loan == true 
+            primary_loan_id = s_deduction.primary_loan_id
+            loan_count = Loan.where("member_id = ? and status = ? and loan_product_id IN (?)", @member.id,"active", primary_loan_id).count
+            if loan_count == 0
+                
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    
+                    if s.num_installments == @num_installments
+                    
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+
+                temp_amount -= amount
+            end
+
           else
             if @member.member_type == "GK"
               if  s_deduction.use_for_special_loan_fund == "true"
