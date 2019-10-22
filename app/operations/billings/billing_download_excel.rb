@@ -77,7 +77,7 @@ module Billings
               amount              << tt[:amount].to_f
               @billing_grand_total  += tt[:amount].to_f
               @billing_total_cp     -= tt[:amount].to_f
-              member_grand_total   += tt[:amount].to_f
+              member_grand_total   -= tt[:amount].to_f
               member_total_cp     -= tt[:amount].to_f
               amount << member_total_cp << member_grand_total
               else
