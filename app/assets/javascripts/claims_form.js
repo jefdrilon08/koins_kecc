@@ -31,8 +31,8 @@ var claimsForm = (function() {
   }
   
 
-  $dateOfDeathTpdAccident.on('change', function() {
-    var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
+  $typeOfInsurancePolicy.on('change', function() {
+    /*var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());*/
     var classificationOfInsuredValue = ($classificationOfInsured.val());  
     var dateOfPolicyIssueValue = ($dateOfPolicyIssue.val());
     var dateOfDeathTpdAccidentValue = ($dateOfDeathTpdAccident.val());

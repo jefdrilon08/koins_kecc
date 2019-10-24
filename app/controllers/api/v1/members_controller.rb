@@ -525,6 +525,29 @@ module Api
           end
         end
       end
+
+      # def get_members
+      #   members  = Member.active.order("last_name ASC")
+
+      #   if params[:q].present?
+      #     name = params[:q]
+      #     members = members.where(
+      #                 "lower(first_name) LIKE :name OR lower(middle_name) LIKE :name OR lower(last_name) LIKE :name", name: "#{name.downcase}%"
+      #               )
+      #   end
+
+      #   if params[:center_id].present?
+      #     members = members.where('center_id = ?', params[:center_id])
+      #   end
+
+      #   members_data = []
+      #   members.each do |member|
+      #     members_data << { id: member.id, name: member.full_name_with_center }
+      #   end
+
+      #   render json: { success: true, info: 'member list', data: { members: members_data } }
+      # end
+
     end
   end
 end
