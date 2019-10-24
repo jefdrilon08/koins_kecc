@@ -103,7 +103,17 @@ export default class FormBeneficiaries extends React.Component {
   handleDeleteClicked(index) {
     var data  = this.props.data;
 
-    data.beneficiaries.splice(index);
+    //data.beneficiaries.splice(index);
+
+    var tempBeneficiaries = [];
+
+    for(var i = 0; i < data.beneficiaries.length; i++) {
+      if(i != index) {
+        tempBeneficiaries.push(data.beneficiaries[i]);
+      }
+    }
+
+    data.beneficiaries = tempBeneficiaries;
 
     this.props.updateData(data);
   };
