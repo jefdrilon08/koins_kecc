@@ -131,6 +131,7 @@ module Loans
 
           @member.update!(insurance_status: "inforce")
         elsif deduction_type == "deposit"
+          if @member.member_type != "GK"
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
             offset          = s_deduction.meta.offset
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
@@ -206,7 +207,7 @@ module Loans
               account_transaction.save!
             end 
             #### DEPOSIT TRANSACTION
-
+            end
           end
         end
       end

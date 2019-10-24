@@ -75,7 +75,8 @@ namespace :rehash do
   end
 
   task :loans => :environment do
-    loans = Loan.active_or_paid
+    #loans = Loan.active_or_paid
+    loans = Loan.where(id: "a810c835-ee22-4326-9b9a-7a20533ee043")
 
     if ENV['BRANCH_ID'].present?
       branch  = Branch.find(ENV['BRANCH_ID'])
