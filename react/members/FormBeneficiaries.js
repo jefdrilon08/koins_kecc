@@ -200,6 +200,16 @@ export default class FormBeneficiaries extends React.Component {
       currentBeneficiary: currentBeneficiary
     });
   }
+  
+  handlePrimaryChanged(event) {
+    var currentBeneficiary  = this.state.currentBeneficiary;
+    
+    currentBeneficiary.is_primary = event.target.checked;
+
+    this.setState({
+      currentBeneficiary: currentBeneficiary
+    });
+  }
 
   renderRecords() {
     var beneficiaries = this.props.data.beneficiaries;
@@ -336,6 +346,7 @@ export default class FormBeneficiaries extends React.Component {
                 <input
                   type="checkbox"
                   className="form-control"
+                  onChange={this.handlePrimaryChanged.bind(this)}
                 />
               </div>
             </div>

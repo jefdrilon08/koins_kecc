@@ -19,9 +19,9 @@ module MemberAccounts
 
       @account_transactions.each do |o|
         if o.deposit?
-          ending_balance = (beginning_balance + o.amount).round(2)
+          ending_balance = (beginning_balance + o.amount)
         else
-          ending_balance = (beginning_balance - o.amount).round(2)
+          ending_balance = (beginning_balance - o.amount)
         end 
 
         data = o.data.with_indifferent_access

@@ -31,7 +31,7 @@ namespace :adjust do
     end
 
     if invalid_records.size > 0
-      puts "Repaired #{invalid_records.size} invalid records out of #{size}"
+      puts "Repaired #{invalid_records} invalid records out of #{size}"
     else
       puts "No invalid records found."
     end
