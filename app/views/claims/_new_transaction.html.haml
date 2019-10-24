@@ -18,13 +18,13 @@
                 .form-group
                   %label
                     Center
-                  = select_tag :center_id,  options_from_collection_for_select([], :id, :name, @center.try(:id)), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
+                  = select_tag :center_id, options_for_select([]), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
             .row
               .col-md-12
                 .form-group
                   %label
                     Member
-                  = select_tag :member_id, options_from_collection_for_select([], :id, :full_name, @member.try(:id)), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+                  = select_tag :member_id, options_for_select([]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
             .message
         .modal-footer
           .controls
@@ -35,3 +35,4 @@
             %button.btn{"data-dismiss" => "modal", :type => "button"}
               .fa.fa-times
               Cancel
+
