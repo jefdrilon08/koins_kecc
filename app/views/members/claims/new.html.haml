@@ -4,8 +4,7 @@
       Claims Form
   %li.breadcrumb-item
     .fa.fa-user
-    = link_to members_path(@member) do
-      #{@member.full_name} 
+    = link_to @member.full_name, member_path(@member), target: '_blank'
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       = link_to claims_path do

@@ -2,7 +2,7 @@ class DepositCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @deposit_collections = DepositCollection.select("*").where(branch_id: @branches.pluck(:id))
+    @deposit_collections = DepositCollection.select("*").where(branch_id: @branches.pluck(:id)) 
 
     if params[:start_date].present? and params[:end_date].present?
       @deposit_collections = @deposit_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )

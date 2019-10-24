@@ -3,7 +3,8 @@ module Administration
     before_action :authenticate_user!
 
     def index
-      @centers  = Center.select("*")
+      @centers  = Center.select("*").where(branch_id: @branches.pluck(:id))
+      
     end
 
     def new
@@ -36,6 +37,13 @@ module Administration
 
     def show
       @center = Center.find(params[:id])
+    end
+
+    def destroy
+      @center = Center.find(params[:id])
+      @center.destroy!
+      flash[:success] = "Successfully removed center"
+      redirect_to administration_center_path
     end
 
     private
