@@ -1,4 +1,44 @@
 namespace :adjust do
+  task :repair_personal_funds => :environment do
+    data_store      = DataStore.personal_funds.find(ENV["ID"])
+    account_type    = ENV["ACCOUNT_TYPE"]
+    account_subtype = ENV["ACCOUNT_SUBTYPE"]
+    data            = data_store.data.with_indifferent_access
+    as_of           = data[:as_of]
+    invalid_records = 0
+
+    size    = data[:records].size
+
+    data[:records].each_with_index do |record, i|
+      account = record[:accounts].select{ |o|
+                  o[:account_type] == account_type && o[:account_subtype] == account_subtype
+                }.first
+
+      if account[:id].present?
+        member_account  = MemberAccount.find(account[:id])
+        result          = MemberAccounts::CheckBalance.new(config: { member_account: member_account }).execute!
+
+        if result[:running_balance] != result[:ending_balance]
+          puts ""
+          puts "Repairing #{member_account.id}..."
+          ::MemberAccounts::Rehash.new(member_account: member_account).execute!
+          invalid_records += 1
+        end
+      end
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+    end
+
+    if invalid_records.size > 0
+      puts "Repaired #{invalid_records} invalid records out of #{size}"
+    else
+      puts "No invalid records found."
+    end
+
+    puts "Done!"
+  end
+
   task :reload_repayment_rates => :environment do
     repayment_rates = DataStore.repayment_rates
 

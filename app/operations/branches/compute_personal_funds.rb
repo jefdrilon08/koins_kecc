@@ -70,7 +70,7 @@ module Branches
                           ["deposit", "withdraw"],
                           "approved"
                         ).select(
-                          "DISTINCT ON(member_accounts.id, account_transactions.transacted_at, member_accounts.member_id, account_transactions.updated_at) member_accounts.id, member_accounts.member_id, member_accounts.account_type, member_accounts.account_subtype, DATE(transacted_at), account_transactions.data, branches.id AS branch_id, branches.name AS branch_name, centers.id AS center_id, centers.name AS center_name, users.id AS officer_id, users.first_name AS officer_first_name, users.last_name AS officer_last_name, users.identification_number AS officer_identification_number, account_transactions.id AS account_transaction_id"
+                          "DISTINCT ON(member_accounts.id, account_transactions.transacted_at, member_accounts.member_id, account_transactions.updated_at) member_accounts.id, member_accounts.member_id, member_accounts.account_type, member_accounts.account_subtype, DATE(transacted_at), account_transactions.data, branches.id AS branch_id, branches.name AS branch_name, centers.id AS center_id, centers.name AS center_name, users.id AS officer_id, users.first_name AS officer_first_name, users.last_name AS officer_last_name, users.identification_number AS officer_identification_number, account_transactions.id AS account_transaction_id, transaction_type"
                         ).order(
                           "account_transactions.transacted_at DESC, account_transactions.updated_at DESC"
                         )
@@ -107,6 +107,7 @@ module Branches
         member_accounts_for_member  = member_accounts.select{ |member_account|
                                         member_account.member_id == o.id
                                       }
+                                  
 
         @default_member_accounts.each do |s|
           account = {
