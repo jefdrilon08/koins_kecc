@@ -11,7 +11,7 @@
   .col-md-4
     .form-group
       %label Member
-      = select_tag :member_id, options_for_select(@members.collect{ |o| [o.full_name_with_center, o.id] }), class: "select-select2 form-control", id: "member-select"
+      = select_tag :member_id, options_for_select(@members.collect{ |o| [o.full_name_with_center, o.id] }), class: "select-select2 form-control js-searchable", id: "member-select"
   .col-md-2
     .form-group
       .pull-right

@@ -22,6 +22,17 @@
 //= require datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4
 //= require signature_pad/dist/signature_pad
 //= require cocoon
+//= require select2
+
+$(document).ready(function(){
+  // Turn on js-selectable class so that it becomes SELCT 2 tag
+  $('.js-searchable').select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
+});
+
 
 var encodeQueryData = function(data) {
   var ret = []

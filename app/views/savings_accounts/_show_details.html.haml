@@ -30,17 +30,11 @@
           %center
             - if o.deposit?
               - if o.interest?
-                .badge.badge-info
-                  .fa.fa-plus
-                  Interest
+                I
               - else
-                .badge.badge-success
-                  .fa.fa-download
-                  Deposit
+                D
             - elsif o.withdraw?
-              .badge.badge-danger
-                .fa.fa-upload
-                Withdraw
+              W
         %td.text-right.text-muted
           #{number_to_currency(o.data["beginning_balance"], unit: "")}
         %td.text-right
