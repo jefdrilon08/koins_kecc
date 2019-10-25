@@ -8,6 +8,15 @@ module ApplicationHelper
     }
   end
 
+  def fetch_centers(branch)
+    Center.where(branch_id: branch.id).order("name ASC").map { |c|
+      {
+        id: c.id,
+        name: c.name
+      }
+    }
+  end
+
   def pending_count(branches)
     Member.pending.where(branch_id: branches.pluck(:id)).count
   end

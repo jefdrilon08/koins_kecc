@@ -1,5 +1,5 @@
 - if member_account_validation.pending? || member_account_validation.cancelled?  
-  - if role == "OAS" || role == "MIS" || role == "REMOTE-OAS" || role == "REMOTE-BK"
+  - if role == "OAS" || role == "MIS" || role == "REMOTE-OAS" || role == "REMOTE-BK" || role == "REMOTE-FM"
     = link_to edit_member_account_validation_path(member_account_validation), class: "btn btn-warning btn-lg" do
       .fa.fa-edit
       Edit

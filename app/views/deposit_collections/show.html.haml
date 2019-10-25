@@ -58,7 +58,7 @@
 = render partial: "deposit_collections/modals/load_center"
 = render partial: "templates/error_list"
 
-#parameters{ data: { id: @deposit_collection.id } }
+#parameters{ data: { id: @deposit_collection.id, centers: fetch_centers(@deposit_collection.branch).to_json } }
 
 = javascript_include_tag "DepositCollectionUI.min.react"
 = javascript_include_tag "deposit_collections/Show"
