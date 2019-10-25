@@ -212,6 +212,16 @@ export default class ShowComponent extends React.Component {
             </select>
           </div>
         </div>
+        <div className="col-md-4 col-xs-12">
+          <div className="form-group">
+            <label>
+              Officers:
+            </label>
+            <select value={this.state.currentOfficerId} onChange={this.handleOfficerChanged.bind(this)} className="form-control">
+              {officerOptions}
+            </select>
+          </div>
+        </div>
       </div>
     );
   }
@@ -277,7 +287,7 @@ export default class ShowComponent extends React.Component {
 
     rows.push(
       <tr key={"grand-total"}>
-        <td colSpan="5"/>
+        <td colSpan="4"/>
         <td className="text-right">
           <strong>
             {numberWithCommas(totalLoanAmount)}

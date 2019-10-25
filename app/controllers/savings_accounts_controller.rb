@@ -23,8 +23,13 @@ class SavingsAccountsController < ApplicationController
       @branch = Branch.find(params[:branch_id])
       @savings_accounts = @savings_accounts.where(branch_id: @branch.id)
     end
-
-    @savings_accounts = @savings_accounts.page(params[:page]).per(20)
+    
+    if params[:center_id].present?
+      @center = Center.find(params[:center_id])
+      @savings_accounts = @savings_accounts.where(center_id: @center.id)
+    end
+ 
+    #@savings_accounts = @savings_accounts.page(params[:page]).per(20)
   end
 
   def time_deposit_withdrawal

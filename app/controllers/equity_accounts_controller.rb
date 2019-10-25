@@ -24,7 +24,13 @@ class EquityAccountsController < ApplicationController
       @equity_accounts = @equity_accounts.where(branch_id: @branch.id)
     end
 
-    @equity_accounts = @equity_accounts.page(params[:page]).per(20)
+    if params[:center_id].present?
+      @center = Center.find(params[:center_id])
+      @equity_accounts = @equity_accounts.where(center_id: @center.id)
+    end
+ 
+
+    #@equity_accounts = @equity_accounts.page(params[:page]).per(20)
   end
 
   def show

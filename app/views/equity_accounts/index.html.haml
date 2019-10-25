@@ -8,7 +8,7 @@
           = render partial: "index_filter"
           - if @equity_accounts.size > 0
             = render partial: "index_list"
-            = paginate @equity_accounts
+            /= paginate @equity_accounts
           - else
             %p
               No accounts found
