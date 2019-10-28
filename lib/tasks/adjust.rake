@@ -877,4 +877,21 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :repair_members_member_accounts => :environment do
+    puts "Repairing ..."
+
+    members = Member.all
+
+    members.each do |member|
+      puts "Updating: #{member.full_name}"
+      center = member.center
+      branch = member.branch
+
+      MemberAccount.where(member_id: member.id).each do |a|
+        a.update!(center: center, branch: branch)
+      end
+    end
+    puts "Done!"
+  end
 end

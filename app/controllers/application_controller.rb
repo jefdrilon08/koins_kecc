@@ -11,7 +11,9 @@ class ApplicationController < ActionController::Base
       
       if @default_branch_name.present?
         @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
-        @branches = @branches.sort_by { |e| [ e.name == @default_branch_name ? 0 : 1 , e ] }
+        if @branches.where(name: @default_branch_name).count > 0
+          @branches = @branches.sort_by { |e| [ e.name == @default_branch_name ? 0 : 1 ] }
+        end
       else
         @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
       end
