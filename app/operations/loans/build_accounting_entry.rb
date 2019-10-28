@@ -446,49 +446,48 @@ module Loans
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
            if @member.member_type != "GK"
             if @loan_data[:advance_insurance_available] == false
-            offset          = s_deduction.meta.offset
-            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
-            name            = accounting_code.name
-            code            = accounting_code.code
-            amount          = 0.00
-            val             = s_deduction.meta.value
+              offset          = s_deduction.meta.offset
+              accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+              name            = accounting_code.name
+              code            = accounting_code.code
+              amount          = 0.00
+              val             = s_deduction.meta.value
 
-            multiplier  = @num_installments
+              multiplier  = @num_installments
 
-            loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
+              loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
 
-            if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
-            #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
-              if @term == "weekly"
-              elsif @term == "monthly"
-                multiplier  = (multiplier * 4.3333333).to_i
-              elsif @term == "semi-monthly"
-                # weird unique rule for 12 semi-monthly
-                if @num_installments ==  12
-                  multiplier  = 12.5 * 2
-                elsif @num_installments == 6
-                  multiplier  = 15
+              if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
+              #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
+                if @term == "weekly"
+                elsif @term == "monthly"
+                  multiplier  = (multiplier * 4.3333333).to_i
+                elsif @term == "semi-monthly"
+                  # weird unique rule for 12 semi-monthly
+                  if @num_installments ==  12
+                    multiplier  = 12.5 * 2
+                  elsif @num_installments == 6
+                    multiplier  = 15
+                  else
+                    multiplier  = multiplier * 2
+                  end #end semimonthly
                 else
-                  multiplier  = multiplier * 2
-                end
+                  raise "Invalid term #{@term}"
+                end #end of term
+
+                amount  = val * (multiplier + offset)
               else
-                raise "Invalid term #{@term}"
-              end
+                amount  = val
+              end #loan cycle presents
+              journal_entries << {
+                accounting_code_id: accounting_code.id,
+                code: code,
+                name: name,
+                amount: amount
+              }
 
-              amount  = val * (multiplier + offset)
-            else
-              amount  = val
-            end
-
-            journal_entries << {
-              accounting_code_id: accounting_code.id,
-              code: code,
-              name: name,
-              amount: amount
-            }
-
-            temp_amount -= amount
-            end
+              temp_amount -= amount
+              end #end of advance insurance
             end #end of gk
           else
             raise "Invalid deduction type algo #{s_deduction.meta.algo}"
