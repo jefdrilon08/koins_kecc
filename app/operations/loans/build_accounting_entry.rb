@@ -441,8 +441,11 @@ module Loans
           end
         elsif deduction_type == "deposit"
           
+    
+
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
            if @member.member_type != "GK"
+            if @loan_data[:advance_insurance_available] == false
             offset          = s_deduction.meta.offset
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
             name            = accounting_code.name
@@ -486,6 +489,7 @@ module Loans
 
             temp_amount -= amount
             end
+            end #end of gk
           else
             raise "Invalid deduction type algo #{s_deduction.meta.algo}"
           end

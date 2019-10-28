@@ -388,6 +388,15 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.setState({ data: data });
   }
+  handleAdvanceInsuranceChanged(event) {
+    const target  = event.target;
+    const value   = target.type === 'checkbox' ? target.checked : target.value;
+
+    var data  = this.state.data;
+    data.data.advance_insurance_available  = value || false;
+
+    this.setState({ data: data });
+  }
 
   render() {
     if(this.state.isLoading) {
@@ -402,6 +411,9 @@ export default class ApplicationFormComponent extends React.Component {
       };
 
       var businessPermitAvailable = this.state.data.data.business_permit_available || false;
+      var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
+
+
 
       return  (
         <div>
@@ -620,6 +632,18 @@ export default class ApplicationFormComponent extends React.Component {
               />
               <label>
                 Business Permit Available
+              </label>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <input 
+                type="checkbox" 
+                checked={advanceInsuranceAvailable}
+                onChange={this.handleAdvanceInsuranceChanged.bind(this)}
+              />
+              <label>
+                Off Insurance
               </label>
             </div>
           </div>
