@@ -75,22 +75,3 @@
       = link_to member_account_validation_path(@member_account_validation), class: "btn btn-danger" do
         .fa.fa-times
         Cancel
-
-#parameters{data: {member_account_validation_id: @member_account_validation.id, member_account_validation_status: @member_account_validation.status}}
-= render partial: "member_account_validations/modals/member_cancel"
-
-= javascript_include_tag "member_account_validation/MemberAccountValidationForm"
-
-:javascript
-  $(document).ready(function() {
-    var $parameters                       = $("#parameters");
-    var memberAccountValidationId         = $parameters.data('member-account-validation-id');
-    var memberAccountValidationStatus     = $parameters.data('member-account-validation-status');
-    var authenticityToken                 = $("meta[name='csrf-token']").attr('content');
-
-    MemberAccountValidationForm.init({
-      memberAccountValidationId: memberAccountValidationId,
-      memberAccountValidationStatus: memberAccountValidationStatus,
-      authenticityToken: authenticityToken
-    });
-  });

@@ -87,7 +87,7 @@ module Api
                   ).execute!
 
         if errors[:messages].size > 0
-          render json: { errors: errors }, status: 400
+          render json: errors, status: 400
         else
           member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
                                                   config: config
@@ -135,7 +135,7 @@ module Api
 
         errors = []
 
-        if ["MIS", "OAS", "CM", "REMOTE-OAS", "REMOTE-BK"].include? current_user.roles.last
+        if ["MIS", "OAS", "CM", "REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].include? current_user.roles.last
           errors = MemberAccountValidations::ValidateNewMemberAccountValidationTransaction.new(branch_id: branch_id, date_prepared: date_prepared).execute!
 
           if errors.length == 0

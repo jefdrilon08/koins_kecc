@@ -16,6 +16,23 @@ module Administration
 
       #@member_shares  = @member_shares.page(params[:page]).per(20)
     end
+
+    def print
+      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("member_shares.data->> 'date_printed' DESC")
+      if params[:branch_id].present?
+        @branch_id  = params[:branch_id]
+        #raise @branch_id.inspect
+        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+      end
+      if params[:center_id].present?
+        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
+      end
+      if params[:start_date].present? and params[:end_date].present?
+        #d = (params[:end_date].to_date + 1).to_s
+        @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
+      end
+ 
+    end
     def no_certificates
       @data = {}
       @data[:sfp] = []
@@ -28,6 +45,9 @@ module Administration
       if params[:branch_id].present?
         b = Branch.find(params[:branch_id])
         x = x.where(branch_id: b.id)
+      end
+      if params[:center_id].present?
+        x = x.where(center_id: params[:center_id])
       end
       x = x.where(branch_id: @branches.pluck(:id))
 
@@ -105,11 +125,14 @@ module Administration
     end
 
     def printed
-      @member_shares  = MemberShare.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id))
+      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("member_shares.data->> 'date_printed' DESC")
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
         #raise @branch_id.inspect
         @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+      end
+      if params[:center_id].present?
+        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
       end
       if params[:start_date].present? and params[:end_date].present?
         #d = (params[:end_date].to_date + 1).to_s

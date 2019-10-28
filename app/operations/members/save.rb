@@ -128,6 +128,11 @@ module Members
         ).execute!
       end
 
+      # Update center of member accounts
+      MemberAccount.where(member_id: @member.id).each do |a|
+        a.update!(center: @center, branch: @branch)
+      end
+
       # Remove has many
       LegalDependent.where(member_id: @member.id, id: ld_to_remove_ids).delete_all
       Beneficiary.where(member_id: @member.id, id: b_to_remove_ids).delete_all

@@ -6,6 +6,7 @@ import SkCubeLoading from '../SkCubeLoading';
 import DepositCollectionUITable from './DepositCollectionUITable';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import AddRecord from './AddRecord';
+import LoadCenter from './LoadCenter';
 import AddAccountingFund from './AddAccountingFund';
 import {numberWithCommas} from '../utils/helpers';
 
@@ -335,6 +336,11 @@ export default class DepositCollectionUIDisplay extends React.Component {
           <AddRecord
             data={this.state.data}
             authenticityToken={this.props.authenticityToken}
+          />
+          <LoadCenter
+            authenticityToken={this.props.authenticityToken}
+            centers={this.props.centers}
+            data={this.state.data}
           />
           <hr/>
           <DepositCollectionUITable

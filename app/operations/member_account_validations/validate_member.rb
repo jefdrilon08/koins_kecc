@@ -14,6 +14,7 @@ module MemberAccountValidations
 	      validate_if_member_is_already_validated_to_pending_for_appoval_for_validation!
 	      validate_member_balik_kasapi!
 	      # validate_resignation_date!
+	      @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }
 	      @errors
 	    end
 

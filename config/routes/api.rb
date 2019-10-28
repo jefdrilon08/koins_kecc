@@ -19,6 +19,8 @@ namespace :api do
       post "/batch_moratorium_adjustments/destroy", to: "batch_moratorium_adjustments#destroy"
     end
 
+		post "/administration/member_shares/print", to: "member_shares#print"
+
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
