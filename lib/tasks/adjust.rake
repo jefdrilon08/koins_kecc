@@ -894,4 +894,21 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :update_insurance_date_resigned => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['uuid'])
+
+      if !member.nil?
+        if member.resigned?
+          puts "Updating: #{member.full_name}"  
+          member.update!(insurance_date_resigned: row['insurance_date_resigned'].to_date)
+        end
+      end
+    end
+    puts "Done!"
+  end
 end

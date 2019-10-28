@@ -6,7 +6,7 @@ module Api
       def fetch_centers
         branch  = @branches.where(id: params[:id]).first
         
-        centers = branch.centers.map{ |c| { id: c.id, name:  c.name } }
+        centers = branch.centers.order("name ASC").map{ |c| { id: c.id, name:  c.name } }
 
         render json: { centers: centers }
       end

@@ -12,7 +12,7 @@
       .form-group
         %label Insurance Status
         = select_tag :insurance_status, options_for_select(Member::INSURANCE_STATUS, @insurance_status), class: "form-control select-select2", id: 'insurance-status-select', prompt: "-- SELECT --"
-    .col-sm-2
+    .col-sm-1
       .form-group
         %label Member Type
         = select_tag :member_type, options_for_select(Member::MEMBER_TYPES, @member_type), class: "form-control select-select2", id: 'member-type-select', prompt: "-- SELECT --"
@@ -24,12 +24,9 @@
       .form-group
         %label End Date
         = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end-date"
-  .row
-    .col-sm-3
-    .col-sm-3
-    .col-sm-4
-    .col-sm-2
+    .col-sm-1
       .form-group
+        %label
         = link_to "#", class: 'btn btn-primary btn-block', id: 'search-btn' do
           .fa.fa-search
           Generate
