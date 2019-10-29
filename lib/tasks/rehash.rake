@@ -21,7 +21,7 @@ namespace :rehash do
     at.update!(data: at_data)
 
     a = Loan.find(at.subsidiary_id)
-    ::Loans::FixAmort.new(loan: a).execute!
+    #::Loans::FixAmort.new(loan: a).execute!
 
     loan_amort_details =  AmortizationScheduleEntry.where("loan_id = ? and interest < ?", a,0 ).order(:due_date)
     loan_amort_details.each do |lad|
