@@ -131,7 +131,6 @@ Rails.application.config.assets.precompile += [
   "member_account_validation/MemberAccountValidationForm.js",
   "member_account_validation/ValidationsReport.js",
   "clip_claims/Index.js",
-  "clip_claims.js",
   "clip_claims_form.js",
   "reports/InsuredLoans.js",
   "member_reports.js",
@@ -148,6 +147,5 @@ Rails.application.config.assets.precompile += [
   "summary_cert_policies.js",
   "reports/PersonalDocumentReport.js",
   "hiip_claims/Index.js",
-  "hiip_claims.js",
   "hiip_claims_form.js"
 ]
