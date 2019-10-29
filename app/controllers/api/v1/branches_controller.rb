@@ -42,7 +42,7 @@ module Api
           render json: data_store.data
         end
       end
-
+     
       def index
         branches  = Branch.where(
                       id: UserBranch.active.where(

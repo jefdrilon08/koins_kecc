@@ -19,7 +19,7 @@ var Index = (function() {
   var memberId                  = $parameters.data('member-id');
 
   var urlBranches       = "/api/v1/branches";
-  var urlCenters       = "/api/v1/centers";   
+  var urlCenters       = "/api/v1/centers/centers";   
 
   var _authenticityToken;
 

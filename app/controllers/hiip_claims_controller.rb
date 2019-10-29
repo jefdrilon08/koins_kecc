@@ -25,7 +25,7 @@ class HiipClaimsController < ApplicationController
       @hiip_claims = @hiip_claims.where(branch_id: @branch.id)
     end
   
-  @hiip_claims = @hiip_claims.page(params[:page]).per(20)
+  
   end
 
   def new

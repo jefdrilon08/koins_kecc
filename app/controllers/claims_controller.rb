@@ -33,7 +33,6 @@ class ClaimsController < ApplicationController
       @claims = @claims.where(type_of_insurance_policy: @type_of_insurance_policy)
     end
   
-  @claims = @claims.page(params[:page]).per(20)
   end
 
   def new

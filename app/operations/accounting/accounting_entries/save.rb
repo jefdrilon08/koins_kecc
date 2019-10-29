@@ -25,6 +25,7 @@ module Accounting
       end
 
       def execute!
+
         @accounting_entry.particular    = @accounting_entry_data[:particular]
         @accounting_entry.book          = @accounting_entry_data[:book]
         @accounting_entry.branch        = @branch
