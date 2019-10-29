@@ -11,9 +11,6 @@ class HiipClaim < ApplicationRecord
 	def load_defaults
 	    if self.new_record? && self.balance.blank?
 	      	6000.00 - self.amount
-		else
-		   	self.balance - self.amount
 		end
 	end
-
 end
