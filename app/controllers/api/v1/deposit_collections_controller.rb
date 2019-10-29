@@ -131,6 +131,26 @@ module Api
         end
       end
 
+      def load_center
+        config  = {
+          deposit_collection:  DepositCollection.where(id: params[:id]).first,
+          center: Center.where(id: params[:center_id]).first,
+          user: current_user
+        }
+
+        errors  = ::DepositCollections::ValidateLoadCenter.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::DepositCollections::LoadCenter.new(
+            config: config
+          ).execute!
+        end
+      end
+
       def add_member
         config  = {
           deposit_collection:  DepositCollection.where(id: params[:id]).first,

@@ -29,3 +29,7 @@
   = link_to daily_report_insurance_account_status_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-file
     Insurance Account Status
+  - if microinsurance?
+    = link_to "#", class: 'nav-link' do
+      %i.nav-icon.fa.fa-file
+      Monthly Remitance Report

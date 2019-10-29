@@ -33,7 +33,6 @@ $(document).ready(function(){
   });
 });
 
-
 var encodeQueryData = function(data) {
   var ret = []
   for(var d in data) {

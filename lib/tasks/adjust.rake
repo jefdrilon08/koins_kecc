@@ -877,4 +877,38 @@ namespace :adjust do
     end
     puts "Done!"
   end
+
+  task :repair_members_member_accounts => :environment do
+    puts "Repairing ..."
+
+    members = Member.all
+
+    members.each do |member|
+      puts "Updating: #{member.full_name}"
+      center = member.center
+      branch = member.branch
+
+      MemberAccount.where(member_id: member.id).each do |a|
+        a.update!(center: center, branch: branch)
+      end
+    end
+    puts "Done!"
+  end
+
+  task :update_insurance_date_resigned => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['uuid'])
+
+      if !member.nil?
+        if member.resigned?
+          puts "Updating: #{member.full_name}"  
+          member.update!(insurance_date_resigned: row['insurance_date_resigned'].to_date)
+        end
+      end
+    end
+    puts "Done!"
+  end
 end

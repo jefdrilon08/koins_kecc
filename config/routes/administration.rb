@@ -12,6 +12,7 @@ namespace :administration do
   get "/member_shares/not_printed", to: "member_shares#not_printed"
   get "/member_shares/printed", to: "member_shares#printed"
   get "/member_shares/no_certificates", to: "member_shares#no_certificates"
+  get "/member_shares/print", to: "member_shares#print"
 
   resources :project_type_categories
 

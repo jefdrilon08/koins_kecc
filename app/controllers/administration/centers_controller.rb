@@ -42,7 +42,8 @@ module Administration
     def destroy
       @center = Center.find(params[:id])
       @center.destroy!
-      redirect_to administration_center_path
+      flash[:success] = "Successfully removed center"
+      redirect_to administration_centers_path
     end
 
     private

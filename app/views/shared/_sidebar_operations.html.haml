@@ -8,7 +8,7 @@
   = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
     %i.nav-icon.fa.fa-users
     Members
-- if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+- if microloans?  
   %li.nav-item
     = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
       %i.nav-icon.fa.fa-money-check
