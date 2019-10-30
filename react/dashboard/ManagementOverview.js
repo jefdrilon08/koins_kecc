@@ -62,7 +62,7 @@ export default class ManagementOverview extends React.Component {
   renderOverviewTable() {
     var areas   = this.state.data.areas;
     var rows    = [];
-    var colSpan = 11;
+    var colSpan = 13;
 
     var areaColor     = "#bad5fd";
     var clusterColor  = "#c5ffc1";
@@ -143,13 +143,16 @@ export default class ManagementOverview extends React.Component {
                   Past Due Amount
                 </th>
                 <th className="text-right">
-                  Par Amount
+                  PAR Amount
                 </th>
                 <th className="">
-                  PR
+                  PAR Rate
                 </th>
                 <th className="">
                   RR
+                </th>
+                <th>
+                  As Of
                 </th>
                 <th className="text-center">
                   Pure Savers
@@ -159,6 +162,9 @@ export default class ManagementOverview extends React.Component {
                 </th>
                 <th className="text-center">
                   Active Members
+                </th>
+                <th>
+                  As Of (Member Count)
                 </th>
               </tr>
             );
@@ -225,6 +231,9 @@ export default class ManagementOverview extends React.Component {
               <td className="">
                 {numberAsPercent(branches[k].data.principal_rr)}
               </td>
+              <td>
+                {branches[k].data.as_of}
+              </td>
               <td className="text-center">
                 {branches[k].data.pure_savers.total}
               </td>
@@ -233,6 +242,9 @@ export default class ManagementOverview extends React.Component {
               </td>
               <td className="text-center">
                 {branches[k].data.active_members.total}
+              </td>
+              <td>
+                {branches[k].data.member_counts_as_of}
               </td>
             </tr>
           );
@@ -254,7 +266,7 @@ export default class ManagementOverview extends React.Component {
         }
 
         var cPrincipalBalance = (cPrincipalDue - cPrincipalPaid);
-        var cPar              = (cPrincipalBalance / cPrincipal);
+        var cPar              = (cParAmount / cPortfolio);
 
         rows.push(
           <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: clusterColor}}>
@@ -298,6 +310,8 @@ export default class ManagementOverview extends React.Component {
                 {numberAsPercent(cPrincipalRR)}
               </strong>
             </td>
+            <td>
+            </td>
             <td className="text-center">
               <strong>
                 {cPureSavers}
@@ -312,6 +326,8 @@ export default class ManagementOverview extends React.Component {
               <strong>
                 {cActiveMembers}
               </strong>
+            </td>
+            <td>
             </td>
           </tr>
         );
@@ -333,7 +349,7 @@ export default class ManagementOverview extends React.Component {
       }
 
       var aPrincipalBalance = (aPrincipalDue - aPrincipalPaid);
-      var aPar              = (aPrincipalBalance / aPrincipal);
+      var aPar              = (aParAmount / aPortfolio);
 
       rows.push(
         <tr key={"area-total-" + areas[i].id} style={{backgroundColor: areaColor}}>
@@ -377,6 +393,8 @@ export default class ManagementOverview extends React.Component {
               {numberAsPercent(aPrincipalRR)}
             </strong>
           </td>
+          <td>
+          </td>
           <td className="text-center">
             <strong>
               {aPureSavers}
@@ -391,6 +409,8 @@ export default class ManagementOverview extends React.Component {
             <strong>
               {aActiveMembers}
             </strong>
+          </td>
+          <td>
           </td>
         </tr>
       );
@@ -412,7 +432,7 @@ export default class ManagementOverview extends React.Component {
     }
 
     var tPrincipalBalance = (tPrincipalDue - tPrincipalPaid);
-    var tPar              = (tPrincipalBalance / tPrincipal);
+    var tPar              = (tParAmount / tPortfolio);
 
     rows.push(
       <tr key={"grand-total"} style={{backgroundColor: "#000", color: "#fff"}}>
@@ -456,6 +476,8 @@ export default class ManagementOverview extends React.Component {
             {numberAsPercent(tPrincipalRR)}
           </strong>
         </td>
+        <td>
+        </td>
         <td className="text-center">
           <strong>
             {tPureSavers}
@@ -470,6 +492,8 @@ export default class ManagementOverview extends React.Component {
           <strong>
             {tActiveMembers}
           </strong>
+        </td>
+        <td>
         </td>
       </tr>
     );
