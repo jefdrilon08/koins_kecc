@@ -10,7 +10,7 @@ class DepositCollectionsController < ApplicationController
 
     if params[:branch_id].present?
       @branch   = Branch.find(params[:branch_id])
-       @deposit_collections = @deposit_collections.where(branch_id: @branch.id)
+      @deposit_collections = @deposit_collections.where(branch_id: @branch.id)
     end
 
     if params[:center_id].present?
