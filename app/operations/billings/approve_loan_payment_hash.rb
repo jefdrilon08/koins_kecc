@@ -7,7 +7,8 @@ module Billings
       @user         = @config[:user]
       @particular   = @config[:particular]
       @amount       = @loan_payment[:amount].try(:to_f).round(2)
-      @loan         = Loan.find(@loan_payment[:loan_id])
+      #@loan         = Loan.find(@loan_payment[:loan_id])
+      @loan         = @config[:loan]
 
       @account_transaction  = AccountTransaction.new(
                                 amount: @amount,
