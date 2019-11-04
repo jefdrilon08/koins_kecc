@@ -27,6 +27,8 @@ class Member < ApplicationRecord
   has_many :member_shares
   has_many :membership_payment_records
   has_many :claims, dependent: :delete_all
+  has_many :clip_claims, dependent: :delete_all
+  has_many :hiip_claims, dependent: :delete_all
   has_many :membership_payment_records
   has_many :attachment_files
   has_many :member_account_validation_records

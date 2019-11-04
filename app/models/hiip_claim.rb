@@ -4,15 +4,13 @@ class HiipClaim < ApplicationRecord
 	belongs_to :member
 
 	validates :member, presence: true
-	# validates :amount, numericality: { less_than_or_equal_to: 6000,  only_integer: true, message: 'Exceed amount limit' }
-
+	validates :effective_date_of_coverage, presence: true
 	
-
-	def hiip_balance
-		if self.new_record?
-	      	self.balance = 6000.00 - self.amount
-	    else
-	      	self.balance = self.balance - self.amount
+	def status
+		if self.expiration_date_of_coverage > Date.today
+			status = "active"
+		else
+			status = "expired"
 		end
 	end
 end

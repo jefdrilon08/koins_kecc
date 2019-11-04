@@ -13,6 +13,9 @@
         Amount
       %th
         Balance
+      %th
+        Status
+
   %tbody
     - @hiip_claims.each do |hiip_claim|
       %tr
@@ -29,7 +32,9 @@
         %td
           #{hiip_claim.amount}
         %td
-          #{hiip_claim.hiip_balance}
+          #{hiip_claim.balance}
+        %td
+          #{hiip_claim.status}
 
         
         
