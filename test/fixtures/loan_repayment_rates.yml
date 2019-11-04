@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  loan: one
+  as_of: 2019-10-31
+  branch: one
+  center: one
+  data: 
+
+two:
+  loan: two
+  as_of: 2019-10-31
+  branch: two
+  center: two
+  data: 

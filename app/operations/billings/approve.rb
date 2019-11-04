@@ -52,15 +52,25 @@ module Billings
 
     def process_loan_payments!
       @data_loan_payments.each do |o|
+        loan  = Loan.find(o[:loan_id])
+
         config  = {
           loan_payment: o,
           date_paid: @date_approved,
           user: @user,
-          particular: @data_accounting_entry[:particular]
+          particular: @data_accounting_entry[:particular],
+          loan: loan
         }
 
         ::Billings::ApproveLoanPaymentHash.new(
           config: config
+        ).execute!
+
+        ::Loans::SaveLoanRepaymentRateRecord.new(
+          config: {
+            as_of: @date_approved,
+            loan: loan
+          }
         ).execute!
       end
     end
