@@ -36,9 +36,12 @@ export default class GeneralLedgerComponent extends React.Component {
             </center>
           </td>
           <td width={"14%"}>
-            <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id} target={"_balnk"}>
+            <a href={"/accounting/accounting_entries/" + entries[i].accounting_entry_id} target={"_blank"}>
               {entries[i].reference_number}
             </a>
+          </td>
+          <td width={"10%"}>
+            {entries[i].sub_reference_number}
           </td>
           <td width={"2%"}>
             {entries[i].book}
@@ -84,21 +87,21 @@ export default class GeneralLedgerComponent extends React.Component {
         <table className="table table-bordered table-sm">
           <thead>
             <tr className="bg-info">
-              <th colspan={2}>
+              <th colspan={3} width="22%">
                 {this.props.data.accounting_code_name}
               </th>
-              <th className="">
+              <th className="" width="8%">
                 Book
               </th>
-              <th>
+              <th width="50%">
               </th>
-              <th className="text-right">
+              <th className="text-right" width="8%">
                 Debit
               </th>
-              <th className="text-right">
+              <th className="text-right" width="8%">
                 Credit
               </th>
-              <th className="text-right">
+              <th className="text-right" width="10%">
                 {this.numberWithCommas(this.props.data.beginning_balance)}
               </th>
             </tr>
@@ -108,7 +111,7 @@ export default class GeneralLedgerComponent extends React.Component {
           </tbody>
           <tfoot>
             <tr className="bg-success">
-              <th colspan={4}>
+              <th colspan={5}>
                 Ending for {this.props.data.accounting_code_name}
               </th>
               <th className="text-right">

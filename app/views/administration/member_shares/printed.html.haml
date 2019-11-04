@@ -1,5 +1,44 @@
 = render partial: "printed_header"
-
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body 
+          = form_tag "", method: 'GET' do
+            .row
+              .col-md-2
+                .form-group
+                  %label
+                    Equity Payment Start Date
+                  = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
+              .col-md-2
+                .form-group
+                  %label
+                    Equity Payment End Date
+                  = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
+              .col-md-2
+                .form-group
+                  %label
+                    SATO
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --" 
+              .col-md-2
+                .form-group
+                  %label
+                    Center
+                  = select_tag :center_id, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)).order(:name), :id, :name, @center), id: "center ",class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+              .col-md-2
+                .form-group
+                  %label
+                    Actions
+                  = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+                    .fa.fa-search
+              .col-md-2
+                .form-group
+                  = link_to administration_member_shares_print_path start_date: params[:start_date], end_date: params[:end_date], center_id: params[:center_id], branch_id: params[:branch_id] , class:'btn btn-print', target: "_blank" do
+                    .fa.fa-print  
+                      PRINT
+   
+         
 .container-fluid
   .row
     .col
@@ -8,33 +47,45 @@
           .row
             .col
               %h5
-                Printed Certificates (#{@member_shares.count})
-              - if @member_shares.size > 0
+                Printed Certificates
+              - if @member_shares != nil
                 %table.table.table-sm.table-bordered
                   %thead
                     %tr
+                      %th
+                        
                       %th
                         Number
                       %th
                         Member
                       %th
-                        Branch
+                        No. of certificate
                       %th
-                        Date Issued
+                        SATO
+                      %th
+                        Center
+                      %th
+                        Date Printed
                   %tbody
-                    - @member_shares.each do |m|
+                    - @member_shares.each_with_index do |m , i|
                       %tr
+                        %td
+                          #{i + 1}
                         %td
                           = link_to member_member_share_path(m.member.id, m.id), target: '_blank' do
                             #{m.certificate_number}
                         %td
                           #{m.member.full_name}
                         %td
+                          #{m.number_of_shares}
+                        %td
                           #{m.member.branch.to_s}
                         %td
-                          #{m.date_of_issue}
+                          #{m.member.center.to_s}
+                        %td
+                          #{m.data["date_printed"]}
                           
-                = paginate @member_shares
+                //= paginate @member_shares
               - else
                 %p
                   No certificates found

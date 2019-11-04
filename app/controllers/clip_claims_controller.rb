@@ -25,7 +25,6 @@ class ClipClaimsController < ApplicationController
       @clip_claims = @clip_claims.where(branch_id: @branch.id)
     end
   
-  @clip_claims = @clip_claims.page(params[:page]).per(20)
   end
 
   def new

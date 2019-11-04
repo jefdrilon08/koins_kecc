@@ -17,7 +17,7 @@ class AccountingEntry < ApplicationRecord
   has_many :journal_entries, dependent: :destroy
 
   validates :particular, presence: true
-  validates :reference_number, presence: true, uniqueness: { scope: [:branch_id, :book] }, if: :approved?
+  #validates :reference_number, presence: true, uniqueness: { scope: [:branch_id, :book] }, if: :approved?
   validates :date_prepared, presence: true
   validates :status, presence: true
 
@@ -28,6 +28,8 @@ class AccountingEntry < ApplicationRecord
   scope :crb, -> { includes(:journal_entries).where(book: "CRB").order("date_prepared DESC") }
   scope :cdb, -> { includes(:journal_entries).where(book: "CDB").order("date_prepared DESC") }
   scope :misc, -> { includes(:journal_entries).where(book: "MISC").order("date_prepared DESC") }
+
+  scope :year_end_closing, -> { where("book = ? AND status = ? AND data->>'is_closing_record' = ?", "MISC", "approved", "true").order("date_prepared DESC") }
 
   before_validation :load_defaults
   
@@ -65,4 +67,5 @@ class AccountingEntry < ApplicationRecord
   def misc?
     self.book == "MISC"
   end
+  
 end

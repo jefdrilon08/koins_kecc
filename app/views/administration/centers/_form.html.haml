@@ -2,7 +2,7 @@
   .row
     .col
       .form-group
-        = f.association :branch, as: :select, collection: Branch.all, input_html: { class: 'form-control' }
+        = f.association :branch, as: :select, collection: @branches, input_html: { class: 'form-control' }
     .col
       .form-group
         = f.input :name, input_html: { class: 'form-control' }

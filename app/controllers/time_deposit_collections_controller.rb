@@ -2,7 +2,7 @@ class TimeDepositCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @time_deposit_collections = TimeDepositCollection.select("*")
+    @time_deposit_collections = TimeDepositCollection.select("*").where(branch_id: @branches.pluck(:id))
 
     @time_deposit_collections = @time_deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end

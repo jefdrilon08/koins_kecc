@@ -150,17 +150,20 @@ Rails.application.routes.draw do
   #books
   get "/books/excel", to: "books#excel"
   get "/books/books_download_excel", to: "books#books_download_excel", as: :books_download_excel
-
-
+  
   namespace :accounting do
     resources :year_end_closings, only: [:index, :show, :destroy]
     resources :balance_sheets, only: [:index, :show, :destroy]
     resources :income_statements, only: [:index, :show, :destroy]
   end
+  
 
+  
   # Billing
+  get "/billings/excel", to: "billings#excel"
+  get "/billings/billing_excel", to: "billings#billing_excel", as: :billing_download_excel
   resources :billings, only: [:index, :show, :destroy]
-
+  
   ################################
   # CASH MANAGEMENT
   ################################
@@ -268,6 +271,9 @@ Rails.application.routes.draw do
     get "/manual_aging/:id", to: "manual_aging#show"
     delete "/manual_aging/:id", to: "manual_aging#destroy"
 
+    get "/branch_resignations", to: "branch_resignations#index"
+    get "/branch_resignations/:id", to: "branch_resignations#show"
+    delete "/branch_resignations/:id", to: "branch_resignations#destroy"
   end
 
   namespace :accounting do
@@ -275,6 +281,7 @@ Rails.application.routes.draw do
     get "/accounting_entries/:id", to: "accounting_entries#show", as: :accounting_entry
     delete "/accounting_entries/:id", to: "accounting_entries#destroy", as: :delete_accounting_entry
     get "/accounting_entry/form", to: "accounting_entries#form", as: :accounting_entry_form
+    
   end
 
   def draw(routes_name)

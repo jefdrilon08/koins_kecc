@@ -25,9 +25,9 @@ module Reports
         end
       elsif @branch_id.present? && @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
         if @status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, @status, @branch_id).order("last_name ASC")
+          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ? AND insurance_status = ?", @start_date, @end_date, @status, @branch_id, @insurance_status).order("last_name ASC")
         else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND branch_id = ?", @start_date, @end_date, @status, @insurance_status, @branch_id).order("last_name ASC")
+          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND branch_id = ? AND member_type != ?", @start_date, @end_date, @status, @insurance_status, @branch_id, "GK").order("last_name ASC")
         end
       elsif @branch_id.present? && @member_type.present? && @status.present? && @start_date.present? && @end_date.present?
         if @status == "resigned"
@@ -132,7 +132,7 @@ module Reports
         end  
 
         record[:index] = i+1
-        record[:name] = member.full_name_titleize
+        record[:name] = member.full_name
         record[:recognition_date] = member.recognition_date
         record[:branch] = member.branch.name
         record[:center] = member.center.name

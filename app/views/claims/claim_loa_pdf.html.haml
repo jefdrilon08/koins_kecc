@@ -42,14 +42,14 @@
     - else
       #{@claim.date_prepared}
   %left
-    - if @cluster.id == 11 
+    - if @cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b" 
       %p
         %b
           CEBU ARCHDIOCESAN PROGRAM FOR SELF RELIANCE INC.-CAPS-R
         %br
           %b
             Cebu Caritas Building, P. Gomez St., Cebu City, Philippines
-    - elsif @cluster.id == 12
+    - elsif @cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
       %p
         %b
           JAIME V. ONGPIN MICROFINANCE FOUNDATION INC. (JVOMFI)
@@ -92,7 +92,7 @@
               Recognition Date:
             %td{:width => "25%"}
               %u  
-                #{@claim.date_of_policy_issue.strftime("%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@claim.date_of_policy_issue.try(:strftime, "%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Life:
@@ -118,7 +118,7 @@
               Date of Death/TPD/MVAH:
             %td{:width => "25%"}
               %u  
-                #{@claim.date_of_death_tpd_accident.strftime("%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@claim.date_of_death_tpd_accident.try(:strftime,"%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Length of Membership:
@@ -172,7 +172,7 @@
                 #{@claim.beneficiary}    
     %br
     .body2  
-      - if @cluster.id == 11  
+      - if @cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"
         %p
           Dear Sir/Madam:
           %br
@@ -194,7 +194,7 @@
                 ***#{@claim.total_amount_payable.to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@claim.total_amount_payable, precision: 2), delimiter: ",", separator: ".", unit: "")})
           %br
             Thank you for your cooperation in this regard.
-      - elsif @cluster.id == 12
+      - elsif @cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
         %p
           Dear Sir/Madam:
           %br
@@ -225,7 +225,7 @@
           %br
           %br
           %u
-            #{@claim.prepared_by.upcase}
+            #{@claim.prepared_by}
           %br
           Account Officer
         %td{:width => "25%"}

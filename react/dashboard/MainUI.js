@@ -5,6 +5,7 @@ import SkCubeLoading from '../SkCubeLoading';
 
 // DASHBOARDS
 import DashboardOAS from './DashboardOAS';
+import DashboardManagement from './DashboardManagement';
 
 export default class MainUI extends React.Component {
   constructor(props) {
@@ -13,39 +14,27 @@ export default class MainUI extends React.Component {
     this.state  = {
       isError: false,
       isLoading: true,
-      roles: [],
-      username: ""
+      roles: props.roles,
+      username: props.username
     };
   }
 
   componentDidMount() {
     var context = this;
 
-    $.ajax({
-      url: "/api/v1/roles",
-      method: 'GET',
-      success: function(response) {
-        context.setState({
-          isLoading: false,
-          roles: response.roles,
-          username: response.username
-        });
-      },
-      error: function(response) {
-        console.log(response);
-
-        context.setState({
-          isError: true,
-          isLoading: false,
-          roles: [],
-          username: ""
-        });
-      }
+    this.setState({
+      isLoading: false
     });
   }
 
   renderDashboards() {
     var dashboards  = [];
+
+    dashboards.push(
+      <DashboardManagement
+        key={"dashboard-Management"}
+      />
+    );
 
     dashboards.push(
       <DashboardOAS

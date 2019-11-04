@@ -24,6 +24,7 @@ module MemberAccountValidations
       @total_advance_life = 0
       @total_advance_rf = 0
       @total_interest = 0
+      @total_equity_interest = 0
       @grand_total = 0
     end
 
@@ -59,6 +60,7 @@ module MemberAccountValidations
             "LIFE",
             "RF",
             "LIFE 50 Percent",
+            "Equity Interest",
             "Advance LIFE",
             "Advance RF",
             "Interest",
@@ -81,11 +83,12 @@ module MemberAccountValidations
                     AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i,
                     iavr.rf,
                     iavr.lif_50_percent,
+                    iavr.equity_interest,
                     iavr.advance_lif,
                     iavr.advance_rf,
                     iavr.interest,
                     iavr.total
-                  ], style: [nil, nil, nil, date_format_cell, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                  ], style: [nil, nil, nil, date_format_cell, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
                 else
                   sheet.add_row [
                     iavr.member.full_name,
@@ -97,11 +100,12 @@ module MemberAccountValidations
                     AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i,
                     iavr.rf,
                     iavr.lif_50_percent,
+                    iavr.equity_interest,
                     iavr.advance_lif,
                     iavr.advance_rf,
                     iavr.interest,
                     iavr.total
-                  ], style: [nil, nil, nil, date_format_cell, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                  ], style: [nil, nil, nil, date_format_cell, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
               end
 
               @total_life = @total_life + AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i
@@ -110,6 +114,7 @@ module MemberAccountValidations
               @total_advance_life = @total_advance_life + iavr.advance_lif
               @total_advance_rf = @total_advance_rf + iavr.advance_rf
               @total_interest = @total_interest + iavr.interest
+              @total_equity_interest = @total_equity_interest + iavr.equity_interest
               @grand_total = @grand_total + iavr.total
 
             end  
@@ -125,11 +130,12 @@ module MemberAccountValidations
             @total_life,
             @total_rf,
             @total_50_percent_life,
+            @total_equity_interest,
             @total_advance_life,
             @total_advance_rf,
             @total_interest,
             @grand_total
-          ], style: [header, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
+          ], style: [header, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
 
         end
       end

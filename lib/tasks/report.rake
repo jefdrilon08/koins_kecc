@@ -1,4 +1,16 @@
 namespace :report do
+  task :mem_share => :environment do
+    x = Member.where("status = 'active' and branch_id = '3726405b-777c-4b61-b6a5-7a4b48db62b6'")
+    x.each do |y|
+      total_share = MemberAccount.where(member_id: y.id , account_type: 'EQUITY' , account_subtype: 'Share Capital').sum(:balance)
+      mem_cert = Member.joins(:member_shares).where("members.id = ? and member_shares.is_void IS NULL" , y.id).sum(:number_of_shares)
+      total_share_count = (total_share/100).to_i
+      if total_share_count > mem_cert
+        puts y.full_name , mem_cert , total_share_count
+      end
+    end
+  end
+  
   task :pending_insurance => :environment do
     Member.where("insurance_status = 'pending' and status = 'active' and data->>'recognition_date' IS NOT NULL").each do |pi|
       Member.find(pi.id).update(insurance_status: 'inforce')
@@ -20,7 +32,7 @@ namespace :report do
    br_id= Branch.where(name: br_name).ids
     @data = []
     #mem = Member.joins(:member_shares).where("members.status = 'active' and members.branch_id = ? and member_shares.date_of_issue >= ? and member_shares.date_of_issue <= ?", br_id , s_date , e_date).order(:center_id)
-    mem = mem_acc = Member.joins(:member_accounts).where("members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital' and members.branch_id = ?", br_id).order(:center_id)
+    mem = Member.joins(:member_accounts).where("members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital' and members.branch_id = ?", br_id).order(:center_id)
 
     puts "Member Name | Center | Status |Date of Membership | Equity Account Balance | Required Additional Share Capital | CBU Balance | Share Capital For Payment | Current Savings"
     mem.each do |mems|
@@ -112,5 +124,20 @@ namespace :report do
       end
     end
   end
+##### LIST OF 400 EQUITY #####
+  task :equity_data => :environment do
+    require 'csv'
+    br_name= ENV['branch']
+    br_id= Branch.where(name: br_name).ids
+
+    CSV.open("#{Rails.root}/tmp/equity_data.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "NAME" , "DATE OF MEMBERSHIP" , "CENTER" , "EQUITY"] ) do |csv|
+      mem = Member.joins(:member_accounts , :center , :membership_payment_records).where("members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital' and members.branch_id = ? and member_accounts.balance = 400 and membership_payment_records.status = 'paid'" , br_id).order("membership_payment_records.date_paid").pluck(:identification_number , "CONCAT_WS(', ',members.last_name,members.first_name,members.middle_name)" , "membership_payment_records.date_paid" ,"centers.name" , "member_accounts.balance").uniq
+      mem.each do |mems|
+        csv << mems
+      end
+    end
+  end
+
+
 
 end

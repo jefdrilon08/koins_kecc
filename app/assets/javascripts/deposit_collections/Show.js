@@ -7,6 +7,10 @@ var Show  = (function() {
   var $btnConfirmApprove;
   var $modalApprove;
 
+  var $btnFinalize;
+  var $btnConfirmFinalize;
+  var $modalFinalize;
+
 
   var $btnPrint;
   var $btnPrintAccountingEntry;
@@ -31,6 +35,7 @@ var Show  = (function() {
   var templateErrorList;
 
   var _urlApprove                       = "/api/v1/deposit_collections/approve";
+  var _urlFinalize                      = "/api/v1/deposit_collections/finalize";
   var _urlPrint                         = "/api/v1/print/generate_file";
   var _urlModifyCashManagementTemplate  = "/api/v1/deposit_collections/modify_cash_management_template";
   var _urlModifyBook                    = "/api/v1/deposit_collections/modify_book";
@@ -41,6 +46,10 @@ var Show  = (function() {
     $btnApprove         = $("#btn-approve");
     $btnConfirmApprove  = $("#btn-confirm-approve");
     $modalApprove       = $("#modal-approve");
+    
+    $btnFinalize        = $("#btn-finalize");
+    $btnConfirmFinalize = $("#btn-confirm-finalize");
+    $modalFinalize      = $("#modal-finalize");
 
     $btnPrint                  = $("#btn-print");
     $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
@@ -336,6 +345,50 @@ var Show  = (function() {
             );
 
             $btnConfirmApprove.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnFinalize.on("click", function() {
+      $message.html("");
+      $modalFinalize.modal("show");
+    });
+
+    $btnConfirmFinalize.on("click", function() {
+      $message.html("Loading...");
+      $btnConfirmFinalize.prop("disabled", true);
+
+      $.ajax({
+        url: _urlFinalize,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+          id: depositCollectionId,
+          authenticity_token: authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmFinalize.prop("disabled", false);
           }
         }
       });

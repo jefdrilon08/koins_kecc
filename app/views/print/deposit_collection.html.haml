@@ -22,7 +22,10 @@
 %h5
   OR Number: #{@deposit_collection[:data][:or_number]} 
   |
+  Sub Reference Number: #{@deposit_collection[:data][:accounting_entry][:sub_reference_number]}
+  |
   Book: #{@deposit_collection[:data][:accounting_entry][:book]}
+
 %table.table.table-bordered.table-sm
   %thead
     %tr
@@ -110,12 +113,20 @@
       Prepared By:
   .col
     %center
+      %strong 
+        -if Settings.activate_microinsurance == true
+          %th{width: 255} #{"EVELYN LAGMAY"}
+        -else
+          %th{width: 255}
       %br
       Reviewed By:
   .col
     %center
       %strong
-        #{@deposit_collection[:data][:accounting_entry][:approved_by]}
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{"SILVIDA ANTIQUERA"}
+        -else
+          %th{width: 350} #{@deposit_collection[:data][:accounting_entry][:approved_by]}
       %br
       Approved By:
 

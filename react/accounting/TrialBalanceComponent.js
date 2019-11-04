@@ -101,6 +101,12 @@ export default class TrialBalanceComponent extends React.Component {
         console.log(response);
         alert("Error in fetching trial balance data");
 
+        var errors  = JSON.parse(response.responseText).errors;
+
+        for(var i = 0; i < errors.length; i++) {
+          alert(errors[i]);
+        }
+
         context.setState({
           isLoading: false,
           data: false
@@ -300,6 +306,12 @@ export default class TrialBalanceComponent extends React.Component {
     }
 
     var accountingFundOptions = [];
+
+    accountingFundOptions.push(
+      <option value={""} key={"acc-fund-all"}>
+        -- SELECT ALL --
+      </option>
+    );
 
     for(var i = 0; i < state.accountingFunds.length; i++) {
       accountingFundOptions.push(

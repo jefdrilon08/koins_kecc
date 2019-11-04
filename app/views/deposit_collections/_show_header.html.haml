@@ -23,10 +23,21 @@
         = link_to "#", class: 'btn', id: 'btn-load-center' do
           .fa.fa-sync
           Load Center
-      - if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+      - if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK") || current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("REMOTE-FM"))
         = link_to deposit_collection_path(@deposit_collection), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times
           Delete
-        = link_to "#", class: 'btn', id: 'btn-approve' do
+      - if @deposit_collection.pending? && !@deposit_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
+        = link_to "#", class: 'btn', id: 'btn-finalize' do
           .fa.fa-check
-          Approve
+          Finalize
+      - if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))    
+        - if Settings.activate_microinsurance
+          - if @deposit_collection.finalized?
+            = link_to "#", class: 'btn', id: 'btn-approve' do
+              .fa.fa-check
+              Approve  
+        - else
+          = link_to "#", class: 'btn', id: 'btn-approve' do
+            .fa.fa-check
+            Approve

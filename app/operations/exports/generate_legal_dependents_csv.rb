@@ -18,7 +18,8 @@ module Exports
                     :reference_number,
                     :relationship,
                     :member_identification_number,
-                    :uuid
+                    :uuid,
+                    :member_uuid
                         ]
                                 
                 @legal_dependents.each do |ld|
@@ -35,7 +36,8 @@ module Exports
                         nil,
                         ld.relationship,
                         ld.member.identification_number,
-                        ld.id
+                        ld.id,
+                        ld.member.id
                         ]
                     end
                 end

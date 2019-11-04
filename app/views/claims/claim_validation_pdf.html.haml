@@ -20,7 +20,7 @@
     border-color: black;
   }
   tr td {
-    font-size: 1em;
+    font-size: 1.2em;
   }
 
 %span.print-text
@@ -34,7 +34,7 @@
     %p
       CLAIMS VALIDATION:
       %u
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BLIP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.type_of_insurance_policy}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       %br
       %br
       %b
@@ -240,7 +240,7 @@
           %br
           %br
           %u
-            #{@claim.prepared_by.upcase}
+            #{@claim.prepared_by}
           %br
           Account Officer
         %td{:width => "30%"}

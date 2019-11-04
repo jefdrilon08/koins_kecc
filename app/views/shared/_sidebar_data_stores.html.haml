@@ -1,100 +1,105 @@
-%li.nav-title
-  Reports
-%li{ class: "nav-item nav-dropdown" }
-  = link_to "#", class: "nav-link nav-dropdown-toggle" do
-    %i.nav-icon.fa.fa-store-alt
-    Branch Level
-  %ul.nav-dropdown-items
-    %li{ class: "nav-item #{params[:controller] == 'repayment_rates' ? 'active' : ''}" }
-      = link_to "/data_stores/repayment_rates", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Repayment Rates
-    %li{ class: "nav-item #{params[:controller] == 'manual_aging' ? 'active' : ''}" }
-      = link_to "/data_stores/manual_aging", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Manual Aging
-    %li{ class: "nav-item #{params[:controller] == 'personal_funds' ? 'active' : ''}" }
-      = link_to "/data_stores/personal_funds", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Personal Funds
-    %li{ class: "nav-item #{params[:controller] == 'branch_loans_stats' ? 'active' : ''}" }
-      = link_to "/data_stores/branch_loans_stats", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Loan Stats
-    %li{ class: "nav-item #{params[:controller] == 'branch_with_centers_loans_stats' ? 'active' : ''}" }
-    %li{ class: "nav-item #{params[:controller] == 'member_counts' ? 'active' : ''}" }
-      = link_to "/data_stores/member_counts", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Member Counts
-    %li{ class: "nav-item #{params[:controller] == 'accounting_entries_summaries' ? 'active' : ''}" }
-      = link_to "/data_stores/accounting_entries_summaries", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Voucher Summary
-    %li{ class: "nav-item #{params[:controller] == 'soa_expenses' ? 'active' : ''}" }
-      = link_to "/data_stores/soa_expenses", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        SOA Expenses
-    %li{ class: "nav-item #{params[:controller] == 'soa_loans' ? 'active' : ''}" }
-      = link_to "/data_stores/soa_loans", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        SOA Loans
-    %li{ class: "nav-item #{params[:controller] == 'soa_funds' ? 'active' : ''}" }
-      = link_to "/data_stores/soa_funds", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        SOA Funds
-    %li{ class: "nav-item #{params[:controller] == 'watchlists' ? 'active' : ''}" }
-      = link_to "/data_stores/watchlists", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Watchlists
-    %li{ class: "nav-item #{params[:controller] == 'monthly_new_and_resigned' ? 'active' : ''}" }
-      = link_to "/data_stores/monthly_new_and_resigned", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Monthly New/Res.
-    %li{ class: "nav-item #{params[:controller] == 'monthly_incentives' ? 'active' : ''}" }
-      = link_to "/data_stores/monthly_incentives", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Monthly Incentives
-    %li{ class: "nav-item #{params[:controller] == 'x_weeks_to_pay' ? 'active' : ''}" }
-      = link_to "/data_stores/x_weeks_to_pay", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        X Weeks to Pay
-%li{ class: "nav-item" }
-  = link_to "/reports/insured_loans", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    Insured Loans
-%li{ class: "nav-item" }
-  = link_to "/reports/member_reports", class: 'nav-link' do
-    %i.nav-icon.fa.fa-users
-    Member Reports
-%li{ class: "nav-item" }
-  = link_to "/reports/collections_clip", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    CLIP Reports
-%li{ class: "nav-item" }
-  = link_to "/reports/collections_blip", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    BLIP Reports
-%li{ class: "nav-item" }
-  = link_to "/reports/member_dependent", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    Member Dependents
-%li{ class: "nav-item" }
-  = link_to "/reports/member_quarterly_reports", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    Member Quarterly Reports
-%li{ class: "nav-item" }
-  = link_to "/reports/cic", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    CIC Report
-%li{ class: "nav-item" }
-  = link_to "/reports/monthly_collection", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    Monthly Collection
-%li{ class: "nav-item" }
-  = link_to "/reports/summary_of_certificates_and_policies", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    Summary of Certification and Policies
-%li{ class: "nav-item" }
-  = link_to "/reports/personal_document", class: 'nav-link' do
-    %i.nav-icon.fa.fa-book.icon
-    Personal Documents Report
+- if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last
+  %li.nav-title
+    Reports
+  %li{ class: "nav-item nav-dropdown" }
+    = link_to "#", class: "nav-link nav-dropdown-toggle" do
+      %i.nav-icon.fa.fa-store-alt
+      Branch Level
+    %ul.nav-dropdown-items
+      %li{ class: "nav-item #{params[:controller] == 'repayment_rates' ? 'active' : ''}" }
+        = link_to "/data_stores/repayment_rates", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Repayment Rates
+      %li{ class: "nav-item #{params[:controller] == 'manual_aging' ? 'active' : ''}" }
+        = link_to "/data_stores/manual_aging", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Manual Aging
+      %li{ class: "nav-item #{params[:controller] == 'personal_funds' ? 'active' : ''}" }
+        = link_to "/data_stores/personal_funds", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Personal Funds
+      %li{ class: "nav-item #{params[:controller] == 'branch_loans_stats' ? 'active' : ''}" }
+        = link_to "/data_stores/branch_loans_stats", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Loan Stats
+      %li{ class: "nav-item #{params[:controller] == 'branch_with_centers_loans_stats' ? 'active' : ''}" }
+      %li{ class: "nav-item #{params[:controller] == 'member_counts' ? 'active' : ''}" }
+        = link_to "/data_stores/member_counts", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Member Counts
+      %li{ class: "nav-item #{params[:controller] == 'accounting_entries_summaries' ? 'active' : ''}" }
+        = link_to "/data_stores/accounting_entries_summaries", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Voucher Summary
+      %li{ class: "nav-item #{params[:controller] == 'soa_expenses' ? 'active' : ''}" }
+        = link_to "/data_stores/soa_expenses", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          SOA Expenses
+      %li{ class: "nav-item #{params[:controller] == 'soa_loans' ? 'active' : ''}" }
+        = link_to "/data_stores/soa_loans", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          SOA Loans
+      %li{ class: "nav-item #{params[:controller] == 'soa_funds' ? 'active' : ''}" }
+        = link_to "/data_stores/soa_funds", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          SOA Funds
+      %li{ class: "nav-item #{params[:controller] == 'watchlists' ? 'active' : ''}" }
+        = link_to "/data_stores/watchlists", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Watchlists
+      %li{ class: "nav-item #{params[:controller] == 'monthly_new_and_resigned' ? 'active' : ''}" }
+        = link_to "/data_stores/monthly_new_and_resigned", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Monthly New/Res.
+      %li{ class: "nav-item #{params[:controller] == 'monthly_incentives' ? 'active' : ''}" }
+        = link_to "/data_stores/monthly_incentives", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Monthly Incentives
+      %li{ class: "nav-item #{params[:controller] == 'x_weeks_to_pay' ? 'active' : ''}" }
+        = link_to "/data_stores/x_weeks_to_pay", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          X Weeks to Pay
+      %li{ class: "nav-item #{params[:controller] == 'branch_resignations' ? 'active' : ''}" }
+        = link_to "/data_stores/branch_resignations", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Branch Resignations
+  %li{ class: "nav-item" }
+    = link_to "/reports/insured_loans", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      Insured Loans
+  %li{ class: "nav-item" }
+    = link_to "/reports/member_reports", class: 'nav-link' do
+      %i.nav-icon.fa.fa-users
+      Member Reports
+  %li{ class: "nav-item" }
+    = link_to "/reports/collections_clip", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      CLIP Reports
+  %li{ class: "nav-item" }
+    = link_to "/reports/collections_blip", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      BLIP Reports
+  %li{ class: "nav-item" }
+    = link_to "/reports/member_dependent", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      Member Dependents
+  %li{ class: "nav-item" }
+    = link_to "/reports/member_quarterly_reports", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      Member Quarterly Reports
+  %li{ class: "nav-item" }
+    = link_to "/reports/cic", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      CIC Report
+  %li{ class: "nav-item" }
+    = link_to "/reports/monthly_collection", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      Monthly Collection
+  %li{ class: "nav-item" }
+    = link_to "/reports/summary_of_certificates_and_policies", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      Summary of Certification and Policies
+  %li{ class: "nav-item" }
+    = link_to "/reports/personal_document", class: 'nav-link' do
+      %i.nav-icon.fa.fa-book.icon
+      Personal Documents Report

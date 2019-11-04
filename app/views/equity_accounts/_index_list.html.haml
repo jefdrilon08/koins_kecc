@@ -1,0 +1,24 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+        Account
+      %th
+        Branch
+      %th.text-center
+        Type
+      %th.text-right
+        Balance
+  %tbody
+    - @equity_accounts.each do |o|
+      %tr
+        %th
+          = link_to equity_account_path(o) do
+            #{o.member.full_name}
+        %td
+          #{o.branch}
+        %td.text-center
+          %small
+            #{o.account_subtype}
+        %th.text-right
+          #{number_to_currency(o.balance, unit: '')}

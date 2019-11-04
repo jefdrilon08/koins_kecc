@@ -17,7 +17,63 @@ module Administration
       #@member_shares  = @member_shares.page(params[:page]).per(20)
     end
 
+    def print
+      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("member_shares.data->> 'date_printed' DESC")
+      if params[:branch_id].present?
+        @branch_id  = params[:branch_id]
+        #raise @branch_id.inspect
+        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+      end
+      if params[:center_id].present?
+        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
+      end
+      if params[:start_date].present? and params[:end_date].present?
+        #d = (params[:end_date].to_date + 1).to_s
+        @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
+      end
+ 
+    end
     def no_certificates
+      @data = {}
+      @data[:sfp] = []
+      #x = Member.joins(:member_accounts).where("members.branch_id = ? and members.status = 'active'" , @branches.pluck(:id)).order("member_accounts.updated_at ASC")
+      x = Member.joins(:member_accounts).where("members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital'" ).order("member_accounts.updated_at ASC")
+      if params[:start_date].present? and params[:end_date].present?
+        d = (params[:end_date].to_date + 1).to_s
+        x = x.where("member_accounts.updated_at >= ?  and member_accounts.updated_at <= ?", params[:start_date] , d)
+      end
+      if params[:branch_id].present?
+        b = Branch.find(params[:branch_id])
+        x = x.where(branch_id: b.id)
+      end
+      if params[:center_id].present?
+        x = x.where(center_id: params[:center_id])
+      end
+      x = x.where(branch_id: @branches.pluck(:id))
+
+      x.each do |y|
+       sfp = {}
+       total_share = MemberAccount.where(member_id: y.id , account_type: 'EQUITY' , account_subtype: 'Share Capital').sum(:balance)
+       eq_date = MemberAccount.where(member_id: y.id , account_type: 'EQUITY' , account_subtype: 'Share Capital').pluck(:updated_at).to_s
+ 
+       mem_cert = Member.joins(:member_shares).where("members.id = ? and member_shares.is_void IS NULL" , y.id).sum(:number_of_shares)
+       total_share_count = (total_share/100).to_i
+       if total_share_count > mem_cert
+        sfp[:id] = y.id
+        sfp[:branch] = Branch.find(y.branch_id).name
+        sfp[:full_name] = y.full_name
+        sfp_center = y.center_id 
+        sfp[:center] = Center.find(sfp_center).name
+        sfp[:shares_printed] = mem_cert
+        sfp[:shares_for_printing] = total_share_count - mem_cert
+        sfp[:eq_date] = eq_date.to_date
+        @data[:sfp] << sfp 
+       end
+      end
+      @data
+    end
+
+    def no_certificatesx
       @members        = Member.active.where.not(id: MemberShare.all.pluck(:member_id).uniq).where(branch_id: @branches.pluck(:id)).order("last_name ASC")
 
       @member_accounts  = MemberAccount.where(
@@ -69,8 +125,22 @@ module Administration
     end
 
     def printed
-      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("date_of_issue DESC")
-      @member_shares  = @member_shares.page(params[:page]).per(20)
+      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("member_shares.data->> 'date_printed' DESC")
+      if params[:branch_id].present?
+        @branch_id  = params[:branch_id]
+        #raise @branch_id.inspect
+        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+      end
+      if params[:center_id].present?
+        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
+      end
+      if params[:start_date].present? and params[:end_date].present?
+        #d = (params[:end_date].to_date + 1).to_s
+        @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
+      end
+ 
+
+      #@member_shares  = @member_shares.page(params[:page]).per(20)
     end
   end
 end

@@ -26,7 +26,7 @@ module Closing
       if @branch.present? and @closing_date.present?
         year  = @closing_date.year
 
-        if DataStore.year_end_closings.where("CAST(meta->>'year' AS integer) = ?", year).count > 0
+        if DataStore.year_end_closings.where("CAST(meta->>'year' AS integer) = ? AND meta->>'branch_id' = ?", year, @branch.id).count > 0
           @errors[:messages] << {
             key: "closing_date",
             message: "Already has closing record for year #{@year}"

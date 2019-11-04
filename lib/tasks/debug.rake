@@ -1,4 +1,104 @@
 namespace :debug do
+  task :monitor_personal_funds => :environment do
+    data_store      = DataStore.personal_funds.find(ENV["ID"])
+    account_type    = ENV["ACCOUNT_TYPE"]
+    account_subtype = ENV["ACCOUNT_SUBTYPE"]
+    data            = data_store.data.with_indifferent_access
+    as_of           = data[:as_of]
+    invalid_records = []
+
+    total_discrepancy = 0.00
+
+    size    = data[:records].size
+
+    data[:records].each_with_index do |record, i|
+      account = record[:accounts].select{ |o|
+                  o[:account_type] == account_type && o[:account_subtype] == account_subtype
+                }.first
+
+      if account[:id].present?
+        deposits    = AccountTransaction.personal_funds_deposits.where("subsidiary_id = ? AND DATE(transacted_at) <= ?", account[:id], as_of).sum(:amount)
+        withdrawals = AccountTransaction.personal_funds_withdrawals.where("subsidiary_id = ? AND DATE(transacted_at) <= ?", account[:id], as_of).sum(:amount)
+
+        correct_balance = (deposits - withdrawals).round(2)
+
+        if account[:balance].to_f.round(2) != correct_balance
+          puts ""
+          puts "Found inconsistent account #{account[:id]} Reported balance: #{account[:balance]} | Correct balance: #{correct_balance}"
+          invalid_records << {
+            id: account[:id],
+            reported_balance: account[:balance],
+            correct_balance: correct_balance
+          }
+
+          if account[:balance] > correct_balance
+            total_discrepancy += (account[:balance] - correct_balance)
+          else
+            total_discrepancy += (correct_balance - account[:balance])
+          end
+        end
+      end
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+    end
+
+    if invalid_records.size > 0
+      puts "Found #{invalid_records.size} invalid records out of #{size}"
+
+      invalid_records.each do |o|
+        puts "Account ID: #{o[:id]}"
+        puts "Reported Balance: #{o[:reported_balance]}"
+        puts "Correct Balance: #{o[:correct_balance]}"
+        puts "=================================================="
+      end
+
+      puts "Total discrepancy: #{total_discrepancy}"
+    else
+      puts "No invalid records found."
+    end
+  end
+
+  task :repair_cbu_account => :environment do 
+    ma = MemberAccount.where(account_type: "SAVINGS", account_subtype: "CBU")
+    size = ma.size
+    ma.each_with_index do |m,i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Member Account #{m.id}... #{progress}%%")
+      MemberAccount.find(m.id).update!(account_type: "EQUITY")
+      
+    end
+  
+  end
+
+  task :delete_loan_payment => :environment do
+    loans = Loan.where(branch_id: "3cccd843-3fa8-4693-b60c-dea2505c6b57")
+    size = loans.size
+
+    loans.each_with_index do |l,i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Examining #{l.id}... #{progress}%%")
+      at = AccountTransaction.where(subsidiary_id: l.id, subsidiary_type: "Loan")
+      at.each do |a|
+        AccountTransaction.find(a.id).destroy!
+      end
+    end
+  end
+
+  task :load_date_completed => :environment do
+    branch_id = ENV['BRANCH_ID']
+    loans = Loan.where("branch_id = ? and status = ? and date_completed IS NULL ", branch_id, "paid" )
+    size = loans.size
+
+    loans.each_with_index do |l,i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): date completed #{l.id}... #{progress}%%")
+      account_transaction = AccountTransaction.where(subsidiary_id: l.id).order(:transacted_at).last
+      Loan.find(l.id).update(date_completed: account_transaction.transacted_at)
+      
+    end
+    puts "Done"
+  end
   task :loan_reamortize => :environment do
     loan                    = Loan.find(ENV['ID'])
     p_principal             = ENV['P_PRINCIPAL'].to_f.round(2)

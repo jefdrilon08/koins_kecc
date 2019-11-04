@@ -1,58 +1,62 @@
-%li.nav-title
-  Administration
-%li{ class: "nav-item #{params[:controller] == 'administration/users' ? 'active' : ''}" }
-  = link_to administration_users_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-users
-    User Management
+- if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last
+  %li.nav-title
+    Administration
+  %li{ class: "nav-item #{params[:controller] == 'administration/users' ? 'active' : ''}" }
+    = link_to administration_users_path, class: 'nav-link' do
+      %i.nav-icon.fa.fa-users
+      User Management
 %li{ class: "nav-item nav-dropdown" }
   = link_to "#", class: "nav-link nav-dropdown-toggle" do
     %i.nav-icon.fa.fa-cogs
     Settings
   %ul.nav-dropdown-items
-    %li{ class: "nav-item #{params[:controller] == 'administration/loan_products' ? 'active' : ''}" }
-      = link_to administration_loan_products_path, class: 'nav-link' do
-        %i.nav-icon.fa.fa-file
-        Loan Products
-    %li{ class: "nav-item #{params[:controller] == 'administration/areas' ? 'active' : ''}" }
-      = link_to administration_areas_path, class: 'nav-link' do
-        %i.nav-icon.fa.fa-file
-        Areas 
-    %li{ class: "nav-item #{params[:controller] == 'administration/clusters' ? 'active' : ''}" }
-      = link_to administration_clusters_path, class: 'nav-link' do
-        %i.nav-icon.fa.fa-file
-        Clusters
-    %li{ class: "nav-item #{params[:controller] == 'administration/branches' ? 'active' : ''}" }
-      = link_to administration_branches_path, class: 'nav-link' do
-        %i.nav-icon.fa.fa-file
-        Branches
+    - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+      %li{ class: "nav-item #{params[:controller] == 'administration/loan_products' ? 'active' : ''}" }
+        = link_to administration_loan_products_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Loan Products
+      %li{ class: "nav-item #{params[:controller] == 'administration/areas' ? 'active' : ''}" }
+        = link_to administration_areas_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Areas 
+      %li{ class: "nav-item #{params[:controller] == 'administration/clusters' ? 'active' : ''}" }
+        = link_to administration_clusters_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Clusters
+      %li{ class: "nav-item #{params[:controller] == 'administration/branches' ? 'active' : ''}" }
+        = link_to administration_branches_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Branches
     %li{ class: "nav-item #{params[:controller] == 'administration/centers' ? 'active' : ''}" }
       = link_to administration_centers_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
         Centers
-    %li{ class: "nav-item #{params[:controller] == 'administration/surveys' ? 'active' : ''}" }
-      = link_to administration_surveys_path, class: 'nav-link' do
+    - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+      %li{ class: "nav-item #{params[:controller] == 'administration/surveys' ? 'active' : ''}" }
+        = link_to administration_surveys_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Surveys
+      %li{ class: "nav-item #{params[:controller] == 'administration/project_type_categories' ? 'active' : ''}" }
+        = link_to administration_project_type_categories_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Project Type Cat.
+  %li{ class: "nav-item #{params[:controller] == 'administration/announcements' ? 'active' : ''}" }
+    = link_to administration_announcements_path, class: 'nav-link' do
+      %i.nav-icon.fa.fa-bullhorn
+      Announcements
+    - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+      = link_to administration_member_shares_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
-        Surveys
-    %li{ class: "nav-item #{params[:controller] == 'administration/project_type_categories' ? 'active' : ''}" }
-      = link_to administration_project_type_categories_path, class: 'nav-link' do
+        Member Shares
+      = link_to administration_member_shares_not_printed_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
-        Project Type Cat.
-%li{ class: "nav-item #{params[:controller] == 'administration/announcements' ? 'active' : ''}" }
-  = link_to administration_announcements_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-bullhorn
-    Announcements
-  = link_to administration_member_shares_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-file
-    Member Shares
-  = link_to administration_member_shares_not_printed_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-file
-    Not Printed Cert.
-  = link_to administration_member_shares_printed_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-file
-    Printed Cert.
-  = link_to administration_member_shares_no_certificates_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-file
-    No Cert. 
+        Not Printed Cert.
+      = link_to administration_member_shares_printed_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Printed Cert.
+      = link_to administration_member_shares_no_certificates_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        No Cert. 
 %li{ class: "nav-item nav-dropdown" }
   = link_to "#", class: "nav-link nav-dropdown-toggle" do
     %i.nav-icon.fa.fa-cogs

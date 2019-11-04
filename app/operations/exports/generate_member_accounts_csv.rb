@@ -14,7 +14,8 @@ module Exports
                             :status,
                             :branch,   
                             :center,
-                            :uuid
+                            :uuid,
+                            :member_uuid
                         ]
 
                 @member_accounts.each do |ma|
@@ -33,7 +34,8 @@ module Exports
                         ma.status,
                         ma.branch,
                         ma.center,
-                        ma.id
+                        ma.id,
+                        ma.member.id
                         ]
                     end
                 end

@@ -102,6 +102,10 @@ module Api
       def fetch
         deposit_collection = DepositCollection.find(params[:id])
 
+        if deposit_collection.data["accounting_fund_id"].present?
+          deposit_collection.data["accounting_fund_name"] = AccountingFund.find(deposit_collection.data["accounting_fund_id"]).name
+        end
+
         render json: deposit_collection
       end
 
@@ -124,6 +128,26 @@ module Api
               ).execute!
 
           render json: { id: o.id }
+        end
+      end
+
+      def load_center
+        config  = {
+          deposit_collection:  DepositCollection.where(id: params[:id]).first,
+          center: Center.where(id: params[:center_id]).first,
+          user: current_user
+        }
+
+        errors  = ::DepositCollections::ValidateLoadCenter.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::DepositCollections::LoadCenter.new(
+            config: config
+          ).execute!
         end
       end
 
@@ -226,6 +250,23 @@ module Api
         if deposit_collection.pending?
           data[:ar_number]                            = ar_number
           data[:accounting_entry][:data][:ar_number]  = ar_number
+
+          deposit_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
+      def finalize
+        deposit_collection   = DepositCollection.find(params[:id])
+        data      = deposit_collection.try(:data).try(:with_indifferent_access)
+        
+        if deposit_collection.pending?
+          data[:finalize]                             = true
 
           deposit_collection.update!(
             data: data

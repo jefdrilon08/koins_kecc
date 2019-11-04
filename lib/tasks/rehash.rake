@@ -1,32 +1,41 @@
 namespace :rehash do
+  task :loan_negative_amort => :environment do
+    amort_id = ENV['ID']
   
-  task :member_account_rehash => :environment do
-    id = ENV['ID']
-    beginning_balance = 0
-    ending_balance = 0
-
-    a =  AccountTransaction.where(subsidiary_id: id).order(:transacted_at)
-
-    a.each do |f|
     
-      beginning_balance = beginning_balance
-      
-      if f.deposit?
-        ending_balance = beginning_balance + f.amount
-      else
-        ending_balance = beginning_balance - f.amount                 
-      end 
-      data = f.data.with_indifferent_access
-      data[:beginning_balance] = beginning_balance
-      data[:ending_balance] = ending_balance 
-      f.update(data: data)
-                            
-      beginning_balance = ending_balance
+
+    amort = AmortizationScheduleEntry.find(amort_id)
+    details_sum = (amort.principal.to_f + amort.interest.to_f).to_f
+  
+    update_amort = amort.update(principal: details_sum, interest: 0.0, principal_paid: details_sum, interest_paid: 0.0 )
+
+    payment_id = amort.data.with_indifferent_access[:payments][0][:payment_id]
+    
+    at = AccountTransaction.find(payment_id)
+    at_data = at.data.with_indifferent_access
+    at_data[:amort_entries][0][:principal_paid] = "#{details_sum}"
+    at_data[:amort_entries][0][:interest_paid] = "0.0"
+    at_data[:total_principal_paid] = "#{details_sum}"
+    at_data[:total_interest_paid] = "0.0"
+
+    at.update!(data: at_data)
+
+    a = Loan.find(at.subsidiary_id)
+    #::Loans::FixAmort.new(loan: a).execute!
+
+    loan_amort_details =  AmortizationScheduleEntry.where("loan_id = ? and interest < ?", a,0 ).order(:due_date)
+    loan_amort_details.each do |lad|
+      AmortizationScheduleEntry.find(lad.id).update(principal: lad.amount_due, interest: 0.0, principal_paid: lad.amount_due, principal_balance: 0.0, interest_balance:0.0)
     end
-    
-    MemberAccount.find(id).update(balance: a.last.data.with_indifferent_access[:ending_balance] )
 
+
+    ::Loans::FixAmort.new(loan: a).execute!
+
+    puts "Done."
+
+  
   end
+
 
   task :member_account => :environment do
     member_account  = MemberAccount.find(ENV['ID'])
@@ -40,7 +49,11 @@ namespace :rehash do
   end
 
   task :member_account_by_branch => :environment do
-    member_accounts = MemberAccount.where(branch_id: ENV['BRANCH_ID'])
+    members         = Member.active.where(
+                        branch_id: ENV['BRANCH_ID']
+                      )
+
+    member_accounts = MemberAccount.where(member_id: members.pluck(:id))
     member_accounts.each do |member_account|  
       puts "Rehashing member_account #{member_account.id}..."
 
@@ -53,7 +66,7 @@ namespace :rehash do
   end
 
   task :member_accounts => :environment do
-    member_accounts = MemberAccount.all
+    member_accounts = MemberAccount.where.not(member_id: nil)
     size            = member_accounts.size
 
     if ENV["ACCOUNT_TYPE"].present?
@@ -75,7 +88,8 @@ namespace :rehash do
   end
 
   task :loans => :environment do
-    loans = Loan.active_or_paid
+    #loans = Loan.active_or_paid
+    loans = Loan.where(id: "a810c835-ee22-4326-9b9a-7a20533ee043")
 
     if ENV['BRANCH_ID'].present?
       branch  = Branch.find(ENV['BRANCH_ID'])

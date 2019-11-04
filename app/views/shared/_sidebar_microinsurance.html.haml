@@ -8,23 +8,28 @@
   = link_to validations_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-users
     Validations Report
-  %li{ class: "nav-item #{params[:controller] == 'pages' and params[:action] == 'insurance_exit_age_members' ? 'active' : ''}" }
-  = link_to insurance_exit_age_members_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-users
-    Members for Exit Age
-  = link_to seriatim_path, class: 'nav-link' do
-    %i.nav-icon.fa.fa-users
-    Seriatim  
-  - if microinsurance?
-    = link_to claims_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-money-check
-      Claim Register(BLIP)
-    = link_to clip_claims_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-money-check
-      Claim Register(CLIP)
-    = link_to hiip_claims_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-money-check
-      HIIP 
+  - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+    %li{ class: "nav-item #{params[:controller] == 'pages' and params[:action] == 'insurance_exit_age_members' ? 'active' : ''}" }
+    = link_to insurance_exit_age_members_path, class: 'nav-link' do
+      %i.nav-icon.fa.fa-users
+      Members for Exit Age
+    = link_to seriatim_path, class: 'nav-link' do
+      %i.nav-icon.fa.fa-users
+      Seriatim  
+    - if microinsurance?
+      = link_to claims_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-money-check
+        Claim Register(BLIP)
+      = link_to clip_claims_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-money-check
+        Claim Register(CLIP)
+      = link_to hiip_claims_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-money-check
+        HIIP 
   = link_to daily_report_insurance_account_status_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-file
     Insurance Account Status
+  - if microinsurance?
+    = link_to "#", class: 'nav-link' do
+      %i.nav-icon.fa.fa-file
+      Monthly Remitance Report

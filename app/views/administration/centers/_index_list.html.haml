@@ -30,3 +30,6 @@
             = link_to edit_administration_center_path(center), class: 'btn btn-sm btn-info' do
               .fa.fa-pencil-alt
               Edit
+            = link_to administration_center_path(center), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" do
+              .fa.fa-times
+              Delete

@@ -14,6 +14,7 @@ var MemberAccountValidationForm = (function() {
   var $memberSelect                    = $("#member-select");
   var $resignationDate                 = $("#resignation-date");
   var $btnAddMember                    = $("#btn-add-member");
+  var $modalLoading                    = $("#modal-loading");
   var $modalMemberCancellation         = $("#modal-member-cancellation");
   var $btnConfirmMemberCancellation    = $("#btn-confirm-member-cancellation");
   var $inputDateCancelled              = $("#input-date-cancelled");
@@ -21,10 +22,7 @@ var MemberAccountValidationForm = (function() {
   var $memberClassification            = $("#member-classification");
 
   var $message                        = $(".message");
-  var templateErrorList               = $("#template-error-list").html();
-  console.log(templateErrorList);
-
-  
+  var templateErrorList               = $("#template-error-list").html();  
 
   // Hide controls
   //$(".modal-loading").find('.controls').hide();
@@ -35,7 +33,9 @@ var MemberAccountValidationForm = (function() {
 
   var _bindEvents = function() {
     $btnAddMember.on("click", function() {
+      // $modalLoading.modal("show");
       $btnAddMember.prop("disabled", true);
+      $message.html("Loading...");
 
       var memberId = $memberSelect.val();
       var resignationDate = $resignationDate.val();
@@ -61,7 +61,6 @@ var MemberAccountValidationForm = (function() {
           var errors  = [];
           try {
             errors  = JSON.parse(response.responseText).full_messages;
-            alert(errors);
           } catch(err) {
             errors  = ["Something went wrong"];
             console.log(err);
@@ -73,8 +72,9 @@ var MemberAccountValidationForm = (function() {
                 { errors: errors }
               )
             );
-
             $btnAddMember.prop("disabled", false);
+
+            // $modalLoading.modal("hide");
           }
         }
       });

@@ -11,6 +11,7 @@ module Loaders
           :member_id,
           :certificate_number,
           :date_of_issue,
+          :number_of_shares,
           :data
         ]
 

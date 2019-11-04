@@ -131,41 +131,44 @@ module Loans
 
           @member.update!(insurance_status: "inforce")
         elsif deduction_type == "deposit"
-          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
-            offset          = s_deduction.meta.offset
-            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
-            name            = accounting_code.name
-            code            = accounting_code.code
-            amount          = 0.00
-            val             = s_deduction.meta.value
+          if @member.member_type != "GK"
+            if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+            if @loan.data.with_indifferent_access[:advance_insurance_available] == false
+              offset          = s_deduction.meta.offset
+              accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+              name            = accounting_code.name
+              code            = accounting_code.code
+              amount          = 0.00
+              val             = s_deduction.meta.value
 
-            multiplier  = @num_installments
+              multiplier  = @num_installments
 
-            loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
-            if loan_cycle.present?
-            #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
-              if @term == "weekly"
-              elsif @term == "monthly"
-                multiplier  = (multiplier * 4.3333333).ceil.to_i
-              elsif @term == "semi-monthly"
-                # weird unique rule for 12 semi-monthly
-                if @num_installments ==  12
-                  multiplier  = 12.5 * 2
-                elsif @num_installments == 6
-                  multiplier  = 15
+              loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
+              if loan_cycle.present?
+              #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
+                if @term == "weekly"
+                elsif @term == "monthly"
+                  multiplier  = (multiplier * 4.3333333).ceil.to_i
+                elsif @term == "semi-monthly"
+                  # weird unique rule for 12 semi-monthly
+                  if @num_installments ==  12
+                    multiplier  = 12.5 * 2
+                  elsif @num_installments == 6
+                    multiplier  = 15
+                  else
+                    multiplier  = multiplier * 2
+                  end
                 else
-                  multiplier  = multiplier * 2
+                  raise "Invalid term #{@term}"
                 end
-              else
-                raise "Invalid term #{@term}"
-              end
 
-              amount  = val * (multiplier + offset)
-            else
-              amount  = val
-            end
+                amount  = val * (multiplier + offset)
+              else
+                amount  = val
+              end #end loan cycle present
 
             #### DEPOSIT TRANSACTION ####
+        
             if amount > 0
               member_account  = MemberAccount.where(
                                   member_id: @member.id,
@@ -206,8 +209,9 @@ module Loans
               account_transaction.save!
             end 
             #### DEPOSIT TRANSACTION
-
-          end
+            end
+            end #s_deduction.meta.algo
+          end #gk
         end
       end
     end

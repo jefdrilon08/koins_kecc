@@ -24,12 +24,12 @@ module Accounting
         }
       end
 
-      if @branch.blank?
-        @errors[:messages] << {
-          key: "branch",
-          message: "branch required"
-        }
-      end
+#      if @branch.blank?
+#        @errors[:messages] << {
+#          key: "branch",
+#          message: "branch required"
+#        }
+#      end
 
       #not_yet_implemented!
 

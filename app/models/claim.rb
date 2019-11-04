@@ -1,5 +1,5 @@
 class Claim < ApplicationRecord
-	INSURANCE_POLICY_TYPES = ["Basic Life", "Accidental Death", "MVAH", "TPD"]
+	INSURANCE_POLICY_TYPES = ["Basic Life", "Accidental Death", "TPD", "MVAH"]
 	INSURED_CLASSIFICATION = ["Member", "Legal Dependent (Spouse)", "Legal Dependent (Child)", "Legal Dependent (Parent)"]
 	CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT = ["Cardiovascular", "Respiratory", "Hematological", "Gastro Intestinal", "Gynecological", "Neurogical", "Suicide", "Motor Vehicular Accident", "Others"]
 	GENDER = ["Male", "Female"]

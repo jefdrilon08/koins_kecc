@@ -13,48 +13,82 @@ module Accounting
         start_date: @start_date.strftime("%b %d, %Y"),
         end_date: @end_date.strftime("%b %d, %Y"),
         branch: {
-          id: @branch.id,
-          name: @branch.name
+          id: @branch.try(:id) || "",
+          name: @branch.try(:name) || "ALL"
         },
         entries: []
       }
     end
 
     def execute!
-      journal_entries_by_accounting_code  = JournalEntry
-                                              .eager_load(:accounting_code, :accounting_entry)
-                                              .where(
-                                                "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
-                                                @start_date,
-                                                @end_date,
-                                                @branch.id
-                                              )
-                                              .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
-                                              .group_by(&:accounting_code_id)
+      if @branch.present?
+        journal_entries_by_accounting_code  = JournalEntry
+                                                .eager_load(:accounting_code, :accounting_entry)
+                                                .where(
+                                                  "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
+                                                  @start_date,
+                                                  @end_date,
+                                                  @branch.id
+                                                )
+                                                .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
+                                                .group_by(&:accounting_code_id)
 
-      dr_accounting_codes = AccountingCode.joins(
-                              journal_entries: :accounting_entry
-                            )
-                            .where(
-                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
-                              "DR",
-                              @start_date,
-                              @branch.id
-                            )
-                            .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
-                            .group("accounting_codes.id")
+        dr_accounting_codes = AccountingCode.joins(
+                                journal_entries: :accounting_entry
+                              )
+                              .where(
+                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
+                                "DR",
+                                @start_date,
+                                @branch.id
+                              )
+                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
+                              .group("accounting_codes.id")
 
-      cr_accounting_codes = AccountingCode.joins(
-                              journal_entries: :accounting_entry
-                            )
-                            .where(
-                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
-                              "CR",
-                              @start_date,
-                              @branch.id
-                            )
-                            .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
-                            .group("accounting_codes.id")
+        cr_accounting_codes = AccountingCode.joins(
+                                journal_entries: :accounting_entry
+                              )
+                              .where(
+                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
+                                "CR",
+                                @start_date,
+                                @branch.id
+                              )
+                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
+                              .group("accounting_codes.id")
+      else
+        journal_entries_by_accounting_code  = JournalEntry
+                                                .eager_load(:accounting_code, :accounting_entry)
+                                                .where(
+                                                  "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ?",
+                                                  @start_date,
+                                                  @end_date
+                                                )
+                                                .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
+                                                .group_by(&:accounting_code_id)
+
+        dr_accounting_codes = AccountingCode.joins(
+                                journal_entries: :accounting_entry
+                              )
+                              .where(
+                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ?",
+                                "DR",
+                                @start_date
+                              )
+                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
+                              .group("accounting_codes.id")
+
+        cr_accounting_codes = AccountingCode.joins(
+                                journal_entries: :accounting_entry
+                              )
+                              .where(
+                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ?",
+                                "CR",
+                                @start_date
+                              )
+                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
+                              .group("accounting_codes.id")
+      end
 
       entries = []
 
@@ -104,7 +138,6 @@ module Accounting
 
         running_balance = beginning_balance
         if journal_entries_by_accounting_code[a].present?
-
           mapped_entries  = journal_entries_by_accounting_code[a].map{ |x|
                               dr_amount       = x.post_type == "DR" ? x.amount.to_f : 0.00
                               cr_amount       = x.post_type == "CR" ? x.amount.to_f : 0.00
@@ -124,6 +157,7 @@ module Accounting
                                 date_posted: x.accounting_entry.date_posted.strftime("%b %d, %Y"),
                                 accounting_entry_id: x.accounting_entry.id,
                                 reference_number: x.accounting_entry.reference_number,
+                                sub_reference_number: x.accounting_entry.sub_reference_number,
                                 book: x.accounting_entry.book,
                                 particular: x.accounting_entry.particular,
                                 dr_amount: dr_amount,
@@ -132,7 +166,11 @@ module Accounting
                                 running_balance: running_balance.to_f
                               }
                             }
+        else
+          mapped_entries = []
+        end
 
+        if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0 || mapped_entries.size > 0
           entries << {
             accounting_code_id: a,
             accounting_code_name: accounting_code_name,

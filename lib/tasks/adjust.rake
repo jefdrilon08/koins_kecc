@@ -1,4 +1,44 @@
 namespace :adjust do
+  task :repair_personal_funds => :environment do
+    data_store      = DataStore.personal_funds.find(ENV["ID"])
+    account_type    = ENV["ACCOUNT_TYPE"]
+    account_subtype = ENV["ACCOUNT_SUBTYPE"]
+    data            = data_store.data.with_indifferent_access
+    as_of           = data[:as_of]
+    invalid_records = 0
+
+    size    = data[:records].size
+
+    data[:records].each_with_index do |record, i|
+      account = record[:accounts].select{ |o|
+                  o[:account_type] == account_type && o[:account_subtype] == account_subtype
+                }.first
+
+      if account[:id].present?
+        member_account  = MemberAccount.find(account[:id])
+        result          = MemberAccounts::CheckBalance.new(config: { member_account: member_account }).execute!
+
+        if result[:running_balance] != result[:ending_balance]
+          puts ""
+          puts "Repairing #{member_account.id}..."
+          ::MemberAccounts::Rehash.new(member_account: member_account).execute!
+          invalid_records += 1
+        end
+      end
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+    end
+
+    if invalid_records.size > 0
+      puts "Repaired #{invalid_records} invalid records out of #{size}"
+    else
+      puts "No invalid records found."
+    end
+
+    puts "Done!"
+  end
+
   task :reload_repayment_rates => :environment do
     repayment_rates = DataStore.repayment_rates
 
@@ -569,6 +609,9 @@ namespace :adjust do
 
     size  = members.size
     
+    member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id))
+
     members.each_with_index do |member, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Validating #{member.id}... #{progress}%%")
@@ -578,20 +621,20 @@ namespace :adjust do
       recognition_date          = member.recognition_date
 
       if recognition_date.present?
-        member_accounts       = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
-        transactions          = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id).order("transacted_at ASC")
+        current_member_account = member_accounts.select{ |o| o.member_id == member.id }.first
+        transactions = account_transactions.select{ |o| o.subsidiary_id == current_member_account.id }
 
         if transactions.size > 0
-          latest_payment    = member_accounts
+          # latest_payment    = member_accounts
           latest            = transactions.last
           last_payment_date = transactions.last[:transacted_at].to_date
-           # Code
-          current_balance          = latest_payment.balance.to_i
+          # Code
+          current_balance          = current_member_account.balance.to_i
           num_days                 = (current_date - recognition_date).to_i
           num_weeks                = (num_days / 7).to_i + 1
           insured_amount           = num_weeks * default_periodic_payment
           amt_past_due             = (current_balance - insured_amount).to_i * -1
-          num_weeks_past_due       = (amt_past_due / default_periodic_payment)
+          # num_weeks_past_due       = (amt_past_due / default_periodic_payment)
           days_lapsed              = (current_date - last_payment_date).to_i
           
           if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true
@@ -803,5 +846,69 @@ namespace :adjust do
       end
     end
     puts "Done"
+  end
+
+  task :update_center_name => :environment do
+    file_location = ENV['CENTERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      center = Center.find(row['center_id'])
+
+      if !center.nil?
+        puts "Updating: #{center.name}"  
+        center.update!(name: row['center_name'])
+      end
+    end
+    puts "Done!"
+  end
+
+  task :update_identification_number_by_uuid => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['uuid'])
+
+      if !member.nil?
+        puts "Updating: #{member.full_name}"  
+        member.update!(identification_number: row['identification_number'])
+      end
+    end
+    puts "Done!"
+  end
+
+  task :repair_members_member_accounts => :environment do
+    puts "Repairing ..."
+
+    members = Member.all
+
+    members.each do |member|
+      puts "Updating: #{member.full_name}"
+      center = member.center
+      branch = member.branch
+
+      MemberAccount.where(member_id: member.id).each do |a|
+        a.update!(center: center, branch: branch)
+      end
+    end
+    puts "Done!"
+  end
+
+  task :update_insurance_date_resigned => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['uuid'])
+
+      if !member.nil?
+        if member.resigned?
+          puts "Updating: #{member.full_name}"  
+          member.update!(insurance_date_resigned: row['insurance_date_resigned'].to_date)
+        end
+      end
+    end
+    puts "Done!"
   end
 end

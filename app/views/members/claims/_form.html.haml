@@ -30,7 +30,7 @@
   .row
     .col
       .form-group
-        = f.input :date_of_death_tpd_accident, input_html: { class: 'form-control datepick', id: 'date-of-death-tpd-accident', type: 'date' }, as: :string
+        = f.input :date_of_death_tpd_accident, input_html: { class: 'form-control', id: 'date-of-death-tpd-accident', type: 'date' }, as: :string
     .col
       .form-group
         = f.input :length_of_stay, input_html: { class: 'form-control', id: 'length-of-stay'}
@@ -55,7 +55,7 @@
     .col
       .form-group
         %label
-        = f.input :date_of_birth, input_html: { class: 'form-control datepick', id: 'date-of-birth', type: 'date' }, as: :string
+        = f.input :date_of_birth, input_html: { class: 'form-control', id: 'date-of-birth', type: 'date' }, as: :string
   .row
     .col-sm-6 
       .form-group.order-of-child-field
@@ -77,7 +77,7 @@
   .row
     .col
       .form-group
-        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.full_name.titleize}
+        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize}
     .col
       .form-group
         = f.input :arrears, input_html: { class: 'form-control', id: 'arrears'}, as: :string

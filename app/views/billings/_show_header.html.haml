@@ -13,6 +13,9 @@
       = link_to "#", class: 'btn', id: 'btn-print' do
         .fa.fa-print
         Print Billing
+      = link_to "#", class: 'btn', id: 'btn-excel' do
+        .fa.fa-download
+        Download Excel
       - if @billing.pending?
         = link_to "#", class: 'btn', id: 'btn-check' do
           .fa.fa-check

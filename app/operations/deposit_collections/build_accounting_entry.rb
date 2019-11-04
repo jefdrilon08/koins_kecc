@@ -4,6 +4,12 @@ module DepositCollections
       @config = config
 
       @branch = @config[:branch]
+
+      if Settings.activate_microinsurance
+        branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.where(id: branch_id).first
+      end
+
       @data   = @config[:data].with_indifferent_access
       @user   = @config[:user]
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
@@ -14,7 +20,7 @@ module DepositCollections
         company_name: Settings.company_name,
         company_address: Settings.company_address,
         branch: @branch.to_s.upcase,
-        prepared_by: @user.full_name,
+        prepared_by: @user.print_full_name,
         particular: default_particular,
         debit_journal_entries: [],
         credit_journal_entries: [],
@@ -25,7 +31,8 @@ module DepositCollections
         status: "display",
         data: {
           or_number: "",
-          ar_number: ""
+          ar_number: "",
+          payee: @config[:branch].name
         }       
       }
 
@@ -36,7 +43,7 @@ module DepositCollections
       @branch_accounting_code_settings = nil
 
       Settings.branch_accounting_codes.each do |o|
-        if o.branch_id == @branch.id
+        if o.branch_id == @config[:branch].id
           @branch_accounting_code_settings = o
         end
       end
@@ -141,7 +148,7 @@ module DepositCollections
     end
 
     def default_particular
-      "TO RECORD DEPOSIT OF #{@branch.name}"
+      "TO RECORD DEPOSIT OF #{@config[:branch].name}"
     end
   end
 end

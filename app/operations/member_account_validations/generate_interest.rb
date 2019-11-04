@@ -14,7 +14,7 @@ module MemberAccountValidations
       @data[:interest_table]  = []
 
       # TODO: Change this to parameter/settings
-      @interest_rate      = 0.02
+      @interest_rate      = 0.01
       @weekly             = 0.01916536484
 
       # @member_status_data  = ::member::GeneratememberAccountStatus.new(

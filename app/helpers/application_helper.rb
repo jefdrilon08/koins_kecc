@@ -8,6 +8,15 @@ module ApplicationHelper
     }
   end
 
+  def fetch_centers(branch)
+    Center.where(branch_id: branch.id).order("name ASC").map { |c|
+      {
+        id: c.id,
+        name: c.name
+      }
+    }
+  end
+
   def pending_count(branches)
     Member.pending.where(branch_id: branches.pluck(:id)).count
   end
@@ -65,6 +74,18 @@ module ApplicationHelper
 
     Settings.default_member_accounts.each do |o|
       if o.account_type == "SAVINGS"
+        data << o.account_subtype
+      end
+    end
+
+    data
+  end
+
+  def equity_subtypes
+    data  = []
+
+    Settings.default_member_accounts.each do |o|
+      if o.account_type == "EQUITY"
         data << o.account_subtype
       end
     end

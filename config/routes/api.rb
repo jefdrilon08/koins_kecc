@@ -19,12 +19,15 @@ namespace :api do
       post "/batch_moratorium_adjustments/destroy", to: "batch_moratorium_adjustments#destroy"
     end
 
+		post "/administration/member_shares/print", to: "member_shares#print"
+
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"
+    get "/dashboard/overview", to: "dashboard#overview"
 
     # Monitoring
     get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing"
@@ -99,7 +102,8 @@ namespace :api do
 
     # Centers
     get "/centers", to: "centers#index"
-  
+    get "/centers/centers", to: "centers#centers"
+
     # Print Services
     post "/print/generate_file", to: "print#generate_file"
 
@@ -140,6 +144,7 @@ namespace :api do
     post "/deposit_collections", to: "deposit_collections#create"
     post "/deposit_collections/modify_transaction_record", to: "deposit_collections#modify_transaction_record"
     post "/deposit_collections/approve", to: "deposit_collections#approve"
+    post "/deposit_collections/finalize", to: "deposit_collections#finalize"
     post "/deposit_collections/update_or_number", to: "deposit_collections#update_or_number"
     post "/deposit_collections/update_ar_number", to: "deposit_collections#update_ar_number"
     post "/deposit_collections/update_particular", to: "deposit_collections#update_particular"
@@ -240,6 +245,8 @@ namespace :api do
       get "/manual_aging/fetch", to: "manual_aging#fetch"
       post "/branch_repayment_reports/queue", to: "branch_repayment_reports#queue"
       get "/branch_repayment_reports/fetch", to: "branch_repayment_reports#fetch"
+      post "/branch_resignations/queue", to: "branch_resignations#queue"
+      get "/branch_resignations/fetch", to: "branch_resignations#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
@@ -292,6 +299,6 @@ namespace :api do
     get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
     get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
     get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
-     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
+    get "/reports/personal_document_reports", to: "reports#personal_document_reports"
   end
 end

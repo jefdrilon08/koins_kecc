@@ -4,7 +4,7 @@ module DepositCollections
       @config             = config
       @deposit_collection = @config[:deposit_collection]
       @member             = @config[:member]
-
+      @user               = @config[:user]
       @data = @deposit_collection.data.with_indifferent_access
 
       @default_deposit_accounts = Settings.default_deposit_accounts
@@ -27,6 +27,9 @@ module DepositCollections
 
       # Build member records
       @records  = []
+
+      total_collected = 0.00
+
       @default_deposit_accounts.each_with_index do |o, i|
         member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o.account_subtype, account_type: o.account_type).first
         enabled         = false
@@ -49,6 +52,8 @@ module DepositCollections
           end
         end
 
+        total_collected += amount
+
         record_type = o.account_type
 
         @records << {
@@ -64,12 +69,29 @@ module DepositCollections
       @data[:records] << {
         member: @member_object,
         records: @records,
-        total_collected: 0.00
+        total_collected: total_collected
       }
 
       @deposit_collection.update!(
         data: @data
       )
+
+      if Settings.activate_microinsurance
+        r_config = {
+          current_member: {
+            id: @member.id
+          },
+          data: @deposit_collection.data.with_indifferent_access,
+          user: @user,
+          deposit_collection: @deposit_collection
+        }
+
+        data  = ::DepositCollections::RecomputeTotals.new(
+                  config: r_config
+                ).execute!
+
+        @deposit_collection.update!(data: data)
+      end
 
       @deposit_collection
     end

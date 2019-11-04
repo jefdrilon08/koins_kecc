@@ -103,7 +103,17 @@ export default class FormBeneficiaries extends React.Component {
   handleDeleteClicked(index) {
     var data  = this.props.data;
 
-    data.beneficiaries.splice(index);
+    //data.beneficiaries.splice(index);
+
+    var tempBeneficiaries = [];
+
+    for(var i = 0; i < data.beneficiaries.length; i++) {
+      if(i != index) {
+        tempBeneficiaries.push(data.beneficiaries[i]);
+      }
+    }
+
+    data.beneficiaries = tempBeneficiaries;
 
     this.props.updateData(data);
   };
@@ -195,6 +205,16 @@ export default class FormBeneficiaries extends React.Component {
     var currentBeneficiary = this.state.currentBeneficiary;
 
     currentBeneficiary.relationship  = event.target.value.toUpperCase();
+
+    this.setState({
+      currentBeneficiary: currentBeneficiary
+    });
+  }
+  
+  handlePrimaryChanged(event) {
+    var currentBeneficiary  = this.state.currentBeneficiary;
+    
+    currentBeneficiary.is_primary = event.target.checked;
 
     this.setState({
       currentBeneficiary: currentBeneficiary
@@ -336,6 +356,7 @@ export default class FormBeneficiaries extends React.Component {
                 <input
                   type="checkbox"
                   className="form-control"
+                  onChange={this.handlePrimaryChanged.bind(this)}
                 />
               </div>
             </div>

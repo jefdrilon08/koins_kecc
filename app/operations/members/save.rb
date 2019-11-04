@@ -71,7 +71,7 @@ module Members
       # Beneficiaries
       b_remaining_uuids = []
       b_current_uuids   = @member.beneficiaries.pluck(:id)
-
+      #raise b_current_uuids.inspect
       if @member_data[:beneficiaries].size > 0
         @member_data[:beneficiaries].each do |o|
           # Update if any
@@ -89,6 +89,7 @@ module Members
               end
             end
           else
+    
             @member.beneficiaries <<  Beneficiary.new(
                                         first_name: o[:first_name],
                                         middle_name: o[:middle_name],
@@ -97,13 +98,15 @@ module Members
                                         relationship: o[:relationship],
                                         is_primary: o[:is_primary]
                                       )
+              
+            b_remaining_uuids << @member.beneficiaries.last.id
+      
           end
         end
       end
 
       ld_to_remove_ids  = @member.legal_dependents.where.not(id: ld_remaining_uuids).pluck(:id)
       b_to_remove_ids   = @member.beneficiaries.where.not(id: b_remaining_uuids).pluck(:id)
-
       #raise ld_to_remove_ids.inspect
 
       @member.branch      = @branch
@@ -123,6 +126,11 @@ module Members
         ::Members::GenerateMissingAccounts.new(
           config: { member: @member }
         ).execute!
+      end
+
+      # Update center of member accounts
+      MemberAccount.where(member_id: @member.id).each do |a|
+        a.update!(center: @center, branch: @branch)
       end
 
       # Remove has many
