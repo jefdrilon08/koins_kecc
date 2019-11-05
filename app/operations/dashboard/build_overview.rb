@@ -163,7 +163,7 @@ module Dashboard
           end
 
           # Compute par
-          d[:par] = (d[:par_amount] / d[:portfolio]).round(2)
+          d[:par] = (d[:par_amount] / d[:portfolio]).round(4)
         end
 
         if ds_member_counts.present?
