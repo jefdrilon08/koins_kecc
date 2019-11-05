@@ -20,8 +20,14 @@ module Members
       @hiip_claim.member = @member
       @hiip_claim.branch = @member.branch
       @hiip_claim.center = @member.center
+      @hiip_balance = @hiip_claim.balance
+      @hiip_amount  = @hiip_claim.amount
+      @hiip_claim.balance = 6000 - @hiip_amount
       @errors = []
       @errors = Claims::ValidateHiipClaimDuplication.new(hiip_claim: @hiip_claim).execute!
+
+        
+        
 
       if @errors.count <= 0
         if @hiip_claim.save
@@ -43,6 +49,7 @@ module Members
 
     def show
       @hiip_claim = HiipClaim.find(params[:id])
+
     end
 
     def update
