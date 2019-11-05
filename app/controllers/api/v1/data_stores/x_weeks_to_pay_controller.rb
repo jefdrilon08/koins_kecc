@@ -71,11 +71,11 @@ module Api
           args  = {
             data_store_id: @record.id,
             branch_id: @branch.id,
-            as_of: @as_of.to_s,
+            as_of: @as_of,
             x: @x
           }
 
-          ProcessXWeeksToPay.perform_later(args)
+          ProcessXWeeksToPay.perform_now(args)
 
           render json: { message: "ok" }
         end
