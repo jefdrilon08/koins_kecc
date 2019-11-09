@@ -102,7 +102,8 @@ namespace :api do
 
     # Centers
     get "/centers", to: "centers#index"
-  
+    get "/centers/centers", to: "centers#centers"
+
     # Print Services
     post "/print/generate_file", to: "print#generate_file"
 
@@ -298,6 +299,6 @@ namespace :api do
     get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
     get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
     get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
-     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
+    get "/reports/personal_document_reports", to: "reports#personal_document_reports"
   end
 end

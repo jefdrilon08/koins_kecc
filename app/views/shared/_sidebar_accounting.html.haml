@@ -17,16 +17,15 @@
     = link_to accounting_year_end_closings_path, class: 'nav-link' do
       %i.nav-icon.fa.fa-file
       Year End Closing
-  %li{ class: "nav-item #{params[:controller] == 'icpr' ? 'active' : ''}" }
-    = link_to "/data_stores/icpr", class: 'nav-link' do
-      %i.nav-icon.fa.fa-database
-      ICPR
-  %li{ class: "nav-item #{params[:controller] == 'patronage_refund' ? 'active' : ''}" }
-    = link_to "/data_stores/patronage_refund", class: 'nav-link' do
-      %i.nav-icon.fa.fa-database
-      Patronage Refund
-
-
+  - if microloans?    
+    %li{ class: "nav-item #{params[:controller] == 'icpr' ? 'active' : ''}" }
+      = link_to "/data_stores/icpr", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        ICPR
+    %li{ class: "nav-item #{params[:controller] == 'patronage_refund' ? 'active' : ''}" }
+      = link_to "/data_stores/patronage_refund", class: 'nav-link' do
+        %i.nav-icon.fa.fa-database
+        Patronage Refund
   %li{ class: "nav-item nav-dropdown" }
     = link_to "#", class: "nav-link nav-dropdown-toggle" do
       %i.nav-icon.fa.fa-book-reader

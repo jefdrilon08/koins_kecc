@@ -2,24 +2,41 @@ var hiipClaimsForm = (function() {
 
   var $amount;
   var $numberOfDaysTobepaid;
+  var $effectiveDateOfCoverage;
  
   var _cacheDom = function() {
     $amount                 = $("#amount"); 
-    $numberOfDaysTobepaid   = $("#number-ofdays-tobepaid")
+    $numberOfDaysTobepaid   = $("#number-ofdays-tobepaid");
+    $effectiveDateOfCoverage = $("#effective-date-of-coverage")
  }
 
   var _bindEvents = function() {
 
     $numberOfDaysTobepaid.on('change', function() {
-      var numberOfDaysTobepaid = $("#number-ofdays-tobepaid").val();
-      var value = 200.00
-      var hiip_total = 6000.00
-      var amount = $("#amount").val();
-      $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value))
-      $('#balance').val(parseFloat(hiip_total) - (parseFloat(numberOfDaysTobepaid) * parseFloat(value)))
 
+      var numberOfDaysTobepaid = $("#number-ofdays-tobepaid").val();
+      var value = 200.00;
+      $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value));
+     
     });
+
+    $effectiveDateOfCoverage.on('change', function(){
+     
+            var effectiveDateOfCoverage = $("#effective-date-of-coverage").val();
+            var expireDate = new Date(effectiveDateOfCoverage);
+            expireDate.setFullYear(expireDate.getFullYear() + 1);
+            expireDate.setDate(expireDate.getDate() -1);
+            var dd = expireDate.getDate();
+            var mm = expireDate.getMonth() + 1;
+            var y = expireDate.getFullYear();            
+            $("#expiration-date-of-coverage").val(dd + "/" + mm + "/" + y);
+
+  });
+
   }
+
+
+
 
   var init = function() {
     _cacheDom();

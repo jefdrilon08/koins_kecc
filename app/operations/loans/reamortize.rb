@@ -110,14 +110,21 @@ module Loans
 
     def execute!
       build_reamortized_data!
-      build_corrected_amortization!
+
+      if @data[:excess_paid] == 0
+        build_corrected_amortization!
+      else
+        build_corrected_amortization_with_excess!
+      end
 
       @data
     end
 
     private
 
-    def build_corrected_amortization!
+    def build_corrected_amortization_with_excess!
+      running_principal = 0.00
+
       @paid_amortization.each do |o|
         @data[:corrected_amortization] << {
           id: o.id,
@@ -131,14 +138,126 @@ module Loans
           due_date: o.due_date,
           is_paid: o.is_paid
         }
+
+        running_principal += o.principal
       end
 
       due_date = @paid_amortization.last.due_date
 
       # Remaining balance
-      remaining_balance = (@should_be_dues - (@principal_paid + @interest_paid))
+      remaining_balance   = (@should_be_dues - (@principal_paid + @interest_paid))
+      remaining_principal = (@should_be_principal - @principal_paid).round(2)
+      remaining_interest  = (@should_be_interest  - @interest_paid).round(2)
 
-      @new_amortization.select{ |o| o[:is_paid] != true }.each do |o|
+      @new_amortization.each do |o|
+        if @data[:p_term] == "weekly"
+          due_date = due_date + 1.week
+        elsif @data[:p_term] == "monthly"
+          due_date = due_date + 1.month
+        elsif @data[:p_term] == "semi-monthly"
+          due_date = due_date + 15.days
+        else
+          raise "Invalid term: #{@data[:p_term]}"
+        end
+
+        principal         = o[:principal].to_f.round(2)
+        interest          = 0.00
+        principal_paid    = 0.00
+        interest_paid     = 0.00
+        amount_due        = (principal + interest).round(2)
+
+        if remaining_principal >= principal
+          remaining_principal -= principal
+        elsif remaining_principal < principal and remaining_principal > 0
+          remaining_principal = 0.00
+          principal = remaining_principal
+        elsif remaining_principal == 0.00
+          principal = 0.00
+        end
+
+        amount_due        = (principal + interest).round(2)
+        principal_balance = principal
+        interest_balance  = interest
+
+        if principal_balance > 0 or interest_balance > 0
+          running_principal += principal
+
+          @data[:corrected_amortization] << {
+            id: nil,
+            amount_due: amount_due,
+            principal: principal,
+            interest: interest,
+            principal_paid: principal_paid,
+            interest_paid: interest_paid,
+            principal_balance: principal_balance,
+            interest_balance: interest_balance,
+            due_date: due_date,
+            is_paid: false
+          }
+        end
+      end
+
+      # Adjust principal
+      if running_principal < @should_be_principal
+        if @data[:p_term] == "weekly"
+          due_date = due_date + 1.week
+        elsif @data[:p_term] == "monthly"
+          due_date = due_date + 1.month
+        elsif @data[:p_term] == "semi-monthly"
+          due_date = due_date + 15.days
+        else
+          raise "Invalid term: #{@data[:p_term]}"
+        end
+
+        principal   = (@should_be_principal - running_principal).round(2)
+        interest    = 0.00
+        amount_due  = principal
+
+        @data[:corrected_amortization] << {
+          id: nil,
+          amount_due: amount_due,
+          principal: principal,
+          interest: interest,
+          principal_paid: 0.00,
+          interest_paid: 0.00,
+          principal_balance: principal,
+          interest_balance: interest,
+          due_date: due_date,
+          is_paid: false
+        }
+      end
+    end
+
+    def build_corrected_amortization!
+      running_principal = 0.00
+      running_interest  = 0.00
+
+      @paid_amortization.each do |o|
+        @data[:corrected_amortization] << {
+          id: o.id,
+          amount_due: o.amount_due,
+          principal: o.principal,
+          interest: o.interest,
+          principal_paid: o.principal_paid,
+          interest_paid: o.interest_paid,
+          principal_balance: o.principal_balance,
+          interest_balance: o.interest_balance,
+          due_date: o.due_date,
+          is_paid: o.is_paid
+        }
+
+        running_principal += o.principal
+        running_interest  += o.interest
+      end
+
+      due_date = @paid_amortization.last.due_date
+
+      # Remaining balance
+      remaining_balance   = (@should_be_dues - (@principal_paid + @interest_paid))
+      remaining_principal = (@should_be_principal - @principal_paid).round(2)
+      remaining_interest  = (@should_be_interest  - @interest_paid).round(2)
+
+      @new_amortization.each do |o|
         if @data[:p_term] == "weekly"
           due_date = due_date + 1.week
         elsif @data[:p_term] == "monthly"
@@ -151,21 +270,90 @@ module Loans
 
         principal         = o[:principal].to_f.round(2)
         interest          = o[:interest].to_f.round(2)
+        principal_paid    = 0.00
+        interest_paid     = 0.00
         amount_due        = (principal + interest).round(2)
-        principal_paid    = o[:principal_paid].to_f.round(2)
-        interest_paid     = o[:interest_paid].to_f.round(2)
-        principal_balance = o[:principal_balance].to_f.round(2)
-        interest_balance  = o[:interest_balance].to_f.round(2)
+
+        if running_principal + principal > @should_be_principal
+          principal = (@should_be_principal - running_principal)
+          running_principal = @should_be_principal
+        else
+          running_principal += principal
+        end
+
+        if remaining_principal >= principal
+          remaining_principal -= principal
+        elsif remaining_principal < principal and remaining_principal > 0
+          remaining_principal = 0.00
+          principal = 0.00
+
+          if amount_due - interest > 0
+            interest = amount_due
+          end
+        elsif remaining_principal == 0.00
+          principal = 0.00
+
+          if amount_due - interest > 0
+            interest = amount_due
+          end
+        end
+
+        if remaining_interest >= interest
+          remaining_interest -= interest
+        elsif remaining_interest < interest and remaining_interest > 0
+          remaining_interest = 0.00
+          interest = 0.00
+        elsif remaining_interest == 0.00
+          interest = 0.00
+        end
+
+        amount_due        = (principal + interest).round(2)
+        principal_balance = principal
+        interest_balance  = interest
+
+        if principal_balance > 0 or interest_balance > 0
+          @data[:corrected_amortization] << {
+            id: nil,
+            amount_due: amount_due,
+            principal: principal,
+            interest: interest,
+            principal_paid: principal_paid,
+            interest_paid: interest_paid,
+            principal_balance: principal_balance,
+            interest_balance: interest_balance,
+            due_date: due_date,
+            is_paid: false
+          }
+
+          running_interest += interest
+        end
+      end
+
+      # Adjust interest
+      if running_interest < @should_be_interest
+        if @data[:p_term] == "weekly"
+          due_date = due_date + 1.week
+        elsif @data[:p_term] == "monthly"
+          due_date = due_date + 1.month
+        elsif @data[:p_term] == "semi-monthly"
+          due_date = due_date + 15.days
+        else
+          raise "Invalid term: #{@data[:p_term]}"
+        end
+
+        principal   = 0.00
+        interest    = (@should_be_interest - running_interest).round(2)
+        amount_due  = interest
 
         @data[:corrected_amortization] << {
           id: nil,
           amount_due: amount_due,
           principal: principal,
           interest: interest,
-          principal_paid: principal_paid,
-          interest_paid: interest_paid,
-          principal_balance: principal_balance,
-          interest_balance: interest_balance,
+          principal_paid: 0.00,
+          interest_paid: 0.00,
+          principal_balance: principal,
+          interest_balance: interest,
           due_date: due_date,
           is_paid: false
         }
@@ -187,44 +375,47 @@ module Loans
           @new_amortization[i][:is_paid]            = true
         end
       else
+        # Check excess
+        if @interest_paid > @should_be_interest
+          @data[:excess_interest_paid]  = (@interest_paid - @should_be_interest).round(2).abs
+        end
+
+        @data[:excess_paid]           = (@data[:excess_principal_paid] + @data[:excess_interest_paid]).round(2)
 
         # loop against new amortization and flag paid
         buffer_principal_paid = @principal_paid
         buffer_interest_paid  = @interest_paid
-
-        #raise "Principal Paid: #{@principal_paid} Interest Paid: #{@interest_paid} Total Paid: #{@principal_paid + @interest_paid}"
+        buffer_total_paid     = (buffer_principal_paid + buffer_interest_paid).round(2)
 
         @new_amortization.each_with_index do |o, i|
           if buffer_interest_paid >= o[:interest]
             @new_amortization[i][:interest_paid]    = o[:interest]
             @new_amortization[i][:interest_balance] = 0.00
 
-            buffer_interest_paid -= o[:interest].to_f.round(2)
-          elsif o[:interest] > buffer_interest_paid
-            @new_amortization[i][:interest_paid]    = buffer_interest_paid
+            buffer_interest_paid -= o[:interest]
+          else
+            @new_amortization[i][:interest_paid]    += buffer_interest_paid
             @new_amortization[i][:interest_balance] -= buffer_interest_paid
 
-            buffer_interest_paid  = 0.00
+            buffer_interest_paid -= buffer_interest_paid
           end
 
           if buffer_principal_paid >= o[:principal]
             @new_amortization[i][:principal_paid]     = o[:principal]
             @new_amortization[i][:principal_balance]  = 0.00
 
-            buffer_principal_paid -= o[:principal].to_f.round(2)
-          elsif o[:principal] > buffer_principal_paid
-            @new_amortization[i][:principal_paid]     = buffer_principal_paid
+            buffer_principal_paid -= o[:principal]
+          else
+            @new_amortization[i][:principal_paid]     += buffer_principal_paid
             @new_amortization[i][:principal_balance]  -= buffer_principal_paid
 
-            buffer_principal_paid = 0.00
+            buffer_principal_paid -= buffer_principal_paid
           end
 
           if @new_amortization[i][:principal_balance] == 0.00 and @new_amortization[i][:interest_balance] == 0.00
             @new_amortization[i][:is_paid]  = true
           end
         end
-
-        #raise "Buffer Principal Paid: #{buffer_principal_paid} Buffer Interest Paid: #{buffer_interest_paid}"
 
         @data[:remaining_principal_balance] = 0.00
         @data[:remaining_interest_balance]  = 0.00

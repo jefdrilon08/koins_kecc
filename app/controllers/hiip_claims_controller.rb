@@ -6,14 +6,13 @@ class HiipClaimsController < ApplicationController
     @member = @hiip_claim.member
   end
 
-  def hiip_claim_loa_pdf
-    @hiip_claim = HiipClaim.find(params[:clip_claim_id])
-    @member = @hiip_claim.member
-  end
+  # def hiip_claim_loa_pdf
+  #   @hiip_claim = HiipClaim.find(params[:clip_claim_id])
+  #   @member = @hiip_claim.member
+  # end
 
   def index
-    #@clip_claims = ClipClaim.all.includes(:member).order("members.last_name")
-    @hiip_claims = HiipClaim.all.order("date_posted DESC")
+    @hiip_claims = HiipClaim.all.order("date_posted ASC")
 
     if params[:q].present?
       @q = params[:q]
@@ -24,8 +23,9 @@ class HiipClaimsController < ApplicationController
       @branch = Branch.find(params[:branch_id])
       @hiip_claims = @hiip_claims.where(branch_id: @branch.id)
     end
+    
+        
   
-  @hiip_claims = @hiip_claims.page(params[:page]).per(20)
   end
 
   def new
@@ -36,6 +36,7 @@ class HiipClaimsController < ApplicationController
     @hiip_claim = HiipClaim.new(hiip_claim_params)
 
     if @hiip_claim.save
+
       flash[:success] = "Successfully saved hiip claim record."
       redirect_to hiip_claim_path(@hiip_claim.id)
     else
@@ -80,3 +81,4 @@ class HiipClaimsController < ApplicationController
     params.require(:hiip_claim).permit!
   end
 end
+  
