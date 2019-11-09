@@ -9,6 +9,10 @@
             .callout.callout-info
               %p
                 Pindutin ang amount upang baguhin ito.
+          - elsif @billing.processing?
+            .callout.callout-danger
+              %p
+                This billing is still being processed.
 
           - if !@billing.checked?
             .callout.callout-danger
