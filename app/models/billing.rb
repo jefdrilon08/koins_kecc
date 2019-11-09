@@ -1,7 +1,8 @@
 class Billing < ApplicationRecord
   STATUSES  = [
     "pending",
-    "approved"
+    "approved",
+    "processing"
   ]
 
   belongs_to :center
@@ -60,6 +61,10 @@ class Billing < ApplicationRecord
 
   def approved?
     self.status == "approved"
+  end
+
+  def processing?
+    self.status == "processing"
   end
 
   def loan_payments
