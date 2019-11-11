@@ -57,3 +57,6 @@ dump.rdb
 *.csv
 
 /shared
+
+# Ignore db backups
+/*.dump
