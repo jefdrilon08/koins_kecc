@@ -1,4 +1,33 @@
 namespace :monitor do
+  task :check_balances => :environment do
+    branch          = Branch.find(ENV['BRANCH_ID'])
+    account_type    = ENV['ACCOUNT_TYPE']
+    account_subtype = ENV['ACCOUNT_SUBTYPE']
+
+    puts "Branch: #{branch.name}"
+    puts "Account Type: #{account_type}"
+    puts "Account Subtype: #{account_subtype}"
+    puts "====================================="
+    
+    member_accounts = MemberAccount.where(
+                        account_type: account_type,
+                        account_subtype: account_subtype,
+                        branch_id: branch.id
+                      )
+
+    member_accounts.each do |o|
+      result  = ::MemberAccounts::CheckBalance.new(
+                  config: {
+                    member_account: o
+                  }
+                ).execute!
+
+      if result[:running_balance].to_f != result[:ending_balance]
+        puts "Invalid: #{o.id} Running Balance: #{result[:running_balance]} Ending Balance: #{result[:ending_balance]} Member: #{o.member.full_name} Status: #{o.member.status}"
+      end
+    end
+  end
+
   task :floating_member_accounts_summary => :environment do
     member_accounts   = MemberAccount.where(member_id: nil)
     account_types     = member_accounts.pluck(:account_type).uniq
