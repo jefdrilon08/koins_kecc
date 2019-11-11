@@ -3,14 +3,13 @@ module MemberAccounts
     def initialize(config:)
       @config = config
 
-      @member_account   = @config[:member_account]
-      @closing_date     = @config[:closing_date]
-      @account_type     = @config[:account_type]
-      @account_subtype  = @config[:account_subtype]
-      @account_settings = @config[:account_settings]
+      @member_account   = @config[:member_account] 
+      @closing_date     = @config[:closing_date] 
+      @account_type     = @config[:account_type] 
+      @account_subtype  = @config[:account_subtype] 
+      @account_settings = @config[:account_settings] 
 
-      @dormant_threshold_months     = @account_settings.dormant_threshold_months
-      @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
+      @dormant_threshold_months     = @account_settings.dormant_threshold_months @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
       @annual_interest_rate         = @account_settings.annual_interest_rate
       @zero_interest_threshold      = @account_settings.zero_interest_threshold
       @monthly_interest_rate        = (@annual_interest_rate / 12.0)
@@ -27,8 +26,6 @@ module MemberAccounts
 
       if @latest_transaction.present? and @zero_interest_threshold.present?
         threshold_date  = @closing_date - @zero_interest_threshold.to_i.months
-
-        #raise "#{@latest_transaction.transacted_at.to_date < threshold_date} Latest Transaction: #{@latest_transaction.transacted_at.to_date} Threshold Date: #{threshold_date}"
 
         if @latest_transaction.transacted_at.to_date < threshold_date
           @annual_interest_rate   = 0
