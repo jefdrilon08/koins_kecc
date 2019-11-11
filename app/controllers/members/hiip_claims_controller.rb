@@ -8,7 +8,7 @@ module Members
     end
 
     def index
-      @hiip_claims = HiipClaim.all
+      @hiip_claims = HiipClaim.all.order("policy_number ASC")
     end
 
     def new
@@ -23,11 +23,9 @@ module Members
       @hiip_balance = @hiip_claim.balance
       @hiip_amount  = @hiip_claim.amount
       @hiip_claim.balance = 6000 - @hiip_amount
+ 
       @errors = []
       @errors = Claims::ValidateHiipClaimDuplication.new(hiip_claim: @hiip_claim).execute!
-
-        
-        
 
       if @errors.count <= 0
         if @hiip_claim.save
