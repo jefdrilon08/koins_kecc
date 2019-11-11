@@ -23,7 +23,7 @@ namespace :monitor do
                 ).execute!
 
       if result[:running_balance].to_f != result[:ending_balance]
-        puts "Invalid: #{o.id} Running Balance: #{result[:running_balance]} Ending Balance: #{result[:ending_balance]}"
+        puts "Invalid: #{o.id} Running Balance: #{result[:running_balance]} Ending Balance: #{result[:ending_balance]} Member: #{o.member.full_name} Status: #{o.member.status}"
       end
     end
   end
