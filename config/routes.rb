@@ -260,6 +260,7 @@ Rails.application.routes.draw do
     delete "/soa_loans/:id", to: "soa_loans#destroy"
 
     get "/soa_funds", to: "soa_funds#index"
+    get "/soa_funds/turkey", to: "soa_funds#turkey"
     get "/soa_funds/:id", to: "soa_funds#show"
     delete "/soa_funds/:id", to: "soa_funds#destroy"
 
