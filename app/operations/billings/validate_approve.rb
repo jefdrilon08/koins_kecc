@@ -27,7 +27,6 @@ module Billings
         }
       end
 
-
       if @data[:records].present? 
         @data[:records].each do |record|
           member = Member.find(record[:member][:id])
