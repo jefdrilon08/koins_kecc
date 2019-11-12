@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_080045) do
+ActiveRecord::Schema.define(version: 2019_11_12_081010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_080045) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["loan_id", "due_date"], name: "idx_amortization_schedule_entries_loans"
+    t.index ["loan_id", "due_date"], name: "idx_amortization_schedule_entries_loans_principal_interest", where: "((interest > (0)::numeric) AND (principal > (0)::numeric))"
     t.index ["loan_id"], name: "index_amortization_schedule_entries_on_loan_id"
   end
 
