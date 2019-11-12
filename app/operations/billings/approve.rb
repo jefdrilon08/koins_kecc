@@ -66,12 +66,12 @@ module Billings
           config: config
         ).execute!
 
-        ::Loans::SaveLoanRepaymentRateRecord.new(
-          config: {
-            as_of: @date_approved,
-            loan: loan
-          }
-        ).execute!
+#        ::Loans::SaveLoanRepaymentRateRecord.new(
+#          config: {
+#            as_of: @date_approved,
+#            loan: loan
+#          }
+#        ).execute!
       end
     end
 

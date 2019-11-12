@@ -29,8 +29,13 @@ module DataStores
 
     def destroy
       @record = DataStore.soa_expenses.where(id: params[:id]).first
-      @record.destroy! 
-      redirect_to "/data_stores/soa_expenses"
+
+      if !@record.processing?
+        @record.destroy! 
+        redirect_to "/data_stores/soa_expenses"
+      else
+        redirect_to "/data_stores/soa_expenses/#{@record.id}"
+      end
     end
   end
 end
