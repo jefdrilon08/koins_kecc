@@ -36,7 +36,7 @@
           Date Resigned
           .value.text-muted
             %b
-              #{@member.date_resigned.strftime("%b %d, %Y")}
+              #{@member.date_resigned.try(:strftime,"%b %d, %Y")}
 
       - if @member.previous_date_resigned.present?
         %li.list-group-item
