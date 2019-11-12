@@ -33,6 +33,7 @@ gem 'numbers_and_words'
 gem 'zip-zip'
 gem 'tty-table'
 gem 'newrelic_rpm'
+gem 'rollbar'
 
 # Support Select 2
 gem 'select2-rails'
