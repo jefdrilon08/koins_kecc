@@ -210,6 +210,8 @@ module Api
         if errors[:messages].size > 0
           render json: errors, status: 400
         else
+          billing.update!(status: "processing")
+
           ProcessApproveBilling.perform_later({
             id: billing.id,
             user_id: current_user.id

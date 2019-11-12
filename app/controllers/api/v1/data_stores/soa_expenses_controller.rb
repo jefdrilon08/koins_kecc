@@ -78,6 +78,10 @@ module Api
                             status: "processing"
                           }
                         )
+            else
+              record.update!(
+                status: "processing"
+              )
             end
 
             args = {

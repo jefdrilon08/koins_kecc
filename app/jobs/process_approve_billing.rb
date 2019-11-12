@@ -5,8 +5,6 @@ class ProcessApproveBilling < ApplicationJob
     billing = Billing.find(args[:id])
     user    = User.find(args[:user_id])
 
-    billing.update!(status: "processing")
-
     begin
       config  = {
         billing: billing,

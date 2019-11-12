@@ -29,8 +29,13 @@ module DataStores
 
     def destroy
       @record = DataStore.accounting_entries_summaries.where(id: params[:id]).first
-      @record.destroy! 
-      redirect_to "/data_stores/accounting_entries_summaries"
+
+      if !@record.processing?
+        @record.destroy! 
+        redirect_to "/data_stores/accounting_entries_summaries"
+      else
+        redirect_to "/data_stores/accounting_entries_summaries/#{@record.id}"
+      end
     end
   end
 end

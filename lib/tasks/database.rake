@@ -1,4 +1,14 @@
 namespace :db do
+  task :backup => :environment do
+    filename = "#{Time.now.to_i}-backup-#{ENV['RAILS_ENV'] ||= 'development'}.dump"
+
+    ::Utils::BackupDatabase.new(
+      config: {
+        destination_file: "#{Rails.root}/db_backup/#{filename}"
+      }
+    ).execute!
+  end
+  
   task :fetch_uninterested_members => :environment do
     monthly_closing_collection  = MonthlyClosingCollection.find(ENV['ID'])
     branch                      = monthly_closing_collection.branch
