@@ -189,6 +189,11 @@ class Member < ApplicationRecord
     "#{spouse_data[:last_name]}, #{spouse_data[:first_name]} #{spouse_data[:middle_name]}"
   end
 
+  def spouse_date_of_birth
+    spouse_data = data.with_indifferent_access[:spouse]
+    "#{spouse_data[:date_of_birth]}"
+  end
+
   def age 
     if self.date_of_birth.nil?
       "Please set date of birth"
@@ -222,7 +227,6 @@ class Member < ApplicationRecord
   def equity_value
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)
   end
-
   def lif_amount
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance)
   end
