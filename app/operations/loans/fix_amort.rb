@@ -10,7 +10,7 @@ module Loans
 
       @amort_entries  = AmortizationScheduleEntry.where(
                           loan_id: @loan.id
-                        ).order("due_date ASC")
+                        ).order("due_date ASC, created_at ASC")
     end
 
     def execute!
