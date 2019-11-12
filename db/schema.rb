@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_010444) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
+    t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric) AND ((status)::text = 'approved'::text))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
     t.index ["transaction_type"], name: "index_account_transactions_on_transaction_type"
   end
