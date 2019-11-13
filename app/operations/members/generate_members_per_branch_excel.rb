@@ -46,7 +46,7 @@ module Members
             member_row  <<  member.status
             member_row  <<  member.insurance_status
             member_row  <<  member.date_resigned
-            member_row  <<  member.center
+            member_row  <<  member.center.name
             member_row  <<  member.data['recognition_date']
             member_row  <<  member.date_of_birth
             member_row  <<  member.age
