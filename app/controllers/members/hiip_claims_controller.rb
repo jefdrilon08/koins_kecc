@@ -8,7 +8,7 @@ module Members
     end
 
     def index
-      @hiip_claims = HiipClaim.all
+      @hiip_claims = HiipClaim.all.order("policy_number ASC")
     end
 
     def new
@@ -20,6 +20,10 @@ module Members
       @hiip_claim.member = @member
       @hiip_claim.branch = @member.branch
       @hiip_claim.center = @member.center
+      @hiip_balance = @hiip_claim.balance
+      @hiip_amount  = @hiip_claim.amount
+      @hiip_claim.balance = 6000 - @hiip_amount
+ 
       @errors = []
       @errors = Claims::ValidateHiipClaimDuplication.new(hiip_claim: @hiip_claim).execute!
 
@@ -43,6 +47,7 @@ module Members
 
     def show
       @hiip_claim = HiipClaim.find(params[:id])
+
     end
 
     def update

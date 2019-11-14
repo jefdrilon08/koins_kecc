@@ -25,8 +25,12 @@ module Billings
           key: "billing",
           message: "billing not found"
         }
+      elsif !@billing.pending?
+        @errors[:messages] << {
+          key: "billing",
+          message: "billing is not pending"
+        }
       end
-
 
       if @data[:records].present? 
         @data[:records].each do |record|

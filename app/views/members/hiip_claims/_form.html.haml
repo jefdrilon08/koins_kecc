@@ -23,16 +23,17 @@
     .col
       .form-group
         %label
-        = f.input :age, input_html: { class: 'form-control', id: 'age', value: @member.age}, as: :string, label: "Age" 
+        = f.input :age, input_html: { class: 'form-control', id: 'age', value: @member.age}, as: :string, label: "Age"
   .row
     .col
       .form-group
         %label
-        = f.input :effective_date_of_coverage, input_html: { class: 'form-control', id: 'effective-date-of-coverage', type: 'date'}, as: :string, label: "Effective Date of Coverage"
+        = f.input :effective_date_of_coverage, input_html: { class: 'form-control', id: 'effective-date-of-coverage', type: 'date', value: @hiip_claim.effective_date_of_coverage}, as: :string, label: "Effective Date of Coverage"
     .col
       .form-group
         %label
-        = f.input :expiration_date_of_coverage, input_html: { class: 'form-control', id: 'expiration-date-of-coverage', type: 'date'}, as: :string, label: "Expiration Date of Coverage" 
+        = f.input :expiration_date_of_coverage, input_html: { class: 'form-control', id: 'expiration-date-of-coverage'}, as: :string, label: "Expiration Date of Coverage" 
+
   .row
     .col
       .form-group
@@ -42,10 +43,6 @@
       .form-group
         %label
         = f.input :amount, input_html: { class: 'form-control', id: 'amount'}, as: :string, label: "Amount"
-    / .col
-    /   .form-group
-    /     %label
-    /     = f.input :balance, input_html: { class: 'form-control', id: 'balance'}, as: :string, label: "Balance"
   .row
     .col
       .form-group

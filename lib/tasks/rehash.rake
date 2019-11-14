@@ -1,4 +1,42 @@
 namespace :rehash do
+  task :loan_negative_amort => :environment do
+    amort_id = ENV['ID']
+  
+    
+
+    amort = AmortizationScheduleEntry.find(amort_id)
+    details_sum = (amort.principal.to_f + amort.interest.to_f).to_f
+  
+    update_amort = amort.update(principal: details_sum, interest: 0.0, principal_paid: details_sum, interest_paid: 0.0 )
+
+    payment_id = amort.data.with_indifferent_access[:payments][0][:payment_id]
+    
+    at = AccountTransaction.find(payment_id)
+    at_data = at.data.with_indifferent_access
+    at_data[:amort_entries][0][:principal_paid] = "#{details_sum}"
+    at_data[:amort_entries][0][:interest_paid] = "0.0"
+    at_data[:total_principal_paid] = "#{details_sum}"
+    at_data[:total_interest_paid] = "0.0"
+
+    at.update!(data: at_data)
+
+    a = Loan.find(at.subsidiary_id)
+    #::Loans::FixAmort.new(loan: a).execute!
+
+    loan_amort_details =  AmortizationScheduleEntry.where("loan_id = ? and interest < ?", a,0 ).order(:due_date)
+    loan_amort_details.each do |lad|
+      AmortizationScheduleEntry.find(lad.id).update(principal: lad.amount_due, interest: 0.0, principal_paid: lad.amount_due, principal_balance: 0.0, interest_balance:0.0)
+    end
+
+
+    ::Loans::FixAmort.new(loan: a).execute!
+
+    puts "Done."
+
+  
+  end
+
+
   task :member_account => :environment do
     member_account  = MemberAccount.find(ENV['ID'])
     puts "Rehashing member_account #{member_account.id}..."

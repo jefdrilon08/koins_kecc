@@ -210,27 +210,12 @@ module Api
         if errors[:messages].size > 0
           render json: errors, status: 400
         else
-          billing = ::Billings::Approve.new(
-                      config: config
-                    ).execute!
+          billing.update!(status: "processing")
 
-          # Set maintaining balance for members
-          Member.where(id: billing.member_ids).each do |m|
-            ::Members::SetMaintainingBalance.new(
-              config: {
-                member: m
-              }
-            ).execute!
-          end
-  
-          ActivityLog.create!(
-            content: "#{current_user.full_name} approved billing",
-            activity_type: "approval",
-            data: {
-              user_id: current_user.id,
-              billing_id: billing.id
-            }
-          )
+          ProcessApproveBilling.perform_later({
+            id: billing.id,
+            user_id: current_user.id
+          })
 
           render json: { message: "ok" }
         end

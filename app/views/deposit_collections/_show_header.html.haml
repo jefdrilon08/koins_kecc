@@ -27,7 +27,7 @@
         = link_to deposit_collection_path(@deposit_collection), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times
           Delete
-      - if @deposit_collection.pending? && !@deposit_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS"))
+      - if @deposit_collection.pending? && !@deposit_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
         = link_to "#", class: 'btn', id: 'btn-finalize' do
           .fa.fa-check
           Finalize

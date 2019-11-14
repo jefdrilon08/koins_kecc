@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_19_052051) do
+ActiveRecord::Schema.define(version: 2019_11_12_081010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2019_10_19_052051) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
+    t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
     t.index ["transaction_type"], name: "index_account_transactions_on_transaction_type"
   end
@@ -132,6 +134,8 @@ ActiveRecord::Schema.define(version: 2019_10_19_052051) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["loan_id", "due_date"], name: "idx_amortization_schedule_entries_loans"
+    t.index ["loan_id", "due_date"], name: "idx_amortization_schedule_entries_loans_principal_interest", where: "((interest > (0)::numeric) AND (principal > (0)::numeric))"
     t.index ["loan_id"], name: "index_amortization_schedule_entries_on_loan_id"
   end
 
@@ -391,6 +395,19 @@ ActiveRecord::Schema.define(version: 2019_10_19_052051) do
     t.datetime "updated_at", null: false
     t.json "data"
     t.integer "priority"
+  end
+
+  create_table "loan_repayment_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "loan_id"
+    t.date "as_of"
+    t.uuid "branch_id"
+    t.uuid "center_id"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_loan_repayment_rates_on_branch_id"
+    t.index ["center_id"], name: "index_loan_repayment_rates_on_center_id"
+    t.index ["loan_id"], name: "index_loan_repayment_rates_on_loan_id"
   end
 
   create_table "loans", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -726,6 +743,9 @@ ActiveRecord::Schema.define(version: 2019_10_19_052051) do
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
   add_foreign_key "legal_dependents", "members"
+  add_foreign_key "loan_repayment_rates", "branches"
+  add_foreign_key "loan_repayment_rates", "centers"
+  add_foreign_key "loan_repayment_rates", "loans"
   add_foreign_key "loans", "branches"
   add_foreign_key "loans", "centers"
   add_foreign_key "loans", "loan_products"

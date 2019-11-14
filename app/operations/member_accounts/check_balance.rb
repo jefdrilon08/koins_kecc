@@ -16,7 +16,11 @@ module MemberAccounts
       withdrawals = @account_transactions.where(transaction_type: "withdraw").sum(:amount)
 
       running_balance = (deposits - withdrawals)
-      ending_balance  = @account_transactions.last.data["ending_balance"].to_f.round(2)
+      ending_balance  = 0.00
+
+      if @account_transactions.size > 0
+        ending_balance  = @account_transactions.last.data["ending_balance"].to_f.round(2)
+      end
 
       {
         id: @member_account.id,

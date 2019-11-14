@@ -3,6 +3,8 @@
     %tr
       %th
         Date Posted 
+      %th 
+        HIIP Policy Number
       %th
         Member
       %th
@@ -13,11 +15,21 @@
         Amount
       %th
         Balance
+      %th
+        Status
+      %th
+        Effective Date
+      %th
+        Expiration Date
+
+
   %tbody
     - @hiip_claims.each do |hiip_claim|
       %tr
         %td 
           #{hiip_claim.date_posted.strftime("%B %d, %Y")}
+        %td 
+          #{hiip_claim.policy_number}
         %td
           = link_to hiip_claim_path(hiip_claim) do
             %strong
@@ -30,6 +42,11 @@
           #{hiip_claim.amount}
         %td
           #{hiip_claim.balance}
-
+        %td
+          #{hiip_claim.status}
+        %td
+          #{@hiip_claims.where(policy_number: hiip_claim.policy_number).first.effective_date_of_coverage}
+        %td
+          #{@hiip_claims.where(policy_number: hiip_claim.policy_number).first.expiration_date_of_coverage}
         
         

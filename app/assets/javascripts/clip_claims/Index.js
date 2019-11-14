@@ -1,11 +1,9 @@
 var Index = (function() {
   var $btnNewTransaction;
-  var $btnConfirmNewTransaction;
   var $modalNewTransaction;
 
   var $selectBranch;
   var $selectCenter;
-  var $selectMember;
 
   var $message;
 
@@ -19,14 +17,12 @@ var Index = (function() {
   var memberId                  = $parameters.data('member-id');
 
   var urlBranches       = "/api/v1/branches";
-  var urlCenters       = "/api/v1/centers";
-  var urlMembers      ="/api/v1/members";
+  var urlCenters       = "/api/v1/centers/centers";
 
   var _authenticityToken;
 
   var _cacheDom = function() {
     $btnNewTransaction        = $("#btn-new-transaction");
-    $btnConfirmNewTransaction = $("#btn-confirm-new-transaction");
     $modalNewTransaction      = $("#modal-new-transaction");
 
     $selectBranch         = $("#select-branch");
@@ -41,21 +37,6 @@ var Index = (function() {
   var _bindEvents = function() {
     $btnNewTransaction.on("click", function() {
       $modalNewTransaction.modal("show");
-    });
-
-    $btnConfirmNewTransaction.on("click", function() {
-      var branchId        = $selectBranch.val();
-      var centerId        = $selectCenter.val();
-      var memberId        = $selectMember.val();
-
-      $message.html(
-        "Loading..."
-      );
-
-      $btnConfirmNewTransaction.prop("disabled", true);
-      $selectBranch.prop("disabled", true);
-      $selectCenter.prop("disabled", true);
-      $selectMember.prop("disabled", true)
     });
 
     $selectBranch.on("change", function() {
@@ -78,7 +59,8 @@ var Index = (function() {
       var centerId  = $(this).val();
 
       $selectMember.html("");
-      $selectMember.append("<option>--ALL--</option>")
+      $selectMember.append("<option>--ALL--</option>");
+      console.log(centers);
       for(var i = 0; i < centers.length; i++) {
         if(centers[i].id == centerId) {
           for(var j = 0; j < centers[i].members.length; j++) { 
@@ -118,17 +100,6 @@ var Index = (function() {
       }
     });
 
-    $.ajax({
-      url: urlMembers,
-      method: 'GET',
-      success: function(response) {
-        members  = response.members;
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Error in fetching members");
-      }
-    });
 
     _cacheDom();
     _bindEvents();
