@@ -296,6 +296,8 @@ Rails.application.routes.draw do
   draw :api
 
   #reports
+  get '/reports/monthly_remittance', to: 'reports#monthly_remittance', as: :monthly_remittance
+  get '/reports/download_excel_monthly_remittance', to: 'reports#download_excel_monthly_remittance', as: :download_excel_monthly_remittance
   get '/reports/insured_loans', to: 'reports#insured_loans', as: :insured_loans
   get "/reports/print_insured_loans", to: "reports#print_insured_loans", as: :reports_print_insured_loans
   get '/reports/member_reports', to: 'reports#member_reports', as: :member_reports
@@ -315,9 +317,8 @@ Rails.application.routes.draw do
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies
   get "/reports/personal_document", to: "reports#personal_document", as: :personal_document
   get "/reports/personal_document_reports", to: "reports#personal_document_reports", as: :personal_document_reports
+  
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
-
-
 end

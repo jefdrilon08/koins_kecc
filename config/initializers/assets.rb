@@ -134,6 +134,7 @@ Rails.application.config.assets.precompile += [
   "clip_claims.js",
   "clip_claims_form.js",
   "reports/InsuredLoans.js",
+  "reports/MonthlyRemittance.js",
   "member_reports.js",
   "reports/CollectionsClipReport.js",
   "reports/CollectionsBlipReport.js",

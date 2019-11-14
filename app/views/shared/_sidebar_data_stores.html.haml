@@ -63,6 +63,10 @@
         = link_to "/data_stores/branch_resignations", class: 'nav-link' do
           %i.nav-icon.fa.fa-database
           Branch Resignations
+  - if microinsurance?
+    = link_to "/reports/monthly_remittance", class: 'nav-link' do
+      %i.nav-icon.fa.fa-file
+      Monthly Remittance
   %li{ class: "nav-item" }
     = link_to "/reports/insured_loans", class: 'nav-link' do
       %i.nav-icon.fa.fa-book.icon

@@ -15,11 +15,11 @@
       .fa.fa-check
       Check    
 - if member_account_validation.for_validation?
-  - if role == "REMOTE-OM" || role == "MIS" || role == "AO"
+  - if role == "OM" || role == "MIS" || role == "AO"
     = link_to "#", class: "btn btn-primary btn-lg", id: "btn-validate" do
       .fa.fa-check
       Validate
-  - if role == "CM" || role == "MIS" || role == "FM" || role == "REMOTE-FM" || role == "AO" || role == "REMOTE-OM"
+  - if role == "CM" || role == "MIS" || role == "FM" || role == "REMOTE-FM" || role == "AO" || role == "OM"
     = link_to "#", class: "btn btn-danger btn-lg", id: "btn-cancel" do
       .fa.fa-times
       Cancel  
@@ -31,7 +31,7 @@
     = link_to member_account_validation_pdf_path(member_account_validation), target: "_blank", class: "btn btn-light btn-lg", id: "btn-print-pdf" do
       .fa.fa-print
       Print PDF  
-  - if role == "AO" || role == "MIS" || role == "REMOTE-OM" 
+  - if role == "AO" || role == "MIS" || role == "OM" 
     = link_to "#", class: "btn btn-danger btn-lg", id: "btn-cancel" do
       .fa.fa-times
       Cancel
@@ -46,7 +46,7 @@
   = link_to "#", class: "btn btn-primary btn-lg", id: "btn-validate" do
     .fa.fa-check
     Validate
-- if member_account_validation.cancelled? && role == "REMOTE-OM"
+- if member_account_validation.cancelled? && role == "OM"
   = link_to edit_member_account_validation_path(member_account_validation), class: "btn btn-warning btn-lg" do
     .fa.fa-edit
     Edit

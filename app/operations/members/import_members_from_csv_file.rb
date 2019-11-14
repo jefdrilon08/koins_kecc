@@ -111,7 +111,8 @@ module Members
           member.mobile_number = row['cellphone_number']
           member.gender = row['gender']
           member.civil_status = row['civil_status']
-          member.date_resigned = row['insurance_date_resigned']
+          member.date_resigned = row['date_resigned']
+          member.insurance_date_resigned = row['insurance_date_resigned']
           
           member.data = { 
                           address: 
@@ -315,7 +316,8 @@ module Members
             civil_status: row['civil_status'],
             place_of_birth: row['place_of_birth'],
             mobile_number: row['cellphone_number'],
-            date_resigned: row['insurance_date_resigned'],
+            date_resigned: row['date_resigned'],
+            insurance_date_resigned: row['insurance_date_resigned'],
             data: member_data
             )
         end       
