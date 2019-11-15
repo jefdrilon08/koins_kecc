@@ -32,6 +32,10 @@ module Reports
                                                                   account_subtype: "Life Insurance Fund"
                                                                 }
                                                             ).execute!
+
+      @new_members = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, @branch.id)
+      @membership_fee = @new_members.count * 100
+
       
       @member_account_validations = MemberAccountValidation.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, @branch.id) 
 
@@ -126,7 +130,7 @@ module Reports
           "",
           @total_rf,
           @total_interest,
-          # @mem_fee,
+          @membership_fee,
           "",
           # @collection_fee,
           "",

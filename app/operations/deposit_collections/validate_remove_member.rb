@@ -43,6 +43,13 @@ module DepositCollections
         end
       end
 
+      if @deposit_collection.finalized?
+        @errors[:messages] << {
+          key: "deposit_collection",
+          message: "Deposit Collection already finalized!"
+        }
+      end
+
       #not_yet_implemented!
 
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }

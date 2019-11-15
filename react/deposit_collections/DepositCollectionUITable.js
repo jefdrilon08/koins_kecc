@@ -22,6 +22,7 @@ export default class DepositCollectionUITable extends React.Component {
       currentAmountValue: false,
       currentMember: false,
       modalIsOpen: false,
+      modalRemoveIsOpen: false,
       isLoading: false,
       errors: false
     };
@@ -114,7 +115,7 @@ export default class DepositCollectionUITable extends React.Component {
         btnDelete = (
           <button
             className="btn btn-danger btn-sm"
-            onClick={this.handleRemoveRecord.bind(this, member.id)}
+            onClick={this.handleRemovedClicked.bind(this, member)}
             disabled={this.state.isLoading}
           >
             <span className="fa fa-times"/>
@@ -242,6 +243,22 @@ export default class DepositCollectionUITable extends React.Component {
       errors: false
     });
   }
+
+  handleRemovedClicked(member) {
+    this.setState({
+      modalRemoveIsOpen: true,
+      currentMember: member
+    });
+  }
+
+  handleRemoveModalClose() {
+    this.setState({
+      modalRemoveIsOpen: false,
+      currentMember: false,
+      errors: false
+    });
+  }
+
 
   handleInputAmountChanged(event) {
     var currentTransaction  = this.state.currentTransaction;
@@ -406,6 +423,56 @@ export default class DepositCollectionUITable extends React.Component {
     }
   }
 
+  renderRemoveModalContent() {
+    var currentMember       = this.state.currentMember;
+
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <h5>
+              Member: &nbsp;
+              <span className="text-muted">
+                {currentMember.full_name}
+              </span>
+            </h5>
+            <h5>
+              <span className="text-muted" />
+              Are you sure you want to remove?
+            </h5>
+            {this.renderLoadingStatus()}
+          </div>
+        </div>
+        <hr/>
+        <div className="row">
+          <div className="col">
+            <center>
+              <div className="btn-group">
+                <button 
+                  className="btn btn-success" 
+                  onClick={this.handleRemoveRecord.bind(this, currentMember.id)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-check" />
+                  Confirm
+                </button>
+                &emsp;
+                <button 
+                  className="btn btn-danger" 
+                  onClick={this.handleRemoveModalClose.bind(this)}
+                  disabled={this.state.isLoading}
+                >
+                  <span className="fa fa-times" />
+                  Cancel
+                </button>
+              </div>
+            </center>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="table-responsive">
@@ -414,6 +481,12 @@ export default class DepositCollectionUITable extends React.Component {
           style={customStyles}
         >
           {this.renderModalContent()}
+        </Modal>
+        <Modal
+          isOpen={this.state.modalRemoveIsOpen}
+          style={customStyles}
+        >
+          {this.renderRemoveModalContent()}
         </Modal>
         {this.renderLoadingStatus()}
         <table className="table table-bordered table-hover table-sm">
