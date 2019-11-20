@@ -8,8 +8,6 @@ class ProcessSoaLoans < ApplicationJob
     start_date  = meta[:start_date].to_date
     end_date    = meta[:end_date].to_date
 
-    record.update!(status: "processing")
-
     begin 
       config  = {
         id: record.id,

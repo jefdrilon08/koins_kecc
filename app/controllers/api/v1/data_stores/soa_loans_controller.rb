@@ -80,6 +80,8 @@ module Api
                         )
             end
 
+            record.update!(status: "processing")
+
             args = {
               id: record.id,
               data_store_type: data_store_type
