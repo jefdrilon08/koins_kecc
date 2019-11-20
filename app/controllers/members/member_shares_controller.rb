@@ -7,7 +7,7 @@ module Members
       date_of_issue = @member.membership_payment_records.paid.order("date_paid ASC").last.try(:date_paid)
       settings  = nil
       actv_share = MemberShare.where("member_id = ? and is_void IS NULL" , @member.id).sum(:number_of_shares)
-      share_bal = MemberAccount.where(member_id: "295ce01b-16d1-4b83-b3d0-a1fb1a394fde" , account_type: 'EQUITY' , account_subtype: "Share Capital").sum(:balance)
+      share_bal = MemberAccount.where(member_id: @member.id , account_type: 'EQUITY' , account_subtype: "Share Capital").sum(:balance)
       add_share = (share_bal / 100).to_i
       number_of_shares = add_share - actv_share
 
