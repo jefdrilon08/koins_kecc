@@ -1,10 +1,12 @@
 class ProcessImportInsuranceAccountTransaction < ApplicationJob
-	queue_as :default
+  queue_as :default
 
-	def perform(args)
-		# create background operation with status, processing, started_at, ended_at
-		file        = args[:file]
-    data_store  = DataStore.where(args[:data_store_id]).first
+  def perform(args)
+    # create background operation with status, processing, started_at, ended_at
+    file        = args[:file]
+    # data_store  = DataStore.where(args[:data_store_id]).first
+    data_store  = DataStore.find(args[:data_store_id])
+
 
     if data_store.blank?
       data_store.update!(
@@ -33,5 +35,5 @@ class ProcessImportInsuranceAccountTransaction < ApplicationJob
         )
       end
     end
-	end
+  end
 end

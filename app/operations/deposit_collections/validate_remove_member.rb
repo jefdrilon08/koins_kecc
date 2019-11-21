@@ -27,11 +27,6 @@ module DepositCollections
           key: "member",
           message: "Member not found"
         }
-      elsif @member.not_active?
-        @errors[:messages] << {
-          key: "member",
-          message: "Member not active"
-        }
       end
 
       if @deposit_collection.present? && @member.present?
