@@ -64,6 +64,10 @@ module Adjustments
             total_credit += o[:amount].to_f.round(2)
           end
 
+
+          total_debit   = total_debit.round(2)
+          total_credit  = total_credit.round(2)
+
           if total_debit != total_credit
             @errors[:messages] << {
               key: "accounting_entry",
