@@ -125,6 +125,7 @@ Rails.application.config.assets.precompile += [
   "claims/Index.js",
   "claims_form.js",
   "exports/Exports.js",
+  "exports/BillingPerCenter.js",
   "MemberAccountInsuranceStatus.min.react.js",
   "member_account_validation/Index.js",
   "member_account_validation/MemberAccountValidations.js",

@@ -54,6 +54,10 @@ class PagesController < ApplicationController
   def export_tools
   end
 
+  def billing_per_center
+    @centers  = @branches.first.centers.order("name ASC")
+  end
+
   def upload_deposit
   end
 
