@@ -32,17 +32,16 @@ namespace :rehash do
     ::Loans::FixAmort.new(loan: a).execute!
 
     puts "Done."
-
-  
   end
 
 
   task :member_account => :environment do
     member_account  = MemberAccount.find(ENV['ID'])
     puts "Rehashing member_account #{member_account.id}..."
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account.id, "approved")
 
     ::MemberAccounts::Rehash.new(
-      member_account: member_account
+      member_account: member_account, account_transactions: account_transactions
     ).execute!
 
     puts "Done."
@@ -51,14 +50,22 @@ namespace :rehash do
   task :member_account_by_branch => :environment do
     members         = Member.active.where(
                         branch_id: ENV['BRANCH_ID']
-                      )
+                        )
 
     member_accounts = MemberAccount.where(member_id: members.pluck(:id))
+                      
+    if ENV['ACCOUNT_TYPE'].present?
+      member_accounts = member_accounts.where(account_type: ENV["ACCOUNT_TYPE"])
+    end
+
+    # >>
+    @account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_accounts.pluck(:id), "approved")
+
     member_accounts.each do |member_account|  
       puts "Rehashing member_account #{member_account.id}..."
 
       ::MemberAccounts::Rehash.new(
-        member_account: member_account
+        member_account: member_account, account_transactions: @account_transactions
       ).execute!
     end
 
@@ -73,13 +80,16 @@ namespace :rehash do
       member_accounts = member_accounts.where(account_type: ENV["ACCOUNT_TYPE"])
     end
 
+    @account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_accounts.pluck(:id), "approved")
+
     member_accounts.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing member account #{o.id}... #{progress}%%")
       sleep(0.1)
 
       ::MemberAccounts::Rehash.new(
-        member_account: o
+        member_account: o,
+        account_transactions: @account_transactions
       ).execute!
     end
 

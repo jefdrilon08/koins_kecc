@@ -18,10 +18,12 @@ namespace :adjust do
         member_account  = MemberAccount.find(account[:id])
         result          = MemberAccounts::CheckBalance.new(config: { member_account: member_account }).execute!
 
+        account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account.id, "approved")
+
         if result[:running_balance] != result[:ending_balance]
           puts ""
           puts "Repairing #{member_account.id}..."
-          ::MemberAccounts::Rehash.new(member_account: member_account).execute!
+          ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
           invalid_records += 1
         end
       end
@@ -817,8 +819,10 @@ namespace :adjust do
 
     insurance_account_ids = insurance_account_ids.uniq
 
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+
     MemberAccount.where(id: insurance_account_ids).each do |acc|
-      ::MemberAccounts::Rehash.new(member_account: acc).execute!
+      ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
     end
     puts "Done!"
   end
