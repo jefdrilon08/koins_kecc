@@ -7,8 +7,6 @@ class ProcessRepaymentRates < ApplicationJob
     branch  = Branch.find(meta[:branch_id])
     as_of   = meta[:as_of].to_date
 
-    record.update!(status: "processing")
-
     begin 
       config  = {
         id: record.id,
