@@ -66,6 +66,11 @@
       = link_to export_tools_path, class: 'nav-link' do
         %i.nav-icon.fa.fa-file
         Export Tools
+    - if microinsurance?
+      %li{ class: "nav-item" }
+        = link_to billing_per_center_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Billing per center
     %li{ class: "nav-item nav-dropdown" }
       = link_to "#", class: "nav-link nav-dropdown-toggle" do
         %i.nav-icon.fa.fa-cogs

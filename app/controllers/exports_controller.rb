@@ -99,4 +99,13 @@ class ExportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def billing_per_center
+    center        = Center.where(id: params[:center_id]).first
+    members       = Member.active.where(center_id: center.id).order("last_name ASC")
+    excel         = Exports::GenerateBillingPerCenterExcel.new(members: members, center: center).execute!
+    filename      = "billing_of_#{center.name.try(:to_s)}.xlsx"
+    
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
 end
