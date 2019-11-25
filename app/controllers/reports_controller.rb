@@ -29,9 +29,16 @@ class ReportsController < ApplicationController
   end
 
   def download_excel_monthly_remittance 
-    @start_date = params[:start_date]
-    @end_date   = params[:end_date]
-    @branch     = Branch.find(params[:branch_id])
+    if params[:start_date].present? and params[:end_date].present?
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+    end
+
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+    else
+      @branch = nil
+    end
 
     if @branch.present?
       filename = "#{@branch}_monthly_remittance.xlsx"
@@ -39,7 +46,7 @@ class ReportsController < ApplicationController
       filename = "monthly_remittance.xlsx"
     end
 
-    excel = Reports::GenerateMonthlyRemittanceExcel.new(start_date: @start_date, end_date: @end_date, branch_id: @branch.id).execute!
+    excel = Reports::GenerateMonthlyRemittanceExcel.new(start_date: @start_date, end_date: @end_date, branch: @branch).execute!
     excel.serialize "#{Rails.root}/tmp/#{filename}"
 
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
