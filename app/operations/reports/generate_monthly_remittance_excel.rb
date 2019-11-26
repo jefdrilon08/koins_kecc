@@ -101,6 +101,7 @@ module Reports
             ], style: [ header, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right ] 
           end
         end
+      end
       @p
     end
   end
