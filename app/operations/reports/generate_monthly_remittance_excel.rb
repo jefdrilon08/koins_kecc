@@ -47,58 +47,59 @@ module Reports
           "TOTAL"
           ], style: header
 
-        @branches.each do |branch|
-          total_per_branch = 0.00
+          @branches.each do |branch|
+            total_per_branch = 0.00
 
-          total_50_percent_life = 0.00
-          total_advance_life = 0.00
-          total_interest = 0.00
-          total_rf = 0.00
+            total_50_percent_life = 0.00
+            total_advance_life = 0.00
+            total_interest = 0.00
+            total_rf = 0.00
 
-          member_account_validations = MemberAccountValidation.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id) 
+            member_account_validations = MemberAccountValidation.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id) 
 
-          member_account_validations.each do |iav|
-            iav.member_account_validation_records.each_with_index do |iavr, index|
-              total_rf = total_rf + iavr.rf
-              total_50_percent_life = total_50_percent_life + iavr.lif_50_percent
-              total_advance_life = total_advance_life + iavr.advance_lif
-              total_interest = total_interest + iavr.interest + iavr.equity_interest
-            end
-          end
-
-          new_members = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, branch.id)            
-          membership_fee = new_members.count * 100
-
-          deposit_collections = DepositCollection.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id)
-          
-          total_deposit_lif = 0.00
-          total_deposit_rf = 0.00
-
-          deposit_collections.each do |deposit_collection|
-            deposit_collection_data = deposit_collection.data.with_indifferent_access
-
-            deposit_collection_data[:totals].each do |total|
-              if total[:key] == "Life Insurance Fund"
-                total_deposit_lif = total_deposit_lif + total[:amount]
-              elsif total[:key] == "Retirement Fund"
-                total_deposit_rf = total_deposit_rf + total[:amount]
+            member_account_validations.each do |iav|
+              iav.member_account_validation_records.each_with_index do |iavr, index|
+                total_rf = total_rf + iavr.rf
+                total_50_percent_life = total_50_percent_life + iavr.lif_50_percent
+                total_advance_life = total_advance_life + iavr.advance_lif
+                total_interest = total_interest + iavr.interest + iavr.equity_interest
               end
             end
-          end 
 
-          total_per_branch = total_deposit_rf + total_deposit_lif + total_advance_life + total_50_percent_life + total_rf + total_interest + membership_fee
+            new_members = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, branch.id)            
+            membership_fee = new_members.count * 100
 
-          sheet.add_row [ 
-          branch,
-          total_deposit_lif,
-          total_deposit_rf,
-          total_advance_life,
-          total_50_percent_life,
-          total_rf,
-          total_interest,
-          membership_fee,
-          total_per_branch
-          ], style: [ header, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right ] 
+            deposit_collections = DepositCollection.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id)
+            
+            total_deposit_lif = 0.00
+            total_deposit_rf = 0.00
+
+            deposit_collections.each do |deposit_collection|
+              deposit_collection_data = deposit_collection.data.with_indifferent_access
+
+              deposit_collection_data[:totals].each do |total|
+                if total[:key] == "Life Insurance Fund"
+                  total_deposit_lif = total_deposit_lif + total[:amount]
+                elsif total[:key] == "Retirement Fund"
+                  total_deposit_rf = total_deposit_rf + total[:amount]
+                end
+              end
+            end 
+
+            total_per_branch = total_deposit_rf + total_deposit_lif + total_advance_life + total_50_percent_life + total_rf + total_interest + membership_fee
+
+            sheet.add_row [ 
+            branch,
+            total_deposit_lif,
+            total_deposit_rf,
+            total_advance_life,
+            total_50_percent_life,
+            total_rf,
+            total_interest,
+            membership_fee,
+            total_per_branch
+            ], style: [ header, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right ] 
+          end
         end
       @p
     end
