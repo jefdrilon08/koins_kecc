@@ -14,17 +14,6 @@ class ReportsController < ApplicationController
     @branches = Branch.all
   end
 
-  def insured_loans
-    if params[:start_date].present? and params[:end_date].present? and params[:loan_status].present? and params[:branch_id].present?
-      @start_date = params[:start_date]
-      @end_date = params[:end_date]
-      @loan_status = params[:loan_status]
-      @branch_id = params[:branch_id]
-
-      @data = Insurance::FetchInsuredLoans.new(start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: @branch_id).execute!
-    end
-  end
-
   def print_insured_loans
     @data = Insurance::FetchInsuredLoans.new(start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: params[:branch_id]).execute!
 
