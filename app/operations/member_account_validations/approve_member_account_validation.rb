@@ -71,34 +71,37 @@ module MemberAccountValidations
         if Settings.activate_microloans
           if member_account_validation_record.member_classification == "EXIT AGE (GK)"
             member_data[:insurance_resignation] = {
-                                                  date_resigned: @c_working_date,
+                                                  date_resigned: member_account_validation_record.resignation_date,
                                                   resignation_reason: "GK"
                                                   }
             
             member_account_validation_record.member.update!(
               insurance_status: "resigned",
+              insurance_date_resigned: member_account_validation_record.resignation_date,
               member_type: "GK",
               data: member_data
             )
           elsif member_account_validation_record.member_classification == "DECEASED"
             member_data[:insurance_resignation] = {
-                                                  date_resigned: @c_working_date,
+                                                  date_resigned: member_account_validation_record.resignation_date,
                                                   resignation_reason: "Deceased",
                                                   is_deceased: true
                                                   }
 
             member_account_validation_record.member.update!(
               insurance_status: "resigned",
+              insurance_date_resigned: member_account_validation_record.resignation_date,
               data: member_data
             )
           else
             member_data[:insurance_resignation] = {
-                                                  date_resigned: @c_working_date,
+                                                  date_resigned: member_account_validation_record.resignation_date,
                                                   resignation_reason: "resigned"
                                                   }
 
             member_account_validation_record.member.update!(
               insurance_status: "resigned",
+              insurance_date_resigned: member_account_validation_record.resignation_date,
               data: member_data
             )
           end
@@ -112,7 +115,8 @@ module MemberAccountValidations
             status: "resigned",
             insurance_status: "resigned",
             date_resigned: member_account_validation_record.resignation_date,
-            data: member_data
+            data: member_data,
+            insurance_date_resigned: member_account_validation_record.resignation_date
           )
         end  
       end

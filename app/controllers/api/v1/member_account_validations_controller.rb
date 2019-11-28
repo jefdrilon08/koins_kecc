@@ -11,7 +11,7 @@ module Api
           user: current_user
         }
 
-        if ["MIS", "AO", "CM", "FM", "REMOTE-FM", "REMOTE-OM"].include? current_user.roles.last
+        if ["MIS", "AO", "CM", "FM", "REMOTE-FM", "OM"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationForCancellation.new(
                       config: config
                     ).execute!
@@ -47,7 +47,7 @@ module Api
           user: current_user
         }
 
-        if ["MIS", "OAS", "REMOTE-OAS", "REMOTE-BK", "AO", "REMOTE-OM"].include? current_user.roles.last
+        if ["MIS", "OAS", "REMOTE-OAS", "REMOTE-BK", "AO", "OM"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationMemberForCancellation.new(
                      config: config
                     ).execute!
@@ -197,7 +197,7 @@ module Api
           user: current_user
         }
 
-        if ["MIS", "REMOTE-OM", "AO"].include? current_user.roles.last
+        if ["MIS", "OM", "AO"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationForValidation.new(
                       config: config
                     ).execute!

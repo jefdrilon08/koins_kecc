@@ -59,13 +59,13 @@ module Accounting
             temp.update!(
               accounting_code: AccountingCode.find(o[:accounting_code_id]),
               post_type: o[:post_type],
-              amount: o[:amount]
+              amount: o[:amount].to_f.round(2)
             )
           else
             @accounting_entry.journal_entries <<  JournalEntry.new(
                                                     accounting_code: AccountingCode.find(o[:accounting_code_id]),
                                                     post_type: o[:post_type],
-                                                    amount: o[:amount]
+                                                    amount: o[:amount].to_f.round(2)
                                                   )
           end
         end

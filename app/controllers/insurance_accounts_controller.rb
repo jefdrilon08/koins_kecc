@@ -14,8 +14,8 @@ class InsuranceAccountsController < ApplicationController
 
   def claims_copy_pdf
 
-  	@insurance_account = MemberAccount.find(params[:insurance_account_id])
-  	@member = @insurance_account.member
+    @insurance_account = MemberAccount.find(params[:insurance_account_id])
+    @member = @insurance_account.member
     @lif = "Life Insurance Fund"
     @lif_insurance_account = MemberAccount.where(account_subtype: @lif, member_id: @member.id).first
     @rf = "Retirement Fund"
@@ -75,6 +75,24 @@ class InsuranceAccountsController < ApplicationController
 
   def import_insurance_account_transactions
     file = params[:file]
+    orig_file_name = file.original_filename
+    orig_file_name_no_ext = File.basename("#{orig_file_name}", ".*")
+    file_name = orig_file_name_no_ext.delete! "insurance account transactions"
+    start_date_string = file_name.split("_").first
+    end_date_string = file_name.split("_").last
+    
+    if !start_date_string.nil? && !end_date_string.nil?
+      if start_date_string.include? "201"
+        end_date = DateTime.parse(end_date_string).try(:to_date)
+        start_date = DateTime.parse(start_date_string).try(:to_date)
+      else
+        end_date = nil
+        start_date = nil
+      end
+    else  
+      end_date = nil
+      start_date = nil
+    end
 
     CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
       config = {  
@@ -101,11 +119,13 @@ class InsuranceAccountsController < ApplicationController
                           first_name: current_user.first_name,
                           last_name: current_user.last_name
                         },
-                        time_start: Time.now.to_i,
+                        time_start: Time.now,
                         time_end: nil
                       },
                       data: {
-                        file_path_to_save: file_path_to_save
+                        file_path_to_save: file_path_to_save,
+                        start_date: start_date,
+                        end_date: end_date
                       }
                     ) 
 

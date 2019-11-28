@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 
+  #billing
+  get "/billing_per_center", to: "pages#billing_per_center"
+
    # import
   get "/import_members", to: "pages#import_members"
   get "/import_beneficiaries", to: "pages#import_beneficiaries"
@@ -39,6 +42,7 @@ Rails.application.routes.draw do
   get "/exports/legal_dependents", to: "exports#legal_dependents", as: :export_legal_dependents
   get "/exports/member_accounts", to: "exports#member_accounts", as: :export_member_accounts
   get "/exports/account_transactions", to: "exports#account_transactions", as: :export_account_transactions
+  get "/exports/billing_per_center", to: "exports#billing_per_center", as: :export_billing_per_center
 
   root to: "pages#index"
   
@@ -296,6 +300,8 @@ Rails.application.routes.draw do
   draw :api
 
   #reports
+  get '/reports/monthly_remittance', to: 'reports#monthly_remittance', as: :monthly_remittance
+  get '/reports/download_excel_monthly_remittance', to: 'reports#download_excel_monthly_remittance', as: :download_excel_monthly_remittance
   get '/reports/insured_loans', to: 'reports#insured_loans', as: :insured_loans
   get "/reports/print_insured_loans", to: "reports#print_insured_loans", as: :reports_print_insured_loans
   get '/reports/member_reports', to: 'reports#member_reports', as: :member_reports
@@ -315,9 +321,8 @@ Rails.application.routes.draw do
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies
   get "/reports/personal_document", to: "reports#personal_document", as: :personal_document
   get "/reports/personal_document_reports", to: "reports#personal_document_reports", as: :personal_document_reports
+  
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
-
-
 end

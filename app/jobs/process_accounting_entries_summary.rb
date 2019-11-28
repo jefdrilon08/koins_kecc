@@ -9,8 +9,6 @@ class ProcessAccountingEntriesSummary < ApplicationJob
     end_date    = meta[:end_date].to_date
     book        = meta[:book]
 
-    record.update!(status: "processing")
-
     begin 
       config  = {
         id: record.id,

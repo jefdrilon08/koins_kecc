@@ -11,7 +11,6 @@ class User < ApplicationRecord
     "REMOTE-BK",
     "REMOTE-MIS",
     "REMOTE-FM",
-    "REMOTE-OM"
   ]
 
   ROLES = [
@@ -29,7 +28,7 @@ class User < ApplicationRecord
     "REMOTE-BK",
     "REMOTE-MIS",
     "REMOTE-FM",
-    "REMOTE-OM"
+    "OM"
   ]
 
   validates :username, presence: true, uniqueness: true

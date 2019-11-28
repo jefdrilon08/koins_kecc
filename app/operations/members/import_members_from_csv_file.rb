@@ -111,7 +111,8 @@ module Members
           member.mobile_number = row['cellphone_number']
           member.gender = row['gender']
           member.civil_status = row['civil_status']
-          member.date_resigned = row['insurance_date_resigned']
+          member.date_resigned = row['date_resigned']
+          member.insurance_date_resigned = row['insurance_date_resigned']
           
           member.data = { 
                           address: 
@@ -190,10 +191,11 @@ module Members
           end 
 
           center_name = row['center'].try(:upcase)
-          center = Center.where(name: center_name, branch_id: branch.id).first
+          center_id = row['center_id']
+          center = Center.where(id: center_id, branch_id: branch.id).first
           if center.nil?
             center = Center.new
-            center.id = row['center_id']
+            center.id = center_id
             center.name = row['center'].try(:upcase)
             center.short_name = row['center'].try(:upcase)
             center.meeting_day = 1
@@ -201,6 +203,7 @@ module Members
             center.save!
             member.center = center
           else
+            center.update!(name: row['center'].try(:upcase))
             member.center = center
           end
 
@@ -315,7 +318,8 @@ module Members
             civil_status: row['civil_status'],
             place_of_birth: row['place_of_birth'],
             mobile_number: row['cellphone_number'],
-            date_resigned: row['insurance_date_resigned'],
+            date_resigned: row['date_resigned'],
+            insurance_date_resigned: row['insurance_date_resigned'],
             data: member_data
             )
         end       

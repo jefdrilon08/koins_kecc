@@ -18,10 +18,12 @@ namespace :adjust do
         member_account  = MemberAccount.find(account[:id])
         result          = MemberAccounts::CheckBalance.new(config: { member_account: member_account }).execute!
 
+        account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account.id, "approved")
+
         if result[:running_balance] != result[:ending_balance]
           puts ""
           puts "Repairing #{member_account.id}..."
-          ::MemberAccounts::Rehash.new(member_account: member_account).execute!
+          ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
           invalid_records += 1
         end
       end
@@ -819,8 +821,10 @@ namespace :adjust do
 
     insurance_account_ids = insurance_account_ids.uniq
 
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+
     MemberAccount.where(id: insurance_account_ids).each do |acc|
-      ::MemberAccounts::Rehash.new(member_account: acc).execute!
+      ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
     end
     puts "Done!"
   end
@@ -897,7 +901,7 @@ namespace :adjust do
     puts "Done!"
   end
 
-  task :update_insurance_date_resigned => :environment do
+  task :update_insurance_date_resigned_using_file => :environment do
     file_location = ENV['MEMBERS_CSV']
     puts file_location
 
@@ -912,5 +916,28 @@ namespace :adjust do
       end
     end
     puts "Done!"
+  end
+
+  task :update_insurance_date_resigned => :environment do
+    members = Member.where(insurance_status: "resigned")
+
+    size  = members.count
+
+    members.each_with_index do |o, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Updating insurance date resigned of member #{o.full_name}... #{progress}%%")
+
+      data  = o.data.with_indifferent_access
+      
+      if data[:insurance_resignation].present?
+        data_insurance_date_resigned = data[:insurance_resignation][:date_resigned]
+        o.update!(insurance_date_resigned: data_insurance_date_resigned)
+      else
+        insurance_date_resigned = o.date_resigned  
+        o.update!(insurance_date_resigned: insurance_date_resigned)
+      end
+    end
+
+    puts "\nDone."
   end
 end

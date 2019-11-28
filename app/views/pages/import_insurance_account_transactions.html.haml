@@ -27,6 +27,12 @@
                   %th
                     ID
                   %th
+                    User
+                  %th
+                    From
+                  %th
+                    To  
+                  %th
                     Time Start
                   %th
                     Time Stop
@@ -38,11 +44,20 @@
                     %td
                       #{o.id}
                     %td
-                      - if o.data["time_start"].present?
-                        #{o.data["time_start"]}
+                      - if o.meta["user"]["username"].present?
+                        #{o.meta["user"]["username"]}
                     %td
-                      - if o.data["time_stop"].present?
-                        #{o.data["time_stop"]}
+                      - if o.data["start_date"].present?
+                        #{o.data["start_date"]}
+                    %td
+                      - if o.data["end_date"].present?
+                        #{o.data["end_date"]}
+                    %td
+                      - if o.meta["time_start"].present?
+                        #{o.meta["time_start"]}
+                    %td
+                      - if o.data["time_end"].present?
+                        #{o.data["time_end"]}
                     %td
                       #{o.status}
           - else

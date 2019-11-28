@@ -31,10 +31,10 @@ module MemberAccountValidations
       @rf_amt_past_due            = @data[:rf_amt_past_due]
       @lif_num_weeks_past_due     = @data[:lif_num_weeks_past_due]
       @rf_num_weeks_past_due      = @data[:rf_num_weeks_past_due]
-      @lif_insured_amount         = @data[:lif_insured_amount]
+      #@lif_insured_amount         = @data[:lif_insured_amount]
       @rf_insured_amount          = @data[:rf_insured_amount]
       @rf_num_weeks               = @data[:rf_num_weeks]
-      @number_of_days_lapsed      = @rf_num_weeks_past_due * 7
+      #@number_of_days_lapsed      = @rf_num_weeks_past_due * 7
 
       # Check if member has advance, lapsed and normal payment
       if @lif_num_weeks_past_due < 0 && @rf_num_weeks_past_due < 0
@@ -104,9 +104,11 @@ module MemberAccountValidations
         @equity_interest        = ::MemberAccountValidations::GenerateEquityInterest.new(
                                           lif_member_account: @lif_member_account,
                                           resignation_date: @resignation_date,
-                                          equity_interest_implementation_date: @equity_interest_implementation_date
+                                          equity_interest_implementation_date: @equity_interest_implementation_date,
+                                          lif_current_balance: @lif_current_balance
                                           ).execute!
-        @equity_interest_amount = @equity_interest[:equity_interest].last[:running_interest].to_f
+        #@equity_interest_amount = (@equity_interest[:equity_interest].last[:running_interest].to_f + @equity_interest[:weekly_interest].last[:running_interest].to_f).round(2)
+        @equity_interest_amount = @equity_interest[:equity_interest].last[:interest].to_f
       else
         @equity_interest_amount = 0.00
       end

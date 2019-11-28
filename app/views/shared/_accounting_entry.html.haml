@@ -44,10 +44,18 @@
     .row
       .col-md-8
         - if accounting_entry.crb?
-          %strong
-            OR Number: 
-          .text-muted
-            #{accounting_entry.data['or_number']}
+          .row
+            .col
+              %strong
+                OR Number: crb
+              .text-muted
+                #{accounting_entry.data['or_number']}
+            - if accounting_entry.data["ar_number"].present?
+              .col
+                %strong
+                  AR Number: crb
+                .text-muted
+                  #{accounting_entry.data['ar_number']}
         - if accounting_entry.cdb?
           .row
             - if accounting_entry.data["check_number"].present?

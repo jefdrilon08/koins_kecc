@@ -1,5 +1,11 @@
-require 'rollbar'
-
 Rollbar.configure do |config|
-  config.access_token = '25d2247703ab4d239257641d1e05a726'
+  if Rails.env.development?
+    config.enabled = false
+  else
+    config.access_token = ENV['ROLLBAR_TOKEN']
+  end
+
+  if Rails.env.test?
+    config.enabled = false
+  end
 end

@@ -37,6 +37,7 @@ module Loaders
           :insurance_status,
           :data,
           :date_resigned,
+          :insurance_date_resigned,
           :meta
         ]
 

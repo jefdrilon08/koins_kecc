@@ -2,8 +2,8 @@ module Insurance
   class FetchInsuredLoans
     def initialize(start_date:, end_date:, loan_status:, branch_id:)
       @records  = []
-      @start_date = start_date
-      @end_date = end_date
+      @start_date = start_date.to_date
+      @end_date = end_date.to_date
       @branch_id = branch_id
       @loan_status = loan_status
       @loans = []

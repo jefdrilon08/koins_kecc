@@ -71,11 +71,11 @@ module Exports
                             recognition_date = nil
                         end
 
-
-                        if m.data.with_indifferent_access[:insurance_resignation].nil?
+                        
+                        if m.insurance_date_resigned.nil?
                             insurance_date_resigned = nil
                         else
-                            insurance_date_resigned = m.data.with_indifferent_access[:insurance_resignation][:date_resigned]                        
+                            insurance_date_resigned = m.insurance_date_resigned                        
                         end    
 
                         if !m.data.with_indifferent_access[:resignation].nil?
