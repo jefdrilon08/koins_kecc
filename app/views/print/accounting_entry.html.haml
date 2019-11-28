@@ -123,8 +123,10 @@
         %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
         %th{:width => "17%"} Date Requested:
         %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
-        %th{:width => "17%"} 
-        %th{:width => "20%"} 
+        -if Settings.activate_microinsurance == true
+          -if @accounting_entry_data[:book] == "CRB"
+            %th{:width => "17%"} AR Number:
+            %th{:width => "20%"} #{@accounting_entry_data[:data][:ar_number]}
       - if @accounting_entry_data[:data][:payee].present?
         %tr
           %th{:width => "17%"} Payee:
