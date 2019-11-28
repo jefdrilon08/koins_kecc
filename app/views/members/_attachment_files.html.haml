@@ -16,7 +16,7 @@
         %tr
           %td
             - if attachment_file.file.attached?        
-              = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true), width: "1135", height: "1000"
+              = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true, resize: "500x500"), width: "1130", height: "1100"
             - else
               %p
                 No image found
