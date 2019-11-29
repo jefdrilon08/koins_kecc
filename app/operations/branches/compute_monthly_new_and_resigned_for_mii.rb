@@ -37,11 +37,10 @@ module Branches
                             @year
                           ).order("last_name ASC")
 
-      @new_members  = @members.where(
-                        "data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status = ?",
+      @new_members  = @members.active.where(
+                        "data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ?",
                         @start_date,
-                        @as_of,
-                        "inforce"
+                        @as_of
                       ).order("last_name ASC")
 
 
