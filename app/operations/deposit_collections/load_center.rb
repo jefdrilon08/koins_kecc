@@ -11,7 +11,7 @@ module DepositCollections
 
     def execute!
       record_member_ids = @deposit_collection.member_ids
-      members           = Member.active.where(center_id: @center.id)
+      members           = Member.active.where(center_id: @center.id, insurance_status: "inforce")
       members_to_add    = members.where.not(
                             id: record_member_ids
                           ).order("last_name ASC")
