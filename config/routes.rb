@@ -216,6 +216,7 @@ Rails.application.routes.draw do
     delete "/patronage_refund/:id", to: "patronage_refund#destroy"
 
     get "/personal_funds", to: "personal_funds#index"
+    get "/personal_funds/turkey", to: "personal_funds#turkey"
     get "/personal_funds/:id", to: "personal_funds#show"
     delete "/personal_funds/:id", to: "personal_funds#destroy"
 
