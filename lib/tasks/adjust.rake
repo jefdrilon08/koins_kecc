@@ -752,6 +752,26 @@ namespace :adjust do
       uuid = row['uuid']
       insurance_account_transaction_record = AccountTransaction.where(id: uuid).first
 
+      t_transaction_type    = row['transaction_type']
+        t_is_withdraw_payment = false
+        t_is_interest         = false
+        t_is_fund_transfer    = false
+
+        if t_transaction_type == "wp"
+          t_transaction_type    = "withdraw"
+          t_is_withdraw_payment = true
+        elsif t_transaction_type == "interest"
+          t_transaction_type  = "deposit"
+          t_is_interest       = true
+        elsif t_transaction_type == "reverse_deposit"
+          t_transaction_type  = "withdraw"
+        elsif t_transaction_type == "reverse_withdraw"
+          t_transaction_type  = "deposit"
+        elsif t_transaction_type == "fund_transfer_deposit"
+          t_transaction_type  = "deposit"
+          t_is_fund_transfer  = true
+        end
+
       if insurance_account_transaction_record.nil?
         puts "Creating new insurance account transaction record #{uuid}..."
 
@@ -763,24 +783,24 @@ namespace :adjust do
         
         # data
         insurance_account_transaction.data = {
-                                              is_withdraw_payment: false,
-                                              is_fund_transfer: false,
-                                              is_interest: false,
-                                              is_adjustment: row['is_adjustment'],
-                                              is_for_exit_age: row['for_exit_age'],
-                                              is_for_loan_payments: row['for_loan_payments'],
-                                              accounting_entry_reference_number: row['voucher_reference_number'],
-                                              accounting_entry_particular: row['particular'],
-                                              beginning_balance: row['beginning_balance'],
-                                              ending_balance: row['ending_balance']
-                                              }
+                                                is_withdraw_payment: t_is_withdraw_payment,
+                                                is_fund_transfer: t_is_fund_transfer,
+                                                is_interest: t_is_interest,
+                                                is_adjustment: row['is_adjustment'],
+                                                is_for_exit_age: row['for_exit_age'],
+                                                is_for_loan_payments: row['for_loan_payments'],
+                                                accounting_entry_reference_number: row['voucher_reference_number'],
+                                                accounting_entry_particular: row['particular'],
+                                                beginning_balance: row['beginning_balance'],
+                                                ending_balance: row['ending_balance']
+                                                }
       
         statuses = ["active", "inactive"]
         insurance_account = MemberAccount.where("id = ? AND status IN (?)", row['insurance_account_uuid'], statuses).first
         
         insurance_account_transaction.subsidiary_id = insurance_account.id
         insurance_account_transaction.subsidiary_type = "MemberAccount"
-        insurance_account_transaction.transaction_type = row['transaction_type']
+        insurance_account_transaction.transaction_type = t_transaction_type
         insurance_account_transaction.amount = row['amount']
         
         insurance_account_transaction.save!
@@ -793,9 +813,9 @@ namespace :adjust do
 
         insurance_account_transaction_record_data = insurance_account_transaction_record.data.with_indifferent_access
 
-        insurance_account_transaction_record_data[:is_withdraw_payment] = false
-        insurance_account_transaction_record_data[:is_fund_transfer] = false
-        insurance_account_transaction_record_data[:is_interest] = false
+        insurance_account_transaction_record_data[:is_withdraw_payment] = t_is_withdraw_payment
+        insurance_account_transaction_record_data[:is_fund_transfer] = t_is_fund_transfer
+        insurance_account_transaction_record_data[:is_interest] = t_is_interest
         insurance_account_transaction_record_data[:is_adjustment] = row['is_adjustment']
         insurance_account_transaction_record_data[:is_for_exit_age] = row['for_exit_age']
         insurance_account_transaction_record_data[:is_for_loan_payments] = row['for_loan_payments']
@@ -807,7 +827,7 @@ namespace :adjust do
         insurance_account_transaction_record.update!(
           amount: row['amount'],
           subsidiary_id: row['insurance_account_uuid'],
-          transaction_type: row['transaction_type'],
+          transaction_type: t_transaction_type,
           transacted_at: row['transacted_at'],
           status: row['status'],
           data: insurance_account_transaction_record_data
@@ -823,7 +843,9 @@ namespace :adjust do
 
     account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
 
-    MemberAccount.where(id: insurance_account_ids).each do |acc|
+    MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
+      puts "Rehashing member_account #{acc.id}..."
+
       ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
     end
     puts "Done!"
