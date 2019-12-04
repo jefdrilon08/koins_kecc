@@ -63,6 +63,7 @@ module Members
       end
 
       @data[:restoration_records] = restoration_records
+      @data[:recognition_date] = nil
 
       # Update member
       previous_date_resigned  = @member.date_resigned
@@ -70,6 +71,7 @@ module Members
         status: "pending",
         insurance_status: "pending",
         date_resigned: nil,
+        insurance_date_resigned: nil,
         previous_date_resigned: previous_date_resigned,
         data: @data
       )

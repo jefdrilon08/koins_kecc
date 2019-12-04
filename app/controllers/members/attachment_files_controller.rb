@@ -51,7 +51,7 @@ module Members
     end
 
     def attachment_file_params
-      params.require(:attachment_file).permit!
+      params.require(:attachment_file).permit(:file_name, :file, :data)
     end
 
   end

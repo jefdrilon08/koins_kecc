@@ -1,86 +1,15 @@
 module Reports
   class GenerateMonthlyRemittanceExcel
-    def initialize(start_date:, end_date:, branch_id:)
+    def initialize(start_date:, end_date:, branch:)
       @start_date   = start_date
       @end_date     = end_date
-      @branch_id    = branch_id
+      @branch       =  branch
 
-      if @branch_id.present?
-        @branch       = Branch.where(id: @branch_id).first
+      if @branch.present?
+        @branches       = Branch.where(id: @branch.id)
       else
-        @branch       = Branch.all
+        @branches       = Branch.where("cluster_id IN (?)", ["4350b839-9774-4b0a-a79b-f71409ad6d2b", "168eb8bf-59b4-4401-9498-79c87b3c01d4"]).order("cluster_id ASC, name ASC")
       end
-
-      @account_type = "INSURANCE"
-
-      @data_rf = ::MemberAccounts::FetchMembersFromTransactions.new(
-                                                                config: {
-                                                                  start_date: @start_date,
-                                                                  end_date: @end_date,
-                                                                  branch: @branch,
-                                                                  account_type: @account_type,
-                                                                  account_subtype: "Retirement Fund"
-                                                                }
-                                                            ).execute!
-
-      @data_lif = ::MemberAccounts::FetchMembersFromTransactions.new(
-                                                                config: {
-                                                                  start_date: @start_date,
-                                                                  end_date: @end_date,
-                                                                  branch: @branch,
-                                                                  account_type: @account_type,
-                                                                  account_subtype: "Life Insurance Fund"
-                                                                }
-                                                            ).execute!
-
-      @new_members = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, @branch.id)
-      @membership_fee = @new_members.count * 100
-
-      
-      @member_account_validations = MemberAccountValidation.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, @branch.id) 
-
-      @total_50_percent_life = 0
-      @total_advance_life = 0
-      @total_interest = 0
-      @total_rf = 0
-
-      @member_account_validations.each do |iav|
-        iav.member_account_validation_records.each_with_index do |iavr, index|
-          @total_rf = @total_rf + iavr.rf
-          @total_50_percent_life = @total_50_percent_life + iavr.lif_50_percent
-          @total_advance_life = @total_advance_life + iavr.advance_lif
-          @total_interest = @total_interest + iavr.interest
-        end
-      end
-
-      # trial_balance_data  = ::Accounting::GenerateTrialBalance.new(config: { start_date: @start_date.to_date, end_date: @end_date.to_date, branch: @branch }).execute!
-
-      # trial_balance_data[:accounting_codes].each_with_index do |d, i|
-      #   if d[:name] == "Payable to MBA - RF"
-      #     @dr_ret_fee = trial_balance_data[:current_entries][i][:dr_amount]
-      #     @cr_ret_fee = trial_balance_data[:current_entries][i][:cr_amount]
-      #     # @ret_fee = @cr_ret_fee - @dr_ret_fee
-      #     # if @ret_fee == 0
-      #       @ret_fee = @cr_ret_fee
-      #     # end
-      #   elsif d[:name] == "Payable to MBA-LIF"
-      #     @dr_life = trial_balance_data[:current_entries][i][:dr_amount]
-      #     @cr_life = trial_balance_data[:current_entries][i][:cr_amount]
-      #     # @life = @cr_life - @dr_life
-      #     # if @life == 0
-      #       @life = @cr_life
-      #     # end
-      #   elsif d[:name] == "Payable to MBA Mem. Fee "
-      #     @dr_mem_fee = trial_balance_data[:current_entries][i][:dr_amount]
-      #     @cr_mem_fee = trial_balance_data[:current_entries][i][:cr_amount]  
-      #     @mem_fee = @cr_mem_fee - @dr_mem_fee
-      #     if @mem_fee == 0
-      #       @mem_fee = @cr_mem_fee
-      #     end
-      #   end
-      # end
-
-      # @collection_fee = ((@ret_fee + @life) * 0.05)
 
       @p = Axlsx::Package.new
     end
@@ -101,101 +30,78 @@ module Reports
         date_format_cell = wb.styles.add_style format_code: "mm-dd-yyyy", font_name: "Calibri", alignment: { horizontal: :right }
         default_cell = wb.styles.add_style font_name: "Calibri"
 
-        sheet.add_row ["Monthly Collection Report"], style: title_cell
+        sheet.add_row ["Monthly Remittance Report"], style: title_cell
         sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
         sheet.add_row []
 
         # For header
         sheet.add_row [ 
           "FIELD OFFICE",
-          "LIFE",
+          "DEPOSIT COLLECTION OF LIFE",
+          "DEPOSIT COLLECTION OF RF",
           "ADVANCE LIFE",
           "EQUITY VALUE",
-          "RET. FEE",
           "RF WITHDRAWALS",
           "REC'L FROM MBA (interest)",
           "MEM. FEE",
-          "COLLECTION FEES",
-          "KDCI WITHDRAWALS",
           "TOTAL"
           ], style: header
 
-          sheet.add_row [ 
-          @branch,
-          # @life,
-          "",
-          @total_advance_life,
-          @total_50_percent_life,
-          # @ret_fee,
-          "",
-          @total_rf,
-          @total_interest,
-          @membership_fee,
-          "",
-          # @collection_fee,
-          "",
-          "",
-          ""
-          ], style: [ header, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right ] 
-       
-        sheet.add_row []       
-        sheet.add_row ["LIFE TRANSACTIONS"], style: header
-        sheet.add_row [
-          "FIRST NAME",
-          "MIDDLE NAME",
-          "LAST NAME",
-          "CENTER",
-          "AMOUNT",
-          "TRANSACTIONS TYPE"
-          ], style: header
+          @branches.each do |branch|
+            total_per_branch = 0.00
 
-        @data_lif[:members].each do |member|
-          member[:transactions].each do |trans|
-          sheet.add_row [ 
-            member[:member][:first_name], 
-            member[:member][:middle_name], 
-            member[:member][:last_name], 
-            member[:center][:name],
-            trans[:amount], 
-            trans[:transaction_type]
-            ], style: [ default_cell, default_cell, default_cell, default_cell, currency_cell_right, default_cell] 
+            total_50_percent_life = 0.00
+            total_advance_life = 0.00
+            total_interest = 0.00
+            total_rf = 0.00
+
+            member_account_validations = MemberAccountValidation.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id) 
+
+            member_account_validations.each do |iav|
+              iav.member_account_validation_records.each_with_index do |iavr, index|
+                total_rf = total_rf + iavr.rf
+                total_50_percent_life = total_50_percent_life + iavr.lif_50_percent
+                total_advance_life = total_advance_life + iavr.advance_lif
+                total_interest = total_interest + iavr.interest + iavr.equity_interest
+              end
+            end
+
+            new_members = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, branch.id)            
+            membership_fee = new_members.count * 100
+
+            deposit_collections = DepositCollection.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id)
+            
+            total_deposit_lif = 0.00
+            total_deposit_rf = 0.00
+
+            deposit_collections.each do |deposit_collection|
+              deposit_collection_data = deposit_collection.data.with_indifferent_access
+
+              deposit_collection_data[:totals].each do |total|
+                if total[:key] == "Life Insurance Fund"
+                  total_deposit_lif = total_deposit_lif + total[:amount]
+                elsif total[:key] == "Retirement Fund"
+                  total_deposit_rf = total_deposit_rf + total[:amount]
+                end
+              end
+            end 
+
+            total_per_branch = total_deposit_rf + total_deposit_lif + total_advance_life + total_50_percent_life + total_rf + total_interest + membership_fee
+
+            sheet.add_row [ 
+            branch,
+            total_deposit_lif,
+            total_deposit_rf,
+            total_advance_life,
+            total_50_percent_life,
+            total_rf,
+            total_interest,
+            membership_fee,
+            total_per_branch
+            ], style: [ header, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right ] 
           end
-        end
-
-        # DAPAT UNG VALUE IS DEBIT MINUS CREDIT
-        sheet.add_row [ "Total LIFE Withdrawals", @data_lif[:total_withdrawals].to_f ], style: [ header, currency_cell_right_bold ]
-        sheet.add_row [ "Total LIFE Deposits", @data_lif[:total_deposits].to_f ], style: [ header, currency_cell_right_bold ]
-        
-        sheet.add_row []       
-        sheet.add_row ["RF TRANSACTIONS"], style: header
-        sheet.add_row [
-          "FIRST NAME",
-          "MIDDLE NAME",
-          "LAST NAME",
-          "CENTER",
-          "AMOUNT",
-          "TRANSACTIONS TYPE"
-          ], style: header
-
-        @data_rf[:members].each do |member|
-          member[:transactions].each do |trans|
-          sheet.add_row [ 
-            member[:member][:first_name], 
-            member[:member][:middle_name], 
-            member[:member][:last_name], 
-            member[:center][:name],
-            trans[:amount], 
-            trans[:transaction_type]
-            ], style: [ default_cell, default_cell, default_cell, default_cell, currency_cell_right, default_cell] 
-          end
-        end
-
-        # DAPAT UNG VALUE IS DEBIT MINUS CREDIT
-        sheet.add_row [ "Total RF Withdrawals", @data_rf[:total_withdrawals].to_f ], style: [ header, currency_cell_right_bold ]
-        sheet.add_row [ "Total RF Deposits", @data_rf[:total_deposits].to_f ], style: [ header, currency_cell_right_bold ]
         end
       end
-      
       @p
     end
   end

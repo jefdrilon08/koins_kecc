@@ -16,10 +16,16 @@ class ProcessMonthlyNewAndResigned < ApplicationJob
         year: year,
         month: month
       }
-
-      data_result = ::Branches::ComputeMonthlyNewAndResigned.new(
+      
+      if Settings.activate_microinsurance
+        data_result = ::Branches::ComputeMonthlyNewAndResignedForMii.new(
                       config: config
                     ).execute!
+      else
+        data_result = ::Branches::ComputeMonthlyNewAndResigned.new(
+                      config: config
+                    ).execute!
+      end
 
       record.update!(
         data: data_result,

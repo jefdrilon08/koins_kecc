@@ -71,6 +71,10 @@
         = link_to billing_per_center_path, class: 'nav-link' do
           %i.nav-icon.fa.fa-file
           Billing per center
+      %li{ class: "nav-item #{params[:controller] == 'monthly_new_and_resigned' ? 'active' : ''}" }
+        = link_to "/data_stores/monthly_new_and_resigned", class: 'nav-link' do
+          %i.nav-icon.fa.fa-database
+          Monthly New/Res
     %li{ class: "nav-item nav-dropdown" }
       = link_to "#", class: "nav-link nav-dropdown-toggle" do
         %i.nav-icon.fa.fa-cogs

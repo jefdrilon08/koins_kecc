@@ -20,8 +20,9 @@ module Insurance
     def build_lif_data!
       @account_transaction =  AccountTransaction.where("subsidiary_id = ?", @lif_insurance_account.id).order("transacted_at ASC")
       @lif_latest_payment   = @account_transaction.last
-      @lif_current_balance  = @lif_latest_payment ? @lif_latest_payment.data['ending_balance'].to_i : 0.00
- 
+      # @lif_current_balance  = @lif_latest_payment ? @lif_latest_payment.data['ending_balance'].to_i : 0.00
+      @lif_current_balance = @lif_insurance_account.balance
+
       @lif_default_periodic_payment = 15
             
 
@@ -62,7 +63,8 @@ module Insurance
     def build_rf_data!
       @account_transaction   = AccountTransaction.where("subsidiary_id = ?", @rf_insurance_account.id).order("transacted_at ASC")
       @rf_latest_payment   = @account_transaction.last
-      @rf_current_balance  = @rf_latest_payment ? @rf_latest_payment.data['ending_balance'].to_i : 0.00
+      # @rf_current_balance  = @rf_latest_payment ? @rf_latest_payment.data['ending_balance'].to_i : 0.00
+      @rf_current_balance = @rf_insurance_account.balance
 
       @rf_default_periodic_payment = 5
 

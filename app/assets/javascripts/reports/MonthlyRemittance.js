@@ -6,6 +6,15 @@ MonthlyRemittance = (function() {
   var $filterEndDate     = $("#filter-end-date");
   var $branchSelect      = $("#branch-select");
 
+  var encodeQueryData = function(data) {
+    var ret = []
+    for(var d in data) {
+      ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+    }
+
+    return ret.join("&");
+  };
+
   var _bindEvents = function() {
     $btnExcel.on('click', function() {
       data = {
