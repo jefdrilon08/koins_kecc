@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
         
         @branch = Branch.where(name: @default_branch_name)
 
-        @branches = @branches.sort_by { |e| [ @branch.index(e) || @branch.size, e ] }
+        #@branches = @branches.sort_by { |e| [ @branch.index(e) || @branch.size, e ] }
         # if @branches.where(name: @default_branch_name).count > 0
         #   @branches = @branches.sort_by { |e| [ e.name == @default_branch_name ? 0 : 1 ] }
         # end
