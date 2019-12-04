@@ -1,0 +1,33 @@
+= render partial: "index_header"
+
+.container-fluid:
+  .row
+    .col
+      .card
+        .card-body
+          %table.table.table-bordered.table-sm
+            - @rows.chunk { |r| "#{r.fetch("last_name")}, #{r.fetch("first_name")}" }.each do |member_name, member_txs|
+              %tr
+                %td(colspan="#{@subtypes.size * 2 + 1}")= member_name
+              %tr
+                %td Date
+                - @subtypes.each do |_, subtype|
+                  %td(colspan="2")= subtype
+              - member_txs.each do |tx|
+                %tr
+                  %td= tx.fetch("transacted_at")
+                  - @subtypes.each do |_, subtype|
+                    %td
+                      - if subtype == tx.fetch("account_subtype") && tx.fetch("transaction_type") == "withdraw"
+                        = tx.fetch("amount")
+                    %td
+                      - if subtype == tx.fetch("account_subtype") && tx.fetch("transaction_type") == "deposit"
+                        = tx.fetch("amount")
+              %tr
+                %td Total
+                - last_tx = member_txs.last
+                - @subtypes.each do |key, _|
+                  %td
+                    = last_tx.fetch("#{key}_debit")
+                  %td
+                    = last_tx.fetch("#{key}_credit")

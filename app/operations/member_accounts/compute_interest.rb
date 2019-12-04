@@ -9,7 +9,8 @@ module MemberAccounts
       @account_subtype  = @config[:account_subtype] 
       @account_settings = @config[:account_settings] 
 
-      @dormant_threshold_months     = @account_settings.dormant_threshold_months @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
+      @dormant_threshold_months     = @account_settings.dormant_threshold_months 
+      @dormant_annual_interest_rate = @account_settings.dormant_annual_interest_rate || 0
       @annual_interest_rate         = @account_settings.annual_interest_rate
       @zero_interest_threshold      = @account_settings.zero_interest_threshold
       @monthly_interest_rate        = (@annual_interest_rate / 12.0)
