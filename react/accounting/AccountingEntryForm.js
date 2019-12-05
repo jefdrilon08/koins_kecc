@@ -10,6 +10,12 @@ var $parameters       = $("#parameters");
 var book  = $parameters.data("book");
 var id    = $parameters.data("id");
 
+var accountingFundId = ""
+
+if ($parameters.data("accounting-fund-id")) {
+  var accountingFundId = $parameters.data("accounting-fund-id");
+}
+
 var defaultBranch = false;
 
 if($parameters.data("branch-id") && $parameters.data("branch-name")) {
@@ -25,6 +31,7 @@ ReactDOM.render(
     authenticityToken={authenticityToken}
     defaultBranch={defaultBranch}
     book={book}
+    accountingFundId={accountingFundId}
     id={id}
   />,
   document.getElementById('content')
