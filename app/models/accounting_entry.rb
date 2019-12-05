@@ -68,4 +68,7 @@ class AccountingEntry < ApplicationRecord
     self.book == "MISC"
   end
   
+  def amount
+    self.journal_entries.sum(:amount)
+  end
 end

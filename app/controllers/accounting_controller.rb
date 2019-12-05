@@ -73,6 +73,7 @@ class AccountingController < ApplicationController
 
   def jvb
     @records  = AccountingEntry.jvb.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
+    @accounting_funds = AccountingFund.all.order("name ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)
@@ -99,6 +100,11 @@ class AccountingController < ApplicationController
     if params[:branch_id].present?
       @branch_id  = params[:branch_id]
       @records    = @records.where(branch_id: params[:branch_id])
+    end
+
+    if params[:accounting_fund_id].present?
+      @accounting_fund_id  = params[:accounting_fund_id]
+      @records    = @records.where(accounting_fund_id: @accounting_fund_id)
     end
 
     @records  = @records.page(params[:page]).per(20)
@@ -106,6 +112,7 @@ class AccountingController < ApplicationController
 
   def crb
     @records  = AccountingEntry.crb.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
+    @accounting_funds = AccountingFund.all.order("name ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)
@@ -131,6 +138,11 @@ class AccountingController < ApplicationController
     if params[:branch_id].present?
       @branch_id  = params[:branch_id]
       @records    = @records.where(branch_id: params[:branch_id])
+    end
+
+    if params[:accounting_fund_id].present?
+      @accounting_fund_id  = params[:accounting_fund_id]
+      @records    = @records.where(accounting_fund_id: @accounting_fund_id)
     end
 
     @records  = @records.page(params[:page]).per(20)
@@ -138,6 +150,7 @@ class AccountingController < ApplicationController
 
   def cdb
     @records  = AccountingEntry.cdb.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
+    @accounting_funds = AccountingFund.all.order("name ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)
@@ -163,6 +176,11 @@ class AccountingController < ApplicationController
     if params[:branch_id].present?
       @branch_id  = params[:branch_id]
       @records    = @records.where(branch_id: params[:branch_id])
+    end
+
+    if params[:accounting_fund_id].present?
+      @accounting_fund_id  = params[:accounting_fund_id]
+      @records    = @records.where(accounting_fund_id: @accounting_fund_id)
     end
 
     @records  = @records.page(params[:page]).per(20)
