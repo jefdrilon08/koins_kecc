@@ -5,10 +5,14 @@
         Status
       %th{ width: "10%" }
         Book
-      %th
-        Sub Ref Number
-      %th
-        Accounting Fund
+      - if microinsurance?
+        %th
+          Sub Ref Number
+        %th
+          Accounting Fund
+      - else
+        %th
+          Ref Number
       - if book == "CDB"  
         %th
           Check Number
@@ -17,37 +21,43 @@
       - if book == "CRB"  
         %th
           OR Number
-        %th
-          AR Number
+        - if microinsurance?
+          %th
+            AR Number
       %th
         Date Prepared
       %th
         Date Posted  
-      %th
+      %th.text-right
         Amount
   %tbody
     - records.each do |o|
       %tr
         %td.text-muted
           = link_to accounting_accounting_entry_path(o) do
-            %strong
-              %small
-                #{o.status.upcase}
+            #{o.status.upcase}
         %td.text-muted
           = link_to accounting_accounting_entry_path(o) do
             %strong
               %small
                 #{o.book}
-        %td.text-muted
-          = link_to accounting_accounting_entry_path(o) do
-            %strong
-              %small
-                #{o.data.with_indifferent_access[:sub_reference_number]}
-        %td.text-muted
-          = link_to accounting_accounting_entry_path(o) do
-            %strong
-              %small
-                #{o.accounting_fund}
+        - if microinsurance?  
+          %td.text-muted
+            = link_to accounting_accounting_entry_path(o) do
+              %strong
+                %small
+                  #{o.data.with_indifferent_access[:sub_reference_number]}
+          %td.text-muted
+            = link_to accounting_accounting_entry_path(o) do
+              %strong
+                %small
+                  #{o.accounting_fund}
+        - else
+          %td.text-muted
+            = link_to accounting_accounting_entry_path(o) do
+              %strong
+                %small
+                  #{o.reference_number}
         - if book == "CDB"  
           %td.text-muted
             = link_to accounting_accounting_entry_path(o) do
@@ -65,23 +75,24 @@
               %strong
                 %small
                   #{o.data.with_indifferent_access[:or_number]}
-          %td.text-muted
-            = link_to accounting_accounting_entry_path(o) do
-              %strong
-                %small
-                  #{o.data.with_indifferent_access[:ar_number]}
+          - if microinsurance?
+            %td.text-muted
+              = link_to accounting_accounting_entry_path(o) do
+                %strong
+                  %small
+                    #{o.data.with_indifferent_access[:ar_number]}
         %td.text-muted
           = link_to accounting_accounting_entry_path(o) do
             %strong
               %small
-                #{o.date_prepared}
+                #{o.date_prepared.strftime("%B %d, %Y")}
         %td.text-muted
           = link_to accounting_accounting_entry_path(o) do
             %strong
               %small
-                #{o.date_posted}        
-        %td.text-muted
+                #{o.date_posted.try(:strftime, "%B %d, %Y")}        
+        %td.text-right
           = link_to accounting_accounting_entry_path(o) do
             %strong
               %small
-                #{o.amount}
+                #{number_to_currency(o.amount, unit: "")}

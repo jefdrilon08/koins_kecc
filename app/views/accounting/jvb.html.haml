@@ -6,10 +6,7 @@
       .card
         .card-body
           = render partial: "filter"
-          - if microinsurance?
-            = render partial: "book_records_list", locals: { records: @records, book: "JVB" }
-          - else        
-            = render partial: "book_records", locals: { records: @records }
+          = render partial: "book_records_list", locals: { records: @records, book: "JVB" }
           = paginate @records
 
 #parameters{ data: { book: "JVB" } }
