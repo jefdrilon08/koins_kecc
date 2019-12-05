@@ -42,27 +42,65 @@ module Api
             @branch       = Branch.find(params[:branch_id])
             @closing_date = params[:closing_date].to_date
 
-            @record = DataStore.create!(
-                        meta: {
-                          branch_id: @branch.id,
-                          branch_name: @branch.name,
-                          closing_date: @closing_date,
-                          year: @closing_date.year,
-                          data_store_type: @data_store_type,
-                          progress: 0
-                        },
-                        data: {
-                          status: "processing"
-                        }
-                      )
+            settings  = Settings.accounting_fund_year_end_closing_entries
 
-            args = {
-              id: @record.id,
-              data_store_type: @data_store_type,
-              user_id: current_user.id
-            }
+            if settings.present?
+              # KMBA
+              settings.each do |o|
+                accounting_fund = AccountingFund.find(o.accounting_fund_id)
 
-            ProcessYearEndClosing.perform_later(args)
+                @record = DataStore.create!(
+                            meta: {
+                              branch_id: @branch.id,
+                              branch_name: @branch.name,
+                              closing_date: @closing_date,
+                              year: @closing_date.year,
+                              data_store_type: @data_store_type,
+                              progress: 0,
+                              accounting_fund: accounting_fund
+                            },
+                            data: {
+                              status: "processing"
+                            }
+                          )
+
+                @record.update!(status: "processing")
+
+                args = {
+                  id: @record.id,
+                  data_store_type: @data_store_type,
+                  user_id: current_user.id,
+                  accounting_fund_id: o.accounting_fund_id
+                }
+
+                ProcessYearEndClosing.perform_later(args)
+              end
+            else
+              # KCOOP
+              @record = DataStore.create!(
+                          meta: {
+                            branch_id: @branch.id,
+                            branch_name: @branch.name,
+                            closing_date: @closing_date,
+                            year: @closing_date.year,
+                            data_store_type: @data_store_type,
+                            progress: 0
+                          },
+                          data: {
+                            status: "processing"
+                          }
+                        )
+
+              @record.update!(status: "processing")
+
+              args = {
+                id: @record.id,
+                data_store_type: @data_store_type,
+                user_id: current_user.id
+              }
+
+              ProcessYearEndClosing.perform_later(args)
+            end
 
             render json: { message: "ok" }
           end
