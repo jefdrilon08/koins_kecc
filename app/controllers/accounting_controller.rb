@@ -41,6 +41,7 @@ class AccountingController < ApplicationController
 
   def misc
     @records  = AccountingEntry.misc.where(branch_id: @branches.pluck(:id)).order("reference_number DESC, updated_at ASC")
+    @accounting_funds = AccountingFund.all.order("name ASC")
 
     @start_date = params[:start_date] || Date.new(@current_date.year, @current_date.month, 1)
     @end_date   = params[:end_date] || Date.new(@current_date.year, @current_date.month, -1)
