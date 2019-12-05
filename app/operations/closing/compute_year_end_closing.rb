@@ -8,10 +8,28 @@ module Closing
       @user         = @config[:user]
       @branch       = @config[:branch]
 
+      @accounting_fund  = @config[:accounting_fund] || nil
+
       @expenses_accounting_codes  = AccountingCode.expenses
       @income_accounting_codes    = AccountingCode.income
 
-      @net_closing_accounting_code  = AccountingCode.find(Settings.net_closing_accounting_code_id)
+      if @accounting_fund.present?
+        settings  = Settings.accounting_fund_year_end_closing_entries.select{ |o|
+                      o.accounting_fund_id == @accounting_fund.id
+                    }.first
+
+        if settings.blank?
+          raise "Settings for accounting fund #{@accounting_fund.id} not found (year end closing)"
+        else
+          if settings.accounting_entry_id.blank?
+            raise "Accounting entry id not found for accounting fund settings #{@accounting_fund.id} (year end closing)"
+          end
+        end
+
+        @net_closing_accounting_code  = AccountingCode.find(settings.accounting_entry_id)
+      else
+        @net_closing_accounting_code  = AccountingCode.find(Settings.net_closing_accounting_code_id)
+      end
 
       @data = {
         year: @year,
@@ -56,7 +74,8 @@ module Closing
                                       data: @data,
                                       prepared_by: @user.full_name,
                                       particular: @particular,
-                                      branch: @branch
+                                      branch: @branch,
+                                      accounting_fund: @accounting_fund
                                     }
                                   ).execute!
     end
@@ -114,18 +133,25 @@ module Closing
       # Expense entries: debit accounts
       @expenses_accounting_codes.each do |a|
         debit_entries = JournalEntry.debit.joins(:accounting_entry).where(
-                          "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
+                          "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ? AND EXTRACT(year FROM accounting_entries.date_posted) = ?",
                           "approved",
                           a.id,
-                          @branch.id
+                          @branch.id,
+                          @year
                         )
 
         credit_entries  = JournalEntry.credit.joins(:accounting_entry).where(
-                            "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
+                            "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ? AND EXTRACT(year FROM accounting_entries.date_posted) = ?",
                             "approved",
                             a.id,
-                            @branch.id
+                            @branch.id,
+                            @year
                           )
+
+        if @accounting_fund.present?
+          debit_entries   = debit_entries.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
+          credit_entries  = credit_entries.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
+        end
 
 
         total_debit   = debit_entries.sum(:amount).round(2)
@@ -162,18 +188,25 @@ module Closing
       # Income entries: credit accounts
       @income_accounting_codes.each do |a|
         debit_entries = JournalEntry.debit.joins(:accounting_entry).where(
-                          "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
+                          "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ? AND EXTRACT(year FROM accounting_entries.date_posted) = ?",
                           "approved",
                           a.id,
-                          @branch.id
+                          @branch.id,
+                          @year
                         )
 
         credit_entries  = JournalEntry.credit.joins(:accounting_entry).where(
-                            "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ?",
+                            "accounting_entries.status = ? AND accounting_code_id = ? AND accounting_entries.branch_id = ? AND EXTRACT(year FROM accounting_entries.date_posted) = ?",
                             "approved",
                             a.id,
-                            @branch.id
+                            @branch.id,
+                            @year
                           )
+
+        if @accounting_fund.present?
+          debit_entries   = debit_entries.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
+          credit_entries  = credit_entries.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
+        end
 
         total_debit   = debit_entries.sum(:amount).round(2)
         total_credit  = credit_entries.sum(:amount).round(2)

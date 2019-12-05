@@ -9,6 +9,8 @@ module Closing
       @particular   = @config[:particular]
       @prepared_by  = @config[:prepared_by]
       @branch       = @config[:branch]
+      
+      @accounting_fund  = @config[:accounting_fund]
 
       @accounting_entry_data  = {
         book: @book,
@@ -24,6 +26,7 @@ module Closing
         branch_id: @branch.id,
         branch_name: @branch.name,
         status: "display",
+        accounting_fund_id: @accounting_fund.try(:id),
         data: {
           or_number: "",
           ar_number: "",
