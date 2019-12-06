@@ -1,0 +1,37 @@
+#modal-new-transaction.modal.fade{:tabindex => "-1"}
+  = form_tag send("new_kalinga_claim_application_path"), method: :post do |f|
+    .modal-dialog.modal-lg
+      .modal-content
+        .modal-header
+          %h3.modal-title
+            Please select a member to apply for new K-Kalinga application 
+        .modal-body
+          .modal-body-content
+            .row
+              .col-md-12
+                .form-group
+                  %label
+                    Branch
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+            .row
+              .col-md-12
+                .form-group
+                  %label
+                    Center
+                  = select_tag :center_id, options_for_select([]), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
+            .row
+              .col-md-12
+                .form-group
+                  %label
+                    Member
+                  = select_tag :member_id, options_for_select([]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+            .message
+        .modal-footer
+          .controls
+            / %button#btn-confirm-new-transaction.btn.btn-primary
+            /   .fa.fa-check
+            /   Confirm
+            = submit_tag "New Record", class: "btn btn-primary"
+            %button.btn{"data-dismiss" => "modal", :type => "button"}
+              .fa.fa-times
+              Cancel

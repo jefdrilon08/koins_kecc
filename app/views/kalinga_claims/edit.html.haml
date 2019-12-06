@@ -1,0 +1,17 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+      K-Kalinga Information
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to kalinga_claims_path do
+        .fa.fa-arrow-left
+        Back to Kalinga 
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "kalinga_claims/form", locals: { kalinga_claim: @kalinga_claim }
+

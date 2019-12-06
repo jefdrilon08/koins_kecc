@@ -1,0 +1,67 @@
+%section.content-header
+  %h3
+    %strong
+      K-Kalinga Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Member Name
+      %td
+        = @kalinga_claim.name_of_member
+      %th
+      %td
+      %th
+      %td
+      %th
+      %td
+    %tr
+      %th Date Reported
+      %td 
+        = @kalinga_claim.date_reported
+      %th Date Emailed
+      %td 
+        = @kalinga_claim.date_emailed
+      %th Date Approved
+      %td 
+        = @kalinga_claim.date_approved
+      %th Date Requested
+      %td 
+        = @kalinga_claim.date_requested
+    %tr
+      %th Insured Name
+      %td 
+        = @kalinga_claim.name_of_insured
+      %th Date of Birth
+      %td 
+        = @kalinga_claim.date_of_birth
+      %th Gender
+      %td 
+        = @kalinga_claim.gender
+      %th Civil Status
+      %td 
+        = @kalinga_claim.civil_status
+    %tr
+      %th Insured Address
+      %td 
+        = @kalinga_claim.insured_address
+      %th POC No.
+      %td 
+        = @kalinga_claim.poc_number
+      %th Issued Date
+      %td 
+        = @kalinga_claim.date_reported
+      %th Amount
+      %td 
+        = @kalinga_claim.amount
+    %tr
+      %th Name of Beneficiary
+      %td
+        = @kalinga_claim.name_of_beneficiary
+      %th Relationship
+      %td
+        = @kalinga_claim.relationship_to_member
+      %th Prepared by
+      %td 
+        = @kalinga_claim.prepared_by
+      %th
+      %td 

@@ -15,7 +15,11 @@
     .col
       .card
         .card-body
-          = render partial: "clip_claims/list"
+          - if @clip_claims.size > 0
+            = render partial: "clip_claims/list", locals: { clip_claims: @clip_claims }
+            = paginate @clip_claims
+          - else
+            No clip claims found.
 
 = render partial: "clip_claims/new_transaction"
 
