@@ -4,9 +4,10 @@ module Api
       before_action :authenticate_user!
 
       def fetch_centers
-        branch  = @branches.where(id: params[:id]).first
+        #branch  = @branches.where(id: params[:id]).first
+        branch = @branches.select{ |o| o[:id] == params[:id] }.first
         
-        centers = branch.centers.order("name ASC").map{ |c| { id: c.id, name:  c.name } }
+        centers = Center.where(branch_id: branch[:id]).order("name ASC").map{ |c| { id: c.id, name:  c.name } }
 
         render json: { centers: centers }
       end

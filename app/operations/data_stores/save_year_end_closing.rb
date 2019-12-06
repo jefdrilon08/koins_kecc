@@ -7,6 +7,8 @@ module DataStores
       @closing_date = @config[:closing_date]
       @year         = @config[:year]
 
+      @accounting_fund  = @config[:accounting_fund] || nil
+
       @data_store = DataStore.find(@config[:id])
     end
 
@@ -16,7 +18,8 @@ module DataStores
                         closing_date: @closing_date,
                         year: @year,
                         user: @user,
-                        branch: @branch
+                        branch: @branch,
+                        accounting_fund: @accounting_fund
                       }
                     ).execute!
 

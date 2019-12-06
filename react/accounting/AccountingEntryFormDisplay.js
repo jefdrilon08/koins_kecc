@@ -33,7 +33,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
       accountingCodes: [],
       accountingFunds: [],
       accountingCodeId: "",
-      accountingFundId: "",
+      accountingFundId: props.accountingFundId,
       accountingCodeObject: {},
       accountingCodeName: "",
       postType: "DR",
@@ -61,7 +61,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
         reference_number: "",
         date_prepared: moment(),
         status: "pending",
-        accounting_fund_id: "",
+        accounting_fund_id: props.accountingFundId,
         data: {
           or_number: "",
           check_number: "",
@@ -95,10 +95,10 @@ export default class AccountingEntryFormDisplay extends React.Component {
       success: function(response) {
         // Set currentAccountingFundId
         var data  = context.state.data;
-
-        if(response.accounting_funds.length > 0) {
-          data.accounting_fund_id = response.accounting_funds[0].id;  
-        }
+        
+        // if(response.accounting_funds.length > 0) {
+        //   data.accounting_fund_id = response.accounting_funds[2].id;  
+        // }
 
         context.setState({
           accountingFunds: response.accounting_funds,

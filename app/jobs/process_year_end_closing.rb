@@ -7,8 +7,8 @@ class ProcessYearEndClosing < ApplicationJob
     branch        = Branch.find(record.meta.with_indifferent_access[:branch_id])
     closing_date  = record.meta.with_indifferent_access[:closing_date].to_date
     year          = closing_date.year 
-    
-    record.update!(status: "processing")
+
+    accounting_fund = AccountingFund.where(id: args[:accounting_fund_id]).first
 
     begin
       config  = {
@@ -16,12 +16,13 @@ class ProcessYearEndClosing < ApplicationJob
         user: user,
         closing_date: closing_date,
         year: year,
-        branch: branch
+        branch: branch,
+        accounting_fund: accounting_fund
       }
 
-      data_store  = DataStores::SaveYearEndClosing.new(
-                      config: config
-                    ).execute!
+      DataStores::SaveYearEndClosing.new(
+        config: config
+      ).execute!
 
     rescue Exception => e
       record.update!(
