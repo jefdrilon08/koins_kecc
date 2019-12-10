@@ -4,26 +4,30 @@
     Microinsurance
   %li.breadcrumb-item
     .fa.fa-money-check
-    Claims Register
+    K-Kalinga Register
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       = link_to "#", class: 'btn', id: 'btn-new-transaction' do
         .fa.fa-plus
-        New Claims
+        New Kalinga for Members
+      = link_to new_kalinga_claim_path(@kalinga_claim), class: 'btn' do
+        .fa.fa-plus
+        New Kalinga for Non-Members
 .container-fluid
   .row
     .col
       .card
         .card-body
-          - if @claims.size > 0
-            = render partial: "claims/list", locals: { claims: @claims }
-            = paginate @claims
+          - if @kalinga_claims.size > 0
+            = render partial: "kalinga_claims/list", locals: { kalinga_claims: @kalinga_claims }
+            = paginate @kalinga_claims
           - else
-            No claims found.
+            No kalinga found.
 
-= render partial: "claims/new_transaction"
+= render partial: "kalinga_claims/new_transaction"
 
-= javascript_include_tag "claims/Index"
+= javascript_include_tag "kalinga_claims/Index"
+
 
 :javascript
   $(document).ready(function() {

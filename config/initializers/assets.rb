@@ -149,5 +149,6 @@ Rails.application.config.assets.precompile += [
   "summary_cert_policies.js",
   "reports/PersonalDocumentReport.js",
   "hiip_claims/Index.js",
-  "hiip_claims_form.js"
+  "hiip_claims_form.js",
+  "kalinga_claims/Index.js"
 ]

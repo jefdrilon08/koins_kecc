@@ -74,8 +74,8 @@ Rails.application.routes.draw do
   post "/new_claim_application", to: "claims#new_claim_application", as: :new_claim_application
   post "/new_clip_claim_application", to: "clip_claims#new_clip_claim_application", as: :new_clip_claim_application
   post "/new_hiip_claim_application", to: "hiip_claims#new_hiip_claim_application", as: :new_hiip_claim_application
-
-
+  post "/new_kalinga_claim_application", to: "kalinga_claims#new_kalinga_claim_application", as: :new_kalinga_claim_application
+    
   resources :claims do
     get "/claim_validation_pdf", to: "claims#claim_validation_pdf"
     get "/claim_loa_pdf", to: "claims#claim_loa_pdf"
@@ -90,6 +90,8 @@ Rails.application.routes.draw do
     get "/hiip_claim_validation_pdf", to: "hiip_claims#hiip_claim_validation_pdf"
   end
 
+  resources :kalinga_claims 
+
   resources :members, only: [] do
     collection { post :import_members }
     collection { post :import_beneficiaries }
@@ -102,6 +104,7 @@ Rails.application.routes.draw do
     resources :claims, controller: 'members/claims'
     resources :clip_claims, controller: 'members/clip_claims'
     resources :hiip_claims, controller: 'members/hiip_claims'
+    resources :kalinga_claims, controller: 'members/kalinga_claims'
   end
   
   # Insurance Accounts
@@ -294,7 +297,6 @@ Rails.application.routes.draw do
 
   get "/download_backup", to: "pages#download_backup"
   get "/download_exit_age", to: "pages#download_exit_age"
-  resources :claims
   draw :administration
   draw :accounting
   draw :api

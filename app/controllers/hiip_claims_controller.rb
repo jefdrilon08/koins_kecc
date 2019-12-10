@@ -25,7 +25,7 @@ class HiipClaimsController < ApplicationController
     end
     
         
-  
+  @hiip_claims = @hiip_claims.page(params[:page]).per(20)
   end
 
   def new

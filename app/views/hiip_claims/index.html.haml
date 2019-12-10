@@ -15,7 +15,11 @@
     .col
       .card
         .card-body
-          = render partial: "hiip_claims/list"
+          - if @hiip_claims.size > 0
+            = render partial: "hiip_claims/list", locals: { hiip_claims: @hiip_claims }
+            = paginate @hiip_claims
+          - else
+            No hiip found.
 
 = render partial: "hiip_claims/new_transaction"
 

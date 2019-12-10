@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_28_034144) do
+ActiveRecord::Schema.define(version: 2019_12_06_063019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -367,6 +367,33 @@ ActiveRecord::Schema.define(version: 2019_11_28_034144) do
     t.datetime "updated_at", null: false
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
+  end
+
+  create_table "kalinga_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "date_reported"
+    t.date "date_emailed"
+    t.date "date_approved"
+    t.date "date_requested"
+    t.string "purpose"
+    t.decimal "amount"
+    t.date "effective_date"
+    t.date "expiration_date"
+    t.string "poc_number"
+    t.string "name_of_insured"
+    t.string "relationship_to_member"
+    t.boolean "is_member"
+    t.string "insured_address"
+    t.string "civil_status"
+    t.date "date_of_birth"
+    t.string "name_of_beneficiary"
+    t.date "date_of_death_or_incident"
+    t.text "reason_of_death"
+    t.string "gender"
+    t.string "prepared_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "issueddate"
+    t.string "name_of_member"
   end
 
   create_table "legal_dependents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
