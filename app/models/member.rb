@@ -99,6 +99,10 @@ class Member < ApplicationRecord
     self.status == "pending"
   end
 
+  def pending_dormant?
+    self.insurance_status == "dormant" or self.insurance_status == "pending"
+  end
+
   def active?
     self.status == "active"
   end
