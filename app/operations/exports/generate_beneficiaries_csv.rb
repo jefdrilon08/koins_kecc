@@ -15,7 +15,7 @@ module Exports
                 :relationship,
                 :reference_number,
                 :member_identification_number,
-                :is_deceased
+                :is_deceased,
                 :uuid,
                 :member_uuid
                 
