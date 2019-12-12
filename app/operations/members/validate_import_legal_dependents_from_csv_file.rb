@@ -55,7 +55,7 @@ module Members
     end
 
     def validate_if_member_uuid_present!
-      if @beneficiary['member_uuid'].nil?
+      if @legal_dependent['member_uuid'].nil?
         @errors[:messages] << {
           key: "member_uuid",
           message: "Member UUID can't be blank."
