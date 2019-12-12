@@ -1,0 +1,36 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Microinsurance
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Calamity Assitance Register
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", class: 'btn', id: 'btn-new-transaction' do
+        .fa.fa-plus
+        New Claims
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @calamity_claims.size > 0
+            = render partial: "calamity_claims/list", locals: { calamity_claims: @calamity_claims }
+            = paginate @calamity_claims
+          - else
+            No claims found.
+
+= render partial: "calamity_claims/new_transaction"
+
+= javascript_include_tag "calamity_claims/Index"
+
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

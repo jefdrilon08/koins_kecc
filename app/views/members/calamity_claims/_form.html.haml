@@ -1,0 +1,54 @@
+= simple_form_for [@member, calamity_claim] do |f|
+  = hidden_field_tag 'memberId', "#{@member.id}"
+  #{@errors}
+  .row
+    .col
+      .form-group
+        %h3
+          Calamity Assistance Information
+  .row
+    .col
+      .form-group
+        = f.input :date_requested, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Requested"
+    .col
+      .form-group 
+        = f.input :date_approved, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Approved"
+    .col
+      .form-group
+        = f.input :date_of_event, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date of Event"
+    .col
+      .form-group
+        = f.input :date_of_notification, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date of Notification"
+  .row
+    .col
+      .form-group
+        = f.input :type_of_calamity, input_html: { class: 'form-control'}, as: :string, label: "Type of Calamity"
+    .col
+      .form-group
+        = f.input :purpose, input_html: { class: 'form-control', value: 'Payment for Calamity Assistance'}, as: :string, label: "Purpose"   
+    .col
+      .form-group
+        = f.input :amount, input_html: { class: 'form-control'}, as: :string, label: "Amount"
+  .row
+    .col
+      .form-group
+        = f.input :name_of_payee, input_html: { class: 'form-control'}, as: :string, label: "Name of Payee"
+    .col
+      .form-group
+        = f.input :name_of_beneficiary, input_html: { class: 'form-control'}, as: :string, label: "Name of Beneficiary" 
+  .row
+    .col
+      .form-group
+        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize}, as: :string, label: "PREPARED BY"       
+  .row
+    .col
+      .form-actions
+      = button_tag type: 'submit', class: 'btn btn-primary', data: { confirm: "Are you sure?" } do
+        .fa.fa-check
+        Submit
+      = link_to calamity_claims_path, class: 'btn btn-default' do
+        .fa.fa-times
+        Cancel
+
+
+

@@ -5,21 +5,39 @@ var hiipClaimsForm = (function() {
   var $effectiveDateOfCoverage;
  
   var _cacheDom = function() {
-    $amount                 = $("#amount"); 
-    $numberOfDaysTobepaid   = $("#number-ofdays-tobepaid");
-    $effectiveDateOfCoverage = $("#effective-date-of-coverage")
+    $amount                   = $("#amount"); 
+    $numberOfDaysTobepaid     = $("#number-ofdays-tobepaid");
+    $effectiveDateOfCoverage  = $("#effective-date-of-coverage");
+    $dateAdmitted             = $("#date-admitted");
+    $dateDischarged             = $("#date-discharged");
  }
 
   var _bindEvents = function() {
 
-    $numberOfDaysTobepaid.on('change', function() {
+    // $numberOfDaysTobepaid.on('change', function() {
 
+    //   var numberOfDaysTobepaid = $("#number-ofdays-tobepaid").val();
+    //   var value = 200.00;
+    //   $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value));
+     
+    // });
+    $dateDischarged.on('change', function() {
+
+      var dateAdmitted = $("#date-admitted").val();
+      var dateDischarged = $("#date-discharged").val();
+
+      var dateDischargedValue = new Date(dateDischarged);
+      var dateAdmittedValue = new Date(dateAdmitted);
+
+      var time = dateDischargedValue.getTime() - dateAdmittedValue.getTime(); 
+      var days = time / (1000 * 3600 * 24); 
+
+      $('#number-ofdays-tobepaid').val(days + 1);
       var numberOfDaysTobepaid = $("#number-ofdays-tobepaid").val();
       var value = 200.00;
       $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value));
      
     });
-
     $effectiveDateOfCoverage.on('change', function(){
      
             var effectiveDateOfCoverage = $("#effective-date-of-coverage").val();

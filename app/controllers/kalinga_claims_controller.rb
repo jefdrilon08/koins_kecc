@@ -1,5 +1,13 @@
 class KalingaClaimsController < ApplicationController
 
+  def kalinga_claim_validation_pdf
+    @kalinga_claim = KalingaClaim.find(params[:kalinga_claim_id])
+  end
+
+  def kalinga_claim_loa_pdf
+     @kalinga_claim = KalingaClaim.find(params[:kalinga_claim_id])
+  end
+
   def index
     @kalinga_claims = KalingaClaim.all
 

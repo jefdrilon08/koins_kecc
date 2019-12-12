@@ -33,7 +33,15 @@
       .form-group
         %label
         = f.input :expiration_date_of_coverage, input_html: { class: 'form-control', id: 'expiration-date-of-coverage'}, as: :string, label: "Expiration Date of Coverage" 
-
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :date_admitted, input_html: { class: 'form-control', id: 'date-admitted', type: 'date'}, as: :string, label: "Date Admitted"
+    .col
+      .form-group
+        %label
+        = f.input :date_discharged, input_html: { class: 'form-control', id: 'date-discharged', type: 'date'}, as: :string, label: "Date Discharged"      
   .row
     .col
       .form-group
@@ -43,15 +51,6 @@
       .form-group
         %label
         = f.input :amount, input_html: { class: 'form-control', id: 'amount'}, as: :string, label: "Amount"
-  .row
-    .col
-      .form-group
-        %label
-        = f.input :date_admitted, input_html: { class: 'form-control', id: 'date-admitted', type: 'date'}, as: :string, label: "Date Admitted"
-    .col
-      .form-group
-        %label
-        = f.input :date_discharged, input_html: { class: 'form-control', id: 'date-discharged', type: 'date'}, as: :string, label: "Date Discharged"    
   .row
     .col
       .form-group

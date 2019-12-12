@@ -1,0 +1,48 @@
+%section.content-header
+  %h3
+    %strong
+      Calamity Assistance Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Date of Requested
+      %td 
+        = @calamity_claim.date_requested.strftime("%B %d, %Y")
+      %th Date Approved
+      %td 
+        = @calamity_claim.date_approved.strftime("%B %d, %Y")
+    %tr
+      %th Date of Event
+      %td 
+        = @calamity_claim.date_of_event.strftime("%B %d, %Y")
+      %th Date of Notice
+      %td 
+        = @calamity_claim.date_of_notification.strftime("%B %d, %Y")
+    %tr
+      %th Branch
+      %td 
+        = @calamity_claim.member.branch.name
+      %th Name of Member 
+      %td 
+        = link_to "#{@calamity_claim.member.full_name_formatted} (#{@calamity_claim.member.identification_number})", member_path(@calamity_claim.member), target: "_blank"
+    %tr
+      %th Name of Beneficiary
+      %td 
+        = @calamity_claim.name_of_beneficiary 
+      %th Amount
+      %td 
+        = @calamity_claim.amount
+    %tr
+      %th Type of Calamity
+      %td 
+        = @calamity_claim.type_of_calamity
+      %th Purpose
+      %td 
+        = @calamity_claim.purpose  
+      
+    %tr 
+      %th Prepared By
+      %td 
+        = @calamity_claim.prepared_by
+      %th
+      %td

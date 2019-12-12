@@ -1,0 +1,36 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Microinsurance
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    KJSP Register
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", class: 'btn', id: 'btn-new-transaction' do
+        .fa.fa-plus
+        New Claims
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @kjsp_claims.size > 0
+            = render partial: "kjsp_claims/list", locals: { kjsp_claims: @kjsp_claims }
+            = paginate @kjsp_claims
+          - else
+            No claims found.
+
+= render partial: "kjsp_claims/new_transaction"
+
+= javascript_include_tag "kjsp_claims/Index"
+
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

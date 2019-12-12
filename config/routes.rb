@@ -75,7 +75,10 @@ Rails.application.routes.draw do
   post "/new_clip_claim_application", to: "clip_claims#new_clip_claim_application", as: :new_clip_claim_application
   post "/new_hiip_claim_application", to: "hiip_claims#new_hiip_claim_application", as: :new_hiip_claim_application
   post "/new_kalinga_claim_application", to: "kalinga_claims#new_kalinga_claim_application", as: :new_kalinga_claim_application
-    
+  post "/new_kbente_claim_application", to: "kbente_claims#new_kbente_claim_application", as: :new_kbente_claim_application
+  post "/new_kjsp_claim_application", to: "kjsp_claims#new_kjsp_claim_application", as: :new_kjsp_claim_application
+  post "/new_calamity_claim_application", to: "calamity_claims#new_calamity_claim_application", as: :new_calamity_claim_application
+          
   resources :claims do
     get "/claim_validation_pdf", to: "claims#claim_validation_pdf"
     get "/claim_loa_pdf", to: "claims#claim_loa_pdf"
@@ -88,9 +91,29 @@ Rails.application.routes.draw do
   
   resources :hiip_claims do
     get "/hiip_claim_validation_pdf", to: "hiip_claims#hiip_claim_validation_pdf"
+    get "/hiip_claim_loa_pdf", to: "hiip_claims#hiip_claim_loa_pdf"
   end
 
-  resources :kalinga_claims 
+  resources :kalinga_claims do
+     get "/kalinga_claim_validation_pdf", to: "kalinga_claims#kalinga_claim_validation_pdf"
+     get "/kalinga_claim_loa_pdf", to: "kalinga_claims#kalinga_claim_loa_pdf"
+  end
+
+  resources :kbente_claims do
+     get "/kbente_claim_validation_pdf", to: "kbente_claims#kbente_claim_validation_pdf"
+     get "/kbente_claim_loa_pdf", to: "kbente_claims#kbente_claim_loa_pdf"
+  end
+
+  resources :kjsp_claims do
+     get "/kjsp_claim_validation_pdf", to: "kjsp_claims#kjsp_claim_validation_pdf"
+     get "/kjsp_claim_loa_pdf", to: "kjsp_claims#kjsp_claim_loa_pdf"
+     get "/kjsp_contract_pdf", to: "kjsp_claims#kjsp_contract_pdf"
+  end
+
+  resources :calamity_claims do
+     get "/calamity_claim_validation_pdf", to: "calamity_claims#calamity_claim_validation_pdf"
+     get "/calamity_claim_loa_pdf", to: "calamity_claims#calamity_claim_loa_pdf"
+  end
 
   resources :members, only: [] do
     collection { post :import_members }
@@ -105,6 +128,9 @@ Rails.application.routes.draw do
     resources :clip_claims, controller: 'members/clip_claims'
     resources :hiip_claims, controller: 'members/hiip_claims'
     resources :kalinga_claims, controller: 'members/kalinga_claims'
+    resources :kbente_claims, controller: 'members/kbente_claims'
+    resources :kjsp_claims, controller: 'members/kjsp_claims'
+    resources :calamity_claims, controller: 'members/calamity_claims'
   end
   
   # Insurance Accounts

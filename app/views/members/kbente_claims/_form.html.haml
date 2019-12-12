@@ -1,0 +1,57 @@
+= simple_form_for [@member, kbente_claim] do |f|
+  = hidden_field_tag 'memberId', "#{@member.id}"
+  #{@errors}
+  .row
+    .col
+      .form-group
+        %h3
+          K-Bente Information
+  .row
+    .col
+      .form-group
+        = f.input :date_reported, input_html: { class: 'form-control ', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Reported"
+    .col
+      .form-group
+        = f.input :date_emailed, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Emailed"
+    .col
+      .form-group
+        = f.input :date_approved, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Approved"  
+    .col
+      .form-group
+        = f.input :date_requested, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Requested"
+  .row
+    .col
+      .form-group
+        = f.input :purpose, input_html: { class: 'form-control', value: 'Payment for K-Bente Benefit'}, as: :string, label: "Purpose"   
+    .col
+      .form-group
+        = f.input :amount, input_html: { class: 'form-control'}, as: :string, label: "Amount"
+  .row
+    .col
+      .form-group
+        = f.input :name_of_insured, input_html: { class: 'form-control'}, as: :string, label: "Name of Insured" 
+    .col
+      .form-group
+        = f.input :name_of_beneficiary, input_html: { class: 'form-control'}, as: :string, label: "Name of Beneficiary" 
+    .col
+      .form-group
+        = f.input :classification, input_html: { class: 'form-control'}, as: :string, label: "Classification"  
+    .col
+      .form-group
+        = f.input :date_of_death, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date of Death"
+  .row
+    .col
+      .form-group
+        = f.input :prepared_by, input_html: { class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize}, as: :string, label: "PREPARED BY"       
+  .row
+    .col
+      .form-actions
+      = button_tag type: 'submit', class: 'btn btn-primary', data: { confirm: "Are you sure?" } do
+        .fa.fa-check
+        Submit
+      = link_to kbente_claims_path, class: 'btn btn-default' do
+        .fa.fa-times
+        Cancel
+
+
+

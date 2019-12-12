@@ -4,64 +4,156 @@
       K-Kalinga Details
 %table.table.table-sm.table-hover
   %tbody
-    %tr
-      %th Member Name
-      %td
-        = @kalinga_claim.name_of_member
-      %th
-      %td
-      %th
-      %td
-      %th
-      %td
-    %tr
-      %th Date Reported
-      %td 
-        = @kalinga_claim.date_reported
-      %th Date Emailed
-      %td 
-        = @kalinga_claim.date_emailed
-      %th Date Approved
-      %td 
-        = @kalinga_claim.date_approved
-      %th Date Requested
-      %td 
-        = @kalinga_claim.date_requested
-    %tr
-      %th Insured Name
-      %td 
-        = @kalinga_claim.name_of_insured
-      %th Date of Birth
-      %td 
-        = @kalinga_claim.date_of_birth
-      %th Gender
-      %td 
-        = @kalinga_claim.gender
-      %th Civil Status
-      %td 
-        = @kalinga_claim.civil_status
-    %tr
-      %th Insured Address
-      %td 
-        = @kalinga_claim.insured_address
-      %th POC No.
-      %td 
-        = @kalinga_claim.poc_number
-      %th Issued Date
-      %td 
-        = @kalinga_claim.date_reported
-      %th Amount
-      %td 
-        = @kalinga_claim.amount
-    %tr
-      %th Name of Beneficiary
-      %td
-        = @kalinga_claim.name_of_beneficiary
-      %th Relationship
-      %td
-        = @kalinga_claim.relationship_to_member
-      %th Prepared by
-      %td 
-        = @kalinga_claim.prepared_by
-      %th
-      %td 
+    - if @kalinga_claim.name_of_member.present?
+      %tr
+        %th Branch
+        %td
+          = @kalinga_claim.member_branch
+        %th
+        %td
+      %tr
+        %th Name of Member
+        %td
+          = @kalinga_claim.name_of_member.titlecase
+        %th Identification Number
+        %td
+          = @kalinga_claim.member_identification_number
+      %tr
+        %th Date Reported
+        %td 
+          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+        %th Date Emailed
+        %td 
+          = @kalinga_claim.date_emailed.strftime("%B %d, %Y")
+      %tr
+        %th Date Approved
+        %td 
+          = @kalinga_claim.date_approved.strftime("%B %d, %Y")
+        %th Date Requested
+        %td 
+          = @kalinga_claim.date_requested.strftime("%B %d, %Y")
+      %tr
+        %th Insured Name
+        %td 
+          = @kalinga_claim.name_of_insured
+        %th Date of Birth
+        %td 
+          = @kalinga_claim.date_of_birth.strftime("%B %d, %Y")
+      %tr
+        %th Gender
+        %td 
+          = @kalinga_claim.gender
+        %th Civil Status
+        %td 
+          = @kalinga_claim.civil_status
+      %tr
+        %th Insured Address
+        %td 
+          = @kalinga_claim.insured_address
+        %th POC No.
+        %td 
+          = @kalinga_claim.poc_number
+      %tr
+        %th Issued Date
+        %td 
+          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+        %th Amount
+        %td 
+          = @kalinga_claim.amount
+      %tr
+        %th Effective Date
+        %td
+          = @kalinga_claim.effective_date.strftime("%B %d, %Y")
+        %th Expiration Date
+        %td 
+          = @kalinga_claim.expiration_date.strftime("%B %d, %Y")
+      %tr
+        %th Purpose
+        %td
+          = @kalinga_claim.purpose
+        %th Reason of Death
+        %td
+          = @kalinga_claim.reason_of_death
+      %tr
+        %th Name of Beneficiary
+        %td
+          = @kalinga_claim.name_of_beneficiary
+        %th Relationship
+        %td
+          = @kalinga_claim.relationship_to_member
+      %tr
+        %th Prepared by
+        %td 
+          = @kalinga_claim.prepared_by
+        %th
+        %td
+    - else
+      %tr
+        %th Date Reported
+        %td 
+          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+        %th Date Emailed
+        %td 
+          = @kalinga_claim.date_emailed.strftime("%B %d, %Y")
+      %tr
+        %th Date Approved
+        %td 
+          = @kalinga_claim.date_approved.strftime("%B %d, %Y")
+        %th Date Requested
+        %td 
+          = @kalinga_claim.date_requested.strftime("%B %d, %Y")
+      %tr
+        %th Insured Name
+        %td 
+          = @kalinga_claim.name_of_insured
+        %th Date of Birth
+        %td 
+          = @kalinga_claim.date_of_birth.strftime("%B %d, %Y")
+      %tr
+        %th Gender
+        %td 
+          = @kalinga_claim.gender
+        %th Civil Status
+        %td 
+          = @kalinga_claim.civil_status
+      %tr
+        %th Insured Address
+        %td 
+          = @kalinga_claim.insured_address
+        %th POC No.
+        %td 
+          = @kalinga_claim.poc_number
+      %tr
+        %th Issued Date
+        %td 
+          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+        %th Amount
+        %td 
+          = @kalinga_claim.amount
+      %tr
+        %th Effective Date
+        %td
+          = @kalinga_claim.effective_date.strftime("%B %d, %Y")
+        %th Expiration Date
+        %td 
+          = @kalinga_claim.expiration_date.strftime("%B %d, %Y")
+      %tr
+        %th Purpose
+        %td
+          = @kalinga_claim.purpose
+        %th Reason of Death
+        %td
+          = @kalinga_claim.reason_of_death
+      %tr
+        %th Name of Beneficiary
+        %td
+          = @kalinga_claim.name_of_beneficiary
+        %th Relationship
+        %td
+          = @kalinga_claim.relationship_to_member
+      %tr
+        %th Prepared by
+        %td 
+          = @kalinga_claim.prepared_by
+        %th
+        %td
