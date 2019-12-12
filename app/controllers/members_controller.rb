@@ -118,10 +118,8 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportMembersFromCsvFile.new(config: config).execute!
     end
 
-    if !@errors.nil?
-      if @errors[:messages].size > 0
-        redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-      end
+    if @errors[:messages].size > 0
+      redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       Members::ImportMembersFromCsvFile.new(
                           file: file
