@@ -11,6 +11,7 @@ module Members
       validate_if_identification_number_present!
       validate_if_relationship_present!
       validate_if_uuid_present!
+      validate_if_member_uuid_present!
       @errors
     end
 
@@ -49,6 +50,15 @@ module Members
         @errors[:messages] << {
           key: "uuid",
           message: "UUID can't be blank."
+        } 
+      end
+    end
+
+    def validate_if_member_uuid_present!
+      if @beneficiary['member_uuid'].nil?
+        @errors[:messages] << {
+          key: "member_uuid",
+          message: "Member UUID can't be blank."
         } 
       end
     end

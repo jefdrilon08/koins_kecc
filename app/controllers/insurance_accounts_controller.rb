@@ -64,8 +64,10 @@ class InsuranceAccountsController < ApplicationController
       @errors = Insurance::ValidateInsuranceAccountsImportFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+    if !@errors.nil?
+      if @errors[:messages].size > 0
+        redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+      end
     else
       Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
       flash[:success] = "Successfully Import Insurance Accounts for Members."
@@ -102,8 +104,10 @@ class InsuranceAccountsController < ApplicationController
       @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+    if !@errors.nil?
+      if @errors[:messages].size > 0
+        redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+      end
     else
 
       file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
