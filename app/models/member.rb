@@ -21,9 +21,9 @@ class Member < ApplicationRecord
   belongs_to :branch
 
   has_many :loans
-  has_many :legal_dependents
-  has_many :beneficiaries
-  has_many :member_accounts
+  has_many :legal_dependents, dependent: :delete_all
+  has_many :beneficiaries, dependent: :delete_all
+  has_many :member_accounts, dependent: :delete_all
   has_many :member_shares
   has_many :membership_payment_records
   has_many :claims, dependent: :delete_all
@@ -46,7 +46,7 @@ class Member < ApplicationRecord
   #validates :middle_name, presence: true
   validates :last_name, presence: true
 
-  validates :identification_number, presence: true, uniqueness: true, if: :active?
+  #validates :identification_number, presence: true, uniqueness: true, if: :active?
   validates :civil_status, presence: true
   #validates :home_number, presence: true
   #validates :mobile_number, presence: true
@@ -100,6 +100,10 @@ class Member < ApplicationRecord
 
   def pending?
     self.status == "pending"
+  end
+
+  def pending_dormant?
+    self.insurance_status == "dormant" or self.insurance_status == "pending"
   end
 
   def active?
