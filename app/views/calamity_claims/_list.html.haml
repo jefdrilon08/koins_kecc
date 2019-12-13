@@ -1,0 +1,26 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Date Requested 
+      %th
+        Branch
+      %th
+        Member
+      %th 
+        Amount
+
+  %tbody
+    - @calamity_claims.each do |calamity_claim|
+      %tr
+        %td 
+          #{calamity_claim.date_requested.strftime("%B %d, %Y")}
+        %td
+          #{calamity_claim.member.branch.name}
+        %td
+          = link_to calamity_claim_path(calamity_claim) do
+            %strong
+              #{calamity_claim.member.full_name}
+        %td
+          #{calamity_claim.amount}
+        

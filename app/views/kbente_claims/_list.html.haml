@@ -1,0 +1,26 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Date Prepared 
+      %th
+        Branch
+      %th
+        Member
+      %th 
+        Amount
+
+  %tbody
+    - @kbente_claims.each do |kbente_claim|
+      %tr
+        %td 
+          #{kbente_claim.date_reported.strftime("%B %d, %Y")}
+        %td
+          #{kbente_claim.member.branch.name}
+        %td
+          = link_to kbente_claim_path(kbente_claim) do
+            %strong
+              #{kbente_claim.member.full_name}
+        %td
+          #{kbente_claim.amount}
+        

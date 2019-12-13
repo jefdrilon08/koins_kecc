@@ -68,4 +68,11 @@ class AccountingEntry < ApplicationRecord
     self.book == "MISC"
   end
   
+  def amount
+    self.journal_entries.sum(:amount)
+  end
+
+  def total_debit
+    self.journal_entries.where(post_type: "DR").sum(:amount).to_f
+  end
 end

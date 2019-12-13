@@ -11,11 +11,20 @@ module Members
     end
 
     def execute!
-      if !@member.pending?
-        @errors[:messages] << {
-          key: "status",
-          message: "member not pending"
-        }
+      if Settings.activate_microloans
+        if !@member.pending?
+          @errors[:messages] << {
+            key: "status",
+            message: "member not pending"
+          }
+        end
+      elsif Settings.activate_microinsurance
+        if !@member.pending_dormant?
+          @errors[:messages] << {
+            key: "status",
+            message: "member not pending or dormant"
+          }
+        end
       end
 
       if @user.blank?

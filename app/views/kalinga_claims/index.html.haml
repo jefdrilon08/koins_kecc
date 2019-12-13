@@ -1,0 +1,39 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    Microinsurance
+  %li.breadcrumb-item
+    .fa.fa-money-check
+    K-Kalinga Register
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", class: 'btn', id: 'btn-new-transaction' do
+        .fa.fa-plus
+        New Kalinga for Members
+      = link_to new_kalinga_claim_path(@kalinga_claim), class: 'btn' do
+        .fa.fa-plus
+        New Kalinga for Non-Members
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @kalinga_claims.size > 0
+            = render partial: "kalinga_claims/list", locals: { kalinga_claims: @kalinga_claims }
+            = paginate @kalinga_claims
+          - else
+            No kalinga found.
+
+= render partial: "kalinga_claims/new_transaction"
+
+= javascript_include_tag "kalinga_claims/Index"
+
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });

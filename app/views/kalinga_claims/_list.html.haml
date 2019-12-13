@@ -1,0 +1,26 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Name of Member
+      %th
+        Name of Insured
+      %th
+        Name of Beneficiary
+      %th
+        Amount    
+  %tbody
+    - @kalinga_claims.each do |kalinga_claim|
+      %tr
+        %td
+          = link_to kalinga_claim_path(kalinga_claim) do
+            %strong
+              #{kalinga_claim.name_of_member}
+        %td
+          = link_to kalinga_claim_path(kalinga_claim) do
+            %strong
+              #{kalinga_claim.name_of_insured}
+        %td 
+          #{kalinga_claim.name_of_beneficiary}
+        %td 
+          #{kalinga_claim.amount}

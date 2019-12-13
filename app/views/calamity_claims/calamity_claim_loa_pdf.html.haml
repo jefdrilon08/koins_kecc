@@ -1,0 +1,121 @@
+:css
+  .print-text {
+    font-size: 1.7em;
+    font-family: arial;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: arial;
+  }
+
+  .print-text-sub {
+    font-size: .8em;
+    font-family: arial;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  #kmba{
+    padding: -5px 5px 5px 5px;
+    width: 20%;
+  }
+
+  .body1{
+    width: 100%;
+    padding: 0px 0px 0px 45px;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+
+%span.print-text
+  %left
+    = image_tag("kmba.ico", :alt => "kmba img", id: "kmba")
+  %br
+    #{Time.now.strftime("%B %d, %Y")}
+  %left
+    %p
+      %b
+        CEBU ARCHDIOCESAN PROGRAM FOR SELF RELIANCE INC.-CAPS-R
+      %br
+        %b
+          Cebu Caritas Building, P. Gomez St., Cebu City, Philippines
+    %p
+      Attention:
+      %br
+      .body1   
+        %table{:border => "0"}
+          %tr
+            %td{:width => "21%"}
+              Branch:
+            %td{:width => "25%"}
+              %u  
+                #{@calamity_claim.branch.name}
+          %tr
+            %td{:width => "21%"}
+              Name of Member:
+            %td{:width => "25%"}
+              %u  
+                #{@calamity_claim.member.full_name_formatted}
+          %tr
+            %td{:width => "21%"}
+              Payable:
+            %td{:width => "25%"}
+              %u  
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@calamity_claim.amount, precision: 2), delimiter: ",", separator: ".")} 
+          %tr
+            %td{:width => "21%"}
+              Payee:
+            %td{:width => "25%"}
+              %u  
+                #{@calamity_claim.member.full_name_formatted}
+          
+
+    %br
+    .body2  
+      %p
+        Dear Sir/Madam:
+        %br
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This will serve as your authority to proceed the realease of the above claims in favor of
+          %b
+            %u
+              #{@calamity_claim.member.full_name_formatted}
+          &nbsp;member/beneficiary for Calamity Assistance of
+          %u
+            %b
+              #{@calamity_claim.member.full_name_formatted}
+          &nbsp;loss assured from CAPS-R
+          %u
+            %b
+              #{@calamity_claim.branch.name}
+          &nbsp;branch with the amount of
+          %u
+            %b
+              ***#{@calamity_claim.amount.to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@calamity_claim.amount, precision: 2), delimiter: ",", separator: ".", unit: "")})
+        %br
+          Thank you for your cooperation in this regard.
+  %br
+  .signatories
+    %table{:border => "0"}
+      %tr
+        %td{:width => "25%"}
+          Sincerely Yours:
+          %br
+          %br
+          %u
+            #{@calamity_claim.prepared_by}
+          %br
+          Account Officer
+        %td{:width => "25%"}
+          Check and Approved by:
+          %br
+          %br
+          %u
+            Evangeline Pe / Silvida Reyes - Antiquera
+          %br
+            KMBA OM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMBA-GM

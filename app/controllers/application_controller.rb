@@ -10,14 +10,8 @@ class ApplicationController < ActionController::Base
       @default_branch_name = Settings.try(:defaults).try(:default_branch).try(:name)
       
       if @default_branch_name.present?
-        @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
+        @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name='#{@default_branch_name}', name DESC").reverse
         
-        @branch = Branch.where(name: @default_branch_name)
-
-        #@branches = @branches.sort_by { |e| [ @branch.index(e) || @branch.size, e ] }
-        # if @branches.where(name: @default_branch_name).count > 0
-        #   @branches = @branches.sort_by { |e| [ e.name == @default_branch_name ? 0 : 1 ] }
-        # end
       else
         @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
       end
@@ -30,7 +24,11 @@ class ApplicationController < ActionController::Base
     "member_account_validations",
     "insurance_accounts",
     "members",
-    "hiip_claims"
+    "hiip_claims",
+    "kalinga_claims",
+    "kbente_claims",
+    "kjsp_claims",
+    "calamity_claims"
   ]
 
   FOR_PDF = [
@@ -43,7 +41,17 @@ class ApplicationController < ActionController::Base
     "claims_copy_pdf",
     "insurance_account_pdf",
     "blip_form_pdf",
-    "hiip_claim_validation_pdf"
+    "hiip_claim_validation_pdf",
+    "hiip_claim_loa_pdf",
+    "kalinga_claim_validation_pdf",
+    "kalinga_claim_loa_pdf",
+    "kbente_claim_validation_pdf",
+    "kbente_claim_loa_pdf",
+    "kjsp_claim_validation_pdf",
+    "kjsp_claim_loa_pdf",
+    "kjsp_contract_pdf",
+    "calamity_claim_validation_pdf",
+    "calamity_claim_loa_pdf"
   ]
 
   def layout_by_resource

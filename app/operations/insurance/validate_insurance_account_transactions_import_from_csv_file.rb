@@ -7,20 +7,23 @@ module Insurance
     end
 
     def execute!
-      check_if_parameters_present!
+      check_if_insurance_account_uuid_present!
+
       @errors
     end
 
     private
 
-    def check_if_parameters_present!
+    def check_if_insurance_account_uuid_present!
       if @insurance_account_transaction['insurance_account_uuid'].nil?
         @errors[:messages] << {
           key: "insurance_account_uuid",
           message: "Insurance Account UUID can't be blank."
         }
-      end 
+      end
+    end 
 
+    def check_if_uuid_present!
       if @insurance_account_transaction['uuid'].nil?
         @errors[:messages] << {
           key: "uuid",

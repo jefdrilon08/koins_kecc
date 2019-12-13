@@ -1,0 +1,118 @@
+= simple_form_for @kalinga_claim do |f|
+  .row
+    .col
+      .form-group
+        %h3
+          K-Kalinga Information
+  .row
+    .col
+      .form-group
+        %label
+        = f.hidden_field :name_of_member, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Name"
+    .col
+      .form-group
+        %label
+        = f.hidden_field :member_identification_number, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Identification Number"
+    .col
+      .form-group
+        %label
+        = f.hidden_field :member_branch, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Branch"
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :date_reported, input_html: { class: 'form-control ', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Reported"
+    .col
+      .form-group
+        %label
+        = f.input :date_emailed, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Emailed"
+    .col
+      .form-group
+        %label
+        = f.input :date_approved, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Approved"  
+    .col
+      .form-group
+        %label
+        = f.input :date_requested, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Requested"
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :purpose, input_html: { class: 'form-control' }, as: :select, collection: KalingaClaim::PURPOSE, include_blank: false, label: "Purpose", prompt: "-- Select --"
+    .col
+      .form-group
+        %label
+        = f.input :amount, input_html: { class: 'form-control'}, as: :string, label: "Amount"
+    .col
+      .form-group
+        %label
+        = f.input :poc_number, input_html: { class: 'form-control'}, as: :string, label: "POC #"
+    .col
+      .form-group
+        %label
+        = f.input :issueddate, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Issue Date"
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :effective_date, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Effective Date"
+    .col
+      .form-group
+        %label
+        = f.input :expiration_date, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Expiration Date"
+  .row
+    .col
+      .form-group
+        %label
+        = f.input :name_of_insured, input_html: { class: 'form-control'}, as: :string, label: "Name of Insured"
+    .col
+      .form-group
+        %label
+        = f.input :date_of_birth, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date of Birth"
+    .col
+      .form-group
+        %label
+        = f.input :gender, input_html: { class: 'form-control'}, as: :select, collection: KalingaClaim::GENDER, include_blank: false, label: "Gender", prompt: "-- Select --"
+    .col
+      .form-group
+        %label
+        = f.input :civil_status, input_html: { class: 'form-control'}, as: :select, collection: KalingaClaim::CIVIL_STATUS, include_blank: false, label: "Civil Status", prompt: "-- Select --"
+  .row  
+    .col
+      .form-group
+        %label
+        = f.input :insured_address, input_html: { class: 'form-control'}, as: :string, label: "Insured Address"
+  .row  
+    .col
+      .form-group
+        %label
+        = f.input :name_of_beneficiary, input_html: { class: 'form-control'}, as: :string, label: "Name of Beneficiary"
+    .col
+      .form-group
+        %label
+        = f.input :relationship_to_member, input_html: { class: 'form-control'}, as: :string, label: "Classification"
+  .row  
+    .col
+      .form-group
+        %label
+        = f.input :date_of_death_or_incident, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date of death/incident"
+    .col
+      .form-group
+        %label
+        = f.input :reason_of_death, input_html: { class: 'form-control'}, as: :select, collection: KalingaClaim::REASON_OF_CLAIMS, include_blank: false, label: "Reason of Claims", prompt: "-- Select --"
+  .row  
+    .col
+      .form-group
+        %label
+        = f.input :prepared_by, input_html: { class: 'form-control', value: current_user.print_full_name.titleize}, as: :string, label: "Prepared By"  
+  .row
+    .col
+      .form-actions
+      = button_tag type: 'submit', class: 'btn btn-primary', data: { confirm: "Are you sure?" } do
+        .fa.fa-check
+        Submit
+      = link_to kalinga_claims_path, class: 'btn btn-default' do
+        .fa.fa-times
+        Cancel
+
+

@@ -1,0 +1,28 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-money-check
+      K-Bente 
+  %li.breadcrumb-item
+    .fa.fa-user
+    = link_to "#{@kbente_claim.member.full_name}", member_path(@kbente_claim.member), target: "_blank"
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to edit_member_kbente_claim_path(@kbente_claim.member, @kbente_claim), class: 'btn btn-app' do
+        %i.fa.fa-edit
+        Edit
+    .btn-group 
+      = link_to kbente_claim_path(@kbente_claim), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-app" do
+        %i.fa.fa-times
+        Delete
+    .btn-group    
+      = link_to kbente_claim_kbente_claim_validation_pdf_path(@kbente_claim), target: "_blank", class: "btn btn-app" do
+        .fa.fa-download
+        Validation PDF
+    .btn-group 
+      = link_to kbente_claim_kbente_claim_loa_pdf_path(@kbente_claim), target: "_blank", class: "btn btn-app" do
+        .fa.fa-print
+        LOA
+    .btn-group
+      = link_to kbente_claims_path do
+        .fa.fa-arrow-left
+        Back to Claims

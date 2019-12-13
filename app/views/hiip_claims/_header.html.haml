@@ -18,6 +18,10 @@
       = link_to hiip_claim_hiip_claim_validation_pdf_path(@hiip_claim), target: "_blank", class: "btn btn-app" do
         .fa.fa-download
         Validation PDF
+    .btn-group    
+      = link_to hiip_claim_hiip_claim_loa_pdf_path(@hiip_claim), target: "_blank", class: "btn btn-app" do
+        .fa.fa-download
+        LOA 
     .btn-group
       = link_to hiip_claims_path do
         .fa.fa-arrow-left
