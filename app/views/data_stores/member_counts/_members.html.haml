@@ -9,6 +9,8 @@
         Name
       %th
         Member Type
+      %th
+        Membership Date
   %tbody
     - members.each_with_index do |m, i|
       %tr
@@ -21,3 +23,5 @@
           #{m[:center][:name]}
         %td
           #{m[:member_type]}
+        %td
+          #{MembershipPaymentRecord.where(member_id: m[:id], status: 'paid').last.date_paid}
