@@ -1,0 +1,155 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: calibri;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  .body1{
+    width: 100%;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+  hr {
+    border-color: black;
+  }
+  tr td {
+    font-size: 1.2em;
+  }
+
+%span.print-text
+  %center
+    %p
+      %b
+        Kasagana-Ka Mutual Benefit Association
+      %br
+        #{Settings.company_address}
+  %left
+    %p
+      CLAIMS VALIDATION:
+      %u
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K-Bente&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      %br
+      %br
+      %b
+        FOR:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      KASAGANA-KA Mutual Benefit Association, Inc.
+      %br
+      %b
+        FROM:&nbsp;&nbsp;&nbsp;
+      #{@kbente_claim.prepared_by}
+      %br
+      %b
+        DATE:&nbsp;&nbsp;&nbsp;&nbsp;
+      #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
+      %hr
+    .body1
+      %p
+        %b
+          For the following details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submitted Documents
+      %br
+      %table{:border => "0"}
+        %tr
+          %td{:width => "21%"}
+            Branch:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@kbente_claim.member.branch.name}
+          %td{:width => "28%"}
+            [] BLIP Form
+        %tr
+          %td{:width => "21%"}
+            Name of Insured:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@kbente_claim.name_of_insured}
+          %td{:width => "28%"}
+            [] ID of Claimant  
+        %tr
+          %td{:width => "21%"}
+            Purpose
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@kbente_claim.purpose}
+          %td{:width => "28%"}
+            [] Death Certificate
+        %tr
+          %td{:width => "21%"}
+            Name of Beneficiary
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@kbente_claim.name_of_beneficiary}
+          %td{:width => "28%"}
+            [] Letter of Approval
+        %tr
+          %td{:width => "21%"}
+            Date of Death
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@kbente_claim.date_of_death}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Classification
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@kbente_claim.classification}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Amount
+          %td{:width => "25%"}
+            %b
+              %u  
+                PhP #{number_with_delimiter(number_with_precision(@kbente_claim.amount, precision: 2), delimiter: ",", separator: ".")} 
+          %td{:width => "28%"} 
+  %br
+  %br
+  %br
+  .signatories
+    %table{:border => "0"}
+      %tr
+        %td{:width => "20%"}
+          Validated by:
+          %br
+          %br
+          %u
+            #{@kbente_claim.prepared_by}
+          %br
+          Account Officer
+        %td{:width => "30%"}
+          Approved by:
+          %br
+          %br
+          %u
+            Evangeline Pe / Silvida Reyes - Antiquera
+          %br
+            KMBA OM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMBA-GM
+        %td{:width => "10%"}
+          Released by:
+          %br
+          %br
+          %br
+            %u

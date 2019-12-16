@@ -1,0 +1,47 @@
+%section.content-header
+  %h3
+    %strong
+      K-Bente Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Date of Requested
+      %td 
+        = @kbente_claim.date_requested.strftime("%B %d, %Y")
+      %th Branch
+      %td 
+        = @kbente_claim.member.branch.name
+    %tr
+      %th Name of Member 
+      %td 
+        = link_to "#{@kbente_claim.member.full_name_formatted} (#{@kbente_claim.member.identification_number})", member_path(@kbente_claim.member), target: "_blank"
+      %th Recognition Date
+      %td 
+        = @kbente_claim.member.recognition_date.strftime("%B %d, %Y")
+    %tr
+      %th Name of Insured 
+      %td 
+        = @kbente_claim.name_of_insured
+      %th Classification
+      %td 
+        = @kbente_claim.classification
+    %tr
+      %th Name of Beneficiary
+      %td 
+        = @kbente_claim.name_of_beneficiary 
+      %th Purpose
+      %td 
+        = @kbente_claim.purpose  
+    %tr
+      %th Amount
+      %td 
+        = @kbente_claim.amount
+      %th Date of death
+      %td 
+        = @kbente_claim.date_of_death.strftime("%B %d, %Y")
+    %tr 
+      %th Prepared By
+      %td 
+        = @kbente_claim.prepared_by
+      %th
+      %td

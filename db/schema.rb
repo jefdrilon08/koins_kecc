@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_06_063019) do
+ActiveRecord::Schema.define(version: 2019_12_12_045236) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -199,6 +199,27 @@ ActiveRecord::Schema.define(version: 2019_12_06_063019) do
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 
+  create_table "calamity_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "date_requested"
+    t.string "purpose"
+    t.string "type_of_calamity"
+    t.string "amount"
+    t.date "date_of_event"
+    t.date "date_approved"
+    t.date "date_of_notification"
+    t.string "name_of_payee"
+    t.string "name_of_beneficiary"
+    t.string "prepared_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_calamity_claims_on_branch_id"
+    t.index ["center_id"], name: "index_calamity_claims_on_center_id"
+    t.index ["member_id"], name: "index_calamity_claims_on_member_id"
+  end
+
   create_table "centers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "branch_id"
     t.string "name"
@@ -381,7 +402,6 @@ ActiveRecord::Schema.define(version: 2019_12_06_063019) do
     t.string "poc_number"
     t.string "name_of_insured"
     t.string "relationship_to_member"
-    t.boolean "is_member"
     t.string "insured_address"
     t.string "civil_status"
     t.date "date_of_birth"
@@ -394,6 +414,55 @@ ActiveRecord::Schema.define(version: 2019_12_06_063019) do
     t.datetime "updated_at", null: false
     t.date "issueddate"
     t.string "name_of_member"
+    t.string "member_branch"
+    t.string "member_identification_number"
+  end
+
+  create_table "kbente_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "date_reported"
+    t.date "date_emailed"
+    t.date "date_approved"
+    t.date "date_requested"
+    t.string "purpose"
+    t.decimal "amount"
+    t.string "prepared_by"
+    t.string "name_of_insured"
+    t.string "name_of_beneficiary"
+    t.string "classification"
+    t.date "date_of_death"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_kbente_claims_on_branch_id"
+    t.index ["center_id"], name: "index_kbente_claims_on_center_id"
+    t.index ["member_id"], name: "index_kbente_claims_on_member_id"
+  end
+
+  create_table "kjsp_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "date_prepared"
+    t.string "name_of_kjsp_beneficiary"
+    t.string "payee"
+    t.string "amount"
+    t.string "name_of_school"
+    t.string "school_year"
+    t.string "year_level"
+    t.string "sem"
+    t.string "kjsp_type"
+    t.string "final_grade"
+    t.string "remarks"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "classification"
+    t.string "received_by"
+    t.string "prepared_by"
+    t.index ["branch_id"], name: "index_kjsp_claims_on_branch_id"
+    t.index ["center_id"], name: "index_kjsp_claims_on_center_id"
+    t.index ["member_id"], name: "index_kjsp_claims_on_member_id"
   end
 
   create_table "legal_dependents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -749,6 +818,9 @@ ActiveRecord::Schema.define(version: 2019_12_06_063019) do
   add_foreign_key "billings", "branches"
   add_foreign_key "billings", "centers"
   add_foreign_key "branches", "clusters"
+  add_foreign_key "calamity_claims", "branches"
+  add_foreign_key "calamity_claims", "centers"
+  add_foreign_key "calamity_claims", "members"
   add_foreign_key "centers", "branches"
   add_foreign_key "claims", "branches"
   add_foreign_key "claims", "centers"
@@ -768,6 +840,12 @@ ActiveRecord::Schema.define(version: 2019_12_06_063019) do
   add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
+  add_foreign_key "kbente_claims", "branches"
+  add_foreign_key "kbente_claims", "centers"
+  add_foreign_key "kbente_claims", "members"
+  add_foreign_key "kjsp_claims", "branches"
+  add_foreign_key "kjsp_claims", "centers"
+  add_foreign_key "kjsp_claims", "members"
   add_foreign_key "legal_dependents", "members"
   add_foreign_key "loan_repayment_rates", "branches"
   add_foreign_key "loan_repayment_rates", "centers"

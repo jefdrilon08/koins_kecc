@@ -1,0 +1,26 @@
+%table.table.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        Date Prepared 
+      %th
+        Branch
+      %th
+        Member
+      %th 
+        Amount
+
+  %tbody
+    - @kjsp_claims.each do |kjsp_claim|
+      %tr
+        %td 
+          #{kjsp_claim.date_prepared.strftime("%B %d, %Y")}
+        %td
+          #{kjsp_claim.member.branch.name}
+        %td
+          = link_to kjsp_claim_path(kjsp_claim) do
+            %strong
+              #{kjsp_claim.member.full_name}
+        %td
+          #{kjsp_claim.amount}
+        

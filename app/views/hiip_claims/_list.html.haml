@@ -45,8 +45,8 @@
         %td
           #{hiip_claim.status}
         %td
-          #{@hiip_claims.where(policy_number: hiip_claim.policy_number).first.effective_date_of_coverage}
+          #{@hiip_claims.where(policy_number: hiip_claim.policy_number).first.effective_date_of_coverage.strftime("%B %d, %Y")}
         %td
-          #{@hiip_claims.where(policy_number: hiip_claim.policy_number).first.expiration_date_of_coverage}
+          #{@hiip_claims.where(policy_number: hiip_claim.policy_number).first.expiration_date_of_coverage.strftime("%B %d, %Y")}
         
         

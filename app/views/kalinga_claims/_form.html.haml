@@ -8,6 +8,19 @@
     .col
       .form-group
         %label
+        = f.hidden_field :name_of_member, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Name"
+    .col
+      .form-group
+        %label
+        = f.hidden_field :member_identification_number, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Identification Number"
+    .col
+      .form-group
+        %label
+        = f.hidden_field :member_branch, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Branch"
+  .row
+    .col
+      .form-group
+        %label
         = f.input :date_reported, input_html: { class: 'form-control ', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Reported"
     .col
       .form-group
@@ -25,7 +38,7 @@
     .col
       .form-group
         %label
-        = f.input :purpose, input_html: { class: 'form-control', id: 'creditors-name' }, as: :select, collection: KalingaClaim::PURPOSE, include_blank: false, label: "Purpose", prompt: "-- Select --"
+        = f.input :purpose, input_html: { class: 'form-control' }, as: :select, collection: KalingaClaim::PURPOSE, include_blank: false, label: "Purpose", prompt: "-- Select --"
     .col
       .form-group
         %label
@@ -59,7 +72,7 @@
     .col
       .form-group
         %label
-        = f.input :gender, input_html: { class: 'form-control', id: 'creditors-name' }, as: :select, collection: KalingaClaim::GENDER, include_blank: false, label: "Gender", prompt: "-- Select --"
+        = f.input :gender, input_html: { class: 'form-control'}, as: :select, collection: KalingaClaim::GENDER, include_blank: false, label: "Gender", prompt: "-- Select --"
     .col
       .form-group
         %label
@@ -77,7 +90,7 @@
     .col
       .form-group
         %label
-        = f.input :relationship_to_member, input_html: { class: 'form-control'}, as: :string, label: "Relationship to Member"
+        = f.input :relationship_to_member, input_html: { class: 'form-control'}, as: :string, label: "Classification"
   .row  
     .col
       .form-group
@@ -86,7 +99,7 @@
     .col
       .form-group
         %label
-        = f.input :reason_of_death, input_html: { class: 'form-control'}, as: :string, label: "Reason of death"
+        = f.input :reason_of_death, input_html: { class: 'form-control'}, as: :select, collection: KalingaClaim::REASON_OF_CLAIMS, include_blank: false, label: "Reason of Claims", prompt: "-- Select --"
   .row  
     .col
       .form-group

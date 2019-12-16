@@ -12,15 +12,11 @@ module Members
     end
 
     def new
-      #@kalinga_claim = KalingaClaim.new
       @kalinga_claim = KalingaClaim.new
     end
 
     def create
       @kalinga_claim = KalingaClaim.new(kalinga_claim_params)
-      #@kalinga_claim.member = @member
-      #@kalinga_claim.branch = @member.branch
-      #@kalinga_claim.center = @member.center
       @errors = []
       @errors = Claims::ValidateKalingaClaimDuplication.new(kalinga_claim: @kalinga_claim).execute!
 
@@ -48,10 +44,8 @@ module Members
 
     def update
       @kalinga_claim = KalingaClaim.find(params[:id])
-      @kalinga_claim.member = @member
 
       if @kalinga_claim.update(kalinga_claim_params)
-        # update the remaining balance
         flash[:success] = "Successfully updated claim"
         redirect_to kalinga_claim_path(@kalinga_claim)
       else

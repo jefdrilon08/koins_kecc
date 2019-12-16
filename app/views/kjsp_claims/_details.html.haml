@@ -1,0 +1,56 @@
+%section.content-header
+  %h3
+    %strong
+      KJSP Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th KJSP Type 
+      %td 
+        = @kjsp_claim.kjsp_type
+      %th Date Prepared
+      %td 
+        = @kjsp_claim.date_prepared.strftime("%B %d, %Y")
+    %tr
+      %th Branch
+      %td 
+        = @kjsp_claim.member.branch.name
+      %th Name of Member 
+      %td 
+        = link_to "#{@kjsp_claim.member.full_name_formatted} (#{@kjsp_claim.member.identification_number})", member_path(@kjsp_claim.member), target: "_blank"
+    %tr
+      %th Name of KJSP Beneficiary
+      %td 
+        = @kjsp_claim.name_of_kjsp_beneficiary
+      %th Name of School
+      %td 
+        = @kjsp_claim.name_of_school
+    %tr
+      %th SY
+      %td 
+        = @kjsp_claim.school_year
+      %th Year Level
+      %td 
+        = @kjsp_claim.year_level
+    %tr
+      %th Semester
+      %td 
+        = @kjsp_claim.sem
+      %th Final Grade
+      %td 
+        = @kjsp_claim.final_grade
+    %tr
+      %th Relationship to Member
+      %td 
+        = @kjsp_claim.classification
+      %th Amount
+      %td 
+        = @kjsp_claim.amount
+    %tr
+      %th Remarks
+      %td 
+        = @kjsp_claim.remarks
+      %th Prepared by
+      %td 
+        = @kjsp_claim.prepared_by
+      

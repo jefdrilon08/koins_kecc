@@ -6,10 +6,10 @@ class HiipClaimsController < ApplicationController
     @member = @hiip_claim.member
   end
 
-  # def hiip_claim_loa_pdf
-  #   @hiip_claim = HiipClaim.find(params[:clip_claim_id])
-  #   @member = @hiip_claim.member
-  # end
+  def hiip_claim_loa_pdf
+    @hiip_claim = HiipClaim.find(params[:hiip_claim_id])
+    @member = @hiip_claim.member
+  end
 
   def index
     @hiip_claims = HiipClaim.all.order("date_posted ASC")

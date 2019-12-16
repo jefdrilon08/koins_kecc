@@ -24,7 +24,11 @@ class ApplicationController < ActionController::Base
     "member_account_validations",
     "insurance_accounts",
     "members",
-    "hiip_claims"
+    "hiip_claims",
+    "kalinga_claims",
+    "kbente_claims",
+    "kjsp_claims",
+    "calamity_claims"
   ]
 
   FOR_PDF = [
@@ -37,7 +41,17 @@ class ApplicationController < ActionController::Base
     "claims_copy_pdf",
     "insurance_account_pdf",
     "blip_form_pdf",
-    "hiip_claim_validation_pdf"
+    "hiip_claim_validation_pdf",
+    "hiip_claim_loa_pdf",
+    "kalinga_claim_validation_pdf",
+    "kalinga_claim_loa_pdf",
+    "kbente_claim_validation_pdf",
+    "kbente_claim_loa_pdf",
+    "kjsp_claim_validation_pdf",
+    "kjsp_claim_loa_pdf",
+    "kjsp_contract_pdf",
+    "calamity_claim_validation_pdf",
+    "calamity_claim_loa_pdf"
   ]
 
   def layout_by_resource

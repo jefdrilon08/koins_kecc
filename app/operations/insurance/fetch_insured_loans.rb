@@ -75,7 +75,7 @@ module Insurance
         record[:amount] = loan.principal
         record[:num_installments] = loan.try(:num_installments)
         record[:maturity_date]  = loan.maturity_date
-        record[:date_released] = loan.date_released.strftime("%B %d, %Y")
+        record[:date_released] = loan.date_released
 
        lde = loan.accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
         if lde.present?

@@ -7,6 +7,14 @@
       = link_to edit_kalinga_claim_path(@kalinga_claim), class: 'btn btn-app' do
         %i.fa.fa-edit
         Edit
+    .btn-group    
+      = link_to kalinga_claim_kalinga_claim_validation_pdf_path(@kalinga_claim), target: "_blank", class: "btn btn-app" do
+        .fa.fa-download
+        Validation PDF
+    .btn-group 
+      = link_to kalinga_claim_kalinga_claim_loa_pdf_path(@kalinga_claim), target: "_blank", class: "btn btn-app" do
+        .fa.fa-print
+        LOA
     .btn-group 
       = link_to kalinga_claim_path(@kalinga_claim), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-app" do
         %i.fa.fa-times

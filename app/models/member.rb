@@ -29,6 +29,9 @@ class Member < ApplicationRecord
   has_many :claims, dependent: :delete_all
   has_many :clip_claims, dependent: :delete_all
   has_many :hiip_claims, dependent: :delete_all
+  has_many :kbente_claims, dependent: :delete_all
+  has_many :kjsp_claims, dependent: :delete_all
+  has_many :calamity_claims, dependent: :delete_all
   has_many :membership_payment_records
   has_many :attachment_files
   has_many :member_account_validation_records
@@ -304,6 +307,8 @@ class Member < ApplicationRecord
       "#{last_name.titleize}, #{first_name.titleize} #{middle_name[0].try(:titleize)}."
     end
   end
+
+  
 
 end
 

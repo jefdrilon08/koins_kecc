@@ -152,5 +152,8 @@ Rails.application.config.assets.precompile += [
   "hiip_claims_form.js",
   "kalinga_claims/Index.js",
   "reports/ClaimsBlip.js",
-  "reports/ClaimsClip.js"
+  "reports/ClaimsClip.js",
+  "kbente_claims/Index.js",
+  "kjsp_claims/Index.js",
+  "calamity_claims/Index.js"
 ]
