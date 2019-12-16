@@ -68,6 +68,12 @@ module Branches
             female: 0,
             others: 0,
             total: 0,
+            female_inforce: 0,
+            male_inforce: 0,
+            female_pending: 0,
+            male_pending: 0,
+            female_lapsed: 0,
+            male_lapsed: 0,
             members: []
           }
         },
@@ -105,13 +111,19 @@ module Branches
                             @branch.id
                           )
       # Active Members = Pure Savers + Loaners
-      total_inforce = @active_members.where(insurance_status: "inforce").count
-      total_lapsed  = @active_members.where(insurance_status: "lapsed").count
-      total_pending = @active_members.where(insurance_status: "pending").count
-      total_female  = @active_members.where(gender: "Female").count
-      total_male    = @active_members.where(gender: "Male").count
-      total_others  = @active_members.where(gender: "Others").count
-      total         = total_female + total_male + total_others
+      total_inforce        = @active_members.where(insurance_status: "inforce").count
+      total_lapsed         = @active_members.where(insurance_status: "lapsed").count
+      total_pending        = @active_members.where(insurance_status: "pending").count
+      total_female_inforce = @active_members.where(insurance_status: "inforce", gender: "Female").count
+      total_male_inforce   = @active_members.where(insurance_status: "inforce", gender: "Male").count
+      total_female_pending = @active_members.where(insurance_status: "pending", gender: "Female").count
+      total_male_pending   = @active_members.where(insurance_status: "pending", gender: "Male").count
+      total_female_lapsed  = @active_members.where(insurance_status: "lapsed", gender: "Female").count
+      total_male_lapsed    = @active_members.where(insurance_status: "lapsed", gender: "Male").count
+      total_female         = @active_members.where(gender: "Female").count
+      total_male           = @active_members.where(gender: "Male").count
+      total_others         = @active_members.where(gender: "Others").count
+      total                = total_female + total_male + total_others
 
       @data[:counts][:active_members][:inforce] = total_inforce
       @data[:counts][:active_members][:lapsed] = total_lapsed
@@ -119,6 +131,14 @@ module Branches
       @data[:counts][:active_members][:female] = total_female
       @data[:counts][:active_members][:male]   = total_male
       @data[:counts][:active_members][:others] = total_others
+      @data[:counts][:active_members][:female_inforce] = total_female_inforce
+      @data[:counts][:active_members][:male_inforce] = total_male_inforce
+      @data[:counts][:active_members][:female_lapsed] = total_female_lapsed
+      @data[:counts][:active_members][:male_lapsed] = total_male_lapsed
+      @data[:counts][:active_members][:female_pending] = total_female_pending
+      @data[:counts][:active_members][:male_pending] = total_male_pending
+      @data[:counts][:active_members][:others] = total_others
+      
       @data[:counts][:active_members][:total]  = total
 
       @data[:counts][:active_members][:members] = @active_members.map{ |m|

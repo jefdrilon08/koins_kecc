@@ -29,6 +29,10 @@ namespace :api do
     get "/dashboard", to: "dashboard#index"
     get "/dashboard/overview", to: "dashboard#overview"
 
+    # Dashboard MII
+    get "/dashboard_mii", to: "dashboard_mii#index"
+    get "/dashboard_mii/overview", to: "dashboard_mii#overview"
+
     # Monitoring
     get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing"
     get "/monitoring/accounting_entry_precision", to: "monitoring#accounting_entry_precision"

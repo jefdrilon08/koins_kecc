@@ -90,7 +90,7 @@
   %li{ class: "nav-item" }
     = link_to "/reports/member_quarterly_reports", class: 'nav-link' do
       %i.nav-icon.fa.fa-book.icon
-      Member Quarterly Reports
+      Member Quarterly
   %li{ class: "nav-item" }
     = link_to "/reports/cic", class: 'nav-link' do
       %i.nav-icon.fa.fa-book.icon
@@ -102,8 +102,15 @@
   %li{ class: "nav-item" }
     = link_to "/reports/summary_of_certificates_and_policies", class: 'nav-link' do
       %i.nav-icon.fa.fa-book.icon
-      Summary of Certification and Policies
+      Cert and Policies
   %li{ class: "nav-item" }
     = link_to "/reports/personal_document", class: 'nav-link' do
       %i.nav-icon.fa.fa-book.icon
-      Personal Documents Report
+      Personal Documents
+  - if microinsurance?
+    = link_to "/reports/claims_blip", class: 'nav-link' do
+      %i.nav-icon.fa.fa-file
+      Claims (BLIP)
+    = link_to "/reports/claims_clip", class: 'nav-link' do
+      %i.nav-icon.fa.fa-file
+      Claims (CLIP)

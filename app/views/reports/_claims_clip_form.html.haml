@@ -1,0 +1,24 @@
+= form_tag claims_clip_path, html: { novalidate: true }, method: "GET" do
+  .row
+    .col
+      .form-group
+        %label Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label Type of Loan
+        = select_tag :type_of_loan, options_for_select(ClipClaim::TYPES_OF_LOAN, @type_of_loan), class: "form-control select-select2", prompt: "-- SELECT --", id: "type-of-loan"
+    .col
+      .form-group
+        %label Start Date
+        = text_field_tag :start_date, @start_date, class: "form-control", type: "date", id: "start-date"
+    .col
+      .form-group
+        %label End Date
+        = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end-date"
+    .col
+      .form-group
+        %label
+        = link_to "#", class: 'btn btn-primary btn-block', id: 'excel-btn' do
+          .fa.fa-download
+          Excel

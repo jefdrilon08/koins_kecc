@@ -1,0 +1,32 @@
+= form_tag claims_blip_path, html: { novalidate: true }, method: "GET" do
+  .row
+    .col
+      .form-group
+        %label Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label Type of Insurance Policy
+        = select_tag :type_of_insurance_policy, options_for_select(Claim::INSURANCE_POLICY_TYPES, @type_of_insurance_policy), class: "form-control select-select2", prompt: "-- SELECT --", id: "type-of-insurance-policy"
+    .col
+      .form-group
+        %label Classification of Insured
+        = select_tag :classification_of_insured, options_for_select(Claim::INSURED_CLASSIFICATION, @classification_of_insured), class: "form-control select-select2", prompt: "-- SELECT --", id: "classification-of-insured"
+    .col
+      .form-group
+        %label Category
+        = select_tag :category_of_cause_of_death_tpd_accident, options_for_select(Claim::CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT, @category_of_cause_of_death_tpd_accident), class: "form-control select-select2", prompt: "-- SELECT --", id: "category-of-cause-of-death-tpd-accident"
+    .col
+      .form-group
+        %label Start Date
+        = text_field_tag :start_date, @start_date, class: "form-control", type: "date", id: "start-date"
+    .col
+      .form-group
+        %label End Date
+        = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end-date"
+    .col
+      .form-group
+        %label
+        = link_to "#", class: 'btn btn-primary btn-block', id: 'excel-btn' do
+          .fa.fa-download
+          Excel

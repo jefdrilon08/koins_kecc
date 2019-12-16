@@ -1,0 +1,20 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-chart-pie
+    Report 
+  %li.breadcrumb-item
+    .fa.fa-users
+    BLIP Claims Report
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "claims_blip_form"
+
+= javascript_include_tag "reports/ClaimsBlip"
+
+:javascript
+  $(document).ready(function() {
+    ClaimsBlip.init();
+  });

@@ -131,17 +131,38 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
-  def personal_document_reports
+  def claims_blip
+  end
+
+  def claims_blip_report
+    branch = params[:branch]
+    category_of_cause_of_death_tpd_accident = params[:category_of_cause_of_death_tpd_accident]
+    type_of_insurance_policy = params[:type_of_insurance_policy]
+    classification_of_insured = params[:classification_of_insured]
     start_date = params[:start_date]
     end_date = params[:end_date]
-    branch = params[:branch]
-    branch_name = Branch.where(id: branch).first.name
   
-    excel = Reports::GeneratePersonalDocumentsReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
-    filename  = "#{branch_name}_personal_documents_report.xlsx"
+    excel = Reports::GenerateClaimsBlipReportExcel.new(branch: branch, category_of_cause_of_death_tpd_accident: category_of_cause_of_death_tpd_accident, type_of_insurance_policy: type_of_insurance_policy, classification_of_insured: classification_of_insured, start_date: start_date, end_date: end_date).execute!
+    filename  = "BLIP_claims_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def claims_clip
+  end
+
+  def claims_clip_report
+    branch = params[:branch]
+    cause_of_death = params[:cause_of_death]
+    type_of_loan = params[:type_of_loan]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+  
+    excel = Reports::GenerateClaimsClipReportExcel.new(branch: branch, type_of_loan: type_of_loan, start_date: start_date, end_date: end_date).execute!
+    filename  = "CLIP_claims_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
 end
