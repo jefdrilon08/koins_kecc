@@ -35,16 +35,6 @@ module Billings
                                     }
                                   ).execute!
 
-      ActivityLog.create!(
-        content: "#{@user.full_name} zero-ed out billing",
-        activity_type: "modification",
-        data: {
-          user_id: @user.id,
-          billing_id: @billing.id,
-          current_member: @current_member
-        }
-      )
-
       # Update billing
       @billing.data = @data
 
