@@ -15,7 +15,7 @@ module Billings
     def execute!
       @records.each do |r|
         r[:records].each do |o|
-          if o[:enabled]
+          if o[:enabled] and o[:amount].to_f.round(2) > 0.00
             o[:amount]  = 0.00
 
             config  = {
