@@ -1,4 +1,81 @@
 namespace :report do
+  task :midas_report => :environment do
+    s_date= ENV['s_date']
+    br_name = ENV['SATO']
+    rep_type = ENV['MIDAS']
+    br_id= Branch.where(name: br_name).ids
+    
+    if rep_type == 'PODs'
+      loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date >=?", br_id , s_date , s_date).order("members.identification_number").uniq
+    elsif rep_type == 'BARs'
+      loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date <=?", br_id , s_date , s_date).order("members.identification_number").uniq
+    end
+    
+    if rep_type == 'PODs'
+      m_type = 'POD'
+    elsif rep_type == 'BARs'
+      m_type = 'BAR'
+    end
+ 
+    loan_count = loan_data.count 
+    puts "#{rep_type} Template"
+    puts "Institution|midas"
+    puts "Cut Off Date | #{s_date.to_date.strftime("%m/%d/%Y")}"
+    puts "No. Of Clients| #{loan_count}"
+    puts "BEGIN"
+    puts "CLIENT_REFERENCE|LAST_NAME|FIRST_NAME|MIDDLE_NAME|NO_STREET_SITIO_PUROK|BARANGAY_DISTRICT|CITY_MUNICIPALITY|PROVINCE|ZIP_CODE|BIRTHDATE|GENDER|CONTACT_NO|MOTHER'S MAIDEN FIRST NAME|MOTHER'S MAIDENMIDDLE NAME|MOTHER'S MAIDEN LAST NAME|ID_TYPE|ID_NO|SSS/GSIS|PAGIBIG|PHILHEALTH|TIN|LOAN_REFERENCE|CONTRACT_TYPE|CONTRACT_PHASE|TRANSACTION_TYPE|LOAN_PRINCIPAL|LOAN_BALANCE|DATE_GRANTED|DUE_DATE|INTEREST_RATE|PAY_FREQ|TERM|CURRENCY|LOAN_PURPOSE|#{m_type}_TYPE|TOTAL_LOAN_BALANCE|CONTRACT_ACTUAL_END_DATE|OVERDUE_DAYS|MONTHLY_PAYMENT_AMOUNT|NO_OF_OUTSTANDING_PAYMENT|AMOUNT_OF_LAST_PAYMENT|REMARKS"
+      
+    loan_data.each do |y|
+      
+      street = y.member.data["address"]["street"]
+      brgy = y.member.data["address"]["district"]
+      city = y.member.data["address"]["city"]
+      bday = y.member.date_of_birth.to_date.strftime("%m/%d/%Y")
+      sss = y.member.data["government_identification_numbers"]["sss_number"]
+      pag_ibig =  y.member.data["government_identification_numbers"]["pag_ibig_number"]
+      phil_health =  y.member.data["government_identification_numbers"]["phil_health_number"]
+      tin =  y.member.data["government_identification_numbers"]["tin_number"] 
+      loan_prod = LoanProduct.find(y.loan_product_id).name
+      date_rel = y.date_released.to_date.strftime("%m/%d/%Y")
+      mat_date = y.maturity_date.to_date.strftime("%m/%d/%Y")
+      int_rate = (y.monthly_interest_rate*12)*100
+      pod_type = "50-01"
+      tot_loan_balance = y.principal_balance + y.interest_balance
+      over_due_days = ( s_date.to_date - y.maturity_date.to_date).to_i
+      amort = AmortizationScheduleEntry.where(loan_id: y.id)
+      monthly_payment = amort.first.amount_due * 4
+      outs_payment = amort.where("is_paid IS NULL").count
+      last_payment = amort.last.amount_due
+
+      #OVER DUE DAYS
+      if over_due_days >= -1
+        over_due_days = over_due_days
+      else
+        over_due_days = 0
+      end
+
+      #CONTRACT TYPE
+      if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'  or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO'
+        contract_type = 12
+      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'
+        contract_type = 22
+      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD'
+        contract_type = 28
+      end
+
+      #LOAN PURPOSE
+      if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'         
+        loan_purpose = 'NI'
+      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'
+        loan_purpose = 'ET'
+      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO'
+        loan_purpose = 'SE'
+      end
+
+      puts "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{y.member.gender}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+    end
+  puts "END"
+  end
   task :mem_share => :environment do
     x = Member.where("status = 'active' and branch_id = '3726405b-777c-4b61-b6a5-7a4b48db62b6'")
     x.each do |y|
