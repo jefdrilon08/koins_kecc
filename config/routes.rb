@@ -350,16 +350,12 @@ Rails.application.routes.draw do
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies
   get "/reports/personal_document", to: "reports#personal_document", as: :personal_document
   get "/reports/personal_document_reports", to: "reports#personal_document_reports", as: :personal_document_reports
-<<<<<<< HEAD
   get "/reports/claims_blip", to: "reports#claims_blip", as: :claims_blip
   get "/reports/claims_blip_report", to: "reports#claims_blip_report", as: :claims_blip_report
   get "/reports/claims_clip", to: "reports#claims_clip", as: :claims_clip
   get "/reports/claims_clip_report", to: "reports#claims_clip_report", as: :claims_clip_report
-  
-=======
   get "/reports/collections_hiip", to: "reports#collections_hiip", as: :collections_hiip
   get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports", as: :collections_hiip_reports
->>>>>>> dev
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
