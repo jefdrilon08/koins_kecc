@@ -149,6 +149,7 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+<<<<<<< HEAD
   def claims_clip
   end
 
@@ -161,8 +162,22 @@ class ReportsController < ApplicationController
   
     excel = Reports::GenerateClaimsClipReportExcel.new(branch: branch, type_of_loan: type_of_loan, start_date: start_date, end_date: end_date).execute!
     filename  = "CLIP_claims_report.xlsx"
+=======
+  def collections_hiip_reports
+    branch = params[:branch]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch_name = Branch.where(id: branch).first.name
+
+    excel = Reports::GenerateCollectionsHiipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "#{branch_name}_collections_hiip_report.xlsx"
+>>>>>>> dev
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 end
