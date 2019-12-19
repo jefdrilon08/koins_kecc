@@ -300,5 +300,6 @@ namespace :api do
     get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
     get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
+    get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
   end
 end
