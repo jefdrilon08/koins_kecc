@@ -32,7 +32,7 @@ var hiipClaimsForm = (function() {
       var time = dateDischargedValue.getTime() - dateAdmittedValue.getTime(); 
       var days = time / (1000 * 3600 * 24); 
 
-      $('#number-ofdays-tobepaid').val(days + 1);
+      $('#number-ofdays-tobepaid').val(days);
       var numberOfDaysTobepaid = $("#number-ofdays-tobepaid").val();
       var value = 200.00;
       $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value));

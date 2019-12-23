@@ -6,7 +6,12 @@ class KjspClaimsController < ApplicationController
     @member = @kjsp_claim.member
   end
 
-  def kjsp_contract_pdf
+  def kjsp_contract_highschool_pdf
+    @kjsp_claim = KjspClaim.find(params[:kjsp_claim_id])
+    @member = @kjsp_claim.member
+  end
+
+  def kjsp_contract_college_pdf
     @kjsp_claim = KjspClaim.find(params[:kjsp_claim_id])
     @member = @kjsp_claim.member
   end

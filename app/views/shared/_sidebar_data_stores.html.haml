@@ -108,9 +108,15 @@
       %i.nav-icon.fa.fa-book.icon
       Personal Documents
   - if microinsurance?
-    = link_to "/reports/claims_blip", class: 'nav-link' do
-      %i.nav-icon.fa.fa-file
-      Claims (BLIP)
-    = link_to "/reports/claims_clip", class: 'nav-link' do
-      %i.nav-icon.fa.fa-file
-      Claims (CLIP)
+    %li{ class: "nav-item" }
+      = link_to "/reports/claims_blip", class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Claims (BLIP)
+    %li{ class: "nav-item" }
+      = link_to "/reports/claims_clip", class: 'nav-link' do
+        %i.nav-icon.fa.fa-file
+        Claims (CLIP)
+    %li{ class: "nav-item" }
+      = link_to "/reports/collections_hiip", class: 'nav-link' do
+        %i.nav-icon.fa.fa-book.icon
+        HIIP Reports

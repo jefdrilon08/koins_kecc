@@ -49,7 +49,8 @@ class ApplicationController < ActionController::Base
     "kbente_claim_loa_pdf",
     "kjsp_claim_validation_pdf",
     "kjsp_claim_loa_pdf",
-    "kjsp_contract_pdf",
+    "kjsp_contract_highschool_pdf",
+    "kjsp_contract_college_pdf",
     "calamity_claim_validation_pdf",
     "calamity_claim_loa_pdf"
   ]

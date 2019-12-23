@@ -14,10 +14,16 @@
       = link_to kjsp_claim_path(@kjsp_claim), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-app" do
         %i.fa.fa-times
         Delete
-    .btn-group    
-      = link_to kjsp_claim_kjsp_contract_pdf_path(@kjsp_claim), target: "_blank", class: "btn btn-app" do
-        .fa.fa-download
-        KJSP Contract
+    - if @kjsp_claim.year_level == "GRADE 7" || @kjsp_claim.year_level == "GRADE 8" || @kjsp_claim.year_level == "GRADE 9" || @kjsp_claim.year_level == "GRADE 10"  || @kjsp_claim.year_level == "GRADE 11" || @kjsp_claim.year_level == "GRADE 12" 
+      .btn-group    
+        = link_to kjsp_claim_kjsp_contract_highschool_pdf_path(@kjsp_claim), target: "_blank", class: "btn btn-app" do
+          .fa.fa-download
+          KJSP Contract for Highschool
+    - else
+      .btn-group    
+        = link_to kjsp_claim_kjsp_contract_college_pdf_path(@kjsp_claim), target: "_blank", class: "btn btn-app" do
+          .fa.fa-download
+          KJSP Contract for College
     .btn-group    
       = link_to kjsp_claim_kjsp_claim_validation_pdf_path(@kjsp_claim), target: "_blank", class: "btn btn-app" do
         .fa.fa-download

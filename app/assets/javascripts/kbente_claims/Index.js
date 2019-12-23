@@ -21,6 +21,8 @@ var Index = (function() {
 
   var _authenticityToken;
 
+  var $dataTable;
+
   var _cacheDom = function() {
     $btnNewTransaction        = $("#btn-new-transaction");
     $modalNewTransaction      = $("#modal-new-transaction");
@@ -32,11 +34,16 @@ var Index = (function() {
     $message  = $(".message");
 
     templateErrorList = $("#template-error-list").html();
+    $dataTable  = $("#data-table");
   };
 
   var _bindEvents = function() {
     $btnNewTransaction.on("click", function() {
       $modalNewTransaction.modal("show");
+    });
+
+    $dataTable.DataTable({
+      fixedHeader: true
     });
 
     $selectBranch.on("change", function() {
@@ -109,12 +116,3 @@ var Index = (function() {
     init: init
   };
 })();
-
-
-
-
-
-
-
-
-

@@ -107,7 +107,8 @@ Rails.application.routes.draw do
   resources :kjsp_claims do
      get "/kjsp_claim_validation_pdf", to: "kjsp_claims#kjsp_claim_validation_pdf"
      get "/kjsp_claim_loa_pdf", to: "kjsp_claims#kjsp_claim_loa_pdf"
-     get "/kjsp_contract_pdf", to: "kjsp_claims#kjsp_contract_pdf"
+     get "/kjsp_contract_highschool_pdf", to: "kjsp_claims#kjsp_contract_highschool_pdf"
+     get "/kjsp_contract_college_pdf", to: "kjsp_claims#kjsp_contract_college_pdf"
   end
 
   resources :calamity_claims do
@@ -355,6 +356,8 @@ Rails.application.routes.draw do
   get "/reports/claims_blip_report", to: "reports#claims_blip_report", as: :claims_blip_report
   get "/reports/claims_clip", to: "reports#claims_clip", as: :claims_clip
   get "/reports/claims_clip_report", to: "reports#claims_clip_report", as: :claims_clip_report
+  get "/reports/collections_hiip", to: "reports#collections_hiip", as: :collections_hiip
+  get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports", as: :collections_hiip_reports
   
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
