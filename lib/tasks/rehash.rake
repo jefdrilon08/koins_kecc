@@ -80,6 +80,10 @@ namespace :rehash do
       member_accounts = member_accounts.where(account_type: ENV["ACCOUNT_TYPE"])
     end
 
+    if ENV["BRANCH_ID"].present?
+      member_accounts = member_accounts.where(branch_id: ENV["BRANCH_ID"])
+    end
+
     account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_accounts.pluck(:id), "approved")
 
     member_accounts.each_with_index do |o, i|
