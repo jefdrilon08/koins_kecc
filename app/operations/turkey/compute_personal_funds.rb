@@ -2,7 +2,7 @@ module Turkey
   class ComputePersonalFunds
     attr_reader :branch, :as_of, :accounts
 
-    def initialize(branch:, as_of:)
+    def initialize(branch:, as_of: Date.today)
       @branch = branch
       @as_of = as_of
       @accounts = MemberAccount
@@ -16,11 +16,16 @@ module Turkey
         SELECT DISTINCT ON (m.last_name, m.first_name, m.id, ma.account_subtype)
           at.data ->> 'ending_balance' AS ending_balance,
           at.transacted_at,
+          at.id AS account_transaction_id,
+          ma.id AS member_account_id,
           ma.account_type,
           ma.account_subtype,
+          m.identification_number AS member_identification_number,
           m.last_name,
           m.first_name,
-          m.id as member_id,
+          m.middle_name,
+          m.status AS member_status,
+          m.id AS member_id,
           c.id AS center_id,
           c.name AS center_name,
           u.id AS officer_id,

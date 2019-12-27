@@ -45,6 +45,11 @@
             %strong
               - if o.due_date
                 #{o.due_date.strftime("%b %d, %Y")}
+              - if current_user.is_mis?
+                %small
+                  %hr
+                  #{o.id}
+                  %hr
         %td.text-right.text-muted
           #{number_to_currency(o.principal, unit: "")}
         %td.text-right.text-muted

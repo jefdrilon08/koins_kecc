@@ -8,20 +8,6 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @members  = Member.where(branch_id: @branch.id).order("last_name ASC")
-
-      @default_member_accounts  = Settings.default_member_accounts
-
-      # For progress update
-      @data_store_id  = @config[:data_store_id]
-      if @data_store_id.present?
-        @data_store = DataStore.find(@data_store_id)
-      end
-
-      if @default_member_accounts.blank?
-        raise "Settings not found: default_member_accounts"
-      end
-
       @data = {
         branch: {
           id: @branch.id,
@@ -39,13 +25,18 @@ module Branches
         records: [],
         total: 0.00
       }
+
+      @cmd  = ::Turkey::ComputePersonalFunds.new(
+                branch: @branch,
+                as_of: @as_of
+              )
     end
 
     def execute!
       compute_records!
 
       @data[:officers]  = @data[:records].map{ |mr| mr[:officer] }.uniq
-      @data[:centers]  = @data[:records].map{ |mr| mr[:center] }.uniq
+      @data[:centers]   = @data[:records].map{ |mr| mr[:center] }.uniq
 
       @data
     end
@@ -53,108 +44,66 @@ module Branches
     private
 
     def compute_records!
-      member_accounts = MemberAccount.joins(
-                          "INNER JOIN account_transactions ON member_accounts.id = account_transactions.subsidiary_id"
-                        ).joins(
-                          "INNER JOIN members ON member_accounts.member_id = members.id"
-                        ).joins(
-                          "INNER JOIN branches ON members.branch_id = branches.id"
-                        ).joins(
-                          "INNER JOIN centers ON members.center_id = centers.id"
-                        ).joins(
-                          "INNER JOIN users ON centers.user_id = users.id"
-                        ).where(
-                          "DATE(account_transactions.transacted_at) <= ? AND member_accounts.member_id IN (?) AND account_transactions.transaction_type IN (?) AND account_transactions.status = ?", 
-                          @as_of,
-                          @members.pluck(:id),
-                          ["deposit", "withdraw"],
-                          "approved"
-                        ).select(
-                          "DISTINCT ON(member_accounts.id, account_transactions.transacted_at, member_accounts.member_id, account_transactions.updated_at) member_accounts.id, member_accounts.member_id, member_accounts.account_type, member_accounts.account_subtype, DATE(transacted_at), account_transactions.data, branches.id AS branch_id, branches.name AS branch_name, centers.id AS center_id, centers.name AS center_name, users.id AS officer_id, users.first_name AS officer_first_name, users.last_name AS officer_last_name, users.identification_number AS officer_identification_number, account_transactions.id AS account_transaction_id, transaction_type"
-                        ).order(
-                          "account_transactions.transacted_at DESC, account_transactions.updated_at DESC"
-                        )
+      @result   = @cmd.run
+      @accounts = @cmd.accounts
 
-      @members.each_with_index do |o, i|
+      @result.chunk{ |r| r.fetch("member_id") }.each do |member_id, member_txs|
+        last_tx = member_txs.first
+
         temp_data = {
           member: {
-            id: o.id,
-            first_name: o.first_name,
-            middle_name: o.middle_name,
-            last_name: o.last_name,
-            identification_number: o.identification_number,
-            status: o.status
+            id: last_tx.fetch("member_id"),
+            first_name: last_tx.fetch("first_name"),
+            middle_name: last_tx.fetch("middle_name"),
+            last_name: last_tx.fetch("last_name"),
+            identification_number: last_tx.fetch("member_identification_number"),
+            status: last_tx.fetch("member_status")
           },
           as_of: @as_of,
           branch: {
-            id: "",
-            name: ""
+            id: @branch.id,
+            name: @branch.name
           },
           center: {
-            id: "",
-            name: ""
+            id: last_tx.fetch("center_id"),
+            name: last_tx.fetch("center_name")
           },
           officer: {
-            id: "",
-            first_name: "",
-            last_name: "",
-            identification_number: ""
+            id: last_tx.fetch("officer_id"),
+            first_name: last_tx.fetch("officer_first_name"),
+            last_name: last_tx.fetch("officer_last_name"),
+            identification_number: last_tx.fetch("officer_identification_number")
           },
           total: 0.00,
           accounts: []
         }
 
-        member_accounts_for_member  = member_accounts.select{ |member_account|
-                                        member_account.member_id == o.id
-                                      }
-                                  
-
-        @default_member_accounts.each do |s|
+        @cmd.accounts.each do |_, subtype|
           account = {
             id: "",
-            account_type: s.account_type,
-            account_subtype: s.account_subtype,
-            member_id: o.id,
+            account_type: "",
+            account_subtype: subtype,
+            member_id: "",
             balance: 0.00,
             account_transaction_id: "",
             transacted_at: ""
           }
 
-          m_account = member_accounts_for_member.select{ |temp_m_ac|
-                        temp_m_ac[:account_type] == s.account_type && temp_m_ac[:account_subtype] == s.account_subtype
-                      }.first
-
-          if m_account.present?
-            account[:id]            = m_account[:id]
-            account[:transacted_at] = m_account[:transacted_at]
-            account[:balance]       = m_account[:data]["ending_balance"].to_f.round(2)
-
-            temp_data[:center] = {
-              id: m_account[:center_id],
-              name: m_account[:center_name]
-            }
-
-            temp_data[:branch] = {
-              id: m_account[:branch_id],
-              name: m_account[:branch_name]
-            }
-
-            temp_data[:officer] = {
-              id: m_account[:officer_id],
-              first_name: m_account[:officer_first_name],
-              last_name: m_account[:officer_last_name],
-              identification_number: m_account[:identification_number]
-            }
+          if (tx = member_txs.find{ |tx| tx.fetch("account_subtype") == subtype })
+            account[:id]                      = tx.fetch("member_account_id")
+            account[:account_type]            = tx.fetch("account_type")
+            account[:account_subtype]         = tx.fetch("account_subtype")
+            account[:member_id]               = tx.fetch("member_id")
+            account[:balance]                 = tx.fetch("ending_balance").to_f.round(2)
+            account[:account_transaction_id]  = tx.fetch("account_transaction_id")
+            account[:transacted_at]           = tx.fetch("transacted_at")
           end
 
           temp_data[:accounts] << account
-        end
 
-        temp_data[:accounts].each do |x|
-          temp_data[:total] += x[:balance]
+          temp_data[:total] += account[:balance]
+          @data[:total] += account[:balance]
         end
-
-        temp_data[:total] = temp_data[:total].to_f.round(2)
 
         @data[:records] << temp_data
       end
