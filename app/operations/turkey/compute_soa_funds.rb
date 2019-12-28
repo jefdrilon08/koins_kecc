@@ -26,8 +26,8 @@ module Turkey
 
       ActiveRecord::Base.connection.execute(<<-EOS).to_a
         SELECT
-          at.account_type,
-          at.account_subtype,
+          ma.account_type,
+          ma.account_subtype,
           m.id as member_id,
           m.last_name,
           m.first_name,
@@ -36,12 +36,12 @@ module Turkey
           at.amount,
           at.transacted_at
         FROM account_transactions at
-          INNER JOIN member_accounts ma ON ma.id = account_transactions.subsidiary_id
+          INNER JOIN member_accounts ma ON ma.id = at.subsidiary_id
           INNER JOIN members m ON m.id = ma.member_id
         WHERE at.transacted_at BETWEEN '#{from}' AND '#{to}'
           AND m.branch_id = '#{branch.id}'
           AND m.status IN ('active', 'resigned')
-        ORDER BY m.last_name ASC, m.first_name ASC, at.transacted_at DESC, at.account_type ASC, at.account_subtype ASC
+        ORDER BY m.last_name ASC, m.first_name ASC, at.transacted_at DESC, ma.account_type ASC, ma.account_subtype ASC
       EOS
     end
   end
