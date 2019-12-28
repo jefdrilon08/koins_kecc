@@ -37,7 +37,8 @@ module Api
           data_store_type = params[:data_store_type] || "SOA_FUNDS"
           start_date      = params[:start_date].try(:to_date)
           end_date        = params[:end_date].try(:to_date)
-          branch          = @branches.where(id: params[:branch_id]).first
+          #branch          = @branches.where(id: params[:branch_id]).first
+          branch  = @branches.select{|b| b[:id] == params[:branch_id] }.first
 
           errors  = ::DataStores::ValidateSoaFundsQueue.new(
                       config: {

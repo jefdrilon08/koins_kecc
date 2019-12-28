@@ -9,7 +9,7 @@ module DataStores
                   )
 
       @records  = @records.order(
-                    "CAST(meta->>'start_date' AS date) DESC" 
+                    "CAST(meta->>'end_date' AS date) DESC" 
                   ).page(params[:page]).per(20)
 
       @current_date = Date.today
