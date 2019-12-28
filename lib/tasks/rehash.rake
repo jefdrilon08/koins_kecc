@@ -85,7 +85,7 @@ namespace :rehash do
     end
 
     if ENV["ACCOUNT_SUBTYPE"].present?
-      member_accounts = member_accounts.where(account_type: ENV["ACCOUNT_SUBTYPE"])
+      member_accounts = member_accounts.where(account_subtype: ENV["ACCOUNT_SUBTYPE"])
     end
 
     account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_accounts.pluck(:id), "approved")
