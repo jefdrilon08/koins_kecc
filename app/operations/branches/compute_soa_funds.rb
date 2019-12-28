@@ -104,7 +104,7 @@ module Branches
           member_data[:records] << record_object
         end
 
-        last_tx = member_txs.first # using `#first` because sorted in reverse
+        last_tx = member_txs.last # using `#first` because sorted in reverse
 
         @cmd.accounts.each do |key, _|
           member_data[:totals] << {
