@@ -17,12 +17,16 @@
 #   runner "AnotherModel.prune_old_records"
 # end
 
-every :day, at: '6pm' do
-  rake "adjust:update_member_insurance_status"
-end
+#every :day, at: '6pm' do
+#  rake "adjust:update_member_insurance_status"
+#end
+#
+#every :day, at: '6am' do
+#  rake "finance:autorenew_time_deposit_accounts"
+#end
 
-every :day, at: '6am' do
-  rake "finance:autorenew_time_deposit_accounts"
+every :day, at: '1am' do
+  rake "adjust:set_max_active_date"
 end
 
 # Learn more: http://github.com/javan/whenever
