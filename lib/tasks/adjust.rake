@@ -1,5 +1,7 @@
 namespace :adjust do
   task :set_max_active_date => :environment do
+    current_date  = Date.today
+
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
               SELECT DISTINCT ON (loans.id)
                 loans.id AS loan_id,
@@ -29,7 +31,9 @@ namespace :adjust do
 
               max_active_date = last_amortization_date
 
-              if last_transaction_date > last_amortization_date
+              if current_date > last_amortization_date and status == 'active'
+                max_active_date = current_date
+              elsif last_transaction_date > last_amortization_date
                 max_active_date = last_transaction_date
               elsif status == 'paid' and last_transaction_date < last_amortization_date
                 max_active_date = last_transaction_date
