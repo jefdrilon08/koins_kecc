@@ -8,16 +8,26 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @members          = Member.active.where(
-                            "branch_id = ?",
-                            @branch.id
-                          )
+      if Settings.activate_microloans
+        @members          = Member.active.where(
+                              "branch_id = ?",
+                              @branch.id
+                            )
 
       @resigned_members = Member.resigned.where(
                             "date_resigned > ? AND branch_id = ?", 
                             @as_of, 
                             @branch.id
                           )
+      else
+        @members          = Member.active
+
+        @resigned_members = Member.resigned.where(
+                            "date_resigned > ?", 
+                            @as_of
+                          )
+      end
+
 
       @members  = Member.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
 

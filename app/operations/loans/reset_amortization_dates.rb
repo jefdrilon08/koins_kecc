@@ -3,6 +3,7 @@ module Loans
     def initialize(config:)
       @config = config
       @loan   = @config[:loan]
+  
 
       if @loan.blank?
         raise "Loan not found"
