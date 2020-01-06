@@ -5,7 +5,7 @@ module Branches
     def initialize(config:)
       @config = config
       @branch = @config[:branch]
-      @as_of  = @config[:as_of] || Date.today
+      @as_of  = @config[:as_of].try(:to_date) || Date.today
 
       @manual_aging = @config[:manual_aging] || false
 
@@ -45,16 +45,18 @@ module Branches
       @result.each do |r|
         amorts  = []
 
-        JSON.parse(r.fetch("amorts")).each do |o|
-          o.each do |oo|
-            amorts << oo["due_date"]
+        if r.fetch("amorts").present?
+          JSON.parse(r.fetch("amorts")).each do |o|
+            o.each do |oo|
+              amorts << oo["due_date"]
+            end
           end
         end
 
         amorts    = amorts.uniq
         max_amort = amorts.map{ |d| d.to_date }.max
 
-        latest_transaction_date = r.fetch("latest_transaction_date").to_date
+        latest_transaction_date = r.try(:fetch, "latest_transaction_date").try(:to_date)
 
         principal_paid      = r.fetch("principal_paid").to_f.round(2)
         interest_paid       = r.fetch("interest_paid").to_f.round(2)
@@ -239,22 +241,24 @@ module Branches
                     ROUND((tt.total_principal_paid + tt.total_interest_paid), 2) AS total_paid,
                     at.principal AS principal_due,
                     at.interest AS interest_due,
-                    ROUND((at.principal + at.interest), 2) AS total_due,
-                    ROUND((at.principal - tt.total_principal_paid), 2) AS principal_balance,
-                    ROUND((at.interest - tt.total_interest_paid), 2) AS interest_balance,
+                    ROUND(at.principal + at.interest, 2) AS total_due,
+                    ROUND(at.principal - COALESCE(tt.total_principal_paid, 0.00), 2) AS principal_balance,
+                    ROUND(at.interest - COALESCE(tt.total_interest_paid, 0.00), 2) AS interest_balance,
                     ROUND(principal_balance + interest_balance, 2) AS total_balance,
-                    ROUND(loans.principal - tt.total_principal_paid, 2) AS overall_principal_balance,
-                    ROUND(loans.interest - tt.total_interest_paid, 2) AS overall_interest_balance,
-                    tt_date.transacted_at AS latest_transaction_date,
-                    tt_date.amorts
+                    ROUND(loans.principal - COALESCE(tt.total_principal_paid, 0.00), 2) AS overall_principal_balance,
+                    ROUND(loans.interest - COALESCE(tt.total_interest_paid, 0.00), 2) AS overall_interest_balance,
+                    tt.transacted_at AS latest_transaction_date,
+                    tt.amorts
                   FROM
                     loans
-                  LEFT JOIN
+                  LEFT OUTER JOIN
                     (
                       SELECT 
                         subsidiary_id, 
-                        ROUND(SUM(CAST(data->>'total_principal_paid' AS decimal)), 2) AS total_principal_paid,
-                        ROUND(SUM(CAST(data->>'total_interest_paid' AS decimal)),2 ) AS total_interest_paid
+                        ROUND(SUM(COALESCE(CAST(data->>'total_principal_paid' AS decimal), 0.00)), 2) AS total_principal_paid,
+                        ROUND(SUM(CAST(data->>'total_interest_paid' AS decimal)),2 ) AS total_interest_paid,
+                        DATE(MAX(transacted_at)) AS transacted_at,
+                        json_agg(data->'amort_entries') AS amorts
                       FROM
                         account_transactions
                       WHERE
@@ -277,22 +281,6 @@ module Branches
                         amortization_schedule_entries.due_date #{@manual_aging ? '<=' : '<'} '#{@as_of}'
                       GROUP BY 1
                     ) at ON loans.id = at.loan_id
-                  LEFT JOIN
-                    (
-                      SELECT
-                        subsidiary_id,
-                        DATE(MAX(transacted_at)) AS transacted_at,
-                        json_agg(data->'amort_entries') AS amorts
-                      FROM
-                        account_transactions
-                      WHERE
-                        account_transactions.transaction_type = 'loan_payment'
-                      AND
-                        account_transactions.status = 'approved'
-                      AND 
-                        DATE(account_transactions.transacted_at) <= '#{@as_of}'
-                      GROUP BY subsidiary_id
-                    ) tt_date ON loans.id = tt_date.subsidiary_id
                   INNER JOIN centers c ON loans.center_id = c.id
                   INNER JOIN users u ON u.id = c.user_id
                   INNER JOIN branches b ON b.id = loans.branch_id
@@ -300,11 +288,11 @@ module Branches
                   INNER JOIN members m ON m.id = loans.member_id
                   WHERE
                     (
-                      loans.status = 'active' AND loans.first_date_of_payment <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
+                      loans.status = 'active' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
                     )
                     OR
                     (
-                      loans.status = 'paid' AND loans.first_date_of_payment <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
+                      loans.status = 'paid' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
                     )
                 EOS
     end

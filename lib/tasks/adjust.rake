@@ -11,7 +11,7 @@ namespace :adjust do
                 DATE(amortization_schedule_entries.due_date) as last_amortization_date
               FROM
                 loans
-                INNER JOIN
+                LEFT OUTER JOIN
                   account_transactions ON account_transactions.subsidiary_id = loans.id
                 INNER JOIN
                   amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
@@ -25,18 +25,26 @@ namespace :adjust do
 
     sets  = data.map{ |d|
               loan_id                 = d.fetch("loan_id")
-              last_transaction_date   = d.fetch("last_transaction_date").to_date
-              last_amortization_date  = d.fetch("last_amortization_date").to_date
+              last_transaction_date   = d.try(:fetch, "last_transaction_date").try(:to_date)
+              last_amortization_date  = d.try(:fetch, "last_amortization_date").try(:to_date)
               status                  = d.fetch("status")
 
-              max_active_date = last_amortization_date
+              max_active_date = current_date
 
-              if current_date > last_amortization_date and status == 'active'
+              if last_amortization_date.present?
+                max_active_date = last_amortization_date
+              end
+
+              if last_transaction_date.present?
+                if current_date > last_amortization_date and status == 'active'
+                  max_active_date = current_date
+                elsif last_transaction_date > last_amortization_date
+                  max_active_date = last_transaction_date
+                elsif status == 'paid' and last_transaction_date < last_amortization_date
+                  max_active_date = last_transaction_date
+                end
+              else
                 max_active_date = current_date
-              elsif last_transaction_date > last_amortization_date
-                max_active_date = last_transaction_date
-              elsif status == 'paid' and last_transaction_date < last_amortization_date
-                max_active_date = last_transaction_date
               end
 
               "('#{loan_id}', '#{max_active_date.to_date.to_s}')"
