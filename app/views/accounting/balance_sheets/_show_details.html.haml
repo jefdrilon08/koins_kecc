@@ -50,6 +50,7 @@
         Accounting Code
       %th.text-right{ width: "25%" }
         Amount
+    - total_equities_on_share_capital = 0.00
     - @data[:equities].each do |o|
       - if o[:accounting_code][:code] != @statutory_funds_beginning[:accounting_code][:code]
         %tr
@@ -59,6 +60,14 @@
               #{o[:accounting_code][:name]}
           %td.text-right
             #{number_to_currency(o[:amount], unit: "")}
+        - total_equities_on_share_capital += o[:amount].to_f.round(2)
+    %tr
+      %td.text-right
+        %b
+          Total Share Capital
+      %td.text-right
+        %b
+          #{number_to_currency(total_equities_on_share_capital, unit: "")}
     / Statutory Funds beginning
     %tr
       %td

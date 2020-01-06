@@ -9,7 +9,8 @@ module Api
           start_date      = params[:start_date].try(:to_date)
           end_date        = params[:end_date].try(:to_date)
           book            = params[:book]
-          branch          = @branches.where(id: params[:branch_id]).first
+          #branch          = @branches.where(id: params[:branch_id]).first
+          branch          = @branches.select{ |o| o[:id] == params[:branch_id] }.first
 
           errors  = ::DataStores::ValidateAccountingEntriesSummariesQueue.new(
                       config: {
