@@ -120,8 +120,8 @@ namespace :debug do
     p_principal             = ENV['P_PRINCIPAL'].to_f.round(2)
     p_monthly_interest_rate = ENV['P_MONTHLY_INTEREST_RATE'].to_f
     p_num_installments      = ENV['P_NUM_INSTALLMENTS']
-    p_term                  = loan.term
-    #p_term                  = ENV['P_TERM']
+    #p_term                  = loan.term
+    p_term                  = ENV['P_TERM']
 
     config  = {
       loan: loan,
