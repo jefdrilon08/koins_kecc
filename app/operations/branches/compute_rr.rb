@@ -67,7 +67,17 @@ module Branches
         total_paid_due      = (principal_paid_due.to_f.round(2) + interest_paid_due.to_f.round(2)).to_f.round(2)
 
         overall_principal_balance = r.fetch("overall_principal_balance").to_f.round(2)
+
+        if overall_principal_balance < 0
+          overall_principal_balance = 0.00
+        end
+
         overall_interest_balance  = r.fetch("overall_interest_balance").to_f.round(2)
+
+        if overall_interest_balance < 0
+          overall_interest_balance  = 0.00
+        end
+
         overall_balance           = (overall_principal_balance + overall_interest_balance).to_f.round(2)
 
         principal_rr  = (principal_paid_due / principal_due).round(4)
@@ -116,8 +126,19 @@ module Branches
         end
 
         principal_balance = r.fetch("principal_balance").to_f.round(2)
+
+        if principal_balance < 0
+          principal_balance = 0.00
+        end
+
         interest_balance  = r.fetch("interest_balance").to_f.round(2)
-        total_balance     = r.fetch("total_balance").to_f.round(2)
+
+        if interest_balance < 0
+          interest_balance  = 0.00
+        end
+
+        total_balance     = (principal_balance + interest_balance).to_f.round(2)
+
         principal         = r.fetch("principal").to_f.round(2)
         interest          = r.fetch("interest").to_f.round(2)
         total             = r.fetch("total").to_f.round(2)
