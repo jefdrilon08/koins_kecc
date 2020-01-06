@@ -1,4 +1,20 @@
 namespace :debug do
+  task :reamortize_active_loan => :environment do
+    branch_id = ENV["BRANCH_ID"]
+
+    loan = Loan.where(branch_id: branch_id, status: "active")
+    size    = loan.size
+    loan.each_with_index do |l,i|
+      
+      ::Loans::ResetAmortizationDates.new(config: {loan: l}).execute!
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+      
+    end
+
+  end
+
   task :monitor_personal_funds => :environment do
     data_store      = DataStore.personal_funds.find(ENV["ID"])
     account_type    = ENV["ACCOUNT_TYPE"]
@@ -104,7 +120,8 @@ namespace :debug do
     p_principal             = ENV['P_PRINCIPAL'].to_f.round(2)
     p_monthly_interest_rate = ENV['P_MONTHLY_INTEREST_RATE'].to_f
     p_num_installments      = ENV['P_NUM_INSTALLMENTS']
-    p_term                  = ENV['P_TERM']
+    p_term                  = loan.term
+    #p_term                  = ENV['P_TERM']
 
     config  = {
       loan: loan,

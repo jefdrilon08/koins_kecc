@@ -5,7 +5,7 @@ module Finance
     N_QUARTERLY     = 4 
     N_MONTHLY       = 12
     N_SEMI_MONTHLY  = 24
-    N_WEEKLY        = 52
+    N_WEEKLY        = 25
     N_DAILY         = 365 
 
     TERMS = ["weekly", "monthly", "semi-monthly", "semi-annually", "quarterly", "daily"]
