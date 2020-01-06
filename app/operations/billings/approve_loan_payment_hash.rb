@@ -97,12 +97,23 @@ module Billings
       end
 
       # Update loan balances
-      updated_amort         = AmortizationScheduleEntry.where(loan_id: @loan.id)
+      updated_amort         = AmortizationScheduleEntry.where(loan_id: @loan.id).order("due_date DESC")
       @loan.principal_paid  = updated_amort.sum(:principal_paid).round(2)
       @loan.interest_paid   = updated_amort.sum(:interest_paid).round(2)
 
       @loan.principal_balance = (@loan.principal - @loan.principal_paid).round(2)
       @loan.interest_balance  = (@loan.interest - @loan.interest_paid).round(2)
+
+      # Setup max_active_date
+      max_active_date = @loan.max_active_date
+
+      if max_active_date.blank?
+        max_active_date = updated_amort.first.due_date
+      end
+
+      if @date_paid > max_active_date
+        max_active_date = @date_paid        
+      end
 
       @loan.save!
 

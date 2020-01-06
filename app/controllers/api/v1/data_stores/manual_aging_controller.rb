@@ -39,7 +39,8 @@ module Api
         def queue
           data_store_type = params[:data_store_type] || "MANUAL_AGING"
           as_of           = params[:as_of].try(:to_date)
-          branch          = @branches.where(id: params[:branch_id]).first
+          #branch          = @branches.where(id: params[:branch_id]).first
+          branch          = @branches.select{ |o| o[:id] == params[:branch_id] }.first
 
           errors  = ::DataStores::ValidateManualAgingQueue.new(
                       config: {

@@ -1,4 +1,57 @@
 namespace :adjust do
+  task :set_max_active_date => :environment do
+    data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+              SELECT DISTINCT ON (loans.id)
+                loans.id AS loan_id,
+                loans.first_date_of_payment,
+                loans.status AS status,
+                DATE(account_transactions.transacted_at) as last_transaction_date,
+                DATE(amortization_schedule_entries.due_date) as last_amortization_date
+              FROM
+                loans
+                INNER JOIN
+                  account_transactions ON account_transactions.subsidiary_id = loans.id
+                INNER JOIN
+                  amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
+                WHERE
+                  loans.status IN ('active', 'paid')
+                ORDER BY
+                  loans.id,
+                  amortization_schedule_entries.due_date DESC,
+                  account_transactions.transacted_at DESC
+            EOS
+
+    sets  = data.map{ |d|
+              loan_id                 = d.fetch("loan_id")
+              last_transaction_date   = d.fetch("last_transaction_date").to_date
+              last_amortization_date  = d.fetch("last_amortization_date").to_date
+              status                  = d.fetch("status")
+
+              max_active_date = last_amortization_date
+
+              if last_transaction_date > last_amortization_date
+                max_active_date = last_transaction_date
+              elsif status == 'paid' and last_transaction_date < last_amortization_date
+                max_active_date = last_transaction_date
+              end
+
+              "('#{loan_id}', '#{max_active_date.to_date.to_s}')"
+            }.join(",")
+
+    query = "
+      UPDATE loans AS l SET
+        max_active_date = DATE(c.max_active_date)
+      FROM (values
+        #{sets}
+      ) AS c(loan_id, max_active_date)
+      WHERE c.loan_id = l.id::text
+    "
+
+    ActiveRecord::Base.connection.execute(query)
+
+    puts "Done."
+  end
+  
   task :repair_personal_funds => :environment do
     data_store      = DataStore.personal_funds.find(ENV["ID"])
     account_type    = ENV["ACCOUNT_TYPE"]
