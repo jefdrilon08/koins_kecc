@@ -362,4 +362,7 @@ Rails.application.routes.draw do
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
+
+  # ACTIVITY LOGS
+  resources :activity_logs, only: [:index]
 end

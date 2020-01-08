@@ -11,3 +11,7 @@
     = link_to monitoring_no_membership_payments_path, class: "nav-link #{params[:controller] == 'monitoring' && params[:action] == 'no_membership_payments'}" do
       %i.nav-icon.fa.fa-times
       No Membership Payments
+%li{ class: "nav-item" }
+  = link_to activity_logs_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Activity Logs
