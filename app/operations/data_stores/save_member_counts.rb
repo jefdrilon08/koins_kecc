@@ -9,7 +9,14 @@ module DataStores
     end
 
     def execute!
-      data_result = ::Branches::ComputeMemberCounts.new(
+#      data_result = ::Branches::ComputeMemberCounts.new(
+#                      config: {
+#                        branch: @branch,
+#                        as_of: @as_of
+#                      }
+#                    ).execute!
+
+      data_result = ::Branches::FetchMemberCounts.new(
                       config: {
                         branch: @branch,
                         as_of: @as_of
