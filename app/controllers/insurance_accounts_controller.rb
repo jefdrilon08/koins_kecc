@@ -88,8 +88,14 @@ class InsuranceAccountsController < ApplicationController
       Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
       flash[:success] = "Successfully Import Insurance Accounts for Members."
 
+      if !start_date.nil? && !end_date.nil?
+        content = "#{current_user.full_name} successfully imported insurance accounts. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported insurance accounts."
+      end
+
       ActivityLog.create!(
-        content: "#{current_user.full_name} successfully imported insurance accounts. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}",
+        content: content,
         activity_type: "upload",
         data: {
           user_id: current_user.id,
@@ -169,8 +175,14 @@ class InsuranceAccountsController < ApplicationController
       ProcessImportInsuranceAccountTransaction.perform_later(args)
       flash[:success] = "Successfully Import Insurance Account Transactions For Members."
 
+      if !start_date.nil? && !end_date.nil?
+        "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported insurance account transactions."
+      end
+
       ActivityLog.create!(
-          content: "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}",
+          content: content,
           activity_type: "upload",
           data: {
             user_id: current_user.id,

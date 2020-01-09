@@ -144,8 +144,14 @@ class MembersController < ApplicationController
                     ).execute!
       flash[:success] = "Successfully Imported Members Record."
       
+      if !start_date.nil? && !end_date.nil?
+        content = "#{current_user.full_name} successfully imported members. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported members."
+      end
+
       ActivityLog.create!(
-        content: "#{current_user.full_name} successfully imported members. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}",
+        content: content,
         activity_type: "upload",
         data: {
           user_id: current_user.id,
@@ -195,8 +201,14 @@ class MembersController < ApplicationController
                     ).execute!
       flash[:success] = "Successfully Imported Legal Dependents Record."
 
+      if !start_date.nil? && !end_date.nil?
+        content = "#{current_user.full_name} successfully imported legal dependents. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported legal dependents."
+      end
+
       ActivityLog.create!(
-        content: "#{current_user.full_name} successfully imported legal dependents. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}",
+        content: content,
         activity_type: "upload",
         data: {
           user_id: current_user.id,
@@ -246,8 +258,14 @@ class MembersController < ApplicationController
                     ).execute!
       flash[:success] = "Successfully Imported Beneficiaries Record."
 
+      if !start_date.nil? && !end_date.nil?
+        content = "#{current_user.full_name} successfully imported beneficiaries. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported beneficiaries."
+      end
+
       ActivityLog.create!(
-        content: "#{current_user.full_name} successfully imported beneficiaries. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}",
+        content: content,
         activity_type: "upload",
         data: {
           user_id: current_user.id,
