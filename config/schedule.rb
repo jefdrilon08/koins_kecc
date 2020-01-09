@@ -27,6 +27,7 @@
 
 every :day, at: '1am' do
   rake "adjust:set_max_active_date"
+  rake "adjust:update_insurance_status"
 end
 
 # Learn more: http://github.com/javan/whenever

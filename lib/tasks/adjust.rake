@@ -658,6 +658,109 @@ namespace :adjust do
       end
     end
   end
+
+  task :update_insurance_status => :environment do
+    result  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+                SELECT DISTINCT ON(member_accounts.id)
+                  member_accounts.id AS member_account_id,
+                  member_accounts.account_type,
+                  member_accounts.account_subtype,
+                  account_transactions.id AS transaction_id,
+                  account_transactions.transacted_at,
+                  COALESCE(account_transactions.data->>'ending_balance', '0.00')::float AS balance,
+                  account_transactions.data->>'is_withdraw_payment' AS is_withdraw_payment,
+                  members.data->>'recognition_date' AS recognition_date,
+                  members.id AS member_id,
+                  members.member_type,
+                  members.status
+                FROM
+                  member_accounts
+                LEFT JOIN
+                  account_transactions ON account_transactions.subsidiary_id = member_accounts.id
+                LEFT JOIN
+                  members ON members.id = member_accounts.member_id
+                WHERE
+                  member_accounts.account_type = 'INSURANCE' AND member_accounts.account_subtype = 'Life Insurance Fund'
+                ORDER BY
+                  member_accounts.id, account_transactions.transacted_at DESC
+              EOS
+
+    current_date  = Date.today
+
+    sets  = result.map{ |o|
+              member_id                 = o.fetch("member_id")
+              default_periodic_payment  = 15
+              recognition_date          = o.fetch("recognition_date").try(:to_date)
+
+              new_status  = "inforce"
+              status      = o.fetch("status")
+              member_type = o.fetch("member_type")
+              last_payment_date = o.fetch("transacted_at").try(:to_date)
+
+              if recognition_date.present? and last_payment_date.present?
+                # Code
+                current_balance         = o.fetch("balance").to_f.round(2)
+                num_days                = (current_date - recognition_date).to_i
+                num_weeks               = (num_days / 7).to_i + 1
+                insured_amount          = num_weeks * default_periodic_payment
+                amt_past_due            = (current_balance - insured_amount).to_i * -1
+                days_lapsed             = (current_date - last_payment_date).to_i
+
+                is_withdraw_payment = o.fetch("is_withdraw_payment")
+
+                if current_balance == 0.00 && is_withdraw_payment == "true"
+                  new_status = "resigned"
+                elsif o.fetch("balance").to_f.round(2) == 0.00
+                  new_status = "dormant"
+                elsif days_lapsed <= 45 && current_balance >= insured_amount
+                  new_status = "inforce"
+                elsif days_lapsed > 45 && current_balance >= insured_amount
+                  new_status = "inforce"
+                elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
+                  new_status = "inforce"
+                elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
+                  new_status = "lapsed"
+                elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
+                  new_status = "lapsed"
+                elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
+                  new_status = "inforce"
+                end
+              else
+                new_status = "pending"
+              end
+
+              if member_type == "GK"
+                new_status = "resigned"
+              elsif status == "resigned"
+                if recognition_date.nil?
+                  new_status = "pending"
+                else
+                  new_status = "resigned"
+                end
+              elsif status == "pending"
+                new_status = "pending"
+              elsif status == "archived"
+                new_status = "dormant"
+              elsif status == "cleared"
+                new_status = "cleared"
+              end
+
+              "('#{member_id}', '#{new_status}')"
+            }.join(",")
+
+    query = "
+      UPDATE members AS m SET
+        insurance_status = c.new_status
+      FROM (values
+        #{sets}
+      ) AS c(member_id, new_status)
+      WHERE c.member_id = m.id::text
+    "
+
+    ActiveRecord::Base.connection.execute(query)
+
+    puts "Done."
+  end
   
   task :update_member_insurance_status => :environment do
     puts "Updating member insurance status"
