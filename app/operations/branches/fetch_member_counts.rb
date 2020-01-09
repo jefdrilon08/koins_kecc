@@ -249,14 +249,6 @@ module Branches
                   ) tt ON tt.member_id = members.id
                   LEFT JOIN
                     loans ON loans.member_id = members.id
-                  LEFT JOIN
-                    centers ON centers.id = members.center_id
-                  LEFT JOIN
-                    users ON users.id = centers.user_id
-                  WHERE 
-                    (members.status = 'active' AND members.branch_id::text = '#{@branch.id}')
-                    OR 
-                    (members.status = 'resigned' AND members.date_resigned > '#{@as_of}' AND members.branch_id::text = '#{@branch.id}')
                     AND
                     (
                       loans.status = 'active' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
@@ -265,6 +257,14 @@ module Branches
                     (
                       loans.status = 'paid' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
                     )
+                  LEFT JOIN
+                    centers ON centers.id = members.center_id
+                  LEFT JOIN
+                    users ON users.id = centers.user_id
+                  WHERE 
+                    (members.status = 'active' AND members.branch_id::text = '#{@branch.id}')
+                    OR 
+                    (members.status = 'resigned' AND members.date_resigned > '#{@as_of}' AND members.branch_id::text = '#{@branch.id}')
                   GROUP BY
                     members.id, centers.id, users.id
                 EOS
