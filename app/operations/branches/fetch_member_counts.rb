@@ -243,7 +243,7 @@ module Branches
                     FROM 
                       member_accounts
                     INNER JOIN
-                      account_transactions ON member_accounts.id = account_transactions.subsidiary_id AND member_accounts.account_type = 'SAVINGS' AND member_accounts.account_subtype = '#{@default_savings_key}'
+                      account_transactions ON member_accounts.id = account_transactions.subsidiary_id AND member_accounts.account_type = 'SAVINGS'
                     ORDER BY
                       member_accounts.id, account_transactions.transacted_at DESC
                   ) tt ON tt.member_id = members.id
