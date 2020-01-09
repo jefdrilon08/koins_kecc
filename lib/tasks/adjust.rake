@@ -660,6 +660,12 @@ namespace :adjust do
   end
 
   task :update_insurance_status => :environment do
+    current_date = Date.today
+    
+    if ENV['CURRENT_DATE'].present?
+      current_date = ENV['CURRENT_DATE'].to_date
+    end
+
     result  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                 SELECT DISTINCT ON(member_accounts.id)
                   member_accounts.id AS member_account_id,
@@ -672,7 +678,8 @@ namespace :adjust do
                   members.data->>'recognition_date' AS recognition_date,
                   members.id AS member_id,
                   members.member_type,
-                  members.status
+                  members.status,
+                  COUNT(account_transactions) AS acc_trans_count
                 FROM
                   member_accounts
                 LEFT JOIN
@@ -681,16 +688,20 @@ namespace :adjust do
                   members ON members.id = member_accounts.member_id
                 WHERE
                   member_accounts.account_type = 'INSURANCE' AND member_accounts.account_subtype = 'Life Insurance Fund'
+                GROUP BY
+                  member_account_id,
+                  transaction_id,
+                  recognition_date,
+                  members.id
                 ORDER BY
                   member_accounts.id, account_transactions.transacted_at DESC
               EOS
-
-    current_date  = Date.today
 
     sets  = result.map{ |o|
               member_id                 = o.fetch("member_id")
               default_periodic_payment  = 15
               recognition_date          = o.fetch("recognition_date").try(:to_date)
+              transactions_count        = o.fetch("acc_trans_count")
 
               new_status  = "inforce"
               status      = o.fetch("status")
@@ -699,31 +710,35 @@ namespace :adjust do
 
               if recognition_date.present? and last_payment_date.present?
                 # Code
-                current_balance         = o.fetch("balance").to_f.round(2)
-                num_days                = (current_date - recognition_date).to_i
-                num_weeks               = (num_days / 7).to_i + 1
-                insured_amount          = num_weeks * default_periodic_payment
-                amt_past_due            = (current_balance - insured_amount).to_i * -1
-                days_lapsed             = (current_date - last_payment_date).to_i
+                if transactions_count > 0 
+                  current_balance         = o.fetch("balance").to_f.round(2)
+                  num_days                = (current_date - recognition_date).to_i
+                  num_weeks               = (num_days / 7).to_i + 1
+                  insured_amount          = num_weeks * default_periodic_payment
+                  amt_past_due            = (current_balance - insured_amount).to_i * -1
+                  days_lapsed             = (current_date - last_payment_date).to_i
 
-                is_withdraw_payment = o.fetch("is_withdraw_payment")
+                  is_withdraw_payment = o.fetch("is_withdraw_payment")
 
-                if current_balance == 0.00 && is_withdraw_payment == "true"
-                  new_status = "resigned"
-                elsif o.fetch("balance").to_f.round(2) == 0.00
+                  if current_balance == 0.00 && is_withdraw_payment == "true"
+                    new_status = "resigned"
+                  elsif o.fetch("balance").to_f.round(2) == 0.00
+                    new_status = "dormant"
+                  elsif days_lapsed <= 45 && current_balance >= insured_amount
+                    new_status = "inforce"
+                  elsif days_lapsed > 45 && current_balance >= insured_amount
+                    new_status = "inforce"
+                  elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
+                    new_status = "inforce"
+                  elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
+                    new_status = "lapsed"
+                  elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
+                    new_status = "lapsed"
+                  elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
+                    new_status = "inforce"
+                  end
+                else
                   new_status = "dormant"
-                elsif days_lapsed <= 45 && current_balance >= insured_amount
-                  new_status = "inforce"
-                elsif days_lapsed > 45 && current_balance >= insured_amount
-                  new_status = "inforce"
-                elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
-                  new_status = "inforce"
-                elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
-                  new_status = "lapsed"
-                elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
-                  new_status = "lapsed"
-                elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
-                  new_status = "inforce"
                 end
               else
                 new_status = "pending"
