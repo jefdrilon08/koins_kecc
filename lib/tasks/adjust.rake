@@ -1,4 +1,16 @@
 namespace :adjust do
+  task :bulk_rehash => :environment do
+    branch  = Branch.find(ENV['BRANCH_ID')
+
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+        branch: branch
+      }
+    ).execute!
+
+    puts "Done for #{branch.id}"
+  end
+
   task :set_max_active_date => :environment do
     current_date  = Date.today
 

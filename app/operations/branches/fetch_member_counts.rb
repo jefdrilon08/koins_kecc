@@ -258,13 +258,16 @@ module Branches
                       member_accounts.id, account_transactions.transacted_at DESC
                   ) tt ON tt.member_id = members.id
                   LEFT JOIN
-                    loans ON loans.member_id = members.id
-                    AND
+                    loans ON 
                     (
+                      loans.member_id = members.id
+                      AND
                       loans.status = 'active' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
                     )
                     OR
                     (
+                      loans.member_id = members.id
+                      AND
                       loans.status = 'paid' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
                     )
                   LEFT JOIN

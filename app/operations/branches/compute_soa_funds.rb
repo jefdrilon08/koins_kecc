@@ -76,17 +76,21 @@ module Branches
           }
 
           @cmd.accounts.each do |_, subtype|
-            tx = txs.find{ |tx| tx.fetch("account_subtype") == subtype }
 
             debit   = 0.00
             credit  = 0.00
 
-            if tx.try(:fetch, "transaction_type") == "withdraw"
-              debit = tx.fetch("amount").to_f.round(2)
-            end
+            #tx = txs.find{ |tx| tx.fetch("account_subtype") == subtype }
+            txs.find{ |tx| tx.fetch("account_subtype") == subtype }
 
-            if tx.try(:fetch, "transaction_type") == "deposit"
-              credit = tx.fetch("amount").to_f.round(2)
+            txs.select{ |tx| tx.fetch("account_subtype") == subtype }.each do |tx|
+              if tx.try(:fetch, "transaction_type") == "withdraw"
+                debit += tx.fetch("amount").to_f.round(2)
+              end
+
+              if tx.try(:fetch, "transaction_type") == "deposit"
+                credit += tx.fetch("amount").to_f.round(2)
+              end
             end
 
             rr = {
