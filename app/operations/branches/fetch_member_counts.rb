@@ -115,6 +115,7 @@ module Branches
                                                       last_name: o.fetch("last_name"),
                                                       member_type: o.fetch("member_type"),
                                                       gender: o.fetch("gender"),
+                                                      insurance_status: o.fetch("insurance_status"),
                                                       total_balance: o.fetch("amount").try(:to_f).try(:round, 2) || 0.00,
                                                       branch: {
                                                         id: @branch.id,
@@ -132,10 +133,19 @@ module Branches
                                                     }
                                                   }
       
-      @data[:counts][:active_members][:male]   = @data[:counts][:active_members][:members].select{ |o| o[:gender] == "Male" }.size
-      @data[:counts][:active_members][:female] = @data[:counts][:active_members][:members].select{ |o| o[:gender] == "Female" }.size
-      @data[:counts][:active_members][:others] = @data[:counts][:active_members][:members].select{ |o| o[:gender] == "Others" }.size
-      @data[:counts][:active_members][:total]  = @data[:counts][:active_members][:members].size
+      @data[:counts][:active_members][:male]    = @data[:counts][:active_members][:members].select{ |o| o[:gender] == "Male" }.size
+      @data[:counts][:active_members][:female]  = @data[:counts][:active_members][:members].select{ |o| o[:gender] == "Female" }.size
+      @data[:counts][:active_members][:others]  = @data[:counts][:active_members][:members].select{ |o| o[:gender] == "Others" }.size
+      @data[:counts][:active_members][:inforce] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "inforce" }.size
+      @data[:counts][:active_members][:male_inforce] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "inforce" and o[:gender] == "Male" }.size
+      @data[:counts][:active_members][:female_inforce] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "inforce" and o[:gender] == "Female" }.size
+      @data[:counts][:active_members][:male_pending] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "pending" and o[:gender] == "Male" }.size
+      @data[:counts][:active_members][:female_pending] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "pending" and o[:gender] == "Female" }.size
+      @data[:counts][:active_members][:male_lapsed] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "lapsed" and o[:gender] == "Male" }.size
+      @data[:counts][:active_members][:female_lapsed] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "lapsed" and o[:gender] == "Female" }.size
+      @data[:counts][:active_members][:lapsed]  = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "lapsed" }.size
+      @data[:counts][:active_members][:pending] = @data[:counts][:active_members][:members].select{ |o| o[:insurance_status] == "pending" }.size
+      @data[:counts][:active_members][:total]   = @data[:counts][:active_members][:members].size
     end
 
     def compute_loaners!
