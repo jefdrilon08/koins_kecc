@@ -1,4 +1,6 @@
 class Member < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   STATUSES = [
     "blacklisted",
     "whitelisted",
@@ -38,6 +40,7 @@ class Member < ApplicationRecord
 
   # ActiveStorage
   #has_many_attached :attachment_files
+  has_one_attached :profile_picture
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -87,6 +90,14 @@ class Member < ApplicationRecord
       return self.data.with_indifferent_access[:recognition_date].to_date
     else
       return nil
+    end
+  end
+
+  def profile_picture_url
+    if self.profile_picture.attached? and self.profile_picture.representable?
+      return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+    else
+      "#{ENV['HOST']}/#{ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
     end
   end
 

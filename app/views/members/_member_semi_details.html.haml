@@ -1,7 +1,10 @@
 .card
   .card-body#semi_member_details
     %center
-      = image_tag "image.jpg"
+      = image_tag "#{@member.profile_picture_url}"
+      %center
+        = link_to "#", id: "btn-upload-profile-picture" do
+          .fa.fa-upload
       %h2
         #{@member.full_name}
       %span.text-muted

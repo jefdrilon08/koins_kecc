@@ -1,6 +1,6 @@
 namespace :adjust do
   task :bulk_rehash => :environment do
-    branch  = Branch.find(ENV['BRANCH_ID')
+    branch  = Branch.find(ENV['BRANCH_ID'])
 
     ::MemberAccounts::BulkRehash.new(
       config: {
