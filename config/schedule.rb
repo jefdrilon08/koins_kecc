@@ -25,9 +25,12 @@
 #  rake "finance:autorenew_time_deposit_accounts"
 #end
 
-every :day, at: '1am' do
+set :output, "#{Rails.root}/log/cron.log"
+
+#every :day, at: '1am' do
+every 1.minutes do
   rake "adjust:set_max_active_date"
-  rake "adjust:update_insurance_status"
+  #rake "adjust:update_insurance_status"
 end
 
 # Learn more: http://github.com/javan/whenever

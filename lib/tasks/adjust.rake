@@ -12,6 +12,7 @@ namespace :adjust do
   end
 
   task :set_max_active_date => :environment do
+    puts "Starting set_max_active_date..."
     current_date  = Date.today
 
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
