@@ -27,8 +27,7 @@
 
 #every :day, at: '1am' do
 every 1.minutes do
-  
-  rake "adjust:set_max_active_date", :output => {:error => "#{Rails.root}/log/error.log", :standard => "#{Rails.root}/log/cron.log"}
+  rake "adjust:set_max_active_date"
   #rake "adjust:update_insurance_status"
 end
 
