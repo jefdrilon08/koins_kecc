@@ -25,7 +25,7 @@
 #  rake "finance:autorenew_time_deposit_accounts"
 #end
 
-set :output, "#{Rails.root}/log/cron.log"
+set :output, File.join(Rails.root, "log", "cron.log")
 
 #every :day, at: '1am' do
 every 1.minutes do
