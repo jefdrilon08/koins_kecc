@@ -59,6 +59,7 @@ namespace :api do
     post "/members/change_recognition_date", to: "members#change_recognition_date"
     post "/members/resign", to: "members#resign"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
+    post "/members/upload_signature", to: "members#upload_signature"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
