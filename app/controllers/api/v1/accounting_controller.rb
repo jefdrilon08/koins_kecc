@@ -66,7 +66,7 @@ module Api
                                   ).last
 
           if latest_closing_record.present?
-            date_closed = latest_closing_record.meta["date_closed"].to_date
+            date_closed = latest_closing_record.meta["closing_date"].to_date
 
             if start_date < date_closed and end_date > date_closed
               errors << "Closing date #{date_closed} is in between start and end dates"
