@@ -45,7 +45,7 @@ module Accounting
       end
 
       if @latest_closing_record.present?
-        @closing_date = @latest_closing_record.meta["date_closed"].to_date
+        @closing_date = @latest_closing_record.meta["closing_date"].to_date
       end
 
       @data = {
