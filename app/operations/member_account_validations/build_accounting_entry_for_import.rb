@@ -11,6 +11,10 @@ module MemberAccountValidations
       @branch                       = @member_account_validation.branch
       @status                       = @member_account_validation.status
       @reference_number             = @member_account_validation.reference_number
+      @approved_by                  = @member_account_validation.approved_by
+      @date_approved                = @member_account_validation.date_approved
+      @updated_at                   = @member_account_validation.updated_at
+
 
       if Settings.activate_microinsurance
         branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
@@ -51,7 +55,6 @@ module MemberAccountValidations
             journal_entries: [],
             branch_id: @branch.id,
             branch_name: @branch.name,
-            status: "display",
             accounting_fund_id: @accounting_fund_id,
             data: {
               or_number: "",
@@ -59,9 +62,9 @@ module MemberAccountValidations
             },
             status: @status,
             reference_number: @reference_number,
-            updated_at: @c_working_date,
-            approved_by: @user,
-            date_approved: @c_working_date
+            updated_at: @updated_at,
+            approved_by: @approved_by,
+            date_approved: @date_approved
           }
     end
 

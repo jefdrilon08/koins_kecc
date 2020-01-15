@@ -1171,7 +1171,8 @@ namespace :adjust do
                   is_remote: true,
                   branch: o.branch,
                   status: o.status,
-                  reference_number: o.reference_number
+                  reference_number: o.reference_number, 
+                  approved_by: o.approved_by
                 }
               ).execute! 
             }
