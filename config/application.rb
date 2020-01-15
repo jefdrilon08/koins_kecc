@@ -26,5 +26,8 @@ module Koins
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
+
+    # ActionCable
+    config.action_cable.mount_path = '/websocket'
   end
 end

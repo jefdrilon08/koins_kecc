@@ -66,7 +66,7 @@ module Api
                                   ).last
 
           if latest_closing_record.present?
-            date_closed = latest_closing_record.meta["date_closed"].to_date
+            date_closed = latest_closing_record.meta["closing_date"].to_date
 
             if start_date < date_closed and end_date > date_closed
               errors << "Closing date #{date_closed} is in between start and end dates"
@@ -75,9 +75,9 @@ module Api
 
           # Check according to accounting entry closing record
           if accounting_fund.present?
-            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).where(accounting_fund_id: accounting_fund.id).order("date_posted DESC").first
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).where(accounting_fund_id: accounting_fund.id, branch_id: branch.id).order("date_posted DESC").first
           else
-            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).order("date_posted DESC").first
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ? AND branch_id = ?", end_date, branch.id).order("date_posted DESC").first
           end
 
           if latest_closing_entry.present?

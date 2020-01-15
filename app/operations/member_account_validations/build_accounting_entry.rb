@@ -56,8 +56,6 @@ module MemberAccountValidations
               ar_number: ""
             }
           }
-      else
-        raise "Invalid member account validation"
       end
 
       # @accounting_entry_data  = {

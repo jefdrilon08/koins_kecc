@@ -17,7 +17,7 @@
         Total
     %tr
       %th
-        Active Members
+        Admitted Members
       %td.text-center
         #{o[:counts][:active_members][:male]}
       %td.text-center
@@ -39,7 +39,7 @@
         #{o[:counts][:pure_savers][:total]}
     %tr
       %th
-        Active Loaners
+        Active Borrowers
       %td.text-center
         #{o[:counts][:loaners][:male]}
       %td.text-center
@@ -50,7 +50,7 @@
         #{o[:counts][:loaners][:total]}
     %tr
       %th
-        GRAND TOTAL
+        TOTAL ACTIVE MEMBERS
       %th.text-center
         #{o[:counts][:active_members][:male].to_i + o[:counts][:pure_savers][:male].to_i + o[:counts][:loaners][:male].to_i}
       %th.text-center

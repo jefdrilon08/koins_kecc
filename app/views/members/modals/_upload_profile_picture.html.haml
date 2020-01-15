@@ -1,0 +1,18 @@
+#modal-upload-profile-picture.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Upload Profile Picture
+      .modal-body
+        .modal-body-content
+          = file_field_tag :profile_picture, id: "file-profile-picture"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-upload-profile-picture.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

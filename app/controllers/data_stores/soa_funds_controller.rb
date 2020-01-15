@@ -9,7 +9,7 @@ module DataStores
                   )
 
       @records  = @records.order(
-                    "CAST(meta->>'start_date' AS date) DESC" 
+                    "CAST(meta->>'end_date' AS date) DESC" 
                   ).page(params[:page]).per(20)
 
       @current_date = Date.today
@@ -36,6 +36,15 @@ module DataStores
       else
         redirect_to "/data_stores/soa_funds/#{@record.id}"
       end
+    end
+
+    def turkey
+      @command = Turkey::ComputeSoaFunds.new(
+        branch: Branch.find_by(id: params[:branch_id]) || Branch.first,
+        from: Date.parse(params[:from].presence || "2019-11-07"),
+        to: Date.parse(params[:to].presence || "2020-02-15"),
+      )
+      @result = @command.run
     end
   end
 end

@@ -111,6 +111,11 @@
         #{@loan.maturity_date}
   %tr
     %th
+      Max Active Date:
+    %td.text-right
+      #{@loan.max_active_date}
+  %tr
+    %th
       Term:
     %td.text-right
       #{@loan.term} (#{@loan.num_weeks} installments)

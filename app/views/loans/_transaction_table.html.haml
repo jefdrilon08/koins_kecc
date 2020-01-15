@@ -22,6 +22,11 @@
               #{o.transacted_at.localtime.strftime("%b %d, %Y")}
         %td
           #{o.data["approved_by"]}
+          - if current_user.is_mis?
+            %small
+              %hr
+              #{o.id}
+              %hr
         %td.text-right
           %strong
             #{number_to_currency(o.amount, unit: "")}

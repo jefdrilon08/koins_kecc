@@ -32,7 +32,7 @@
         #{@data[:counts][:pure_savers][:total]}
     %tr
       %th
-        Active Loaners
+        Active Borrowers
       %td.text-center
         #{@data[:counts][:loaners][:male]}
       %td.text-center
@@ -43,7 +43,7 @@
         #{@data[:counts][:loaners][:total]}
   %tr
     %th
-      Active Members
+      Admitted Members
     - if microinsurance?
       %td.text-center
         #{@data[:counts][:active_members][:inforce]}
@@ -61,7 +61,7 @@
       #{@data[:counts][:active_members][:total]}
   %tr
     %th
-      GRAND TOTAL
+      TOTAL ACTIVE MEMBERS
     - if microinsurance?
       %th.text-center
         #{@data[:counts][:active_members][:inforce].to_i}
@@ -99,14 +99,14 @@
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
     %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
-      Active Members (#{@data[:counts][:active_members][:total]})
+      Admitted Members (#{@data[:counts][:active_members][:total]})
   - if microloans?  
     %li.nav-item
       %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
         Pure Savers (#{@data[:counts][:pure_savers][:total]})
     %li.nav-item
       %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#loaners", :role => "tab"}
-        Active Loaners (#{@data[:counts][:loaners][:total]})
+        Active Borrowers (#{@data[:counts][:loaners][:total]})
 .tab-content
   #active-members.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:active_members][:members] }

@@ -1,7 +1,56 @@
 module Api
   module V1
     class MembersController < ApiController
+      skip_before_action :verify_authenticity_token
       before_action :authenticate_user!
+
+      def upload_signature
+        member  = Member.where(id: params[:id]).first
+        files   = params[:files]
+
+        config  = {
+          user: current_user,
+          files: files,
+          member: member
+        }
+
+        errors  = ::Members::ValidateUploadSignature.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          # Upload code
+          member.update!(signature_file: config[:files][0])
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def upload_profile_picture
+        member  = Member.where(id: params[:id]).first
+        files   = params[:files]
+
+        config  = {
+          user: current_user,
+          files: files,
+          member: member
+        }
+
+        errors  = ::Members::ValidateUploadProfilePicture.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          # Upload code
+          member.update!(profile_picture: config[:files][0])
+
+          render json: { message: "ok" }
+        end
+      end
 
       def restore
         member  = Member.where(id: params[:id]).first

@@ -6,8 +6,13 @@ class ActivityLog < ApplicationRecord
     "correction",
     "modification",
     "create",
-    "delete"
+    "delete",
+    "upload"
   ]
 
   validates :content, presence: true
+
+  def user
+    User.where(id: self.data.with_indifferent_access[:user_id]).first
+  end
 end

@@ -43,6 +43,8 @@ module Branches
     end
 
     def execute!
+      # AccountingCode.select("code, (#{JournalEntry.select("SUM(amount)").where("journal_entries.accounting_code_id = accounting_codes.id").where(post_type: 'DR').to_sql}) AS debit, (#{JournalEntry.select("SUM(amount)").where("journal_entries.accounting_code_id = accounting_codes.id").where(post_type: 'CR').to_sql}) AS credit").map { |ac| { accounting_code: ac.code, debit: ac.debit, credit: ac.credit } }
+
       @accounting_codes.each do |a|
         d = {
           accounting_code: a,

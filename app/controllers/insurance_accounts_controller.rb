@@ -55,6 +55,24 @@ class InsuranceAccountsController < ApplicationController
 
   def import_insurance_accounts
     file = params[:file]
+    orig_file_name = file.original_filename
+    orig_file_name_no_ext = File.basename("#{orig_file_name}", ".*")
+    file_name = orig_file_name_no_ext.delete! "insurance accounts"
+    start_date_string = file_name.split("_").first
+    end_date_string = file_name.split("_").last
+    
+    if !start_date_string.nil? && !end_date_string.nil?
+      # if start_date_string.include? "201"
+        end_date = DateTime.parse(end_date_string).try(:to_date)
+        start_date = DateTime.parse(start_date_string).try(:to_date)
+      # else
+      #   end_date = nil
+      #   start_date = nil
+      # end
+    else  
+      end_date = nil
+      start_date = nil
+    end
    
     CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
       config = {  
@@ -69,6 +87,23 @@ class InsuranceAccountsController < ApplicationController
     else
       Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
       flash[:success] = "Successfully Import Insurance Accounts for Members."
+
+      if !start_date.nil? && !end_date.nil?
+        content = "#{current_user.full_name} successfully imported insurance accounts. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported insurance accounts."
+      end
+
+      ActivityLog.create!(
+        content: content,
+        activity_type: "upload",
+        data: {
+          user_id: current_user.id,
+          start_date: start_date,
+          end_date: end_date
+        }
+      )
+
       redirect_to members_path
     end  
   end
@@ -82,13 +117,13 @@ class InsuranceAccountsController < ApplicationController
     end_date_string = file_name.split("_").last
     
     if !start_date_string.nil? && !end_date_string.nil?
-      if start_date_string.include? "201"
+      # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).try(:to_date)
         start_date = DateTime.parse(start_date_string).try(:to_date)
-      else
-        end_date = nil
-        start_date = nil
-      end
+      # else
+      #   end_date = nil
+      #   start_date = nil
+      # end
     else  
       end_date = nil
       start_date = nil
@@ -139,6 +174,22 @@ class InsuranceAccountsController < ApplicationController
 
       ProcessImportInsuranceAccountTransaction.perform_later(args)
       flash[:success] = "Successfully Import Insurance Account Transactions For Members."
+
+      if !start_date.nil? && !end_date.nil?
+        "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      else
+        content = "#{current_user.full_name} successfully imported insurance account transactions."
+      end
+
+      ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
       
       redirect_to import_insurance_account_transactions_path
     end  
