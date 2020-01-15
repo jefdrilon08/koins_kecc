@@ -59,6 +59,27 @@ module MemberAccountValidations
       else
         raise "Invalid member account validation"
       end
+
+      # @accounting_entry_data  = {
+      #       book: @book,
+      #       date_prepared: @current_date.strftime("%B %d, %Y"),
+      #       company_name: Settings.company_name,
+      #       company_address: Settings.company_address,
+      #       branch: @branch.to_s.upcase,
+      #       prepared_by: @user.full_name,
+      #       particular: @particular,
+      #       debit_journal_entries: [],
+      #       credit_journal_entries: [],
+      #       journal_entries: [],
+      #       branch_id: @branch.id,
+      #       branch_name: @branch.name,
+      #       status: "display",
+      #       accounting_fund_id: @accounting_fund_id,
+      #       data: {
+      #         or_number: "",
+      #         ar_number: ""
+      #       }
+      #     }
     end
 
     def execute!
