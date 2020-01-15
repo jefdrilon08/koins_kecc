@@ -1,5 +1,5 @@
 module MemberAccountValidations
-  class BuildAccountingEntry
+  class BuildAccountingEntryForImport
     include ActionView::Helpers::NumberHelper
 
     def initialize(config:)
@@ -9,7 +9,9 @@ module MemberAccountValidations
       @member_account_validation    = @config[:member_account_validation]
       @is_remote                    = @config[:is_remote]
       @branch                       = @member_account_validation.branch
-      
+      @status                       = @member_account_validation.status
+      @reference_number             = @member_account_validation.reference_number
+
       if Settings.activate_microinsurance
         branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
         @branch = Branch.where(id: branch_id).first
@@ -35,8 +37,8 @@ module MemberAccountValidations
       @lif_member_accounts    = MemberAccount.where("account_type = ? AND account_subtype = ? AND member_accounts.member_id IN (?)", "INSURANCE", "Life Insurance Fund", @members.pluck(:id))
       @total_lif_balance      = @lif_member_accounts.sum(:balance)
 
-      if @member_account_validation.pending? || @member_account_validation.for_approval? || @member_account_validation.for_validation? || @member_account_validation.cancelled?   
-          @accounting_entry_data  = {
+
+      @accounting_entry_data  = {
             book: @book,
             date_prepared: @current_date.strftime("%B %d, %Y"),
             company_name: Settings.company_name,
@@ -54,9 +56,13 @@ module MemberAccountValidations
             data: {
               or_number: "",
               ar_number: ""
-            }
+            },
+            status: @status,
+            reference_number: @reference_number,
+            updated_at: @c_working_date,
+            approved_by: @user,
+            date_approved: @c_working_date
           }
-      end
     end
 
     def execute!
@@ -421,6 +427,30 @@ module MemberAccountValidations
       end
 
       journal_entries
+    end
+
+    def post_accounting_entry!
+      # Create new accounting entry
+      config  = {
+        accounting_entry_data: @data_accounting_entry.with_indifferent_access,
+        user: @user
+      }
+
+      accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: config
+                          ).execute!
+
+      # Post to books
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
+      @accounting_entry
     end
   end
 end
