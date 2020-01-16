@@ -57,9 +57,36 @@ class MemberAccountValidationsController < ApplicationController
   def show 
     @member_account_validation = MemberAccountValidation.find(params[:id])
     
+
     if !@member_account_validation.data.nil?
       @accounting_entry_data = @member_account_validation.data.with_indifferent_access[:accounting_entry]
     end
+
+    # if @member_account_validation.data.nil?
+    #   @accounting_entry = AccountingEntry.where(date_prepared: @member_account_validation.date_approved, reference_number: @member_account_validation.reference_number).first
+    #   @journal_entries = @accounting_entry.journal_entries.last
+    #   @accounting_code = AccountingCode.where(id: @journal_entries.accounting_code_id).last
+    #     @member_account_validation.update!(data: 
+    #       {"accounting_entry":
+    #         {
+    #           book: @accounting_entry.book, 
+    #           status: "approved",
+    #           company_name: Settings.company_name,
+    #           company_address: Settings.company_address,
+    #           branch: @accounting_entry.branch.name,
+    #           prepared_by: @accounting_entry.prepared_by,
+    #           particular: @accounting_entry.particular,
+    #           approved_by: @accounting_entry.approved_by,
+    #           date_prepared: @accounting_entry.date_prepared,
+    #           journal_entries: [
+    #             post_type: @journal_entries.post_type,
+    #             code_id: @journal_entries.accounting_code_id,
+    #             code_name: @accounting_code.name,
+    #             amount: @journal_entries.amount
+    #           ]
+    #         }
+    #       })
+    # end
 
     @members = Member.where(branch_id: @member_account_validation.branch.id).all
     @role = current_user.roles.last
