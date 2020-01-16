@@ -87,11 +87,12 @@ module Accounting
                         )
 
         if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
-          dr_entries  = dr_entries.where.not(
-                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
-                          "true",
-                          @closing_date
-                        )
+#          dr_entries  = dr_entries.where.not(
+#                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+#                          "true",
+#                          @closing_date
+#                        )
+          dr_entries  = dr_entries.where("accounting_entries.data->'is_closing_record' IS NULL")
         end
 
         dr_hash = dr_entries
@@ -111,11 +112,12 @@ module Accounting
                         )
 
         if @closing_date.present? and @start_date < @closing_date and @end_date < @closing_date
-          cr_entries  = cr_entries.where.not(
-                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
-                          "true",
-                          @closing_date
-                        )
+#          cr_entries  = cr_entries.where.not(
+#                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+#                          "true",
+#                          @closing_date
+#                        )
+          cr_entries  = cr_entries.where("accounting_entries.data->'is_closing_record' IS NULL")
         end
 
         cr_hash = cr_entries
@@ -134,11 +136,12 @@ module Accounting
                         )
 
         if @closing_date.present? and @start_date < @closing_date and @end_date < @closing_date
-          dr_entries  = dr_entries.where.not(
-                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
-                          "true",
-                          @closing_date
-                        )
+#          dr_entries  = dr_entries.where.not(
+#                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+#                          "true",
+#                          @closing_date
+#                        )
+          dr_entries  = dr_entries.where("accounting_entries.data->'is_closing_record' IS NULL")
         end
 
         dr_hash = dr_entries
@@ -157,11 +160,12 @@ module Accounting
                         )
 
         if @closing_date.present? and @start_date <= @closing_date and @end_date <= @closing_date
-          cr_entries  = cr_entries.where.not(
-                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
-                          "true",
-                          @closing_date
-                        )
+#          cr_entries  = cr_entries.where.not(
+#                          "accounting_entries.data->>'is_closing_record' = ? AND accounting_entries.date_posted = ?",
+#                          "true",
+#                          @closing_date
+#                        )
+          cr_entries  = cr_entries.where("accounting_entries.data->'is_closing_record' IS NULL")
         end
 
         cr_hash = cr_entries
