@@ -15,6 +15,10 @@
       %th
         %center
           Status
+      - if microinsurance?
+        %th
+          %center
+            Finalize Stat
   %tbody
     - @deposit_collections.each do |o|
       %tr
@@ -46,3 +50,15 @@
             - elsif o.processing?
               .badge.badge-warning
                 Processing
+        - if microinsurance?
+          %td
+            %center
+              - if o.pending? && o.finalized?
+                .badge.badge-primary
+                  For Apporval
+              - elsif o.pending? && !o.finalized?
+                .badge.badge-warning
+                  For Finalize
+              - elsif o.approved?
+                .badge.badge-success
+                  Approved
