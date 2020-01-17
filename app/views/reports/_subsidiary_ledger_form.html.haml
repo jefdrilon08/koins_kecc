@@ -1,0 +1,23 @@
+= form_tag subsidiary_ledger_path, html: { novalidate: true }, method: "GET" do
+  .row
+    .col-sm-3
+      .form-group
+        %label Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select" 
+    .col-sm-3
+      .form-group
+        %label As of
+        = text_field_tag :as_of, nil,  class: "form-control",type: "date" , id: "as-of" 
+    .col-sm-3
+      .form-group
+        %label Actions
+        = link_to "#", id: 'download-btn', class: 'btn btn-primary btn-block' do
+          .fa.fa-download
+          Download 
+
+= javascript_include_tag "reports/SubsidiaryLedger"
+
+:javascript
+  $(document).ready(function() {
+    SubsidiaryLedger.init();
+  });

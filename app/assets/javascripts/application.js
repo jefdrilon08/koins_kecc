@@ -23,6 +23,7 @@
 //= require signature_pad/dist/signature_pad
 //= require cocoon
 //= require select2
+//= require cable
 
 $(document).ready(function(){
   // Turn on js-selectable class so that it becomes SELCT 2 tag

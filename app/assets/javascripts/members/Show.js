@@ -8,6 +8,8 @@ var Show  = (function() {
   var $modalUnlock;
   var $modalChangeMemberType;
   var $modalChangeRecognitionDate;
+  var $modalUploadProfilePicture;
+  var $modalUploadSignature;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -28,6 +30,10 @@ var Show  = (function() {
   var $btnChangeRecognitionDate;
   var $btnConfirmChangeMemberType;
   var $btnConfirmChangeRecognitionDate;
+  var $btnUploadProfilePicture;
+  var $btnConfirmUploadProfilePicture;
+  var $btnUploadSignature;
+  var $btnConfirmUploadSignature;
   var $inputRecognitionDate;
   var $selectLoanProduct;
   var $selectSurvey;
@@ -38,6 +44,7 @@ var Show  = (function() {
   var $btnConfirmInsuranceResign;
   var $inputDateResigned;
   var $inputReason;
+  var $fileProfilePicture;
   var templateErrorList;
 
 
@@ -52,6 +59,8 @@ var Show  = (function() {
   var _urlChangeMemberType        = "/api/v1/members/change_member_type";
   var _urlChangeRecognitionDate   = "/api/v1/members/change_recognition_date";
   var _urlResignFromInsurance     = "/api/v1/members/resign";
+  var _urlUploadProfilePicture    = "/api/v1/members/upload_profile_picture";
+  var _urlUploadSignature         = "/api/v1/members/upload_signature";
   var _memberId;
   var _authenticityToken;
 
@@ -71,6 +80,8 @@ var Show  = (function() {
     $modalRestore                     = $("#modal-restore");
     $modalChangeMemberType            = $("#modal-change-member-type");
     $modalChangeRecognitionDate       = $("#modal-change-recognition-date");
+    $modalUploadProfilePicture        = $("#modal-upload-profile-picture");
+    $modalUploadSignature             = $("#modal-upload-signature");
     $btnGenerateAccessToken           = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken    = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature              = $("#btn-confirm-signature");
@@ -91,13 +102,19 @@ var Show  = (function() {
     $btnChangeRecognitionDate         = $("#btn-change-recognition-date");
     $btnConfirmChangeMemberType       = $("#btn-confirm-change-member-type");
     $btnConfirmChangeRecognitionDate  = $("#btn-confirm-change-recognition-date");
+    $btnUploadSignature               = $("#btn-upload-signature");
+    $btnConfirmUploadSignature        = $("#btn-confirm-upload-signature");
     $inputRecognitionDate             = $("#input-recognition-date");
+    $fileProfilePicture               = $("#file-profile-picture");
+    $fileSignature                    = $("#file-signature");
     $selectMemberType                 = $("#select-member-type");
     $selectLoanProduct                = $("#select-loan-product");
     $selectSurvey                     = $("#select-survey");
     $btnResignFromInsurance           = $("#btn-resign-from-insurance");
     $modalResignFromInsurance         = $("#modal-resign-from-insurance");
     $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
+    $btnUploadProfilePicture          = $("#btn-upload-profile-picture");
+    $btnConfirmUploadProfilePicture   = $("#btn-confirm-upload-profile-picture");
     $inputDateResigned                = $("#input-date-resigned");
     $inputReason                      = $("#input-reason");
 
@@ -106,6 +123,141 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnUploadSignature.on("click", function() {
+      $message.html("");
+      $modalUploadSignature.modal("show");
+    });
+
+    $btnConfirmUploadSignature.on("click", function() {
+      $message.html("Uploading signature...");
+      $btnConfirmUploadSignature.prop("disabled", true);
+
+      errors  = [];
+      if($fileSignature[0].files.length == 0) {
+        errors.push("Signature required");
+
+        $message.html("Signature required...");
+        $btnConfirmUploadSignature.prop("disabled", false);
+      }
+
+      if(errors.length == 0) {
+        var formData  = new FormData();
+        var files     = [];
+
+        files.push({
+          name: "SIGNATURE",
+          file: $fileSignature[0].files[0]
+        });
+
+        for(var i = 0; i < files.length; i++) {
+          formData.append("files[]", files[i].file);
+          formData.append("file_types[]", files[i].name);
+
+          formData.append("id", _memberId);
+
+          $.ajax({
+            url: _urlUploadSignature,
+            method: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(response) {
+              $message.html("Success! Reloading...");
+              window.location.reload();
+            },
+            error: function(response) {
+              console.log(response);
+              var errors  = [];
+              try {
+                errors  = JSON.parse(response.responseText).full_messages;
+              } catch(err) {
+                errors  = ["Something went wrong"];
+                console.log(err);
+              } finally {
+                console.log(errors);
+                $message.html(
+                  Mustache.render(
+                    templateErrorList,
+                    { errors: errors }
+                  )
+                );
+
+                $btnConfirmUploadSignature.prop("disabled", false);
+              }
+            }
+          });
+        }
+      }
+    });
+
+    $btnUploadProfilePicture.on("click", function() {
+      $message.html("");
+      $modalUploadProfilePicture.modal("show");
+    });
+
+    $btnConfirmUploadProfilePicture.on("click", function() {
+      $message.html("Uploading profile picture...");
+      $btnConfirmUploadProfilePicture.prop("disabled", true);
+
+      errors  = [];
+
+      if($fileProfilePicture[0].files.length == 0) {
+        errors.push("Profile picture required");
+
+        $message.html("Profile picture required...");
+        $btnConfirmUploadProfilePicture.prop("disabled", false);
+      }
+
+      if(errors.length == 0) {
+        var formData  = new FormData();
+        var files     = [];
+
+        files.push({
+          name: "PROFILE_PICTURE",
+          file: $fileProfilePicture[0].files[0]
+        });
+
+        for(var i = 0; i < files.length; i++) {
+          formData.append("files[]", files[i].file);
+          formData.append("file_types[]", files[i].name);
+
+          formData.append("id", _memberId);
+
+          $.ajax({
+            url: _urlUploadProfilePicture,
+            method: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function(response) {
+              $message.html("Success! Reloading...");
+              window.location.reload();
+            },
+            error: function(response) {
+              console.log(response);
+              var errors  = [];
+              try {
+                errors  = JSON.parse(response.responseText).full_messages;
+              } catch(err) {
+                errors  = ["Something went wrong"];
+                console.log(err);
+              } finally {
+                console.log(errors);
+                $message.html(
+                  Mustache.render(
+                    templateErrorList,
+                    { errors: errors }
+                  )
+                );
+
+                $btnConfirmUploadProfilePicture.prop("disabled", false);
+              }
+            }
+          });
+        }
+      }
+    });
+
     $btnChangeRecognitionDate.on("click", function() {
       $message.html(""); 
       $modalChangeRecognitionDate.modal("show");

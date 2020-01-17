@@ -1,7 +1,10 @@
 .card
   .card-body#semi_member_details
     %center
-      = image_tag "image.jpg"
+      = image_tag "#{@member.profile_picture_url}"
+      %center
+        = link_to "#", id: "btn-upload-profile-picture" do
+          .fa.fa-upload
       %h2
         #{@member.full_name}
       %span.text-muted
@@ -105,15 +108,17 @@
     %h6
       Signature
     %div
-      #btn-generate-signature.btn.btn-success.btn-block
-        .fa.fa-pencil-alt
-        Generate Signature
-
-      - if @member.signature_data.present?
-        .card
-          .card-body
-            %center
-              %img{ src: @member.signature_data, width: "100", id: "signature-display" }
+      - if @member.has_signature?
+        %center
+          %hr
+          = image_tag "#{@member.signature_url}"
+          %hr
+      - else
+        %p
+          No signature
+      #btn-upload-signature.btn.btn-success.btn-block
+        .fa.fa-upload
+        Upload Signature
     - if Settings.activate_microinsurance and @member.active? 
       %hr
       %h6

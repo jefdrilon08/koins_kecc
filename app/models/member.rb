@@ -1,4 +1,6 @@
 class Member < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   STATUSES = [
     "blacklisted",
     "whitelisted",
@@ -38,6 +40,8 @@ class Member < ApplicationRecord
 
   # ActiveStorage
   #has_many_attached :attachment_files
+  has_one_attached :profile_picture
+  has_one_attached :signature_file
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
@@ -88,6 +92,24 @@ class Member < ApplicationRecord
     else
       return nil
     end
+  end
+
+  def profile_picture_url
+    if self.profile_picture.attached? and self.profile_picture.representable?
+      return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+    else
+      "http://#{ENV['HOST']}/#{ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
+    end
+  end
+
+  def signature_url
+    if self.signature_file.attached? and self.signature_file.representable?
+      return rails_blob_path(self.signature_file, disposition: "attachment", only_path: true)
+    end
+  end
+
+  def has_signature?
+    self.signature_file.attached? and self.signature_file.representable?
   end
 
   def full_name_titleize

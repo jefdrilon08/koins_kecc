@@ -71,7 +71,7 @@ module Reports
         @total_male += @male_members.where(branch_id: branch).count
         @total_female += @female_members.where(branch_id: branch).count
         @total_with_spouse += @members_with_spouse.where(branch_id: branch).count
-        @total_female += @female_members.where(branch_id: branch).count
+        # @total_female += @female_members.where(branch_id: branch).count
         @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
         @total_single += @single_members.where(branch_id: branch).count
         @total_married += @married_members.where(branch_id: branch).count

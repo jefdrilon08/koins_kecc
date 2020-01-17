@@ -20,7 +20,7 @@ class MemberAccountValidation < ApplicationRecord
 	validates :total_advance_rf, presence: true, numericality: true
 	validates :total_interest, presence: true, numericality: true
 	validates :total, presence: true, numericality: true
-	validates :total_equity_interest, presence: true, numericality: true
+	#validates :total_equity_interest, presence: true, numericality: true
 
 	before_validation :load_defaults
 

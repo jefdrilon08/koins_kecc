@@ -12,6 +12,7 @@ namespace :adjust do
   end
 
   task :set_max_active_date => :environment do
+    puts "Starting set_max_active_date..."
     current_date  = Date.today
 
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
@@ -1156,5 +1157,26 @@ namespace :adjust do
     end
 
     puts "\nDone."
+  end
+
+  task :update_accounting_entry => :environment do
+    member_account_validation = MemberAccountValidation.approved.all
+    current_user = User.first
+    member_account_validation.where(data: nil).each do |o|
+      data = { accounting_entry: ::MemberAccountValidations::BuildAccountingEntryForImport.new(
+                config: 
+                {
+                  user: current_user, 
+                  member_account_validation: o, 
+                  is_remote: true,
+                  branch: o.branch,
+                  status: o.status,
+                  reference_number: o.reference_number, 
+                  approved_by: o.approved_by
+                }
+              ).execute! 
+            }
+      o.update!(data: data)
+    end
   end
 end

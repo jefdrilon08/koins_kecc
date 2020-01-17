@@ -85,13 +85,22 @@
             [] ID of Claimant
         %tr
           %td{:width => "21%"}
+            Type of Calamity
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@calamity_claim.type_of_calamity}
+          %td{:width => "28%"}
+            [] Brgy. Certification/Certification
+        %tr
+          %td{:width => "21%"}
             Name of Member
           %td{:width => "25%"}
             %b
               %u  
                 #{@calamity_claim.member.full_name_formatted}
           %td{:width => "28%"}
-            [] Brgy. Certification/Certification
+            [] Monitoring Toll / Claims Copy PDF
         %tr
           %td{:width => "21%"}
             Amount
@@ -100,6 +109,14 @@
               %u  
                 PhP #{number_with_delimiter(number_with_precision(@calamity_claim.amount, precision: 2), delimiter: ",", separator: ".")} 
           %td{:width => "28%"} 
+        %tr
+          %td{:width => "21%"}
+            Payee
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@calamity_claim.name_of_payee}
+          %td{:width => "28%"}
   %br
   %br
   %br

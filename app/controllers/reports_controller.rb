@@ -178,4 +178,19 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+
+  def subsidiary_ledger
+  end
+
+  def subsidiary_ledger_report
+    @as_of = params[:as_of]
+    @branch = params[:branch]
+
+    excel = Reports::GenerateSubsidiaryLedgerExcel.new(as_of: @as_of, branch: @branch).execute!
+    filename  = "subsidiary_ledger.xlsx"
+   
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  
+  end
 end

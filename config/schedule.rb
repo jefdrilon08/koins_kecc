@@ -25,6 +25,9 @@
 #  rake "finance:autorenew_time_deposit_accounts"
 #end
 
+set :output, {:error => "log/cron_error_log.log", :standard => "log/cron_log.log"}
+env :PATH, ENV['PATH']
+
 every :day, at: '1am' do
   rake "adjust:set_max_active_date"
   rake "adjust:update_insurance_status"
