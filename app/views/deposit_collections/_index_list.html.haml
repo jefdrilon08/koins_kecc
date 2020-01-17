@@ -54,11 +54,11 @@
           %td
             %center
               - if o.pending? && o.finalized?
-                .badge.badge-danger
+                .badge.badge-primary
                   For Apporval
               - elsif o.pending? && !o.finalized?
-                .badge.badge-danger
+                .badge.badge-warning
                   For Finalize
               - elsif o.approved?
-                .badge.badge-danger
+                .badge.badge-success
                   Approved
