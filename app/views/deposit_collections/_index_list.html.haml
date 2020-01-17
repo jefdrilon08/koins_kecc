@@ -50,14 +50,15 @@
             - elsif o.processing?
               .badge.badge-warning
                 Processing
-        %td
-          %center
-            - if o.pending? && o.is_finalized?
-              .badge.badge-danger
-                For Apporval
-            - elsif o.pending? && !o.is_finalized?
-              .badge.badge-danger
-                For Finalize
-            - elsif o.approved?
-              .badge.badge-danger
-                Approved
+        - if microinsurance?
+          %td
+            %center
+              - if o.pending? && o.finalized?
+                .badge.badge-danger
+                  For Apporval
+              - elsif o.pending? && !o.finalized?
+                .badge.badge-danger
+                  For Finalize
+              - elsif o.approved?
+                .badge.badge-danger
+                  Approved
