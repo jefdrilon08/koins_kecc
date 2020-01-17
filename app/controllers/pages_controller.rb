@@ -39,6 +39,10 @@ class PagesController < ApplicationController
     @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
   end
 
+  def members_for_reinsurance
+    @members = Insurance::FetchMembersForReinsurance.new.execute!
+  end
+
   def download_exit_age
     @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
     excel     = Members::GenerateInsuranceExitAgeReportExcel.new(

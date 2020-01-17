@@ -48,6 +48,7 @@ Rails.application.routes.draw do
   
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members
+  get "/members_for_reinsurance", to: "pages#members_for_reinsurance", as: :members_for_reinsurance
   get "/validations", to: "pages#validations", as: :validations
   get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
   get "/seriatim", to: "pages#seriatim", as: :seriatim
