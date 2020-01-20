@@ -82,7 +82,7 @@ class InsuranceAccountsController < ApplicationController
       @errors = Insurance::ValidateInsuranceAccountsImportFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if !@errors.nil?
       redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
@@ -137,7 +137,7 @@ class InsuranceAccountsController < ApplicationController
       @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if !@errors.nil?
       redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
 

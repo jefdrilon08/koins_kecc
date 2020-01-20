@@ -136,7 +136,7 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportMembersFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if !@errors.nil?
       redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       Members::ImportMembersFromCsvFile.new(
@@ -193,7 +193,7 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportLegalDependentsFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if !@errors.nil?
       redirect_to import_legal_dependents_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       Members::ImportLegalDependentsFromCsvFile.new(
@@ -250,7 +250,7 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportBeneficiariesFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if !@errors.nil?
       redirect_to import_beneficiaries_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       Members::ImportBeneficiariesFromCsvFile.new(
