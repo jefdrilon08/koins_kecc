@@ -10,6 +10,16 @@ module Insurance
 
     private
 
+    def new_load_csv_file!
+      uuids = []
+
+      CSV.foreach(@file, headers: true) do |row|
+        uuids << row['uuid']
+      end
+
+      uuids_for_updating  = AccountTransaction.where(id: uuids).pluck(:id)
+    end
+
     def load_csv_file!
       insurance_account_ids = []
 

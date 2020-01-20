@@ -47,28 +47,30 @@ module MemberAccounts
       member_account_sets = member_account_sets.join(",")
 
 
-      query = "
-        UPDATE account_transactions AS a SET
-          data  = CAST(temp.data AS json)
-        FROM (values
-          #{sets}
-        ) AS temp(transaction_id, data)
-        WHERE temp.transaction_id = a.id::text
-      "
+      if sets.present?
+        query = "
+          UPDATE account_transactions AS a SET
+            data  = CAST(temp.data AS json)
+          FROM (values
+            #{sets}
+          ) AS temp(transaction_id, data)
+          WHERE temp.transaction_id = a.id::text
+        "
 
-      ActiveRecord::Base.connection.execute(query)
+        ActiveRecord::Base.connection.execute(query)
 
-      # Update member accounts
-      query = "
-        UPDATE member_accounts AS m SET
-          balance = temp.ending_balance
-        FROM (values
-          #{member_account_sets}
-        ) AS temp(id, ending_balance)
-        WHERE temp.id = m.id::text
-      "
+        # Update member accounts
+        query = "
+          UPDATE member_accounts AS m SET
+            balance = temp.ending_balance
+          FROM (values
+            #{member_account_sets}
+          ) AS temp(id, ending_balance)
+          WHERE temp.id = m.id::text
+        "
 
-      ActiveRecord::Base.connection.execute(query)
+        ActiveRecord::Base.connection.execute(query)
+      end
     end
 
     def query!
