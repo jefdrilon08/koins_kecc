@@ -83,29 +83,33 @@ class InsuranceAccountsController < ApplicationController
     end
 
     if !@errors.nil?
-      redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-    else
-      Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
-      flash[:success] = "Successfully Import Insurance Accounts for Members."
-
-      if !start_date.nil? && !end_date.nil?
-        content = "#{current_user.full_name} successfully imported insurance accounts. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+      if @errors[:messages].size > 0
+        redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
-        content = "#{current_user.full_name} successfully imported insurance accounts."
+        Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
+        flash[:success] = "Successfully Import Insurance Accounts for Members."
+
+        if !start_date.nil? && !end_date.nil?
+          content = "#{current_user.full_name} successfully imported insurance accounts. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        else
+          content = "#{current_user.full_name} successfully imported insurance accounts."
+        end
+
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
+        redirect_to members_path
       end
-
-      ActivityLog.create!(
-        content: content,
-        activity_type: "upload",
-        data: {
-          user_id: current_user.id,
-          start_date: start_date,
-          end_date: end_date
-        }
-      )
-
+    else
       redirect_to members_path
-    end  
+    end    
   end
 
   def import_insurance_account_transactions
@@ -137,7 +141,7 @@ class InsuranceAccountsController < ApplicationController
       @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
     end
 
-    if !@errors.nil?
+    if @errors[:messages].size > 0
       redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
 
@@ -176,7 +180,7 @@ class InsuranceAccountsController < ApplicationController
       flash[:success] = "Successfully Import Insurance Account Transactions For Members."
 
       if !start_date.nil? && !end_date.nil?
-        "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        content = "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
       else
         content = "#{current_user.full_name} successfully imported insurance account transactions."
       end
