@@ -131,12 +131,6 @@ export default class ManagementOverview extends React.Component {
                   Branch Name
                 </th>
                 <th className="text-right">
-                  Principal
-                </th>
-                <th className="text-right">
-                  Principal Paid
-                </th>
-                <th className="text-right">
                   Portfolio
                 </th>
                 <th className="text-right">
@@ -211,12 +205,6 @@ export default class ManagementOverview extends React.Component {
                 </strong>
               </td>
               <td className="text-right">
-                {numberWithCommas(branches[k].data.principal)}
-              </td>
-              <td className="text-right">
-                {numberWithCommas(branches[k].data.principal_paid)}
-              </td>
-              <td className="text-right">
                 {numberWithCommas(branches[k].data.portfolio)}
               </td>
               <td className="text-right">
@@ -273,16 +261,6 @@ export default class ManagementOverview extends React.Component {
             <td>
               <strong>
                 {clusters[j].name} Total
-              </strong>
-            </td>
-            <td className="text-right">
-              <strong>
-                {numberWithCommas(cPrincipal)}
-              </strong>
-            </td>
-            <td className="text-right">
-              <strong>
-                {numberWithCommas(cPrincipalPaid)}
               </strong>
             </td>
             <td className="text-right">
@@ -360,16 +338,6 @@ export default class ManagementOverview extends React.Component {
           </td>
           <td className="text-right">
             <strong>
-              {numberWithCommas(aPrincipal)}
-            </strong>
-          </td>
-          <td className="text-right">
-            <strong>
-              {numberWithCommas(aPrincipalPaid)}
-            </strong>
-          </td>
-          <td className="text-right">
-            <strong>
               {numberWithCommas(aPortfolio)}
             </strong>
           </td>
@@ -439,16 +407,6 @@ export default class ManagementOverview extends React.Component {
         <td>
           <strong>
             Grand Total
-          </strong>
-        </td>
-        <td className="text-right">
-          <strong>
-            {numberWithCommas(tPrincipal)}
-          </strong>
-        </td>
-        <td className="text-right">
-          <strong>
-            {numberWithCommas(tPrincipalPaid)}
           </strong>
         </td>
         <td className="text-right">
