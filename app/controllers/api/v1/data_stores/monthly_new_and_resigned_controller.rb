@@ -38,7 +38,7 @@ module Api
                       )
           end
 
-          @record.update!(status: "processing"
+          @record.update!(status: "processing")
 
           args  = {
             data_store_id: @record.id,
