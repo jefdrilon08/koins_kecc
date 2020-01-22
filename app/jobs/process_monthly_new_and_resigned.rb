@@ -9,8 +9,6 @@ class ProcessMonthlyNewAndResigned < ApplicationJob
       year    = args[:year]
       month   = args[:month]
 
-      record.update!(status: "processing")
-
       config  = {
         branch: branch,
         year: year,
