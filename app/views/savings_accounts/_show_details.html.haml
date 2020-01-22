@@ -22,6 +22,10 @@
           %td
             %small
               #{o.id}
+              %br
+              Transacted At: #{o.transacted_at.to_s(:db)}
+              |
+              Updated At: #{o.updated_at.to_s(:db)}
         %td
           %center
             %small

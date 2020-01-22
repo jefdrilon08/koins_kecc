@@ -5,8 +5,6 @@ class ProcessPersonalFunds < ApplicationJob
     record  = DataStore.find(args[:id])
     branch  = Branch.find(record.meta.with_indifferent_access[:branch_id])
     as_of   = record.meta.with_indifferent_access[:as_of].to_date
-    
-    record.update!(status: "processing")
 
     begin
       config  = {

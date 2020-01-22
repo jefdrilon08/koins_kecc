@@ -1,6 +1,7 @@
 %table.table.table-bordered.table-sm.table-hover
   %thead
     %tr
+      %th
       %th.text-center
         Date
       %th
@@ -15,9 +16,11 @@
     - @records.each do |o|
       %tr
         %td.text-center
+          = link_to "/data_stores/personal_funds/#{o.id}" do
+            .fa.fa-search
+        %td.text-center
           %strong
-            = link_to "/data_stores/personal_funds/#{o.id}" do
-              #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
+            #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
         %td
           #{o.meta.with_indifferent_access[:branch_name]}
         %td.text-center
