@@ -172,6 +172,7 @@ Rails.application.routes.draw do
   resources :membership_payment_records, only: [:destroy]
 
   # Accounting
+  get "/trial_balance", to: "accounting#trial_balance"
   get "/accounting/trial_balance", to: "accounting#trial_balance"
   get "/accounting/general_ledger", to: "accounting#general_ledger"
   get "/accounting/general_ledger_excel_url", to: "accounting#general_ledger_excel_url"
