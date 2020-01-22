@@ -27,9 +27,11 @@ module Reports
 
           # For header
           sheet.add_row [ 
+            "Identification Number",
             "Name",
             "Branch",
             "Center",
+            "Status",
             "LIF",
             "RF"
           ], 
@@ -59,9 +61,11 @@ module Reports
             end
 
               sheet.add_row [
+                member.identification_number,
                 member.full_name,
                 member.branch.name,
                 member.center.name,
+                member.status,
                 total_life.round(2),
                 total_rf.round(2)
               ], style: default_cell 
