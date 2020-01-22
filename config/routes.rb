@@ -361,6 +361,7 @@ Rails.application.routes.draw do
   get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports", as: :collections_hiip_reports
   get "/reports/subsidiary_ledger", to: "reports#subsidiary_ledger", as: :subsidiary_ledger
   get "/reports/subsidiary_ledger_report", to: "reports#subsidiary_ledger_report", as: :subsidiary_ledger_report
+  
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

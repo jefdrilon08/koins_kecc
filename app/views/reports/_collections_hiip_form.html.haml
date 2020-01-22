@@ -2,8 +2,12 @@
   .row
     .col-sm-3
       .form-group
+        %label Cluster
+        = select_tag :cluster_id, options_from_collection_for_select(@clusters, :id, :name, @cluster.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "cluster-select"
+    .col-sm-3
+      .form-group
         %label Branch
-        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
+        = select_tag :branch_id, options_for_select([]), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
     .col-sm-3
       .form-group
         %label Start Date
@@ -23,5 +27,9 @@
 
 :javascript
   $(document).ready(function() {
-    CollectionsHiipReport.init();
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    CollectionsHiipReport.init({
+      authenticityToken: authenticityToken
+    });
   });

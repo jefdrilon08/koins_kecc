@@ -11,7 +11,13 @@ class ReportsController < ApplicationController
     if params[:branch_id].present?
       @branch = Branch.find(params[:branch_id])
     end
-    @branches = Branch.all
+      @branches = Branch.all
+
+    if params[:cluster_id].present?
+      @cluster = Cluster.find(params[:cluster_id])
+    end
+      @clusters = Cluster.all
+
   end
 
   def monthly_remittance
@@ -65,10 +71,9 @@ class ReportsController < ApplicationController
     branch = params[:branch]
     start_date = params[:start_date]
     end_date = params[:end_date]
-    branch_name = Branch.where(id: branch).first.name
 
     excel = Reports::GenerateCollectionsClipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
-    filename  = "#{branch_name}_collections_clip_report.xlsx"
+    filename  = "collections_clip_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -168,18 +173,19 @@ class ReportsController < ApplicationController
 
   def collections_hiip_reports
     branch = params[:branch]
+    cluster = params[:cluster]
     start_date = params[:start_date]
     end_date = params[:end_date]
-    branch_name = Branch.where(id: branch).first.name
 
-    excel = Reports::GenerateCollectionsHiipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
-    filename  = "#{branch_name}_collections_hiip_report.xlsx"
+    excel = Reports::GenerateCollectionsHiipReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "collections_hiip_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
   def subsidiary_ledger
+
   end
 
   def subsidiary_ledger_report
@@ -193,4 +199,5 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   
   end
+
 end
