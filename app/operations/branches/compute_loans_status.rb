@@ -31,8 +31,6 @@ module Branches
       @loan_products  = LoanProduct.where(id: @loans.pluck(:loan_product_id).uniq)
       @centers        = Center.where(id: @loans.pluck(:center_id).uniq)
 
-      @loan_statuses  = []
-
       @data = {
         as_of: @as_of,
         num_loans: @loans.size,

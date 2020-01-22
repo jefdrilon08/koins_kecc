@@ -16,28 +16,21 @@ module Branches
         officers: [],
         records: []
       }
+
+      @cmd  = ::Branches::ComputeRr.new(
+                config: {
+                  branch: @branch,
+                  as_of: @as_of
+                }
+              )
     end
 
     def execute!
-      loans = ::Loans::FetchActiveAsOf.new(
-                config: {
-                  as_of: @as_of,
-                  branch: @branch
-                }
-              ).execute!
+      @cmd.execute!
 
-      loans.each do |loan|
-        temp_loan = ::Reports::GenerateLoanRepaymentReport.new(
-                      config: {
-                        loan: loan,
-                        as_of: @as_of
-                      }
-                    ).execute!
-
-        if temp_loan[:total_balance].to_f > 0
-          @data[:records] << temp_loan
-        end
-      end
+      @data[:records] = @cmd.data[:records].select{ |o|
+                          o[:total_balance].to_f > 0
+                        }
 
       # Setup centers
       center_ids      = @data[:records].map{ |o| o[:center][:id] }
