@@ -1,4 +1,16 @@
 namespace :adjust do
+  task :asign_user_to_loans => :environment do
+    branch  = Branch.find(ENV['BRANCH_ID'])
+
+    ::Loans::AssignUser.new(
+      config: {
+        branch: branch
+      }
+    ).execute!
+
+    puts "Done for #{branch.id}"
+  end
+
   task :bulk_rehash => :environment do
     branch  = Branch.find(ENV['BRANCH_ID'])
 

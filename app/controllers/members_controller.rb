@@ -136,32 +136,36 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportMembersFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-    else
-      Members::ImportMembersFromCsvFile.new(
-                          file: file
-                    ).execute!
-      flash[:success] = "Successfully Imported Members Record."
-      
-      if !start_date.nil? && !end_date.nil?
-        content = "#{current_user.full_name} successfully imported members. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+    if !@errors.nil?
+      if @errors[:messages].size > 0
+        redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
-        content = "#{current_user.full_name} successfully imported members."
+        Members::ImportMembersFromCsvFile.new(
+                            file: file
+                      ).execute!
+        flash[:success] = "Successfully Imported Members Record."
+        
+        if !start_date.nil? && !end_date.nil?
+          content = "#{current_user.full_name} successfully imported members. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        else
+          content = "#{current_user.full_name} successfully imported members."
+        end
+
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
+        redirect_to members_path
       end
-
-      ActivityLog.create!(
-        content: content,
-        activity_type: "upload",
-        data: {
-          user_id: current_user.id,
-          start_date: start_date,
-          end_date: end_date
-        }
-      )
-
+    else
       redirect_to members_path
-    end  
+    end    
   end
 
   def import_legal_dependents
@@ -193,32 +197,36 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportLegalDependentsFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to import_legal_dependents_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-    else
-      Members::ImportLegalDependentsFromCsvFile.new(
-                          file: file
-                    ).execute!
-      flash[:success] = "Successfully Imported Legal Dependents Record."
-
-      if !start_date.nil? && !end_date.nil?
-        content = "#{current_user.full_name} successfully imported legal dependents. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+    if !@errors.nil?
+      if @errors[:messages].size > 0
+        redirect_to import_legal_dependents_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
-        content = "#{current_user.full_name} successfully imported legal dependents."
+        Members::ImportLegalDependentsFromCsvFile.new(
+                            file: file
+                      ).execute!
+        flash[:success] = "Successfully Imported Legal Dependents Record."
+
+        if !start_date.nil? && !end_date.nil?
+          content = "#{current_user.full_name} successfully imported legal dependents. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        else
+          content = "#{current_user.full_name} successfully imported legal dependents."
+        end
+
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
+        redirect_to members_path
       end
-
-      ActivityLog.create!(
-        content: content,
-        activity_type: "upload",
-        data: {
-          user_id: current_user.id,
-          start_date: start_date,
-          end_date: end_date
-        }
-      )
-
+    else
       redirect_to members_path
-    end  
+    end
   end
 
   def import_beneficiaries
@@ -250,30 +258,34 @@ class MembersController < ApplicationController
       @errors = Members::ValidateImportBeneficiariesFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to import_beneficiaries_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-    else
-      Members::ImportBeneficiariesFromCsvFile.new(
-                          file: file
-                    ).execute!
-      flash[:success] = "Successfully Imported Beneficiaries Record."
-
-      if !start_date.nil? && !end_date.nil?
-        content = "#{current_user.full_name} successfully imported beneficiaries. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+    if !@errors.nil?
+      if @errors[:messages].size > 0
+        redirect_to import_beneficiaries_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
-        content = "#{current_user.full_name} successfully imported beneficiaries."
+        Members::ImportBeneficiariesFromCsvFile.new(
+                            file: file
+                      ).execute!
+        flash[:success] = "Successfully Imported Beneficiaries Record."
+
+        if !start_date.nil? && !end_date.nil?
+          content = "#{current_user.full_name} successfully imported beneficiaries. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        else
+          content = "#{current_user.full_name} successfully imported beneficiaries."
+        end
+
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
+        redirect_to members_path
       end
-
-      ActivityLog.create!(
-        content: content,
-        activity_type: "upload",
-        data: {
-          user_id: current_user.id,
-          start_date: start_date,
-          end_date: end_date
-        }
-      )
-
+    else
       redirect_to members_path
     end  
   end

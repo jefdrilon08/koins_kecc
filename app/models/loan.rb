@@ -20,6 +20,7 @@ class Loan < ApplicationRecord
   belongs_to :branch
   belongs_to :member
   belongs_to :loan_product
+  belongs_to :user, optional: true
   belongs_to :project_type, optional: true
 
   validates :status, presence: true, inclusion: { in: STATUSES }
@@ -53,6 +54,10 @@ class Loan < ApplicationRecord
     if self.new_record?
       self.status = "pending"
       self.payment_type = "cash"
+    end
+
+    if self.user.blank? and self.center.present?
+      self.user = self.center.user 
     end
   end
 
