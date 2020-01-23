@@ -1,11 +1,11 @@
 module InsuranceFundTransferCollections
 	class RecomputeTotals
 		def initialize(config:)
-			@config 				= config
-			@data   				= @config[:data]
-			@current_member			= @config[:current_member]
-			@user					= @config[:user]
-			@insurance_withdrawal_collection 	= @config[:insurance_withdrawal_collection]
+			@config 							= config
+			@data   							= @config[:data]
+			@current_member						= @config[:current_member]
+			@user								= @config[:user]
+			@insurance_fund_transfer_collection = @config[:insurance_fund_transfer_collection]
 		end
 
 		def execute!

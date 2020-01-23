@@ -211,6 +211,9 @@ namespace :api do
     get "/insurance_fund_transfer_collections/fetch_members", to: "insurance_fund_transfer_collections#fetch_members"
     post "/insurance_fund_transfer_collections/add_member", to: "insurance_fund_transfer_collections#add_member"
     post "/insurance_fund_transfer_collections/remove_member", to: "insurance_fund_transfer_collections#remove_member"
+    post "/insurance_fund_transfer_collections/load_center", to: "insurance_fund_transfer_collections#load_center"
+    post "/insurance_fund_transfer_collections/update_or_number", to: "insurance_fund_transfer_collections#update_or_number"
+    post "/insurance_fund_transfer_collections/finalize", to: "insurance_fund_transfer_collections#finalize"
 
     #Member Account Validations
     post 'member_account_validations/generate_transaction', to: 'member_account_validations#generate_transaction'

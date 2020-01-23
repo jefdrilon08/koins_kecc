@@ -12,16 +12,24 @@ module InsuranceFundTransferCollections
                                                   branch: @branch
                                                   )
 
+      if Settings.activate_microinsurance
+        particular = "TO RECORD DEPOSIT COLLECTION OF #{@branch.name.upcase}"
+      else
+        particular = "TO RECORD INSURANCE FUND TRANSFER OF #{@branch.name.upcase}"
+      end
+
       @members  = []
 
       @data = {
         or_number: "",
         ar_number: "",
+        finalize: false,
         records: [],
         headers: [],
         totals: [],
         total_collected: 0.00,
-        particular: "TO RECORD INSURANCE FUND TRANSFER OF #{@branch.name}"
+        particular: particular,
+        is_remote_deposit: User::REMOTE_ROLES.include?(@user.roles.last)
       }
     end
 

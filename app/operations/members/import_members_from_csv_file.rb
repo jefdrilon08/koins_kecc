@@ -1,7 +1,8 @@
 module Members
   class ImportMembersFromCsvFile
-    def initialize(file:)
+    def initialize(file:, user:)
       @file = file
+      @user = user
     end
 
     def execute!
@@ -199,6 +200,7 @@ module Members
             center.name = row['center'].try(:upcase)
             center.short_name = row['center'].try(:upcase)
             center.meeting_day = 1
+            center.user = @user
             center.branch = branch
             center.save!
             member.center = center
@@ -222,6 +224,12 @@ module Members
                           config: { member: member } 
                     ).execute!
         else
+          center = Center.where(id: row['center_id'], branch_id: row['branch_id']).first
+          
+          if !center.nil?
+            center.update!(name: row['center'].try(:upcase), user: @user)
+          end
+
           member_data = member_record.data.with_indifferent_access
 
           sss_num = row['sss_number']
@@ -307,6 +315,7 @@ module Members
   
           member_record.update!(
             identification_number: identification_number,
+            center: center,
             member_type: row['member_type'],
             status: status,
             insurance_status: insurance_status,

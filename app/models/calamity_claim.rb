@@ -13,5 +13,5 @@ class CalamityClaim < ApplicationRecord
 	validates :date_approved, presence: true
 	validates :name_of_payee, presence: true
 	validates :name_of_beneficiary, presence: true
-	
+	validates :date_requested, presence: true
 end

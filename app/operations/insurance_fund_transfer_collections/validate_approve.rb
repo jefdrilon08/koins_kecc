@@ -25,6 +25,17 @@ module InsuranceFundTransferCollections
         }
       end
 
+      if Settings.activate_microinsurance
+        if @insurance_fund_transfer_collection.is_remote_deposit?
+          if @data.present? and @data[:or_number].blank?
+            @errors[:messages] << {
+              key: "or_number",
+              message: "no or number found"
+           }
+          end
+        end
+      end
+
       #not_yet_implemented!
 
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }

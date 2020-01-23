@@ -1,4 +1,5 @@
 class KalingaClaim < ApplicationRecord
+
 	GENDER = ["Male", "Female"]
 	PURPOSE = ["Payment for K-Kalinga Accidental Death", "Payment for K-Kalinga Fire Assistance"]
 	CIVIL_STATUS = ["Single", "Married", "Widowed"]
@@ -25,6 +26,10 @@ class KalingaClaim < ApplicationRecord
 	validates :relationship_to_member, presence: true
 	validates :reason_of_death, presence: true
 	# validates :name_of_member, presence: true
-	# validates :member_branch, presence: true
+	validates :member_branch, presence: true
 	# validates :member_identification_number, presence: true
+
+	def branch_name
+		Branch.where(id: self.member_branch).first
+	end
 end

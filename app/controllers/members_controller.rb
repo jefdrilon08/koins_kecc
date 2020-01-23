@@ -141,7 +141,8 @@ class MembersController < ApplicationController
         redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
         Members::ImportMembersFromCsvFile.new(
-                            file: file
+                            file: file,
+                            user: current_user
                       ).execute!
         flash[:success] = "Successfully Imported Members Record."
         
@@ -164,6 +165,18 @@ class MembersController < ApplicationController
         redirect_to members_path
       end
     else
+      content = "Successfully, but no members uploaded!"
+
+      ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
       redirect_to members_path
     end    
   end
@@ -225,6 +238,18 @@ class MembersController < ApplicationController
         redirect_to members_path
       end
     else
+      content = "Successfully, but no legal dependents uploaded!"
+
+      ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
       redirect_to members_path
     end
   end
@@ -286,6 +311,18 @@ class MembersController < ApplicationController
         redirect_to members_path
       end
     else
+      content = "Successfully, but no beneficiaries uploaded!"
+
+      ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
       redirect_to members_path
     end  
   end

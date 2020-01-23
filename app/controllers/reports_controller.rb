@@ -197,7 +197,79 @@ class ReportsController < ApplicationController
    
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  def calamity_reports
+  end
+  def calamity_claim_reports
+    branch = params[:branch]
+    cluster = params[:cluster]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+
+    excel = Reports::GenerateCalamityClaimsReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "calamity_claim_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  def kalinga
+  end
+  def kalinga_reports
+    branch = params[:branch]
+    cluster = params[:cluster]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+
+    excel = Reports::GenerateKalingaReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "kalinga_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def kbente
+  end
+  def kbente_reports
+    branch = params[:branch]
+    cluster = params[:cluster]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+
+    excel = Reports::GenerateKbenteReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "kbente_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def kjsp
+  end
+  def kjsp_reports
+    branch = params[:branch]
+    cluster = params[:cluster]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+
+    excel = Reports::GenerateKjspReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "kjsp_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  def personal_document
+  end
+
+  def personal_document_reports
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch = params[:branch]
+    branch_name = Branch.where(id: branch).first.name
   
+    excel = Reports::GeneratePersonalDocumentsReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+    filename  = "#{branch_name}_personal_documents_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
 end

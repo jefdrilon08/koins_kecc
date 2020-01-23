@@ -10,6 +10,10 @@
       %th
         %center
           Status
+      - if microinsurance?
+        %th
+          %center
+            Finalize Stat
   %tbody
     - @insurance_fund_transfer_collections.each do |o|
       %tr
@@ -30,3 +34,15 @@
             - elsif o.approved?
               .badge.badge-success
                 Approved
+        - if microinsurance?
+          %td
+            %center
+              - if o.pending? && o.finalized?
+                .badge.badge-primary
+                  For Approval
+              - elsif o.pending? && !o.finalized?
+                .badge.badge-warning
+                  For Finalize
+              - elsif o.approved?
+                .badge.badge-success
+                  Approved

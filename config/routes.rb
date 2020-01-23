@@ -362,7 +362,16 @@ Rails.application.routes.draw do
   get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports", as: :collections_hiip_reports
   get "/reports/subsidiary_ledger", to: "reports#subsidiary_ledger", as: :subsidiary_ledger
   get "/reports/subsidiary_ledger_report", to: "reports#subsidiary_ledger_report", as: :subsidiary_ledger_report
+  get "/reports/calamity_reports", to: "reports#calamity_reports", as: :calamity_reports
+  get "/reports/calamity_claim_reports", to: "reports#calamity_claim_reports", as: :calamity_claim_reports
+  get "/reports/kalinga", to: "reports#kalinga", as: :kalinga
+  get "/reports/kalinga_reports", to: "reports#kalinga_reports", as: :kalinga_reports
+  get "/reports/kbente", to: "reports#kbente", as: :kbente
+  get "/reports/kbente_reports", to: "reports#kbente_reports", as: :kbente_reports
+  get "/reports/kjsp", to: "reports#kjsp", as: :kjsp
+  get "/reports/kjsp_reports", to: "reports#kjsp_reports", as: :kjsp_reports
   
+
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

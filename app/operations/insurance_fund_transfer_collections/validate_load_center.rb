@@ -1,12 +1,12 @@
 module InsuranceFundTransferCollections
-  class ValidateRemoveMember < AppValidator
+  class ValidateLoadCenter < AppValidator
     def initialize(config:)
       super()
 
-      @config                              = config
-      @insurance_fund_transfer_collection  = @config[:insurance_fund_transfer_collection]
-      @member                              = @config[:member]
-      @user                                = @config[:user]
+      @config                             = config
+      @insurance_fund_transfer_collection = @config[:insurance_fund_transfer_collection]
+      @center                             = @config[:center]
+      @user                               = @config[:user]
     end
 
     def execute!
@@ -22,20 +22,11 @@ module InsuranceFundTransferCollections
         }
       end
 
-      if @member.blank?
+      if @center.blank?
         @errors[:messages] << {
-          key: "member",
-          message: "Member not found"
+          key: "center",
+          message: "Center not found"
         }
-      end
-
-      if @insurance_fund_transfer_collection.present? && @member.present?
-        if !@insurance_fund_transfer_collection.member_ids.include?(@member.id)
-          @errors[:messages] << {
-            key: "member",
-            message: "Member not included in records"
-          }
-        end
       end
 
       if @insurance_fund_transfer_collection.finalized?

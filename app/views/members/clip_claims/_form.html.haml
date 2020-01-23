@@ -9,7 +9,7 @@
   .row
     .col
       .form-group
-        = f.input :date_prepared, input_html: { class: 'form-control', id: 'date-prepared', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Prepared"
+        = f.input :date_prepared, input_html: { class: 'form-control', id: 'date-prepared', type: 'date'}, as: :string, label: "Date Prepared"
     .col
       .form-group
         = f.input :creditors_name, input_html: { class: 'form-control', id: 'creditors-name' }, as: :select, collection: ClipClaim::CREDITORS_NAME, include_blank: false, label: "CREDITORS NAME", prompt: "-- Select --"
@@ -44,7 +44,7 @@
   .row
     .col
       .form-group
-        = f.input :type_of_loan, input_html: { class: 'form-control', id: 'type-of-loan'}, as: :string, label: "TYPE OF LOAN"
+        = f.input :type_of_loan, input_html: { class: 'form-control', id: 'type-of-loan'}, as: :select, collection: ClipClaim::TYPES_OF_LOAN, include_blank: false, label: "Type of Loan", prompt: "-- Select --"
     .col
       .form-group
         = f.input :terms, input_html: { class: 'form-control', id: 'terms'}, as: :string, label: "TERMS OF LOANS (Weeks)"

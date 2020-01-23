@@ -38,6 +38,13 @@ module InsuranceFundTransferCollections
         end
       end
 
+      if @insurance_fund_transfer_collection.finalized?
+        @errors[:messages] << {
+          key: "insurance_fund_transfer_collection",
+          message: "Insurance Fund Transfer Collection already finalized!"
+        }
+      end
+
       #not_yet_implemented!
 
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }

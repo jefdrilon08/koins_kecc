@@ -1,16 +1,17 @@
 module Reports
-  class GenerateCollectionsHiipReportExcel
+  class GenerateKjspReportExcel
     def initialize(branch:, cluster:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
       @cluster = cluster
       @branch = branch
+     
 
       if @cluster.present? && @branch == "--ALL--"
         @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+        @kjsp_claim  = KjspClaim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
       else
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
+        @kjsp_claim   = KjspClaim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
       end
 
       @p          = Axlsx::Package.new
@@ -34,41 +35,37 @@ module Reports
 
           sheet.add_row [ 
             "Name of Member",
-            "Policy Number",
             "Branch",
             "Center",
-            "Effective Date",
-            "Expiration Date",
-            "Date Admitted",
-            "Date Discharge",
-            "Number of Days to be paid",
-            "Date of Birth",
-            "Age",
-            "Reason of Confinement",
-            "Diagnosis",
+            "Date Prepared",
+            "Name of Scholar",
             "Payee",
             "Amount",
-            "Balance"
+            "Name of School",
+            "School Year",
+            "Sem",
+            "KJSP Type",
+            "Final Grade",
+            "Remarks",
+            "Classification"
           ], style: header
 
-          @hiip_claim.each_with_index do |hiip_claim|
+          @kjsp_claim.each_with_index do |kjsp_claim|
               sheet.add_row [
-                  hiip_claim.member.full_name,
-                  hiip_claim.policy_number,
-                  hiip_claim.branch.name,
-                  hiip_claim.center.name,
-                  hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.date_admitted.strftime("%b %d, %Y"),
-                  hiip_claim.date_discharged.strftime("%b %d, %Y"),
-                  hiip_claim.number_ofdays_tobepaid,
-                  hiip_claim.date_of_birth.strftime("%b %d, %Y"),
-                  hiip_claim.age,
-                  hiip_claim.reason_of_confinement,
-                  hiip_claim.diagnosis,
-                  hiip_claim.check_payee,
-                  hiip_claim.amount,
-                  hiip_claim.balance,
+                  kjsp_claim.member.full_name,
+                  kjsp_claim.branch.name,
+                  kjsp_claim.center.name,
+                  kjsp_claim.date_prepared.strftime("%b %d, %Y"),
+                  kjsp_claim.name_of_kjsp_beneficiary,
+                  kjsp_claim.payee,
+                  kjsp_claim.amount,
+                  kjsp_claim.name_of_school,
+                  kjsp_claim.school_year,
+                  kjsp_claim.sem,
+                  kjsp_claim.kjsp_type,
+                  kjsp_claim.final_grade,
+                  kjsp_claim.remarks,
+                  kjsp_claim.classification
                 ], style: [nil]             
               end
           end

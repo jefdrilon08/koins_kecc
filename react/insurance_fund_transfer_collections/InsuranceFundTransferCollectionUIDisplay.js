@@ -6,6 +6,7 @@ import SkCubeLoading from '../SkCubeLoading';
 import InsuranceFundTransferCollectionUITable from './InsuranceFundTransferCollectionUITable';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import AddRecord from './AddRecord';
+import LoadCenter from './LoadCenter';
 import {numberWithCommas} from '../utils/helpers';
 
 export default class InsuranceFundTransferCollectionUIDisplay extends React.Component {
@@ -55,6 +56,46 @@ export default class InsuranceFundTransferCollectionUIDisplay extends React.Comp
     alert("Not implemented for this module");
   }
 
+  saveOrNumber() {
+    var context     = this;
+    var data        = context.state.data;
+    var newOrNumber = data.data.or_number;
+
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/insurance_fund_transfer_collections/update_or_number",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        or_number: newOrNumber
+      },
+      success: function(response) {
+        context.setState({
+          isSaving: false
+        });
+      },
+      error: function(response) {
+        alert("Error in updating or number");
+      }
+    });
+  }
+
+  modifyOrNumber(event) {
+    var context     = this;
+    var newOrNumber = event.target.value;
+    var data        = context.state.data;
+
+    data.data.or_number  = newOrNumber;
+
+    context.setState({
+      data: data
+    });
+  }
+
   saveParticular() {
     var context       = this;
     var data          = context.state.data;
@@ -93,6 +134,37 @@ export default class InsuranceFundTransferCollectionUIDisplay extends React.Comp
     context.setState({
       data: data
     });
+  }
+
+  renderOrNumber() {
+    var orNumber  = this.state.data.data.or_number;
+
+    if(this.state.data.status == "pending") {
+      return  (
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={orNumber} 
+              onChange={this.modifyOrNumber.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveOrNumber.bind(this)}
+            >
+              <span className="fa fa-check"/>
+              Save
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return this.state.data.data.or_number;
+    }
   }
 
   renderParticular() {
@@ -151,6 +223,14 @@ export default class InsuranceFundTransferCollectionUIDisplay extends React.Comp
               </tr>
               <tr>
                 <th>
+                  OR Number:
+                </th>
+                <td className="text-right">
+                  {this.renderOrNumber()}
+                </td>
+              </tr>
+              <tr>
+                <th>
                   Particular:
                 </th>
                 <td className="text-right">
@@ -162,6 +242,11 @@ export default class InsuranceFundTransferCollectionUIDisplay extends React.Comp
           <AddRecord
             data={this.state.data}
             authenticityToken={this.props.authenticityToken}
+          />
+          <LoadCenter
+            authenticityToken={this.props.authenticityToken}
+            centers={this.props.centers}
+            data={this.state.data}
           />
           <hr/>
           <InsuranceFundTransferCollectionUITable
