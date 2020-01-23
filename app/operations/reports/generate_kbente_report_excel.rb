@@ -1,16 +1,17 @@
 module Reports
-  class GenerateCollectionsHiipReportExcel
+  class GenerateKbenteReportExcel
     def initialize(branch:, cluster:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
       @cluster = cluster
       @branch = branch
+     
 
       if @cluster.present? && @branch == "--ALL--"
         @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+        @kbente_claim  = KbenteClaim.where("date_reported >= ? AND date_reported <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
       else
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
+        @kbente_claim   = KbenteClaim.where("date_reported >= ? AND date_reported <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
       end
 
       @p          = Axlsx::Package.new
@@ -34,41 +35,35 @@ module Reports
 
           sheet.add_row [ 
             "Name of Member",
-            "Policy Number",
             "Branch",
             "Center",
-            "Effective Date",
-            "Expiration Date",
-            "Date Admitted",
-            "Date Discharge",
-            "Number of Days to be paid",
-            "Date of Birth",
-            "Age",
-            "Reason of Confinement",
-            "Diagnosis",
-            "Payee",
+            "Date Emailed",
+            "Date Reported",
+            "Date Approved",
+            "Date Requested",
+            "Purpose",
             "Amount",
-            "Balance"
+            "Name of Insured",
+            "Name of Beneficiary",
+            "Classification",
+            "Date of Death"
           ], style: header
 
-          @hiip_claim.each_with_index do |hiip_claim|
+          @kbente_claim.each_with_index do |kbente_claim|
               sheet.add_row [
-                  hiip_claim.member.full_name,
-                  hiip_claim.policy_number,
-                  hiip_claim.branch.name,
-                  hiip_claim.center.name,
-                  hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.date_admitted.strftime("%b %d, %Y"),
-                  hiip_claim.date_discharged.strftime("%b %d, %Y"),
-                  hiip_claim.number_ofdays_tobepaid,
-                  hiip_claim.date_of_birth.strftime("%b %d, %Y"),
-                  hiip_claim.age,
-                  hiip_claim.reason_of_confinement,
-                  hiip_claim.diagnosis,
-                  hiip_claim.check_payee,
-                  hiip_claim.amount,
-                  hiip_claim.balance,
+                  kbente_claim.member.full_name,
+                  kbente_claim.branch.name,
+                  kbente_claim.center.name,
+                  kbente_claim.date_emailed.strftime("%b %d, %Y"),
+                  kbente_claim.date_reported.strftime("%b %d, %Y"),
+                  kbente_claim.date_approved.strftime("%b %d, %Y"),
+                  kbente_claim.date_requested.strftime("%b %d, %Y"),
+                  kbente_claim.purpose,
+                  kbente_claim.amount,
+                  kbente_claim.name_of_insured,
+                  kbente_claim.name_of_beneficiary,
+                  kbente_claim.classification,
+                  kbente_claim.date_of_death.strftime("%b %d, %Y")
                 ], style: [nil]             
               end
           end

@@ -8,7 +8,7 @@
       %tr
         %th Branch
         %td
-          = @kalinga_claim.member_branch
+          = @kalinga_claim.branch_name
         %th
         %td
       %tr
@@ -88,6 +88,12 @@
         %th
         %td
     - else
+      %tr
+        %th Branch
+        %td
+          = @kalinga_claim.branch_name
+        %th
+        %td
       %tr
         %th Date Reported
         %td 
