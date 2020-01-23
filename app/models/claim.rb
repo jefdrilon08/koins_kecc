@@ -10,6 +10,19 @@ class Claim < ApplicationRecord
 
   validates :date_reported, presence: true
   validates :member, presence: true
+  validates :type_of_insurance_policy, presence: true
+  validates :classification_of_insured, presence: true
+  validates :date_of_policy_issue, presence: true
+  validates :date_prepared, presence: true
+  validates :date_paid, presence: true
+  validates :date_of_death_tpd_accident, presence: true
+  validates :name_of_insured, presence: true
+  validates :date_of_birth, presence: true
+  validates :gender, presence: true
+  validates :beneficiary, presence: true
+  validates :category_of_cause_of_death_tpd_accident, presence: true
+  validates :cause_of_death_tpd_accident, presence: true
+
 	def age
     	if self.date_of_birth.nil?
       		"Please set date of birth"

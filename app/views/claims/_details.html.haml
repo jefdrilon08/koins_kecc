@@ -86,6 +86,11 @@
         %th Prepared By
         %td
           = @claim.prepared_by
-        %th Order of Child
-        %td
-          = @claim.order_of_child
+        - if @claim.order_of_child.present?
+          %th Order of Child
+          %td
+            = @claim.order_of_child
+        - else
+          %th 
+          %td
+

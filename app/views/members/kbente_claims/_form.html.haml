@@ -9,7 +9,7 @@
   .row
     .col
       .form-group
-        = f.input :date_reported, input_html: { class: 'form-control ', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Reported"
+        = f.input :date_reported, input_html: { class: 'form-control ', type: 'date'}, as: :string, label: "Date Reported"
     .col
       .form-group
         = f.input :date_emailed, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Emailed"

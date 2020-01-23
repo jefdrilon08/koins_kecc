@@ -1,16 +1,17 @@
 module Reports
-  class GenerateCollectionsHiipReportExcel
+  class GenerateCalamityClaimsReportExcel
     def initialize(branch:, cluster:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
       @cluster = cluster
       @branch = branch
+     
 
       if @cluster.present? && @branch == "--ALL--"
         @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+        @calamity_claim   = CalamityClaim.where("date_requested >= ? AND date_requested <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
       else
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
+        @calamity_claim   = CalamityClaim.where("date_requested >= ? AND date_requested <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
       end
 
       @p          = Axlsx::Package.new
@@ -34,41 +35,33 @@ module Reports
 
           sheet.add_row [ 
             "Name of Member",
-            "Policy Number",
             "Branch",
             "Center",
-            "Effective Date",
-            "Expiration Date",
-            "Date Admitted",
-            "Date Discharge",
-            "Number of Days to be paid",
-            "Date of Birth",
-            "Age",
-            "Reason of Confinement",
-            "Diagnosis",
-            "Payee",
+            "Date Requested",
+            "Purpose",
+            "Type of Calamity",
             "Amount",
-            "Balance"
+            "Date of Event",
+            "Date of Approved",
+            "Date of Notification",
+            "Payee",
+            "Name of Beneficiary"
           ], style: header
 
-          @hiip_claim.each_with_index do |hiip_claim|
+          @calamity_claim.each_with_index do |calamity_claim|
               sheet.add_row [
-                  hiip_claim.member.full_name,
-                  hiip_claim.policy_number,
-                  hiip_claim.branch.name,
-                  hiip_claim.center.name,
-                  hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.date_admitted.strftime("%b %d, %Y"),
-                  hiip_claim.date_discharged.strftime("%b %d, %Y"),
-                  hiip_claim.number_ofdays_tobepaid,
-                  hiip_claim.date_of_birth.strftime("%b %d, %Y"),
-                  hiip_claim.age,
-                  hiip_claim.reason_of_confinement,
-                  hiip_claim.diagnosis,
-                  hiip_claim.check_payee,
-                  hiip_claim.amount,
-                  hiip_claim.balance,
+                  calamity_claim.member.full_name,
+                  calamity_claim.branch.name,
+                  calamity_claim.center.name,
+                  calamity_claim.date_requested.strftime("%b %d, %Y"),
+                  calamity_claim.purpose,
+                  calamity_claim.type_of_calamity,
+                  calamity_claim.amount,
+                  calamity_claim.date_of_event.strftime("%b %d, %Y"),
+                  calamity_claim.date_approved.strftime("%b %d, %Y"),
+                  calamity_claim.date_of_notification.strftime("%b %d, %Y"),
+                  calamity_claim.name_of_payee,
+                  calamity_claim.name_of_beneficiary
                 ], style: [nil]             
               end
           end
