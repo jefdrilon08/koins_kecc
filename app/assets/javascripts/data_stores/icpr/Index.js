@@ -23,6 +23,56 @@ var Index  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnNew.on("click", function() {
+      $modalNew.modal("show");
+      $message.html("");
+    });
+
+    $btnConfirmNew.on("click", function() {
+      var year      = $selectYear.val();
+      var branchId  = $selectBranch.val();
+
+      $message.html("Loading...");
+      $btnConfirmNew.prop("disabled", true);
+      $selectYear.prop("disabled", true);
+      $selectBranch.prop("disabled", true);
+
+      var data  = {
+        year: year,
+        branch_id: branchId,
+        authenticity_token: authenticityToken
+      }
+
+      $.ajax({
+        url: "/api/v1/data_stores/icpr/queue",
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          window.location.href="/data_stores/icpr";
+        },
+        error: function(response) {
+          errors = [];
+
+          try {
+            errors = JSON.parse(response.responseText).full_messages;
+          } catch {
+            console.log(response);
+            errors.push("Something went wrong");
+          }
+
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmNew.prop("disabled", false);
+          $selectYear.prop("disabled", false);
+          $selectBranch.prop("disabled", false);
+        }
+      });
+    });
   }
 
   var init  = function(config) {
