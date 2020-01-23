@@ -7,6 +7,13 @@ var Show  = (function() {
   var $btnConfirmApprove;
   var $modalApprove;
 
+  var $btnSetRate;
+  var $btnConfirmSetRate;
+  var $modalSetRate;
+  var $inputEquityInterestRate;
+  var $inputSavingsRate;
+  var $inputCbuRate;
+
   var id;
   var templateErrorList;
   var authenticityToken;
@@ -22,11 +29,75 @@ var Show  = (function() {
     $btnConfirmApprove  = $("#btn-confirm-approve");
     $modalApprove       = $("#modal-approve");
 
+    $btnSetRate               = $("#btn-set-rate");
+    $btnConfirmSetRate        = $("#btn-confirm-set-rate");
+    $modalSetRate             = $("#modal-set-rate");
+    $inputEquityInterestRate  = $("#input-equity-interest-rate");
+    $inputSavingsRate         = $("#input-savings-rate");
+    $inputCbuRate             = $("#input-cbu-rate");
+
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
   };
 
   var _bindEvents = function() {
+    $btnSetRate.on("click", function() {
+      $message.html("");
+      $modalSetRate.modal("show");
+    });
+
+    $btnConfirmSetRate.on("click", function() {
+      var equityInterestRate  = $inputEquityInterestRate.val();
+      var savingsRate         = $inputSavingsRate.val();
+      var cbuRate             = $inputCbuRate.val();
+
+      $message.html("Loading...");
+
+      $inputEquityInterestRate.prop("disabled", true);
+      $inputSavingsRate.prop("disabled", true);
+      $inputCbuRate.prop("disabled", true);
+      $btnConfirmSetRate.prop("disabled", true);
+
+      $.ajax({
+        url: "/api/v1/data_stores/icpr/set_rate",
+        method: 'POST',
+        data: {
+          id: id,
+          authenticity_token: authenticityToken,
+          equity_interest_rate: equityInterestRate,
+          savings_rate: savingsRate,
+          cbu_rate: cbuRate
+        },
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmSetRate.prop("disabled", false);
+            $inputEquityInterestRate.prop("disabled", false);
+            $inputSavingsRate.prop("disabled", false);
+            $inputCbuRate.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnApprove.on("click", function() {
       $message.html("");
       $modalApprove.modal("show");

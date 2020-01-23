@@ -16,71 +16,103 @@ module Api
 
         def queue
           @data_store_type  = params[:data_store_type] || "ICPR"
-          @include_centers  = false
-          @record           = DataStore.icpr.where(id: params[:id]).first 
+          @year             = params[:year]
+          @branch_id        = params[:branch_id]
+          @branch           = Branch.where(id: @branch_id).first
+          @record           = DataStore.icpr.where("meta->>'branch_id' = ? AND meta->>'year' = ?", @branch_id, @year).first 
 
-          if @record.blank?
-            @branch       = Branch.find(params[:branch_id])
-            @start_date   = params[:start_date].to_date
-            @end_date     = params[:end_date].to_date
-            @equity_rate  = params[:equity_rate].to_f
+          errors  = ::DataStores::ValidateIcprQueue.new(
+                      config: {
+                        year: @year,
+                        record: @record,
+                        branch: @branch
+                      }
+                    ).execute!
 
-            @record = DataStore.create!(
-                        meta: {
-                          branch_id: @branch.id,
-                          branch_name: @branch.name,
-                          start_date: @start_date,
-                          end_date: @end_date,
-                          equity_rate: @equity_rate,
-                          data_store_type: @data_store_type,
-                          progress: 0
-                        },
-                        data: {
-                          status: "processing"
-                        }
-                      )
+          if errors[:full_messages].size > 0
+            render json: errors, status: 400
+          else
+            if @record.blank?
+              @record = DataStore.create!(
+                          meta: {
+                            data_store_type: @data_store_type,
+                            year: @year,
+                            branch_id: @branch.id,
+                            branch_name: @branch.name,
+                            branch: {
+                              id: @branch.id,
+                              name: @branch.name
+                            }
+                          },
+                          data: {
+                            status: "processing",
+                            year: @year,
+                            branch: {
+                              id: @branch.id,
+                              name: @branch.name
+                            }
+                          }
+                        )
+            elsif !@record.processing? and !@record.approved?
+              @record.update!("processing")
+            end
+
+            args = {
+              id: @record.id,
+              data_store_type: @data_store_type,
+              year: @year,
+              branch_id: @branch.id,
+              user_id: current_user.id
+            }
+
+            ProcessIcpr.perform_later(args)
+
+            render json: { message: "ok", id: @record.id }
           end
+        end
 
-          args = {
-            id: @record.id,
-            data_store_type: @data_store_type
-            #closing_date: Date.today
+        def approve
+          data_store  = DataStore.find(params[:id])
+        
+          config  = {
+            data_store: data_store
           }
 
-          ProcessIcpr.perform_later(args)
+          errors  = ::DataStores::ValidateApproveIcpr.new(
+                      config: config
+                    ).execute!
+          
+          if errors[:messages].size > 0
+            render json: errors, status: 400
+          else
+            ::DataStores::ApproveIcpr.new(
+              config: config
+            ).execute!
+
+            render json: { id: icpr.id }
+          end
+        end
+
+        def set_rate
+          data_store            = DataStore.find(params[:id])
+          equity_interest_rate  = params[:equity_interest_rate].try(:to_f)
+          savings_rate          = params[:savings_rate].try(:to_f)
+          cbu_rate              = params[:cbu_rate].try(:to_f)
+
+          config = {
+            data_store: data_store,
+            equity_interest_rate: equity_interest_rate,
+            savings_rate: savings_rate,
+            cbu_rate: cbu_rate,
+            user: current_user
+          }
+
+          ::Icpr::SetRate.new(
+            config: config
+          ).execute!
 
           render json: { message: "ok" }
         end
-
-
-      def approve
-        icpr  = DataStore.find(params[:id])
-      
-        config  = {
-          icpr: icpr,
-          user: current_user
-        }
-
- #       errors  = ::MonthlyClosingCollections::ValidateApprove.new(
- #                   config: config
- #                 ).execute!
-
- #       if errors[:messages].size == 0
-          icpr  = ::DataStores::ApproveIcpr.new(
-                                          config: config
-                                        ).execute!
-
-          render json: { id: icpr.id }
- #       else
- #         render json: errors, status: 400
- #       end
-      end
-
-
-
-
-
-
       end
     end
   end

@@ -2,21 +2,19 @@ class ProcessIcpr < ApplicationJob
   queue_as :default
 
   def perform(args)
-    record  = DataStore.find(args[:id])
-    branch  = Branch.find(record.meta.with_indifferent_access[:branch_id])
-    start_date  = record.meta.with_indifferent_access[:start_date].to_date
-    end_date    = record.meta.with_indifferent_access[:end_date].to_date
-    equity_rate = record.meta.with_indifferent_access[:equity_rate].to_f
-    
-    record.update!(status: "processing")
+    record    = DataStore.find(args[:id])
+    year      = args[:year]
+    branch_id = args[:branch_id]
+    user_id   = args[:user_id]
+    branch    = Branch.find(branch_id)
+    user      = User.find(user_id)
 
     begin
       config  = {
         id: record.id,
-        start_date: start_date,
-        end_date: end_date,
-        equity_rate: equity_rate,
-        branch: branch
+        year: year,
+        branch: branch,
+        user: user
       }
 
       data_store  = DataStores::SaveIcpr.new(

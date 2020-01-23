@@ -1,0 +1,35 @@
+#modal-set-rate.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Set Rate
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Set Rate
+          .row
+            .col
+              .form-group
+                %label
+                  Equity Rate:
+                = number_field_tag :equity_interest_rate, @equity_interest_rate, class: 'form-control', id: 'input-equity-interest-rate'
+            .col
+              .form-group
+                %label
+                  Savings Rate:
+                = number_field_tag :savings_rate, @savings_rate, class: 'form-control', id: 'input-savings-rate'
+            .col
+              .form-group
+                %label
+                  CBU Rate:
+                = number_field_tag :cbu_rate, @cbu_rate, class: 'form-control', id: 'input-cbu-rate'
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-set-rate.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
