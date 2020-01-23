@@ -55,7 +55,7 @@ var Index  = (function() {
 
           try {
             errors = JSON.parse(response.responseText).full_messages;
-          } catch {
+          } catch(err) {
             console.log(response);
             errors.push("Something went wrong");
           }
