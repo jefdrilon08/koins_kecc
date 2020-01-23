@@ -282,7 +282,7 @@ module Branches
                       GROUP BY 1
                     ) at ON loans.id = at.loan_id
                   INNER JOIN centers c ON loans.center_id = c.id
-                  INNER JOIN users u ON u.id = c.user_id
+                  INNER JOIN users u ON u.id = loans.user_id
                   INNER JOIN branches b ON b.id = loans.branch_id
                   INNER JOIN loan_products lp ON lp.id = loans.loan_product_id
                   INNER JOIN members m ON m.id = loans.member_id

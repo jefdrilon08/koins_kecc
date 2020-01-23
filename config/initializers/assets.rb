@@ -157,5 +157,9 @@ Rails.application.config.assets.precompile += [
   "kjsp_claims/Index.js",
   "calamity_claims/Index.js",
   "reports/CollectionsHiipReport.js",
-  "reports/SubsidiaryLedger.js"
+  "reports/SubsidiaryLedger.js",
+  "reports/CalamityClaimReport.js",
+  "reports/KalingaReport.js",
+  "reports/KbenteReport.js",
+  "reports/KjspReport.js"
 ]

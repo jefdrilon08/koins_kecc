@@ -1,15 +1,19 @@
 module Reports
   class GenerateCollectionsHiipReportExcel
-    def initialize(branch:, start_date:, end_date:)
+    def initialize(branch:, cluster:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
+      @cluster = cluster
       @branch = branch
 
+      if @cluster.present? && @branch == "--ALL--"
+        @cluster_branch   = Branch.where(cluster_id: @cluster)
+        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+      else
+        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
+      end
 
-      #@members  = Member.pure_active.where("previous_mii_member_since <= ? AND insurance_status != ? AND member_type != ? and branch_id = ?", @end_date, "dormant", "GK", @branch).order("identification_number ASC")
-      @members  = Member.where("data ->>'recognition_date' <= ? AND branch_id = ?", @end_date, @branch).order("identification_number ASC")
- 
-      @p        = Axlsx::Package.new
+      @p          = Axlsx::Package.new
     end
 
     def execute!
@@ -29,44 +33,44 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
-            "Number",
             "Name of Member",
+            "Policy Number",
+            "Branch",
+            "Center",
+            "Effective Date",
+            "Expiration Date",
+            "Date Admitted",
+            "Date Discharge",
+            "Number of Days to be paid",
+            "Date of Birth",
+            "Age",
+            "Reason of Confinement",
+            "Diagnosis",
+            "Payee",
+            "Amount",
+            "Balance"
           ], style: header
 
-           @members.each_with_index do |member, index|
-            @active_loans = []
-            if index == 0
+          @hiip_claim.each_with_index do |hiip_claim|
               sheet.add_row [
-                  "",
-                  member.full_name_titleize,
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
-              else
-                sheet.add_row [
-                  "",
-                  member.full_name_titleize,
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                  hiip_claim.member.full_name,
+                  hiip_claim.policy_number,
+                  hiip_claim.branch.name,
+                  hiip_claim.center.name,
+                  hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
+                  hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
+                  hiip_claim.date_admitted.strftime("%b %d, %Y"),
+                  hiip_claim.date_discharged.strftime("%b %d, %Y"),
+                  hiip_claim.number_ofdays_tobepaid,
+                  hiip_claim.date_of_birth.strftime("%b %d, %Y"),
+                  hiip_claim.age,
+                  hiip_claim.reason_of_confinement,
+                  hiip_claim.diagnosis,
+                  hiip_claim.check_payee,
+                  hiip_claim.amount,
+                  hiip_claim.balance,
+                ], style: [nil]             
               end
-            end
           end
         end
       @p

@@ -8,7 +8,7 @@ module MemberAccounts
     def execute!
       query!
 
-      sets  = []
+      sets_array  = []
 
       member_account_sets = []
 
@@ -17,13 +17,14 @@ module MemberAccounts
         beginning_balance = 0.00
         ending_balance    = 0.00
 
-        temp_sets = txs.map{ |t|
+        temp_sets = txs.map.with_index{ |t, i|
+                      updated_at      = Time.now + i.second
                       transaction_id  = t.fetch("transaction_id")
 
                       if t.fetch("transaction_type") == "deposit"
-                        ending_balance  = (beginning_balance + t.fetch("amount").to_f.round(2))
+                        ending_balance  = (beginning_balance + t.fetch("amount").to_f.round(2)).to_f.round(2)
                       elsif t.fetch("transaction_type") == "withdraw"
-                        ending_balance  = (beginning_balance - t.fetch("amount").to_f.round(2))
+                        ending_balance  = (beginning_balance - t.fetch("amount").to_f.round(2)).to_f.round(2)
                       end
 
                       data  = {
@@ -33,30 +34,32 @@ module MemberAccounts
 
                       beginning_balance = ending_balance
 
-                      "('#{transaction_id}', '#{data.to_json}')"
+                      "('#{transaction_id}', '#{data.to_json}', '#{updated_at.to_s(:db)}')"
                     }.join(",")
 
         temp_sets.split(",").each do |o|
-          sets << o
+          sets_array << o
         end
 
         member_account_sets << "('#{id}', #{ending_balance})"
       end
 
-      sets                = sets.join(",")
+      sets                = sets_array.join(",")
       member_account_sets = member_account_sets.join(",")
 
 
       if sets.present?
         query = "
           UPDATE account_transactions AS a SET
-            data  = CAST(temp.data AS json)
+            data = CAST(temp.data AS json),
+            updated_at = temp.updated_at::timestamp
           FROM (values
             #{sets}
-          ) AS temp(transaction_id, data)
+          ) AS temp(transaction_id, data, updated_at)
           WHERE temp.transaction_id = a.id::text
         "
 
+        #binding.pry
         ActiveRecord::Base.connection.execute(query)
 
         # Update member accounts
@@ -91,7 +94,7 @@ module MemberAccounts
                   WHERE
                     member_accounts.branch_id = '#{@branch.id}'
                   ORDER BY
-                    member_accounts.id, member_accounts.account_type, member_accounts.account_subtype, account_transactions.transacted_at ASC
+                    member_accounts.id, member_accounts.account_type, member_accounts.account_subtype, account_transactions.transacted_at ASC, account_transactions.updated_at ASC
                 EOS
     end
   end

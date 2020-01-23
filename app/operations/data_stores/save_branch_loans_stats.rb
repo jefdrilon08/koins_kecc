@@ -50,7 +50,8 @@ module DataStores
         include_loan_products: include_loan_products
       }
 
-      @data = ::Branches::ComputeLoansStatus.new(config: config).execute!
+      #@data = ::Branches::ComputeLoansStatus.new(config: config).execute!
+      @data = ::Branches::ComputeBranchState.new(config: config).execute!
 
       @data_store.meta  = @meta
       @data_store.data  = @data

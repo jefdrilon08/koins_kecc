@@ -16,8 +16,8 @@ module MemberAccounts
 
 			if @recognition_date.nil?
 				@recognition_date = @member.membership_payment_records.where(
-										membership_type: "Insurance", 
-										membership_name: "K-MBA"
+										membership_type: ["Insurance", "Cooperative"],
+										membership_name: ["K-MBA", "K-KOOP"]
 									).first.try(:date_paid)
 			end
 
@@ -27,13 +27,13 @@ module MemberAccounts
 			@num_days = (@current_date - @recognition_date).to_i
 			@num_weeks  = (@num_days / 7).to_i + 1
 			
-			@latest_transaction_date = latest_transaction.transacted_at
+			@latest_transaction_date = latest_transaction.try(:transacted_at)
 
 			@data = {
 				recognition_date: @recognition_date.strftime("%B %d, %Y"),
 				length_of_membership: @num_days,
 				current_date: @current_date.strftime("%B %d, %Y"),
-				latest_transaction_date: @latest_transaction_date.strftime("%B %d, %Y"),
+				latest_transaction_date: @latest_transaction_date.try(:strftime, "%B %d, %Y"),
 				num_weeks: @num_weeks,
 				current_balance: @current_balance
 			}
@@ -51,21 +51,25 @@ module MemberAccounts
 			@data[:amt_past_due]    = (@current_balance - @data[:insured_amount]) * -1
 			@data[:num_weeks_past_due]  = (@data[:amt_past_due] / @data[:default_periodic_payment]).to_i
 
-			@days_lapsed = (@current_date.to_date - @latest_transaction_date.to_date).to_i
+      if @latest_transaction_date.present?
+        @days_lapsed = (@current_date.to_date - @latest_transaction_date.to_date).to_i
+      else
+        @days_lapsed  = 999
+      end
 
-		    if @days_lapsed <= 45 && @current_balance > @data[:insured_amount]
-       		  @data[:status] = "advanced"
-	        elsif @days_lapsed >= 45 && @current_balance > @data[:insured_amount]
-	          @data[:status] = "advanced"
-	        elsif @days_lapsed > 45 && @current_balance < @data[:insured_amount]
-	          @data[:status]  = "lapsed"
-	        elsif @days_lapsed <= 45 && @current_balance < @data[:insured_amount] && @data[:amt_past_due] >= 97
-	          @data[:status]  = "lapsed"  
-	        elsif @days_lapsed <= 45 && @current_balance < @data[:insured_amount] && @data[:amt_past_due] < 97
-	          @data[:status]  = "past due"  
-	        else
-	          @data[:status] = "normal"
-	        end
+      if @days_lapsed <= 45 && @current_balance > @data[:insured_amount]
+        @data[:status] = "advanced"
+      elsif @days_lapsed >= 45 && @current_balance > @data[:insured_amount]
+        @data[:status] = "advanced"
+      elsif @days_lapsed > 45 && @current_balance < @data[:insured_amount]
+        @data[:status]  = "lapsed"
+      elsif @days_lapsed <= 45 && @current_balance < @data[:insured_amount] && @data[:amt_past_due] >= 97
+        @data[:status]  = "lapsed"  
+      elsif @days_lapsed <= 45 && @current_balance < @data[:insured_amount] && @data[:amt_past_due] < 97
+        @data[:status]  = "past due"  
+      else
+        @data[:status] = "normal"
+      end
 
 			@data
 		end

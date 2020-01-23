@@ -19,7 +19,7 @@
   .row
     .col
       .form-group
-        = f.input :date_prepared, input_html: { class: 'form-control ', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Prepared"
+        = f.input :date_prepared, input_html: { class: 'form-control', type: 'date'}, as: :string, label: "Date Prepared"
     .col
       .form-group
         = f.input :name_of_kjsp_beneficiary, input_html: { class: 'form-control'}, as: :string, label: "Name of KJSP Beneficiary"   

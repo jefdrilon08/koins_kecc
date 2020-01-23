@@ -4,6 +4,7 @@
       .form-group
         %h3
           K-Kalinga Information
+  
   .row
     .col
       .form-group
@@ -13,15 +14,16 @@
       .form-group
         %label
         = f.hidden_field :member_identification_number, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Identification Number"
-    .col
+  .row
+    .col-md-3
       .form-group
         %label
-        = f.hidden_field :member_branch, input_html: { class: 'form-control ', value: "Non-Member"}, as: :string, label: "Member Branch"
+        = f.input :member_branch, input_html: { class: 'form-control' }, as: :select, collection: @branches, include_blank: false, label: "Branch", prompt: "-- Select --"
   .row
     .col
       .form-group
         %label
-        = f.input :date_reported, input_html: { class: 'form-control ', value: Time.now.to_date, type: 'date'}, as: :string, label: "Date Reported"
+        = f.input :date_reported, input_html: { class: 'form-control ', type: 'date'}, as: :string, label: "Date Reported"
     .col
       .form-group
         %label

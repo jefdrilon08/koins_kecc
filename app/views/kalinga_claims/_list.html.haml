@@ -1,6 +1,8 @@
 %table#data-table.display.table.table-bordered.table-hover.table-sm
   %thead
     %tr
+      %th 
+        Branch
       %th
         Name of Member
       %th
@@ -12,6 +14,8 @@
   %tbody
     - @kalinga_claims.each do |kalinga_claim|
       %tr
+        %td
+          #{kalinga_claim.branch_name}
         %td
           = link_to kalinga_claim_path(kalinga_claim) do
             %strong

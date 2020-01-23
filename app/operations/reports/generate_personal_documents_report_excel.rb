@@ -41,8 +41,7 @@ module Reports
             "BRANCH",
             "CENTER",
             "NO. OF DOCX",
-            "BLIPFORM",
-            "MC"
+            "ATTACHMENT FILES"
           ], style: header
 
           @members.each_with_index do |member|
@@ -60,12 +59,19 @@ module Reports
             member_row << member.branch.name
             member_row << member.center.name
             member_row << member.attachment_files.count
-            member.attachment_files.order("name ASC").each do |att|
-              #if att.title == "BLIPFORM" || att.title == "BLIP FORM"
-              if att.name "BLIPFORM" 
-                member_row << att.name
-              elsif att.name == "MC"
-                member_row << att.name
+            member.attachment_files.order("file_name ASC").each do |att|
+              if att.file_name == "BLIPFORM" 
+                member_row << att.file_name
+              elsif att.file_name == "MC"
+                member_row << att.file_name
+              elsif att.file_name == "BC"
+                member_row << att.file_name
+              elsif att.file_name == "ID"
+                member_row << att.file_name
+              elsif att.file_name == "COHABITATION"
+                member_row << att.file_name
+              elsif att.file_name == "OTHERFILE"
+                member_row << att.file_name
               end
             end
             if member.status == "resigned"
