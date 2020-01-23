@@ -11,6 +11,13 @@ module InsuranceFundTransferCollections
     end
 
     def execute!
+      if @insurance_fund_transfer_collection.finalized?
+        @errors[:messages] << {
+          key: "insurance_fund_transfer_collection",
+          message: "Insurance Fund Transfer Collection already finalized!"
+        }
+      end
+
       # Validate fund_transfer_collection status
       if @insurance_fund_transfer_collection.blank?
         @errors[:messages] << {

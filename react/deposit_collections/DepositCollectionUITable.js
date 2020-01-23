@@ -135,7 +135,7 @@ export default class DepositCollectionUITable extends React.Component {
           {btnDelete}
           <strong>
             <a href={"/members/" + member.id + "/display"} target="_blank">
-              {this.props.data.data.records[i].member.full_name} - {centerName}
+              {this.props.data.data.records[i].member.full_name} ({centerName})
             </a>
           </strong>
         </td>

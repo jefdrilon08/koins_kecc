@@ -1,11 +1,11 @@
 module DepositCollections
   class AddMember
     def initialize(config:)
-      @config             = config
-      @deposit_collection = @config[:deposit_collection]
-      @member             = @config[:member]
-      @user               = @config[:user]
-      @data = @deposit_collection.data.with_indifferent_access
+      @config                    = config
+      @deposit_collection       = @config[:deposit_collection]
+      @member                   = @config[:member]
+      @user                     = @config[:user]
+      @data                     = @deposit_collection.data.with_indifferent_access
 
       @default_deposit_accounts = Settings.default_deposit_accounts
     end

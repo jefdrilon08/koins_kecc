@@ -71,4 +71,12 @@ class InsuranceFundTransferCollection < ApplicationRecord
   def approved?
     self.status == "approved"
   end
+
+  def finalized?
+    self.data.with_indifferent_access[:finalize] == true
+  end
+
+  def is_remote_deposit?
+    self.data.with_indifferent_access[:is_remote_deposit] == true
+  end
 end

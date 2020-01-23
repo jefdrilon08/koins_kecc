@@ -53,6 +53,26 @@ module Api
         end
       end
 
+      def load_center
+        config  = {
+          insurance_fund_transfer_collection:  InsuranceFundTransferCollection.where(id: params[:id]).first,
+          center: Center.where(id: params[:center_id]).first,
+          user: current_user
+        }
+
+        errors  = ::InsuranceFundTransferCollections::ValidateLoadCenter.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          ::InsuranceFundTransferCollections::LoadCenter.new(
+            config: config
+          ).execute!
+        end
+      end
+
       def fetch_members
         insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
 
@@ -76,11 +96,46 @@ module Api
 
       def update_particular
         insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
-        data                            = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
-        particular                      = params[:particular]
+        data                               = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
+        particular                         = params[:particular]
 
         if insurance_fund_transfer_collection.pending?
           data[:particular]  = particular
+
+          insurance_fund_transfer_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
+      def update_or_number
+        insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
+        data                               = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
+        or_number                          = params[:or_number]
+
+        if insurance_fund_transfer_collection.pending?
+          data[:or_number]                            = or_number
+
+          insurance_fund_transfer_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
+      def finalize
+        insurance_fund_transfer_collection   = InsuranceFundTransferCollection.find(params[:id])
+        data                                 = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
+        
+        if insurance_fund_transfer_collection.pending?
+          data[:finalize] = true
 
           insurance_fund_transfer_collection.update!(
             data: data

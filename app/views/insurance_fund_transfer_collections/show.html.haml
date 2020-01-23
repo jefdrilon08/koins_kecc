@@ -20,9 +20,10 @@
 
 = render partial: "shared/modals/print"
 = render partial: "insurance_fund_transfer_collections/modals/approve"
+= render partial: "insurance_fund_transfer_collections/modals/finalize"
 = render partial: "templates/error_list"
 
-#parameters{ data: { id: @insurance_fund_transfer_collection.id } }
+#parameters{ data: { id: @insurance_fund_transfer_collection.id, centers: fetch_centers(@insurance_fund_transfer_collection.branch).to_json  } }
 
 = javascript_include_tag "InsuranceFundTransferCollectionUI.min.react"
 = javascript_include_tag "insurance_fund_transfer_collections/Show"

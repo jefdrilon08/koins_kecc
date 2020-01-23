@@ -60,6 +60,7 @@
                         #{o.data["time_end"]}
                     %td
                       #{o.status}
+            = paginate @records
           - else
             %p
               No records found

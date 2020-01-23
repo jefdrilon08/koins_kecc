@@ -634,34 +634,36 @@ namespace :adjust do
         member  = Member.where(identification_number: sub_dir_name).first
 
         if member
-          puts "Found directory for member #{member.full_name}"
-          Dir["#{f}/*"].each do |ff|
-            if !File.directory? ff
-              filename  = ff.split('/').last.split('.').first
-              
-              attachments = member.attachment_files  
-              attachment = attachments.where(file_name: filename).first
-              if attachment.nil?
-                attachment_file  = AttachmentFile.new(
-                                      file_name: filename,
-                                      member: member
-                                   )
+          if member.active?
+            puts "Found directory for member #{member.full_name}"
+            Dir["#{f}/*"].each do |ff|
+              if !File.directory? ff
+                filename  = ff.split('/').last.split('.').first
+                
+                attachments = member.attachment_files  
+                attachment = attachments.where(file_name: filename).first
+                if attachment.nil?
+                  attachment_file  = AttachmentFile.new(
+                                        file_name: filename,
+                                        member: member
+                                     )
 
-                attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                  attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
 
-                if attachment_file.save
-                  puts "Successfully uploaded file #{ff} for #{member.identification_number}"
+                  if attachment_file.save
+                    puts "Successfully uploaded file #{ff} for #{member.identification_number}"
+                  else
+                    puts "Error in attaching file #{ff}"
+                  end
                 else
-                  puts "Error in attaching file #{ff}"
+                  attachment.file.purge
+                  attachment.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                  attachment.update(
+                    file_name: filename,
+                    member: member,
+                    )
+                  puts "Successfully updated file #{ff} for #{member.identification_number}"
                 end
-              else
-                attachment.file.purge
-                attachment.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
-                attachment.update(
-                  file_name: filename,
-                  member: member,
-                  )
-                puts "Successfully updated file #{ff} for #{member.identification_number}"
               end
             end
           end
