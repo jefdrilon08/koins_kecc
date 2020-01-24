@@ -80,7 +80,7 @@
               %u
                 #{@kjsp_claim.date_prepared.strftime("%B %d, %Y")}
           %td{:width => "28%"}
-            [] School ID
+            [] Certificate of Registration / Registration Form
         %tr
           %td{:width => "21%"}
             Status:
@@ -89,7 +89,7 @@
               %u  
                 #{@kjsp_claim.kjsp_type}
           %td{:width => "28%"}
-            [] Certificate of Registration / Registration Form  
+            [] Grades last sem/year 
         %tr
           %td{:width => "21%"}
             Scholar's Name
@@ -98,7 +98,7 @@
               %u  
                 #{@kjsp_claim.name_of_kjsp_beneficiary}
           %td{:width => "28%"}
-            [] Grades last sem/year
+            [] Prospectus (for new scholars only)
         %tr
           %td{:width => "21%"}
             Amount of Allowance
@@ -107,7 +107,7 @@
               %u  
                 PhP #{number_with_delimiter(number_with_precision(@kjsp_claim.amount, precision: 2), delimiter: ",", separator: ".")} 
           %td{:width => "28%"}
-            [] Prospectus (for new scholars only)
+            [] Others
         %tr
           %td{:width => "21%"}
             Name of School
@@ -116,7 +116,6 @@
               %u  
                 #{@kjsp_claim.name_of_school}
           %td{:width => "28%"}
-            [] Others
         %tr
           %td{:width => "21%"}
             SY
