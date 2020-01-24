@@ -84,7 +84,7 @@ class PagesController < ApplicationController
   end
 
   def import_insurance_account_transactions
-    @records  = DataStore.import_insurance_account_transactions.order("created_at ASC").page(params[:page]).per(35)
+    @records  = DataStore.import_insurance_account_transactions.order("created_at DESC").page(params[:page]).per(35)
   end
 
   def seriatim_report
