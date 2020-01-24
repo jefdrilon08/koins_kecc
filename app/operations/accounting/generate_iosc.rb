@@ -1,0 +1,124 @@
+module Accounting
+  class GenerateIosc
+    attr_accessor :data, :result
+
+    def initialize(config:)
+      @config = config
+      @year   = @config[:year]
+      @branch = @config[:branch]
+
+      @data = {
+        year: @year,
+        branch: {
+          id: @branch.id,
+          name: @branch.name
+        },
+        equity_interest_rate: 0.00,
+        savings_rate: 0.00,
+        cbu_rate: 0.00,
+        status: "pending",
+        records: []
+      }
+    end
+
+    def execute!
+      query!
+
+      @data[:records] = @result.map{ |o|
+                          temp  = {
+                            id: o.fetch("member_id"),
+                            first_name: o.fetch("first_name"),
+                            middle_name: o.fetch("middle_name"),
+                            last_name: o.fetch("last_name"),
+                            identification_number: o.fetch("identification_number"),
+                            status: o.fetch("member_status"),
+                            member_account_id: o.fetch("member_account_id"),
+                            center: {
+                              id: o.fetch("center_id"),
+                              name: o.fetch("center_name")
+                            },
+                            branch: {
+                              id: @branch.id,
+                              name: @branch.name
+                            },
+                            latest_transaction_date: o.fetch("latest_transaction_date").try(:to_date),
+                            latest_ending_balance: o.fetch("ending_balance").try(:to_f).try(:round, 2),
+                            previous_transaction_date: o.fetch("previous_transaction_date").try(:to_date),
+                            previous_ending_balance: o.fetch("previous_ending_balance").try(:to_f).try(:round, 2),
+                            months: [],
+                            total_equity: 0.00,
+                            ave_equity: 0.00,
+                            equity_interest_amount: 0.00,
+                            savings_distribute: 0.00,
+                            cbu_distribute: 0.00
+                          }
+
+                          latest_transaction_month    = temp[:latest_transaction_date].try(:month)
+                          previous_transaction_month  = temp[:previous_transaction_date].try(:month)
+
+                          (1..12).to_a.each do |m|
+                            d = {
+                              month_index: m,
+                              month: Date::MONTHNAMES[m],
+                              year: @year,
+                              amount: 0.00
+                            }
+
+                            if previous_transaction_month.present? and temp[:previous_ending_balance].present? and temp[:previous_ending_balance] > 0.00
+                              if temp[:latest_ending_balance].present? and temp[:latest_ending_balance] > 0.00 and m >= latest_transaction_month
+                                d[:amount] = temp[:latest_ending_balance] 
+                              else
+                                d[:amount] = temp[:previous_ending_balance]
+                              end
+                            elsif temp[:previous_ending_balance].blank? and temp[:latest_ending_balance].present?
+                              if m >= latest_transaction_month
+                                d[:amount] = temp[:latest_ending_balance]
+                              end
+                            end
+
+                            temp[:months] << d
+                          end
+
+                          temp[:total_equity] = temp[:months].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
+                          temp[:ave_equity]   = (temp[:total_equity] / 12).round(2)
+
+                          temp
+                        }
+
+      @data
+    end
+
+    def query!
+      @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+                  SELECT DISTINCT ON(members.identification_number, member_accounts.id)
+                    members.id AS member_id,
+                    members.first_name,
+                    members.middle_name,
+                    members.last_name,
+                    members.status AS member_status,
+                    members.identification_number,
+                    member_accounts.id AS member_account_id,
+                    member_accounts.account_type,
+                    member_accounts.account_subtype,
+                    centers.id AS center_id,
+                    centers.name AS center_name,
+                    t1.transacted_at AS latest_transaction_date,
+                    t1.data->>'ending_balance' AS ending_balance,
+                    t2.transacted_at AS previous_transaction_date,
+                    t2.data->>'ending_balance' AS previous_ending_balance
+                  FROM
+                    member_accounts
+                  INNER JOIN members ON
+                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
+                  INNER JOIN centers ON
+                    centers.id = member_accounts.center_id
+                  LEFT JOIN account_transactions AS t1 ON
+                    t1.subsidiary_id = member_accounts.id AND t1.status = 'approved' AND EXTRACT(year FROM t1.transacted_at) = '#{@year}'::int
+                  LEFT JOIN account_transactions AS t2 ON
+                    t2.subsidiary_id = member_accounts.id AND t2.status = 'approved' AND EXTRACT(year FROM t2.transacted_at) < '#{@year}'::int
+                  ORDER BY
+                    members.identification_number, member_accounts.id, members.last_name ASC, t1.transacted_at DESC, t1.updated_at DESC, t2.transacted_at DESC, t2.transacted_at DESC
+                EOS
+    end
+  end
+end

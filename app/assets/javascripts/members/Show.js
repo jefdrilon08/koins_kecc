@@ -69,7 +69,6 @@ var Show  = (function() {
 
   var _cacheDom = function() {
     _canvas       = document.querySelector("#signature-canvas");
-    _signaturePad = new SignaturePad(_canvas);
 
     $modalGenerateAccessToken         = $("#modal-generate-access-token");
     $modalSignature                   = $("#modal-signature");

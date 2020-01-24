@@ -3,18 +3,20 @@ module DataStores
     before_action :authenticate_user!
 
     def index
-      @records  = DataStore.icpr.where(
-                    "meta->>'branch_id' IN (?)",
-                    @branches.pluck(:id)
-                  )
+      @records  = DataStore.icpr.select("*")
 
       @records  = @records.order(
-                    "CAST(meta->>'as_of' AS date) DESC" 
+                    "meta->>'year' DESC" 
                   ).page(params[:page]).per(20)
     end
 
     def show
       @record = DataStore.icpr.where(id: params[:id]).first
+      @data   = @record.data.with_indifferent_access
+
+      @equity_interest_rate = @data[:equity_interest_rate]
+      @savings_rate         = @data[:savings_rate]
+      @cbu_rate             = @data[:cbu_rate]
 
       if @record.blank? or @record.processing?
         redirect_to "/data_stores/icpr"

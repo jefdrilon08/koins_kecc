@@ -12,23 +12,13 @@
             .col
               .form-group
                 %label
+                  Year
+                = select_tag :years, options_for_select(((Date.today.year - 3)..Date.today.year).to_a, Date.today.year - 1), id: "select-year", class: "form-control"
+            .col
+              .form-group
+                %label
                   Branch
-                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch"
-            .col
-              .form-group
-                %label
-                  Start Date
-                = text_field_tag :start_date, Date.today, type: :date, id: "input-start-date", class: 'form-control'
-            .col
-              .form-group
-                %label
-                  End Date
-                = text_field_tag :end_date, Date.today, type: :date, id: "input-end-date", class: 'form-control'
-            .col
-              .form-group
-                %label
-                  Equity Rate
-                = number_field_tag :equity_rate, 0.0, id: "input-equity-rate", class: "form-control"
+                = select_tag :branch, options_from_collection_for_select(@branches, :id, :name), id: "select-branch", class: "form-control"
           .message
       .modal-footer
         .controls

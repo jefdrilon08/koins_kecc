@@ -1,6 +1,5 @@
-= render partial: "show_header"
 #parameters{ data: { id: "#{@record.id}" } }
-
+= render partial: "show_header"
 .container-fluid
   .row
     .col
@@ -9,94 +8,11 @@
           - if @record.error?
             = render partial: "data_stores/error_page"
           - else
-            %table.display.table.table-bordered.table-hover.table-sm
-              %thead
-                %tr
-                  %th
-                    no.
-                  %th
-                    Member Name
-                  %th
-                    Member_id
-                  %th
-                    Center
-                  %th
-                    Jan.
-                  %th
-                    Feb.
-                  %th
-                    March
-                  %th
-                    Apr.
-                  %th
-                    May
-                  %th
-                    June
-                  %th
-                    July
-                  %th
-                    Aug.
-                  %th
-                    Sept.
-                  %th
-                    Oct.
-                  %th
-                    Nov.
-                  %th
-                    Dec.
-                  %th
-                    Total Equity
-                  %th
-                    Total Average
-                  %th
-                    Equity Interest Amount
-                  %th
-                    Savings Distribute
-                  %th
-                    CBU Distribute
-
-              %tbody
-                - @record.data.with_indifferent_access[:details].each_with_index do |record, i|
-                  %tr
-                    %td
-                      #{ i + 1}
-                    %td #{record[:member_name]}
-                    %td #{Member.find(record[:member_id]).identification_number}
-                    %td #{Member.joins(:center).find(record[:member_id]).center.name}
-                    - record[:equity_transaction].each do |equity_transaction|
-                      %td
-                        #{equity_transaction[:amount]}
-                    %td
-                      #{record[:member_total_equity]}
-                    %td
-                      #{record[:member_average_equity]}
-                    %td
-                      #{record[:total_equity_interest_amount]}
-                    %td
-                      #{record[:total_savings_distribute]}
-                    %td
-                      #{record[:total_cbu_distribute]}
-                %tr
-                  %th{:colspan => "14"}
-                    %h5
-                      Total
-                  %td
-                    #{@record.data.with_indifferent_access[:details].sum{ |x| x[:member_total_equity] }}
-                  %td
-                    #{@record.data.with_indifferent_access[:details].sum{ |x| x[:member_average_equity] }}
-                  %td
-                    #{@record.data.with_indifferent_access[:details].sum{ |x| x[:total_equity_interest_amount] }}
-                  %td
-                    #{@record.data.with_indifferent_access[:details].sum{ |x| x[:total_savings_distribute] }}
-                  %td
-                    #{@record.data.with_indifferent_access[:details].sum{ |x| x[:total_cbu_distribute] }}
-
-
-
-
+            #display
+            = render partial: "accounting_entry_display", locals: { accounting_entry: @record.data.with_indifferent_access[:accounting_entry] }
+            = javascript_include_tag "IcprShow.min.react.js"
+= render partial: "/data_stores/icpr/modals/set_rate"
 = render partial: "/data_stores/icpr/modals/approve"
-
-
 = javascript_include_tag "data_stores/icpr/Show.js"
 
 
