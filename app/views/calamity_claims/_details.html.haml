@@ -7,17 +7,17 @@
     %tr
       %th Date of Requested
       %td 
-        = @calamity_claim.date_requested.strftime("%B %d, %Y")
+        = @calamity_claim.date_requested.try(:strftime, "%B %d, %Y")  
       %th Date Approved
       %td 
-        = @calamity_claim.date_approved.strftime("%B %d, %Y")
+        = @calamity_claim.date_approved.try(:strftime, "%B %d, %Y")  
     %tr
       %th Date of Event
       %td 
-        = @calamity_claim.date_of_event.strftime("%B %d, %Y")
+        = @calamity_claim.date_of_event.try(:strftime, "%B %d, %Y")  
       %th Date of Notice
       %td 
-        = @calamity_claim.date_of_notification.strftime("%B %d, %Y")
+        = @calamity_claim.date_of_notification.try(:strftime, "%B %d, %Y")  
     %tr
       %th Branch
       %td 

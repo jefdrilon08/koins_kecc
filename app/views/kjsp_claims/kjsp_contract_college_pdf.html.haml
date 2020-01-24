@@ -42,7 +42,7 @@
   .kasunduan{
     border-style: solid;
     margin: 5px;
-    margin-top: 20px;
+    margin-top: 5px;
   }
 
 .body1
@@ -53,13 +53,11 @@
           Kasagana-Ka Mutual Benefit Association, Inc.
         %br
           #{Settings.company_address}
-        %br
         %b
           KUYA JUN SCHOLARSHIP PROGRAM(KJSP)
       %h3
         %b
           Katunayan ng Pagkakaloob ng Allowance sa College Scholar 
-    %br
     %table
       %tr
         %td
@@ -104,7 +102,8 @@
         %td 
           Course:
         %td
-          _______________
+          %u 
+            #{@kjsp_claim.course}
     %br
     .row
       .col
@@ -189,14 +188,12 @@
         %table
           %tr
             %td{:width => "30%"}
-              %br
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               %b #{@kjsp_claim.name_of_kjsp_beneficiary}
               ___________________________________________
               %br
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pangalan at lagda ng Iskolar
             %td{:width => "30%"}
-              %br
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               %b #{Date.today.strftime("%B %d, %Y")}
               ___________________________________________
@@ -204,9 +201,9 @@
           %tr
             %td{:width => "30%"}
               %br
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp 
-                %b.member #{@kjsp_claim.member.full_name_formatted}
-                ___________________________________________
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp 
+              %b.member #{@kjsp_claim.member.full_name_formatted}
+              ___________________________________________
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pangalan at lagda ng Magulang
             %td{:width => "30%"}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ipinagkaloob ni:

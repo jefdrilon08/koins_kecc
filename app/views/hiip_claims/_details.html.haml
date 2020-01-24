@@ -10,28 +10,28 @@
         = link_to "#{@hiip_claim.member.full_name} (#{@hiip_claim.member.identification_number})", member_path(@hiip_claim.member), target: "_blank"
       %th Date Prepared
       %td 
-        = @hiip_claim.date_posted.strftime("%B %d, %Y")
+        = @hiip_claim.date_posted.try(:strftime, "%B %d, %Y")  
     %tr
       %th Policy Number
       %td 
         = @hiip_claim.policy_number 
       %th Date of Birth
       %td 
-        = @hiip_claim.date_of_birth.strftime("%B %d, %Y")   
+        = @hiip_claim.date_of_birth.try(:strftime, "%B %d, %Y")   
     %tr
       %th Effective Date of Coverage
       %td 
-        = @hiip_claim.effective_date_of_coverage.strftime("%B %d, %Y")  
+        = @hiip_claim.effective_date_of_coverage.try(:strftime, "%B %d, %Y")  
       %th Expiration Date of Coverage
       %td 
-        = @hiip_claim.expiration_date_of_coverage.strftime("%B %d, %Y")  
+        = @hiip_claim.expiration_date_of_coverage.try(:strftime, "%B %d, %Y")    
     %tr
       %th Date Admitted
       %td 
-        = @hiip_claim.date_admitted.strftime("%B %d, %Y")  
+        = @hiip_claim.date_admitted.try(:strftime, "%B %d, %Y")  
       %th Date Discharged
       %td 
-        = @hiip_claim.date_discharged.strftime("%B %d, %Y") 
+        = @hiip_claim.date_discharged.try(:strftime, "%B %d, %Y")   
     %tr
       %th Reason of Confinement
       %td 

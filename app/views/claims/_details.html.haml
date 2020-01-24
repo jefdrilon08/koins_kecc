@@ -10,7 +10,7 @@
         = @claim.date_prepared.try(:strftime, "%B %d, %Y")
       %th Date of Policy Issue
       %td
-        = @claim.date_of_policy_issue.strftime("%B %d, %Y")
+        = @claim.date_of_policy_issue.try(:strftime, "%B %d, %Y")  
     %tr
       %th Date Reported/Notice
       %td 

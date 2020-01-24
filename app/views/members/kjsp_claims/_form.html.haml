@@ -26,13 +26,13 @@
     .col
       .form-group
         = f.input :name_of_school, input_html: { class: 'form-control'}, as: :string, label: "Name of School" 
+    .col
+      .form-group
+        = f.input :year_level, input_html: { class: 'form-control', id: 'year-level' }, as: :select, collection: KjspClaim::YEAR_LEVEL, include_blank: false, label: "Year Level", prompt: "-- Select --"
   .row
     .col
       .form-group
-        = f.input :school_year, input_html: { class: 'form-control'}, as: :string, label: "SY"  
-    .col
-      .form-group
-        = f.input :year_level, input_html: { class: 'form-control' }, as: :select, collection: KjspClaim::YEAR_LEVEL, include_blank: false, label: "Year Level", prompt: "-- Select --"
+        = f.input :school_year, input_html: { class: 'form-control'}, as: :string, label: "SY"   
     .col
       .form-group
         = f.input :sem, input_html: { class: 'form-control'}, as: :string, label: "Semester"
@@ -55,7 +55,11 @@
   .row
     .col
       .form-group
-        = f.input :prepared_by, input_html: { class: 'form-control', value: current_user.print_full_name.titleize}, as: :string, label: "PREPARED BY"       
+        = f.input :prepared_by, input_html: { class: 'form-control', value: current_user.print_full_name.titleize}, as: :string, label: "PREPARED BY"  
+  .row
+    .col
+      .form-group.course-value
+        = f.input :course, input_html: { class: 'form-control', id: 'course-value'}, as: :string, label: "Course"     
   .row
     .col
       .form-actions
@@ -67,4 +71,4 @@
         Cancel
 
 
-
+= javascript_include_tag "kjsp_claims_form"

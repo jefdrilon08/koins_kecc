@@ -21,24 +21,24 @@
       %tr
         %th Date Reported
         %td 
-          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+          = @kalinga_claim.date_reported.try(:strftime, "%B %d, %Y")  
         %th Date Emailed
         %td 
-          = @kalinga_claim.date_emailed.strftime("%B %d, %Y")
+          = @kalinga_claim.date_emailed.try(:strftime, "%B %d, %Y")  
       %tr
         %th Date Approved
         %td 
-          = @kalinga_claim.date_approved.strftime("%B %d, %Y")
+          = @kalinga_claim.date_approved.try(:strftime, "%B %d, %Y")  
         %th Date Requested
         %td 
-          = @kalinga_claim.date_requested.strftime("%B %d, %Y")
+          = @kalinga_claim.date_requested.try(:strftime, "%B %d, %Y")  
       %tr
         %th Insured Name
         %td 
           = @kalinga_claim.name_of_insured
         %th Date of Birth
         %td 
-          = @kalinga_claim.date_of_birth.strftime("%B %d, %Y")
+          = @kalinga_claim.date_of_birth.try(:strftime, "%B %d, %Y")  
       %tr
         %th Gender
         %td 
@@ -56,17 +56,17 @@
       %tr
         %th Issued Date
         %td 
-          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+          = @kalinga_claim.date_reported.try(:strftime, "%B %d, %Y")  
         %th Amount
         %td 
           = @kalinga_claim.amount
       %tr
         %th Effective Date
         %td
-          = @kalinga_claim.effective_date.strftime("%B %d, %Y")
+          = @kalinga_claim.effective_date.try(:strftime, "%B %d, %Y")  
         %th Expiration Date
         %td 
-          = @kalinga_claim.expiration_date.strftime("%B %d, %Y")
+          = @kalinga_claim.expiration_date.try(:strftime, "%B %d, %Y")  
       %tr
         %th Purpose
         %td
@@ -97,24 +97,24 @@
       %tr
         %th Date Reported
         %td 
-          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+          = @kalinga_claim.date_reported.try(:strftime, "%B %d, %Y")  
         %th Date Emailed
         %td 
-          = @kalinga_claim.date_emailed.strftime("%B %d, %Y")
+          = @kalinga_claim.date_emailed.try(:strftime, "%B %d, %Y")  
       %tr
         %th Date Approved
         %td 
-          = @kalinga_claim.date_approved.strftime("%B %d, %Y")
+          = @kalinga_claim.date_approved.try(:strftime, "%B %d, %Y")  
         %th Date Requested
         %td 
-          = @kalinga_claim.date_requested.strftime("%B %d, %Y")
+          = @kalinga_claim.date_requested.try(:strftime, "%B %d, %Y")  
       %tr
         %th Insured Name
         %td 
           = @kalinga_claim.name_of_insured
         %th Date of Birth
         %td 
-          = @kalinga_claim.date_of_birth.strftime("%B %d, %Y")
+          = @kalinga_claim.date_of_birth.try(:strftime, "%B %d, %Y")  
       %tr
         %th Gender
         %td 
@@ -132,17 +132,17 @@
       %tr
         %th Issued Date
         %td 
-          = @kalinga_claim.date_reported.strftime("%B %d, %Y")
+          = @kalinga_claim.date_reported.try(:strftime, "%B %d, %Y")  
         %th Amount
         %td 
           = @kalinga_claim.amount
       %tr
         %th Effective Date
         %td
-          = @kalinga_claim.effective_date.strftime("%B %d, %Y")
+          = @kalinga_claim.effective_date.try(:strftime, "%B %d, %Y")  
         %th Expiration Date
         %td 
-          = @kalinga_claim.expiration_date.strftime("%B %d, %Y")
+          = @kalinga_claim.expiration_date.try(:strftime, "%B %d, %Y")  
       %tr
         %th Purpose
         %td

@@ -10,7 +10,7 @@
         = @kjsp_claim.kjsp_type
       %th Date Prepared
       %td 
-        = @kjsp_claim.date_prepared.strftime("%B %d, %Y")
+        = @kjsp_claim.date_prepared.try(:strftime, "%B %d, %Y")  
     %tr
       %th Branch
       %td 
@@ -50,7 +50,17 @@
       %th Remarks
       %td 
         = @kjsp_claim.remarks
+      - if @kjsp_claim.course.present?
+        %th Course
+        %td 
+          = @kjsp_claim.course
+      - else
+        %th
+        %td
+    %tr
       %th Prepared by
       %td 
         = @kjsp_claim.prepared_by
+      %th
+      %td
       
