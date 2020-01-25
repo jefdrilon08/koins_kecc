@@ -99,7 +99,7 @@ export default class ShowComponent extends React.Component {
     } else {
       return  (
         <div>
-          <table className="table table-sm table-bordered">
+          <table className="table table-sm table-bordered table-responsive">
             <thead>
               <tr>
                 <th>
@@ -168,6 +168,20 @@ export default class ShowComponent extends React.Component {
             </thead>
             <tbody>
               {this.renderRows()}
+              <tr>
+                <th colSpan="18">
+                  Total
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(this.state.data.total_equity_interest_amount)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(this.state.data.total_savings_distribute)}
+                </th>
+                <th className="text-right">
+                  {numberWithCommas(this.state.data.total_cbu_distribute)}
+                </th>
+              </tr>
             </tbody>
           </table>
         </div>

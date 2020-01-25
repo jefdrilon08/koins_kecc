@@ -80,7 +80,7 @@ module Icpr
       journal_entries = []
 
       accounting_code = @accounting_code_interest_on_share_capital_payable
-      amount          = @data[:records].inject(0){ |sum, hash| sum + hash[:equity_interest_amount].to_f.round(2) }.to_f.round(2)
+      amount          = @data[:total_equity_interest_amount].to_f.round(2)
 
       journal_entries << {
         accounting_code_id: accounting_code.id,
@@ -96,7 +96,7 @@ module Icpr
       journal_entries = []
 
       accounting_code = @accounting_code_due_to_members
-      amount          = @data[:records].inject(0){ |sum, hash| sum + hash[:savings_distribute].to_f.round(2) }.to_f.round(2)
+      amount          = @data[:total_savings_distribute].to_f.round(2)
 
       journal_entries << {
         accounting_code_id: accounting_code.id,
@@ -106,7 +106,7 @@ module Icpr
       }
 
       accounting_code = @accounting_code_deposits_on_share_capital_subscription
-      amount          = @data[:records].inject(0){ |sum, hash| sum + hash[:cbu_distribute].to_f.round(2) }.to_f.round(2)
+      amount          = @data[:total_cbu_distribute].to_f.round(2)
 
       journal_entries << {
         accounting_code_id: accounting_code.id,

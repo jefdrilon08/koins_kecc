@@ -17,6 +17,10 @@ module Accounting
         savings_rate: 0.00,
         cbu_rate: 0.00,
         status: "pending",
+        total_ave_equity: 0.00,
+        total_equity_interest_amount: 0.00,
+        total_savings_distribute: 0.00,
+        total_cbu_distribute: 0.00,
         records: []
       }
     end
