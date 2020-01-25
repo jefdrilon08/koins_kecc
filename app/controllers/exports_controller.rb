@@ -60,7 +60,7 @@ class ExportsController < ApplicationController
 
     if !@start_date.nil? && !@end_date.nil? && !@branch_id.nil?
       @member_accounts = MemberAccount.insurance.where("Date(member_accounts.updated_at) >= ? AND Date(member_accounts.updated_at) <= ? AND member_accounts.branch_id = ?", @start_date, @end_date, @branch_id)
-      send_data Exports::GenerateMemberAccountsCsv.new(member_accounts: @member_accounts).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=member accounts  #{@start_date}_#{@end_date}.csv"
+      send_data Exports::GenerateMemberAccountsCsv.new(member_accounts: @member_accounts).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=insurance accounts  #{@start_date}_#{@end_date}.csv"
     elsif !@branch_id.nil?
       @member_accounts = MemberAccount.insurance.where(branch_id: @branch_id)
       send_data Exports::GenerateMemberAccountsCsv.new(member_accounts: @member_accounts).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=insurance accounts.csv"

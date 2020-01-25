@@ -1,4 +1,4 @@
-module DataStores
+ module DataStores
   class GeneratePersonalFundReportExcel
     def initialize(config:)
       @config = config
@@ -30,15 +30,15 @@ module DataStores
             "Member",
             "Officer",
             "Center",
-            "K-IMPOK",
-            "Golden-K",
-            "Savings Investment Fund",
-            "Personal Savings Account",
-            "Time Deposit",
             "Retirement Fund",
             "Life Insurance Fund",
             "Share Capital",
-            "CBU"
+            "CBU",
+            "K-IMPOK",
+            "Personal Savings Account",
+            "Golden-K",
+            "Savings Investment Fund",
+            "Time Deposit"
           ], 
           style: label_cell
 
@@ -62,24 +62,24 @@ module DataStores
             row << "#{record[:center][:name]}"
               record[:accounts].each do |a|
                 row << a[:balance]
-                if a[:account_subtype] == "K-IMPOK"
-                  @kimpok_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Golden K"
-                  @goldenk_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Savings Investment Fund"
-                  @sifund_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Personal Savings Account"
-                  @psa_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Time Deposit"
-                  @timed_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Retirement Fund"
+                if a[:account_subtype] == "Retirement Fund"
                   @rt_total += a[:balance].to_d
                 elsif a[:account_subtype] == "Life Insurance Fund"
                   @lif_total += a[:balance].to_d
                 elsif a[:account_subtype] == "Share Capital"
                   @sc_total += a[:balance].to_d
                 elsif a[:account_subtype] == "CBU"
-                  @cbu_total += a[:balance].to_d    
+                  @cbu_total += a[:balance].to_d
+                elsif a[:account_subtype] == "K-IMPOK"
+                  @kimpok_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Personal Savings Account"
+                  @psa_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Golden K"
+                  @goldenk_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Savings Investment Fund"
+                  @sifund_total += a[:balance].to_d
+                elsif a[:account_subtype] == "Time Deposit"
+                  @timed_total += a[:balance].to_d
                 end
               end
             

@@ -224,113 +224,115 @@ module Members
                           config: { member: member } 
                     ).execute!
         else
-          center = Center.where(id: row['center_id'], branch_id: row['branch_id']).first
-          
-          if !center.nil?
-            center.update!(name: row['center'].try(:upcase), user: @user)
-          end
+          if row['status'] != "cleared"
+            center = Center.where(id: row['center_id'], branch_id: row['branch_id']).first
+            
+            if !center.nil?
+              center.update!(name: row['center'].try(:upcase), user: @user)
+            end
 
-          member_data = member_record.data.with_indifferent_access
+            member_data = member_record.data.with_indifferent_access
 
-          sss_num = row['sss_number']
-          if sss_num.nil?
-            sss_number = ''
-          else
-            sss_number = sss_num
-          end
+            sss_num = row['sss_number']
+            if sss_num.nil?
+              sss_number = ''
+            else
+              sss_number = sss_num
+            end
 
-          phil_health_num = row['phil_health_number']
-          if phil_health_num.nil?
-            phil_health_number = ''
-          else
-            phil_health_number = phil_health_num
-          end
+            phil_health_num = row['phil_health_number']
+            if phil_health_num.nil?
+              phil_health_number = ''
+            else
+              phil_health_number = phil_health_num
+            end
 
-          pag_ibig_num = row['pag_ibig_number']
-          if pag_ibig_num.nil?
-            pag_ibig_number = ''
-          else
-            pag_ibig_number = pag_ibig_num
-          end
+            pag_ibig_num = row['pag_ibig_number']
+            if pag_ibig_num.nil?
+              pag_ibig_number = ''
+            else
+              pag_ibig_number = pag_ibig_num
+            end
 
-          tin_num = row['tin_number']
-          if tin_num.nil?
-            tin_number = ''
-          else
-            tin_number = tin_num
-          end
+            tin_num = row['tin_number']
+            if tin_num.nil?
+              tin_number = ''
+            else
+              tin_number = tin_num
+            end
 
-          insurance_status = row['insurance_status']
+            insurance_status = row['insurance_status']
 
-          if row['recognition_date'].present? && insurance_status.present?  
-            if insurance_status == "inforce" || insurance_status == "lapsed"
-              if row['status'] == "cleared"
+            if row['recognition_date'].present? && insurance_status.present?  
+              if insurance_status == "inforce" || insurance_status == "lapsed"
+                if row['status'] == "cleared"
+                  status = "cleared"
+                  insurance_status = "cleared"
+                else
+                  status = "active"
+                end
+              elsif insurance_status == "dormant"
+                if row['status'] == "archived"
+                  status = "archived"
+                elsif row['status'] == "resigned"
+                  status = "resigned"
+                  insurance_status = "resigned"
+                else
+                  status = row['status']
+                  insurance_status = "dormant"
+                end
+              elsif insurance_status == "pending"
+                status = "pending"
+              elsif insurance_status == "resigned"
+                status = "resigned"
+              elsif row['member_type'] == "GK"
+                status = "resigned"
+              elsif row['status'] == "archived"
+                status = "archived"
+              elsif row['status'] == "cleared"
                 status = "cleared"
                 insurance_status = "cleared"
-              else
-                status = "active"
               end
-            elsif insurance_status == "dormant"
-              if row['status'] == "archived"
-                status = "archived"
-              elsif row['status'] == "resigned"
-                status = "resigned"
-                insurance_status = "resigned"
-              else
-                status = row['status']
-                insurance_status = "dormant"
-              end
-            elsif insurance_status == "pending"
+            else
               status = "pending"
-            elsif insurance_status == "resigned"
-              status = "resigned"
-            elsif row['member_type'] == "GK"
-              status = "resigned"
-            elsif row['status'] == "archived"
-              status = "archived"
-            elsif row['status'] == "cleared"
-              status = "cleared"
-              insurance_status = "cleared"
             end
-          else
-            status = "pending"
+              
+              member_data[:recognition_date] = row['recognition_date']
+              member_data[:address][:street] = row['address_street']
+              member_data[:address][:district] = row['address_barangay']
+              member_data[:address][:city] = row['address_city']
+              member_data[:num_children] = row['number_of_children']
+              member_data[:spouse][:first_name] = row['spouse_first_name']
+              member_data[:spouse][:last_name] = row['spouse_last_name']
+              member_data[:spouse][:middle_name] = row['spouse_middle_name']
+              member_data[:spouse][:date_of_birth] = row['spouse_date_of_birth']
+              member_data[:resignation][:type] = row['resignation_type']
+              member_data[:resignation][:code] = row['resignation_code']
+              member_data[:resignation][:reason] = row['resignation_reason']
+              member_data[:government_identification_numbers][:sss_number] = sss_number
+              member_data[:government_identification_numbers][:tin_number] = tin_number
+              member_data[:government_identification_numbers][:pag_ibig_number] = pag_ibig_number
+              member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
+    
+            member_record.update!(
+              identification_number: identification_number,
+              center: center,
+              member_type: row['member_type'],
+              status: status,
+              insurance_status: insurance_status,
+              first_name: row['first_name'],
+              middle_name: row['middle_name'],
+              last_name: row['last_name'],
+              date_of_birth: row['date_of_birth'],
+              gender: row['gender'],
+              civil_status: row['civil_status'],
+              place_of_birth: row['place_of_birth'],
+              mobile_number: row['cellphone_number'],
+              date_resigned: row['date_resigned'],
+              insurance_date_resigned: row['insurance_date_resigned'],
+              data: member_data
+              )
           end
-            
-            member_data[:recognition_date] = row['recognition_date']
-            member_data[:address][:street] = row['address_street']
-            member_data[:address][:district] = row['address_barangay']
-            member_data[:address][:city] = row['address_city']
-            member_data[:num_children] = row['number_of_children']
-            member_data[:spouse][:first_name] = row['spouse_first_name']
-            member_data[:spouse][:last_name] = row['spouse_last_name']
-            member_data[:spouse][:middle_name] = row['spouse_middle_name']
-            member_data[:spouse][:date_of_birth] = row['spouse_date_of_birth']
-            member_data[:resignation][:type] = row['resignation_type']
-            member_data[:resignation][:code] = row['resignation_code']
-            member_data[:resignation][:reason] = row['resignation_reason']
-            member_data[:government_identification_numbers][:sss_number] = sss_number
-            member_data[:government_identification_numbers][:tin_number] = tin_number
-            member_data[:government_identification_numbers][:pag_ibig_number] = pag_ibig_number
-            member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
-  
-          member_record.update!(
-            identification_number: identification_number,
-            center: center,
-            member_type: row['member_type'],
-            status: status,
-            insurance_status: insurance_status,
-            first_name: row['first_name'],
-            middle_name: row['middle_name'],
-            last_name: row['last_name'],
-            date_of_birth: row['date_of_birth'],
-            gender: row['gender'],
-            civil_status: row['civil_status'],
-            place_of_birth: row['place_of_birth'],
-            mobile_number: row['cellphone_number'],
-            date_resigned: row['date_resigned'],
-            insurance_date_resigned: row['insurance_date_resigned'],
-            data: member_data
-            )
         end       
       end
     end

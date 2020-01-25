@@ -161,5 +161,6 @@ Rails.application.config.assets.precompile += [
   "reports/CalamityClaimReport.js",
   "reports/KalingaReport.js",
   "reports/KbenteReport.js",
-  "reports/KjspReport.js"
+  "reports/KjspReport.js",
+  "kjsp_claims_form.js"
 ]
