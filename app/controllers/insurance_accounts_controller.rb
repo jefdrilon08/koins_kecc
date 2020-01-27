@@ -84,6 +84,18 @@ class InsuranceAccountsController < ApplicationController
 
     if !@errors.nil?
       if @errors[:messages].size > 0
+        content = "ERROR: #{@errors[:messages]}!"
+        
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+        
         redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
         Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
