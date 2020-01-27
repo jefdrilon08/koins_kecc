@@ -7,7 +7,8 @@
     .col
       .card
         .card-body
-          %p#error= flash[:error]
+          %h2
+            %span.badge.badge-danger#error= flash[:error]
           = form_tag import_insurance_account_transactions_insurance_accounts_path, multipart: true do
             .row
               .col-md-6
