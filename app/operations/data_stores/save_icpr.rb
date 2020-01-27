@@ -9,7 +9,7 @@ module DataStores
     end
 
     def execute!
-      data_result = ::Accounting::GenerateIosc.new(
+      data_result = ::Icpr::GenerateIcpr.new(
                       config: {
                         year: @year,
                         branch: @branch
