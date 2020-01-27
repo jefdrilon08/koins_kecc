@@ -98,6 +98,7 @@ GEM
       nokogiri (~> 1.8)
     chronic (0.10.2)
     cocoon (1.2.14)
+    coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -220,6 +221,11 @@ GEM
       equatable (~> 0.6)
       tty-color (~> 0.5)
     pg (1.2.2)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-rails (0.3.9)
+      pry (>= 0.10.4)
     public_suffix (4.0.3)
     puma (3.12.2)
     rack (2.1.1)
@@ -368,6 +374,7 @@ DEPENDENCIES
   newrelic_rpm
   numbers_and_words
   pg (>= 0.18, < 2.0)
+  pry-rails
   puma (~> 3.11)
   rails (~> 5.2.1)
   redis
