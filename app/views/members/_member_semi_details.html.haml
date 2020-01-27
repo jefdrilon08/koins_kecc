@@ -32,7 +32,10 @@
         Date of Membership
         .value.text-muted
           %b
-            #{@member.date_of_membership}
+            - if @member.date_of_membership.present?
+              #{@member.date_of_membership}
+            - else
+              N / A
 
       - if @member.resigned?
         %li.list-group-item
@@ -70,6 +73,12 @@
                 #{@member.recognition_date.strftime("%b %d, %Y")}
               - else
                 N / A
+      - if @member.recognition_date.present?
+        %li.list-group-item
+          Lenght of Stay (MBA)
+          .value.text-muted
+            %b
+              #{@member.length_of_stay}
       / %li.list-group-item
       /   Insurance Active
       /   .value.text-muted
