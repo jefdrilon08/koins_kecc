@@ -526,9 +526,11 @@ export default class DashboardOAS extends React.Component {
         </p>
       );
     } else {
-      var rows  = [];
+      var rows          = [];
+      var totalPastDue  = 0.00;
 
       for(var i = 0; i < o.records.length; i++) {
+        totalPastDue += parseFloat(o.records[i].total_balance);
         rows.push(
           <tr key={"watchlist-record-" + o.records[i].id}>
             <td className="text-center">
@@ -550,12 +552,6 @@ export default class DashboardOAS extends React.Component {
             <td>
               {o.records[i].loan_product.name}
             </td>
-            <td className="text-right text-muted">
-              {numberWithCommas(o.records[i].principal_balance)}
-            </td>
-            <td className="text-right text-muted">
-              {numberWithCommas(o.records[i].interest_balance)}
-            </td>
             <td className="text-right">
               <strong>
                 {numberWithCommas(o.records[i].total_balance)}
@@ -564,6 +560,19 @@ export default class DashboardOAS extends React.Component {
           </tr>
         );
       }
+
+      rows.push(
+        <tr key={"watchlist-grand-total"}>
+          <th>
+          </th>
+          <th colSpan="4">
+            GRAND TOTAL ({o.records.length}) 
+          </th>
+          <th className="text-right">
+            {numberWithCommas(totalPastDue)}
+          </th>
+        </tr>
+      );
 
       return  (
         <div>
@@ -587,12 +596,6 @@ export default class DashboardOAS extends React.Component {
                 </th>
                 <th>
                   Loan Product
-                </th>
-                <th className="text-right">
-                  Principal Past Due
-                </th>
-                <th className="text-right">
-                  Interest Past Due
                 </th>
                 <th className="text-right">
                   Total Past Due

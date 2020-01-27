@@ -75,21 +75,27 @@ module Api
           data_store  = DataStore.find(params[:id])
         
           config  = {
-            data_store: data_store
+            data_store: data_store,
+            user: current_user
           }
 
-          errors  = ::DataStores::ValidateApproveIcpr.new(
+          errors  = ::Icpr::ValidateApprove.new(
                       config: config
                     ).execute!
           
           if errors[:messages].size > 0
             render json: errors, status: 400
           else
-            ::DataStores::ApproveIcpr.new(
-              config: config
-            ).execute!
+            data_store.update!(status: "processing")
 
-            render json: { id: icpr.id }
+            args  = {
+              id: data_store.id,
+              user_id: current_user.id
+            }
+
+            ProcessApproveIcpr.perform_later(args)
+
+            render json: { message: "ok" }
           end
         end
 

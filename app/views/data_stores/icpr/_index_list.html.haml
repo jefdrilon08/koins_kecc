@@ -7,7 +7,9 @@
       %th
         Branch
       %th.text-center
-        Status
+        Processing Status
+      %th.text-center
+        Approval Status
       %th.text-center
         Started
       %th.text-center
@@ -33,6 +35,13 @@
           - elsif o.error?
             .badge.badge-danger
               Error
+        %td.text-center
+          - if o.data["status"] == 'pending'
+            .badge.badge-danger
+              Pending
+          - elsif o.data["status"] == 'approved'
+            .badge.badge-success
+              Approved
         %td.text-center
           %small
             #{o.created_at.localtime}

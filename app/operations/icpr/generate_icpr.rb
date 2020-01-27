@@ -1,5 +1,5 @@
-module Accounting
-  class GenerateIosc
+module Icpr
+  class GenerateIcpr
     attr_accessor :data, :result
 
     def initialize(config:)
@@ -37,6 +37,10 @@ module Accounting
                             identification_number: o.fetch("identification_number"),
                             status: o.fetch("member_status"),
                             member_account_id: o.fetch("member_account_id"),
+                            savings_account_id: o.fetch("savings_account_id"),
+                            savings_account_balance: o.fetch("savings_account_balance"),
+                            cbu_account_id: o.fetch("cbu_account_id"),
+                            cbu_account_balance: o.fetch("cbu_account_balance"),
                             center: {
                               id: o.fetch("center_id"),
                               name: o.fetch("center_name")
@@ -104,6 +108,10 @@ module Accounting
                     member_accounts.id AS member_account_id,
                     member_accounts.account_type,
                     member_accounts.account_subtype,
+                    savings_accounts.id AS savings_account_id,
+                    savings_accounts.balance AS savings_account_balance,
+                    cbu_accounts.id AS cbu_account_id,
+                    cbu_accounts.balance AS cbu_account_balance,
                     centers.id AS center_id,
                     centers.name AS center_name,
                     t1.transacted_at AS latest_transaction_date,
@@ -114,6 +122,10 @@ module Accounting
                     member_accounts
                   INNER JOIN members ON
                     member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
+                  INNER JOIN member_accounts AS savings_accounts ON
+                    savings_accounts.member_id = members.id AND savings_accounts.account_type = 'SAVINGS' AND savings_accounts.account_subtype = 'K-IMPOK'
+                  INNER JOIN member_accounts AS cbu_accounts ON
+                    cbu_accounts.member_id = members.id AND cbu_accounts.account_type = 'EQUITY' AND cbu_accounts.account_subtype = 'CBU'
                   INNER JOIN centers ON
                     centers.id = member_accounts.center_id
                   LEFT JOIN account_transactions AS t1 ON
