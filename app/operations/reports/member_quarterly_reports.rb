@@ -12,7 +12,7 @@ module Reports
         @new_members            = Member.active.where("data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status != ?", @start_date, @end_date, "dormant")
         @male_members           = @active_members.where(gender: "Male")
         @female_members         = @active_members.where(gender: "Female")
-        @members_with_spouse    = @active_members.where("data ->> 'spouse'  is not NULL AND data ->> 'spouse' <> ''")
+        @members_with_spouse    = @active_members.where("data -> 'spouse' ->> 'first_name' = ?", '')
         @single_members         = @active_members.where(civil_status: "Single")
         @married_members        = @active_members.where(civil_status: "Kasal") 
         @maykinakasama_members  = @active_members.where(civil_status: "May Kinakasama")
