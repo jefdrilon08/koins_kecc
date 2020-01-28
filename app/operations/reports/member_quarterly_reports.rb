@@ -9,6 +9,7 @@ module Reports
         @active_lapsed_members  = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "lapsed")
         @active_inforce_members = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
         @resigned_members       = Member.resigned.where("date_resigned >= ? AND date_resigned <= ?", @start_date, @end_date)
+        @all_resigned_members   = Member.resigned.where("date_resigned <= ?", @end_date)
         @new_members            = Member.active.where("data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status != ?", @start_date, @end_date, "dormant")
         @male_members           = @active_members.where(gender: "Male")
         @female_members         = @active_members.where(gender: "Female")
@@ -30,14 +31,27 @@ module Reports
       @data[:total_members] = []
 
       @total_active = 0
+      @total_all_resigned = 0
       @total_active_lapsed = 0
       @total_active_inforce = 0
       @total_new = 0
       @total_resigned = 0
-      @total_female = 0
       @total_male = 0
+      @total_inforce_male = 0
+      @total_lapsed_male = 0
+      @total_resigned_male = 0
+      @total_female = 0
+      @total_inforce_female = 0
+      @total_lapsed_female = 0
+      @total_resigned_female = 0
       @total_with_spouse = 0
+      @total_inforce_with_spouse = 0
+      @total_lapsed_with_spouse = 0
+      @total_resigned_with_spouse = 0
       @total_valid_dependent = 0
+      @total_valid_dependent_inforce = 0
+      @total_valid_dependent_lapsed = 0
+      @total_valid_dependent_resigned = 0
       @total_single = 0
       @total_married = 0
       @total_maykinakasama = 0
@@ -48,15 +62,29 @@ module Reports
         member = {}
         
         member[:branch] = branch.name
+        
         member[:active_count] = @active_members.where(branch_id: branch).count
+        member[:all_resigned_count] = @all_resigned_members.where(branch_id: branch).count
         member[:active_lapsed_count] = @active_lapsed_members.where(branch_id: branch).count
         member[:active_inforce_count] = @active_inforce_members.where(branch_id: branch).count
         member[:resigned_count] = @resigned_members.where(branch_id: branch).count
         member[:new_count] = @new_members.where(branch_id: branch).count
         member[:male_count] = @male_members.where(branch_id: branch).count
+        member[:male_inforce_count] = @active_inforce_members.where(branch_id: branch, gender: "Male").count
+        member[:male_lapsed_count] = @active_lapsed_members.where(branch_id: branch, gender: "Male").count
+        member[:male_resigned_count] = @all_resigned_members.where(branch_id: branch, gender: "Male").count
         member[:female_count] = @female_members.where(branch_id: branch).count
+        member[:female_inforce_count] = @active_inforce_members.where(branch_id: branch, gender: "Female").count
+        member[:female_lapsed_count] = @active_lapsed_members.where(branch_id: branch, gender: "Female").count
+        member[:female_resigned_count] = @all_resigned_members.where(branch_id: branch, gender: "Female").count
         member[:member_with_spouse_count] = @members_with_spouse.where(branch_id: branch).count
+        member[:member_inforce_with_spouse_count] = @members_with_spouse.where(branch_id: branch, insurance_status: "inforce").count
+        member[:member_lapsed_with_spouse_count] = @members_with_spouse.where(branch_id: branch, insurance_status: "lapsed").count
+        member[:member_resigned_with_spouse_count] = @all_resigned_members.where("branch_id = ? AND data -> 'spouse' ->> 'first_name' = ?", branch, '').count
         member[:valid_dependent_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        member[:valid_dependent_inforce_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.insurance_status = ? AND members.data ->> 'recognition_date' <= ?", branch, "inforce", @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        member[:valid_dependent_lapsed_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.insurance_status = ? AND members.data ->> 'recognition_date' <= ?", branch, "lapsed", @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        member[:valid_dependent_resigned_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.status = ? AND members.date_resigned <= ?", branch, "resigned", @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
         member[:single] = @single_members.where(branch_id: branch).count
         member[:married] = @married_members.where(branch_id: branch).count
         member[:maykinakasama] = @maykinakasama_members.where(branch_id: branch).count
@@ -64,15 +92,28 @@ module Reports
         member[:biyuda] = @biyuda_members.where(branch_id: branch).count
 
         @total_resigned += @resigned_members.where(branch_id: branch).count
+        @total_all_resigned += @all_resigned_members.where(branch_id: branch).count
         @total_new += @new_members.where(branch_id: branch).count
         @total_active += @active_members.where(branch_id: branch).count
         @total_active_lapsed += @active_lapsed_members.where(branch_id: branch).count
         @total_active_inforce += @active_inforce_members.where(branch_id: branch).count
         @total_male += @male_members.where(branch_id: branch).count
+        @total_inforce_male += @active_inforce_members.where(branch_id: branch, gender: "Male").count
+        @total_lapsed_male += @active_lapsed_members.where(branch_id: branch, gender: "Male").count
+        @total_resigned_male += @all_resigned_members.where(branch_id: branch, gender: "Male").count
         @total_female += @female_members.where(branch_id: branch).count
+        @total_inforce_female += @active_inforce_members.where(branch_id: branch, gender: "Female").count
+        @total_lapsed_female += @active_lapsed_members.where(branch_id: branch, gender: "Female").count
+        @total_resigned_female += @all_resigned_members.where(branch_id: branch, gender: "Female").count
         @total_with_spouse += @members_with_spouse.where(branch_id: branch).count
+        @total_inforce_with_spouse += @members_with_spouse.where(branch_id: branch, insurance_status: "inforce").count
+        @total_lapsed_with_spouse += @members_with_spouse.where(branch_id: branch, insurance_status: "lapsed").count
+        @total_resigned_with_spouse += @all_resigned_members.where("branch_id = ? AND data -> 'spouse' ->> 'first_name' = ?", branch, '').count
         # @total_female += @female_members.where(branch_id: branch).count
         @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        @total_valid_dependent_inforce += LegalDependent.joins(:member).where("members.branch_id = ? AND members.insurance_status = ? AND members.data ->> 'recognition_date' <= ?", branch, "inforce", @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        @total_valid_dependent_lapsed += LegalDependent.joins(:member).where("members.branch_id = ? AND members.insurance_status = ? AND members.data ->> 'recognition_date' <= ?", branch, "lapsed", @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        @total_valid_dependent_resigned += LegalDependent.joins(:member).where("members.branch_id = ? AND members.status = ? AND members.date_resigned <= ?", branch, "resigned", @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
         @total_single += @single_members.where(branch_id: branch).count
         @total_married += @married_members.where(branch_id: branch).count
         @total_maykinakasama += @maykinakasama_members.where(branch_id: branch).count
@@ -83,14 +124,27 @@ module Reports
 
       total = {}
       total[:total_resigned] = @total_resigned
+      total[:total_all_resigned] = @total_all_resigned
       total[:total_new] = @total_new
       total[:total_active] = @total_active
       total[:total_active_lapsed] = @total_active_lapsed
       total[:total_active_inforce] = @total_active_inforce
       total[:total_male] = @total_male
+      total[:total_inforce_male] = @total_inforce_male
+      total[:total_lapsed_male] = @total_lapsed_male
+      total[:total_resigned_male] = @total_resigned_male
       total[:total_female] = @total_female
+      total[:total_inforce_female] = @total_inforce_female
+      total[:total_lapsed_female] = @total_lapsed_female
+      total[:total_resigned_female] = @total_resigned_female
       total[:total_with_spouse] = @total_with_spouse
+      total[:total_inforce_with_spouse] = @total_inforce_with_spouse
+      total[:total_lapsed_with_spouse] = @total_lapsed_with_spouse
+      total[:total_resigned_with_spouse] = @total_resigned_with_spouse
       total[:total_valid_dependent] = @total_valid_dependent
+      total[:total_valid_dependent_inforce] = @total_valid_dependent_inforce
+      total[:total_valid_dependent_lapsed] = @total_valid_dependent_lapsed
+      total[:total_valid_dependent_resigned] = @total_valid_dependent_resigned
       total[:total_single] = @total_single
       total[:total_married] = @total_married
       total[:total_maykinakasama] = @total_maykinakasama

@@ -120,6 +120,18 @@ class InsuranceAccountsController < ApplicationController
         redirect_to members_path
       end
     else
+      content = "Successfully, but no insurance accounts uploaded!"
+
+      ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
       redirect_to members_path
     end    
   end
@@ -153,49 +165,77 @@ class InsuranceAccountsController < ApplicationController
       @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-    else
-
-      file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
-
-      data_store  = DataStore.new(
-                      status: "processing",
-                      meta: {
-                        data_store_type: "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS",
-                        user: {
-                          id: current_user.id,
-                          username: current_user.username,
-                          email: current_user.email,
-                          first_name: current_user.first_name,
-                          last_name: current_user.last_name
-                        },
-                        time_start: Time.now,
-                        time_end: nil
-                      },
-                      data: {
-                        file_path_to_save: file_path_to_save,
-                        start_date: start_date,
-                        end_date: end_date
-                      }
-                    ) 
-
-      data_store.save!
-      File.write(file_path_to_save, file.read.force_encoding("UTF-8"))
-
-      args = {
-        file: file_path_to_save,
-        data_store_id: data_store.id
-      }
-
-      ProcessImportInsuranceAccountTransaction.perform_later(args)
-      flash[:success] = "Successfully Import Insurance Account Transactions For Members."
-
-      if !start_date.nil? && !end_date.nil?
-        content = "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+    if !@errors.nil?
+      if @errors[:messages].size > 0
+        content = "ERROR: #{@errors[:messages]}!"
+        
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+        
+        redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
-        content = "#{current_user.full_name} successfully imported insurance account transactions."
+
+        file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
+
+        data_store  = DataStore.new(
+                        status: "processing",
+                        meta: {
+                          data_store_type: "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS",
+                          user: {
+                            id: current_user.id,
+                            username: current_user.username,
+                            email: current_user.email,
+                            first_name: current_user.first_name,
+                            last_name: current_user.last_name
+                          },
+                          time_start: Time.now,
+                          time_end: nil
+                        },
+                        data: {
+                          file_path_to_save: file_path_to_save,
+                          start_date: start_date,
+                          end_date: end_date
+                        }
+                      ) 
+
+        data_store.save!
+        File.write(file_path_to_save, file.read.force_encoding("UTF-8"))
+
+        args = {
+          file: file_path_to_save,
+          data_store_id: data_store.id
+        }
+
+        ProcessImportInsuranceAccountTransaction.perform_later(args)
+        flash[:success] = "Successfully Import Insurance Account Transactions For Members."
+
+        if !start_date.nil? && !end_date.nil?
+          content = "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        else
+          content = "#{current_user.full_name} successfully imported insurance account transactions."
+        end
+
+        ActivityLog.create!(
+            content: content,
+            activity_type: "upload",
+            data: {
+              user_id: current_user.id,
+              start_date: start_date,
+              end_date: end_date
+            }
+          )
+        
+        redirect_to import_insurance_account_transactions_path
       end
+    else
+      content = "Successfully, but no insurance account transactions uploaded!"
 
       ActivityLog.create!(
           content: content,
@@ -206,8 +246,8 @@ class InsuranceAccountsController < ApplicationController
             end_date: end_date
           }
         )
-      
-      redirect_to import_insurance_account_transactions_path
+
+      redirect_to members_path
     end  
   end
 end
