@@ -1,3 +1,14 @@
 = render partial: "index_header"
 
 = render partial: "savings_insurance_transfer_collections/modals/new_transaction"
+
+= javascript_include_tag "savings_insurance_transfer_collections/Index"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+
+    Index.init({
+      authenticityToken: authenticityToken
+    });
+  });
