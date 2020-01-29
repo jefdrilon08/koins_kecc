@@ -204,6 +204,9 @@ Rails.application.routes.draw do
   # CASH MANAGEMENT
   ################################
 
+  # Savings Insurance Transfers
+  resources :savings_insurance_transfer_collections, only: [:index, :show, :destroy]
+
   # Deposits
   resources :deposit_collections, only: [:index, :show, :destroy] do
     collection { post :upload }

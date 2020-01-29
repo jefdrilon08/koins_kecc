@@ -34,6 +34,7 @@ gem 'zip-zip'
 gem 'tty-table'
 gem 'newrelic_rpm'
 gem 'rollbar'
+gem 'rack', '~> 2.0.0'
 
 # Support Select 2
 gem 'select2-rails'

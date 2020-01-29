@@ -33,3 +33,7 @@
         = link_to time_deposit_collections_path, class: 'nav-link' do
           %i.nav-icon.fa.fa-clock
           Time Deposits
+      %li{ class: "nav-item #{params[:controller] == 'savings_insurance_transfer_collections' ? 'active' : ''}" }
+        = link_to savings_insurance_transfer_collections_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Savings Insurance Transfer
