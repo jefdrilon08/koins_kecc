@@ -14,7 +14,12 @@ module MemberAccountValidations
         @member_account_validations = MemberAccountValidation.where("branch_id = ? AND status = ? AND date_validated >= ? AND date_validated <= ? ", @branch, @status, @start_date, @end_date)        
       elsif @status == "for-validation"
         @member_account_validations = MemberAccountValidation.where("branch_id = ? AND status = ? AND date_checked >= ? AND date_checked <= ? ", @branch, @status, @start_date, @end_date)
+      else
+         @member_account_validations = MemberAccountValidation.all
       end
+    
+    
+
 
       @p        = Axlsx::Package.new
 

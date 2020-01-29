@@ -49,7 +49,7 @@ module Reports
             if !@lif_current_member_account.nil?  
               @transactions  = @account_transactions.select{ |o| o.subsidiary_id == @lif_current_member_account.id }
               @transactions.each do |trans|
-                total_life = (total_life + trans.amount) / 2.00 
+                total_life = (total_life + trans.amount)
               end
             end
 

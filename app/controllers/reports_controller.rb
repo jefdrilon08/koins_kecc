@@ -198,8 +198,10 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+
   def calamity_reports
   end
+
   def calamity_claim_reports
     branch = params[:branch]
     cluster = params[:cluster]
@@ -212,8 +214,10 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+
   def kalinga
   end
+
   def kalinga_reports
     branch = params[:branch]
     cluster = params[:cluster]
@@ -229,6 +233,7 @@ class ReportsController < ApplicationController
 
   def kbente
   end
+
   def kbente_reports
     branch = params[:branch]
     cluster = params[:cluster]
@@ -244,6 +249,7 @@ class ReportsController < ApplicationController
 
   def kjsp
   end
+
   def kjsp_reports
     branch = params[:branch]
     cluster = params[:cluster]
@@ -256,6 +262,7 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
+  
   def personal_document
   end
 
