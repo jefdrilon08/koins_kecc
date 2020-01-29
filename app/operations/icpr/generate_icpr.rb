@@ -75,6 +75,12 @@ module Icpr
                             if previous_transaction_month.present? and temp[:previous_ending_balance].present? and temp[:previous_ending_balance] > 0.00
                               if temp[:latest_ending_balance].present? and temp[:latest_ending_balance] > 0.00 and m >= latest_transaction_month
                                 d[:amount] = temp[:latest_ending_balance] 
+                              elsif temp[:latest_ending_balance].present? and temp[:latest_ending_balance] == 0.00
+                                if m < latest_transaction_month
+                                  d[:amount] = temp[:previous_ending_balance]
+                                else
+                                  d[:amount] = temp[:latest_ending_balance]
+                                end
                               else
                                 d[:amount] = temp[:previous_ending_balance]
                               end
