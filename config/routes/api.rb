@@ -2,6 +2,9 @@ namespace :api do
   namespace :v1 do
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
+    post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
+    post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
+    post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"

@@ -64,7 +64,8 @@ var Index = (function() {
           var errors  = [];
 
           try {
-            errors = JSON.parse(response.responseText).full_messages;
+            console.log(response);
+            errors = JSON.parse(response.responseText).errors.full_messages;
           } catch(err) {
             console.log(err);
             errors = ["Something went wrong"];

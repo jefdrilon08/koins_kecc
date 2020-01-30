@@ -7,6 +7,7 @@ module SavingsInsuranceTransferCollections
       @collection_date    = @config[:collection_date]
       @savings_subtype    = @config[:savings_subtype]
       @insurance_subtype  = @config[:insurance_subtype]
+      @user               = @config[:user]
 
       @savings_insurance_transfer_collection  = SavingsInsuranceTransferCollection.new(
                                                   branch: @branch,
@@ -14,9 +15,18 @@ module SavingsInsuranceTransferCollections
                                                   collection_date: @collection_date,
                                                   data: {
                                                     savings_subtype: @savings_subtype,
-                                                    insurance_subtype: @insurance_subtype
+                                                    insurance_subtype: @insurance_subtype,
+                                                    records: []
                                                   }
                                                 )
+
+      @savings_insurance_transfer_collection.data[:accounting_entry]  = ::SavingsInsuranceTransferCollections::BuildAccountingEntry.new(
+                                                                          config: {
+                                                                            branch: @branch,
+                                                                            data: @savings_insurance_transfer_collection.data.with_indifferent_access,
+                                                                            user: @user
+                                                                          }
+                                                                        ).execute!
     end
 
     def execute!

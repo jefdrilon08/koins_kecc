@@ -15,6 +15,7 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Rails.application.config.assets.precompile += [
   "savings_insurance_transfer_collections/Index.js",
+  "savings_insurance_transfer_collections/Show.js",
   "login.scss",
   "member.scss",
   "Login.js",

@@ -1,5 +1,16 @@
 = render partial: "index_header"
 
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @savings_insurance_transfer_collections.size > 0
+            = render partial: "index_list"
+          - else
+            %p
+              No records found
+
 = render partial: "savings_insurance_transfer_collections/modals/new_transaction"
 = render partial: "shared/errors_template"
 

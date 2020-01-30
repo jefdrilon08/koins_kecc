@@ -61,7 +61,14 @@ module SavingsInsuranceTransferCollections
         }
       end
 
-      not_yet_implemented!
+      if @center.present? and Member.active.where(center_id: @center.id).count == 0
+        @errors[:messages] << {
+          key: "center",
+          message: "No active members found for center #{@center.name}"
+        }
+      end
+
+      #not_yet_implemented!
 
       @errors[:messages].each do |m|
         @errors[:full_messages] << m[:message]
