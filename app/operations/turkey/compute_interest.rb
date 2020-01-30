@@ -112,9 +112,9 @@ module Turkey
 
     def starting_transaction(tx, transacted_at)
       {
-        id: (tx ? tx.id : ""),
-        transacted_at: transacted_at,
+        id:             (tx ? tx.id : ""),
         ending_balance: (tx ? tx.data["ending_balance"].to_f.round(2) : 0.0),
+        transacted_at:  transacted_at,
       }
     end
 
