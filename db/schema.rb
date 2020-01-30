@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_052350) do
+ActiveRecord::Schema.define(version: 2020_01_30_071631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_052350) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY ((ARRAY['deposit'::character varying, 'withdrawal'::character varying])::text[])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
@@ -735,6 +736,8 @@ ActiveRecord::Schema.define(version: 2020_01_29_052350) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "total_amount", precision: 8, scale: 2, default: "0.0"
+    t.string "approved_by"
     t.index ["branch_id"], name: "index_savings_insurance_transfer_collections_on_branch_id"
     t.index ["center_id"], name: "index_savings_insurance_transfer_collections_on_center_id"
   end

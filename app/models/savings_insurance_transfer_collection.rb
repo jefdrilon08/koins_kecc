@@ -2,7 +2,8 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
   STATUSES  = [
     "pending",
     "approved",
-    "processing"
+    "processing",
+    "error"
   ]
 
   belongs_to :center
@@ -14,6 +15,10 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
 
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
+
+  def to_s
+    "#{self.branch.name} #{self.collection_date.strftime("%B %d, %Y")}: #{self.data['savings_subtype']} to #{self.data['insurance_subtype']}"
+  end
 
   def load_defaults
     if self.status.blank?
@@ -41,5 +46,13 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
 
   def processing?
     self.status == "processing"
+  end
+
+  def error?
+    self.status == "error"
+  end
+
+  def member_ids
+    self.data.with_indifferent_access[:records].map{ |o| o[:member][:id] }
   end
 end

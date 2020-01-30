@@ -25,4 +25,29 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
 
     @savings_insurance_transfer_collections = @savings_insurance_transfer_collections.order("status DESC, collection_date DESC").page(params[:page]).per(100)
   end
+
+  def show
+    @savings_insurance_transfer_collection  = SavingsInsuranceTransferCollection.find(params[:id])
+
+    if @savings_insurance_transfer_collection.processing?
+      redirect_to savings_insurance_transfer_collections_path
+    end
+
+    @accounting_entry_hash                  = @savings_insurance_transfer_collection.data.with_indifferent_access[:accounting_entry]
+
+    @members  = Member.active.where(
+                  center_id: @savings_insurance_transfer_collection.center.id
+                ).where.not(
+                  id: @savings_insurance_transfer_collection.member_ids
+                ).order("last_name ASC")
+
+    @records  = @savings_insurance_transfer_collection.data.with_indifferent_access["records"]
+  end
+
+  def destroy
+    @savings_insurance_transfer_collection  = SavingsInsuranceTransferCollection.find(params[:id])
+    @savings_insurance_transfer_collection.destroy!
+
+    redirect_to savings_insurance_transfer_collections_path
+  end
 end
