@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_24_074045) do
+ActiveRecord::Schema.define(version: 2020_01_30_011300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY ((ARRAY['deposit'::character varying, 'withdrawal'::character varying])::text[])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
@@ -726,6 +727,19 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.index ["project_type_category_id"], name: "index_project_types_on_project_type_category_id"
   end
 
+  create_table "savings_insurance_transfer_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "collection_date"
+    t.date "date_approved"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_savings_insurance_transfer_collections_on_branch_id"
+    t.index ["center_id"], name: "index_savings_insurance_transfer_collections_on_center_id"
+  end
+
   create_table "survey_answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "survey_id"
     t.jsonb "meta"
@@ -876,6 +890,8 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
   add_foreign_key "membership_payment_records", "members"
   add_foreign_key "monthly_closing_collections", "branches"
   add_foreign_key "project_types", "project_type_categories"
+  add_foreign_key "savings_insurance_transfer_collections", "branches"
+  add_foreign_key "savings_insurance_transfer_collections", "centers"
   add_foreign_key "survey_answers", "surveys"
   add_foreign_key "survey_questions", "surveys"
   add_foreign_key "time_deposit_collections", "branches"
