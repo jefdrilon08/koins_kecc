@@ -1,0 +1,29 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+        Name
+      %th.text-right
+        Amount
+      - if @savings_insurance_transfer_collection.pending?
+        %th.text-center
+          Actions
+  %tbody
+    - records.each do |o|
+      %tr
+        %td
+          = link_to member_path(o[:member][:id]), target: '_blank' do
+            #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: '')}
+        - if @savings_insurance_transfer_collection.pending?
+          %td.text-center
+            %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{o[:member][:id]}" } }
+              .fa.fa-times
+    %tr
+      %th
+        Total
+      %th.text-right
+        #{number_to_currency(@savings_insurance_transfer_collection.total_amount, unit: '')}
+      - if @savings_insurance_transfer_collection.pending?
+        %th

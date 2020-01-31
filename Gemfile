@@ -34,12 +34,14 @@ gem 'zip-zip'
 gem 'tty-table'
 gem 'newrelic_rpm'
 gem 'rollbar'
+gem 'rack', '~> 2.0.0'
 
 # Support Select 2
 gem 'select2-rails'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-rails'
 end
 
 group :development do

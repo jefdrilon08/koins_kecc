@@ -69,6 +69,12 @@ module ApplicationHelper
     data
   end
 
+  def insurance_subtypes
+    Settings.default_member_accounts.select{ |o| o.account_type == "INSURANCE" }.map{ |o|
+      o.account_subtype
+    }
+  end
+
   def savings_subtypes
     data  = []
 

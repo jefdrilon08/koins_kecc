@@ -96,9 +96,9 @@ export default class AccountingEntryFormDisplay extends React.Component {
         // Set currentAccountingFundId
         var data  = context.state.data;
         
-        // if(response.accounting_funds.length > 0) {
-        //   data.accounting_fund_id = response.accounting_funds[2].id;  
-        // }
+        if(response.accounting_funds.length > 0) {
+          data.accounting_fund_id = response.accounting_funds[0].id;  
+        }
 
         context.setState({
           accountingFunds: response.accounting_funds,

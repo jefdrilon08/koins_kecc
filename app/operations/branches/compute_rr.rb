@@ -146,10 +146,18 @@ module Branches
         total             = r.fetch("total").to_f.round(2)
         par               = (principal_balance / principal).round(2)
 
+        first_date_of_payment = r.fetch("first_date_of_payment").to_date
+
         num_days_par  = 0
 
         if par > 0 and max_amort.present? and latest_transaction_date.present?
           num_days_par  = (@as_of - max_amort).to_i
+        elsif par > 0 and latest_transaction_date.blank?
+          num_days_par  = (@as_of - first_date_of_payment).to_i
+
+          if num_days_par = 0
+            num_days_par = 1
+          end
         end
 
         temp_r  = {
@@ -203,7 +211,9 @@ module Branches
           interest_rr:                interest_rr,
           total_rr:                   total_rr,
           par:                        par,
-          num_days_par:               num_days_par
+          num_days_par:               num_days_par,
+          latest_transaction_date:    latest_transaction_date,
+          first_date_of_payment:      first_date_of_payment
         }
 
         @data[:records] << temp_r
