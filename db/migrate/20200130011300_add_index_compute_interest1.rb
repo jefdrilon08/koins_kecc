@@ -5,7 +5,7 @@ class AddIndexComputeInterest1 < ActiveRecord::Migration[5.2]
       :account_transactions,
       [:subsidiary_id, :transacted_at],
       name: 'idx_compute_interest1',
-      where: "transaction_type IN ('deposit', 'withdrawal') AND NOT (data->>'is_interest' = 'true')"
+      where: "transaction_type IN ('deposit', 'withdraw') AND NOT (data->>'is_interest' = 'true')"
     )
   end
 end
