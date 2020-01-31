@@ -7,24 +7,27 @@
         <th width='auto'>All Resigned Members</th>
         <th width='auto'>Active Inforce Members</th>
         <th width='auto'>Active Lapsed Members</th>
+        <th width='auto'>GK</th>
+        <th width='auto'>Active MFI - Resigned MII Members</t>
+        <th width='auto'>Active Pending</th>
         <th width='auto'>New Members</th>
         <th width='auto'>Resigned Members</th>
         <th width='auto'>Female</th>
-        <th width='auto'>Female Inforce</th>
+        <!-- <th width='auto'>Female Inforce</th>
         <th width='auto'>Female Lapsed</th>
-        <th width='auto'>Female Resigned</th>
+        <th width='auto'>Female Resigned</th> -->
         <th width='auto'>Male</th>
-        <th width='auto'>Male Inforce</th>
+        <!-- <th width='auto'>Male Inforce</th>
         <th width='auto'>Male Lapsed</th>
-        <th width='auto'>Male Resigned</th>
+        <th width='auto'>Male Resigned</th> -->
         <th width='auto'>Spouse</th>
-        <th width='auto'>Spouse of Inforce</th>
+        <!-- <th width='auto'>Spouse of Inforce</th>
         <th width='auto'>Spouse of Lapsed</th>
-        <th width='auto'>Spouse of Resigned</th>
+        <th width='auto'>Spouse of Resigned</th> -->
         <th width='auto'>Depen</th>
-        <th width='auto'>Depen of Inforce</th>
+        <!-- <th width='auto'>Depen of Inforce</th>
         <th width='auto'>Depen of Lapsed</th>
-        <th width='auto'>Depen of Resigned</th>
+        <th width='auto'>Depen of Resigned</th> -->
         <th width='auto'>Single</th>
         <th width='auto'>Married</th>
         <th width='auto'>May Kinakasama</th>
@@ -40,24 +43,27 @@
           <td>{{all_resigned_count}}</td>
           <td>{{active_inforce_count}}</td>
           <td>{{active_lapsed_count}}</td>
+          <td>{{gk_count}}</td>
+          <td>{{active_resigned_insurance}}</td>
+          <td>{{pending}}</td>
           <td>{{new_count}}</td>
           <td>{{resigned_count}}</td>
           <td>{{female_count}}</td>
-          <td>{{female_inforce_count}}</td>
+          <!-- <td>{{female_inforce_count}}</td>
           <td>{{female_lapsed_count}}</td>
-          <td>{{female_resigned_count}}</td>
+          <td>{{female_resigned_count}}</td> -->
           <td>{{male_count}}</td>
-          <td>{{male_inforce_count}}</td>
+          <!-- <td>{{male_inforce_count}}</td>
           <td>{{male_lapsed_count}}</td>
-          <td>{{male_resigned_count}}</td>
+          <td>{{male_resigned_count}}</td> -->
           <td>{{member_with_spouse_count}}</td>
-          <td>{{member_inforce_with_spouse_count}}</td>
+          <!-- <td>{{member_inforce_with_spouse_count}}</td>
           <td>{{member_lapsed_with_spouse_count}}</td>
-          <td>{{member_resigned_with_spouse_count}}</td>
+          <td>{{member_resigned_with_spouse_count}}</td> -->
           <td>{{valid_dependent_count}}</td>
-          <td>{{valid_dependent_inforce_count}}</td>
+          <!-- <td>{{valid_dependent_inforce_count}}</td>
           <td>{{valid_dependent_lapsed_count}}</td>
-          <td>{{valid_dependent_resigned_count}}</td>
+          <td>{{valid_dependent_resigned_count}}</td> -->
           <td>{{single}}</td>
           <td>{{married}}</td>
           <td>{{maykinakasama}}</td>
@@ -73,24 +79,27 @@
           <th>{{total_all_resigned}}</th>
           <th>{{total_active_inforce}}</th>
           <th>{{total_active_lapsed}}</th>
+          <th>{{total_gk}}</th>
+          <th>{{total_active_resigned_insurance}}</th>
+          <th>{{total_pending}}</th>
           <th>{{total_new}}</th>
           <th>{{total_resigned}}</th>
           <th>{{total_female}}</th>
-          <th>{{total_inforce_female}}</th>
+          <!-- <th>{{total_inforce_female}}</th>
           <th>{{total_lapsed_female}}</th>
-          <th>{{total_resigned_female}}</th>
+          <th>{{total_resigned_female}}</th> -->
           <th>{{total_male}}</th>
-          <th>{{total_inforce_male}}</th>
+          <!-- <th>{{total_inforce_male}}</th>
           <th>{{total_lapsed_male}}</th>
-          <th>{{total_resigned_male}}</th>
+          <th>{{total_resigned_male}}</th> -->
           <th>{{total_with_spouse}}</th>
-          <th>{{total_inforce_with_spouse}}</th>
+          <!-- <th>{{total_inforce_with_spouse}}</th>
           <th>{{total_lapsed_with_spouse}}</th>
-          <th>{{total_resigned_with_spouse}}</th>
+          <th>{{total_resigned_with_spouse}}</th> -->
           <th>{{total_valid_dependent}}</th>
-          <th>{{total_valid_dependent_inforce}}</th>
+          <!-- <th>{{total_valid_dependent_inforce}}</th>
           <th>{{total_valid_dependent_lapsed}}</th>
-          <th>{{total_valid_dependent_resigned}}</th>
+          <th>{{total_valid_dependent_resigned}}</th> -->
           <th>{{total_single}}</th>
           <th>{{total_married}}</th>
           <th>{{total_maykinakasama}}</th>
@@ -98,36 +107,6 @@
           <th>{{total_biyuda}}</th>
         </tr>
       {{/total_members}}
-      <tr>
-        <th width='auto'></th>
-        <th width='auto'>All Active Members</th>
-        <th width='auto'>All Resigned Members</th>
-        <th width='auto'>Active Inforce Members</th>
-        <th width='auto'>Active Lapsed Members</th>
-        <th width='auto'>New Members</th>
-        <th width='auto'>Resigned Members</th>
-        <th width='auto'>Female</th>
-        <th width='auto'>Female Inforce</th>
-        <th width='auto'>Female Lapsed</th>
-        <th width='auto'>Female Resigned</th>
-        <th width='auto'>Male</th>
-        <th width='auto'>Male Inforce</th>
-        <th width='auto'>Male Lapsed</th>
-        <th width='auto'>Male Resigned</th>
-        <th width='auto'>Spouse</th>
-        <th width='auto'>Spouse of Inforce</th>
-        <th width='auto'>Spouse of Lapsed</th>
-        <th width='auto'>Spouse of Resigned</th>
-        <th width='auto'>Depen</th>
-        <th width='auto'>Depen of Inforce</th>
-        <th width='auto'>Depen of Lapsed</th>
-        <th width='auto'>Depen of Resigned</th>
-        <th width='auto'>Single</th>
-        <th width='auto'>Married</th>
-        <th width='auto'>May Kinakasama</th>
-        <th width='auto'>Hiwalay</th>
-        <th width='auto'>Biyuda/o</th>
-      </tr>
     </tbody>
   </table>
 </script>
