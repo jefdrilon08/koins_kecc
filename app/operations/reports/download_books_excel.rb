@@ -34,10 +34,10 @@ module Reports
                               @end_date,
                               @branch,
                               @book
-                            ).order("reference_number ASC, date_posted ASC")
+                            )
 
     if @accounting_fund.present?
-      @accounting_entries = @accounting_entries.where(accounting_fund_id: @accounting_fund).order("data ->> 'sub_reference_number' ASC, date_posted ASC")
+      @accounting_entries = @accounting_entries.where(accounting_fund_id: @accounting_fund).order("data ->> 'sub_reference_number' ASC")
     end
 
       @data[:accounting_entries]  = @accounting_entries.map{ |o|
