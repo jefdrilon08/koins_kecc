@@ -137,7 +137,7 @@ module Reports
                   or_number = data[:or_number].present? ? data[:or_number] : data[:ar_number]
 
                   if i != 0
-                    or_number == ""
+                    or_number = ""
                   end
 
                   if !py and data[:payee].present?
