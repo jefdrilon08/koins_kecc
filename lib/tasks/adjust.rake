@@ -768,17 +768,13 @@ namespace :adjust do
                   new_status = "dormant"
                 end
               else
-                new_status = "pending"
+                newstatus_status = "pending"
               end
 
               if member_type == "GK"
                 new_status = "resigned"
-              elsif status == "resigned"
-                if recognition_date.nil?
-                  new_status = "pending"
-                else
-                  new_status = "resigned"
-                end
+              elsif status == "active" and recognition_date.nil?
+                new_status = "pending"
               elsif status == "pending"
                 new_status = "pending"
               elsif status == "archived"

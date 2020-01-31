@@ -3,6 +3,7 @@ var BooksIndex  = (function() {
   var $inputStartDate;
   var $inputEndDate;
   var $selectBranch;
+  var $selectAccountingFund;
   var $modalPrint;
   var $message;
   var $btndownload;
@@ -12,22 +13,24 @@ var BooksIndex  = (function() {
   var _urlPrint = "/api/v1/print/generate_file";
   var _urlDownload = "/books/excel";
   var _cacheDom = function() {
-    $btnPrint       = $("#btn-print");
-    $inputStartDate = $("#input-start-date");
-    $inputEndDate   = $("#input-end-date");
-    $selectBranch   = $("#select-branch");
-    $modalPrint     = $("#modal-print");
-    $message        = $(".message");
-    $btndownload    = $("#btn-download")
+    $btnPrint               = $("#btn-print");
+    $inputStartDate         = $("#input-start-date");
+    $inputEndDate           = $("#input-end-date");
+    $selectBranch           = $("#select-branch");
+    $selectAccountingFund   = $("#select-accounting-fund");
+    $modalPrint             = $("#modal-print");
+    $message                = $(".message");
+    $btndownload            = $("#btn-download")
   };
 
   var _bindEvents = function() {
       
 
-      $btndownload.on("click", function() {
-      var startDate = $inputStartDate.val();
-      var endDate   = $inputEndDate.val();
-      var branchId  = $selectBranch.val();
+    $btndownload.on("click", function() {
+      var startDate         = $inputStartDate.val();
+      var endDate           = $inputEndDate.val();
+      var branchId          = $selectBranch.val();
+      var accountingFundId  = $selectAccountingFund.val();
 
       if(!startDate) {
         alert("Start date required");
@@ -36,6 +39,7 @@ var BooksIndex  = (function() {
       if(!endDate) {
         alert("End date required");
       }
+
       $.ajax({
         url: _urlDownload,
         method: 'GET',
@@ -44,6 +48,7 @@ var BooksIndex  = (function() {
           end_date: endDate,
           branch_id: branchId,
           book: book,
+          accounting_fund_id: accountingFundId,
           type: "book",
           authenticity_token: authenticityToken
         },
@@ -61,10 +66,11 @@ var BooksIndex  = (function() {
 
 
     $btnPrint.on("click", function() {
-      var startDate = $inputStartDate.val();
-      var endDate   = $inputEndDate.val();
-      var branchId  = $selectBranch.val();
-
+      var startDate         = $inputStartDate.val();
+      var endDate           = $inputEndDate.val();
+      var branchId          = $selectBranch.val();
+      var accountingFundId  = $selectAccountingFund.val();
+      
       if(!startDate) {
         alert("Start date required");
       }
@@ -84,6 +90,7 @@ var BooksIndex  = (function() {
           end_date: endDate,
           branch_id: branchId,
           book: book,
+          accounting_fund_id: accountingFundId,
           type: "book",
           authenticity_token: authenticityToken
         },
