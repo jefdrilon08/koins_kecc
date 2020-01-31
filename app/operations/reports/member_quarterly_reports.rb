@@ -6,11 +6,12 @@ module Reports
       
       if @start_date.present? && @end_date.present?
         @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed"])
-        @resigned_before            = Member.where("insurance_date_resigned <= ? AND insurance_status", @end_date, "resigned")
+        @resigned_before            = Member.where("insurance_date_resigned >= ?", @end_date)
+        @gk_members                 = Member.where("member_type = ?", "GK")
         @active_lapsed_members      = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "lapsed")
         @active_inforce_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
-        @resigned_members           = Member.insurance_resigned.where("date_resigned >= ? AND date_resigned <= ?", @start_date, @end_date)
-        @all_resigned_members       = Member.insurance_resigned.where("date_resigned <= ?", @end_date)
+        @resigned_members           = Member.insurance_resigned.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ?", @start_date, @end_date)
+        @all_resigned_members       = Member.insurance_resigned.where("insurance_date_resigned <= ?", @end_date)
         @active_resigned_insurance  = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "resigned")
         @pending                    = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "pending")
         @new_members                = Member.active.where("data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?)", @start_date, @end_date, ["inforce", "lapsed"])
@@ -41,8 +42,9 @@ module Reports
       @total_resigned = 0
       @total_pending = 0
       @total_active_resigned_insurance = 0
-      @total_resigned_before
+      @total_resigned_before = 0
       @total_male = 0
+      @total_gk = 0
       # @total_inforce_male = 0
       # @total_lapsed_male = 0
       # @total_resigned_male = 0
@@ -69,6 +71,7 @@ module Reports
         
         member[:branch] = branch.name
         
+        member[:gk_count] = @gk_members.where(branch_id: branch).count
         member[:active_count] = @active_members.where(branch_id: branch).count
         member[:all_resigned_count] = @all_resigned_members.where(branch_id: branch).count
         member[:active_lapsed_count] = @active_lapsed_members.where(branch_id: branch).count
@@ -78,6 +81,7 @@ module Reports
         member[:pending] = @pending.where(branch_id: branch).count
         member[:active_resigned_insurance] = @active_resigned_insurance.where(branch_id: branch).count
         member[:resigned_before] = @resigned_before.where(branch_id: branch).count
+        
         member[:male_count] = @male_members.where(branch_id: branch).count
         # member[:male_inforce_count] = @active_inforce_members.where(branch_id: branch, gender: "Male").count
         # member[:male_lapsed_count] = @active_lapsed_members.where(branch_id: branch, gender: "Male").count
@@ -110,6 +114,7 @@ module Reports
         @total_active_resigned_insurance += @active_resigned_insurance.where(branch_id: branch).count
         @total_resigned_before += @resigned_before.where(branch_id: branch).count
         @total_male += @male_members.where(branch_id: branch).count
+        @total_gk += @gk_members.where(branch_id: branch).count
         # @total_inforce_male += @active_inforce_members.where(branch_id: branch, gender: "Male").count
         # @total_lapsed_male += @active_lapsed_members.where(branch_id: branch, gender: "Male").count
         # @total_resigned_male += @all_resigned_members.where(branch_id: branch, gender: "Male").count
@@ -135,6 +140,7 @@ module Reports
       end
 
       total = {}
+      total[:total_gk] = @total_gk
       total[:total_resigned] = @total_resigned
       total[:total_all_resigned] = @total_all_resigned
       total[:total_new] = @total_new
