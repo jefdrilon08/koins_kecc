@@ -71,14 +71,20 @@ module MonthlyClosingCollections
                   )
 
       accounts.each do |a|
-        result  = ::MemberAccounts::ComputeInterest.new(
-                    config: {
-                      member_account: a,
-                      closing_date: @closing_date,
-                      account_type: @account_settings.account_type,
-                      account_subtype: @account_settings.account_subtype,
-                      account_settings: @account_settings
-                    }
+#        result  = ::MemberAccounts::ComputeInterest.new(
+#                    config: {
+#                      member_account: a,
+#                      closing_date: @closing_date,
+#                      account_type: @account_settings.account_type,
+#                      account_subtype: @account_settings.account_subtype,
+#                      account_settings: @account_settings
+#                    }
+#                  ).execute!
+
+        result  = ::Turkey::ComputeInterest.new(
+                    member_account: a,
+                    closing_date: @closing_date,
+                    account_settings: @account_settings
                   ).execute!
 
         if result[:interest] > 0

@@ -32,6 +32,8 @@ module Loans
                           date_released         = r.fetch("date_released")
                           date_approved         = r.fetch("date_approved")
                           member_id             = r.fetch("member_id")
+                          reference_number      = r.fetch("reference_number")
+                          book                  = r.fetch("book")
 
                           {
                             id: id,
@@ -46,7 +48,9 @@ module Loans
                             loan_product_name: loan_product_name,
                             member_id: member_id,
                             date_approved: date_approved,
-                            date_released: date_released
+                            date_released: date_released,
+                            reference_number: reference_number,
+                            book: book
                           }
                         }
       @data
@@ -63,6 +67,8 @@ module Loans
                     loans.first_date_of_payment,
                     loans.maturity_date,
                     accounting_entries.id AS accounting_entry_id,
+                    accounting_entries.book,
+                    accounting_entries.reference_number,
                     journal_entries.id AS journal_entry_id,
                     journal_entries.amount,
                     loan_products.id AS loan_product_id,
