@@ -23,7 +23,7 @@ module Turkey
       officers = repayment_rate_records.pluck("officer").uniq
 
       records = officers.map do |officer|
-        officer_id            = officer.fetch(:id)
+        officer_id            = officer.fetch("id")
 
         resigned_members      = by_officer      officer_id, @new_and_resigned,      "resigned_members"
         resigned_members_prev = by_officer      officer_id, @new_and_resigned_prev, "resigned_members"
@@ -37,23 +37,20 @@ module Turkey
         active_members_prev   = by_count_member officer_id, @member_counts_prev,    "active_members"
 
         loans                 = repayment_rate_records.select { |r| r["officer"]["id"] == officer["id"] }
-        loan_disbursements    = Loan
-                                .where(id: loans.pluck("id").uniq)
-                                .where("extract(year FROM date_released) = ? AND extract(month FROM date_released) = ?", year, month)
-        amount_disbursed      = loan_disbursements.sum(:principal)
-        loan_disbursements_h  = loan_disbursements.map do |l|
+        amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
+        loan_disbursements    = loans.map do |l|
                                   {
-                                    id:            l.id,
-                                    principal:     l.principal,
-                                    interest:      l.interest,
-                                    date_released: l.date_released,
-                                    pn_number:     l.pn_number,
-                                    member:        {
-                                                     id:          l.member.id,
-                                                     first_name:  l.member.first_name,
-                                                     middle_name: l.member.middle_name,
-                                                     last_name:   l.member.last_name,
-                                                   },
+                                    id:            l.dig("id"),
+                                    principal:     l.dig("principal"),
+                                    interest:      l.dig("interest"),
+                                    date_released: l.dig("date_released"),
+                                    pn_number:     l.dig("pn_number"),
+                                    member: {
+                                      id:          l.dig("member", "id"),
+                                      first_name:  l.dig("member", "first_name"),
+                                      middle_name: l.dig("member", "middle_name"),
+                                      last_name:   l.dig("member", "last_name"),
+                                    },
                                   }
                                 end
 
@@ -78,8 +75,9 @@ module Turkey
           total_paid_due
         ]
         # loan particulars
-        loan_p = loans.inject({}) do |l|
-          loan_attrs.each { |hash, attr| hash[attr] = hash[attr].to_f + l.fetch(attr.to_s).to_f }
+        loan_p = loans.inject({}) do |hash, loan|
+          loan_attrs.each { |attr| hash[attr] = hash[attr].to_f + loan[attr.to_s].to_f }
+          hash
         end
 
         # RR = (Paid Due - Balance) / Paid Due
@@ -127,8 +125,8 @@ module Turkey
           previous_member_count:           (loaners_prev.size + pure_savers_prev.size + active_members_prev.size),
 
           loans:                           loans,
-          loan_disbursements:              loan_disbursements_h,
-          count_loan_disbursements:        loan_disbursements_h.size,
+          loan_disbursements:              loan_disbursements,
+          count_loan_disbursements:        loan_disbursements.size,
           amount_disbursed:                amount_disbursed,
 
           principal_rr:                    [principal_rr, 1].min, # Max is 100%
@@ -145,7 +143,7 @@ module Turkey
           principal_portfolio:             principal_portfolio,
           interest_portfolio:              interest_portfolio,
           total_portfolio:                 total_portfolio,
-        }.merge(loan_particulars)
+        }.merge(loan_p)
       end
 
       {
