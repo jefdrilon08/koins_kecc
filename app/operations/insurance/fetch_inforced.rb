@@ -31,7 +31,7 @@ module Insurance
 
                             ending_balance >= insured_amount
                           rescue ArgumentError
-                            raise "Recognition date: #{o.fetch("recognition_date").inspect} Status: #{o.fetch("status")} Insurance Status: #{o.fetch("insurance_status")}"
+                            raise "Recognition date: #{o.fetch("recognition_date").inspect} Status: #{o.fetch("member_status")} Insurance Status: #{o.fetch("insurance_status")}"
                           end
                         }
 
