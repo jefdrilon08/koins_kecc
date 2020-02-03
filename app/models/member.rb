@@ -16,7 +16,7 @@ class Member < ApplicationRecord
     "transferred",
     "cleared"
   ]
-  INSURANCE_STATUS = ["inforce", "lapsed", "resigned", "dormant", "pending", "cleared"]
+  INSURANCE_STATUS = ["inforce", "lapsed", "resigned", "dormant", "pending", "cleared", "archived"]
   MEMBER_TYPES = ["Regular", "GK", "Kaagapay"]
 
   belongs_to :center

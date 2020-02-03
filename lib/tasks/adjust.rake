@@ -725,6 +725,8 @@ namespace :adjust do
                   members.id AS member_id,
                   members.member_type,
                   members.status,
+                  members.insurance_status,
+                  members.insurance_date_resigned,
                   COUNT(account_transactions) AS acc_trans_count
                 FROM
                   member_accounts
@@ -749,7 +751,9 @@ namespace :adjust do
               recognition_date          = o.fetch("recognition_date").try(:to_date)
               transactions_count        = o.fetch("acc_trans_count")
 
-              new_status  = "inforce"
+              new_status  = "dormant"
+              insurance_status  = o.fetch("insurance_status")
+              insurance_date_resigned  = o.fetch("insurance_date_resigned")
               status      = o.fetch("status")
               member_type = o.fetch("member_type")
               last_payment_date = o.fetch("transacted_at").try(:to_date)
@@ -766,10 +770,12 @@ namespace :adjust do
 
                   is_withdraw_payment = o.fetch("is_withdraw_payment")
 
-                  if current_balance == 0.00 && is_withdraw_payment == "true"
+                  if o.fetch("balance").to_f.round(2) == 0.00 && insurance_status == "resigned"  
                     new_status = "resigned"
-                  elsif o.fetch("balance").to_f.round(2) == 0.00
-                    new_status = "dormant"
+                  elsif current_balance == 0.00 && is_withdraw_payment == "true"
+                    new_status = "resigned"
+                  elsif current_balance == 0.00 && !insurance_date_resigned.nil?
+                    new_status = "resigned"
                   elsif days_lapsed <= 45 && current_balance >= insured_amount
                     new_status = "inforce"
                   elsif days_lapsed > 45 && current_balance >= insured_amount
@@ -787,7 +793,7 @@ namespace :adjust do
                   new_status = "dormant"
                 end
               else
-                newstatus_status = "pending"
+                new_status = "pending"
               end
 
               if member_type == "GK"
@@ -797,7 +803,7 @@ namespace :adjust do
               elsif status == "pending"
                 new_status = "pending"
               elsif status == "archived"
-                new_status = "dormant"
+                new_status = "archived"
               elsif status == "cleared"
                 new_status = "cleared"
               end
@@ -1066,13 +1072,27 @@ namespace :adjust do
 
     insurance_account_ids = insurance_account_ids.uniq
 
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+    # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
 
-    MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
-      puts "Rehashing member_account #{acc.id}..."
+    # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
+    #   puts "Rehashing member_account #{acc.id}..."
 
-      ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
-    end
+    #   ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
+    # end
+
+    # this
+    insurance_account_id = insurance_account_ids.first
+    branch = MemberAccount.where(id: insurance_account_id).first.member.branch
+
+    # Rehash accounts
+    puts "Rehashing ..."
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+        branch: branch
+      }
+    ).execute!
+    # this
+
     puts "Done!"
   end
 
