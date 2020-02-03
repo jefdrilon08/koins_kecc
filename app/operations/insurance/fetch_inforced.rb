@@ -65,7 +65,7 @@ module Insurance
                   FROM
                     member_accounts
                   INNER JOIN members ON
-                    member_accounts.member_id = members.id AND member_accounts.account_type = 'INSURANCE' AND member_accounts.account_subtype = '#{@insurance_subtype}' AND members.branch_id = '#{@branch.id}' AND members.data->'recognition_date' IS NOT NULL
+                    member_accounts.member_id = members.id AND member_accounts.account_type = 'INSURANCE' AND member_accounts.account_subtype = '#{@insurance_subtype}' AND members.branch_id = '#{@branch.id}' AND members.data->'recognition_date' IS NOT NULL AND insurance_status IS NOT 'pending'
                   INNER JOIN centers ON
                     centers.id = member_accounts.center_id
                   LEFT JOIN account_transactions AS t1 ON
