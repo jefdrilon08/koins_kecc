@@ -23,12 +23,16 @@ module Insurance
       query!
 
       @data[:records] = @result.select{ |o|
-                          insured_amount  = (((@as_of - o.fetch("recognition_date").to_date).to_i / 7).to_i + 1) * @default_amount
-                          ending_balance  = o.fetch("ending_balance").to_f.round(2)
+                          begin
+                            insured_amount  = (((@as_of - o.fetch("recognition_date").to_date).to_i / 7).to_i + 1) * @default_amount
+                            ending_balance  = o.fetch("ending_balance").to_f.round(2)
 
-                          o[:insured_amount]  = insured_amount
+                            o[:insured_amount]  = insured_amount
 
-                          ending_balance >= insured_amount
+                            ending_balance >= insured_amount
+                          rescue ArgumentError
+                            raise o.fetch("recognition_date").inspect
+                          end
                         }
 
       @data
