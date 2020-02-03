@@ -7,34 +7,34 @@ module Turkey
       @year   = year || Date.today.year
       @month  = month || Date.today.month
       @as_of  = Date.new(@year, @month, -1)
-
-      month_prev = as_of - 1.month
-      as_of_prev = Date.new(month_prev.year, month_prev.month, -1)
-
-      @repayment_rate        = find_data_stores :repayment_rates,          as_of,      :meta
-      @new_and_resigned      = find_data_stores :monthly_new_and_resigned, as_of,      :meta
-      @new_and_resigned_prev = find_data_stores :monthly_new_and_resigned, as_of_prev, :meta
-      @member_counts         = find_data_stores :member_counts,            as_of,      :data
-      @member_counts_prev    = find_data_stores :member_counts,            as_of_prev, :data
     end
 
     def execute!
-      repayment_rate_records = @repayment_rate.data.fetch("records")
+      month_prev = as_of - 1.month
+      as_of_prev = Date.new(month_prev.year, month_prev.month, -1)
+
+      repayment_rate        = find_data_stores :repayment_rates,          as_of,      :meta
+      new_and_resigned      = find_data_stores :monthly_new_and_resigned, as_of,      :meta
+      new_and_resigned_prev = find_data_stores :monthly_new_and_resigned, as_of_prev, :meta
+      member_counts         = find_data_stores :member_counts,            as_of,      :data
+      member_counts_prev    = find_data_stores :member_counts,            as_of_prev, :data
+
+      repayment_rate_records = repayment_rate.data.fetch("records")
       officers = repayment_rate_records.pluck("officer").uniq
 
       records = officers.map do |officer|
         officer_id            = officer.fetch("id")
 
-        resigned_members      = by_officer      officer_id, @new_and_resigned,      "resigned_members"
-        resigned_members_prev = by_officer      officer_id, @new_and_resigned_prev, "resigned_members"
-        new_members           = by_officer      officer_id, @new_and_resigned,      "new_members"
-        new_members_prev      = by_officer      officer_id, @new_and_resigned_prev, "new_members"
-        loaners               = by_count_member officer_id, @member_counts,         "loaners"
-        loaners_prev          = by_count_member officer_id, @member_counts_prev,    "loaners"
-        pure_savers           = by_count_member officer_id, @member_counts,         "pure_savers"
-        pure_savers_prev      = by_count_member officer_id, @member_counts_prev,    "pure_savers"
-        active_members        = by_count_member officer_id, @member_counts,         "active_members"
-        active_members_prev   = by_count_member officer_id, @member_counts_prev,    "active_members"
+        resigned_members      = by_officer      officer_id, new_and_resigned,      "resigned_members"
+        resigned_members_prev = by_officer      officer_id, new_and_resigned_prev, "resigned_members"
+        new_members           = by_officer      officer_id, new_and_resigned,      "new_members"
+        new_members_prev      = by_officer      officer_id, new_and_resigned_prev, "new_members"
+        loaners               = by_count_member officer_id, member_counts,         "loaners"
+        loaners_prev          = by_count_member officer_id, member_counts_prev,    "loaners"
+        pure_savers           = by_count_member officer_id, member_counts,         "pure_savers"
+        pure_savers_prev      = by_count_member officer_id, member_counts_prev,    "pure_savers"
+        active_members        = by_count_member officer_id, member_counts,         "active_members"
+        active_members_prev   = by_count_member officer_id, member_counts_prev,    "active_members"
 
         loans                 = repayment_rate_records.select { |r| r["officer"]["id"] == officer["id"] }
         amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
@@ -175,7 +175,7 @@ module Turkey
 
       return ds if ds_date.year == date.year && ds_date.month == date.month
 
-      raise "no report found. as_of: #{as_of}"
+      raise "No report found (#{scope}) as_of: #{as_of}"
     end
 
     def by_officer(officer_id, records, key)
