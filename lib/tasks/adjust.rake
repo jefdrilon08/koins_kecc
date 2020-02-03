@@ -798,7 +798,7 @@ namespace :adjust do
 
               if member_type == "GK"
                 new_status = "resigned"
-              elsif status == "active" and recognition_date.nil?
+              elsif status == "active" && recognition_date.nil?
                 new_status = "pending"
               elsif status == "pending"
                 new_status = "pending"
@@ -806,6 +806,8 @@ namespace :adjust do
                 new_status = "archived"
               elsif status == "cleared"
                 new_status = "cleared"
+              elsif status == "resigned" && !insurance_date_resigned.nil?
+                new_status = "resigned"  
               end
 
               "('#{member_id}', '#{new_status}')"
