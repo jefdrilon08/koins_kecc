@@ -613,6 +613,25 @@ namespace :adjust do
     puts "Done!"
   end
 
+  task :update_member_branch_id => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      branch_id = row['branch_id']
+
+      member = Member.where(identification_number: identification_number).first
+
+      if !member.nil?
+        puts "Updating branch: #{member.full_name}"   
+        member.update!(branch_id: branch_id)
+      end
+    end
+    puts "Done!"
+  end
+
+
   task :repair_validation_accounting_entry_by_id => :environment do
     puts "Repairing ..."
     member_account_validation = MemberAccountValidation.find(ENV['VALIDATION_ID'])
