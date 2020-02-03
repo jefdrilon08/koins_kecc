@@ -6,7 +6,7 @@ module Reports
       
       if @start_date.present? && @end_date.present?
         @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed"])
-        @resigned_before            = Member.where("insurance_date_resigned >= ?", @end_date)
+        @resigned_before            = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @end_date, @end_date)
         @gk_members                 = Member.where("member_type = ?", "GK")
         @active_lapsed_members      = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "lapsed")
         @active_inforce_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
