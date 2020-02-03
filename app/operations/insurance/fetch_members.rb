@@ -1,11 +1,12 @@
 module Insurance
-  class FetchInforced
+  class FetchMembers
     def initialize(config:)
       @config             = config
       @branch             = @config[:branch]
       @as_of              = @config[:as_of].try(:to_date)
       @insurance_subtype  = @config[:insurance_subtype]
       @default_amount     = @config[:default_amount].to_f.round(2)
+      @grace_period       = @config[:grace_period].to_i
 
       @data = {
         as_of: @as_of,
@@ -15,17 +16,22 @@ module Insurance
           id: @branch.id,
           name: @branch.name
         },
-        records: []
+        result: [],
+        inforce: [],
+        lapsed: [],
+        dormant: []
       }
     end
 
     def execute!
       query!
+      @data[:result] = @result
 
-      @data[:records] = @result.select{ |o|
+      @data[:inforce] = @result.select{ |o|
                           begin
-                            insured_amount  = (((@as_of - o.fetch("recognition_date").to_date).to_i / 7).to_i + 1) * @default_amount
-                            ending_balance  = o.fetch("ending_balance").to_f.round(2)
+                            ending_balance    = o.fetch("ending_balance").to_f.round(2)
+                            recognition_date  = o.fetch("recognition_date").to_date
+                            insured_amount  = (((@as_of - recognition_date).to_i / 7).to_i + 1) * @default_amount
 
                             o[:insured_amount]  = insured_amount
 
@@ -65,7 +71,7 @@ module Insurance
                   FROM
                     member_accounts
                   INNER JOIN members ON
-                    member_accounts.member_id = members.id AND member_accounts.account_type = 'INSURANCE' AND member_accounts.account_subtype = '#{@insurance_subtype}' AND members.branch_id = '#{@branch.id}' AND members.data->>'recognition_date' IS NOT NULL AND members.insurance_status <> 'pending' AND members.status <> 'archived' AND DATE(members.data->>'recognition_date') < DATE('#{@as_of}')
+                    member_accounts.member_id = members.id AND member_accounts.account_type = 'INSURANCE' AND member_accounts.account_subtype = '#{@insurance_subtype}' AND members.branch_id = '#{@branch.id}' AND members.data->>'recognition_date' IS NOT NULL
                   INNER JOIN centers ON
                     centers.id = member_accounts.center_id
                   LEFT JOIN account_transactions AS t1 ON
