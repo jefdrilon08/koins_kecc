@@ -4,88 +4,68 @@
       %th
         SO Name
       - @data[:officers].each do |o|
-        %th
+        %th.text-center
           #{o[:last_name]}, #{o[:first_name]}
+    %tr
+      %th
+        Status
+      - @data[:officers].each_with_index do |o, i|
+        %th.text-center
+          #{@data[:records][i][:status]}
   %tbody
     %tr
       %td
         %strong
-          Active Loaners
+          Admitted Members
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center 
-          #{@data[:records][i][:count_loaners]}
-
+        %td.text-right
+          #{@data[:records][i][:count_active_members]}
     %tr
       %td
         %strong
           Pure Savers
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
+        %td.text-right
           #{@data[:records][i][:count_pure_savers]}
 
+    %tr
+      %td
+        %strong
+          Active Loaners
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right 
+          #{@data[:records][i][:count_loaners]}
+
+    %tr
+      %td
+        %strong
+          Outreach
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right 
+          #{@data[:records][i][:count_loaners] + @data[:records][i][:count_pure_savers] + @data[:records][i][:count_active_members]}
 
     %tr
       %td
         %strong
           Repayment Rate
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
+        %td.text-right
           #{(@data[:records][i][:principal_rr] * 100).round(2)} %
 
     %tr
       %td
         %strong
-          Portfolio
+          Beginning Number of Outreach
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{number_to_currency(@data[:records][i][:principal_portfolio], unit: "")}
+        %td.text-right
+          #{@data[:records][i][:previous_count_loaners] + @data[:records][i][:previous_count_pure_savers] + @data[:records][i][:previous_count_active_members]}
 
     %tr
       %td
         %strong
-          Loan Disbursements
+          Additional Members
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{number_to_currency(@data[:records][i][:amount_disbursed], unit: "")}
-
-    %tr
-      %td
-        %strong
-          PAR Rate
-      - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{(@data[:records][i][:par] * 100).round(2)} %
-
-    %tr
-      %td
-        %strong
-          PAR Amount
-      - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{number_to_currency(@data[:records][i][:principal_balance], unit: "")}
-
-    %tr
-      %td
-        %strong
-          Overall Principal Bal.
-      - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{number_to_currency(@data[:records][i][:overall_principal_balance], unit: "")}
-
-    %tr
-      %td
-        %strong
-          Previous Member Count
-      - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{@data[:records][i][:previous_member_count]}
-
-    %tr
-      %td
-        %strong
-          New Members
-      - @data[:officers].each_with_index do |o, i|
-        %td.text-center
+        %td.text-right 
           #{@data[:records][i][:count_new_members]}
 
     %tr
@@ -93,21 +73,103 @@
         %strong
           Resigned Members
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
+        %td.text-right 
           #{@data[:records][i][:count_resigned_members]}
 
     %tr
       %td
         %strong
-          Pure Savers
+          Drop-out Percentage
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{@data[:records][i][:count_pure_savers]}
+        %td.text-right 
+          - beginning_of_outreach = @data[:records][i][:previous_count_loaners] + @data[:records][i][:previous_count_pure_savers] + @data[:records][i][:previous_count_active_members]
+          - additional_members    = @data[:records][i][:count_new_members]
+          - outreach              = @data[:records][i][:count_loaners] + @data[:records][i][:count_pure_savers] + @data[:records][i][:count_active_members]
+          - drop_out_percentage = ((beginning_of_outreach.to_f + additional_members.to_f) - outreach) / beginning_of_outreach
+          #{(drop_out_percentage * 100).round(2)} %
+    %tr
+      %td
+        %strong
+          PAR Amount
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:principal_balance], unit: "")}
 
     %tr
       %td
         %strong
-          Active Members
+          PAR Rate
       - @data[:officers].each_with_index do |o, i|
-        %td.text-center
-          #{@data[:records][i][:count_active_members]}
+        %td.text-right
+          #{(@data[:records][i][:par] * 100).round(2)} %
+
+    %tr
+      %td
+        %strong
+          Portfolio
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:principal_portfolio], unit: "")}
+
+    %tr
+      %td
+        %strong
+          Loan Disbursements
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:amount_disbursed], unit: "")}
+
+    %tr
+      %td
+        %strong
+          Incentive
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:incentive], unit: "")}
+    %tr
+      %td
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+
+    %tr
+      %td
+        %strong
+          Verbal Warning Demerits
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:verbal_warning_demerits], unit: '')}
+
+    %tr
+      %td
+        %strong
+          Written Warning Demerits
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:written_warning_demerits], unit: '')}
+
+    %tr
+      %td
+        %strong
+          Drop-out Demerits
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:drop_out_demerits], unit: '')}
+
+    %tr
+      %td
+        %strong
+          Total Demerits
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:total_demerits], unit: '')}
+    %tr
+      %td
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+    %tr
+      %td
+        %strong
+          Final Incentives
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{number_to_currency(@data[:records][i][:net_incentive], unit: '')}

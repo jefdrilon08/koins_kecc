@@ -1,12 +1,14 @@
 module Turkey
   class ComputeMonthlyIncentive
-    attr_reader :branch, :year, :month, :as_of
+    attr_reader :branch, :year, :month, :as_of, :incentive_table
 
     def initialize(branch:, year: nil, month: nil)
       @branch = branch
       @year   = year || Date.today.year
       @month  = month || Date.today.month
       @as_of  = Date.new(@year, @month, -1)
+
+      @incentive_table  = Settings.incentive_table
     end
 
     def execute!
@@ -35,6 +37,10 @@ module Turkey
         pure_savers_prev      = by_count_member officer_id, member_counts_prev,    "pure_savers"
         active_members        = by_count_member officer_id, member_counts,         "active_members"
         active_members_prev   = by_count_member officer_id, member_counts_prev,    "active_members"
+
+        user              = User.find(officer_id)
+        is_regular        = user.is_regular
+        incentivized_date = user.incentivized_date
 
         loans                 = repayment_rate_records.select { |r| r["officer"]["id"] == officer["id"] }
         amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
@@ -97,7 +103,35 @@ module Turkey
         interest_portfolio  = loan_p.fetch(:interest) - loan_p.fetch(:interest_paid_due)
         total_portfolio     = principal_portfolio + interest_portfolio
 
+        incentive = 0.00
+        incentive_settings  = incentive_table.select{ |o| principal_rr >= o.min_rr and principal_rr <= o.max_rr }.first
+
+        if incentive_settings.present?
+          portfolio_settings  = incentive_settings.portfolio_table.select{ |p|
+                                  principal_portfolio >= p.min and principal_portfolio <= p.max
+                                }.first
+
+          if portfolio_settings.present?
+            incentive = portfolio_settings.amount
+          end
+        end
+
+        drop_out_demerits = ((Settings.drop_out_demerits_per_member || 0.00) * resigned_members.size)
+        total_demerits    = drop_out_demerits
+        net_incentive     = incentive - total_demerits
+
+        if net_incentive < 0.00
+          net_incentive = 0.00
+        end
+
+        status  = (is_regular and incentivized_date.present? and incentivized_date <= as_of) ? "Regular" : "Trainee / Probation"
+
+        if status != "Regular"
+          net_incentive = 0.00
+        end
+
         {
+          status:                         status,
           resigned_members:                resigned_members,
           count_resigned_members:          resigned_members.size,
           previous_resigned_members:       resigned_members_prev,
@@ -143,6 +177,13 @@ module Turkey
           principal_portfolio:             principal_portfolio,
           interest_portfolio:              interest_portfolio,
           total_portfolio:                 total_portfolio,
+
+          incentive:                      incentive,
+          verbal_warning_demerits:        0.00,
+          written_warning_demerits:       0.00,
+          drop_out_demerits:              drop_out_demerits,
+          total_demerits:                 total_demerits,
+          net_incentive:                  net_incentive
         }.merge(loan_p)
       end
 

@@ -53,10 +53,24 @@ var Index  = (function() {
           window.location.href="/data_stores/monthly_incentives";
         },
         error: function(response) {
-          $message.html("Something went wrong...");
-          $btnConfirmNew.prop("disabled", false);
-          $selectBranch.prop("disabled", false);
-          $inputAsOf.prop("disabled", false);
+          var errors = ["Something went wrong"];
+          console.log(response);
+
+          try {
+            errors  = JSON.parse(response.responseText).errors.full_messages;
+          } catch(e) {
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmNew.prop("disabled", false);
+            $selectBranch.prop("disabled", false);
+            $inputAsOf.prop("disabled", false);
+          }
         }
       });
     });
