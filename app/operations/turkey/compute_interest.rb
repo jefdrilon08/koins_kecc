@@ -146,7 +146,6 @@ module Turkey
           AND subsidiary_id = '#{@member_account.id}'
           #{"AND transacted_at > '#{from}'" if from}
           AND DATE(transacted_at) <= '#{to}'
-          AND NOT (data->>'is_interest' = 'true')
         ORDER BY transacted_at ASC, updated_at ASC, created_at ASC
       SQL
     end
