@@ -1,12 +1,15 @@
 module Turkey
   class ComputeMonthlyIncentive
-    attr_reader :branch, :year, :month, :as_of, :incentive_table
+    attr_reader :branch, :year, :month, :as_of, :incentive_table, :start_date, :end_date
 
     def initialize(branch:, year: nil, month: nil)
       @branch = branch
       @year   = year || Date.today.year
       @month  = month || Date.today.month
       @as_of  = Date.new(@year, @month, -1)
+
+      @start_date = Date.new(@year, @month, 1)
+      @end_date   = @as_of
 
       @incentive_table  = Settings.incentive_table
     end
@@ -15,6 +18,7 @@ module Turkey
       month_prev = as_of - 1.month
       as_of_prev = Date.new(month_prev.year, month_prev.month, -1)
 
+      repayment_rate_prev   = find_data_stores :repayment_rates,          as_of_prev, :meta
       repayment_rate        = find_data_stores :repayment_rates,          as_of,      :meta
       new_and_resigned      = find_data_stores :monthly_new_and_resigned, as_of,      :meta
       new_and_resigned_prev = find_data_stores :monthly_new_and_resigned, as_of_prev, :meta
@@ -187,6 +191,13 @@ module Turkey
         }.merge(loan_p)
       end
 
+      total_incentives      = records.inject(0){ |sum, hash| sum + hash[:net_incentive].to_f.round(2) }
+      total_loans_disbursed = records.inject(0) { |sum, hash| sum + hash[:amount_disbursed].to_f.round(2) }
+      total_active_loaners  = records.inject(0) { |sum, hash| sum + hash[:count_loaners].to_i }
+      total_regular         = User.where(id: officers.pluck("id")).where("is_regular = ? AND incentivized_date <= ?", true, as_of).count
+      average_incentive     = (total_incentives / total_regular).round(2)
+      som_incentive         = (average_incentive * 0.75).round(2)
+
       {
         year:  year,
         month: month,
@@ -194,6 +205,14 @@ module Turkey
         officers: officers,
         branch: { id: branch.id, name: branch.name },
         records: records,
+        total_incentives: total_incentives,
+        total_regular: total_regular,
+        som_incentive: som_incentive,
+        average_incentive: average_incentive,
+        total_loans_disbursed: total_loans_disbursed,
+        total_active_loaners: total_active_loaners,
+        start_date: start_date,
+        end_date: end_date
       }
     end
 

@@ -17,11 +17,19 @@ module MonthlyIncentives
       month_prev = as_of - 1.month
       as_of_prev = Date.new(month_prev.year, month_prev.month, -1)
 
+      repayment_rate_prev   = find_data_stores :repayment_rates,          as_of_prev, :meta
       repayment_rate        = find_data_stores :repayment_rates,          as_of,      :meta
       new_and_resigned      = find_data_stores :monthly_new_and_resigned, as_of,      :meta
       new_and_resigned_prev = find_data_stores :monthly_new_and_resigned, as_of_prev, :meta
       member_counts         = find_data_stores :member_counts,            as_of,      :data
       member_counts_prev    = find_data_stores :member_counts,            as_of_prev, :data
+
+      if repayment_rate_prev.blank?
+        @errors[:messages] << {
+          key: "repayment_rate_prev",
+          message: "No repayment rate previous found for #{as_of_prev}"
+        }
+      end
 
       if repayment_rate.blank?
         @errors[:messages] << {
