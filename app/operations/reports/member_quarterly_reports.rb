@@ -7,6 +7,8 @@ module Reports
       if @start_date.present? && @end_date.present?
         @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed"])
         @resigned_before            = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @end_date, @end_date)
+        @resigned_before_inforce    = ::Members::FetchInsuranceMembers.new(config: {members: @resigned_before, as_of: @end_date, insurance_status: "inforce"}).execute!
+        @resigned_before_lapsed     = ::Members::FetchInsuranceMembers.new(config: {members: @resigned_before, as_of: @end_date, insurance_status: "lapsed"}).execute!
         @gk_members                 = Member.where("member_type = ?", "GK")
         @active_lapsed_members      = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "lapsed")
         @active_inforce_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
@@ -43,6 +45,8 @@ module Reports
       @total_pending = 0
       @total_active_resigned_insurance = 0
       @total_resigned_before = 0
+      @total_resigned_before_inforce = 0
+      @total_resigned_before_lapsed = 0
       @total_male = 0
       @total_gk = 0
       # @total_inforce_male = 0
@@ -81,6 +85,8 @@ module Reports
         member[:pending] = @pending.where(branch_id: branch).count
         member[:active_resigned_insurance] = @active_resigned_insurance.where(branch_id: branch).count
         member[:resigned_before] = @resigned_before.where(branch_id: branch).count
+        member[:resigned_before_inforce] = @resigned_before_inforce.select{|o| o[:branch_id] == branch}.count
+        member[:resigned_before_lapsed] = @resigned_before_lapsed.select{|o| o[:branch_id] == branch}.count
         
         member[:male_count] = @male_members.where(branch_id: branch).count
         # member[:male_inforce_count] = @active_inforce_members.where(branch_id: branch, gender: "Male").count
@@ -113,6 +119,8 @@ module Reports
         @total_pending += @pending.where(branch_id: branch).count
         @total_active_resigned_insurance += @active_resigned_insurance.where(branch_id: branch).count
         @total_resigned_before += @resigned_before.where(branch_id: branch).count
+        @total_resigned_before_inforce += @resigned_before_inforce.select{|o| o[:branch_id] == branch}.count
+        @total_resigned_before_lapsed += @resigned_before_lapsed.select{|o| o[:branch_id] == branch}.count
         @total_male += @male_members.where(branch_id: branch).count
         @total_gk += @gk_members.where(branch_id: branch).count
         # @total_inforce_male += @active_inforce_members.where(branch_id: branch, gender: "Male").count
@@ -144,9 +152,9 @@ module Reports
       total[:total_resigned] = @total_resigned
       total[:total_all_resigned] = @total_all_resigned
       total[:total_new] = @total_new
-      total[:total_active] = @total_active + @total_resigned_before
-      total[:total_active_lapsed] = @total_active_lapsed
-      total[:total_active_inforce] = @total_active_inforce
+      total[:total_active] = @total_active + @total_resigned_before + @total_resigned_before_lapsed + @total_resigned_before_inforce
+      total[:total_active_lapsed] = @total_active_lapsed + @total_resigned_before_inforce
+      total[:total_active_inforce] = @total_active_inforce + @total_resigned_before_lapsed
       total[:total_pending] = @total_pending
       total[:total_active_resigned_insurance] = @total_active_resigned_insurance
       total[:total_male] = @total_male
