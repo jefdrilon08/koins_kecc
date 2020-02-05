@@ -1,4 +1,49 @@
 namespace :adjust do
+  task :fill_recognition_date_from_membership_payment => :environment do
+    membership_name = ENV['MEMBERSHIP_NAME'] || 'K-MBA'
+    membership_type = ENV['MEMBERSHIP_TYPE'] || 'Insurance'
+
+    query = "
+      SELECT
+        members.id,
+        members.first_name,
+        members.middle_name,
+        members.last_name,
+        members.status,
+        members.insurance_status,
+        members.data,
+        membership_payment_records.date_paid
+      FROM
+        members
+      INNER JOIN
+        membership_payment_records 
+        ON membership_payment_records.member_id = members.id 
+        AND membership_name = '#{membership_name}' 
+        AND membership_type = '#{membership_type}'
+      WHERE
+        members.data->>'recognition_date' IS NULL
+        AND members.status IN ('active', 'resigned', 'resign')
+    "
+
+    result  = ActiveRecord::Base.connection.execute(query).to_a
+    size    = result.size
+
+    puts "Found #{size} records"
+
+    result.each_with_index do |r, i|
+      m                       = Member.find(r.fetch("id"))
+      data                    = m.data.with_indifferent_access
+      data[:recognition_date] = r.fetch("date_paid")
+
+      m.update!(data: data)
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+    end
+
+    puts "\nDone."
+  end
+
   task :asign_user_to_loans => :environment do
     branch  = Branch.find(ENV['BRANCH_ID'])
 

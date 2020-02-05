@@ -193,28 +193,28 @@
           #{number_to_currency(@data[:records][i][:net_incentive], unit: '')}
 
 
-  %hr
-  %table.table.table-bordred.table-sm
-    %tbody
-      %tr
-        %td
-          %strong
-            Total SO Incentive
-        %td.text-right
-          #{number_to_currency(@data[:total_incentives], unit: '')}
-        %td
-          %strong
-            Total Regular SO
-        %td.text-right
-          #{@data[:total_regular]}
-      %tr
-        %td
-          %strong
-            Average SO Incentive
-        %td.text-right
-          #{number_to_currency(@data[:average_incentive], unit: '')}
-        %td
-          %strong
-            SOM Incentive
-        %td.text-right
-          #{number_to_currency(@data[:som_incentive], unit: '')}
+%hr
+%table.table.table-bordered.table-sm
+  %tbody
+    %tr
+      %td
+        %strong
+          Total SO Incentive
+      %td.text-right
+        #{number_to_currency(@data[:total_incentives], unit: '')}
+      %td
+        %strong
+          Total Regular SO
+      %td.text-right
+        #{@data[:total_regular]}
+    %tr
+      %td
+        %strong
+          Average SO Incentive
+      %td.text-right
+        #{number_to_currency(@data[:average_incentive], unit: '')}
+      %td
+        %strong
+          SOM Incentive
+      %td.text-right
+        #{number_to_currency(@data[:som_incentive], unit: '')}
