@@ -112,9 +112,9 @@ module Turkey
 
     def starting_transaction(tx, transacted_at)
       {
-        id: (tx ? tx.id : ""),
-        transacted_at: transacted_at,
+        id:             (tx ? tx.id : ""),
         ending_balance: (tx ? tx.data["ending_balance"].to_f.round(2) : 0.0),
+        transacted_at:  transacted_at,
       }
     end
 
@@ -146,7 +146,6 @@ module Turkey
           AND subsidiary_id = '#{@member_account.id}'
           #{"AND transacted_at > '#{from}'" if from}
           AND DATE(transacted_at) <= '#{to}'
-          AND NOT (data->>'is_interest' = 'true')
         ORDER BY transacted_at ASC, updated_at ASC, created_at ASC
       SQL
     end

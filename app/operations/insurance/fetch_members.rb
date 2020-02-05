@@ -1,5 +1,6 @@
 module Insurance
   class FetchMembers
+    attr_accessor :data
     def initialize(config:)
       @config             = config
       @branch             = @config[:branch]

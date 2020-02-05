@@ -18,8 +18,10 @@ class ProcessMonthlyIncentive < ApplicationJob
         month: month
       }
 
-      data_result = ::Branches::ComputeMonthlyIncentive.new(
-                      config: config
+      data_result = ::Turkey::ComputeMonthlyIncentive.new(
+                      branch: branch,
+                      year: year,
+                      month: month
                     ).execute!
 
       record.update!(
