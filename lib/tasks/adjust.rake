@@ -4,7 +4,7 @@ namespace :adjust do
     membership_type = ENV['MEMBERSHIP_TYPE'] || 'Insurance'
 
     query = "
-      SELECT
+      SELECT DISTINCT ON (members.id)
         members.id,
         members.first_name,
         members.middle_name,
@@ -18,11 +18,12 @@ namespace :adjust do
       INNER JOIN
         membership_payment_records 
         ON membership_payment_records.member_id = members.id 
-        AND membership_name = '#{membership_name}' 
-        AND membership_type = '#{membership_type}'
+        AND membership_payment_records.membership_name = '#{membership_name}' 
+        AND membership_payment_records.membership_type = '#{membership_type}'
       WHERE
-        members.data->>'recognition_date' IS NULL
-        AND members.status IN ('active', 'resigned', 'resign')
+        members.status IN ('active', 'resigned', 'resign')
+      ORDER BY
+        members.id, membership_payment_records.date_paid DESC
     "
 
     result  = ActiveRecord::Base.connection.execute(query).to_a
