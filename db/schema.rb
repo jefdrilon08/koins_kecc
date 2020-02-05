@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 2020_02_04_063832) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY ((ARRAY['deposit'::character varying, 'withdraw'::character varying])::text[])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
+    t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
