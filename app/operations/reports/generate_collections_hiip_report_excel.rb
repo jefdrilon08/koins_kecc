@@ -6,12 +6,23 @@ module Reports
       @cluster = cluster
       @branch = branch
 
-      if @cluster.present? && @branch == "--ALL--"
-        @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
-      else
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
-      end
+    if @cluster.present? && @branch.present? && @start_date.present? && @end_date.present?
+      @branches  = Branch.where(cluster_id: @cluster, id: @branch)
+      @hiip_claims = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branches.ids)
+    elsif @cluster.present? && @start_date.present? && @end_date.present?
+      @branches  = Branch.where(cluster_id: @cluster)
+      @hiip_claims = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branches.ids)
+    elsif @start_date.present? && @end_date.present?
+      @hiip_claims = HiipClaim.where("date_posted >= ? AND date_posted <= ?", @start_date, @end_date)
+    elsif @cluster.present? && @branch.present? && @branch != "--ALL--"
+      @branches  = Branch.where(cluster_id: @cluster, id: @branch)
+      @hiip_claims = HiipClaim.where("branch_id IN (?)", @branches.ids)
+    elsif @cluster.present? && @branch == "--ALL--"
+      @branches  = Branch.where(cluster_id: @cluster)
+      @hiip_claims = HiipClaim.where("branch_id IN (?)", @branches.ids)
+    else
+      @hiip_claims   = HiipClaim.all
+    end
 
       @p          = Axlsx::Package.new
     end
@@ -51,26 +62,26 @@ module Reports
             "Balance"
           ], style: header
 
-          @hiip_claim.each_with_index do |hiip_claim|
-              sheet.add_row [
-                  hiip_claim.member.full_name,
-                  hiip_claim.policy_number,
-                  hiip_claim.branch.name,
-                  hiip_claim.center.name,
-                  hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.date_admitted.strftime("%b %d, %Y"),
-                  hiip_claim.date_discharged.strftime("%b %d, %Y"),
-                  hiip_claim.number_ofdays_tobepaid,
-                  hiip_claim.date_of_birth.strftime("%b %d, %Y"),
-                  hiip_claim.age,
-                  hiip_claim.reason_of_confinement,
-                  hiip_claim.diagnosis,
-                  hiip_claim.check_payee,
-                  hiip_claim.amount,
-                  hiip_claim.balance,
-                ], style: [nil]             
-              end
+          @hiip_claims.each_with_index do |hiip_claim|
+            sheet.add_row [
+                hiip_claim.member.full_name,
+                hiip_claim.policy_number,
+                hiip_claim.branch.name,
+                hiip_claim.center.name,
+                hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
+                hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
+                hiip_claim.date_admitted.strftime("%b %d, %Y"),
+                hiip_claim.date_discharged.strftime("%b %d, %Y"),
+                hiip_claim.number_ofdays_tobepaid,
+                hiip_claim.date_of_birth.strftime("%b %d, %Y"),
+                hiip_claim.age,
+                hiip_claim.reason_of_confinement,
+                hiip_claim.diagnosis,
+                hiip_claim.check_payee,
+                hiip_claim.amount,
+                hiip_claim.balance,
+              ], style: [nil]             
+            end
           end
         end
       @p

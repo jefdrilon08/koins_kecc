@@ -100,7 +100,20 @@
                           %span.info-box-icon.bg-blue
                           %i.fa.fa-download
                             %span.info-box-text
-                              Member Excel Download Tools
+                              Members Excel Download Tools
+          %hr
+          .box
+            .box-body      
+              #export-members-with-beneficiaries-segment
+                .row
+                  .col-md-12
+                    .form-group
+                      = link_to "#", class: 'btn-download-members-with-beneficiaries' do
+                        .info-box
+                          %span.info-box-icon.bg-blue
+                          %i.fa.fa-download
+                            %span.info-box-text
+                              Members With Beneficiaries Excel Download Tools
 
 = javascript_include_tag "exports/Exports"
 

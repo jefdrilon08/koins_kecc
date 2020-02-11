@@ -11,7 +11,7 @@
     .col-sm-3
       .form-group
         %label As of
-        = text_field_tag :as_of, nil,  class: "form-control",type: "date" , id: "as-of" 
+        = text_field_tag :as_of, nil, value: Date.today.end_of_year, class: "form-control",type: "date" , id: "as-of" 
     .col-sm-3
       .form-group
         %label Actions

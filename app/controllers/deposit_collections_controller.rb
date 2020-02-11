@@ -24,6 +24,7 @@ class DepositCollectionsController < ApplicationController
       @status = params[:status]
       @deposit_collections = @deposit_collections.where(status: @status)
     end
+    
     @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 

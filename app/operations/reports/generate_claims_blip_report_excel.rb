@@ -9,51 +9,51 @@ module Reports
       @branch = branch
 
       if @branch.present? && @type_of_insurance_policy.present? && @classification_of_insured.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND type_of_insurance_policy = ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND type_of_insurance_policy = ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @branch.present? && @classification_of_insured.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @branch.present? && @type_of_insurance_policy.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND type_of_insurance_policy = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND type_of_insurance_policy = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @branch.present? && @type_of_insurance_policy.present? && @start_date.present? && @end_date.present? && @classification_of_insured.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND type_of_insurance_policy = ? AND classification_of_insured = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @classification_of_insured).order("date_prepared DESC")  
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND type_of_insurance_policy = ? AND classification_of_insured = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @classification_of_insured).order("created_at DESC")  
       elsif @type_of_insurance_policy.present? && @classification_of_insured.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND type_of_insurance_policy = ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @type_of_insurance_policy, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND type_of_insurance_policy = ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @type_of_insurance_policy, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @branch.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @branch.present? && @start_date.present? && @end_date.present? && @classification_of_insured.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND classification_of_insured = ?", @start_date, @end_date, @branch, @classification_of_insured).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND classification_of_insured = ?", @start_date, @end_date, @branch, @classification_of_insured).order("created_at DESC")
       elsif @branch.present? && @start_date.present? && @end_date.present? && @type_of_insurance_policy.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND type_of_insurance_policy = ?", @start_date, @end_date, @branch, @type_of_insurance_policy).order("date_prepared DESC") 
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ? AND type_of_insurance_policy = ?", @start_date, @end_date, @branch, @type_of_insurance_policy).order("created_at DESC") 
       elsif @classification_of_insured.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND classification_of_insured = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @classification_of_insured, @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @classification_of_insured.present? && @start_date.present? && @end_date.present? && @type_of_insurance_policy.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND classification_of_insured = ? AND type_of_insurance_policy = ?", @start_date, @end_date, @classification_of_insured, @type_of_insurance_policy).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND classification_of_insured = ? AND type_of_insurance_policy = ?", @start_date, @end_date, @classification_of_insured, @type_of_insurance_policy).order("created_at DESC")
       elsif @type_of_insurance_policy.present? && @start_date.present? && @end_date.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND type_of_insurance_policy = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")    
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND type_of_insurance_policy = ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @branch, @type_of_insurance_policy, @category_of_cause_of_death_tpd_accident).order("created_at DESC")    
       elsif @branch.present? && @start_date.present? && @end_date.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("created_at DESC")
       elsif @classification_of_insured.present? && @start_date.present? && @end_date.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND classification_of_insured = ?", @start_date, @end_date, @classification_of_insured).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND classification_of_insured = ?", @start_date, @end_date, @classification_of_insured).order("created_at DESC")
       elsif @type_of_insurance_policy.present? && @start_date.present? && @end_date.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND type_of_insurance_policy = ?", @start_date, @end_date, @type_of_insurance_policy).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND type_of_insurance_policy = ?", @start_date, @end_date, @type_of_insurance_policy).order("created_at DESC")
       elsif @category_of_cause_of_death_tpd_accident.present? && @start_date.present? && @end_date.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @category_of_cause_of_death_tpd_accident).order("date_prepared DESC") 
+        @claims = Claim.where("created_at >= ? AND created_at <= ? AND category_of_cause_of_death_tpd_accident = ?", @start_date, @end_date, @category_of_cause_of_death_tpd_accident).order("created_at DESC") 
       elsif @branch.present? && @classification_of_insured.present?
-        @claims = Claim.where("classification_of_insured = ? AND branch_id = ?", @classification_of_insured, @branch).order("date_prepared DESC")
+        @claims = Claim.where("classification_of_insured = ? AND branch_id = ?", @classification_of_insured, @branch).order("created_at DESC")
       elsif @branch.present? && @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("category_of_cause_of_death_tpd_accident = ? AND branch_id = ?", @category_of_cause_of_death_tpd_accident, @branch).order("date_prepared DESC")
+        @claims = Claim.where("category_of_cause_of_death_tpd_accident = ? AND branch_id = ?", @category_of_cause_of_death_tpd_accident, @branch).order("created_at DESC")
       elsif @branch.present? && @type_of_insurance_policy.present?
-        @claims = Claim.where("type_of_insurance_policy = ? AND branch_id = ?", @type_of_insurance_policy, @branch).order("date_prepared DESC")          
+        @claims = Claim.where("type_of_insurance_policy = ? AND branch_id = ?", @type_of_insurance_policy, @branch).order("created_at DESC")          
       elsif @start_date.present? && @end_date.present?
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ?", @start_date, @end_date).order("date_prepared DESC")
+        @claims = Claim.where("created_at >= ? AND created_at <= ?", @start_date, @end_date).order("created_at DESC")
       elsif @category_of_cause_of_death_tpd_accident.present?
-        @claims = Claim.where("category_of_cause_of_death_tpd_accident = ?", @category_of_cause_of_death_tpd_accident).order("date_prepared DESC")
+        @claims = Claim.where("category_of_cause_of_death_tpd_accident = ?", @category_of_cause_of_death_tpd_accident).order("created_at DESC")
       elsif @type_of_insurance_policy.present?
-        @claims = Claim.where("type_of_insurance_policy = ?", @type_of_insurance_policy).order("date_prepared DESC")
+        @claims = Claim.where("type_of_insurance_policy = ?", @type_of_insurance_policy).order("created_at DESC")
       elsif @classification_of_insured.present?
-        @claims = Claim.where("classification_of_insured = ?", @classification_of_insured).order("date_prepared DESC")      
+        @claims = Claim.where("classification_of_insured = ?", @classification_of_insured).order("created_at DESC")      
       else  
-        @claims = Claim.all.order("date_prepared DESC")
+        @claims = Claim.all.order("created_at DESC")
       end
 
       @p        = Axlsx::Package.new
@@ -115,7 +115,7 @@ module Reports
 
           @claims.each do |claim|
             sheet.add_row [
-                claim.date_prepared,
+                claim.created_at.to_date,
                 claim.branch.name,
                 claim.member.full_name,
                 claim.policy_number,
@@ -130,8 +130,8 @@ module Reports
                 claim.face_amount,
                 claim.arrears,
                 claim.date_of_death_tpd_accident,
-                claim.date_prepared,
-                claim.date_prepared,
+                claim.created_at.to_date,
+                claim.created_at.to_date,
                 claim.cause_of_death_tpd_accident,
                 claim.category_of_cause_of_death_tpd_accident,
                 claim.face_amount,
