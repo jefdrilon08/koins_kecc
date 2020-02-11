@@ -1,4 +1,4 @@
-module WithdrawalCollections
+module InsuranceWithdrawalCollections
   class BuildAccountingEntry
     def initialize(config:)
       @config = config
