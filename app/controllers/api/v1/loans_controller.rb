@@ -18,7 +18,7 @@ module Api
         if errors[:messages].size > 0
           render json: errors, status: 400
         else
-          adjustment_record = ::Loasn::ApproveAdjustmentRecord.new(
+          adjustment_record = ::Loans::ApproveAdjustmentRecord.new(
                                 config: config
                               ).execute!
 
