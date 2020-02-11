@@ -140,6 +140,13 @@
     %tr
       %td
         %strong
+          Loans Disbursed
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{@data[:records][i][:count_loan_disbursements]}
+    %tr
+      %td
+        %strong
           Incentive
       - @data[:officers].each_with_index do |o, i|
         %td.text-right

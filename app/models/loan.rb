@@ -59,6 +59,10 @@ class Loan < ApplicationRecord
     if self.user.blank? and self.center.present?
       self.user = self.center.user 
     end
+
+    if self.date_approved.present? and self.date_released.blank?
+      self.date_released = self.date_approved
+    end
   end
 
   def co_maker_one

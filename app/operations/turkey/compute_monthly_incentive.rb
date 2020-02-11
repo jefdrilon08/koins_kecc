@@ -47,8 +47,14 @@ module Turkey
         incentivized_date = user.incentivized_date
 
         loans                 = repayment_rate_records.select { |r| r["officer"]["id"] == officer["id"] }
-        amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
-        loan_disbursements    = loans.map do |l|
+        loan_disbursements    = loans.select{ |o|
+                                    if o.fetch("date_released").present? and o.fetch("date_released") != "N/A"
+                                      date_released = o.fetch("date_released").try(:to_date)
+                                      date_released.month == month and date_released.year == year
+                                    else
+                                      false
+                                    end
+                                  }.map do |l|
                                   {
                                     id:            l.dig("id"),
                                     principal:     l.dig("principal"),
@@ -63,6 +69,9 @@ module Turkey
                                     },
                                   }
                                 end
+
+        #amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
+        amount_disbursed  = loan_disbursements.inject(0){ |sum, hash| sum + hash[:principal].to_f }
 
         loan_attrs = %i[
           interest

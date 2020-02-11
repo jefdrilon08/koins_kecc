@@ -1,4 +1,51 @@
 namespace :adjust do
+  task :fill_date_released => :environment do
+    loans = Loan.where(status: ['active', 'paid'], date_released: nil)
+
+    sets  = loans.map{ |o|
+              "('#{o.id}','#{o.date_approved}')"
+            }.join(",")
+
+    query = "
+      UPDATE loans AS l SET
+        date_released = DATE(c.date_approved)
+      FROM (values
+        #{sets}
+      ) AS c(loan_id, date_approved)
+      WHERE c.loan_id = l.id::text
+    "
+
+    ActiveRecord::Base.connection.execute(query)
+
+    puts "Done."
+  end
+
+  task :fill_date_completed_for_paid_loans => :environment do
+    branch  = Branch.find(ENV['BRANCH_ID'])
+
+    query = "
+      SELECT DISTINCT ON (loans.id)
+        loans.id,
+        loans.pn_number,
+        loans.status,
+        loans.date_completed,
+        account_transactions.transacted_at
+      FROM
+        loans
+      INNER JOIN
+        account_transactions
+        ON account_transactions.subsidiary_id = loans.id AND status = 'approved'
+      WHERE
+        loans.branch_id = '#{branch.id}' AND loans.status = 'paid'
+      GROUP BY
+        loans.id
+      ORDER BY
+        account_transactions.transacted_at DESC
+    "
+
+    result  = ActiveRecord::Base.connection.execute(query).to_a
+  end
+
   task :fill_recognition_date_from_membership_payment => :environment do
     membership_name = ENV['MEMBERSHIP_NAME'] || 'K-MBA'
     membership_type = ENV['MEMBERSHIP_TYPE'] || 'Insurance'
