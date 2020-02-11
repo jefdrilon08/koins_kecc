@@ -37,7 +37,7 @@ module Turkey
           INNER JOIN members m ON m.id = ma.member_id
           INNER JOIN centers c ON c.id = m.center_id
           INNER JOIN users u ON u.id = c.user_id
-        WHERE at.transacted_at <= '#{as_of}'
+        WHERE DATE(at.transacted_at) <= DATE('#{as_of}')
           AND m.branch_id = '#{branch.id}'
           AND at.transaction_type IN ('deposit', 'withdraw')
           AND at.status IN ('approved')
