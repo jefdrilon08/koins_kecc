@@ -6,10 +6,11 @@
     = link_to "/data_stores/soa_funds" do
       .fa.fa-database
       SOA Funds
-  %li.breadcrumb-item
-    .fa.fa-file
-    #{@record.data.with_indifferent_access[:branch][:name]} - 
-    #{@record.meta.with_indifferent_access[:start_date].to_date.strftime("%B %d, %Y")} to #{@record.meta.with_indifferent_access[:end_date].to_date.strftime("%B %d, %Y")}
+  - if !@record.error?
+    %li.breadcrumb-item
+      .fa.fa-file
+      #{@record.data.with_indifferent_access[:branch][:name]} - 
+      #{@record.meta.with_indifferent_access[:start_date].to_date.strftime("%B %d, %Y")} to #{@record.meta.with_indifferent_access[:end_date].to_date.strftime("%B %d, %Y")}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
       = link_to "/data_stores/soa_funds/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
