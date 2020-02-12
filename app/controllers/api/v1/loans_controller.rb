@@ -184,6 +184,11 @@ module Api
             loan: loan
           ).execute!
 
+          # Setup original maturity date
+          ::Loans::UpdateOriginalMaturityDate.new(
+            loan: loan
+          ).execute!
+
           ActivityLog.create!(
             content: "#{current_user.full_name} approved loan #{loan.id}",
             activity_type: "approval",

@@ -1,4 +1,40 @@
 namespace :adjust do
+  task :insert_insurance_from_loans => :environment do
+  end
+
+  task :update_loans_original_maturity_date => :environment do
+    loans = Loan.active_or_paid
+
+    if ENV['BRANCH_ID'].present?
+      loans = loans.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    sets  = loans.map{ |o|
+              cmd = ::Loans::UpdateOriginalMaturityDate.new(
+                      loan: o,
+                      save: false
+                    )
+              cmd.execute!
+
+              original_maturity_date  = cmd.original_maturity_date
+
+              "('#{o.id}', '#{original_maturity_date}')"
+            }.join(",")
+
+    query = "
+      UPDATE loans AS l SET
+        original_maturity_date  = DATE(c.original_maturity_date)
+      FROM (values
+        #{sets}
+      ) AS c(loan_id, original_maturity_date)
+      WHERE c.loan_id = l.id::text
+    "
+
+    ActiveRecord::Base.connection.execute(query)
+
+    puts "Done."
+  end
+
   task :fill_date_released => :environment do
     loans = Loan.where(status: ['active', 'paid'], date_released: nil)
 
