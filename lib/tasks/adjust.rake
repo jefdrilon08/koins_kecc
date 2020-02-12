@@ -838,6 +838,8 @@ namespace :adjust do
                 else
                   new_status = "dormant"
                 end
+              elsif recognition_date.present? and transactions_count == 0
+                new_status = "dormant"
               else
                 new_status = "pending"
               end
