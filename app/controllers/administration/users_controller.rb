@@ -33,6 +33,7 @@ module Administration
     end
 
     def show
+      @user_demerits  = @user.user_demerits
     end
 
     private

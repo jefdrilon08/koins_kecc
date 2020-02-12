@@ -69,6 +69,13 @@
       - @data[:officers].each_with_index do |o, i|
         %td.text-right
           #{(@data[:records][i][:principal_rr] * 100).round(2)} %
+    %tr
+      %td
+        %strong
+          Previous Repayment Rate
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{(@data[:records][i][:prev_principal_rr] * 100).round(2)} %
 
     %tr
       %td
@@ -105,6 +112,7 @@
           - outreach              = @data[:records][i][:count_loaners] + @data[:records][i][:count_pure_savers] + @data[:records][i][:count_active_members]
           - drop_out_percentage = ((beginning_of_outreach.to_f + additional_members.to_f) - outreach) / beginning_of_outreach
           #{(drop_out_percentage * 100).round(2)} %
+
     %tr
       %td
         %strong
@@ -124,6 +132,14 @@
     %tr
       %td
         %strong
+          Previous PAR Rate
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{(@data[:records][i][:prev_par] * 100).round(2)} %
+
+    %tr
+      %td
+        %strong
           Portfolio
       - @data[:officers].each_with_index do |o, i|
         %td.text-right
@@ -137,6 +153,13 @@
         %td.text-right
           #{number_to_currency(@data[:records][i][:amount_disbursed], unit: "")}
 
+    %tr
+      %td
+        %strong
+          Loans Disbursed
+      - @data[:officers].each_with_index do |o, i|
+        %td.text-right
+          #{@data[:records][i][:count_loan_disbursements]}
     %tr
       %td
         %strong

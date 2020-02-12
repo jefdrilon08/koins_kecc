@@ -6,7 +6,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 20 } %>
   username: <%= ENV["KOINS_DATABASE_USERNAME"] %>
   password: <%= ENV["KOINS_DATABASE_PASSWORD"] %>
-  host: localhost
+  host: <%= ENV["KOINS_DATABASE_HOST"] %>
 
 development:
   <<: *default
@@ -67,6 +67,6 @@ test:
 #
 production:
   <<: *default
-  database: koins_2_production
+  database: <%= ENV['KOINS_DATABASE_NAME'] %>
   username: <%= ENV['KOINS_DATABASE_USERNAME'] %>
   password: <%= ENV['KOINS_DATABASE_PASSWORD'] %>

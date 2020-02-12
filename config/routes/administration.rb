@@ -1,5 +1,8 @@
 namespace :administration do
-  resources :users, except: [:destroy]
+  resources :users, except: [:destroy] do
+    resources :user_demerits
+  end
+
   resources :account_transactions, only: [:show]
   resources :areas
   resources :clusters

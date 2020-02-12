@@ -25,7 +25,9 @@ module Turkey
       member_counts         = find_data_stores :member_counts,            as_of,      :data
       member_counts_prev    = find_data_stores :member_counts,            as_of_prev, :data
 
-      repayment_rate_records = repayment_rate.data.fetch("records")
+      repayment_rate_records      = repayment_rate.data.fetch("records")
+      prev_repayment_rate_records = repayment_rate_prev.data.fetch("records")
+
       officers = repayment_rate_records.pluck("officer").uniq
 
       records = officers.map do |officer|
@@ -47,8 +49,16 @@ module Turkey
         incentivized_date = user.incentivized_date
 
         loans                 = repayment_rate_records.select { |r| r["officer"]["id"] == officer["id"] }
-        amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
-        loan_disbursements    = loans.map do |l|
+        prev_loans            = prev_repayment_rate_records.select{ |r| r["officer"]["id"] == officer["id"] }
+
+        loan_disbursements    = loans.select{ |o|
+                                    if o.fetch("date_released").present? and o.fetch("date_released") != "N/A"
+                                      date_released = o.fetch("date_released").try(:to_date)
+                                      date_released.month == month and date_released.year == year
+                                    else
+                                      false
+                                    end
+                                  }.map do |l|
                                   {
                                     id:            l.dig("id"),
                                     principal:     l.dig("principal"),
@@ -63,6 +73,9 @@ module Turkey
                                     },
                                   }
                                 end
+
+        #amount_disbursed      = loans.pluck("principal").map(&:to_f).sum
+        amount_disbursed  = loan_disbursements.inject(0){ |sum, hash| sum + hash[:principal].to_f }
 
         loan_attrs = %i[
           interest
@@ -90,14 +103,26 @@ module Turkey
           hash
         end
 
+        loan_prev = prev_loans.inject({}) do |hash, loan|
+          loan_attrs.each { |attr| hash[attr] = hash[attr].to_f + loan[attr.to_s].to_f }
+          hash
+        end
+
         # RR = (Paid Due - Balance) / Paid Due
         principal_rr = (loan_p.fetch(:principal_paid_due) - loan_p.fetch(:principal_balance)) / loan_p.fetch(:principal_paid_due)
         interest_rr  = (loan_p.fetch(:interest_paid_due)  - loan_p.fetch(:interest_balance))  / loan_p.fetch(:interest_paid_due)
         total_rr     = (loan_p.fetch(:total_paid_due)     - loan_p.fetch(:total_balance))     / loan_p.fetch(:total_paid_due)
 
+        prev_principal_rr = (loan_prev.fetch(:principal_paid_due) - loan_prev.fetch(:principal_balance)) / loan_prev.fetch(:principal_paid_due)
+        prev_interest_rr  = (loan_prev.fetch(:interest_paid_due)  - loan_prev.fetch(:interest_balance))  / loan_prev.fetch(:interest_paid_due)
+        prev_total_rr     = (loan_prev.fetch(:total_paid_due)     - loan_prev.fetch(:total_balance))     / loan_prev.fetch(:total_paid_due)
+
         # Par amount: overall * balance
         par_amount = loan_p.fetch(:principal_balance), # ???
         par        = loan_p.fetch(:principal_balance) / loan_p.fetch(:principal),
+
+        prev_par_amount = loan_prev.fetch(:principal_balance),
+        prev_par        = loan_prev.fetch(:principal_balance) / loan_prev.fetch(:principal),
 
         principal_past_due = loan_p.fetch(:principal_balance), # ???
         interest_past_due  = loan_p.fetch(:interest_balance), # ???
@@ -171,8 +196,15 @@ module Turkey
           interest_rr:                     [interest_rr, 1].min,
           total_rr:                        [total_rr, 1].min,
 
+          prev_principal_rr:                [prev_principal_rr, 1].min, # Max is 100%
+          prev_interest_rr:                 [prev_interest_rr, 1].min,
+          prev_total_rr:                    [prev_total_rr, 1].min,
+
           par_amount:                      par_amount,
           par:                             par,
+
+          prev_par_amount:                  prev_par_amount,
+          prev_par:                         prev_par,
 
           principal_past_due:              principal_past_due,
           interest_past_due:               interest_past_due,

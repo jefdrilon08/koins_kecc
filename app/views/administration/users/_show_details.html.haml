@@ -1,5 +1,19 @@
 .card
   .card-body
+    %h5
+      Demerits
+    %hr
+    - if @user_demerits.size > 0
+      = render partial: "user_demerits"
+    - else
+      %p
+        No demerits for this user
+    .row
+      .col
+        .text-right
+          = link_to new_administration_user_user_demerit_path(@user) do
+            .fa.fa-plus
+            New Demerit
     - if current_user.is_mis?
       = render partial: "branch_manager"
 

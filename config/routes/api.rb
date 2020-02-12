@@ -291,6 +291,8 @@ namespace :api do
     end
 
     namespace :administration do
+      post "/user_demerits/approve", to: "user_demerits#approve"
+
       get "/user_branches", to: "user_branches#index"
       post "/user_branches/toggle", to: "user_branches#toggle"
       
