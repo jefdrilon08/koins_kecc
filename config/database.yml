@@ -67,6 +67,6 @@ test:
 #
 production:
   <<: *default
-  database: koins_2_production
+  database: <%= ENV['KOINS_DATABASE_NAME'] %>
   username: <%= ENV['KOINS_DATABASE_USERNAME'] %>
   password: <%= ENV['KOINS_DATABASE_PASSWORD'] %>
