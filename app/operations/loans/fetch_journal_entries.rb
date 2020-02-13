@@ -5,6 +5,7 @@ module Loans
 
       @accounting_code_id = @config[:accounting_code_id]
       @branch             = @config[:branch]
+      @account_subtype    = @config[:account_subtype] || "CLIP"
       
       @data = {
         branch: {
@@ -34,6 +35,11 @@ module Loans
                           member_id             = r.fetch("member_id")
                           reference_number      = r.fetch("reference_number")
                           book                  = r.fetch("book")
+                          member_account_id     = r.fetch("member_account_id")
+                          num_installments      = r.fetch("num_installments")
+                          term                  = r.fetch("term")
+                          original_maturity_date  = r.fetch("original_maturity_date")
+                          account_transaction_id  = r.fetch("account_transaction_id")
 
                           {
                             id: id,
@@ -41,6 +47,7 @@ module Loans
                             interest: interest,
                             first_date_of_payment: first_date_of_payment,
                             maturity_date: maturity_date,
+                            original_maturity_date: original_maturity_date,
                             accounting_entry_id: accounting_entry_id,
                             journal_entry_id: journal_entry_id,
                             amount: amount,
@@ -50,7 +57,9 @@ module Loans
                             date_approved: date_approved,
                             date_released: date_released,
                             reference_number: reference_number,
-                            book: book
+                            book: book,
+                            member_account_id: member_account_id,
+                            account_transaction_id: account_transaction_id
                           }
                         }
       @data
@@ -75,7 +84,12 @@ module Loans
                     loan_products.name AS loan_product_name,
                     loans.date_approved,
                     loans.date_released,
-                    members.id AS member_id
+                    loans.num_installments,
+                    loans.term,
+                    loans.original_maturity_date,
+                    members.id AS member_id,
+                    member_accounts.id AS member_account_id,
+                    account_transactions.id AS account_transaction_id
                   FROM
                     loans
                   INNER JOIN members
@@ -93,11 +107,21 @@ module Loans
                       accounting_entries.status = 'approved'
                       AND
                       accounting_entries.branch_id = '#{@branch.id}'
+                  INNER JOIN member_accounts
+                    ON
+                      member_accounts.member_id = members.id
+                    AND member_accounts.account_subtype = '#{@account_subtype}'
                   INNER JOIN journal_entries
                     ON
                       journal_entries.accounting_entry_id = accounting_entries.id
                       AND
                       journal_entries.accounting_code_id = '#{@accounting_code_id}'
+                  LEFT JOIN account_transactions
+                    account_transactions
+                    ON account_transactions.subsidiary_id = member_accounts.id
+                    AND account_transactions.status = 'approved'
+                    AND ROUND(account_transactions.amount, 2) = ROUND(journal_entries.amount, 2)
+                    AND DATE(account_transactions.transacted_at) = DATE(loans.date_approved)
                   WHERE
                     loans.status IN ('active', 'paid') AND loans.branch_id = '#{@branch.id}'
                 EOS

@@ -1,5 +1,106 @@
 namespace :adjust do
   task :insert_insurance_from_loans => :environment do
+    account_subtype     = ENV['ACCOUNT_SUBTYPE'] || "CLIP"
+    accounting_code_id  = ENV['ACCOUNTING_CODE_ID'] || "af83062d-628a-4fdd-acfd-bdebe2696513"
+    branch              = Branch.find(ENV['BRANCH_ID'] || "3726405b-777c-4b61-b6a5-7a4b48db62b6")
+
+    puts "Fetching journal entry amounts..."
+    cmd = ::Loans::FetchJournalEntries.new(
+            config: {
+              branch: branch,
+              accounting_code_id: accounting_code_id,
+              account_subtype: account_subtype
+            }
+          )
+
+    data  = cmd.execute!
+
+    values  = []
+
+    puts "Inserting records..."
+    data[:records].select{ |o| o[:account_transaction_id].blank? }.each do |r|
+      insurance_account_id      = r[:member_account_id]
+      transaction_type          = 'deposit'
+      transacted_at             = r[:date_approved]
+      created_at                = r[:date_approved]
+      updated_at                = r[:date_approved]
+      amount                    = r[:amount].to_f.round(2)
+      status                    = 'approved'
+
+      subsidiary_id     = insurance_account_id
+      subsidiary_type   = 'MemberAccount'
+
+      trans_data  = {
+        is_withdraw_payment: false,
+        is_fund_transfer: false,
+        is_interest: false,
+        is_adjustment: false,
+        is_for_exit_age: false,
+        is_for_loan_payments: false,
+        is_time_deposit: false,
+        accounting_entry_reference_number: r[:reference_number],
+        beginning_balance: 0.00,
+        ending_balance: 0.00,
+        lock_in_period: nil,
+        data: r
+      }
+
+      values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{trans_data.to_json}')"
+    end
+
+    if values.size > 0
+      query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Rehashing branch..."
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+        branch: branch
+      },
+      account_subtype: account_subtype
+    ).execute!
+
+    puts "Done."
+  end
+
+  task :update_loans_first_date_of_payment => :environment do
+    query = "
+      SELECT DISTINCT ON (loans.id)
+        loans.id,
+        amortization_schedule_entries.due_date
+      FROM
+        loans
+      INNER JOIN
+        amortization_schedule_entries
+        ON amortization_schedule_entries.loan_id = loans.id
+      WHERE
+        loans.status IN ('active', 'paid') AND loans.first_date_of_payment IS NULL #{ENV['BRANCH_ID'].present? ? "AND loans.branch_id = #{ENV['BRANCH_ID']}" : ''}
+      GROUP BY
+        loans.id, amortization_schedule_entries.due_date
+      ORDER BY
+        loans.id, amortization_schedule_entries.due_date ASC
+    "
+
+    result  = ActiveRecord::Base.connection.execute(query).to_a
+
+    sets  = result.map{ |r|
+              "('#{r.fetch("id")}', '#{r.fetch("due_date")}')"
+            }.join(",")
+
+    query = "
+      UPDATE loans AS l SET
+        first_date_of_payment  = DATE(c.first_date_of_payment)
+      FROM (values
+        #{sets}
+      ) AS c(loan_id, first_date_of_payment)
+      WHERE c.loan_id = l.id::text
+    "
+
+    ActiveRecord::Base.connection.execute(query)
+
+    puts "Done."
   end
 
   task :update_loans_original_maturity_date => :environment do
