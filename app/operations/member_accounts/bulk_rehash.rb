@@ -33,6 +33,9 @@ module MemberAccounts
                       data  = JSON.parse(t.fetch("data"))
                       data["beginning_balance"] = beginning_balance
                       data["ending_balance"]    = ending_balance
+                      
+                      # WORKAROUND: Do not save particulars
+                      data["accounting_entry_particular"] = ""
 
                       beginning_balance = ending_balance
 

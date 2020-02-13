@@ -2,7 +2,7 @@ namespace :adjust do
   task :insert_insurance_from_loans => :environment do
     account_subtype     = ENV['ACCOUNT_SUBTYPE'] || "CLIP"
     accounting_code_id  = ENV['ACCOUNTING_CODE_ID'] || "af83062d-628a-4fdd-acfd-bdebe2696513"
-    branch              = Branch.find(ENV['BRANCH_ID'] || "26df15a2-80de-4830-aae4-2f0645c059a3")
+    branch              = Branch.find(ENV['BRANCH_ID'] || "3726405b-777c-4b61-b6a5-7a4b48db62b6")
 
     puts "Fetching journal entry amounts..."
     cmd = ::Loans::FetchJournalEntries.new(

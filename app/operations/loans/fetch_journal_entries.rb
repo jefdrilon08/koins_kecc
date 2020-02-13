@@ -47,6 +47,7 @@ module Loans
                             interest: interest,
                             first_date_of_payment: first_date_of_payment,
                             maturity_date: maturity_date,
+                            original_maturity_date: original_maturity_date,
                             accounting_entry_id: accounting_entry_id,
                             journal_entry_id: journal_entry_id,
                             amount: amount,
