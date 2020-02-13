@@ -36,7 +36,7 @@ Exports = (function() {
       var params    = {
         start_date:  $startDate.val(),
         end_date:  $endDate.val(),
-        branch_id: $branch.val()
+        branch: $branch.val()
       }
 
       window.location = urlExportMembersWithBeneficiaries + "?" + encodeQueryData(params);
