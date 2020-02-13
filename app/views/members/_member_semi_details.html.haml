@@ -5,6 +5,10 @@
       %center
         = link_to "#", id: "btn-upload-profile-picture" do
           .fa.fa-upload
+        - if @member.profile_picture.attached?
+          |
+          = link_to "#", id: "btn-delete-profile-picture" do
+            .fa.fa-times
       %h2
         #{@member.full_name}
       %span.text-muted
@@ -128,6 +132,10 @@
       #btn-upload-signature.btn.btn-success.btn-block
         .fa.fa-upload
         Upload Signature
+      - if @member.signature_file.attached?
+        = link_to "#", id: "btn-delete-signature", class: "btn btn-danger btn-block" do
+          .fa.fa-times
+          Delete Signature
     - if Settings.activate_microinsurance and @member.active? 
       %hr
       %h6
