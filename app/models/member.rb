@@ -115,7 +115,7 @@ class Member < ApplicationRecord
   end
 
   def full_name_titleize
-    "#{last_name.titleize}, #{first_name.titleize} #{middle_name.titleize}"  
+    "#{last_name.try(:titleize)}, #{first_name.try(:titleize)} #{middle_name.try(:titleize)}"  
   end
 
   def resigned?
@@ -307,7 +307,7 @@ class Member < ApplicationRecord
   end
 
   def full_name_formatted
-    "#{first_name.titleize} #{middle_name.titleize} #{last_name.titleize}"  
+    "#{first_name.try(:titleize)} #{middle_name.try(:titleize)} #{last_name.try(:titleize)}"  
   end
 
  def spouse_age
