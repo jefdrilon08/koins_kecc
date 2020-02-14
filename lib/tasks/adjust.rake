@@ -147,16 +147,18 @@ namespace :adjust do
               "('#{o.id}','#{o.date_approved}')"
             }.join(",")
 
-    query = "
-      UPDATE loans AS l SET
-        date_released = DATE(c.date_approved)
-      FROM (values
-        #{sets}
-      ) AS c(loan_id, date_approved)
-      WHERE c.loan_id = l.id::text
-    "
+    if sets.present?
+      query = "
+        UPDATE loans AS l SET
+          date_released = DATE(c.date_approved)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, date_approved)
+        WHERE c.loan_id = l.id::text
+      "
 
-    ActiveRecord::Base.connection.execute(query)
+      ActiveRecord::Base.connection.execute(query)
+    end
 
     puts "Done."
   end
