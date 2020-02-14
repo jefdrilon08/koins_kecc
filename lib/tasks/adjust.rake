@@ -89,16 +89,18 @@ namespace :adjust do
               "('#{r.fetch("id")}', '#{r.fetch("due_date")}')"
             }.join(",")
 
-    query = "
-      UPDATE loans AS l SET
-        first_date_of_payment  = DATE(c.first_date_of_payment)
-      FROM (values
-        #{sets}
-      ) AS c(loan_id, first_date_of_payment)
-      WHERE c.loan_id = l.id::text
-    "
+    if sets.present?
+      query = "
+        UPDATE loans AS l SET
+          first_date_of_payment  = DATE(c.first_date_of_payment)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, first_date_of_payment)
+        WHERE c.loan_id = l.id::text
+      "
 
-    ActiveRecord::Base.connection.execute(query)
+      ActiveRecord::Base.connection.execute(query)
+    end
 
     puts "Done."
   end
@@ -122,16 +124,18 @@ namespace :adjust do
               "('#{o.id}', '#{original_maturity_date}')"
             }.join(",")
 
-    query = "
-      UPDATE loans AS l SET
-        original_maturity_date  = DATE(c.original_maturity_date)
-      FROM (values
-        #{sets}
-      ) AS c(loan_id, original_maturity_date)
-      WHERE c.loan_id = l.id::text
-    "
+    if sets.present?
+      query = "
+        UPDATE loans AS l SET
+          original_maturity_date  = DATE(c.original_maturity_date)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, original_maturity_date)
+        WHERE c.loan_id = l.id::text
+      "
 
-    ActiveRecord::Base.connection.execute(query)
+      ActiveRecord::Base.connection.execute(query)
+    end
 
     puts "Done."
   end
