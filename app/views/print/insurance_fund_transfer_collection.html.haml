@@ -1,0 +1,70 @@
+:css
+  @page { size: portrait; margin: 20px;}
+
+  table {
+    font-size: 0.9em;
+  }
+
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  Branch: #{@insurance_fund_transfer_collection[:branch][:name]}
+  %br
+  Collection Date: #{@insurance_fund_transfer_collection[:collection_date].to_date.strftime("%B %d, %Y")}
+  %br
+  Type of Transaction: FUND TRANSFER
+%hr
+
+%h5
+  OR Number: #{@insurance_fund_transfer_collection[:data][:or_number]} 
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "3%" }
+      %th{ width: "25%" }
+        Member
+      %th
+        Center
+      - @insurance_fund_transfer_collection[:data][:totals].each do |h|
+        %th.text-right
+          #{h[:key]}
+      %th.text-right
+        Amt Rec.
+  %tbody
+    - @insurance_fund_transfer_collection[:data][:records].each_with_index do |r, i|
+      %tr
+        %td.text-center
+          #{i + 1}
+        %td
+          #{r[:member][:full_name]}
+        %td
+          #{Member.find(r[:member][:id]).center.name}
+        - r[:records].each do |rr|
+          %td.text-right
+            #{number_to_currency(rr[:amount], unit: '')}
+        %td.text-right
+          #{number_to_currency(r[:total_collected], unit: '')}
+    %tr
+      %th
+      %th
+      %th
+        TOTAL
+      - @insurance_fund_transfer_collection[:data][:totals].each do |t|
+        %th.text-right
+          #{number_to_currency(t[:amount], unit: '')}
+      %th.text-right
+        #{number_to_currency(@insurance_fund_transfer_collection[:data][:total_collected], unit: '')}
+%hr
+%p
+  %span
+    %strong
+      Particular: 
+  #{@insurance_fund_transfer_collection[:data][:particular]}
+
+:javascript
+  window.print();

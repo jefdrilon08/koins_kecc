@@ -28,12 +28,19 @@ module Exports
                             :is_for_exit_age,
                             :is_withdraw_payment,
                             :is_fund_transfer,
-                            :is_interest
+                            :is_interest,
+                            :trans_data
                         ]
 
                 @account_transactions.each do |at|
                     member_account = MemberAccount.where(id: at.subsidiary_id)
                     if member_account
+                        if at.data
+                            trans_data = at.data.json
+                        else
+                            trans_data = ""
+                        end
+
                         csv << [
                         member_account.ids.first,
                         at.amount,
@@ -56,7 +63,8 @@ module Exports
                         at.data.with_indifferent_access[:is_for_exit_age],
                         at.data.with_indifferent_access[:is_withdraw_payment],
                         at.data.with_indifferent_access[:is_fund_transfer],
-                        at.data.with_indifferent_access[:is_interest]
+                        at.data.with_indifferent_access[:is_interest],
+                        trans_data
                         ]
                     end
                 end
