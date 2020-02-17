@@ -5,7 +5,6 @@
     .col
       .card
         .card-body
-          #content-status
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
@@ -58,5 +57,3 @@
 
 
 #parameters{ data: { member_account_id: @insurance_account.id}}
-
-= javascript_include_tag "MemberAccountInsuranceStatus.min.react.js"

@@ -4,6 +4,72 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!
 
+      def delete_signature
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Members::ValidateDeleteSignature.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          member_full_name  = member.full_name
+          member_id         = member.id
+
+          member.signature_file.purge
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted #{member_full_name}'s signature",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def delete_profile_picture
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Members::ValidateDeleteProfilePicture.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          member_full_name  = member.full_name
+          member_id         = member.id
+
+          member.profile_picture.purge
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted #{member_full_name}'s profile picture",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def upload_signature
         member  = Member.where(id: params[:id]).first
         files   = params[:files]
@@ -23,6 +89,18 @@ module Api
         else
           # Upload code
           member.update!(signature_file: config[:files][0])
+
+          member_full_name  = member.full_name
+          member_id         = member.id
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} uploaded #{member_full_name}'s signature",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
 
           render json: { message: "ok" }
         end
