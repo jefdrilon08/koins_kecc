@@ -68,6 +68,7 @@ namespace :api do
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
     post "/members/delete_signature", to: "members#delete_signature"
+    post "/members/register", to: "members#register"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"

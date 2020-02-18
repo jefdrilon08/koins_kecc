@@ -12,6 +12,7 @@ var Show  = (function() {
   var $modalUploadSignature;
   var $modalDeleteProfilePicture;
   var $modalDeleteSignature;
+  var $modalRegister;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -27,6 +28,8 @@ var Show  = (function() {
   var $btnConfirmDelete;
   var $btnUnlock;
   var $btnConfirmUnlock;
+  var $btnRegister;
+  var $btnConfirmRegister;
   var $btnRestore;
   var $btnConfirmRestore;
   var $btnGenerateMissingAccounts;
@@ -69,6 +72,7 @@ var Show  = (function() {
   var _urlDeleteProfilePicture    = "/api/v1/members/delete_profile_picture";
   var _urlUploadSignature         = "/api/v1/members/upload_signature";
   var _urlDeleteSignature         = "/api/v1/members/delete_signature";
+  var _urlRegister                = "/api/v1/members/register";
   var _memberId;
   var _authenticityToken;
 
@@ -91,6 +95,7 @@ var Show  = (function() {
     $modalUploadSignature             = $("#modal-upload-signature");
     $modalDeleteProfilePicture        = $("#modal-delete-profile-picture");
     $modalDeleteSignature             = $("#modal-delete-signature");
+    $modalRegister                    = $("#modal-register");
     $btnGenerateAccessToken           = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken    = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature              = $("#btn-confirm-signature");
@@ -105,6 +110,8 @@ var Show  = (function() {
     $btnDeleteSignature               = $("#btn-delete-signature");
     $btnConfirmDelete                 = $("#btn-confirm-delete");
     $btnConfirmDeleteProfilePicture   = $("#btn-confirm-delete-profile-picture");
+    $btnRegister                      = $("#btn-register");
+    $btnConfirmRegister               = $("#btn-confirm-register");
     $btnUnlock                        = $("#btn-unlock");
     $btnRestore                       = $("#btn-restore");
     $btnConfirmRestore                = $("#btn-confirm-restore");
@@ -136,6 +143,52 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnRegister.on("click", function() {
+      $message.html("");
+      $modalRegister.modal("show");
+    });
+
+    $btnConfirmRegister.on("click", function() {
+      $message.html("Registering...");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmRegister.prop("disabled", true);
+
+      $.ajax({
+        url: _urlRegister,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmRegister.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnDeleteSignature.on("click", function() {
       $message.html("");
       $modalDeleteSignature.modal("show");

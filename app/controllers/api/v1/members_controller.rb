@@ -4,6 +4,42 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!
 
+      def register
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Epassbook::ValidateRegister.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].size > 0
+          render json: errors, status: 400
+        else
+          cmd = ::Epassbook::Register.new(member: member)
+
+          cmd.execute!
+
+          if cmd.success?
+            ActivityLog.create!(
+              content: "#{current_user.full_name} registered #{member.full_name} to MyKoins",
+              activity_type: "modification",
+              data: {
+                user_id: current_user.id,
+                member_id: member.id
+              }
+            )
+
+            render json: { message: "ok" }
+          else
+            render json: { errors: { full_messages: cmd.errors } }, status: 400
+          end
+        end
+      end
+
       def delete_signature
         member  = Member.where(id: params[:id]).first
 
