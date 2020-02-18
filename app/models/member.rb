@@ -105,13 +105,13 @@ class Member < ApplicationRecord
   end
 
   def signature_url
-    if self.signature_file.attached? and self.signature_file.representable?
+    if self.signature_file.attached?
       return rails_blob_path(self.signature_file, disposition: "attachment", only_path: true)
     end
   end
 
   def has_signature?
-    self.signature_file.attached? and self.signature_file.representable?
+    self.signature_file.attached?
   end
 
   def full_name_titleize
