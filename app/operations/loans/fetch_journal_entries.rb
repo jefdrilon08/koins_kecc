@@ -59,6 +59,7 @@ module Loans
                             reference_number: reference_number,
                             book: book,
                             member_account_id: member_account_id,
+                            num_installments: num_installments,
                             account_transaction_id: account_transaction_id
                           }
                         }

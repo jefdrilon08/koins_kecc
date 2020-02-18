@@ -15,27 +15,27 @@ module Loans
     def execute!
       case @term
       when "weekly"
-        @original_maturity_date = @loan.first_date_of_payment 
+        @original_maturity_date = @loan.date_released || @loan.date_approved
 
         @num_installments.times do
           @original_maturity_date = @original_maturity_date + 7.days
         end
       when "quarterly"
-        @original_maturity_date = @loan.first_date_of_payment 
+        @original_maturity_date = @loan.date_released || @loan.date_approved
 
         @num_installments.times do
           @original_maturity_date = @original_maturity_date + 3.months
         end
       when "monthly"
-        @original_maturity_date = @loan.first_date_of_payment + @num_installments.months
+        @original_maturity_date = @loan.date_released || @loan.date_approved + @num_installments.months
       when "semi-monthly"
-        @original_maturity_date = @loan.first_date_of_payment 
+        @original_maturity_date = @loan.date_released || @loan.date_approved
 
         @num_installments.times do
           @original_maturity_date = @original_maturity_date + 15.days
         end
       when "daily"
-        @original_maturity_date = @loan.first_date_of_payment + @num_installments.days
+        @original_maturity_date = @loan.date_released || @loan.date_approved + @num_installments.days
       else
         raise "Unsupported term #{@term}"
       end

@@ -76,8 +76,7 @@ class DepositCollectionsController < ApplicationController
     end
 
     if @errors[:messages].size > 0
-      redirect_to upload_deposit_path
-      flash[:error] = @errors[:messages]
+      redirect_to upload_deposit_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       @deposit_collection = DepositCollections::LoadDepositFromCsvFile.new(config: config).execute!
       flash[:success] = "Successfully upload deposit."
