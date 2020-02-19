@@ -170,7 +170,8 @@ var Show  = (function() {
           console.log(response);
           var errors  = [];
           try {
-            errors  = JSON.parse(response.responseText).full_messages;
+            errors  = JSON.parse(response.responseText).errors.full_messages;
+            console.log(errors);
           } catch(err) {
             errors  = ["Something went wrong"];
             console.log(err);
