@@ -25,6 +25,8 @@ module WithdrawalCollections
         member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o[:key], account_type: o[:record_type]).first
         enabled         = false
 
+        puts o
+
         if member_account
           enabled = true
         end

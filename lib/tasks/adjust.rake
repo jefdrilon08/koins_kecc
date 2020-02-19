@@ -1,4 +1,37 @@
 namespace :adjust do
+  task :convert_savings_accounts_to_equity => :environment do
+    account_subtype = ENV['ACCOUNT_SUBTYPE']
+
+    if ENV['BRANCH_ID'].present?
+      branch          = Branch.find(ENV['BRANCH_ID'])
+    end
+
+    member_accounts = MemberAccount.where(account_type: "SAVINGS", account_subtype: account_subtype)
+
+    if branch.present?
+      member_accounts = member_accounts.where(branch_id: branch.id)
+    end
+
+    sets  = member_accounts.map{ |r|
+              "('#{r.id}')"
+            }.join(",")
+
+    if sets.present?
+      query = "
+        UPDATE member_accounts AS a SET
+          account_type = 'EQUITY'
+        FROM (values
+          #{sets}
+        ) AS c(id)
+        WHERE c.id = a.id::text
+      "
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Done."
+  end
+
   task :insert_insurance_from_loans => :environment do
     account_subtype     = ENV['ACCOUNT_SUBTYPE'] || "CLIP"
     accounting_code_id  = ENV['ACCOUNTING_CODE_ID'] || "af83062d-628a-4fdd-acfd-bdebe2696513"
