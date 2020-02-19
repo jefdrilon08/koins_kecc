@@ -21,7 +21,7 @@ module Epassbook
       end
 
       data  = {
-        first_name: @member.first_name
+        first_name: @member.first_name,
         middle_name: @member.middle_name,
         last_name: @member.last_name,
         identification_number: @member.identification_number,
