@@ -5,7 +5,7 @@ module Loans
 
       @accounting_code_id = @config[:accounting_code_id]
       @branch             = @config[:branch]
-      @account_subtype    = @config[:account_subtype] || "CLIP"
+      @account_subtype    = @config[:account_subtype]
       
       @data = {
         branch: {
@@ -20,26 +20,27 @@ module Loans
       query!
 
       @data[:records] = @result.map{ |r|
-                          id                    = r.fetch("loan_id")
-                          principal             = r.fetch("principal").to_f.round(2)
-                          interest              = r.fetch("interest").to_f.round(2)
-                          first_date_of_payment = r.fetch("first_date_of_payment")
-                          maturity_date         = r.fetch("maturity_date")
-                          accounting_entry_id   = r.fetch("accounting_entry_id")
-                          journal_entry_id      = r.fetch("journal_entry_id")
-                          amount                = r.fetch("amount").to_f.round(2)
-                          loan_product_id       = r.fetch("loan_product_id")
-                          loan_product_name     = r.fetch("loan_product_name")
-                          date_released         = r.fetch("date_released")
-                          date_approved         = r.fetch("date_approved")
-                          member_id             = r.fetch("member_id")
-                          reference_number      = r.fetch("reference_number")
-                          book                  = r.fetch("book")
-                          member_account_id     = r.fetch("member_account_id")
-                          num_installments      = r.fetch("num_installments")
-                          term                  = r.fetch("term")
+                          id                      = r.fetch("loan_id")
+                          principal               = r.fetch("principal").to_f.round(2)
+                          interest                = r.fetch("interest").to_f.round(2)
+                          first_date_of_payment   = r.fetch("first_date_of_payment")
+                          maturity_date           = r.fetch("maturity_date")
+                          accounting_entry_id     = r.fetch("accounting_entry_id")
+                          journal_entry_id        = r.fetch("journal_entry_id")
+                          amount                  = r.fetch("amount").to_f.round(2)
+                          loan_product_id         = r.fetch("loan_product_id")
+                          loan_product_name       = r.fetch("loan_product_name")
+                          date_released           = r.fetch("date_released")
+                          date_approved           = r.fetch("date_approved")
+                          member_id               = r.fetch("member_id")
+                          reference_number        = r.fetch("reference_number")
+                          book                    = r.fetch("book")
+                          member_account_id       = r.fetch("member_account_id")
+                          num_installments        = r.fetch("num_installments")
+                          term                    = r.fetch("term")
                           original_maturity_date  = r.fetch("original_maturity_date")
                           account_transaction_id  = r.fetch("account_transaction_id")
+                          status                  = r.fetch("status")
 
                           {
                             id: id,
@@ -59,8 +60,10 @@ module Loans
                             reference_number: reference_number,
                             book: book,
                             member_account_id: member_account_id,
+                            term: term,
                             num_installments: num_installments,
-                            account_transaction_id: account_transaction_id
+                            account_transaction_id: account_transaction_id,
+                            status: status
                           }
                         }
       @data
@@ -87,6 +90,7 @@ module Loans
                     loans.date_released,
                     loans.num_installments,
                     loans.term,
+                    loans.status,
                     loans.original_maturity_date,
                     members.id AS member_id,
                     member_accounts.id AS member_account_id,
