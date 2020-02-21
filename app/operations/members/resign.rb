@@ -18,7 +18,7 @@ module Members
         insurance_status: 'resigned',
         date_resigned: @date_resigned,
         insurance_date_resigned: @date_resigned
-        )
+      )
     end
   end
 end
