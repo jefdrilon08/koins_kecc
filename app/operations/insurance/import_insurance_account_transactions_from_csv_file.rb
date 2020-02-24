@@ -115,27 +115,54 @@ module Insurance
           insurance_account_transaction_record_data[:accounting_entry_particular] = row['particular']
           insurance_account_transaction_record_data[:beginning_balance] = row['beginning_balance']
           insurance_account_transaction_record_data[:ending_balance] = row['ending_balance']
-          insurance_account_transaction_record_data[:data][:id] = row['id_data']
-          insurance_account_transaction_record_data[:data][:principal] = row['principal_data']
-          insurance_account_transaction_record_data[:data][:interest] = row['interest_data']
-          insurance_account_transaction_record_data[:data][:first_date_of_payment] = row['first_date_of_payment_data']
-          insurance_account_transaction_record_data[:data][:maturity_date] = row['maturity_date_data']
-          insurance_account_transaction_record_data[:data][:original_maturity_date] = row['original_maturity_date_data']
-          insurance_account_transaction_record_data[:data][:accounting_entry_id] = row['accounting_entry_id_data']
-          insurance_account_transaction_record_data[:data][:journal_entry_id] = row['journal_entry_id_data']
-          insurance_account_transaction_record_data[:data][:amount] = row['amount_data']
-          insurance_account_transaction_record_data[:data][:loan_product_id] = row['loan_product_id_data']
-          insurance_account_transaction_record_data[:data][:loan_product_name] = row['loan_product_name_data']
-          insurance_account_transaction_record_data[:data][:member_id] = row['member_id_data']
-          insurance_account_transaction_record_data[:data][:date_approved] = row['date_approved_data']
-          insurance_account_transaction_record_data[:data][:date_released] = row['date_released_data']
-          insurance_account_transaction_record_data[:data][:reference_number] = row['reference_number_data']
-          insurance_account_transaction_record_data[:data][:book] = row['book_data']
-          insurance_account_transaction_record_data[:data][:member_account_id] = row['member_account_id_data']
-          insurance_account_transaction_record_data[:data][:term] = row['term_data']
-          insurance_account_transaction_record_data[:data][:num_installments] = row['num_installments_data']
-          insurance_account_transaction_record_data[:data][:account_transaction_id] = row['account_transaction_id_data']
-          insurance_account_transaction_record_data[:data][:status] = row['status_data']
+          
+          if !insurance_account_transaction_record_data[:data].nil? 
+            insurance_account_transaction_record_data[:data][:id] = row['id_data']
+            insurance_account_transaction_record_data[:data][:principal] = row['principal_data']
+            insurance_account_transaction_record_data[:data][:interest] = row['interest_data']
+            insurance_account_transaction_record_data[:data][:first_date_of_payment] = row['first_date_of_payment_data']
+            insurance_account_transaction_record_data[:data][:maturity_date] = row['maturity_date_data']
+            insurance_account_transaction_record_data[:data][:original_maturity_date] = row['original_maturity_date_data']
+            insurance_account_transaction_record_data[:data][:accounting_entry_id] = row['accounting_entry_id_data']
+            insurance_account_transaction_record_data[:data][:journal_entry_id] = row['journal_entry_id_data']
+            insurance_account_transaction_record_data[:data][:amount] = row['amount_data']
+            insurance_account_transaction_record_data[:data][:loan_product_id] = row['loan_product_id_data']
+            insurance_account_transaction_record_data[:data][:loan_product_name] = row['loan_product_name_data']
+            insurance_account_transaction_record_data[:data][:member_id] = row['member_id_data']
+            insurance_account_transaction_record_data[:data][:date_approved] = row['date_approved_data']
+            insurance_account_transaction_record_data[:data][:date_released] = row['date_released_data']
+            insurance_account_transaction_record_data[:data][:reference_number] = row['reference_number_data']
+            insurance_account_transaction_record_data[:data][:book] = row['book_data']
+            insurance_account_transaction_record_data[:data][:member_account_id] = row['member_account_id_data']
+            insurance_account_transaction_record_data[:data][:term] = row['term_data']
+            insurance_account_transaction_record_data[:data][:num_installments] = row['num_installments_data']
+            insurance_account_transaction_record_data[:data][:account_transaction_id] = row['account_transaction_id_data']
+            insurance_account_transaction_record_data[:data][:status] = row['status_data']
+          else
+            insurance_account_transaction_record_data[:data] = {
+              id: row['id_data'],
+              principal: row['principal_data'],
+              interest: row['interest_data'],
+              first_date_of_payment: row['first_date_of_payment_data'],
+              maturity_date: row['maturity_date_data'],
+              original_maturity_date: row['original_maturity_date_data'],
+              accounting_entry_id: row['accounting_entry_id_data'],
+              journal_entry_id: row['journal_entry_id_data'],
+              amount: row['amount_data'],
+              loan_product_id: row['loan_product_id_data'],
+              loan_product_name: row['loan_product_name_data'],
+              member_id: row['member_id_data'],
+              date_approved: row['date_approved_data'],
+              date_released: row['date_released_data'],
+              reference_number: row['reference_number_data'],
+              book: row['book_data'],
+              member_account_id: row['member_account_id_data'],
+              term: row['term_data'],
+              num_installments: row['num_installments_data'],
+              account_transaction_id: row['account_transaction_id_data'],
+              status: row['status_data']
+            }
+          end
 
           insurance_account_transaction_record.update!(
             amount: row['amount'],
