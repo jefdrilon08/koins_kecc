@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 
+  # insights
+  get "/insights", to: "pages#insights"
+
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 

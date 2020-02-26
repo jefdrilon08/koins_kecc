@@ -5,6 +5,10 @@
     %i.nav-icon.fa.fa-tachometer-alt
     Dashboard
 %li.nav-item
+  = link_to insights_path, class: "nav-link #{params[:controller] == 'pages' && params[:action] == 'insights' ? 'active' : ''}" do
+    %i.nav-icon.fa.fa-eye
+    Insights
+%li.nav-item
   = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
     %i.nav-icon.fa.fa-users
     Members

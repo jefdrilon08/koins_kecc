@@ -36,6 +36,13 @@ gem 'newrelic_rpm'
 gem 'rollbar'
 gem 'rack', '~> 2.0.0'
 gem 'httparty'
+gem 'rack-mini-profiler'
+# For memory profiling
+gem 'memory_profiler'
+
+# For call-stack profiling flamegraphs
+gem 'flamegraph'
+gem 'stackprof'
 
 # Support Select 2
 gem 'select2-rails'
