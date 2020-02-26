@@ -4,12 +4,7 @@
     Microinsurance
   %li.breadcrumb-item
     .fa.fa-users
-    Members for Insurance Exit Age
-  %li.breadcrumb-menu.d-md-down-none
-    .btn-group
-      = link_to download_exit_age_path, class: 'btn' do
-        .fa.fa-download
-        Download
+    Lapsed Members
 .container-fluid
   .row
     .col
@@ -17,7 +12,7 @@
         .card-body
           .errors_template
             #filter
-              = form_tag insurance_exit_age_members_path, html: { novalidate: true }, method: "GET", defaults: { wrapper_html: { class: 'form-group' }, input_html: { class: 'form-control simple_form' } } do
+              = form_tag lapsed_members_path, html: { novalidate: true }, method: "GET", defaults: { wrapper_html: { class: 'form-group' }, input_html: { class: 'form-control simple_form' } } do
                 .row
                   .col-md-6
                     .form-group
@@ -39,6 +34,10 @@
                   %th
                     Member Type
                   %th
+                    Status
+                  %th
+                    Insurance Status
+                  %th
                     Date of Birth
                   %th
                     Age
@@ -46,16 +45,16 @@
                     Branch
                   %th
                     Center
-                  %th
-                    LIF
-                  %th
-                    RF
               %tbody
                 - @members.each do |m|
                   %tr
                     %td
                       = link_to member_path(m) do 
                         #{m.full_name}
+                    %td
+                      #{m.status}
+                    %td
+                      #{m.insurance_status} 
                     %td
                       #{m.member_type}
                     %td 
@@ -66,8 +65,4 @@
                       #{m.branch.name}
                     %td
                       #{m.center.name}
-                    %td
-                      #{m.member_accounts.where(account_subtype: "Life Insurance Fund").first.try(:balance)}
-                    %td
-                      #{m.member_accounts.where(account_subtype: "Retirement Fund").first.try(:balance)}
 
