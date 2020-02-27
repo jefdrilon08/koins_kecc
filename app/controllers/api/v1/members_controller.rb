@@ -681,10 +681,12 @@ module Api
         if member.blank?
           render json: { errors: ["member not found"] }, status: 400
         else
-          if member.update!(access_token: "#{SecureRandom.hex(32)}")
+          if member.access_token.present?
+            render json: { errors: ["access_token already present"] }, status: 400
+          elsif member.update!(access_token: "#{SecureRandom.hex(32)}")
             render json: { message: "ok" }
           else
-            render json: { errors: ["something went wrong"] }
+            render json: { errors: ["something went wrong"] }, status: 400
           end
         end
       end
