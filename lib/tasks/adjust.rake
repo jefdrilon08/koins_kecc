@@ -942,18 +942,21 @@ namespace :adjust do
                 
                 attachments = member.attachment_files  
                 attachment = attachments.where(file_name: filename).first
+                
                 if attachment.nil?
-                  attachment_file  = AttachmentFile.new(
+                  if filename != "Thumbs"
+                    attachment_file  = AttachmentFile.new(
                                         file_name: filename,
                                         member: member
                                      )
 
-                  attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                    attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
 
-                  if attachment_file.save
-                    puts "Successfully uploaded file #{ff} for #{member.identification_number}"
-                  else
-                    puts "Error in attaching file #{ff}"
+                    if attachment_file.save
+                      puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                    else
+                      puts "Error in attaching file #{ff}"
+                    end
                   end
                 else
                   attachment.file.purge
