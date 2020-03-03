@@ -11,7 +11,8 @@ module Turkey
       @start_date = Date.new(@year, @month, 1)
       @end_date   = @as_of
 
-      @incentive_table  = Settings.incentive_table
+      @incentive_table          = Settings.incentive_table
+      @active_loaner_threshold  = Settings.active_loaner_threshold || 250
     end
 
     def execute!
@@ -156,6 +157,10 @@ module Turkey
         status  = (is_regular and incentivized_date.present? and incentivized_date <= as_of) ? "Regular" : "Trainee / Probation"
 
         if status != "Regular"
+          net_incentive = 0.00
+        end
+
+        if loaners.size < @active_loaner_threshold
           net_incentive = 0.00
         end
 

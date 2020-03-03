@@ -105,6 +105,7 @@ Rails.application.config.assets.precompile += [
   "WithdrawalCollectionUI.min.react.js",
   "InsuranceWithdrawalCollectionUI.min.react.js",
   "InsuranceFundTransferCollectionUI.min.react.js",
+  "Insights.min.react.js",
   "BranchManager.min.react.js",
   "BranchLoanProductStats.min.react.js",
   "LoanApplicationForm.min.react.js",

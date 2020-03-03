@@ -31,6 +31,11 @@ class PagesController < ApplicationController
     @announcements = Announcement.all
   end
 
+  def insights
+    @end_date   = Date.today
+    @start_date = @end_date - 7.days
+  end
+
   def login
     render 'pages/login', layout: 'plain'
   end
