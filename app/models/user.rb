@@ -28,7 +28,8 @@ class User < ApplicationRecord
     "REMOTE-BK",
     "REMOTE-MIS",
     "REMOTE-FM",
-    "OM"
+    "OM",
+    "OJT"
   ]
 
   validates :username, presence: true, uniqueness: true
