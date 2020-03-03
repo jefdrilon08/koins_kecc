@@ -974,6 +974,18 @@ namespace :adjust do
     end
   end
 
+  task :destroy_thumbs_attachment_file => :environment do
+    puts "Destroying thumbs file ..."
+    AttachmentFile.where("file_name IN (?)", ["Thumbs", "thumbs"]).each do |af|
+      if af.last.file.present?
+        puts "Destroying file of #{af.member_id}"
+        af.last.file.purge
+        af.last.destroy!
+      end  
+    end  
+    puts "Done!"
+  end
+
   task :update_insurance_status => :environment do
     current_date = Date.today
     
