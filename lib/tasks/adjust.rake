@@ -977,11 +977,11 @@ namespace :adjust do
   task :destroy_thumbs_attachment_file => :environment do
     puts "Destroying thumbs file ..."
     AttachmentFile.where("file_name IN (?)", ["Thumbs", "thumbs"]).each do |af|
-      if af.last.file.present?
+      if af.file.present?
         puts "Destroying file of #{af.member_id}"
-        af.last.file.purge
-        af.last.destroy!
-      end  
+        af.file.purge
+        af.destroy!  
+      end
     end  
     puts "Done!"
   end
