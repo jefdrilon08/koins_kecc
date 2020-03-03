@@ -16,8 +16,8 @@
         %tr
           %td
             - if attachment_file.file.attached?        
-              = image_tag "#{attachment_file.file_url}", width: "1130", height: "1100"
-              / = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true, resize: "500x500"), width: "1130", height: "1100"
+              /= image_tag "#{attachment_file.file_url}", width: "1130", height: "1100"
+              = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true, resize: "500x500"), width: "1130", height: "1100"
               = link_to attachment_file.file.record_id, rails_blob_path(attachment_file.file, disposition: "attachment")
             - else
               %p
