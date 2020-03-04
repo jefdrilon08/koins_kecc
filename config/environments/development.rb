@@ -62,5 +62,6 @@ Rails.application.configure do
   config.after_initialize do
     # Display N+1 queries and unused eager loading
     Bullet.alert = true
+    Bullet.console = true
   end
 end

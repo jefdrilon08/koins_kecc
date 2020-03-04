@@ -25,7 +25,7 @@ class MembershipPaymentCollectionsController < ApplicationController
       @membership_payment_collections = @membership_payment_collections.where(status: @status)
     end
 
-    @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+    @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def show
