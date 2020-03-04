@@ -1927,3 +1927,6 @@ loan_product_accounting_codes:
     loan_product_id: "0093eb80-ec9d-45e1-9f80-73e678fea145"                         # K-TRABAHO
     receivable_accounting_code_id: "c601accc-3f7c-4789-af2a-d6927e42ffd1"
     interest_receivable_accounting_code_id: "fe904bce-efd4-417d-bf8d-f52ea96b7f1b"
+
+activate_microloans: true
+activate_microinsurance: false
