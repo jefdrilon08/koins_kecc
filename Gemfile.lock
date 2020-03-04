@@ -71,6 +71,9 @@ GEM
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     builder (3.2.4)
+    bullet (6.1.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (11.1.0)
     capybara (3.30.0)
       addressable
@@ -376,6 +379,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.6.1)
     unicode_utils (1.4.0)
+    uniform_notifier (1.13.0)
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.7.0)
@@ -401,6 +405,7 @@ DEPENDENCIES
   awesome_print
   aws-sdk-s3
   bootsnap (>= 1.1.0)
+  bullet
   byebug
   capybara (>= 2.15)
   caxlsx
