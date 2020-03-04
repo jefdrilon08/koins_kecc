@@ -2,6 +2,38 @@ class InsuranceAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @insurance_accounts = MemberAccount.insurance
+
+    @insurance_accounts = @insurance_accounts.where(
+                            branch_id: @branches.pluck(:id)
+                          )
+
+    if params[:q].present?
+      @q  = params[:q]
+
+      @insurance_accounts = @insurance_accounts.joins(:member).where(
+                            "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+                            q: "%#{@q.upcase}%"
+                          )
+    end
+
+    if params[:subtype].present?
+      @subtype  = params[:subtype]
+
+      @insurance_accounts = @insurance_accounts.where(account_subtype: @subtype)
+    end
+
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+      @insurance_accounts = @insurance_accounts.where(branch_id: @branch.id)
+    end
+    
+    if params[:center_id].present?
+      @center = Center.find(params[:center_id])
+      @insurance_accounts = @insurance_accounts.where(center_id: @center.id)
+    end
+ 
+    @insurance_accounts = @insurance_accounts.page(params[:page]).per(20)
   end
 
   def show

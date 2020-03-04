@@ -1,0 +1,18 @@
+%li{ class: "nav-item nav-dropdown" }
+  = link_to "#", class: "nav-link nav-dropdown-toggle" do
+    %i.nav-icon.fa.fa-piggy-bank
+    Accounts
+  %ul.nav-dropdown-items
+    - if microloans?  
+      %li{ class: "nav-item #{params[:controller] == 'savings_accounts' ? 'active' : ''}" }
+        = link_to savings_accounts_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Savings
+      %li{ class: "nav-item #{params[:controller] == 'equity_accounts' ? 'active' : ''}" }
+        = link_to equity_accounts_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Equities
+    %li{ class: "nav-item #{params[:controller] == 'insurance_accounts' ? 'active' : ''}" }
+      = link_to insurance_accounts_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-arrow-right
+        Insurance

@@ -6,6 +6,9 @@ Rails.application.routes.draw do
     delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+  # dashboard
+  get "/dashboard/finance", to: "pages#finance", as: :dashboard_finance
+
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
 

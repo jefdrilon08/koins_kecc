@@ -1,7 +1,18 @@
 .sidebar
   %nav.sidebar-nav.open
     %ul.nav
-      = render partial: "shared/sidebar_operations"
+      = render partial: "shared/sidebar_dashboard"
+      %li.nav-item
+        = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
+          %i.nav-icon.fa.fa-users
+          Members
+      - if microloans?  
+        %li.nav-item
+          = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
+            %i.nav-icon.fa.fa-money-check
+            Loans
+      = render partial: "shared/sidebar_transactions"
+      = render partial: "shared/sidebar_accounts"
       = render partial: "shared/sidebar_accounting"
       = render partial: "shared/sidebar_microinsurance"
       = render partial: "shared/sidebar_administration"

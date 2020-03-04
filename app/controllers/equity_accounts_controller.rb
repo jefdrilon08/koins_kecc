@@ -3,6 +3,9 @@ class EquityAccountsController < ApplicationController
 
   def index
     @equity_accounts  = MemberAccount.equities
+    @equity_accounts  = @equity_accounts.where(
+                          branch_id: @branches.pluck(:id)
+                        )
 
     if params[:q].present?
       @q  = params[:q]
@@ -30,7 +33,7 @@ class EquityAccountsController < ApplicationController
     end
  
 
-    #@equity_accounts = @equity_accounts.page(params[:page]).per(20)
+    @equity_accounts = @equity_accounts.page(params[:page]).per(20)
   end
 
   def show

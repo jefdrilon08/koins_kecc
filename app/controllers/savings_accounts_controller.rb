@@ -4,6 +4,10 @@ class SavingsAccountsController < ApplicationController
   def index
     @savings_accounts = MemberAccount.savings
 
+    @savings_accounts = @savings_accounts.where(
+                          branch_id: @branches.pluck(:id)
+                        )
+
     if params[:q].present?
       @q  = params[:q]
 
@@ -29,7 +33,7 @@ class SavingsAccountsController < ApplicationController
       @savings_accounts = @savings_accounts.where(center_id: @center.id)
     end
  
-    #@savings_accounts = @savings_accounts.page(params[:page]).per(20)
+    @savings_accounts = @savings_accounts.page(params[:page]).per(20)
   end
 
   def time_deposit_withdrawal

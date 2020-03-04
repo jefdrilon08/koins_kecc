@@ -31,6 +31,10 @@ class PagesController < ApplicationController
     @announcements = Announcement.all
   end
 
+  def finance
+    render "dashboard/finance"
+  end
+
   def insights
     @end_date   = Date.today
     @start_date = @end_date - 7.days
