@@ -29,7 +29,7 @@ class EquityAccountsController < ApplicationController
       @equity_accounts = @equity_accounts.where(center_id: @center.id)
     end
  
-    @equity_accounts = @equity_accounts.page(params[:page]).per(100)
+    @equity_accounts = @equity_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def show

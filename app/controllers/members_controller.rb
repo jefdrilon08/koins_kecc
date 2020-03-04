@@ -36,7 +36,7 @@ class MembersController < ApplicationController
       @members  = @members.where("data->'restoration_records' IS NOT NULL")
     end
 
-    @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(100)
+    @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def form_resignation

@@ -11,6 +11,7 @@
                 Non-printed Certificates (#{@member_shares.count})
               - if @member_shares.size > 0
                 = render partial: "list"
+                = paginate @member_shares
               - else
                 %p
                   No certificates found

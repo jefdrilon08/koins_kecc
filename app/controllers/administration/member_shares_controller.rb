@@ -14,7 +14,7 @@ module Administration
         @members        = @members.where(branch_id: @branch.id)
       end
 
-      #@member_shares  = @member_shares.page(params[:page]).per(20)
+      @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
     end
 
     def print
@@ -121,7 +121,7 @@ module Administration
 
     def not_printed
       @member_shares  = MemberShare.not_printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("date_of_issue DESC")
-      @member_shares  = @member_shares.page(params[:page]).per(20)
+      @member_shares  = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
     end
 
     def printed
@@ -138,9 +138,8 @@ module Administration
         #d = (params[:end_date].to_date + 1).to_s
         @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
       end
- 
 
-      #@member_shares  = @member_shares.page(params[:page]).per(20)
+      @member_shares  = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
     end
   end
 end

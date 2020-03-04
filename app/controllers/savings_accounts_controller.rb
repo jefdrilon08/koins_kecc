@@ -29,7 +29,7 @@ class SavingsAccountsController < ApplicationController
       @savings_accounts = @savings_accounts.where(center_id: @center.id)
     end
 
-    @savings_accounts = @savings_accounts.page(params[:page]).per(100)
+    @savings_accounts = @savings_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def time_deposit_withdrawal

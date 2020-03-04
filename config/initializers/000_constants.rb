@@ -1,0 +1,1 @@
+PER_PAGE_SIZE = 100
