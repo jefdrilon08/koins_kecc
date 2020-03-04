@@ -24,4 +24,10 @@ CREATE INDEX manual_idx_7 ON members (status, center_id);
 
 DROP INDEX manual_idx_8;
 CREATE INDEX manual_idx_8 ON activity_logs ((data->>'loan_id'), created_at DESC);
+
+DROP INDEX manual_idx_9;
+CREATE INDEX manual_idx_9 on accounting_entries (book, reference_number, particular);
+
+DROP INDEX manual_idx_10;
+CREATE INDEX manual_idx_10 on journal_entries (accounting_code_id, accounting_entry_id);
 ```
