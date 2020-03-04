@@ -38,6 +38,9 @@ en:
         new: "New Accounting Code"
         edit: "Edit - %{title} - Accounting Codes"
         print: "Print Accounting Codes"
+      year_end_closings:
+        index: "Year End Closings"
+        show: "%{title} - Year End Closings"
     activity_logs:
       index: "Activity Logs"
     billings:
