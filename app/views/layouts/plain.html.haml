@@ -1,13 +1,14 @@
 !!!
 %html
-  %head  
+  %head
     %title
-      KOINS
+      = content_for?(:title) ? "#{yield(:title)} - #{APP_NAME}" : "#{APP_NAME}"
     = csrf_meta_tags
     = csp_meta_tag
 
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = favicon_link_tag "logo_thumb.png"
 
   %body
     = yield

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>KOINS</title>
+  <title>
+    <%= content_for?(:title) ? "#{yield(:title)} - #{APP_NAME}" : "#{APP_NAME}" %>
+  </title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= favicon_link_tag "logo_thumb.png" %>
   <%= javascript_include_tag 'application' %>
