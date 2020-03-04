@@ -28,7 +28,7 @@ module WithdrawalCollections
       load_headers_and_totals!
 
       # Load accounting entry
-      @data[:accounting_entry]  = ::WithdrawalCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::InsuranceWithdrawalCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @branch,
                                       data: @data,

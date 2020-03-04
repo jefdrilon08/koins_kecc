@@ -255,7 +255,6 @@ Rails.application.routes.draw do
     delete "/patronage_refund/:id", to: "patronage_refund#destroy"
 
     get "/personal_funds", to: "personal_funds#index"
-    get "/personal_funds/turkey", to: "personal_funds#turkey"
     get "/personal_funds/:id", to: "personal_funds#show"
     delete "/personal_funds/:id", to: "personal_funds#destroy"
 
@@ -300,7 +299,6 @@ Rails.application.routes.draw do
     delete "/soa_loans/:id", to: "soa_loans#destroy"
 
     get "/soa_funds", to: "soa_funds#index"
-    get "/soa_funds/turkey", to: "soa_funds#turkey"
     get "/soa_funds/:id", to: "soa_funds#show"
     delete "/soa_funds/:id", to: "soa_funds#destroy"
 
@@ -386,4 +384,7 @@ Rails.application.routes.draw do
 
   # ACTIVITY LOGS
   resources :activity_logs, only: [:index]
+
+  # turkey tools
+  get "turkey", to: "turkey#index"
 end
