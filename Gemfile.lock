@@ -95,13 +95,6 @@ GEM
     chronic (0.10.2)
     cocoon (1.2.14)
     coderay (1.1.2)
-    coffee-rails (4.2.2)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.12.2)
     concurrent-ruby (1.1.5)
     config (2.2.1)
       deep_merge (~> 1.2, >= 1.2.1)
@@ -176,8 +169,6 @@ GEM
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
-    jbuilder (2.9.1)
-      activesupport (>= 4.2.0)
     jmespath (1.4.0)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
@@ -368,7 +359,6 @@ DEPENDENCIES
   caxlsx_rails
   chromedriver-helper
   cocoon
-  coffee-rails (~> 4.2)
   config
   devise
   dotenv-rails
@@ -377,7 +367,6 @@ DEPENDENCIES
   haml
   hirb
   httparty
-  jbuilder (~> 2.5)
   kaminari
   listen (>= 3.0.5, < 3.2)
   memory_profiler
