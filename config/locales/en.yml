@@ -41,6 +41,12 @@ en:
       year_end_closings:
         index: "Year End Closings"
         show: "%{title} - Year End Closings"
+      cdb: "Cash Disbursements - Books"
+      crb: "Cash Receipts - Books"
+      general_ledger: "General Ledger - Accounting"
+      jvb: "General Vouchers - Books"
+      misc: "Misc - Books"
+      trial_balance: "Trial Balance - Accounting"
     activity_logs:
       index: "Activity Logs"
     billings:
