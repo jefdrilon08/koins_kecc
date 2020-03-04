@@ -2,7 +2,9 @@ class MembersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @members  = Member.select("*").where(branch_id: @branches.pluck(:id))
+    @members  = Member.select("*")
+                      .includes(:center, :branch, :profile_picture_attachment)
+                      .where(branch_id: @branches.pluck(:id))
     @q        = params[:q]
     @status   = params[:status]
     @restored = params[:restored].present?

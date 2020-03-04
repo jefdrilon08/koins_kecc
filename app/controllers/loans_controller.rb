@@ -2,7 +2,8 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans            = Loan.where("loans.branch_id IN (?)", @branches.pluck(:id))
+    @loans            = Loan.includes(:center, :branch, :member, :loan_product)
+                            .where("loans.branch_id IN (?)", @branches.pluck(:id))
     @q                = params[:q]
     @status           = params[:status]
     @loan_product_id  = params[:loan_product_id]

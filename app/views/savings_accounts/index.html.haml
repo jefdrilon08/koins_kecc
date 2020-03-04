@@ -6,9 +6,9 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @savings_accounts.size > 0
+          - if @savings_accounts.any?
             = render partial: "index_list"
-            /= paginate @savings_accounts
+            = paginate @savings_accounts
           - else
             %p
               No accounts found

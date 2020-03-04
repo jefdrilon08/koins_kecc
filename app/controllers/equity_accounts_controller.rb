@@ -2,12 +2,12 @@ class EquityAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @equity_accounts  = MemberAccount.equities
+    @equity_accounts  = MemberAccount.equities.includes(:branch, :member)
 
     if params[:q].present?
       @q  = params[:q]
 
-      @equity_accounts = @equity_accounts.joins(:member).where(
+      @equity_accounts = @equity_accounts.where(
                             "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
                             q: "%#{@q.upcase}%"
                           )
@@ -29,8 +29,7 @@ class EquityAccountsController < ApplicationController
       @equity_accounts = @equity_accounts.where(center_id: @center.id)
     end
  
-
-    #@equity_accounts = @equity_accounts.page(params[:page]).per(20)
+    @equity_accounts = @equity_accounts.page(params[:page]).per(100)
   end
 
   def show
