@@ -30,4 +30,13 @@ CREATE INDEX manual_idx_9 on accounting_entries (book, reference_number, particu
 
 DROP INDEX manual_idx_10;
 CREATE INDEX manual_idx_10 on journal_entries (accounting_code_id, accounting_entry_id);
+
+DROP INDEX manual_idx_11;
+CREATE INDEX manual_idx_11 ON data_stores ((meta->>'data_store_type'), (meta->>'branch_id'), (meta->>'as_of') DESC);
+
+DROP INDEX manual_idx_12;
+CREATE INDEX manual_idx_12 member_accounts (account_type, account_subtype);
+
+DROP INDEX manual_idx_13;
+CREATE INDEX manual_idx_13 ON activity_logs ((data->>'billing_id'), created_at DESC);
 ```
