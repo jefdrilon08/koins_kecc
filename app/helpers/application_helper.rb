@@ -1,4 +1,9 @@
 module ApplicationHelper
+  def title(*args)
+    key = "titles.#{params[:controller].gsub("/", ".")}.#{params[:action]}"
+    content_for :title, t(key, title: args.join(" - "))
+  end
+
   def accounting_funds
     AccountingFund.all.map{ |o|
       {

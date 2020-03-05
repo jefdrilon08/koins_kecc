@@ -1,11 +1,11 @@
 %h4
   Accounting Entry
 %hr
-= render partial: "accounting/year_end_closings/accounting_entry"
+= render partial: "accounting/year_end_closings/accounting_entry", locals: { accounting_entry: @data[:accounting_entry] }
 
 %h4
   Net Entry
-= render partial: "accounting/year_end_closings/net_entry"
+= render partial: "accounting/year_end_closings/net_entry", locals: { net_entry: @data[:net_entry] }
 
 %hr
 

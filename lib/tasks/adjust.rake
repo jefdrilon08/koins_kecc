@@ -87,13 +87,13 @@ namespace :adjust do
       ActiveRecord::Base.connection.execute(query)
     end
 
-    # puts "Rehashing branch..."
-    # ::MemberAccounts::BulkRehash.new(
-    #   config: {
-    #     branch: branch
-    #   },
-    #   account_subtype: account_subtype
-    # ).execute!
+    puts "Rehashing branch..."
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+        branch: branch
+      },
+      account_subtype: account_subtype
+    ).execute!
 
     puts "Done."
   end
@@ -942,18 +942,21 @@ namespace :adjust do
                 
                 attachments = member.attachment_files  
                 attachment = attachments.where(file_name: filename).first
+                
                 if attachment.nil?
-                  attachment_file  = AttachmentFile.new(
+                  if filename != "Thumbs"
+                    attachment_file  = AttachmentFile.new(
                                         file_name: filename,
                                         member: member
                                      )
 
-                  attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                    attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
 
-                  if attachment_file.save
-                    puts "Successfully uploaded file #{ff} for #{member.identification_number}"
-                  else
-                    puts "Error in attaching file #{ff}"
+                    if attachment_file.save
+                      puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                    else
+                      puts "Error in attaching file #{ff}"
+                    end
                   end
                 else
                   attachment.file.purge
@@ -972,6 +975,18 @@ namespace :adjust do
         end
       end
     end
+  end
+
+  task :destroy_thumbs_attachment_file => :environment do
+    puts "Destroying thumbs file ..."
+    AttachmentFile.where("file_name IN (?)", ["Thumbs", "thumbs"]).each do |af|
+      if af.file.present?
+        puts "Destroying file of #{af.member_id}"
+        af.file.purge
+        af.destroy!  
+      end
+    end  
+    puts "Done!"
   end
 
   task :update_insurance_status => :environment do

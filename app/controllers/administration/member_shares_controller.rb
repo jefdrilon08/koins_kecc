@@ -3,8 +3,19 @@ module Administration
     before_action :authenticate_user!
 
     def index
-      @member_shares  = MemberShare.not_printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id))
-      @members        = Member.active.where.not(id: MemberShare.all.pluck(:member_id).uniq).where(branch_id: @branches.pluck(:id)).order("last_name ASC")
+      branch_ids = @branches.pluck(:id)
+
+      @member_shares = MemberShare
+        .not_printed
+        .includes(:member)
+        .where(members: { branch_id: branch_ids })
+
+      @members = Member
+        .active
+        .left_outer_joins(:member_shares)
+        .includes(:branch)
+        .where(branch_id: branch_ids, member_shares: { id: nil })
+        .order(last_name: :asc)
 
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
@@ -14,7 +25,8 @@ module Administration
         @members        = @members.where(branch_id: @branch.id)
       end
 
-      #@member_shares  = @member_shares.page(params[:page]).per(20)
+      @members       = @members.page(params[:page]).per(LIST_PAGE_SIZE)
+      @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
     end
 
     def print
@@ -33,6 +45,7 @@ module Administration
       end
  
     end
+
     def no_certificates
       @data = {}
       @data[:sfp] = []
@@ -121,7 +134,7 @@ module Administration
 
     def not_printed
       @member_shares  = MemberShare.not_printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("date_of_issue DESC")
-      @member_shares  = @member_shares.page(params[:page]).per(20)
+      @member_shares  = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
     end
 
     def printed
@@ -138,9 +151,8 @@ module Administration
         #d = (params[:end_date].to_date + 1).to_s
         @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
       end
- 
 
-      #@member_shares  = @member_shares.page(params[:page]).per(20)
+      @member_shares  = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
     end
   end
 end

@@ -34,7 +34,7 @@ module WithdrawalCollections
       
 
       # Update accounting_entry
-      @data[:accounting_entry]  = ::WithdrawalCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::InsuranceWithdrawalCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @withdrawal_collection.branch,
                                       data: @data,

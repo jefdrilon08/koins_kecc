@@ -1,10 +1,11 @@
 var debug                 = process.env.NODE_ENV !== "production";
 var webpack               = require('webpack');
 var WebpackNotifierPlugin = require('webpack-notifier');
+const TerserPlugin        = require('terser-webpack-plugin');
 
 module.exports = {
   context: __dirname,
-  devtool: debug ? "inline-sourcemap" : null,
+  devtool: debug ? "inline-sourcemap" : false,
   entry: {
     MembersIndex: "./react/members/Index.js",
     MembersForm: "./react/members/Form.js",
@@ -64,14 +65,16 @@ module.exports = {
       }
     ]
   },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin()],
+  },
   output: {
     path: __dirname + "/app/assets/javascripts/",
     filename: "[name].min.react.js", 
   },
   plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: true, sourcemap: false }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new WebpackNotifierPlugin({title: 'KOINS Webpack', alwaysNotify: true})
   ],
 };

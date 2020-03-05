@@ -7,6 +7,8 @@ module Members
       @member       = @config[:member]
       @user         = @config[:user]
       @member_type  = @config[:member_type]
+    
+      @valid_roles = ["MIS", "BK", "SBK", "REMOTE-BK", "REMOTE-FM", "OAS", "AO"]
     end
 
     def execute!  
@@ -45,6 +47,13 @@ module Members
             message: "Invalid member type #{@member_type}"
           }
         end
+      end
+
+      if (@user.roles & @valid_roles).size == 0
+        @errors[:messages] << {
+          key: "auth",
+          message: "invalid role #{@user.roles}"
+        }
       end
 
       #not_yet_implemented!

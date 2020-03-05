@@ -1,9 +1,10 @@
 class BillingsController < ApplicationController
   before_action :authenticate_user!
-  
-    
+
   def index
-    @billings = Billing.select("*").where(branch_id: @branches.pluck(:id))
+    @billings = Billing
+      .includes(:center, :branch)
+      .where(branch_id: @branches.pluck(:id))
 
     if params[:start_date].present? and params[:end_date].present?
       @billings = @billings.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])

@@ -30,4 +30,63 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  titles:
+    accounting:
+      accounting_codes:
+        index: "Accounting Codes"
+        show: "%{title} - Accounting Codes"
+        new: "New Accounting Code"
+        edit: "Edit - %{title} - Accounting Codes"
+        print: "Print Accounting Codes"
+      year_end_closings:
+        index: "Year End Closings"
+        show: "%{title} - Year End Closings"
+      cdb: "Cash Disbursements - Books"
+      crb: "Cash Receipts - Books"
+      general_ledger: "General Ledger - Accounting"
+      jvb: "General Vouchers - Books"
+      misc: "Misc - Books"
+      trial_balance: "Trial Balance - Accounting"
+    activity_logs:
+      index: "Activity Logs"
+    billings:
+      index: "Billings"
+      show: "Billing #%{title}"
+    deposit_collections:
+      index: "Deposits"
+      show: "%{title} - Deposits"
+    equity_accounts:
+      index: "Equity"
+      show: "Equity #%{title}"
+    insurance_fund_transfer_collections:
+      index: "Insurance Fund Transfers"
+      show: "%{title} - Insurance Fund Transfers"
+    insurance_withdrawal_collections:
+      index: "Insurance Withdrawals"
+      show: "%{title} - Insurance Withdrawals"
+    loans:
+      index: "Loans"
+      show: "Loan #%{title}"
+    members:
+      index: "Members"
+      show: "%{title} - Members"
+      form: "Member Form"
+    membership_payment_collections:
+      index: "Membership Payments"
+      show: "%{title} - Membership Payments"
+    monthly_closing_collections:
+      index: "Monthly Closings"
+      show: "%{title} - Monthly Closings"
+    pages:
+      index: "Dashboard"
+      insights: "Insights"
+      login: "Login"
+    savings_accounts:
+      index: "Savings"
+      show: "Savings #%{title}"
+    time_deposit_collections:
+      index: "Time Deposits"
+      show: "%{title} - Time Deposits"
+    withdrawal_collections:
+      index: "Withdrawals"
+      show: "%{title} - Withdrawals"
