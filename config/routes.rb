@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   devise_for :users, skip: [:sessions]
 
@@ -6,11 +8,12 @@ Rails.application.routes.draw do
     delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
+  authenticate :user do
+    mount Sidekiq::Web => SIDEKIQ_WEB_PATH
+  end
+
   # dashboard
   get "/dashboard/finance", to: "pages#finance", as: :dashboard_finance
-
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
 
   # insights
   get "/insights", to: "pages#insights"
