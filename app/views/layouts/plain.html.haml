@@ -3,7 +3,7 @@
   %head
     %title
       = "[#{App.pipeline.upcase}] " if !App.production?
-      = content_for?(:title) ? "#{yield(:title)} - #{APP_NAME}" : "#{APP_NAME}"
+      = content_for?(:title) ? "#{yield(:title)} - #{App.name}" : "#{App.name}"
     = csrf_meta_tags
     = csp_meta_tag
 
