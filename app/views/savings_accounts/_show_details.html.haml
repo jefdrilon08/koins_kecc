@@ -45,3 +45,5 @@
           #{number_to_currency(o.amount, unit: "")}
         %td.text-right.text-muted
           #{number_to_currency(o.data["ending_balance"], unit: "")}
+
+= paginate @account_transactions

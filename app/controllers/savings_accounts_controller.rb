@@ -48,6 +48,9 @@ class SavingsAccountsController < ApplicationController
                               subsidiary_id: @savings_account.id
                             ).order("transacted_at ASC, updated_at ASC")
 
+    
+    @account_transactions = @account_transactions.page(params[:page]).per(LIST_PAGE_SIZE)
+
     if @savings_account.time_deposit?
       @withdrawal_requests  = ::MemberAccounts::TimeDeposit::FetchWithdrawalRequests.new(
                                 config: {
