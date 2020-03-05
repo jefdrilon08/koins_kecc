@@ -35,7 +35,7 @@ module Members
       ld_remaining_uuids = []
       ld_current_uuids   = @member.legal_dependents.pluck(:id)
 
-      if @member_data[:legal_dependents].size > 0
+      if @member_data[:legal_dependents].any?
         @member_data[:legal_dependents].each do |o|
           # Update if any
           if o[:id].present?
@@ -72,7 +72,7 @@ module Members
       b_remaining_uuids = []
       b_current_uuids   = @member.beneficiaries.pluck(:id)
       #raise b_current_uuids.inspect
-      if @member_data[:beneficiaries].size > 0
+      if @member_data[:beneficiaries].any?
         @member_data[:beneficiaries].each do |o|
           # Update if any
           if o[:id].present?
@@ -122,7 +122,7 @@ module Members
                             }
                           ).execute!
 
-      if missing_accounts.size > 0
+      if missing_accounts.any?
         ::Members::GenerateMissingAccounts.new(
           config: { member: @member }
         ).execute!

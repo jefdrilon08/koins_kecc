@@ -24,7 +24,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           general_ledger_data  = ::Accounting::GenerateGeneralLedger.new(
@@ -89,7 +89,7 @@ module Api
           end
         end
 
-        if errors.size > 0
+        if errors.any?
           render json: { errors: errors }, status: 400
         else
           config  = {

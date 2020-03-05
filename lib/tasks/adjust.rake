@@ -81,7 +81,7 @@ namespace :adjust do
       values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{trans_data.to_json}')"
     end
 
-    if values.size > 0
+    if values.any?
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
 
       ActiveRecord::Base.connection.execute(query)
@@ -391,7 +391,7 @@ namespace :adjust do
       printf("\r(#{i+1}/#{size}): #{progress}%%")
     end
 
-    if invalid_records.size > 0
+    if invalid_records.any?
       puts "Repaired #{invalid_records} invalid records out of #{size}"
     else
       puts "No invalid records found."
@@ -548,11 +548,11 @@ namespace :adjust do
       data        = o.data.with_indifferent_access
       loan_cycles = data[:loan_cycles] || []
 
-      if loan_cycles.size > 0
+      if loan_cycles.any?
         loan_cycles.each do |lc|
           temp_loans  = loans.where(loan_product_id: lc[:loan_product_id]).order("date_approved ASC")
 
-          if temp_loans.size > 0
+          if temp_loans.any?
             cycle_count     = lc[:cycle].to_i
             starting_cycle  = cycle_count - temp_loans.size
 
@@ -1146,7 +1146,7 @@ namespace :adjust do
         if !current_member_account.nil?
           transactions = account_transactions.select{ |o| o.subsidiary_id == current_member_account.id }
 
-          if transactions.size > 0
+          if transactions.any?
             # latest_payment    = member_accounts
             latest            = transactions.last
             last_payment_date = transactions.last[:transacted_at].to_date

@@ -7,7 +7,7 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @deposit_collections.size > 0
+          - if @deposit_collections.any?
             = render partial: "index_list", locals: { deposit_collections: @deposit_collections }
             = paginate @deposit_collections
           - else

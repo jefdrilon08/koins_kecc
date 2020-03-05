@@ -200,7 +200,7 @@ module Reports
 
       num_days_par = 0
 
-      if @amorts.size > 0
+      if @amorts.any?
         num_days_par  = (@as_of - @amorts.first.due_date).days
 
         if last_payment.present?

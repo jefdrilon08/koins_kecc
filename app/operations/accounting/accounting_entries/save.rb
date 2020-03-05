@@ -42,7 +42,7 @@ module Accounting
           existing_journal_entry_ids  = @accounting_entry.journal_entries.pluck(:id)
           unwanted_journal_entry_ids  = (@current_journal_entry_ids - existing_journal_entry_ids) | (existing_journal_entry_ids - @current_journal_entry_ids)
 
-          if unwanted_journal_entry_ids.size > 0
+          if unwanted_journal_entry_ids.any?
             unwanted_journal_entry_ids.each do |unwanted_id|
               JournalEntry.find(unwanted_id).destroy!
             end

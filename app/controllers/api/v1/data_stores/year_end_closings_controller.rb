@@ -16,7 +16,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json: errors, status: 400
           else
             ::Closing::ApproveYearEndClosing.new(
@@ -36,7 +36,7 @@ module Api
                       }
                     ).execute!
 
-          if @errors[:full_messages].size > 0
+          if @errors[:full_messages].any?
             render json: @errors, status: 400
           elsif @record.blank?
             @branch       = Branch.find(params[:branch_id])

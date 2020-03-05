@@ -21,7 +21,7 @@ module Members
           if s.maintaining_balance.present? and member_account.account_type == s.maintaining_balance.account_type and member_account.account_subtype == s.maintaining_balance.account_subtype
             current_loans = @active_loans.where(loan_product_id: s.loan_product_id)
 
-            if member_account.present? and current_loans.size > 0
+            if member_account.present? and current_loans.any?
               
               current_loans.each do |loan|
                 if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)

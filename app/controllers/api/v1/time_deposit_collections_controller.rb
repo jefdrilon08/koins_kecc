@@ -17,7 +17,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::TimeDepositCollections::ModifyBook.new(
@@ -42,7 +42,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::TimeDepositCollections::ModifyCashManagementTemplate.new(
@@ -70,7 +70,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::TimeDepositCollections::RemoveMember.new(
@@ -94,7 +94,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::TimeDepositCollections::AddMember.new(
@@ -225,7 +225,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::TimeDepositCollections::Approve.new(
@@ -253,7 +253,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           time_deposit_collection = ::TimeDepositCollections::ModifyTransactionRecord.new(
@@ -278,7 +278,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           time_deposit_collection = ::TimeDepositCollections::CreateTimeDepositCollection.new(

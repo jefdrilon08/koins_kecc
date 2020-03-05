@@ -5,7 +5,7 @@
     .col
       .card
         .card-body
-          - if @savings_insurance_transfer_collections.size > 0
+          - if @savings_insurance_transfer_collections.any?
             = render partial: "index_list"
           - else
             %p

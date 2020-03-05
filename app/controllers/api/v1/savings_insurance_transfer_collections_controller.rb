@@ -16,7 +16,7 @@ module Api
                   ).execute!
 
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: { errors: errors }, status: 400
         else
           savings_insurance_transfer_collection.update!(status: "processing")
@@ -46,7 +46,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: { errors: errors }, status: 400
         else
           ::SavingsInsuranceTransferCollections::RemoveMember.new(
@@ -73,7 +73,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: { errors: errors }, status: 400
         else
           ::SavingsInsuranceTransferCollections::AddMember.new(
@@ -104,7 +104,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: { errors: errors }, status: 400
         else
           savings_insurance_transfer_collection = ::SavingsInsuranceTransferCollections::Save.new(

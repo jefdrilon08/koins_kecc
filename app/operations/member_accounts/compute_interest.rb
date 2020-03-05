@@ -162,7 +162,7 @@ module MemberAccounts
 
       @transaction_dates  = @account_transactions.pluck(:transacted_at).uniq
 
-      if @transaction_dates.size > 0
+      if @transaction_dates.any?
         r[:interest_per_month]                = (@monthly_interest_rate * r[:ending_balance]).to_f.round(2)
         r[:num_days_before_next_transaction]  = (@transaction_dates.first.to_date - r[:date].to_date).to_i
         r[:interest_earned_on_deposits]       = ((r[:interest_per_month] * r[:num_days_before_next_transaction]) / 30).round(2)

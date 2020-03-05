@@ -9,7 +9,7 @@
             = render partial: "form_add"
           .message
 
-          - if @data[:records].size > 0
+          - if @data[:records].any?
             = render partial: "members_table"
           - else
             %p

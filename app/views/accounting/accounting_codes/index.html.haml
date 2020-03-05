@@ -6,7 +6,7 @@
     .col
       .card
         .card-body
-          - if @accounting_codes.size > 0
+          - if @accounting_codes.any?
             = render partial: "index_list"
           - else
             %p

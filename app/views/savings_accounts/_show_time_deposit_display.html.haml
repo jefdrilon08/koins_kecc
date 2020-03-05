@@ -3,7 +3,7 @@
     Current Lock-In Period
   %hr
   = render partial: "savings_accounts/time_deposit/lock_in_period"
-- if @pending_requests.size > 0
+- if @pending_requests.any?
   %h4
     Withdrawal Request
   = render partial: "savings_accounts/time_deposit/pending_requests"
@@ -14,14 +14,14 @@
 - else
   No current pending withdrawal requests.
 %hr
-- if @approved_requests.size > 0
+- if @approved_requests.any?
   %h4
     Approved Withdrawals
   = render partial: "savings_accounts/time_deposit/approved_requests"
 - else
   No current approved withdrawals.
 %hr
-- if @autorenewals.size > 0
+- if @autorenewals.any?
   %h4
     Autorenewals
   = render partial: "savings_accounts/time_deposit/autorenewals"

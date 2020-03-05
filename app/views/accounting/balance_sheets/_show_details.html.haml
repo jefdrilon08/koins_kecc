@@ -102,7 +102,7 @@
     %td.text-right
       %b
         #{number_to_currency(@data[:total_equities].to_f + @net_income + @data[:total_liabilities], unit: '')}
-  - if @data[:fund_balance].size > 0
+  - if @data[:fund_balance].any?
     %tr
       %th{ colspan: 2 }
         Fund Balance

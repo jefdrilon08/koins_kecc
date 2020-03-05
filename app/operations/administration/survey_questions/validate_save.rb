@@ -37,7 +37,7 @@ module Administration
           }
         end
 
-        if @data[:question_type].present? && @data[:question_type] == "options" && @data[:data][:options].size > 0
+        if @data[:question_type].present? && @data[:question_type] == "options" && @data[:data][:options].any?
           @data[:data][:options].each_with_index do |o, i|
             if o[:content].blank?
               @errors[:messages] << {

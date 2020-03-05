@@ -159,7 +159,7 @@
           = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
             .fa.fa-times
             Resign Member
-      - if @missing_accounts.size > 0
+      - if @missing_accounts.any?
         %hr
         %h6
           Generate Missing Accounts

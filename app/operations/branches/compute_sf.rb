@@ -33,7 +33,7 @@ module Branches
                         end_date: @end_date
                       ).execute!
 
-        if member_data[:records].size > 0
+        if member_data[:records].any?
           @data[:records] << member_data
         end
       end

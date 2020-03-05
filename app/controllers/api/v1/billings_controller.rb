@@ -142,7 +142,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           billing = ::Billings::Check.new(
@@ -174,7 +174,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           billing = ::Billings::ZeroOut.new(
@@ -207,7 +207,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           billing.update!(status: "processing")
@@ -237,7 +237,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           billing = ::Billings::ModifyTransactionRecord.new(
@@ -264,7 +264,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           billing = ::Billings::CreateBilling.new(

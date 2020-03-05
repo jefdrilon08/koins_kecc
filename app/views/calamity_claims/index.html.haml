@@ -15,7 +15,7 @@
     .col
       .card
         .card-body
-          - if @calamity_claims.size > 0
+          - if @calamity_claims.any?
             = render partial: "calamity_claims/list", locals: { calamity_claims: @calamity_claims }
             = paginate @calamity_claims
           - else

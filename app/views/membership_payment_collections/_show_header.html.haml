@@ -13,7 +13,7 @@
       = link_to "#", class: 'btn', id: 'btn-print' do
         .fa.fa-print
         Print
-      - if @membership_payment_collection.pending? && (["BK", "SBK", "MIS"] & current_user.roles).size > 0
+      - if @membership_payment_collection.pending? && (["BK", "SBK", "MIS"] & current_user.roles).any?
         = link_to membership_payment_collection_path(@membership_payment_collection), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times
           Delete

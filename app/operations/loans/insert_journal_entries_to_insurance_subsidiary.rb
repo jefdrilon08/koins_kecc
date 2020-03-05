@@ -66,7 +66,7 @@ module Loans
         end
       end
 
-      if values.size > 0
+      if values.any?
         query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
 
         ActiveRecord::Base.connection.execute(query)

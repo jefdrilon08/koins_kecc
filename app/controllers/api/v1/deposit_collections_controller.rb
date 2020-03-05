@@ -16,7 +16,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           deposit_collection.update!(status: "processing")
@@ -38,7 +38,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           deposit_collection.update!(status: "processing")
@@ -63,7 +63,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::DepositCollections::ModifyBook.new(
@@ -88,7 +88,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::DepositCollections::ModifyCashManagementTemplate.new(
@@ -120,7 +120,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::DepositCollections::RemoveMember.new(
@@ -142,7 +142,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::DepositCollections::LoadCenter.new(
@@ -162,7 +162,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::DepositCollections::AddMember.new(
@@ -309,7 +309,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::DepositCollections::Approve.new(
@@ -337,7 +337,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           deposit_collection = ::DepositCollections::ModifyTransactionRecord.new(
@@ -362,7 +362,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           deposit_collection = ::DepositCollections::CreateDepositCollection.new(

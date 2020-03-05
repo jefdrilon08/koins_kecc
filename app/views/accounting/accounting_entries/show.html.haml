@@ -9,7 +9,7 @@
           - if @accounting_entry.approved?
             = render partial: "accounting/accounting_entries/adjustment_actions", locals: { accounting_entry: @accounting_entry }
 
-          - if @activity_logs.size > 0
+          - if @activity_logs.any?
             %hr
             = render partial: "accounting/accounting_entries/activity_logs", locals: { activity_logs: @activity_logs }
 

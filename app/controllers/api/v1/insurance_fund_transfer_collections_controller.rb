@@ -20,7 +20,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::InsuranceFundTransferCollections::RemoveMember.new(
@@ -42,7 +42,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::InsuranceFundTransferCollections::AddMember.new(
@@ -64,7 +64,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::InsuranceFundTransferCollections::LoadCenter.new(
@@ -159,7 +159,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::InsuranceFundTransferCollections::Approve.new(
@@ -187,7 +187,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           insurance_fund_transfer_collection = ::InsuranceFundTransferCollections::ModifyTransactionRecord.new(
@@ -212,7 +212,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           insurance_fund_transfer_collection = ::InsuranceFundTransferCollections::CreateInsuranceFundTransferCollection.new(

@@ -20,7 +20,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::MembershipPaymentCollections::RemoveMember.new(
@@ -42,7 +42,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::MembershipPaymentCollections::AddMember.new(
@@ -142,7 +142,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::MembershipPaymentCollections::Approve.new(
@@ -170,7 +170,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           membership_payment_collection = ::MembershipPaymentCollections::ModifyTransactionRecord.new(
@@ -197,7 +197,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           membership_payment_collection = ::MembershipPaymentCollections::CreateMembershipPaymentCollection.new(

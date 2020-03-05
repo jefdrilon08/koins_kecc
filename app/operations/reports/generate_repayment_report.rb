@@ -93,7 +93,7 @@ module Reports
           par_bins:           []
         }
 
-        if d[:officers].size > 0
+        if d[:officers].any?
           d[:officers].each do |temp|
             d[:principal] += temp[:principal]
             d[:interest]  += temp[:interest]
@@ -164,7 +164,7 @@ module Reports
         end
       end
 
-      if @data[:loan_products].size > 0
+      if @data[:loan_products].any?
         @data[:loan_products].each do |temp|
           @data[:principal] += temp[:principal]
           @data[:interest]  += temp[:interest]
@@ -271,7 +271,7 @@ module Reports
           par_bins:           []
         }
 
-        if d[:centers].size > 0
+        if d[:centers].any?
           d[:centers].each do |temp|
             d[:principal] += temp[:principal]
             d[:interest]  += temp[:interest]
@@ -378,7 +378,7 @@ module Reports
           par_bins:           []
         }
 
-        if d[:loans].size > 0
+        if d[:loans].any?
           d[:loans].each do |temp|
             d[:principal] += temp[:principal]
             d[:interest]  += temp[:interest]

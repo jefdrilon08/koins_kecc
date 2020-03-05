@@ -6,7 +6,7 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @adjustment_records.size > 0
+          - if @adjustment_records.any?
             = render partial: "index_list"
             = paginate @adjustment_records
           - else
