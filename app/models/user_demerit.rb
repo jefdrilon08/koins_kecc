@@ -34,7 +34,7 @@ class UserDemerit < ApplicationRecord
     if self.file.attached?
       return rails_blob_path(self.file, disposition: "attachment", only_path: true)
     else
-      "https://#{ENV.fetch('APP_HOST')}#{ActionController::Base.helpers.asset_path('missing_file.png')}"
+      ActionController::Base.helpers.asset_url("missing_file.png")
     end
   end
 

@@ -100,7 +100,7 @@ class Member < ApplicationRecord
     if self.profile_picture.attached? and self.profile_picture.representable?
       return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
     else
-      "https://#{ENV.fetch('APP_HOST')}#{ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
+      ActionController::Base.helpers.asset_url("missing_profile_picture.png")
     end
   end
 

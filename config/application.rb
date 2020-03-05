@@ -31,5 +31,7 @@ module Koins
     config.action_cable.mount_path = '/websocket'
 
     config.action_view.raise_on_missing_translations = true
+
+    config.action_controller.asset_host = "#{ENV['APP_PIPELINE'] == 'production' ? 'https' : 'http'}://#{ENV['APP_HOST']}"
   end
 end
