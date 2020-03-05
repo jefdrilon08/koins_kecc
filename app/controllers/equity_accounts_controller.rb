@@ -2,9 +2,10 @@ class EquityAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @equity_accounts  = MemberAccount.equities.includes(:branch, :member).where(
-                          branch_id: @branches.pluck(:id)
-                        )
+    @equity_accounts = MemberAccount
+      .equities
+      .includes(:branch, :member)
+      .where(branch_id: @branches.pluck(:id))
 
     if params[:q].present?
       @q  = params[:q]

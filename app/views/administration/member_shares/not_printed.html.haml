@@ -8,7 +8,7 @@
           .row
             .col
               %h5
-                Non-printed Certificates (#{@member_shares.count})
+                Non-printed Certificates (#{@member_shares.total_count})
               - if @member_shares.any?
                 %table.table.table-sm.table-bordered
                   %thead
