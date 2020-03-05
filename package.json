@@ -30,7 +30,8 @@
     "style-loader": "^0.23.0",
     "terser-webpack-plugin": "^2.3.5",
     "victory": "^31.0.1",
-    "webpack": "^4.42.0"
+    "webpack": "^4.42.0",
+    "yarn": "^1.22.0"
   },
   "devDependencies": {
     "webpack-build-notifier": "^0.1.30",

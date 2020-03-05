@@ -59,3 +59,9 @@ Use the raw file URL in the pg:backups restore command:
 ```
 heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
 ```
+
+Transfer production database to staging:
+
+```
+heroku pg:copy koins-production DATABASE --remote staging
+```
