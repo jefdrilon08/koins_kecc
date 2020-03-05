@@ -27,7 +27,7 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
     #current_date: "2020-02-28"
@@ -43,7 +43,7 @@ branch_config:
     current_date: "2020-02-28"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
 
 #east1
   -
@@ -54,7 +54,7 @@ branch_config:
     current_date: "2020-02-28"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
