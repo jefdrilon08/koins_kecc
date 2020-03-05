@@ -48,4 +48,7 @@ CREATE INDEX manual_idx_15 ON activity_logs ((data->>'member_id'), created_at DE
 
 DROP INDEX manual_idx_16;
 CREATE INDEX manual_idx_16 ON accounting_entries (date_prepared);
+
+-- Get index sizes
+\di+ tbl*;
 ```

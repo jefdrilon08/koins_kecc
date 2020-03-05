@@ -23,7 +23,7 @@ module Members
           if !current_member_account.nil?
             transactions = @account_transactions.select{ |o| o.subsidiary_id == current_member_account.id }
 
-            if transactions.size > 0
+            if transactions.any?
               latest            = transactions.last
               last_payment_date = transactions.last[:transacted_at].to_date
               

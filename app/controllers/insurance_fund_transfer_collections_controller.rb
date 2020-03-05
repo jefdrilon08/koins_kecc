@@ -62,7 +62,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       @errors = InsuranceFundTransferCollections::ValidateFundTransferFromCsvFile.new(insurance_fund_transfer_collection: insurance_fund_transfer_collection, config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if @errors[:messages].any?
       redirect_to upload_deposit_path
       flash[:error] = @errors[:messages]
     else

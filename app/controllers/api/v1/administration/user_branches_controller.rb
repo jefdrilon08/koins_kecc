@@ -32,7 +32,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Administration::UserBranches::Toggle.new(

@@ -5,7 +5,7 @@
     .col
       .card
         .card-body
-          - if @balance_sheets.size > 0
+          - if @balance_sheets.any?
             = render partial: "index_list"
             = paginate @balance_sheets
           - else

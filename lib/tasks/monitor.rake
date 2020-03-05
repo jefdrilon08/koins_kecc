@@ -37,7 +37,7 @@ namespace :monitor do
     branches.each do |branch|
       branch_member_accounts  = member_accounts.where(branch_id: branch.id, account_type: account_types, account_subtype: account_subtypes)
 
-      if branch_member_accounts.size > 0
+      if branch_member_accounts.any?
         puts "Branch: #{branch.name}"
         invalid_account_subtypes  = branch_member_accounts.pluck(:account_subtype).uniq
 
@@ -75,7 +75,7 @@ namespace :monitor do
                             }
                           ).execute!
 
-      if missing_accounts.size > 0
+      if missing_accounts.any?
         puts "Member: #{member.full_name} (#{member.id})"
         puts "Status: #{member.status}"
         puts "Branch: #{member.branch.to_s}"

@@ -18,7 +18,7 @@
     .col
       .card
         .card-body
-          - if @kalinga_claims.size > 0
+          - if @kalinga_claims.any?
             = render partial: "kalinga_claims/list", locals: { kalinga_claims: @kalinga_claims }
             = paginate @kalinga_claims
           - else

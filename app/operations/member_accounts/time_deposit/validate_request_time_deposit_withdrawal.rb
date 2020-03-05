@@ -45,7 +45,7 @@ module MemberAccounts
                                 o[:status] == "pending"
                               }
 
-          if pending_requests.size > 0
+          if pending_requests.any?
             @errors[:messages] << {
               key: "member_account",
               message: "account still has pending requests"

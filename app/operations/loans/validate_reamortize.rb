@@ -32,7 +32,7 @@ module Loans
                               "pending"
                             )
 
-      if pending_adjustments.size > 0
+      if pending_adjustments.any?
         @errors[:messages] << {
           key: "adjustments",
           message: "There are still pending adjustments for this loan"

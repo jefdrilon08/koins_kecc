@@ -3,14 +3,10 @@ module DataStores
     before_action :authenticate_user!
 
     def index
-      @records  = DataStore.repayment_rates.where(
-                    "meta->>'branch_id' IN (?)",
-                    @branches.pluck(:id)
-                  )
-
-      @records  = @records.order(
-                    "CAST(meta->>'as_of' AS date) DESC" 
-                  ).page(params[:page]).per(20)
+      @records = DataStore
+        .select("status, meta->>'branch_name' AS branch_name, meta->>'as_of' AS as_of, created_at, updated_at")
+        .repayment_rates.where("meta->>'branch_id' IN (?)", @branches.pluck(:id))
+        .order("CAST(meta->>'as_of' AS date) DESC").page(params[:page]).per(20)
     end
 
     def show

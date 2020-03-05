@@ -22,7 +22,7 @@ module Api
 
         if params[:branch_id].present?
           branch  = Branch.find(params[:branch_id])
-        elsif branches.size > 0
+        elsif branches.any?
           branch  = Branch.find(branches.first[:id])
         end
 

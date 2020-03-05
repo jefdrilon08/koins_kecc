@@ -3,7 +3,7 @@
     %h5
       Demerits
     %hr
-    - if @user_demerits.size > 0
+    - if @user_demerits.any?
       = render partial: "user_demerits"
     - else
       %p

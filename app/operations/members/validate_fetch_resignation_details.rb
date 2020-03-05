@@ -23,7 +23,7 @@ module Members
       else
         active_loans  = Loan.active.where(member_id: @member.id)
 
-        if active_loans.size > 0
+        if active_loans.any?
           active_loans.each do |o|
             @errors[:messages] << {
               key: "loan_#{o.id}",

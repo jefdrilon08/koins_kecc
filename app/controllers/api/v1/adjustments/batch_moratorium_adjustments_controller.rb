@@ -16,7 +16,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::BatchMoratoriumAdjustments::Approve.new(
@@ -39,7 +39,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             adjustment_record.destroy!
@@ -68,7 +68,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             adjustment_record = ::Adjustments::BatchMoratoriumAdjustments::Create.new(

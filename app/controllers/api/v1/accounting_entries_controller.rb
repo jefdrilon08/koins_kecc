@@ -13,7 +13,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           ac  = ::Accounting::AccountingEntries::Approve.new(
@@ -35,7 +35,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: { errors: errors }, status: 400
         else
           ::Accounting::AccountingEntries::ModifyDatePosted.new(
@@ -75,7 +75,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           ac  = ::Accounting::AccountingEntries::Save.new(

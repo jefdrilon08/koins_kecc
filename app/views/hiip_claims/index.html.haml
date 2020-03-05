@@ -15,7 +15,7 @@
     .col
       .card
         .card-body
-          - if @hiip_claims.size > 0
+          - if @hiip_claims.any?
             = render partial: "hiip_claims/list", locals: { hiip_claims: @hiip_claims }
             = paginate @hiip_claims
           - else

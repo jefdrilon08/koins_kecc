@@ -139,7 +139,7 @@ class MembersController < ApplicationController
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
         
         ActivityLog.create!(
@@ -225,7 +225,7 @@ class MembersController < ApplicationController
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
         
         ActivityLog.create!(
@@ -310,7 +310,7 @@ class MembersController < ApplicationController
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
         
         ActivityLog.create!(

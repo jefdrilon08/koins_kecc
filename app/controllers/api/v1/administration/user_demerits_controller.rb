@@ -17,7 +17,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json: { errors: errors[:full_messages] }, status: 400
           else
             ::UserDemerits::Approve.new(

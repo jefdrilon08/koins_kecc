@@ -15,7 +15,7 @@
     .col
       .card
         .card-body
-          - if @kjsp_claims.size > 0
+          - if @kjsp_claims.any?
             = render partial: "kjsp_claims/list", locals: { kjsp_claims: @kjsp_claims }
             = paginate @kjsp_claims
           - else

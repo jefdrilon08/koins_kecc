@@ -81,7 +81,7 @@ namespace :v1 do
       end
     end
 
-    if invalid_loans.size > 0
+    if invalid_loans.any?
       puts "Found #{invalid_loans.size} invalid loans."
 
       puts "Invalid loans:"

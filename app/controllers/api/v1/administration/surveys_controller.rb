@@ -15,7 +15,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json: errors, status: 402
           else
             survey  = ::Administration::Surveys::Save.new(
@@ -44,7 +44,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json: errors, status: 402
           else
             survey.destroy!

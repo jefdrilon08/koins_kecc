@@ -5,7 +5,7 @@
     .col
       .card
         .card-body
-          - if @income_statements.size > 0
+          - if @income_statements.any?
             = render partial: "index_list"
             = paginate @income_statements
           - else

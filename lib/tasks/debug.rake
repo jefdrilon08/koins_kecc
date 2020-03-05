@@ -59,7 +59,7 @@ namespace :debug do
       printf("\r(#{i+1}/#{size}): #{progress}%%")
     end
 
-    if invalid_records.size > 0
+    if invalid_records.any?
       puts "Found #{invalid_records.size} invalid records out of #{size}"
 
       invalid_records.each do |o|

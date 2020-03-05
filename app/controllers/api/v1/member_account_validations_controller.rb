@@ -16,7 +16,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
             member_account_validation  = MemberAccountValidations::CancelMemberAccountValidation.new(
@@ -52,7 +52,7 @@ module Api
                      config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
             member_account_validation  = MemberAccountValidations::CancelMemberToMemberAccountValidation.new(
@@ -86,7 +86,7 @@ module Api
                    config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
@@ -111,7 +111,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
             member_account_validation  = MemberAccountValidations::CheckMemberAccountValidation.new(
@@ -202,7 +202,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
             member_account_validation  = MemberAccountValidations::ValidateMemberAccountValidation.new(
@@ -231,7 +231,7 @@ module Api
                       config: config
                     ).execute!
           
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
             member_account_validation  = MemberAccountValidations::ApproveMemberAccountValidation.new(

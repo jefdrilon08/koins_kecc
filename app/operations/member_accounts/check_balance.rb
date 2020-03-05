@@ -18,7 +18,7 @@ module MemberAccounts
       running_balance = (deposits - withdrawals)
       ending_balance  = 0.00
 
-      if @account_transactions.size > 0
+      if @account_transactions.any?
         ending_balance  = @account_transactions.last.data["ending_balance"].to_f.round(2)
       end
 

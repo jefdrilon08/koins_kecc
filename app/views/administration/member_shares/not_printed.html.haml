@@ -9,7 +9,7 @@
             .col
               %h5
                 Non-printed Certificates (#{@member_shares.count})
-              - if @member_shares.size > 0
+              - if @member_shares.any?
                 %table.table.table-sm.table-bordered
                   %thead
                     %tr

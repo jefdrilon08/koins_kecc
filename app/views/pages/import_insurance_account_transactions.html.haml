@@ -21,7 +21,7 @@
                 %br  
                 = submit_tag "Import Insurance Account Transactions Information", :class => "btn btn-primary"
           %hr
-          - if @records.size > 0
+          - if @records.any?
             %table.table.table-bordered.table-sm
               %thead
                 %tr
