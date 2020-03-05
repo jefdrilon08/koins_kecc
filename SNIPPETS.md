@@ -45,4 +45,7 @@ CREATE INDEX manual_idx_14 ON account_transactions (subsidiary_id, transacted_at
 
 DROP INDEX manual_idx_15;
 CREATE INDEX manual_idx_15 ON activity_logs ((data->>'member_id'), created_at DESC);
+
+DROP INDEX manual_idx_16;
+CREATE INDEX manual_idx_16 ON accounting_entries (date_prepared);
 ```
