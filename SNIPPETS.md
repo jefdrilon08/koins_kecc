@@ -35,8 +35,14 @@ DROP INDEX manual_idx_11;
 CREATE INDEX manual_idx_11 ON data_stores ((meta->>'data_store_type'), (meta->>'branch_id'), (meta->>'as_of') DESC);
 
 DROP INDEX manual_idx_12;
-CREATE INDEX manual_idx_12 member_accounts (account_type, account_subtype);
+CREATE INDEX manual_idx_12 ON member_accounts (account_type, account_subtype);
 
 DROP INDEX manual_idx_13;
 CREATE INDEX manual_idx_13 ON activity_logs ((data->>'billing_id'), created_at DESC);
+
+DROP INDEX manual_idx_14;
+CREATE INDEX manual_idx_14 ON account_transactions (subsidiary_id, transacted_at);
+
+DROP INDEX manual_idx_15;
+CREATE INDEX manual_idx_15 ON activity_logs ((data->>'member_id'), created_at DESC);
 ```
