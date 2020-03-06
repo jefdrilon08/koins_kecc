@@ -1,7 +1,7 @@
 var debug                 = process.env.NODE_ENV !== "production";
 var webpack               = require('webpack');
 var WebpackNotifierPlugin = require('webpack-notifier');
-const TerserPlugin        = require('terser-webpack-plugin');
+//const TerserPlugin        = require('terser-webpack-plugin');
 
 module.exports = {
   context: __dirname,
@@ -66,8 +66,8 @@ module.exports = {
     ]
   },
   optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
+    minimize: true
+    //minimizer: [new TerserPlugin()],
   },
   output: {
     path: __dirname + "/app/assets/javascripts/",
