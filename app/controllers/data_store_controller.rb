@@ -76,6 +76,6 @@ class DataStoreController < ApplicationController
       .where("meta->>'branch_id' IN (?)", @branches.pluck(:id))
       .order(order_field)
       .page(params[:page])
-      .per(20)
+      .per(LIST_PAGE_SIZE)
   end
 end

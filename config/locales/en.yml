@@ -130,8 +130,10 @@ en:
       index: "Monthly Closings"
       show: "%{title} - Monthly Closings"
     pages:
+      daily_report_insurance_account_status: "Insurance Account Status"
       index: "Dashboard"
       insights: "Insights"
+      lapsed_members: "Lapsed Members"
       login: "Login"
     savings_accounts:
       index: "Savings"

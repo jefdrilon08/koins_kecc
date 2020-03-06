@@ -54,8 +54,11 @@ class PagesController < ApplicationController
   end
 
   def lapsed_members
-    @members = Member.where("status = ? AND insurance_status = ? AND branch_id IN (?)", "active", "lapsed", @branches.pluck(:id)).order("branch_id ASC, center_id ASC, last_name ASC") 
-  
+    @members = Member
+      .includes(:branch, :center)
+      .where(status: "active", insurance_status: "lapsed", branch_id: @branches.pluck(:id))
+      .order("branches.name ASC, centers.name ASC, last_name ASC")
+
     if params[:branch_id].present?
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
