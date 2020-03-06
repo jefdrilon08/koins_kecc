@@ -23,13 +23,13 @@
             %small
               #{o.id}
               %br
-              Transacted At: #{o.transacted_at.to_s(:db)}
+              Transacted At: #{o.transacted_at}
               |
-              Updated At: #{o.updated_at.to_s(:db)}
+              Updated At: #{o.updated_at}
         %td
           %center
             %small
-              #{o.transacted_at.localtime.strftime("%b %d, %Y")}
+              #{o.transacted_at.strftime("%b %d, %Y")}
         %td
           %center
             - if o.deposit?
