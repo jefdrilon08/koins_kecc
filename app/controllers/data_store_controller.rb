@@ -2,10 +2,7 @@ class DataStoreController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @records      = list_query(branch_data_stores)
-    @current_date = Date.today
-    @start_date   = Date.new(@current_date.year, @current_date.month, 1)
-    @end_date     = Date.new(@current_date.year, @current_date.month, -1)
+    @records = list_query(branch_data_stores)
   end
 
   def show
@@ -65,10 +62,6 @@ class DataStoreController < ApplicationController
       "soa_loans"                    => { order: "CAST(meta->>'end_date' AS date) DESC",   meta: %w[branch_name start_date end_date], data: %w[] },
       "watchlists"                   => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
       "x_weeks_to_pay"               => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[date_until x] },
-
-      # XXX: Are these controllers still being used?
-      # "branch_with_centers_loans_stats" => {},
-      # "center_statements" => {},
     }
   end
 
