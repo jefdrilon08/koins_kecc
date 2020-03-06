@@ -61,7 +61,7 @@ class DataStoreController < ApplicationController
       "soa_funds"                    => { order: "CAST(meta->>'end_date' AS date) DESC",   meta: %w[branch_name start_date end_date], data: %w[] },
       "soa_loans"                    => { order: "CAST(meta->>'end_date' AS date) DESC",   meta: %w[branch_name start_date end_date], data: %w[] },
       "watchlists"                   => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
-      "x_weeks_to_pay"               => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[date_until x] },
+      "x_weeks_to_pay"               => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of x], data: %w[date_until] },
     }
   end
 
