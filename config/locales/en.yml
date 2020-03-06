@@ -123,6 +123,9 @@ en:
       index: "Members"
       show: "%{title} - Members"
       form: "Member Form"
+    member_account_validations:
+      index: "Member Account Validations"
+      show: "%{title} - Member Account Validations"
     membership_payment_collections:
       index: "Membership Payments"
       show: "%{title} - Membership Payments"
