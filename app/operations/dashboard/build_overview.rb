@@ -1,58 +1,49 @@
 module Dashboard
   class BuildOverview
-    def initialize(config:)
-      @config = config
-      @user   = @config[:user]
-      @as_of  = @config[:as_of].try(:to_date) || Date.today
-
-      branch_ids = UserBranch.active.where(user_id: @user.id).pluck(:branch_id)
-      @branches  = Branch.where(id: branch_ids).order("name ASC")
-      @clusters  = Cluster.where(id: @branches.pluck(:cluster_id))
-      @areas     = Area.where(id: @clusters.pluck(:area_id)).order("name ASC")
+    def initialize(current_user:, as_of:)
+      @current_user = current_user
+      @as_of = as_of
     end
 
     def execute!
-      branches = build_branches!
+      areas = Area
+        .includes(clusters: { branches: :user_branches })
+        .where(user_branches: { user_id: @current_user.id, active: true })
+        .order("areas.name ASC, clusters.name ASC")
 
-      areas = @areas.map do |area|
-        clusters = @clusters
-          .select { |c| c.area_id == area.id }
-          .map do |c|
-            {
-              id: c.id,
-              name: c.name,
-              branches: branches.select { |b| b[:cluster][:id] == c.id },
-            }
-          end
-
-        { id: area.id, name: area.name, clusters: clusters }
-      end
-
-      { areas: areas }
+      {
+        areas: areas.map do |area|
+          clusters = area.clusters
+            .map do |c|
+              {
+                id:       c.id,
+                name:     c.name,
+                branches: build_branches(c.branches)
+              }
+            end
+          { id: area.id, name: area.name, clusters: clusters }
+        end
+      }
     end
 
     private
 
-    def build_branches!
-      @branches.map do |branch|
-        repayment_rate  = DataStore.repayment_rates.where(
-                        "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ? AND status = ?",
-                        branch.id,
-                        @as_of,
-                        "done"
-                      ).order(
-                        "DATE(meta->>'as_of') ASC"
-                      ).last
+    def build_branches(branches)
+      repayment_rates = DataStore
+        .repayment_rates
+        .done
+        .select("DISTINCT ON (meta->>'branch_id') *")
+        .where("meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", branches.ids, @as_of)
+        .order("meta->>'branch_id', DATE(meta->>'as_of') DESC")
 
-        member_counts  = DataStore.member_counts.where(
-                              "meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ? AND status = ?",
-                              branch.id,
-                              @as_of,
-                              "done"
-                            ).order(
-                              "DATE(meta->>'as_of') ASC"
-                            ).last
+      member_counts = DataStore
+        .member_counts
+        .done
+        .select("DISTINCT ON (meta->>'branch_id') *")
+        .where("meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", branches.ids, @as_of)
+        .order("meta->>'branch_id', DATE(meta->>'as_of') DESC")
 
+      branches.map do |branch|
         d = {
           as_of: "",
           member_counts_as_of: "",
@@ -81,30 +72,18 @@ module Dashboard
           par_amount: 0.00,
           par: 0.00,
           num_days_par: 0,
-          pure_savers: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0
-          },
-          loaners: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0
-          },
-          active_members: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0
-          }
+          pure_savers:    { male: 0, female: 0, others: 0, total: 0 },
+          loaners:        { male: 0, female: 0, others: 0, total: 0 },
+          active_members: { male: 0, female: 0, others: 0, total: 0 }
         }
 
-        if repayment_rate.present?
-          d[:as_of] = repayment_rate.meta["as_of"]
+        rr = repayment_rates.find { |data_store| data_store.meta["branch_id"] == branch.id }
+        mc = member_counts.find   { |data_store| data_store.meta["branch_id"] == branch.id }
 
-          repayment_rate.data["records"].each do |r|
+        if rr.present?
+          d[:as_of] = rr.meta["as_of"]
+
+          rr.data["records"].each do |r|
             d[:principal]                 += r["principal"].to_f.round(2)
             d[:interest]                  += r["interest"].to_f.round(2)
             d[:total]                     += r["total"].to_f.round(2)
@@ -150,10 +129,10 @@ module Dashboard
           d[:par] = (d[:par_amount] / d[:portfolio]).round(4)
         end
 
-        if member_counts.present?
-          counts = member_counts.data["counts"]
+        if mc.present?
+          counts = mc.data["counts"]
 
-          d[:member_counts_as_of] = member_counts.meta["as_of"]
+          d[:member_counts_as_of] = mc.meta["as_of"]
 
           d[:pure_savers][:male]   = counts["pure_savers"]["male"]
           d[:pure_savers][:female] = counts["pure_savers"]["female"]

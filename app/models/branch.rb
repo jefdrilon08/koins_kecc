@@ -5,6 +5,7 @@ class Branch < ApplicationRecord
 
   belongs_to :cluster
   has_many :centers
+  has_many :user_branches
 
   def to_s
     name

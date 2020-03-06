@@ -22,10 +22,6 @@ module ApplicationHelper
     }
   end
 
-  def pending_count(branches)
-    Member.pending.where(branch_id: branches.pluck(:id)).count
-  end
-
   def has_time_deposit?(member)
     account_subtype = Settings.time_deposit.try(:account_subtype)
     

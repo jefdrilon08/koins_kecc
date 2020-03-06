@@ -41,6 +41,8 @@ class User < ApplicationRecord
   has_one_attached :profile_picture
   has_many :announcements
   has_many :user_demerits
+  has_many :user_branches
+  has_many :branches, through: :user_branches
 
   serialize :roles, Array
 

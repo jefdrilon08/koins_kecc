@@ -1,6 +1,13 @@
 class PagesController < ApplicationController
   before_action :authenticate_user!, except: [:login]
 
+  def index
+    @pending_members_count = Member
+      .pending
+      .where(branch_id: @branches.pluck(:id))
+      .count
+  end
+
   def download_backup
     if user_signed_in? and current_user.roles.include?("MIS")
       destination_directory = "#{Rails.root}/db_backup"
@@ -25,10 +32,6 @@ class PagesController < ApplicationController
     destination_file = "#{Rails.root}/tmp/#{filename}"
 
     send_file destination_file, filename: filename
-  end
-
-  def index
-    @announcements = Announcement.all
   end
 
   def finance
