@@ -58,6 +58,9 @@ en:
     equity_accounts:
       index: "Equity"
       show: "Equity #%{title}"
+    insurance_accounts:
+      index: "Insurance"
+      show: "Insurance #%{title}"
     insurance_fund_transfer_collections:
       index: "Insurance Fund Transfers"
       show: "%{title} - Insurance Fund Transfers"

@@ -2,7 +2,10 @@ class InsuranceAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @insurance_accounts = MemberAccount.insurance
+    @insurance_accounts = MemberAccount
+      .insurance
+      .includes(:branch, :member)
+      .where(branch_id: @branches.pluck(:id))
 
     @insurance_accounts = @insurance_accounts.where(
                             branch_id: @branches.pluck(:id)
@@ -27,13 +30,13 @@ class InsuranceAccountsController < ApplicationController
       @branch = Branch.find(params[:branch_id])
       @insurance_accounts = @insurance_accounts.where(branch_id: @branch.id)
     end
-    
+
     if params[:center_id].present?
       @center = Center.find(params[:center_id])
       @insurance_accounts = @insurance_accounts.where(center_id: @center.id)
     end
- 
-    @insurance_accounts = @insurance_accounts.page(params[:page]).per(20)
+
+    @insurance_accounts = @insurance_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def show
@@ -54,8 +57,8 @@ class InsuranceAccountsController < ApplicationController
     @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member.id).first
 
     @payment_meta = Insurance::GenerateInsuranceAccountDetailsForLifAndRf.new(
-                      member: @member, 
-                      lif_insurance_account: @lif_insurance_account, 
+                      member: @member,
+                      lif_insurance_account: @lif_insurance_account,
                       rf_insurance_account: @rf_insurance_account
                     ).execute!
   end
@@ -63,11 +66,11 @@ class InsuranceAccountsController < ApplicationController
   def insurance_account_pdf
     @insurance_account = MemberAccount.find(params[:id])
     @insurance_account_transactions = AccountTransaction.where(
-                                        "subsidiary_id = ? AND amount > 0 AND status IN (?)", 
+                                        "subsidiary_id = ? AND amount > 0 AND status IN (?)",
                                         @insurance_account.id, ["approved", "reversed"]
                                       ).order("transacted_at ASC")
 
-  
+
     if params[:start_date].present? and params[:end_date].present?
       @start_date = params[:start_date]
       @end_date = params[:end_date]
@@ -92,7 +95,7 @@ class InsuranceAccountsController < ApplicationController
     file_name = orig_file_name_no_ext.delete! "insurance accounts"
     start_date_string = file_name.split("_").first
     end_date_string = file_name.split("_").last
-    
+
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).try(:to_date)
@@ -101,23 +104,23 @@ class InsuranceAccountsController < ApplicationController
       #   end_date = nil
       #   start_date = nil
       # end
-    else  
+    else
       end_date = nil
       start_date = nil
     end
-   
+
     CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
-      config = {  
+      config = {
         insurance_account: row.to_hash
       }
-      
+
       @errors = Insurance::ValidateInsuranceAccountsImportFromCsvFile.new(config: config).execute!
     end
 
     if !@errors.nil?
       if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
-        
+
         ActivityLog.create!(
           content: content,
           activity_type: "upload",
@@ -127,7 +130,7 @@ class InsuranceAccountsController < ApplicationController
             end_date: end_date
           }
         )
-        
+
         redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
         Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
@@ -165,7 +168,7 @@ class InsuranceAccountsController < ApplicationController
         )
 
       redirect_to members_path
-    end    
+    end
   end
 
   def import_insurance_account_transactions
@@ -175,7 +178,7 @@ class InsuranceAccountsController < ApplicationController
     file_name = orig_file_name_no_ext.delete! "insurance account transactions"
     start_date_string = file_name.split("_").first
     end_date_string = file_name.split("_").last
-    
+
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).try(:to_date)
@@ -184,23 +187,23 @@ class InsuranceAccountsController < ApplicationController
       #   end_date = nil
       #   start_date = nil
       # end
-    else  
+    else
       end_date = nil
       start_date = nil
     end
 
     CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
-      config = {  
+      config = {
         insurance_account_transaction: row.to_hash
       }
-      
+
       @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
     end
 
     if !@errors.nil?
       if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
-        
+
         ActivityLog.create!(
           content: content,
           activity_type: "upload",
@@ -210,7 +213,7 @@ class InsuranceAccountsController < ApplicationController
             end_date: end_date
           }
         )
-        
+
         redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
 
@@ -235,7 +238,7 @@ class InsuranceAccountsController < ApplicationController
                           start_date: start_date,
                           end_date: end_date
                         }
-                      ) 
+                      )
 
         data_store.save!
         File.write(file_path_to_save, file.read.force_encoding("UTF-8"))
@@ -263,7 +266,7 @@ class InsuranceAccountsController < ApplicationController
               end_date: end_date
             }
           )
-        
+
         redirect_to import_insurance_account_transactions_path
       end
     else
@@ -280,6 +283,6 @@ class InsuranceAccountsController < ApplicationController
         )
 
       redirect_to members_path
-    end  
+    end
   end
 end
