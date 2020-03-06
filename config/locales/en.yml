@@ -133,8 +133,11 @@ en:
       daily_report_insurance_account_status: "Insurance Account Status"
       index: "Dashboard"
       insights: "Insights"
+      insurance_exit_age_members: "Insurance Exit Age Members"
       lapsed_members: "Lapsed Members"
       login: "Login"
+      members_for_reinsurance: "Members for Reinsurance"
+      validations: "Validations"
     savings_accounts:
       index: "Savings"
       show: "Savings #%{title}"
