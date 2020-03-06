@@ -11,8 +11,6 @@
       %th
         Center
       %th
-        Membership Date
-      %th
         Recognition Date
       %th.text-center
         Type
@@ -37,9 +35,6 @@
         %td.text-muted
           %small
             #{o.center.name}
-        %td.text-muted
-          %small
-            #{o.date_of_membership}
         %td.text-muted
           - if o.recognition_date.present?
             %small
