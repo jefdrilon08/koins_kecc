@@ -23,7 +23,7 @@
             = link_to "/data_stores/x_weeks_to_pay/#{o.id}" do
               #{o.as_of.to_date.strftime("%b %d, %Y")}
         %td.text-center
-          #{o.date_until.to_date.strftime("%b %d, %Y")}
+          #{o.date_until.try!(:to_date).try!(:strftime, "%b %d, %Y")}
         %td
           #{o.branch_name}
         %td.text-center
