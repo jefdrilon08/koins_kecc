@@ -141,6 +141,9 @@ en:
     savings_accounts:
       index: "Savings"
       show: "Savings #%{title}"
+    savings_insurance_transfer_collections:
+      index: "Savings Insurance Transfers"
+      show: "#%{title} - Savings Insurance Transfers"
     time_deposit_collections:
       index: "Time Deposits"
       show: "%{title} - Time Deposits"
