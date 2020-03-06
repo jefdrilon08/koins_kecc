@@ -10,8 +10,7 @@
             = render partial: "data_stores/error_page"
           - else
             #display
-            - if accounting_entry = @record.data["accounting_entry"]
-              = render partial: "accounting_entry_display", locals: { accounting_entry: accounting_entry }
+            = render partial: "accounting_entry_display", locals: { accounting_entry: @record.data["accounting_entry"].with_indifferent_access }
             = javascript_include_tag "IcprShow.min.react.js"
 = render partial: "/data_stores/icpr/modals/set_rate"
 = render partial: "/data_stores/icpr/modals/approve"
