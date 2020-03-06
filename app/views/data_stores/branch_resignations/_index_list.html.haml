@@ -19,11 +19,11 @@
     - @records.each do |o|
       %tr
         %td.text-center
-          #{o.meta.with_indifferent_access[:start_date].to_date.strftime("%b %d, %Y")}
+          #{o.start_date.to_date.strftime("%b %d, %Y")}
         %td.text-center
-          #{o.meta.with_indifferent_access[:end_date].to_date.strftime("%b %d, %Y")}
+          #{o.end_date.to_date.strftime("%b %d, %Y")}
         %td
-          #{o.meta.with_indifferent_access[:branch][:name]}
+          #{o.branch_name}
         %td.text-center
           - if o.processing?
             .badge.badge-info

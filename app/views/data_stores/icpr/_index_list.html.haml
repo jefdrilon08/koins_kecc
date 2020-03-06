@@ -9,8 +9,6 @@
       %th.text-center
         Processing Status
       %th.text-center
-        Approval Status
-      %th.text-center
         Started
       %th.text-center
         Last Updated
@@ -22,9 +20,9 @@
             .fa.fa-search
         %td.text-center
           %strong
-            #{o.meta["year"]}
+            #{o.year}
         %td
-          #{o.meta["branch"]["name"]}
+          #{o.branch_name}
         %td.text-center
           - if o.processing?
             .badge.badge-info
@@ -35,13 +33,6 @@
           - elsif o.error?
             .badge.badge-danger
               Error
-        %td.text-center
-          - if o.data["status"] == 'pending'
-            .badge.badge-danger
-              Pending
-          - elsif o.data["status"] == 'approved'
-            .badge.badge-success
-              Approved
         %td.text-center
           %small
             #{o.created_at.localtime}

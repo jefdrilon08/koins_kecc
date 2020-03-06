@@ -21,13 +21,13 @@
         %td.text-center
           %strong
             = link_to "/data_stores/x_weeks_to_pay/#{o.id}" do
-              #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
+              #{o.as_of.to_date.strftime("%b %d, %Y")}
         %td.text-center
-          #{o.data.with_indifferent_access[:date_until].to_date.strftime("%b %d, %Y")}
+          #{o.date_until.to_date.strftime("%b %d, %Y")}
         %td
-          #{o.meta.with_indifferent_access[:branch_name]}
+          #{o.branch_name}
         %td.text-center
-          #{o.meta.with_indifferent_access[:x]}
+          #{o.x}
         %td.text-center
           - if o.processing?
             .badge.badge-info

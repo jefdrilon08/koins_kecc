@@ -24,15 +24,15 @@
             .fa.fa-search
         %td.text-center
           %strong
-            #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%B %Y")}
+            #{o.as_of.to_date.strftime("%B %Y")}
         %td
-          #{o.meta.with_indifferent_access[:branch_name]}
+          #{o.branch_name}
         %td.text-center
           - if o.done?
-            #{o.data.with_indifferent_access[:num_new]}
+            #{o.num_new}
         %td.text-center
           - if o.done?
-            #{o.data.with_indifferent_access[:num_resigned]}
+            #{o.num_resigned}
         %td.text-center
           - if o.processing?
             .badge.badge-info

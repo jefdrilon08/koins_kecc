@@ -1,7 +1,9 @@
+- data = DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(rr_data: record.data.with_indifferent_access).execute!
+
 %h3
   Officers
 
-- @officer_data[:officers].each do |o|
+- data[:officers].each do |o|
   %h5
     #{o[:officer][:last_name]}, #{o[:officer][:first_name]}
 

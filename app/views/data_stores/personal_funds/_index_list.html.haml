@@ -20,9 +20,9 @@
             .fa.fa-search
         %td.text-center
           %strong
-            #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%b %d, %Y")}
+            = o.as_of.to_date.strftime("%b %d, %Y")
         %td
-          #{o.meta.with_indifferent_access[:branch_name]}
+          = o.branch_name
         %td.text-center
           - if o.processing?
             .badge.badge-info

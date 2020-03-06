@@ -52,6 +52,55 @@ en:
     billings:
       index: "Billings"
       show: "Billing #%{title}"
+    data_stores:
+      accounting_entries_summaries:
+        index: "Voucher Summaries"
+        show: "%{title} - Voucher Summaries"
+      branch_loans_stats:
+        index: "Branch Loan Stats"
+        show: "%{title} - Branch Loan Stats"
+      branch_resignations:
+        index: "Branch Resignations"
+        show: "%{title} - Branch Resignations"
+      icpr:
+        index: "ICPR"
+        show: "%{title} - ICPR"
+      manual_aging:
+        index: "Manual Aging"
+        show: "%{title} - Manual Aging"
+      member_counts:
+        index: "Member Counts"
+        show: "%{title} - Member Counts"
+      monthly_new_and_resigned:
+        index: "Monthly New and Redesigned"
+        show: "%{title} - Monthly New and Redesigned"
+      monthly_incentives:
+        index: "Monthly Incentives"
+        show: "%{title} - Monthly Incentives"
+      patronage_refund:
+        index: "Patronage Refund"
+        show: "%{title} - Patronage Refund"
+      personal_funds:
+        index: "Personal Funds"
+        show: "%{title} - Personal Funds"
+      repayment_rates:
+        index: "Repayment Rates"
+        show: "%{title} - Repayment Rates"
+      soa_expenses:
+        index: "SOA Expenses"
+        show: "%{title} - SOA Expenses"
+      soa_funds:
+        index: "SOA Funds"
+        show: "%{title} - SOA Funds"
+      soa_loans:
+        index: "SOA Loans"
+        show: "%{title} - SOA Loans"
+      watchlists:
+        index: "Watchlists"
+        show: "%{title} - Watchlists"
+      x_weeks_to_pay:
+        index: "X Weeks to Pay"
+        show: "%{title} - X Weeks to Pay"
     deposit_collections:
       index: "Deposits"
       show: "%{title} - Deposits"

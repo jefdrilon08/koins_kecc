@@ -19,9 +19,9 @@
           = link_to "/data_stores/monthly_incentives/#{o.id}" do
             .fa.fa-search
         %td
-          #{o.meta.with_indifferent_access[:as_of].to_date.strftime("%B %Y")}
+          #{o.as_of.to_date.strftime("%B %Y")}
         %td
-          #{o.meta.with_indifferent_access[:branch_name]}
+          #{o.branch_name}
         %td.text-center
           - if o.processing?
             .badge.badge-info

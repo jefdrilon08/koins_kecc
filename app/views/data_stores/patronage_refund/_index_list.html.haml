@@ -19,13 +19,13 @@
         %td.text-center
           %strong
             = link_to "/data_stores/patronage_refund/#{o.id}" do
-              #{o.meta.with_indifferent_access[:start_date].to_date.strftime("%b %d, %Y")}
+              #{o.start_date.to_date.strftime("%b %d, %Y")}
               \-
-              #{o.meta.with_indifferent_access[:end_date].to_date.strftime("%b %d, %Y")}
+              #{o.end_date.to_date.strftime("%b %d, %Y")}
         %td
-          #{o.meta.with_indifferent_access[:equity_rate]} %
+          #{o.equity_rate} %
         %td
-          #{o.meta.with_indifferent_access[:branch_name]}
+          #{o.branch_name}
         %td.text-center
           - if o.processing?
             .badge.badge-info
