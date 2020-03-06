@@ -41,6 +41,9 @@ vendor/bundle/
 # Ignore react generated files
 /app/assets/javascripts/*.react.js
 
+# Ignore LICENSE.txt on javascript stuff
+/app/assets/javascripts/*.LICENSE.txt
+
 # scripts
 /bin/dev_reset.sh
 /bin/update.sh

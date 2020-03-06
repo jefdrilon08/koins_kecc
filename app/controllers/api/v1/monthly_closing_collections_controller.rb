@@ -29,9 +29,15 @@ module Api
                   ).execute!
 
         if errors[:messages].size == 0
-          monthly_closing_collection  = ::MonthlyClosingCollections::Approve.new(
-                                          config: config
-                                        ).execute!
+          monthly_closing_collection.update!(status: "processing")
+
+          # Start job
+          args = {
+            monthly_closing_collection_id: monthly_closing_collection.id,
+            user_id: current_user.id
+          }
+
+          ProcessApproveMonthlyClosingCollection.perform_later(args)
 
           render json: { id: monthly_closing_collection.id }
         else
