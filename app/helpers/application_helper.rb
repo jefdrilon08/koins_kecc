@@ -22,18 +22,6 @@ module ApplicationHelper
     }
   end
 
-  def has_time_deposit?(member)
-    account_subtype = Settings.time_deposit.try(:account_subtype)
-    
-    member_account  = MemberAccount.where(
-                        account_type: "SAVINGS", 
-                        account_subtype: account_subtype,
-                        member_id: member.id
-                      ).first
-
-    return member_account.present?
-  end
-
   def cash_management_templates
     names = []
 
