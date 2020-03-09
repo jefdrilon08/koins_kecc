@@ -1,0 +1,62 @@
+%section.content-header
+  %h3
+    %strong
+      Kuya Jun Scholarship Program Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Scholarship Type 
+      %td 
+        = @data[:scholarship_type]
+      %th Date Prepared
+      %td 
+        = @claim.date_prepared.strftime("%b %d, %Y")  
+    %tr
+      %th Branch
+      %td 
+        = @claim.member.branch.name
+      %th Name of Member 
+      %td 
+        = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
+    %tr
+      %th Name of Beneficiary(Student)
+      %td 
+        = @data[:name_of_beneficiary]
+      %th Name of School
+      %td 
+        = @data[:name_of_school]
+    %tr
+      %th SY
+      %td 
+        = @data[:school_year]
+      %th Year Level
+      %td 
+        = @data[:year_level]
+    %tr
+      %th Final Grade
+      %td 
+        = @data[:final_grade]
+      %th Relationship to Member
+      %td 
+        = @data[:classification]
+    %tr
+      %th Amount
+      %td 
+        = @data[:amount]
+      %th Prepared By
+      %td
+        = @claim.prepared_by
+    %tr
+    - if @data[:course].blank? or @data[:year_level] == "GRADE 7" or @data[:year_level] == "GRADE 8" or @data[:year_level] == "GRADE 9" or @data[:year_level] == "GRADE 10" or @data[:year_level] == "GRADE 11" or @data[:year_level] == "GRADE 12" or @data[:sem].blank?
+      %th 
+      %td 
+      %th 
+      %td   
+    - else
+      %th Course
+      %td
+        = @data[:course]
+      %th Semester
+      %td 
+        = @data[:sem] 
+        

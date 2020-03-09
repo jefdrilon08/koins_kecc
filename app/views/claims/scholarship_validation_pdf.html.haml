@@ -1,0 +1,189 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: calibri;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  .body1{
+    width: 100%;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+  hr {
+    border-color: black;
+  }
+  tr td {
+    font-size: 1.2em;
+  }
+
+%span.print-text
+  %center
+    %p
+      %b
+        Kasagana-Ka Mutual Benefit Association
+      %br
+        #{Settings.company_address}
+      %br
+      %b
+        KUYA JUN SCHOLARSHIP PROGRAM(KJSP)
+  %left
+    %p
+      %b
+        FOR:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      KASAGANA-KA Mutual Benefit Association, Inc.
+      %br
+      %b
+        FROM:&nbsp;&nbsp;&nbsp;
+      #{@claim.prepared_by}
+      %br
+      %b
+        DATE:&nbsp;&nbsp;&nbsp;&nbsp;
+      #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
+      %hr
+    .body1
+      %p
+        %b
+          For the following details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submitted Documents
+      %br
+      %table{:border => "0"}
+        %tr
+          %td{:width => "21%"}
+            Branch:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@claim.member.branch.name}
+          %td{:width => "28%"}
+            [] School ID
+        %tr
+          %td{:width => "21%"}
+            Date Prepared:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@claim.date_prepared.strftime("%b %d, %Y")}
+          %td{:width => "28%"}
+            [] Certificate of Registration / Registration Form
+        %tr
+          %td{:width => "21%"}
+            Status:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["scholarship_type"]}
+          %td{:width => "28%"}
+            [] Grades last sem/year 
+        %tr
+          %td{:width => "21%"}
+            Scholar's Name
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["name_of_beneficiary"]}
+          %td{:width => "28%"}
+            [] Prospectus (for new scholars only)
+        %tr
+          %td{:width => "21%"}
+            Amount of Allowance
+          %td{:width => "25%"}
+            %b
+              %u  
+                PhP #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} 
+          %td{:width => "28%"}
+            [] Others
+        %tr
+          %td{:width => "21%"}
+            Name of School
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["name_of_school"]}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            SY
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["school_year"]}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Year Level
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["year_level"]}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Semester
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["sem"]}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Payee
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["payee"]}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Relationship to member
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["classification"]}
+          %td{:width => "28%"}
+  %br
+  %br
+  %br
+  .signatories
+    %table{:border => "0"}
+      %tr
+        %td{:width => "20%"}
+          Recommended by:
+          %br
+          %br
+          %u
+            #{@claim.prepared_by}
+          %br
+          Account Officer
+        %td{:width => "25%"}
+          Checked by:
+          %br
+          %br
+          %u
+            Evelyn A. Lagmay / Analyn Shih
+          %br
+            Finance Manager&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        %td{:width => "30%"}
+          Approved by:
+          %br
+          %br
+          %u
+            Silvida Reyes - Antiquera
+          %br
+            KMBA-GM
+  

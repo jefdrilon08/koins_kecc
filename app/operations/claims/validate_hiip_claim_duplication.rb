@@ -28,7 +28,7 @@ module Claims
             if @hiip_claim.amount > 6000
               @errors << "Exceed amount limit"
             end
-        end
+      end
         
       end    
     end

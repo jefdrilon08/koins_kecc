@@ -1,0 +1,86 @@
+.message
+.row
+  .col
+    .form-group
+      %h3
+        K-Bente Information
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Date Prepared
+        = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control ', type: 'date', id: 'date-prepared'
+  .col
+    .form-group
+      %label.col.control-label
+        Date Approved
+        = text_field_tag :date_approved, @claim.data["date_approved"], class: 'form-control', type: 'date', id: 'date-approved'
+
+  .col
+    .form-group
+      %label.col.control-label
+        Date Enrolled
+        = text_field_tag :date_enrolled, @claim.data["date_enrolled"], class: 'form-control', type: 'date', id: 'date-enrolled'
+  .col
+    .form-group
+      %label.col.control-label
+        Date Expired
+        = text_field_tag :date_expired, @claim.data["date_expired"], class: 'form-control', type: 'date', id: 'date-expired'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Birth
+        = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', type: 'date', id: 'date-of-birth' , value: @claim.member.date_of_birth
+  .col
+    .form-group
+      %label.col.control-label
+        Date of death
+        = text_field_tag :date_of_death, @claim.data["date_of_death"], class: 'form-control', type: 'date', id: 'date-of-death'
+  .col
+    .form-group
+      %label.col.control-label
+        Purpose
+        = text_field_tag :purpose, @claim.data["purpose"], class: 'form-control', value: 'Payment for K-Bente Benefit', id: 'purpose'   
+  .col
+    .form-group
+      %label.col.control-label
+        Amount
+        = text_field_tag :amount, @claim.data["amount"],  class: 'form-control', id: 'amount', value: "6000.00"
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Insured
+        = text_field_tag :name_of_insured, @claim.data["name_of_insured"], class: 'form-control', id: 'name-of-insured'
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Beneficiary
+        = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
+  .col
+    .form-group
+      %label.col.control-label
+        Classification
+        = text_field_tag :classification, @claim.data["classification"], class: 'form-control', id: 'classification'
+.row
+  .col
+    .form-group
+      %label.col-md-4.control-label
+        Prepared by
+        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize    
+.row
+  .col
+    .form-actions
+    = button_tag type: 'submit', class: 'btn btn-primary', id: "submit-button" do
+      .fa.fa-check
+      Submit
+    = link_to claims_path, class: 'btn btn-default' do
+      .fa.fa-times
+      Cancel
+
+#parameters{ data: { id: params[:id] }}
+= javascript_include_tag "claims/kbente_form"
+
+
+

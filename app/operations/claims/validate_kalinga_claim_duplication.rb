@@ -16,7 +16,7 @@ module Claims
 
     def validate_kalinga_claim_duplication!
       KalingaClaim.all.each do |kalinga_claim|
-        if kalinga_claim.id == @kalinga_claim.id 
+        if kalinga_claim.member_id == @kalinga_claim.member_id 
           @errors << "Duplicate clip claims!"
         end
       end

@@ -37,19 +37,19 @@
   %left
     = image_tag("kmba.ico", :alt => "kmba img", id: "kmba")
   %br
-    - if !@claim.date_reported.nil?
-      #{@claim.date_reported}
+    - if !@data["date_reported"].nil?
+      #{@data["date_reported"]}
     - else
       #{@claim.date_prepared}
   %left
-    - if @cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b" 
+    - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b" 
       %p
         %b
           CEBU ARCHDIOCESAN PROGRAM FOR SELF RELIANCE INC.-CAPS-R
         %br
           %b
             Cebu Caritas Building, P. Gomez St., Cebu City, Philippines
-    - elsif @cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
+    - elsif @claim.member.branch.cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
       %p
         %b
           JAIME V. ONGPIN MICROFINANCE FOUNDATION INC. (JVOMFI)
@@ -62,7 +62,7 @@
           KASAGANA-KA CREDIT AND SAVING COOPERATIVE
         %br
           %b
-            5 Don Francisco St. Don Enrique Hiehgts , Quezon City
+            5 Don Francisco St. Don Enrique Heights , Quezon City
     %p
       Attention:
       %br
@@ -74,84 +74,84 @@
               Name of Member:
             %td{:width => "25%"}
               %u
-                #{@claim.member.check_name}
+                #{@claim.member.full_name}
           %tr
             %td{:width => "21%"}
               Name of Loss Assured:
             %td{:width => "25%"}
               %u  
-                #{@claim.name_of_insured}  
+                #{@data["name_of_insured"]}  
           %tr
             %td{:width => "21%"}
               Classification:
             %td{:width => "25%"}
               %u  
-                #{@claim.classification_of_insured}
+                #{@data["classification_of_insured"]}
           %tr
             %td{:width => "21%"}
               Recognition Date:
             %td{:width => "25%"}
               %u  
-                #{@claim.date_of_policy_issue.try(:strftime, "%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["date_of_policy_issue"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Life:
             %td{:width => "25%"}
               %u  
                 // #{@claim.equity_value}
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.equity_value, precision: 2), delimiter: ",", separator: ".")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["equity_value"], precision: 2), delimiter: ",", separator: ".")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
           %tr
             %td{:width => "21%"}
               RF:
             %td{:width => "25%"}
               %u  
                 //#{@claim.retirement_fund}
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.retirement_fund, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["retirement_fund"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
           %tr
             %td{:width => "21%"}
               Cause of Death:
             %td{:width => "25%"}
               %u  
-                #{@claim.cause_of_death_tpd_accident}
+                #{@data["cause_of_death_tpd_accident"]}
           %tr
             %td{:width => "21%"}
               Date of Death/TPD/MVAH:
             %td{:width => "25%"}
               %u  
-                #{@claim.date_of_death_tpd_accident.try(:strftime,"%B %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["date_of_death_tpd_accident"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Length of Membership:
             %td{:width => "25%"}
               %u  
-                #{@claim.length_of_stay}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["length_of_stay"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Face Amount:
             %td{:width => "25%"}
               %u  
                 //#{@claim.face_amount}
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.face_amount, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["face_amount"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Lapse:
             %td{:width => "25%"}
               %u  
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.arrears, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["arrears"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Benefit Payable for BLIP:
             %td{:width => "25%"}
               %u  
                 //#{@claim.face_amount}
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.face_amount, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["face_amount"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Returned Contribution:
             %td{:width => "25%"}
               %u  
                 //#{@claim.face_amount}
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.returned_contribution, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["returned_contribution"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           / %tr
           /   %td{:width => "21%"}
           /     Advance Payment:
@@ -163,57 +163,57 @@
               Amount Payable:
             %td{:width => "25%"}
               %u  
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@claim.total_amount_payable, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["total_amount_payable"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Beneficiary:
             %td{:width => "25%"}
               %u  
-                #{@claim.beneficiary}    
+                #{@data["beneficiary"]}    
     %br
     .body2  
-      - if @cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"
+      - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"
         %p
           Dear Sir/Madam:
           %br
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This will serve as your authority to proceed the realease of the above claims in favor of
             %b
               %u
-                #{@claim.beneficiary}
+                #{@data["beneficiary"]}
             &nbsp;member/beneficiary for the death/MVAH of
             %u
               %b
-                #{@claim.name_of_insured}
+                #{@data["name_of_insured"]}
             &nbsp;loss assured from CAPS-R
             %u
               %b
-                #{@member.branch}
+                #{@claim.member.branch.name}
             &nbsp;branch with the amount of
             %u
               %b
-                ***#{@claim.total_amount_payable.to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@claim.total_amount_payable, precision: 2), delimiter: ",", separator: ".", unit: "")})
+                ***#{@data["total_amount_payable"].to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["total_amount_payable"], precision: 2), delimiter: ",", separator: ".", unit: "")})
           %br
             Thank you for your cooperation in this regard.
-      - elsif @cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
+      - elsif @claim.member.branch.cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
         %p
           Dear Sir/Madam:
           %br
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This will serve as your authority to proceed the realease of the above claims in favor of
             %b
               %u
-                #{@claim.beneficiary}
+                #{@data["beneficiary"]}
             &nbsp;member/beneficiary for the death/MVAH of
             %u
               %b
-                #{@claim.name_of_insured}
+                #{@data["name_of_insured"]}
             &nbsp;loss assured from JVOMFI
             %u
               %b
-                #{@member.branch}
+                #{@claim.member.branch.name}
             &nbsp;branch with the amount of
             %u
               %b
-                ***#{@claim.total_amount_payable.to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@claim.total_amount_payable, precision: 2), delimiter: ",", separator: ".", unit: "")})
+                ***#{@data["total_amount_payable"].to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["total_amount_payable"], precision: 2), delimiter: ",", separator: ".", unit: "")})
           %br
             Thank you for your cooperation in this regard.
   %br
@@ -233,9 +233,9 @@
           %br
           %br
           %u
-            Evangeline Pe / Silvida Reyes - Antiquera
+            Silvida Reyes - Antiquera
           %br
-            KMBA OM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMBA-GM
+            KMBA-GM
   / %br
   / .span.print-text-sub
   /   %br

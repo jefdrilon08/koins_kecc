@@ -23,36 +23,31 @@ class ApplicationController < ActionController::Base
     "claims",
     "member_account_validations",
     "insurance_accounts",
-    "members",
-    "hiip_claims",
-    "kalinga_claims",
-    "kbente_claims",
-    "kjsp_claims",
-    "calamity_claims"
+    "members"
   ]
 
   FOR_PDF = [
-    "claim_validation_pdf",
-    "claim_loa_pdf",
-    "clip_claim_validation_pdf",
-    "clip_claim_loa_pdf",
+    "blip_validation_pdf",
+    "blip_loa_pdf",
+    "clip_validation_pdf",
+    "clip_loa_pdf",
     "withdrawal_pdf",
     "pdf",
     "claims_copy_pdf",
     "insurance_account_pdf",
     "blip_form_pdf",
-    "hiip_claim_validation_pdf",
-    "hiip_claim_loa_pdf",
-    "kalinga_claim_validation_pdf",
-    "kalinga_claim_loa_pdf",
-    "kbente_claim_validation_pdf",
-    "kbente_claim_loa_pdf",
-    "kjsp_claim_validation_pdf",
-    "kjsp_claim_loa_pdf",
-    "kjsp_contract_highschool_pdf",
-    "kjsp_contract_college_pdf",
-    "calamity_claim_validation_pdf",
-    "calamity_claim_loa_pdf"
+    "hiip_validation_pdf",
+    "hiip_loa_pdf",
+    "kalinga_validation_pdf",
+    "kalinga_loa_pdf",
+    "kbente_validation_pdf",
+    "kbente_loa_pdf",
+    "scholarship_validation_pdf",
+    "scholarship_loa_pdf",
+    "scholarship_contract_highschool_pdf",
+    "scholarship_contract_college_pdf",
+    "calamity_validation_pdf",
+    "calamity_loa_pdf"
   ]
 
   def layout_by_resource

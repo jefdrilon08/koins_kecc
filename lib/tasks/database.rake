@@ -278,4 +278,220 @@ namespace :db do
       ActiveRecord::Base.connection_config[:username],
       ActiveRecord::Base.connection_config[:password]
   end
+
+  task :save_blip => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      claims = Claim.where(branch_id: branch.id)
+      filename  = "#{branch}-blip-v2.json" 
+    else
+      claims   = Claim.all
+      filename  = "blip-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    claims.each do |o|
+      data[:claim] << o.blip_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_clip => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      clip_claims = ClipClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-clip-v2.json" 
+    else
+      clip_claims   = ClipClaim.all
+      filename  = "clip-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    clip_claims.each do |o|
+      data[:claim] << o.clip_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_hiip => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      hiip_claims = HiipClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-hiip-v2.json" 
+    else
+      hiip_claims   = HiipClaim.all
+      filename  = "hiip-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    hiip_claims.each do |o|
+      data[:claim] << o.hiip_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_calamity => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      calamity_claims = CalamityClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-calamity-v2.json" 
+    else
+      calamity_claims   = CalamityClaim.all
+      filename  = "calamity-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    calamity_claims.each do |o|
+      data[:claim] << o.calamity_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_scholarship => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      scholarships = KjspClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-scholarship-v2.json" 
+    else
+      scholarships   = KjspClaim.all
+      filename  = "scholarship-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    scholarships.each do |o|
+      data[:claim] << o.scholarship_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_kbente => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      kbente = KbenteClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-kbente-v2.json" 
+    else
+      kbente   = KbenteClaim.all
+      filename  = "kbente-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    kbente.each do |o|
+      data[:claim] << o.kbente_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_kalinga => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      kalinga = KalingaClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-kalinga-v2.json" 
+    else
+      kalinga   = KalingaClaim.all
+      filename  = "kalinga-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    kalinga.each do |o|
+      data[:claim] << o.kalinga_hash
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
+
+  task :save_kalingaclaims => :environment do
+    if ENV['BRANCH_ID'].present?
+      branch = Branch.find(ENV['BRANCH_ID'])
+      kalinga = KalingaClaim.where(branch_id: branch.id)
+      filename  = "#{branch}-kalinga-v2.json" 
+    else
+      kalinga   = KalingaClaim.all
+      filename  = "kalinga-v2.json"
+    end
+
+    full_path = "#{Rails.root}/db_backup/#{filename}"
+
+    data  = {
+      claim: []
+    }
+
+    kalinga.each do |o|
+      data[:claim] << o.kalinga
+    end
+
+    puts "Saving file to #{full_path}..."
+
+    File.write(full_path, JSON.pretty_generate(data))
+
+    puts "Done!"
+  end
 end

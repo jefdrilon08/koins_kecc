@@ -122,8 +122,6 @@ Rails.application.config.assets.precompile += [
   "MonthlyClosingCollectionShow.min.react.js",
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js",
   "MonitoringAccountingEntryPrecision.min.react.js",
-  "claims/Index.js",
-  "claims_form.js",
   "exports/Exports.js",
   "exports/BillingPerCenter.js",
   "MemberAccountInsuranceStatus.min.react.js",
@@ -162,5 +160,15 @@ Rails.application.config.assets.precompile += [
   "reports/KalingaReport.js",
   "reports/KbenteReport.js",
   "reports/KjspReport.js",
-  "kjsp_claims_form.js"
+  "kjsp_claims_form.js",
+  "claims/Index.js",
+  "claims/blip_form.js",
+  "claims/clip_form.js",
+  "claims/approved_claim.js",
+  "claims/hiip_form.js",
+  "claims/kalinga_form.js",
+  "claims/calamity_form.js",
+  "claims/kbente_form.js",
+  "claims/scholarship_form.js",
+  "reports/ClaimReport.js"
 ]

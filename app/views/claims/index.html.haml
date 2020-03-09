@@ -15,13 +15,15 @@
     .col
       .card
         .card-body
+          = render partial: "claims/new_transaction"
+          = render partial: "claims/filter"
           - if @claims.size > 0
             = render partial: "claims/list", locals: { claims: @claims }
             = paginate @claims
           - else
             No claims found.
 
-= render partial: "claims/new_transaction"
+
 
 = javascript_include_tag "claims/Index"
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_24_074045) do
+ActiveRecord::Schema.define(version: 2020_02_17_012411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
@@ -215,6 +216,8 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.string "prepared_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_calamity_claims_on_branch_id"
     t.index ["center_id"], name: "index_calamity_claims_on_center_id"
     t.index ["member_id"], name: "index_calamity_claims_on_member_id"
@@ -261,6 +264,9 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.uuid "member_id"
     t.uuid "center_id"
     t.uuid "branch_id"
+    t.string "claim_type"
+    t.json "data"
+    t.string "status"
     t.index ["branch_id"], name: "index_claims_on_branch_id"
     t.index ["center_id"], name: "index_claims_on_center_id"
     t.index ["member_id"], name: "index_claims_on_member_id"
@@ -290,6 +296,8 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.string "type_of_loan"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_clip_claims_on_branch_id"
     t.index ["center_id"], name: "index_clip_claims_on_center_id"
     t.index ["member_id"], name: "index_clip_claims_on_member_id"
@@ -347,6 +355,9 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.string "check_payee"
     t.string "prepared_by"
     t.decimal "balance"
+    t.string "claim_type"
+    t.json "data"
+    t.date "date_prepared"
     t.index ["branch_id"], name: "index_hiip_claims_on_branch_id"
     t.index ["center_id"], name: "index_hiip_claims_on_center_id"
     t.index ["member_id"], name: "index_hiip_claims_on_member_id"
@@ -413,9 +424,14 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "issueddate"
-    t.string "name_of_member"
-    t.string "member_branch"
-    t.string "member_identification_number"
+    t.string "claim_type"
+    t.json "data"
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.index ["branch_id"], name: "index_kalinga_claims_on_branch_id"
+    t.index ["center_id"], name: "index_kalinga_claims_on_center_id"
+    t.index ["member_id"], name: "index_kalinga_claims_on_member_id"
   end
 
   create_table "kbente_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -435,6 +451,8 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.date "date_of_death"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_kbente_claims_on_branch_id"
     t.index ["center_id"], name: "index_kbente_claims_on_center_id"
     t.index ["member_id"], name: "index_kbente_claims_on_member_id"
@@ -461,6 +479,8 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.string "received_by"
     t.string "prepared_by"
     t.string "course"
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_kjsp_claims_on_branch_id"
     t.index ["center_id"], name: "index_kjsp_claims_on_center_id"
     t.index ["member_id"], name: "index_kjsp_claims_on_member_id"
@@ -536,6 +556,7 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.date "maturity_date"
     t.date "max_active_date"
     t.uuid "user_id"
+    t.date "original_maturity_date"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
@@ -726,6 +747,21 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.index ["project_type_category_id"], name: "index_project_types_on_project_type_category_id"
   end
 
+  create_table "savings_insurance_transfer_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "collection_date"
+    t.date "date_approved"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "total_amount", precision: 8, scale: 2, default: "0.0"
+    t.string "approved_by"
+    t.index ["branch_id"], name: "index_savings_insurance_transfer_collections_on_branch_id"
+    t.index ["center_id"], name: "index_savings_insurance_transfer_collections_on_center_id"
+  end
+
   create_table "survey_answers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "survey_id"
     t.jsonb "meta"
@@ -776,6 +812,24 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_demerits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "branch_id"
+    t.string "status"
+    t.string "demerit_type"
+    t.string "role"
+    t.date "date_prepared"
+    t.date "date_approved"
+    t.date "date_of_action"
+    t.text "reason"
+    t.text "explanation"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_user_demerits_on_branch_id"
+    t.index ["user_id"], name: "index_user_demerits_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -794,6 +848,8 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
     t.string "last_name"
     t.string "identification_number"
     t.string "roles"
+    t.boolean "is_regular"
+    t.date "incentivized_date"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -843,6 +899,9 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
   add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
+  add_foreign_key "kalinga_claims", "branches"
+  add_foreign_key "kalinga_claims", "centers"
+  add_foreign_key "kalinga_claims", "members"
   add_foreign_key "kbente_claims", "branches"
   add_foreign_key "kbente_claims", "centers"
   add_foreign_key "kbente_claims", "members"
@@ -876,10 +935,14 @@ ActiveRecord::Schema.define(version: 2020_01_24_074045) do
   add_foreign_key "membership_payment_records", "members"
   add_foreign_key "monthly_closing_collections", "branches"
   add_foreign_key "project_types", "project_type_categories"
+  add_foreign_key "savings_insurance_transfer_collections", "branches"
+  add_foreign_key "savings_insurance_transfer_collections", "centers"
   add_foreign_key "survey_answers", "surveys"
   add_foreign_key "survey_questions", "surveys"
   add_foreign_key "time_deposit_collections", "branches"
   add_foreign_key "time_deposit_collections", "centers"
+  add_foreign_key "user_demerits", "branches"
+  add_foreign_key "user_demerits", "users"
   add_foreign_key "withdrawal_collections", "branches"
   add_foreign_key "withdrawal_collections", "centers"
 end

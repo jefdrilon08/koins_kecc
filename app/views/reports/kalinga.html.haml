@@ -11,3 +11,10 @@
       .card
         .card-body
           = render partial: "kalinga_form"
+
+= javascript_include_tag "reports/KalingaReport"
+
+:javascript
+  $(document).ready(function() {
+    KalingaReport.init();
+  });

@@ -1,26 +1,101 @@
 class ClaimsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_defaults
-  # before_action :load_defaults, :authenticate_user!
 
-  def claim_validation_pdf
+  def blip_validation_pdf
     @claim = Claim.find(params[:claim_id])
-    @member = @claim.member
+    @data  = @claim.data.try(:with_indifferent_access) || {}
   end
 
-  def claim_loa_pdf
+  def blip_loa_pdf
     @claim = Claim.find(params[:claim_id])
-    @member = @claim.member
-    @cluster = @member.branch.cluster
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def calamity_validation_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def calamity_loa_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def clip_validation_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def clip_loa_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def hiip_validation_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def hiip_loa_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def kalinga_validation_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def kalinga_loa_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def kbente_validation_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def kbente_loa_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def scholarship_validation_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def scholarship_contract_highschool_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def scholarship_contract_college_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def scholarship_loa_pdf
+    @claim = Claim.find(params[:claim_id])
+    @data  = @claim.data.try(:with_indifferent_access) || {}
+  end
+
+  def new
+    @claim = Claim.find(params[:id])
+  end
+
+  def edit
+    @claim = Claim.find(params[:id])
   end
 
   def index
-    #@claims = Claim.all.includes(:member).order("members.last_name")
     @claims = Claim.all.order("date_prepared DESC")
 
     if params[:q].present?
       @q = params[:q]
-      @claims = @claims.where("lower(members.first_name) LIKE :q OR lower(members.last_name) LIKE :q OR lower(members.middle_name) LIKE :q", q: "%#{@q.downcase}%")
+      @claims = @claims.joins(:member).where("lower(members.first_name) LIKE :q OR lower(members.last_name) LIKE :q OR lower(members.middle_name) LIKE :q", q: "%#{@q.downcase}%")
     end
 
     if params[:branch_id].present?
@@ -28,48 +103,19 @@ class ClaimsController < ApplicationController
       @claims = @claims.where(branch_id: @branch.id)
     end
 
-    if params[:type_of_insurance_policy].present?
-      @type_of_insurance_policy = params[:type_of_insurance_policy]
-      @claims = @claims.where(type_of_insurance_policy: @type_of_insurance_policy)
+    if params[:claim_type].present?
+      @claim_type = params[:claim_type]
+      @claims = @claims.where(claim_type: @claim_type)
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @claims = @claims.where(status: @status)
     end
   
-     @claims = @claims.page(params[:page]).per(20)
+     @claims = @claims.page(params[:page]).per(25)
   end
-
-  def new
-    @claim = Claim.new
-  end
-
-  def create
-    @claim = Claim.new(claim_params)
-
-    if @claim.save
-      redirect_to claim_path(@claim)
-    else
-      render :new
-    end
-  end
-
-  def edit 
-     @claim = Claim.find(params[:id])
-  end
-
-  def update
-    @claim = Claim.find(params[:id])
-    @claim.member = @member
-
-    if @claim.update_attributes(claim_params)
-      redirect_to claim_path(@claim)
-    else
-      render :edit
-    end
-  end
-
-  def new_claim_application
-    @member = Member.find(params[:member_id])
-    redirect_to new_member_claim_path(@member)
-  end
-
+  
   def destroy
     @claim = Claim.find(params[:id])
     @claim.destroy!
@@ -78,11 +124,9 @@ class ClaimsController < ApplicationController
   end
 
   def show
-    @claim = Claim.find(params[:id])
-    @member = @claim.member
+    @claim            = Claim.find(params[:id])
+    @data             = @claim.data.try(:with_indifferent_access) || {}
   end
 
-  def claim_params 
-    params.require(:claim).permit!
-  end
+
 end

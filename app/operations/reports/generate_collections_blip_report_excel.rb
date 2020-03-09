@@ -5,8 +5,15 @@ module Reports
       @end_date = end_date
       @branch = branch
 
-      @members  = Member.where("data ->>'recognition_date' <= ? AND branch_id = ?", @end_date, @branch).order("identification_number ASC")
- 
+      if @branch.present? && @start_date.present? && @end_date.present?
+        @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("identification_number ASC")
+      elsif @start_date.present? && @end_date.present?
+        @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ?", @start_date, @end_date).order("identification_number ASC")
+      elsif @branch.present?
+        @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", Date.today, Date.today, @branch).order("identification_number ASC")
+      else
+         @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ?", Date.today, Date.today).order("identification_number ASC") 
+      end
       @p        = Axlsx::Package.new
     end
 

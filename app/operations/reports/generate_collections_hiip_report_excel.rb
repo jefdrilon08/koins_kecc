@@ -1,17 +1,19 @@
 module Reports
   class GenerateCollectionsHiipReportExcel
-    def initialize(branch:, cluster:, start_date:, end_date:)
+    def initialize(branch:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
-      @cluster = cluster
       @branch = branch
 
-      if @cluster.present? && @branch == "--ALL--"
-        @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+      if @branch.present? && @start_date.present? && @end_date.present?
+        @hiip   = Claim.where("date_prepared >= ? AND date_requested <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "HIIP").order("created_at DESC")
+      elsif @start_date.present? && @end_date.present?
+        @hiip   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ?", @start_date, @end_date, "HIIP").order("created_at DESC")
+      elsif @branch.present?
+        @hiip   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "HIIP").order("created_at DESC")
       else
-        @hiip_claim   = HiipClaim.where("date_posted >= ? AND date_posted <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
-      end
+        @hiip = Claim.where(claim_type: 'HIIP')
+      end  
 
       @p          = Axlsx::Package.new
     end
@@ -34,7 +36,7 @@ module Reports
 
           sheet.add_row [ 
             "Name of Member",
-            "Policy Number",
+            "Certificate Number",
             "Branch",
             "Center",
             "Effective Date",
@@ -51,24 +53,24 @@ module Reports
             "Balance"
           ], style: header
 
-          @hiip_claim.each_with_index do |hiip_claim|
+          @hiip.each_with_index do |hiip|
               sheet.add_row [
-                  hiip_claim.member.full_name,
-                  hiip_claim.policy_number,
-                  hiip_claim.branch.name,
-                  hiip_claim.center.name,
-                  hiip_claim.effective_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.expiration_date_of_coverage.strftime("%b %d, %Y"),
-                  hiip_claim.date_admitted.strftime("%b %d, %Y"),
-                  hiip_claim.date_discharged.strftime("%b %d, %Y"),
-                  hiip_claim.number_ofdays_tobepaid,
-                  hiip_claim.date_of_birth.strftime("%b %d, %Y"),
-                  hiip_claim.age,
-                  hiip_claim.reason_of_confinement,
-                  hiip_claim.diagnosis,
-                  hiip_claim.check_payee,
-                  hiip_claim.amount,
-                  hiip_claim.balance,
+                  hiip.member.full_name,
+                  hiip.data["certificate_number"],
+                  hiip.member.branch.name,
+                  hiip.member.center.name,
+                  hiip.data["effective_date_of_coverage"],
+                  hiip.data["expiration_date_of_coverage"],
+                  hiip.data["date_admitted"],
+                  hiip.data["date_discharged"],
+                  hiip.data["number_of_days_tobepaid"],
+                  hiip.data["date_of_birth"],
+                  hiip.data["age"],
+                  hiip.data["reason_of_confinement"],
+                  hiip.data["diagnosis"],
+                  hiip.data["name_of_claimant"],
+                  hiip.data["amount"],
+                  hiip.data["balance"]
                 ], style: [nil]             
               end
           end

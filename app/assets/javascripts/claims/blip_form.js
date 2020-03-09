@@ -1,12 +1,20 @@
-var claimsForm = (function() {
+var blipForm = (function() {
 
   var $typeOfInsurancePolicy;
   var $classificationOfInsured;
   var $dateOfPolicyIssue;
   var $dateOfDeathTpdAccident;
   var $arrears;
- 
+  var urlClaims               = "/api/v1/claims/save";
+  var authenticityToken       = $("meta[name='csrf-token']").attr('content');
+  var $errorsTemplate;
+  var $parameters;
+  var id;
+
   var _cacheDom = function() {
+    $parameters                 = $("#parameters");
+    id = $parameters.data("id");
+
     $typeOfInsurancePolicy      = $("#type-of-insurance-policy");
     $classificationOfInsured    = $("#classification-of-insured");
     $dateOfPolicyIssue          = $("#date-of-policy-issue");
@@ -16,9 +24,86 @@ var claimsForm = (function() {
     $totalAmountPayable         = $("#total-amount-payable");
     $arrears                    = $("#arrears");
     $orderOfChildField          = $(".order-of-child-field");
+    $datePrepared               = $("#date-prepared");
+    $dateReported               = $("#date-reported");
+    $datePaid                   = $("#date-paid");
+    $lengthOfStay               = $("#length-of-stay");
+    $equityValue                = $("#equity-value");
+    $retirementFund             = $("#retirement-fund");
+    $policyNumber               = $("#policy-number");
+    $faceAmount                 = $("#face-amount");
+    $nameOfInsured              = $("#name-of-insured");
+    $dateOfBirth                = $("#date-of-birth");
+    $orderOfChild               = $("#order-of-child");
+    $gender                     = $("#gender");
+    $beneficiary                = $("#beneficiary");
+    $preparedBy                 = $("#prepared-by");
+    $categoryOfCauseOfDeathTpdAccident = $("#category-of-cause-of-death-tpd-accident");
+    $causeOfDeathTpdAccident    = $("#cause-of-death-tpd-accident");
+    $age                        = $("#age");
+    $submitButton               = $("#submit-button");
+    $message                    = $(".message");
+    $errorsTemplate             = $("#errors-template").html();
+
   }
 
   var _bindEvents = function() {
+     $submitButton.on('click', function(){
+        var data = {
+          id: id,
+          date_prepared: $datePrepared.val(),
+          prepared_by: $preparedBy.val(),
+          data: {
+            date_reported: $dateReported.val(),
+            date_paid: $datePaid.val(),
+            length_of_stay: $lengthOfStay.val(),
+            equity_value: $equityValue.val(),
+            retirement_fund: $retirementFund.val(),
+            policy_number: $policyNumber.val(),
+            face_amount: $faceAmount.val(),
+            name_of_insured: $nameOfInsured.val(),
+            date_of_birth: $dateOfBirth.val(),
+            order_of_child: $orderOfChild.val(),
+            gender: $gender.val(),
+            arrears: $arrears.val(),
+            type_of_insurance_policy: $typeOfInsurancePolicy.val(),
+            classification_of_insured: $classificationOfInsured.val(),
+            date_of_death_tpd_accident: $dateOfDeathTpdAccident.val(),
+            date_of_policy_issue: $dateOfPolicyIssue.val(),
+            returned_contribution: $returnedContribution.val(),
+            total_amount_payable: $totalAmountPayable.val(),
+            beneficiary: $beneficiary.val(),
+            category_of_cause_of_death_tpd_accident: $categoryOfCauseOfDeathTpdAccident.val(),
+            cause_of_death_tpd_accident: $causeOfDeathTpdAccident.val(),
+            age: $age.val()
+          },
+          authenticity_token: authenticityToken,
+          
+        }
+        console.log(data);
+
+        $.ajax({
+          url: urlClaims,
+          method: 'POST',
+          data: data,
+          success: function(responseContent) {
+            $message.html("Success! Redirecting...");
+            window.location.href = "/claims/" + id;
+          },
+          error: function(responseContent) {
+            console.log(responseContent);
+            var  errors  = JSON.parse(responseContent.responseText).errors;
+            console.log(errors);
+            console.log(data);
+            $message.html(
+                Mustache.render(
+                  $errorsTemplate,
+                  { errors: errors }
+                )
+              );
+          }
+      });
+     });
 
   var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
   var classificationOfInsuredValue = ($classificationOfInsured.val());
@@ -484,5 +569,5 @@ var claimsForm = (function() {
 })();
 
 $(document).ready(function() {
-  claimsForm.init();
+  blipForm.init();
 });

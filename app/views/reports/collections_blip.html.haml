@@ -9,3 +9,10 @@
         .card-body
           = render partial: "collections_blip_form"
 
+
+= javascript_include_tag "reports/CollectionsBlipReport"
+
+:javascript
+  $(document).ready(function() {
+    CollectionsBlipReport.init();
+  });

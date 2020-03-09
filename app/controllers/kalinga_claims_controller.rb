@@ -1,15 +1,18 @@
 class KalingaClaimsController < ApplicationController
+  # before_action :load_defaults, :authenticate_user!
 
   def kalinga_claim_validation_pdf
     @kalinga_claim = KalingaClaim.find(params[:kalinga_claim_id])
+    @member = @kalinga_claim.member
   end
 
   def kalinga_claim_loa_pdf
-     @kalinga_claim = KalingaClaim.find(params[:kalinga_claim_id])
+    @kalinga_claim = KalingaClaim.find(params[:kalinga_claim_id])
+    @member = @kalinga_claim.member
   end
 
   def index
-    @kalinga_claims = KalingaClaim.all
+    @kalinga_claims = KalingaClaim.all.order("created_at DESC")
 
     if params[:q].present?
       @q = params[:q]
@@ -31,8 +34,10 @@ class KalingaClaimsController < ApplicationController
     @kalinga_claim = KalingaClaim.new(kalinga_claim_params)
 
     if @kalinga_claim.save
+      flash[:success] = "Successfully saved kbente claim record."
       redirect_to kalinga_claim_path(@kalinga_claim.id)
     else
+      flash.now[:error] = "Error in saving kbente claim record."
       render :new
     end
   end
@@ -45,7 +50,7 @@ class KalingaClaimsController < ApplicationController
     @kalinga_claim = KalingaClaim.find(params[:id])
 
     if @kalinga_claim.update_attributes(kalinga_claim_params)
-      flash[:success] = "Successfully saved kalinga claim record."
+      flash[:success] = "Successfully saved kbente claim record."
       redirect_to kalinga_claim_path(@kalinga_claim.id)
     else
       flash[:error] = "Error in saving kalinga claim record."
@@ -72,5 +77,4 @@ class KalingaClaimsController < ApplicationController
   def kalinga_claim_params 
     params.require(:kalinga_claim).permit!
   end
-
 end

@@ -16,24 +16,10 @@ module Members
     end
 
     def create
-      @claim = Claim.new(claim_params)
-      @claim.member = @member
-      @claim.branch = @member.branch
-      @claim.center = @member.center
-      @errors = []
-      @errors = Claims::ValidateClaimDuplication.new(claim: @claim).execute!
+      @claim        = Claim.new(claim_params)
 
-      if @errors.count <= 0
-        if @claim.save
-          flash[:success] = "Successfully created claim"
-          redirect_to claim_path(@claim)
-        else
-          flash[:error] = "Error in creating claim"
-          render :new
-        end
+      if @claim.save
       else
-        flash[:error] = "Error in creating claim : #{@errors}"
-        render :new
       end
     end
 

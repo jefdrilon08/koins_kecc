@@ -1,96 +1,98 @@
+.message
 %section.content-header
   %h3
     %strong
-      Claims Details
+      BLIP Details
 %table.table.table-sm.table-hover
   %tbody
     %tr
       %th Date Prepared
       %td
-        = @claim.date_prepared.try(:strftime, "%B %d, %Y")
+        = @claim.date_prepared.try(:strftime, "%b %d, %Y")
       %th Date of Policy Issue
       %td
-        = @claim.date_of_policy_issue.try(:strftime, "%B %d, %Y")  
+        = @data[:date_of_policy_issue].to_date.strftime("%b %d, %Y")
     %tr
       %th Date Reported/Notice
       %td 
-        =@claim.date_reported.try(:strftime, "%B %d, %Y")
+        = @data[:date_reported].to_date.strftime("%b %d, %Y")
       %th Date Paid
       %td 
-        =@claim.date_paid.try(:strftime, "%B %d, %Y")
+        = @data[:date_paid].try(:to_date).try(:strftime, "%b %d, %Y")
       %tr
         %th Member Name
         %td 
           = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
         %th Length of Stay
         %td 
-          = @claim.length_of_stay  
+          = @data[:length_of_stay] 
       %tr
-        %th PN Number
+        %th Policy Number
         %td
-          = @claim.policy_number
+          = @data[:policy_number]
         %th Date of Death/TPD/Accident 
         %td
-          = @claim.date_of_death_tpd_accident.try(:strftime, "%B %d, %Y")
+          = @data[:date_of_death_tpd_accident].to_date.strftime("%b %d, %Y")
       %tr
         %th Type of Insurance Policy 
         %td
-          = @claim.type_of_insurance_policy
+          = @data[:type_of_insurance_policy]
 
         %th Classification of Insured
         %td
-          = @claim.classification_of_insured
+          = @data[:classification_of_insured]
       %tr
         %th Name of Insured
         %td
-          = @claim.name_of_insured
+          = @data[:name_of_insured]
         %th Gender
         %td
-          = @claim.gender   
+          = @data[:gender]
       %tr
         %th Age
         %td
-          = @claim.age
+          = @data[:age]
         %th Date of Birth
         %td
-          = @claim.date_of_birth.try(:strftime, "%B %d, %Y")    
+          = @data[:date_of_birth].to_date.strftime("%b %d, %Y")
       %tr
         %th Face Amount 
         %td
-          = @claim.face_amount
+          = @data[:face_amount]
         %th Beneficiary
         %td
-          = @claim.beneficiary
+          = @data[:beneficiary]
       %tr
         %th Equity Value
         %td
-          = @claim.equity_value
+          = @data[:equity_value]
         %th Retirement Fund 
         %td
-          = @claim.retirement_fund
+          = @data[:retirement_fund]
       %tr
         %th Returned Contribution
         %td
-          = @claim.returned_contribution
+          = @data[:returned_contribution]
         %th Category of Cause of Death/TPD/Accident
         %td
-          = @claim.category_of_cause_of_death_tpd_accident
+          = @data[:category_of_cause_of_death_tpd_accident]
       %tr
         %th Arrears
         %td
-          = @claim.arrears
+          = @data[:arrears]
         %th Cause of Death/TPD/Accident
         %td
-          = @claim.cause_of_death_tpd_accident
+          = @data[:cause_of_death_tpd_accident]
       %tr
         %th Prepared By
         %td
           = @claim.prepared_by
-        - if @claim.order_of_child.present?
-          %th Order of Child
-          %td
-            = @claim.order_of_child
-        - else
+        - if @data[:order_of_child].blank?
           %th 
           %td
+        - else
+          %th Order of Child
+          %td
+            = @data[:order_of_child]
+          
 

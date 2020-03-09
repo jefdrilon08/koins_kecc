@@ -1,0 +1,89 @@
+.message
+.row
+  .col
+    .form-group
+      %h3
+        Kuya Jun Scholarship Program Information
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Date Prepared
+        = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control', type: 'date', id: 'date-prepared'
+  .col
+    .form-group
+      %label.col.control-label
+        Type of Scholarship
+        = select_tag :scholarship_type, options_for_select(["Old", "New"], @claim.data["scholarship_type"]), class: 'form-control', id: 'scholarship-type'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Beneficiary(Student)
+        = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
+  .col
+    .form-group
+      %label.col.control-label
+        Name of School
+        = text_field_tag :name_of_school, @claim.data["name_of_school"], class: 'form-control', id: 'name-of-school'
+  .col
+    .form-group
+      %label.col.control-label
+        Year Level
+        = select_tag :year_level, options_for_select(Claim::YEAR_LEVEL, @claim.data["year_level"]), class: 'form-control', id: 'year-level'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        SY
+        = select_tag :school_year, options_for_select(["2019-2020","2020-2021","2021-2022"],@claim.data["school_year"]), class: 'form-control', id: 'school-year'
+  .col
+    .form-group
+      %label.col.control-label
+        Final Grade
+        = text_field_tag :final_grade, @claim.data["final_grade"], class: 'form-control', id: 'final-grade'
+  .col
+    .form-group.sem-field
+      %label.col.control-label
+        Semester
+        = select_tag :sem, options_for_select(["1st Sem","2nd Sem"] ,@claim.data["sem"]), class: 'form-control', id: 'sem'
+  .col
+    .form-group.course-field
+      %label.col.control-label
+        Course
+        = text_field_tag :course, @claim.data["course"], class: 'form-control', id: 'course'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Payee
+        = text_field_tag :payee, @claim.data["payee"], class: 'form-control', id: 'payee'
+  .col
+    .form-group
+      %label.col.control-label
+        Classification
+        = text_field_tag :classification, @claim.data["classification"], class: 'form-control', id: 'classification', value: "CHILD"
+  .col
+    .form-group
+      %label.col.control-label
+        Amount
+        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount' , value: "5000.00"
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Prepared by
+        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', value: current_user.print_full_name.titleize, id: 'prepared-by'
+.row
+  .col
+    .form-actions
+    = button_tag type: 'submit', class: 'btn btn-primary', id: "submit-button" do
+      .fa.fa-check
+      Submit
+    = link_to claims_path, class: 'btn btn-default' do
+      .fa.fa-times
+      Cancel
+
+
+#parameters{ data: { id: params[:id] }}
+= javascript_include_tag "claims/scholarship_form"

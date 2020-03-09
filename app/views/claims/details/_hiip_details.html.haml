@@ -1,0 +1,64 @@
+%section.content-header
+  %h3
+    %strong
+      HIIP Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Branch
+      %td
+        = @claim.member.branch.name
+      %th Name
+      %td 
+        = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
+    %tr
+      %th Date Prepared
+      %td 
+        = @claim.date_prepared.strftime("%b %d, %Y")
+      %th Date of Birth
+      %td 
+        = @data[:date_of_birth].to_date.strftime("%b %d, %Y")   
+    %tr
+      %th Effective Date of Coverage
+      %td 
+        = @data[:effective_date_of_coverage].to_date.strftime("%b %d, %Y")
+      %th Expiration Date of Coverage
+      %td 
+        = @data[:expiration_date_of_coverage].to_date.strftime("%b %d, %Y")    
+    %tr
+      %th Date Admitted
+      %td 
+        = @data[:date_admitted].to_date.strftime("%b %d, %Y") 
+      %th Date Discharged
+      %td 
+        = @data[:date_discharged].to_date.strftime("%b %d, %Y")  
+    %tr
+      %th Reason of Confinement
+      %td 
+        = @data[:reason_of_confinement] 
+      %th Diagnosis
+      %td 
+        = @data[:diagnosis] 
+    %tr
+      %th Certificate No.
+      %td 
+        = @data[:certificate_number] 
+      %th Amount
+      %td 
+        = @data[:amount]
+    %tr
+      %th Name of Claimant
+      %td 
+        = @data[:name_of_claimant]
+      %th Age
+      %td 
+        = @data[:age]
+    %tr
+      %th Prepared By
+      %td
+        = @claim.prepared_by
+      %th
+      %td
+
+
+     

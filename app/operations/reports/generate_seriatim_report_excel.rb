@@ -80,8 +80,8 @@ module Reports
               end
             end  
 
-            member_account = MemberAccount.where(account_subtype: "Life Insurance Fund", member_id: member.id).first
-            account_transactions = AccountTransaction.where(subsidiary_id: member_account.id)
+            member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
+            account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id)
 
             life = 0
             life_amount = 0

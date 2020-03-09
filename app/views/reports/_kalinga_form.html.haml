@@ -2,12 +2,8 @@
   .row
     .col-sm-3
       .form-group
-        %label Cluster
-        = select_tag :cluster_id, options_from_collection_for_select(@clusters, :id, :name, @cluster.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "cluster-select"
-    .col-sm-3
-      .form-group
         %label Branch
-        = select_tag :branch_id, options_for_select([]), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
     .col-sm-3
       .form-group
         %label Start Date
@@ -23,13 +19,3 @@
           .fa.fa-download
           Excel 
           
-= javascript_include_tag "reports/KalingaReport"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    KalingaReport.init({
-      authenticityToken: authenticityToken
-    });
-  });
