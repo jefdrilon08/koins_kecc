@@ -8,7 +8,12 @@
         .modal-body-content
           .callout.callout-info
             %p
-              Are you sure you want to approve this billing?
+              Are you sure you want to approve this billing? 
+            %p
+              Approval date is 
+              %span
+                %strong
+                  #{@current_date.strftime("%b %d, %Y")}
           .message
       .modal-footer
         .controls

@@ -30,8 +30,13 @@ class BillingsController < ApplicationController
 
   def show
     @billing  = Billing.find(params[:id])
-   
     @data     = @billing.data.with_indifferent_access
+
+    @current_date = ::Utils::GetCurrentDate.new(
+                      config: {
+                        branch: @billing.branch
+                      }
+                    ).execute!
 
     @activity_logs  = ActivityLog.where(
                         "data ->> 'billing_id' = ?",

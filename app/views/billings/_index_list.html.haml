@@ -2,6 +2,7 @@
   %thead
     %tr
       %th
+      %th
         Collection Date
       %th
         OR Number
@@ -19,14 +20,16 @@
   %tbody
     - @billings.each do |o|
       %tr
-        %td
+        %td.text-center
           = link_to billing_path(o), target: "_blank" do
             %strong
-              #{o.collection_date.strftime("%b %d, %Y")}
+              .fa.fa-search
         %td
-          = link_to billing_path(o) do
-            %strong
-              #{o.or_number}
+          %strong
+            #{o.collection_date.strftime("%b %d, %Y")}
+        %td
+          %strong
+            #{o.or_number}
         %td
           - if o.date_approved.present?
             #{o.date_approved.strftime("%b %d, %Y")}

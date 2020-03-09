@@ -337,7 +337,7 @@ Rails.application.routes.draw do
     instance_eval(File.read(Rails.root.join("config/routes/#{routes_name}.rb")))
   end
 
-  get "/download_backup", to: "pages#download_backup"
+  #get "/download_backup", to: "pages#download_backup"
   get "/download_exit_age", to: "pages#download_exit_age"
   draw :administration
   draw :accounting

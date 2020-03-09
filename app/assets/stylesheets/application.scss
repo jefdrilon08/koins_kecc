@@ -23,6 +23,10 @@
 @import "datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4";
 @import "sk-cube-grid";
 
+.callout {
+  padding: 5px;
+}
+
 td {
   white-space: normal !important; // To consider whitespace.
 }
