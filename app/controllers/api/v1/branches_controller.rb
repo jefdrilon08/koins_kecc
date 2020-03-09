@@ -7,6 +7,7 @@ module Api
         branches = current_user
           .branches
           .includes(:centers)
+          .where(user_branches: { active: true })
           .map do |b|
             {
               id:      b.id,
