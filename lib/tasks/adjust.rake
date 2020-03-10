@@ -1,4 +1,74 @@
 namespace :adjust do
+  task :load_rr_totals => :environment do
+    start_date  = ENV['START_DATE'].to_date
+    end_date    = ENV['END_DATE'].to_date
+
+    data_stores = DataStore.repayment_rates.where(
+                    "status = ? AND DATE(data->>'as_of') >= ? AND DATE(data->>'as_of') <= ?",
+                    "done",
+                    start_date,
+                    end_date
+                  )
+
+    size    = data_stores.size
+
+    puts "Found #{size} records"
+
+    data_stores.each_with_index do |o, i|
+      data  = o.data.with_indifferent_access
+      data[:total_principal]                 = 0.00
+      data[:total_principal_paid]            = 0.00
+      data[:total_overall_principal_balance] = 0.00
+      data[:total_interest]                  = 0.00
+      data[:total_interest_paid]             = 0.00
+      data[:total_overall_interest_balance]  = 0.00
+      data[:total_total_paid]                = 0.00
+      data[:total_principal_due]             = 0.00
+      data[:total_total_due]                 = 0.00
+      data[:total_principal_balance]         = 0.00
+      data[:total_total_balance]             = 0.00
+      data[:total_overall_balance]           = 0.00
+      data[:total_rr]                        = 0
+      data[:total_principal_rr]              = 0
+      data[:total_principal_paid_due]        = 0.00
+      data[:total_interest_paid_due]         = 0.00
+      data[:total_paid_due]                  = 0.00
+
+      # Compute totals
+      data[:records].each do |r|
+        data[:total_principal] += r[:principal].to_f
+        data[:total_principal_paid] += r[:principal_paid].to_f
+        data[:total_principal_paid_due] += r[:principal_paid_due].to_f
+        data[:total_overall_principal_balance] += r[:overall_principal_balance].to_f
+        data[:total_interest] += r[:interest].to_f
+        data[:total_interest_paid] += r[:interest_paid].to_f
+        data[:total_overall_interest_balance] += r[:overall_interest_balance].to_f
+        data[:total_total_paid] += r[:total_paid].to_f
+        data[:total_principal_due] += r[:principal_due].to_f
+        data[:total_total_due] += r[:total_due].to_f
+        data[:total_total_balance] += r[:total_balance].to_f
+        data[:total_principal_balance] += r[:principal_balance].to_f
+        data[:total_paid_due] += r[:total_paid_due].to_f
+      end
+
+      data[:total_overall_balance] = data[:total_overall_principal_balance] + data[:total_overall_interest_balance]
+      data[:total_rr] = data[:total_paid_due] / data[:total_total_due]
+
+      data[:total_principal_rr] = data[:total_principal_paid_due] / data[:total_principal_due]
+
+      if data[:total_principal_rr] > 1
+        data[:total_principal_rr] = 1
+      end
+
+      o.update!(data: data)
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+    end
+
+    puts "\nDone."
+  end
+
   task :convert_savings_accounts_to_equity => :environment do
     account_subtype = ENV['ACCOUNT_SUBTYPE']
 
