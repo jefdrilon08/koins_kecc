@@ -6,8 +6,10 @@
     .col
       .card
         .card-body
+          = render partial: "index_filter"
           - if @monthly_closing_collections.any?
             = render partial: "index_list"
+            = paginate @monthly_closing_collections
           - else
             %p
               No records found

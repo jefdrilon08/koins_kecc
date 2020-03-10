@@ -14,7 +14,7 @@ namespace :adjust do
 
     puts "Found #{size} records"
 
-    data_stores.each_with_index do |o, i|
+    data_stores.find_each(batch_size: 1).with_index do |o, i|
       data  = o.data.with_indifferent_access
       data[:total_principal]                 = 0.00
       data[:total_principal_paid]            = 0.00
