@@ -45,9 +45,8 @@
       ],
       [
         "Accounting", [
-          ["Chart of Accounts", accounting_accounting_codes_path, { "accounting/accounting_codes" => nil },             true, "fa-book"],
-          ["Trial Balance",     "/accounting/trial_balance",      { "accounting"                  => "trial_balance" }, true, "fa-book"],
-          ["Insurance",         insurance_accounts_path,          { "insurance_accounts"          => nil },             true, "fa-book"],
+          ["Chart of Accounts", accounting_accounting_codes_path, { "accounting/accounting_codes" => nil },             true, "fa-balance-scale"],
+          ["Trial Balance",     trial_balance_path,               { "accounting"                  => "trial_balance" }, true, "fa-balance-scale"],
           [
             "Journal Entries", [
               ["Cash Receipts",      accounting_accounting_entry_form_path(book: "CRB"), { "accounting/books" => "crb" }, true, "fa-plus"],
