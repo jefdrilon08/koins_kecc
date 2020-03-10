@@ -8,6 +8,7 @@ module ApplicationHelper
   #
   # { "pages" => "about" } -> #about action in PagesController
   # { "pages" => nil } -> any action in PagesController
+  # { "a" => ["b", "c"], "d" => nil } -> #b and #c actions in AController, and any action in DController
   def active_class(hash_set, name: "active")
     return if !hash_set
 

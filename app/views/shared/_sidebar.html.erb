@@ -3,6 +3,12 @@
   is_not_remote = ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last
   is_not_ojt = ["OJT"].exclude? current_user.roles.last
 
+  # Parent:
+  # [label (string), children (Child array)]
+  #
+  # Child:
+  # [label (string), path (string), active_class_args (hash), is_visible (boolean), fa_icon_name (string, see: https://fontawesome.com/icons)]
+  #
   items = [
     [
       "Dashboard", [
@@ -39,9 +45,8 @@
       ],
       [
         "Accounting", [
-          ["Chart of Accounts", accounting_accounting_codes_path, { "accounting/accounting_codes" => nil },             true, "fa-book"],
-          ["Trial Balance",     "/accounting/trial_balance",      { "accounting"                  => "trial_balance" }, true, "fa-book"],
-          ["Insurance",         insurance_accounts_path,          { "insurance_accounts"          => nil },             true, "fa-book"],
+          ["Chart of Accounts", accounting_accounting_codes_path, { "accounting/accounting_codes" => nil },             true, "fa-balance-scale"],
+          ["Trial Balance",     trial_balance_path,               { "accounting"                  => "trial_balance" }, true, "fa-balance-scale"],
           [
             "Journal Entries", [
               ["Cash Receipts",      accounting_accounting_entry_form_path(book: "CRB"), { "accounting/books" => "crb" }, true, "fa-plus"],
