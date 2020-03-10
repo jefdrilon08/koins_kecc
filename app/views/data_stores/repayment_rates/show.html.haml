@@ -6,7 +6,10 @@
     .col
       .card
         .card-body
-          #content
+          - if @record.error?
+            = render partial: "data_stores/error_page"
+          - else
+            #content
 
 #parameters{ data: { id: "#{@record.id}" } }
 = javascript_include_tag "RepaymentRatesShow.min.react"
