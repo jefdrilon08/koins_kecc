@@ -24,7 +24,7 @@ export default class Controls extends React.Component {
                             { value: "daily", label: "Daily" }
                           ]
 
-    return  <div className="container-fluid">
+    return  <div>
               <div className="row">
                 <div className="col">
                   <div className="form-group">
