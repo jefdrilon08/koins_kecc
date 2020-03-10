@@ -3,6 +3,12 @@
   is_not_remote = ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last
   is_not_ojt = ["OJT"].exclude? current_user.roles.last
 
+  # Parent:
+  # [ label (string), children (array) ]
+  #
+  # Child:
+  # [label (string), path (string), active_class (hash), is_visible (boolean), fa_icon_name (string)]
+  #
   items = [
     [
       "Dashboard", [
