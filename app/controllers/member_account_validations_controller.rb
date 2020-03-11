@@ -54,7 +54,7 @@ class MemberAccountValidationsController < ApplicationController
       @accounting_entry_data = @member_account_validation.data.with_indifferent_access[:accounting_entry]
     end
 
-    @members = Member.where(branch_id: @member_account_validation.branch.id).all
+    # @members = Member.where(branch_id: @member_account_validation.branch.id).all
     @role = current_user.roles.last
   end
 

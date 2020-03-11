@@ -1,0 +1,49 @@
+%li.nav-title
+  Microinsurance
+  %li{ class: "nav-item #{params[:controller] == "member_account_validations" || params[:controller] == "members/member_account_validations" ? 'active' : '' }" }
+  = link_to member_account_validations_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Validations
+  %li{ class: "nav-item #{params[:controller] == 'pages' and params[:action] == 'validations' ? 'active' : ''}" }
+  = link_to validations_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    Validations Report
+  = link_to insurance_exit_age_members_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    Members for Exit Age
+  = link_to lapsed_members_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    Lapsed Members
+  - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+    %li{ class: "nav-item #{params[:controller] == 'pages' and params[:action] == 'insurance_exit_age_members' ? 'active' : ''}" }
+    = link_to members_for_reinsurance_path, class: 'nav-link' do
+      %i.nav-icon.fa.fa-file
+      Mem For Reinsurance
+  = link_to seriatim_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    Seriatim  
+    - if microinsurance?
+      = link_to claims_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-money-check
+        Claims Register
+      / = link_to clip_claims_path, class: 'nav-link' do
+      /   %i.nav-icon.fa.fa-money-check
+      /   Claim Register(CLIP)
+      / = link_to calamity_claims_path, class: 'nav-link' do
+      /   %i.nav-icon.fa.fa-money-check
+      /   Calamity Assistance 
+      / = link_to hiip_claims_path, class: 'nav-link' do
+      /   %i.nav-icon.fa.fa-money-check
+      /   HIIP 
+      / = link_to kalinga_claims_path, class: 'nav-link' do
+      /   %i.nav-icon.fa.fa-money-check
+      /   K-Kalinga
+      / = link_to kbente_claims_path, class: 'nav-link' do
+      /   %i.nav-icon.fa.fa-money-check
+      /   K-Bente
+      / = link_to kjsp_claims_path, class: 'nav-link' do
+      /   %i.nav-icon.fa.fa-money-check
+      /   K-JSP
+  = link_to daily_report_insurance_account_status_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-file
+    Ins Acc Status

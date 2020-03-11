@@ -7,15 +7,15 @@ module Reports
       @end_date = end_date
 
       if @branch.present? && @type_of_loan.present? && @start_date.present? && @end_date.present?
-        @clip_claims = ClipClaim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND type_of_loan = ?", @start_date, @end_date, @branch, @type_of_loan).order("date_prepared DESC")
+        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND data->>'type_of_loan' = ? AND claim_type = ?", @start_date, @end_date, @branch, @type_of_loan, "CLIP").order("date_prepared DESC")
       elsif @branch.present? && @start_date.present? && @end_date.present?
-        @clip_claims = ClipClaim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("date_prepared DESC")
+        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "CLIP").order("date_prepared DESC")
       elsif @type_of_loan.present? && @start_date.present? && @end_date.present?
-        @clip_claims = ClipClaim.where("date_prepared >= ? AND date_prepared <= ? AND type_of_loan = ?", @start_date, @end_date, @type_of_loan).order("date_prepared DESC")
+        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND data->>'type_of_loan' = ? AND claim_type = ?", @start_date, @end_date, @type_of_loan, "CLIP").order("date_prepared DESC")
       elsif @start_date.present? && @end_date.present?
-        @clip_claims = ClipClaim.where("date_prepared >= ? AND date_prepared <= ?", @start_date, @end_date).order("date_prepared DESC")
+        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ?", @start_date, @end_date, "CLIP").order("date_prepared DESC")
       else
-        @clip_claims = ClipClaim.all
+        @clip = Claim.where(claim_type: "CLIP")
       end
 
       @p        = Axlsx::Package.new
@@ -48,16 +48,17 @@ module Reports
           sheet.add_row []
           
           sheet.add_row [ 
-            "Date Entered",
+            "Date Prepared",
             "Creditors Name",
             "Branch",
             "Type of Insurance Policy",
             "Debtors Name (Member)",
             "Beneficiary",
-            "CLIP Policy Number",
+            "Policy Number",
             "Date of Birth",
             "Age",
             "Sex",
+            "Type of Loan",
             "Date of Death",
             "Cause of Death",
             "Effective Date of Coverage",
@@ -69,32 +70,33 @@ module Reports
             "Prepared by:"
           ], style: header
 
-          @clip_claims.each do |clip_claim|
+          @clip.each do |clip|
             sheet.add_row [
-              clip_claim.date_prepared,
-              clip_claim.creditors_name,
-              clip_claim.branch.name,
+              clip.date_prepared.strftime("%b %d, %Y"),
+              clip.data["creditors_name"],
+              clip.member.branch.name,
               "CLIP",
-              clip_claim.member.full_name,
-              clip_claim.beneficiary,
-              clip_claim.policy_number,
-              clip_claim.date_of_birth,
-              clip_claim.age,
-              clip_claim.gender,
-              clip_claim.date_of_death,
-              clip_claim.cause_of_death,
-              clip_claim.effective_date_of_coverage,
-              clip_claim.expiration_date_of_coverage,
-              clip_claim.amount_of_loan,
-              clip_claim.terms,
-              clip_claim.amount_payable_to_beneficiary,
-              clip_claim.amount_payable_to_creditor,
-              clip_claim.prepared_by
+              clip.member.full_name,
+              clip.data["beneficiary"],
+              clip.data["policy_number"],
+              clip.data["date_of_birth"].try(:to_date).try(:strftime, "%b %d, %Y"),
+              clip.data["age"],
+              clip.data["gender"],
+              clip.data["type_of_loan"],
+              clip.data["date_of_death"].try(:to_date).try(:strftime, "%b %d, %Y"),
+              clip.data["cause_of_death"],
+              clip.data["effective_date_of_coverage"].try(:to_date).try(:strftime, "%b %d, %Y"),
+              clip.data["expiration_date_of_coverage"].try(:to_date).try(:strftime, "%b %d, %Y"),
+              clip.data["amount_of_loan"],
+              clip.data["terms"],
+              clip.data["amount_payable_to_beneficiary"],
+              clip.data["amount_payable_to_creditor"],
+              clip.prepared_by
             ], style: [date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, date_format_cell, nil, date_format_cell, date_format_cell, currency_cell_right, nil, currency_cell_right, currency_cell_right, nil]
 
-            @total_amount_of_loan = @total_amount_of_loan + clip_claim.amount_of_loan
-            @total_amount_payable_to_creditor = @total_amount_payable_to_creditor + clip_claim.amount_payable_to_creditor
-            @total_amount_payable_to_beneficiary = @total_amount_payable_to_beneficiary + clip_claim.amount_payable_to_beneficiary
+            @total_amount_of_loan = @total_amount_of_loan + clip.data["amount_of_loan"].to_i
+            @total_amount_payable_to_creditor = @total_amount_payable_to_creditor + clip.data["amount_payable_to_creditor"].to_i
+            @total_amount_payable_to_beneficiary = @total_amount_payable_to_beneficiary + clip.data["amount_payable_to_beneficiary"].to_i
           end
 
           sheet.add_row [

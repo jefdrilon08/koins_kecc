@@ -1,18 +1,20 @@
 module Reports
-  class GenerateKjspReportExcel
-    def initialize(branch:, cluster:, start_date:, end_date:)
+  class GenerateScholarshipExcelReport
+    def initialize(branch:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
-      @cluster = cluster
       @branch = branch
      
 
-      if @cluster.present? && @branch == "--ALL--"
-        @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @kjsp_claim  = KjspClaim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+      if @branch.present? && @start_date.present? && @end_date.present?
+        @scholarship   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "KUYA JUN SCHOLARSHIP PROGRAM").order("created_at DESC")
+      elsif @start_date.present? && @end_date.present?
+        @scholarship   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ?", @start_date, @end_date, "KUYA JUN SCHOLARSHIP PROGRAM").order("created_at DESC")
+      elsif @branch.present?
+        @scholarship   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "KUYA JUN SCHOLARSHIP PROGRAM").order("created_at DESC")
       else
-        @kjsp_claim   = KjspClaim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
-      end
+        @scholarship = Claim.where(claim_type: 'KUYA JUN SCHOLARSHIP PROGRAM')
+      end  
 
       @p          = Axlsx::Package.new
     end
@@ -34,38 +36,42 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
-            "Name of Member",
+            "Date Prepared",
+            "Cluster",
             "Branch",
             "Center",
-            "Date Prepared",
+            "Name of Member",
             "Name of Scholar",
             "Payee",
             "Amount",
             "Name of School",
             "School Year",
             "Sem",
-            "KJSP Type",
+            "Scholarship Type",
             "Final Grade",
-            "Remarks",
-            "Classification"
+            "Classification",
+            "Course",
+            "Prepared by"
           ], style: header
 
-          @kjsp_claim.each_with_index do |kjsp_claim|
+          @scholarship.each_with_index do |scholarship|
               sheet.add_row [
-                  kjsp_claim.member.full_name,
-                  kjsp_claim.branch.name,
-                  kjsp_claim.center.name,
-                  kjsp_claim.date_prepared.strftime("%b %d, %Y"),
-                  kjsp_claim.name_of_kjsp_beneficiary,
-                  kjsp_claim.payee,
-                  kjsp_claim.amount,
-                  kjsp_claim.name_of_school,
-                  kjsp_claim.school_year,
-                  kjsp_claim.sem,
-                  kjsp_claim.kjsp_type,
-                  kjsp_claim.final_grade,
-                  kjsp_claim.remarks,
-                  kjsp_claim.classification
+                  scholarship.date_prepared.try(:strftime, "%b %d, %Y"),
+                  scholarship.branch.cluster.name,
+                  scholarship.branch.name,
+                  scholarship.member.center.name,
+                  scholarship.member.full_name,
+                  scholarship.data["name_of_beneficiary"],
+                  scholarship.data["payee"],
+                  scholarship.data["amount"],
+                  scholarship.data["name_of_school"],
+                  scholarship.data["school_year"],
+                  scholarship.data["sem"],
+                  scholarship.data["scholarship_type"],
+                  scholarship.data["final_grade"],
+                  scholarship.data["classification"],
+                  scholarship.data["course"],
+                  scholarship.prepared_by
                 ], style: [nil]             
               end
           end

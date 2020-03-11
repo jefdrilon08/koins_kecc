@@ -1,0 +1,104 @@
+.message
+.row
+  .col
+    .form-group
+      %h3
+        K-Kalinga Information
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Date Prepared
+        = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control ', type: 'date', id: 'date-prepared'
+  .col
+    .form-group
+      %label.col.control-label
+        Date Approved
+        = text_field_tag :date_approved, @claim.data["date_approved"], class: 'form-control', type: 'date', id: 'date-approved'
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Death/Incident
+        = text_field_tag :date_of_death_or_incident, @claim.data["date_of_death_or_incident"], class: 'form-control', type: 'date', id: 'date-of-death-or-incident'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Type of Claims
+        = select_tag :reason_of_death, options_for_select(["Accidental Death", "Fire Assistance"], @claim.data["reason_of_death"]), id: 'reason-of-death', class: 'form-control'
+  .col
+    .form-group
+      %label.col.control-label
+        Amount
+        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
+  .col
+    .form-group
+      %label.col.control-label
+        POC #
+        = text_field_tag :poc_number, @claim.data["poc_number"],  class: 'form-control', id: 'poc-number'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Effective Date
+        = text_field_tag :effective_date, @claim.data["effective_date"], class: 'form-control', type: 'date', id: 'effective-date'
+  .col
+    .form-group
+      %label.col.control-label
+        Expiration Date
+        = text_field_tag :expiration_date, @claim.data["expiration_date"], class: 'form-control', type: 'date', id: 'expiration-date'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Insured
+        = text_field_tag :name_of_insured, @claim.data["name_of_insured"], class: 'form-control', id: 'name-of-insured'
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Birth
+        = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', type: 'date', id: 'date-of-birth', value: @claim.member.date_of_birth
+  .col
+    .form-group
+      %label.col.control-label
+        Gender
+        = text_field_tag :gender, @claim.data["gender"], class: 'form-control' , id: 'gender', value: @claim.member.gender
+  .col
+    .form-group
+      %label.col.control-label
+        Civil Status
+        = text_field_tag :civil_status, @claim.data["civil_status"], class: 'form-control', id: 'civil-status', value: @claim.member.civil_status
+.row  
+  .col
+    .form-group
+      %label.col.control-label
+        Insured Address
+        = text_field_tag :insured_address, @claim.data["insured_address"],class: 'form-control', id: 'insured-address', value: @claim.member.full_address_upcase
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Beneficiary
+        = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
+  .col
+    .form-group
+      %label.col.control-label
+        Classification
+        = select_tag :relationship_to_member, options_for_select(["Member", "Non-Member"], @claim.data["relationship_to_member"]), class: 'form-control', id: 'relationship-to-member' 
+.row  
+  .col
+    .form-group
+      %label.col-md-4.control-label
+        Prepared by
+        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', value: current_user.print_full_name.titleize, id: 'prepared-by' 
+.row
+  .col
+    .form-actions
+    = button_tag type: 'submit', class: 'btn btn-primary', id: "submit-button" do
+      .fa.fa-check
+      Submit
+    = link_to claims_path, class: 'btn btn-default' do
+      .fa.fa-times
+      Cancel
+
+#parameters{ data: { id: params[:id] }}
+= javascript_include_tag "claims/kalinga_form"

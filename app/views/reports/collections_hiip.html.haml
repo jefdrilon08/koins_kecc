@@ -11,3 +11,10 @@
       .card
         .card-body
           = render partial: "collections_hiip_form"
+
+= javascript_include_tag "reports/CollectionsHiipReport"
+
+:javascript
+  $(document).ready(function() {
+    CollectionsHiipReport.init();
+  });

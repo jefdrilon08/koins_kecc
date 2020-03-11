@@ -1,0 +1,68 @@
+.message
+.row
+  .col
+    .form-group
+      %h3
+        Calamity Assistance Information
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Date Prepared
+        = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control ', type: 'date', id: 'date-prepared'
+  .col
+    .form-group
+      %label.col.control-label
+        Date Requested
+        = text_field_tag :date_requested,@claim.data["date_requested"], class: 'form-control', type: 'date', id: 'date-requested'
+  .col
+    .form-group
+      %label.col.control-label 
+        Date Event
+        = text_field_tag :date_of_event, @claim.data["date_of_event"], class: 'form-control', type: 'date', id: 'date-of-event'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Type of Calamity
+        = text_field_tag :type_of_calamity, @claim.data["type_of_calamity"], class: 'form-control', id: 'type-of-calamity'
+  .col
+    .form-group
+      %label.col.control-label
+        Purpose
+        = text_field_tag :purpose, @claim.data["purpose"], class: 'form-control', value: 'Payment for Calamity Assistance', id: 'purpose'   
+  .col
+    .form-group
+      %label.col.control-label
+        Amount
+        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Beneficiary
+        = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Payee
+        = text_field_tag :name_of_payee, @claim.data["name_of_payee"], class: 'form-control', id: 'name-of-payee'
+.row
+  .col
+    .form-group
+      %label.col-md-4.control-label
+        Prepared by
+        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize       
+.row
+  .col
+    .form-actions
+    = button_tag type: 'submit', class: 'btn btn-primary', id: "submit-button" do
+      .fa.fa-check
+      Submit
+    = link_to claims_path, class: 'btn btn-default' do
+      .fa.fa-times
+      Cancel
+
+
+#parameters{ data: { id: params[:id] }}
+= javascript_include_tag "claims/calamity_form"

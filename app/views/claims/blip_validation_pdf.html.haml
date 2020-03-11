@@ -34,7 +34,7 @@
     %p
       CLAIMS VALIDATION:
       %u
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.type_of_insurance_policy}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@data["type_of_insurance_policy"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       %br
       %br
       %b
@@ -47,8 +47,8 @@
       %br
       %b
         DATE:&nbsp;&nbsp;&nbsp;&nbsp
-      - if !@claim.date_reported.nil?
-        #{@claim.date_reported}
+      - if !@data["date_reported"].nil?
+        #{@data["date_reported"]}
         #{Time.now.strftime("%H:%M:%S")}
       - else
         #{@claim.date_prepared}
@@ -66,7 +66,7 @@
           %td{:width => "25%"}
             %b
               %u
-                #{@claim.branch}
+                #{@claim.member.branch.name}
           %td{:width => "28%"}
             [] Notice of Death/TPD/MVAH
         %tr
@@ -75,7 +75,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@member.check_name}
+                #{@claim.member.full_name}
           %td{:width => "28%"}
             [] Application Form / Reinstatement  
         %tr
@@ -84,7 +84,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@member.identification_number}
+                #{@claim.member.identification_number}
           %td{:width => "28%"}
             [] Marriage Contract / Birth Certificate
         %tr
@@ -93,7 +93,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.date_of_policy_issue}
+                #{@data["date_of_policy_issue"].to_date.strftime("%b %d, %Y")}
           %td{:width => "28%"}
             [] Death Certificate
         %tr
@@ -103,7 +103,7 @@
             %b
               %u  
                 // #{@claim.equity_value}
-                #{number_with_delimiter(number_with_precision(@claim.equity_value, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["equity_value"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
             [] Doctor's Certificate of TPD
         %tr
@@ -113,7 +113,7 @@
             %b
               %u  
                 //#{@claim.retirement_fund}
-                #{number_with_delimiter(number_with_precision(@claim.retirement_fund, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["retirement_fund"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
             [] Monitoring Tool
         %tr
@@ -127,7 +127,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.length_of_stay}
+                #{@data["length_of_stay"]}
           %td{:width => "28%"}
             [] Others ___________________
       %br
@@ -142,7 +142,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.name_of_insured.titleize}
+                #{@data["name_of_insured"].titleize}
           %td{:width => "28%"}
             [] Police Report
         %tr
@@ -151,7 +151,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.date_of_birth}
+                #{@data["date_of_birth"].to_date.strftime("%b %d, %Y")}
           %td{:width => "28%"}
             [] Medical Certificate         
         %tr
@@ -160,7 +160,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.classification_of_insured}
+                #{@data["classification_of_insured"]}
           %td{:width => "28%"}
             [] Hospital Billing
         %tr
@@ -170,7 +170,7 @@
             %b
               %u  
                 //#{@claim.face_amount}
-                #{number_with_delimiter(number_with_precision(@claim.face_amount, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["face_amount"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
             [] Official Receipts
         %tr
@@ -179,7 +179,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{number_with_delimiter(number_with_precision(@claim.arrears, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["arrears"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
         %tr
           %td{:width => "21%"}
@@ -188,7 +188,7 @@
             %b
               %u  
                 //#{@claim.face_amount}
-                #{number_with_delimiter(number_with_precision(@claim.face_amount, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["face_amount"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
         %tr
           %td{:width => "21%"}
@@ -197,7 +197,7 @@
             %b
               %u  
                 //#{@claim.returned_contribution}
-                #{number_with_delimiter(number_with_precision(@claim.returned_contribution, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["returned_contribution"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
         %tr
           %td{:width => "21%"}
@@ -206,7 +206,7 @@
             %b
               %u  
                 //#{@claim.total_amount_payable}
-                #{number_with_delimiter(number_with_precision(@claim.total_amount_payable, precision: 2), delimiter: ",", separator: ".")}
+                #{number_with_delimiter(number_with_precision(@data["total_amount_payable"], precision: 2), delimiter: ",", separator: ".")}
           %td{:width => "28%"}
         %tr
           %td{:width => "21%"}
@@ -214,7 +214,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.date_of_death_tpd_accident}
+                #{@data["date_of_death_tpd_accident"].to_date.strftime("%b %d, %Y")}
           %td{:width => "28%"}
         %tr
           %td{:width => "21%"}
@@ -222,13 +222,13 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.cause_of_death_tpd_accident}
+                #{@data["cause_of_death_tpd_accident"]}
           %td{:width => "28%"}
   %br
   Beneficiary:
   %b
     %u
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.beneficiary.upcase}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@data["beneficiary"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
   %br
   %br
   %br

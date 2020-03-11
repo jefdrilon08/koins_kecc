@@ -1,0 +1,63 @@
+%section.content-header
+  %h3
+    %strong
+      K-Kalinga Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Branch
+      %td
+        = @claim.branch.name
+      %th Name of Member
+      %td
+        = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
+    %tr
+      %th Date Approved
+      %td 
+        = @data[:date_approved].to_date.strftime("%b %d, %Y")
+      %th Insured Name
+      %td 
+        = @data[:name_of_insured]
+    %tr
+      %th Date of Birth
+      %td 
+        = @data[:date_of_birth].to_date.strftime("%b %d, %Y")  
+      %th Gender
+      %td 
+        = @data[:gender]
+    %tr
+      %th Civil Status
+      %td 
+        = @data[:civil_status]
+      %th Insured Address
+      %td 
+        = @data[:insured_address]
+    %tr
+      %th POC No.
+      %td 
+        = @data[:poc_number]
+      %th Amount
+      %td 
+        = @data[:amount]
+    %tr
+      %th Effective Date
+      %td
+        = @data[:effective_date].to_date.strftime("%b %d, %Y")  
+      %th Expiration Date
+      %td 
+        = @data[:expiration_date].to_date.strftime("%b %d, %Y")  
+    %tr
+      %th Name of Beneficiary
+      %td
+        = @data[:name_of_beneficiary]
+      %th Type of Claims
+      %td
+        = @data[:reason_of_death]
+    %tr
+      %th Relationship
+      %td
+        = @data[:relationship_to_member]
+      %th Prepared by
+      %td 
+        = @claim.prepared_by
+   

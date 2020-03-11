@@ -1,0 +1,28 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-3
+      .form-group
+        %label
+          Member Name
+        = text_field_tag :member, @member, class: 'form-control', placeholder: 'Name'
+    .col-md-3
+      .form-group
+        %label
+          Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Type of Claim
+        = select_tag :claim_type,options_for_select(["BLIP", "CLIP", "HIIP", "CALAMITY ASSISTANCE", "K-KALINGA", "K-BENTE", "KUYA JUN SCHOLARSHIP PROGRAM"]), class: "form-control select-select2", id: "type-of-claims", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Status
+        = select_tag :status,options_for_select(["approved", "pending"]), class: "form-control select-select2", id: "status", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .fa.fa-search

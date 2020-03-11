@@ -1,0 +1,216 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: calibri;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  .body1{
+    width: 100%;
+    border-style: solid;
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-top:35px;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+  hr {
+    border-color: black;
+  }
+  tr td {
+    font-size: 1.2em;
+  }
+  .row{
+    margin:5px;
+  }
+  .kasunduan{
+    border-style: solid;
+    margin: 5px;
+    margin-top: 20px;
+  }
+
+.body1
+  %span.print-text
+    %center
+      %p
+        %b
+          Kasagana-Ka Mutual Benefit Association, Inc.
+        %br
+          #{Settings.company_address}
+        %br
+        %b
+          KUYA JUN SCHOLARSHIP PROGRAM(KJSP)
+      %h3
+        %b
+          Katunayan ng Pagkakaloob ng Allowance sa College Scholar 
+    %br
+    %table
+      %tr
+        %td
+          Petsa:
+        %td
+          %u 
+            #{@claim.date_prepared.strftime("%B %d, %Y")}
+        %td 
+          Branch:
+        %td
+          %u
+            #{@claim.member.branch.name}
+        %td 
+          Sentro:
+        %td
+          %u 
+            #{@claim.member.center.name.titlecase}
+      %tr
+        %td
+          Pangalan ng Miyembro:
+        %td
+          %u 
+            #{@claim.member.full_name_formatted}
+        %td
+        %td
+        %td 
+          Pangalan ng Iskolar:
+        %td
+          %u
+            #{@data["name_of_beneficiary"]}
+      %tr
+        %td
+          Paaralan:
+        %td
+          %u 
+            #{@data["name_of_school"]}
+        %td
+          Year Level:
+        %td
+          %u
+            #{@data["year_level"]}
+    .row
+      .col
+        %p 
+          Ako, si 
+          %u
+            %b #{@data["name_of_beneficiary"]} 
+          ay nakalagda sa ibaba bilang katunayan na tinanggap ko ang aking allowance na Php
+          %u 
+            %b &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")}
+          para sa 
+          %u 
+            %b #{@data["sem"]}
+          semester ng school-year 
+          %u
+            %b #{@data["school_year"]}. 
+          Nalalaman ko na ang pagiging iskolar ng Kasagana-Ka ay may kaakibat na mga kondisyon at patakaran na ipinaliwanag sa akin. Ang mga patakaran na nakasulat sa ibaba ay handa kong sundin ng may katapatan.
+    .kasunduan
+      .row
+        .col
+          %center
+            %p 
+              %b KASUNDUAN
+      .row
+        .col
+          %tr
+            %th
+              %b Petsa: 
+              #{@claim.date_prepared.strftime("%B %d, %Y")}
+      .row
+        .col
+          %p Para sa Iskolar:
+          %ol 
+            1. Kailangan na naka-enroll bilang regular na mag-aaral ng isang paaralan; 
+            %br
+            2. Dapat na mgsumite ng orignal certificate ng mga grado pagkatapos ng bawat taon;
+            %br
+            3.Dapat walang bagsak na grado sa pagtatapos ng bawat taon;
+            %br
+            4. Dapat na may grado na hindi bababa sa 82%;
+            %br
+            6. Hindi sangkot sa hindi magandang gawain na nangangailangan ng parusa;
+            %br
+            7. Hindi maaaring lumipat ng paaralan o tirahan ng hindi nagpapaalam sa Kasagana-Ka.
+            %br
+      .row
+        .col
+          %p Para sa Magulang
+          %ol 
+            1. Aktibong kasapi, ang pagtiwalag ng kasapi sa Kasagana-Ka sa anumang kadahilanan ay nangangahulugan ng pag-alis ng scholarship benefit;
+            %br
+            2. Kailangan mapanatili ang pagiging maayos na kasapi at tumutugon sa 6 P's ng Kasagana-Ka;
+            %br
+            3. Hindi maaaring lumipat ng tirahan ang pamilya ng iskolar, lalo't walang umiiral na Kasagana-Ka sa lugar na paglilipatan;
+            %br
+            4. Kinakikitaan ng mabuting pag-uugali, pagiging matapat at pagiging masikap;
+            %br
+            5. Sumusunod sa mga polisiya at patakaran na itinakda ng Kasagana-Ka.
+            %br
+      .row
+        .col
+          %p Ang hindi pagsunod sa mga nabanggit na kondisyon sa itaas ay mangangahulugang ng pagbawi ng scholarship benefit.
+          %tr 
+            %th 
+              Sinang-ayunan nina: 
+            %th 
+              _______________________________
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            %th 
+              _______________________________
+          %br
+          %tr
+            %td
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iskolar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Magulang ng Iskolar
+    %br
+    .row
+      .col
+        %table
+          %tr
+            %td{:width => "30%"}
+              Tinanggap ni: 
+              %br
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              %b #{@data["name_of_beneficiary"]}
+              ___________________________________________
+              %br
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pangalan at lagda ng Iskolar
+            %td{:width => "30%"}
+              %br
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              %b #{Date.today.strftime("%B %d, %Y")}
+              ___________________________________________
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Petsa
+          %tr
+            %td{:width => "30%"}
+              Noted by:
+              %br
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp 
+                %b.member #{@claim.member.full_name_formatted}
+                ___________________________________________
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pangalan at lagda ng Magulang
+            %td{:width => "30%"}
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ipinagkaloob ni:
+              %br
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              %b #{@claim.prepared_by}
+              _____________________________________________
+              %br
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KMBA Account Officer
+  
+
+    %br
+
+      

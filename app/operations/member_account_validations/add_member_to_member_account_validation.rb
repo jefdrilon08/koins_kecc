@@ -144,6 +144,7 @@ module MemberAccountValidations
    	def build_member_account_validation_record!
    		member_account_validation_record = MemberAccountValidationRecord.new(
    													member: @member,
+                            center: @member.center,
                             transaction_number: "",
                             lif_50_percent: @lif_50_percent,
                             resignation_date: @resignation_date,

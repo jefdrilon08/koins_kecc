@@ -15,11 +15,11 @@
     - @kalinga_claims.each do |kalinga_claim|
       %tr
         %td
-          #{kalinga_claim.branch_name}
+          #{kalinga_claim.member.branch.name}
         %td
           = link_to kalinga_claim_path(kalinga_claim) do
             %strong
-              #{kalinga_claim.name_of_member}
+              #{kalinga_claim.member.full_name}
         %td
           = link_to kalinga_claim_path(kalinga_claim) do
             %strong

@@ -4,10 +4,17 @@
     Report 
   %li.breadcrumb-item
     .fa.fa-users
-    K-JSP Report
+    Kuya Jun Scholarship Program Report
 .container-fluid
   .row
     .col
       .card
         .card-body
           = render partial: "kjsp_report_form"
+
+= javascript_include_tag "reports/KjspReport"
+
+:javascript
+  $(document).ready(function() {
+    KjspReport.init();
+  });

@@ -225,6 +225,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.string "prepared_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_calamity_claims_on_branch_id"
     t.index ["center_id"], name: "index_calamity_claims_on_center_id"
     t.index ["member_id"], name: "index_calamity_claims_on_member_id"
@@ -271,6 +273,9 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.uuid "member_id"
     t.uuid "center_id"
     t.uuid "branch_id"
+    t.string "claim_type"
+    t.json "data"
+    t.string "status"
     t.index ["branch_id"], name: "index_claims_on_branch_id"
     t.index ["center_id"], name: "index_claims_on_center_id"
     t.index ["member_id"], name: "index_claims_on_member_id"
@@ -300,6 +305,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.string "type_of_loan"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_clip_claims_on_branch_id"
     t.index ["center_id"], name: "index_clip_claims_on_center_id"
     t.index ["member_id"], name: "index_clip_claims_on_member_id"
@@ -359,6 +366,9 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.string "check_payee"
     t.string "prepared_by"
     t.decimal "balance"
+    t.string "claim_type"
+    t.json "data"
+    t.date "date_prepared"
     t.index ["branch_id"], name: "index_hiip_claims_on_branch_id"
     t.index ["center_id"], name: "index_hiip_claims_on_center_id"
     t.index ["member_id"], name: "index_hiip_claims_on_member_id"
@@ -426,9 +436,14 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "issueddate"
-    t.string "name_of_member"
-    t.string "member_branch"
-    t.string "member_identification_number"
+    t.string "claim_type"
+    t.json "data"
+    t.uuid "member_id"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.index ["branch_id"], name: "index_kalinga_claims_on_branch_id"
+    t.index ["center_id"], name: "index_kalinga_claims_on_center_id"
+    t.index ["member_id"], name: "index_kalinga_claims_on_member_id"
   end
 
   create_table "kbente_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -448,6 +463,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.date "date_of_death"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_kbente_claims_on_branch_id"
     t.index ["center_id"], name: "index_kbente_claims_on_center_id"
     t.index ["member_id"], name: "index_kbente_claims_on_member_id"
@@ -474,6 +491,8 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.string "received_by"
     t.string "prepared_by"
     t.string "course"
+    t.string "claim_type"
+    t.json "data"
     t.index ["branch_id"], name: "index_kjsp_claims_on_branch_id"
     t.index ["center_id"], name: "index_kjsp_claims_on_center_id"
     t.index ["member_id"], name: "index_kjsp_claims_on_member_id"
@@ -897,6 +916,9 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
   add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
+  add_foreign_key "kalinga_claims", "branches"
+  add_foreign_key "kalinga_claims", "centers"
+  add_foreign_key "kalinga_claims", "members"
   add_foreign_key "kbente_claims", "branches"
   add_foreign_key "kbente_claims", "centers"
   add_foreign_key "kbente_claims", "members"

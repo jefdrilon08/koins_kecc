@@ -1,23 +1,11 @@
 = simple_form_for [@member, @kalinga_claim] do |f|
+  = hidden_field_tag 'memberId', "#{@member.id}"
   #{@errors}
   .row
     .col
       .form-group
         %h3
           K-Kalinga Information
-  .row
-    .col
-      .form-group
-        %label
-        = f.input :name_of_member, input_html: { class: 'form-control ', value: @member.full_name_formatted,  readonly: 'readonly'}, as: :string, label: "Member Name"
-    .col
-      .form-group
-        %label
-        = f.input :member_identification_number, input_html: { class: 'form-control ', value: @member.identification_number, readonly: 'readonly'}, as: :string, label: "Member Identification Number"
-    .col
-      .form-group
-        %label
-        = f.input :member_branch, input_html: { class: 'form-control ', value: @member.branch.id, readonly: 'readonly'}, as: :string, label: "Member Branch"
   .row
     .col
       .form-group

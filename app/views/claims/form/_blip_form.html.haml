@@ -1,0 +1,145 @@
+.message
+.row
+  .col
+    .form-group
+      %h3
+        BLIP Information
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Date Prepared
+        = text_field_tag :date_prepared, @claim.date_prepared, id: 'date-prepared', class: 'form-control select-select2', type: 'date' 
+  .col
+    .form-group
+      %label.col.control-label 
+        Date Reported
+        = text_field_tag :date_reported, @claim.data["date_reported"], id: 'date-reported', class: 'form-control select-select2', type: 'date'
+  .col
+    .form-group 
+      %label.col.control-label 
+        Date Paid
+        = text_field_tag :date_paid, @claim.data["date_paid"], id: 'date-paid', type: 'date', class: 'form-control'
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Policy Issue
+        = text_field_tag :date_of_policy_issue, @claim.data["date_of_policy_issue"], class: 'form-control', id: 'date-of-policy-issue', type: 'date', value: @claim.member.data.with_indifferent_access[:recognition_date]
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Type of Insurance Policy
+        = select_tag :type_of_insurance_policy, options_for_select(Claim::INSURANCE_POLICY_TYPES, @claim.data["type_of_insurance_policy"]), class: 'form-control', id: 'type-of-insurance-policy', prompt: "-- Select --"
+  .col
+    .form-group
+      %label.col.control-label
+        Classification of Insured
+        = select_tag :classification_of_insured, options_for_select(Claim::INSURED_CLASSIFICATION, @claim.data["classification_of_insured"]), class: 'form-control', id: 'classification-of-insured', prompt: "-- Select --"
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Death
+        = text_field_tag :date_of_death_tpd_accident, @claim.data["date_of_death_tpd_accident"], class: 'form-control', id: 'date-of-death-tpd-accident', type: 'date' 
+  .col
+    .form-group
+      %label.col.control-label 
+        Length of Stay
+        = text_field_tag :length_of_stay, @claim.data["length_of_stay"], class: 'form-control', id: 'length-of-stay'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Equity Value
+        = text_field_tag :equity_value, @claim.data["equity_value"], class: 'form-control', id: 'equity-value',value: @claim.member.equity_value
+  .col
+    .form-group   
+      %label.col.control-label
+        Retirement Fund 
+        = text_field_tag :retirement_fund, @claim.data["retirement_fund"], class: 'form-control', id: 'retirement-fund',value: @claim.member.rf_amount
+  .col
+    .form-group
+      %label.col.control-label
+        Policy Number
+        = text_field_tag :policy_number, @claim.data["policy_number"], class: 'form-control', id: 'policy-number',  value: @claim.member.identification_number 
+  .col
+    .form-group
+      %label.col.control-label
+        Face Amount
+        = text_field_tag :face_amount, @claim.data["face_amount"],  class: 'form-control', id: 'face-amount'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Insured
+        = text_field_tag :name_of_insured, @claim.data["name_of_insured"], class: 'form-control', id: 'name-of-insured'
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Birth
+        = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', id: 'date-of-birth', type: 'date', value: @claim.member.date_of_birth
+  .col
+    .form-group
+      %label.col.control-label
+        Age
+        = text_field_tag :age, @claim.data["age"], class: 'form-control', id: 'age', value: @claim.member.age 
+  .col
+    .form-group
+      %label.col.control-label
+        Gender
+        = text_field_tag :gender, @claim.data["gender"], class: 'form-control', id: 'gender', value: @claim.member.gender
+  .col
+    .form-group.order-of-child-field
+      %label.col.control-label 
+        Order of Child
+        = select_tag :order_of_child, options_for_select(["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"], @claim.data["order_of_child"]), class: 'form-control', id: 'order-of-child' , prompt: "-- Select --"
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Name of Beneficiary
+        = text_field_tag :beneficiary, @claim.data["beneficiary"], class: 'form-control', id: 'beneficiary'         
+  .col
+    .form-group
+      %label.col.control-label
+        Returned Contribution
+        = text_field_tag :returned_contribution, @claim.data["returned_contribution"], class: 'form-control', id: 'returned-contribution'
+  .col
+    .form-group
+      %label.col.control-label
+        Total Amount Payable
+        = text_field_tag :total_amount_payable, @claim.data["total_amount_payable"], class: 'form-control', id: 'total-amount-payable'
+  .col
+    .form-group
+      %label.col.control-label
+        Arrears
+        = text_field_tag :arrears, @claim.data["arrears"], class: 'form-control', id: 'arrears'  
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Category of cause of Death/TPD/Accident
+        = select_tag :category_of_cause_of_death_tpd_accident, options_for_select(Claim::CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT, @claim.data["category_of_cause_of_death_tpd_accident"]), class: 'form-control', id: 'category-of-cause-of-death-tpd-accident', prompt: "-- Select --"
+  .col
+    .form-group
+      %label.col.control-label
+        Cause of Death/TPD/Accident
+        = text_field_tag :cause_of_death_tpd_accident, @claim.data["cause_of_death_tpd_accident"], class: 'form-control', id: 'cause-of-death-tpd-accident'
+  .col
+    .form-group
+      %label.col.control-label
+        Prepared By
+        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize
+.row
+  .col
+    .form-actions
+    = button_tag type: 'submit', class: 'btn btn-primary', id: "submit-button" do
+      .fa.fa-check
+      Submit
+    = link_to claims_path, class: 'btn btn-default' do
+      .fa.fa-times
+      Cancel
+
+
+#parameters{ data: { id: params[:id] }}
+= javascript_include_tag "claims/blip_form"

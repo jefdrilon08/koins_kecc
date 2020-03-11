@@ -1,13 +1,9 @@
 = form_tag collections_hiip_path, html: { novalidate: true }, method: "GET" do
   .row
-    .col-sm-2
-      .form-group
-        %label Cluster
-        = select_tag :cluster_id, options_from_collection_for_select(@clusters, :id, :name, @cluster.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "cluster-select"
-    .col-sm-2
+    .col-sm-3
       .form-group
         %label Branch
-        = select_tag :branch_id, options_for_select([]), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
     .col-sm-3
       .form-group
         %label Start Date
@@ -16,20 +12,10 @@
       .form-group
         %label End Date
         = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end-date"
-    .col-sm-2
+    .col-sm-3
       .form-group
         %label Actions
         = link_to "#", id: 'download-btn', class: 'btn btn-success btn-block' do
           .fa.fa-download
           Excel 
           
-= javascript_include_tag "reports/CollectionsHiipReport"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    CollectionsHiipReport.init({
-      authenticityToken: authenticityToken
-    });
-  });
