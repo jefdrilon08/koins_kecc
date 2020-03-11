@@ -15,7 +15,7 @@ namespace :adjust do
       start_date,
       end_date,
       status
-    ).find_each(bath_size: batch_size) do |a|
+    ).find_each(batch_size: batch_size) do |a|
       puts "Adjusting #{a.id}"
       a.transacted_at = (a.transacted_at + offset.hours)
       a.save(touch: false)

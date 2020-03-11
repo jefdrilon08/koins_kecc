@@ -3,7 +3,17 @@ module Administration
     before_action :authenticate_user!
 
     def index
-      @branches  = Branch.select("*")
+      sql = "
+        SELECT 
+          branches.*, 
+          count(centers.*) AS center_count
+        FROM branches 
+        INNER JOIN centers
+        ON centers.branch_id = branches.id
+        GROUP BY branches.id
+        ORDER BY branches.name ASC
+      "
+      @branches  = Branch.find_by_sql(sql)
     end
 
     def new

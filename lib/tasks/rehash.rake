@@ -74,7 +74,6 @@ namespace :rehash do
 
   task :member_accounts => :environment do
     member_accounts = MemberAccount.where.not(member_id: nil)
-    size            = member_accounts.size
 
     if ENV["BRANCH_ID"].present?
       member_accounts = member_accounts.where(branch_id: ENV["BRANCH_ID"])
@@ -88,12 +87,12 @@ namespace :rehash do
       member_accounts = member_accounts.where(account_subtype: ENV["ACCOUNT_SUBTYPE"])
     end
 
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_accounts.pluck(:id), "approved")
-
+    size  = member_accounts.length
     member_accounts.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing member account #{o.id}... #{progress}%%")
       sleep(0.1)
+      account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id = ? AND status = ?", o.id, "approved")
 
       ::MemberAccounts::Rehash.new(
         member_account: o,

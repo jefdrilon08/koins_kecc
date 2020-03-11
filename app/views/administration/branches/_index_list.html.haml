@@ -6,6 +6,8 @@
       %th
         Short Name
       %th
+        Current Date
+      %th
         Center Count
       %th
         Member Counter
@@ -19,7 +21,9 @@
         %td
           #{branch.short_name.upcase}
         %td
-          #{branch.centers.count}
+          #{::Utils::GetCurrentDate.new(config: { branch: branch }).execute!.strftime("%b %d, %Y")}
+        %td
+          #{branch.center_count}
         %td
           #{branch.member_counter}
 
