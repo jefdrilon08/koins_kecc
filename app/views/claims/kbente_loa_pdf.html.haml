@@ -106,11 +106,11 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This will serve as your authority to proceed the realease of the above claims in favor of
           %b
             %u
-              #{@kbente_claim.name_of_beneficiary}
+              #{@data["name_of_beneficiary"]}
           &nbsp;member/beneficiary for First Life of
           %u
             %b
-              #{@kbente_claim.member.full_name_formatted}
+              #{@claim.member.full_name_formatted}
           &nbsp;loss assured from #{@claim.member.branch.cluster.name}
           %u
             %b
@@ -118,7 +118,7 @@
           &nbsp;branch with the amount of
           %u
             %b
-              ***#{@kbente_claim.amount.to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@kbente_claim.amount, precision: 2), delimiter: ",", separator: ".", unit: "")})
+              ***#{@data["amount"].to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")})
         %br
           Thank you for your cooperation in this regard.
       - elsif @claim.member.branch.cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"
