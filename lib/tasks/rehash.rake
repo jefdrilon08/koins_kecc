@@ -92,11 +92,9 @@ namespace :rehash do
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing member account #{o.id}... #{progress}%%")
       sleep(0.1)
-      account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id = ? AND status = ?", o.id, "approved")
 
       ::MemberAccounts::Rehash.new(
-        member_account: o,
-        account_transactions: account_transactions
+        member_account: o
       ).execute!
     end
 

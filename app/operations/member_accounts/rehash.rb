@@ -1,20 +1,19 @@
 module MemberAccounts
   class Rehash
-    def initialize(member_account:, account_transactions:)
+    def initialize(member_account:, account_transactions: nil)
       @member_account       = member_account
       @account_type         = @member_account.account_type
       @account_subtype      = @member_account.account_subtype
-      @account_transactions = account_transactions
 
-      # if @account_transactions.nil?
-      #   @account_transactions = AccountTransaction.savings.where(
-      #                             subsidiary_id: @member_account.id,
-      #                             subsidiary_type: "MemberAccount",
-      #                             status: "approved"
-      #                           )
-      # end
-
-      @transactions = @account_transactions.select{ |o| o.subsidiary_id == @member_account.id }
+      if account_transactions.present?
+        @account_transactions = account_transactions
+      else
+        @account_transactions = AccountTransaction.where(
+                                  "amount > 0 AND subsidiary_id = ? AND status = ?",
+                                  @member_account.id,
+                                  "approved"
+                                ).order("transacted_at ASC")
+      end
     end
 
     def execute!
@@ -22,10 +21,7 @@ module MemberAccounts
       beginning_balance = 0.00
       ending_balance    = 0.00
 
-      # @account_transactions.each do |o|
-      
-      # >>
-      @transactions.each do |o|
+      @account_transactions.each do |o|
         if o.deposit?
           ending_balance = (beginning_balance + o.amount)
         else
