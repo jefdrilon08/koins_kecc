@@ -1,4 +1,29 @@
 namespace :adjust do
+  task :offset_hours => :environment do
+    start_date  = ENV['START_DATE']
+    end_date    = ENV['END_DATE']
+    hour        = ENV['HOUR'].to_i
+    minute      = ENV['MINUTE'].to_i
+    status      = ENV['STATUS'] || "approved"
+    batch_size  = ENV['BATCH_SIZE'].try(:to_i) || 100
+    offset      = ENV['OFFSET'].try(:to_i) || 8
+
+    AccountTransaction.where(
+      "extract(hour FROM transacted_at)::int = ? AND extract(minute FROM transacted_at) = ? AND transacted_at >= ? AND transacted_at <= ? AND amount > 0 AND status = ?", 
+      hour,
+      minute,
+      start_date,
+      end_date,
+      status
+    ).find_each(bath_size: batch_size) do |a|
+      puts "Adjusting #{a.id}"
+      a.transacted_at = (a.transacted_at + offset.hours)
+      a.save(touch: false)
+    end
+
+    puts "Done."
+  end
+
   task :load_rr_totals => :environment do
     start_date  = ENV['START_DATE'].to_date
     end_date    = ENV['END_DATE'].to_date
