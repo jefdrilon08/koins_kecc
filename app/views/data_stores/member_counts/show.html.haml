@@ -1,4 +1,7 @@
+- @data = @record.data.with_indifferent_access
+- @data_officers = DataStores::BuildMemberCountsPerOfficer.new(mc_data: @data).execute!
 = title @record.id
+
 = render partial: "show_header"
 
 .container-fluid
