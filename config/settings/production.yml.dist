@@ -11,7 +11,7 @@
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
 
 #north 3
   -
@@ -43,7 +43,7 @@ branch_config:
     current_date: "2020-02-28"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    #current_date: "2020-02-28"
+    current_date: "2020-02-28"
 
 #east1
   -
@@ -61,7 +61,7 @@ branch_config:
     current_date: "2020-02-28"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
 ###############################
 # AUTHORIZATION               #
 ###############################
@@ -79,6 +79,7 @@ taga_pangulo: Martiniana Mancio
 ###############################
 # INCENTIVE CONFIG            #
 ###############################
+active_loaner_threshold: 250
 drop_out_demerits_per_member: 20.00
 incentive_table:
   -
