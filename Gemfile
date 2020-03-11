@@ -50,6 +50,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
   gem 'factory_bot_rails'
+  gem 'derailed_benchmarks'
 end
 
 group :development do

@@ -11,7 +11,7 @@
               %p
                 Pindutin ang amount upang baguhin ito.
           %h5
-            Withdrawal Collection for #{@withdrawal_collection.branch} / #{@withdrawal_collection.center} - #{@withdrawal_collection.collection_date.strftime("%b %d, %Y")}
+            Withdrawal Collection for #{@withdrawal_collection.branch} / #{@withdrawal_collection.center} - #{@withdrawal_collection.collection_date.strftime("%b %d, %Y")} #{@withdrawal_collection.approved? ? "/ Approved on #{@withdrawal_collection.date_approved.strftime("%b %d, %Y")}" : ""}
           #withdrawal-collection-content
 
           - if debug?

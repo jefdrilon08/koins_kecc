@@ -11,7 +11,7 @@
               %p
                 Pindutin ang amount upang baguhin ito.
           %h5
-            Deposit Collection for #{@deposit_collection.branch} / #{@deposit_collection.center} - #{@deposit_collection.collection_date.strftime("%b %d, %Y")}
+            Deposit Collection for #{@deposit_collection.branch} / #{@deposit_collection.center} - #{@deposit_collection.collection_date.strftime("%b %d, %Y")} #{@deposit_collection.approved? ? "/ Approved on #{@deposit_collection.date_approved.strftime("%b %d, %Y")}" : ""}
           #deposit-collection-content
 
           #settings

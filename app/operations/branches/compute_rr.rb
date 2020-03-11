@@ -264,6 +264,7 @@ module Branches
     end
 
     def query_result!
+
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                   SELECT
                     loans.id,
@@ -319,7 +320,7 @@ module Branches
                       AND
                         account_transactions.status = 'approved'
                       AND 
-                        DATE(account_transactions.transacted_at) <= '#{@as_of}'
+                        DATE(account_transactions.transacted_at) <= '{@as_of}'
                       GROUP BY 1
                     ) tt ON loans.id = tt.subsidiary_id
                   LEFT JOIN
@@ -331,7 +332,7 @@ module Branches
                       FROM
                         amortization_schedule_entries
                       WHERE
-                        amortization_schedule_entries.due_date #{@manual_aging ? '<=' : '<'} '#{@as_of}'
+                        amortization_schedule_entries.due_date {@manual_aging ? '<=' : '<'} '{@as_of}'
                       GROUP BY 1
                     ) at ON loans.id = at.loan_id
                   INNER JOIN centers c ON loans.center_id = c.id
@@ -341,11 +342,11 @@ module Branches
                   INNER JOIN members m ON m.id = loans.member_id
                   WHERE
                     (
-                      loans.status = 'active' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
+                      loans.status = 'active' AND loans.date_approved <= '{@as_of}' AND loans.max_active_date >= '{@as_of}' AND loans.branch_id = '{@branch.id}'
                     )
                     OR
                     (
-                      loans.status = 'paid' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
+                      loans.status = 'paid' AND loans.date_approved <= '{@as_of}' AND loans.max_active_date > '{@as_of}' AND loans.branch_id = '{@branch.id}'
                     )
                 EOS
     end

@@ -107,9 +107,12 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          ::WithdrawalCollections::Approve.new(
-            config: config
-          ).execute!
+          withdrawal_collection.update!(status: "processing")
+          
+          ProcessApproveWithdrawalCollection.perform_layer({
+            id: withdrawal_collection.id,
+            user_id: current_user.id
+          })
 
           render json: { message: "ok" }
         end

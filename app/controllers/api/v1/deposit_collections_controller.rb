@@ -312,9 +312,12 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          ::DepositCollections::Approve.new(
-            config: config
-          ).execute!
+          deposit_collection.update!(status: "processing")
+
+          ProcessApproveDepositCollection.perform_later({
+            id: deposit_collection.id,
+            user_id: current_user.id
+          })
 
           render json: { message: "ok" }
         end
