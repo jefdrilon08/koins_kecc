@@ -1646,7 +1646,7 @@ namespace :adjust do
                 {
                   user: current_user, 
                   member_account_validation: o, 
-                  is_remote: true,
+                  is_remote: o.is_remote,
                   branch: o.branch,
                   status: o.status,
                   reference_number: o.reference_number, 

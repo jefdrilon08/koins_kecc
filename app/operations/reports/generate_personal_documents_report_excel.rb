@@ -59,21 +59,29 @@ module Reports
             member_row << member.branch.name
             member_row << member.center.name
             member_row << member.attachment_files.count
-            member.attachment_files.order("file_name ASC").each do |att|
-              if att.file_name == "BLIPFORM" 
-                member_row << att.file_name
-              elsif att.file_name == "MC"
-                member_row << att.file_name
-              elsif att.file_name == "BC"
-                member_row << att.file_name
-              elsif att.file_name == "ID"
-                member_row << att.file_name
-              elsif att.file_name == "COHABITATION"
-                member_row << att.file_name
-              elsif att.file_name == "OTHERFILE"
-                member_row << att.file_name
-              end
-            end
+            member_row << member.attachment_files.where(file_name: "BC").first.try(:file_name) 
+            member_row << member.attachment_files.where(file_name: "BLIPFORM").first.try(:file_name) 
+            member_row << member.attachment_files.where(file_name: "COHABITATION").first.try(:file_name) 
+            member_row << member.attachment_files.where(file_name: "ID").first.try(:file_name) 
+            member_row << member.attachment_files.where(file_name: "MC").first.try(:file_name)
+            member_row << member.attachment_files.where(file_name: "OTHERFILE").first.try(:file_name) 
+            # member.attachment_files.order("file_name").each do |att|
+
+              # if att.file_name == "BC" 
+              #   member_row << att.file_name
+              # elsif att.file_name == "BLIPFORM"
+              #   member_row << att.file_name
+              # elsif att.file_name == "COHABITATION"
+              #   member_row << att.file_name
+              # elsif att.file_name == "ID"
+              #   member_row << att.file_name
+              # elsif att.file_name == "MC"
+              #   member_row << att.file_name
+              # elsif att.file_name == "OTHERFILE"
+              #   member_row << att.file_name
+              # end
+            # end
+
             if member.status == "resigned"
               sheet.add_row member_row, style: [ black_white, black_white, black_white, black_white,  black_white, black_white_date, black_white_date, black_white, black_white, black_white, black_white, black_white, black_white ]
             elsif member.status == "active"

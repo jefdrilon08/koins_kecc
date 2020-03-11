@@ -1,23 +1,24 @@
 module Reports
   class GenerateCalamityClaimsReportExcel
-    def initialize(branch:, cluster:, start_date:, end_date:)
+    def initialize(branch:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
-      @cluster = cluster
       @branch = branch
-     
-
-      if @cluster.present? && @branch == "--ALL--"
-        @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @calamity_claim   = CalamityClaim.where("date_requested >= ? AND date_requested <= ? AND branch_id IN (?)", @start_date, @end_date, @cluster_branch.ids)
+      
+      if @branch.present? && @start_date.present? && @end_date.present?
+        @calamity   = Claim.where("data->>'date_requested' >= ? AND data->>'date_requested' <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "CALAMITY ASSISTANCE").order("created_at DESC")
+      elsif @start_date.present? && @end_date.present?
+        @calamity   = Claim.where("data->>'date_requested' >= ? AND data->>'date_requested' <= ? AND claim_type = ?", @start_date, @end_date, "CALAMITY ASSISTANCE").order("created_at DESC")
+      elsif @branch.present?
+        @calamity   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "CALAMITY ASSISTANCE").order("created_at DESC")
       else
-        @calamity_claim   = CalamityClaim.where("date_requested >= ? AND date_requested <= ? AND branch_id IN (?)", @start_date, @end_date, @branch)
-      end
+        @calamity = Claim.where(claim_type: 'CALAMITY ASSISTANCE')
+      end  
 
       @p          = Axlsx::Package.new
     end
 
-    def execute!
+    def execute!  
       @p.workbook do |wb|
         wb.add_worksheet do |sheet|
           header  = wb.styles.add_style(alignment: {horizontal: :left}, b: true)
@@ -34,34 +35,36 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
-            "Name of Member",
+            "Date",
+            "Cluster",
             "Branch",
             "Center",
+            "Name of Member",
             "Date Requested",
             "Purpose",
             "Type of Calamity",
             "Amount",
             "Date of Event",
-            "Date of Approved",
-            "Date of Notification",
             "Payee",
-            "Name of Beneficiary"
+            "Name of Beneficiary",
+            "Prepared by"
           ], style: header
 
-          @calamity_claim.each_with_index do |calamity_claim|
+          @calamity.each_with_index do |calamity|
               sheet.add_row [
-                  calamity_claim.member.full_name,
-                  calamity_claim.branch.name,
-                  calamity_claim.center.name,
-                  calamity_claim.date_requested.strftime("%b %d, %Y"),
-                  calamity_claim.purpose,
-                  calamity_claim.type_of_calamity,
-                  calamity_claim.amount,
-                  calamity_claim.date_of_event.strftime("%b %d, %Y"),
-                  calamity_claim.date_approved.strftime("%b %d, %Y"),
-                  calamity_claim.date_of_notification.strftime("%b %d, %Y"),
-                  calamity_claim.name_of_payee,
-                  calamity_claim.name_of_beneficiary
+                  calamity.date_prepared.try(:strftime, "%b %d, %Y"),
+                  calamity.branch.cluster.name,
+                  calamity.branch.name,
+                  calamity.center.name,
+                  calamity.member.full_name,
+                  calamity.data["date_requested"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  calamity.data["purpose"],
+                  calamity.data["type_of_calamity"],
+                  calamity.data["amount"],
+                  calamity.data["date_of_event"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  calamity.data["name_of_payee"],
+                  calamity.data["name_of_beneficiary"],
+                  calamity.prepared_by
                 ], style: [nil]             
               end
           end

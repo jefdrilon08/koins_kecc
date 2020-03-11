@@ -91,28 +91,39 @@ Rails.application.routes.draw do
   post "/new_calamity_claim_application", to: "calamity_claims#new_calamity_claim_application", as: :new_calamity_claim_application
           
   resources :claims do
-    get "/claim_validation_pdf", to: "claims#claim_validation_pdf"
-    get "/claim_loa_pdf", to: "claims#claim_loa_pdf"
+    get "/blip_validation_pdf", to: "claims#blip_validation_pdf"
+    get "/blip_loa_pdf", to: "claims#blip_loa_pdf"
+    get "/calamity_validation_pdf", to: "claims#calamity_validation_pdf"
+    get "/calamity_loa_pdf", to: "claims#calamity_loa_pdf"
+    get "/clip_validation_pdf", to: "claims#clip_validation_pdf"
+    get "/clip_loa_pdf", to: "claims#clip_loa_pdf"
+    get "/hiip_validation_pdf", to: "claims#hiip_validation_pdf"
+    get "/hiip_loa_pdf", to: "claims#hiip_loa_pdf"
+    get "/kalinga_validation_pdf", to: "claims#kalinga_validation_pdf"
+    get "/kalinga_loa_pdf", to: "claims#kalinga_loa_pdf"
+    get "/kbente_validation_pdf", to: "claims#kbente_validation_pdf"
+    get "/kbente_loa_pdf", to: "claims#kbente_loa_pdf"
+    get "/scholarship_validation_pdf", to: "claims#scholarship_validation_pdf"
+    get "/scholarship_loa_pdf", to: "claims#scholarship_loa_pdf"
+    get "/scholarship_contract_highschool_pdf", to: "claims#scholarship_contract_highschool_pdf"
+    get "/scholarship_contract_college_pdf", to: "claims#scholarship_contract_college_pdf"
   end
+   get "/claims/new/:id", to: "claims#new"
 
   resources :clip_claims do
-    get "/clip_claim_validation_pdf", to: "clip_claims#clip_claim_validation_pdf"
-    get "/clip_claim_loa_pdf", to: "clip_claims#clip_claim_loa_pdf"
+    
   end
   
   resources :hiip_claims do
-    get "/hiip_claim_validation_pdf", to: "hiip_claims#hiip_claim_validation_pdf"
-    get "/hiip_claim_loa_pdf", to: "hiip_claims#hiip_claim_loa_pdf"
+    
   end
 
   resources :kalinga_claims do
-     get "/kalinga_claim_validation_pdf", to: "kalinga_claims#kalinga_claim_validation_pdf"
-     get "/kalinga_claim_loa_pdf", to: "kalinga_claims#kalinga_claim_loa_pdf"
+     
   end
 
   resources :kbente_claims do
-     get "/kbente_claim_validation_pdf", to: "kbente_claims#kbente_claim_validation_pdf"
-     get "/kbente_claim_loa_pdf", to: "kbente_claims#kbente_claim_loa_pdf"
+    
   end
 
   resources :kjsp_claims do
@@ -123,8 +134,7 @@ Rails.application.routes.draw do
   end
 
   resources :calamity_claims do
-     get "/calamity_claim_validation_pdf", to: "calamity_claims#calamity_claim_validation_pdf"
-     get "/calamity_claim_loa_pdf", to: "calamity_claims#calamity_claim_loa_pdf"
+     
   end
 
   resources :members, only: [] do
@@ -382,8 +392,8 @@ Rails.application.routes.draw do
   get "/reports/kbente_reports", to: "reports#kbente_reports", as: :kbente_reports
   get "/reports/kjsp", to: "reports#kjsp", as: :kjsp
   get "/reports/kjsp_reports", to: "reports#kjsp_reports", as: :kjsp_reports
-  
-
+  get "/reports/claim_reports", to: "reports#claim_reports", as: :claim_reports
+  get "/reports/claim_generate_report", to: "reports#claim_generate_report", as: :claim_generate_report
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

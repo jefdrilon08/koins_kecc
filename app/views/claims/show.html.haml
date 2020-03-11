@@ -3,3 +3,6 @@
 
 %section.content
   = render partial: "content"
+
+#parameters{ data: { id: params[:id]}}
+= javascript_include_tag "claims/approved_claim"

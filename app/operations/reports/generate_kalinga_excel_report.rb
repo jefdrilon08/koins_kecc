@@ -1,16 +1,18 @@
 module Reports
-  class GenerateKalingaReportExcel
-    def initialize(branch:, cluster:, start_date:, end_date:)
+  class GenerateKalingaExcelReport
+    def initialize(branch:, start_date:, end_date:)
       @start_date   = start_date
       @end_date     = end_date
-      @cluster      = cluster
       @branch       = branch
 
-      if @cluster.present? && @branch == "--ALL--"
-        @cluster_branch   = Branch.where(cluster_id: @cluster)
-        @kalinga_claim    = KalingaClaim.where("date_reported >= ? AND date_reported <= ? AND member_branch IN (?)", @start_date, @end_date, @cluster_branch.ids)
+      if @branch.present? && @start_date.present? && @end_date.present?
+        @kalinga   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "K-KALINGA").order("created_at DESC")
+      elsif @start_date.present? && @end_date.present?
+        @kalinga   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND claim_type = ?", @start_date, @end_date, "K-KALINGA").order("created_at DESC")
+      elsif @branch.present?
+        @kalinga   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "K-KALINGA").order("created_at DESC")
       else
-        @kalinga_claim    = KalingaClaim.where("date_reported >= ? AND date_reported <= ? AND member_branch IN (?)", @start_date, @end_date, @branch)
+        @kalinga = Claim.where(claim_type: 'K-KALINGA')
       end
 
       @p          = Axlsx::Package.new
@@ -33,14 +35,12 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [
-            "Date Reported",
-            "Date Emailed",
-            "Date Approved",
-            "Date Requested",
+            "Date Prepared",
+            "Cluster",
+            "Branch",
             "Name of Member",
             "Policy Number",
-            "Branch",
-            "Identification Number",
+            "Date Approved",
             "Gender",
             "Civil Status",
             "Date of Birth",
@@ -50,37 +50,33 @@ module Reports
             "Insured Address",
             "Date of Incident or Death",
             "Reason of Death",
-            "Purpose",
             "Amount",
-            "Issued Date",
             "Effective Date",
-            "Expiration Date"
+            "Expiration Date",
+            "Prepared by"
           ], style: header
 
-          @kalinga_claim.each_with_index do |kalinga_claim|
+          @kalinga.each_with_index do |kalinga|
               sheet.add_row [
-                  kalinga_claim.date_reported.strftime("%b %d, %Y"),
-                  kalinga_claim.date_emailed.strftime("%b %d, %Y"),
-                  kalinga_claim.date_approved.strftime("%b %d, %Y"),
-                  kalinga_claim.date_requested.strftime("%b %d, %Y"),
-                  kalinga_claim.name_of_member,
-                  kalinga_claim.poc_number,
-                  kalinga_claim.branch_name,
-                  kalinga_claim.member_identification_number,
-                  kalinga_claim.gender,
-                  kalinga_claim.civil_status,
-                  kalinga_claim.date_of_birth.strftime("%b %d, %Y"),
-                  kalinga_claim.name_of_beneficiary,
-                  kalinga_claim.relationship_to_member,
-                  kalinga_claim.name_of_insured,
-                  kalinga_claim.insured_address,
-                  kalinga_claim.date_of_death_or_incident.strftime("%b %d, %Y"),
-                  kalinga_claim.reason_of_death,
-                  kalinga_claim.purpose,
-                  kalinga_claim.amount,
-                  kalinga_claim.issueddate.strftime("%b %d, %Y"),
-                  kalinga_claim.effective_date.strftime("%b %d, %Y"),
-                  kalinga_claim.expiration_date.strftime("%b %d, %Y")
+                  kalinga.date_prepared.try(:strftime, "%b %d, %Y"),
+                  kalinga.branch.cluster.name,
+                  kalinga.branch.name,
+                  kalinga.member.full_name,
+                  kalinga.data["poc_number"],
+                  kalinga.data["date_approved"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kalinga.data["gender"],
+                  kalinga.data["civil_status"],
+                  kalinga.data["date_of_birth"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kalinga.data["name_of_beneficiary"],
+                  kalinga.data["relationship_to_member"],
+                  kalinga.data["name_of_insured"],
+                  kalinga.data["insured_address"],
+                  kalinga.data["date_of_death_or_incident"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kalinga.data["reason_of_death"],
+                  kalinga.data["amount"],
+                  kalinga.data["effective_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kalinga.data["expiration_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kalinga.prepared_by
                 ], style: [nil]             
               end
           end

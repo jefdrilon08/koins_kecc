@@ -1,5 +1,6 @@
 var Index = (function() {
   var $btnNewTransaction;
+  var $btnConfirm;
   var $modalNewTransaction;
 
   var $selectBranch;
@@ -12,39 +13,57 @@ var Index = (function() {
   var branches  = [];
   var centers   = [];
   var members   = [];
- 
-  var $parameters               = $("#parameters");
-  var memberId                  = $parameters.data('member-id');
+  var authenticityToken       = $("meta[name='csrf-token']").attr('content');
 
   var urlBranches       = "/api/v1/branches";
   var urlCenters       = "/api/v1/centers/centers";
+  var urlCreate       = "/api/v1/claims/create";
 
   var _authenticityToken;
 
-  var $dataTable;
+
 
   var _cacheDom = function() {
     $btnNewTransaction        = $("#btn-new-transaction");
+    $btnConfirm               = $("#btn-confirm");
     $modalNewTransaction      = $("#modal-new-transaction");
 
-    $selectBranch         = $("#select-branch");
-    $selectCenter         = $("#select-center");
-    $selectMember          = $("#select-member")
+    $selectBranch          = $("#select-branch");
+    $selectCenter          = $("#select-center");
+    $selectMember          = $("#select-member");
+    $typeOfClaim           = $("#type-of-claims");
 
-    $message  = $(".message");
-
+    $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
-    $dataTable  = $("#data-table");
+
   };
 
   var _bindEvents = function() {
+    $btnConfirm.on("click", function() {
+      var memberId = $selectMember.val();
+      var typeOfClaim = $typeOfClaim.val();
+
+      $.ajax({
+        url: urlCreate,
+        method: 'POST',
+        data: {
+          authenticity_token: authenticityToken,
+          member_id: memberId,
+          claim_type: typeOfClaim
+        },  
+        success: function(response) {
+          window.location.href = "/claims/new/" + response.id;
+        },
+        error: function(response) {
+          console.log(response);
+          alert("Something went wrong")
+        }
+      });
+    });
     $btnNewTransaction.on("click", function() {
       $modalNewTransaction.modal("show");
     });
 
-    $dataTable.DataTable({
-      fixedHeader: true
-    });
 
     $selectBranch.on("change", function() {
       var branchId  = $(this).val();

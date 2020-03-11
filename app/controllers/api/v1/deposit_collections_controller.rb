@@ -357,7 +357,7 @@ module Api
           branch_id: branch_id,
           user: current_user
         }
-
+        
         errors  = ::DepositCollections::ValidateCreateDepositCollection.new(
                     config: config
                   ).execute!

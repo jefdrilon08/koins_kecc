@@ -324,5 +324,11 @@ namespace :api do
     get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
     get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
+    
+    #claims
+    post "/claims/save", to: "claims#save"
+    post "/claims/create", to: "claims#create"
+    post "/claims/approved", to: "claims#approved"
+    post "/claims/update", to: "claims#update"
   end
 end

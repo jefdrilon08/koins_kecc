@@ -1,0 +1,57 @@
+%section.content-header
+  %h3
+    %strong
+      K-Bente Details
+%table.table.table-sm.table-hover
+  %tbody
+    %tr
+      %th Date Prepared
+      %td
+        = @claim.date_prepared
+      %th Branch
+      %td 
+        = @claim.member.branch.name
+    %tr 
+      %th Date Approved
+      %td
+        = @data[:date_approved].to_date.strftime("%b %d, %Y")
+      %th Date of Birth
+      %td
+        = @data[:date_of_birth].to_date.strftime("%b %d, %Y")
+    %tr
+      %th Date Enrolled
+      %td 
+        = @data[:date_enrolled].to_date.strftime("%b %d, %Y")
+      %th Date Expired
+      %td 
+        = @data[:date_expired].to_date.strftime("%b %d, %Y")
+    %tr
+      
+      %th Name of Member 
+      %td 
+        = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
+      %th Name of Insured 
+      %td 
+        = @data[:name_of_insured]
+    %tr
+      %th Name of Beneficiary
+      %td 
+        = @data[:name_of_beneficiary] 
+      %th Classification
+      %td 
+        = @data[:classification] 
+    %tr
+      %th Amount
+      %td 
+        = @data[:amount]
+      %th Date of death
+      %td 
+        = @data[:date_of_death].to_date.strftime("%b %d, %Y")  
+    %tr
+      %th Purpose
+      %td 
+        = @data[:purpose] 
+      %th Prepared By
+      %td 
+        = @claim.prepared_by
+      

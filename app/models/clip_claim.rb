@@ -15,7 +15,6 @@ class ClipClaim < ApplicationRecord
 	validates :member, presence: true
   validates :date_prepared, presence: true
   validates :creditors_name, presence: true
-  validates :policy_number, presence: true
   validates :date_of_birth, presence: true
   validates :member_name, presence: true
   validates :beneficiary, presence: true
@@ -43,4 +42,38 @@ class ClipClaim < ApplicationRecord
       end
     end
 	end
+
+  def clip_hash
+
+    {
+       id: self.id,
+      center_id: self.center_id,
+      branch_id: self.branch_id,
+      member_id: self.member_id,
+      claim_type: "CLIP",
+      prepared_by: self.prepared_by,
+      date_prepared: self.date_prepared,
+      created_at: self.created_at,
+      updated_at: self.updated_at,
+      status: "pending",
+      data: {
+        policy_number: self.policy_number,
+        creditors_name: self.creditors_name,
+        date_of_birth: self.date_of_birth,
+        beneficiary: self.beneficiary,
+        debtors_name: self.member_name,
+        gender: self.gender,
+        age: self.age,
+        date_of_death: self.date_of_death,
+        cause_of_death: self.cause_of_death,
+        effective_date_of_coverage: self.effective_date_of_coverage,
+        expiration_date_of_coverage: self.expiration_date_of_coverage,
+        amount_of_loan: self.amount_of_loan,
+        terms: self.terms,
+        amount_payable_to_beneficiary: self.amount_payable_to_beneficiary,
+        amount_payable_to_creditor: self.amount_payable_to_creditor,
+        type_of_loan: self.type_of_loan
+      }
+    }
+  end
 end

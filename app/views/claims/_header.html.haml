@@ -1,28 +1,14 @@
-%ol.breadcrumb
-  %li.breadcrumb-item
-    .fa.fa-money-check
-      Claims 
-  %li.breadcrumb-item
-    .fa.fa-user
-    = link_to "#{@claim.member.full_name}", member_path(@claim.member), target: "_blank"
-  %li.breadcrumb-menu.d-md-down-none
-    .btn-group
-      = link_to edit_member_claim_path(@claim.member, @claim), class: 'btn btn-app' do
-        %i.fa.fa-edit
-        Edit
-    .btn-group 
-      = link_to claim_path(@claim), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-app" do
-        %i.fa.fa-times
-        Delete
-    .btn-group    
-      = link_to claim_claim_validation_pdf_path(@claim), target: "_blank", class: "btn btn-app" do
-        .fa.fa-download
-        Validation PDF
-    .btn-group 
-      = link_to claim_claim_loa_pdf_path(@claim), target: "_blank", class: "btn btn-app" do
-        .fa.fa-print
-        LOA
-    .btn-group
-      = link_to claims_path do
-        .fa.fa-arrow-left
-        Back to Claims
+- if @claim.claim_type == "BLIP"
+  = render partial: "claims/header/blip_header"
+- elsif @claim.claim_type == "CLIP"
+  = render partial: "claims/header/clip_header"
+- elsif @claim.claim_type == "HIIP"
+  = render partial: "claims/header/hiip_header"
+- elsif @claim.claim_type == "K-KALINGA"
+  = render partial: "claims/header/kalinga_header"
+- elsif @claim.claim_type == "CALAMITY ASSISTANCE"
+  = render partial: "claims/header/calamity_header"
+- elsif @claim.claim_type == "K-BENTE"
+  = render partial: "claims/header/kbente_header"
+- elsif @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
+  = render partial: "claims/header/scholarship_header"

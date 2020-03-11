@@ -13,11 +13,6 @@ class ReportsController < ApplicationController
     end
       @branches = Branch.all
 
-    if params[:cluster_id].present?
-      @cluster = Cluster.find(params[:cluster_id])
-    end
-      @clusters = Cluster.all
-
   end
 
   def monthly_remittance
@@ -83,10 +78,9 @@ class ReportsController < ApplicationController
     branch = params[:branch]
     start_date = params[:start_date]
     end_date = params[:end_date]
-    branch_name = Branch.where(id: branch).first.name
   
     excel = Reports::GenerateCollectionsBlipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
-    filename  = "#{branch_name}_collections_blip_report.xlsx"
+    filename  = "collections_blip_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -173,11 +167,10 @@ class ReportsController < ApplicationController
 
   def collections_hiip_reports
     branch = params[:branch]
-    cluster = params[:cluster]
     start_date = params[:start_date]
     end_date = params[:end_date]
 
-    excel = Reports::GenerateCollectionsHiipReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    excel = Reports::GenerateCollectionsHiipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
     filename  = "collections_hiip_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
@@ -204,11 +197,10 @@ class ReportsController < ApplicationController
 
   def calamity_claim_reports
     branch = params[:branch]
-    cluster = params[:cluster]
     start_date = params[:start_date]
     end_date = params[:end_date]
 
-    excel = Reports::GenerateCalamityClaimsReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    excel = Reports::GenerateCalamityClaimsReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
     filename  = "calamity_claim_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
@@ -220,11 +212,10 @@ class ReportsController < ApplicationController
 
   def kalinga_reports
     branch = params[:branch]
-    cluster = params[:cluster]
     start_date = params[:start_date]
     end_date = params[:end_date]
 
-    excel = Reports::GenerateKalingaReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    excel = Reports::GenerateKalingaReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
     filename  = "kalinga_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
@@ -236,11 +227,10 @@ class ReportsController < ApplicationController
 
   def kbente_reports
     branch = params[:branch]
-    cluster = params[:cluster]
     start_date = params[:start_date]
     end_date = params[:end_date]
 
-    excel = Reports::GenerateKbenteReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
+    excel = Reports::GenerateKbenteExcelReport.new(branch: branch, start_date: start_date, end_date: end_date).execute!
     filename  = "kbente_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
@@ -252,12 +242,11 @@ class ReportsController < ApplicationController
 
   def kjsp_reports
     branch = params[:branch]
-    cluster = params[:cluster]
     start_date = params[:start_date]
     end_date = params[:end_date]
 
-    excel = Reports::GenerateKjspReportExcel.new(cluster: cluster, branch: branch, start_date: start_date, end_date: end_date).execute!
-    filename  = "kjsp_report.xlsx"
+    excel = Reports::GenerateScholarshipExcelReport.new(branch: branch, start_date: start_date, end_date: end_date).execute!
+    filename  = "scholarship_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -277,6 +266,51 @@ class ReportsController < ApplicationController
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def claim_generate_report
+    claim_type = params[:claim_type]
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch = params[:branch]
+   
+    if claim_type == "BLIP"
+      excel = Reports::GenerateBlipExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "blip_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    elsif claim_type == "CLIP"
+      excel = Reports::GenerateClipExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "clip_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    elsif claim_type == "CALAMITY ASSISTANCE"
+      excel = Reports::GenerateCalamityClaimsReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "calamity_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    elsif claim_type == "HIIP"
+      excel = Reports::GenerateHiipExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "hiip_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    elsif claim_type == "K-KALINGA"
+      excel = Reports::GenerateKalingaExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "kalinga_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    elsif claim_type == "K-BENTE"
+      excel = Reports::GenerateKbenteExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "kbente_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    elsif claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
+      excel = Reports::GenerateScholarshipExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "scholarship_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    
+    end
   end
 
 end

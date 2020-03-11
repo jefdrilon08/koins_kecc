@@ -1,0 +1,147 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: calibri;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  .body1{
+    width: 100%;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+  hr {
+    border-color: black;
+  }
+  tr td {
+    font-size: 1.2em;
+  }
+
+%span.print-text
+  %center
+    %p
+      %b
+        Kasagana-Ka Mutual Benefit Association
+      %br
+        #{Settings.company_address}
+  %left
+    %p
+      CLAIMS VALIDATION:
+      %u
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.claim_type}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      %br
+      %br
+      %b
+        FOR:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      KASAGANA-KA Mutual Benefit Association, Inc.
+      %br
+      %b
+        FROM:&nbsp;&nbsp;&nbsp;
+      #{@claim.prepared_by}
+      %br
+      %b
+        DATE:&nbsp;&nbsp;&nbsp;&nbsp;
+      #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
+      %hr
+    .body1
+      %p
+        %b
+          For the following details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submitted Documents
+      %br
+      %table{:border => "0"}
+        %tr
+          %td{:width => "21%"}
+            Branch:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@claim.member.branch.name}
+          %td{:width => "28%"}
+            [] Calamity Assistance Form
+        %tr
+          %td{:width => "21%"}
+            Purpose
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["purpose"]}
+          %td{:width => "28%"}
+            [] ID of Claimant
+        %tr
+          %td{:width => "21%"}
+            Type of Calamity
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["type_of_calamity"]}
+          %td{:width => "28%"}
+            [] Brgy. Certification/Certification
+        %tr
+          %td{:width => "21%"}
+            Name of Member
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.member.full_name}
+          %td{:width => "28%"}
+            [] Monitoring Tool / Claims Copy PDF
+        %tr
+          %td{:width => "21%"}
+            Amount
+          %td{:width => "25%"}
+            %b
+              %u  
+                PhP #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} 
+          %td{:width => "28%"} 
+        %tr
+          %td{:width => "21%"}
+            Payee
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["name_of_payee"]}
+          %td{:width => "28%"}
+  %br
+  %br
+  %br
+  .signatories
+    %table{:border => "0"}
+      %tr
+        %td{:width => "20%"}
+          Validated by:
+          %br
+          %br
+          %u
+            #{@claim.prepared_by}
+          %br
+          Account Officer
+        %td{:width => "30%"}
+          Approved by:
+          %br
+          %br
+          %u
+            Silvida Reyes - Antiquera
+          %br
+            KMBA - General Manager
+        %td{:width => "10%"}
+          Released by:
+          %br
+          %br
+          %br
+            %u
