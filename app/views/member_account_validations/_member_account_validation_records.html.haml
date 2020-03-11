@@ -18,7 +18,7 @@
       %th.curr Total
       %th Actions
   %tbody
-    - member_account_validation.member_account_validation_records.includes(:member).order("members.last_name ASC").each_with_index do |member_account_validation_record, i|
+    - member_account_validation.member_account_validation_records.includes(:center, :member).order("members.last_name ASC").each_with_index do |member_account_validation_record, i|
       %tr
         %td #{i + 1}
         %td
@@ -28,7 +28,7 @@
         %td
           #{member_account_validation_record.member.data.with_indifferent_access[:recognition_date]}
         %td
-          #{member_account_validation_record.member.center}
+          #{member_account_validation_record.center}
         - if member_account_validation_record.approved?
           %td
             #{member_account_validation_record.transaction_number}

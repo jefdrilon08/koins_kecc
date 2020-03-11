@@ -20,7 +20,7 @@
           %th Total
           %th Actions
       %tbody
-        = f.simple_fields_for :member_account_validation_records, f.object.member_account_validation_records.joins(:member).order("members.last_name ASC") do |ff|
+        = f.simple_fields_for :member_account_validation_records, f.object.member_account_validation_records.includes(:member).order("members.last_name ASC") do |ff|
           %tr
             %td #{link_to ff.object.member.full_name, member_path(ff.object.member), target: "_blank"}
             %td

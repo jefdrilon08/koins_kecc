@@ -36,27 +36,35 @@ module MemberAccountValidations
 	    end
 
 	    def validate_if_member_is_already_validated_to_pending_for_appoval_for_validation!
-	    	member_account_validation_records = MemberAccountValidationRecord.where("status = ? OR status = ? OR status = ?", "for-approval", "for-validation", "pending")
-	    	member_account_validation_records.each do |rec|
-	    		if rec.member.identification_number == @member.identification_number
-	    			@errors[:messages] << {
-		         		key: "member_account_validation_record",
-		          		message: "Member's member Account is already validated"
-		       		}
-		    	end
-	    	end
+	    	# member_account_validation_records = MemberAccountValidationRecord.where("status = ? OR status = ? OR status = ?", "for-approval", "for-validation", "pending")
+	    	# member_account_validation_records.each do |rec|
+	    	# 	if rec.member.identification_number == @member.identification_number
+	    	# 		@errors[:messages] << {
+		    #      		key: "member_account_validation_record",
+		    #       		message: "Member's member Account is already validated"
+		    #    		}
+		    # 	end
+	    	# end
+
+	    	member_account_validation_records = MemberAccountValidationRecord.where("member_id = ? AND status IN (?)", @member.id, ["for-approval", "for-validation", "pending"])
+			if member_account_validation_records.count > 0
+				@errors[:messages] << {
+		         	key: "member_account_validation_record",
+		          	message: "Member's member Account is already validated"
+		       	}
+		    end
 		end
 
 		def validate_member_balik_kasapi!
-	    	member_account_validation_records = MemberAccountValidationRecord.where("status = ?", "approved")
-	    	member_account_validation_records.each do |rec|
-    			if rec.member.identification_number == @member.identification_number
-    				if !rec.is_void?
-    					@errors[:messages] << {
-	         				key: "member_account_validation_record",
-	          				message: "Member's member Account is already validated"
+	    	member_account_validation_records = MemberAccountValidationRecord.where(member_id: @member.id, status: "approved")   	
+	    	if member_account_validation_records.count > 0
+	    		member_account_validation_records.each do |record|
+	    			if !record.is_void?
+	    				@errors[:messages] << {
+         					key: "member_account_validation_record",
+          					message: "Member's member Account is already validated"
 	       				}
-	       			end
+	    			end
 	    		end
 	    	end
 		end	
