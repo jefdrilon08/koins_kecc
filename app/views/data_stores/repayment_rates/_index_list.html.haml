@@ -30,6 +30,9 @@
           - elsif o.done?
             .badge.badge-success
               Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error
         %td.text-center
           %small
             #{o.created_at.localtime}

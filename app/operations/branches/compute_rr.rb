@@ -18,7 +18,24 @@ module Branches
         loan_products: [],
         centers: [],
         officers: [],
-        records: []
+        records: [],
+        total_principal: 0.00,
+        total_principal_paid: 0.00,
+        total_overall_principal_balance: 0.00,
+        total_interest: 0.00,
+        total_interest_paid: 0.00,
+        total_overall_interest_balance: 0.00,
+        total_total_paid: 0.00,
+        total_principal_due: 0.00,
+        total_total_due: 0.00,
+        total_principal_balance: 0.00,
+        total_total_balance: 0.00,
+        total_overall_balance: 0.00,
+        total_rr: 0,
+        total_principal_rr: 0,
+        total_principal_paid_due: 0.00,
+        total_interest_paid_due: 0.00,
+        total_paid_due: 0.00
       }
     end
 
@@ -37,6 +54,32 @@ module Branches
       @data[:officers]  = @data[:records].map{ |o|
                             o[:officer]
                           }.uniq
+
+      # Compute totals
+      @data[:records].each do |r|
+        @data[:total_principal] += r[:principal].to_f
+        @data[:total_principal_paid] += r[:principal_paid].to_f
+        @data[:total_principal_paid_due] += r[:principal_paid_due].to_f
+        @data[:total_overall_principal_balance] += r[:overall_principal_balance].to_f
+        @data[:total_interest] += r[:interest].to_f
+        @data[:total_interest_paid] += r[:interest_paid].to_f
+        @data[:total_overall_interest_balance] += r[:overall_interest_balance].to_f
+        @data[:total_total_paid] += r[:total_paid].to_f
+        @data[:total_principal_due] += r[:principal_due].to_f
+        @data[:total_total_due] += r[:total_due].to_f
+        @data[:total_total_balance] += r[:total_balance].to_f
+        @data[:total_principal_balance] += r[:principal_balance].to_f
+        @data[:total_paid_due] += r[:total_paid_due].to_f
+      end
+
+      @data[:total_overall_balance] = @data[:total_overall_principal_balance] + @data[:total_overall_interest_balance]
+      @data[:total_rr] = @data[:total_paid_due] / @data[:total_total_due]
+
+      @data[:total_principal_rr] = @data[:total_principal_paid_due] / @data[:total_principal_due]
+
+      if @data[:total_principal_rr] > 1
+        @data[:total_principal_rr] = 1
+      end
 
       @data
     end

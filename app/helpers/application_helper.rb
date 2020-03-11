@@ -4,6 +4,19 @@ module ApplicationHelper
     content_for :title, t(key, title: args.join(" - "))
   end
 
+  # Examples:
+  #
+  # { "pages" => "about" } -> #about action in PagesController
+  # { "pages" => nil } -> any action in PagesController
+  # { "a" => ["b", "c"], "d" => nil } -> #b and #c actions in AController, and any action in DController
+  def active_class(hash_set, name: "active")
+    return if !hash_set
+
+    actions = hash_set[params[:controller]]
+
+    return name if hash_set.key?(params[:controller]) && (actions.nil? || actions&.include?(params[:action]))
+  end
+
   def accounting_funds
     AccountingFund.all.map{ |o|
       {
@@ -20,18 +33,6 @@ module ApplicationHelper
         name: c.name
       }
     }
-  end
-
-  def has_time_deposit?(member)
-    account_subtype = Settings.time_deposit.try(:account_subtype)
-    
-    member_account  = MemberAccount.where(
-                        account_type: "SAVINGS", 
-                        account_subtype: account_subtype,
-                        member_id: member.id
-                      ).first
-
-    return member_account.present?
   end
 
   def cash_management_templates

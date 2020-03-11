@@ -65,13 +65,6 @@ module Billings
         ::Billings::ApproveLoanPaymentHash.new(
           config: config
         ).execute!
-
-#        ::Loans::SaveLoanRepaymentRateRecord.new(
-#          config: {
-#            as_of: @date_approved,
-#            loan: loan
-#          }
-#        ).execute!
       end
     end
 

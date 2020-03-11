@@ -35,7 +35,7 @@ class LoansController < ApplicationController
       @loans  = @loans.where(status: @status)
     end
 
-    @loans  = @loans.order("status ASC").page(params[:page]).per(20)
+    @loans  = @loans.order("status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def form

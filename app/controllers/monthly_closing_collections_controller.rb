@@ -7,6 +7,26 @@ class MonthlyClosingCollectionsController < ApplicationController
       .where(branch_id: @branches.pluck(:id))
       .order(closing_date: :desc)
 
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+      @monthly_closing_collections  = @monthly_closing_collections.where(
+                                        branch_id: @branch.id
+                                      )
+    end
+
+    if params[:start_date].present? and params[:end_date].present? and params[:start_date] <= params[:end_date]
+      @monthly_closing_collections  = @monthly_closing_collections.where(
+                                        "closing_date >= ? AND closing_date <= ?",
+                                        params[:start_date],
+                                        params[:end_date]
+                                      )
+    end
+
+    if params[:status].present?
+      @status                       = params[:status]
+      @monthly_closing_collections  = @monthly_closing_collections.where(status: params[:status])
+    end
+
     @interest_member_accounts = Settings.interest_member_accounts
 
     if @interest_member_accounts.blank?
@@ -16,6 +36,8 @@ class MonthlyClosingCollectionsController < ApplicationController
     @account_subtypes = @interest_member_accounts.map{ |o|
                           o.account_subtype
                         }
+
+    @monthly_closing_collections  = @monthly_closing_collections.page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def show
