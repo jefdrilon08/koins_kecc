@@ -3,10 +3,26 @@ module Api
     class BranchesController < ApiController
       before_action :authenticate_user!
 
+      def index
+        branches = current_user
+          .branches
+          .includes(:centers)
+          .where(user_branches: { active: true })
+          .map do |b|
+            {
+              id:      b.id,
+              name:    b.name,
+              centers: b.centers.map { |c| { id: c.id, name: c.name } },
+            }
+          end
+
+        render json: { branches: branches }
+      end
+
       def fetch_centers
         #branch  = @branches.where(id: params[:id]).first
         branch = @branches.select{ |o| o[:id] == params[:id] }.first
-        
+
         centers = Center.where(branch_id: branch[:id]).order("name ASC").map{ |c| { id: c.id, name:  c.name } }
 
         render json: { centers: centers }
@@ -42,35 +58,6 @@ module Api
 
           render json: data_store.data
         end
-      end
-     
-      def index
-        branches  = Branch.where(
-                      id: UserBranch.active.where(
-                        user_id: current_user.id
-                      ).pluck(:branch_id)
-                    ).order("name ASC")
-
-        data  = []
-
-        branches.each do |o|
-          centers = []
-
-          o.centers.order("name ASC").each do |c|
-            centers << {
-              id: c.id,
-              name: c.name
-            }
-          end
-
-          data << {
-            id: o.id,
-            name: o.name,
-            centers: centers
-          }
-        end
-
-        render json: { branches: data }
       end
     end
   end

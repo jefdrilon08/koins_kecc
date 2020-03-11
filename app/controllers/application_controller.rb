@@ -2,6 +2,11 @@ class ApplicationController < ActionController::Base
   before_action :load_defaults
   layout :layout_by_resource
 
+  before_action do
+    # XXX: Add a condition for showing this (see: https://github.com/MiniProfiler/rack-mini-profiler#access-control-in-non-development-environments)
+    Rack::MiniProfiler.authorize_request
+  end
+
   def load_defaults
     @current_date = Date.today
 

@@ -1,57 +1,78 @@
 - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last
-  %li.nav-title
-    Accounting
-  %li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'trial_balance' ? 'active' : ''}" }
-    = link_to "/accounting/trial_balance", class: 'nav-link' do
-      %i.nav-icon.fa.fa-balance-scale
-      Trial Balance
-  %li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'general_ledger' ? 'active' : ''}" }
-    = link_to "/accounting/general_ledger", class: 'nav-link' do
-      %i.nav-icon.fa.fa-atlas
-      General Ledger
-  %li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
-    = link_to accounting_accounting_codes_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-file
-      Chart of Acc.
-  %li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
-    = link_to accounting_year_end_closings_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-file
-      Year End Closing
-  - if microloans?    
-    %li{ class: "nav-item #{params[:controller] == 'icpr' ? 'active' : ''}" }
-      = link_to "/data_stores/icpr", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        ICPR
-    %li{ class: "nav-item #{params[:controller] == 'patronage_refund' ? 'active' : ''}" }
-      = link_to "/data_stores/patronage_refund", class: 'nav-link' do
-        %i.nav-icon.fa.fa-database
-        Patronage Refund
   %li{ class: "nav-item nav-dropdown" }
     = link_to "#", class: "nav-link nav-dropdown-toggle" do
-      %i.nav-icon.fa.fa-book-reader
-      Books
+      %i.nav-icon.fa.fa-atlas
+      Accounting
     %ul.nav-dropdown-items
+      %li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
+        = link_to accounting_accounting_codes_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Chart of Acc.
+      %li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'trial_balance' ? 'active' : ''}" }
+        = link_to "/accounting/trial_balance", class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Trial Balance
+      %li.nav-title
+        Journal Entries
+      %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'crb' ? 'active' : ''}" }
+        = link_to accounting_accounting_entry_form_path(book: "CRB"), class: 'nav-link' do
+          %i.nav-icon.fa.fa-plus
+          Cash Receipts
+      %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'cdb' ? 'active' : ''}" }
+        = link_to accounting_accounting_entry_form_path(book: "CDB"), class: 'nav-link' do
+          %i.nav-icon.fa.fa-plus
+          Cash Disbursements
       %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'jvb' ? 'active' : ''}" }
-        = link_to accounting_books_jvb_path, class: 'nav-link' do
-          %i.nav-icon.fa.fa-book
-          General Vouchers
+        = link_to accounting_accounting_entry_form_path(book: "JVB"), class: 'nav-link' do
+          %i.nav-icon.fa.fa-plus
+          General Journal
+      %li.nav-title
+        Books
       %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'crb' ? 'active' : ''}" }
         = link_to accounting_books_crb_path, class: 'nav-link' do
-          %i.nav-icon.fa.fa-book
+          %i.nav-icon.fa.fa-arrow-right
           Cash Receipts
       %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'cdb' ? 'active' : ''}" }
         = link_to accounting_books_cdb_path, class: 'nav-link' do
-          %i.nav-icon.fa.fa-book
+          %i.nav-icon.fa.fa-arrow-right
           Cash Disbursements
-      %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'misc' ? 'active' : ''}" }
-        = link_to accounting_books_misc_path, class: 'nav-link' do
+      %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'jvb' ? 'active' : ''}" }
+        = link_to accounting_books_jvb_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          General Journal
+      %li{ class: "nav-item #{params[:controller] == 'accounting' and params[:action] == 'general_ledger' ? 'active' : ''}" }
+        = link_to "/accounting/general_ledger", class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          General Ledger
+      %li.nav-title
+        Reports
+      %li{ class: "nav-item #{params[:controller] == 'accounting/accounting_codes' ? 'active' : ''}" }
+        = link_to accounting_year_end_closings_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-file
+          Year End Closing
+      - if microloans?    
+        %li{ class: "nav-item #{params[:controller] == 'icpr' ? 'active' : ''}" }
+          = link_to "/data_stores/icpr", class: 'nav-link' do
+            %i.nav-icon.fa.fa-database
+            ICPR
+        %li{ class: "nav-item #{params[:controller] == 'patronage_refund' ? 'active' : ''}" }
+          = link_to "/data_stores/patronage_refund", class: 'nav-link' do
+            %i.nav-icon.fa.fa-database
+            Patronage Refund
+      %li{ class: "nav-item nav-dropdown" }
+        = link_to "#", class: "nav-link nav-dropdown-toggle" do
+          %i.nav-icon.fa.fa-book-reader
+          Books
+        %ul.nav-dropdown-items
+          %li{ class: "nav-item #{params[:controller] == 'accounting/books' and params[:action] == 'misc' ? 'active' : ''}" }
+            = link_to accounting_books_misc_path, class: 'nav-link' do
+              %i.nav-icon.fa.fa-book
+              MISC
+      %li{ class: "nav-item #{params[:controller] == 'accounting/balance_sheets' ? 'active' : ''}" }
+        = link_to accounting_balance_sheets_path, class: 'nav-link' do
           %i.nav-icon.fa.fa-book
-          MISC
-  %li{ class: "nav-item #{params[:controller] == 'accounting/balance_sheets' ? 'active' : ''}" }
-    = link_to accounting_balance_sheets_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-book
-      Balance Sheets
-  %li{ class: "nav-item #{params[:controller] == 'accounting/income_statements' ? 'active' : ''}" }
-    = link_to accounting_income_statements_path, class: 'nav-link' do
-      %i.nav-icon.fa.fa-book
-      Income Statements
+          Balance Sheets
+      %li{ class: "nav-item #{params[:controller] == 'accounting/income_statements' ? 'active' : ''}" }
+        = link_to accounting_income_statements_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-book
+          Income Statements

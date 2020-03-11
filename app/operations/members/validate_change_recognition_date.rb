@@ -7,6 +7,8 @@ module Members
       @member           = @config[:member]
       @user             = @config[:user]
       @recognition_date = @config[:recognition_date].try(:to_date)
+
+      @valid_roles = ["MIS", "BK", "SBK", "REMOTE-BK", "REMOTE-FM", "OAS", "AO"]
     end
 
     def execute!  
@@ -35,6 +37,13 @@ module Members
         @errors[:messages] << {
           key: "recognition_date",
           message: "Same recognition date"
+        }
+      end
+
+      if (@user.roles & @valid_roles).size == 0
+        @errors[:messages] << {
+          key: "auth",
+          message: "invalid role #{@user.roles}"
         }
       end
 

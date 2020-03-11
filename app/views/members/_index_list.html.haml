@@ -1,6 +1,7 @@
 %table.table.table-sm.table-hover
   %thead
     %tr
+      %th
       %th{ width: "10%" }
         ID Number
       %th
@@ -10,8 +11,6 @@
       %th
         Center
       %th
-        Membership Date
-      %th
         Recognition Date
       %th.text-center
         Type
@@ -20,11 +19,12 @@
   %tbody
     - members.each do |o|
       %tr
+        %td.text-center
+          %img{ src: "#{o.profile_picture_url}", width: 25 }
         %td
           = link_to member_path(o) do
             %strong
-              %small
-                #{o.identification_number}
+              #{o.identification_number}
         %td
           = link_to member_path(o) do
             %strong
@@ -35,9 +35,6 @@
         %td.text-muted
           %small
             #{o.center.name}
-        %td.text-muted
-          %small
-            #{o.date_of_membership}
         %td.text-muted
           - if o.recognition_date.present?
             %small

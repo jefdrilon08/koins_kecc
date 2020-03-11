@@ -11,6 +11,9 @@
   = link_to insurance_exit_age_members_path, class: 'nav-link' do
     %i.nav-icon.fa.fa-users
     Members for Exit Age
+  = link_to lapsed_members_path, class: 'nav-link' do
+    %i.nav-icon.fa.fa-users
+    Lapsed Members
   - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
     %li{ class: "nav-item #{params[:controller] == 'pages' and params[:action] == 'insurance_exit_age_members' ? 'active' : ''}" }
     = link_to members_for_reinsurance_path, class: 'nav-link' do

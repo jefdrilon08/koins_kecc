@@ -1,4 +1,273 @@
 namespace :adjust do
+  task :convert_savings_accounts_to_equity => :environment do
+    account_subtype = ENV['ACCOUNT_SUBTYPE']
+
+    if ENV['BRANCH_ID'].present?
+      branch          = Branch.find(ENV['BRANCH_ID'])
+    end
+
+    member_accounts = MemberAccount.where(account_type: "SAVINGS", account_subtype: account_subtype)
+
+    if branch.present?
+      member_accounts = member_accounts.where(branch_id: branch.id)
+    end
+
+    sets  = member_accounts.map{ |r|
+              "('#{r.id}')"
+            }.join(",")
+
+    if sets.present?
+      query = "
+        UPDATE member_accounts AS a SET
+          account_type = 'EQUITY'
+        FROM (values
+          #{sets}
+        ) AS c(id)
+        WHERE c.id = a.id::text
+      "
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Done."
+  end
+
+  task :insert_insurance_from_loans => :environment do
+    account_subtype     = ENV['ACCOUNT_SUBTYPE']
+    accounting_code_id  = ENV['ACCOUNTING_CODE_ID']
+    branch              = Branch.find(ENV['BRANCH_ID'])
+
+    puts "Fetching journal entry amounts..."
+    cmd = ::Loans::FetchJournalEntries.new(
+            config: {
+              branch: branch,
+              accounting_code_id: accounting_code_id,
+              account_subtype: account_subtype
+            }
+          )
+
+    data  = cmd.execute!
+
+    values  = []
+
+    puts "Inserting records..."
+    data[:records].select{ |o| o[:account_transaction_id].blank? }.each do |r|
+      insurance_account_id      = r[:member_account_id]
+      transaction_type          = 'deposit'
+      transacted_at             = r[:date_approved]
+      created_at                = r[:date_approved]
+      updated_at                = r[:date_approved]
+      amount                    = r[:amount].to_f.round(2)
+      status                    = 'approved'
+
+      subsidiary_id     = insurance_account_id
+      subsidiary_type   = 'MemberAccount'
+
+      trans_data  = {
+        is_withdraw_payment: false,
+        is_fund_transfer: false,
+        is_interest: false,
+        is_adjustment: false,
+        is_for_exit_age: false,
+        is_for_loan_payments: false,
+        is_time_deposit: false,
+        accounting_entry_reference_number: r[:reference_number],
+        beginning_balance: 0.00,
+        ending_balance: 0.00,
+        lock_in_period: nil,
+        data: r
+      }
+
+      values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{trans_data.to_json}')"
+    end
+
+    if values.any?
+      query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Rehashing branch..."
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+        branch: branch
+      },
+      account_subtype: account_subtype
+    ).execute!
+
+    puts "Done."
+  end
+
+  task :update_loans_first_date_of_payment => :environment do
+    query = "
+      SELECT DISTINCT ON (loans.id)
+        loans.id,
+        amortization_schedule_entries.due_date
+      FROM
+        loans
+      INNER JOIN
+        amortization_schedule_entries
+        ON amortization_schedule_entries.loan_id = loans.id
+      WHERE
+        loans.status IN ('active', 'paid') AND loans.first_date_of_payment IS NULL #{ENV['BRANCH_ID'].present? ? "AND loans.branch_id = #{ENV['BRANCH_ID']}" : ''}
+      GROUP BY
+        loans.id, amortization_schedule_entries.due_date
+      ORDER BY
+        loans.id, amortization_schedule_entries.due_date ASC
+    "
+
+    result  = ActiveRecord::Base.connection.execute(query).to_a
+
+    sets  = result.map{ |r|
+              "('#{r.fetch("id")}', '#{r.fetch("due_date")}')"
+            }.join(",")
+
+    if sets.present?
+      query = "
+        UPDATE loans AS l SET
+          first_date_of_payment  = DATE(c.first_date_of_payment)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, first_date_of_payment)
+        WHERE c.loan_id = l.id::text
+      "
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Done."
+  end
+
+  task :update_loans_original_maturity_date => :environment do
+    loans = Loan.active_or_paid
+
+    if ENV['BRANCH_ID'].present?
+      loans = loans.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    sets  = loans.map{ |o|
+              cmd = ::Loans::UpdateOriginalMaturityDate.new(
+                      loan: o,
+                      save: false
+                    )
+              cmd.execute!
+
+              original_maturity_date  = cmd.original_maturity_date
+
+              "('#{o.id}', '#{original_maturity_date}')"
+            }.join(",")
+
+    if sets.present?
+      query = "
+        UPDATE loans AS l SET
+          original_maturity_date  = DATE(c.original_maturity_date)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, original_maturity_date)
+        WHERE c.loan_id = l.id::text
+      "
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Done."
+  end
+
+  task :fill_date_released => :environment do
+    loans = Loan.where(status: ['active', 'paid'], date_released: nil)
+
+    sets  = loans.map{ |o|
+              "('#{o.id}','#{o.date_approved}')"
+            }.join(",")
+
+    if sets.present?
+      query = "
+        UPDATE loans AS l SET
+          date_released = DATE(c.date_approved)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, date_approved)
+        WHERE c.loan_id = l.id::text
+      "
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Done."
+  end
+
+  task :fill_date_completed_for_paid_loans => :environment do
+    branch  = Branch.find(ENV['BRANCH_ID'])
+
+    query = "
+      SELECT DISTINCT ON (loans.id)
+        loans.id,
+        loans.pn_number,
+        loans.status,
+        loans.date_completed,
+        account_transactions.transacted_at
+      FROM
+        loans
+      INNER JOIN
+        account_transactions
+        ON account_transactions.subsidiary_id = loans.id AND status = 'approved'
+      WHERE
+        loans.branch_id = '#{branch.id}' AND loans.status = 'paid'
+      GROUP BY
+        loans.id
+      ORDER BY
+        account_transactions.transacted_at DESC
+    "
+
+    result  = ActiveRecord::Base.connection.execute(query).to_a
+  end
+
+  task :fill_recognition_date_from_membership_payment => :environment do
+    membership_name = ENV['MEMBERSHIP_NAME'] || 'K-MBA'
+    membership_type = ENV['MEMBERSHIP_TYPE'] || 'Insurance'
+
+    query = "
+      SELECT DISTINCT ON (members.id)
+        members.id,
+        members.first_name,
+        members.middle_name,
+        members.last_name,
+        members.status,
+        members.insurance_status,
+        members.data,
+        membership_payment_records.date_paid
+      FROM
+        members
+      INNER JOIN
+        membership_payment_records 
+        ON membership_payment_records.member_id = members.id 
+        AND membership_payment_records.membership_name = '#{membership_name}' 
+        AND membership_payment_records.membership_type = '#{membership_type}'
+      WHERE
+        members.status IN ('active', 'resigned', 'resign')
+      ORDER BY
+        members.id, membership_payment_records.date_paid DESC
+    "
+
+    result  = ActiveRecord::Base.connection.execute(query).to_a
+    size    = result.size
+
+    puts "Found #{size} records"
+
+    result.each_with_index do |r, i|
+      m                       = Member.find(r.fetch("id"))
+      data                    = m.data.with_indifferent_access
+      data[:recognition_date] = r.fetch("date_paid")
+
+      m.update!(data: data)
+
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): #{progress}%%")
+    end
+
+    puts "\nDone."
+  end
+
   task :asign_user_to_loans => :environment do
     branch  = Branch.find(ENV['BRANCH_ID'])
 
@@ -122,7 +391,7 @@ namespace :adjust do
       printf("\r(#{i+1}/#{size}): #{progress}%%")
     end
 
-    if invalid_records.size > 0
+    if invalid_records.any?
       puts "Repaired #{invalid_records} invalid records out of #{size}"
     else
       puts "No invalid records found."
@@ -279,11 +548,11 @@ namespace :adjust do
       data        = o.data.with_indifferent_access
       loan_cycles = data[:loan_cycles] || []
 
-      if loan_cycles.size > 0
+      if loan_cycles.any?
         loan_cycles.each do |lc|
           temp_loans  = loans.where(loan_product_id: lc[:loan_product_id]).order("date_approved ASC")
 
-          if temp_loans.size > 0
+          if temp_loans.any?
             cycle_count     = lc[:cycle].to_i
             starting_cycle  = cycle_count - temp_loans.size
 
@@ -613,6 +882,25 @@ namespace :adjust do
     puts "Done!"
   end
 
+  task :update_member_branch_id => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      branch_id = row['branch_id']
+
+      member = Member.where(identification_number: identification_number).first
+
+      if !member.nil?
+        puts "Updating branch: #{member.full_name}"   
+        member.update!(branch_id: branch_id)
+      end
+    end
+    puts "Done!"
+  end
+
+
   task :repair_validation_accounting_entry_by_id => :environment do
     puts "Repairing ..."
     member_account_validation = MemberAccountValidation.find(ENV['VALIDATION_ID'])
@@ -654,18 +942,21 @@ namespace :adjust do
                 
                 attachments = member.attachment_files  
                 attachment = attachments.where(file_name: filename).first
+                
                 if attachment.nil?
-                  attachment_file  = AttachmentFile.new(
+                  if filename != "Thumbs"
+                    attachment_file  = AttachmentFile.new(
                                         file_name: filename,
                                         member: member
                                      )
 
-                  attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                    attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
 
-                  if attachment_file.save
-                    puts "Successfully uploaded file #{ff} for #{member.identification_number}"
-                  else
-                    puts "Error in attaching file #{ff}"
+                    if attachment_file.save
+                      puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                    else
+                      puts "Error in attaching file #{ff}"
+                    end
                   end
                 else
                   attachment.file.purge
@@ -686,7 +977,19 @@ namespace :adjust do
     end
   end
 
-task :update_insurance_status => :environment do
+  task :destroy_thumbs_attachment_file => :environment do
+    puts "Destroying thumbs file ..."
+    AttachmentFile.where("file_name IN (?)", ["Thumbs", "thumbs"]).each do |af|
+      if af.file.present?
+        puts "Destroying file of #{af.member_id}"
+        af.file.purge
+        af.destroy!  
+      end
+    end  
+    puts "Done!"
+  end
+
+  task :update_insurance_status => :environment do
     current_date = Date.today
     
     if ENV['CURRENT_DATE'].present?
@@ -843,7 +1146,7 @@ task :update_insurance_status => :environment do
         if !current_member_account.nil?
           transactions = account_transactions.select{ |o| o.subsidiary_id == current_member_account.id }
 
-          if transactions.size > 0
+          if transactions.any?
             # latest_payment    = member_accounts
             latest            = transactions.last
             last_payment_date = transactions.last[:transacted_at].to_date
@@ -1008,7 +1311,30 @@ task :update_insurance_status => :environment do
                                                 accounting_entry_reference_number: row['voucher_reference_number'],
                                                 accounting_entry_particular: row['particular'],
                                                 beginning_balance: row['beginning_balance'],
-                                                ending_balance: row['ending_balance']
+                                                ending_balance: row['ending_balance'],
+                                                data: {
+                                                  id: row['id_data'],
+                                                  principal: row['principal_data'],
+                                                  interest: row['interest'],
+                                                  first_date_of_payment: row['first_date_of_payment_data'],
+                                                  maturity_date: row['maturity_date_data'],
+                                                  original_maturity_date: row['original_maturity_date_data'],
+                                                  accounting_entry_id: row['accounting_entry_id_data'],
+                                                  journal_entry_id: row['journal_entry_id_data'],
+                                                  amount: row['amount_data'],
+                                                  loan_product_id: row['loan_product_id_data'],
+                                                  loan_product_name: row['loan_product_name_data'],
+                                                  member_id: row['member_id_data'],
+                                                  date_approved: row['date_approved_data'],
+                                                  date_released: row['date_released_data'],
+                                                  reference_number: row['reference_number_data'],
+                                                  book: row['book_data'],
+                                                  member_account_id: row['member_account_id_data'],
+                                                  term: row['term_data'],
+                                                  num_installments: row['num_installments_data'],
+                                                  account_transaction_id: row['account_transaction_id_data'],
+                                                  status: row['status_data']
+                                                  }
                                                 }
       
         statuses = ["active", "inactive"]
@@ -1039,6 +1365,54 @@ task :update_insurance_status => :environment do
         insurance_account_transaction_record_data[:accounting_entry_particular] = row['particular']
         insurance_account_transaction_record_data[:beginning_balance] = row['beginning_balance']
         insurance_account_transaction_record_data[:ending_balance] = row['ending_balance']
+        
+        if !insurance_account_transaction_record_data[:data].nil? 
+          insurance_account_transaction_record_data[:data][:id] = row['id_data']
+          insurance_account_transaction_record_data[:data][:principal] = row['principal_data']
+          insurance_account_transaction_record_data[:data][:interest] = row['interest_data']
+          insurance_account_transaction_record_data[:data][:first_date_of_payment] = row['first_date_of_payment_data']
+          insurance_account_transaction_record_data[:data][:maturity_date] = row['maturity_date_data']
+          insurance_account_transaction_record_data[:data][:original_maturity_date] = row['original_maturity_date_data']
+          insurance_account_transaction_record_data[:data][:accounting_entry_id] = row['accounting_entry_id_data']
+          insurance_account_transaction_record_data[:data][:journal_entry_id] = row['journal_entry_id_data']
+          insurance_account_transaction_record_data[:data][:amount] = row['amount_data']
+          insurance_account_transaction_record_data[:data][:loan_product_id] = row['loan_product_id_data']
+          insurance_account_transaction_record_data[:data][:loan_product_name] = row['loan_product_name_data']
+          insurance_account_transaction_record_data[:data][:member_id] = row['member_id_data']
+          insurance_account_transaction_record_data[:data][:date_approved] = row['date_approved_data']
+          insurance_account_transaction_record_data[:data][:date_released] = row['date_released_data']
+          insurance_account_transaction_record_data[:data][:reference_number] = row['reference_number_data']
+          insurance_account_transaction_record_data[:data][:book] = row['book_data']
+          insurance_account_transaction_record_data[:data][:member_account_id] = row['member_account_id_data']
+          insurance_account_transaction_record_data[:data][:term] = row['term_data']
+          insurance_account_transaction_record_data[:data][:num_installments] = row['num_installments_data']
+          insurance_account_transaction_record_data[:data][:account_transaction_id] = row['account_transaction_id_data']
+          insurance_account_transaction_record_data[:data][:status] = row['status_data']
+        else
+          insurance_account_transaction_record_data[:data] = {
+            id: row['id_data'],
+            principal: row['principal_data'],
+            interest: row['interest_data'],
+            first_date_of_payment: row['first_date_of_payment_data'],
+            maturity_date: row['maturity_date_data'],
+            original_maturity_date: row['original_maturity_date_data'],
+            accounting_entry_id: row['accounting_entry_id_data'],
+            journal_entry_id: row['journal_entry_id_data'],
+            amount: row['amount_data'],
+            loan_product_id: row['loan_product_id_data'],
+            loan_product_name: row['loan_product_name_data'],
+            member_id: row['member_id_data'],
+            date_approved: row['date_approved_data'],
+            date_released: row['date_released_data'],
+            reference_number: row['reference_number_data'],
+            book: row['book_data'],
+            member_account_id: row['member_account_id_data'],
+            term: row['term_data'],
+            num_installments: row['num_installments_data'],
+            account_transaction_id: row['account_transaction_id_data'],
+            status: row['status_data']
+          }
+        end
 
         insurance_account_transaction_record.update!(
           amount: row['amount'],
@@ -1057,13 +1431,27 @@ task :update_insurance_status => :environment do
 
     insurance_account_ids = insurance_account_ids.uniq
 
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+    # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
 
-    MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
-      puts "Rehashing member_account #{acc.id}..."
+    # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
+    #   puts "Rehashing member_account #{acc.id}..."
 
-      ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
-    end
+    #   ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
+    # end
+
+    # this
+    insurance_account_id = insurance_account_ids.first
+    branch = MemberAccount.where(id: insurance_account_id).first.member.branch
+
+    # Rehash accounts
+    puts "Rehashing ..."
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+        branch: branch
+      }
+    ).execute!
+    # this
+
     puts "Done!"
   end
 

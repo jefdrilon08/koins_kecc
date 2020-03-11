@@ -102,7 +102,7 @@ namespace :db do
     puts ""
     puts "Total portfolio: #{total_portfolio}"
 
-    if invalid_loans.size > 0
+    if invalid_loans.any?
       puts "Found #{invalid_loans.size} invalid loans."
     end
 

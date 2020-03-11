@@ -115,7 +115,7 @@ module Reports
 
           @claims.each do |claim|
             sheet.add_row [
-                claim.date_prepared,
+                claim.created_at.to_date,
                 claim.branch.name,
                 claim.member.full_name,
                 claim.data["policy_number"],

@@ -7,7 +7,7 @@ module Loans
       @first_date_of_payment  = @loan.first_date_of_payment.try(:to_date)
       @term                   = @loan.term
       @num_installments       = @loan.num_installments
-      @amorts                 = @loan.amortization_schedule_entries.order("due_date ASC")
+      @amorts                 = @loan.amortization_schedule_entries
     end
 
     def execute!

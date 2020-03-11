@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -5,7 +6,8 @@
     .col
       .card
         .card-body
-          - if @insurance_fund_transfer_collections.size > 0
+          = render partial: "index_filter"
+          - if @insurance_fund_transfer_collections.any?
             = render partial: "index_list", locals: { insurance_fund_transfer_collections: @insurance_fund_transfer_collections }
             = paginate @insurance_fund_transfer_collections
           - else

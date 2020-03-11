@@ -4,6 +4,20 @@ class InsuranceFundTransferCollectionsController < ApplicationController
   def index
     @insurance_fund_transfer_collections = InsuranceFundTransferCollection.select("*").where(branch_id: @branches.pluck(:id))
 
+    if params[:start_date].present? and params[:end_date].present?
+      @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )
+    end
+
+    if params[:branch_id].present?
+      @branch   = Branch.find(params[:branch_id])
+      @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.where(branch_id: @branch.id)
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.where(status: @status)
+    end
+
     @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
@@ -48,7 +62,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       @errors = InsuranceFundTransferCollections::ValidateFundTransferFromCsvFile.new(insurance_fund_transfer_collection: insurance_fund_transfer_collection, config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if @errors[:messages].any?
       redirect_to upload_deposit_path
       flash[:error] = @errors[:messages]
     else

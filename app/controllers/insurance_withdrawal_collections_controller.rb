@@ -66,7 +66,7 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
       @errors = InsuranceWithdrawalCollections::ValidateInsuranceWithdrawalFromCsvFile.new(insurance_withdrawal_collection: insurance_withdrawal_collection, config: config).execute!
     end
 
-    if @errors[:messages].size > 0
+    if @errors[:messages].any?
       redirect_to upload_insurance_withdrawal_path
       flash[:error] = @errors[:messages]
     else

@@ -18,7 +18,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json:  errors, status: 400
           else
             ::LoanProducts::ModifyMaintainingBalance.new(
@@ -56,7 +56,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json: errors, status: 400
           else
             ::LoanProducts::ModifyPrerequisite.new(
@@ -95,7 +95,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             loan_product_name = loan_product.name

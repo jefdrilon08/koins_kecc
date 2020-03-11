@@ -1,6 +1,13 @@
 class PagesController < ApplicationController
   before_action :authenticate_user!, except: [:login]
 
+  def index
+    @pending_members_count = Member
+      .pending
+      .where(branch_id: @branches.pluck(:id))
+      .count
+  end
+
   def download_backup
     if user_signed_in? and current_user.roles.include?("MIS")
       destination_directory = "#{Rails.root}/db_backup"
@@ -27,8 +34,13 @@ class PagesController < ApplicationController
     send_file destination_file, filename: filename
   end
 
-  def index
-    @announcements = Announcement.all
+  def finance
+    render "dashboard/finance"
+  end
+
+  def insights
+    @end_date   = Date.today
+    @start_date = @end_date - 7.days
   end
 
   def login
@@ -36,7 +48,24 @@ class PagesController < ApplicationController
   end
 
   def insurance_exit_age_members 
-    @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
+    @members = Member.where("DATE(date_of_birth) <= ? AND member_type = ? AND status = ? AND branch_id IN (?) ", 774.months.ago, "Regular", "active", @branches.pluck(:id)).order("branch_id ASC, center_id ASC, last_name ASC") 
+  
+    if params[:branch_id].present?
+      @branch_id = params[:branch_id]
+      @members = @members.where(branch_id: @branch_id)
+    end
+  end
+
+  def lapsed_members
+    @members = Member
+      .includes(:branch, :center)
+      .where(status: "active", insurance_status: "lapsed", branch_id: @branches.pluck(:id))
+      .order("branches.name ASC, centers.name ASC, last_name ASC")
+
+    if params[:branch_id].present?
+      @branch_id = params[:branch_id]
+      @members = @members.where(branch_id: @branch_id)
+    end
   end
 
   def members_for_reinsurance

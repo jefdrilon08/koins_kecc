@@ -31,6 +31,7 @@ env :PATH, ENV['PATH']
 every :day, at: '1am' do
   rake "adjust:set_max_active_date"
   rake "adjust:update_insurance_status"
+  rake "adjust:fill_recognition_date_from_membership_payment"
 end
 
 # Learn more: http://github.com/javan/whenever

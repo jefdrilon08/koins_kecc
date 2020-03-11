@@ -1,4 +1,9 @@
 module ApplicationHelper
+  def title(*args)
+    key = "titles.#{params[:controller].gsub("/", ".")}.#{params[:action]}"
+    content_for :title, t(key, title: args.join(" - "))
+  end
+
   def accounting_funds
     AccountingFund.all.map{ |o|
       {
@@ -15,10 +20,6 @@ module ApplicationHelper
         name: c.name
       }
     }
-  end
-
-  def pending_count(branches)
-    Member.pending.where(branch_id: branches.pluck(:id)).count
   end
 
   def has_time_deposit?(member)
@@ -67,6 +68,12 @@ module ApplicationHelper
     end
 
     data
+  end
+
+  def insurance_subtypes
+    Settings.default_member_accounts.select{ |o| o.account_type == "INSURANCE" }.map{ |o|
+      o.account_subtype
+    }
   end
 
   def savings_subtypes

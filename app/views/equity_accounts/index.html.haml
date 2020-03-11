@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -6,9 +7,9 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @equity_accounts.size > 0
+          - if @equity_accounts.any?
             = render partial: "index_list"
-            /= paginate @equity_accounts
+            = paginate @equity_accounts
           - else
             %p
               No accounts found

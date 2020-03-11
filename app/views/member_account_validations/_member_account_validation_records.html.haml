@@ -18,7 +18,7 @@
       %th.curr Total
       %th Actions
   %tbody
-    - member_account_validation.member_account_validation_records.joins(:member).order("members.last_name ASC").each_with_index do |member_account_validation_record, i|
+    - member_account_validation.member_account_validation_records.includes(:member).order("members.last_name ASC").each_with_index do |member_account_validation_record, i|
       %tr
         %td #{i + 1}
         %td

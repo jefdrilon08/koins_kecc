@@ -4,6 +4,108 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!
 
+      def register
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Epassbook::ValidateRegister.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          cmd = ::Epassbook::Register.new(member: member)
+
+          cmd.execute!
+
+          if cmd.success?
+            ActivityLog.create!(
+              content: "#{current_user.full_name} registered #{member.full_name} to MyKoins",
+              activity_type: "modification",
+              data: {
+                user_id: current_user.id,
+                member_id: member.id
+              }
+            )
+
+            render json: { message: "ok" }
+          else
+            render json: { errors: { full_messages: cmd.errors } }, status: 400
+          end
+        end
+      end
+
+      def delete_signature
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Members::ValidateDeleteSignature.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          member_full_name  = member.full_name
+          member_id         = member.id
+
+          member.signature_file.purge
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted #{member_full_name}'s signature",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def delete_profile_picture
+        member  = Member.where(id: params[:id]).first
+
+        config  = {
+          user: current_user,
+          member: member
+        }
+
+        errors  = ::Members::ValidateDeleteProfilePicture.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          member_full_name  = member.full_name
+          member_id         = member.id
+
+          member.profile_picture.purge
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} deleted #{member_full_name}'s profile picture",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def upload_signature
         member  = Member.where(id: params[:id]).first
         files   = params[:files]
@@ -18,11 +120,23 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           # Upload code
           member.update!(signature_file: config[:files][0])
+
+          member_full_name  = member.full_name
+          member_id         = member.id
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} uploaded #{member_full_name}'s signature",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              member_id: member_id
+            }
+          )
 
           render json: { message: "ok" }
         end
@@ -42,7 +156,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           # Upload code
@@ -64,7 +178,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::Members::Restore.new(
@@ -87,7 +201,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::Members::ProcessResignation.new(
@@ -110,7 +224,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           data  = ::Members::FetchResignationDetails.new(
@@ -133,7 +247,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           member_id         = member.id
@@ -166,7 +280,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           member_id         = member.id
@@ -203,7 +317,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 402
         else
           survey_answer = ::Members::SaveSurveyAnswer.new(
@@ -258,7 +372,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           
           render json: errors, status: 402
         else
@@ -289,7 +403,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 402
         else
           survey_answer = ::Members::BuildSurveyAnswer.new(
@@ -312,7 +426,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 402
         else
           data  = ::Members::Fetch.new(
@@ -379,7 +493,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           member  = ::Members::Save.new(
@@ -416,7 +530,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           data  = member.data.with_indifferent_access
@@ -480,7 +594,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           member.update!(member_type: member_type)
@@ -567,10 +681,12 @@ module Api
         if member.blank?
           render json: { errors: ["member not found"] }, status: 400
         else
-          if member.update!(access_token: "#{SecureRandom.hex(32)}")
+          if member.access_token.present?
+            render json: { errors: ["access_token already present"] }, status: 400
+          elsif member.update!(access_token: "#{SecureRandom.hex(32)}")
             render json: { message: "ok" }
           else
-            render json: { errors: ["something went wrong"] }
+            render json: { errors: ["something went wrong"] }, status: 400
           end
         end
       end

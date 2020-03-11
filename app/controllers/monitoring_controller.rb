@@ -18,7 +18,7 @@ class MonitoringController < ApplicationController
 
     @members  = @members.where.not(id: MembershipPaymentRecord.all.pluck(:member_id).uniq)
 
-    @members  = @members.order("last_name ASC").page(@page).per(100)
+    @members  = @members.order("last_name ASC").page(@page).per(LIST_PAGE_SIZE)
 
     @data = ::Monitoring::FetchMembersWithNoMembershipPaymentRecords.new(
               config: {

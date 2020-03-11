@@ -1,5 +1,11 @@
 namespace :api do
   namespace :v1 do
+    # Savings Insurance Transfer Collections
+    post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
+    post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
+    post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
+    post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
+
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
@@ -60,6 +66,9 @@ namespace :api do
     post "/members/resign", to: "members#resign"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"
+    post "/members/delete_profile_picture", to: "members#delete_profile_picture"
+    post "/members/delete_signature", to: "members#delete_signature"
+    post "/members/register", to: "members#register"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
@@ -285,6 +294,8 @@ namespace :api do
     end
 
     namespace :administration do
+      post "/user_demerits/approve", to: "user_demerits#approve"
+
       get "/user_branches", to: "user_branches#index"
       post "/user_branches/toggle", to: "user_branches#toggle"
       

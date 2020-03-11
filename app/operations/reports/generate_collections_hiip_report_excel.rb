@@ -15,6 +15,7 @@ module Reports
         @hiip = Claim.where(claim_type: 'HIIP')
       end  
 
+
       @p          = Axlsx::Package.new
     end
 

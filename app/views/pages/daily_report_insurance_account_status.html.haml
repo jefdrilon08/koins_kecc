@@ -1,3 +1,5 @@
+= title
+
 %ol.breadcrumb
   %li.breadcrumb-item
     .fa.fa-file
@@ -16,12 +18,15 @@
                 .form-group
                   %label Branch
                   = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
-              .col-md-6
+              .col-md-3
                 .form-group
-                  %label Actions
+                  %br
                   = link_to "#", id: 'download-btn', class: "btn btn-primary btn-block" do
                     .fa.fa-download
                     Download
+              .col-md-3
+                .form-group  
+                  %br
                   = link_to "#", id: 'generate-btn', class: "btn btn-success btn-block" do
                     .fa.fa-download
                     Generate

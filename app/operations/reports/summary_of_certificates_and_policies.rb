@@ -6,14 +6,16 @@ module Reports
       @as_of       =  as_of.to_date
       @members = []
 
-      if @as_of.present? && 
+      if @as_of.present? && @branch_id.present?
         @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status != ? AND branch_id = ?", @as_of, "active", "dormant", @branch_id)
-      else
+      elsif @as_of.present?
+        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status != ? AND branch_id = ?", @as_of, "active", "dormant")
+      elsif @branch_id.present?
         @active_members = Member.where("insurance_status !=? AND branch_id = ?", "dormant", @branch_id)
       end
 
       @active_members.each do |m|
-        recognition_date = m.data['recognition_date']
+        recognition_date = m.data.with_indifferent_access['recognition_date']
         if @as_of.present? 
           current_date = @as_of
         else

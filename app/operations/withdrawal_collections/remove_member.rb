@@ -49,7 +49,7 @@ module WithdrawalCollections
       end
 
       # Load accounting entry
-      @data[:accounting_entry]  = ::WithdrawalCollections::BuildAccountingEntry.new(
+      @data[:accounting_entry]  = ::InsuranceWithdrawalCollections::BuildAccountingEntry.new(
                                     config: {
                                       branch: @branch,
                                       data: @data,

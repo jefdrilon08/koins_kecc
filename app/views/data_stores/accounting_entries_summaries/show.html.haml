@@ -1,4 +1,8 @@
+= title @record.id
 = render partial: "show_header"
+
+- @meta = @record.meta.with_indifferent_access
+- @data = @record.data.with_indifferent_access
 
 .container-fluid
   .row

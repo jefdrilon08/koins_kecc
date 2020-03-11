@@ -1,0 +1,12 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-lock
+    Administration
+  %li.breadcrumb-item
+    = link_to administration_users_path do
+      Users
+  %li.breadcrumb-item
+    = link_to administration_user_path(@user) do
+      #{@user.full_name}
+  %li.breadcrumb-item
+    New Demerit

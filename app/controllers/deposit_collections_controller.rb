@@ -2,7 +2,9 @@ class DepositCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @deposit_collections = DepositCollection.select("*").where(branch_id: @branches.pluck(:id)) 
+    @deposit_collections = DepositCollection
+      .includes(:branch)
+      .where(branch_id: @branches.pluck(:id)) 
 
     if params[:start_date].present? and params[:end_date].present?
       @deposit_collections = @deposit_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )
@@ -24,6 +26,7 @@ class DepositCollectionsController < ApplicationController
       @status = params[:status]
       @deposit_collections = @deposit_collections.where(status: @status)
     end
+    
     @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
   end
 
@@ -74,9 +77,8 @@ class DepositCollectionsController < ApplicationController
       @errors = DepositCollections::ValidateDepositFromCsvFile.new(deposit_collection: deposit_collection, config: config).execute!
     end
 
-    if @errors[:messages].size > 0
-      redirect_to upload_deposit_path
-      flash[:error] = @errors[:messages]
+    if @errors[:messages].any?
+      redirect_to upload_deposit_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
     else
       @deposit_collection = DepositCollections::LoadDepositFromCsvFile.new(config: config).execute!
       flash[:success] = "Successfully upload deposit."

@@ -2,7 +2,9 @@ class MembershipPaymentCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @membership_payment_collections = MembershipPaymentCollection.select("*").where(branch_id: @branches.pluck(:id))
+    @membership_payment_collections = MembershipPaymentCollection
+      .includes(:branch, :center)
+      .where(branch_id: @branches.pluck(:id))
 
     if params[:start_date].present? and params[:end_date].present?
       @membership_payment_collections = @membership_payment_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )
@@ -25,7 +27,7 @@ class MembershipPaymentCollectionsController < ApplicationController
       @membership_payment_collections = @membership_payment_collections.where(status: @status)
     end
 
-    @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+    @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def show

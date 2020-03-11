@@ -20,6 +20,10 @@ module Insurance
           acc_subtype = "Life Insurance Fund"
         elsif  row['insurance_type'] == "RF"
           acc_subtype = "Retirement Fund"
+        elsif  row['insurance_type'] == "CLIP"
+          acc_subtype = "Credit Life Insurance Plan"
+        elsif  row['insurance_type'] == "HIIP"
+          acc_subtype = "Hospital Income Insurance Plan"    
         end
 
         if !member.nil?

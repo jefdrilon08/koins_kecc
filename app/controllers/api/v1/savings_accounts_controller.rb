@@ -17,7 +17,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::MemberAccounts::TimeDeposit::ApproveWithdrawalRequest.new(
@@ -42,7 +42,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           data_store.destroy!
@@ -65,7 +65,7 @@ module Api
                     config: config 
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           data  = ::MemberAccounts::TimeDeposit::GenerateWithdrawalRequest.new(
@@ -128,7 +128,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           savings_account = ::SavingsAccounts::SyncMaintainingBalance.new(

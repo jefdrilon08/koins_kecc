@@ -67,7 +67,7 @@ module Accounting
       #accounting_codes  = dr_accounting_codes.map{ |o| o.accounting_code_id } | cr_accounting_codes.map{ |o| o.accounting_code_id }
       accounting_codes  = AccountingCode.all.order("code ASC").pluck(:id)
 
-      if @accounting_code_ids.size > 0
+      if @accounting_code_ids.any?
         accounting_codes  = AccountingCode.where(id: @accounting_code_ids).order("code ASC").pluck(:id)
       end
 
@@ -142,7 +142,7 @@ module Accounting
             mapped_entries = []
           end
        
-          if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0|| mapped_entries.size > 0
+          if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0|| mapped_entries.any?
           entries << {
             accounting_code_id: a,
             accounting_code_name: accounting_code_name,

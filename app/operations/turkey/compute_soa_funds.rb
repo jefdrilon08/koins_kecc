@@ -6,10 +6,15 @@ module Turkey
       @branch   = branch
       @from     = from
       @to       = to
-      @accounts = MemberAccount
-        .pluck(:account_subtype).uniq
-        .map { |subtype| [subtype.parameterize.underscore, subtype] }
-        .to_h
+#      @accounts = MemberAccount
+#        .pluck(:account_subtype).uniq
+#        .map { |subtype| [subtype.parameterize.underscore, subtype] }
+#        .to_h
+      @accounts = Settings.default_member_accounts.map{ |o|
+                    [o[:account_subtype].parameterize.underscore, o[:account_subtype]]
+                  }.to_h
+
+      @account_subtypes = @accounts.map{ |o| "'#{o[1]}'" }.join(",")
     end
 
     def run
@@ -45,7 +50,7 @@ module Turkey
           u.last_name AS officer_last_name,
           u.identification_number AS officer_identification_number
         FROM account_transactions at
-          INNER JOIN member_accounts ma ON ma.id = at.subsidiary_id
+          INNER JOIN member_accounts ma ON ma.id = at.subsidiary_id AND ma.account_subtype IN (#{@account_subtypes})
           INNER JOIN members m ON m.id = ma.member_id
           INNER JOIN centers c ON c.id = m.center_id
           INNER JOIN users u ON u.id = c.user_id

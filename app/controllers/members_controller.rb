@@ -2,7 +2,9 @@ class MembersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @members  = Member.select("*").where(branch_id: @branches.pluck(:id))
+    @members  = Member.select("*")
+                      .includes(:center, :branch, :profile_picture_attachment)
+                      .where(branch_id: @branches.pluck(:id))
     @q        = params[:q]
     @status   = params[:status]
     @restored = params[:restored].present?
@@ -34,7 +36,7 @@ class MembersController < ApplicationController
       @members  = @members.where("data->'restoration_records' IS NOT NULL")
     end
 
-    @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(100)
+    @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def form_resignation
@@ -137,7 +139,7 @@ class MembersController < ApplicationController
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
         
         ActivityLog.create!(
@@ -223,7 +225,7 @@ class MembersController < ApplicationController
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
         
         ActivityLog.create!(
@@ -308,7 +310,7 @@ class MembersController < ApplicationController
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
         
         ActivityLog.create!(

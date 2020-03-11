@@ -1,0 +1,29 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col
+      .form-group
+        %label
+          Query
+        = text_field_tag :q, @q, class: 'form-control', placeholder: 'Name / ID Number'
+    .col
+      .form-group
+        %label
+          Type
+        = select_tag :subtype, options_for_select(insurance_subtypes, @subtype), class: "form-control select-select2", id: "loan-product-select", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label
+          Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label
+          Center
+        = select_tag :center_id, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)).order(:name), :id, :name, @center), id: "center ",class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+ 
+    .col
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .fa.fa-search

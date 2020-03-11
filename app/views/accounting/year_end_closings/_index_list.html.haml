@@ -13,13 +13,15 @@
         Last Updated
   %thead
     - @records.each do |o|
+      - closed_on = o.meta["closing_date"].to_date.strftime("%b %d, %Y")
       %tr
         %td.text-center
           %strong
-            = link_to "/accounting/year_end_closings/#{o.id}" do
-              #{o.meta.with_indifferent_access[:closing_date].to_date.strftime("%b %d, %Y")}
-        %td
-          #{o.meta.with_indifferent_access[:branch_name]}
+            - if o.processing?
+              = closed_on
+            - else
+              = link_to closed_on, accounting_year_end_closing_path(o)
+        %td= o.meta["branch_name"]
         %td.text-center
           - if o.processing?
             .badge.badge-info

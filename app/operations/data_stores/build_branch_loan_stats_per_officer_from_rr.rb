@@ -87,7 +87,7 @@ module DataStores
           # Compute PAR Rate
           loan_product[:par_rate]  = loan_product[:par_amount] / loan_product[:portfolio]
 
-          if loan_product[:loans].size > 0
+          if loan_product[:loans].any?
             officer_data[:loan_products] << loan_product
           end
         end

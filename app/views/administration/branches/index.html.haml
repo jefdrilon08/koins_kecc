@@ -5,7 +5,7 @@
     .col
       .card
         .card-body
-          - if @branches.size > 0
+          - if @branches.any?
 
             = render partial: "index_list"
           - else

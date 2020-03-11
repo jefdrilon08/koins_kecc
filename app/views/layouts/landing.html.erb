@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>KOINS</title>
+  <title>
+    <%= "[#{App.pipeline.upcase}] " if !App.production? %>
+    <%= content_for?(:title) ? "#{yield(:title)} - #{App.name}" : "#{App.name}" %>
+  </title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= favicon_link_tag "logo_thumb.png" %>
   <%= javascript_include_tag 'application' %>

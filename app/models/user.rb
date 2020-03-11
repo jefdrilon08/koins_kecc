@@ -28,7 +28,8 @@ class User < ApplicationRecord
     "REMOTE-BK",
     "REMOTE-MIS",
     "REMOTE-FM",
-    "OM"
+    "OM",
+    "OJT"
   ]
 
   validates :username, presence: true, uniqueness: true
@@ -39,6 +40,9 @@ class User < ApplicationRecord
   # ActiveStorage
   has_one_attached :profile_picture
   has_many :announcements
+  has_many :user_demerits
+  has_many :user_branches
+  has_many :branches, through: :user_branches
 
   serialize :roles, Array
 
@@ -61,7 +65,7 @@ class User < ApplicationRecord
     if self.profile_picture.attached?
       return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
     else
-      "http://#{ENV['HOST']}/#{ ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
+      ActionController::Base.helpers.asset_url("missing_profile_picture.png")
     end
   end
 

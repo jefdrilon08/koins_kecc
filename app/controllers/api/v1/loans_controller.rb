@@ -15,10 +15,10 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
-          adjustment_record = ::Loasn::ApproveAdjustmentRecord.new(
+          adjustment_record = ::Loans::ApproveAdjustmentRecord.new(
                                 config: config
                               ).execute!
 
@@ -38,7 +38,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           adjustment_record.destroy!
@@ -68,7 +68,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           adjustment_record = ::Loans::GenerateReamortizationAdjustment.new(
@@ -96,7 +96,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           old_date  = amort.due_date
@@ -132,7 +132,7 @@ module Api
                   ).execute!
 
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           old_book  = loan.data.with_indifferent_access[:accounting_entry][:book]
@@ -165,7 +165,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           loan  = ::Loans::Approve.new(
@@ -181,6 +181,11 @@ module Api
 
           # setup maturity date
           ::Loans::UpdateMaturityDate.new(
+            loan: loan
+          ).execute!
+
+          # Setup original maturity date
+          ::Loans::UpdateOriginalMaturityDate.new(
             loan: loan
           ).execute!
 
@@ -296,7 +301,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           loan_data = JSON.parse(loan.to_json).with_indifferent_access
@@ -331,7 +336,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           loan  = ::Loans::Save.new(
@@ -374,7 +379,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           loan  = ::Loans::Apply.new(
@@ -394,7 +399,7 @@ module Api
                     approved_by: approved_by
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           loan  = ::Loans::Reage.new(

@@ -29,7 +29,7 @@ module Api
                       }
                     ).execute!
 
-          if errors[:full_messages].size > 0
+          if errors[:full_messages].any?
             render json: errors, status: 400
           else
             if @record.blank?
@@ -83,7 +83,7 @@ module Api
                       config: config
                     ).execute!
           
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             data_store.update!(status: "processing")

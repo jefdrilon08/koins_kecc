@@ -27,7 +27,7 @@ bundle exec rails db:setup && bundle exec rails db:migrate
 
 ```
 bundle install
-npm install
+yarn install
 ```
 
 5. KOINS uses `react-js` for various javascript front-end interfaces. Source code is found in the directory `react`. Compile (and optionally `---watch`) the necessary react related assets:
@@ -40,4 +40,28 @@ npm install
 
 ```
 bundle exec rails server
+```
+
+## Importing Database to Heroku
+
+In order for PG Backups to access and import your dump file you will need to upload it somewhere with an HTTP-accessible URL.
+
+> Note that the `pg:backups restore` command drops any tables and other database objects before recreating them.
+
+Generate a signed URL using the aws console:
+
+```
+aws s3 presign s3://your-bucket-address/your-object
+```
+
+Use the raw file URL in the pg:backups restore command:
+
+```
+heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
+```
+
+Transfer production database to staging:
+
+```
+heroku pg:copy koins-production DATABASE --remote staging
 ```

@@ -19,7 +19,7 @@
         %td
           %center
             %strong
-              #{o.transacted_at.localtime.strftime("%b %d, %Y")}
+              #{o.transacted_at.strftime("%b %d, %Y")}
         %td
           #{o.data["approved_by"]}
           - if current_user.is_mis?

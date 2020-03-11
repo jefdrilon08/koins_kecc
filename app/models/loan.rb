@@ -43,13 +43,15 @@ class Loan < ApplicationRecord
   before_validation :load_defaults
 
   def accounting_entry
-    AccountingEntry.where(
-                    book: self.data.with_indifferent_access[:accounting_entry][:book],
-                    reference_number: self.data.with_indifferent_access[:accounting_entry][:reference_number],
-                    particular: self.data.with_indifferent_access[:accounting_entry][:particular]
-                    ).try(:first)
+    entry = data.fetch("accounting_entry")
+
+    AccountingEntry.find_by(
+      book:             entry["book"],
+      reference_number: entry["reference_number"],
+      particular:       entry["particular"],
+    )
   end
-  
+
   def load_defaults
     if self.new_record?
       self.status = "pending"
@@ -58,6 +60,10 @@ class Loan < ApplicationRecord
 
     if self.user.blank? and self.center.present?
       self.user = self.center.user 
+    end
+
+    if self.date_approved.present? and self.date_released.blank?
+      self.date_released = self.date_approved
     end
   end
 

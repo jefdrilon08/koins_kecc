@@ -24,6 +24,10 @@ module Exports
                             code = "RF"
                         elsif ma.account_subtype == "Life Insurance Fund"
                             code = "LIF"
+                        elsif ma.account_subtype == "Credit Life Insurance Plan"
+                            code = "CLIP"
+                        elsif ma.account_subtype == "Hospital Income Insurance Plan"
+                            code = "HIIP"
                         end
 
                         csv << [

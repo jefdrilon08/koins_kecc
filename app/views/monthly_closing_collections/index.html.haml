@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -5,7 +6,7 @@
     .col
       .card
         .card-body
-          - if @monthly_closing_collections.size > 0
+          - if @monthly_closing_collections.any?
             = render partial: "index_list"
           - else
             %p

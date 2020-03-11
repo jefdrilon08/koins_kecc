@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -5,7 +6,7 @@
     .col
       .card
         .card-body
-          - if @records.size > 0
+          - if @records.any?
             = render partial: "index_list"
             = paginate @records
           - else

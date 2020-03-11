@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -6,7 +7,7 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @members.size > 0
+          - if @members.any?
             = render partial: "index_list", locals: { members: @members }
             = paginate @members
           - else

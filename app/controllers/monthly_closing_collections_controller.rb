@@ -2,9 +2,10 @@ class MonthlyClosingCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @monthly_closing_collections  = MonthlyClosingCollection.where(
-                                      branch_id: @branches.pluck(:id)
-                                    ).order("closing_date DESC")
+    @monthly_closing_collections = MonthlyClosingCollection
+      .includes(:branch)
+      .where(branch_id: @branches.pluck(:id))
+      .order(closing_date: :desc)
 
     @interest_member_accounts = Settings.interest_member_accounts
 

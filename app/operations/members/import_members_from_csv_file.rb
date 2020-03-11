@@ -32,54 +32,56 @@ module Members
 
           recognition_date = row['recognition_date']
           status = row['status']
+          member.status = status
+          member.insurance_status = insurance_status
 
-          if recognition_date.present? && insurance_status.present?
-            if insurance_status == "inforce" || insurance_status == "lapsed" 
-              if status == "cleared"
-                member.status = "cleared"
-                member.insurance_status = "cleared"
-              elsif status == "resigned"
-                member.status = "resigned"
-                member.insurance_status = resigned
-              else  
-                member.status = "active"
-                member.insurance_status = insurance_status
-              end
-            elsif insurance_status == "dormant"
-              if status == "archived"
-                member.status = "archived"
-                member.insurance_status = insurance_status
-              elsif status == "resigned"
-                member.status = "resigned"
-                member.insurance_status = "resigned"
-              else
-                member.status = status
-                member.insurance_status = insurance_status
-              end
-            elsif insurance_status == "resigned"
-              member.status = "resigned"
-              member.insurance_status = insurance_status
-            elsif insurance_status == "cleared"
-              member.status = "cleared"
-              member.insurance_status = insurance_status
-            elsif insurance_status == "pending"
-              member.status = "pending"
-              member.insurance_status = insurance_status  
-            elsif row['member_type'] == "GK"
-              member.status = "resigned"
-              member.insurance_status = insurance_status
-            end
-          elsif recognition_date.nil?
-            member.insurance_status = insurance_status
+          # if recognition_date.present? && insurance_status.present?
+          #   if insurance_status == "inforce" || insurance_status == "lapsed" 
+          #     if status == "cleared"
+          #       member.status = "cleared"
+          #       member.insurance_status = "cleared"
+          #     elsif status == "resigned"
+          #       member.status = "resigned"
+          #       member.insurance_status = resigned
+          #     else  
+          #       member.status = "active"
+          #       member.insurance_status = insurance_status
+          #     end
+          #   elsif insurance_status == "dormant"
+          #     if status == "archived"
+          #       member.status = "archived"
+          #       member.insurance_status = insurance_status
+          #     elsif status == "resigned"
+          #       member.status = "resigned"
+          #       member.insurance_status = "resigned"
+          #     else
+          #       member.status = status
+          #       member.insurance_status = insurance_status
+          #     end
+          #   elsif insurance_status == "resigned"
+          #     member.status = "resigned"
+          #     member.insurance_status = insurance_status
+          #   elsif insurance_status == "cleared"
+          #     member.status = "cleared"
+          #     member.insurance_status = insurance_status
+          #   elsif insurance_status == "pending"
+          #     member.status = "pending"
+          #     member.insurance_status = insurance_status  
+          #   elsif row['member_type'] == "GK"
+          #     member.status = "resigned"
+          #     member.insurance_status = insurance_status
+          #   end
+          # elsif recognition_date.nil?
+          #   member.insurance_status = insurance_status
             
-            if status == "archived"
-              member.status = "archived"
-            elsif status == "resigned"
-              member.status = "resigned"
-            else
-              member.status = "pending"
-            end
-          end
+          #   if status == "archived"
+          #     member.status = "archived"
+          #   elsif status == "resigned"
+          #     member.status = "resigned"
+          #   else
+          #     member.status = "pending"
+          #   end
+          # end
 
           birthday = row['date_of_birth']
           if birthday.nil?
@@ -224,10 +226,24 @@ module Members
                           config: { member: member } 
                     ).execute!
         else
-          if row['status'] != "cleared"
-            center = Center.where(id: row['center_id'], branch_id: row['branch_id']).first
+          if !["cleared", "transferred", "for-transfer"].include?(row['status'])
+            branch_name = row['branch']
+            branch = Branch.where(name: branch_name).first
+
+            center_name = row['center'].try(:upcase)
+            center_id = row['center_id']
+            center = Center.where(id: center_id).first
             
-            if !center.nil?
+            if center.nil?
+              center = Center.new
+              center.id = center_id
+              center.name = row['center'].try(:upcase)
+              center.short_name = row['center'].try(:upcase)
+              center.meeting_day = 1
+              center.user = @user
+              center.branch = branch
+              center.save!
+            else
               center.update!(name: row['center'].try(:upcase), user: @user)
             end
 
@@ -262,40 +278,41 @@ module Members
             end
 
             insurance_status = row['insurance_status']
+            status = row['status']
 
-            if row['recognition_date'].present? && insurance_status.present?  
-              if insurance_status == "inforce" || insurance_status == "lapsed"
-                if row['status'] == "cleared"
-                  status = "cleared"
-                  insurance_status = "cleared"
-                else
-                  status = "active"
-                end
-              elsif insurance_status == "dormant"
-                if row['status'] == "archived"
-                  status = "archived"
-                elsif row['status'] == "resigned"
-                  status = "resigned"
-                  insurance_status = "resigned"
-                else
-                  status = row['status']
-                  insurance_status = "dormant"
-                end
-              elsif insurance_status == "pending"
-                status = "pending"
-              elsif insurance_status == "resigned"
-                status = "resigned"
-              elsif row['member_type'] == "GK"
-                status = "resigned"
-              elsif row['status'] == "archived"
-                status = "archived"
-              elsif row['status'] == "cleared"
-                status = "cleared"
-                insurance_status = "cleared"
-              end
-            else
-              status = "pending"
-            end
+            # if row['recognition_date'].present? && insurance_status.present?  
+            #   if insurance_status == "inforce" || insurance_status == "lapsed"
+            #     if row['status'] == "cleared"
+            #       status = "cleared"
+            #       insurance_status = "cleared"
+            #     else
+            #       status = "active"
+            #     end
+            #   elsif insurance_status == "dormant"
+            #     if row['status'] == "archived"
+            #       status = "archived"
+            #     elsif row['status'] == "resigned"
+            #       status = "resigned"
+            #       insurance_status = "resigned"
+            #     else
+            #       status = row['status']
+            #       insurance_status = "dormant"
+            #     end
+            #   elsif insurance_status == "pending"
+            #     status = "pending"
+            #   elsif insurance_status == "resigned"
+            #     status = "resigned"
+            #   elsif row['member_type'] == "GK"
+            #     status = "resigned"
+            #   elsif row['status'] == "archived"
+            #     status = "archived"
+            #   elsif row['status'] == "cleared"
+            #     status = "cleared"
+            #     insurance_status = "cleared"
+            #   end
+            # else
+            #   status = "pending"
+            # end
               
               member_data[:recognition_date] = row['recognition_date']
               member_data[:address][:street] = row['address_street']
@@ -317,6 +334,7 @@ module Members
             member_record.update!(
               identification_number: identification_number,
               center: center,
+              branch: branch,
               member_type: row['member_type'],
               status: status,
               insurance_status: insurance_status,

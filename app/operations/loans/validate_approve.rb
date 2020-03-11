@@ -30,6 +30,7 @@ module Loans
       if @loan.present?
         validate_accounting_entry!
         validate_parameters!
+        validate_amortization!
       end
 
       #not_yet_implemented!
@@ -42,6 +43,15 @@ module Loans
     end
 
     private
+
+    def validate_amortization!
+      if @loan.amortization_schedule_entries.where("principal < 0.00 OR interest < 0.00").count > 0
+        @errors[:messages] << {
+          key: "amortization",
+          message: "Invalid amortization detected"
+        }
+      end
+    end
 
     def validate_parameters!
       # First date of payment

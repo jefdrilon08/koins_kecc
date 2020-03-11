@@ -20,7 +20,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::InsuranceWithdrawalCollections::RemoveMember.new(
@@ -42,7 +42,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::InsuranceWithdrawalCollections::AddMember.new(
@@ -104,7 +104,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::InsuranceWithdrawalCollections::Approve.new(
@@ -132,7 +132,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           insurance_withdrawal_collection = ::InsuranceWithdrawalCollections::ModifyTransactionRecord.new(
@@ -157,7 +157,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           insurance_withdrawal_collection = ::InsuranceWithdrawalCollections::CreateInsuranceWithdrawalCollection.new(

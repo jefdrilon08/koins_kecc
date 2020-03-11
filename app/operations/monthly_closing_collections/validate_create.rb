@@ -34,7 +34,7 @@ module MonthlyClosingCollections
             @closing_date.year,
             @branch.id,
             @account_subtype
-          ).size > 0
+          ).any?
 
           @errors[:messages] << {
             key: "monthly_closing_collection",

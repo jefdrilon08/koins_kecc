@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -5,7 +6,7 @@
     .col
       .card
         .card-body
-          - if @time_deposit_collections.size > 0
+          - if @time_deposit_collections.any?
             = render partial: "index_list", locals: { time_deposit_collections: @time_deposit_collections }
             = paginate @time_deposit_collections
           - else

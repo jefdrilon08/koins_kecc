@@ -19,7 +19,7 @@ module Api
                       }
                     ).execute!
 
-          if @errors[:full_messages].size > 0
+          if @errors[:full_messages].any?
             render json: @errors, status: 400
           elsif @record.blank?
             @record = DataStore.create!(

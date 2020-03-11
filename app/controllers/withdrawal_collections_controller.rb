@@ -2,7 +2,9 @@ class WithdrawalCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @withdrawal_collections = WithdrawalCollection.select("*").where(branch_id: @branches.pluck(:id))
+    @withdrawal_collections = WithdrawalCollection
+      .includes(:branch)
+      .where(branch_id: @branches.pluck(:id))
 
     if params[:start_date].present? and params[:end_date].present?
       @withdrawal_collections = @withdrawal_collections.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])

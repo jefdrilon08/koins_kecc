@@ -27,9 +27,18 @@ class ClaimsController < ApplicationController
     @data  = @claim.data.try(:with_indifferent_access) || {}
   end
 
+
   def clip_loa_pdf
     @claim = Claim.find(params[:claim_id])
     @data  = @claim.data.try(:with_indifferent_access) || {}
+
+    # if params[:type_of_insurance_policy].present?
+    #   @type_of_insurance_policy = params[:type_of_insurance_policy]
+    #   @claims = @claims.where(type_of_insurance_policy: @type_of_insurance_policy)
+    # end
+  
+    #  @claims = @claims.page(params[:page]).per(LIST_PAGE_SIZE)
+
   end
 
   def hiip_validation_pdf
@@ -91,11 +100,11 @@ class ClaimsController < ApplicationController
   end
 
   def index
-    @claims = Claim.all.order("date_prepared DESC")
+    @claims = Claim.all.includes(:member, :branch).where(branch_id: @branches.pluck(:id)).order("date_prepared DESC")
 
-    if params[:q].present?
-      @q = params[:q]
-      @claims = @claims.joins(:member).where("lower(members.first_name) LIKE :q OR lower(members.last_name) LIKE :q OR lower(members.middle_name) LIKE :q", q: "%#{@q.downcase}%")
+    if params[:member].present?
+      @member = params[:member]
+      @claims = @claims.joins(:member).where("lower(members.first_name) LIKE :member OR lower(members.last_name) LIKE :member OR lower(members.middle_name) LIKE :member", member: "%#{@member.downcase}%")
     end
 
     if params[:branch_id].present?

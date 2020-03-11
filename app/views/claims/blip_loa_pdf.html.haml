@@ -92,7 +92,7 @@
               Recognition Date:
             %td{:width => "25%"}
               %u  
-                #{@data["date_of_policy_issue"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["date_of_policy_issue"].to_date.strftime("%b %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Life:
@@ -118,7 +118,7 @@
               Date of Death/TPD/MVAH:
             %td{:width => "25%"}
               %u  
-                #{@data["date_of_death_tpd_accident"]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["date_of_death_tpd_accident"].to_date.strftime("%b %d, %Y")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Length of Membership:
@@ -235,7 +235,7 @@
           %u
             Silvida Reyes - Antiquera
           %br
-            KMBA-GM
+            KMBA - General Manager
   / %br
   / .span.print-text-sub
   /   %br

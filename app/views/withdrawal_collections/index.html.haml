@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -6,7 +7,7 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @withdrawal_collections.size > 0
+          - if @withdrawal_collections.any?
             = render partial: "index_list", locals: { withdrawal_collections: @withdrawal_collections }
             = paginate @withdrawal_collections
           - else

@@ -1,0 +1,45 @@
+%li{ class: "nav-item nav-dropdown" }
+  = link_to "#", class: "nav-link nav-dropdown-toggle" do
+    %i.nav-icon.fa.fa-download
+    Transactions
+  %ul.nav-dropdown-items
+    - if microloans?  
+      %li{ class: "nav-item #{params[:controller] == 'billings' ? 'active' : ''}" }
+        = link_to billings_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Billing
+    - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last  
+      %li{ class: "nav-item #{params[:controller] == 'membership_payment_collections' ? 'active' : ''}" }
+        = link_to membership_payment_collections_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Membership Payment
+    %li{ class: "nav-item #{params[:controller] == 'deposit_collections' ? 'active' : ''}" }
+      = link_to deposit_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-arrow-right
+        Deposits
+    - if microloans?  
+      %li{ class: "nav-item #{params[:controller] == 'time_deposit_collections' ? 'active' : ''}" }
+        = link_to time_deposit_collections_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Time Deposits
+    %li{ class: "nav-item #{params[:controller] == 'withdrawal_collections' ? 'active' : ''}" }
+      = link_to withdrawal_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-arrow-right
+        Withdrawals
+    %li{ class: "nav-item #{params[:controller] == 'savings_insurance_transfer_collections' ? 'active' : ''}" }
+      = link_to savings_insurance_transfer_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-arrow-right
+        Savings to Insurance
+    %li{ class: "nav-item #{params[:controller] == 'insurance_fund_transfer_collections' ? 'active' : ''}" }
+      = link_to insurance_fund_transfer_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-arrow-right
+        Fund Transfer
+    %li{ class: "nav-item #{params[:controller] == 'insurance_withdrawal_collections' ? 'active' : ''}" }
+      = link_to insurance_withdrawal_collections_path, class: 'nav-link' do
+        %i.nav-icon.fa.fa-arrow-right
+        Insurance Withdrawal
+    - if ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last 
+      %li{ class: "nav-item #{params[:controller] == 'monthly_collection_collections' ? 'active' : ''}" }
+        = link_to monthly_closing_collections_path, class: 'nav-link' do
+          %i.nav-icon.fa.fa-arrow-right
+          Monthly Closing Col.

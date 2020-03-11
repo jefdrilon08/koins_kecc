@@ -18,7 +18,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::UpdateAccountingEntryParticular.new(
@@ -47,7 +47,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::AddAccountingCode.new(
@@ -72,7 +72,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::DeleteAccountingCode.new(
@@ -95,7 +95,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::DeleteMember.new(
@@ -131,7 +131,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::AddMember.new(
@@ -154,7 +154,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             ::Adjustments::SubsidiaryAdjustments::Approve.new(
@@ -177,7 +177,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             adjustment_record.destroy!
@@ -198,7 +198,7 @@ module Api
                       config: config
                     ).execute!
 
-          if errors[:messages].size > 0
+          if errors[:messages].any?
             render json: errors, status: 400
           else
             adjustment_record = ::Adjustments::SubsidiaryAdjustments::Create.new(

@@ -10,6 +10,9 @@ var Show  = (function() {
   var $modalChangeRecognitionDate;
   var $modalUploadProfilePicture;
   var $modalUploadSignature;
+  var $modalDeleteProfilePicture;
+  var $modalDeleteSignature;
+  var $modalRegister;
   var $btnGenerateAccessToken;
   var $btnGenerateSignature;
   var $btnClearSignature;
@@ -20,9 +23,13 @@ var Show  = (function() {
   var $btnCreateSurvey;
   var $btnConfirmCreateSurvey;
   var $btnDelete;
+  var $btnDeleteProfilePicture;
+  var $btnDeleteSignature;
   var $btnConfirmDelete;
   var $btnUnlock;
   var $btnConfirmUnlock;
+  var $btnRegister;
+  var $btnConfirmRegister;
   var $btnRestore;
   var $btnConfirmRestore;
   var $btnGenerateMissingAccounts;
@@ -30,6 +37,8 @@ var Show  = (function() {
   var $btnChangeRecognitionDate;
   var $btnConfirmChangeMemberType;
   var $btnConfirmChangeRecognitionDate;
+  var $btnConfirmDeleteProfilePicture;
+  var $btnConfirmDeleteSignature;
   var $btnUploadProfilePicture;
   var $btnConfirmUploadProfilePicture;
   var $btnUploadSignature;
@@ -60,7 +69,10 @@ var Show  = (function() {
   var _urlChangeRecognitionDate   = "/api/v1/members/change_recognition_date";
   var _urlResignFromInsurance     = "/api/v1/members/resign";
   var _urlUploadProfilePicture    = "/api/v1/members/upload_profile_picture";
+  var _urlDeleteProfilePicture    = "/api/v1/members/delete_profile_picture";
   var _urlUploadSignature         = "/api/v1/members/upload_signature";
+  var _urlDeleteSignature         = "/api/v1/members/delete_signature";
+  var _urlRegister                = "/api/v1/members/register";
   var _memberId;
   var _authenticityToken;
 
@@ -81,6 +93,9 @@ var Show  = (function() {
     $modalChangeRecognitionDate       = $("#modal-change-recognition-date");
     $modalUploadProfilePicture        = $("#modal-upload-profile-picture");
     $modalUploadSignature             = $("#modal-upload-signature");
+    $modalDeleteProfilePicture        = $("#modal-delete-profile-picture");
+    $modalDeleteSignature             = $("#modal-delete-signature");
+    $modalRegister                    = $("#modal-register");
     $btnGenerateAccessToken           = $("#btn-generate-access-token");
     $btnConfirmGenerateAccessToken    = $("#btn-confirm-generate-access-token");
     $btnConfirmSignature              = $("#btn-confirm-signature");
@@ -91,7 +106,12 @@ var Show  = (function() {
     $btnConfirmCreateSurvey           = $("#btn-confirm-create-survey");
     $btnConfirmNewLoan                = $("#btn-confirm-new-loan");
     $btnDelete                        = $("#btn-delete");
+    $btnDeleteProfilePicture          = $("#btn-delete-profile-picture");
+    $btnDeleteSignature               = $("#btn-delete-signature");
     $btnConfirmDelete                 = $("#btn-confirm-delete");
+    $btnConfirmDeleteProfilePicture   = $("#btn-confirm-delete-profile-picture");
+    $btnRegister                      = $("#btn-register");
+    $btnConfirmRegister               = $("#btn-confirm-register");
     $btnUnlock                        = $("#btn-unlock");
     $btnRestore                       = $("#btn-restore");
     $btnConfirmRestore                = $("#btn-confirm-restore");
@@ -114,6 +134,7 @@ var Show  = (function() {
     $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
     $btnUploadProfilePicture          = $("#btn-upload-profile-picture");
     $btnConfirmUploadProfilePicture   = $("#btn-confirm-upload-profile-picture");
+    $btnConfirmDeleteSignature        = $("#btn-confirm-delete-signature");
     $inputDateResigned                = $("#input-date-resigned");
     $inputReason                      = $("#input-reason");
 
@@ -122,6 +143,145 @@ var Show  = (function() {
   }
 
   var _bindEvents = function() {
+    $btnRegister.on("click", function() {
+      $message.html("");
+      $modalRegister.modal("show");
+    });
+
+    $btnConfirmRegister.on("click", function() {
+      $message.html("Registering...");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmRegister.prop("disabled", true);
+
+      $.ajax({
+        url: _urlRegister,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).errors.full_messages;
+            console.log(errors);
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmRegister.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnDeleteSignature.on("click", function() {
+      $message.html("");
+      $modalDeleteSignature.modal("show");
+    });
+
+    $btnConfirmDeleteSignature.on("click", function() {
+      $message.html("Deleting...");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmDeleteSignature.prop("disabled", true);
+
+      $.ajax({
+        url: _urlDeleteSignature,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmDeleteSignature.prop("disabled", false);
+          }
+        }
+      });
+    });
+
+    $btnDeleteProfilePicture.on("click", function() {
+      $message.html("");
+      $modalDeleteProfilePicture.modal("show");
+    });
+
+    $btnConfirmDeleteProfilePicture.on("click", function() {
+      $message.html("Deleting...");
+
+      var data  = {
+        id: _memberId,
+        authenticity_token: _authenticityToken
+      }
+
+      $btnConfirmDeleteProfilePicture.prop("disabled", true);
+
+      $.ajax({
+        url: _urlDeleteProfilePicture,
+        method: 'POST',
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.reload();
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+            console.log(err);
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmDeleteProfilePicture.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnUploadSignature.on("click", function() {
       $message.html("");
       $modalUploadSignature.modal("show");

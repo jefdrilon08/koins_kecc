@@ -1,3 +1,4 @@
+= title
 = render partial: "index_header"
 
 .container-fluid
@@ -6,7 +7,7 @@
       .card
         .card-body
           = render partial: "index_filter"
-          - if @membership_payment_collections.size > 0
+          - if @membership_payment_collections.any?
             = render partial: "index_list", locals: { membership_payment_collections: @membership_payment_collections }
             = paginate @membership_payment_collections
           - else

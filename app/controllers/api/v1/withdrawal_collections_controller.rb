@@ -20,7 +20,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::WithdrawalCollections::RemoveMember.new(
@@ -42,7 +42,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           o = ::WithdrawalCollections::AddMember.new(
@@ -104,7 +104,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: errors, status: 400
         else
           ::WithdrawalCollections::Approve.new(
@@ -132,7 +132,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:messages].size > 0
+        if errors[:messages].any?
           render json: { errors: errors }, status: 400
         else
           withdrawal_collection = ::WithdrawalCollections::ModifyTransactionRecord.new(
@@ -157,7 +157,7 @@ module Api
                     config: config
                   ).execute!
 
-        if errors[:full_messages].size > 0
+        if errors[:full_messages].any?
           render json: errors, status: 400
         else
           withdrawal_collection = ::WithdrawalCollections::CreateWithdrawalCollection.new(

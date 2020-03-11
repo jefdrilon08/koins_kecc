@@ -16,7 +16,7 @@ class Member < ApplicationRecord
     "transferred",
     "cleared"
   ]
-  INSURANCE_STATUS = ["inforce", "lapsed", "resigned", "dormant", "pending", "cleared"]
+  INSURANCE_STATUS = ["inforce", "lapsed", "resigned", "dormant", "pending", "cleared", "archived"]
   MEMBER_TYPES = ["Regular", "GK", "Kaagapay"]
 
   belongs_to :center
@@ -64,11 +64,13 @@ class Member < ApplicationRecord
   scope :active_and_resigned, -> { where(status: ["active", "resigned"]).order("last_name ASC") }
   scope :active_and_resigned_and_pending, -> { where(status: ["active", "resigned", "pending"]).order("last_name ASC") }
   scope :returning, -> { where("status = ? AND previous_date_resigned IS NOT NULL", "active").order("last_name ASC") }
+  scope :insurance_resigned, -> { where(insurance_status: "resigned").order("last_name ASC") }
+  scope :insurance_active, -> { where(status: "active", insurance_status: ["inforce", "lapsed"]).order("last_name ASC") }
 
   before_validation :load_defaults
 
   def is_returning?
-    self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].size > 0))
+    self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].any?))
   end
   
   def check_name
@@ -99,22 +101,22 @@ class Member < ApplicationRecord
     if self.profile_picture.attached? and self.profile_picture.representable?
       return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
     else
-      "http://#{ENV['HOST']}/#{ActionController::Base.helpers.asset_path('missing_profile_picture.png')}"
+      ActionController::Base.helpers.asset_url("missing_profile_picture.png")
     end
   end
 
   def signature_url
-    if self.signature_file.attached? and self.signature_file.representable?
+    if self.signature_file.attached?
       return rails_blob_path(self.signature_file, disposition: "attachment", only_path: true)
     end
   end
 
   def has_signature?
-    self.signature_file.attached? and self.signature_file.representable?
+    self.signature_file.attached?
   end
 
   def full_name_titleize
-    "#{last_name.titleize}, #{first_name.titleize} #{middle_name.titleize}"  
+    "#{last_name.try(:titleize)}, #{first_name.try(:titleize)} #{middle_name.try(:titleize)}"  
   end
 
   def resigned?
@@ -306,7 +308,7 @@ class Member < ApplicationRecord
   end
 
   def full_name_formatted
-    "#{first_name.titleize} #{middle_name.titleize} #{last_name.titleize}"  
+    "#{first_name.try(:titleize)} #{middle_name.try(:titleize)} #{last_name.try(:titleize)}"  
   end
 
  def spouse_age

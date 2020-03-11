@@ -90,7 +90,7 @@ module InsuranceFundTransferCollections
                 ).execute!
 
         @insurance_fund_transfer_collection.update!(
-          data: @data
+          data: data
         )
       end
 

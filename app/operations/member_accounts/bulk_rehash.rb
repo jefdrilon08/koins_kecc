@@ -1,8 +1,11 @@
 module MemberAccounts
   class BulkRehash
-    def initialize(config:)
+    attr_accessor :account_subtype
+
+    def initialize(config:, account_subtype: nil)
       @config = config
       @branch = @config[:branch]
+      @account_subtype  = account_subtype
     end
 
     def execute!
@@ -27,10 +30,12 @@ module MemberAccounts
                         ending_balance  = (beginning_balance - t.fetch("amount").to_f.round(2)).to_f.round(2)
                       end
 
-                      data  = {
-                        beginning_balance: beginning_balance,
-                        ending_balance: ending_balance
-                      }
+                      data  = JSON.parse(t.fetch("data"))
+                      data["beginning_balance"] = beginning_balance
+                      data["ending_balance"]    = ending_balance
+                      
+                      # WORKAROUND: Do not save particulars
+                      data["accounting_entry_particular"] = ""
 
                       beginning_balance = ending_balance
 
@@ -86,7 +91,8 @@ module MemberAccounts
                     (account_transactions.data->>'beginning_balance')::float AS beginning_balance,
                     account_transactions.amount,
                     (account_transactions.data->>'ending_balance')::float AS ending_balance,
-                    account_transactions.transaction_type
+                    account_transactions.transaction_type,
+                    account_transactions.data AS data
                   FROM
                     member_accounts
                   INNER JOIN

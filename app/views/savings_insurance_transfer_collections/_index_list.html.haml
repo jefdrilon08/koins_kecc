@@ -1,0 +1,47 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+      %th
+        Collection Date
+      %th
+        Date Approved
+      %th
+        Status
+      %th
+        Savings Type
+      %th
+        Insurance Type
+      %th.text-right
+        Total Amount
+  %tbody
+    - @savings_insurance_transfer_collections.each do |o|
+      %tr
+        %td.text-center
+          = link_to savings_insurance_transfer_collection_path(o) do
+            .fa.fa-search
+        %td
+          #{o.collection_date.strftime("%B %d, %Y")}
+        %td
+          #{o.date_approved.try(:strftime, "%B %d, %Y")}
+        %td
+          - if o.pending?
+            .badge.badge-danger
+              Pending
+          - elsif o.approved?
+            .badge.badge-success
+              Approved
+          - elsif o.error?
+            .badge.badge-danger
+              ERROR
+          - elsif o.processing?
+            .badge.badge-info
+              Processing
+        %td
+          #{o.data["savings_subtype"]}
+        %td
+          #{o.data["insurance_subtype"]}
+        %td.text-right
+          #{number_to_currency(o.total_amount, unit: '')}
+
+= paginate @savings_insurance_transfer_collections

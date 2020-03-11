@@ -99,6 +99,27 @@ class ExportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def members_with_beneficiaries_excel
+    @start_date = params[:start_date].try(:to_date)
+    @end_date   = params[:end_date].try(:to_date)
+    @branch_id  = params[:branch]
+    @branch     = Branch.where(id: @branch_id).first
+
+    if !@start_date.nil? && !@end_date.nil? && !@branch_id.nil?
+      members       = Member.insurance_active.where("branch_id = ? AND data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ?", @branch.id, @start_date, @end_date).order("created_at asc")
+    elsif !@branch_id.nil?
+      members       = Member.insurance_active.where("branch_id = ?", @branch.id).order("created_at asc")
+    else
+      members = Member.insurance_active
+    end    
+
+    excel         = Members::GenerateMembersWithBeneficiariesExcel.new(members: members, branch: @branch).execute!
+    filename      = "#{@branch.try(:to_s)}_members_with_beneficiaries.xlsx"
+    
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
   def billing_per_center
     center        = Center.where(id: params[:center_id]).first
     members       = Member.active.where(center_id: center.id).order("last_name ASC")

@@ -1,3 +1,5 @@
+= title
+
 %ol.breadcrumb
   %li.breadcrumb-item
     .fa.fa-money-check
@@ -15,43 +17,59 @@
     .col
       .card
         .card-body
-          %table#data-table.display.table.table-bordered.table-hover.table-sm
-            %thead
-              %tr
-                %th
-                  Name
-                %th
-                  Member Type
-                %th
-                  Date of Birth
-                %th
-                  Age
-                %th
-                  Branch
-                %th
-                  Center
-                %th
-                  LIF
-                %th
-                  RF
-            %tbody
-              - @members.each do |m|
+          .errors_template
+            #filter
+              = form_tag insurance_exit_age_members_path, html: { novalidate: true }, method: "GET", defaults: { wrapper_html: { class: 'form-group' }, input_html: { class: 'form-control simple_form' } } do
+                .row
+                  .col-md-6
+                    .form-group
+                      %label Branch 
+                      = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+                  .col-md-6
+                    .form-group
+                      %label Actions
+                      %br
+                      .ui.large.buttons
+                        = button_tag :submit, class: 'btn btn-primary' do
+                          .fa.fa-search
+                          Search
+            %table#data-table.display.table.table-bordered.table-hover.table-sm
+              %thead
                 %tr
-                  %td
-                    = link_to member_path(m) do 
-                      #{m.full_name}
-                  %td
-                    #{m.member_type}
-                  %td 
-                    #{m.date_of_birth}
-                  %td
-                    #{m.age}
-                  %td 
-                    #{m.branch.name}
-                  %td
-                    #{m.center.name}
-                  %td
-                    #{m.member_accounts.where(account_subtype: "Life Insurance Fund").first.try(:balance)}
-                  %td
-                    #{m.member_accounts.where(account_subtype: "Retirement Fund").first.try(:balance)}
+                  %th
+                    Name
+                  %th
+                    Member Type
+                  %th
+                    Date of Birth
+                  %th
+                    Age
+                  %th
+                    Branch
+                  %th
+                    Center
+                  %th
+                    LIF
+                  %th
+                    RF
+              %tbody
+                - @members.each do |m|
+                  %tr
+                    %td
+                      = link_to member_path(m) do 
+                        #{m.full_name}
+                    %td
+                      #{m.member_type}
+                    %td 
+                      #{m.date_of_birth}
+                    %td
+                      #{m.age}
+                    %td 
+                      #{m.branch.name}
+                    %td
+                      #{m.center.name}
+                    %td
+                      #{m.member_accounts.where(account_subtype: "Life Insurance Fund").first.try(:balance)}
+                    %td
+                      #{m.member_accounts.where(account_subtype: "Retirement Fund").first.try(:balance)}
 

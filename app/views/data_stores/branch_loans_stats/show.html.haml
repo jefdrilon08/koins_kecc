@@ -1,3 +1,4 @@
+= title @record.id
 = render partial: "show_header"
 
 .container-fluid
@@ -8,9 +9,9 @@
           - if @record.error?
             = render partial: "data_stores/error_page"
           - else
-            = render partial: "show_details"
+            = render partial: "show_details", locals: { record: @record }
             %hr
-            = render partial: "show_officer_details"
+            = render partial: "show_officer_details", locals: { record: @record }
 
 #parameters{ data: { id: "#{@record.id}" } }
 

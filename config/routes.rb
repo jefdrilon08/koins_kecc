@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   devise_for :users, skip: [:sessions]
 
@@ -6,8 +8,15 @@ Rails.application.routes.draw do
     delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
+  authenticate :user do
+    mount Sidekiq::Web => SIDEKIQ_WEB_PATH
+  end
+
+  # dashboard
+  get "/dashboard/finance", to: "pages#finance", as: :dashboard_finance
+
+  # insights
+  get "/insights", to: "pages#insights"
 
   # export tools page
   get "/export_tools", to: "pages#export_tools"
@@ -49,6 +58,7 @@ Rails.application.routes.draw do
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members
   get "/members_for_reinsurance", to: "pages#members_for_reinsurance", as: :members_for_reinsurance
+  get "/lapsed_members", to: "pages#lapsed_members", as: :lapsed_members
   get "/validations", to: "pages#validations", as: :validations
   get "/pages/validations_report", to: "pages#validations_report", as: :pages_validations_report
   get "/seriatim", to: "pages#seriatim", as: :seriatim
@@ -214,6 +224,9 @@ Rails.application.routes.draw do
   # CASH MANAGEMENT
   ################################
 
+  # Savings Insurance Transfers
+  resources :savings_insurance_transfer_collections, only: [:index, :show, :destroy]
+
   # Deposits
   resources :deposit_collections, only: [:index, :show, :destroy] do
     collection { post :upload }
@@ -258,7 +271,6 @@ Rails.application.routes.draw do
     delete "/patronage_refund/:id", to: "patronage_refund#destroy"
 
     get "/personal_funds", to: "personal_funds#index"
-    get "/personal_funds/turkey", to: "personal_funds#turkey"
     get "/personal_funds/:id", to: "personal_funds#show"
     delete "/personal_funds/:id", to: "personal_funds#destroy"
 
@@ -303,7 +315,6 @@ Rails.application.routes.draw do
     delete "/soa_loans/:id", to: "soa_loans#destroy"
 
     get "/soa_funds", to: "soa_funds#index"
-    get "/soa_funds/turkey", to: "soa_funds#turkey"
     get "/soa_funds/:id", to: "soa_funds#show"
     delete "/soa_funds/:id", to: "soa_funds#destroy"
 
@@ -361,6 +372,7 @@ Rails.application.routes.draw do
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
+  get "/exports/members_with_beneficiaries_excel", to: "exports#members_with_beneficiaries_excel", as: :export_members_with_beneficiaries_excel
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies
   get "/reports/personal_document", to: "reports#personal_document", as: :personal_document
   get "/reports/personal_document_reports", to: "reports#personal_document_reports", as: :personal_document_reports
@@ -388,4 +400,7 @@ Rails.application.routes.draw do
 
   # ACTIVITY LOGS
   resources :activity_logs, only: [:index]
+
+  # turkey tools
+  get "turkey", to: "turkey#index"
 end

@@ -3,7 +3,7 @@
   %small.text-muted
     Entry Point Loan Cycle Count: #{@member.entry_point_loan_cycle_count}
 
-- if @active_loans.size > 0
+- if @active_loans.any?
   %table.table.table-bordered.table-hover.table-sm
     %thead
       %tr
@@ -47,7 +47,7 @@
 %h6
   Pending Loans
 
-- if @pending_loans.size > 0
+- if @pending_loans.any?
   %table.table.table-bordered.table-hover.table-sm
     %thead
       %tr
@@ -90,7 +90,7 @@
 %hr
 %h6
   Paid Loans
-- if @paid_loans.size > 0
+- if @paid_loans.any?
   %table.table.table-bordered.table-hover.table-sm
     %thead
       %tr

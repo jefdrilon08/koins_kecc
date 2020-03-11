@@ -129,6 +129,8 @@ module Finance
       total_due         = @total_principal + @total_interest
       periodic_payment  = @emi
 
+      @schedule = @schedule.sort_by{ |h| -h[:interest] }
+
       return {
         schedule: @schedule,
         principal: @total_principal,

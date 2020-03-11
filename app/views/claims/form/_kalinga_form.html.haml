@@ -28,7 +28,7 @@
         = select_tag :reason_of_death, options_for_select(["Accidental Death", "Fire Assistance"], @claim.data["reason_of_death"]), id: 'reason-of-death', class: 'form-control'
   .col
     .form-group
-      %label
+      %label.col.control-label
         Amount
         = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
   .col

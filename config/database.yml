@@ -6,11 +6,11 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 20 } %>
   username: <%= ENV["KOINS_DATABASE_USERNAME"] %>
   password: <%= ENV["KOINS_DATABASE_PASSWORD"] %>
-  host: localhost
+  host: <%= ENV["KOINS_DATABASE_HOST"] %>
 
 development:
   <<: *default
-  database: koins_2_development
+  database: <%= ENV['KOINS_DATABASE_NAME'] %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -67,6 +67,6 @@ test:
 #
 production:
   <<: *default
-  database: koins_2_production
+  database: <%= ENV['KOINS_DATABASE_NAME'] %>
   username: <%= ENV['KOINS_DATABASE_USERNAME'] %>
   password: <%= ENV['KOINS_DATABASE_PASSWORD'] %>

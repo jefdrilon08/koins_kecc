@@ -1,3 +1,4 @@
+= title @member.full_name
 = render partial: "show_header"
 
 .container-fluid
@@ -19,6 +20,9 @@
 = render partial: "members/modals/resign_from_insurance"
 = render partial: "members/modals/upload_profile_picture"
 = render partial: "members/modals/upload_signature"
+= render partial: "members/modals/delete_profile_picture"
+= render partial: "members/modals/delete_signature"
+= render partial: "members/modals/register"
 = render partial: "templates/error_list"
 
 = javascript_include_tag "members/Show.js"

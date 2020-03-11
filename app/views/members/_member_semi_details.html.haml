@@ -5,6 +5,10 @@
       %center
         = link_to "#", id: "btn-upload-profile-picture" do
           .fa.fa-upload
+        - if @member.profile_picture.attached?
+          |
+          = link_to "#", id: "btn-delete-profile-picture" do
+            .fa.fa-times
       %h2
         #{@member.full_name}
       %span.text-muted
@@ -98,65 +102,76 @@
       = link_to "#", id: "btn-restore", class: "btn btn-danger btn-block" do
         .fa.fa-sync
         Balik Kasapi
-
-    %hr
-    %h6
-      Access Token
-    %div
-      - if @member.access_token.present?
-        %code
-          #{@member.access_token}
-      - else
-        %small
-          No access token
-    %br
-    #btn-generate-access-token.btn.btn-info.btn-block
-      .fa.fa-sync
-      Generate Access Token
-    %hr
-    %h6
-      Signature
-    %div
-      - if @member.has_signature?
-        %center
-          %hr
-          = image_tag "#{@member.signature_url}"
-          %hr
-      - else
-        %p
-          No signature
-      #btn-upload-signature.btn.btn-success.btn-block
-        .fa.fa-upload
-        Upload Signature
-    - if Settings.activate_microinsurance and @member.active? 
+    - if ["OJT"].exclude? current_user.roles.last
       %hr
       %h6
-        Resign from Insurance
+        Access Token
       %div
-        #btn-resign-from-insurance.btn.btn-danger.btn-block
-          .fa.fa-times
-          Resign from Insurance
-    - else 
+        - if @member.access_token.present?
+          %code
+            #{@member.access_token}
+        - else
+          %small
+            No access token
+        #btn-generate-access-token.btn.btn-info.btn-block
+          .fa.fa-sync
+          Generate Access Token
+      %br
       %hr
       %h6
-        Resignation
-      %div
-        = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
-          .fa.fa-times
-          Resign Member
-    - if @missing_accounts.size > 0
-      %hr
-      %h6
-        Generate Missing Accounts
-      #btn-generate-missing-accounts.btn.btn-warning.btn-block
+        Register My KOINS
+      %br
+      #btn-register.btn.btn-info.btn-block
         .fa.fa-sync
-        Generate Missing Accounts
-      .message
-    %hr
-    %h6
-      BLIP Form
-    %div
-      #btn.btn-warning.btn-block
-        = link_to member_blip_form_pdf_path(@member), target: "_blank", class: "btn btn-default btn-block" do
-          .fa.fa-download
-          Generate BLIP Form
+        Register Now
+      %hr
+      %h6
+        Signature
+      %div
+        - if @member.has_signature?
+          %center
+            %hr
+            = image_tag "#{@member.signature_url}"
+            %hr
+        - else
+          %p
+            No signature
+        #btn-upload-signature.btn.btn-success.btn-block
+          .fa.fa-upload
+          Upload Signature
+        - if @member.signature_file.attached?
+          = link_to "#", id: "btn-delete-signature", class: "btn btn-danger btn-block" do
+            .fa.fa-times
+            Delete Signature
+      - if Settings.activate_microinsurance and @member.active? 
+        %hr
+        %h6
+          Resign from Insurance
+        %div
+          #btn-resign-from-insurance.btn.btn-danger.btn-block
+            .fa.fa-times
+            Resign from Insurance
+      - else 
+        %hr
+        %h6
+          Resignation
+        %div
+          = link_to member_form_resignation_path(@member), class: 'btn btn-danger btn-block' do
+            .fa.fa-times
+            Resign Member
+      - if @missing_accounts.any?
+        %hr
+        %h6
+          Generate Missing Accounts
+        #btn-generate-missing-accounts.btn.btn-warning.btn-block
+          .fa.fa-sync
+          Generate Missing Accounts
+        .message
+      %hr
+      %h6
+        BLIP Form
+      %div
+        #btn.btn-warning.btn-block
+          = link_to member_blip_form_pdf_path(@member), target: "_blank", class: "btn btn-default btn-block" do
+            .fa.fa-download
+            Generate BLIP Form

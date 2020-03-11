@@ -2,6 +2,41 @@ class InsuranceAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @insurance_accounts = MemberAccount
+      .insurance
+      .includes(:branch, :member)
+      .where(branch_id: @branches.pluck(:id))
+
+    @insurance_accounts = @insurance_accounts.where(
+                            branch_id: @branches.pluck(:id)
+                          )
+
+    if params[:q].present?
+      @q  = params[:q]
+
+      @insurance_accounts = @insurance_accounts.joins(:member).where(
+                            "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+                            q: "%#{@q.upcase}%"
+                          )
+    end
+
+    if params[:subtype].present?
+      @subtype  = params[:subtype]
+
+      @insurance_accounts = @insurance_accounts.where(account_subtype: @subtype)
+    end
+
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+      @insurance_accounts = @insurance_accounts.where(branch_id: @branch.id)
+    end
+
+    if params[:center_id].present?
+      @center = Center.find(params[:center_id])
+      @insurance_accounts = @insurance_accounts.where(center_id: @center.id)
+    end
+
+    @insurance_accounts = @insurance_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
   end
 
   def show
@@ -9,7 +44,7 @@ class InsuranceAccountsController < ApplicationController
 
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @insurance_account.id
-                            ).order("transacted_at ASC")
+                            ).order("transacted_at ASC, updated_at ASC")
   end
 
   def claims_copy_pdf
@@ -22,8 +57,8 @@ class InsuranceAccountsController < ApplicationController
     @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member.id).first
 
     @payment_meta = Insurance::GenerateInsuranceAccountDetailsForLifAndRf.new(
-                      member: @member, 
-                      lif_insurance_account: @lif_insurance_account, 
+                      member: @member,
+                      lif_insurance_account: @lif_insurance_account,
                       rf_insurance_account: @rf_insurance_account
                     ).execute!
   end
@@ -31,11 +66,11 @@ class InsuranceAccountsController < ApplicationController
   def insurance_account_pdf
     @insurance_account = MemberAccount.find(params[:id])
     @insurance_account_transactions = AccountTransaction.where(
-                                        "subsidiary_id = ? AND amount > 0 AND status IN (?)", 
+                                        "subsidiary_id = ? AND amount > 0 AND status IN (?)",
                                         @insurance_account.id, ["approved", "reversed"]
                                       ).order("transacted_at ASC")
 
-  
+
     if params[:start_date].present? and params[:end_date].present?
       @start_date = params[:start_date]
       @end_date = params[:end_date]
@@ -60,7 +95,7 @@ class InsuranceAccountsController < ApplicationController
     file_name = orig_file_name_no_ext.delete! "insurance accounts"
     start_date_string = file_name.split("_").first
     end_date_string = file_name.split("_").last
-    
+
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).try(:to_date)
@@ -69,23 +104,23 @@ class InsuranceAccountsController < ApplicationController
       #   end_date = nil
       #   start_date = nil
       # end
-    else  
+    else
       end_date = nil
       start_date = nil
     end
-   
+
     CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
-      config = {  
+      config = {
         insurance_account: row.to_hash
       }
-      
+
       @errors = Insurance::ValidateInsuranceAccountsImportFromCsvFile.new(config: config).execute!
     end
 
     if !@errors.nil?
-      if @errors[:messages].size > 0
+      if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
-        
+
         ActivityLog.create!(
           content: content,
           activity_type: "upload",
@@ -95,7 +130,7 @@ class InsuranceAccountsController < ApplicationController
             end_date: end_date
           }
         )
-        
+
         redirect_to import_insurance_accounts_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
         Insurance::ImportInsuranceAccountsFromCsvFile.new(file: file).execute!
@@ -120,82 +155,7 @@ class InsuranceAccountsController < ApplicationController
         redirect_to members_path
       end
     else
-      redirect_to members_path
-    end    
-  end
-
-  def import_insurance_account_transactions
-    file = params[:file]
-    orig_file_name = file.original_filename
-    orig_file_name_no_ext = File.basename("#{orig_file_name}", ".*")
-    file_name = orig_file_name_no_ext.delete! "insurance account transactions"
-    start_date_string = file_name.split("_").first
-    end_date_string = file_name.split("_").last
-    
-    if !start_date_string.nil? && !end_date_string.nil?
-      # if start_date_string.include? "201"
-        end_date = DateTime.parse(end_date_string).try(:to_date)
-        start_date = DateTime.parse(start_date_string).try(:to_date)
-      # else
-      #   end_date = nil
-      #   start_date = nil
-      # end
-    else  
-      end_date = nil
-      start_date = nil
-    end
-
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
-      config = {  
-        insurance_account_transaction: row.to_hash
-      }
-      
-      @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
-    end
-
-    if @errors[:messages].size > 0
-      redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
-    else
-
-      file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
-
-      data_store  = DataStore.new(
-                      status: "processing",
-                      meta: {
-                        data_store_type: "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS",
-                        user: {
-                          id: current_user.id,
-                          username: current_user.username,
-                          email: current_user.email,
-                          first_name: current_user.first_name,
-                          last_name: current_user.last_name
-                        },
-                        time_start: Time.now,
-                        time_end: nil
-                      },
-                      data: {
-                        file_path_to_save: file_path_to_save,
-                        start_date: start_date,
-                        end_date: end_date
-                      }
-                    ) 
-
-      data_store.save!
-      File.write(file_path_to_save, file.read.force_encoding("UTF-8"))
-
-      args = {
-        file: file_path_to_save,
-        data_store_id: data_store.id
-      }
-
-      ProcessImportInsuranceAccountTransaction.perform_later(args)
-      flash[:success] = "Successfully Import Insurance Account Transactions For Members."
-
-      if !start_date.nil? && !end_date.nil?
-        content = "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
-      else
-        content = "#{current_user.full_name} successfully imported insurance account transactions."
-      end
+      content = "Successfully, but no insurance accounts uploaded!"
 
       ActivityLog.create!(
           content: content,
@@ -206,8 +166,123 @@ class InsuranceAccountsController < ApplicationController
             end_date: end_date
           }
         )
-      
-      redirect_to import_insurance_account_transactions_path
-    end  
+
+      redirect_to members_path
+    end
+  end
+
+  def import_insurance_account_transactions
+    file = params[:file]
+    orig_file_name = file.original_filename
+    orig_file_name_no_ext = File.basename("#{orig_file_name}", ".*")
+    file_name = orig_file_name_no_ext.delete! "insurance account transactions"
+    start_date_string = file_name.split("_").first
+    end_date_string = file_name.split("_").last
+
+    if !start_date_string.nil? && !end_date_string.nil?
+      # if start_date_string.include? "201"
+        end_date = DateTime.parse(end_date_string).try(:to_date)
+        start_date = DateTime.parse(start_date_string).try(:to_date)
+      # else
+      #   end_date = nil
+      #   start_date = nil
+      # end
+    else
+      end_date = nil
+      start_date = nil
+    end
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      config = {
+        insurance_account_transaction: row.to_hash
+      }
+
+      @errors = Insurance::ValidateInsuranceAccountTransactionsImportFromCsvFile.new(config: config).execute!
+    end
+
+    if !@errors.nil?
+      if @errors[:messages].any?
+        content = "ERROR: #{@errors[:messages]}!"
+
+        ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
+        redirect_to import_insurance_account_transactions_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
+      else
+
+        file_path_to_save = "#{Rails.root}/tmp/#{Time.now.to_i}-insurance-transactions.csv"
+
+        data_store  = DataStore.new(
+                        status: "processing",
+                        meta: {
+                          data_store_type: "IMPORT_INSURANCE_ACCOUNT_TRANSACTIONS",
+                          user: {
+                            id: current_user.id,
+                            username: current_user.username,
+                            email: current_user.email,
+                            first_name: current_user.first_name,
+                            last_name: current_user.last_name
+                          },
+                          time_start: Time.now,
+                          time_end: nil
+                        },
+                        data: {
+                          file_path_to_save: file_path_to_save,
+                          start_date: start_date,
+                          end_date: end_date
+                        }
+                      )
+
+        data_store.save!
+        File.write(file_path_to_save, file.read.force_encoding("UTF-8"))
+
+        args = {
+          file: file_path_to_save,
+          data_store_id: data_store.id
+        }
+
+        ProcessImportInsuranceAccountTransaction.perform_later(args)
+        flash[:success] = "Successfully Import Insurance Account Transactions For Members."
+
+        if !start_date.nil? && !end_date.nil?
+          content = "#{current_user.full_name} successfully imported insurance account transactions. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
+        else
+          content = "#{current_user.full_name} successfully imported insurance account transactions."
+        end
+
+        ActivityLog.create!(
+            content: content,
+            activity_type: "upload",
+            data: {
+              user_id: current_user.id,
+              start_date: start_date,
+              end_date: end_date
+            }
+          )
+
+        redirect_to import_insurance_account_transactions_path
+      end
+    else
+      content = "Successfully, but no insurance account transactions uploaded!"
+
+      ActivityLog.create!(
+          content: content,
+          activity_type: "upload",
+          data: {
+            user_id: current_user.id,
+            start_date: start_date,
+            end_date: end_date
+          }
+        )
+
+      redirect_to members_path
+    end
   end
 end

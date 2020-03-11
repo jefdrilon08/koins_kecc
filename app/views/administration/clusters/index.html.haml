@@ -5,7 +5,7 @@
     .col
       .card
         .card-body
-          - if @clusters.size > 0
+          - if @clusters.any?
 
             = render partial: "index_list"
           - else
