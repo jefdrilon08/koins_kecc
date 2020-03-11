@@ -1,4 +1,6 @@
+- @data = @record.data.with_indifferent_access
 = title @record.id
+
 #parameters{ data: { id: "#{@record.id}" } }
 = render partial: "show_header"
 .container-fluid

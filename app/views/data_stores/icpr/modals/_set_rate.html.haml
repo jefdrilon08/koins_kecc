@@ -13,17 +13,17 @@
               .form-group
                 %label
                   Equity Rate:
-                = number_field_tag :equity_interest_rate, @equity_interest_rate, class: 'form-control', id: 'input-equity-interest-rate'
+                = number_field_tag :equity_interest_rate, @data[:equity_interest_rate], class: 'form-control', id: 'input-equity-interest-rate'
             .col
               .form-group
                 %label
                   Savings Rate:
-                = number_field_tag :savings_rate, @savings_rate, class: 'form-control', id: 'input-savings-rate'
+                = number_field_tag :savings_rate, @data[:savings_rate], class: 'form-control', id: 'input-savings-rate'
             .col
               .form-group
                 %label
                   CBU Rate:
-                = number_field_tag :cbu_rate, @cbu_rate, class: 'form-control', id: 'input-cbu-rate'
+                = number_field_tag :cbu_rate, @data[:cbu_rate], class: 'form-control', id: 'input-cbu-rate'
           .message
       .modal-footer
         .controls
