@@ -49,6 +49,12 @@ CREATE INDEX manual_idx_15 ON activity_logs ((data->>'member_id'), created_at DE
 DROP INDEX manual_idx_16;
 CREATE INDEX manual_idx_16 ON accounting_entries (date_prepared);
 
+DROP INDEX manual_idx_17;
+CREATE INDEX manual_idx_17 ON accounting_entries (branch_id, date_posted) WHERE status = 'approved';
+
+DROP INDEX manual_idx_18;
+CREATE INDEX manual_idx_18 ON journal_entries (accounting_entry_id, post_type, accounting_code_id)
+
 -- Get index sizes
-\di+ tbl*;
+\di+ manual_idx_*;
 ```

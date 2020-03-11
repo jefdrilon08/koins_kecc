@@ -1,303 +1,238 @@
 module Accounting
+  # Test in console:
+  #
+  # x = Accounting::FetchTrialBalance.new(config: { start_date: 1.year.ago, end_date: Date.today, branch: Branch.first }).execute!; { total_beginning_debit: x[:total_beginning_debit], total_beginning_credit: x[:total_beginning_credit], total_current_debit: x[:total_current_debit], total_current_credit: x[:total_current_credit], total_ending_debit: x[:total_ending_debit], total_ending_credit: x[:total_ending_credit] }
   class FetchTrialBalance
     def initialize(config:)
       @config           = config
       @start_date       = @config[:start_date]
       @end_date         = @config[:end_date]
-      @branch           = @config[:branch][:name]
-      
+      @branch           = @config[:branch]
       @accounting_fund  = @config[:accounting_fund]
+      @accounting_codes = {}
+    end
 
-      @data = {
-        start_date: @start_date,
-        end_date: @end_date,
-        branch: @branch,
-        beginning_assets: {},
-        beginning_liabilities: {},
-        beginning_equities: {},
-        beginning_income: {},
-        beginning_expenses: {},
-        beginning_fund_balances: {},
-        current_assets: {},
-        current_liabilities: {},
-        current_equities: {},
-        current_income: {},
-        current_expenses: {},
-        current_fund_balances: {},
-        ending_assets: {},
-        ending_liabilities: {},
-        ending_equities: {},
-        ending_income: {},
-        ending_expenses: {},
-        ending_fund_balances: {},
-        entries: [],
-        total_beginning_debit: 0.00,
-        total_beginning_credit: 0.00,
-        total_current_debit: 0.00,
-        total_current_credit: 0.00,
-        total_ending_debit: 0.00,
-        total_ending_credit: 0.00
-      }
+    def categories
+      %i[assets liabilities equities income expenses fund_balance]
     end
 
     def execute!
-      # Assets
-      @config[:category]  = "ASSETS"
+      data = {
+        start_date:             @start_date,
+        end_date:               @end_date,
+        branch:                 @branch,
+        entries:                [],
+        total_beginning_debit:  0.00,
+        total_beginning_credit: 0.00,
+        total_current_debit:    0.00,
+        total_current_credit:   0.00,
+        total_ending_debit:     0.00,
+        total_ending_credit:    0.00
+      }
 
-      @data[:beginning_assets]  = ::Accounting::FetchBeginningBalances.new(
-                                    config: @config
-                                  ).execute!
+      categories.each do |category|
+        data[:"#{category}_beginning"] = build_entries(category: category, phase: :beginning)
+        data[:"#{category}_current"]   = build_entries(category: category, phase: :current)
+        data[:"#{category}_ending"]    = build_entries(category: category, phase: :ending)
 
-      @data[:current_assets]  = ::Accounting::FetchCurrentBalances.new(
-                                  config: @config
-                                ).execute!
+        data.fetch(:"#{category}_beginning")[:entries].each_with_index do |entry, i|
+          entry = {
+            id:               entry.fetch(:accounting_code_id),
+            name:             entry.fetch(:accounting_code_name),
+            code:             entry.fetch(:accounting_code_code),
+            beginning_debit:  entry.fetch(:debit),
+            beginning_credit: entry.fetch(:credit),
+            current_debit:    data.fetch(:"#{category}_current")[:entries][i][:debit],
+            current_credit:   data.fetch(:"#{category}_current")[:entries][i][:credit],
+            ending_debit:     data.fetch(:"#{category}_ending")[:entries][i][:debit],
+            ending_credit:    data.fetch(:"#{category}_ending")[:entries][i][:credit],
+          }
 
-      @data[:ending_assets] = ::Accounting::FetchEndingBalances.new(
-                                config: @config
-                              ).execute!
+          if [
+            entry[:beginning_debit],
+            entry[:beginning_credit],
+            entry[:current_debit],
+            entry[:current_credit],
+            entry[:ending_debit],
+            entry[:ending_credit],
+          ].any? { |e| e > 0 }
+            data[:entries] << entry
+          end
+        end
 
-      # Liabilities
-      @config[:category]  = "LIABILITIES"
+        data[:total_beginning_debit]  += data.fetch(:"#{category}_beginning").fetch(:total_debit)
+        data[:total_beginning_credit] += data.fetch(:"#{category}_beginning").fetch(:total_credit)
+        data[:total_current_debit]    += data.fetch(:"#{category}_current").fetch(:total_debit)
+        data[:total_current_credit]   += data.fetch(:"#{category}_current").fetch(:total_credit)
+        data[:total_ending_debit]     += data.fetch(:"#{category}_ending").fetch(:total_debit)
+        data[:total_ending_credit]    += data.fetch(:"#{category}_ending").fetch(:total_credit)
+      end
 
-      @data[:beginning_liabilities] = ::Accounting::FetchBeginningBalances.new(
-                                        config: @config
-                                      ).execute!
+      data[:entries] << {
+        id:               "",
+        name:             "TOTAL",
+        beginning_debit:  data[:total_beginning_debit],
+        beginning_credit: data[:total_beginning_credit],
+        current_debit:    data[:total_current_debit],
+        current_credit:   data[:total_current_credit],
+        ending_debit:     data[:total_ending_debit],
+        ending_credit:    data[:total_ending_credit]
+      }
 
-      @data[:current_liabilities] = ::Accounting::FetchCurrentBalances.new(
-                                      config: @config
-                                    ).execute!
-
-      @data[:ending_liabilities]  = ::Accounting::FetchEndingBalances.new(
-                                      config: @config
-                                    ).execute!
-
-      # Equities
-      @config[:category]  = "EQUITIES"
-
-      @data[:beginning_equities]  = ::Accounting::FetchBeginningBalances.new(
-                                      config: @config
-                                    ).execute!
-
-      @data[:current_equities]  = ::Accounting::FetchCurrentBalances.new(
-                                    config: @config
-                                  ).execute!
-
-      @data[:ending_equities] = ::Accounting::FetchEndingBalances.new(
-                                  config: @config
-                                ).execute!
-
-      # Income
-      @config[:category]  = "INCOME"
-
-      @data[:beginning_income]  = ::Accounting::FetchBeginningBalances.new(
-                                    config: @config
-                                  ).execute!
-
-      @data[:current_income]  = ::Accounting::FetchCurrentBalances.new(
-                                  config: @config
-                                ).execute!
-
-      @data[:ending_income] = ::Accounting::FetchEndingBalances.new(
-                                config: @config
-                              ).execute!
-
-      # Expenses
-      @config[:category]  = "EXPENSES"
-
-      @data[:beginning_expenses]  = ::Accounting::FetchBeginningBalances.new(
-                                      config: @config
-                                    ).execute!
-
-      @data[:current_expenses]  = ::Accounting::FetchCurrentBalances.new(
-                                    config: @config
-                                  ).execute!
-
-      @data[:ending_expenses] = ::Accounting::FetchEndingBalances.new(
-                                  config: @config
-                                ).execute!
-
-      # Fund Balance
-      @config[:category]  = "FUND BALANCE"
-
-      @data[:beginning_fund_balances] = ::Accounting::FetchBeginningBalances.new(
-                                          config: @config
-                                        ).execute!
-
-      @data[:current_fund_balances] = ::Accounting::FetchCurrentBalances.new(
-                                        config: @config
-                                      ).execute!
-
-      @data[:ending_fund_balances]  = ::Accounting::FetchEndingBalances.new(
-                                        config: @config
-                                      ).execute!
-
-      @data[:total_beginning_debit] += @data[:beginning_assets][:total_beginning_debit] 
-      @data[:total_beginning_debit] += @data[:beginning_liabilities][:total_beginning_debit]
-      @data[:total_beginning_debit] += @data[:beginning_equities][:total_beginning_debit]
-      @data[:total_beginning_debit] += @data[:beginning_income][:total_beginning_debit]
-      @data[:total_beginning_debit] += @data[:beginning_expenses][:total_beginning_debit]
-      @data[:total_beginning_debit] += @data[:beginning_fund_balances][:total_beginning_debit]
-
-      @data[:total_beginning_credit] += @data[:beginning_assets][:total_beginning_credit]
-      @data[:total_beginning_credit] += @data[:beginning_liabilities][:total_beginning_credit]
-      @data[:total_beginning_credit] += @data[:beginning_equities][:total_beginning_credit]
-      @data[:total_beginning_credit] += @data[:beginning_income][:total_beginning_credit]
-      @data[:total_beginning_credit] += @data[:beginning_expenses][:total_beginning_credit]
-      @data[:total_beginning_credit] += @data[:beginning_fund_balances][:total_beginning_credit]
-
-      @data[:total_current_debit] += @data[:current_assets][:total_current_debit] 
-      @data[:total_current_debit] += @data[:current_liabilities][:total_current_debit]
-      @data[:total_current_debit] += @data[:current_equities][:total_current_debit]
-      @data[:total_current_debit] += @data[:current_income][:total_current_debit]
-      @data[:total_current_debit] += @data[:current_expenses][:total_current_debit]
-      @data[:total_current_debit] += @data[:current_fund_balances][:total_current_debit]
-
-      @data[:total_current_credit] += @data[:current_assets][:total_current_credit]
-      @data[:total_current_credit] += @data[:current_liabilities][:total_current_credit]
-      @data[:total_current_credit] += @data[:current_equities][:total_current_credit]
-      @data[:total_current_credit] += @data[:current_income][:total_current_credit]
-      @data[:total_current_credit] += @data[:current_expenses][:total_current_credit]
-      @data[:total_current_credit] += @data[:current_fund_balances][:total_current_credit]
-
-      @data[:total_ending_debit] += @data[:ending_assets][:total_ending_debit] 
-      @data[:total_ending_debit] += @data[:ending_liabilities][:total_ending_debit]
-      @data[:total_ending_debit] += @data[:ending_equities][:total_ending_debit]
-      @data[:total_ending_debit] += @data[:ending_income][:total_ending_debit]
-      @data[:total_ending_debit] += @data[:ending_expenses][:total_ending_debit]
-      @data[:total_ending_debit] += @data[:ending_fund_balances][:total_ending_debit]
-
-      @data[:total_ending_credit] += @data[:ending_assets][:total_ending_credit]
-      @data[:total_ending_credit] += @data[:ending_liabilities][:total_ending_credit]
-      @data[:total_ending_credit] += @data[:ending_equities][:total_ending_credit]
-      @data[:total_ending_credit] += @data[:ending_income][:total_ending_credit]
-      @data[:total_ending_credit] += @data[:ending_expenses][:total_ending_credit]
-      @data[:total_ending_credit] += @data[:ending_fund_balances][:total_ending_credit]
-
-      build_entries!
-
-      @data
+      data
     end
 
     private
 
-    def build_entries!
-      @data[:beginning_assets][:beginning_entries].each_with_index do |o, i|
-        entry = {
-          id: o[:accounting_code][:id],
-          name: o[:accounting_code][:name],
-          code: o[:accounting_code][:code],
-          beginning_debit: o[:dr_amount],
-          beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_assets][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_assets][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_assets][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_assets][:ending_entries][i][:cr_amount]
-        }
+    def set_closing_date(phase)
+      latest_closing_record = DataStore
+        .year_end_closings
+        .where("status = ? AND meta->>'branch_id' = ?", "closed", @branch.id)
+        .order("created_at DESC")
+        .first
 
-        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
-          @data[:entries] << entry
-        end
+      if latest_closing_record.present?
+        @closing_date = latest_closing_record.meta["closing_date"].to_date
       end
 
-      @data[:beginning_liabilities][:beginning_entries].each_with_index do |o, i|
-        entry = {
-          id: o[:accounting_code][:id],
-          name: o[:accounting_code][:name],
-          code: o[:accounting_code][:code],
-          beginning_debit: o[:dr_amount],
-          beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_liabilities][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_liabilities][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_liabilities][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_liabilities][:ending_entries][i][:cr_amount]
-        }
+      if phase == :beginning
+        if @accounting_fund.present?
+          latest_closing_entry = AccountingEntry
+            .year_end_closing
+            .where(accounting_fund_id: @accounting_fund.id)
+            .order("date_posted DESC")
+            .first
+        else
+          latest_closing_entry = AccountingEntry
+            .year_end_closing
+            .order("date_posted DESC")
+            .first
+        end
 
-        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
-          @data[:entries] << entry
+        if latest_closing_entry.present?
+          @closing_date = latest_closing_entry.date_posted
         end
       end
+    end
 
-      @data[:beginning_equities][:beginning_entries].each_with_index do |o, i|
-        entry = {
-          id: o[:accounting_code][:id],
-          name: o[:accounting_code][:name],
-          code: o[:accounting_code][:code],
-          beginning_debit: o[:dr_amount],
-          beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_equities][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_equities][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_equities][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_equities][:ending_entries][i][:cr_amount]
-        }
+    def build_entries(category:, phase:)
+      puts "--> build_entries(category: #{category}, phase: #{phase})"
+      is_yearly = case category
+                  when :assets       then false
+                  when :liabilities  then false
+                  when :equities     then false
+                  when :fund_balance then false
+                  when :income       then true
+                  when :expenses     then true
+                  else raise "Invalid category, given #{category}"
+                  end
 
-        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
-          @data[:entries] << entry
-        end
+      # Cache accounting codes
+      puts "--> @accounting_codes: #{@accounting_codes[category]}"
+      @accounting_codes[category] ||= AccountingCode.send(category)
+
+      set_closing_date(phase)
+
+      compute_totals(phase, accounting_codes: @accounting_codes[category], is_yearly: is_yearly)
+    end
+
+    def closing_date_is_within_range?
+      @closing_date.present? && (@start_date <= @closing_date) && (@end_date <= @closing_date)
+    end
+
+    def group_by_code_and_amount(phase, entries, is_yearly:)
+      puts "--> group_by_code_and_amount"
+      is_beginning_and_overall = !is_yearly && phase == :beginning
+      if closing_date_is_within_range? && !is_beginning_and_overall
+        entries = entries.where("accounting_entries.data->'is_closing_record' IS NULL")
       end
 
-      @data[:beginning_income][:beginning_entries].each_with_index do |o, i|
-        entry = {
-          id: o[:accounting_code][:id],
-          name: o[:accounting_code][:name],
-          code: o[:accounting_code][:code],
-          beginning_debit: o[:dr_amount],
-          beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_income][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_income][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_income][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_income][:ending_entries][i][:cr_amount]
-        }
+      entries.group("journal_entries.accounting_code_id").sum("journal_entries.amount")
+    end
 
-        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
-          @data[:entries] << entry
+    def filter_entries(phase, post_type, accounting_fund_id = nil, accounting_code_ids:, is_yearly:)
+      entries = AccountingEntry
+        .joins(:journal_entries)
+        .where(
+          status: "approved",
+          branch_id: @branch.id,
+          journal_entries: { post_type: post_type, accounting_code_id: accounting_code_ids },
+        )
+      entries = entries.where(accounting_fund_id: accounting_fund_id) if accounting_fund_id
+      case phase
+      when :beginning
+        entries = entries.where("date_posted < ?", @start_date)
+        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @start_date.year) if is_yearly
+      when :current
+        entries = entries.where("date_posted >= ? AND date_posted <= ?", @start_date, @end_date)
+        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @start_date.year) if is_yearly
+      when :ending
+        entries = entries.where("date_posted <= ?", @end_date)
+        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @end_date.year) if is_yearly
+      else
+        raise "Invalid phase, given #{phase}"
+      end
+      entries
+    end
+
+    def compute_totals(phase, accounting_codes:, is_yearly:)
+      dr_entries = filter_entries(phase, "DR", @accounting_fund.try(:id), accounting_code_ids: accounting_codes.ids, is_yearly: is_yearly)
+      cr_entries = filter_entries(phase, "CR", @accounting_fund.try(:id), accounting_code_ids: accounting_codes.ids, is_yearly: is_yearly)
+
+      dr_hash = group_by_code_and_amount(phase, dr_entries, is_yearly: is_yearly)
+      cr_hash = group_by_code_and_amount(phase, cr_entries, is_yearly: is_yearly)
+
+      total_debit = 0.00
+      total_credit = 0.00
+
+      entries = accounting_codes.map do |accounting_code|
+        debit = 0.00
+        credit = 0.00
+
+        if dr_hash.has_key? accounting_code.id.to_s
+          debit = dr_hash[accounting_code.id.to_s].to_f.round(2)
         end
+
+        if cr_hash.has_key? accounting_code.id.to_s
+          credit = cr_hash[accounting_code.id.to_s].to_f.round(2)
+        end
+
+        if phase != :current
+          if accounting_code.debit_entry?
+            debit = (debit - credit).round(2)
+            credit = 0.00
+
+            if debit < 0
+              credit = debit * -1
+              debit = 0.00
+            end
+          elsif accounting_code.credit_entry?
+            credit = (credit - debit).round(2)
+            debit = 0.00
+
+            if credit < 0
+              debit = credit * -1
+              credit = 0.00
+            end
+          end
+        end
+
+        total_debit += debit
+        total_credit += credit
+
+        {
+          accounting_code_id: accounting_code.id,
+          accounting_code_name: accounting_code.name,
+          accounting_code_code: accounting_code.code,
+          debit: debit,
+          credit: credit,
+        }
       end
 
-      @data[:beginning_expenses][:beginning_entries].each_with_index do |o, i|
-        entry = {
-          id: o[:accounting_code][:id],
-          name: o[:accounting_code][:name],
-          code: o[:accounting_code][:code],
-          beginning_debit: o[:dr_amount],
-          beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_expenses][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_expenses][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_expenses][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_expenses][:ending_entries][i][:cr_amount]
-        }
-
-        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
-          @data[:entries] << entry
-        end
-      end
-
-      @data[:beginning_fund_balances][:beginning_entries].each_with_index do |o, i|
-        entry = {
-          id: o[:accounting_code][:id],
-          name: o[:accounting_code][:name],
-          code: o[:accounting_code][:code],
-          beginning_debit: o[:dr_amount],
-          beginning_credit: o[:cr_amount],
-          current_debit: @data[:current_fund_balances][:current_entries][i][:dr_amount],
-          current_credit: @data[:current_fund_balances][:current_entries][i][:cr_amount],
-          ending_debit: @data[:ending_fund_balances][:ending_entries][i][:dr_amount],
-          ending_credit: @data[:ending_fund_balances][:ending_entries][i][:cr_amount]
-        }
-
-        if entry[:beginning_debit] > 0 or entry[:beginning_credit] > 0 or entry[:current_debit] > 0 or entry[:current_credit] > 0 or entry[:ending_debit] > 0 or entry[:ending_credit] > 0
-          @data[:entries] << entry
-        end
-      end
-
-      @data[:entries] << {
-        id: "",
-        name: "TOTAL",
-        beginning_debit: @data[:total_beginning_debit],
-        beginning_credit: @data[:total_beginning_credit],
-        current_debit: @data[:total_current_debit],
-        current_credit: @data[:total_current_credit],
-        ending_debit: @data[:total_ending_debit],
-        ending_credit: @data[:total_ending_credit]
+      {
+        total_debit: total_debit.round(2),
+        total_credit: total_credit.round(2),
+        entries: entries,
       }
     end
   end
