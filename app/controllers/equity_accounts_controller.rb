@@ -36,7 +36,7 @@ class EquityAccountsController < ApplicationController
   end
 
   def show
-    @equity_account       = MemberAccount.equities.where(id: params[:id]).first
+    @equity_account       = MemberAccount.equities.find(params[:id])
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @equity_account.id
                             ).order("transacted_at ASC, updated_at ASC")

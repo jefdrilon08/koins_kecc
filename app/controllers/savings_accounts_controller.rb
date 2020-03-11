@@ -41,7 +41,7 @@ class SavingsAccountsController < ApplicationController
   end
 
   def show
-    @savings_account  = MemberAccount.savings.where(id: params[:id]).first
+    @savings_account  = MemberAccount.savings.find(params[:id])
 
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @savings_account.id

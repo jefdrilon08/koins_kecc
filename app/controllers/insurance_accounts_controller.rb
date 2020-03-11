@@ -40,7 +40,7 @@ class InsuranceAccountsController < ApplicationController
   end
 
   def show
-    @insurance_account  = MemberAccount.insurance.where(id: params[:id]).first
+    @insurance_account  = MemberAccount.insurance.find(params[:id])
 
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @insurance_account.id
