@@ -2,7 +2,6 @@ namespace :diagnosis do
   task :member_accounts => :environment do
     branch          = Branch.find(ENV['BRANCH_ID'])
     account_subtype = ENV['ACCOUNT_SUBTYPE']
-    batch_size      = ENV['BATCH_SIZE'].try(:to_id) || 100
     repair          = ENV['REPAIR'].present? ? true : false
 
     invalid_accounts = []
