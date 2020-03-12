@@ -53,7 +53,7 @@ export default class TrialBalanceComponent extends React.Component {
       url: "/api/v1/branches",
       method: "GET",
       data: {
-        
+        b: true        
       },
       dataType: 'json',
       success: function(response) {

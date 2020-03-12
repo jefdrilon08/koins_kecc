@@ -44,3 +44,6 @@
             - elsif o.approved?
               .badge.badge-success
                 Approved
+            - elsif o.processing?
+              .badge.badge-info
+                Processing

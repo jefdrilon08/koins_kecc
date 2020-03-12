@@ -1,7 +1,8 @@
 class MembershipPaymentCollection < ApplicationRecord
   STATUSES  = [
     "pending",
-    "approved"
+    "approved",
+    "processing"
   ]
 
   belongs_to :center
@@ -120,5 +121,9 @@ class MembershipPaymentCollection < ApplicationRecord
 
   def approved?
     self.status == "approved"
+  end
+
+  def processing?
+    self.status == "processing"
   end
 end

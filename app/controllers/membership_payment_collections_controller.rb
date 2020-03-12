@@ -32,12 +32,17 @@ class MembershipPaymentCollectionsController < ApplicationController
 
   def show
     @membership_payment_collection  = MembershipPaymentCollection.find(params[:id])
-    @data     = @membership_payment_collection.data.with_indifferent_access
 
-    @activity_logs  = ActivityLog.where(
-                        "data ->> 'membership_payment_collection_id' = ?",
-                        @membership_payment_collection.id
-                      ).order("created_at DESC")
+    if @membership_payment_collection.processing?
+      redirect_to membership_payment_collections_path
+    else
+      @data     = @membership_payment_collection.data.with_indifferent_access
+
+      @activity_logs  = ActivityLog.where(
+                          "data ->> 'membership_payment_collection_id' = ?",
+                          @membership_payment_collection.id
+                        ).order("created_at DESC")
+    end
   end
 
   def destroy
