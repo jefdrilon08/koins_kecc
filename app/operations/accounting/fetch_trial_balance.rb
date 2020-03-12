@@ -173,7 +173,6 @@ module Accounting
       else
         raise "Invalid phase, given #{phase}"
       end
-
       entries
     end
 
