@@ -48,21 +48,15 @@ namespace :rehash do
   end
 
   task :member_account_by_branch => :environment do
-    members         = Member.active.where(
-                        branch_id: ENV['BRANCH_ID']
-                        )
+    batch_size  = ENV['BATCH_SIZE'].try(:to_i) || 10
 
-    member_accounts = MemberAccount.where(member_id: members.pluck(:id))
-                      
-    if ENV['ACCOUNT_TYPE'].present?
-      member_accounts = member_accounts.where(account_type: ENV["ACCOUNT_TYPE"])
-    end
-
-    # >>
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_accounts.pluck(:id), "approved")
-
-    member_accounts.each do |member_account|  
+    MemberAccount.where(
+      "branch_id = ? AND account_subtype = ?",
+      ENV['BRANCH_ID'],
+      ENV['ACCOUNT_SUBTYPE']
+    ).find_each(batch_size: batch_size) do |member_account|
       puts "Rehashing member_account #{member_account.id}..."
+      account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id = ? AND status = ?", member_account.id, "approved").order("transacted_at ASC")
 
       ::MemberAccounts::Rehash.new(
         member_account: member_account, account_transactions: account_transactions
