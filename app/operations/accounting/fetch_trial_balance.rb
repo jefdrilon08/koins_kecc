@@ -31,9 +31,11 @@ module Accounting
       }
 
       categories.each do |category|
-        data[:"#{category}_beginning"] = build_entries(category: category, phase: :beginning)
-        data[:"#{category}_current"]   = build_entries(category: category, phase: :current)
-        data[:"#{category}_ending"]    = build_entries(category: category, phase: :ending)
+        accounting_codes = AccountingCode.send(category)
+
+        data[:"#{category}_beginning"] = build_entries(category: category, phase: :beginning, accounting_codes: accounting_codes)
+        data[:"#{category}_current"]   = build_entries(category: category, phase: :current, accounting_codes: accounting_codes)
+        data[:"#{category}_ending"]    = build_entries(category: category, phase: :ending, accounting_codes: accounting_codes)
 
         data.fetch(:"#{category}_beginning")[:entries].each_with_index do |entry, i|
           entry = {
@@ -115,7 +117,7 @@ module Accounting
       end
     end
 
-    def build_entries(category:, phase:)
+    def build_entries(category:, phase:, accounting_codes:)
       puts "--> build_entries(category: #{category}, phase: #{phase})"
       is_yearly = case category
                   when :assets       then false
@@ -127,13 +129,9 @@ module Accounting
                   else raise "Invalid category, given #{category}"
                   end
 
-      # Cache accounting codes
-      puts "--> @accounting_codes: #{@accounting_codes[category]}"
-      @accounting_codes[category] ||= AccountingCode.send(category)
-
       set_closing_date(phase)
 
-      compute_totals(phase, accounting_codes: @accounting_codes[category], is_yearly: is_yearly)
+      compute_totals(category, phase, accounting_codes: accounting_codes, is_yearly: is_yearly)
     end
 
     def closing_date_is_within_range?
@@ -150,15 +148,18 @@ module Accounting
       entries.group("journal_entries.accounting_code_id").sum("journal_entries.amount")
     end
 
-    def filter_entries(phase, post_type, accounting_fund_id = nil, accounting_code_ids:, is_yearly:)
+    def filter_entries(category, phase, post_type, accounting_fund_id = nil, is_yearly:)
       entries = AccountingEntry
-        .joins(:journal_entries)
+        .joins(journal_entries: :accounting_code)
         .where(
           status: "approved",
           branch_id: @branch.id,
-          journal_entries: { post_type: post_type, accounting_code_id: accounting_code_ids },
+          journal_entries: { post_type: post_type },
+          accounting_codes: { category: category.to_s.upcase.gsub("_", " ") },
         )
+
       entries = entries.where(accounting_fund_id: accounting_fund_id) if accounting_fund_id
+
       case phase
       when :beginning
         entries = entries.where("date_posted < ?", @start_date)
@@ -172,12 +173,13 @@ module Accounting
       else
         raise "Invalid phase, given #{phase}"
       end
+
       entries
     end
 
-    def compute_totals(phase, accounting_codes:, is_yearly:)
-      dr_entries = filter_entries(phase, "DR", @accounting_fund.try(:id), accounting_code_ids: accounting_codes.ids, is_yearly: is_yearly)
-      cr_entries = filter_entries(phase, "CR", @accounting_fund.try(:id), accounting_code_ids: accounting_codes.ids, is_yearly: is_yearly)
+    def compute_totals(category, phase, accounting_codes:, is_yearly:)
+      dr_entries = filter_entries(category, phase, "DR", @accounting_fund.try(:id), is_yearly: is_yearly)
+      cr_entries = filter_entries(category, phase, "CR", @accounting_fund.try(:id), is_yearly: is_yearly)
 
       dr_hash = group_by_code_and_amount(phase, dr_entries, is_yearly: is_yearly)
       cr_hash = group_by_code_and_amount(phase, cr_entries, is_yearly: is_yearly)

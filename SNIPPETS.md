@@ -55,6 +55,9 @@ CREATE INDEX manual_idx_17 ON accounting_entries (branch_id, date_posted) WHERE 
 DROP INDEX manual_idx_18;
 CREATE INDEX manual_idx_18 ON journal_entries (accounting_entry_id, post_type, accounting_code_id)
 
+DROP INDEX manual_idx_19;
+CREATE INDEX manual_idx_19 ON accounting_codes (category)
+
 -- Get index sizes
 \di+ manual_idx_*;
 ```
