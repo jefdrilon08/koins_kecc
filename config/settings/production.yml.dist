@@ -58,7 +58,7 @@ branch_config:
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
     #current_date: "2020-02-28"
