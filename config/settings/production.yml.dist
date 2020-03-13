@@ -40,7 +40,7 @@ branch_config:
     current_date: "2020-02-28"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
     current_date: "2020-02-28"
@@ -51,7 +51,7 @@ branch_config:
     current_date: "2020-02-28"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
     #current_date: "2020-02-28"
