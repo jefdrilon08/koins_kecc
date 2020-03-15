@@ -17,7 +17,8 @@
         .select("DISTINCT ON (member_id) member_id, date_paid")
         .where(member_id: members.pluck(:id), status: "paid")
         .order(member_id: :asc, date_paid: :desc)
-        .map { |r| [r.member_id, r.date_paid] }.to_h
+        .pluck(:id, :date_paid)
+        .to_h
     - members.each do |m, i|
       %tr
         %td
