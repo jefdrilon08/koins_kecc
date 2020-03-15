@@ -3,8 +3,9 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_action do
-    # XXX: Add a condition for showing this (see: https://github.com/MiniProfiler/rack-mini-profiler#access-control-in-non-development-environments)
-    Rack::MiniProfiler.authorize_request
+    if params[:rmp]
+      Rack::MiniProfiler.authorize_request
+    end
   end
 
   def load_defaults
