@@ -31,7 +31,7 @@
     = link_to member_account_validation_pdf_path(member_account_validation), target: "_blank", class: "btn btn-light btn-lg", id: "btn-print-pdf" do
       .fa.fa-print
       Print PDF  
-  - if role == "AO" || role == "MIS" || role == "OM" 
+  - if role == "AO" || role == "MIS" || role == "OM" || role == "REMOTE-FM" 
     = link_to "#", class: "btn btn-danger btn-lg", id: "btn-cancel" do
       .fa.fa-times
       Cancel

@@ -39,6 +39,86 @@ module Api
         end
       end
 
+      def trial_balance_excel
+        start_date      = params[:start_date].try(:to_date)
+        end_date        = params[:end_date].try(:to_date)
+        branch          = Branch.where(id: params[:branch_id]).first
+        accounting_fund = AccountingFund.where(id: params[:accounting_fund_id]).first
+
+        errors  = []
+
+        if start_date.blank?
+          errors << "Start date required"
+        end
+
+        if end_date.blank?
+          errors << "End date required"
+        end
+
+        # Check for closing entries
+        if start_date.present? and end_date.present? and branch.present?
+          latest_closing_record = DataStore.year_end_closings.where(
+                                    "status = ? AND meta->>'branch_id' = ?",
+                                    "closed",
+                                    branch.id
+                                  ).order(
+                                    "created_at ASC"
+                                  ).last
+
+          if latest_closing_record.present?
+            date_closed = latest_closing_record.meta["closing_date"].to_date
+
+            if start_date < date_closed and end_date > date_closed
+              errors << "Closing date #{date_closed} is in between start and end dates"
+            end
+          end
+
+          # Check according to accounting entry closing record
+          if accounting_fund.present?
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).where(accounting_fund_id: accounting_fund.id, branch_id: branch.id).order("date_posted DESC").first
+          else
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ? AND branch_id = ?", end_date, branch.id).order("date_posted DESC").first
+          end
+
+          if latest_closing_entry.present?
+            date_closed = latest_closing_entry.date_posted
+
+            if start_date < date_closed and end_date > date_closed
+              errors << "Closing date #{date_closed} is in between start and end dates"
+            end
+          end
+        end
+
+        if errors.any?
+          render json: { errors: errors }, status: 400
+        else
+          config  = {
+            start_date: start_date,
+            end_date: end_date,
+            branch: branch || "",
+            accounting_fund: accounting_fund || ""
+          }
+
+          data  = ::Accounting::FetchTrialBalance.new(
+                    config: config
+                  ).execute!
+        end
+
+        trial_balance_excel = ::Reports::TrialBalanceExcel.new(
+          start_date: start_date,
+          end_date: end_date,
+          branch: branch,
+          accounting_fund: accounting_fund,
+          data: data
+        ).execute!
+
+        filename= "trial_balance.xlsx"  
+
+        trial_balance_excel.serialize "#{Rails.root}/tmp/#{filename}"
+        send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}" , type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      end
+
+
       def fetch_trial_balance
         start_date      = params[:start_date].try(:to_date)
         end_date        = params[:end_date].try(:to_date)

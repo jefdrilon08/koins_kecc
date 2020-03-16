@@ -10,7 +10,8 @@ module Billings
 
     INSURANCE_SUBTYPES  = [
       "Life Insurance Fund",
-      "Retirement Fund"
+      "Retirement Fund",
+      "Hospital Income Insurance Plan"
     ]
 
     def initialize(config:)

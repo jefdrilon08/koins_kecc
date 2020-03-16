@@ -47,7 +47,7 @@ module Api
           user: current_user
         }
 
-        if ["MIS", "OAS", "REMOTE-OAS", "REMOTE-BK", "AO", "OM"].include? current_user.roles.last
+        if ["MIS", "OAS", "REMOTE-OAS", "REMOTE-BK", "REMOTE-FM", "AO", "OM"].include? current_user.roles.last
           errors  = MemberAccountValidations::ValidateMemberAccountValidationMemberForCancellation.new(
                      config: config
                     ).execute!

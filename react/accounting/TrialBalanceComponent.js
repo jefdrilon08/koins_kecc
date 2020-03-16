@@ -175,6 +175,54 @@ export default class TrialBalanceComponent extends React.Component {
     });
   }
 
+  handleExcelClicked() {
+    var context = this;
+    
+    context.setState({
+      isLoading: true
+    });
+
+    var start_date  = moment(context.state.start_date).format('YYYY-MM-DD');
+    var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
+
+    $.ajax({
+      url: "/api/v1/accounting/trial_balance_excel",
+      method: 'GET',
+      data: { 
+        start_date: start_date,
+        end_date: end_date,
+        branch_id: context.state.currentBranchId,
+        accounting_fund_id: context.state.currentAccountingFundId,
+        authenticity_token: context.props.authenticityToken
+      },
+      dataType: 'json',
+      success: function(response) {
+        console.log(response);
+        var data  = response.data;
+
+        context.setState({
+          isLoading: false,
+          data: data
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error generating excel!");
+
+        var errors  = JSON.parse(response.responseText).errors;
+
+        for(var i = 0; i < errors.length; i++) {
+          alert(errors[i]);
+        }
+
+        context.setState({
+          isLoading: false,
+          data: false
+        });
+      }
+    });
+  }
+
   renderTable() {
     var context = this;
     var state   = context.state;
@@ -395,6 +443,14 @@ export default class TrialBalanceComponent extends React.Component {
                 >
                   <span className="fa fa-print"/>
                   Print
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={context.handleExcelClicked.bind(this)}
+                  disabled={state.isLoading}
+                >
+                  <span className="fa fa-print"/>
+                  Excel
                 </button>
               </div>
             </div>
