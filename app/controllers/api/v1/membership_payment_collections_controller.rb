@@ -145,17 +145,14 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          begin
-            ActiveRecord::Base.transaction do
-              ::MembershipPaymentCollections::Approve.new(
-                config: config
-              ).execute!
-            end
+          membership_payment_collection.update!(status: "processing")
 
-            render json: { message: "ok" }
-          rescue Exception => e
-            render json: { errors: { full_messages: ["something went wrong"] } }
-          end
+          ProcessApproveMembershipPaymentCollection.perform_later({
+            id: membership_payment_collection.id,
+            user_id: current_user.id
+          })
+
+          render json: { message: "ok" }
         end
       end
 

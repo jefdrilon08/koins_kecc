@@ -5,7 +5,7 @@ module Api
 
       def overview
         as_of = params[:as_of].try(:to_date) || Date.today
-        json = Dashboard::BuildOverview.new(current_user: current_user, as_of: as_of).execute!
+        json = Dashboard::BuildOverview.new(branches: @branches, as_of: as_of).execute!
 
         render json: json
       end
@@ -27,12 +27,22 @@ module Api
                            @branches.first
                          end
 
-        rr_data = DataStore.repayment_rates.where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done").order("(meta->>'as_of')::date ASC").last
-        if rr_data.present?
-          branch_loans_stats = ::DataStores::BuildBranchLoanStatsFromRr.new(rr_data: rr_data.data.with_indifferent_access).execute!
-          watchlist          = ::DataStores::BuildWatchlistFromRr.new(rr_data: rr_data.data.with_indifferent_access).execute!
+        rr = DataStore
+          .repayment_rates
+          .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
+          .order("(meta->>'as_of')::date ASC")
+          .last
+
+        if rr.present?
+          branch_loans_stats = ::DataStores::BuildBranchLoanStatsFromRr.new(rr_data: rr.data.with_indifferent_access).execute!
+          watchlist          = ::DataStores::BuildWatchlistFromRr.new(records: rr.data["records"], as_of: rr.data["as_of"]).execute!
         end
-        member_counts = DataStore.member_counts.where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done").order("(meta->>'as_of')::date ASC").last
+
+        member_counts = DataStore
+          .member_counts
+          .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
+          .order("(meta->>'as_of')::date ASC")
+          .last
 
         render json: {
           branches:            branches_hash,

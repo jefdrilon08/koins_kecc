@@ -37,28 +37,28 @@ branch_config:
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
 
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
     #current_date: "2020-02-28"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-02-28"
+    #current_date: "2020-02-28"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
     #current_date: "2020-02-28"

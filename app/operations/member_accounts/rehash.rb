@@ -12,7 +12,7 @@ module MemberAccounts
                                   "amount > 0 AND subsidiary_id = ? AND status = ?",
                                   @member_account.id,
                                   "approved"
-                                ).order("transacted_at ASC")
+                                ).order("transacted_at ASC, updated_at ASC")
       end
     end
 

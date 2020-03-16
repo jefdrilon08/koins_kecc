@@ -3,26 +3,23 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_action do
-    # XXX: Add a condition for showing this (see: https://github.com/MiniProfiler/rack-mini-profiler#access-control-in-non-development-environments)
-    Rack::MiniProfiler.authorize_request
+    if params[:rmp]
+      Rack::MiniProfiler.authorize_request
+    end
   end
 
   def load_defaults
     @current_date = Date.today
 
     if user_signed_in?
-      # TODO: Only fetch user assigned branches
       @default_branch_name = Settings.try(:defaults).try(:default_branch).try(:name)
-      
-      if @default_branch_name.present?
-        @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name='#{@default_branch_name}', name DESC").reverse
-        
-      else
-        @branches = Branch.where(id: UserBranch.active.where(user_id: current_user.id).pluck(:branch_id)).order("name ASC")
-      end
+      @branches = Branch
+        .joins(user_branches: :user)
+        .where(user_branches: { active: true, user_id: @current_user.id })
+        .order("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC")
     end
   end
-  
+
   FOR_PDF_PATH = [
     "clip_claims",
     "claims",
