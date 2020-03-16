@@ -63,38 +63,48 @@ module Api
         end
 
         def queue
-          @data_store_type  = params[:data_store_type] || "PERSONAL_FUNDS"
-          @include_centers  = false
-          @record           = DataStore.personal_funds.where(id: params[:id]).first 
+          data_store_type = params[:data_store_type] || "PERSONAL_FUNDS"
+          record          = DataStore.personal_funds.where(id: params[:id]).first 
+          branch          = Branch.where(id: params[:branch_id]).first
+          as_of           = params[:as_of].try(:to_date)
 
-          if @record.blank?
-            @branch = Branch.find(params[:branch_id])
-            @as_of  = params[:as_of].to_date
+          errors  = ::DataStores::ValidateQueuePersonalFunds.new(
+                      config: {
+                        branch: branch,
+                        as_of: as_of
+                      }
+                    ).execute!
 
-            @record = DataStore.create!(
-                        meta: {
-                          branch_id: @branch.id,
-                          branch_name: @branch.name,
-                          as_of: @as_of,
-                          data_store_type: @data_store_type,
-                          progress: 0
-                        },
-                        data: {
-                          status: "processing"
-                        }
-                      )
+          if errors.size > 0
+            render json: { errors: errors }, status: 400
+          else
+            if record.blank?
+
+              record = DataStore.create!(
+                          meta: {
+                            branch_id: branch.id,
+                            branch_name: branch.name,
+                            as_of: as_of,
+                            data_store_type: data_store_type,
+                            progress: 0
+                          },
+                          data: {
+                            status: "processing"
+                          }
+                        )
+            end
+
+            record.update!(status: "processing")
+
+            args = {
+              id: record.id,
+              data_store_type: data_store_type
+            }
+
+            ProcessPersonalFunds.perform_later(args)
+
+            render json: { message: "ok" }
           end
-
-          @record.update!(status: "processing")
-
-          args = {
-            id: @record.id,
-            data_store_type: @data_store_type
-          }
-
-          ProcessPersonalFunds.perform_later(args)
-
-          render json: { message: "ok" }
         end
       end
       

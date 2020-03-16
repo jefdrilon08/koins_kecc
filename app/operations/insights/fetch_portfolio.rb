@@ -47,7 +47,7 @@ module Insights
                     )
 
       if branch.present?
-        data_stores = data_stores.where("branch_id = ?", branch.id)
+        data_stores = data_stores.where("data->'branch'->>'id' = ?", branch.id)
       end
 
       data[:records]  = data_stores.map{ |o|

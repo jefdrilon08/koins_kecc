@@ -109,7 +109,7 @@ module Api
         else
           withdrawal_collection.update!(status: "processing")
           
-          ProcessApproveWithdrawalCollection.perform_layer({
+          ProcessApproveWithdrawalCollection.perform_later({
             id: withdrawal_collection.id,
             user_id: current_user.id
           })

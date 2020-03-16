@@ -1,7 +1,8 @@
 class WithdrawalCollection < ApplicationRecord
   STATUSES  = [
     "pending",
-    "approved"
+    "approved",
+    "processing"
   ]
 
   belongs_to :center, optional: true

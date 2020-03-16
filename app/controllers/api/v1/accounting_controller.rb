@@ -115,7 +115,8 @@ module Api
         filename= "trial_balance.xlsx"  
 
         trial_balance_excel.serialize "#{Rails.root}/tmp/#{filename}"
-        send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}" , type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        #send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}" , type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        render json: { filename: filename, data: data }
       end
 
 

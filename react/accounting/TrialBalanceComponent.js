@@ -199,11 +199,14 @@ export default class TrialBalanceComponent extends React.Component {
       success: function(response) {
         console.log(response);
         var data  = response.data;
+        var filename = response.filename;
 
         context.setState({
           isLoading: false,
           data: data
         });
+
+        window.location.href = "/download_file?filename=" + filename;
       },
       error: function(response) {
         console.log(response);

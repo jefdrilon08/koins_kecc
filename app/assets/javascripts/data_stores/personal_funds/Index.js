@@ -53,10 +53,25 @@ var Index  = (function() {
           window.location.href="/data_stores/personal_funds";
         },
         error: function(response) {
-          $message.html("Something went wrong...");
-          $btnConfirmNew.prop("disabled", false);
-          $selectBranch.prop("disabled", false);
-          $inputAsOf.prop("disabled", false);
+          var errors  = [];
+
+          try {
+            console.log(response);
+            errors  = JSON.parse(response.responseText).errors.full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"]
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmNew.prop("disabled", false);
+            $selectBranch.prop("disabled", false);
+            $inputAsOf.prop("disabled", false);
+          }
         }
       });
     });
