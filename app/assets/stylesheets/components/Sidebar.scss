@@ -61,5 +61,11 @@
 }
 
 // override bootstrap coreui width
-.sidebar { flex: 0 0 300px !important; margin-left: -300px !important; transition: none; width: auto !important; }
+.sidebar {
+  flex: 0 0 300px !important;
+  margin-left: -300px !important;
+  overflow-y: scroll;
+  transition: none;
+  width: auto !important;
+}
 .sidebar-show .sidebar { margin-left: 0 !important; }
