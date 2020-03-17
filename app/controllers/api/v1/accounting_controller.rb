@@ -43,7 +43,10 @@ module Api
         start_date      = params[:start_date].try(:to_date)
         end_date        = params[:end_date].try(:to_date)
         branch          = Branch.where(id: params[:branch_id]).first
-        accounting_fund = AccountingFund.where(id: params[:accounting_fund_id]).first
+        
+        if params[:accounting_fund].present?
+          accounting_fund = AccountingFund.where(id: params[:accounting_fund_id]).first
+        end
 
         errors  = []
 
@@ -112,7 +115,7 @@ module Api
           data: data
         ).execute!
 
-        filename= "trial_balance.xlsx"  
+        filename = "trial_balance.xlsx" 
 
         trial_balance_excel.serialize "#{Rails.root}/tmp/#{filename}"
         #send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}" , type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
