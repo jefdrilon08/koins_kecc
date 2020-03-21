@@ -38,6 +38,7 @@
                       Status
               %tbody
                 - @account_transactions.each do |o|
+                  - @maturity_date = o.data.with_indifferent_access[:data][:maturity_date] != nil ? o.data.with_indifferent_access[:data][:maturity_date] : o.data.with_indifferent_access[:data][:original_maturity_date]
                   %tr
                     - if current_user.roles.include?("MIS")
                       %td
@@ -66,14 +67,14 @@
                     %td
                       %center
                         %small
-                          #{o.data.with_indifferent_access[:data][:maturity_date].to_date.strftime("%B %d, %Y")}
+                          #{@maturity_date.to_date.strftime("%B %d, %Y")}
                     %td
                       %center
                         %small
                           #{number_to_currency(o.amount, unit: "")}
                     %td
                       %center
-                        - if o.data.with_indifferent_access[:data][:maturity_date].to_date > Date.today
+                        - if @maturity_date.to_date > Date.today
                           .badge.badge-info
                             Active
                         - else 
