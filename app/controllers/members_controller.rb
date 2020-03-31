@@ -56,7 +56,7 @@ class MembersController < ApplicationController
   
   def member_registry_excel
 
-    excel = ::Members::GenerateRegistryOfMembers.new.execute!
+    excel = ::Members::GenerateRegistryOfMembers.new(branch: @branches).execute!
     filename  = "member_registry.xlsx"
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

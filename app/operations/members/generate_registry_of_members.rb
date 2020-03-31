@@ -1,7 +1,9 @@
 module Members
   class GenerateRegistryOfMembers
-    def initialize
-      @member = Member.where(status: "active")
+    def initialize(branch:)
+      
+      @member = Member.select("*").where(status: "active",branch_id: branch.pluck(:id))
+    
       @p = Axlsx::Package.new
     end
     def execute!
