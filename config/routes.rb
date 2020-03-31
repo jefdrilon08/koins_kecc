@@ -76,6 +76,7 @@ Rails.application.routes.draw do
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
+  get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
