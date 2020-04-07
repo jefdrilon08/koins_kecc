@@ -5,17 +5,8 @@
       Billings
   %li.breadcrumb-item
     Billing: #{@billing.id}
-  %li.breadcrumb-menu.d-md-down-none
+  %li.ml-auto
     .btn-group
-      = link_to "#", class: 'btn', id: 'btn-print-wp' do
-        .fa.fa-print
-        Print Withdraw Payment
-      = link_to "#", class: 'btn', id: 'btn-print' do
-        .fa.fa-print
-        Print Billing
-      = link_to "#", class: 'btn', id: 'btn-excel' do
-        .fa.fa-download
-        Download Excel
       - if @billing.pending?
         = link_to "#", class: 'btn', id: 'btn-check' do
           .fa.fa-check
@@ -29,3 +20,12 @@
         = link_to billing_path(@billing), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times
           Delete
+      = link_to "#", class: 'btn', id: 'btn-print-wp' do
+        .fa.fa-print
+        Print Withdraw Payment
+      = link_to "#", class: 'btn', id: 'btn-print' do
+        .fa.fa-print
+        Print Billing
+      = link_to "#", class: 'btn', id: 'btn-excel' do
+        .fa.fa-download
+        Download Excel
