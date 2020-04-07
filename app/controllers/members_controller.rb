@@ -53,6 +53,16 @@ class MembersController < ApplicationController
   def blip_form_pdf
     @member = Member.find(params[:id])
   end
+  
+  def member_registry_excel
+
+    excel = ::Members::GenerateRegistryOfMembers.new(branch: @branches).execute!
+    filename  = "member_registry.xlsx"
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+  end
+
 
   def survey_answer
     @member         = Member.find(params[:id])

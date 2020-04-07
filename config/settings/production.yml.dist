@@ -11,57 +11,57 @@
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
 
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
 
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
 
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    #current_date: "2020-02-28"
+    current_date: "2020-03-31"
 ###############################
 # AUTHORIZATION               #
 ###############################

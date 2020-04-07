@@ -65,3 +65,6 @@ dump.rdb
 
 # Ignore db backups
 /*.dump
+
+# Ignore package-lock.json since we're using yarn
+package-lock.json
