@@ -1,0 +1,34 @@
+%table.table.table-bordered.table-sm.table-hover.data-table
+  %thead
+    %tr
+      %th{ width: "20%" }
+        ID Number
+      %th
+        Member
+      %th
+        Name
+      %th
+        Member Type
+      %th
+        Membership Date
+  %tbody
+    :ruby
+      membership_payment_records = MembershipPaymentRecord
+        .select("DISTINCT ON (member_id) member_id, date_paid")
+        .where(member_id: members.pluck(:id), status: "paid")
+        .order(member_id: :asc, date_paid: :desc)
+        .pluck(:id, :date_paid)
+        .to_h
+    - members.each do |m, i|
+      %tr
+        %td
+          = link_to member_path(m[:id]), target: '_blank' do
+            #{m[:identification_number]}
+        %td
+          #{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}
+        %td
+          #{m[:center][:name]}
+        %td
+          #{m[:member_type]}
+        %td
+          #{membership_payment_records[m[:id]]}

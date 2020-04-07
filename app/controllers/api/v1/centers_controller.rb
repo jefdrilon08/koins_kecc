@@ -14,7 +14,7 @@ module Api
 
         data  = []
 
-        centers.each do |o|
+        centers.find_each(batch_size: 1000) do |o|
           members = []
 
           o.members.order("last_name ASC").each do |m|
@@ -39,7 +39,7 @@ module Api
 
         data  = []
 
-        centers.each do |o|
+        centers.find_each(batch_size: 1000) do |o|
           members = []
 
           o.members.order("last_name ASC").each do |m|

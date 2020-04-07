@@ -1,0 +1,39 @@
+%h3
+  Officers
+
+- @data_officers[:officers].each do |o|
+  %h5
+    #{o[:last_name]}, #{o[:first_name]}
+  %table.table.table-bordered.table-hover.table-sm
+    %tr
+      %th{ width: "50%" }
+      %th.text-center
+        Male
+      %th.text-center
+        Female
+      %th.text-center
+        Others
+      %th.text-center
+        Total
+    %tr
+      %th
+        Admitted Members
+      %td.text-center
+        #{o[:counts][:active_members][:male]}
+      %td.text-center
+        #{o[:counts][:active_members][:female]}
+      %td.text-center
+        #{o[:counts][:active_members][:others]}
+      %td.text-center
+        #{o[:counts][:active_members][:total]}
+    %tr
+      %th
+        TOTAL ACTIVE MEMBERS
+      %th.text-center
+        #{o[:counts][:active_members][:male].to_i}
+      %th.text-center
+        #{o[:counts][:active_members][:female].to_i}
+      %th.text-center
+        #{o[:counts][:active_members][:others].to_i}
+      %th.text-center
+        #{o[:counts][:active_members][:total].to_i}

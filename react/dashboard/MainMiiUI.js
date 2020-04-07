@@ -5,6 +5,7 @@ import SkCubeLoading from '../SkCubeLoading';
 
 // DASHBOARDS
 import DashboardMII from './DashboardMII';
+import DashboardManagementMii from './DashboardManagementMii';
 
 export default class MainMiiUI extends React.Component {
   constructor(props) {
@@ -46,6 +47,12 @@ export default class MainMiiUI extends React.Component {
 
   renderDashboards() {
     var dashboards  = [];
+
+    dashboards.push(
+      <DashboardManagementMii
+        key={"dashboard-Management-Mii"}
+      />
+    );
 
     dashboards.push(
       <DashboardMII

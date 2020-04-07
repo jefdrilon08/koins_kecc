@@ -1,0 +1,100 @@
+%h5
+  As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+%table.table.table-bordered.table-hover.table-sm
+  %tr
+    %th{ width: "50%" }
+    - if microinsurance?
+      %th.text-center
+        Inforce
+      %th.text-center
+        Lapsed
+      %th.text-center
+        Pending
+    %th.text-center
+      Male
+    %th.text-center
+      Female
+    %th.text-center
+      Others
+    %th.text-center
+      Total
+  %tr
+    %th
+      Admitted Members
+    - if microinsurance?
+      %td.text-center
+        #{@data[:counts][:active_members][:inforce]}
+      %td.text-center
+        #{@data[:counts][:active_members][:lapsed]}
+      %td.text-center
+        #{@data[:counts][:active_members][:pending]}    
+    %td.text-center
+      #{@data[:counts][:active_members][:male]}
+    %td.text-center
+      #{@data[:counts][:active_members][:female]}
+    %td.text-center
+      #{@data[:counts][:active_members][:others]}
+    %td.text-center
+      #{@data[:counts][:active_members][:total]}
+  %tr
+    %th
+      TOTAL ACTIVE MEMBERS
+    - if microinsurance?
+      %th.text-center
+        #{@data[:counts][:active_members][:inforce].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:lapsed].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:pending].to_i}  
+    %th.text-center
+      #{@data[:counts][:active_members][:male].to_i}
+    %th.text-center
+      #{@data[:counts][:active_members][:female].to_i}
+    %th.text-center
+      #{@data[:counts][:active_members][:others].to_i}
+    %th.text-center
+      #{@data[:counts][:active_members][:total].to_i}
+
+%hr
+- if @data[:member_type_counts].present?
+  %h5
+    Member Type Count
+  %table.table.table-bordered.table-hover.table-sm
+    %tbody
+      %tr
+      - @data[:member_type_counts].each do |o|
+        %tr
+          %th{ width: "50%" }
+            #{o[:member_type]}
+          %td
+            #{o[:count]}
+- else
+  %p
+    No membership type counts.
+
+%hr
+%ul.nav.nav-tabs{:role => "tablist"}
+  %li.nav-item
+    %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
+      Admitted Members (#{@data[:counts][:active_members][:total]})
+  - if microloans?  
+    %li.nav-item
+      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
+        Pure Savers (#{@data[:counts][:pure_savers][:total]})
+    %li.nav-item
+      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#loaners", :role => "tab"}
+        Active Borrowers (#{@data[:counts][:loaners][:total]})
+.tab-content
+  #active-members.tab-pane.active.show{:role => "tabpanel"}
+    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:active_members][:members] }
+  / #pure-savers.tab-pane{:role => "tabpanel"}
+  /   = render partial: "data_stores/member_counts/members_with_savings", locals: { members: @data[:counts][:pure_savers][:members] }
+  / #loaners.tab-pane{:role => "tabpanel"}
+  /   = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:loaners][:members] }
+
+:javascript
+  $(document).ready(function() {
+    $(".data-table").DataTable({
+      fixedHeader: true
+    });
+  });

@@ -37,7 +37,8 @@ namespace :api do
 
     # Dashboard MII
     get "/dashboard_mii", to: "dashboard_mii#index"
-    get "/dashboard_mii/overview", to: "dashboard_mii#overview"
+    get "/dashboard_mii/overview_mii", to: "dashboard_mii#overview_mii"
+
 
     # Monitoring
     get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing"
@@ -270,6 +271,7 @@ namespace :api do
       post "/branch_resignations/queue", to: "branch_resignations#queue"
       get "/branch_resignations/fetch", to: "branch_resignations#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
+      post "/insurance_member_counts/queue", to: "insurance_member_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
       post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"

@@ -3,17 +3,11 @@ module Api
     class DashboardMiiController < ApiController
       before_action :authenticate_user!
 
-      def overview
-        config  = {
-          user: current_user,
-          as_of: params[:as_of] || Date.today
-        }
+      def overview_mii
+        as_of = params[:as_of].try(:to_date) || Date.today
+        json = Dashboard::BuildOverviewMii.new(branches: @branches, as_of: as_of).execute!
 
-        data  = ::Dashboard::BuildOverview.new(
-                  config: config
-                ).execute!
-
-        render json: data
+        render json: json
       end
 
       def index
