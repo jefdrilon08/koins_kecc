@@ -31,7 +31,7 @@ module DataStores
         }
       end
 
-      not_yet_implemented!
+      #not_yet_implemented!
 
       @errors[:messages].each do |e|
         @errors[:full_messages] << e[:message]

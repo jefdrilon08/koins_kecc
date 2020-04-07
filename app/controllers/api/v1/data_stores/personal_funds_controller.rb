@@ -75,7 +75,7 @@ module Api
                       }
                     ).execute!
 
-          if errors.size > 0
+          if errors[:full_messages].size > 0
             render json: { errors: errors }, status: 400
           else
             if record.blank?
