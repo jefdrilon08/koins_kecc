@@ -24,8 +24,7 @@
         = link_to accounting_delete_accounting_entry_path(@accounting_entry.id), class: 'btn', method: :delete, data: { confirm: "Are you sure?" } do
           .fa.fa-times
           Delete
-        - is_not_remote = ["SBK","MIS"].include? current_user.roles.last
-        - if is_not_remote
+        - if sbk_mis_user
           #btn-approve.btn{ data: { id: @accounting_entry.id } }
             .fa.fa-check
             Approve
