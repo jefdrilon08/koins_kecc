@@ -1,5 +1,5 @@
 module Branches
-  class FetchMemberCounts
+  class FetchInsuranceMemberCounts
     def initialize(config:)
       @config = config
 
@@ -8,26 +8,11 @@ module Branches
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
-      @default_savings_key  = Settings.default_savings_key
       @member_types         = Settings.default_member_types
 
       @data = {
         member_type_counts: [],
         counts: {
-          pure_savers: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0,
-            members: []
-          },
-          loaners: {
-            male: 0,
-            female: 0,
-            others: 0,
-            total: 0,
-            members: []
-          },
           active_members: {
             inforce: 0,
             lapsed: 0,
@@ -74,8 +59,6 @@ module Branches
 
     def execute!
       query!
-      compute_pure_savers!
-      compute_loaners!
       compute_active_members!
       compute_member_types!
 
@@ -96,18 +79,6 @@ module Branches
           m_data[:members] << o
         end
 
-        @data[:counts][:pure_savers][:members].select{ |o|
-          o[:member_type] == m
-        }.each do |o|
-          m_data[:members] << o
-        end
-
-        @data[:counts][:loaners][:members].select{ |o|
-          o[:member_type] == m
-        }.each do |o|
-          m_data[:members] << o
-        end
-
         m_data[:count]  = m_data[:members].size
 
         @data[:member_type_counts] << m_data
@@ -116,7 +87,7 @@ module Branches
 
     def compute_active_members!
       @data[:counts][:active_members][:members] = @result.select{ |o|
-                                                    o.fetch("count").to_i == 0 && ((o.fetch("amount").try(:to_f).try(:round, 2) || 0.00) == 0.00)
+                                                    ((o.fetch("amount").try(:to_f).try(:round, 2) || 0.00) >= 0.00)
                                                   }.map{ |o|
                                                     {
                                                       id: o.fetch("id"),
@@ -171,76 +142,6 @@ module Branches
       @data[:counts][:active_members][:total]   = @data[:counts][:active_members][:members].size
     end
 
-    def compute_loaners!
-      @data[:counts][:loaners][:members]  = @result.select{ |o|
-                                              o.fetch("count").to_i > 0
-                                            }.map{ |o|
-                                              {
-                                                id: o.fetch("id"),
-                                                identification_number: o.fetch("identification_number"),
-                                                first_name: o.fetch("first_name"),
-                                                middle_name: o.fetch("middle_name"),
-                                                last_name: o.fetch("last_name"),
-                                                member_type: o.fetch("member_type"),
-                                                gender: o.fetch("gender"),
-                                                total_balance: o.fetch("amount").try(:to_f).try(:round, 2) || 0.00,
-                                                branch: {
-                                                  id: @branch.id,
-                                                  name: @branch.name
-                                                },
-                                                center: {
-                                                  id: o.fetch("center_id"),
-                                                  name: o.fetch("center_name")
-                                                },
-                                                officer: {
-                                                  id: o.fetch("officer_id"),
-                                                  first_name: o.fetch("officer_first_name"),
-                                                  last_name: o.fetch("officer_last_name")
-                                                }
-                                              }
-                                            }
-      
-      @data[:counts][:loaners][:male]   = @data[:counts][:loaners][:members].select{ |o| o[:gender] == "Male" }.size
-      @data[:counts][:loaners][:female] = @data[:counts][:loaners][:members].select{ |o| o[:gender] == "Female" }.size
-      @data[:counts][:loaners][:others] = @data[:counts][:loaners][:members].select{ |o| o[:gender] == "Others" }.size
-      @data[:counts][:loaners][:total]  = @data[:counts][:loaners][:members].size
-    end
-
-    def compute_pure_savers!
-      @data[:counts][:pure_savers][:members]  = @result.select{ |o|
-                                                  o.fetch("count").to_i == 0 && o.fetch("amount").to_f.round(2) > 0
-                                                }.map{ |o|
-                                                  {
-                                                    id: o.fetch("id"),
-                                                    identification_number: o.fetch("identification_number"),
-                                                    first_name: o.fetch("first_name"),
-                                                    middle_name: o.fetch("middle_name"),
-                                                    last_name: o.fetch("last_name"),
-                                                    member_type: o.fetch("member_type"),
-                                                    gender: o.fetch("gender"),
-                                                    total_balance: o.fetch("amount").try(:to_f).try(:round, 2) || 0.00,
-                                                    branch: {
-                                                      id: @branch.id,
-                                                      name: @branch.name
-                                                    },
-                                                    center: {
-                                                      id: o.fetch("center_id"),
-                                                      name: o.fetch("center_name")
-                                                    },
-                                                    officer: {
-                                                      id: o.fetch("officer_id"),
-                                                      first_name: o.fetch("officer_first_name"),
-                                                      last_name: o.fetch("officer_last_name")
-                                                    }
-                                                  }
-                                                }
-      
-      @data[:counts][:pure_savers][:male]   = @data[:counts][:pure_savers][:members].select{ |o| o[:gender] == "Male" }.size
-      @data[:counts][:pure_savers][:female] = @data[:counts][:pure_savers][:members].select{ |o| o[:gender] == "Female" }.size
-      @data[:counts][:pure_savers][:others] = @data[:counts][:pure_savers][:members].select{ |o| o[:gender] == "Others" }.size
-      @data[:counts][:pure_savers][:total]  = @data[:counts][:pure_savers][:members].size
-    end
-
     def query!
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                   SELECT
@@ -261,7 +162,6 @@ module Branches
                     users.identification_number AS officer_identification_number,
                     users.first_name AS officer_first_name,
                     users.last_name AS officer_last_name,
-                    COUNT(loans.*),
                     COALESCE(SUM(tt.ending_balance::float), 0.00) AS amount
                   FROM members 
                   LEFT JOIN
@@ -281,26 +181,13 @@ module Branches
                       member_accounts.id, account_transactions.transacted_at DESC
                   ) tt ON tt.member_id = members.id
                   LEFT JOIN
-                    loans ON 
-                    (
-                      loans.member_id = members.id
-                      AND
-                      loans.status = 'active' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
-                    )
-                    OR
-                    (
-                      loans.member_id = members.id
-                      AND
-                      loans.status = 'paid' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
-                    )
-                  LEFT JOIN
                     centers ON centers.id = members.center_id
                   LEFT JOIN
                     users ON users.id = centers.user_id
                   WHERE 
                     (members.status = 'active' AND members.branch_id::text = '#{@branch.id}')
                     OR 
-                    (members.status = 'resigned' AND members.date_resigned > '#{@as_of}' AND members.branch_id::text = '#{@branch.id}')
+                    (members.status = 'resigned' AND members.insurance_date_resigned > '#{@as_of}' AND members.branch_id::text = '#{@branch.id}')
                   GROUP BY
                     members.id, centers.id, users.id
                 EOS

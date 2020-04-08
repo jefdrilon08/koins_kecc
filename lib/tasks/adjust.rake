@@ -127,6 +127,67 @@ namespace :adjust do
     puts "Done."
   end
 
+  task :insert_hiip_from_withdrawal => :environment do
+    puts "Fetching withdrawal collection..."    
+
+    withdrawal_collections = ::Insurance::FetchWithdrawalCollectionForHiip.new().execute!
+
+    if ENV['BRANCH_ID'].present?
+      withdrawal_collections = withdrawal_collections.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    values = []
+
+    withdrawal_collections.each do |wc|
+      wc.data.with_indifferent_access[:records].each do |rec|
+        puts "#{rec[:member][:id]}"
+        member = Member.find(rec[:member][:id])
+        puts "#{member.full_name}"
+        hiip_account = MemberAccount.where(account_subtype: "Hospital Income Insurance Plan", member_id: member.id, status: "active").first
+        puts "#{hiip_account.id}"
+
+        insurance_account_id      = hiip_account.id
+        transaction_type          = 'deposit'
+        transacted_at             = wc[:date_approved]
+        created_at                = wc[:date_approved]
+        updated_at                = wc[:date_approved]
+        amount                    = rec[:total_collected].to_f.round(2)
+        status                    = 'approved'
+
+        subsidiary_id     = insurance_account_id
+        subsidiary_type   = 'MemberAccount'
+
+        trans_data  = {
+        is_withdraw_payment: false,
+        is_fund_transfer: false,
+        is_interest: false,
+        is_adjustment: false,
+        is_for_exit_age: false,
+        is_for_loan_payments: false,
+        is_time_deposit: false,
+        accounting_entry_reference_number: wc.accounting_entry[:reference_number],
+        beginning_balance: 0.00,
+        ending_balance: 0.00,
+        lock_in_period: nil,
+        data: {
+                date_prepared: wc[:date_approved],
+                date_approved: wc[:date_approved]                                          
+          }
+        }
+
+        values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{trans_data.to_json}')"
+      end
+    end
+
+    if values.any?
+      query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+    puts "Done!"
+  end
+
   task :insert_insurance_from_loans => :environment do
     account_subtype     = ENV['ACCOUNT_SUBTYPE']
     accounting_code_id  = ENV['ACCOUNTING_CODE_ID']
@@ -191,6 +252,76 @@ namespace :adjust do
     ).execute!
 
     puts "Done."
+  end
+
+  task :load_withrawal_hiip_from_v1 => :environment do
+    file_location = ENV["FILE_LOCATION"]
+    puts "Searching file #{file_location}"
+
+    member_account_ids = []
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.find(row['member_uuid'])
+      hiip_account = MemberAccount.where(account_subtype: "Hospital Income Insurance Plan", member_id: member.id, status: "active").first
+
+      puts "Creating new insurance account transaction record #{hiip_account}..."
+
+      account_transaction = AccountTransaction.new
+
+      account_transaction.subsidiary_type = 'MemberAccount'
+      account_transaction.subsidiary_id = hiip_account.id
+      account_transaction.status = 'approved'
+      account_transaction.amount = row['amount']
+      account_transaction.transaction_type = 'deposit'
+      account_transaction.transacted_at = row['date_approved']
+      account_transaction.created_at = row['date_approved']
+      account_transaction.updated_at = row['date_approved']
+
+      # data
+      account_transaction.data = {
+                                              is_withdraw_payment: false,
+                                              is_fund_transfer: false,
+                                              is_interest: false,
+                                              is_adjustment: false,
+                                              is_for_exit_age: false,
+                                              is_for_loan_payments: false,
+                                              accounting_entry_reference_number: row['voucher_reference_number'],
+                                              accounting_entry_particular: row['particular'],
+                                              beginning_balance: 0.00,
+                                              ending_balance: 0.00,
+                                              data: {
+                                                payment_collection_uuid: row['payment_collection_uuid'],
+                                                or_number: row['or_number'],
+                                                payment_collection_record_uuid: row['payment_collection_record_uuid'],
+                                                first_date_of_payment: row['first_date_of_payment_data'],
+                                                accounting_entry_uuid: row['accounting_entry_uuid'],
+                                                approved_by: row['approved_by'],
+                                                prepared_by: row['prepared_by'],
+                                                book: row['book'],
+                                                date_approved: row['date_approved'],
+                                                date_prepared: row['date_prepared'],
+                                                master_reference_number: row['master_reference_number']
+                                                }
+                                              }
+  
+      
+      account_transaction.save!
+      
+      member_account_ids << account_transaction.subsidiary_id
+
+      puts "Done creating!"  
+    end
+
+    member_account_ids = member_account_ids.uniq
+
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved")
+
+    MemberAccount.where(id: member_account_ids, account_type: "INSURANCE").each do |acc|
+      puts "Rehashing member_account #{acc.id}..."
+
+      ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
+    end
+    
+    puts "Done!"
   end
 
   task :update_loans_first_date_of_payment => :environment do

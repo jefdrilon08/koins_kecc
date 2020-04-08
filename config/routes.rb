@@ -279,6 +279,10 @@ Rails.application.routes.draw do
     get "/member_counts/:id", to: "member_counts#show"
     delete "/member_counts/:id", to: "member_counts#destroy"
 
+    get "/insurance_member_counts", to: "insurance_member_counts#index"
+    get "/insurance_member_counts/:id", to: "insurance_member_counts#show"
+    delete "/insurance_member_counts/:id", to: "insurance_member_counts#destroy"
+
     get "/monthly_new_and_resigned", to: "monthly_new_and_resigned#index"
     get "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#show"
     delete "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#destroy"

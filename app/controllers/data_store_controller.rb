@@ -52,6 +52,7 @@ class DataStoreController < ApplicationController
       "icpr"                         => { order: "meta->>'year' DESC",                     meta: %w[branch_name year], data: %w[] },
       "manual_aging"                 => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
       "member_counts"                => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
+      "insurance_member_counts"      => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
       "monthly_incentives"           => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
       "monthly_new_and_resigned"     => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[num_new num_resigned] },
       "patronage_refund"             => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name start_date end_date equity_rate], data: %w[] },
