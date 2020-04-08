@@ -223,6 +223,9 @@ export default class BillingUITable extends React.Component {
 
             </a>
           </strong>
+            <small>
+              {this.props.data.data.records[i].member.member_type}
+            </small>
         </td>
       );
 
