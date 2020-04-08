@@ -40,7 +40,8 @@ module Billings
           first_name: @member.first_name,
           middle_name: @member.middle_name,
           last_name: @member.last_name,
-          identification_number: @member.identification_number
+          identification_number: @member.identification_number,
+          member_type: @member.member_type
         },
         attendance: true,
         total_expected_collections: 0.00,

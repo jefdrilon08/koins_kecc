@@ -1,4 +1,13 @@
 module ApplicationHelper
+  def sbk_mis_user
+    sbk_mis_user = ["SBK","MIS"].include? current_user.roles.last
+  end
+  def sbk_bk_mis_user
+    sbk_bk_mis_user = ["SBK","MIS","BK"].include? current_user.roles.last
+  end
+  def oas_mis_user
+    oas_mis_user = ["OAS","MIS"].include? current_user.roles.last
+  end
   def title(*args)
     key = "titles.#{params[:controller].gsub("/", ".")}.#{params[:action]}"
     content_for :title, t(key, title: args.join(" - "))
