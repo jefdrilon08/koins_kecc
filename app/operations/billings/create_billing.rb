@@ -61,9 +61,9 @@ module Billings
                     collection_date: @collection_date
                   }
                 ).execute!
-
+      
         @data[:records] << data
-
+    
         @data[:total_expected_collections]  += data[:total_expected_collections]
         @data[:total_collected]             += data[:total_expected_collections]
       end
@@ -81,10 +81,12 @@ module Billings
                                   ).execute!
 
       @billing.data = @data
+    
 
       @billing.save!
 
       @billing
+     # raise @billing.inspect
     end
 
     private

@@ -32,7 +32,7 @@ class LoansController < ApplicationController
     end
 
     if @status.present?
-      @loans  = @loans.joins(:member).where(status: @status).order("members.last_name")
+      @loans  = @loans.joins(:member).where(status: @status)
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)

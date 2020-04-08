@@ -270,6 +270,7 @@ module Api
           billing = ::Billings::CreateBilling.new(
                       config: config
                     ).execute!
+        
 
           render json: { id: billing.id }
         end
