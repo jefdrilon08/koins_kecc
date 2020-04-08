@@ -10,66 +10,49 @@ module Api
         render json: json
       end
 
+      
       def index
-        branches  = build_branches
-        branch    = nil
-
-        if params[:branch_id].present?
-          branch  = Branch.find(params[:branch_id])
-        elsif branches.any?
-          branch  = Branch.find(branches.first[:id])
-        end
-
-        data  = {
-          branches: build_branches
-        }
-
-        # Fetch repayment rates
-        rr_data = DataStore.repayment_rates.where(
-                    "meta->>'branch_id' = ? AND status = ?",
-                    branch.id,
-                    "done"
-                  ).order(
-                    "(meta->>'as_of')::date ASC"
-                  ).last
-
-        # Fetch member counts
-        member_counts = DataStore.member_counts.where(
-                          "meta->>'branch_id' = ? AND status = ?", 
-                          branch.id,
-                          "done"
-                        ).order(
-                          "(meta->>'as_of')::date ASC"
-                        ).last
-
-        data[:member_counts]  = member_counts
-
-        render json: data
-      end
-
-      private
-
-      def build_branches
-        data  = []
-
-        @branches.each do |o|
-          centers = []
-
-          o.centers.order("name ASC").each do |c|
-            centers << {
-              id: c.id,
-              name: c.name
+        branches_hash = @branches
+          .includes(:centers)
+          .map do |b|
+            {
+              id:      b.id,
+              name:    b.name,
+              centers: b.centers.map { |c| { id: c.id, name: c.name } },
             }
           end
 
-          data << {
-            id: o.id,
-            name: o.name,
-            centers: centers
-          }
-        end
+        current_branch = if params[:branch_id].present?
+                           @branches.find { |b| b.id == params[:branch_id] }
+                         else
+                           @branches.first
+                         end
 
-        data
+        # rr = DataStore
+        #   .repayment_rates
+        #   .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
+        #   .order("(meta->>'as_of')::date ASC")
+        #   .last
+
+        # if rr.present?
+        #   branch_loans_stats = ::DataStores::BuildBranchLoanStatsFromRr.new(rr_data: rr.data.with_indifferent_access).execute!
+        #   watchlist          = ::DataStores::BuildWatchlistFromRr.new(records: rr.data["records"], as_of: rr.data["as_of"]).execute!
+        # end
+
+        member_counts = DataStore
+          .member_counts
+          .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
+          .order("(meta->>'as_of')::date ASC")
+          .last
+
+        render json: {
+          branches:            branches_hash,
+          member_counts:       member_counts,
+          # branch_loans_stats:  branch_loans_stats || false,
+          # watchlist:           watchlist || false,
+          centers:             ::Branches::FetchCenters.new(branch: current_branch).execute!,
+          # cycle_count_summary: ::Branches::ComputeLoanCycleCountSummary.new(config: { branch: current_branch }).execute!,
+        }
       end
     end
   end

@@ -13,7 +13,7 @@ module Dashboard
 
       data_stores = DataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
-        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
+        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
         .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC")
 
       {
@@ -35,9 +35,13 @@ module Dashboard
 
     def build_branch(data_stores, branch)
       mc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "INSURANCE_MEMBER_COUNTS" }
+      pf = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "PERSONAL_FUNDS" }
       d = {
-        as_of: "",
+        personal_funds_as_of: "",
         member_counts_as_of: "",
+        total_life: 0.00,
+        total_rf: 0.00,
+        total_life_rf: 0.00,
         active_members:           { male: 0, female: 0, others: 0, total: 0 },
         inforce_members:          { male: 0, female: 0, others: 0, total: 0 },
         lapsed_members:           { male: 0, female: 0, others: 0, total: 0 },
@@ -45,6 +49,19 @@ module Dashboard
         dormant_members:          { male: 0, female: 0, others: 0, total: 0 },
         resigned_active_members:  { male: 0, female: 0, others: 0, total: 0 },
       }
+
+      if pf.present?
+        d[:personal_funds_as_of] = pf.meta["as_of"]
+
+        pf.data["records"].each.with_index do |p, i|
+          d[:total_life_rf] += p["total"].to_f.round(2)
+
+          if !p["accounts"].nil?
+            d[:total_rf] += p["accounts"].select{ |acc| acc["account_subtype"] == "Retirement Fund" }.first["balance"].to_f.round(2)
+            d[:total_life] += p["accounts"].select{ |acc| acc["account_subtype"] == "Life Insurance Fund" }.first["balance"].to_f.round(2)
+          end
+        end
+      end
 
       if mc.present?
         counts = mc.data["counts"]

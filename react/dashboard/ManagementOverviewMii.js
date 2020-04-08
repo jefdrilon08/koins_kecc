@@ -40,7 +40,7 @@ export default class ManagementOverviewMii extends React.Component {
       },
       error: function(response) {
         console.log(response);
-        alert("Error in fetching overview data");
+        alert("Error in fetching overview mii data");
       }
     });
   }
@@ -68,6 +68,9 @@ export default class ManagementOverviewMii extends React.Component {
     var clusterColor  = "#c5ffc1";
     var branchColor   = "#797979";
 
+    var tTotalLife        = 0.00;
+    var tTotalRf          = 0.00;
+    var tTotalLifeRf      = 0.00;
     var tActiveMembers    = 0;
     var tInforceMembers   = 0;
     var tLapsedMembers    = 0;
@@ -86,6 +89,9 @@ export default class ManagementOverviewMii extends React.Component {
      
       var clusters    = areas[i].clusters;
 
+      var aTotalLife        = 0.00;
+      var aTotalRf          = 0.00;
+      var aTotalLifeRf      = 0.00;
       var aActiveMembers    = 0;
       var aInforceMembers   = 0;
       var aLapsedMembers    = 0;
@@ -104,6 +110,9 @@ export default class ManagementOverviewMii extends React.Component {
 
         var branches  = clusters[j].branches;
 
+        var cTotalLife        = 0.00;
+        var cTotalRf          = 0.00;
+        var cTotalLifeRf      = 0.00;
         var cActiveMembers    = 0;
         var cInforceMembers   = 0;
         var cLapsedMembers    = 0;
@@ -136,6 +145,9 @@ export default class ManagementOverviewMii extends React.Component {
                 <th className="text-center">
                   Active Members
                 </th>
+                <th>
+                  As Of (Member Count)
+                </th>
                 <th className="text-center">
                   LIFE
                 </th>
@@ -143,12 +155,14 @@ export default class ManagementOverviewMii extends React.Component {
                   RF
                 </th>
                 <th>
-                  As Of (Member Count)
+                  As Of (Personal Fund)
                 </th>
               </tr>
             );
           }
 
+          cTotalLife        += branches[k].data.total_life
+          cTotalRf          += branches[k].data.total_rf
           cActiveMembers    += branches[k].data.active_members.total;
           cInforceMembers   += branches[k].data.inforce_members.total;
           cLapsedMembers    += branches[k].data.lapsed_members.total;
@@ -156,6 +170,8 @@ export default class ManagementOverviewMii extends React.Component {
           cDormantMembers   += branches[k].data.dormant_members.total;
           cResignedActiveMembers += branches[k].data.resigned_active_members.total;
 
+          aTotalLife        += branches[k].data.total_life
+          aTotalRf          += branches[k].data.total_rf
           aActiveMembers    += branches[k].data.active_members.total;
           aInforceMembers   += branches[k].data.inforce_members.total;
           aLapsedMembers    += branches[k].data.lapsed_members.total;
@@ -163,6 +179,8 @@ export default class ManagementOverviewMii extends React.Component {
           aDormantMembers   += branches[k].data.dormant_members.total;
           aResignedActiveMembers += branches[k].data.resigned_active_members.total;
 
+          tTotalLife        += branches[k].data.total_life
+          tTotalRf          += branches[k].data.total_rf
           tActiveMembers    += branches[k].data.active_members.total;
           tInforceMembers   += branches[k].data.inforce_members.total;
           tLapsedMembers    += branches[k].data.lapsed_members.total;
@@ -196,11 +214,16 @@ export default class ManagementOverviewMii extends React.Component {
                 {branches[k].data.active_members.total}
               </td>
               <td className="text-center">
+                {branches[k].data.member_counts_as_of}
               </td>
               <td className="text-center">
+                {numberWithCommas(branches[k].data.total_life)}
               </td>
-              <td>
-                {branches[k].data.member_counts_as_of}
+              <td className="text-center">
+                {numberWithCommas(branches[k].data.total_rf)}
+              </td>
+              <td className="text-center">
+                {branches[k].data.personal_funds_as_of}
               </td>
             </tr>
           );
@@ -245,7 +268,15 @@ export default class ManagementOverviewMii extends React.Component {
             </td>
             <td>
             </td>
-            <td>
+            <td className="text-center">
+              <strong>
+                {numberWithCommas(cTotalLife)}
+              </strong>
+            </td>
+            <td className="text-center">
+              <strong>
+                {numberWithCommas(cTotalRf)}
+              </strong>
             </td>
             <td>
             </td>
@@ -292,7 +323,15 @@ export default class ManagementOverviewMii extends React.Component {
           </td>
           <td>
           </td>
-          <td>
+          <td className="text-center">
+            <strong>
+              {numberWithCommas(aTotalLife)}
+            </strong>
+          </td>
+          <td className="text-center">
+            <strong>
+              {numberWithCommas(aTotalRf)}
+            </strong>
           </td>
           <td>
           </td>
@@ -340,7 +379,15 @@ export default class ManagementOverviewMii extends React.Component {
         </td>
         <td>
         </td>
-        <td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalLife)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalRf)}
+          </strong>
         </td>
         <td>
         </td>
