@@ -84,7 +84,7 @@ class MembersController < ApplicationController
     @recognition_date = @data[:recognition_date]
     @active_loans     = Loan.active.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
     @paid_loans       = Loan.paid.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @pending_loans    = Loan.pending.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC"
+    @pending_loans    = Loan.pending.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
 
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)

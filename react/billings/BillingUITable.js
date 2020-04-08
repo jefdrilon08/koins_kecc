@@ -222,9 +222,6 @@ export default class BillingUITable extends React.Component {
               {this.props.data.data.records[i].member.full_name} -
 
             </a>
-              <small>
-                {this.props.data.data.records[i].member.member_type}
-              </small>
           </strong>
         </td>
       );
@@ -605,7 +602,7 @@ export default class BillingUITable extends React.Component {
               <h5>
                 Member: &nbsp;
                 <span className="text-muted">
-                  {currentMember.member_type}
+                  {currentMember.full_name}
                 </span>
               </h5>
               <h5>
