@@ -219,8 +219,12 @@ export default class BillingUITable extends React.Component {
         <td key={"c-member-" + member.id}>
           <strong>
             <a href={"/members/" + member.id + "/display"} target="_blank">
-              {this.props.data.data.records[i].member.full_name}
+              {this.props.data.data.records[i].member.full_name} -
+
             </a>
+              <small>
+                {this.props.data.data.records[i].member.member_type}
+              </small>
           </strong>
         </td>
       );
@@ -601,7 +605,7 @@ export default class BillingUITable extends React.Component {
               <h5>
                 Member: &nbsp;
                 <span className="text-muted">
-                  {currentMember.full_name}
+                  {currentMember.member_type}
                 </span>
               </h5>
               <h5>
