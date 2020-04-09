@@ -3,6 +3,31 @@ module Api
     class CentersController < ApiController
       before_action :authenticate_user!
 
+      def assign_officer
+        officer = User.where(id: params[:officer_id]).first
+        center  = Center.where(id: params[:id]).first
+
+        config = {
+          user: current_user,
+          officer: officer,
+          center: center
+        }
+
+        errors  = ::Centers::ValidateAssignOfficer.new(
+                    config: config
+                  ).execute! 
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Centers::AssignOfficer.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def index
         branches  = Branch.where(
                       id: UserBranch.active.where(

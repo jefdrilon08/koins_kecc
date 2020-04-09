@@ -296,6 +296,9 @@ namespace :api do
       get "/loans/payments", to: "loans#payments"
     end
 
+    # Centers
+    post "/centers/assign_officer", to: "centers#assign_officer"
+
     namespace :administration do
       post "/user_demerits/approve", to: "user_demerits#approve"
 

@@ -1,4 +1,4 @@
 .card
   .card-body
-    %h5.text-muted
+    = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
       
