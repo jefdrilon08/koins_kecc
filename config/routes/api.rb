@@ -276,6 +276,7 @@ namespace :api do
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
       post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"
       get "/x_weeks_to_pay/fetch", to: "x_weeks_to_pay#fetch"
+      get "/x_weeks_to_pay/:id/print_pdf", to: "x_weeks_to_pay#print_pdf"
       post "/year_end_closings/queue", to: "year_end_closings#queue"
       post "/year_end_closings/approve", to: "year_end_closings#approve"
       post "/balance_sheets/queue", to: "balance_sheets#queue"
