@@ -84,6 +84,8 @@ module Api
         user      = current_user
         reason    = params[:reason]
         new_date  = params[:new_date].try(:to_date)
+        loan    = Loan.find(amort.loan_id)
+      
 
         config  = {
           amort: amort,
@@ -99,6 +101,7 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
+          loan_data = loan.id
           old_date  = amort.due_date
           loan      = ::Loans::DelayAmort.new(
                         config: config
@@ -109,7 +112,8 @@ module Api
             activity_type: "modification",
             data: {
               user_id: current_user.id,
-              amortization_schedule_entry_id: amort.id
+              amortization_schedule_entry_id: amort.id,
+              loan_id: loan_data
             }
           )
 
