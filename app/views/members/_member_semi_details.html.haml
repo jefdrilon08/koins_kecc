@@ -65,14 +65,23 @@
         Member Type
         .value.text-muted
           %b
-            = link_to "#", id: "btn-change-member-type" do
+            - if @member.modifiable
+              = link_to "#", id: "btn-change-member-type" do
+                #{@member.member_type.upcase}
+            - else
               #{@member.member_type.upcase}
 
       %li.list-group-item
         Recognition Date
         .value.text-muted
           %b
-            = link_to "#", id: "btn-change-recognition-date" do
+            -  if @member.modifiable
+              = link_to "#", id: "btn-change-recognition-date" do
+                - if @member.recognition_date.present?
+                  #{@member.recognition_date.strftime("%b %d, %Y")}
+                - else
+                  N / A
+            - else
               - if @member.recognition_date.present?
                 #{@member.recognition_date.strftime("%b %d, %Y")}
               - else
