@@ -55,17 +55,15 @@
 
   / Maintaining balance
   - if @loan.active?
-    - @loan.member.member_accounts.where("maintaining_balance > 0").each do |a|
-      %tr
-        %th
-          #{a.account_subtype} Balance:
-        %td.text-right
-          #{number_to_currency(a.balance, unit: "")}
-      %tr
-        %th
-          #{a.account_subtype} Maintaining Balance:
-        %td.text-right
-          #{number_to_currency(a.maintaining_balance, unit: "")}
+    -  Settings.loan_products.each do |a|
+      - if a[:loan_product_id] == @loan.loan_product_id
+        %tr
+          %th
+            Maintaining Balance:
+          %td.text-right
+            #{ @loan.principal.to_f  * a[:maintaining_balance][:percentage].to_f} 
+
+
   %tr
     %th
       Date Prepared:
