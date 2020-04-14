@@ -154,6 +154,29 @@ export default class ShowComponent extends React.Component {
 
     return cols;
   }
+  renderDebitCreditHeaders(id) {
+    var cols      = [];
+    var settings  = this.state.data.data.settings;
+
+    for(var i = 0; i < settings.length; i++) {
+      cols.push(
+        <td className="text-center">
+          <strong>
+            Credit
+          </strong>
+        </td>
+      );
+      cols.push(
+        <td className="text-center">
+          <strong>
+            Debit
+          </strong>
+        </td>
+      );
+    }
+
+    return cols;
+  }
 
   renderSubtableTotals(totals, id) {
     var cols      = [];
@@ -206,6 +229,14 @@ export default class ShowComponent extends React.Component {
             Date
           </th>
           {this.renderSubtableHeaders(r.member.id)}
+        </tr>
+      );
+      rows.push(
+        <tr key={"member-" + i + "-labels"}>
+          <th>
+            
+          </th>
+          {this.renderDebitCreditHeaders(r.member.id)}
         </tr>
       );
 
