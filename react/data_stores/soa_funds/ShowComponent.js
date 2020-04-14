@@ -369,15 +369,15 @@ export default class ShowComponent extends React.Component {
     }
 
     for(var i = 0; i < settings.length; i++) {
-      totals.push(
-        <td key={"grand-total-" + i + "-debit"} className="text-right">
-          {numberWithCommas(totalVals[i].debit)}
-        </td>
-      );
 
       totals.push(
         <td key={"grand-total-" + i + "-credit"} className="text-right">
           {numberWithCommas(totalVals[i].credit)}
+        </td>
+      );
+      totals.push(
+        <td key={"grand-total-" + i + "-debit"} className="text-right">
+          {numberWithCommas(totalVals[i].debit)}
         </td>
       );
     }
