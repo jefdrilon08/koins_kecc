@@ -560,7 +560,8 @@ module Api
             data: data,
             status: status,
             insurance_status: insurance_status,
-            identification_number: identification_number
+            identification_number: identification_number,
+            modifiable: nil
           )
 
           ActivityLog.create!(
@@ -597,7 +598,7 @@ module Api
         if errors[:full_messages].any?
           render json: errors, status: 400
         else
-          member.update!(member_type: member_type)
+          member.update!(member_type: member_type, modifiable: nil)
 
           ActivityLog.create!(
             content: "#{current_user.full_name} modified member #{member.full_name}'s member_type from #{old_member_type} to #{member_type}",
