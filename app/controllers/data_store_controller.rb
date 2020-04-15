@@ -5,7 +5,10 @@ class DataStoreController < ApplicationController
     @records      = list_query(branch_data_stores)
     @start_date   = params[:start_date]
     @end_date     = params[:end_date]
-    @br_id        =  Branch.where(id: params[:branch_id]).first
+    @br_id        = Branch.where(id: params[:branch_id]).first
+    @book         = params[:book]
+    @book_s_date  = params[:book_start_date]
+    @book_e_date  = params[:book_end_date]
 
       if @start_date.present?
         @records = @records.where(
@@ -19,11 +22,32 @@ class DataStoreController < ApplicationController
                     )
       end
 
-      if @branch_id.present?
+      if @br_id.present?
         @records = @records.where(
                     "meta ->> 'branch_id' = ?" , @br_id
                     )
       end
+
+      #for books
+      if @book.present?
+        @records = @records.where(
+                    "meta ->> 'book' = ?" , @book
+                    )
+      end
+
+
+      if @book_s_date.present?
+        @records = @records.where(
+                    "meta ->> 'start_date' = ?" , @book_s_date
+                    )
+      end
+
+      if @book_e_date.present?
+        @records = @records.where(
+                    "meta ->> 'end_date' = ?" , @book_e_date
+                    )
+      end
+
 
 
   end
