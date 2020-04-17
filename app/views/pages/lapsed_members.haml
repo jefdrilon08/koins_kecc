@@ -36,7 +36,13 @@
                   %th
                     Center
                   %th
+                    ID Number
+                  %th
                     Name
+                  %th
+                    Recognition Date
+                  %th
+                    Lenght of Stay
                   %th
                     Member Type
                   %th
@@ -47,24 +53,37 @@
                     Date of Birth
                   %th
                     Age
+                  %th
+                    LIFE
+                  %th
+                    RF  
               %tbody
-                - @members.each do |m|
+                - @members.find_each(batch_size: 1000) do |m|
                   %tr
                     %td 
                       #{m.branch.name}
                     %td
                       #{m.center.name}
+                    %td 
+                      #{m.identification_number}
+                    %td 
+                      #{m.full_name}
                     %td
-                      = link_to member_path(m) do 
-                        #{m.full_name}
+                      #{m.data.with_indifferent_access[:recognition_date]}
+                    %td 
+                      #{m.length_of_stay}
+                    %td
+                      #{m.member_type}
                     %td
                       #{m.status}
                     %td
                       #{m.insurance_status} 
-                    %td
-                      #{m.member_type}
                     %td 
                       #{m.date_of_birth}
                     %td
                       #{m.age}
+                    %td
+                      #{m.lif_amount}
+                    %td
+                      #{m.rf_amount}
 

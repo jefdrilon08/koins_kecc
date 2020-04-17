@@ -220,19 +220,35 @@ module MemberAccountValidations
               config: config
             ).execute!
         else
-          savings_account    = MemberAccount.where(account_type: "SAVINGS", account_subtype: "K-IMPOK", member_id: member.id).first
+          if member_account_validation_record.data.with_indifferent_access[:member_type].try(:upcase) == "KAAGAPAY"
+            savings_account    = MemberAccount.where(account_type: "SAVINGS", account_subtype: "Personal Savings Account", member_id: member.id).first
 
-          config  = {
-            date_paid: @c_working_date,
-            member_account: savings_account,
-            user: @user,
-            amount: due_to_members,
-            accounting_entry_reference_number: @data_accounting_entry[:reference_number]
-            }
+            config  = {
+              date_paid: @c_working_date,
+              member_account: savings_account,
+              user: @user,
+              amount: due_to_members,
+              accounting_entry_reference_number: @data_accounting_entry[:reference_number]
+              }
 
-          ::MemberAccountValidations::ApproveDepositToSavings.new(
-                  config: config
-            ).execute!
+              ::MemberAccountValidations::ApproveDepositToSavings.new(
+                config: config
+              ).execute!
+          else  
+            savings_account    = MemberAccount.where(account_type: "SAVINGS", account_subtype: "K-IMPOK", member_id: member.id).first
+
+            config  = {
+              date_paid: @c_working_date,
+              member_account: savings_account,
+              user: @user,
+              amount: due_to_members,
+              accounting_entry_reference_number: @data_accounting_entry[:reference_number]
+              }
+
+            ::MemberAccountValidations::ApproveDepositToSavings.new(
+                    config: config
+              ).execute!
+          end
         end
       end
     end

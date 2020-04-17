@@ -2,7 +2,8 @@
   %thead
     %tr
       %th{width: "2%"}
-      %th{width: "20%"} Member
+      %th{width: "15%"} Member
+      %th Member Type
       %th Classification
       %th Recognition Date (MII)
       %th Center
@@ -23,6 +24,8 @@
         %td #{i + 1}
         %td
           = link_to "#{member_account_validation_record.member.full_name}", member_path(member_account_validation_record.member), target: "_blank"
+        %td
+          #{member_account_validation_record.data.with_indifferent_access[:member_type]}
         %td
           #{member_account_validation_record.member_classification}  
         %td
@@ -54,7 +57,8 @@
   %thead
     %tr
       %th
-      %th{width: "20%"} Total
+      %th{width: "15%"} Total
+      %th
       %th
       %th
       %th

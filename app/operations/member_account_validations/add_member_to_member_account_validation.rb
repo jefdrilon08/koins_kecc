@@ -156,7 +156,8 @@ module MemberAccountValidations
                             total: @total,
                             equity_interest: @equity_interest_amount,
                             data: {
-                              is_void: false
+                              is_void: false,
+                              member_type: @member.member_type
                             }
    			)
    		@member_account_validation.member_account_validation_records << member_account_validation_record

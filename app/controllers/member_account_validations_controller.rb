@@ -10,6 +10,7 @@ class MemberAccountValidationsController < ApplicationController
     @member_account_validations = MemberAccountValidation
       .includes(:branch)
       .where(branch_id: @branches.pluck(:id))
+      .order("date_prepared DESC, status DESC")
       .page(params[:page])
       .per(LIST_PAGE_SIZE)
 

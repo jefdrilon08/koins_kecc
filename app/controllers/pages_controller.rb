@@ -62,6 +62,9 @@ class PagesController < ApplicationController
       .where(status: "active", insurance_status: "lapsed", branch_id: @branches.pluck(:id))
       .order("branches.name ASC, centers.name ASC, last_name ASC")
 
+    # @members = Insurance::FetchActiveLapsed.new(branches: @branches).execute!
+    # @members.order("branches.name ASC, centers.name ASC, last_name ASC")
+
     if params[:branch_id].present?
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
