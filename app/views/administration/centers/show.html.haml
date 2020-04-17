@@ -6,3 +6,21 @@
       = render partial: "show_sidebar"
     .col-md-8
       = render partial: "show_details"
+
+#parameters{ data: { id: @center.id } }
+
+= render partial: "administration/centers/modals/assign_officer"
+= render partial: "templates/error_list"
+
+= javascript_include_tag "administration/centers/Show.js"
+
+:javascript
+  $(document).ready(function() {
+    var authenticityToken = $("meta[name='csrf-token']").attr('content');
+    var id                = $("#parameters").data('id');
+
+    Show.init({
+      id: id,
+      authenticityToken: authenticityToken
+    });
+  });

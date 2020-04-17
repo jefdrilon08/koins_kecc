@@ -9,9 +9,10 @@
     .col
       .form-group
         = f.input :short_name, input_html: { class: 'form-control' }
-    .col
-      .form-group
-        = f.association :user, input_html: { class: 'form-control' }, label: "SO"
+    - if center.new_record?
+      .col
+        .form-group
+          = f.association :user, input_html: { class: 'form-control' }, label: "SO"
     .col
       .form-group
         = f.input :meeting_day, as: :select, collection: Center::MEETING_DAYS.map { |o| [o[:display], o[:value]] }, input_html: { class: 'form-control' }

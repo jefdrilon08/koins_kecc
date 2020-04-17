@@ -104,13 +104,13 @@ export default class ShowComponent extends React.Component {
 
     for(var j = 0; j < paymentRecords.length; j++) {
       rows.push(
-        <td className="text-right" key={"payment-" + id + "-" + j + "debit"}>
-          {paymentRecords[j].debit > 0 ? numberWithCommas(paymentRecords[j].debit) : ''}
+        <td className="text-right" key={"payment-" + id + "-" + j + "-credit"}>
+          {paymentRecords[j].credit > 0 ? numberWithCommas(paymentRecords[j].credit) : ''}
         </td>
       );
       rows.push(
-        <td className="text-right" key={"payment-" + id + "-" + j + "-credit"}>
-          {paymentRecords[j].credit > 0 ? numberWithCommas(paymentRecords[j].credit) : ''}
+        <td className="text-right" key={"payment-" + id + "-" + j + "debit"}>
+          {paymentRecords[j].debit > 0 ? numberWithCommas(paymentRecords[j].debit) : ''}
         </td>
       );
     }
@@ -154,22 +154,45 @@ export default class ShowComponent extends React.Component {
 
     return cols;
   }
+  renderDebitCreditHeaders(id) {
+    var cols      = [];
+    var settings  = this.state.data.data.settings;
+
+    for(var i = 0; i < settings.length; i++) {
+      cols.push(
+        <td className="text-center">
+          <strong>
+            Debit
+          </strong>
+        </td>
+      );
+      cols.push(
+        <td className="text-center">
+          <strong>
+            Credit
+          </strong>
+        </td>
+      );
+    }
+
+    return cols;
+  }
 
   renderSubtableTotals(totals, id) {
     var cols      = [];
 
     for(var i = 0; i < totals.length; i++) {
       cols.push(
-        <td className="text-right" key={"total-" + id + "-" + i + "-debit"}>
+        <td className="text-right" key={"total-" + id + "-" + i + "-credit"}>
           <strong>
-            {totals[i].debit > 0 ? numberWithCommas(totals[i].debit) : ''}
+            {totals[i].credit > 0 ? numberWithCommas(totals[i].credit) : ''}
           </strong>
         </td>
       );
       cols.push(
-        <td className="text-right" key={"total-" + id + "-" + i + "-credit"}>
+        <td className="text-right" key={"total-" + id + "-" + i + "-debit"}>
           <strong>
-            {totals[i].credit > 0 ? numberWithCommas(totals[i].credit) : ''}
+            {totals[i].debit > 0 ? numberWithCommas(totals[i].debit) : ''}
           </strong>
         </td>
       );
@@ -206,6 +229,14 @@ export default class ShowComponent extends React.Component {
             Date
           </th>
           {this.renderSubtableHeaders(r.member.id)}
+        </tr>
+      );
+      rows.push(
+        <tr key={"member-" + i + "-labels"}>
+          <th>
+            
+          </th>
+          {this.renderDebitCreditHeaders(r.member.id)}
         </tr>
       );
 
@@ -338,15 +369,15 @@ export default class ShowComponent extends React.Component {
     }
 
     for(var i = 0; i < settings.length; i++) {
-      totals.push(
-        <td key={"grand-total-" + i + "-debit"} className="text-right">
-          {numberWithCommas(totalVals[i].debit)}
-        </td>
-      );
 
       totals.push(
         <td key={"grand-total-" + i + "-credit"} className="text-right">
           {numberWithCommas(totalVals[i].credit)}
+        </td>
+      );
+      totals.push(
+        <td key={"grand-total-" + i + "-debit"} className="text-right">
+          {numberWithCommas(totalVals[i].debit)}
         </td>
       );
     }

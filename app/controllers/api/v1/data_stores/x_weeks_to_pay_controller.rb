@@ -36,6 +36,11 @@ module Api
           end
         end
 
+        def print_pdf
+          raise "hello world" 
+        end
+
+
         def queue
           @data_store_type  = "X_WEEKS_TO_PAY"
           @as_of            = params[:as_of].try(:to_date) || Date.today

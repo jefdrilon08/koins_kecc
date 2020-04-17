@@ -2,7 +2,54 @@ class DataStoreController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @records = list_query(branch_data_stores)
+    @records      = list_query(branch_data_stores)
+    @start_date   = params[:start_date]
+    @end_date     = params[:end_date]
+    @br_id        = Branch.where(id: params[:branch_id]).first
+    @book         = params[:book]
+    @book_s_date  = params[:book_start_date]
+    @book_e_date  = params[:book_end_date]
+
+      if @start_date.present?
+        @records = @records.where(
+                    "data ->> 'as_of' >= ?" , @start_date
+                    )
+      end
+
+      if @end_date.present?
+        @records = @records.where(
+                    "data ->> 'as_of' <= ?" , @end_date
+                    )
+      end
+
+      if @br_id.present?
+        @records = @records.where(
+                    "meta ->> 'branch_id' = ?" , @br_id
+                    )
+      end
+
+      #for books
+      if @book.present?
+        @records = @records.where(
+                    "meta ->> 'book' = ?" , @book
+                    )
+      end
+
+
+      if @book_s_date.present?
+        @records = @records.where(
+                    "meta ->> 'start_date' = ?" , @book_s_date
+                    )
+      end
+
+      if @book_e_date.present?
+        @records = @records.where(
+                    "meta ->> 'end_date' = ?" , @book_e_date
+                    )
+      end
+
+
+
   end
 
   def show
