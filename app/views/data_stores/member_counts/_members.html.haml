@@ -6,7 +6,9 @@
       %th
         Member
       %th
-        Name
+        Center
+      %th
+        SO
       %th
         Member Type
       %th
@@ -15,7 +17,7 @@
     :ruby
       membership_payment_records = MembershipPaymentRecord
         .select("DISTINCT ON (member_id) member_id, date_paid")
-        .where(member_id: members.pluck(:id), status: "paid")
+        .where(member_id: members.pluck(:id), status: "paid" , membership_name: "K-KOOP")
         .order(member_id: :asc, date_paid: :desc)
         .pluck(:id, :date_paid)
         .to_h
@@ -29,6 +31,12 @@
         %td
           #{m[:center][:name]}
         %td
+          - @so_id = Center.find(m[:center][:id]).user_id
+          - @so_name = User.find(@so_id).full_name
+          #{@so_name}
+        %td
           #{m[:member_type]}
         %td
-          #{membership_payment_records[m[:id]]}
+          - @x = MembershipPaymentRecord.where("member_id = ? and membership_name = 'K-KOOP' and status = 'paid'" , m[:id]).last
+          - @x = @x.date_paid
+          #{@x}
