@@ -80,7 +80,7 @@ namespace :rehash do
     if ENV["ACCOUNT_SUBTYPE"].present?
       member_accounts = member_accounts.where(account_subtype: ENV["ACCOUNT_SUBTYPE"])
     end
-
+    sleep(0.1)
     size  = member_accounts.length
     member_accounts.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
