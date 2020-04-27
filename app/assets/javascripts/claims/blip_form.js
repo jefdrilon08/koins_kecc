@@ -54,6 +54,7 @@ var blipForm = (function() {
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
           data: {
+            amount: $totalAmountPayable.val(),
             date_reported: $dateReported.val(),
             date_paid: $datePaid.val(),
             length_of_stay: $lengthOfStay.val(),
@@ -71,7 +72,6 @@ var blipForm = (function() {
             date_of_death_tpd_accident: $dateOfDeathTpdAccident.val(),
             date_of_policy_issue: $dateOfPolicyIssue.val(),
             returned_contribution: $returnedContribution.val(),
-            total_amount_payable: $totalAmountPayable.val(),
             beneficiary: $beneficiary.val(),
             category_of_cause_of_death_tpd_accident: $categoryOfCauseOfDeathTpdAccident.val(),
             cause_of_death_tpd_accident: $causeOfDeathTpdAccident.val(),
@@ -267,6 +267,19 @@ var blipForm = (function() {
       var arrears_val = $('#arrears').val()
       $('#total-amount-payable').val(parseFloat(value) - parseFloat(arrears_val))
     });
+
+    $dateOfBirth.on('change', function(){
+      var dateOfBirth = $('#date-of-birth').val();
+      var birthDate = new Date(dateOfBirth);
+      var today = new Date();
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      $('#age').val(age);
+    });
+
 
     $classificationOfInsured.on('change', function() { 
       var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());

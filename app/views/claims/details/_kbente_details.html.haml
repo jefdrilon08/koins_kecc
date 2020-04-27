@@ -54,4 +54,9 @@
       %th Prepared By
       %td 
         = @claim.prepared_by
-      
+    %tr 
+      %th Approved by
+      %td 
+        = @claim.try(:approved_by).try(:titleize)
+      %th
+      %td

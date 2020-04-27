@@ -58,7 +58,8 @@ module Api
         claim = Claim.find(params[:id])
 
         if claim.pending? 
-          claim.update!(status: "approved")
+          claim.update!(status: "approved", approved_by: @current_user.print_full_name)
+
         end
       end
     end

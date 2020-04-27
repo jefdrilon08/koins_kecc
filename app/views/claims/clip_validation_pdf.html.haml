@@ -225,7 +225,7 @@
           %td{:width => "21%", :align => "right"}
             %b
               %u  
-                #{number_with_delimiter(number_with_precision(@data["amount_payable_to_beneficiary"], precision: 2), delimiter: ",", separator: ".")} PhP
+                #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} PhP
         %tr
           %td{:width => "22%"}
             Total amount of loan:

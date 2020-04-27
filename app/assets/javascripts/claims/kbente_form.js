@@ -35,10 +35,10 @@ var kbenteForm = (function() {
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
           data: {
+            amount: $amount.val(),
             date_approved: $dateApproved.val(),
             date_of_birth: $dateOfBirth.val(),
-            purpose: $purpose.val(),
-            amount: $amount.val(),
+            purpose: $purpose.val(), 
             name_of_insured: $nameOfInsured.val(),
             name_of_beneficiary: $nameOfBeneficiary.val(),
             classification: $classification.val(),

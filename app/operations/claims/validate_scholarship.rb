@@ -6,9 +6,9 @@ module Claims
         @data                     = data
         @date_prepared            = date_prepared
         @prepared_by              = prepared_by
+        @amount                   = @data[:amount]
         @name_of_beneficiary      = @data[:name_of_beneficiary]
         @payee                    = @data[:payee]
-        @amount                   = @data[:amount]
         @name_of_school           = @data[:name_of_school]
         @school_year              = @data[:school_year]
         @year_level               = @data[:year_level]

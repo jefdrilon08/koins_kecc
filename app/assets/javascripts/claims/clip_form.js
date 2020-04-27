@@ -43,8 +43,8 @@ var clipForm = (function() {
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
           data: {
+            amount: $amountPayableToBeneficiary.val(),
             amount_of_loan: $amountOfLoan.val(),
-            amount_payable_to_beneficiary: $amountPayableToBeneficiary.val(),
             amount_payable_to_creditor: $amountPayableToCreditor.val(),
             date_prepared: $datePrepared.val(),
             creditors_name: $creditorsName.val(),
@@ -105,6 +105,18 @@ var clipForm = (function() {
       var y = expireDate.getFullYear();           
       $("#expiration-date-of-coverage").val(y + "-" + mm + "-" + dd);
 
+    });
+
+    $dateOfBirth.on('change', function(){
+      var dateOfBirth = $('#date-of-birth').val();
+      var birthDate = new Date(dateOfBirth);
+      var today = new Date();
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      $('#age').val(age);
     });
   }
 
