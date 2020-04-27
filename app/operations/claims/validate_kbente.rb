@@ -7,10 +7,10 @@ module Claims
         @data                                     = data
         @date_prepared                            = date_prepared
         @prepared_by                              = prepared_by
+        @amount                                   = @data[:amount]
         @date_approved                            = @data[:date_approved]
         @date_of_birth                            = @data[:date_of_birth]
         @purpose                                  = @data[:purpose]
-        @amount                                   = @data[:amount]
         @name_of_insured                          = @data[:name_of_insured]
         @name_of_beneficiary                      = @data[:name_of_beneficiary]
         @classification                           = @data[:classification]
@@ -65,6 +65,10 @@ module Claims
         @errors << "Date expired field is required"
       end
 
+      if Date.today.to_date > @date_expired.to_date
+        @errors << "Expired K-BENTE!"
+      end
+
       validate_kbente_duplication!
       return  @errors
     end
@@ -72,13 +76,11 @@ module Claims
     private
 
     def validate_kbente_duplication!
-      count = Claim.where("claim_type = ? AND data->>'purpose' = ? AND data->>'date_of_death' = ?", "K-BENTE", @purpose, @date_of_death).count
+      count = Claim.where("member_id = ? AND claim_type = ? AND data->>'purpose' = ? AND data->>'date_of_death' = ?",@claim.member_id, "K-BENTE", @purpose, @date_of_death).count
         if count > 0
           @errors << "Duplicate K-BENTE!"
         end
-       if @claim.created_at.to_date > @date_expired.to_date
-        @errors << "Expired K-BENTE!"
-      end
+       
     end
   end
 end

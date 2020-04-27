@@ -88,7 +88,8 @@
           ["Lapsed Members",           lapsed_members_path,                        nil,                                         true,                               "fa-users"],
           ["Members For Reinsurance",  members_for_reinsurance_path,               { "pages" => "insurance_exit_age_members" }, is_not_remote,                      "fa-users"],
           ["Seriatim",                 seriatim_path,                              nil,                                         (is_not_remote || microinsurance?), "fa-users"],
-          ["Claims Register",          claims_path,                                nil,                                         (is_not_remote || microinsurance?), "fa-house-damage"],
+          ["Claims Register",          claims_path,                                nil,                                        microinsurance?, "fa-house-damage"],
+          ["Insurace Account Status",          daily_report_insurance_account_status_path,                                nil,                                         microinsurance?, "fa-users"],
         ],
       ],
       [

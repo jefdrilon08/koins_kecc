@@ -28,6 +28,7 @@ var approvedClaim = (function() {
           data: data,
           success: function(responseContent) {
             $message.html("Success! Redirecting...");
+            window.location.reload();
             window.location.href = "/claims/" + id;
           },
           error: function(responseContent) {

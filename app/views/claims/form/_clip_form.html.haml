@@ -41,7 +41,7 @@
     .form-group
       %label.col.control-label 
         Gender
-        = text_field_tag :gender, @claim.data["gender"], class: 'form-control', id: 'gender', value: @claim.member.gender
+        = select_tag :gender, options_for_select(["FEMALE","MALE"], @claim.data["gender"]), class: 'form-control' , id: 'gender'
   .col
     .form-group
       %label.col.control-label
@@ -88,7 +88,7 @@
     .form-group
       %label.col.control-label
         Amount Payable to Beneficiary(Paid Amount)
-        = text_field_tag :amount_payable_to_beneficiary, @claim.data["amount_payable_to_beneficiary"], class: 'form-control', id: 'amount-payable-to-beneficiary'
+        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount-payable-to-beneficiary'
   .col
     .form-group
       %label.col.control-label

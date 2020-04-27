@@ -62,12 +62,12 @@
     .form-group
       %label.col.control-label
         Gender
-        = text_field_tag :gender, @claim.data["gender"], class: 'form-control' , id: 'gender', value: @claim.member.gender
+        = select_tag :gender, options_for_select(["FEMALE","MALE"], @claim.data["gender"]), class: 'form-control' , id: 'gender', value: @claim.member.gender
   .col
     .form-group
       %label.col.control-label
         Civil Status
-        = text_field_tag :civil_status, @claim.data["civil_status"], class: 'form-control', id: 'civil-status', value: @claim.member.civil_status
+        = select_tag :civil_status, options_for_select(["SINGLE","MAY KINAKASAMA","KASAL","HIWALAY","BIYUDO/A"]), class: 'form-control', id: 'civil-status', value: @claim.member.civil_status
 .row  
   .col
     .form-group

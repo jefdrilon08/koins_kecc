@@ -7,8 +7,8 @@ module Claims
         @data                                     = data
         @date_prepared                            = date_prepared
         @prepared_by                              = prepared_by
-        @date_approved                            = @data[:date_approved]
         @amount                                   = @data[:amount]
+        @date_approved                            = @data[:date_approved]
         @effective_date                           = @data[:effective_date]
         @expiration_date                          = @data[:expiration_date]
         @poc_number                               = @data[:poc_number]
@@ -84,6 +84,9 @@ module Claims
         @errors << "Gender field is required"
       end
 
+      if Date.today.to_date > @expiration_date.to_date
+        @errors << "Expired KALINGA!"
+      end
 
       validate_kalinga_duplication!
       return  @errors
@@ -93,10 +96,6 @@ module Claims
       count = Claim.where("claim_type = ? AND data->>'poc_number' = ?", "K-KALINGA", @poc_number).count
       if count > 0
         @errors << "Duplicate KALINGA!"
-      end
-
-      if @claim.created_at.to_date > @expiration_date.to_date
-        @errors << "Expired KALINGA!"
       end
 
     end

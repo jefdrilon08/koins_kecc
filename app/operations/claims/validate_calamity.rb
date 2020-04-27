@@ -6,10 +6,10 @@ module Claims
         @data                                     = data
         @date_prepared                            = date_prepared
         @prepared_by                              = prepared_by
+        @amount                                   = @data[:amount]
         @date_requested                           = @data[:date_requested]
         @purpose                                  = @data[:purpose]
         @type_of_calamity                         = @data[:type_of_calamity]
-        @amount                                   = @data[:amount]
         @date_of_event                            = @data[:date_of_event]
         @name_of_payee                            = @data[:name_of_payee]
         @name_of_beneficiary                      = @data[:name_of_beneficiary]

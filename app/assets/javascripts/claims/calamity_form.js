@@ -32,10 +32,10 @@ var calamityForm = (function() {
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
           data: {
+            amount: $amount.val(), 
             date_requested: $dateRequested.val(),
             purpose: $purpose.val(),
             type_of_calamity: $typeOfCalamity.val(),
-            amount: $amount.val(),
             date_of_event: $dateOfEvent.val(),
             name_of_payee: $nameOfPayee.val(),
             name_of_beneficiary: $nameOfBeneficiary.val()
