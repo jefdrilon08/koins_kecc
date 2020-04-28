@@ -1,0 +1,55 @@
+%h5
+  As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+%table.table.table-bordered.table-hover.table-sm
+  %tr
+    %th{ width: "50%" }
+    %th.text-center
+      BLIP
+    %th.text-center
+      CLIP
+    %th.text-center
+      HIIP
+    %th.text-center
+      K-BENTE
+    %th.text-center
+      K-KALINGA
+    %th.text-center
+      CALAMITY ASSISTANCE
+    %th.text-center
+      KJSP
+    %th.text-center
+      Total
+  %tr
+    %th
+      Claims Count   
+    %td.text-center
+      #{@data[:counts][:approved_claims][:blip]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:clip]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:hiip]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:k_bente]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:k_kalinga]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:calamity_assistance]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:kjsp]}
+    %td.text-center
+      #{@data[:counts][:approved_claims][:total]}
+%hr
+%ul.nav.nav-tabs{:role => "tablist"}
+  %li.nav-item
+    %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
+      Claims Counts (#{@data[:counts][:approved_claims][:total]})  
+.tab-content
+  #active-members.tab-pane.active.show{:role => "tabpanel"}
+    = render partial: "data_stores/claims_counts/claims", locals: { claims: @data[:counts][:approved_claims][:claims] }
+
+:javascript
+  $(document).ready(function() {
+    $(".data-table").DataTable({
+      fixedHeader: true
+    });
+  });

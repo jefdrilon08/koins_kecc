@@ -136,6 +136,4 @@ class ClaimsController < ApplicationController
     @claim            = Claim.find(params[:id])
     @data             = @claim.data.try(:with_indifferent_access) || {}
   end
-
-
 end

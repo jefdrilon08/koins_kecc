@@ -1948,7 +1948,7 @@ namespace :adjust do
 
     @branches         = Branch.all
 
-    @branches.find_each(batch_size: 1000) do |branch|
+    @branches.each do |branch|
 
       puts "Processing #{branch.name}"
 
@@ -1996,7 +1996,7 @@ namespace :adjust do
       @as_of = ENV['CURRENT_DATE'].to_date
     end
 
-    @branches.find_each(batch_size: 1000) do |branch|
+    @branches.each do |branch|
 
       puts "Processing #{branch.name}"
 
@@ -2026,6 +2026,53 @@ namespace :adjust do
         }
 
         ProcessPersonalFunds.perform_later(args)
+      end
+      puts "Done!"
+    end
+  end
+
+  task :process_claims_counts => :environment do
+    @data_store_type  = "CLAIMS_COUNTS"
+    @as_of            = Date.today
+    @branches         = Branch.all
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    @branches.each do |branch|
+
+      puts "Processing #{branch.name}"
+
+      @record = DataStore.claims_counts.where(
+                      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                      branch.id,
+                      @as_of
+                    ).first
+
+      if @record.blank?
+        @record = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      branch: {
+                        id: branch.id,
+                        name: branch.name
+                      },
+                      as_of: @as_of,
+                      data_store_type: @data_store_type
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+        args  = {
+          record: @record,
+          data_store_type: @data_store_type
+        }
+
+        ProcessClaimsCounts.perform_later(args)
       end
       puts "Done!"
     end

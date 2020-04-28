@@ -13,7 +13,7 @@ module Dashboard
 
       data_stores = DataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
-        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
+        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[CLAIMS_COUNTS PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
         .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC")
 
       {
@@ -36,9 +36,12 @@ module Dashboard
     def build_branch(data_stores, branch)
       mc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "INSURANCE_MEMBER_COUNTS" }
       pf = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "PERSONAL_FUNDS" }
+      cc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "CLAIMS_COUNTS" }
+
       d = {
         personal_funds_as_of: "",
         member_counts_as_of: "",
+        claims_counts_as_of: "",
         total_life: 0.00,
         total_rf: 0.00,
         total_life_rf: 0.00,
@@ -48,6 +51,24 @@ module Dashboard
         pending_members:          { male: 0, female: 0, others: 0, total: 0 },
         dormant_members:          { male: 0, female: 0, others: 0, total: 0 },
         resigned_active_members:  { male: 0, female: 0, others: 0, total: 0 },
+        approved_claims:          { 
+                                    blip: 0,
+                                    clip: 0,
+                                    hiip: 0,
+                                    kjsp: 0,
+                                    calamity_assistance: 0,
+                                    k_bente: 0,
+                                    k_kalinga: 0,
+                                    total: 0,
+                                   },
+        total_claims_amount: 0.00,
+        total_blip_claims: 0.00,
+        total_clip_claims: 0.00,
+        total_hiip_claims: 0.00,
+        total_kbente_claims: 0.00,
+        total_kkalinga_claims: 0.00,
+        total_kjsp_claims: 0.00,
+        total_calamity_assistance_claims: 0.00
       }
 
       if pf.present?
@@ -59,6 +80,42 @@ module Dashboard
           if !p["accounts"].nil?
             d[:total_rf] += p["accounts"].select{ |acc| acc["account_subtype"] == "Retirement Fund" }.first["balance"].to_f.round(2)
             d[:total_life] += p["accounts"].select{ |acc| acc["account_subtype"] == "Life Insurance Fund" }.first["balance"].to_f.round(2)
+          end
+        end
+      end
+
+      if cc.present?
+        counts = cc.data["counts"]
+
+        d[:claims_counts_as_of]  = cc.meta["as_of"]
+      
+        d[:approved_claims][:blip]                = counts["approved_claims"]["blip"]
+        d[:approved_claims][:clip]                = counts["approved_claims"]["clip"]
+        d[:approved_claims][:hiip]                = counts["approved_claims"]["hiip"]
+        d[:approved_claims][:k_bente]              = counts["approved_claims"]["k_bente"]
+        d[:approved_claims][:k_kalinga]            = counts["approved_claims"]["k_kalinga"]
+        d[:approved_claims][:kjsp]                = counts["approved_claims"]["kjsp"]
+        d[:approved_claims][:calamity_assistance] = counts["approved_claims"]["calamity_assistance"]
+        d[:approved_claims][:total]               = counts["approved_claims"]["total"]
+
+        cc.data["counts"]["approved_claims"]["claims"].each.with_index do |c, i|
+            
+          d[:total_claims_amount] += c["amount"].to_f.round(2)
+
+          if c["claim_type"] == "BLIP"
+            d[:total_blip_claims] += c["amount"].to_f.round(2)
+          elsif c["claim_type"] == "CLIP"
+            d[:total_clip_claims] += c["amount"].to_f.round(2)
+          elsif c["claim_type"] == "HIIP"
+            d[:total_hiip_claims] += c["amount"].to_f.round(2)
+          elsif c["claim_type"] == "CALAMITY ASSISTANCE"
+            d[:total_calamity_assistance_claims] += c["amount"].to_f.round(2)
+          elsif c["claim_type"] == "K-BENTE"
+            d[:total_kbente_claims] += c["amount"].to_f.round(2)
+          elsif c["claim_type"] == "K-KALINGA"
+            d[:total_kkalinga_claims] += c["amount"].to_f.round(2)
+          elsif c["claim_type"] == "KUYA JUN SCHOLARSHIP PROGRAM"
+            d[:total_kjsp_claims] += c["amount"].to_f.round(2)
           end
         end
       end
