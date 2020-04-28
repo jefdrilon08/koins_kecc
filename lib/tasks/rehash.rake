@@ -80,12 +80,12 @@ namespace :rehash do
     if ENV["ACCOUNT_SUBTYPE"].present?
       member_accounts = member_accounts.where(account_subtype: ENV["ACCOUNT_SUBTYPE"])
     end
-
+  
     size  = member_accounts.length
     member_accounts.each_with_index do |o, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Rehasing member account #{o.id}... #{progress}%%")
-      sleep(0.1)
+      sleep(1)
 
       ::MemberAccounts::Rehash.new(
         member_account: o

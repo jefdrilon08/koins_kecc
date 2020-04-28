@@ -6,12 +6,12 @@ module Claims
       @data                                     = data
       @date_prepared                            = date_prepared
       @prepared_by                              = prepared_by
+      @amount                                   = @data[:amount]
       @certificate_number                       = @data[:certificate_number]
       @date_of_birth                            = @data[:date_of_birth]
       @effective_date_of_coverage               = @data[:effective_date_of_coverage]
       @expiration_date_of_coverage              = @data[:expiration_date_of_coverage]
       @age                                      = @data[:age]
-      @amount                                   = @data[:amount]
       @date_admitted                            = @data[:date_admitted]
       @date_discharged                          = @data[:date_discharged]
       @number_of_days_tobepaid                  = @data[:number_of_days_tobepaid]
@@ -40,6 +40,7 @@ module Claims
       if @expiration_date_of_coverage.blank?
         @errors << "Expiration date field is required"
       end
+
 
       if @age.blank?
         @errors << "Age field is required"
@@ -73,6 +74,14 @@ module Claims
         @errors << "Name of claimant field is required"
       end
 
+      if Date.today.to_date > @expiration_date_of_coverage.to_date
+        @errors << "Expired HIIP!"
+      end
+
+      if @amount.to_i >= 6000.00.to_i
+        @errors << "Exceed amount!"
+      end
+
       validate_hiip_duplication!
       return  @errors
     end
@@ -81,27 +90,15 @@ module Claims
 
     def validate_hiip_duplication!
       total_amount = 0.0
-      count = Claim.where("claim_type = ? AND data->>'certificate_number' = ?", "HIIP", @certificate_number).count
-      if count > 0
-        @errors << "Duplicate HIIP!"
-      end
-      if total_amount >= 6000.00
-        @errors << "Exceed amount!"
-      end
-      # # count = Claim.where("claim_type = ? AND member_id = ?", "HIIP", @claim.member_id).count
-      # # if count > 1
-      # #   if total_amount >= 6000.00
-      # #     @errors << "Exceed amount!"
-      # #   end
-      # # end
-
       Claim.where("claim_type = ?", "HIIP").each do |hiip|
+        hiip_data = hiip.data.with_indifferent_access
         if hiip.member_id == @claim.member_id
-          hiip_data = hiip.data.with_indifferent_access
           total_amount = total_amount + hiip_data[:amount].to_i
-        end
+          if total_amount >= 6000.00
+            @errors << "Exceed amount!"
+          end
+        end 
       end
-      
     end
   end
 end

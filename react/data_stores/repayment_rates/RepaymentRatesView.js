@@ -56,7 +56,7 @@ export default class RepaymentRatesView extends React.Component {
                 {member.last_name}, {member.first_name} {member.middle_name}
                 <br/>
                 <small className="text-muted">
-                  {center.name}
+                  | {center.name}
                 </small>
               </strong>
             </a>

@@ -48,15 +48,18 @@
         = @claim.prepared_by
     %tr
     - if @data[:course].blank? or @data[:year_level] == "GRADE 7" or @data[:year_level] == "GRADE 8" or @data[:year_level] == "GRADE 9" or @data[:year_level] == "GRADE 10" or @data[:year_level] == "GRADE 11" or @data[:year_level] == "GRADE 12" or @data[:sem].blank?
-      %th 
-      %td 
-      %th 
-      %td   
     - else
       %th Course
       %td
         = @data[:course]
       %th Semester
       %td 
-        = @data[:sem] 
+        = @data[:sem]
+    %tr 
+      %th Approved by
+      %td 
+        = @claim.try(:approved_by).try(:titleize)
+      %th
+      %td
+    
         

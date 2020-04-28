@@ -101,6 +101,18 @@ var hiipForm = (function() {
       // $('#balance').val(parseFloat(balance) - (parseFloat(numberOfDaysTobepaid) * parseFloat(value)));
     });
 
+    $dateOfBirth.on('change', function(){
+      var dateOfBirth = $('#date-of-birth').val();
+      var birthDate = new Date(dateOfBirth);
+      var today = new Date();
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      $('#age').val(age);
+    });
+
     $effectiveDateOfCoverage.on('change', function(){
       var effectiveDateOfCoverage = $("#effective-date-of-coverage").val();
       var expireDate = new Date(effectiveDateOfCoverage);

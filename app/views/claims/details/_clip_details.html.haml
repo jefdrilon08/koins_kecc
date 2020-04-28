@@ -56,7 +56,7 @@
     %tr
       %th Amount Payable to Beneficiary (Paid Amount)
       %td
-        = @data[:amount_payable_to_beneficiary]
+        = @data[:amount]
       %th Amount Payable to Creditor (Balance)
       %td
         = @data[:amount_payable_to_creditor]
@@ -64,5 +64,6 @@
       %th Prepared By
       %td
         = @claim.prepared_by
-      %th
-      %td
+      %th Approved by
+      %td 
+        = @claim.try(:approved_by).try(:titleize)

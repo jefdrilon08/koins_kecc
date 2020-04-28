@@ -7,6 +7,7 @@ module Claims
         @data                                     = data
         @date_prepared                            = date_prepared
         @prepared_by                              = prepared_by
+        @amount                                   = @data[:amount]
         @gender                                   = @data[:gender]
         @policy_number                            = @data[:policy_number]
         @type_of_insurance_policy                 = @data[:type_of_insurance_policy]
@@ -23,7 +24,6 @@ module Claims
         @retirement_fund                          = @data[:retirement_fund]
         @length_of_stay                           = @data[:length_of_stay]
         @returned_contribution                    = @data[:returned_contribution]
-        @total_amount_payable                     = @data[:total_amount_payable]
         @order_of_child                           = @data[:order_of_child]
         @category_of_cause_of_death_tpd_accident  = @data[:category_of_cause_of_death_tpd_accident]
         @date_reported                            = @data[:date_reported]
@@ -107,7 +107,7 @@ module Claims
         @errors << "Returned Contribution field is required"
       end
 
-      if @total_amount_payable.blank?
+      if @amount.blank?
         @errors << "Total Amount Payable field is required"
       end
 
