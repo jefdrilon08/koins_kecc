@@ -8,7 +8,7 @@ module Reports
       if @branch.present? && @start_date.present? && @end_date.present? 
         @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "BLIP").order("date_prepared DESC")
       elsif  @start_date.present? && @end_date.present? 
-        @claims = Claim.where("date_prepared >= ? AND date_prepared  = ? AND claim_type = ?", @start_date, @end_date, "BLIP").order("date_prepared DESC")
+        @claims = Claim.where("date_prepared >= ? AND date_prepared  <= ? AND claim_type = ?", @start_date, @end_date, "BLIP").order("date_prepared DESC")
       elsif @branch.present? 
         @claims = Claim.where("branch_id = ? AND claim_type = ?", @branch, "BLIP").order("date_prepared DESC")
       else  
