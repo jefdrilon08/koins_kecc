@@ -6,6 +6,7 @@ module Claims
       @data                                     = data
       @date_prepared                            = date_prepared
       @prepared_by                              = prepared_by
+      @amount                                   = @data[:amount]
       @gender                                   = @data[:gender]
       @policy_number                            = @data[:policy_number]
       @creditors_name                           = @data[:creditors_name]
@@ -17,9 +18,8 @@ module Claims
       @effective_date_of_coverage               = @data[:effective_date_of_coverage]
       @expiration_date_of_coverage              = @data[:expiration_date_of_coverage]
       @age                                      = @data[:age]
-      @amount_of_loan                           = @data[:amount_of_loan]
       @terms                                    = @data[:terms]
-      @amount_payable_to_beneficiary            = @data[:amount_payable_to_beneficiary]
+      @amount_of_loan                           = @data[:amount_of_loan]
       @amount_payable_to_creditor               = @data[:amount_payable_to_creditor]
       @type_of_loan                             = @data[:type_of_loan]
       
@@ -85,7 +85,7 @@ module Claims
         @errors << "Amount Payable to Creditor field is required"
       end
 
-      if @amount_payable_to_beneficiary.blank?
+      if @amount.blank?
         @errors << "Amount Payable to Beneficiary field is required"
       end
 

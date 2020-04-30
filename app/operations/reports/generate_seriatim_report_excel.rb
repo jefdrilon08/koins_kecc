@@ -4,8 +4,14 @@ module Reports
       @as_of = as_of
       @branch = branch
 
-      if !@as_of.nil? && !@branch.nil?
-        @members  = Member.active.where("data->>'recognition_date' <= ? AND insurance_status != ? AND member_type != ? AND branch_id = ?", @as_of, "dormant", "GK", @branch).order("identification_number ASC")
+      if @as_of.present? && @branch.present?
+        @active_members  = Member.active.where("data->>'recognition_date' <= ? AND insurance_status != ? AND member_type != ? AND branch_id = ?", @as_of, "dormant", "GK", @branch).order("identification_number ASC")
+        @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? AND branch_id = ? ", @as_of, @as_of, @branch)
+        @members = @active_members + @resigned   
+      elsif @as_of.present?  
+        @active_members  = Member.active.where("data->>'recognition_date' <= ? AND insurance_status != ? AND member_type != ?", @as_of, "dormant", "GK").order("identification_number ASC")
+        @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? ", @as_of, @as_of)
+        @members = @active_members + @resigned      
       end
 
       @p        = Axlsx::Package.new
@@ -30,6 +36,7 @@ module Reports
           sheet.add_row [ 
             "Certificate Number",
             "Name of Member",
+            "Date Resigned",
             "Date of Membership",
             "Basic Benefit",
             "Mode of Contribution (weekly/monthly)",
@@ -98,6 +105,7 @@ module Reports
               sheet.add_row [
                   member.identification_number,
                   member.full_name_titleize,
+                  member.insurance_date_resigned,
                   member.data.with_indifferent_access[:recognition_date].try(:to_date),
                   value,
                   "weekly",
@@ -107,11 +115,12 @@ module Reports
                   "",
                   life_amount/2,
                   "",
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                ], style: [nil, nil, date_format_cell,date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
               else
                 sheet.add_row [
                   member.identification_number,
                   member.full_name_titleize,
+                  member.insurance_date_resigned,
                   member.data.with_indifferent_access[:recognition_date].try(:to_date),
                   value,
                   "weekly",
@@ -121,7 +130,7 @@ module Reports
                   "",
                   life_amount/2,
                   "",
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                ], style: [nil, nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
             end
 
           loans = member.loans.where("status = ? AND date_approved <= ?","active", @as_of)
@@ -159,6 +168,7 @@ module Reports
                   "",
                   "",
                   "",
+                  "",
                   loan.pn_number,
                   loan.date_approved,
                   loan.principal,
@@ -172,6 +182,7 @@ module Reports
                 ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
               else
                 sheet.add_row [
+                  "",
                   "",
                   "",
                   "",

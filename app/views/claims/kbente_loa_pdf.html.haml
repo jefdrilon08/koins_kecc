@@ -140,7 +140,7 @@
           &nbsp;branch with the amount of
           %u
             %b
-              ***#{@kbente_claim.amount.to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@kbente_claim.amount, precision: 2), delimiter: ",", separator: ".", unit: "")})
+              ***#{@data["amount"].to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")})
         %br
           Thank you for your cooperation in this regard.
   %br

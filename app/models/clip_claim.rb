@@ -70,6 +70,7 @@ class ClipClaim < ApplicationRecord
         expiration_date_of_coverage: self.expiration_date_of_coverage,
         amount_of_loan: self.amount_of_loan,
         terms: self.terms,
+        amount: self.amount_payable_to_beneficiary,
         amount_payable_to_beneficiary: self.amount_payable_to_beneficiary,
         amount_payable_to_creditor: self.amount_payable_to_creditor,
         type_of_loan: self.type_of_loan

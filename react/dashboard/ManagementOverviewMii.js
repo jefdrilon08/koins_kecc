@@ -403,6 +403,238 @@ export default class ManagementOverviewMii extends React.Component {
     );
   }
 
+  renderOverviewTableClaims() {
+    var areas   = this.state.data.areas;
+    var rows    = [];
+    var colSpan = 13;
+
+    var areaColor     = "#bad5fd";
+    var clusterColor  = "#c5ffc1";
+    var branchColor   = "#797979";
+
+    var tTotalBLip                = 0.00;
+    var tTotalClip                = 0.00;
+    var tTotalHiip                = 0.00;
+    var tTotalKbente              = 0.00;
+    var tTotalKkalinga            = 0.00;
+    var tTotalKjsp                = 0.00;
+    var tTotalCalamityAssistance  = 0.00;
+    var tBlip                     = 0;
+    var tClip                     = 0;
+    var tHiip                     = 0;
+    var tKbente                   = 0;
+    var tKkalinga                 = 0;
+    var tKjsp                     = 0;
+    var tCalamityAssistance       = 0;
+
+    rows.push(
+      <tr style={{backgroundColor: areaColor}}>
+        <th className="text-center" colSpan={colSpan}>
+          <h4>        
+            CLAIMS COUNTS
+          </h4>  
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+          Branch Name
+        </th>
+        <th className="text-center">
+          BLIP
+        </th>
+        <th className="text-center">
+          CLIP
+        </th>
+        <th className="text-center">
+          HIIP
+        </th>
+        <th className="text-center">
+          K-BENTE
+        </th>
+        <th className="text-center">
+          K-KALINGA
+        </th>
+        <th className="text-center">
+          CALAMITY ASSISTANCE
+        </th>
+        <th className="text-center">
+          KJSP
+        </th>
+        <th>
+          As Of (Claim Counts)
+        </th>
+      </tr>
+    );
+
+    for(var i = 0; i < areas.length; i++) {
+     
+      var clusters    = areas[i].clusters;
+
+      for(var j = 0; j < clusters.length; j++) {
+
+        var branches  = clusters[j].branches;
+
+        for(var k = 0; k < branches.length; k++) {
+        
+
+          tTotalBLip                += branches[k].data.total_blip_claims;
+          tTotalClip                += branches[k].data.total_clip_claims;
+          tTotalHiip                += branches[k].data.total_hiip_claims;
+          tTotalKbente              += branches[k].data.total_kbente_claims;
+          tTotalKkalinga            += branches[k].data.total_kkalinga_claims;
+          tTotalKjsp                += branches[k].data.total_kjsp_claims;
+          tTotalCalamityAssistance  += branches[k].data.total_calamity_assistance_claims;
+          tBlip                     += branches[k].data.approved_claims.blip;
+          tClip                     += branches[k].data.approved_claims.clip;
+          tHiip                     += branches[k].data.approved_claims.hiip;
+          tKbente                   += branches[k].data.approved_claims.k_bente;
+          tKkalinga                 += branches[k].data.approved_claims.k_kalinga;
+          tKjsp                     += branches[k].data.approved_claims.kjsp;
+          tCalamityAssistance       += branches[k].data.approved_claims.calamity_assistance;
+
+          rows.push(
+            <tr key={"branch-" + branches[k].id}>
+              <td>
+                <strong>
+                  {branches[k].name}
+                </strong>
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.blip}
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.clip}
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.hiip}
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.k_bente}
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.k_kalinga}
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.calamity_assistance}
+              </td>
+              <td className="text-center">
+                {branches[k].data.approved_claims.kjsp}
+              </td>
+              <td className="text-center">
+                {branches[k].data.claims_counts_as_of}
+              </td>
+            </tr>
+          );
+        }
+      }
+    }
+
+    rows.push(
+      <tr style={{backgroundColor: "#696", color: "#fff"}}>
+        <td>
+          <strong>
+            Grand Total
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tBlip}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tClip}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tHiip}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tKbente}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tKkalinga}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tCalamityAssistance}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tKjsp}
+          </strong>
+        </td>
+        <td>
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: "#000", color: "#fff"}}>
+        <td>
+          <strong>
+            Grand Total Amount
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalBLip)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalClip)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalHiip)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalKbente)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalKkalinga)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalCalamityAssistance)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalKjsp)}
+          </strong>
+        </td>
+        <td>
+        </td>
+      </tr>
+    );
+
+    return (
+      <table className="table table-sm table-bordered">
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    );
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -447,6 +679,8 @@ export default class ManagementOverviewMii extends React.Component {
             </div>
           </div>
           {this.renderOverviewTable()}
+          <br />
+          {this.renderOverviewTableClaims()}
         </div>
       );
     }

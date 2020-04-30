@@ -84,15 +84,22 @@
         %td
           = @data[:cause_of_death_tpd_accident]
       %tr
+        %th Total Amount Payable
+        %td
+          = @data[:amount]
         %th Prepared By
         %td
           = @claim.prepared_by
+      %tr
+        %th Approved by
+        %td 
+          = @claim.try(:approved_by).try(:titleize)
         - if @data[:order_of_child].blank?
-          %th 
+          %th
           %td
         - else
           %th Order of Child
           %td
             = @data[:order_of_child]
-          
+      
 

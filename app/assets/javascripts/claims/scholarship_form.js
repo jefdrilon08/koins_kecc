@@ -15,7 +15,6 @@ var scholarshipForm = (function() {
     $submitButton                = $("#submit-button");
     $message                     = $(".message");
     $errorsTemplate              = $("#errors-template").html();
-
     $nameOfBeneficiary           = $("#name-of-beneficiary");
     $payee                       = $("#payee");
     $amount                      = $("#amount");
@@ -49,9 +48,9 @@ var scholarshipForm = (function() {
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
           data: {
+            amount: $amount.val(),
             name_of_beneficiary: $nameOfBeneficiary.val(),
             payee: $payee.val(),
-            amount: $amount.val(),
             name_of_school: $nameOfSchool.val(),
             school_year: $schoolYear.val(),
             year_level: $yearLevel.val(),

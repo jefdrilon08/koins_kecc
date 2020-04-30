@@ -273,6 +273,7 @@ namespace :api do
       get "/branch_resignations/fetch", to: "branch_resignations#fetch"
       post "/member_counts/queue", to: "member_counts#queue"
       post "/insurance_member_counts/queue", to: "insurance_member_counts#queue"
+      post "/claims_counts/queue", to: "claims_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
       post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"

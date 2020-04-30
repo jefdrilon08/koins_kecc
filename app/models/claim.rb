@@ -9,6 +9,7 @@ class Claim < ApplicationRecord
                   "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7","K-KASAL","K-KASANGKAPAN","K-MAGGAGAWA",
                   "K-NHA W1","K-NHA W12","K-Noche Buena","K-PWD","K-Toda","K-TRABAHO", "PROJECT LOAN", "MULTI-PURPOSE LOAN", "EMERGENCY LOAN", "UTILITY LOAN", "EDUCATIONAL LOAN"]
   CREDITORS_NAME = ["KCOOP", "JVOMFI", "CAPS-R"]
+  GENDER = ["MALE","FEMALE"]
   belongs_to :branch
 	belongs_to :center
 	belongs_to :member
@@ -59,6 +60,7 @@ class Claim < ApplicationRecord
         length_of_stay: self.length_of_stay,
         returned_contribution: self.returned_contribution,
         total_amount_payable: self.total_amount_payable,
+        amount: self.total_amount_payable,
         order_of_child: self.order_of_child,
         category_of_cause_of_death_tpd_accident: self.category_of_cause_of_death_tpd_accident,
         date_reported: self.date_reported,
