@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_12_075046) do
+ActiveRecord::Schema.define(version: 2020_04_23_042316) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -570,6 +570,7 @@ ActiveRecord::Schema.define(version: 2020_02_12_075046) do
     t.date "max_active_date"
     t.uuid "user_id"
     t.date "original_maturity_date"
+    t.boolean "is_restructured"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
