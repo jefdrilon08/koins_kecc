@@ -11,7 +11,7 @@
               .form-group
                 %label
                   Loan Product
-                = select_tag :loan_product_id, options_from_collection_for_select(LoanProduct.all, :id, :to_s), class: "form-control select-select2 js-searchable", id: "select-restructure-loan-product"
+                = select_tag :loan_product_id, options_from_collection_for_select(loan_products_for_restructuring, :id, :to_s), class: "form-control select-select2 js-searchable", id: "select-restructure-loan-product"
           .row
             .col
               .form-group

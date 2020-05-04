@@ -45,7 +45,7 @@ module Administration
       )
 
       if @loan_product.save
-        redirect_to administraiton_loan_product_path(@loan_product)
+        redirect_to administration_loan_product_path(@loan_product)
       else
         render :new
       end
