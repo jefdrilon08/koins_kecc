@@ -176,6 +176,21 @@ module Loans
 
       @loan.data[:accounting_entry] = accounting_entry_data
 
+      # Save information of restructured loans
+      @loan.data[:restructured_loans] = @active_loans.map{ |loan|
+        {
+          id: loan.id,
+          pn_number: loan.pn_number,
+          principal_balance: loan.principal_balance,
+          interest_balance: loan.interest_balance,
+          total_balance: (loan.principal_balance + loan.interest_balance).to_f.round(2),
+          loan_product: {
+            id: loan.loan_product_id,
+            name: loan.loan_product.name
+          }
+        }
+      }
+
       @loan.save!
 
       @loan

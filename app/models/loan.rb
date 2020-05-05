@@ -52,6 +52,10 @@ class Loan < ApplicationRecord
     )
   end
 
+  def restructured?
+    self.is_restructured
+  end
+
   def load_defaults
     if self.new_record?
       self.status = "pending"
