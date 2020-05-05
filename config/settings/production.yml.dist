@@ -3986,7 +3986,7 @@ loan_products:
           account_subtype: "Life Insurance Fund"
           value: 15.00
           algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
+          offset: 0
       -
         name: "Deposit to retirement fund"
         accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
@@ -3998,7 +3998,7 @@ loan_products:
           account_subtype: "Retirement Fund"
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
+          offset: 0
           
 
 loan_product_accounting_codes:
