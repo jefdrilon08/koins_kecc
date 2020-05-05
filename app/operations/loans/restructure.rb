@@ -82,6 +82,7 @@ module Loans
         advance_insurance_available: false
       }
 
+
       # Setup loan cycle
       @loan_cycles            = @member_data[:loan_cycles]
 
@@ -108,6 +109,32 @@ module Loans
           end
         end
       end
+
+      ###########################################################################
+      # Build accounting entry data
+      ###########################################################################
+      particular  = " To record loan restructuring of #{@member.full_name}"
+      @book       = "JVB"
+
+      ae_cmd  = ::Loans::BuildRestructuredAccountingEntry.new(
+                  config: {
+                    member: @member,
+                    loan_product: @loan_product,
+                    amount: @loan.principal,
+                    term: @loan.term,
+                    num_installments: @loan.num_installments,
+                    particular: particular,
+                    book: @book,
+                    loan: @loan,
+                    active_loans: @active_loans
+                  }
+                )
+
+      accounting_entry_data = ae_cmd.execute!
+      ###########################################################################
+
+      # Set loan principal according to debit entry
+      @loan.principal = ae_cmd.total_debit
 
       params  = {
         principal: @loan.principal,
@@ -146,25 +173,6 @@ module Loans
                 )
         @loan.amortization_schedule_entries << amort
       end
-
-      # Build accounting entry data
-      particular = " To record loan restructuring of #{@member.full_name}"
-
-      @book = "CDB"
-
-      accounting_entry_data = ::Loans::BuildRestructuredAccountingEntry.new(
-                                config: {
-                                  member: @member,
-                                  loan_product: @loan_product,
-                                  amount: @loan.principal,
-                                  term: @loan.term,
-                                  num_installments: @loan.num_installments,
-                                  particular: particular,
-                                  book: @book,
-                                  loan: @loan,
-                                  active_loans: @active_loans
-                                }
-                              ).execute!
 
       @loan.data[:accounting_entry] = accounting_entry_data
 

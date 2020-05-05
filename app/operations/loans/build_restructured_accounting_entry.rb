@@ -1,5 +1,7 @@
 module Loans
   class BuildRestructuredAccountingEntry
+    attr_accessor :total_debit
+
     def initialize(config:)
       @config       = config
       @loan         = @config[:loan]
@@ -166,7 +168,7 @@ module Loans
 
       # Receivable
       accounting_code = AccountingCode.find(@settings.receivable_accounting_code_id)
-      amount          = @amount
+      amount          = @total_debit
       name            = accounting_code.name
       code            = accounting_code.code
 
