@@ -1,20 +1,28 @@
 module Loans
-  class Save
-    def initialize(config:)
-      @config       = config
-      @loan_data    = @config[:loan_data]
-      @user         = @config[:user]
-      @loan_product = LoanProduct.where(id: @loan_data[:loan_product_id]).first
-      @member       = Member.where(id: @loan_data[:member_id]).first
-      @branch       = Branch.where(id: @loan_data[:branch_id]).first
-      @center       = Center.where(id: @loan_data[:center_id]).first
+  class Restructure
+    def initialize(user:, co_maker:, co_maker_member:, pn_number:, clip_number:, date_prepared:, num_installments:, term:, member:, active_loans:, loan_product:, date_released: nil, beneficiary_first_name:, beneficiary_middle_name:, beneficiary_last_name:, beneficiary_date_of_birth:, beneficiary_relationship:)
+      @user             = user
+      @co_maker         = co_maker
+      @co_maker_member  = co_maker_member
+      @pn_number        = pn_number
+      @clip_number      = clip_number
+      @member           = member
+      @date_prepared    = date_prepared
+      @num_installments = num_installments
+      @term             = term
+      @branch           = @member.branch
+      @center           = @member.center
+      @active_loans     = active_loans
+      @loan_product     = loan_product
 
-      @loan = Loan.new
+      # beneficiary information
+      @beneficiary_first_name     = beneficiary_first_name
+      @beneficiary_middle_name    = beneficiary_middle_name
+      @beneficiary_last_name      = beneficiary_last_name
+      @beneficiary_date_of_birth  = beneficiary_date_of_birth
+      @beneficiary_relationship   = beneficiary_relationship
 
-      if @loan_data[:id].present?
-        @loan = Loan.find(@loan_data[:id])
-      end
-
+      @loan         = Loan.new(is_restructured: true)
       @member_data  = @member.data.with_indifferent_access
 
       # Settings
@@ -34,17 +42,44 @@ module Loans
       if @settings.blank?
         raise "No settings foud for loan_product #{@loan_product.id}"
       end
+
+      # Set principal to be sum of active_loans balances
+      @principal  = (@active_loans.sum(:principal_balance) + @active_loans.sum(:interest_balance)).round(2)
     end
 
     def execute!
-      @loan.pn_number         = @loan_data[:pn_number]
-      @loan.date_prepared     = @loan_data[:date_prepared]
-      @loan.date_released     = @loan_data[:date_released]
-      @loan.principal         = @loan_data[:principal].to_f.round(2)
-      @loan.num_installments  = @loan_data[:num_installments]
-      @loan.project_type_id   = @loan_data[:project_type_id]
-      @loan.term              = @loan_data[:term]
-      @loan.data              = @loan_data[:data]
+      @loan.pn_number         = @pn_number
+      @loan.date_prepared     = @date_prepared
+      @loan.date_released     = @date_released
+      @loan.principal         = @principal
+      @loan.num_installments  = @num_installments
+      @loan.term              = @term
+
+      @loan.data = {
+        clip_number: @clip_number,
+        beneficiary: {
+          first_name: @beneficiary_first_name,
+          middle_name: @beneficiary_middle_name,
+          last_name: @beneficiary_last_name,
+          date_of_birth: @beneficiary_date_of_birth,
+          relationship: @beneficiary_relationship
+        },
+        co_maker_one: {
+          value: @co_maker_member.id,
+          label: @co_maker_member.full_name,
+          id: @co_maker_member.id,
+          first_name: @co_maker_member.first_name,
+          middle_name: @co_maker_member.middle_name,
+          last_name: @co_maker_member.last_name
+        },
+        voucher: {
+          or_number: "",
+          bank_check_number: "",
+          check_number: "",
+          date_of_check: ""
+        },
+        business_permit_available: "false"
+      }
 
       # Setup loan cycle
       @loan_cycles            = @member_data[:loan_cycles]
@@ -76,8 +111,8 @@ module Loans
       params  = {
         principal: @loan.principal,
         annual_interest_rate: (@loan.monthly_interest_rate * 12),
-        num_installments: @loan_data[:num_installments],
-        term: @loan_data[:term]
+        num_installments: @num_installments,
+        term: @term
       }
 
       result  = ::Finance::Amortize.new(
@@ -112,12 +147,11 @@ module Loans
       end
 
       # Build accounting entry data
-      particular  = "Release of Loan - #{@member.first_name} #{@member.middle_name} #{@member.last_name} cv# #{@loan.voucher_check_voucher_number} ck# #{@loan.voucher_bank_check_number} clip# #{@loan.clip_number}"
+      particular = " To record loan restructuring of #{@member.full_name}"
 
-      if @loan.data.present? and @loan.data.with_indifferent_access[:accounting_entry].present?
-        @book = @loan.data.with_indifferent_access[:accounting_entry][:book]
-      end
-      accounting_entry_data = ::Loans::BuildAccountingEntry.new(
+      @book = "CDB"
+
+      accounting_entry_data = ::Loans::BuildRestructuredAccountingEntry.new(
                                 config: {
                                   member: @member,
                                   loan_product: @loan_product,
@@ -126,7 +160,8 @@ module Loans
                                   num_installments: @loan.num_installments,
                                   particular: particular,
                                   book: @book,
-                                  loan: @loan
+                                  loan: @loan,
+                                  active_loans: @active_loans
                                 }
                               ).execute!
 

@@ -107,6 +107,7 @@ namespace :api do
     post "/loans/new_adjustment", to: "loans#new_adjustment"
     post "/loans/delete_adjustment", to: "loans#delete_adjustment"
     post "/loans/approve_adjustment", to: "loans#approve_adjustment"
+    post "/loans/restructure", to: "loans#restructure"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches

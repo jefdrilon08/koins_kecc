@@ -56,10 +56,28 @@ var Show  = (function() {
   var $fileProfilePicture;
   var templateErrorList;
 
+  var $btnRestructure;
+  var $btnConfirmRestructure;
+  var $modalRestructure;
+  var $selectRestructureLoanProduct;
+  var $selectActiveLoans;
+  var $inputCoMakerA;
+  var $selectCoMakerB;
+  var $inputPnNumber;
+  var $inputClipNumber;
+  var $inputDatePrepared;
+  var $selectTerm;
+  var $selectModeOfPayment;
+  var $inputBeneficiaryFirstName;
+  var $inputBeneficiaryMiddleName;
+  var $inputBeneficiaryLastName;
+  var $inputBeneficiaryDateOfBirth;
+  var $inputBeneficiaryRelationship;
 
   var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
   var _urlSaveSignature           = "/api/v1/members/save_signature";
   var _urlNewLoan                 = "/api/v1/loans/apply";
+  var _urlRestructure             = "/api/v1/loans/restructure";
   var _urlCreateSurvey            = "/api/v1/members/create_survey";
   var _urlDelete                  = "/api/v1/members/delete";
   var _urlUnlock                  = "/api/v1/members/unlock";
@@ -138,11 +156,158 @@ var Show  = (function() {
     $inputDateResigned                = $("#input-date-resigned");
     $inputReason                      = $("#input-reason");
 
+    $btnRestructure               = $("#btn-restructure");
+    $btnConfirmRestructure        = $("#btn-confirm-restructure");
+    $modalRestructure             = $("#modal-restructure");
+    $selectRestructureLoanProduct = $("#select-restructure-loan-product");
+    $selectActiveLoans            = $("#select-active-loans");
+    $inputCoMakerA                = $("#input-co-maker-a");
+    $selectCoMakerB               = $("#select-co-maker-b");
+    $inputPnNumber                = $("#input-pn-number");
+    $inputClipNumber              = $("#input-clip-number");
+    $inputDatePrepared            = $("#input-date-prepared");
+    $selectTerm                   = $("#select-term");
+    $selectModeOfPayment          = $("#select-mode-of-payment");
+    $inputBeneficiaryFirstName    = $("#input-beneficiary-first-name");
+    $inputBeneficiaryMiddleName   = $("#input-beneficiary-middle-name");
+    $inputBeneficiaryLastName     = $("#input-beneficiary-last-name");
+    $inputBeneficiaryDateOfBirth  = $("#input-beneficiary-date-of-birth");
+    $inputBeneficiaryRelationship = $("#input-beneficiary-relationship");
+
     $message          = $(".message");
     templateErrorList = $("#template-error-list").html();
+
+    _changeTermOptions($selectModeOfPayment.val());
+  }
+
+  var _changeTermOptions  = function(modeOfPayment) {
+    $selectTerm.empty();
+
+    if(modeOfPayment == "weekly") {
+      $selectTerm.append($("<option></option>").attr("value", 15).text(15));
+      $selectTerm.append($("<option></option>").attr("value", 25).text(25));
+      $selectTerm.append($("<option></option>").attr("value", 35).text(35));
+      $selectTerm.append($("<option></option>").attr("value", 50).text(50));
+    } else if(modeOfPayment == "monthly") {
+      $selectTerm.append($("<option></option>").attr("value", 3).text(3));
+      $selectTerm.append($("<option></option>").attr("value", 6).text(6));
+      $selectTerm.append($("<option></option>").attr("value", 9).text(9));
+      $selectTerm.append($("<option></option>").attr("value", 12).text(12));
+    } else if(modeOfPayment == "semi-monthly") {
+      $selectTerm.append($("<option></option>").attr("value", 6).text(6));
+      $selectTerm.append($("<option></option>").attr("value", 12).text(12));
+      $selectTerm.append($("<option></option>").attr("value", 18).text(18));
+      $selectTerm.append($("<option></option>").attr("value", 24).text(24));
+    }
   }
 
   var _bindEvents = function() {
+    $selectModeOfPayment.on("change", function() {
+      _changeTermOptions($(this).val());
+    });
+
+    $btnRestructure.on("click", function() {
+      $message.html("");
+      $modalRestructure.modal("show");
+    });
+
+    $btnConfirmRestructure.on("click", function() {
+      var activeLoanIds = $selectActiveLoans.val();
+      var loanProductId = $selectRestructureLoanProduct.val();
+      var coMaker       = $inputCoMakerA.val();
+      var coMakerId     = $selectCoMakerB.val();
+      var pnNumber      = $inputPnNumber.val();
+      var clipNumber    = $inputClipNumber.val();
+      var datePrepared  = $inputDatePrepared.val();
+      var term          = $selectTerm.val();
+      var modeOfPayment = $selectModeOfPayment.val();
+      
+      var beneficiaryFirstName    = $inputBeneficiaryFirstName.val();
+      var beneficiaryMiddleName   = $inputBeneficiaryMiddleName.val();
+      var beneficiaryLastName     = $inputBeneficiaryLastName.val();
+      var beneficiaryDateOfBirth  = $inputBeneficiaryDateOfBirth.val();
+      var beneficiaryRelationship = $inputBeneficiaryRelationship.val();
+
+      $btnConfirmRestructure.prop("disabled", true);
+      $selectRestructureLoanProduct.prop("disabled", true);
+      $selectActiveLoans.prop("disabled", true);
+      $inputCoMakerA.prop("disabled", true);
+      $selectCoMakerB.prop("disabled", true);
+      $inputPnNumber.prop("disabled", true);
+      $inputClipNumber.prop("disabled", true);
+      $inputDatePrepared.prop("disabled", true);
+      $selectTerm.prop("disabled", true);
+      $selectModeOfPayment.prop("disabled", true);
+      $inputBeneficiaryFirstName.prop("disabled", true);
+      $inputBeneficiaryMiddleName.prop("disabled", true);
+      $inputBeneficiaryLastName.prop("disabled", true);
+      $inputBeneficiaryDateOfBirth.prop("disabled", true);
+      $inputBeneficiaryRelationship.prop("disabled", true);
+
+      var data = {
+        active_loan_ids: activeLoanIds,
+        loan_product_id: loanProductId,
+        co_maker: coMaker,
+        co_maker_id: coMakerId,
+        pn_number: pnNumber,
+        clip_number: clipNumber,
+        date_prepared: datePrepared,
+        num_installments: term,
+        term: modeOfPayment,
+        active_loan_ids: activeLoanIds,
+        member_id: _memberId,
+        beneficiary_first_name: beneficiaryFirstName,
+        beneficiary_middle_name: beneficiaryMiddleName,
+        beneficiary_last_name: beneficiaryLastName,
+        beneficiary_relationship: beneficiaryRelationship,
+        beneficiary_date_of_birth: beneficiaryDateOfBirth,
+        authenticity_token: _authenticityToken
+      }
+
+      $.ajax({
+        url: _urlRestructure,
+        method: "POST",
+        data: data,
+        success: function(response) {
+          $message.html("Success! Redirecting...");
+          window.location.href = "/loans/" + response.id;
+        },
+        error: function(response) {
+          console.log(response);
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors  = ["Something went wrong"];
+          } finally {
+            console.log(errors);
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnConfirmRestructure.prop("disabled", false);
+            $selectRestructureLoanProduct.prop("disabled", false);
+            $selectActiveLoans.prop("disabled", false);
+            $inputCoMakerA.prop("disabled", false);
+            $selectCoMakerB.prop("disabled", false);
+            $inputPnNumber.prop("disabled", false);
+            $inputClipNumber.prop("disabled", false);
+            $inputDatePrepared.prop("disabled", false);
+            $selectTerm.prop("disabled", false);
+            $selectModeOfPayment.prop("disabled", false);
+            $inputBeneficiaryFirstName.prop("disabled", false);
+            $inputBeneficiaryMiddleName.prop("disabled", false);
+            $inputBeneficiaryLastName.prop("disabled", false);
+            $inputBeneficiaryDateOfBirth.prop("disabled", false);
+            $inputBeneficiaryRelationship.prop("disabled", false);
+          }
+        }
+      });
+    });
+
     $btnRegister.on("click", function() {
       $message.html("");
       $modalRegister.modal("show");
@@ -170,7 +335,7 @@ var Show  = (function() {
           console.log(response);
           var errors  = [];
           try {
-            errors  = JSON.parse(response.responseText).errors.full_messages;
+            errors  = JSON.parse(response.responseText).full_messages;
             console.log(errors);
           } catch(err) {
             errors  = ["Something went wrong"];
@@ -266,7 +431,6 @@ var Show  = (function() {
             errors  = JSON.parse(response.responseText).full_messages;
           } catch(err) {
             errors  = ["Something went wrong"];
-            console.log(err);
           } finally {
             console.log(errors);
             $message.html(
@@ -328,7 +492,7 @@ var Show  = (function() {
               console.log(response);
               var errors  = [];
               try {
-                errors  = JSON.parse(response.responseText).full_messages;
+                errors  = JSON.parse(response.responseText).errors.full_messages;
               } catch(err) {
                 errors  = ["Something went wrong"];
                 console.log(err);

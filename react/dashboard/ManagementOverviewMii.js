@@ -403,7 +403,7 @@ export default class ManagementOverviewMii extends React.Component {
     );
   }
 
-  renderOverviewTableClaims() {
+renderOverviewTableClaims() {
     var areas   = this.state.data.areas;
     var rows    = [];
     var colSpan = 13;
@@ -431,7 +431,7 @@ export default class ManagementOverviewMii extends React.Component {
       <tr style={{backgroundColor: areaColor}}>
         <th className="text-center" colSpan={colSpan}>
           <h4>        
-            CLAIMS COUNTS
+            CLAIMS COUNTS PER BRANCH
           </h4>  
         </th>
       </tr>
@@ -635,6 +635,628 @@ export default class ManagementOverviewMii extends React.Component {
     );
   }
 
+  renderOverviewTableClaimsSummary() {
+    var areas   = this.state.data.areas;
+    var rows    = [];
+    var colSpan = 13;
+
+    var areaColor     = "#bad5fd";
+    var clusterColor  = "#c5ffc1";
+    var branchColor   = "#797979";
+
+    var tTotalBLip                = 0.00;
+    var tTotalClip                = 0.00;
+    var tTotalHiip                = 0.00;
+    var tTotalKbente              = 0.00;
+    var tTotalKkalinga            = 0.00;
+    var tTotalKjsp                = 0.00;
+    var tTotalCalamityAssistance  = 0.00;
+    var tBlip                     = 0;
+    var tClip                     = 0;
+    var tHiip                     = 0;
+    var tKbente                   = 0;
+    var tKkalinga                 = 0;
+    var tKjsp                     = 0;
+    var tCalamityAssistance       = 0;
+
+    var tTotalKcoopBlipAmount     = 0.00;
+    var tTotalKcoopBlip           = 0;
+    var tTotalCapsrBlipAmount     = 0.00;
+    var tTotalCapsrBlip           = 0;
+    var tTotalAssociateBlipAmount = 0.00;
+    var tTotalAssociateBlip       = 0;
+    var tTotalJvoBlipAmount       = 0.00;
+    var tTotalJvoBlip             = 0;
+
+    var tTotalKcoopClipAmount     = 0.00;
+    var tTotalKcoopClip           = 0;
+    var tTotalCapsrClipAmount     = 0.00;
+    var tTotalCapsrClip           = 0;
+    var tTotalAssociateClipAmount = 0.00;
+    var tTotalAssociateClip       = 0;
+    var tTotalJvoClipAmount       = 0.00;
+    var tTotalJvoClip             = 0;
+
+    var tTotalKcoopHiipAmount     = 0.00;
+    var tTotalKcoopHiip           = 0;
+    var tTotalCapsrHiipAmount     = 0.00;
+    var tTotalCapsrHiip           = 0;
+    var tTotalAssociateHiipAmount = 0.00;
+    var tTotalAssociateHiip       = 0;
+    var tTotalJvoHiipAmount       = 0.00;
+    var tTotalJvoHiip             = 0;
+
+    var tTotalKcoopKbenteAmount     = 0.00;
+    var tTotalKcoopKbente           = 0;
+    var tTotalCapsrKbenteAmount     = 0.00;
+    var tTotalCapsrKbente           = 0;
+    var tTotalAssociateKbenteAmount = 0.00;
+    var tTotalAssociateKbente       = 0;
+    var tTotalJvoKbenteAmount       = 0.00;
+    var tTotalJvoKbente             = 0;
+
+    var tTotalKcoopKkalingaAmount     = 0.00;
+    var tTotalKcoopKkalinga           = 0;
+    var tTotalCapsrKkalingaAmount     = 0.00;
+    var tTotalCapsrKkalinga           = 0;
+    var tTotalAssociateKkalingaAmount = 0.00;
+    var tTotalAssociateKkalinga       = 0;
+    var tTotalJvoKkalingaAmount       = 0.00;
+    var tTotalJvoKkalinga             = 0;
+
+    var tTotalKcoopKjspAmount     = 0.00;
+    var tTotalKcoopKjsp           = 0;
+    var tTotalCapsrKjspAmount     = 0.00;
+    var tTotalCapsrKjsp           = 0;
+    var tTotalAssociateKjspAmount = 0.00;
+    var tTotalAssociateKjsp       = 0;
+    var tTotalJvoKjspAmount       = 0.00;
+    var tTotalJvoKjsp             = 0;
+
+    var tTotalKcoopCalamityAssistanceAmount     = 0.00;
+    var tTotalKcoopCalamityAssistance           = 0;
+    var tTotalCapsrCalamityAssistanceAmount     = 0.00;
+    var tTotalCapsrCalamityAssistance           = 0;
+    var tTotalAssociateCalamityAssistanceAmount = 0.00;
+    var tTotalAssociateCalamityAssistance       = 0;
+    var tTotalJvoCalamityAssistanceAmount       = 0.00;
+    var tTotalJvoCalamityAssistance             = 0;
+
+    var tTotalKcoopClaimsAmount       = 0.00;
+    var tTotalKcoopClaims             = 0;
+    var tTotalCapsrClaimsAmount       = 0.00;
+    var tTotalCapsrClaims             = 0;
+    var tTotalAssociateClaimsAmount   = 0.00;
+    var tTotalAssociateClaims         = 0;
+    var tTotalJvoClaimsAmount         = 0.00;
+    var tTotalJvoClaims               = 0;
+
+    var tTotalClaims                  = 0;
+    var tTotalClaimsAmount            = 0.00;
+
+    rows.push(
+      <tr style={{backgroundColor: areaColor}}>
+        <th className="text-center" colSpan={colSpan}>
+          <h4>        
+            CLAIMS SUMMARY
+          </h4>  
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+        </th>
+        <th className="text-center" colspan="2">
+          KCOOP
+        </th>
+        <th className="text-center" colspan="2">
+          CAPS-R
+        </th>
+        <th className="text-center" colspan="2">
+          ASSOCIATE
+        </th>
+        <th className="text-center" colspan="2">
+          JVOMFI
+        </th>
+        <th className="text-center" colspan="2">
+          TOTAL
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+        </th>
+        <th className="text-center">
+          NUMBER
+        </th>
+        <th className="text-center">
+          AMOUNT
+        </th>
+        <th className="text-center">
+          NUMBER
+        </th>
+        <th className="text-center">
+          AMOUNT
+        </th>
+        <th className="text-center">
+          NUMBER
+        </th>
+        <th className="text-center">
+          AMOUNT
+        </th>
+        <th className="text-center">
+          NUMBER
+        </th>
+        <th className="text-center">
+          AMOUNT
+        </th>
+        <th className="text-center">
+          NUMBER
+        </th>
+        <th className="text-center">
+          AMOUNT
+        </th>
+      </tr> 
+    );
+
+    for(var i = 0; i < areas.length; i++) {
+     
+      var clusters    = areas[i].clusters;
+
+      for(var j = 0; j < clusters.length; j++) {
+
+        var branches  = clusters[j].branches;
+
+        for(var k = 0; k < branches.length; k++) {
+        
+
+          tTotalBLip                += branches[k].data.total_blip_claims;
+          tTotalClip                += branches[k].data.total_clip_claims;
+          tTotalHiip                += branches[k].data.total_hiip_claims;
+          tTotalKbente              += branches[k].data.total_kbente_claims;
+          tTotalKkalinga            += branches[k].data.total_kkalinga_claims;
+          tTotalKjsp                += branches[k].data.total_kjsp_claims;
+          tTotalCalamityAssistance  += branches[k].data.total_calamity_assistance_claims;
+          tBlip                     += branches[k].data.approved_claims.blip;
+          tClip                     += branches[k].data.approved_claims.clip;
+          tHiip                     += branches[k].data.approved_claims.hiip;
+          tKbente                   += branches[k].data.approved_claims.k_bente;
+          tKkalinga                 += branches[k].data.approved_claims.k_kalinga;
+          tKjsp                     += branches[k].data.approved_claims.kjsp;
+          tCalamityAssistance       += branches[k].data.approved_claims.calamity_assistance;
+
+          tTotalKcoopBlip           += branches[k].data.total_blip_kcoop;
+          tTotalKcoopBlipAmount     += branches[k].data.total_blip_kcoop_amount;
+          tTotalCapsrBlip           += branches[k].data.total_blip_capsr;
+          tTotalCapsrBlipAmount     += branches[k].data.total_blip_capsr_amount;
+          tTotalAssociateBlip       += branches[k].data.total_blip_associate;
+          tTotalAssociateBlipAmount += branches[k].data.total_blip_associate_amount;
+          tTotalJvoBlip             += branches[k].data.total_blip_jvo;
+          tTotalJvoBlipAmount       += branches[k].data.total_blip_jvo_amount;
+
+          tTotalKcoopClip           += branches[k].data.total_clip_kcoop;
+          tTotalKcoopClipAmount     += branches[k].data.total_clip_kcoop_amount;
+          tTotalCapsrClip           += branches[k].data.total_clip_capsr;
+          tTotalCapsrClipAmount     += branches[k].data.total_clip_capsr_amount;
+          tTotalAssociateClip       += branches[k].data.total_clip_associate;
+          tTotalAssociateClipAmount += branches[k].data.total_clip_associate_amount;
+          tTotalJvoClip             += branches[k].data.total_clip_jvo;
+          tTotalJvoClipAmount       += branches[k].data.total_clip_jvo_amount;
+
+          tTotalKcoopHiip           += branches[k].data.total_hiip_kcoop;
+          tTotalKcoopHiipAmount     += branches[k].data.total_hiip_kcoop_amount;
+          tTotalCapsrHiip           += branches[k].data.total_hiip_capsr;
+          tTotalCapsrHiipAmount     += branches[k].data.total_hiip_capsr_amount;
+          tTotalAssociateHiip       += branches[k].data.total_hiip_associate;
+          tTotalAssociateHiipAmount += branches[k].data.total_hiip_associate_amount;
+          tTotalJvoHiip             += branches[k].data.total_hiip_jvo;
+          tTotalJvoHiipAmount       += branches[k].data.total_hiip_jvo_amount;
+
+          tTotalKcoopKbente           += branches[k].data.total_kbente_kcoop;
+          tTotalKcoopKbenteAmount     += branches[k].data.total_kbente_kcoop_amount;
+          tTotalCapsrKbente           += branches[k].data.total_kbente_capsr;
+          tTotalCapsrKbenteAmount     += branches[k].data.total_kbente_capsr_amount;
+          tTotalAssociateKbente       += branches[k].data.total_kbente_associate;
+          tTotalAssociateKbenteAmount += branches[k].data.total_kbente_associate_amount;
+          tTotalJvoKbente             += branches[k].data.total_kbente_jvo;
+          tTotalJvoKbenteAmount       += branches[k].data.total_kbente_jvo_amount;
+
+          tTotalKcoopKjsp           += branches[k].data.total_kjsp_kcoop;
+          tTotalKcoopKjspAmount     += branches[k].data.total_kjsp_kcoop_amount;
+          tTotalCapsrKjsp           += branches[k].data.total_kjsp_capsr;
+          tTotalCapsrKjspAmount     += branches[k].data.total_kjsp_capsr_amount;
+          tTotalAssociateKjsp       += branches[k].data.total_kjsp_associate;
+          tTotalAssociateKjspAmount += branches[k].data.total_kjsp_associate_amount;
+          tTotalJvoKjsp             += branches[k].data.total_kjsp_jvo;
+          tTotalJvoKjspAmount       += branches[k].data.total_kjsp_jvo_amount;
+
+          tTotalKcoopKkalinga           += branches[k].data.total_kkalinga_kcoop;
+          tTotalKcoopKkalingaAmount     += branches[k].data.total_kkalinga_kcoop_amount;
+          tTotalCapsrKkalinga           += branches[k].data.total_kkalinga_capsr;
+          tTotalCapsrKkalingaAmount     += branches[k].data.total_kkalinga_capsr_amount;
+          tTotalAssociateKkalinga       += branches[k].data.total_kkalinga_associate;
+          tTotalAssociateKkalingaAmount += branches[k].data.total_kkalinga_associate_amount;
+          tTotalJvoKkalinga             += branches[k].data.total_kkalinga_jvo;
+          tTotalJvoKkalingaAmount       += branches[k].data.total_kkalinga_jvo_amount;
+
+          tTotalKcoopCalamityAssistance           += branches[k].data.total_calamity_assistance_kcoop;
+          tTotalKcoopCalamityAssistanceAmount     += branches[k].data.total_calamity_assistance_kcoop_amount;
+          tTotalCapsrCalamityAssistance           += branches[k].data.total_calamity_assistance_capsr;
+          tTotalCapsrCalamityAssistanceAmount     += branches[k].data.total_calamity_assistance_capsr_amount;
+          tTotalAssociateCalamityAssistance       += branches[k].data.total_calamity_assistance_associate;
+          tTotalAssociateCalamityAssistanceAmount += branches[k].data.total_calamity_assistance_associate_amount;
+          tTotalJvoCalamityAssistance             += branches[k].data.total_calamity_assistance_jvo;
+          tTotalJvoCalamityAssistanceAmount       += branches[k].data.total_calamity_assistance_jvo_amount;
+
+        }
+      }
+
+      tTotalKcoopClaims       = tTotalKcoopBlip + tTotalKcoopClip + tTotalKcoopHiip + tTotalKcoopKbente + tTotalKcoopKjsp + tTotalKcoopKkalinga + tTotalKcoopCalamityAssistance
+      tTotalKcoopClaimsAmount = tTotalKcoopBlipAmount + tTotalKcoopClipAmount + tTotalKcoopHiipAmount + tTotalKcoopKbenteAmount + tTotalKcoopKjspAmount + tTotalKcoopKkalingaAmount + tTotalKcoopCalamityAssistanceAmount
+      tTotalCapsrClaims       = tTotalCapsrBlip + tTotalCapsrClip + tTotalCapsrHiip + tTotalCapsrKbente + tTotalCapsrKjsp + tTotalCapsrKkalinga + tTotalCapsrCalamityAssistance
+      tTotalCapsrClaimsAmount = tTotalCapsrBlipAmount + tTotalCapsrClipAmount + tTotalCapsrHiipAmount + tTotalCapsrKbenteAmount + tTotalCapsrKjspAmount + tTotalCapsrKkalingaAmount + tTotalCapsrCalamityAssistanceAmount
+      tTotalAssociateClaims       = tTotalAssociateBlip + tTotalAssociateClip + tTotalAssociateHiip + tTotalAssociateKbente + tTotalAssociateKjsp + tTotalAssociateKkalinga + tTotalAssociateCalamityAssistance
+      tTotalAssociateClaimsAmount = tTotalAssociateBlipAmount + tTotalAssociateClipAmount + tTotalAssociateHiipAmount + tTotalAssociateKbenteAmount + tTotalAssociateKjspAmount + tTotalAssociateKkalingaAmount + tTotalAssociateCalamityAssistanceAmount
+      tTotalJvoClaims       = tTotalJvoBlip + tTotalJvoClip + tTotalJvoHiip + tTotalJvoKbente + tTotalJvoKjsp + tTotalJvoKkalinga + tTotalJvoCalamityAssistance
+      tTotalJvoClaimsAmount = tTotalJvoBlipAmount + tTotalJvoClipAmount + tTotalJvoHiipAmount + tTotalJvoKbenteAmount + tTotalJvoKjspAmount + tTotalJvoKkalingaAmount + tTotalJvoCalamityAssistanceAmount
+    
+      tTotalClaims       = tBlip + tClip + tHiip + tKbente + tKjsp + tKkalinga + tCalamityAssistance
+      tTotalClaimsAmount = tTotalBLip + tTotalClip + tTotalHiip + tTotalKbente + tTotalKjsp + tTotalKkalinga + tTotalCalamityAssistance
+    }
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            BLIP
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopBlip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopBlipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrBlip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrBlipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateBlip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateBlipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoBlip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoBlipAmount)}
+        </td>
+        <td className="text-center">
+          {tBlip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalBLip)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            CLIP
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopClip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopClipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrClip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrClipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateClip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateClipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoClip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoClipAmount)}
+        </td>
+        <td className="text-center">
+          {tClip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalClip)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            HIIP
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopHiip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopHiipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrHiip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrHiipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateHiip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateHiipAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoHiip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoHiipAmount)}
+        </td>
+        <td className="text-center">
+          {tHiip}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalHiip)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            K-BENTE
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopKbente}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopKbenteAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrKbente}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrKbenteAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateKbente}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateKbenteAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoKbente}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoKbenteAmount)}
+        </td>
+        <td className="text-center">
+          {tKbente}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKbente)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            K-KALINGA
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopKkalinga}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopKkalingaAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrKkalinga}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrKkalingaAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateKkalinga}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateKkalingaAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoKkalinga}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoKkalingaAmount)}
+        </td>
+        <td className="text-center">
+          {tKkalinga}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKkalinga)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            CALAMITY ASSISTANCE
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopCalamityAssistance}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopCalamityAssistanceAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrCalamityAssistance}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrCalamityAssistanceAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateCalamityAssistance}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateCalamityAssistanceAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoCalamityAssistance}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoCalamityAssistanceAmount)}
+        </td>
+        <td className="text-center">
+          {tCalamityAssistance}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCalamityAssistance)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            KJSP
+          </strong>
+        </td>
+        <td className="text-center">
+          {tTotalKcoopKjsp}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopKjspAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalCapsrKjsp}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrKjspAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalAssociateKjsp}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateKjspAmount)}
+        </td>
+        <td className="text-center">
+          {tTotalJvoKjsp}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoKjspAmount)}
+        </td>
+        <td className="text-center">
+          {tKjsp}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKjsp)}
+        </td>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: "#000", color: "#fff"}}>
+        <td>
+          <strong>
+            Grand Total
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalKcoopClaims}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalKcoopClaimsAmount)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalCapsrClaims}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalCapsrClaimsAmount)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalAssociateClaims}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalAssociateClaimsAmount)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalJvoClaims}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalJvoClaimsAmount)}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalClaims}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {numberWithCommas(tTotalClaimsAmount)}
+          </strong>
+        </td>
+      </tr>
+    );
+
+    return (
+      <table className="table table-sm table-bordered">
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    );
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -679,6 +1301,8 @@ export default class ManagementOverviewMii extends React.Component {
             </div>
           </div>
           {this.renderOverviewTable()}
+          <br />
+          {this.renderOverviewTableClaimsSummary()}
           <br />
           {this.renderOverviewTableClaims()}
         </div>
