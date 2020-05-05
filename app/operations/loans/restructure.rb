@@ -78,7 +78,8 @@ module Loans
           check_number: "",
           date_of_check: ""
         },
-        business_permit_available: "false"
+        business_permit_available: "false",
+        advance_insurance_available: false
       }
 
       # Setup loan cycle

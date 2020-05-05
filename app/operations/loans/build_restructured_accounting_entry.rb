@@ -7,7 +7,7 @@ module Loans
       @branch       = @member.branch
       @loan_product = @config[:loan_product]
       @amount       = @config[:amount].to_f.round(2)
-      @book         = @config[:book] || "CDB"
+      @book         = @config[:book] || "JVB"
       @loan_data    = @loan.data.with_indifferent_access
       @voucher_data = @loan_data[:voucher]
       @active_loans = @config[:active_loans]
