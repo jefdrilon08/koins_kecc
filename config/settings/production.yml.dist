@@ -65,6 +65,16 @@ branch_config:
   -
     id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
     current_date: "2020-03-31"
+#central1
+  -
+    id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
+    current_date: "2020-03-31"
+  -
+    id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
+    current_date: "2020-03-31"
+  -
+    id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
+    current_date: "2020-03-31"
 ###############################
 # AUTHORIZATION               #
 ###############################
@@ -748,7 +758,18 @@ branch_accounting_codes:
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-
+  -
+    branch_id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"                              #fairview
+    cash_in_bank_accounting_code_id: "c7f37dda-7920-4107-a4de-e835ea3fe460"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "3503b976-d48c-4f88-b007-1534f228d194"                              #tandangsora
+    cash_in_bank_accounting_code_id: "78f46c27-76d0-4740-a3f8-1e45a8b9aedd"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     
 #
 ###############################
@@ -3986,7 +4007,7 @@ loan_products:
           account_subtype: "Life Insurance Fund"
           value: 15.00
           algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 0
+          offset: 1
       -
         name: "Deposit to retirement fund"
         accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
@@ -3998,7 +4019,7 @@ loan_products:
           account_subtype: "Retirement Fund"
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 0
+          offset: 1
           
 
 loan_product_accounting_codes:
