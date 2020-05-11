@@ -72,16 +72,40 @@ module Loans
       }
 
       # Main settings for this loan product
-      @settings = nil
+      @settings_loan_products = Settings.loan_products
 
-      Settings.loan_products.each do |s|
-        if s.loan_product_id == @loan_product.id
-          @settings = s
-        end
+      if @settings_loan_products.blank?
+        raise "settings_loan_products not found"
       end
 
+      # Actual loan product settings
+      @settings = @settings_loan_products.select{ |s| 
+                    s.loan_product_id == @loan_product.id and s.for_restructuring == true 
+                  }.first
+
       if @settings.blank?
-        raise "Settings not foud for loan product #{@loan_product.id}: #{@loan_product.name}. Please check production.yml"
+        raise "No settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Primary for restructuring (initial deductions)
+      @settings_primary = @settings.deductions.select{ |s| s.restructuring_primary == true }
+
+      if @settings_primary.blank?
+        raise "No primary restructuring settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Secondary for application on top of primary
+      @settings_secondary = @settings.deductions.select{ |s| s.restructuring_secondary == true }
+
+      if @settings_secondary.blank?
+        raise "No secondary restructuring settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Offset for round off (only one)
+      @settings_offset  = @settings.deductions.select{ |s| s.restructuring_offset == true }.first
+      
+      if @settings_offset.blank?
+        raise "No offset settings found for loan_product #{@loan_product.id}"
       end
 
       # Branch related accounting code settings
@@ -208,7 +232,7 @@ module Loans
         end
 
         if interest_receivable > 0
-          journal_entries << {
+         journal_entries << {
             accounting_code_id: interest_receivable_accounting_code.id,
             amount: interest_receivable,
             name: interest_receivable_accounting_code.name,
@@ -220,7 +244,7 @@ module Loans
       # Deductions: Only support member_type_deduction_ratio
       # compute amount released by deducting from @amount
       temp_amount = @amount
-      @settings.deductions.each do |s_deduction|
+      @settings_primary.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
 
         if deduction_type == "straight_one_time"
@@ -475,29 +499,278 @@ module Loans
 
                 amount  = val * (multiplier + offset)
 
-#                loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
-#
-#                if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
-#                  if @term == "weekly"
-#                  elsif @term == "monthly"
-#                    multiplier  = (multiplier * 4.3333333).to_i
-#                  elsif @term == "semi-monthly"
-#                    # weird unique rule for 12 semi-monthly
-#                    if @num_installments ==  12
-#                      multiplier  = 12.5 * 2
-#                    elsif @num_installments == 6
-#                      multiplier  = 15
-#                    else
-#                      multiplier  = multiplier * 2
-#                    end #end semimonthly
-#                  else
-#                    raise "Invalid term #{@term}"
-#                  end #end of term
-#
-#                  amount  = val * (multiplier + offset)
-#                else
-#                  amount  = val
-#                end #loan cycle presents
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+
+                temp_amount -= amount
+                @total_debit += amount
+
+              end #end of advance insurance
+            end #end of gk
+          else
+            raise "Invalid deduction type algo #{s_deduction.meta.algo}"
+          end
+        end
+      end
+
+      @settings_secondary.each do |s_deduction|
+        deduction_type  = s_deduction.deduction_type
+
+        if deduction_type == "straight_one_time"
+          #if @member.loans.active_or_paid.count == 0
+          if @loan_cycles.size == 0
+            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+            amount          = s_deduction.amount
+            name            = accounting_code.name
+            code            = accounting_code.code
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
+            temp_amount -= amount
+            @total_debit += amount
+          end
+        elsif deduction_type == "membership_fee"
+          if s_deduction.membership_type == "Cooperative" and @member.status == "pending"
+            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+            amount          = s_deduction.amount
+            name            = accounting_code.name
+            code            = accounting_code.code
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
+            temp_amount -= amount
+            @total_debit += amount
+          elsif s_deduction.membership_type == "Insurance" and @member.insurance_status == "pending"
+            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+            amount          = s_deduction.amount
+            name            = accounting_code.name
+            code            = accounting_code.code
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
+            temp_amount -= amount
+            @total_debit += amount
+          end
+        elsif deduction_type == "additional_amount_branch_term_map"
+          s_deduction.meta.branches.each do |s_b|
+            if s_b.branch_id == @branch.id
+              accounting_code     = AccountingCode.where(id: s_b.complimentary_accounting_code_id).first
+              amount              = s_deduction.amount
+              name                = accounting_code.name
+              code                = accounting_code.code
+
+              if @term == "weekly"
+                s_deduction.meta.term_map.weekly.each do |s|
+                  if s.num_installments == @num_installments
+                    amount  = (s.ratio * @amount).round(2)
+                  end
+                end
+              elsif @term == "monthly"
+                s_deduction.meta.term_map.monthly.each do |s|
+                  if s.num_installments == @num_installments
+                    amount  = (s.ratio * @amount).round(2)
+                  end
+                end
+              elsif @term == "semi-monthly"
+                s_deduction.meta.term_map.semi_monthly.each do |s|
+                  if s.num_installments == @num_installments
+                    amount  = (s.ratio * @amount).round(2)
+                  end
+                end
+              else
+                raise "Invalid term: #{@term}"
+              end
+
+              journal_entries << {
+                accounting_code_id: accounting_code.id,
+                code: code,
+                name: name,
+                amount: amount
+              }
+
+              #temp_amount -= amount
+              @total_debit += amount
+            end
+          end
+        elsif deduction_type == "member_type_deduction_ratio"
+          target_member_type  = s_deduction.meta.member_type
+          accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
+          amount              = s_deduction.amount
+          name                = accounting_code.name
+          code                = accounting_code.code
+
+          # Special: business_permit_available
+          if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
+            amount  = s_deduction.business_permit_amount
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
+            temp_amount -= amount
+            @total_debit += amount
+          elsif s_deduction.for_primary_loan.present? and s_deduction.for_primary_loan == true 
+            primary_loan_id = s_deduction.primary_loan_id
+            loan_count = Loan.where("member_id = ? and status = ? and loan_product_id IN (?)", @member.id,"active", primary_loan_id).count
+            if loan_count == 0
+              if @term == "weekly"
+                s_deduction.meta.term_map.weekly.each do |s|
+                  
+                  if s.num_installments == @num_installments
+                  
+                    amount  = (s.ratio * @amount).round(2)
+                  end
+                end
+              elsif @term == "monthly"
+                s_deduction.meta.term_map.monthly.each do |s|
+                  if s.num_installments == @num_installments
+                    amount  = (s.ratio * @amount).round(2)
+                  end
+                end
+              elsif @term == "semi-monthly"
+                s_deduction.meta.term_map.semi_monthly.each do |s|
+                  if s.num_installments == @num_installments
+                    amount  = (s.ratio * @amount).round(2)
+                  end
+                end
+              else
+                raise "Invalid term: #{@term}"
+              end
+
+              journal_entries << {
+                accounting_code_id: accounting_code.id,
+                code: code,
+                name: name,
+                amount: amount
+              }
+
+              temp_amount -= amount
+              @total_debit += amount
+            end
+          else
+            if @member.member_type == "GK"
+              if  s_deduction.use_for_special_loan_fund == "true"
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+
+                temp_amount -= amount
+                @total_debit += amount
+              end
+            else
+              if  s_deduction.skip_for_special_loan_fund == "true"
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+
+                temp_amount -= amount
+                @total_debit += amount
+              end
+            end
+          end
+        elsif deduction_type == "deposit"
+          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+            if @member.member_type != "GK"
+              if @loan_data[:advance_insurance_available] == false
+                offset          = s_deduction.meta.offset
+                accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+                name            = accounting_code.name
+                code            = accounting_code.code
+                amount          = 0.00
+                val             = s_deduction.meta.value
+
+                multiplier  = @num_installments
+
+                # Always advance payments for restructured loans
+                if @term == "weekly"
+                elsif @term == "monthly"
+                  multiplier  = (multiplier * 4.3333333).to_i
+                elsif @term == "semi-monthly"
+                  # weird unique rule for 12 semi-monthly
+                  if @num_installments ==  12
+                    multiplier  = 12.5 * 2
+                  elsif @num_installments == 6
+                    multiplier  = 15
+                  else
+                    multiplier  = multiplier * 2
+                  end #end semimonthly
+                else
+                  raise "Invalid term #{@term}"
+                end #end of term
+
+                amount  = val * (multiplier + offset)
 
                 journal_entries << {
                   accounting_code_id: accounting_code.id,

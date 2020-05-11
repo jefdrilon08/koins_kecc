@@ -3835,6 +3835,7 @@ loan_products:
         business_permit_amount: 500
         for_primary_loan: true
         primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        restructuring_offset: true
         meta:
           member_type: "Regular"
           term_map:
@@ -3884,6 +3885,7 @@ loan_products:
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "false"
+        restructuring_secondary: true
         meta:
           member_type: "Regular"
           term_map:
@@ -3981,6 +3983,7 @@ loan_products:
         amount: 0.00
         deduction_type: "deposit"
         advance_insurance_value: true
+        restructuring_primary: true
         meta:
           account_type: "INSURANCE"
           account_subtype: "Life Insurance Fund"
@@ -3993,6 +3996,7 @@ loan_products:
         amount: 0.00
         deduction_type: "deposit"
         advance_insurance_value: true
+        restructuring_primary: true
         meta:
           account_type: "INSURANCE"
           account_subtype: "Retirement Fund"

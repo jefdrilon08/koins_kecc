@@ -33,14 +33,33 @@ module Loans
       end
 
       # Actual loan product settings
-      @settings_loan_products.each do |s|
-        if s.loan_product_id == @loan_product.id
-          @settings = s
-        end
-      end
+      @settings = @settings_loan_products.select{ |s| 
+                    s.loan_product_id == @loan_product.id and s.for_restructuring == true 
+                  }.first
 
       if @settings.blank?
-        raise "No settings foud for loan_product #{@loan_product.id}"
+        raise "No settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Primary for restructuring (initial deductions)
+      @settings_primary = @settings.deductions.select{ |s| s.restructuring_primary == true }
+
+      if @settings_primary.blank?
+        raise "No primary restructuring settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Secondary for application on top of primary
+      @settings_secondary = @settings.deductions.select{ |s| s.restructuring_secondary == true }
+
+      if @settings_secondary.blank?
+        raise "No secondary restructuring settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Offset for round off (only one)
+      @settings_offset  = @settings.deductions.select{ |s| s.restructuring_offset == true }.first
+      
+      if @settings_offset.blank?
+        raise "No offset settings found for loan_product #{@loan_product.id}"
       end
 
       # Set principal to be sum of active_loans balances
