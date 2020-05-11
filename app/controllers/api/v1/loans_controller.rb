@@ -68,11 +68,11 @@ module Api
                       beneficiary_date_of_birth: beneficiary_date_of_birth,
                       beneficiary_relationship: beneficiary_relationship
                     ).execute!
+
+            render json: { message: "ok", id: loan.id }
           rescue Exception => e
             render json: { message: "error", id: member.id }, status: 500
           end
-
-          render json: { message: "ok", id: loan.id }
         end
       end
 
