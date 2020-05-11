@@ -49,24 +49,28 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          loan  = ::Loans::Restructure.new(
-                    user: current_user,
-                    co_maker: co_maker,
-                    co_maker_member: co_maker_member,
-                    pn_number: pn_number,
-                    clip_number: clip_number,
-                    date_prepared: date_prepared,
-                    num_installments: num_installments,
-                    term: term,
-                    member: member,
-                    active_loans: active_loans,
-                    loan_product: loan_product,
-                    beneficiary_first_name: beneficiary_first_name,
-                    beneficiary_middle_name: beneficiary_middle_name,
-                    beneficiary_last_name: beneficiary_last_name,
-                    beneficiary_date_of_birth: beneficiary_date_of_birth,
-                    beneficiary_relationship: beneficiary_relationship
-                  ).execute!
+          ActiveRecord::Base.transaction do
+            loan  = ::Loans::Restructure.new(
+                      user: current_user,
+                      co_maker: co_maker,
+                      co_maker_member: co_maker_member,
+                      pn_number: pn_number,
+                      clip_number: clip_number,
+                      date_prepared: date_prepared,
+                      num_installments: num_installments,
+                      term: term,
+                      member: member,
+                      active_loans: active_loans,
+                      loan_product: loan_product,
+                      beneficiary_first_name: beneficiary_first_name,
+                      beneficiary_middle_name: beneficiary_middle_name,
+                      beneficiary_last_name: beneficiary_last_name,
+                      beneficiary_date_of_birth: beneficiary_date_of_birth,
+                      beneficiary_relationship: beneficiary_relationship
+                    ).execute!
+          rescue Exception => e
+            render json: { message: "error", id: member.id }, status: 500
+          end
 
           render json: { message: "ok", id: loan.id }
         end
@@ -377,23 +381,27 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          loan_data = JSON.parse(loan.to_json).with_indifferent_access
+          ActiveRecord::Base.transaction do
+            loan_data = JSON.parse(loan.to_json).with_indifferent_access
 
-          loan  = ::Loans::Delete.new(
-                    config: config
-                  ).execute!
+            loan  = ::Loans::Delete.new(
+                      config: config
+                    ).execute!
 
-          ActivityLog.create!(
-            content: "#{current_user.full_name} deleted loan #{loan_data[:id]}",
-            activity_type: "modification",
-            data: {
-              user_id: current_user.id,
-              loan_id: loan_data[:id],
-              loan_data: loan_data
-            }
-          )
+            ActivityLog.create!(
+              content: "#{current_user.full_name} deleted loan #{loan_data[:id]}",
+              activity_type: "modification",
+              data: {
+                user_id: current_user.id,
+                loan_id: loan_data[:id],
+                loan_data: loan_data
+              }
+            )
 
-          render json: { message: "ok", id: member.id }
+            render json: { message: "ok", id: member.id }
+          rescue Exception => e
+            render json: { message: "error", id: member.id }, status: 500
+          end
         end
       end
 

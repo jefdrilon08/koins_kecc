@@ -209,6 +209,10 @@ module Loans
         }
       }
 
+      @active_loans.each do |o|
+        o.update!(status: "processing")
+      end
+
       @loan.save!
 
       @loan

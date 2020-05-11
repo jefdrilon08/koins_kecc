@@ -2,7 +2,8 @@ class Loan < ApplicationRecord
   STATUSES  = [
     "pending",
     "active",
-    "paid"
+    "paid",
+    "processing"
   ]
   LOAN_STATUSES = [
     "pending",
