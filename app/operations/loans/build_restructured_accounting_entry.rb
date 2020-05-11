@@ -517,6 +517,9 @@ module Loans
         end
       end
 
+      # Secondary will always be attributed to the total_debit computed after primary
+      primary_amount  = @total_debit
+
       @settings_secondary.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
 
@@ -581,19 +584,19 @@ module Loans
               if @term == "weekly"
                 s_deduction.meta.term_map.weekly.each do |s|
                   if s.num_installments == @num_installments
-                    amount  = (s.ratio * @amount).round(2)
+                    amount  = (s.ratio * primary_amount).round(2)
                   end
                 end
               elsif @term == "monthly"
                 s_deduction.meta.term_map.monthly.each do |s|
                   if s.num_installments == @num_installments
-                    amount  = (s.ratio * @amount).round(2)
+                    amount  = (s.ratio * primary_amount).round(2)
                   end
                 end
               elsif @term == "semi-monthly"
                 s_deduction.meta.term_map.semi_monthly.each do |s|
                   if s.num_installments == @num_installments
-                    amount  = (s.ratio * @amount).round(2)
+                    amount  = (s.ratio * primary_amount).round(2)
                   end
                 end
               else
@@ -640,19 +643,19 @@ module Loans
                   
                   if s.num_installments == @num_installments
                   
-                    amount  = (s.ratio * @amount).round(2)
+                    amount  = (s.ratio * primary_amount).round(2)
                   end
                 end
               elsif @term == "monthly"
                 s_deduction.meta.term_map.monthly.each do |s|
                   if s.num_installments == @num_installments
-                    amount  = (s.ratio * @amount).round(2)
+                    amount  = (s.ratio * primary_amount).round(2)
                   end
                 end
               elsif @term == "semi-monthly"
                 s_deduction.meta.term_map.semi_monthly.each do |s|
                   if s.num_installments == @num_installments
-                    amount  = (s.ratio * @amount).round(2)
+                    amount  = (s.ratio * primary_amount).round(2)
                   end
                 end
               else
@@ -675,19 +678,19 @@ module Loans
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * primary_amount).round(2)
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * primary_amount).round(2)
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * primary_amount).round(2)
                     end
                   end
                 else
@@ -709,19 +712,19 @@ module Loans
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * primary_amount).round(2)
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * primary_amount).round(2)
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * primary_amount).round(2)
                     end
                   end
                 else
