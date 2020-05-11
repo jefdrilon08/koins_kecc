@@ -790,6 +790,29 @@ module Loans
         end
       end
 
+      # Offset round off
+      rounded_off_amount  = @total_debit.to_f.ceil
+
+      if @total_debit != rounded_off_amount
+        # Get offset and add as part of credit
+        offset = (rounded_off_amount - @total_debit)
+
+        accounting_code = AccountingCode.find(@settings_offset.accounting_code_id)
+        code            = accounting_code.code
+        name            = accounting_code.name
+        amount          = offset
+
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: code,
+          name: name,
+          amount: amount
+        }
+
+        # Set @total_debit to rounded off value
+        @total_debit = rounded_off_amount
+      end
+
       return journal_entries
     end
 

@@ -164,7 +164,7 @@ module Loans
 
       result  = ::Finance::Amortize.new(
                   params: params
-                ).execute!
+               ).execute!
 
       @loan.principal_balance = @loan.principal
       @loan.interest_balance  = result[:interest]
@@ -181,16 +181,15 @@ module Loans
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
 
-        amort = AmortizationScheduleEntry.new(
-                  principal: principal,
-                  interest: interest,
-                  principal_balance: principal,
-                  interest_balance: interest,
-                  principal_paid: 0.00,
-                  interest_paid: 0.00,
-                  amount_due: amount_due
-                )
-        @loan.amortization_schedule_entries << amort
+        @loan.amortization_schedule_entries.build(
+          principal: principal,
+          interest: interest,
+          principal_balance: principal,
+          interest_balance: interest,
+          principal_paid: 0.00,
+          interest_paid: 0.00,
+          amount_due: amount_due
+        )
       end
 
       @loan.data[:accounting_entry] = accounting_entry_data
