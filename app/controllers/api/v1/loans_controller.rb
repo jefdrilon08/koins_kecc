@@ -245,35 +245,12 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          loan  = ::Loans::Approve.new(
-                    config: config
-                  ).execute!
+          loan.update!(status: "processing")
 
-          # setup maintaining balance
-          ::Members::SetMaintainingBalance.new(
-            config: {
-              member: loan.member
-            }
-          ).execute!
-
-          # setup maturity date
-          ::Loans::UpdateMaturityDate.new(
-            loan: loan
-          ).execute!
-
-          # Setup original maturity date
-          ::Loans::UpdateOriginalMaturityDate.new(
-            loan: loan
-          ).execute!
-
-          ActivityLog.create!(
-            content: "#{current_user.full_name} approved loan #{loan.id}",
-            activity_type: "approval",
-            data: {
-              user_id: current_user.id,
-              loan_id: loan.id
-            }
-          )
+          ProcessApproveLoan.perform_later({
+            id: loan.id,
+            user_id: current_user.id
+          })
 
           render json: { message: "ok", id: loan.id }
         end
