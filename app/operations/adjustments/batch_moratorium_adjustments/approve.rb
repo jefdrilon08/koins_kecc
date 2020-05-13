@@ -33,7 +33,7 @@ module Adjustments
                                             @date_initialized
                                           ).order("due_date ASC")
 
-          current_date  = amortization_schedule_entries.first
+          current_date  = amortization_schedule_entries.first.due_date
 
           amortization_schedule_entries.each do |o|
             o.update!(due_date: current_date + @number_of_days.days)
