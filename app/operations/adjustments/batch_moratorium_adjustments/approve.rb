@@ -13,32 +13,33 @@ module Adjustments
         @number_of_days   = @data[:number_of_days].to_i
         @branch           = Branch.find(@meta[:branch][:id])
 
+        @center_ids = Center.where(branch_id: @branch.id).pluck(:id)
+
         if @meta[:center][:id].present?
-          @center = Center.find(@meta[:center][:id])
+          @center_ids = [@meta[:center][:id]]
         end
 
-        @loans  = Loan.active.where(
-                    branch_id: @branch.id
-                  )
-
-        if @center.present?
-          @loans  = @loans.where(center_id: @center.id)
-        end
-
-        @amortization_schedule_entries  = AmortizationScheduleEntry.unpaid.where(
-                                            "loan_id IN (?) AND due_date >= ?",
-                                            @loans.pluck(:id),
-                                            @date_initialized
-                                          )
+        @loan_ids = Loan.active.where(
+                      branch_id: @branch.id,
+                      center_id: @center_ids
+                    ).pluck(:id)
       end
 
       def execute!
-        current_date  = @amortization_schedule_entries.first
+        @loan_ids.each do |loan_id|
+          amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
+                                            "loan_id = ? AND due_date >= ?",
+                                            loan_id,
+                                            @date_initialized
+                                          ).order("due_date ASC")
 
-        @amortization_schedule_entries.each do |o|
-          o.update!(due_date: current_date + @number_of_days.days)
+          current_date  = amortization_schedule_entries.first
 
-          current_date = o.due_date
+          amortization_schedule_entries.each do |o|
+            o.update!(due_date: current_date + @number_of_days.days)
+
+            current_date = o.due_date
+          end
         end
 
         @adjustment_record.update!(status: "approved")
