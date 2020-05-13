@@ -33,8 +33,12 @@ module Adjustments
       end
 
       def execute!
+        current_date  = @amortization_schedule_entries.first
+
         @amortization_schedule_entries.each do |o|
-          o.update!(due_date: o.due_date + @number_of_days.days)
+          o.update!(due_date: current_date + @number_of_days.days)
+
+          current_date = o.due_date
         end
 
         @adjustment_record.update!(status: "approved")

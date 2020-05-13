@@ -17,7 +17,7 @@
               .form-group
                 %label
                   Active Loans
-                = select_tag :active_loans, options_from_collection_for_select(@active_loans, :id, :pn_number), class: "form-control select-select2 js-searchable", id: "select-active-loans", multiple: true
+                = select_tag :active_loans, options_from_collection_for_select(@active_loans, :id, :loan_product_name), class: "form-control select-select2 js-searchable", id: "select-active-loans", multiple: true
           %h6
             Co-maker Information
           .row

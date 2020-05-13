@@ -53,6 +53,10 @@ class Loan < ApplicationRecord
     )
   end
 
+  def loan_product_name
+    self.loan_product.name
+  end
+
   def restructured?
     self.is_restructured
   end

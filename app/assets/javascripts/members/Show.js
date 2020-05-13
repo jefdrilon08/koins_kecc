@@ -188,6 +188,7 @@ var Show  = (function() {
       $selectTerm.append($("<option></option>").attr("value", 25).text(25));
       $selectTerm.append($("<option></option>").attr("value", 35).text(35));
       $selectTerm.append($("<option></option>").attr("value", 50).text(50));
+      $selectTerm.append($("<option></option>").attr("value", 75).text(75));
     } else if(modeOfPayment == "monthly") {
       $selectTerm.append($("<option></option>").attr("value", 3).text(3));
       $selectTerm.append($("<option></option>").attr("value", 6).text(6));
