@@ -3691,6 +3691,8 @@ loan_products:
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
+        for_primary_loan: true
+        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
         meta:
           member_type: "Regular"
           term_map:
@@ -3923,6 +3925,9 @@ loan_products:
               -
                 num_installments: 50
                 ratio: 0.0140
+              -
+                num_installments: 75
+                ratio: 0.021
             monthly:
               -
                 num_installments: 3
@@ -3949,6 +3954,7 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+              
       -
         name: "Golden Protection Fund"
         accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
@@ -3972,6 +3978,9 @@ loan_products:
               -
                 num_installments: 50
                 ratio: 0.0140
+              -
+                num_installments: 75
+                ratio: 0.021
             monthly:
               -
                 num_installments: 3
