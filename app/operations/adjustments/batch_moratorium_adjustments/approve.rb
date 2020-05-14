@@ -33,7 +33,7 @@ module Adjustments
                                             @date_initialized
                                           ).order("due_date ASC")
 
-          if amortization_schedule_entries.size > 0
+          if amortization_schedule_entries.any?
             current_date  = amortization_schedule_entries.first.due_date
 
             amortization_schedule_entries.each do |o|
