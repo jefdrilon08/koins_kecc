@@ -88,6 +88,9 @@ module Loans
           end
         end
 
+        dr_amount = dr_amount.round(2)
+        cr_amount = cr_amount.round(2)
+
         if dr_amount != cr_amount
           @errors[:messages] << {
             key: "accounting_entry",
