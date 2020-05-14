@@ -251,7 +251,7 @@ module Loans
           #if @member.loans.active_or_paid.count == 0
           if @loan_cycles.size == 0
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
-            amount          = s_deduction.amount
+            amount          = s_deduction.amount.round(2)
             name            = accounting_code.name
             code            = accounting_code.code
 
@@ -268,7 +268,7 @@ module Loans
         elsif deduction_type == "membership_fee"
           if s_deduction.membership_type == "Cooperative" and @member.status == "pending"
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
-            amount          = s_deduction.amount
+            amount          = s_deduction.amount.round(2)
             name            = accounting_code.name
             code            = accounting_code.code
 
@@ -283,7 +283,7 @@ module Loans
             @total_debit += amount
           elsif s_deduction.membership_type == "Insurance" and @member.insurance_status == "pending"
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
-            amount          = s_deduction.amount
+            amount          = s_deduction.amount.round(2)
             name            = accounting_code.name
             code            = accounting_code.code
 
@@ -327,6 +327,8 @@ module Loans
                 raise "Invalid term: #{@term}"
               end
 
+              amount = amount.round(2)
+
               journal_entries << {
                 accounting_code_id: accounting_code.id,
                 code: code,
@@ -347,7 +349,7 @@ module Loans
 
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
-            amount  = s_deduction.business_permit_amount
+            amount  = (s_deduction.business_permit_amount).round(2)
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
@@ -497,7 +499,7 @@ module Loans
                   raise "Invalid term #{@term}"
                 end #end of term
 
-                amount  = val * (multiplier + offset)
+                amount  = (val * (multiplier + offset)).round(2)
 
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
@@ -1097,7 +1099,7 @@ module Loans
               accounting_code_id: accounting_code.id,
               code: code,
               name: name,
-              amount: amount
+              amount: amount.round(2)
             }
 
             temp_amount -= amount
@@ -1114,7 +1116,7 @@ module Loans
               accounting_code_id: accounting_code.id,
               code: code,
               name: name,
-              amount: amount
+              amount: amount.round(2)
             }
 
             temp_amount -= amount
@@ -1129,7 +1131,7 @@ module Loans
               accounting_code_id: accounting_code.id,
               code: code,
               name: name,
-              amount: amount
+              amount: amount.round(2)
             }
 
             temp_amount -= amount
@@ -1169,7 +1171,7 @@ module Loans
                 accounting_code_id: accounting_code.id,
                 code: code,
                 name: name,
-                amount: amount
+                amount: amount.round(2)
               }
 
               #temp_amount -= amount
@@ -1191,7 +1193,7 @@ module Loans
               accounting_code_id: accounting_code.id,
               code: code,
               name: name,
-              amount: amount
+              amount: amount.round(2)
             }
 
             temp_amount -= amount
@@ -1263,7 +1265,7 @@ module Loans
                   accounting_code_id: accounting_code.id,
                   code: code,
                   name: name,
-                  amount: amount
+                  amount: amount.round(2)
                 }
 
                 temp_amount -= amount
