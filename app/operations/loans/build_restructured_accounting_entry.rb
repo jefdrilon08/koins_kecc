@@ -1335,7 +1335,7 @@ module Loans
                   raise "Invalid term #{@term}"
                 end #end of term
 
-                amount  = val * (multiplier + offset)
+                amount  = (val * (multiplier + offset)).round(2)
 
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
@@ -1365,7 +1365,7 @@ module Loans
         accounting_code = AccountingCode.find(@settings_offset.accounting_code_id)
         code            = accounting_code.code
         name            = accounting_code.name
-        amount          = offset
+        amount          = offset.round(2)
 
         journal_entries << {
           accounting_code_id: accounting_code.id,
