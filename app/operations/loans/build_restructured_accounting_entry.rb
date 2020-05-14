@@ -1358,16 +1358,17 @@ module Loans
       end
 
       # Offset round off
-      rounded_off_amount  = @total_debit.to_f.ceil
+      rounded_off_amount  = @total_debit.ceil
+      credit_so_far       = journal_entries.inject(0){ |sum, h| sum + h[:amount] }
 
-      if @total_debit != rounded_off_amount
+      if rounded_off_amount != credit_so_far
         # Get offset and add as part of credit
-        offset = (rounded_off_amount - @total_debit)
+        offset = (rounded_off_amount - credit_so_far).round(2)
 
         accounting_code = AccountingCode.find(@settings_offset.accounting_code_id)
         code            = accounting_code.code
         name            = accounting_code.name
-        amount          = offset.round(2)
+        amount          = offset
 
         journal_entries << {
           accounting_code_id: accounting_code.id,
