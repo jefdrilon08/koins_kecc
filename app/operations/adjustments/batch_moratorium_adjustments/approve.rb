@@ -27,7 +27,7 @@ module Adjustments
 
       def execute!
         @loan_ids.each do |loan_id|
-          loan_term = Loan.find(loand_id).term
+          loan_term = Loan.find(loan_id).term
           amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
                                             "loan_id = ? AND due_date >= ?",
                                             loan_id,
