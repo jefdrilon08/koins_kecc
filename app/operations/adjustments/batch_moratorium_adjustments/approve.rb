@@ -44,6 +44,7 @@ module Adjustments
               end
 
               current_date = o.due_date
+              iter = iter + 1
             end
           end
         end
