@@ -35,9 +35,13 @@ module Adjustments
 
           if amortization_schedule_entries.any?
             current_date  = amortization_schedule_entries.first.due_date
-
+            iter = 1
             amortization_schedule_entries.each do |o|
-              o.update!(due_date: current_date + @number_of_days.days)
+              if iter == 1
+                o.update!(due_date: current_date + @number_of_days.days)
+              else
+                o.update!(due_date: current_date + 7.days)
+              end
 
               current_date = o.due_date
             end
