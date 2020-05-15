@@ -27,6 +27,7 @@ module Adjustments
 
       def execute!
         @loan_ids.each do |loan_id|
+          loan_term = Loan.find(loand_id).term
           amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
                                             "loan_id = ? AND due_date >= ?",
                                             loan_id,
@@ -40,7 +41,14 @@ module Adjustments
               if iter == 1
                 o.update!(due_date: current_date + @number_of_days.days)
               else
-                o.update!(due_date: current_date + 7.days)
+                if loan_term == "weekly"
+                  o.update!(due_date: current_date + 7.days)
+                elsif loan_term == "semi-monthly"
+                  o.update!(due_date: current_date + 15.days)
+                else
+                  o.update!(due_date: current_date + 30.days)
+                end
+
               end
 
               current_date = o.due_date
