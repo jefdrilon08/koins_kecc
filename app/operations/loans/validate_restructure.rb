@@ -115,6 +115,16 @@ module Loans
         }
       end
 
+      # Do not allow creation of restructured loan if there are still existin restructured loans
+      if @member.present? and @loan_product.present?
+        if Loan.where(is_restructured: true, status: 'pending', member_id: @member.id).count > 0
+          @errors[:messages] << {
+            key: "loan",
+            message: "member still has pending restructured loan"
+          }
+        end
+      end
+
       #not_yet_implemented!
 
       @errors[:messages].each do |o|
