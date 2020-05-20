@@ -3,7 +3,7 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 50 } %>
+  pool: 10
   username: <%= ENV["KOINS_DATABASE_USERNAME"] %>
   password: <%= ENV["KOINS_DATABASE_PASSWORD"] %>
   host: <%= ENV["KOINS_DATABASE_HOST"] %>
