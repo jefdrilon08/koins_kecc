@@ -45,8 +45,10 @@ module Adjustments
                   o.update!(due_date: current_date + 7.days)
                 elsif loan_term == "semi-monthly"
                   o.update!(due_date: current_date + 15.days)
-                else
+                elsif loan_term == "monthly"
                   o.update!(due_date: current_date + 30.days)
+                else
+                  raise "something went wrong"
                 end
 
               end
