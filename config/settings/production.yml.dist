@@ -279,8 +279,10 @@ interest_member_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "K-IMPOK"
-    annual_interest_rate: 0.02
+#    annual_interest_rate: 0.02
+    annual_interest_rate: 0.01
     annual_tax_rate: 0.0
+    #dormant_annual_interest_rate: 0.01
     dormant_annual_interest_rate: 0.01
     dormant_threshold_months: 6
     zero_interest_threshold: 24
@@ -291,16 +293,19 @@ interest_member_accounts:
     account_subtype: "Golden K"
     annual_tax_rate: 0.0
     dormant_annual_interest_rate: 0.0
-    annual_interest_rate: 0.10
+#    annual_interest_rate: 0.10
+    annual_interest_rate: 0.05
     dormant_threshold_months: 6
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     credit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
   -
     account_type: "SAVINGS"
     account_subtype: "Personal Savings Account"
-    annual_interest_rate: 0.02
+#    annual_interest_rate: 0.02
+    annual_interest_rate: 0.01
     annual_tax_rate: 0.0
-    dormant_annual_interest_rate: 0.01
+    #dormant_annual_interest_rate: 0.01
+    dormant_annual_interest_rate: 0.00
     dormant_threshold_months: 6
     zero_interest_threshold: 24
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
