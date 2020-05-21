@@ -23,18 +23,16 @@ module Loans
       due_date  = @loan.first_date_of_payment
 
       @amortization_schedule_entries.each do |o|
-        if o.due_date >= "2019-12-31"
-          o.update!(due_date: due_date)
+        o.update!(due_date: due_date)
 
-          if term == "weekly"
-            due_date = due_date + 1.week
-          elsif term == "monthly"
-            due_date = due_date + 1.month
-          elsif term == "semi-monthly"
-            due_date = due_date + 15.days
-          else
-            raise "Invalid term: #{term}"
-          end
+        if term == "weekly"
+          due_date = due_date + 1.week
+        elsif term == "monthly"
+          due_date = due_date + 1.month
+        elsif term == "semi-monthly"
+          due_date = due_date + 15.days
+        else
+          raise "Invalid term: #{term}"
         end
       end
 
