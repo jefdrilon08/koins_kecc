@@ -68,3 +68,10 @@ dump.rdb
 
 # Ignore package-lock.json since we're using yarn
 package-lock.json
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

@@ -38,6 +38,9 @@ gem 'rack-mini-profiler'
 # For memory profiling
 gem 'memory_profiler'
 
+# Webpacker
+gem 'webpacker'
+
 # For call-stack profiling flamegraphs
 gem 'flamegraph'
 gem 'stackprof'

@@ -1,5 +1,4 @@
 = title
-= stylesheet_link_tag "login"
 
 .container
   .row
@@ -30,9 +29,4 @@
                       .fa.fa-sign-in-alt
                       Login to System
 
-= javascript_include_tag "Login"
-
-:javascript
-  $(document).ready(function() {
-    Login.init();
-  });
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }
