@@ -875,6 +875,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@coreui/coreui@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@coreui/coreui/-/coreui-3.2.0.tgz#44f5d62492f1e0add10fff46780b30d528dc8ee5"
+  integrity sha512-/phj0z2DhbJ955bVCjoRbGG0qt0KdjUAG6erdLF14FPV410QbaW3J4PIe9kAZUz86CJ/lXUMzKSYYR3gr7dOAQ==
+
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
@@ -931,6 +936,11 @@
   version "5.13.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.13.0.tgz#fcb113d1aca4b471b709e8c9c168674fbd6e06d9"
   integrity sha512-xKOeQEl5O47GPZYIMToj6uuA2syyFlq9EMSl2ui0uytjY9xbe8XS0pexNWmxrdcCyNGyDmLyYw5FtKsalBUeOg==
+
+"@popperjs/core@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.0.tgz#0e1bdf8d021e7ea58affade33d9d607e11365915"
+  integrity sha512-NMrDy6EWh9TPdSRiHmHH2ye1v5U0gBD7pRYwSwJvomx7Bm4GG04vu63dYiVzebLOx2obPpJugew06xVP0Nk7hA==
 
 "@rails/activestorage@^6.0.3-1":
   version "6.0.3-1"

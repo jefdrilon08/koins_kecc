@@ -13,11 +13,11 @@
     = javascript_pack_tag 'application'
     = favicon_link_tag "logo_thumb.png"
 
-  %body.app.header-fixed
-    = render partial: "shared/header"
-    .app-body
-      = render partial: "shared/sidebar"
-      %main.main
+  %body.c-app
+    = render partial: "shared/c_sidebar"
+    .c-wrapper
+      = render partial: "shared/header"
+      .c-body
         = yield
     = render partial: "templates/error_list"
     = render partial: "templates/loader"

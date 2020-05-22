@@ -6,7 +6,9 @@
 
 // Manual imports
 @import "./login";
-@import "./coreui";
+//@import "./coreui";
+@import "~@coreui/coreui/scss/coreui";
+
 @import "./sk-cube-grid";
 @import "./components/Sidebar";
 

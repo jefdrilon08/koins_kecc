@@ -16,7 +16,8 @@ import "@fortawesome/fontawesome-free/js/all";
 //import "select2/dist/js/select2";
 
 // Third party js
-import "../opt/coreui.min";
+//import "../opt/coreui.min";
+import { Sidebar } from '@coreui/coreui';
 
 import "../stylesheets/application.scss";
 

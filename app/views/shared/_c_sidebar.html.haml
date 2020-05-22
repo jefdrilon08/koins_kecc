@@ -1,0 +1,10 @@
+#sidebar.c-sidebar.c-sidebar-dark.c-sidebar-fixed
+  .c-sidebar-brand.d-md-down-none
+    = image_tag "logo.png", width: "89", class: "c-sidebar-brand-full"
+  %ul.c-sidebar-nav
+    %li.c-sidebar-nav-title
+      Dashboard
+    %li{ class: "c-sidebar-nav-item" }
+      = link_to root_path, class: "c-sidebar-nav-link #{params[:controller] == "pages" and params[:action] == "index" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-tachometer-alt
+        Operations
