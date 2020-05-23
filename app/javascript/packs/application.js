@@ -1,6 +1,11 @@
 require("@rails/ujs").start()
 require("@rails/activestorage").start()
 
+// Support component names relative to this directory:
+var componentRequireContext = require.context("components", true);
+var ReactRailsUJS = require("react_ujs");
+ReactRailsUJS.useContext(componentRequireContext);
+
 import 'bootstrap';
 import jquery from 'jquery';
 import $ from 'jquery';
@@ -8,20 +13,16 @@ window.$ = window.jquery = jquery;
 
 import "@fortawesome/fontawesome-free/js/all";
 
-//import "mustache/mustache";
-//import "datatables.net/js/jquery.dataTables";
-//import "datatables.net-bs4/js/dataTables.bootstrap4";
-//import "datatables.net-fixedheader/js/dataTables.fixedHeader";
-//import "datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4";
-//import "select2/dist/js/select2";
-
-// Third party js
-//import "../opt/coreui.min";
-import { Sidebar } from '@coreui/coreui';
+import '@coreui/coreui';
 
 import "../stylesheets/application.scss";
 
 import "../pages/Login.js";
+
+import React from "react";
+import ReactDOM from "react-dom";
+
+import MainUI from "../../../react/dashboard/MainUI";
 
 var Hooks = {};
 
@@ -35,7 +36,9 @@ $(document).ready(function() {
 
   console.log("Controller: " + controller + " Action: " + action);
 
-  if(controller == "pages" && action == "login") {
-    Login.init();
+  if(controller == "pages") {
+    if(action == "login") {
+      Login.init();
+    }
   }
 });
