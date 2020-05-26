@@ -39,6 +39,18 @@ $(document).ready(function() {
   if(controller == "pages") {
     if(action == "login") {
       Login.init();
+    } else if(action == "index") {
+      var username  = $parameters.data('username');
+      var roles     = $parameters.data('roles');
+
+      ReactDOM.render(
+        <MainUI
+          authenticityToken={authenticityToken}
+          username={username}
+          roles={roles}
+        />,
+        document.getElementById('dashboard-content')
+      );
     }
   }
 });

@@ -8,8 +8,3 @@
       #dashboard-content
 
 #parameters{ data: { controller: params[:controller], action: params[:action], username: current_user.username, roles: current_user.roles } }
-
-- if microloans?
-  = javascript_include_tag "DashboardMain.min.react"
-- elsif microinsurance?
-  = javascript_include_tag "DashboardMainMii.min.react"
