@@ -283,7 +283,7 @@ interest_member_accounts:
     annual_interest_rate: 0.01
     annual_tax_rate: 0.0
     #dormant_annual_interest_rate: 0.01
-    dormant_annual_interest_rate: 0.01
+    dormant_annual_interest_rate: 0.005
     dormant_threshold_months: 6
     zero_interest_threshold: 24
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
@@ -305,7 +305,7 @@ interest_member_accounts:
     annual_interest_rate: 0.01
     annual_tax_rate: 0.0
     #dormant_annual_interest_rate: 0.01
-    dormant_annual_interest_rate: 0.00
+    dormant_annual_interest_rate: 0.005
     dormant_threshold_months: 6
     zero_interest_threshold: 24
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"

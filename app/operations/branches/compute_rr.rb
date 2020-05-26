@@ -201,6 +201,12 @@ module Branches
           if num_days_par = 0
             num_days_par = 1
           end
+        elsif latest_transaction_date.blank?
+          num_days_par  = (@as_of - first_date_of_payment).to_i
+
+          if num_days_par = 0
+            num_days_par = 1
+          end
         end
 
         temp_r  = {
