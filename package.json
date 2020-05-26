@@ -18,6 +18,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.9.3",
+    "core-js": "^3.6.5",
     "css-loader": "^1.0.0",
     "datatables.net": "^1.10.19",
     "datatables.net-bs4": "^1.10.19",
@@ -41,6 +42,7 @@
     "react-toggle": "^4.0.2",
     "react_ujs": "^2.6.1",
     "recharts": "^2.0.0-beta.1",
+    "regenerator-runtime": "^0.13.5",
     "sass-loader": "^8.0.2",
     "select2": "^4.0.13",
     "signature_pad": "^3.0.0-beta.3",
@@ -48,7 +50,6 @@
     "terser-webpack-plugin": "^2.3.5",
     "typescript": "^3.9.3",
     "victory": "^31.0.1",
-    "webpack": "^4.42.0",
     "yarn": "^1.22.0"
   },
   "devDependencies": {

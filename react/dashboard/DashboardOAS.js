@@ -19,7 +19,7 @@ const customStyles = {
   }
 };
 
-Modal.setAppElement('#dashboard-content');
+//Modal.setAppElement('#dashboard-content');
 
 export default class DashboardOAS extends React.Component {
   constructor(props) {
