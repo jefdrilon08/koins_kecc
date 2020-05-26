@@ -41,10 +41,13 @@ module.exports = function(api) {
         '@babel/preset-react',
         {
           development: isDevelopmentEnv || isTestEnv,
-          useBuiltIns: true
+          forceAllTransforms: true,
+          useBuiltIns: 'entry',
+          corejs: 3,
+          modules: false,
+          exclude: ['transform-typeof-symbol']
         }
-      ],
-      ['@babel/preset-typescript', { 'allExtensions': true, 'isTSX': true }]
+      ]
     ].filter(Boolean),
     plugins: [
       'babel-plugin-macros',
