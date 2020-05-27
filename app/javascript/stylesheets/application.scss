@@ -11,6 +11,11 @@
 
 @import "./sk-cube-grid";
 @import "./components/Sidebar";
+@import "./member";
+
+.tab-pane {
+  padding: 10px;
+}
 
 .callout {
   padding: 5px;

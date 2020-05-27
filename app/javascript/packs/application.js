@@ -21,8 +21,10 @@ import "../stylesheets/application.scss";
 
 import "../pages/Login.js";
 import "../members/Index.js";
+import "../members/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
+import MembersFormDisplay from "../../../react/members/FormDisplay";
 
 var Hooks = {};
 
@@ -55,6 +57,22 @@ $(document).ready(function() {
   } else if(controller == "members") {
     if(action == "index") {
       MembersIndex.init();
+    } else if(action == "show") {
+      var memberId  = $parameters.data("member-id");
+
+      MembersShow.init(memberId, authenticityToken);
+    } else if(action == "form") {
+      var id          = $parameters.data("id");
+      var memberTypes = $parameters.data("member-types");
+
+      ReactDOM.render(
+        <MembersFormDisplay
+          authenticityToken={authenticityToken}
+          memberTypes={memberTypes}
+          id={id}
+        />,
+        document.getElementById('content')
+      );
     }
   }
 });

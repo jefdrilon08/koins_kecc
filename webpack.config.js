@@ -1,14 +1,11 @@
 var debug                 = process.env.NODE_ENV !== "production";
 var webpack               = require('webpack');
 var WebpackNotifierPlugin = require('webpack-notifier');
-//const TerserPlugin        = require('terser-webpack-plugin');
 
 module.exports = {
   context: __dirname,
   devtool: debug ? "inline-sourcemap" : false,
   entry: {
-    MembersIndex: "./react/members/Index.js",
-    MembersForm: "./react/members/Form.js",
     MembersFormResignation: "./react/members/FormResignation.js",
     MemberAccountsSavingsIndex: "./react/member_accounts/savings/Index.js",
     AccountingTrialBalance: "./react/accounting/TrialBalance.js",

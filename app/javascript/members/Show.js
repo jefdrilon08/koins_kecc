@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var $modalGenerateAccessToken;
   var $modalSignature;
@@ -54,6 +56,7 @@ var Show  = (function() {
   var $inputDateResigned;
   var $inputReason;
   var $fileProfilePicture;
+  var $fileSignature;
   var templateErrorList;
 
   var $btnRestructure;
@@ -1060,3 +1063,5 @@ var Show  = (function() {
     init: init
   };
 })();
+
+window.MembersShow  = Show;

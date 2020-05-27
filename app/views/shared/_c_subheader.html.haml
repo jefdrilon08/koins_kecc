@@ -10,6 +10,6 @@
   - if side_actions.any?
     .c-subheader-nav.d-md-down-none.mfe-2
       - side_actions.each do |a|
-        = link_to a[:link], class: "c-subheader-nav-link" do
+        = link_to a[:link], class: "c-subheader-nav-link", id: "#{a[:id]}" do
           %div{ class: "c-icon #{a[:class]}" }
           #{a[:text]}

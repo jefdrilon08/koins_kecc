@@ -48,6 +48,19 @@ class MembersController < ApplicationController
   end
 
   def form
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        text: "Form"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def blip_form_pdf
@@ -117,6 +130,44 @@ class MembersController < ApplicationController
                             member: @member
                           }
                         ).execute!
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        text: "#{@member.full_name}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-create-survey",
+        class: "fa fa-plus",
+        link: "#",
+        text: "New Survey"
+      }
+    ]
+
+    if (Settings.activate_microloans and @member.pending?) or (Settings.activate_microinsurance and @member.pending_dormant?)
+      @subheader_side_actions << {
+        id: "btn-delete",
+        class: "fa fa-times",
+        link: "#",
+        text: "Delete"
+      }
+    end
+
+    if @member.active?
+      @subheader_side_actions << {
+        class: "fa fa-plus",
+        link: loan_application_form_path(member_id: @member.id),
+        text: "New Loan"
+      }
+    end
   end
 
   def import_members
