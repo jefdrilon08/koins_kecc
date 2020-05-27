@@ -24,11 +24,13 @@ import "../members/Index.js";
 import "../members/Show.js";
 import "../members/SurveyAnswer.js";
 import "../loans/Show.js";
+import "../billings/Index.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
 import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
 import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
+import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryComponent";
 
 var Hooks = {};
 
@@ -101,12 +103,22 @@ $(document).ready(function() {
     }
   } else if(controller == "loans") {
     if(action == "show") {
-      var loanId  = $parameters.data("id");
+      var loanId    = $parameters.data("id");
+      var memberId  = $parameters.data("member-id");
 
       LoansShow.init({
         loanId: loanId,
         authenticityToken: authenticityToken
       });
+
+      ReactDOM.render(
+        <LoanAccountingEntryComponent
+          authenticityToken={authenticityToken}
+          id={loanId}
+          memberId={memberId}
+        />,
+        document.getElementById('loan-accounting-entry-content')
+      );
     } else if(action == "form") {
       var id        = $parameters.data("id");
       var memberId  = $parameters.data("member-id");
@@ -121,6 +133,12 @@ $(document).ready(function() {
         />,
         document.getElementById('loan-application-content')
       );
+    }
+  } else if(controller == "billings") {
+    if(action == "index") {
+      BillingsIndex.init({
+        authenticityToken: authenticityToken
+      });
     }
   }
 });

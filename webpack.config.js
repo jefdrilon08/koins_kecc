@@ -22,7 +22,6 @@ module.exports = {
     InsuranceFundTransferCollectionUI: "./react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
-    LoanApplicationForm: "./react/loans/ApplicationForm.js",
     LoanAccountingEntry: "./react/loans/AccountingEntry.js",
     DashboardMain: "./react/dashboard/Main.js",
     BranchRepaymentReportShow: "./react/data_stores/branch_repayment_reports/Show.js",

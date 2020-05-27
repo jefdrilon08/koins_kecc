@@ -26,6 +26,21 @@ class BillingsController < ApplicationController
     end
 
     @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(100)
+
+    @subheader_items = [
+      {
+        text: "Billings"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show

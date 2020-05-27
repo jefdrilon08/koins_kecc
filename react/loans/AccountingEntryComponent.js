@@ -8,7 +8,7 @@ import ErrorDisplay from '../ErrorDisplay';
 
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 
-export default class AccountingEntryDisplay extends React.Component {
+export default class AccountingEntryComponent extends React.Component {
   constructor(props) {
     super(props);
 

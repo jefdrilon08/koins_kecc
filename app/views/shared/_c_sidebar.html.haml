@@ -1,3 +1,6 @@
+- is_not_remote = ["REMOTE-OAS", "REMOTE-BK", "REMOTE-FM"].exclude? current_user.roles.last
+- is_not_ojt = ["OJT"].exclude? current_user.roles.last
+
 #sidebar.c-sidebar.c-sidebar-dark.c-sidebar-fixed
   .c-sidebar-brand.d-md-down-none
     = image_tag "logo.png", width: "89", class: "c-sidebar-brand-full"
@@ -14,3 +17,10 @@
       = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-hand-holding-usd
         Loans
+    %li.c-sidebar-nav-title
+      Transactions
+    - if microloans?
+      %li.c-sidebar-nav-item
+        = link_to billings_path, class: "c-sidebar-nav-link #{params[:controller] == "billings" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Billings
