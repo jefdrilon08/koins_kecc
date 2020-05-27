@@ -25,12 +25,14 @@ import "../members/Show.js";
 import "../members/SurveyAnswer.js";
 import "../loans/Show.js";
 import "../billings/Index.js";
+import "../billings/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
 import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
 import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
 import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryComponent";
+import BillingUIComponent from "../../../react/billings/BillingUIComponent";
 
 var Hooks = {};
 
@@ -139,6 +141,21 @@ $(document).ready(function() {
       BillingsIndex.init({
         authenticityToken: authenticityToken
       });
+    } else if(action == "show") {
+      var billingId = $parameters.data("id");
+
+      BillingsShow.init({
+        billingId: billingId,
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <BillingUIComponent
+          authenticityToken={authenticityToken}
+          id={billingId}
+        />,
+        document.getElementById('billing-content')
+      );
     }
   }
 });

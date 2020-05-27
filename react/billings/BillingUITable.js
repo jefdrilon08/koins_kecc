@@ -11,8 +11,6 @@ import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
 
-Modal.setAppElement("#billing-content")
-
 export default class BillingUITable extends React.Component {
   constructor(props) {
     super(props);

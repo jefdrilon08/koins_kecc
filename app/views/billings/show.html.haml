@@ -1,42 +1,43 @@
 = title @billing.id
-= render partial: "show_header"
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @billing.pending?
-            .callout.callout-info
-              %p
-                Pindutin ang amount upang baguhin ito.
-          - elsif @billing.processing?
-            .callout.callout-danger
-              %p
-                This billing is still being processed.
-          - elsif @billing.approved?
-            .callout.callout-success
-              %p
-                This billing has been approved on #{@billing.date_approved.strftime("%b %d, %Y")}
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @billing.pending?
+              .c-callout.c-callout-info
+                %p
+                  Pindutin ang amount upang baguhin ito.
+            - elsif @billing.processing?
+              .c-callout.c-callout-danger
+                %p
+                  This billing is still being processed.
+            - elsif @billing.approved?
+              .c-callout.c-callout-success
+                %p
+                  This billing has been approved on #{@billing.date_approved.strftime("%b %d, %Y")}
 
-          - if !@billing.checked?
-            .callout.callout-danger
-              This billing has not been checked yet.
-          - else
-            .callout.callout-info
-              Checked By: #{@billing.checked_by}
+            - if !@billing.checked?
+              .c-callout.c-callout-danger
+                This billing has not been checked yet.
+            - else
+              .c-callout.c-callout-info
+                Checked By: #{@billing.checked_by}
 
-          %h5
-            Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")} #{@billing.approved? ? "(Approved on #{@billing.date_approved.strftime("%b %d, %Y")})" : ""}
+            %h5
+              Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")} #{@billing.approved? ? "(Approved on #{@billing.date_approved.strftime("%b %d, %Y")})" : ""}
 
-          #billing-content
+            #billing-content
 
-          - if debug?
-            %pre
-              %code
-                #{JSON.pretty_generate(JSON.parse(@billing.to_json))}
-          %hr
-          = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
+            - if debug?
+              %pre
+                %code
+                  #{JSON.pretty_generate(JSON.parse(@billing.to_json))}
+            %hr
+            = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
 
 = render partial: "shared/modals/print"
 = render partial: "billings/modals/approve"
@@ -44,19 +45,4 @@
 = render partial: "billings/modals/zero_out"
 = render partial: "templates/error_list"
 
-#parameters{ data: { id: @billing.id } }
-
-= javascript_include_tag "BillingUI.min.react"
-= javascript_include_tag "billings/Show"
-
-:javascript
-  $(document).ready(function() {
-    var $parameters       = $("#parameters");
-    var billingId         = $parameters.data('id');
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Show.init({
-      billingId: billingId, 
-      authenticityToken: authenticityToken
-    });
-  });
+#parameters{ data: { id: @billing.id, controller: "#{params[:controller]}", action: "#{params[:action]}" } }

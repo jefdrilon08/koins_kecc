@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var options;
   var billingId;
@@ -17,6 +19,7 @@ var Show  = (function() {
 
   var $btnZeroOut;
   var $btnConfirmZeroOut;
+  var $btnExcel;
   var $modalZeroOut;
 
   var $message;
@@ -164,8 +167,7 @@ var Show  = (function() {
       });
     });
 
-      $btnExcel.on("click", function() {
-      
+    $btnExcel.on("click", function() {
       $.ajax({
         url: _urlDownload,
         method: 'GET',
@@ -268,3 +270,5 @@ var Show  = (function() {
     init: init
   };
 })();
+
+window.BillingsShow = Show;

@@ -7,7 +7,7 @@ import BillingUITable from './BillingUITable';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import {numberWithCommas} from '../utils/helpers';
 
-export default class BillingUIDisplay extends React.Component {
+export default class BillingUIComponent extends React.Component {
   constructor(props) {
     super(props);
 
