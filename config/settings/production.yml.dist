@@ -2546,7 +2546,7 @@ loan_products:
         monthly_interest_rate: 0.078
       -
         term: "weekly"
-        min_num_installments: 17
+        min_num_installments: 26
         max_num_installments: 35
         monthly_interest_rate: 0.056
       -
