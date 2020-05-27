@@ -1,12 +1,11 @@
-= render "form_header"
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #loan-application-content
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            #loan-application-content
 
-#parameters{ data: { id: "#{params[:id]}", member_id: "#{params[:member_id]}", banks: @banks } }
-
-= javascript_include_tag "LoanApplicationForm.min.react"
+#parameters{ data: { id: "#{params[:id]}", member_id: "#{params[:member_id]}", banks: @banks, controller: "#{params[:controller]}", action: "#{params[:action]}" } }

@@ -36,6 +36,7 @@ class LoansController < ApplicationController
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+
   end
 
   def form
@@ -53,6 +54,25 @@ class LoansController < ApplicationController
     if @member.blank?
       redirect_to members_path
     end
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: loans_path,
+        text: "Loans"
+      },
+      {
+        is_link: true,
+        path: member_path(@member),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "Loan Application"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def adjustment
@@ -83,5 +103,48 @@ class LoansController < ApplicationController
                             "meta->>'loan_id' = ?",
                             @loan.id
                           ).order("created_at DESC")
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: loans_path,
+        text: "Loans"
+      },
+      {
+        is_link: true,
+        path: member_path(@loan.member_id),
+        text: "#{@loan.member.full_name}"
+      },
+      {
+        text: "#{@loan.pn_number} - #{@loan.cycle.present? ? "Cycle #{@loan.cycle}" : "NO LOAN CYCLE PRESENT"}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    if @loan.pending?
+      @subheader_side_actions << {
+        id: "btn-approve",
+        class: "fa fa-check",
+        link: "#",
+        text: "Approve"
+      }
+
+      if !@loan.is_restructured
+        @subheader_side_actions << {
+          class: "fa fa-pencil-alt",
+          link: loan_application_form_path(id: @loan.id, member_id: @loan.member_id),
+          text: "Edit"
+        }
+      end
+
+      @subheader_side_actions << {
+        id: "btn-delete",
+        class: "fa fa-times",
+        text: "Delete",
+        link: "#"
+      }
+    end
   end
 end

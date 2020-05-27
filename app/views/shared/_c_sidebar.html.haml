@@ -7,6 +7,10 @@
         .c-sidebar-nav-icon.fa.fa-tachometer-alt
         Operations
     %li.c-sidebar-nav-item
-      = link_to members_path, class: "c-sidebar-nav-link #{params[:controller] == "members"}" do
+      = link_to members_path, class: "c-sidebar-nav-link #{params[:controller] == "members" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-users
         Members
+    %li.c-sidebar-nav-item
+      = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-hand-holding-usd
+        Loans

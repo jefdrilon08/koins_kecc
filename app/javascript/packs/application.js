@@ -23,10 +23,12 @@ import "../pages/Login.js";
 import "../members/Index.js";
 import "../members/Show.js";
 import "../members/SurveyAnswer.js";
+import "../loans/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
 import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
+import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
 
 var Hooks = {};
 
@@ -96,6 +98,29 @@ $(document).ready(function() {
         memberId: memberId,
         authenticityToken: authenticityToken
       });
+    }
+  } else if(controller == "loans") {
+    if(action == "show") {
+      var loanId  = $parameters.data("id");
+
+      LoansShow.init({
+        loanId: loanId,
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "form") {
+      var id        = $parameters.data("id");
+      var memberId  = $parameters.data("member-id");
+      var banks     = $parameters.data("banks");
+
+      ReactDOM.render(
+        <LoanApplicationForm
+          authenticityToken={authenticityToken}
+          id={id}
+          memberId={memberId}
+          banks={banks}
+        />,
+        document.getElementById('loan-application-content')
+      );
     }
   }
 });

@@ -1,49 +1,50 @@
 = title @loan.pn_number
-= render partial: "show_header"
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          %ul.nav.nav-tabs{:role => "tablist"}
-            %li.nav-item
-              %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#details", :role => "tab"} Details
-            %li.nav-item
-              %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#amortization-table", :role => "tab"} Amortization Table
-            %li.nav-item
-              %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#payments-table", :role => "tab"} Payments
-            %li.nav-item
-              %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#adjustments", :role => "tab"} Adjustments
-            %li.nav-item
-              %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#activity-logs", :role => "tab"} Activity Logs
-          .tab-content
-            #details.tab-pane.active.show{:role => "tabpanel"}
-              = render partial: "details"
-              %hr
-              .row
-                .col
-                  %h5
-                    Accounting Entry
-                - if @loan.pending?
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            %ul.nav.nav-tabs{:role => "tablist"}
+              %li.nav-item
+                %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#details", :role => "tab"} Details
+              %li.nav-item
+                %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#amortization-table", :role => "tab"} Amortization Table
+              %li.nav-item
+                %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#payments-table", :role => "tab"} Payments
+              %li.nav-item
+                %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#adjustments", :role => "tab"} Adjustments
+              %li.nav-item
+                %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#activity-logs", :role => "tab"} Activity Logs
+            .tab-content
+              #details.tab-pane.active.show{:role => "tabpanel"}
+                = render partial: "details"
+                %hr
+                .row
                   .col
-                    .text-right
-                      #btn-change-book.btn.btn-info.btn-sm
-                        .fa.fa-sync
-                        Change Book
-              #loan-accounting-entry-content
-            #amortization-table.tab-pane{:role => "tabpanel"}
-              = render partial: "amortization_table"
-            #payments-table.tab-pane{:role => "tabpanel"}
-              = render partial: "transaction_table"
-            #adjustments.tab-pane{:role => "tabpanel"}
-              = render partial: "adjustments"
-            #activity-logs.tab-pane{:role => "tabpanel"}
-              = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
-          - if debug?
-            %pre
-              %code
-                #{JSON.pretty_generate(JSON.parse(@loan.to_json))}
+                    %h5
+                      Accounting Entry
+                  - if @loan.pending?
+                    .col
+                      .text-right
+                        #btn-change-book.btn.btn-info.btn-sm
+                          .fa.fa-sync
+                          Change Book
+                #loan-accounting-entry-content
+              #amortization-table.tab-pane{:role => "tabpanel"}
+                = render partial: "amortization_table"
+              #payments-table.tab-pane{:role => "tabpanel"}
+                = render partial: "transaction_table"
+              #adjustments.tab-pane{:role => "tabpanel"}
+                = render partial: "adjustments"
+              #activity-logs.tab-pane{:role => "tabpanel"}
+                = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
+            - if debug?
+              %pre
+                %code
+                  #{JSON.pretty_generate(JSON.parse(@loan.to_json))}
 
 = render partial: "loans/modals/approve"
 = render partial: "loans/modals/reage"
@@ -55,18 +56,6 @@
 = render partial: "loans/modals/new_adjustment"
 = render partial: "templates/error_list"
 
-#parameters{ data: { id: @loan.id, member_id: @loan.member.id } }
+#parameters{ data: { id: @loan.id, member_id: @loan.member.id, controller: "#{params[:controller]}", action: "#{params[:action]}" } }
 
-= javascript_include_tag "loans/Show.js"
 = javascript_include_tag "LoanAccountingEntry.min.react"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-    var loanId  = $("#parameters").data('id');
-
-    Show.init({
-      loanId: loanId,
-      authenticityToken: authenticityToken
-    });
-  });

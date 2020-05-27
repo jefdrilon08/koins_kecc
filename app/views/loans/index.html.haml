@@ -1,15 +1,16 @@
 = title
-= render partial: "index_header"
+= render partial: "shared/c_subheader", locals: { items: [{ text: "Loans" }], side_actions: [] }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @loans.any?
-            = render partial: "index_list", locals: { loans: @loans }
-            = paginate @loans
-          - else
-            %p
-              No loans found
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            = render partial: "index_filter"
+            - if @loans.any?
+              = render partial: "index_list", locals: { loans: @loans }
+              = paginate @loans
+            - else
+              %p
+                No loans found
