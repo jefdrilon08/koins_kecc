@@ -1,12 +1,13 @@
 = title
 = render partial: "form_header"
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #content
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            #content
 
 #parameters{ data: { id: "#{params[:id]}", member_types: Settings.default_member_types } }
 

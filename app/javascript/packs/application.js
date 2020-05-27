@@ -10,6 +10,7 @@ require("@rails/activestorage").start()
 import 'bootstrap';
 import jquery from 'jquery';
 import $ from 'jquery';
+
 window.$ = window.jquery = jquery;
 
 import "@fortawesome/fontawesome-free/js/all";
@@ -19,6 +20,7 @@ import '@coreui/coreui';
 import "../stylesheets/application.scss";
 
 import "../pages/Login.js";
+import "../members/Index.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 
@@ -49,6 +51,10 @@ $(document).ready(function() {
         />,
         document.getElementById('dashboard-content')
       );
+    }
+  } else if(controller == "members") {
+    if(action == "index") {
+      MembersIndex.init();
     }
   }
 });

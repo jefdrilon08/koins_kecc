@@ -2,7 +2,11 @@
   .c-sidebar-brand.d-md-down-none
     = image_tag "logo.png", width: "89", class: "c-sidebar-brand-full"
   %ul.c-sidebar-nav
-    %li{ class: "c-sidebar-nav-item" }
+    %li.c-sidebar-nav-item
       = link_to root_path, class: "c-sidebar-nav-link #{params[:controller] == "pages" and params[:action] == "index" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-tachometer-alt
         Operations
+    %li.c-sidebar-nav-item
+      = link_to members_path, class: "c-sidebar-nav-link #{params[:controller] == "members"}" do
+        .c-sidebar-nav-icon.fa.fa-users
+        Members

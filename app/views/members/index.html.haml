@@ -1,24 +1,20 @@
 = title
-= render partial: "index_header"
+= render partial: "shared/c_subheader", locals: { items: [{ class: "", text: "Members" }], side_actions: [{ link: member_form_path, class: "fa fa-plus", text: "New Member" }] }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @members.any?
-            = render partial: "index_list", locals: { members: @members }
-            = paginate @members
-          - else
-            %p
-              No members found
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            = render partial: "index_filter"
+            - if @members.any?
+              = render partial: "index_list", locals: { members: @members }
+              = paginate @members
+            - else
+              %p
+                No members found
 
 = render partial: "templates/center_options"
 
-= javascript_include_tag "members/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }

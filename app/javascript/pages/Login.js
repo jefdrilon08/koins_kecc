@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Login = (function() {
   var url         = "/api/v1/login";
   var loadingText = '<i class="fa fa-spin"></i> Loading...';
@@ -7,6 +9,7 @@ var Login = (function() {
   var $inputUsername;
   var $inputPassword;
   var $btnLogin;
+  var $message;
 
   var authenticityToken;
 

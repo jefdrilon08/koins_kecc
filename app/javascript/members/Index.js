@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Index = (function() {
   var $branchSelect;
   var $centerSelect;
@@ -68,3 +70,5 @@ var Index = (function() {
     init: init
   };
 })();
+
+window.MembersIndex = Index;

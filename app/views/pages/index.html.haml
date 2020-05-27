@@ -2,9 +2,9 @@
 
 = render partial: "shared/c_subheader", locals: { items: [{ is_link: false, class: "fa fa-tachometer-alt", text: "Operations" }], side_actions: [{ link: member_form_path, class: "fa fa-plus", text: "New Member" }, { link: members_path(status: "pending"), class: "fa fa-arrow-right", text: "Pending Records (#{@pending_members_count})" }] }
 %main.c-main
-.container-fluid
-  .card
-    .card-body
-      #dashboard-content
+  .container-fluid
+    .card
+      .card-body
+        #dashboard-content
 
 #parameters{ data: { controller: params[:controller], action: params[:action], username: current_user.username, roles: current_user.roles } }
