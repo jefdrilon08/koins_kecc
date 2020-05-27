@@ -322,7 +322,7 @@ export default class ApplicationFormComponent extends React.Component {
       );
 
       termItems.push(
-        <option value={50} key={"weekly-" + 50}>
+        <option value={75} key={"weekly-" + 75}>
           75
         </option>
       );
