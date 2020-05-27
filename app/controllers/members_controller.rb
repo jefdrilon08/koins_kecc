@@ -81,11 +81,66 @@ class MembersController < ApplicationController
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
     @data           = @survey_answer.data.with_indifferent_access
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        is_link: true,
+        path: member_path(@member.id),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "#{@survey_answer.survey.name}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        class: "fa fa-pencil-alt",
+        link: member_survey_answer_form_path(@member, @survey_answer),
+        text: "Edit"
+      },
+      {
+        class: "fa fa-times",
+        link: "#",
+        id: "btn-delete-survey-answer",
+        text: "Delete"
+      }
+    ]
   end
 
   def survey_answer_form
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        is_link: true,
+        path: member_path(@member.id),
+        text: "#{@member.full_name}"
+      },
+      {
+        is_link: true,
+        path: member_survey_answer_path(@member, @survey_answer) ,
+        text: "#{@survey_answer.survey.name}"
+      },
+      {
+        text: "Edit"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def show

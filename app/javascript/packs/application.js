@@ -22,9 +22,11 @@ import "../stylesheets/application.scss";
 import "../pages/Login.js";
 import "../members/Index.js";
 import "../members/Show.js";
+import "../members/SurveyAnswer.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
+import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
 
 var Hooks = {};
 
@@ -73,6 +75,27 @@ $(document).ready(function() {
         />,
         document.getElementById('content')
       );
+    } else if(action == "survey_answer_form") {
+      var id        = $parameters.data("id");
+      var memberId  = $parameters.data("member-id");
+
+      ReactDOM.render(
+        <SurveyAnswerUIDisplay
+          authenticityToken={authenticityToken}
+          memberId={memberId}
+          id={id}
+        />,
+        document.getElementById('survey-answer-content')
+      );
+    } else if(action == "survey_answer") {
+      var id        = $parameters.data("id");
+      var memberId  = $parameters.data("member-id");
+
+      SurveyAnswer.init({
+        id: id,
+        memberId: memberId,
+        authenticityToken: authenticityToken
+      });
     }
   }
 });

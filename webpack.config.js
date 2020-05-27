@@ -24,7 +24,6 @@ module.exports = {
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanApplicationForm: "./react/loans/ApplicationForm.js",
     LoanAccountingEntry: "./react/loans/AccountingEntry.js",
-    MemberSurveyAnswerUI: "./react/members/SurveyAnswerUI.js",
     DashboardMain: "./react/dashboard/Main.js",
     BranchRepaymentReportShow: "./react/data_stores/branch_repayment_reports/Show.js",
     BranchResignationShow: "./react/data_stores/branch_resignations/Show.js",
