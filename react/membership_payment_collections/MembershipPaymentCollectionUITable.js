@@ -11,8 +11,6 @@ import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
 
-Modal.setAppElement("#membership-payment-collection-content")
-
 export default class MembershipPaymentCollectionUITable extends React.Component {
   constructor(props) {
     super(props);

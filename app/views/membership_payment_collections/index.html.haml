@@ -1,30 +1,22 @@
 = title
-= render partial: "index_header"
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @membership_payment_collections.any?
-            = render partial: "index_list", locals: { membership_payment_collections: @membership_payment_collections }
-            = paginate @membership_payment_collections
-          - else
-            %p
-              No membership_payment_collections found
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            = render partial: "index_filter"
+            - if @membership_payment_collections.any?
+              = render partial: "index_list", locals: { membership_payment_collections: @membership_payment_collections }
+              = paginate @membership_payment_collections
+            - else
+              %p
+                No membership_payment_collections found
 
 = render partial: "membership_payment_collections/modals/new_transaction"
 = render partial: "templates/error_list"
 = render partial: "templates/loader"
 
-= javascript_include_tag "membership_payment_collections/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }

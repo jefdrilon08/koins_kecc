@@ -42,8 +42,6 @@ Rails.application.config.assets.precompile += [
   "adjustments/batch_moratorium_adjustments/Show.js",
   "savings_accounts/Show.js",
   "savings_accounts/ShowWithdrawalRequest.js",
-  "membership_payment_collections/Index.js",
-  "membership_payment_collections/Show.js",
   "time_deposit_collections/Index.js",
   "time_deposit_collections/Show.js",
   "deposit_collections/Index.js",

@@ -26,6 +26,8 @@ import "../members/SurveyAnswer.js";
 import "../loans/Show.js";
 import "../billings/Index.js";
 import "../billings/Show.js";
+import "../membership_payment_collections/Index.js";
+import "../membership_payment_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -33,6 +35,7 @@ import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay"
 import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
 import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryComponent";
 import BillingUIComponent from "../../../react/billings/BillingUIComponent";
+import MembershipPaymentCollectionUIComponent from "../../../react/membership_payment_collections/MembershipPaymentCollectionUIComponent";
 
 var Hooks = {};
 
@@ -155,6 +158,27 @@ $(document).ready(function() {
           id={billingId}
         />,
         document.getElementById('billing-content')
+      );
+    }
+  } else if(controller == "membership_payment_collections") {
+    if(action == "index") {
+      MembershipPaymentCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var membershipPaymentCollectionId = $parameters.data('id');
+
+      MembershipPaymentCollectionsShow.init({
+        membershipPaymentCollectionId: membershipPaymentCollectionId,
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <MembershipPaymentCollectionUIComponent
+          authenticityToken={authenticityToken}
+          id={membershipPaymentCollectionId}
+        />,
+        document.getElementById('membership-payment-collection-content')
       );
     }
   }

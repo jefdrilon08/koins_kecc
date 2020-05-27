@@ -8,7 +8,7 @@ import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import AddRecord from './AddRecord';
 import {numberWithCommas} from '../utils/helpers';
 
-export default class MembershipPaymentCollectionUIDisplay extends React.Component {
+export default class MembershipPaymentCollectionUIComponent extends React.Component {
   constructor(props) {
     super(props);
 

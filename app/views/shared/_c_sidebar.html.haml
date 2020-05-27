@@ -24,3 +24,8 @@
         = link_to billings_path, class: "c-sidebar-nav-link #{params[:controller] == "billings" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Billings
+    - if is_not_remote
+      %li.c-sidebar-nav-item
+        = link_to membership_payment_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "membership_payment_collections"}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Membership Payments
