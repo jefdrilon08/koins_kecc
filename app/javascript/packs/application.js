@@ -66,43 +66,19 @@ const renderComponent = (Component, payload) => {
   )
 }
 
-const routes = {
-  "pages/index": (payload) => {
-    renderComponent(DashboardMainUI, payload);
-  },
+const newHooks = {
+  "members/form":                             [MembersFormDisplay],
+  "members/index":                            [MembersIndex],
+  "members/show":                             [MembersShow],
+  "members/survey_answer":                    [SurveyAnswer],
+  "members/survey_answer_form":               [SurveyAnswerUIDisplay],
+  "pages/index":                              [DashboardMainUI],
+  "pages/login":                              [PagesLogin],
+  "savings_accounts/show":                    [SavingsAccountsShow],
+  "savings_accounts/time_deposit_withdrawal": [SavingsAccountsShowWithdrawalRequest],
+}
 
-  "members/index": (payload) => {
-    MembersIndex.init();
-  },
-
-  "members/show": ({ memberId, authenticityToken }) => {
-    MembersShow.init(memberId, authenticityToken);
-  },
-
-  "members/form": ({ id, memberTypes }) => {
-    renderComponent(MembersFormDisplay, payload);
-  },
-
-  "pages/login": (payload) => {
-    PagesLogin.init()
-  },
-
-  "savings_accounts/show": ({ id, authenticityToken }) => {
-    SavingsAccountsShow.init({ id, authenticityToken });
-  },
-
-  "savings_accounts/time_deposit_withdrawal": ({ id, authenticityToken }) => {
-    SavingsAccountsShowWithdrawalRequest.init({ id, authenticityToken });
-  },
-
-  "members/survey_answer_form": (payload) => {
-    renderComponent(SurveyAnswerUIDisplay, payload);
-  },
-
-  "members/survey_answer": ({ id, memberId, authenticityToken }) => {
-    SurveyAnswer.init({ id, memberId, authenticityToken });
-  },
-
+const hooks = {
   "loans/show": ({ loanId, memberId, authenticityToken }) => {
     LoansShow.init({ loanId, authenticityToken });
     renderComponent(LoanAccountingEntryComponent, { id: loanId, memberId: memberId, authenticityToken: authenticityToken });
@@ -202,12 +178,27 @@ const routes = {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
-  const csrfToken = $("meta[name='csrf-token']").attr('content');
-  const route = routes[controller_action];
+  const { route, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
+  const authenticityToken = $("meta[name='csrf-token']").attr('content');
+  const options = { authenticityToken, ...payload }
 
-  if (route) {
-    payload.authenticityToken = csrfToken;
-    route(payload);
+  // OLD
+  const hook = hooks[route];
+  if (hook) {
+    hook(options);
+  }
+
+  // NEW
+  const components = newHooks[route];
+  if (components) {
+    components.forEach((component) => {
+      if (typeof component.init === "function") {
+        // "init" object
+        component.init(options)
+      } else {
+        // React component
+        renderComponent(component, options)
+      }
+    })
   }
 });
