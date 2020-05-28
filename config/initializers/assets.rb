@@ -100,7 +100,6 @@ Rails.application.config.assets.precompile += [
   "WatchlistsShow.min.react.js",
   "RepaymentRatesShow.min.react.js",
   "ManualAgingShow.min.react.js",
-  "MonthlyClosingCollectionShow.min.react.js",
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js",
   "MonitoringAccountingEntryPrecision.min.react.js",
   "exports/Exports.js",

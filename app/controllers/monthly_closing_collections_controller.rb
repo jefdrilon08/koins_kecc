@@ -38,6 +38,24 @@ class MonthlyClosingCollectionsController < ApplicationController
                         }
 
     @monthly_closing_collections  = @monthly_closing_collections.page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Monthly Closing Collections"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Collection"
+      }
+    ]
   end
 
   def show
@@ -45,6 +63,40 @@ class MonthlyClosingCollectionsController < ApplicationController
 
     if @monthly_closing_collection.processing?
       redirect_to monthly_closing_collections_path
+    end
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: monthly_closing_collections_path,
+        text: "Monthly Closing Collections"
+      },
+      {
+        text: "Closing for #{@monthly_closing_collection.closing_date.strftime("%b %d, %Y")} - #{@monthly_closing_collection.branch} - #{@monthly_closing_collection.account_subtype}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    if @monthly_closing_collection.pending?
+      @subheader_side_actions << {
+        id: "btn-approve",
+        link: "#",
+        class: "fa fa-check",
+        text: "Approve"
+      }
+    end
+
+    if @monthly_closing_collection.pending? || @monthly_closing_collection.error?
+      @subheader_side_actions << {
+        link: monthly_closing_collection_path(@monthly_closing_collection),
+        class: "fa fa-times",
+        text: "Delete",
+        data: { method: :delete, confirm: "Are you sure?" }
+      }
     end
   end
 

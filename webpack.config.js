@@ -27,7 +27,6 @@ module.exports = {
     ManualAgingShow: "./react/data_stores/manual_aging/Show.js",
     PersonalFundsShow: "./react/data_stores/personal_funds/Show.js",
     XWeeksToPayShow: "./react/data_stores/x_weeks_to_pay/Show.js",
-    MonthlyClosingCollectionShow: "./react/monthly_closing_collections/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./react/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision: "./react/monitoring/AccountingEntryPrecision.js",
     MemberAccountInsuranceStatus: "./react/member_accounts/FetchInsuranceStatus.js",

@@ -55,6 +55,7 @@ import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collec
 import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collections/WithdrawalCollectionUIComponent";
 import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
 import InsuranceWithdrawalCollectionUIComponent from "../../../react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
+import MonthlyClosingCollectionsShowUI from "../../../react/monthly_closing_collections/ShowUI";
 
 var Hooks = {};
 
@@ -328,6 +329,20 @@ $(document).ready(function() {
         authenticityToken: authenticityToken
       });
     } else if(action == "show") {
+      var id  = $parameters.data("id");
+
+      MonthlyClosingCollectionsShow.init({
+        id: id,
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <MonthlyClosingCollectionsShowUI
+          authenticityToken={authenticityToken}
+          id={id}
+        />,
+        document.getElementById('content')
+      );
     }
   }
 });
