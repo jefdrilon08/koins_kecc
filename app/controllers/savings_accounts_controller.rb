@@ -33,15 +33,56 @@ class SavingsAccountsController < ApplicationController
     end
 
     @savings_accounts = @savings_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        text: "Savings"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def time_deposit_withdrawal
     @savings_account  = MemberAccount.find(params[:id])
+    @member           = @savings_account.member
     @data_store       = DataStore.find(params[:data_store_id])
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        is_link: true,
+        path: savings_accounts_path,
+        text: "Savings"
+      },
+      {
+        is_link: true,
+        path: member_path(@member),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "#{@savings_account.account_subtype}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-print-withdrawal-request",
+        class: "fa fa-print",
+        link: "#",
+        text: "Print"
+      }
+    ]
   end
 
   def show
     @savings_account  = MemberAccount.savings.find(params[:id])
+    @member           = @savings_account.member
 
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @savings_account.id
@@ -76,5 +117,43 @@ class SavingsAccountsController < ApplicationController
                         @savings_account.id
                       )
     end
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        is_link: true,
+        path: savings_accounts_path,
+        text: "Savings"
+      },
+      {
+        is_link: true,
+        path: member_path(@member),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "#{@savings_account.account_subtype}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-sync-maintaining-balance",
+        class: "fa fa-sync",
+        link: "#",
+        text: "Sync Maintaining Balance"
+      },
+      {
+        class: "",
+        link: "#",
+        text: "Balance: #{helpers.number_to_currency(@savings_account.balance, unit: '')}"
+      },
+      {
+        class: "",
+        link: "#",
+        text: "Maintaining Balance: #{helpers.number_to_currency(@savings_account.maintaining_balance, unit: '')}"
+      }
+    ]
   end
 end

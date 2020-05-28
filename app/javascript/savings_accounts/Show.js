@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var $btnSyncMaintaningBalance;
   var $btnConfirmSyncMaintainingBalance;
@@ -276,3 +278,5 @@ var Show  = (function() {
     init: init
   }
 })();
+
+window.SavingsAccountsShow  = Show;

@@ -37,14 +37,63 @@ class InsuranceAccountsController < ApplicationController
     end
 
     @insurance_accounts = @insurance_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        text: "Insurance"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def show
     @insurance_account  = MemberAccount.insurance.find(params[:id])
+    @member             = @insurance_account.member
 
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @insurance_account.id
                             ).order("transacted_at ASC, updated_at ASC")
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        is_link: true,
+        path: insurance_accounts_path,
+        text: "Insurance"
+      },
+      {
+        is_link: true,
+        path: member_path(@member),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "#{@insurance_account.account_subtype}"
+      },
+      {
+        is_link: true,
+        path: insurance_account_claims_copy_pdf_path(@insurance_account),
+        text: "Claims Copy PDF"
+      },
+      {
+        is_link: true,
+        path: insurance_account_pdf_path,
+        text: "Print Subsidiary to PDF"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        class: "",
+        link: "#",
+        text: "Balance: #{helpers.number_to_currency(@insurance_account.balance, unit: '')}"
+      }
+    ]
   end
 
   def claims_copy_pdf

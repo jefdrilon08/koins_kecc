@@ -59,3 +59,19 @@
         = link_to monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "monthly_closing_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Monthly Closing Collections
+    - if is_not_ojt
+      %li.c-sidebar-nav-title
+        Accounts
+      - if microloans?
+        %li.c-sidebar-nav-item
+          = link_to savings_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_accounts" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-piggy-bank
+            Savings
+        %li.c-sidebar-nav-item
+          = link_to insurance_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_accounts" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-piggy-bank
+            Insurance
+        %li.c-sidebar-nav-item
+          = link_to equity_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_accounts" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-piggy-bank
+            Equity

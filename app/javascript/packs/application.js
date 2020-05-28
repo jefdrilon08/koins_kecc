@@ -42,6 +42,8 @@ import "../insurance_withdrawal_collections/Index.js";
 import "../insurance_withdrawal_collections/Show.js";
 import "../monthly_closing_collections/Index.js";
 import "../monthly_closing_collections/Show.js";
+import "../savings_accounts/Show.js";
+import "../savings_accounts/ShowWithdrawalRequest.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -56,6 +58,7 @@ import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collectio
 import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
 import InsuranceWithdrawalCollectionUIComponent from "../../../react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 import MonthlyClosingCollectionsShowUI from "../../../react/monthly_closing_collections/ShowUI";
+import InsuranceStatusComponent from "../../../react/member_accounts/InsuranceStatusComponent";
 
 var Hooks = {};
 
@@ -342,6 +345,33 @@ $(document).ready(function() {
           id={id}
         />,
         document.getElementById('content')
+      );
+    }
+  } else if(controller == "savings_accounts") {
+    if(action == "show") {
+      var id  = $parameters.data("id");
+
+      SavingsAccountsShow.init({
+        id: id,
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "time_deposit_withdrawal") {
+      var id  = $parameters.data("id");
+
+      SavingsAccountsShowWithdrawalRequest.init({
+        id: id,
+        authenticityToken: authenticityToken
+      });
+    }
+  } else if(controller == "insurance_accounts") {
+    if(action == "show") {
+      var id  = $parameters.data("member-account-id");
+
+      ReactDOM.render(
+        <InsuranceStatusComponent
+          memberAccountId={id}
+        />,
+        document.getElementById("content-status")
       );
     }
   }
