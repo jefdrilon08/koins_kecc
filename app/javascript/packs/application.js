@@ -36,6 +36,8 @@ import "../withdrawal_collections/Index.js";
 import "../withdrawal_collections/Show.js";
 import "../savings_insurance_transfer_collections/Index.js";
 import "../savings_insurance_transfer_collections/Show.js";
+import "../insurance_fund_transfer_collections/Index.js";
+import "../insurance_fund_transfer_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -47,6 +49,7 @@ import MembershipPaymentCollectionUIComponent from "../../../react/membership_pa
 import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
 import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collections/TimeDepositCollectionUIComponent";
 import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collections/WithdrawalCollectionUIComponent";
+import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent"
 
 var Hooks = {};
 
@@ -269,6 +272,29 @@ $(document).ready(function() {
         id: id,
         authenticityToken: authenticityToken
       });
+    }
+  } else if(controller == "insurance_fund_transfer_collections") {
+    if(action == "index") {
+      InsuranceFundTransferCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var id      = $parameters.data('id');
+      var centers = $parameters.data("centers");
+
+      InsuranceFundTransferCollectionsShow.init({
+        authenticityToken: authenticityToken,
+        insuranceFundTransferCollectionId: id
+      });
+
+      ReactDOM.render(
+        <InsuranceFundTransferCollectionUIComponent
+          authenticityToken={authenticityToken}
+          centers={centers}
+          id={id}
+        />,
+        document.getElementById('insurance-fund-transfer-collection-content')
+      );
     }
   }
 });

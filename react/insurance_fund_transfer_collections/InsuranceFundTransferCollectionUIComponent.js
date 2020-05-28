@@ -9,7 +9,7 @@ import AddRecord from './AddRecord';
 import LoadCenter from './LoadCenter';
 import {numberWithCommas} from '../utils/helpers';
 
-export default class InsuranceFundTransferCollectionUIDisplay extends React.Component {
+export default class InsuranceFundTransferCollectionUIComponent extends React.Component {
   constructor(props) {
     super(props);
 

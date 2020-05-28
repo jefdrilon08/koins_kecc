@@ -11,8 +11,6 @@ import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
 
-Modal.setAppElement("#insurance-fund-transfer-collection-content")
-
 export default class InsuranceFundTransferCollectionUITable extends React.Component {
   constructor(props) {
     super(props);
