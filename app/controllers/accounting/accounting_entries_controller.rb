@@ -16,6 +16,22 @@ module Accounting
     end
 
     def form
+      @subheader_items = [
+        {
+          text: "Accounting"
+        },
+        {
+          is_link: true,
+          path: "/accounting/books/#{params[:book].downcase}",
+          text: "#{params[:book].upcase}"
+        },
+        {
+          text: "Accounting Entry Form"
+        }
+      ]
+
+      @subheader_side_actions = [
+      ]
     end
 
     def destroy

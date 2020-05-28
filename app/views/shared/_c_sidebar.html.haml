@@ -75,10 +75,72 @@
           = link_to equity_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_accounts" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-piggy-bank
             Equity
-    - if is_not_remote
-      %li.c-sidebar-nav-title
-        Accounting
-      %li.c-sidebar-nav-item
-        = link_to accounting_accounting_codes_path, class: "c-sidebar-nav-link" do
-          .c-sidebar-nav-icon.fa.fa-balance-scale
-          Chart of Accounts
+      - if is_not_remote
+        %li.c-sidebar-nav-title
+          Accounting
+        %li.c-sidebar-nav-item
+          = link_to accounting_accounting_codes_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-balance-scale
+            Chart of Accounts
+        %li.c-sidebar-nav-item
+          = link_to accounting_trial_balance_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-balance-scale
+            Trial Balance
+        %li.c-sidebar-nav-title
+          Journal Entries
+        %li.c-sidebar-nav-item
+          = link_to accounting_accounting_entry_form_path(book: "CRB"), class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-plus
+            Cash Receipts
+        %li.c-sidebar-nav-item
+          = link_to accounting_accounting_entry_form_path(book: "CDB"), class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-plus
+            Cash Disbursements
+        %li.c-sidebar-nav-item
+          = link_to accounting_accounting_entry_form_path(book: "JVB"), class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-plus
+            General Journal
+        %li.c-sidebar-nav-title
+          Books
+        %li.c-sidebar-nav-item
+          = link_to accounting_books_crb_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-book
+            Cash Receipts
+        %li.c-sidebar-nav-item
+          = link_to accounting_books_cdb_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-book
+            Cash Disbursements
+        %li.c-sidebar-nav-item
+          = link_to accounting_books_jvb_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-book
+            General Journal
+        %li.c-sidebar-nav-item
+          = link_to accounting_books_misc_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-book
+            Misc.
+        %li.c-sidebar-nav-item
+          = link_to "/accounting/general_ledger", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-book
+            General Ledger
+        %li.c-sidebar-nav-title
+          Reports
+        %li.c-sidebar-nav-item
+          = link_to accounting_year_end_closings_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-calculator
+            Year End Closing
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/icpr", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-calculator
+            ICPR
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/patronage_refund", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-calculator
+            Patronage Refund
+        %li.c-sidebar-nav-item
+          = link_to accounting_balance_sheets_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-calculator
+            Balance Sheets
+        %li.c-sidebar-nav-item
+          = link_to accounting_income_statements_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-calculator
+            Income Statements

@@ -2,6 +2,17 @@ class AccountingController < ApplicationController
   before_action :authenticate_user!
 
   def trial_balance
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Trial Balance"
+      }
+    ]
+
+    @subheader_side_actions = [
+    ]
   end
 
   def general_ledger_excel_url
@@ -37,6 +48,16 @@ class AccountingController < ApplicationController
       end
 
   def general_ledger
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "General Ledger"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def misc
@@ -70,6 +91,26 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "Miscellaeneous"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "misc"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
   end
 
   def jvb
@@ -109,6 +150,26 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "General Journal"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "jvb"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
   end
 
   def crb
@@ -147,6 +208,26 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "Cash Receipts"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "crb"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
   end
 
   def cdb
@@ -185,6 +266,26 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "Cash Disbursement"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "cdb"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
   end
 
   def form
