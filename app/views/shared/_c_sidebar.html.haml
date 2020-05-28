@@ -26,11 +26,15 @@
           Billings
     - if is_not_remote
       %li.c-sidebar-nav-item
-        = link_to membership_payment_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "membership_payment_collections"}" do
+        = link_to membership_payment_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "membership_payment_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Membership Payments
     - if microloans?
       %li.c-sidebar-nav-item
-        = link_to deposit_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "deposit_collections"}" do
+        = link_to deposit_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "deposit_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Deposits
+      %li.c-sidebar-nav-item
+        = link_to time_deposit_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "time_deposit_collections" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Time Deposits

@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var options;
   var timeDepositCollectionId;
@@ -215,3 +217,5 @@ var Show  = (function() {
     init: init
   };
 })();
+
+window.TimeDepositCollectionsShow  = Show;

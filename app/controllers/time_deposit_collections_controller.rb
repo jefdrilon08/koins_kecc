@@ -7,6 +7,24 @@ class TimeDepositCollectionsController < ApplicationController
       .where(branch_id: @branches.pluck(:id))
 
     @time_deposit_collections = @time_deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Time Deposits"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show
@@ -22,6 +40,41 @@ class TimeDepositCollectionsController < ApplicationController
                           "data ->> 'time_deposit_collection_id' = ?",
                           @time_deposit_collection.id
                         ).order("created_at DESC")
+
+      @subheader_items = [
+        {
+          text: "Cash Management"
+        },
+        {
+          is_link: true,
+          path: time_deposit_collections_path,
+          text: "Time Deposits"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          id: "btn-print",
+          link: "#",
+          class: "fa fa-print",
+          text: "Print"
+        }
+      ]
+
+      if @time_deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+        @subheader_side_actions << {
+          class: "fa fa-times",
+          link: time_deposit_collection_path(@time_deposit_collection),
+          data: { method: :delete, confirm: "Are you sure?" }
+        }
+
+        @subheader_side_actions << {
+          id: "btn-approve",
+          class: "fa fa-check",
+          link: "#",
+          text: "Approve"
+        }
+      end
     end
   end
 

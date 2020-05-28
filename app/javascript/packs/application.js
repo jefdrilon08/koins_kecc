@@ -30,6 +30,8 @@ import "../membership_payment_collections/Index.js";
 import "../membership_payment_collections/Show.js";
 import "../deposit_collections/Index.js";
 import "../deposit_collections/Show.js";
+import "../time_deposit_collections/Index.js";
+import "../time_deposit_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -39,6 +41,7 @@ import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryCo
 import BillingUIComponent from "../../../react/billings/BillingUIComponent";
 import MembershipPaymentCollectionUIComponent from "../../../react/membership_payment_collections/MembershipPaymentCollectionUIComponent";
 import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
+import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collections/TimeDepositCollectionUIComponent";
 
 var Hooks = {};
 
@@ -205,6 +208,27 @@ $(document).ready(function() {
           centers={centers}
         />,
         document.getElementById('deposit-collection-content')
+      );
+    }
+  } else if(controller == "time_deposit_collections") {
+    if(action == "index") {
+      TimeDepositCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var timeDepositCollectionId = $parameters.data('id');
+
+      TimeDepositCollectionsShow.init({
+        timeDepositCollectionId: depositCollectionId, 
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <TimeDepositCollectionUIComponent
+          authenticityToken={authenticityToken}
+          id={timeDepositCollectionId}
+        />,
+        document.getElementById('time-deposit-collection-content')
       );
     }
   }

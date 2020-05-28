@@ -11,8 +11,6 @@ import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
 
-Modal.setAppElement("#time-deposit-collection-content")
-
 export default class TimeDepositCollectionUITable extends React.Component {
   constructor(props) {
     super(props);
