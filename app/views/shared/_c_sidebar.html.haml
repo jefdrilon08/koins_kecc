@@ -42,3 +42,7 @@
         = link_to withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "withdrawal_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Withdrawals
+      %li.c-sidebar-nav-item
+        = link_to savings_insurance_transfer_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_insurance_transfer_collections" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Savings Insurance Transfers

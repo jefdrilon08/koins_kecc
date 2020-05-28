@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show = (function() {
   var $btnAdd;
   var $btnDelete;
@@ -179,3 +181,5 @@ var Show = (function() {
     init: init
   };
 })();
+
+window.SavingsInsuranceTransferCollectionsShow  = Show;

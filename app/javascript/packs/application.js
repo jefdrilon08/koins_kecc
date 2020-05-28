@@ -34,6 +34,8 @@ import "../time_deposit_collections/Index.js";
 import "../time_deposit_collections/Show.js";
 import "../withdrawal_collections/Index.js";
 import "../withdrawal_collections/Show.js";
+import "../savings_insurance_transfer_collections/Index.js";
+import "../savings_insurance_transfer_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -254,6 +256,19 @@ $(document).ready(function() {
         />,
         document.getElementById('withdrawal-collection-content')
       );
+    }
+  } else if(controller == "savings_insurance_transfer_collections") {
+    if(action == "index") {
+      SavingsInsuranceTransferCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var id = $parameters.data('id');
+
+      SavingsInsuranceTransferCollectionsShow.init({
+        id: id,
+        authenticityToken: authenticityToken
+      });
     }
   }
 });

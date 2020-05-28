@@ -24,6 +24,24 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
     end
 
     @savings_insurance_transfer_collections = @savings_insurance_transfer_collections.order("status DESC, collection_date DESC").page(params[:page]).per(100)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Savings Insurance Transfers"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show
@@ -42,6 +60,38 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
                 ).order("last_name ASC")
 
     @records  = @savings_insurance_transfer_collection.data.with_indifferent_access["records"]
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: savings_insurance_transfer_collections_path,
+        text: "Savings Insurance Transfers"
+      },
+      {
+        text: "Record: #{@savings_insurance_transfer_collection.id}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    if @savings_insurance_transfer_collection.pending?
+      @subheader_side_actions << {
+        id: "btn-approve",
+        link: "#",
+        class: "fa fa-check",
+        text: "Approve"
+      }
+
+      @subheader_side_actions << {
+        link: savings_insurance_transfer_collection_path(@savings_insurance_transfer_collection.id),
+        class: "fa fa-times",
+        text: "Delete",
+        data: { method: :delete, confirm: "Are you sure?" }
+      }
+    end
   end
 
   def destroy
