@@ -19,7 +19,27 @@ import '@coreui/coreui';
 
 import "../stylesheets/application.scss";
 
-import "../pages/Login.js";
+// React Components
+import DashboardMainUI from "../components/dashboard/MainUI";
+import MembersFormDisplay from "../components/members/FormDisplay";
+import SurveyAnswerUIDisplay from "../components/members/SurveyAnswerUIDisplay";
+import LoanApplicationForm from "../components/loans/ApplicationFormComponent";
+import LoanAccountingEntryComponent from "../components/loans/AccountingEntryComponent";
+import BillingUIComponent from "../components/billings/BillingUIComponent";
+import MembershipPaymentCollectionUIComponent from "../components/membership_payment_collections/MembershipPaymentCollectionUIComponent";
+import DepositCollectionUIComponent from "../components/deposit_collections/DepositCollectionUIComponent";
+import TimeDepositCollectionUIComponent from "../components/time_deposit_collections/TimeDepositCollectionUIComponent";
+import WithdrawalCollectionUIComponent from "../components/withdrawal_collections/WithdrawalCollectionUIComponent";
+import InsuranceFundTransferCollectionUIComponent from "../components/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
+import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
+import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
+import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
+
+// "init" Objects
+import PagesLogin from "../pages/Login.js";
+import SavingsAccountsShow from "../savings_accounts/Show.js";
+import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/ShowWithdrawalRequest.js";
+
 import "../members/Index.js";
 import "../members/Show.js";
 import "../members/SurveyAnswer.js";
@@ -43,25 +63,6 @@ import "../insurance_withdrawal_collections/Show.js";
 import "../monthly_closing_collections/Index.js";
 import "../monthly_closing_collections/Show.js";
 
-// XXX: Namespace all under "app/javascript/components"
-import MainUI from "../../../react/dashboard/MainUI";
-import MembersFormDisplay from "../../../react/members/FormDisplay";
-import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
-import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
-import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryComponent";
-import BillingUIComponent from "../../../react/billings/BillingUIComponent";
-import MembershipPaymentCollectionUIComponent from "../../../react/membership_payment_collections/MembershipPaymentCollectionUIComponent";
-import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
-import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collections/TimeDepositCollectionUIComponent";
-import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collections/WithdrawalCollectionUIComponent";
-import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
-import InsuranceWithdrawalCollectionUIComponent from "../../../react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
-import MonthlyClosingCollectionsShowUI from "../../../react/monthly_closing_collections/ShowUI";
-import InsuranceStatusComponent from "../../../react/member_accounts/InsuranceStatusComponent";
-
-import SavingsAccountsShow from "../savings_accounts/Show.js";
-import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/SavingsAccountsShowWithdrawalRequest.js";
-
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
@@ -76,11 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
   payload.authenticityToken = authenticityToken
 
   if (controller_action === "pages/index") {
-    renderComponent(MainUI, payload)
+    renderComponent(DashboardMainUI, payload)
   }
 
   if (controller_action === "pages/login") {
-    Login.init()
+    PagesLogin.init()
   }
 
   if (controller_action === "savings_accounts/show") {
