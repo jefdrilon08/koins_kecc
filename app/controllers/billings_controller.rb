@@ -41,6 +41,8 @@ class BillingsController < ApplicationController
         text: "New Transaction"
       }
     ]
+
+    @payload = {}
   end
 
   def show
@@ -124,6 +126,10 @@ class BillingsController < ApplicationController
       class: "fa fa-download",
       id: "btn-excel",
       text: "Download Excel"
+    }
+
+    @payload = {
+      billingId: @billing.id
     }
   end
 

@@ -99,6 +99,11 @@ class InsuranceFundTransferCollectionsController < ApplicationController
         }
       end
     end
+
+    @payload = {
+      id: @insurance_fund_transfer_collection.id,
+      centers: helpers.fetch_centers(@insurance_fund_transfer_collection.branch)
+    }
   end
 
   def destroy

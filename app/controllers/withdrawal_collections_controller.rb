@@ -93,6 +93,10 @@ class WithdrawalCollectionsController < ApplicationController
         text: "Approve"
       }
     end
+
+    @payload = {
+      withdrawalCollectionId: @withdrawal_collection.id
+    }
   end
 
   def destroy

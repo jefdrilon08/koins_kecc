@@ -17,6 +17,5 @@
               = render partial: "show_list", locals: { records: @records }
             = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_hash }
 
-#parameters{ data: { id: "#{@savings_insurance_transfer_collection.id}", controller: "#{params[:controller]}", action: "#{params[:action]}" } }
 = render partial: "savings_insurance_transfer_collections/modals/approve"
 = render partial: "shared/errors_template"

@@ -100,6 +100,10 @@ class MembershipPaymentCollectionsController < ApplicationController
         text: "Approve"
       }
     end
+
+    @payload = {
+      membershipPaymentCollectionId: @membership_payment_collection.id
+    }
   end
 
   def destroy

@@ -1,11 +1,6 @@
-import 'core-js/stable'
-import 'regenerator-runtime/runtime'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-
-require("@rails/ujs").start()
-require("@rails/activestorage").start()
 
 import 'bootstrap';
 import jquery from 'jquery';
@@ -42,6 +37,7 @@ import "../insurance_withdrawal_collections/Index.js";
 import "../insurance_withdrawal_collections/Show.js";
 import "../monthly_closing_collections/Index.js";
 import "../monthly_closing_collections/Show.js";
+import "../AccountingBooksIndex.js";
 
 // XXX: Namespace all under "app/javascript/components"
 import MainUI from "../../../react/dashboard/MainUI";
@@ -60,7 +56,7 @@ import MonthlyClosingCollectionsShowUI from "../../../react/monthly_closing_coll
 import InsuranceStatusComponent from "../../../react/member_accounts/InsuranceStatusComponent";
 
 import SavingsAccountsShow from "../savings_accounts/Show.js";
-import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/SavingsAccountsShowWithdrawalRequest.js";
+import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/ShowWithdrawalRequest.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -76,303 +72,169 @@ document.addEventListener("DOMContentLoaded", () => {
   payload.authenticityToken = authenticityToken
 
   if (controller_action === "pages/index") {
-    renderComponent(MainUI, payload)
+    renderComponent(MainUI, payload);
+  }
+
+  if (controller_action == "members/index") {
+    MembersIndex.init();
+  }
+
+  if (controller_action == "members/show") {
+    const { memberId } = payload;
+    MembersShow.init(memberId, authenticityToken);
+  }
+
+  if (controller_action == "members/form") {
+    const { id, memberTypes } = payload;
+
+    renderComponent(MembersFormDisplay, payload);
   }
 
   if (controller_action === "pages/login") {
-    Login.init()
+    Login.init();
   }
 
   if (controller_action === "savings_accounts/show") {
-    const { id } = payload
-    SavingsAccountsShow.init({ id, authenticityToken })
+    const { id } = payload;
+    SavingsAccountsShow.init({ id, authenticityToken });
   }
 
   if (controller_action == "savings_accounts/time_deposit_withdrawal") {
-    const { id } = payload
-    SavingsAccountsShowWithdrawalRequest.init({ id, authenticityToken })
+    const { id } = payload;
+    SavingsAccountsShowWithdrawalRequest.init({ id, authenticityToken });
   }
-})
 
-// Router
-$(document).ready(function() {
-  var authenticityToken = $("meta[name='csrf-token']").attr('content');
+  if (controller_action == "members/survey_answer_form") {
+    renderComponent(SurveyAnswerUIDisplay, payload);
+  }
 
-  var $parameters = $("#parameters");
-  var controller  = $parameters.data("controller");
-  var action      = $parameters.data("action");
+  if (controller_action == "members/survey_answer") {
+    const { id, memberId } = payload;
 
-  console.log("Controller: " + controller + " Action: " + action);
+    SurveyAnswer.init({ id, memberId, authenticityToken });
+  }
 
-  if(controller == "members") {
-    if(action == "index") {
-      MembersIndex.init();
-    } else if(action == "show") {
-      var memberId  = $parameters.data("member-id");
+  if (controller_action == "loans/show") {
+    const { loanId, memberId }  = payload;
 
-      MembersShow.init(memberId, authenticityToken);
-    } else if(action == "form") {
-      var id          = $parameters.data("id");
-      var memberTypes = $parameters.data("member-types");
+    LoansShow.init({ loanId, authenticityToken });
 
-      ReactDOM.render(
-        <MembersFormDisplay
-          authenticityToken={authenticityToken}
-          memberTypes={memberTypes}
-          id={id}
-        />,
-        document.getElementById('content')
-      );
-    } else if(action == "survey_answer_form") {
-      var id        = $parameters.data("id");
-      var memberId  = $parameters.data("member-id");
+    renderComponent(LoanAccountingEntryComponent, { id: loanId, memberId: memberId, authenticityToken: authenticityToken });
+  }
 
-      ReactDOM.render(
-        <SurveyAnswerUIDisplay
-          authenticityToken={authenticityToken}
-          memberId={memberId}
-          id={id}
-        />,
-        document.getElementById('survey-answer-content')
-      );
-    } else if(action == "survey_answer") {
-      var id        = $parameters.data("id");
-      var memberId  = $parameters.data("member-id");
+  if (controller_action == "loans/form") {
+    renderComponent(LoanApplicationForm, payload); 
+  }
 
-      SurveyAnswer.init({
-        id: id,
-        memberId: memberId,
-        authenticityToken: authenticityToken
-      });
-    }
-  } else if(controller == "loans") {
-    if(action == "show") {
-      var loanId    = $parameters.data("id");
-      var memberId  = $parameters.data("member-id");
+  if (controller_action == "billings/index") {
+    BillingsIndex.init({ authenticityToken });
+  }
+  
+  if (controller_action == "billings/show") {
+    const { billingId } = payload;
 
-      LoansShow.init({
-        loanId: loanId,
-        authenticityToken: authenticityToken
-      });
+    BillingsShow.init({ billingId, authenticityToken });
 
-      ReactDOM.render(
-        <LoanAccountingEntryComponent
-          authenticityToken={authenticityToken}
-          id={loanId}
-          memberId={memberId}
-        />,
-        document.getElementById('loan-accounting-entry-content')
-      );
-    } else if(action == "form") {
-      var id        = $parameters.data("id");
-      var memberId  = $parameters.data("member-id");
-      var banks     = $parameters.data("banks");
+    renderComponent(BillingUIComponent, { id: billingId, authenticityToken: authenticityToken });
+  }
 
-      ReactDOM.render(
-        <LoanApplicationForm
-          authenticityToken={authenticityToken}
-          id={id}
-          memberId={memberId}
-          banks={banks}
-        />,
-        document.getElementById('loan-application-content')
-      );
-    }
-  } else if(controller == "billings") {
-    if(action == "index") {
-      BillingsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var billingId = $parameters.data("id");
+  if (controller_action == "membership_payment_collections/index") {
+    MembershipPaymentCollectionsIndex.init({ authenticityToken: authenticityToken });
+  }
 
-      BillingsShow.init({
-        billingId: billingId,
-        authenticityToken: authenticityToken
-      });
+  if (controller_action == "membership_payment_collections/show") {
+    const { membershipPaymentCollectionId } = payload;
 
-      ReactDOM.render(
-        <BillingUIComponent
-          authenticityToken={authenticityToken}
-          id={billingId}
-        />,
-        document.getElementById('billing-content')
-      );
-    }
-  } else if(controller == "membership_payment_collections") {
-    if(action == "index") {
-      MembershipPaymentCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var membershipPaymentCollectionId = $parameters.data('id');
+    MembershipPaymentCollectionsShow.init({ membershipPaymentCollectionId, authenticityToken });
 
-      MembershipPaymentCollectionsShow.init({
-        membershipPaymentCollectionId: membershipPaymentCollectionId,
-        authenticityToken: authenticityToken
-      });
+    renderComponent(MembershipPaymentCollectionUIComponent, { id: membershipPaymentCollectionId, authenticityToken: authenticityToken });
+  }
 
-      ReactDOM.render(
-        <MembershipPaymentCollectionUIComponent
-          authenticityToken={authenticityToken}
-          id={membershipPaymentCollectionId}
-        />,
-        document.getElementById('membership-payment-collection-content')
-      );
-    }
-  } else if(controller == "deposit_collections") {
-    if(action == "index") {
-      DepositCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var depositCollectionId = $parameters.data('id');
-      var centers             = $parameters.data('centers');
+  if (controller_action == "deposit_collections/index") {
+    DepositCollectionsIndex.init({ authenticityToken: authenticityToken });
+  }
 
-      DepositCollectionsShow.init({
-        depositCollectionId: depositCollectionId, 
-        authenticityToken: authenticityToken
-      });
+  if (controller_action == "deposit_collections/show") {
+    const { depositCollectionId, centers } = payload;
 
-      ReactDOM.render(
-        <DepositCollectionUIComponent
-          authenticityToken={authenticityToken}
-          id={depositCollectionId}
-          centers={centers}
-        />,
-        document.getElementById('deposit-collection-content')
-      );
-    }
-  } else if(controller == "time_deposit_collections") {
-    if(action == "index") {
-      TimeDepositCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var timeDepositCollectionId = $parameters.data('id');
+    DepositCollectionsShow.init({ depositCollectionId, authenticityToken });
 
-      TimeDepositCollectionsShow.init({
-        timeDepositCollectionId: depositCollectionId, 
-        authenticityToken: authenticityToken
-      });
+    renderComponent(DepositCollectionUIComponent, { authenticityToken: authenticityToken, id: depositCollectionId, centers: centers });
+  }
 
-      ReactDOM.render(
-        <TimeDepositCollectionUIComponent
-          authenticityToken={authenticityToken}
-          id={timeDepositCollectionId}
-        />,
-        document.getElementById('time-deposit-collection-content')
-      );
-    }
-  } else if(controller == "withdrawal_collections") {
-    if(action == "index") {
-      WithdrawalCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var withdrawalCollectionId = $parameters.data('id');
+  if (controller_action == "deposit_collections/index") {
+    TimeDepositCollectionsIndex.init({ authenticityToken });
+  }
 
-      WithdrawalCollectionsShow.init({
-        withdrawalCollectionId: withdrawalCollectionId,
-        authenticityToken: authenticityToken
-      });
+  if (controller_action == "deposit_collections/show") {
+    const { timeDepositCollectionId } = payload;
 
-      ReactDOM.render(
-        <WithdrawalCollectionUIComponent
-          authenticityToken={authenticityToken}
-          id={withdrawalCollectionId}
-        />,
-        document.getElementById('withdrawal-collection-content')
-      );
-    }
-  } else if(controller == "savings_insurance_transfer_collections") {
-    if(action == "index") {
-      SavingsInsuranceTransferCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var id = $parameters.data('id');
+    TimeDepositCollectionsShow.init({ timeDepositCollectionId, authenticityToken });
 
-      SavingsInsuranceTransferCollectionsShow.init({
-        id: id,
-        authenticityToken: authenticityToken
-      });
-    }
-  } else if(controller == "insurance_fund_transfer_collections") {
-    if(action == "index") {
-      InsuranceFundTransferCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var id      = $parameters.data('id');
-      var centers = $parameters.data("centers");
+    renderComponent(TimeDepositCollectionUIComponent, { id: timeDepositCollectionId, authenticityToken: authenticityToken });
+  }
 
-      InsuranceFundTransferCollectionsShow.init({
-        authenticityToken: authenticityToken,
-        insuranceFundTransferCollectionId: id
-      });
+  if (controller_action == "withdrawal_collections/index") {
+    WithdrawalCollectionsShow.init({ authenticityToken });
+  }
 
-      ReactDOM.render(
-        <InsuranceFundTransferCollectionUIComponent
-          authenticityToken={authenticityToken}
-          centers={centers}
-          id={id}
-        />,
-        document.getElementById('insurance-fund-transfer-collection-content')
-      );
-    }
-  } else if(controller == "insurance_withdrawal_collections") {
-    if(action == "index") {
-      InsuranceWithdrawalCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var id  = $parameters.data('id');
+  if (controller_action == "withdrawal_collections/show") {
+    const { withdrawalCollectionId }  = payload;
 
-      InsuranceWithdrawalCollectionsShow.init({
-        insuranceWithdrawalCollectionId: id,
-        authenticityToken: authenticityToken
-      });
+    WithdrawalCollectionsShow.init({ withdrawalCollectionId, authenticityToken });
 
-      ReactDOM.render(
-        <InsuranceWithdrawalCollectionUIComponent
-          authenticityToken={authenticityToken}
-          id={id}
-        />,
-        document.getElementById('insurance-withdrawal-collection-content')
-      );
-    }
-  } else if(controller == "monthly_closing_collections") {
-    if(action == "index") {
-      MonthlyClosingCollectionsIndex.init({
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "show") {
-      var id  = $parameters.data("id");
+    renderComponent(WithdrawalCollectionUIComponent, { id: withdrawalCollectionId, authenticityToken: authenticityToken });
+  }
 
-      MonthlyClosingCollectionsShow.init({
-        id: id,
-        authenticityToken: authenticityToken
-      });
+  if (controller_action == "savings_insurance_transfer_collections/index") {
+    SavingsInsuranceTransferCollectionsIndex.init({ authenticityToken });
+  }
 
-      ReactDOM.render(
-        <MonthlyClosingCollectionsShowUI
-          authenticityToken={authenticityToken}
-          id={id}
-        />,
-        document.getElementById('content')
-      );
-    }
-  } if(controller == "insurance_accounts") {
-    if(action == "show") {
-      var id  = $parameters.data("member-account-id");
+  if (controller_action == "savings_insurance_transfer_collections/show") {
+    SavingsInsuranceTransferCollectionsShow.init(payload);
+  }
 
-      ReactDOM.render(
-        <InsuranceStatusComponent
-          memberAccountId={id}
-        />,
-        document.getElementById("content-status")
-      );
-    }
+  if (controller_action == "insurance_fund_transfer_collections/index") {
+    InsuranceFundTransferCollectionsIndex.init(payload);
+  }
+
+  if (controller_action == "insurance_fund_transfer_collections/show") {
+    const { id, centers } = payload;
+
+    InsuranceFundTransferCollectionsShow.init({ authenticityToken: authenticityToken, insuranceFundTransferCollectionId: id });
+
+    renderComponent(InsuranceFundTransferCollectionUIComponent, payload);
+  }
+
+  if (controller_action == "insurance_withdrawal_collections/index") {
+    InsuranceWithdrawalCollectionsIndex.init(payload);
+  }
+
+  if (controller_action == "insurance_withdrawal_collections/show") {
+    const { id } = payload;
+
+    InsuranceWithdrawalCollectionsShow.init({ insuranceWithdrawalCollectionId: id, authenticityToken: authenticityToken });
+
+    renderComponent(InsuranceWithdrawalCollectionUIComponent, payload);
+  }
+
+  if (controller_action == "monthly_closing_collections/index") {
+    MonthlyClosingCollectionsIndex.init(payload);
+  }
+
+  if (controller_action == "monthly_closing_collections/show") {
+    MonthlyClosingCollectionsShow.init(payload);
+
+    renderComponent(MonthlyClosingCollectionsShowUI, payload);
+  }
+
+  if (controller_action == "insurance_accounts/show") {
+    const { id } = payload;
+
+    renderComponent(InsuranceStatusComponent, { memberAccountId: id });
+  }
+
+  if (controller_action == "accounting/crb" || controller_action == "accounting/cdb" || controller_action == "accounting/jvb" || controller_action == "accounting/misc") {
+    AccountingBooksIndex.init(payload); 
   }
 });

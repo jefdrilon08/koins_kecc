@@ -94,6 +94,10 @@ class InsuranceAccountsController < ApplicationController
         text: "Balance: #{helpers.number_to_currency(@insurance_account.balance, unit: '')}"
       }
     ]
+
+    @payload = {
+      id: @insurance_account.id
+    }
   end
 
   def claims_copy_pdf

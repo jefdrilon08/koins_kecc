@@ -1,4 +1,6 @@
-var BooksIndex  = (function() {
+import Mustache from "mustache/mustache";
+
+var AccountingBooksIndex  = (function() {
   var $btnPrint;
   var $inputStartDate;
   var $inputEndDate;
@@ -123,3 +125,5 @@ var BooksIndex  = (function() {
     init: init
   };
 })();
+
+window.AccountingBooksIndex = AccountingBooksIndex;

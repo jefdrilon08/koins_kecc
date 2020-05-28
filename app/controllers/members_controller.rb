@@ -61,6 +61,11 @@ class MembersController < ApplicationController
     ]
 
     @subheader_side_actions = []
+
+    @payload = {
+      "id": @member.id,
+      "memberTypes": Settings.default_member_types
+    }
   end
 
   def blip_form_pdf
@@ -112,6 +117,11 @@ class MembersController < ApplicationController
         text: "Delete"
       }
     ]
+
+    @payload = {
+      id: @survey_answer.id,
+      memberId: @member.id
+    }
   end
 
   def survey_answer_form
@@ -141,6 +151,11 @@ class MembersController < ApplicationController
     ]
 
     @subheader_side_actions = []
+
+    @payload = {
+      id: @survey_answer.id,
+      memberId: @member.id
+    }
   end
 
   def show
@@ -185,6 +200,10 @@ class MembersController < ApplicationController
                             member: @member
                           }
                         ).execute!
+
+    @payload = {
+      "memberId": @member.id
+    }
 
     # subheader items
     @subheader_items = [

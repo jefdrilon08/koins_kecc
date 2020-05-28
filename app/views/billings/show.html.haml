@@ -30,7 +30,7 @@
             %h5
               Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")} #{@billing.approved? ? "(Approved on #{@billing.date_approved.strftime("%b %d, %Y")})" : ""}
 
-            #billing-content
+            #react-root
 
             - if debug?
               %pre

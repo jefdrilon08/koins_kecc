@@ -13,7 +13,7 @@
                   Pindutin ang amount upang baguhin ito.
             %h5
               MembershipPaymentCollection for #{@membership_payment_collection.branch} / #{@membership_payment_collection.center} - #{@membership_payment_collection.collection_date.strftime("%b %d, %Y")}
-            #membership-payment-collection-content
+            #react-root
 
             - if debug?
               %pre
@@ -23,5 +23,3 @@
 = render partial: "shared/modals/print"
 = render partial: "membership_payment_collections/modals/approve"
 = render partial: "templates/error_list"
-
-#parameters{ data: { id: @membership_payment_collection.id, controller: "#{params[:controller]}", action: "#{params[:action]}" } }

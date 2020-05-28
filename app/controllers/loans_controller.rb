@@ -36,7 +36,6 @@ class LoansController < ApplicationController
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
-
   end
 
   def form
@@ -73,6 +72,12 @@ class LoansController < ApplicationController
     ]
 
     @subheader_side_actions = []
+
+    @payload = {
+      id: params[:id],
+      memberId: @member.id,
+      banks: @banks
+    }
   end
 
   def adjustment
@@ -146,5 +151,10 @@ class LoansController < ApplicationController
         link: "#"
       }
     end
+
+    @payload = {
+      loanId: @loan.id,
+      memberId: @loan.member_id
+    }
   end
 end

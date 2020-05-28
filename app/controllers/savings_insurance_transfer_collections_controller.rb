@@ -92,6 +92,10 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
         data: { method: :delete, confirm: "Are you sure?" }
       }
     end
+
+    @payload = {
+      id: @savings_insurance_transfer_collection.id
+    }
   end
 
   def destroy

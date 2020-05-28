@@ -98,6 +98,10 @@ class MonthlyClosingCollectionsController < ApplicationController
         data: { method: :delete, confirm: "Are you sure?" }
       }
     end
+
+    @payload = {
+      id: @monthly_closing_collection.id
+    }
   end
 
   def destroy

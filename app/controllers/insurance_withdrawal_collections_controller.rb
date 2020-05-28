@@ -84,6 +84,10 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
         text: "Approve"
       }
     end
+
+    @payload = {
+      id: @insurance_withdrawal_collection.id
+    }
   end
 
   def destroy

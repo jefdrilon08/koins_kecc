@@ -120,7 +120,7 @@
                             .badge.badge-danger
                               Matured
             -else
-              #content-status
+              #react-root
               %table.table.table-hover.table-sm.table-bordered
                 %thead
                   %tr
@@ -170,6 +170,3 @@
                         #{number_to_currency(o.amount, unit: "")}
                       %td.text-right.text-muted
                         #{number_to_currency(o.data["ending_balance"], unit: "")}
-
-
-#parameters{ data: { member_account_id: @insurance_account.id, controller: "#{params[:controller]}", action: "#{params[:action]}" }}

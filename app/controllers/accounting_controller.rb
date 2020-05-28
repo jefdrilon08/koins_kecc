@@ -16,16 +16,16 @@ class AccountingController < ApplicationController
   end
 
   def general_ledger_excel_url
-  if params[:branch_id].present?
-    branch = Branch.find(params[:branch_id])
-  end
-  if params[:accounting_code_ids].present?
-    accounting_code_ids = params[:accounting_code_ids]
+    if params[:branch_id].present?
+      branch = Branch.find(params[:branch_id])
+    end
+    if params[:accounting_code_ids].present?
+      accounting_code_ids = params[:accounting_code_ids]
+    end
+
+    render json: { download_url: "#{general_ledger_excel_url_path(start_date: params[:start_date],end_date: params[:end_date], branch_id: branch.try(:id))}"}
   end
 
-  render json: { download_url: "#{general_ledger_excel_url_path(start_date: params[:start_date],end_date: params[:end_date], branch_id: branch.try(:id))}"}
-
-  end
   def general_ledger_excel
         start_date          = params[:start_date].try(:to_date)
         end_date            = params[:end_date].try(:to_date)
@@ -111,6 +111,10 @@ class AccountingController < ApplicationController
         text: "New Entry"
       }
     ]
+
+    @payload = {
+      book: "MISC"
+    }
   end
 
   def jvb
@@ -170,6 +174,10 @@ class AccountingController < ApplicationController
         text: "New Entry"
       }
     ]
+
+    @payload = {
+      book: "JVB"
+    }
   end
 
   def crb
@@ -228,6 +236,10 @@ class AccountingController < ApplicationController
         text: "New Entry"
       }
     ]
+
+    @payload = {
+      book: "CRB"
+    }
   end
 
   def cdb
@@ -286,6 +298,10 @@ class AccountingController < ApplicationController
         text: "New Entry"
       }
     ]
+
+    @payload = {
+      book: "CDB"
+    }
   end
 
   def form

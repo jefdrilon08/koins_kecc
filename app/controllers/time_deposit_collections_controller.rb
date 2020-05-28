@@ -75,6 +75,10 @@ class TimeDepositCollectionsController < ApplicationController
           text: "Approve"
         }
       end
+
+      @payload = {
+        timeDepositCollectionId: @time_deposit_collection.id
+      }
     end
   end
 

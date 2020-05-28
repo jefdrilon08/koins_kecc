@@ -13,7 +13,7 @@
                   Pindutin ang amount upang baguhin ito.
             %h5
               Insurance Withdrawal Collection for #{@insurance_withdrawal_collection.branch} / #{@insurance_withdrawal_collection.center} - #{@insurance_withdrawal_collection.collection_date.strftime("%b %d, %Y")}
-            #insurance-withdrawal-collection-content
+            #react-root
 
             - if debug?
               %pre
@@ -23,5 +23,3 @@
 = render partial: "shared/modals/print"
 = render partial: "insurance_withdrawal_collections/modals/approve"
 = render partial: "templates/error_list"
-
-#parameters{ data: { id: @insurance_withdrawal_collection.id, controller: "#{params[:controller]}", action: "#{params[:action]}" } }

@@ -143,6 +143,11 @@ class DepositCollectionsController < ApplicationController
         }
       end
     end
+
+    @payload = {
+      depositCollectionId: @deposit_collection.id,
+      centers: helpers.fetch_centers(@deposit_collection.branch)
+    }
   end
 
   def destroy

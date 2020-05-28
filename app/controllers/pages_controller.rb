@@ -9,7 +9,7 @@ class PagesController < ApplicationController
 
     @payload = {
       username: current_user.username,
-      roles: current_user.roles,
+      roles: current_user.roles
     }
   end
 

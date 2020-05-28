@@ -13,10 +13,8 @@
               - if debug?
                 %pre
                   #{JSON.pretty_generate(JSON.parse(@monthly_closing_collection.data.to_json))}
-              #content
+              #react-root
 
 = render partial: "monthly_closing_collections/modals/update"
 = render partial: "monthly_closing_collections/modals/approve"
 = render partial: "templates/error_list"
-
-#parameters{ data: { id: "#{@monthly_closing_collection.id}", controller: "#{params[:controller]}", action: "#{params[:action]}" } }
