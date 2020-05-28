@@ -7,6 +7,7 @@
     = csrf_meta_tags
     = csp_meta_tag
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no" }
+    %meta{ name: "parameters" content: "#{ { controller: params[:controller], action: params[:action], payload: @payload } }" }
     = action_cable_meta_tag
 
     = stylesheet_pack_tag 'application'

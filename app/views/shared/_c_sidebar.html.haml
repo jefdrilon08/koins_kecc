@@ -75,3 +75,10 @@
           = link_to equity_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_accounts" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-piggy-bank
             Equity
+    - if is_not_remote
+      %li.c-sidebar-nav-title
+        Accounting
+      %li.c-sidebar-nav-item
+        = link_to accounting_accounting_codes_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-balance-scale
+          Chart of Accounts

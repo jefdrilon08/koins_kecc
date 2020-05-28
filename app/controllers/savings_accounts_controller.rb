@@ -118,6 +118,10 @@ class SavingsAccountsController < ApplicationController
                       )
     end
 
+    @payload  = {
+      id: @savings_account.id
+    }
+
     @subheader_items = [
       {
         text: "Accounts"
