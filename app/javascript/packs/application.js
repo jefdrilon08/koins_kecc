@@ -28,6 +28,8 @@ import "../billings/Index.js";
 import "../billings/Show.js";
 import "../membership_payment_collections/Index.js";
 import "../membership_payment_collections/Show.js";
+import "../deposit_collections/Index.js";
+import "../deposit_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -36,6 +38,7 @@ import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
 import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryComponent";
 import BillingUIComponent from "../../../react/billings/BillingUIComponent";
 import MembershipPaymentCollectionUIComponent from "../../../react/membership_payment_collections/MembershipPaymentCollectionUIComponent";
+import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
 
 var Hooks = {};
 
@@ -179,6 +182,29 @@ $(document).ready(function() {
           id={membershipPaymentCollectionId}
         />,
         document.getElementById('membership-payment-collection-content')
+      );
+    }
+  } else if(controller == "deposit_collections") {
+    if(action == "index") {
+      DepositCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var depositCollectionId = $parameters.data('id');
+      var centers             = $parameters.data('centers');
+
+      DepositCollectionsShow.init({
+        depositCollectionId: depositCollectionId, 
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <DepositCollectionUIComponent
+          authenticityToken={authenticityToken}
+          id={depositCollectionId}
+          centers={centers}
+        />,
+        document.getElementById('deposit-collection-content')
       );
     }
   }

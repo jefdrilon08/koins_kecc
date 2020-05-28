@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var options;
   var depositCollectionId;
@@ -407,3 +409,5 @@ var Show  = (function() {
     init: init
   };
 })();
+
+window.DepositCollectionsShow = Show;

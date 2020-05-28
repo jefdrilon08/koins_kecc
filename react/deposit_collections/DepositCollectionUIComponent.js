@@ -10,7 +10,7 @@ import LoadCenter from './LoadCenter';
 import AddAccountingFund from './AddAccountingFund';
 import {numberWithCommas} from '../utils/helpers';
 
-export default class DepositCollectionUIDisplay extends React.Component {
+export default class DepositCollectionUIComponent extends React.Component {
   constructor(props) {
     super(props);
 

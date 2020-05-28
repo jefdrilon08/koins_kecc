@@ -91,7 +91,6 @@ Rails.application.config.assets.precompile += [
   "SurveyUI.min.react.js",
   "SurveyQuestionUI.min.react.js",
   "MembershipPaymentCollectionUI.min.react.js",
-  "DepositCollectionUI.min.react.js",
   "TimeDepositCollectionUI.min.react.js",
   "WithdrawalCollectionUI.min.react.js",
   "InsuranceWithdrawalCollectionUI.min.react.js",

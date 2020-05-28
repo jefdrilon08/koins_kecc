@@ -13,7 +13,6 @@ module.exports = {
     AccountingEntryForm: "./react/accounting/AccountingEntryForm.js",
     SurveyUI: "./react/administration/surveys/SurveyUI.js",
     SurveyQuestionUI: "./react/administration/surveys/survey_questions/SurveyQuestionUI.js",
-    DepositCollectionUI: "./react/deposit_collections/DepositCollectionUI.js",
     TimeDepositCollectionUI: "./react/time_deposit_collections/TimeDepositCollectionUI.js",
     WithdrawalCollectionUI: "./react/withdrawal_collections/WithdrawalCollectionUI.js",
     InsuranceWithdrawalCollectionUI: "./react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUI.js",
