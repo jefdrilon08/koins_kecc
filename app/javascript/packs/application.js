@@ -207,8 +207,11 @@ const routes = {
 
 document.addEventListener("DOMContentLoaded", () => {
   const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
-  const authenticityToken = $("meta[name='csrf-token']").attr('content');
-  payload.authenticityToken = authenticityToken;
+  const csrfToken = $("meta[name='csrf-token']").attr('content');
+  const route = routes[controller_action];
 
-  routes[controller_action](payload);
+  if (route) {
+    payload.authenticityToken = csrfToken;
+    route(payload);
+  }
 });
