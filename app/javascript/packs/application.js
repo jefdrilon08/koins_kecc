@@ -65,7 +65,7 @@ import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/SavingsAcc
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
-    document.getElementById(payload._react_dom_id),
+    document.getElementById("react-root"),
   )
 }
 

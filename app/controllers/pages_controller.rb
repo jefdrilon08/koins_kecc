@@ -8,7 +8,6 @@ class PagesController < ApplicationController
       .count
 
     @payload = {
-      _react_dom_id: "dashboard-content",
       username: current_user.username,
       roles: current_user.roles,
     }
