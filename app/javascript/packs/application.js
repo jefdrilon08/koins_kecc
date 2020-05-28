@@ -34,6 +34,7 @@ import InsuranceStatusComponent from "../components/member_accounts/InsuranceSta
 import PagesLogin from "../pages/Login.js";
 import SavingsAccountsShow from "../savings_accounts/Show.js";
 import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/ShowWithdrawalRequest.js";
+import AccountingCodesIndex from "../AccountingCodesIndex.js";
 
 import "../members/Index.js";
 import "../members/Show.js";
@@ -199,6 +200,9 @@ const routes = {
   "accounting/cdb":  (payload) => { AccountingBooksIndex.init(payload); },
   "accounting/jvb":  (payload) => { AccountingBooksIndex.init(payload); },
   "accounting/misc": (payload) => { AccountingBooksIndex.init(payload); },
+
+  "accounting_codes/index": (payload) => {
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
