@@ -153,7 +153,7 @@ class LoansController < ApplicationController
     end
 
     @payload = {
-      loanId: @loan.id,
+      id: @loan.id,
       memberId: @loan.member_id
     }
   end

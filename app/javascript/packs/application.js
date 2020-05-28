@@ -34,12 +34,13 @@ import InsuranceStatusComponent from "../components/member_accounts/InsuranceSta
 import PagesLogin from "../pages/Login.js";
 import SavingsAccountsShow from "../savings_accounts/Show.js";
 import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/ShowWithdrawalRequest.js";
-import AccountingCodesIndex from "../AccountingCodesIndex.js";
+import AccountingCodesIndex from "../models/AccountingCodesIndex.js";
+import AccountingBooksIndex from "../models/AccountingBooksIndex.js";
+import LoansShow from "../models/LoansShow.js";
 
 import "../members/Index.js";
 import "../members/Show.js";
 import "../members/SurveyAnswer.js";
-import "../loans/Show.js";
 import "../billings/Index.js";
 import "../billings/Show.js";
 import "../membership_payment_collections/Index.js";
@@ -58,7 +59,6 @@ import "../insurance_withdrawal_collections/Index.js";
 import "../insurance_withdrawal_collections/Show.js";
 import "../monthly_closing_collections/Index.js";
 import "../monthly_closing_collections/Show.js";
-import "../AccountingBooksIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -77,14 +77,15 @@ const newHooks = {
   "pages/login":                              [PagesLogin],
   "savings_accounts/show":                    [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal": [SavingsAccountsShowWithdrawalRequest],
+  "accounting/crb":                           [AccountingBooksIndex],
+  "accounting/cdb":                           [AccountingBooksIndex],
+  "accounting/jvb":                           [AccountingBooksIndex],
+  "accounting/misc":                          [AccountingBooksIndex],
+  "accounting/accounting_codes/index":        [AccountingCodesIndex],
+  "loans/show":                               [LoansShow, LoanAccountingEntryComponent]
 }
 
 const hooks = {
-  "loans/show": ({ loanId, memberId, authenticityToken }) => {
-    LoansShow.init({ loanId, authenticityToken });
-    renderComponent(LoanAccountingEntryComponent, { id: loanId, memberId: memberId, authenticityToken: authenticityToken });
-  },
-
   "loans/form": (payload) => {
     renderComponent(LoanApplicationForm, payload);
   },
@@ -171,21 +172,15 @@ const hooks = {
   "insurance_accounts/show": ({ id }) => {
     renderComponent(InsuranceStatusComponent, { memberAccountId: id });
   },
-
-  "accounting/crb":  (payload) => { AccountingBooksIndex.init(payload); },
-  "accounting/cdb":  (payload) => { AccountingBooksIndex.init(payload); },
-  "accounting/jvb":  (payload) => { AccountingBooksIndex.init(payload); },
-  "accounting/misc": (payload) => { AccountingBooksIndex.init(payload); },
-
-  "accounting/accounting_codes/index": (payload) => {
-    AccountingCodesIndex.init();
-  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const { route, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
   const authenticityToken = $("meta[name='csrf-token']").attr('content');
   const options = { authenticityToken, ...payload }
+
+  console.log("payload:");
+  console.log(payload);
 
   // OLD
   const hook = hooks[route];

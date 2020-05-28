@@ -64,6 +64,8 @@ export default class AccountingEntryComponent extends React.Component {
         <SkCubeLoading/>
       );
     } else {
+      console.log("this.state.data:");
+      console.log(this.state.data);
       var accounting_entry_data = this.state.data.data.accounting_entry;
       return  (
         <div>
