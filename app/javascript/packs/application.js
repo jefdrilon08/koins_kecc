@@ -32,6 +32,8 @@ import "../deposit_collections/Index.js";
 import "../deposit_collections/Show.js";
 import "../time_deposit_collections/Index.js";
 import "../time_deposit_collections/Show.js";
+import "../withdrawal_collections/Index.js";
+import "../withdrawal_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -42,6 +44,7 @@ import BillingUIComponent from "../../../react/billings/BillingUIComponent";
 import MembershipPaymentCollectionUIComponent from "../../../react/membership_payment_collections/MembershipPaymentCollectionUIComponent";
 import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
 import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collections/TimeDepositCollectionUIComponent";
+import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collections/WithdrawalCollectionUIComponent";
 
 var Hooks = {};
 
@@ -229,6 +232,27 @@ $(document).ready(function() {
           id={timeDepositCollectionId}
         />,
         document.getElementById('time-deposit-collection-content')
+      );
+    }
+  } else if(controller == "withdrawal_collections") {
+    if(action == "index") {
+      WithdrawalCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var withdrawalCollectionId = $parameters.data('id');
+
+      WithdrawalCollectionsShow.init({
+        withdrawalCollectionId: withdrawalCollectionId,
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <WithdrawalCollectionUIComponent
+          authenticityToken={authenticityToken}
+          id={withdrawalCollectionId}
+        />,
+        document.getElementById('withdrawal-collection-content')
       );
     }
   }

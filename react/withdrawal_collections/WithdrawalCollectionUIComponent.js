@@ -8,7 +8,7 @@ import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import AddRecord from './AddRecord';
 import {numberWithCommas} from '../utils/helpers';
 
-export default class WithdrawalCollectionUIDisplay extends React.Component {
+export default class WithdrawalCollectionUIComponent extends React.Component {
   constructor(props) {
     super(props);
 

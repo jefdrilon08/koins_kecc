@@ -26,6 +26,24 @@ class WithdrawalCollectionsController < ApplicationController
     end
 
     @withdrawal_collections = @withdrawal_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Withdrawals"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show
@@ -36,6 +54,45 @@ class WithdrawalCollectionsController < ApplicationController
                         "data ->> 'withdrawal_collection_id' = ?",
                         @withdrawal_collection.id
                       ).order("created_at DESC")
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: withdrawal_collections_path,
+        text: "Withdrawals"
+      },
+      {
+        text: "Withdrawal: #{@withdrawal_collection.id}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-print",
+        link: "#",
+        class: "fa fa-print",
+        text: "Print"
+      }
+    ]
+
+    if @withdrawal_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+      @subheader_side_actions << {
+        link: withdrawal_collection_path(@withdrawal_collection.id),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-check",
+        id: "btn-approve",
+        text: "Approve"
+      }
+    end
   end
 
   def destroy
