@@ -59,25 +59,6 @@ import "../monthly_closing_collections/Index.js";
 import "../monthly_closing_collections/Show.js";
 import "../AccountingBooksIndex.js";
 
-// XXX: Namespace all under "app/javascript/components"
-import MainUI from "../../../react/dashboard/MainUI";
-import MembersFormDisplay from "../../../react/members/FormDisplay";
-import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
-import LoanApplicationForm from "../../../react/loans/ApplicationFormComponent";
-import LoanAccountingEntryComponent from "../../../react/loans/AccountingEntryComponent";
-import BillingUIComponent from "../../../react/billings/BillingUIComponent";
-import MembershipPaymentCollectionUIComponent from "../../../react/membership_payment_collections/MembershipPaymentCollectionUIComponent";
-import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
-import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collections/TimeDepositCollectionUIComponent";
-import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collections/WithdrawalCollectionUIComponent";
-import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
-import InsuranceWithdrawalCollectionUIComponent from "../../../react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
-import MonthlyClosingCollectionsShowUI from "../../../react/monthly_closing_collections/ShowUI";
-import InsuranceStatusComponent from "../../../react/member_accounts/InsuranceStatusComponent";
-
-import SavingsAccountsShow from "../savings_accounts/Show.js";
-import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/ShowWithdrawalRequest.js";
-
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
