@@ -1,26 +1,20 @@
-import 'datatables.net';
+//import 'datatables.net';
+import 'datatables.net-bs4';
 
-var AccountingCodesIndex = (function() {
-  var $dataTable;
+var $dataTable;
 
-  var init  = function() {
-    _cacheDom();
-    _bindEvents();
-  };
+var init  = function() {
+  _cacheDom();
+  _bindEvents();
+};
 
-  var _cacheDom = function() {
-    $dataTable  = $("#data-table");
-  };
+var _cacheDom = function() {
+  $dataTable  = $("#data-table");
+};
 
-  var _bindEvents = function() {
-    $dataTable.DataTable({
-      fixedHeader: true
-    });
-  };
+var _bindEvents = function() {
+  $dataTable.DataTable();
+};
 
-  return {
-    init: init
-  };
-})();
 
-export default AccountingCodesIndex;
+export default { init: init };

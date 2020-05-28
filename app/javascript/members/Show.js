@@ -1052,7 +1052,7 @@ var Show  = (function() {
     
   }
 
-  var init  = function(memberId, authenticityToken) {
+  var init  = function({ memberId, authenticityToken }) {
     _memberId           = memberId
     _authenticityToken  = authenticityToken
     _cacheDom();
