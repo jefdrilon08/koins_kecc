@@ -24,6 +24,24 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
     end
 
     @insurance_withdrawal_collections = @insurance_withdrawal_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Insurance Withdrawals"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show
@@ -34,6 +52,38 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
                         "data ->> 'insurance_withdrawal_collection_id' = ?",
                         @insurance_withdrawal_collection.id
                       ).order("created_at DESC")
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: insurance_withdrawal_collections_path,
+        text: "Insurance Withdrawals"
+      },
+      {
+        text: "Record: #{@insurance_withdrawal_collection.id}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    if @insurance_withdrawal_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+      @subheader_side_actions << {
+        link: insurance_withdrawal_collection_path(@insurance_withdrawal_collection),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      }
+
+      @subheader_side_actions << {
+        id: "btn-approve",
+        link: "#",
+        class: "fa fa-check",
+        text: "Approve"
+      }
+    end
   end
 
   def destroy

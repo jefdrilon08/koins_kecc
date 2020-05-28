@@ -50,3 +50,12 @@
       = link_to insurance_fund_transfer_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_fund_transfer_collections" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-money-check
         Insurance Fund Transfer
+    %li.c-sidebar-nav-item
+      = link_to insurance_withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_withdrawal_collections" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-money-check
+        Insurance Withdrawals
+    - if is_not_remote
+      %li.c-sidebar-nav-item
+        = link_to monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "monthly_closing_collections" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Monthly Closing Collections

@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var $btnUpdate;
   var $btnConfirmUpdate;
@@ -125,3 +127,5 @@ var Show  = (function() {
     init: init
   };
 })();
+
+window.MonthlyClosingCollectionsShow  = Show;

@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Show  = (function() {
   var options;
   var insuranceWithdrawalCollectionId;
@@ -111,3 +113,5 @@ var Show  = (function() {
     init: init
   };
 })();
+
+window.InsuranceWithdrawalCollectionsShow = Show;

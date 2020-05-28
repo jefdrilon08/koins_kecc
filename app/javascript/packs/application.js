@@ -38,6 +38,10 @@ import "../savings_insurance_transfer_collections/Index.js";
 import "../savings_insurance_transfer_collections/Show.js";
 import "../insurance_fund_transfer_collections/Index.js";
 import "../insurance_fund_transfer_collections/Show.js";
+import "../insurance_withdrawal_collections/Index.js";
+import "../insurance_withdrawal_collections/Show.js";
+import "../monthly_closing_collections/Index.js";
+import "../monthly_closing_collections/Show.js";
 
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
@@ -49,7 +53,8 @@ import MembershipPaymentCollectionUIComponent from "../../../react/membership_pa
 import DepositCollectionUIComponent from "../../../react/deposit_collections/DepositCollectionUIComponent";
 import TimeDepositCollectionUIComponent from "../../../react/time_deposit_collections/TimeDepositCollectionUIComponent";
 import WithdrawalCollectionUIComponent from "../../../react/withdrawal_collections/WithdrawalCollectionUIComponent";
-import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent"
+import InsuranceFundTransferCollectionUIComponent from "../../../react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
+import InsuranceWithdrawalCollectionUIComponent from "../../../react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 
 var Hooks = {};
 
@@ -295,6 +300,34 @@ $(document).ready(function() {
         />,
         document.getElementById('insurance-fund-transfer-collection-content')
       );
+    }
+  } else if(controller == "insurance_withdrawal_collections") {
+    if(action == "index") {
+      InsuranceWithdrawalCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
+      var id  = $parameters.data('id');
+
+      InsuranceWithdrawalCollectionsShow.init({
+        insuranceWithdrawalCollectionId: id,
+        authenticityToken: authenticityToken
+      });
+
+      ReactDOM.render(
+        <InsuranceWithdrawalCollectionUIComponent
+          authenticityToken={authenticityToken}
+          id={id}
+        />,
+        document.getElementById('insurance-withdrawal-collection-content')
+      );
+    }
+  } else if(controller == "monthly_closing_collections") {
+    if(action == "index") {
+      MonthlyClosingCollectionsIndex.init({
+        authenticityToken: authenticityToken
+      });
+    } else if(action == "show") {
     }
   }
 });

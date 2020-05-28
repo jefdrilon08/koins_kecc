@@ -1,41 +1,27 @@
 = title @insurance_withdrawal_collection.id
-= render partial: "show_header"
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @insurance_withdrawal_collection.pending?
-            .callout.callout-info
-              %p
-                Pindutin ang amount upang baguhin ito.
-          %h5
-            Insurance Withdrawal Collection for #{@insurance_withdrawal_collection.branch} / #{@insurance_withdrawal_collection.center} - #{@insurance_withdrawal_collection.collection_date.strftime("%b %d, %Y")}
-          #insurance-withdrawal-collection-content
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @insurance_withdrawal_collection.pending?
+              .c-callout.c-callout-info
+                %p
+                  Pindutin ang amount upang baguhin ito.
+            %h5
+              Insurance Withdrawal Collection for #{@insurance_withdrawal_collection.branch} / #{@insurance_withdrawal_collection.center} - #{@insurance_withdrawal_collection.collection_date.strftime("%b %d, %Y")}
+            #insurance-withdrawal-collection-content
 
-          - if debug?
-            %pre
-              %code
-                #{JSON.pretty_generate(JSON.parse(@insurance_withdrawal_collection.to_json))}
+            - if debug?
+              %pre
+                %code
+                  #{JSON.pretty_generate(JSON.parse(@insurance_withdrawal_collection.to_json))}
 
 = render partial: "shared/modals/print"
 = render partial: "insurance_withdrawal_collections/modals/approve"
 = render partial: "templates/error_list"
 
-#parameters{ data: { id: @insurance_withdrawal_collection.id } }
-
-= javascript_include_tag "InsuranceWithdrawalCollectionUI.min.react"
-= javascript_include_tag "insurance_withdrawal_collections/Show"
-
-:javascript
-  $(document).ready(function() {
-    var $parameters                     = $("#parameters");
-    var insuranceWithdrawalCollectionId = $parameters.data('id');
-    var authenticityToken               = $("meta[name='csrf-token']").attr('content');
-
-    Show.init({
-      insuranceWithdrawalCollectionId: insuranceWithdrawalCollectionId, 
-      authenticityToken: authenticityToken
-    });
-  });
+#parameters{ data: { id: @insurance_withdrawal_collection.id, controller: "#{params[:controller]}", action: "#{params[:action]}" } }

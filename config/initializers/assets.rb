@@ -14,8 +14,6 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile += [
-  "savings_insurance_transfer_collections/Index.js",
-  "savings_insurance_transfer_collections/Show.js",
   "administration/centers/Show.js",
   "administration/users/Index.js",
   "administration/user_demerits/Show.js",
@@ -48,8 +46,6 @@ Rails.application.config.assets.precompile += [
   "withdrawal_collections/Show.js",
   "insurance_withdrawal_collections/Index.js",
   "insurance_withdrawal_collections/Show.js",
-  "insurance_fund_transfer_collections/Index.js",
-  "insurance_fund_transfer_collections/Show.js",
   "data_stores/icpr/Index.js",
   "data_stores/icpr/Show.js",
   "data_stores/patronage_refund/Index.js",
@@ -89,8 +85,6 @@ Rails.application.config.assets.precompile += [
   "SurveyUI.min.react.js",
   "SurveyQuestionUI.min.react.js",
   "MembershipPaymentCollectionUI.min.react.js",
-  "InsuranceWithdrawalCollectionUI.min.react.js",
-  "InsuranceFundTransferCollectionUI.min.react.js",
   "Insights.min.react.js",
   "BranchManager.min.react.js",
   "BranchLoanProductStats.min.react.js",

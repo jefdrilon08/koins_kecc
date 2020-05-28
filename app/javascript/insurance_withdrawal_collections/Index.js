@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Index = (function() {
   var $btnNewTransaction;
   var $btnConfirmNewTransaction;
@@ -105,3 +107,5 @@ var Index = (function() {
     init: init
   };
 })();
+
+window.InsuranceWithdrawalCollectionsIndex  = Index;

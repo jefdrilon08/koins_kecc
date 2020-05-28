@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var Index = (function() {
   var $btnNew;
   var $btnConfirmNew;
@@ -95,3 +97,5 @@ var Index = (function() {
     init: init
   }
 })();
+
+window.MonthlyClosingCollectionsIndex = Index;

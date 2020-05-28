@@ -13,8 +13,6 @@ module.exports = {
     AccountingEntryForm: "./react/accounting/AccountingEntryForm.js",
     SurveyUI: "./react/administration/surveys/SurveyUI.js",
     SurveyQuestionUI: "./react/administration/surveys/survey_questions/SurveyQuestionUI.js",
-    InsuranceWithdrawalCollectionUI: "./react/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUI.js",
-    InsuranceFundTransferCollectionUI: "./react/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUI.js",
     BranchManager: "./react/administration/users/BranchManager.js",
     BranchLoanProductStats: "./react/dashboard/BranchLoanProductStats.js",
     LoanAccountingEntry: "./react/loans/AccountingEntry.js",

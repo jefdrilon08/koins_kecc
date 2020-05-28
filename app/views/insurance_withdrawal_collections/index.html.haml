@@ -1,30 +1,22 @@
 = title
-= render partial: "index_header"
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @insurance_withdrawal_collections.any?
-            = render partial: "index_list", locals: { insurance_withdrawal_collections: @insurance_withdrawal_collections }
-            = paginate @insurance_withdrawal_collections
-          - else
-            %p
-              No insurance_withdrawal_collections found
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            = render partial: "index_filter"
+            - if @insurance_withdrawal_collections.any?
+              = render partial: "index_list", locals: { insurance_withdrawal_collections: @insurance_withdrawal_collections }
+              = paginate @insurance_withdrawal_collections
+            - else
+              %p
+                No insurance_withdrawal_collections found
 
 = render partial: "insurance_withdrawal_collections/modals/new_transaction"
 = render partial: "templates/error_list"
 = render partial: "templates/loader"
 
-= javascript_include_tag "insurance_withdrawal_collections/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }
