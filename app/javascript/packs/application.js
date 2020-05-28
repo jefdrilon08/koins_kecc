@@ -71,12 +71,17 @@ const renderComponent = (Component, payload) => {
 
 // Better router
 document.addEventListener("DOMContentLoaded", () => {
-  const authenticityToken = $("meta[name='csrf-token']").attr('content')
   const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'))
+  const authenticityToken = $("meta[name='csrf-token']").attr('content')
+  payload.authenticityToken = authenticityToken
 
-  if (controller_action === "pages/index") { renderComponent(MainUI, payload) }
+  if (controller_action === "pages/index") {
+    renderComponent(MainUI, payload)
+  }
 
-  if (controller_action === "pages/login") { Login.init() }
+  if (controller_action === "pages/login") {
+    Login.init()
+  }
 
   if (controller_action === "savings_accounts/show") {
     const { id } = payload
