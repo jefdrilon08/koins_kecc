@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   as :user do
     get 'login', to: 'pages#login', as: :new_user_session
-    delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
+    get 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
   authenticate :user do

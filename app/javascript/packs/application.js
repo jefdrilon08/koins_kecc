@@ -201,7 +201,8 @@ const routes = {
   "accounting/jvb":  (payload) => { AccountingBooksIndex.init(payload); },
   "accounting/misc": (payload) => { AccountingBooksIndex.init(payload); },
 
-  "accounting_codes/index": (payload) => {
+  "accounting/accounting_codes/index": (payload) => {
+    AccountingCodesIndex.init();
   }
 }
 
@@ -209,6 +210,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
   const csrfToken = $("meta[name='csrf-token']").attr('content');
   const route = routes[controller_action];
+
+  console.log("controller_action: " + controller_action);
 
   if (route) {
     payload.authenticityToken = csrfToken;

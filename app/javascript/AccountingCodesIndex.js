@@ -1,7 +1,6 @@
 import 'datatables.net';
-//import 'datatables.net/css/jquery.dataTables.css';
 
-var Index = (function() {
+var AccountingCodesIndex = (function() {
   var $dataTable;
 
   var init  = function() {
@@ -23,3 +22,5 @@ var Index = (function() {
     init: init
   };
 })();
+
+export default AccountingCodesIndex;
