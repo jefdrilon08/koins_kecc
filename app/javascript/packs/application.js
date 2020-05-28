@@ -66,176 +66,145 @@ const renderComponent = (Component, payload) => {
   )
 }
 
-// Better router
-document.addEventListener("DOMContentLoaded", () => {
-  const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'))
-  const authenticityToken = $("meta[name='csrf-token']").attr('content')
-  payload.authenticityToken = authenticityToken
+const routes = {
+  "pages/index": (payload) => {
+    renderComponent(DashboardMainUI, payload);
+  },
 
-  if (controller_action === "pages/index") {
-    renderComponent(MainUI, payload);
-  }
-
-  if (controller_action == "members/index") {
+  "members/index": (payload) => {
     MembersIndex.init();
-  }
+  },
 
-  if (controller_action == "members/show") {
-    const { memberId } = payload;
+  "members/show": ({ memberId, authenticityToken }) => {
     MembersShow.init(memberId, authenticityToken);
-  }
+  },
 
-  if (controller_action == "members/form") {
-    const { id, memberTypes } = payload;
-
+  "members/form": ({ id, memberTypes }) => {
     renderComponent(MembersFormDisplay, payload);
-  }
+  },
 
-  if (controller_action === "pages/login") {
+  "pages/login": (payload) => {
     PagesLogin.init()
-  }
+  },
 
-  if (controller_action === "savings_accounts/show") {
-    const { id } = payload;
+  "savings_accounts/show": ({ id, authenticityToken }) => {
     SavingsAccountsShow.init({ id, authenticityToken });
-  }
+  },
 
-  if (controller_action == "savings_accounts/time_deposit_withdrawal") {
-    const { id } = payload;
+  "savings_accounts/time_deposit_withdrawal": ({ id, authenticityToken }) => {
     SavingsAccountsShowWithdrawalRequest.init({ id, authenticityToken });
-  }
+  },
 
-  if (controller_action == "members/survey_answer_form") {
+  "members/survey_answer_form": (payload) => {
     renderComponent(SurveyAnswerUIDisplay, payload);
-  }
+  },
 
-  if (controller_action == "members/survey_answer") {
-    const { id, memberId } = payload;
-
+  "members/survey_answer": ({ id, memberId, authenticityToken }) => {
     SurveyAnswer.init({ id, memberId, authenticityToken });
-  }
+  },
 
-  if (controller_action == "loans/show") {
-    const { loanId, memberId }  = payload;
-
+  "loans/show": ({ loanId, memberId, authenticityToken }) => {
     LoansShow.init({ loanId, authenticityToken });
-
     renderComponent(LoanAccountingEntryComponent, { id: loanId, memberId: memberId, authenticityToken: authenticityToken });
-  }
+  },
 
-  if (controller_action == "loans/form") {
-    renderComponent(LoanApplicationForm, payload); 
-  }
+  "loans/form": (payload) => {
+    renderComponent(LoanApplicationForm, payload);
+  },
 
-  if (controller_action == "billings/index") {
+  "billings/index": ({ authenticityToken }) => {
     BillingsIndex.init({ authenticityToken });
-  }
-  
-  if (controller_action == "billings/show") {
-    const { billingId } = payload;
+  },
 
+  "billings/show": ({ billingId, authenticityToken }) => {
     BillingsShow.init({ billingId, authenticityToken });
-
     renderComponent(BillingUIComponent, { id: billingId, authenticityToken: authenticityToken });
-  }
+  },
 
-  if (controller_action == "membership_payment_collections/index") {
-    MembershipPaymentCollectionsIndex.init({ authenticityToken: authenticityToken });
-  }
+  "membership_payment_collections/index": ({ authenticityToken }) => {
+    MembershipPaymentCollectionsIndex.init({ authenticityToken });
+  },
 
-  if (controller_action == "membership_payment_collections/show") {
-    const { membershipPaymentCollectionId } = payload;
-
-    MembershipPaymentCollectionsShow.init({ membershipPaymentCollectionId, authenticityToken });
-
+  "membership_payment_collections/show": ({ membershipPaymentCollectionId, authenticityToken }) => {
     renderComponent(MembershipPaymentCollectionUIComponent, { id: membershipPaymentCollectionId, authenticityToken: authenticityToken });
-  }
+  },
 
-  if (controller_action == "deposit_collections/index") {
+  "deposit_collections/index": ({ authenticityToken }) => {
     DepositCollectionsIndex.init({ authenticityToken: authenticityToken });
-  }
+  },
 
-  if (controller_action == "deposit_collections/show") {
-    const { depositCollectionId, centers } = payload;
-
+  "deposit_collections/show": ({ depositCollectionId, centers, authenticityToken }) => {
     DepositCollectionsShow.init({ depositCollectionId, authenticityToken });
-
     renderComponent(DepositCollectionUIComponent, { authenticityToken: authenticityToken, id: depositCollectionId, centers: centers });
-  }
+  },
 
-  if (controller_action == "deposit_collections/index") {
+  "deposit_collections/index": ({ authenticityToken }) => {
     TimeDepositCollectionsIndex.init({ authenticityToken });
-  }
+  },
 
-  if (controller_action == "deposit_collections/show") {
-    const { timeDepositCollectionId } = payload;
-
+  "deposit_collections/show": ({ timeDepositCollectionId, authenticityToken }) => {
     TimeDepositCollectionsShow.init({ timeDepositCollectionId, authenticityToken });
-
     renderComponent(TimeDepositCollectionUIComponent, { id: timeDepositCollectionId, authenticityToken: authenticityToken });
-  }
+  },
 
-  if (controller_action == "withdrawal_collections/index") {
+  "withdrawal_collections/index": ({ authenticityToken }) => {
     WithdrawalCollectionsShow.init({ authenticityToken });
-  }
+  },
 
-  if (controller_action == "withdrawal_collections/show") {
-    const { withdrawalCollectionId }  = payload;
-
+  "withdrawal_collections/show": ({ withdrawalCollectionId, authenticityToken }) => {
     WithdrawalCollectionsShow.init({ withdrawalCollectionId, authenticityToken });
-
     renderComponent(WithdrawalCollectionUIComponent, { id: withdrawalCollectionId, authenticityToken: authenticityToken });
-  }
+  },
 
-  if (controller_action == "savings_insurance_transfer_collections/index") {
+  "savings_insurance_transfer_collections/index": (payload) => {
     SavingsInsuranceTransferCollectionsIndex.init({ authenticityToken });
-  }
+  },
 
-  if (controller_action == "savings_insurance_transfer_collections/show") {
+  "savings_insurance_transfer_collections/show": (payload) => {
     SavingsInsuranceTransferCollectionsShow.init(payload);
-  }
+  },
 
-  if (controller_action == "insurance_fund_transfer_collections/index") {
+  "insurance_fund_transfer_collections/index": (payload) => {
     InsuranceFundTransferCollectionsIndex.init(payload);
-  }
+  },
 
-  if (controller_action == "insurance_fund_transfer_collections/show") {
-    const { id, centers } = payload;
-
+  "insurance_fund_transfer_collections/show": ({ id, centers, authenticityToken }) => {
     InsuranceFundTransferCollectionsShow.init({ authenticityToken: authenticityToken, insuranceFundTransferCollectionId: id });
-
     renderComponent(InsuranceFundTransferCollectionUIComponent, payload);
-  }
+  },
 
-  if (controller_action == "insurance_withdrawal_collections/index") {
+  "insurance_withdrawal_collections/index": (payload) => {
     InsuranceWithdrawalCollectionsIndex.init(payload);
-  }
+  },
 
-  if (controller_action == "insurance_withdrawal_collections/show") {
-    const { id } = payload;
-
+  "insurance_withdrawal_collections/show": ({ id, authenticityToken }) => {
     InsuranceWithdrawalCollectionsShow.init({ insuranceWithdrawalCollectionId: id, authenticityToken: authenticityToken });
-
     renderComponent(InsuranceWithdrawalCollectionUIComponent, payload);
-  }
+  },
 
-  if (controller_action == "monthly_closing_collections/index") {
+  "monthly_closing_collections/index": (payload) => {
     MonthlyClosingCollectionsIndex.init(payload);
-  }
+  },
 
-  if (controller_action == "monthly_closing_collections/show") {
+  "monthly_closing_collections/show": (payload) => {
     MonthlyClosingCollectionsShow.init(payload);
-
     renderComponent(MonthlyClosingCollectionsShowUI, payload);
-  }
+  },
 
-  if (controller_action == "insurance_accounts/show") {
-    const { id } = payload;
-
+  "insurance_accounts/show": ({ id }) => {
     renderComponent(InsuranceStatusComponent, { memberAccountId: id });
-  }
+  },
 
-  if (controller_action == "accounting/crb" || controller_action == "accounting/cdb" || controller_action == "accounting/jvb" || controller_action == "accounting/misc") {
-    AccountingBooksIndex.init(payload); 
-  }
+  "accounting/crb":  (payload) => { AccountingBooksIndex.init(payload); },
+  "accounting/cdb":  (payload) => { AccountingBooksIndex.init(payload); },
+  "accounting/jvb":  (payload) => { AccountingBooksIndex.init(payload); },
+  "accounting/misc": (payload) => { AccountingBooksIndex.init(payload); },
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
+  const authenticityToken = $("meta[name='csrf-token']").attr('content');
+  payload.authenticityToken = authenticityToken;
+
+  routes[controller_action](payload);
 });
