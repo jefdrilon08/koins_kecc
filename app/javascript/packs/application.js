@@ -42,9 +42,8 @@ import "../insurance_withdrawal_collections/Index.js";
 import "../insurance_withdrawal_collections/Show.js";
 import "../monthly_closing_collections/Index.js";
 import "../monthly_closing_collections/Show.js";
-import "../savings_accounts/Show.js";
-import "../savings_accounts/ShowWithdrawalRequest.js";
 
+// XXX: Namespace all under "app/javascript/components"
 import MainUI from "../../../react/dashboard/MainUI";
 import MembersFormDisplay from "../../../react/members/FormDisplay";
 import SurveyAnswerUIDisplay from "../../../react/members/SurveyAnswerUIDisplay";
@@ -60,7 +59,35 @@ import InsuranceWithdrawalCollectionUIComponent from "../../../react/insurance_w
 import MonthlyClosingCollectionsShowUI from "../../../react/monthly_closing_collections/ShowUI";
 import InsuranceStatusComponent from "../../../react/member_accounts/InsuranceStatusComponent";
 
-var Hooks = {};
+import SavingsAccountsShow from "../savings_accounts/Show.js";
+import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/SavingsAccountsShowWithdrawalRequest.js";
+
+const renderComponent = (Component, payload) => {
+  ReactDOM.render(
+    <Component {...payload} />,
+    document.getElementById(payload._react_dom_id),
+  )
+}
+
+// Better router
+document.addEventListener("DOMContentLoaded", () => {
+  const authenticityToken = $("meta[name='csrf-token']").attr('content')
+  const { controller_action, payload } = JSON.parse($("meta[name='parameters']").attr('content'))
+
+  if (controller_action === "pages/index") { renderComponent(MainUI, payload) }
+
+  if (controller_action === "pages/login") { Login.init() }
+
+  if (controller_action === "savings_accounts/show") {
+    const { id } = payload
+    SavingsAccountsShow.init({ id, authenticityToken })
+  }
+
+  if (controller_action == "savings_accounts/time_deposit_withdrawal") {
+    const { id } = payload
+    SavingsAccountsShowWithdrawalRequest.init({ id, authenticityToken })
+  }
+})
 
 // Router
 $(document).ready(function() {
@@ -72,23 +99,7 @@ $(document).ready(function() {
 
   console.log("Controller: " + controller + " Action: " + action);
 
-  if(controller == "pages") {
-    if(action == "login") {
-      Login.init();
-    } else if(action == "index") {
-      var username  = $parameters.data('username');
-      var roles     = $parameters.data('roles');
-
-      ReactDOM.render(
-        <MainUI
-          authenticityToken={authenticityToken}
-          username={username}
-          roles={roles}
-        />,
-        document.getElementById('dashboard-content')
-      );
-    }
-  } else if(controller == "members") {
+  if(controller == "members") {
     if(action == "index") {
       MembersIndex.init();
     } else if(action == "show") {
@@ -347,23 +358,7 @@ $(document).ready(function() {
         document.getElementById('content')
       );
     }
-  } else if(controller == "savings_accounts") {
-    if(action == "show") {
-      var id  = $parameters.data("id");
-
-      SavingsAccountsShow.init({
-        id: id,
-        authenticityToken: authenticityToken
-      });
-    } else if(action == "time_deposit_withdrawal") {
-      var id  = $parameters.data("id");
-
-      SavingsAccountsShowWithdrawalRequest.init({
-        id: id,
-        authenticityToken: authenticityToken
-      });
-    }
-  } else if(controller == "insurance_accounts") {
+  } if(controller == "insurance_accounts") {
     if(action == "show") {
       var id  = $parameters.data("member-account-id");
 

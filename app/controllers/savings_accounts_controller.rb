@@ -78,6 +78,8 @@ class SavingsAccountsController < ApplicationController
         text: "Print"
       }
     ]
+
+    @payload = { id: @data_store.id }
   end
 
   def show
@@ -118,10 +120,6 @@ class SavingsAccountsController < ApplicationController
                       )
     end
 
-    @payload  = {
-      id: @savings_account.id
-    }
-
     @subheader_items = [
       {
         text: "Accounts"
@@ -159,5 +157,7 @@ class SavingsAccountsController < ApplicationController
         text: "Maintaining Balance: #{helpers.number_to_currency(@savings_account.maintaining_balance, unit: '')}"
       }
     ]
+
+    @payload = { id: @savings_account.id }
   end
 end
