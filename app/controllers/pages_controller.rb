@@ -211,6 +211,15 @@ class PagesController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def daily_report_insurance_account_status
+    @subheader_items = [
+      {
+        text: "Insurance Account Status"
+      }
+    ]
+
+    @subheader_side_actions = []
+  end
 
   def daily_report_insurance_account_status_excel
     branch = params[:branch]

@@ -79,6 +79,7 @@ import MemberAccountValidationsShow from "../models/MemberAccountValidationsShow
 import MemberAccountValidationsForm from "../models/MemberAccountValidationsForm.js";
 import ValidationsReport from "../models/ValidationsReport.js";
 import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
+import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -142,7 +143,8 @@ const hooks = {
   "member_account_validations/show":                [MemberAccountValidationsShow],
   "member_account_validations/edit":                [MemberAccountValidationsForm],
   "pages/validations":                              [ValidationsReport],
-  "accounting/accounting_entries/show":             [AccountingEntriesShow]
+  "accounting/accounting_entries/show":             [AccountingEntriesShow],
+  "pages/daily_report_insurance_account_status":    [InsuranceAccountStatusIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
