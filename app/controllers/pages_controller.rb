@@ -59,6 +59,23 @@ class PagesController < ApplicationController
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
     end
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Members for Exit Age"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: download_exit_age_path,
+        class: "fa fa-download",
+        text: "Download"
+      }
+    ]
   end
 
   def lapsed_members
