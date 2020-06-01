@@ -69,6 +69,7 @@ import DataStoresIcprShow from "../models/DataStoresIcprShow.js";
 import PatronageRefundIndex from "../models/PatronageRefundIndex.js";
 import PatronageRefundShow from "../models/PatronageRefundShow.js";
 import BalanceSheetsIndex from "../models/BalanceSheetsIndex.js";
+import IncomeStatementsIndex from "../models/IncomeStatementsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -122,7 +123,8 @@ const hooks = {
   "data_stores/icpr/show":                        [DataStoresIcprShow, DataStoresIcprShowComponent],
   "data_stores/patronage_refund/index":           [PatronageRefundIndex],
   "data_stores/patronage_refund/show":            [PatronageRefundShow],
-  "accounting/balance_sheets/index":              [BalanceSheetsIndex]
+  "accounting/balance_sheets/index":              [BalanceSheetsIndex],
+  "accounting/income_statements/index":           [IncomeStatementsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
