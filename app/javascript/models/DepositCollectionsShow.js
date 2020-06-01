@@ -398,7 +398,7 @@ var Show  = (function() {
   };
 
   var init  = function(options) {
-    depositCollectionId = options.depositCollectionId;
+    depositCollectionId = options.id;
     authenticityToken   = options.authenticityToken;
 
     _cacheDom();

@@ -27,7 +27,7 @@ export default class ErrorDisplay extends React.Component {
   render() {
     return  (
       <div className="error-display">
-        <div className="callout callout-danger">
+        <div className="c-callout c-callout-danger">
           <div className="row">
             <div className="col">
               <br/>

@@ -146,6 +146,4 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       redirect_to insurance_fund_transfer_collection_path(@insurance_fund_transfer_collection)
     end  
   end
-
-
 end

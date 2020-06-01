@@ -37,28 +37,27 @@ import SavingsAccountsShowWithdrawalRequest from "../savings_accounts/ShowWithdr
 import AccountingCodesIndex from "../models/AccountingCodesIndex.js";
 import AccountingBooksIndex from "../models/AccountingBooksIndex.js";
 import LoansShow from "../models/LoansShow.js";
-
-import "../members/Index.js";
-import "../members/Show.js";
-import "../members/SurveyAnswer.js";
-import "../billings/Index.js";
-import "../billings/Show.js";
-import "../membership_payment_collections/Index.js";
-import "../membership_payment_collections/Show.js";
-import "../deposit_collections/Index.js";
-import "../deposit_collections/Show.js";
-import "../time_deposit_collections/Index.js";
-import "../time_deposit_collections/Show.js";
-import "../withdrawal_collections/Index.js";
-import "../withdrawal_collections/Show.js";
-import "../savings_insurance_transfer_collections/Index.js";
-import "../savings_insurance_transfer_collections/Show.js";
-import "../insurance_fund_transfer_collections/Index.js";
-import "../insurance_fund_transfer_collections/Show.js";
-import "../insurance_withdrawal_collections/Index.js";
-import "../insurance_withdrawal_collections/Show.js";
-import "../monthly_closing_collections/Index.js";
-import "../monthly_closing_collections/Show.js";
+import BillingsIndex from "../models/BillingsIndex.js";
+import BillingsShow from "../models/BillingsShow.js";
+import MembershipPaymentCollectionsIndex from "../models/MembershipPaymentCollectionsIndex.js";
+import MembershipPaymentCollectionsShow from "../models/MembershipPaymentCollectionsShow.js";
+import DepositCollectionsIndex from "../models/DepositCollectionsIndex.js";
+import DepositCollectionsShow from "../models/DepositCollectionsShow.js";
+import TimeDepositCollectionsIndex from "../models/TimeDepositCollectionsIndex.js";
+import TimeDepositCollectionsShow from "../models/TimeDepositCollectionsShow.js";
+import WithdrawalCollectionsIndex from "../models/WithdrawalCollectionsIndex.js";
+import WithdrawalCollectionsShow from "../models/WithdrawalCollectionsShow.js";
+import MembersIndex from "../models/MembersIndex.js";
+import MembersShow from "../models/MembersShow.js";
+import SurveyAnswer from "../models/SurveyAnswer.js";
+import SavingsInsuranceTransferCollectionsIndex from "../models/SavingsInsuranceTransferCollectionsIndex.js";
+import SavingsInsuranceTransferCollectionsShow from "../models/SavingsInsuranceTransferCollectionsShow.js";
+import InsuranceFundTransferCollectionsIndex from "../models/InsuranceFundTransferCollectionsIndex.js";
+import InsuranceFundTransferCollectionsShow from "../models/InsuranceFundTransferCollectionsShow.js";
+import InsuranceWithdrawalCollectionsIndex from "../models/InsuranceWithdrawalCollectionsIndex.js";
+import InsuranceWithdrawalCollectionsShow from "../models/InsuranceWithdrawalCollectionsShow.js";
+import MonthlyClosingCollectionsIndex from "../models/MonthlyClosingCollectionsIndex.js";
+import MonthlyClosingCollectionsShow from "../models/MonthlyClosingCollectionsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -67,111 +66,42 @@ const renderComponent = (Component, payload) => {
   )
 }
 
-const newHooks = {
-  "members/form":                             [MembersFormDisplay],
-  "members/index":                            [MembersIndex],
-  "members/show":                             [MembersShow],
-  "members/survey_answer":                    [SurveyAnswer],
-  "members/survey_answer_form":               [SurveyAnswerUIDisplay],
-  "pages/index":                              [DashboardMainUI],
-  "pages/login":                              [PagesLogin],
-  "savings_accounts/show":                    [SavingsAccountsShow],
-  "savings_accounts/time_deposit_withdrawal": [SavingsAccountsShowWithdrawalRequest],
-  "accounting/crb":                           [AccountingBooksIndex],
-  "accounting/cdb":                           [AccountingBooksIndex],
-  "accounting/jvb":                           [AccountingBooksIndex],
-  "accounting/misc":                          [AccountingBooksIndex],
-  "accounting/accounting_codes/index":        [AccountingCodesIndex],
-  "loans/show":                               [LoansShow, LoanAccountingEntryComponent]
-}
-
 const hooks = {
-  "loans/form": (payload) => {
-    renderComponent(LoanApplicationForm, payload);
-  },
-
-  "billings/index": ({ authenticityToken }) => {
-    BillingsIndex.init({ authenticityToken });
-  },
-
-  "billings/show": ({ billingId, authenticityToken }) => {
-    BillingsShow.init({ billingId, authenticityToken });
-    renderComponent(BillingUIComponent, { id: billingId, authenticityToken: authenticityToken });
-  },
-
-  "membership_payment_collections/index": ({ authenticityToken }) => {
-    MembershipPaymentCollectionsIndex.init({ authenticityToken });
-  },
-
-  "membership_payment_collections/show": ({ membershipPaymentCollectionId, authenticityToken }) => {
-    renderComponent(MembershipPaymentCollectionUIComponent, { id: membershipPaymentCollectionId, authenticityToken: authenticityToken });
-  },
-
-  "deposit_collections/index": ({ authenticityToken }) => {
-    DepositCollectionsIndex.init({ authenticityToken: authenticityToken });
-  },
-
-  "deposit_collections/show": ({ depositCollectionId, centers, authenticityToken }) => {
-    DepositCollectionsShow.init({ depositCollectionId, authenticityToken });
-    renderComponent(DepositCollectionUIComponent, { authenticityToken: authenticityToken, id: depositCollectionId, centers: centers });
-  },
-
-  "deposit_collections/index": ({ authenticityToken }) => {
-    TimeDepositCollectionsIndex.init({ authenticityToken });
-  },
-
-  "deposit_collections/show": ({ timeDepositCollectionId, authenticityToken }) => {
-    TimeDepositCollectionsShow.init({ timeDepositCollectionId, authenticityToken });
-    renderComponent(TimeDepositCollectionUIComponent, { id: timeDepositCollectionId, authenticityToken: authenticityToken });
-  },
-
-  "withdrawal_collections/index": ({ authenticityToken }) => {
-    WithdrawalCollectionsShow.init({ authenticityToken });
-  },
-
-  "withdrawal_collections/show": ({ withdrawalCollectionId, authenticityToken }) => {
-    WithdrawalCollectionsShow.init({ withdrawalCollectionId, authenticityToken });
-    renderComponent(WithdrawalCollectionUIComponent, { id: withdrawalCollectionId, authenticityToken: authenticityToken });
-  },
-
-  "savings_insurance_transfer_collections/index": (payload) => {
-    SavingsInsuranceTransferCollectionsIndex.init({ authenticityToken });
-  },
-
-  "savings_insurance_transfer_collections/show": (payload) => {
-    SavingsInsuranceTransferCollectionsShow.init(payload);
-  },
-
-  "insurance_fund_transfer_collections/index": (payload) => {
-    InsuranceFundTransferCollectionsIndex.init(payload);
-  },
-
-  "insurance_fund_transfer_collections/show": ({ id, centers, authenticityToken }) => {
-    InsuranceFundTransferCollectionsShow.init({ authenticityToken: authenticityToken, insuranceFundTransferCollectionId: id });
-    renderComponent(InsuranceFundTransferCollectionUIComponent, payload);
-  },
-
-  "insurance_withdrawal_collections/index": (payload) => {
-    InsuranceWithdrawalCollectionsIndex.init(payload);
-  },
-
-  "insurance_withdrawal_collections/show": ({ id, authenticityToken }) => {
-    InsuranceWithdrawalCollectionsShow.init({ insuranceWithdrawalCollectionId: id, authenticityToken: authenticityToken });
-    renderComponent(InsuranceWithdrawalCollectionUIComponent, payload);
-  },
-
-  "monthly_closing_collections/index": (payload) => {
-    MonthlyClosingCollectionsIndex.init(payload);
-  },
-
-  "monthly_closing_collections/show": (payload) => {
-    MonthlyClosingCollectionsShow.init(payload);
-    renderComponent(MonthlyClosingCollectionsShowUI, payload);
-  },
-
-  "insurance_accounts/show": ({ id }) => {
-    renderComponent(InsuranceStatusComponent, { memberAccountId: id });
-  },
+  "members/form":                                 [MembersFormDisplay],
+  "members/index":                                [MembersIndex],
+  "members/show":                                 [MembersShow],
+  "members/survey_answer":                        [SurveyAnswer],
+  "members/survey_answer_form":                   [SurveyAnswerUIDisplay],
+  "pages/index":                                  [DashboardMainUI],
+  "pages/login":                                  [PagesLogin],
+  "savings_accounts/show":                        [SavingsAccountsShow],
+  "savings_accounts/time_deposit_withdrawal":     [SavingsAccountsShowWithdrawalRequest],
+  "accounting/crb":                               [AccountingBooksIndex],
+  "accounting/cdb":                               [AccountingBooksIndex],
+  "accounting/jvb":                               [AccountingBooksIndex],
+  "accounting/misc":                              [AccountingBooksIndex],
+  "accounting/accounting_codes/index":            [AccountingCodesIndex],
+  "loans/show":                                   [LoansShow, LoanAccountingEntryComponent],
+  "loans/form":                                   [LoanApplicationForm],
+  "billings/index":                               [BillingsIndex],
+  "billings/show":                                [BillingsShow, BillingUIComponent],
+  "membership_payment_collections/index":         [MembershipPaymentCollectionsIndex],
+  "membership_payment_collections/show":          [MembershipPaymentCollectionsShow, MembershipPaymentCollectionUIComponent],
+  "deposit_collections/index":                    [DepositCollectionsIndex],
+  "deposit_collections/show":                     [DepositCollectionsShow, DepositCollectionUIComponent],
+  "time_deposit_collections/index":               [TimeDepositCollectionsIndex],
+  "time_deposit_collections/show":                [TimeDepositCollectionsShow, TimeDepositCollectionUIComponent],
+  "withdrawal_collections/index":                 [WithdrawalCollectionsIndex],
+  "withdrawal_collections/show":                  [WithdrawalCollectionsShow, WithdrawalCollectionUIComponent],
+  "savings_insurance_transfer_collections/index": [SavingsInsuranceTransferCollectionsIndex],
+  "savings_insurance_transfer_collections/show":  [SavingsInsuranceTransferCollectionsShow],
+  "insurance_fund_transfer_collections/index":    [InsuranceFundTransferCollectionsIndex],
+  "insurance_fund_transfer_collections/show":     [InsuranceFundTransferCollectionsShow, InsuranceFundTransferCollectionUIComponent],
+  "insurance_withdrawal_collections/index":       [InsuranceWithdrawalCollectionsIndex],
+  "insurance_withdrawal_collections/show":        [InsuranceWithdrawalCollectionsShow, InsuranceWithdrawalCollectionUIComponent],
+  "monthly_closing_collections/index":            [MonthlyClosingCollectionsIndex],
+  "monthly_closing_collections/show":             [MonthlyClosingCollectionsShow, MonthlyClosingCollectionsShowUI],
+  "insurance_accounts/show":                      [InsuranceStatusComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -181,16 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("payload:");
   console.log(payload);
-
-  // OLD
-  const hook = hooks[route];
-  if (hook) {
-    hook(options);
-  }
-
   console.log("route: " + route);
-  // NEW
-  const components = newHooks[route];
+
+  const components = hooks[route];
   if (components) {
     components.forEach((component) => {
       if (typeof component.init === "function") {

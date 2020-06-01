@@ -41,8 +41,6 @@ class BillingsController < ApplicationController
         text: "New Transaction"
       }
     ]
-
-    @payload = {}
   end
 
   def show
@@ -129,7 +127,7 @@ class BillingsController < ApplicationController
     }
 
     @payload = {
-      billingId: @billing.id
+      id: @billing.id
     }
   end
 

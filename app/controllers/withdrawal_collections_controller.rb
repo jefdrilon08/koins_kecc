@@ -95,7 +95,7 @@ class WithdrawalCollectionsController < ApplicationController
     end
 
     @payload = {
-      withdrawalCollectionId: @withdrawal_collection.id
+      id: @withdrawal_collection.id
     }
   end
 

@@ -145,7 +145,7 @@ class DepositCollectionsController < ApplicationController
     end
 
     @payload = {
-      depositCollectionId: @deposit_collection.id,
+      id: @deposit_collection.id,
       centers: helpers.fetch_centers(@deposit_collection.branch)
     }
   end

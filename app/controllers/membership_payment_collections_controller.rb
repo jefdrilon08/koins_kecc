@@ -102,7 +102,7 @@ class MembershipPaymentCollectionsController < ApplicationController
     end
 
     @payload = {
-      membershipPaymentCollectionId: @membership_payment_collection.id
+      id: @membership_payment_collection.id
     }
   end
 
