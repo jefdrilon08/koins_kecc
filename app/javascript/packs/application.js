@@ -29,6 +29,7 @@ import InsuranceFundTransferCollectionUIComponent from "../components/insurance_
 import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
+import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -101,7 +102,8 @@ const hooks = {
   "insurance_withdrawal_collections/show":        [InsuranceWithdrawalCollectionsShow, InsuranceWithdrawalCollectionUIComponent],
   "monthly_closing_collections/index":            [MonthlyClosingCollectionsIndex],
   "monthly_closing_collections/show":             [MonthlyClosingCollectionsShow, MonthlyClosingCollectionsShowUI],
-  "insurance_accounts/show":                      [InsuranceStatusComponent]
+  "insurance_accounts/show":                      [InsuranceStatusComponent],
+  "accounting/trial_balance":                     [TrialBalanceComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

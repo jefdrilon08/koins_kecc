@@ -78,7 +78,6 @@ Rails.application.config.assets.precompile += [
   "MembersForm.min.react.js",
   "MembersFormResignation.min.react.js",
   "MemberAccountsSavingsIndex.min.react.js",
-  "AccountingTrialBalance.min.react.js",
   "AccountingGeneralLedger.min.react.js",
   "AccountingEntryForm.min.react.js",
   "SurveyUI.min.react.js",

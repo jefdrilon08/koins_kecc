@@ -13,6 +13,10 @@ class AccountingController < ApplicationController
 
     @subheader_side_actions = [
     ]
+
+    @payload = {
+      accountingFunds: helpers.accounting_funds.to_json
+    }
   end
 
   def general_ledger_excel_url
