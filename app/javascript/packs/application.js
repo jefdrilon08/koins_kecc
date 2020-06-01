@@ -70,6 +70,8 @@ import PatronageRefundIndex from "../models/PatronageRefundIndex.js";
 import PatronageRefundShow from "../models/PatronageRefundShow.js";
 import BalanceSheetsIndex from "../models/BalanceSheetsIndex.js";
 import IncomeStatementsIndex from "../models/IncomeStatementsIndex.js";
+import SubsidiaryAdjustmentsIndex from "../models/SubsidiaryAdjustmentsIndex.js";
+import SubsidiaryAdjustmentsShow from "../models/SubsidiaryAdjustmentsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -124,7 +126,9 @@ const hooks = {
   "data_stores/patronage_refund/index":           [PatronageRefundIndex],
   "data_stores/patronage_refund/show":            [PatronageRefundShow],
   "accounting/balance_sheets/index":              [BalanceSheetsIndex],
-  "accounting/income_statements/index":           [IncomeStatementsIndex]
+  "accounting/income_statements/index":           [IncomeStatementsIndex],
+  "adjustments/subsidiary_adjustments/index":     [SubsidiaryAdjustmentsIndex],
+  "adjustments/subsidiary_adjustments/show":      [SubsidiaryAdjustmentsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

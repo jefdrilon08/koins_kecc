@@ -1,44 +1,31 @@
-= render partial: "show_header"
+= title @adjustment_record.id
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @adjustment_record.pending?
-            = render partial: "form_add"
-          .message
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @adjustment_record.pending?
+              = render partial: "form_add"
+            .message
 
-          - if @data[:records].any?
-            = render partial: "members_table"
-          - else
-            %p
-              No records found.
-          %hr
+            - if @data[:records].any?
+              = render partial: "members_table"
+            - else
+              %p
+                No records found.
+            %hr
 
-          %h4
-            Accounting Entry
-          - if @adjustment_record.pending?
-            = render partial: "accounting_entry_controls"
-          = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
-
-#parameters{ data: { id: @adjustment_record.id } }
+            %h4
+              Accounting Entry
+            - if @adjustment_record.pending?
+              = render partial: "accounting_entry_controls"
+            = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
 
 = render partial: "adjustments/subsidiary_adjustments/modals/approve"
 = render partial: "adjustments/subsidiary_adjustments/modals/delete"
 = render partial: "adjustments/subsidiary_adjustments/modals/delete_member"
 = render partial: "adjustments/subsidiary_adjustments/modals/delete_accounting_entry"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "adjustments/subsidiary_adjustments/Show"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-    var id                = $("#parameters").data("id");
-
-    Show.init({
-      authenticityToken: authenticityToken,
-      id: id
-    });
-  });

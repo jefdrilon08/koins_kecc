@@ -29,8 +29,6 @@ Rails.application.config.assets.precompile += [
   "administration/loan_products/Index.js",
 	"administration/member_shares/Print.js",
 	"accounting/BooksIndex.js",
-  "adjustments/subsidiary_adjustments/Index.js",
-  "adjustments/subsidiary_adjustments/Show.js",
   "adjustments/batch_moratorium_adjustments/Index.js",
   "adjustments/batch_moratorium_adjustments/Show.js",
   "savings_accounts/ShowWithdrawalRequest.js",

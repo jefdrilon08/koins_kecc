@@ -1,28 +1,19 @@
-= render partial: "index_header"
+= title
+= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @adjustment_records.any?
-            = render partial: "index_list"
-            = paginate @adjustment_records
-          - else
-            %p
-              No adjustment records found
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            = render partial: "index_filter"
+            - if @adjustment_records.any?
+              = render partial: "index_list"
+              = paginate @adjustment_records
+            - else
+              %p
+                No adjustment records found
 
 = render partial: "adjustments/subsidiary_adjustments/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "adjustments/subsidiary_adjustments/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });
