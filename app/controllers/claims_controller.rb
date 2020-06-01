@@ -122,7 +122,25 @@ class ClaimsController < ApplicationController
       @claims = @claims.where(status: @status)
     end
   
-     @claims = @claims.page(params[:page]).per(25)
+    @claims = @claims.page(params[:page]).per(25)
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Claims Register"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Claims"
+      }
+    ]
   end
   
   def destroy

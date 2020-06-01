@@ -167,6 +167,16 @@ class PagesController < ApplicationController
     @records  = DataStore.import_insurance_account_transactions.order("created_at DESC").page(params[:page]).per(35)
   end
 
+  def seriatim
+    @subheader_items = [
+      {
+        text: "Seriatim Report"
+      }
+    ]
+
+    @subheader_side_actions = []
+  end
+
   def seriatim_report
     branch = params[:branch]
     as_of = params[:as_of]

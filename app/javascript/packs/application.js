@@ -80,6 +80,8 @@ import MemberAccountValidationsForm from "../models/MemberAccountValidationsForm
 import ValidationsReport from "../models/ValidationsReport.js";
 import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
+import Seriatim from "../models/Seriatim.js";
+import ClaimsIndex from "../models/ClaimsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -144,7 +146,9 @@ const hooks = {
   "member_account_validations/edit":                [MemberAccountValidationsForm],
   "pages/validations":                              [ValidationsReport],
   "accounting/accounting_entries/show":             [AccountingEntriesShow],
-  "pages/daily_report_insurance_account_status":    [InsuranceAccountStatusIndex]
+  "pages/daily_report_insurance_account_status":    [InsuranceAccountStatusIndex],
+  "pages/seriatim":                                 [Seriatim],
+  "claims/index":                                   [ClaimsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

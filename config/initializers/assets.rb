@@ -95,7 +95,6 @@ Rails.application.config.assets.precompile += [
   "reports/CollectionsBlipReport.js",
   "reports/MemberDependentReport.js",
   "reports/CicReport.js",
-  "Seriatim.js",
   "reports/MonthlyCollectionReport.js",
   "member_quarterly_reports.js",
   "data_stores/personal_funds/personal_fund_report.js",
