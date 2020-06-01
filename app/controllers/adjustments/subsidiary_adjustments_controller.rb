@@ -14,8 +14,6 @@ module Adjustments
         @adjustment_records = @adjustment_records.where("meta #>> '{branch, id}' = ?", @branch.id)
       end
 
-    
-
       if params[:status].present?
         @status = params[:status]
         @adjustment_records = @adjustment_records.where(status: @status)
