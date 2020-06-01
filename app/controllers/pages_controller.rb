@@ -139,6 +139,16 @@ class PagesController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def validations
+    @subheader_items = [
+      {
+        text: "Validations Report"
+      }
+    ]
+
+    @subheader_side_actions = []
+  end
+
   def validations_report
     branch = params[:branch]
     status = params[:status]

@@ -74,6 +74,11 @@ import SubsidiaryAdjustmentsIndex from "../models/SubsidiaryAdjustmentsIndex.js"
 import SubsidiaryAdjustmentsShow from "../models/SubsidiaryAdjustmentsShow.js";
 import BatchMoratoriumAdjustmentsIndex from "../models/BatchMoratoriumAdjustmentsIndex.js";
 import BatchMoratoriumAdjustmentsShow from "../models/BatchMoratoriumAdjustmentsShow.js";
+import MemberAccountValidationsIndex from "../models/MemberAccountValidationsIndex.js";
+import MemberAccountValidationsShow from "../models/MemberAccountValidationsShow.js";
+import MemberAccountValidationsForm from "../models/MemberAccountValidationsForm.js";
+import ValidationsReport from "../models/ValidationsReport.js";
+import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -132,7 +137,12 @@ const hooks = {
   "adjustments/subsidiary_adjustments/index":       [SubsidiaryAdjustmentsIndex],
   "adjustments/subsidiary_adjustments/show":        [SubsidiaryAdjustmentsShow],
   "adjustments/batch_moratorium_adjustments/index": [BatchMoratoriumAdjustmentsIndex],
-  "adjustments/batch_moratorium_adjustments/show":  [BatchMoratoriumAdjustmentsShow]
+  "adjustments/batch_moratorium_adjustments/show":  [BatchMoratoriumAdjustmentsShow],
+  "member_account_validations/index":               [MemberAccountValidationsIndex],
+  "member_account_validations/show":                [MemberAccountValidationsShow],
+  "member_account_validations/edit":                [MemberAccountValidationsForm],
+  "pages/validations":                              [ValidationsReport],
+  "accounting/accounting_entries/show":             [AccountingEntriesShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
