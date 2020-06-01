@@ -381,6 +381,7 @@ export default class TrialBalanceComponent extends React.Component {
           <div className="col">
             <div className="form-group">
               <label>Start Date</label>
+              <br/>
               <DatePicker
                 className="form-control"
                 selected={state.start_date}
@@ -392,6 +393,7 @@ export default class TrialBalanceComponent extends React.Component {
           <div className="col">
             <div className="form-group">
               <label>End Date</label>
+              <br/>
               <DatePicker
                 className="form-control"
                 selected={state.end_date}
