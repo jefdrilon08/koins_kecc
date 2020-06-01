@@ -187,7 +187,7 @@ module Branches
         principal         = r.fetch("principal").to_f.round(2)
         interest          = r.fetch("interest").to_f.round(2)
         total             = r.fetch("total").to_f.round(2)
-        par               = (principal_balance / principal).round(2)
+        par               = (principal_balance / principal)
 
         first_date_of_payment = r.fetch("first_date_of_payment").to_date
 
@@ -332,6 +332,8 @@ module Branches
                         account_transactions.status = 'approved'
                       AND 
                         DATE(account_transactions.transacted_at) <= '#{@as_of}'
+                      AND
+                        account_transactions.amount > 0
                       GROUP BY 1
                     ) tt ON loans.id = tt.subsidiary_id
                   LEFT JOIN
