@@ -31,6 +31,7 @@ import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_colle
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
+import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -105,7 +106,8 @@ const hooks = {
   "monthly_closing_collections/show":             [MonthlyClosingCollectionsShow, MonthlyClosingCollectionsShowUI],
   "insurance_accounts/show":                      [InsuranceStatusComponent],
   "accounting/trial_balance":                     [TrialBalanceComponent],
-  "accounting/general_ledger":                    [GeneralLedgerComponent]
+  "accounting/general_ledger":                    [GeneralLedgerComponent],
+  "accounting/accounting_entries/form":           [AccountingEntryFormComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

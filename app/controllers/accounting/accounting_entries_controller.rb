@@ -32,6 +32,24 @@ module Accounting
 
       @subheader_side_actions = [
       ]
+
+      defaultBranch = nil
+
+      if Settings.try(:defaults).try(:default_branch).present?
+        s = Settings.try(:defaults).try(:default_branch)
+
+        defaultBranch = {
+          id: s.id,
+          name: s.name
+        }
+      end
+
+      @payload = {
+        id: params[:id],
+        book: params[:book],
+        accountingFundId: params[:accounting_fund_id] || "",
+        defaultBranch: defaultBranch
+      }
     end
 
     def destroy

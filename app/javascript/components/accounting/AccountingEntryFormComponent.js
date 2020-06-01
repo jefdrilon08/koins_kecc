@@ -17,9 +17,7 @@ import Modal from 'react-modal';
 import {numberWithCommas} from '../utils/helpers'; 
 import {customStyles} from '../utils/consts';
 
-Modal.setAppElement("#content")
-
-export default class AccountingEntryFormDisplay extends React.Component {
+export default class AccountingEntryFormComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -939,6 +937,7 @@ export default class AccountingEntryFormDisplay extends React.Component {
           <div className="col">
             <div className="form-group">
               <label>Date Prepared</label>
+              <br/>
               <DatePicker
                 className="form-control"
                 selected={data.date_prepared}
