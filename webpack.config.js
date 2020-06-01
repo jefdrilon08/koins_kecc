@@ -30,8 +30,7 @@ module.exports = {
     MonitoringAccountingEntrySubsidiaryBalancing: "./app/assets/javascript/components/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision:           "./app/assets/javascript/components/monitoring/AccountingEntryPrecision.js",
     IcprShow:                                     "./app/assets/javascript/components/data_stores/icpr/Show.js",
-    DashboardMainMii:                             "./app/assets/javascript/components/dashboard/MainMii.js",
-    Insights:                                     "./app/assets/javascript/components/insights/Index.js"
+    DashboardMainMii:                             "./app/assets/javascript/components/dashboard/MainMii.js"
   },
   module: {
     rules: [

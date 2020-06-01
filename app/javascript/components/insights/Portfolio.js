@@ -1,5 +1,4 @@
 import React from "react";
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 export default class Portfolio extends React.Component {
   constructor(props) {

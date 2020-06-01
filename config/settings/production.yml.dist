@@ -68,7 +68,7 @@ branch_config:
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
     current_date: "2020-03-31"
@@ -367,7 +367,7 @@ memberships:
     name: "K-MBA"
     type: "Insurance"
     is_main: true
-    fee: 50.00
+    fee: 100.00
     accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
     payment_default: false
 
@@ -3097,7 +3097,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3252,7 +3252,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3517,7 +3517,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3672,7 +3672,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3696,8 +3696,8 @@ loan_products:
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        #for_primary_loan: true
+        #primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
         meta:
           member_type: "Regular"
           term_map:
