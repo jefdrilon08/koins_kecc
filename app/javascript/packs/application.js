@@ -66,6 +66,8 @@ import YearEndClosingsIndex from "../models/YearEndClosingsIndex.js";
 import YearEndClosingsShow from "../models/YearEndClosingsShow.js";
 import DataStoresIcprIndex from "../models/DataStoresIcprIndex.js";
 import DataStoresIcprShow from "../models/DataStoresIcprShow.js";
+import PatronageRefundIndex from "../models/PatronageRefundIndex.js";
+import PatronageRefundShow from "../models/PatronageRefundShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -116,7 +118,9 @@ const hooks = {
   "accounting/year_end_closings/index":           [YearEndClosingsIndex],
   "accounting/year_end_closings/show":            [YearEndClosingsShow],
   "data_stores/icpr/index":                       [DataStoresIcprIndex],
-  "data_stores/icpr/show":                        [DataStoresIcprShow, DataStoresIcprShowComponent]
+  "data_stores/icpr/show":                        [DataStoresIcprShow, DataStoresIcprShowComponent],
+  "data_stores/patronage_refund/index":           [PatronageRefundIndex],
+  "data_stores/patronage_refund/show":            [PatronageRefundShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

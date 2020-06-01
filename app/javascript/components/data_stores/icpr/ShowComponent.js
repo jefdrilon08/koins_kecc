@@ -58,14 +58,13 @@ export default class ShowComponent extends React.Component {
 
     console.log(context.state.data);
 
-    return  context.state.data.details.map(function(o, i) {
-      console.log(o);
+    return  context.state.data.records.map(function(o, i) {
               return  <tr key={o.id}>
                         <td className="text-center">{i + 1}</td>
                         <td>
                           <a href={"/equity_accounts/" + o.member_account_id} target="_blank">
                             <strong>
-                              {o.member_name}
+                              {o.last_name}, {o.first_name} {o.middle_name}
                             </strong>
                           </a>
                         </td>
