@@ -1,6 +1,6 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 import 'bootstrap';
 import jquery from 'jquery';
@@ -30,6 +30,7 @@ import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_wi
 import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
+import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -103,7 +104,8 @@ const hooks = {
   "monthly_closing_collections/index":            [MonthlyClosingCollectionsIndex],
   "monthly_closing_collections/show":             [MonthlyClosingCollectionsShow, MonthlyClosingCollectionsShowUI],
   "insurance_accounts/show":                      [InsuranceStatusComponent],
-  "accounting/trial_balance":                     [TrialBalanceComponent]
+  "accounting/trial_balance":                     [TrialBalanceComponent],
+  "accounting/general_ledger":                    [GeneralLedgerComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

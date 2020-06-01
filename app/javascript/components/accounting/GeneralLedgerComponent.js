@@ -16,7 +16,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingCodeMultiSelect from './AccountingCodeMultiSelect';
 
-export default class GeneralLedgerDisplay extends React.Component {
+export default class GeneralLedgerComponent extends React.Component {
   constructor(props) {
     super(props);
     
