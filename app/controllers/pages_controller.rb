@@ -109,6 +109,18 @@ class PagesController < ApplicationController
 
   def members_for_reinsurance
     @members = Insurance::FetchMembersForReinsurance.new.execute!
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Members for Reinsurance"
+      }
+    ]
+
+    @subheader_side_actions = [
+    ]
   end
 
   def download_exit_age
