@@ -8,9 +8,6 @@ module.exports = {
   entry: {
     MembersFormResignation:                       "./app/assets/javascript/components/members/FormResignation.js",
     MemberAccountsSavingsIndex:                   "./app/assets/javascript/components/member_accounts/savings/Index.js",
-    AccountingTrialBalance:                       "./app/assets/javascript/components/accounting/TrialBalance.js",
-    AccountingGeneralLedger:                      "./app/assets/javascript/components/accounting/GeneralLedger.js",
-    AccountingEntryForm:                          "./app/assets/javascript/components/accounting/AccountingEntryForm.js",
     SurveyUI:                                     "./app/assets/javascript/components/administration/surveys/SurveyUI.js",
     SurveyQuestionUI:                             "./app/assets/javascript/components/administration/surveys/survey_questions/SurveyQuestionUI.js",
     BranchManager:                                "./app/assets/javascript/components/administration/users/BranchManager.js",
@@ -29,7 +26,6 @@ module.exports = {
     XWeeksToPayShow:                              "./app/assets/javascript/components/data_stores/x_weeks_to_pay/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./app/assets/javascript/components/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision:           "./app/assets/javascript/components/monitoring/AccountingEntryPrecision.js",
-    IcprShow:                                     "./app/assets/javascript/components/data_stores/icpr/Show.js",
     DashboardMainMii:                             "./app/assets/javascript/components/dashboard/MainMii.js"
   },
   module: {

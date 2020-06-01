@@ -42,7 +42,6 @@ Rails.application.config.assets.precompile += [
   "withdrawal_collections/Show.js",
   "insurance_withdrawal_collections/Index.js",
   "insurance_withdrawal_collections/Show.js",
-  "data_stores/icpr/Index.js",
   "data_stores/icpr/Show.js",
   "data_stores/patronage_refund/Index.js",
   "data_stores/patronage_refund/Show.js",

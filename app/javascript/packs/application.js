@@ -32,6 +32,7 @@ import InsuranceStatusComponent from "../components/member_accounts/InsuranceSta
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
 import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
+import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -63,6 +64,8 @@ import MonthlyClosingCollectionsIndex from "../models/MonthlyClosingCollectionsI
 import MonthlyClosingCollectionsShow from "../models/MonthlyClosingCollectionsShow.js";
 import YearEndClosingsIndex from "../models/YearEndClosingsIndex.js";
 import YearEndClosingsShow from "../models/YearEndClosingsShow.js";
+import DataStoresIcprIndex from "../models/DataStoresIcprIndex.js";
+import DataStoresIcprShow from "../models/DataStoresIcprShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -111,7 +114,9 @@ const hooks = {
   "accounting/general_ledger":                    [GeneralLedgerComponent],
   "accounting/accounting_entries/form":           [AccountingEntryFormComponent],
   "accounting/year_end_closings/index":           [YearEndClosingsIndex],
-  "accounting/year_end_closings/show":            [YearEndClosingsShow]
+  "accounting/year_end_closings/show":            [YearEndClosingsShow],
+  "data_stores/icpr/index":                       [DataStoresIcprIndex],
+  "data_stores/icpr/show":                        [DataStoresIcprShow, DataStoresIcprShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

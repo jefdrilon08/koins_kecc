@@ -1,413 +1,407 @@
 import Mustache from "mustache/mustache";
 
-var Show  = (function() {
-  var options;
-  var depositCollectionId;
-  var authenticityToken;
+var options;
+var depositCollectionId;
+var authenticityToken;
 
-  var $btnApprove;
-  var $btnConfirmApprove;
-  var $modalApprove;
+var $btnApprove;
+var $btnConfirmApprove;
+var $modalApprove;
 
-  var $btnFinalize;
-  var $btnConfirmFinalize;
-  var $modalFinalize;
+var $btnFinalize;
+var $btnConfirmFinalize;
+var $modalFinalize;
 
 
-  var $btnPrint;
-  var $btnPrintAccountingEntry;
-  var $modalPrint;
+var $btnPrint;
+var $btnPrintAccountingEntry;
+var $modalPrint;
 
-  var $selectCashManagementTemplate;
-  var $btnConfirmBook;
+var $selectCashManagementTemplate;
+var $btnConfirmBook;
+
+var $selectBook;
+var $btnConfirmCashManagementTemplate;
+
+var $btnLoadBranch;
+var $btnConfirmLoadBranch;
+var $modalLoadBranch;
+
+var $btnLoadCenter;
+var $btnConfirmLoadCenter;
+var $modalLoadCenter;
+var $selectCenter;
+
+var $message;
+var templateErrorList;
+
+var _urlApprove                       = "/api/v1/deposit_collections/approve";
+var _urlFinalize                      = "/api/v1/deposit_collections/finalize";
+var _urlPrint                         = "/api/v1/print/generate_file";
+var _urlModifyCashManagementTemplate  = "/api/v1/deposit_collections/modify_cash_management_template";
+var _urlModifyBook                    = "/api/v1/deposit_collections/modify_book";
+var _urlLoadBranch                    = "/api/v1/deposit_collections/load_branch";
+var _urlLoadCenter                    = "/api/v1/deposit_collections/load_center";
+
+var _cacheDom = function() {
+  $btnApprove         = $("#btn-approve");
+  $btnConfirmApprove  = $("#btn-confirm-approve");
+  $modalApprove       = $("#modal-approve");
   
-  var $selectBook;
-  var $btnConfirmCashManagementTemplate;
+  $btnFinalize        = $("#btn-finalize");
+  $btnConfirmFinalize = $("#btn-confirm-finalize");
+  $modalFinalize      = $("#modal-finalize");
 
-  var $btnLoadBranch;
-  var $btnConfirmLoadBranch;
-  var $modalLoadBranch;
+  $btnPrint                  = $("#btn-print");
+  $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
+  $modalPrint                = $("#modal-print");
 
-  var $btnLoadCenter;
-  var $btnConfirmLoadCenter;
-  var $modalLoadCenter;
-  var $selectCenter;
+  $selectBook     = $("#select-book");
+  $btnConfirmBook = $("#btn-confirm-book");
 
-  var $message;
-  var templateErrorList;
+  $selectCashManagementTemplate     = $("#select-cash-management-template");
+  $btnConfirmCashManagementTemplate = $("#btn-confirm-cash-management-template");
 
-  var _urlApprove                       = "/api/v1/deposit_collections/approve";
-  var _urlFinalize                      = "/api/v1/deposit_collections/finalize";
-  var _urlPrint                         = "/api/v1/print/generate_file";
-  var _urlModifyCashManagementTemplate  = "/api/v1/deposit_collections/modify_cash_management_template";
-  var _urlModifyBook                    = "/api/v1/deposit_collections/modify_book";
-  var _urlLoadBranch                    = "/api/v1/deposit_collections/load_branch";
-  var _urlLoadCenter                    = "/api/v1/deposit_collections/load_center";
+  $btnLoadBranch        = $("#btn-load-branch");
+  $btnConfirmLoadBranch = $("#btn-confirm-load-branch");
+  $modalLoadBranch      = $("#modal-load-branch");
 
-  var _cacheDom = function() {
-    $btnApprove         = $("#btn-approve");
-    $btnConfirmApprove  = $("#btn-confirm-approve");
-    $modalApprove       = $("#modal-approve");
-    
-    $btnFinalize        = $("#btn-finalize");
-    $btnConfirmFinalize = $("#btn-confirm-finalize");
-    $modalFinalize      = $("#modal-finalize");
+  $btnLoadCenter        = $("#btn-load-center");
+  $btnConfirmLoadCenter = $("#btn-confirm-load-center");
+  $modalLoadCenter      = $("#modal-load-center");
+  $selectCenter         = $("#select-center");
 
-    $btnPrint                  = $("#btn-print");
-    $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
-    $modalPrint                = $("#modal-print");
+  $message          = $(".message");
+  templateErrorList = $("#template-error-list").html();
+};
 
-    $selectBook     = $("#select-book");
-    $btnConfirmBook = $("#btn-confirm-book");
+var _bindEvents = function() {
+  $btnLoadCenter.on("click", function() {
+    $modalLoadCenter.modal("show");
+  });
 
-    $selectCashManagementTemplate     = $("#select-cash-management-template");
-    $btnConfirmCashManagementTemplate = $("#btn-confirm-cash-management-template");
+  $btnConfirmLoadCenter.on("click", function() {
+    var centerId  = $selectCenter.val();
 
-    $btnLoadBranch        = $("#btn-load-branch");
-    $btnConfirmLoadBranch = $("#btn-confirm-load-branch");
-    $modalLoadBranch      = $("#modal-load-branch");
+    $message.html("Loading....");
+    $btnConfirmLoadBranch.prop("disabled", true);
+    $selectCenter.prop("disabled", true);
 
-    $btnLoadCenter        = $("#btn-load-center");
-    $btnConfirmLoadCenter = $("#btn-confirm-load-center");
-    $modalLoadCenter      = $("#modal-load-center");
-    $selectCenter         = $("#select-center");
+    $.ajax({
+      url: _urlLoadCenter,
+      method: 'POST',
+      data: { 
+        id: depositCollectionId,
+        center_id: centerId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
 
-    $message          = $(".message");
-    templateErrorList = $("#template-error-list").html();
-  };
-
-  var _bindEvents = function() {
-    $btnLoadCenter.on("click", function() {
-      $modalLoadCenter.modal("show");
-    });
-
-    $btnConfirmLoadCenter.on("click", function() {
-      var centerId  = $selectCenter.val();
-
-      $message.html("Loading....");
-      $btnConfirmLoadBranch.prop("disabled", true);
-      $selectCenter.prop("disabled", true);
-
-      $.ajax({
-        url: _urlLoadCenter,
-        method: 'POST',
-        data: { 
-          id: depositCollectionId,
-          center_id: centerId,
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
           $message.html(
-            "Success! Redirecting..."
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
           );
 
-          window.location.reload();
-        },
-        error: function(response) {
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"];
-            console.log(err);
-          } finally {
-            console.log(errors);
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnConfirmLoadCenter.prop("disabled", false);
-            $selectCenter.prop("disabled", false);
-          }
+          $btnConfirmLoadCenter.prop("disabled", false);
+          $selectCenter.prop("disabled", false);
         }
-      });
+      }
     });
+  });
 
-    $btnLoadBranch.on("click", function() {
-      $modalLoadBranch.modal("show");
-    });
+  $btnLoadBranch.on("click", function() {
+    $modalLoadBranch.modal("show");
+  });
 
-    $btnConfirmLoadBranch.on("click", function() {
-      $message.html("Loading....");
-      $btnConfirmLoadBranch.prop("disabled", true);
+  $btnConfirmLoadBranch.on("click", function() {
+    $message.html("Loading....");
+    $btnConfirmLoadBranch.prop("disabled", true);
 
-      $.ajax({
-        url: _urlLoadBranch,
-        method: 'POST',
-        data: { 
-          id: depositCollectionId,
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
+    $.ajax({
+      url: _urlLoadBranch,
+      method: 'POST',
+      data: { 
+        id: depositCollectionId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
           $message.html(
-            "Success! Redirecting..."
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
           );
 
-          window.location.reload();
-        },
-        error: function(response) {
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"];
-            console.log(err);
-          } finally {
-            console.log(errors);
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnConfirmLoadBranch.prop("disabled", false);
-          }
+          $btnConfirmLoadBranch.prop("disabled", false);
         }
-      });
+      }
     });
+  });
 
-    $btnConfirmBook.on("click", function() {
-      var book  = $selectBook.val();
+  $btnConfirmBook.on("click", function() {
+    var book  = $selectBook.val();
 
-      $message.html("Loading...");
+    $message.html("Loading...");
 
-      $selectBook.prop("disabled", true);
-      $btnConfirmBook.prop("disabled", true);
+    $selectBook.prop("disabled", true);
+    $btnConfirmBook.prop("disabled", true);
 
-      $.ajax({
-        url: _urlModifyBook,
-        method: 'POST',
-        data: { 
-          id: depositCollectionId,
-          book: book,
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
+    $.ajax({
+      url: _urlModifyBook,
+      method: 'POST',
+      data: { 
+        id: depositCollectionId,
+        book: book,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
           $message.html(
-            "Success! Redirecting..."
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
           );
 
-          window.location.reload();
-        },
-        error: function(response) {
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"];
-            console.log(err);
-          } finally {
-            console.log(errors);
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $selectBook.prop("disabled", false);
-            $btnConfirmBook.prop("disabled", false);
-          }
+          $selectBook.prop("disabled", false);
+          $btnConfirmBook.prop("disabled", false);
         }
-      });
+      }
     });
+  });
 
-    $btnConfirmCashManagementTemplate.on("click", function() {
-      var template  = $selectCashManagementTemplate.val();
+  $btnConfirmCashManagementTemplate.on("click", function() {
+    var template  = $selectCashManagementTemplate.val();
 
-      $message.html("Loading...");
+    $message.html("Loading...");
 
-      $selectCashManagementTemplate.prop("disabled", true);
-      $btnConfirmCashManagementTemplate.prop("disabled", true);
+    $selectCashManagementTemplate.prop("disabled", true);
+    $btnConfirmCashManagementTemplate.prop("disabled", true);
 
-      $.ajax({
-        url: _urlModifyCashManagementTemplate,
-        method: 'POST',
-        data: { 
-          id: depositCollectionId,
-          template: template,
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
+    $.ajax({
+      url: _urlModifyCashManagementTemplate,
+      method: 'POST',
+      data: { 
+        id: depositCollectionId,
+        template: template,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
           $message.html(
-            "Success! Redirecting..."
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
           );
 
-          window.location.reload();
-        },
-        error: function(response) {
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"];
-            console.log(err);
-          } finally {
-            console.log(errors);
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $selectCashManagementTemplate.prop("disabled", false);
-            $btnConfirmCashManagementTemplate.prop("disabled", false);
-          }
+          $selectCashManagementTemplate.prop("disabled", false);
+          $btnConfirmCashManagementTemplate.prop("disabled", false);
         }
-      });
+      }
     });
+  });
 
-    $btnPrint.on("click", function() {
-      $modalPrint.modal("show");
+  $btnPrint.on("click", function() {
+    $modalPrint.modal("show");
 
-      $.ajax({
-        url: "/api/v1/print/generate_file",
-        method: 'POST',
-        data: { 
-          id: depositCollectionId,
-          type: "deposit_collection",
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
+    $.ajax({
+      url: "/api/v1/print/generate_file",
+      method: 'POST',
+      data: { 
+        id: depositCollectionId,
+        type: "deposit_collection",
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        $modalPrint.modal("hide");
+        window.open("/print?filename=" + response.filename, '_blank');
+      },
+      error: function(response) {
+        $message.html("Error!");
+      }
+    });
+  });
+
+  $btnPrintAccountingEntry.on("click", function() {
+    $modalPrint.modal("show");
+
+    $.ajax({
+      url: "/api/v1/print/generate_file",
+      method: 'POST',
+      data: { 
+        id: depositCollectionId,
+        type: "deposit_collection_accounting_entry",
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        $modalPrint.modal("hide");
+        window.open("/print?filename=" + response.filename, '_blank');
+      },
+      error: function(response) {
+        $message.html("Error!");
+      }
+    });
+  });
+
+  $btnApprove.on("click", function() {
+    $message.html("");
+    $modalApprove.modal("show");
+  });
+
+  $btnConfirmApprove.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmApprove.prop("disabled", true);
+
+    $.ajax({
+      url: _urlApprove,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: depositCollectionId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
           $message.html(
-            "Success! Redirecting..."
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
           );
 
-          $modalPrint.modal("hide");
-          window.open("/print?filename=" + response.filename, '_blank');
-        },
-        error: function(response) {
-          $message.html("Error!");
+          $btnConfirmApprove.prop("disabled", false);
         }
-      });
+      }
     });
+  });
 
-    $btnPrintAccountingEntry.on("click", function() {
-      $modalPrint.modal("show");
+  $btnFinalize.on("click", function() {
+    $message.html("");
+    $modalFinalize.modal("show");
+  });
 
-      $.ajax({
-        url: "/api/v1/print/generate_file",
-        method: 'POST',
-        data: { 
-          id: depositCollectionId,
-          type: "deposit_collection_accounting_entry",
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
+  $btnConfirmFinalize.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmFinalize.prop("disabled", true);
+
+    $.ajax({
+      url: _urlFinalize,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: depositCollectionId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
           $message.html(
-            "Success! Redirecting..."
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
           );
 
-          $modalPrint.modal("hide");
-          window.open("/print?filename=" + response.filename, '_blank');
-        },
-        error: function(response) {
-          $message.html("Error!");
+          $btnConfirmFinalize.prop("disabled", false);
         }
-      });
+      }
     });
+  });
+};
 
-    $btnApprove.on("click", function() {
-      $message.html("");
-      $modalApprove.modal("show");
-    });
+var init  = function(options) {
+  depositCollectionId = options.id;
+  authenticityToken   = options.authenticityToken;
 
-    $btnConfirmApprove.on("click", function() {
-      $message.html("Loading...");
-      $btnConfirmApprove.prop("disabled", true);
+  _cacheDom();
+  _bindEvents();
+};
 
-      $.ajax({
-        url: _urlApprove,
-        method: 'POST',
-        dataType: 'json',
-        data: {
-          id: depositCollectionId,
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
-          $message.html("Success! Redirecting...");
-          window.location.reload();
-        },
-        error: function(response) {
-          console.log(response);
-          var errors  = [];
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"];
-            console.log(err);
-          } finally {
-            console.log(errors);
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnConfirmApprove.prop("disabled", false);
-          }
-        }
-      });
-    });
-
-    $btnFinalize.on("click", function() {
-      $message.html("");
-      $modalFinalize.modal("show");
-    });
-
-    $btnConfirmFinalize.on("click", function() {
-      $message.html("Loading...");
-      $btnConfirmFinalize.prop("disabled", true);
-
-      $.ajax({
-        url: _urlFinalize,
-        method: 'POST',
-        dataType: 'json',
-        data: {
-          id: depositCollectionId,
-          authenticity_token: authenticityToken
-        },
-        success: function(response) {
-          $message.html("Success! Redirecting...");
-          window.location.reload();
-        },
-        error: function(response) {
-          console.log(response);
-          var errors  = [];
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors  = ["Something went wrong"];
-            console.log(err);
-          } finally {
-            console.log(errors);
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnConfirmFinalize.prop("disabled", false);
-          }
-        }
-      });
-    });
-  };
-
-  var init  = function(options) {
-    depositCollectionId = options.id;
-    authenticityToken   = options.authenticityToken;
-
-    _cacheDom();
-    _bindEvents();
-  };
-
-  return {
-    init: init
-  };
-})();
-
-window.DepositCollectionsShow = Show;
+export default { init: init };

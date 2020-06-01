@@ -9,7 +9,6 @@ import SkCubeLoading from '../../SkCubeLoading';
 import ErrorDisplay from '../../ErrorDisplay';
 import {numberWithCommas} from '../../utils/helpers';
 
-
 export default class ShowComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -57,13 +56,16 @@ export default class ShowComponent extends React.Component {
   renderRows() {
     var context = this;
 
-    return  context.state.data.records.map(function(o, i) {
+    console.log(context.state.data);
+
+    return  context.state.data.details.map(function(o, i) {
+      console.log(o);
               return  <tr key={o.id}>
                         <td className="text-center">{i + 1}</td>
                         <td>
                           <a href={"/equity_accounts/" + o.member_account_id} target="_blank">
                             <strong>
-                              {o.last_name}, {o.first_name} {o.middle_name}
+                              {o.member_name}
                             </strong>
                           </a>
                         </td>
