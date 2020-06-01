@@ -61,6 +61,8 @@ import InsuranceWithdrawalCollectionsIndex from "../models/InsuranceWithdrawalCo
 import InsuranceWithdrawalCollectionsShow from "../models/InsuranceWithdrawalCollectionsShow.js";
 import MonthlyClosingCollectionsIndex from "../models/MonthlyClosingCollectionsIndex.js";
 import MonthlyClosingCollectionsShow from "../models/MonthlyClosingCollectionsShow.js";
+import YearEndClosingsIndex from "../models/YearEndClosingsIndex.js";
+import YearEndClosingsShow from "../models/YearEndClosingsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -107,7 +109,9 @@ const hooks = {
   "insurance_accounts/show":                      [InsuranceStatusComponent],
   "accounting/trial_balance":                     [TrialBalanceComponent],
   "accounting/general_ledger":                    [GeneralLedgerComponent],
-  "accounting/accounting_entries/form":           [AccountingEntryFormComponent]
+  "accounting/accounting_entries/form":           [AccountingEntryFormComponent],
+  "accounting/year_end_closings/index":           [YearEndClosingsIndex],
+  "accounting/year_end_closings/show":            [YearEndClosingsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
