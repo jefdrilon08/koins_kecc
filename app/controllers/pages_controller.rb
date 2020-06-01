@@ -91,6 +91,20 @@ class PagesController < ApplicationController
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
     end
+
+    @members  = @members.order("last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Lapsed Members"
+      }
+    ]
+
+    @subheader_side_actions = [
+    ]
   end
 
   def members_for_reinsurance
