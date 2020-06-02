@@ -44,8 +44,10 @@ export default class AgingOfReceivablesView extends React.Component {
       var categoryCParAmount      = 0.00;
 
       var numDaysPar  = parseInt(loans[i].num_days_par);
+      var par         = loans[i].par;
 
-      if(numDaysPar > 0) {
+      //if(numDaysPar > 0) {
+      if(par > 0) {
         counter++;
 
         if(numDaysPar >= 1 && numDaysPar <= 30) {
