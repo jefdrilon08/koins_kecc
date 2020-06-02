@@ -34,16 +34,10 @@ gem 'rollbar'
 gem 'rack', '~> 2.0.0'
 gem 'httparty'
 gem 'rack-timeout'
-gem 'rack-mini-profiler'
-# For memory profiling
-gem 'memory_profiler'
 
 # Webpacker
 gem 'webpacker'
 
-# For call-stack profiling flamegraphs
-gem 'flamegraph'
-gem 'stackprof'
 
 # Support Select 2
 gem 'select2-rails'
@@ -64,6 +58,12 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'guard-rspec', require: false
   gem 'bullet'
+
+  # Profiling
+  gem 'rack-mini-profiler'
+  gem 'memory_profiler' # For memory profiling
+  gem 'flamegraph' # For call-stack profiling flamegraphs
+  gem 'stackprof'
 end
 
 group :test do
