@@ -38,9 +38,12 @@ gem 'rack-timeout'
 # Webpacker
 gem 'webpacker'
 
-
 # Support Select 2
 gem 'select2-rails'
+
+group :production do
+  gem 'puma_worker_killer'
+end
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
