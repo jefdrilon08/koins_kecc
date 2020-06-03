@@ -204,6 +204,25 @@ module Loans
               account_transaction.data[:beginning_balance]  = member_account.balance.round(2)
               account_transaction.data[:ending_balance]     = (member_account.balance + amount).round(2)
 
+              # For equity amount computation
+              if member_account.account_subtype == Settings.life
+                if member_account.data.nil?
+                  # For New Loaner
+                  member_account.data = { equity_value: (amount / 2).round(2) }
+                  member_account.save!
+                  
+                  account_transaction.data[:equity_value] = (amount / 2).round(2)
+                else
+                  # For Reloaner
+                  member_account_data = member_account.data.with_indifferent_access[:equity_value]
+                  equity_value = member_account_data[:equity_value]
+                  member_account_data[:equity_value] = ((amount / 2) + equity_value).round(2)
+                  member_account.update!(data: member_account_data)
+
+                  account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
+                end
+              end
+
               # Update account balance
               new_balance = (member_account.balance + amount).round(2)
               member_account.update!(

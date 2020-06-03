@@ -2077,4 +2077,55 @@ namespace :adjust do
       puts "Done!"
     end
   end
+
+  task :insert_equity_value_to_life_transactions => :environment do
+    puts "Inserting ..."
+    
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved")
+
+    account_transactions.each do |at|
+      puts "Inserting #{at.id}"  
+
+      at_data = at.data.with_indifferent_access
+      ev_amount = at_data[:ending_balance].to_f / 2
+      at_data[:equity_value] = ev_amount
+      at.update!(data: at_data)
+    end
+
+    puts "Done!"
+  end
+
+  task :insert_equity_value_to_life_account => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    member_accounts.each do |ma|
+      puts "Inserting #{ma.id}"
+      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
+        
+      if !last_transaction.nil?  
+        latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
+        if ma.data.nil?
+          ma.data = { equity_value: latest_ev_amount }
+          ma.save!
+        end
+      end
+    end 
+
+    puts "Done!"
+  end
 end

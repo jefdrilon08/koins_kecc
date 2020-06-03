@@ -16,6 +16,7 @@
       %th.curr Advance LIFE
       %th.curr Advance RF
       %th.curr Interest
+      %th.curr Policy Loan
       %th.curr Total
       %th Actions
   %tbody
@@ -50,6 +51,11 @@
         %td.curr
           #{number_to_currency(member_account_validation_record.interest, unit: "")}
         %td.curr
+          - if member_account_validation_record.policy_loan > 0
+            (#{number_to_currency(member_account_validation_record.policy_loan, unit: "")})  
+          - else
+            #{number_to_currency(member_account_validation_record.policy_loan, unit: "")}  
+        %td.curr
           #{number_to_currency(member_account_validation_record.total, unit: "")}
         %td
           = link_to member_account_validation_withdrawal_pdf_path(member_account_validation,member_account_validation_record), target: "_blank", class: "btn", id: "btn-print-pdf" do
@@ -71,5 +77,10 @@
       %th.curr #{number_to_currency(member_account_validation.total_advance_lif, unit: "P")}
       %th.curr #{number_to_currency(member_account_validation.total_advance_rf, unit: "P")}
       %th.curr #{number_to_currency(member_account_validation.total_interest, unit: "P")}
+      %th.curr
+        - if member_account_validation.total_policy_loan > 0
+          (#{number_to_currency(member_account_validation.total_policy_loan, unit: "P")})
+        - else
+          #{number_to_currency(member_account_validation.total_policy_loan, unit: "P")}
       %th.curr #{number_to_currency(member_account_validation.total, unit: "P")}
       %th

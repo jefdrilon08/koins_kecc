@@ -101,6 +101,7 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
       redirect_to insurance_withdrawal_collection_path(@insurance_withdrawal_collection)
     end
   end
+  
   def upload
     file = params[:file]
     branch = Branch.find(params[:branch_id])

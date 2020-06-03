@@ -912,7 +912,9 @@ renderOverviewTableClaims() {
       <tr>
         <td>
           <strong>
-            BLIP
+            <a href={"blip_summary"} target='_blank'>  
+              BLIP
+            </a>
           </strong>
         </td>
         <td className="text-center">

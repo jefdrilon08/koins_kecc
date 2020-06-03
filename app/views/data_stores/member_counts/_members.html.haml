@@ -38,5 +38,5 @@
           #{m[:member_type]}
         %td
           - @x = MembershipPaymentRecord.where("member_id = ? and membership_name = 'K-KOOP' and status = 'paid'" , m[:id]).last
-          - @x = @x.date_paid
-          #{@x}
+          - if @x.date_paid.present?
+            = @x.date_paid.strftime("%b %d, %Y")

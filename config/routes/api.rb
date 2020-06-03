@@ -214,6 +214,16 @@ namespace :api do
     post "/insurance_withdrawal_collections/add_member", to: "insurance_withdrawal_collections#add_member"
     post "/insurance_withdrawal_collections/remove_member", to: "insurance_withdrawal_collections#remove_member"
 
+    # Equity Withdrawal Collection
+    post "/equity_withdrawal_collections", to: "equity_withdrawal_collections#create"
+    post "/equity_withdrawal_collections/modify_transaction_record", to: "equity_withdrawal_collections#modify_transaction_record"
+    post "/equity_withdrawal_collections/approve", to: "equity_withdrawal_collections#approve"
+    post "/equity_withdrawal_collections/update_particular", to: "equity_withdrawal_collections#update_particular"
+    get "/equity_withdrawal_collections/fetch", to: "equity_withdrawal_collections#fetch"
+    get "/equity_withdrawal_collections/fetch_members", to: "equity_withdrawal_collections#fetch_members"
+    post "/equity_withdrawal_collections/add_member", to: "equity_withdrawal_collections#add_member"
+    post "/equity_withdrawal_collections/remove_member", to: "equity_withdrawal_collections#remove_member"
+
     # Insurance Fund Transfer Collection
     post "/insurance_fund_transfer_collections", to: "insurance_fund_transfer_collections#create"
     post "/insurance_fund_transfer_collections/modify_transaction_record", to: "insurance_fund_transfer_collections#modify_transaction_record"

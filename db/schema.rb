@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_20_064449) do
+ActiveRecord::Schema.define(version: 2020_05_26_155205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -347,6 +347,19 @@ ActiveRecord::Schema.define(version: 2020_05_20_064449) do
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
   end
 
+  create_table "equity_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_equity_withdrawal_collections_on_branch_id"
+    t.index ["center_id"], name: "index_equity_withdrawal_collections_on_center_id"
+  end
+
   create_table "hiip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id"
     t.uuid "center_id"
@@ -613,6 +626,8 @@ ActiveRecord::Schema.define(version: 2020_05_20_064449) do
     t.datetime "updated_at", null: false
     t.decimal "advance_lif"
     t.json "data"
+    t.decimal "equity_value"
+    t.decimal "policy_loan"
     t.index ["center_id"], name: "index_member_account_validation_records_on_center_id"
     t.index ["member_account_validation_id"], name: "index_member_account_validation_records_uniqueness"
     t.index ["member_id"], name: "index_member_account_validation_records_on_member_id"
@@ -645,6 +660,7 @@ ActiveRecord::Schema.define(version: 2020_05_20_064449) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "data"
+    t.decimal "total_policy_loan"
     t.index ["branch_id"], name: "index_member_account_validations_on_branch_id"
   end
 
@@ -913,6 +929,8 @@ ActiveRecord::Schema.define(version: 2020_05_20_064449) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "equity_withdrawal_collections", "branches"
+  add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"
   add_foreign_key "hiip_claims", "centers"
   add_foreign_key "hiip_claims", "members"
