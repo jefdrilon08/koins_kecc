@@ -15,8 +15,6 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Rails.application.config.assets.precompile += [
   "administration/user_demerits/Show.js",
-  "administration/surveys/Index.js",
-  "administration/surveys/Show.js",
 	"administration/member_shares/Print.js",
 	"accounting/BooksIndex.js",
   "savings_accounts/ShowWithdrawalRequest.js",
@@ -63,8 +61,6 @@ Rails.application.config.assets.precompile += [
   "MembersForm.min.react.js",
   "MembersFormResignation.min.react.js",
   "MemberAccountsSavingsIndex.min.react.js",
-  "SurveyUI.min.react.js",
-  "SurveyQuestionUI.min.react.js",
   "MembershipPaymentCollectionUI.min.react.js",
   "DepositCollectionUI.min.react.js",
   "TimeDepositCollectionUI.min.react.js",

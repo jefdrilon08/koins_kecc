@@ -8,7 +8,7 @@ import {numberWithCommas} from '../../../utils/helpers';
 
 import OptionEditor from './OptionEditor';
 
-export default class SurveyUIDisplay extends React.Component {
+export default class SurveyUIComponent extends React.Component {
   constructor(props) {
     super(props);
 

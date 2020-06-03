@@ -1,29 +1,14 @@
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @surveys.any?
-            = render partial: "index_list", locals: { surveys: @surveys }
-          - else
-            %p
-              No surveys available
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @surveys.any?
+              = render partial: "index_list", locals: { surveys: @surveys }
+            - else
+              %p
+                No surveys available
 
 = render partial: "administration/surveys/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "administration/surveys/Index.js"
-
-#parameters
-
-:javascript
-  $(document).ready(function() {
-    var $parameters       = $("#parameters");
-    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

@@ -34,6 +34,7 @@ import GeneralLedgerComponent from "../components/accounting/GeneralLedgerCompon
 import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
 import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
 import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
+import SurveyQuestionUIComponent from "../components/administration/surveys/survey_questions/SurveyQuestionUIComponent.js";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -90,6 +91,8 @@ import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
 import AdministrationClustersIndex from "../models/AdministrationClustersIndex.js";
 import AdministrationBranchesIndex from "../models/AdministrationBranchesIndex.js";
 import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
+import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js";
+import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -164,7 +167,10 @@ const hooks = {
   "administration/areas/index":                     [AdministrationAreasIndex],
   "administration/clusters/index":                  [AdministrationClustersIndex],
   "administration/branches/index":                  [AdministrationBranchesIndex],
-  "administration/centers/show":                    [AdministrationCentersShow]
+  "administration/centers/show":                    [AdministrationCentersShow],
+  "administration/surveys/index":                   [AdministrationSurveysIndex],
+  "administration/surveys/show":                    [AdministrationSurveysShow],
+  "administration/surveys/survey_question_form":    [SurveyQuestionUIComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
