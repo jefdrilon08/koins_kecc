@@ -163,7 +163,7 @@ module MemberAccountValidations
         member          = member_account_validation_record.member
         member.member_accounts.each do |member_account|
 
-          if member_account.account_subtype == 'Life Insurance Fund' || member_account.account_subtype == 'Retirement Fund'
+          if member_account.account_subtype == 'Life Insurance Fund' || member_account.account_subtype == 'Retirement Fund' || member_account.account_subtype == 'Policy Loan'
             config  = {
               date_paid: @c_working_date,
               member: member,
@@ -186,7 +186,7 @@ module MemberAccountValidations
         member          = member_account_validation_record.member
         member.member_accounts.each do |member_account|
 
-          if member_account.account_subtype == 'Life Insurance Fund' || member_account.account_subtype == 'Retirement Fund'
+          if member_account.account_subtype == 'Life Insurance Fund' || member_account.account_subtype == 'Retirement Fund' || member_account.account_subtype == 'Policy Loan' 
             config  = {
               date_paid: @c_working_date,
               member: member,
@@ -205,6 +205,10 @@ module MemberAccountValidations
         # half_adv_lif = member_account_validation_record.try(:advance_lif) / 2 
         due_to_members = (member_account_validation_record.try(:equity_interest) + member_account_validation_record.try(:interest) + member_account_validation_record.try(:rf) + member_account_validation_record.try(:advance_rf) + member_account_validation_record.try(:lif_50_percent) + member_account_validation_record.try(:advance_lif))
         
+        if !member_account_validation_record.try(:policy_loan).nil?
+          due_to_members = due_to_members - member_account_validation_record.try(:policy_loan)
+        end
+
         if member_account_validation_record.member_classification == "EXIT AGE (GK)"
           savings_account    = MemberAccount.where(account_type: "SAVINGS", account_subtype: "Golden K", member_id: member.id).first
 

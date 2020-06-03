@@ -7,6 +7,7 @@ var MemberAccountValidationForm = (function() {
   var $totalAdvanceLif                 = $(".total-advance-lif");
   var $totalAdvanceRf                  = $(".total-advance-rf");
   var $totalInterest                   = $(".total-interest");
+  var $totalPolicyLoan                 = $(".total-policy-loan");
   var $grandTotal                      = $(".grand-total");
   
   var $section                         = $(".transaction-table");
@@ -210,6 +211,7 @@ var MemberAccountValidationForm = (function() {
     _computeTotalAdvanceLif($section);
     _computeTotalAdvanceRf($section);
     _computeTotalInterest($section);
+    _computeTotalPolicyLoan($section);
     _computeTotalAmt($section);
   }
 
@@ -271,6 +273,16 @@ var MemberAccountValidationForm = (function() {
     });
 
     $section.find(".total-interest").val(totalInterest);
+  }
+
+  var _computeTotalPolicyLoan = function($section) {
+    var totalPolicyLoan = 0.00;
+
+    $.each($section.find(".policy-loan"), function() {
+      totalPolicyLoan += parseFloat($(this).val());
+    });
+
+    $section.find(".total-policy-loan").val(totalPolicyLoan);
   }
 
   var _computeTotalAmt = function($section) {

@@ -172,7 +172,7 @@ GEM
     factory_bot_rails (5.1.1)
       factory_bot (~> 5.1.0)
       railties (>= 4.2.0)
-    ffi (1.12.2)
+    ffi (1.9.18)
     flamegraph (0.9.5)
     font-awesome-sass (5.12.0)
       sassc (>= 1.11)
@@ -432,6 +432,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   factory_bot_rails
+  ffi (= 1.9.18)
   flamegraph
   font-awesome-sass
   guard-rspec

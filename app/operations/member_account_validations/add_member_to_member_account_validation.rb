@@ -17,14 +17,21 @@ module MemberAccountValidations
 
       @lif_member_account   = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").first
       @rf_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").first
+      @pl_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Policy Loan").first
       
-      @data                  = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
+      @data                 = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
                                 member: @member, 
                                 lif_member_account: @lif_member_account, 
                                 rf_member_account: @rf_member_account, 
                                 resignation_date: @resignation_date
                               ).execute!
-      
+
+      @equity_value         = @lif_member_account.data.with_indifferent_access[:equity_value] 
+
+      if !@pl_member_account.nil?
+        @policy_loan = @pl_member_account.try(:balance).to_f
+      end
+
       @lif_current_balance        = @data[:lif_current_balance]
       @rf_current_balance         = @data[:rf_current_balance]
       @lif_amt_past_due           = @data[:lif_amt_past_due]
@@ -83,7 +90,15 @@ module MemberAccountValidations
           #     @lif_50_percent = @lif_amount / 2
           #   end
           # end
-          @lif_50_percent   = @lif_amount / 2
+          
+          if @advance_lif > 0
+            @lif_50_percent = (@equity_value - (@advance_lif / 2))
+          else
+            @lif_50_percent = @equity_value
+          end
+
+          # Old validation
+          # @lif_50_percent   = @lif_amount / 2
         end
       
       if @years >= 1 && @rf_current_balance >= 260 
@@ -114,6 +129,12 @@ module MemberAccountValidations
       end
 
       @total = (@lif_50_percent + @rf_amount + @advance_lif + @advance_rf + @interest_amount + @equity_interest_amount).round(2)
+
+      if !@pl_member_account.nil?
+        if @policy_loan > 0
+          @total = (@total - @policy_loan).round(2)
+        end
+      end
 
       @member_account_validation
     end
@@ -155,9 +176,11 @@ module MemberAccountValidations
                             interest: @interest_amount,
                             total: @total,
                             equity_interest: @equity_interest_amount,
+                            equity_value: @equity_value,
+                            policy_loan: @policy_loan,
                             data: {
                               is_void: false,
-                              member_type: @member.member_type
+                              member_type: @member.member_type,
                             }
    			)
    		@member_account_validation.member_account_validation_records << member_account_validation_record

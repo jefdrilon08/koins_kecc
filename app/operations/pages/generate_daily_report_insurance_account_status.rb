@@ -23,28 +23,29 @@ module Pages
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           
-
-
+          sheet.add_row [
+          "Member",
+          "Recognition Date",
+          "Member Status",
+          "Insurance Status",
+          "Center", 
+          "Length of Membership", 
+          "Certificate Number", 
+          "RF",
+          "Coverage Date", 
+          "Number of Weeks Past Due", 
+          "Amount Past Due", 
+          "Status", 
+          "LIF",
+          "Coverage Date", 
+          "Number of Weeks Past Due", 
+          "Amount Past Due", 
+          "Status"], 
+          style: label_cell
 
           @centers.order("name ASC").each do |center|
+
             sheet.add_row []
-            sheet.add_row []
-            sheet.add_row [
-            "Member",
-            "Recognition Date", 
-            "Length of Membership", 
-            "Certificate Number", 
-            "RF",
-            "Coverage Date", 
-            "Number of Weeks Past Due", 
-            "Amount Past Due", 
-            "Status", 
-            "LIF",
-            "Coverage Date", 
-            "Number of Weeks Past Due", 
-            "Amount Past Due", 
-            "Status"], 
-            style: label_cell
 
             sheet.add_row [
                     center.name
@@ -102,6 +103,9 @@ module Pages
                   sheet.add_row [
                     member.full_name,
                     member.data['recognition_date'],
+                    member.status,
+                    member.insurance_status,
+                    member.center.name,
                     member.length_of_stay,
                     member.identification_number,
                     rf_account,
@@ -119,6 +123,9 @@ module Pages
                   sheet.add_row [
                     member.full_name,
                     member.data['recognition_date'],
+                    member.status,
+                    member.insurance_status,
+                    member.center.name,
                     member.length_of_stay,
                     member.identification_number,
                     rf_account,

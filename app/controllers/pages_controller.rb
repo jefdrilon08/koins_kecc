@@ -38,6 +38,13 @@ class PagesController < ApplicationController
     render "dashboard/finance"
   end
 
+  def blip_summary
+    @branches = Branch.all
+    @as_of = params[:as_of].try(:to_date) || Date.today
+
+    @records = Pages::BuildClaimsCounts.new(branches: @branches, as_of: @as_of).execute!
+  end
+
   def insights
     @end_date   = Date.today
     @start_date = @end_date - 7.days

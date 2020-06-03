@@ -1,0 +1,41 @@
+/ = title @equity_withdrawal_collection.id
+= render partial: "show_header"
+
+.container-fluid
+  .row
+    .col
+      .card
+        .card-body
+          - if @equity_withdrawal_collection.pending?
+            .callout.callout-info
+              %p
+                Pindutin ang amount upang baguhin ito.
+          %h5
+            Equity Withdrawal Collection for #{@equity_withdrawal_collection.branch} / #{@equity_withdrawal_collection.center} - #{@equity_withdrawal_collection.collection_date.strftime("%b %d, %Y")}
+          #equity-withdrawal-collection-content
+
+          - if debug?
+            %pre
+              %code
+                #{JSON.pretty_generate(JSON.parse(@equity_withdrawal_collection.to_json))}
+
+= render partial: "shared/modals/print"
+= render partial: "equity_withdrawal_collections/modals/approve"
+= render partial: "templates/error_list"
+
+#parameters{ data: { id: @equity_withdrawal_collection.id } }
+
+= javascript_include_tag "EquityWithdrawalCollectionUI.min.react"
+= javascript_include_tag "equity_withdrawal_collections/Show"
+
+:javascript
+  $(document).ready(function() {
+    var $parameters                     = $("#parameters");
+    var equityWithdrawalCollectionId    = $parameters.data('id');
+    var authenticityToken               = $("meta[name='csrf-token']").attr('content');
+
+    Show.init({
+      equityWithdrawalCollectionId: equityWithdrawalCollectionId, 
+      authenticityToken: authenticityToken
+    });
+  });

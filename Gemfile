@@ -37,6 +37,7 @@ gem 'rack-timeout'
 gem 'rack-mini-profiler'
 # For memory profiling
 gem 'memory_profiler'
+gem 'ffi', '1.9.18'
 
 # For call-stack profiling flamegraphs
 gem 'flamegraph'

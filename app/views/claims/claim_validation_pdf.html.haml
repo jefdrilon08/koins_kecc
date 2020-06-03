@@ -1,0 +1,259 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  .body1{
+    width: 100%;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+  hr {
+    border-color: black;
+  }
+  tr td {
+    font-size: 1.2em;
+  }
+
+%span.print-text
+  %center
+    %p
+      %b
+        Kasagana-Ka Mutual Benefit Association
+      %br
+        #{Settings.company_address}
+  %left
+    %p
+      CLAIMS VALIDATION:
+      %u
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.type_of_insurance_policy}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      %br
+      %br
+      %b
+        FOR:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      KASAGANA-KA Mutual Benefit Association, Inc.
+      %br
+      %b
+        FROM:&nbsp;&nbsp;&nbsp;
+      #{@claim.prepared_by.upcase}
+      %br
+      %b
+        DATE:&nbsp;&nbsp;&nbsp;&nbsp
+      - if !@claim.date_reported.nil?
+        #{@claim.date_reported}
+        #{Time.now.strftime("%H:%M:%S")}
+      - else
+        #{@claim.date_prepared}
+        #{Time.now.strftime("%H:%M:%S")}
+      %hr
+    .body1
+      %p
+        %b
+          For the following details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submitted Documents
+      %br
+      %table{:border => "0"}
+        %tr
+          %td{:width => "21%"}
+            Field Office:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@claim.branch}
+          %td{:width => "28%"}
+            [] Notice of Death/TPD/MVAH
+        %tr
+          %td{:width => "21%"}
+            Member's Name:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@member.check_name}
+          %td{:width => "28%"}
+            [] Application Form / Reinstatement  
+        %tr
+          %td{:width => "21%"}
+            Policy Number:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@member.identification_number}
+          %td{:width => "28%"}
+            [] Marriage Contract / Birth Certificate
+        %tr
+          %td{:width => "21%"}
+            Date of Policy Issue:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.date_of_policy_issue}
+          %td{:width => "28%"}
+            [] Death Certificate
+        %tr
+          %td{:width => "21%"}
+            Life:
+          %td{:width => "25%"}
+            %b
+              %u  
+                // #{@claim.equity_value}
+                #{number_with_delimiter(number_with_precision(@claim.equity_value, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+            [] Doctor's Certificate of TPD
+        %tr
+          %td{:width => "21%"}
+            RF:
+          %td{:width => "25%"}
+            %b
+              %u  
+                //#{@claim.retirement_fund}
+                #{number_with_delimiter(number_with_precision(@claim.retirement_fund, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+            [] Monitoring Tool
+        %tr
+          %td{:width => "21%"}
+          %td{:width => "25%"}
+          %td{:width => "28%"}
+            [] Valid ID
+        %tr
+          %td{:width => "21%"}
+            Length of Membership:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.length_of_stay}
+          %td{:width => "28%"}
+            [] Others ___________________
+      %br
+    .body2  
+      %p
+        %b
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Additional Requirements for MVAH
+      %table{:border => "0"}  
+        %tr
+          %td{:width => "21%"}
+            Name of Insured:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.name_of_insured.titleize}
+          %td{:width => "28%"}
+            [] Police Report
+        %tr
+          %td{:width => "21%"}
+            Date of Birth:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.date_of_birth}
+          %td{:width => "28%"}
+            [] Medical Certificate         
+        %tr
+          %td{:width => "21%"}
+            Classification:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.classification_of_insured}
+          %td{:width => "28%"}
+            [] Hospital Billing
+        %tr
+          %td{:width => "21%"}
+            Face Amount:
+          %td{:width => "25%"}
+            %b
+              %u  
+                //#{@claim.face_amount}
+                #{number_with_delimiter(number_with_precision(@claim.face_amount, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+            [] Official Receipts
+        %tr
+          %td{:width => "21%"}
+            Lapse:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{number_with_delimiter(number_with_precision(@claim.arrears, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Benefit Payable for BLIP:
+          %td{:width => "25%"}
+            %b
+              %u  
+                //#{@claim.face_amount}
+                #{number_with_delimiter(number_with_precision(@claim.face_amount, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Returned Contribution:
+          %td{:width => "25%"}
+            %b
+              %u  
+                //#{@claim.returned_contribution}
+                #{number_with_delimiter(number_with_precision(@claim.returned_contribution, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Total Amount Payable:
+          %td{:width => "25%"}
+            %b
+              %u  
+                //#{@claim.total_amount_payable}
+                #{number_with_delimiter(number_with_precision(@claim.total_amount_payable, precision: 2), delimiter: ",", separator: ".")}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Date Of Death/TPD/MVAH:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.date_of_death_tpd_accident}
+          %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Cause of Death/TPD/MVAH:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@claim.cause_of_death_tpd_accident}
+          %td{:width => "28%"}
+  %br
+  Beneficiary:
+  %b
+    %u
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#{@claim.beneficiary.upcase}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     
+  %br
+  %br
+  %br
+  .signatories
+    %table{:border => "0"}
+      %tr
+        %td{:width => "20%"}
+          Validated by:
+          %br
+          %br
+          %u
+            #{@claim.prepared_by}
+          %br
+          Account Officer
+        %td{:width => "30%"}
+          Approved by:
+          %br
+          %br
+          %u
+            Silvida Reyes - Antiquera
+          %br
+            KMBA - General Manager
+        %td{:width => "10%"}
+          Released by:
+          %br
+          %br
+          %br
+            %u

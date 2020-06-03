@@ -11,9 +11,12 @@ module MemberAccountValidations
                                                     @equity_interest_implementation_date
                                                     ).order("transacted_at ASC")
       if @lif_member_account_transactions.count > 1
+        # Old life 50%
         @lif_50_percent = @lif_member_account_transactions.last.data.with_indifferent_access[:ending_balance].try(:to_f) / 2
+        @equity_value   = @lif_member_account.data.with_indifferent_access[:equity_value].try(:to_f)
       else
         @lif_50_percent = 0.00
+        @equity_value   = 0.00
       end
 
       @amount_after_implementation = @lif_current_balance - (@lif_50_percent * 2)
@@ -35,7 +38,7 @@ module MemberAccountValidations
     def execute!
       tmp = {}
 
-      @equity_interest = ((@lif_50_percent * @interest_rate_weekly) * @num_weeks).round(2)
+      @equity_interest = ((@equity_value * @interest_rate_weekly) * @num_weeks).round(2)
       
       if @num_weeks_after_implementation > 0
         @equity_interest_after = ((@amount_after_implementation * @interest_rate_weekly) * @num_weeks_after_implementation).round(2)

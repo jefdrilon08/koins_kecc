@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   # insights
   get "/insights", to: "pages#insights"
 
+  # claims summary
+  get "/blip_summary", to: "pages#blip_summary"
+
   # export tools page
   get "/export_tools", to: "pages#export_tools"
 
@@ -242,6 +245,11 @@ Rails.application.routes.draw do
 
   # Insurance Withdrawals
   resources :insurance_withdrawal_collections, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
+
+  # Equity Withdrawals
+  resources :equity_withdrawal_collections, only: [:index, :show, :destroy] do
     collection { post :upload }
   end
 
