@@ -587,6 +587,7 @@ ActiveRecord::Schema.define(version: 2020_05_26_155205) do
     t.date "max_active_date"
     t.uuid "user_id"
     t.date "original_maturity_date"
+    t.boolean "is_restructured"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"

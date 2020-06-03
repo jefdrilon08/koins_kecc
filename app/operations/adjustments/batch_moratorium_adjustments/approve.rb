@@ -13,28 +13,50 @@ module Adjustments
         @number_of_days   = @data[:number_of_days].to_i
         @branch           = Branch.find(@meta[:branch][:id])
 
+        @center_ids = Center.where(branch_id: @branch.id).pluck(:id)
+
         if @meta[:center][:id].present?
-          @center = Center.find(@meta[:center][:id])
+          @center_ids = [@meta[:center][:id]]
         end
 
-        @loans  = Loan.active.where(
-                    branch_id: @branch.id
-                  )
-
-        if @center.present?
-          @loans  = @loans.where(center_id: @center.id)
-        end
-
-        @amortization_schedule_entries  = AmortizationScheduleEntry.unpaid.where(
-                                            "loan_id IN (?) AND due_date >= ?",
-                                            @loans.pluck(:id),
-                                            @date_initialized
-                                          )
+        @loan_ids = Loan.active.where(
+                      branch_id: @branch.id,
+                      center_id: @center_ids
+                    ).pluck(:id)
       end
 
       def execute!
-        @amortization_schedule_entries.each do |o|
-          o.update!(due_date: o.due_date + @number_of_days.days)
+        @loan_ids.each do |loan_id|
+          loan_term = Loan.find(loan_id).term
+          amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
+                                            "loan_id = ? AND due_date >= ?",
+                                            loan_id,
+                                            @date_initialized
+                                          ).order("due_date ASC")
+
+          if amortization_schedule_entries.any?
+            current_date  = amortization_schedule_entries.first.due_date
+            iter = 1
+            amortization_schedule_entries.each do |o|
+              if iter == 1
+                o.update!(due_date: current_date + @number_of_days.days)
+              else
+                if loan_term == "weekly"
+                  o.update!(due_date: current_date + 7.days)
+                elsif loan_term == "semi-monthly"
+                  o.update!(due_date: current_date + 15.days)
+                elsif loan_term == "monthly"
+                  o.update!(due_date: current_date + 30.days)
+                else
+                  raise "something went wrong"
+                end
+
+              end
+
+              current_date = o.due_date
+              iter = iter + 1
+            end
+          end
         end
 
         @adjustment_record.update!(status: "approved")

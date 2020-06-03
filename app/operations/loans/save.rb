@@ -1,5 +1,5 @@
 module Loans
-  class Save < AppValidator
+  class Save
     def initialize(config:)
       @config       = config
       @loan_data    = @config[:loan_data]

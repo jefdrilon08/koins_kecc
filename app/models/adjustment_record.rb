@@ -1,7 +1,8 @@
 class AdjustmentRecord < ApplicationRecord
   STATUSES  = [
     "pending", 
-    "approved"
+    "approved",
+    "processing"
   ]
 
   ADJUSTMENT_TYPES  = [

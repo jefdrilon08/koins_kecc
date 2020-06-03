@@ -32,6 +32,37 @@
           .text-muted
             #{number_to_currency(@loan.total_paid, unit: "")}
 
+- if @loan.restructured?
+  %h5
+    Restructured Loans
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-right
+          Principal Balance
+        %th.text-right
+          Interest Balance
+        %th.text-right
+          Total Balance
+    %tbody
+      - @loan.data["restructured_loans"].each do |rl|
+        %tr
+          %td
+            = link_to loan_path(rl.fetch("id")) do
+              #{rl.fetch("pn_number")}
+          %td
+            #{rl["loan_product"]["name"]}
+          %td.text-right
+            #{number_to_currency(rl.fetch("principal_balance"), unit: "")}
+          %td.text-right
+            #{number_to_currency(rl.fetch("interest_balance"), unit: "")}
+          %td.text-right
+            #{number_to_currency(rl.fetch("total_balance"), unit: "")}
+
 .row
   .col-md-4.col-xs-12
     %h4

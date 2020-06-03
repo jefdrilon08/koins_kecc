@@ -6,7 +6,5 @@
     .col
       .card
         .card-body
-          #content
-
-#parameters{ data: { settings: Settings.insights.to_json, branches: @branches.map{ |o| { id: o[:id], name: o[:name] } }.to_json, start_date: @start_date, end_date: @end_date } }
-= javascript_include_tag "Insights.min.react"
+          %h1
+            Out of Service

@@ -39,6 +39,14 @@ class LoansController < ApplicationController
   end
 
   def form
+    if params[:id].present?
+      loan  = Loan.find(params[:id])
+    end
+
+    if loan.present? and loan.is_restructured
+      redirect_to member_path(@member)
+    end
+
     @member = Member.where(id: params[:member_id]).first
     @branch = @member.branch
 

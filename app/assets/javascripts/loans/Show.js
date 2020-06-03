@@ -106,6 +106,7 @@ var Show  = (function() {
     $inputDelayAmort      = $("#input-delay-amort");
     $inputReason          = $("#input-reason");
 
+
     templateErrorList = $("#template-error-list").html();
   };
 

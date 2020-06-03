@@ -39,6 +39,10 @@
           %td.text-right
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
+
+  %button#btn-restructure.btn.btn-info.text-white
+    .fa.fa-sync
+    Restructure
 - else
   %p
     No active loans found.

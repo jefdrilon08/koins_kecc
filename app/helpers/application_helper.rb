@@ -1,13 +1,26 @@
 module ApplicationHelper
+  def loan_products_for_restructuring
+    loan_product_ids = Settings.loan_products.select{ |o| o.for_restructuring == true }.pluck(:loan_product_id)    
+
+    if loan_product_ids.any?
+      return LoanProduct.where(id: loan_product_ids)
+    else
+      []
+    end
+  end
+
   def sbk_mis_user
     sbk_mis_user = ["SBK","MIS"].include? current_user.roles.last
   end
+
   def sbk_bk_mis_user
     sbk_bk_mis_user = ["SBK","MIS","BK"].include? current_user.roles.last
   end
+
   def oas_mis_user
     oas_mis_user = ["OAS","MIS"].include? current_user.roles.last
   end
+
   def title(*args)
     key = "titles.#{params[:controller].gsub("/", ".")}.#{params[:action]}"
     content_for :title, t(key, title: args.join(" - "))

@@ -2,7 +2,8 @@ class Loan < ApplicationRecord
   STATUSES  = [
     "pending",
     "active",
-    "paid"
+    "paid",
+    "processing"
   ]
   LOAN_STATUSES = [
     "pending",
@@ -50,6 +51,14 @@ class Loan < ApplicationRecord
       reference_number: entry["reference_number"],
       particular:       entry["particular"],
     )
+  end
+
+  def loan_product_name
+    self.loan_product.name
+  end
+
+  def restructured?
+    self.is_restructured
   end
 
   def load_defaults

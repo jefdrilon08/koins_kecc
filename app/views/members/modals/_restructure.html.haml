@@ -1,0 +1,100 @@
+#modal-restructure.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Restructure Loans
+      .modal-body
+        .modal-body-content
+          .row
+            .col
+              .form-group
+                %label
+                  Loan Product
+                = select_tag :loan_product_id, options_from_collection_for_select(loan_products_for_restructuring, :id, :to_s), class: "form-control select-select2 js-searchable", id: "select-restructure-loan-product"
+          .row
+            .col
+              .form-group
+                %label
+                  Active Loans
+                = select_tag :active_loans, options_from_collection_for_select(@active_loans, :id, :loan_product_name), class: "form-control select-select2 js-searchable", id: "select-active-loans", multiple: true
+          %h6
+            Co-maker Information
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Pangalan ng Co-maker (Kamag-anak)
+                = text_field_tag :co_maker_a, "", id: "input-co-maker-a", class: "form-control"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Pangalan ng Co-maker (Kasama sa sentro)
+                = select_tag :co_maker_b, options_from_collection_for_select(Member.active.where(center_id: @member.center_id).where.not(id: @member.id), :id, :full_name), class: "form-control", id: "select-co-maker-b"
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  PN Number
+                = text_field_tag :pn_number, "", id: "input-pn-number", class: "form-control"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  CLIP Number
+                = text_field_tag :clip_number, "", id: "input-clip-number", class: "form-control"
+          .row
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Date Prepared
+                = date_field_tag :date_prepared, Date.today, id: "input-date-prepared", class: "form-control"
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Term
+                = select_tag :term, options_for_select([]), id: "select-term", class: "form-control"
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Mode of Payment
+                = select_tag :mode_of_payment, options_for_select([["Weekly", "weekly"], ["Monthly", "monthly"], ["Semi-monthly", "semi-monthly"]]), id: "select-mode-of-payment", class: "form-control"
+          %h6
+            CLIP Beneficiary
+          .card
+            .card-body
+              .row
+                .col-md-4.col-xs-12
+                  .form-group
+                    %label
+                      First Name
+                    = text_field_tag :first_name, "", id: "input-beneficiary-first-name", class: "form-control"
+                .col-md-4.col-xs-12
+                  .form-group
+                    %label
+                      Middle Name
+                    = text_field_tag :middle_name, "", id: "input-beneficiary-middle-name", class: "form-control"
+                .col-md-4.col-xs-12
+                  .form-group
+                    %label
+                      Last Name
+                    = text_field_tag :last_name, "", id: "input-beneficiary-last-name", class: "form-control"
+              .row
+                .col-md-6.col-xs-12
+                  .form-group
+                    %label
+                      Date of Birth
+                    = date_field_tag :date_of_birth, "", id: "input-beneficiary-date-of-birth", class: "form-control"
+                .col-md-6.col-xs-12
+                  .form-group
+                    %label
+                      Relationship
+                    = text_field_tag :relationship, "", id: "input-beneficiary-relationship", class: "form-control"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-restructure.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
