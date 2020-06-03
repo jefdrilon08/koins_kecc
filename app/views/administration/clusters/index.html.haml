@@ -1,20 +1,12 @@
-= render partial: "index_header"
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @clusters.any?
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @clusters.any?
-
-            = render partial: "index_list"
-          - else
-            %p
-              No clusters found
-
-= javascript_include_tag "administration/clusters/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });
+              = render partial: "index_list"
+            - else
+              %p
+                No clusters found

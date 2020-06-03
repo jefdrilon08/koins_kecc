@@ -87,6 +87,9 @@ import AdministrationUsersIndex from "../models/AdministrationUsersIndex.js";
 import AdministrationLoanProductsShow from "../models/AdministrationLoanProductsShow.js";
 import AdministrationLoanProductsIndex from "../models/AdministrationLoanProductsIndex.js";
 import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
+import AdministrationClustersIndex from "../models/AdministrationClustersIndex.js";
+import AdministrationBranchesIndex from "../models/AdministrationBranchesIndex.js";
+import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -158,7 +161,10 @@ const hooks = {
   "administration/users/show":                      [BranchManagerComponent],
   "administration/loan_products/show":              [AdministrationLoanProductsShow],
   "administration/loan_products/index":             [AdministrationLoanProductsIndex],
-  "administration/areas/index":                     [AdministrationAreasIndex]
+  "administration/areas/index":                     [AdministrationAreasIndex],
+  "administration/clusters/index":                  [AdministrationClustersIndex],
+  "administration/branches/index":                  [AdministrationBranchesIndex],
+  "administration/centers/show":                    [AdministrationCentersShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

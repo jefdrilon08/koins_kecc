@@ -1,20 +1,12 @@
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @centers.any?
-
-            = render partial: "index_list"
-          - else
-            %p
-              No centers found
-
-= javascript_include_tag "administration/centers/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @centers.any?
+              = render partial: "index_list"
+            - else
+              %p
+                No centers found
+            = paginate @centers

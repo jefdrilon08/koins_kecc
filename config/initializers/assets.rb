@@ -14,14 +14,9 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile += [
-  "administration/centers/Show.js",
   "administration/user_demerits/Show.js",
-  "administration/clusters/Index.js",
-  "administration/branches/Index.js",
-  "administration/centers/Index.js",
   "administration/surveys/Index.js",
   "administration/surveys/Show.js",
-  "administration/loan_products/Index.js",
 	"administration/member_shares/Print.js",
 	"accounting/BooksIndex.js",
   "savings_accounts/ShowWithdrawalRequest.js",
