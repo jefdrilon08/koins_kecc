@@ -54,7 +54,7 @@ module Claims
     private
 
     def validate_calamity_duplication!
-     count = Claim.where("claim_type = ? AND data->>'date_of_event'= ?" , "CALAMITY ASSISTANCE", @date_of_event).count
+     count = Claim.where("claim_type = ? AND data->>'date_of_event'= ? AND member_id = ?" , "CALAMITY ASSISTANCE", @date_of_event, @claim.member_id).count
         if count > 0 
           @errors << "Duplicate CALAMITY!"
         end
