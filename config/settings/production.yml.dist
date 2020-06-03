@@ -51,7 +51,7 @@ branch_config:
     current_date: "2020-03-31"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
     current_date: "2020-03-31"
@@ -982,7 +982,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
