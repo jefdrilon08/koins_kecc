@@ -20,16 +20,70 @@ module Administration
 
     def index
       @loan_products  = LoanProduct.select("*").order("priority ASC, name ASC")
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          text: "Loan Products"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          id: "btn-new",
+          link: new_administration_loan_product_path,
+          class: "fa fa-plus",
+          text: "New Loan Product"
+        }
+      ]
     end
 
     def show
       @loan_product         = LoanProduct.find(params[:id])
       @prerequisite_id      = @loan_product.prerequisite.try(:id)
       @maintaining_balance  = @loan_product.maintaining_balance
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_loan_products_path,
+          text: "Loan Products"
+        },
+        {
+          text: "#{@loan_product.name}"
+        }
+      ]
+
+      @subheader_side_actions = []
+
+      @payload = {
+        id: @loan_product.id
+      }
     end
 
     def new
       @loan_product = LoanProduct.new
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_loan_products_path,
+          text: "Loan Products"
+        },
+        {
+          text: "New Loan Product"
+        }
+      ]
+
+      @subheader_side_actions = []
     end
 
     def create
@@ -47,11 +101,43 @@ module Administration
       if @loan_product.save
         redirect_to administration_loan_product_path(@loan_product)
       else
+        @subheader_items = [
+          {
+            text: "Administration"
+          },
+          {
+            is_link: true,
+            path: administration_loan_products_path,
+            text: "Loan Products"
+          },
+          {
+            text: "New Loan Product"
+          }
+        ]
+
+        @subheader_side_actions = []
+
         render :new
       end
     end
 
     def edit
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_loan_products_path,
+          text: "Loan Products"
+        },
+        {
+          text: "Edit: #{@loan_product.name}"
+        }
+      ]
+
+      @subheader_side_actions = []
+
       @loan_product = LoanProduct.find(params[:id])
     end
 
@@ -71,6 +157,22 @@ module Administration
 
         redirect_to administration_loan_product_path(@loan_product)
       else
+        @subheader_items = [
+          {
+            text: "Administration"
+          },
+          {
+            is_link: true,
+            path: administration_loan_products_path,
+            text: "Loan Products"
+          },
+          {
+            text: "Edit: #{@loan_product.name}"
+          }
+        ]
+
+        @subheader_side_actions = []
+
         render :edit
       end
     end

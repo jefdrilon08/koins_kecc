@@ -138,7 +138,8 @@ module Administration
         {
           id: "",
           text: "Edit",
-          class: "fa fa-pencil-alt"
+          class: "fa fa-pencil-alt",
+          link: edit_administration_announcement_path(@announcement)
         }
       ]
     end

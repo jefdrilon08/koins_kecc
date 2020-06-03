@@ -1,8 +1,9 @@
-= render partial: "edit_header"
+= title
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "form", locals: { area: @area }
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            = render partial: "form", locals: { area: @area }

@@ -84,6 +84,9 @@ import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.j
 import Seriatim from "../models/Seriatim.js";
 import ClaimsIndex from "../models/ClaimsIndex.js";
 import AdministrationUsersIndex from "../models/AdministrationUsersIndex.js";
+import AdministrationLoanProductsShow from "../models/AdministrationLoanProductsShow.js";
+import AdministrationLoanProductsIndex from "../models/AdministrationLoanProductsIndex.js";
+import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -152,7 +155,10 @@ const hooks = {
   "pages/seriatim":                                 [Seriatim],
   "claims/index":                                   [ClaimsIndex],
   "administration/users/index":                     [AdministrationUsersIndex],
-  "administration/users/show":                      [BranchManagerComponent]
+  "administration/users/show":                      [BranchManagerComponent],
+  "administration/loan_products/show":              [AdministrationLoanProductsShow],
+  "administration/loan_products/index":             [AdministrationLoanProductsIndex],
+  "administration/areas/index":                     [AdministrationAreasIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
