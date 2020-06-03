@@ -1,5 +1,4 @@
 import 'datatables.net-bs4';
-
 var $dataTable;
 
 var init  = function() {
@@ -12,8 +11,9 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
-  $dataTable.DataTable();
+  $dataTable.DataTable({
+    fixedHeader: true
+  });
 };
-
 
 export default { init: init };

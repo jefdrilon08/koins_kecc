@@ -10,7 +10,6 @@ module.exports = {
     MemberAccountsSavingsIndex:                   "./app/assets/javascript/components/member_accounts/savings/Index.js",
     SurveyUI:                                     "./app/assets/javascript/components/administration/surveys/SurveyUI.js",
     SurveyQuestionUI:                             "./app/assets/javascript/components/administration/surveys/survey_questions/SurveyQuestionUI.js",
-    BranchManager:                                "./app/assets/javascript/components/administration/users/BranchManager.js",
     BranchLoanProductStats:                       "./app/assets/javascript/components/dashboard/BranchLoanProductStats.js",
     LoanAccountingEntry:                          "./app/assets/javascript/components/loans/AccountingEntry.js",
     DashboardMain:                                "./app/assets/javascript/components/dashboard/Main.js",

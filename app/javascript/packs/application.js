@@ -33,6 +33,7 @@ import TrialBalanceComponent from "../components/accounting/TrialBalanceComponen
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
 import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
 import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
+import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -82,6 +83,7 @@ import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
 import Seriatim from "../models/Seriatim.js";
 import ClaimsIndex from "../models/ClaimsIndex.js";
+import AdministrationUsersIndex from "../models/AdministrationUsersIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -148,7 +150,9 @@ const hooks = {
   "accounting/accounting_entries/show":             [AccountingEntriesShow],
   "pages/daily_report_insurance_account_status":    [InsuranceAccountStatusIndex],
   "pages/seriatim":                                 [Seriatim],
-  "claims/index":                                   [ClaimsIndex]
+  "claims/index":                                   [ClaimsIndex],
+  "administration/users/index":                     [AdministrationUsersIndex],
+  "administration/users/show":                      [BranchManagerComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

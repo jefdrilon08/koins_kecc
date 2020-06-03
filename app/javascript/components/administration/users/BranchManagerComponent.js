@@ -5,7 +5,7 @@ import "react-toggle/style.css";
 
 import SkCubeLoading from '../../SkCubeLoading';
 
-export default class BranchManagerDisplay extends React.Component {
+export default class BranchManagerComponent extends React.Component {
   constructor(props) {
     super(props);
 

@@ -15,7 +15,6 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 
 Rails.application.config.assets.precompile += [
   "administration/centers/Show.js",
-  "administration/users/Index.js",
   "administration/user_demerits/Show.js",
   "administration/areas/Index.js",
   "administration/clusters/Index.js",
@@ -81,7 +80,6 @@ Rails.application.config.assets.precompile += [
   "EquityWithdrawalCollectionUI.min.react.js",
   "InsuranceFundTransferCollectionUI.min.react.js",
   "Insights.min.react.js",
-  "BranchManager.min.react.js",
   "BranchLoanProductStats.min.react.js",
   "DashboardMain.min.react.js",
   "BranchRepaymentReportShow.min.react.js",
