@@ -27,13 +27,13 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
@@ -58,7 +58,7 @@ branch_config:
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
     current_date: "2020-03-31"
@@ -982,7 +982,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 100.00
+        amount: 50.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
