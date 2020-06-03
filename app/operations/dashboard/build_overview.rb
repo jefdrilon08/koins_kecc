@@ -93,7 +93,8 @@ module Dashboard
           d[:overall_interest_balance]  += r["overall_interest_balance"].to_f.round(2)
 
           # Par Amount. Add if num_days_par > 0
-          if r["num_days_par"].to_i > 0
+          #if r["num_days_par"].to_i > 0
+          if r["par"].to_f > 0
             d[:par_amount] += r["overall_principal_balance"].to_f.round(2)
           end
         end
