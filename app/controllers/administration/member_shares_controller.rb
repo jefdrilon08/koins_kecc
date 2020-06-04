@@ -27,6 +27,11 @@ module Administration
 
       @members       = @members.page(params[:page]).per(LIST_PAGE_SIZE)
       @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
+
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Member Shares Monitoring" }
+      ]
     end
 
     def print

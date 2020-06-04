@@ -1,20 +1,13 @@
-= title
-= render partial: "shared/c_subheader", locals: { items: [{ class: "", text: "Members" }], side_actions: [{ link: member_form_path, class: "fa fa-plus", text: "New Member" }] }
-
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            = render partial: "index_filter"
-            - if @members.any?
-              = render partial: "index_list", locals: { members: @members }
-              = paginate @members
-            - else
-              %p
-                No members found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @members.any?
+          = render partial: "index_list", locals: { members: @members }
+          = paginate @members
+        - else
+          %p
+            No members found
 
 = render partial: "templates/center_options"
-
-#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }

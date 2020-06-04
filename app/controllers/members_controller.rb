@@ -37,6 +37,13 @@ class MembersController < ApplicationController
     end
 
     @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+    @subheader_items = [
+      { text: "Members" },
+    ]
+
+    @subheader_side_actions = [
+      { id: "", link: member_form_path, class: "fa fa-plus", text: "New Member" }
+    ]
   end
 
   def form_resignation
@@ -60,10 +67,8 @@ class MembersController < ApplicationController
       }
     ]
 
-    @subheader_side_actions = []
-
     @payload = {
-      "id": @member.id,
+      "id": params[:id],
       "memberTypes": Settings.default_member_types
     }
   end

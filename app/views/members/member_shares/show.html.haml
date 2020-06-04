@@ -1,37 +1,23 @@
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          .row
-            .col
+.row
+  .col
+    .card
+      .card-body
+        .row
+          .col
+            %h4
+              #{@member_share}
+          .col
+            .text-right
               %h4
-                #{@member_share}
-            .col
-              .text-right
-                %h4
-                  Date of Issue:
-                  - if @member_share.date_of_issue
-                    #{@member_share.date_of_issue.strftime("%B %d, %Y")}
-          %hr
-          .row
-            .col
-              - if @member_share.data["printed"].to_s == "true"
-                Date Printed: #{@member_share.data["date_printed"]}
-              - else
-                Not yet printed
+                Date of Issue:
+                - if @member_share.date_of_issue
+                  #{@member_share.date_of_issue.strftime("%B %d, %Y")}
+        %hr
+        .row
+          .col
+            - if @member_share.data["printed"].to_s == "true"
+              Date Printed: #{@member_share.data["date_printed"]}
+            - else
+              Not yet printed
 
 = render partial: "shared/modals/print"
-
-= javascript_include_tag "members/member_shares/Show"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Show.init({
-      authenticityToken: authenticityToken
-    });
-  });

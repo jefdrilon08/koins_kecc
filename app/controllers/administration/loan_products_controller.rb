@@ -59,8 +59,6 @@ module Administration
         }
       ]
 
-      @subheader_side_actions = []
-
       @payload = {
         id: @loan_product.id
       }

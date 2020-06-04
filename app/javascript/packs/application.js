@@ -95,6 +95,7 @@ import AdministrationBranchesIndex from "../models/AdministrationBranchesIndex.j
 import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
 import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js";
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
+import MemberSharesShow from "../models/MemberSharesShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -172,7 +173,8 @@ const hooks = {
   "administration/centers/show":                    [AdministrationCentersShow],
   "administration/surveys/index":                   [AdministrationSurveysIndex],
   "administration/surveys/show":                    [AdministrationSurveysShow],
-  "administration/surveys/survey_question_form":    [SurveyQuestionUIComponent]
+  "administration/surveys/survey_question_form":    [SurveyQuestionUIComponent],
+  "members/member_shares/show":                     [MemberSharesShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -1,15 +1,12 @@
 = title @member.full_name
-= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
 
-%main.c-main
-  .container-fluid
-    .row
-      .col-md-4.col-xs-12
-        = render partial: "member_semi_details"
-      .col-md-8.col-xs-12
-        .card
-          .card-body
-            = render partial: "member_details"
+.row
+  .col-md-4.col-xs-12
+    = render partial: "member_semi_details"
+  .col-md-8.col-xs-12
+    .card
+      .card-body
+        = render partial: "member_details"
 
 = render partial: "members/modals/generate_access_token"
 = render partial: "members/modals/signature"
@@ -28,5 +25,3 @@
 = render partial: "members/modals/delete_signature"
 = render partial: "members/modals/register"
 = render partial: "templates/error_list"
-
-#parameters{ data: { member_id: @member.id, controller: "#{params[:controller]}", action: "#{params[:action]}" } }
