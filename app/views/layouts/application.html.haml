@@ -19,6 +19,8 @@
     .c-wrapper
       = render partial: "shared/header"
       .c-body
-        = yield
+        %main.c-main
+          .container-fluid
+            = yield
     = render partial: "templates/error_list"
     = render partial: "templates/loader"

@@ -1,16 +1,13 @@
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          %h2
-            #{@project_type_category}
-            %small
-              (#{@project_type_category.code})
-          %hr
-          %ul
-            - @project_type_category.project_types.each do |o|
-              %li
-                #{o}
+.row
+  .col
+    .card
+      .card-body
+        %h2
+          #{@project_type_category}
+          %small
+            (#{@project_type_category.code})
+        %hr
+        %ul
+          - @project_type_category.project_types.each do |o|
+            %li
+              #{o}
