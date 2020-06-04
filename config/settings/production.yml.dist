@@ -406,6 +406,9 @@ default_deposit_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Policy Loan"
 
 default_withdrawal_accounts:
   -
@@ -464,12 +467,20 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Credit Life Insurance Plan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Policy Loan"
 
 # Mba new insurance accounts
 hiip: "Hospital Income Insurance Plan"
 clip: "Credit Life Insurance Plan"
+life: "Life Insurance Fund"
+pl: "Policy Loan"
 
-
+default_equity_withdrawal_accounts:
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Life Insurance Fund"
 
 #Time Deposit Config
 time_deposit_autorenewal_user_id: "72eb76bc-3f42-40f9-a9e8-7f71ee656508"

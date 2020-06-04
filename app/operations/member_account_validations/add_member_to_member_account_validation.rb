@@ -30,6 +30,8 @@ module MemberAccountValidations
 
       if !@pl_member_account.nil?
         @policy_loan = @pl_member_account.try(:balance).to_f
+      else
+        @policy_loan = 0.00
       end
 
       @lif_current_balance        = @data[:lif_current_balance]
