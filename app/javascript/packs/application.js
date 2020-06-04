@@ -38,6 +38,8 @@ import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComp
 import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
 import SurveyQuestionUIComponent from "../components/administration/surveys/survey_questions/SurveyQuestionUIComponent.js";
 import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
+import ManualAgingShowComponent from "../components/data_stores/manual_aging/ShowComponent.js";
+import PersonalFundsShowComponent from "../components/data_stores/personal_funds/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -101,6 +103,9 @@ import ExportsBillingPerCenter from "../models/ExportsBillingPerCenter.js";
 import MonthlyNewAndResignedIndex from "../models/MonthlyNewAndResignedIndex.js";
 import ExportTools from "../models/ExportTools.js";
 import RepaymentRatesIndex from "../models/RepaymentRatesIndex.js";
+import ManualAgingIndex from "../models/ManualAgingIndex.js";
+import PersonalFundsIndex from "../models/PersonalFundsIndex.js";
+import PersonalFundsShow from "../models/PersonalFundsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -184,7 +189,11 @@ const hooks = {
   "data_stores/monthly_new_and_resigned/index":     [MonthlyNewAndResignedIndex],
   "pages/export_tools":                             [ExportTools],
   "data_stores/repayment_rates/index":              [RepaymentRatesIndex],
-  "data_stores/repayment_rates/show":               [RepaymentRatesShowComponent]
+  "data_stores/repayment_rates/show":               [RepaymentRatesShowComponent],
+  "data_stores/manual_aging/index":                 [ManualAgingIndex],
+  "data_stores/manual_aging/show":                  [ManualAgingShowComponent],
+  "data_stores/personal_funds/index":               [PersonalFundsIndex],
+  "data_stores/personal_funds/show":                [PersonalFundsShowComponent, PersonalFundsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

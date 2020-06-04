@@ -19,8 +19,6 @@ module.exports = {
     SoaLoansShow:                                 "./app/assets/javascript/components/data_stores/soa_loans/Show.js",
     SoaFundsShow:                                 "./app/assets/javascript/components/data_stores/soa_funds/Show.js",
     WatchlistsShow:                               "./app/assets/javascript/components/data_stores/watchlists/Show.js",
-    ManualAgingShow:                              "./app/assets/javascript/components/data_stores/manual_aging/Show.js",
-    PersonalFundsShow:                            "./app/assets/javascript/components/data_stores/personal_funds/Show.js",
     XWeeksToPayShow:                              "./app/assets/javascript/components/data_stores/x_weeks_to_pay/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./app/assets/javascript/components/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision:           "./app/assets/javascript/components/monitoring/AccountingEntryPrecision.js",

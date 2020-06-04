@@ -9,7 +9,7 @@ import SkCubeLoading from '../../SkCubeLoading';
 import ErrorDisplay from '../../ErrorDisplay';
 import {numberWithCommas} from '../../utils/helpers';
 
-export default class ShowDisplay extends React.Component {
+export default class ShowComponent extends React.Component {
   constructor(props) {
     super(props);
 
