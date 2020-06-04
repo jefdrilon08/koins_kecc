@@ -147,31 +147,60 @@ class PagesController < ApplicationController
 
   def billing_per_center
     @centers  = @branches.first.centers.order("name ASC")
+
+    @subheader_items = [
+      { text: "Billing Per Center" }
+    ]
   end
 
   def upload_deposit
+    @subheader_items = [
+      { text: "Upload Insurance Deposit" }
+    ]
   end
 
   def upload_insurance_withdrawal
+    @subheader_items = [
+      { text: "Upload Insurance Withdrawal" }
+    ]
   end
 
   def upload_fund_transfer
+    @subheader_items = [
+      { text: "Upload Fund Transfer" }
+    ]
   end
 
   def import_members
+    @subheader_items = [
+      { text: "Import Members" }
+    ]
   end
 
   def import_beneficiaries
+    @subheader_items = [
+      { text: "Import Beneficiaries" }
+    ]
   end
 
   def import_legal_dependents
+    @subheader_items = [
+      { text: "Import Legal Dependents" }
+    ]
   end
 
   def import_insurance_accounts
+    @subheader_items = [
+      { text: "Import Insurance Accounts" }
+    ]
   end
 
   def import_insurance_account_transactions
     @records  = DataStore.import_insurance_account_transactions.order("created_at DESC").page(params[:page]).per(35)
+
+    @subheader_items = [
+      { text: "Import Insurance Account Transactions" }
+    ]
   end
 
   def seriatim
