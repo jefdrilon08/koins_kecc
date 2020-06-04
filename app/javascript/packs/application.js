@@ -37,6 +37,7 @@ import AccountingEntryFormComponent from "../components/accounting/AccountingEnt
 import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
 import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
 import SurveyQuestionUIComponent from "../components/administration/surveys/survey_questions/SurveyQuestionUIComponent.js";
+import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -99,6 +100,7 @@ import MemberSharesShow from "../models/MemberSharesShow.js";
 import ExportsBillingPerCenter from "../models/ExportsBillingPerCenter.js";
 import MonthlyNewAndResignedIndex from "../models/MonthlyNewAndResignedIndex.js";
 import ExportTools from "../models/ExportTools.js";
+import RepaymentRatesIndex from "../models/RepaymentRatesIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -180,7 +182,9 @@ const hooks = {
   "members/member_shares/show":                     [MemberSharesShow],
   "pages/billing_per_center":                       [ExportsBillingPerCenter],
   "data_stores/monthly_new_and_resigned/index":     [MonthlyNewAndResignedIndex],
-  "pages/export_tools":                             [ExportTools]
+  "pages/export_tools":                             [ExportTools],
+  "data_stores/repayment_rates/index":              [RepaymentRatesIndex],
+  "data_stores/repayment_rates/show":               [RepaymentRatesShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
