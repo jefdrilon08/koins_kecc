@@ -83,7 +83,6 @@ Rails.application.config.assets.precompile += [
   "ManualAgingShow.min.react.js",
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js",
   "MonitoringAccountingEntryPrecision.min.react.js",
-  "exports/Exports.js",
   "clip_claims/Index.js",
   "clip_claims_form.js",
   "reports/InsuredLoans.js",

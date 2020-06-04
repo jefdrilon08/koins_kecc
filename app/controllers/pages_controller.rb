@@ -143,6 +143,9 @@ class PagesController < ApplicationController
   end
 
   def export_tools
+    @subheader_items = [
+      { text: "Export Tools" }
+    ]
   end
 
   def billing_per_center

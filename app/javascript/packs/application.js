@@ -98,6 +98,7 @@ import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
 import MemberSharesShow from "../models/MemberSharesShow.js";
 import ExportsBillingPerCenter from "../models/ExportsBillingPerCenter.js";
 import MonthlyNewAndResignedIndex from "../models/MonthlyNewAndResignedIndex.js";
+import ExportTools from "../models/ExportTools.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -178,7 +179,8 @@ const hooks = {
   "administration/surveys/survey_question_form":    [SurveyQuestionUIComponent],
   "members/member_shares/show":                     [MemberSharesShow],
   "pages/billing_per_center":                       [ExportsBillingPerCenter],
-  "data_stores/monthly_new_and_resigned/index":     [MonthlyNewAndResignedIndex]
+  "data_stores/monthly_new_and_resigned/index":     [MonthlyNewAndResignedIndex],
+  "pages/export_tools":                             [ExportTools]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
