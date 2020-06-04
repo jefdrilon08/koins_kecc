@@ -11,7 +11,7 @@
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
 
 #north 3
   -
@@ -19,10 +19,10 @@ branch_config:
     current_date: "2020-04-30"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    current_date: "2020-05-31"
+    current_date: "2020-05-29"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-05-31"
+    current_date: "2020-05-29"
 
 #north 2    
   -
@@ -43,7 +43,7 @@ branch_config:
     current_date: "2020-03-31"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
 
 #east1
   -
@@ -68,7 +68,7 @@ branch_config:
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
     current_date: "2020-03-31"
