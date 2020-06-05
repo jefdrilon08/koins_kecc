@@ -14,8 +14,6 @@ module.exports = {
     LoanAccountingEntry:                          "./app/assets/javascript/components/loans/AccountingEntry.js",
     DashboardMain:                                "./app/assets/javascript/components/dashboard/Main.js",
     BranchRepaymentReportShow:                    "./app/assets/javascript/components/data_stores/branch_repayment_reports/Show.js",
-    BranchResignationShow:                        "./app/assets/javascript/components/data_stores/branch_resignations/Show.js",
-    WatchlistsShow:                               "./app/assets/javascript/components/data_stores/watchlists/Show.js",
     MonitoringAccountingEntrySubsidiaryBalancing: "./app/assets/javascript/components/monitoring/AccountingEntrySubsidiaryBalancing.js",
     MonitoringAccountingEntryPrecision:           "./app/assets/javascript/components/monitoring/AccountingEntryPrecision.js",
     DashboardMainMii:                             "./app/assets/javascript/components/dashboard/MainMii.js"

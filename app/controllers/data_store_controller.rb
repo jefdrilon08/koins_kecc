@@ -118,7 +118,7 @@ class DataStoreController < ApplicationController
     order_field = config.fetch(:order)
 
     scope
-      .select("id, status, created_at, updated_at, #{(meta_fields + data_fields).join(", ")}")
+      .select("id, meta, status, created_at, updated_at, #{(meta_fields + data_fields).join(", ")}")
       .where("meta->>'branch_id' IN (?)", @branches.pluck(:id))
       .order(order_field)
       .page(params[:page])

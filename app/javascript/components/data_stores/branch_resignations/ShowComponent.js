@@ -8,8 +8,6 @@ import Modal from 'react-modal';
 
 import ResignationDisplay from './ResignationDisplay';
 
-Modal.setAppElement("body");
-
 const customStyles  = {
   content : {
     top: '50%',
