@@ -114,6 +114,7 @@ import InsuranceMemberCountsIndex from "../models/InsuranceMemberCountsIndex.js"
 import InsuranceMemberCountsShow from "../models/InsuranceMemberCountsShow.js";
 import ClaimsCountsIndex from "../models/ClaimsCountsIndex.js";
 import ClaimsCountsShow from "../models/ClaimsCountsShow.js";
+import AccountingEntriesSummariesIndex from "../models/AccountingEntriesSummariesIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -209,7 +210,8 @@ const hooks = {
   "data_stores/insurance_member_counts/index":      [InsuranceMemberCountsIndex],
   "data_stores/insurance_member_counts/show":       [InsuranceMemberCountsShow],
   "data_stores/claims_counts/index":                [ClaimsCountsIndex],
-  "data_stores/claims_counts/show":                 [ClaimsCountsShow]
+  "data_stores/claims_counts/show":                 [ClaimsCountsShow],
+  "data_stores/accounting_entries_summaries/index": [AccountingEntriesSummariesIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

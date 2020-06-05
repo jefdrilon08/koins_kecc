@@ -32,7 +32,6 @@ Rails.application.config.assets.precompile += [
   "data_stores/icpr/Show.js",
   "data_stores/patronage_refund/Index.js",
   "data_stores/patronage_refund/Show.js",
-  "data_stores/accounting_entries_summaries/Index.js",
   "data_stores/soa_expenses/Index.js",
   "data_stores/soa_loans/Index.js",
   "data_stores/soa_funds/Index.js",
