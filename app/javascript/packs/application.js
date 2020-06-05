@@ -42,6 +42,8 @@ import ManualAgingShowComponent from "../components/data_stores/manual_aging/Sho
 import PersonalFundsShowComponent from "../components/data_stores/personal_funds/ShowComponent.js";
 import SOAExpensesShowComponent from "../components/data_stores/soa_expenses/ShowComponent.js";
 import SOALoansShowComponent from "../components/data_stores/soa_loans/ShowComponent.js";
+import SOAFundsShowComponent from "../components/data_stores/soa_funds/ShowComponent.js";
+import WatchlistsShowComponent from "../components/data_stores/watchlists/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -119,6 +121,8 @@ import ClaimsCountsShow from "../models/ClaimsCountsShow.js";
 import AccountingEntriesSummariesIndex from "../models/AccountingEntriesSummariesIndex.js";
 import SOAExpensesIndex from "../models/SOAExpensesIndex.js";
 import SOALoansIndex from "../models/SOALoansIndex.js";
+import SOAFundsIndex from "../models/SOAFundsIndex.js";
+import WatchlistsIndex from "../models/WatchlistsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -219,7 +223,11 @@ const hooks = {
   "data_stores/soa_expenses/index":                 [SOAExpensesIndex],
   "data_stores/soa_expenses/show":                  [SOAExpensesShowComponent],
   "data_stores/soa_loans/index":                    [SOALoansIndex],
-  "data_stores/soa_loans/show":                     [SOALoansShowComponent]
+  "data_stores/soa_loans/show":                     [SOALoansShowComponent],
+  "data_stores/soa_funds/index":                    [SOAFundsIndex],
+  "data_stores/soa_funds/show":                     [SOAFundsShowComponent],
+  "data_stores/watchlists/index":                   [WatchlistsIndex],
+  "data_stores/watchlists/show":                    [WatchlistsShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

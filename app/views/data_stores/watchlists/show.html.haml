@@ -1,12 +1,7 @@
 = title @record.id
-= render partial: "show_header"
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #content
-
-#parameters{ data: { id: "#{@record.id}" } }
-= javascript_include_tag "WatchlistsShow.min.react"
+.row
+  .col
+    .card
+      .card-body
+        #react-root

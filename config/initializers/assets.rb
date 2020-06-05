@@ -66,7 +66,6 @@ Rails.application.config.assets.precompile += [
   "PersonalFundsShow.min.react.js",
   "IcprShow.min.react.js",
   "XWeeksToPayShow.min.react.js",
-  "SoaFundsShow.min.react.js",
   "WatchlistsShow.min.react.js",
   "MonitoringAccountingEntrySubsidiaryBalancing.min.react.js",
   "MonitoringAccountingEntryPrecision.min.react.js",

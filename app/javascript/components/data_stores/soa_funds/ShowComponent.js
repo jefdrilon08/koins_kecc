@@ -210,7 +210,7 @@ export default class ShowComponent extends React.Component {
       var r = records[i];
 
       rows.push(
-        <tr key={"member-" + i} style={{backgroundColor: "#d0ccff"}}>
+        <tr key={"member-" + r.member.id} style={{backgroundColor: "#d0ccff"}}>
           <td colSpan={2 * (settings.length) + 1}>
             <strong>
               <a href={"/members/" + r.member.id + "/display"} target='_blank'>
@@ -224,17 +224,17 @@ export default class ShowComponent extends React.Component {
       );
 
       rows.push(
-        <tr key={"member-" + i + "-labels"}>
-          <th>
+        <tr key={"member-" + r.member.id + "-subtable-labels"}>
+          <th key={"member-empty-date-" + r.member.id}>
             Date
           </th>
           {this.renderSubtableHeaders(r.member.id)}
         </tr>
       );
+
       rows.push(
-        <tr key={"member-" + i + "-labels"}>
-          <th>
-            
+        <tr key={"member-" + r.member.id + "-debit-credit-labels"}>
+          <th key={"member-empty-dc-" + r.member.id}>
           </th>
           {this.renderDebitCreditHeaders(r.member.id)}
         </tr>
@@ -249,8 +249,8 @@ export default class ShowComponent extends React.Component {
       // TOTALS
       var totals  = records[i].totals;
       rows.push(
-        <tr key={"member-" + i + "-totals"}>
-          <td>
+        <tr key={"member-" + r.member.id + "-totals"}>
+          <td key={"totals-" + r.member.id}>
             <strong>
               Total
             </strong>
