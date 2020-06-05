@@ -16,7 +16,7 @@
       %th.curr Advance LIFE
       %th.curr Advance RF
       %th.curr Interest
-      - if !member_account_validation.total_policy_loan.nil?
+      - if !member_account_validation.total_policy_loan.nil? && member_account_validation.total_policy_loan > 0
         %th.curr Policy Loan
       %th.curr Total
       %th Actions
@@ -51,7 +51,7 @@
           #{number_to_currency(member_account_validation_record.advance_rf, unit: "")}
         %td.curr
           #{number_to_currency(member_account_validation_record.interest, unit: "")}
-        - if !member_account_validation_record.policy_loan.nil?  
+        - if member_account_validation_record.policy_loan > 0
           %td.curr
             - if member_account_validation_record.policy_loan > 0
               (#{number_to_currency(member_account_validation_record.policy_loan, unit: "")})  
@@ -79,7 +79,7 @@
       %th.curr #{number_to_currency(member_account_validation.total_advance_lif, unit: "P")}
       %th.curr #{number_to_currency(member_account_validation.total_advance_rf, unit: "P")}
       %th.curr #{number_to_currency(member_account_validation.total_interest, unit: "P")}
-      - if !member_account_validation.total_policy_loan.nil?  
+      - if !member_account_validation.total_policy_loan.nil? && member_account_validation.total_policy_loan > 0
         %th.curr
           - if member_account_validation.total_policy_loan > 0
             (#{number_to_currency(member_account_validation.total_policy_loan, unit: "P")})
