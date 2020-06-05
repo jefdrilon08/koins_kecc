@@ -40,7 +40,6 @@ Rails.application.config.assets.precompile += [
   "data_stores/repayment_rates/Index.js",
   "data_stores/branch_repayment_reports/Index.js",
   "data_stores/branch_resignations/Index.js",
-  "data_stores/insurance_member_counts/Index.js",
   "data_stores/claims_counts/Index.js",
   "data_stores/monthly_incentives/Index.js",
   "data_stores/x_weeks_to_pay/Index.js",

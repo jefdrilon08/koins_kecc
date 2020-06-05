@@ -110,6 +110,8 @@ import BranchLoansStatsIndex from "../models/BranchLoansStatsIndex.js";
 import BranchLoansStatsShow from "../models/BranchLoansStatsShow.js";
 import MemberCountsIndex from "../models/MemberCountsIndex.js";
 import MemberCountsShow from "../models/MemberCountsShow.js";
+import InsuranceMemberCountsIndex from "../models/InsuranceMemberCountsIndex.js";
+import InsuranceMemberCountsShow from "../models/InsuranceMemberCountsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -201,7 +203,9 @@ const hooks = {
   "data_stores/branch_loans_stats/index":           [BranchLoansStatsIndex],
   "data_stores/branch_loans_stats/show":            [BranchLoansStatsShow],
   "data_stores/member_counts/index":                [MemberCountsIndex],
-  "data_stores/member_counts/show":                 [MemberCountsShow]
+  "data_stores/member_counts/show":                 [MemberCountsShow],
+  "data_stores/insurance_member_counts/index":      [InsuranceMemberCountsIndex],
+  "data_stores/insurance_member_counts/show":       [InsuranceMemberCountsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
