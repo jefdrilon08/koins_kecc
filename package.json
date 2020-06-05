@@ -58,6 +58,6 @@
     "node": "12.13.0"
   },
   "scripts": {
-    "build": "webpack -p; cp config/settings/production.yml.dist config/settings/production.yml"
+    "build": "cp config/settings/production.yml.dist config/settings/production.yml"
   }
 }
