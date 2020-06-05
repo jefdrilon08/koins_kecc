@@ -11,7 +11,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails'
 gem 'haml'
-gem 'font-awesome-sass'
 gem 'devise'
 gem 'simple_form'
 gem 'awesome_print'
@@ -35,14 +34,10 @@ gem 'rack', '~> 2.0.0'
 gem 'httparty'
 gem 'rack-timeout'
 # For memory profiling
-gem 'memory_profiler'
-gem 'ffi', '1.9.18'
+gem 'ffi'
 
 # Webpacker
 gem 'webpacker'
-
-# Support Select 2
-gem 'select2-rails'
 
 group :production do
   gem 'puma_worker_killer'

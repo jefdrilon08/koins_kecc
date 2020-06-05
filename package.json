@@ -45,7 +45,6 @@
     "sass-loader": "^8.0.2",
     "select2": "^4.0.13",
     "select2-theme-bootstrap4": "^0.2.0-beta.6",
-    "signature_pad": "^3.0.0-beta.3",
     "style-loader": "^1.2.1",
     "terser-webpack-plugin": "^2.3.5"
   },
