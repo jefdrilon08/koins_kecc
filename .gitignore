@@ -59,7 +59,7 @@ config/settings/*development*.yml
 config/settings/_*.yml
 
 # Stray files
-dump.rdb
+*.rdb
 *.csv
 
 /shared
