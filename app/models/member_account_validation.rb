@@ -1,5 +1,5 @@
 class MemberAccountValidation < ApplicationRecord
-	STATUSES = ["approved", "pending", "for-approval", "reversed", "for-validation", "cancelled"]
+	STATUSES = ["approved", "pending", "for-approval", "reversed", "for-validation", "cancelled", "processing"]
 
 	belongs_to :branch
 

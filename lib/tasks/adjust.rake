@@ -2088,7 +2088,7 @@ namespace :adjust do
     end
 
     member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved")
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved").order("updated_at ASC")
 
     account_transactions.each do |at|
       puts "Inserting #{at.id}"  
@@ -2127,5 +2127,29 @@ namespace :adjust do
     end 
 
     puts "Done!"
+  end
+
+  task :update_ev_and_policy_loan_value_for_validation_record => :environment do
+    puts "Updating ..."
+    member_account_validations = MemberAccountValidation.all
+
+    if ENV['BRANCH_ID'].present?
+      member_account_validations = member_account_validations.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    member_account_validations.each do |member_account_validation|
+      member_account_validation.member_account_validation_records.each do |member_account_validation_record|
+        
+        if member_account_validation_record.policy_loan.nil?
+          member_account_validation_record.update!(policy_loan: 0.00)
+        end
+
+        if member_account_validation_record.equity_value.nil?
+          member_account_validation_record.update!(equity_value: 0.00)
+        end        
+      end
+    end
+      
+    puts "Done"
   end
 end
