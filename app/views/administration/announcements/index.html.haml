@@ -1,13 +1,10 @@
 = title
-
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            - if @announcements.any?
-              = render partial: "index_list"
-            - else
-              %p
-                No announcement found
+.row
+  .col
+    .card
+      .card-body
+        - if @announcements.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No announcement found
