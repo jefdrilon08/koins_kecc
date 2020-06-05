@@ -107,6 +107,9 @@ import ManualAgingIndex from "../models/ManualAgingIndex.js";
 import PersonalFundsIndex from "../models/PersonalFundsIndex.js";
 import PersonalFundsShow from "../models/PersonalFundsShow.js";
 import BranchLoansStatsIndex from "../models/BranchLoansStatsIndex.js";
+import BranchLoansStatsShow from "../models/BranchLoansStatsShow.js";
+import MemberCountsIndex from "../models/MemberCountsIndex.js";
+import MemberCountsShow from "../models/MemberCountsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -195,7 +198,10 @@ const hooks = {
   "data_stores/manual_aging/show":                  [ManualAgingShowComponent],
   "data_stores/personal_funds/index":               [PersonalFundsIndex],
   "data_stores/personal_funds/show":                [PersonalFundsShowComponent, PersonalFundsShow],
-  "data_stores/branch_loans_stats/index":           [BranchLoansStatsIndex]
+  "data_stores/branch_loans_stats/index":           [BranchLoansStatsIndex],
+  "data_stores/branch_loans_stats/show":            [BranchLoansStatsShow],
+  "data_stores/member_counts/index":                [MemberCountsIndex],
+  "data_stores/member_counts/show":                 [MemberCountsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

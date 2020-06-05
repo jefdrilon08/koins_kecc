@@ -18,7 +18,7 @@ var _cacheDom = function() {
   $btnConfirmNew = $("#btn-confirm-new");
 
   $selectBranch = $("#select-branch");
-  $inputAsOf    = $("#input-as-of");
+  $inputAsOf      = $("#input-as-of");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -32,7 +32,7 @@ var _bindEvents = function() {
 
   $btnConfirmNew.on("click", function() {
     var asOf      = $inputAsOf.val();
-    var branchId  = $selectBranch.val();;
+    var branchId  = $selectBranch.val();
 
     $message.html("Loading...");
     $btnConfirmNew.prop("disabled", true);
@@ -46,40 +46,24 @@ var _bindEvents = function() {
     }
 
     $.ajax({
-      url: "/api/v1/data_stores/personal_funds/queue",
+      url: "/api/v1/data_stores/member_counts/queue",
       method: 'POST',
       data: data,
       success: function(response) {
         $message.html("Success! Redirecting...");
-        window.location.href="/data_stores/personal_funds";
+        window.location.href="/data_stores/member_counts";
       },
       error: function(response) {
-        var errors  = [];
-
-        try {
-          console.log(response);
-          errors  = JSON.parse(response.responseText).errors.full_messages;
-        } catch(err) {
-          errors  = ["Something went wrong"]
-        } finally {
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
-
-          $btnConfirmNew.prop("disabled", false);
-          $selectBranch.prop("disabled", false);
-          $inputAsOf.prop("disabled", false);
-        }
+        $message.html("Something went wrong...");
+        $btnConfirmNew.prop("disabled", false);
+        $selectBranch.prop("disabled", false);
+        $inputAsOf.prop("disabled", false);
       }
     });
   });
 }
 
 var init  = function(config) {
-  id                = config.id;
   authenticityToken = config.authenticityToken;
 
   _cacheDom();

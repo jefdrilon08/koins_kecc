@@ -9,7 +9,6 @@ module DataStores
       ]
 
       @subheader_side_actions = [
-        { text: "New", link: "#", class: "fa fa-plus", id: "btn-new" }
       ]
     end
 
@@ -39,7 +38,7 @@ module DataStores
     private
 
     def data_store_scope
-      "branch_loans_stats" # There's no .branch_loan_stats scope
+      "repayment_rates" # There's no .branch_loan_stats scope
     end
   end
 end

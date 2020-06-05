@@ -19,7 +19,7 @@
         .select("DISTINCT ON (member_id) member_id, date_paid")
         .where(member_id: members.pluck(:id), status: "paid" , membership_name: "K-KOOP")
         .order(member_id: :asc, date_paid: :desc)
-        .pluck(:id, :date_paid)
+        .pluck(:member_id, :date_paid)
         .to_h
     - members.each do |m, i|
       %tr
@@ -37,6 +37,4 @@
         %td
           #{m[:member_type]}
         %td
-          - @x = MembershipPaymentRecord.where("member_id = ? and membership_name = 'K-KOOP' and status = 'paid'" , m[:id]).last
-          - if @x.date_paid.present?
-            = @x.date_paid.strftime("%b %d, %Y")
+          #{membership_payment_records.fetch(m[:id], nil).try(:strftime, "%b %d, %Y")}

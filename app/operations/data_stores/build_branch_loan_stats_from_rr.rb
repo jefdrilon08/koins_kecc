@@ -2,7 +2,6 @@ module DataStores
   class BuildBranchLoanStatsFromRr
     def initialize(rr_data:)
       @rr_data  = rr_data
-      raise @rr_data.inspect
 
       @data = {
         loan_products: [],

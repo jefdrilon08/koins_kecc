@@ -90,7 +90,6 @@ class DataStoreController < ApplicationController
 
   def list_query_config
     {
-      "branch_loans_stats"           => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
       "accounting_entries_summaries" => { order: "CAST(meta->>'end_date' AS date) DESC",   meta: %w[branch_name book start_date end_date], data: %w[] },
       "branch_repayment_reports"     => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name as_of], data: %w[] },
       "branch_resignations"          => { order: "CAST(meta->>'as_of' AS date) DESC",      meta: %w[branch_name start_date end_date], data: %w[] },
