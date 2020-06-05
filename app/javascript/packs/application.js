@@ -40,6 +40,8 @@ import SurveyQuestionUIComponent from "../components/administration/surveys/surv
 import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
 import ManualAgingShowComponent from "../components/data_stores/manual_aging/ShowComponent.js";
 import PersonalFundsShowComponent from "../components/data_stores/personal_funds/ShowComponent.js";
+import SOAExpensesShowComponent from "../components/data_stores/soa_expenses/ShowComponent.js";
+import SOALoansShowComponent from "../components/data_stores/soa_loans/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -115,6 +117,8 @@ import InsuranceMemberCountsShow from "../models/InsuranceMemberCountsShow.js";
 import ClaimsCountsIndex from "../models/ClaimsCountsIndex.js";
 import ClaimsCountsShow from "../models/ClaimsCountsShow.js";
 import AccountingEntriesSummariesIndex from "../models/AccountingEntriesSummariesIndex.js";
+import SOAExpensesIndex from "../models/SOAExpensesIndex.js";
+import SOALoansIndex from "../models/SOALoansIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -211,7 +215,11 @@ const hooks = {
   "data_stores/insurance_member_counts/show":       [InsuranceMemberCountsShow],
   "data_stores/claims_counts/index":                [ClaimsCountsIndex],
   "data_stores/claims_counts/show":                 [ClaimsCountsShow],
-  "data_stores/accounting_entries_summaries/index": [AccountingEntriesSummariesIndex]
+  "data_stores/accounting_entries_summaries/index": [AccountingEntriesSummariesIndex],
+  "data_stores/soa_expenses/index":                 [SOAExpensesIndex],
+  "data_stores/soa_expenses/show":                  [SOAExpensesShowComponent],
+  "data_stores/soa_loans/index":                    [SOALoansIndex],
+  "data_stores/soa_loans/show":                     [SOALoansShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
