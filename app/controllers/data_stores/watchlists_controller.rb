@@ -21,7 +21,7 @@ module DataStores
 
       @subheader_items = [
         { text: "Data Stores" },
-        { text: "Statement of Accounts Funds", is_link: true, path:  "/data_stores/watchlists" }
+        { text: "Watchlists", is_link: true, path:  "/data_stores/watchlists" }
       ]
 
       if !@record.error?

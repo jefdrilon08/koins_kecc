@@ -44,6 +44,7 @@ import SOAExpensesShowComponent from "../components/data_stores/soa_expenses/Sho
 import SOALoansShowComponent from "../components/data_stores/soa_loans/ShowComponent.js";
 import SOAFundsShowComponent from "../components/data_stores/soa_funds/ShowComponent.js";
 import WatchlistsShowComponent from "../components/data_stores/watchlists/ShowComponent.js";
+import XWeeksToPayShowComponent from "../components/data_stores/x_weeks_to_pay/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../pages/Login.js";
@@ -123,6 +124,8 @@ import SOAExpensesIndex from "../models/SOAExpensesIndex.js";
 import SOALoansIndex from "../models/SOALoansIndex.js";
 import SOAFundsIndex from "../models/SOAFundsIndex.js";
 import WatchlistsIndex from "../models/WatchlistsIndex.js";
+import MonthlyIncentivesIndex from "../models/MonthlyIncentivesIndex.js";
+import XWeeksToPayIndex from "../models/XWeeksToPayIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -227,7 +230,10 @@ const hooks = {
   "data_stores/soa_funds/index":                    [SOAFundsIndex],
   "data_stores/soa_funds/show":                     [SOAFundsShowComponent],
   "data_stores/watchlists/index":                   [WatchlistsIndex],
-  "data_stores/watchlists/show":                    [WatchlistsShowComponent]
+  "data_stores/watchlists/show":                    [WatchlistsShowComponent],
+  "data_stores/monthly_incentives/index":           [MonthlyIncentivesIndex],
+  "data_stores/x_weeks_to_pay/index":               [XWeeksToPayIndex],
+  "data_stores/x_weeks_to_pay/show":                [XWeeksToPayShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
