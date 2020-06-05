@@ -1,30 +1,15 @@
-/ = title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @equity_withdrawal_collections.any?
-            = render partial: "index_list", locals: { equity_withdrawal_collections: @equity_withdrawal_collections }
-            = paginate @equity_withdrawal_collections
-          - else
-            %p
-              No Equity Withdrawal Collections found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @equity_withdrawal_collections.any?
+          = render partial: "index_list", locals: { equity_withdrawal_collections: @equity_withdrawal_collections }
+          = paginate @equity_withdrawal_collections
+        - else
+          %p
+            No Equity Withdrawal Collections found
 
 = render partial: "equity_withdrawal_collections/modals/new_transaction"
 = render partial: "templates/error_list"
 = render partial: "templates/loader"
-
-= javascript_include_tag "equity_withdrawal_collections/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

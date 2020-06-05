@@ -3,10 +3,30 @@ class MonitoringController < ApplicationController
 
   def accounting_entry_subsidiary_balancing
     @branches = @branches.map{ |o| { id: o.id, name: o.name } }
+
+    @subheader_items = [
+      { text: "Monitoring" },
+      { text: "Accounting Subsidiary Balancing" }
+    ]
+
+    @payload = {
+      branches: @branches,
+      asOf: "#{Date.today.to_s}"
+    }
   end
 
   def accounting_entry_precision
     @branches = @branches.map{ |o| { id: o.id, name: o.name } }
+
+    @subheader_items = [
+      { text: "Monitoring" },
+      { text: "Accounting Entry Precision" }
+    ]
+
+    @payload = {
+      branches: @branches,
+      asOf: "#{Date.today.to_s}"
+    }
   end
 
   def no_membership_payments
@@ -26,5 +46,10 @@ class MonitoringController < ApplicationController
                 members: @members
               }
             ).execute!
+
+    @subheader_items = [
+      { text: "Monitoring" },
+      { text: "No Membership Payments" }
+    ]
   end
 end

@@ -1,12 +1,10 @@
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            - if @centers.any?
-              = render partial: "index_list"
-            - else
-              %p
-                No centers found
-            = paginate @centers
+.row
+  .col
+    .card
+      .card-body
+        - if @centers.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No centers found
+        = paginate @centers

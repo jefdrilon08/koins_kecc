@@ -18,11 +18,3 @@
         = link_to "#", id: 'download-btn', class: 'btn btn-primary btn-block' do
           .fa.fa-download
           Download 
-= javascript_include_tag "reports/CicReport"
-
-:javascript
-  $(document).ready(function() {
-    CicReport.init();
-  });
-
-

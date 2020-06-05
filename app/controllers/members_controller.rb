@@ -48,6 +48,20 @@ class MembersController < ApplicationController
 
   def form_resignation
     @member = Member.find(params[:id])
+
+    @subheader_items = [
+      { is_link: true, path: members_path, text: "Members" },
+      { is_link: true, path: member_path(@member), text: "#{@member.full_name}" },
+      { text: "Resignation Form" }
+    ]
+
+    @subheader_side_actions = [
+    ]
+
+    @payload = {
+      id: @member.id,
+      memberResignationTypes: helpers.member_resignation_types
+    }
   end
 
   def form_attachment

@@ -1,14 +1,12 @@
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            - if @surveys.any?
-              = render partial: "index_list", locals: { surveys: @surveys }
-            - else
-              %p
-                No surveys available
+.row
+  .col
+    .card
+      .card-body
+        - if @surveys.any?
+          = render partial: "index_list", locals: { surveys: @surveys }
+        - else
+          %p
+            No surveys available
 
 = render partial: "administration/surveys/modals/new"
 = render partial: "templates/error_list"

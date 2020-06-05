@@ -10,8 +10,6 @@ import {numberWithCommas} from '../utils/helpers';
 import {customStyles} from '../utils/consts';
 import Modal from 'react-modal';
 
-Modal.setAppElement("#content");
-
 export default class FormResignationComponent extends React.Component {
   constructor(props) {
     super(props);

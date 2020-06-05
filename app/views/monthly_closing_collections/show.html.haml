@@ -1,19 +1,15 @@
 = title @monthly_closing_collection.id
-= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
-
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            - if @monthly_closing_collection.error?
-              = render partial: "error_page"
-            - else
-              - if debug?
-                %pre
-                  #{JSON.pretty_generate(JSON.parse(@monthly_closing_collection.data.to_json))}
-              #react-root
+.row
+  .col
+    .card
+      .card-body
+        - if @monthly_closing_collection.error?
+          = render partial: "error_page"
+        - else
+          - if debug?
+            %pre
+              #{JSON.pretty_generate(JSON.parse(@monthly_closing_collection.data.to_json))}
+          #react-root
 
 = render partial: "monthly_closing_collections/modals/update"
 = render partial: "monthly_closing_collections/modals/approve"

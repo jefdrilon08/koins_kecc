@@ -60,7 +60,7 @@ class EquityAccountsController < ApplicationController
       {
         is_link: true,
         path: equity_accounts_path,
-        text: "Savings"
+        text: "Equity"
       },
       {
         is_link: true,

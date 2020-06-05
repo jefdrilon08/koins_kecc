@@ -30,21 +30,12 @@ class DepositCollectionsController < ApplicationController
     @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
 
     @subheader_items = [
-      {
-        text: "Cash Management"
-      },
-      {
-        text: "Deposits"
-      }
+      { text: "Cash Management" },
+      { text: "Deposits" }
     ]
 
     @subheader_side_actions = [
-      {
-        id: "btn-new-transaction",
-        link: "#",
-        class: "fa fa-plus",
-        text: "New Transaction"
-      }
+      { id: "btn-new-transaction", link: "#", class: "fa fa-plus", text: "New Transaction" }
     ]
   end
 

@@ -11,8 +11,6 @@ import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
 
-Modal.setAppElement("#equity-withdrawal-collection-content")
-
 export default class EquityWithdrawalCollectionUITable extends React.Component {
   constructor(props) {
     super(props);

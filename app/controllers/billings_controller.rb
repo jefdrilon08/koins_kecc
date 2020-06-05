@@ -28,18 +28,11 @@ class BillingsController < ApplicationController
     @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(100)
 
     @subheader_items = [
-      {
-        text: "Billings"
-      }
+      { text: "Billings" }
     ]
 
     @subheader_side_actions = [
-      {
-        id: "btn-new-transaction",
-        link: "#",
-        class: "fa fa-plus",
-        text: "New Transaction"
-      }
+      { id: "btn-new-transaction", link: "#", class: "fa fa-plus", text: "New Transaction" }
     ]
   end
 
@@ -59,14 +52,8 @@ class BillingsController < ApplicationController
                       ).order("created_at DESC")
 
     @subheader_items = [
-      {
-        is_link: true, 
-        path: billings_path,
-        text: "Billings"
-      },
-      {
-        text: "Billing #{@billing.id}"
-      }
+      { is_link: true, path: billings_path, text: "Billings" },
+      { text: "Billing #{@billing.id}" }
     ]
 
     @subheader_side_actions = []

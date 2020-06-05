@@ -23,5 +23,9 @@ class ActivityLogsController < ApplicationController
     end
 
     @activity_logs = @activity_logs.page(params[:page])
+
+    @subheader_items = [
+      { text: "Activity Logs" }
+    ]
   end
 end

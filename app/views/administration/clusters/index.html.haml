@@ -1,12 +1,10 @@
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            - if @clusters.any?
+.row
+  .col
+    .card
+      .card-body
+        - if @clusters.any?
 
-              = render partial: "index_list"
-            - else
-              %p
-                No clusters found
+          = render partial: "index_list"
+        - else
+          %p
+            No clusters found

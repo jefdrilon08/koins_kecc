@@ -18,10 +18,3 @@
         = link_to "#", id: 'download-btn', class: 'btn btn-success btn-block' do
           .fa.fa-download
           Excel 
-          
-= javascript_include_tag "reports/MemberDependentReport"
-
-:javascript
-  $(document).ready(function() {
-    MemberDependentReport.init();
-  });

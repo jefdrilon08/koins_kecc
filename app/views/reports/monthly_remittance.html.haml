@@ -1,21 +1,5 @@
-%ol.breadcrumb
-  %li.breadcrumb-item
-    .fa.fa-chart-pie
-    Reports
-  %li.breadcrumb-item
-    .fa.fa-money-check
-    Monthly Remittance
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "monthly_remittance_form"
-      
- 
-= javascript_include_tag "reports/MonthlyRemittance"
-
-:javascript
-  $(document).ready(function() {
-    MonthlyRemittance.init();
-  });
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "monthly_remittance_form"

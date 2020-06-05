@@ -1,4 +1,6 @@
 import Mustache from "mustache/mustache";
+import 'select2';
+import 'select2-theme-bootstrap4/dist/select2-bootstrap.css';
 
 var $modalGenerateAccessToken;
 var $modalSignature;
@@ -163,6 +165,11 @@ var _cacheDom = function() {
   $modalRestructure             = $("#modal-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
   $selectActiveLoans            = $("#select-active-loans");
+  $selectActiveLoans.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
   $inputCoMakerA                = $("#input-co-maker-a");
   $selectCoMakerB               = $("#select-co-maker-b");
   $inputPnNumber                = $("#input-pn-number");

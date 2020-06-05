@@ -1,77 +1,73 @@
 = title @savings_account.id
-= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
-
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            %h5.text-muted
-              Lock-In Period Information
-            %table.table.table.table-bordered.table-sm
-              %tr
-                %th{ width: "25%" }
-                  Num Days
-                %td
-                  #{@data_store.data["lock_in_period"]["num_days"]}
-              %tr
-                %th
-                  Num Months
-                %td
-                  #{@data_store.data["lock_in_period"]["num_months"]}
-              %tr
-                %th
-                  Expected Interest Rate
-                %td
-                  #{@data_store.data["lock_in_period"]["interest_rate"].to_f * 100}
-              %tr
-                %th
-                  Premature Withdrawal Interest Rate / Month 
-                %td
-                  #{sprintf("%0.2f", @data_store.data["premature_interest_rate_per_month"].to_f * 100)}
-              %tr
-                %th
-                  Expected Interest Amount
-                %td
-                  #{number_to_currency(@data_store.data["lock_in_period"]["expected_interest"], unit: '')}
-            %h5.text-muted
-              Withdrawal Information
-            %table.table.table-bordered.table-sm
-              %tr
-                %th{ width: "25%" }
-                  Amount to Withdraw:
-                %td
-                  #{number_to_currency(@data_store.data["amount_to_withdraw"], unit: "")}
-              %tr
-                %th
-                  Start Date:
-                %td
-                  #{@data_store.data["start_date"].to_date.strftime("%B %d, %Y")}
-              %tr
-                %th
-                  End Date:
-                %td
-                  #{@data_store.data["end_date"].to_date.strftime("%B %d, %Y")}
-              %tr
-                %th
-                  Number of Days Outstanding:
-                %td
-                  #{@data_store.data["num_days_outstanding"]}
-              %tr
-                %th
-                  Interest Rate per Month
-                %td
-                  #{@data_store.data["interest_rate_per_month"].to_f * 100}
-              %tr
-                %th
-                  Interest Garnered
-                %td
-                  #{number_to_currency(@data_store.data["interest_amount"], unit: "")}
-            %hr
-            %h5.text-muted
-              Accounting Entry
-            = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @data_store.data.with_indifferent_access[:accounting_entry] }
+.row
+  .col
+    .card
+      .card-body
+        %h5.text-muted
+          Lock-In Period Information
+        %table.table.table.table-bordered.table-sm
+          %tr
+            %th{ width: "25%" }
+              Num Days
+            %td
+              #{@data_store.data["lock_in_period"]["num_days"]}
+          %tr
+            %th
+              Num Months
+            %td
+              #{@data_store.data["lock_in_period"]["num_months"]}
+          %tr
+            %th
+              Expected Interest Rate
+            %td
+              #{@data_store.data["lock_in_period"]["interest_rate"].to_f * 100}
+          %tr
+            %th
+              Premature Withdrawal Interest Rate / Month 
+            %td
+              #{sprintf("%0.2f", @data_store.data["premature_interest_rate_per_month"].to_f * 100)}
+          %tr
+            %th
+              Expected Interest Amount
+            %td
+              #{number_to_currency(@data_store.data["lock_in_period"]["expected_interest"], unit: '')}
+        %h5.text-muted
+          Withdrawal Information
+        %table.table.table-bordered.table-sm
+          %tr
+            %th{ width: "25%" }
+              Amount to Withdraw:
+            %td
+              #{number_to_currency(@data_store.data["amount_to_withdraw"], unit: "")}
+          %tr
+            %th
+              Start Date:
+            %td
+              #{@data_store.data["start_date"].to_date.strftime("%B %d, %Y")}
+          %tr
+            %th
+              End Date:
+            %td
+              #{@data_store.data["end_date"].to_date.strftime("%B %d, %Y")}
+          %tr
+            %th
+              Number of Days Outstanding:
+            %td
+              #{@data_store.data["num_days_outstanding"]}
+          %tr
+            %th
+              Interest Rate per Month
+            %td
+              #{@data_store.data["interest_rate_per_month"].to_f * 100}
+          %tr
+            %th
+              Interest Garnered
+            %td
+              #{number_to_currency(@data_store.data["interest_amount"], unit: "")}
+        %hr
+        %h5.text-muted
+          Accounting Entry
+        = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @data_store.data.with_indifferent_access[:accounting_entry] }
 
 = render partial: "shared/modals/print"
 = render partial: "templates/error_list"

@@ -1,15 +1,7 @@
-%ol.breadcrumb
-  %li.breadcrumb-item
-    .fa.fa-chart-pie
-    Report 
-  %li.breadcrumb-item
-    .fa.fa-users
-    Member Quarterly Reports
-    %small as of #{Time.now.localtime.strftime("%b %d, %Y")}
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "member_quarterly_reports_form"
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "member_quarterly_reports_form"
 
+= render partial: "reports/templates/members_quarterly"

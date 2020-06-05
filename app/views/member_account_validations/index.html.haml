@@ -1,19 +1,15 @@
 = title
-= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
-
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            .errors_template
-              = render partial: "member_account_validations/filter"
-              - if @member_account_validations.any?
-                = render partial: "member_account_validations/list", locals: { member_account_validations: @member_account_validations }
-                = paginate @member_account_validations
-              - else
-                No records found.
+.row
+  .col
+    .card
+      .card-body
+        .errors_template
+          = render partial: "member_account_validations/filter"
+          - if @member_account_validations.any?
+            = render partial: "member_account_validations/list", locals: { member_account_validations: @member_account_validations }
+            = paginate @member_account_validations
+          - else
+            No records found.
 
 = render partial: "member_account_validations/modals/new_transaction"
 = render partial: "shared/errors_template"

@@ -24,6 +24,15 @@ class EquityWithdrawalCollectionsController < ApplicationController
     end
 
     @equity_withdrawal_collections = @equity_withdrawal_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+
+    @subheader_items = [
+      { text: "Cash Management" },
+      { text: "Equity Withdrawals" }
+    ]
+
+    @subheader_side_actions = [
+      { id: "btn-new-transaction", link: "#", class: "fa fa-plus", text: "New Transaction" }
+    ]
   end
 
   def show
@@ -34,6 +43,37 @@ class EquityWithdrawalCollectionsController < ApplicationController
                         "data ->> 'equity_withdrawal_collection_id' = ?",
                         @equity_withdrawal_collection.id
                       ).order("created_at DESC")
+
+    @subheader_items = [
+      { text: "Cash Management" },
+      { text: "Equity Withdrawals", is_link: true, path: equity_withdrawal_collections_path },
+      { text: "#{@equity_withdrawal_collection.id}" }
+    ]
+
+    @subheader_side_actions = []
+
+    if @equity_withdrawal_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+      @subheader_side_actions << {
+        link: equity_withdrawal_collection_path(@equity_withdrawal_collection),
+        class: "fa fa-times",
+        data: {
+          confirm: "Are you sure?",
+          method: :delete
+        },
+        text: "Delete"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-check",
+        id: "btn-approve",
+        text: "Approve"
+      }
+    end
+
+    @payload = {
+      id: @equity_withdrawal_collection.id
+    }
   end
 
   def destroy

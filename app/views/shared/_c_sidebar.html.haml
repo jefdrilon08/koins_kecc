@@ -59,6 +59,11 @@
         = link_to monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "monthly_closing_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Monthly Closing Collections
+      %li.c-sidebar-nav-item
+        = link_to equity_withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_withdrawal_collections" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Equity Withdrawals
+
     - if is_not_ojt
       %li.c-sidebar-nav-title
         Accounts
@@ -254,6 +259,58 @@
           = link_to claims_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-users
             Claims Register
+
+        %li.c-sidebar-nav-title
+          Other Reports
+        %li.c-sidebar-nav-item
+          = link_to "/reports/monthly_remittance", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Monthly Remittance
+        %li.c-sidebar-nav-item
+          = link_to "/reports/insured_loans", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Insured Loans
+        %li.c-sidebar-nav-item
+          = link_to "/reports/member_reports", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Member Reports
+        %li.c-sidebar-nav-item
+          = link_to "/reports/collections_clip", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            CLIP Reports
+        %li.c-sidebar-nav-item
+          = link_to "/reports/collections_blip", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            BLIP Reports
+        %li.c-sidebar-nav-item
+          = link_to "/reports/member_dependents", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Member Dependents
+        %li.c-sidebar-nav-item
+          = link_to "/reports/member_quarterly_reports", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Member Quarterly
+        %li.c-sidebar-nav-item
+          = link_to "/reports/cic", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            CIC Report
+        %li.c-sidebar-nav-item
+          = link_to "/reports/monthly_collection", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Monthly Collection
+        %li.c-sidebar-nav-item
+          = link_to "/reports/summary_of_certificates_and_policies", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Cert and Policies
+        %li.c-sidebar-nav-item
+          = link_to "/reports/personal_documents", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Personal Documents
+        %li.c-sidebar-nav-item
+          = link_to "/reports/claims", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Claims
+
         %li.c-sidebar-nav-title
           Administration
         %li.c-sidebar-nav-item
@@ -308,6 +365,7 @@
           = link_to administration_member_shares_no_certificates_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-stamp
             No Certificates
+
         %li.c-sidebar-nav-title
           System Tools
         %li.c-sidebar-nav-item
@@ -354,3 +412,22 @@
           = link_to export_tools_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-file-import
             Export Tools
+
+        %li.c-sidebar-nav-title
+          Monitoring
+        %li.c-sidebar-nav-item
+          = link_to monitoring_accounting_entry_subsidiary_balancing_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-tv
+            Balancing
+        %li.c-sidebar-nav-item
+          = link_to monitoring_accounting_entry_precision_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-tv
+            Accounting Precision
+        %li.c-sidebar-nav-item
+          = link_to monitoring_no_membership_payments_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-tv
+            No Membership Payments
+        %li.c-sidebar-nav-item
+          = link_to activity_logs_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-tv
+            Activity Logs

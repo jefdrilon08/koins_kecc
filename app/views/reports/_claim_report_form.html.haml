@@ -22,9 +22,3 @@
         = link_to "#", id: 'download-btn', class: 'btn btn-success btn-block' do
           .fa.fa-download
           Excel
-= javascript_include_tag "reports/ClaimReport"
-
-:javascript
-  $(document).ready(function() {
-    ClaimReport.init();
-  });

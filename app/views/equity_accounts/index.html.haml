@@ -1,16 +1,12 @@
 = title
-= render partial: "shared/c_subheader", locals: { items: @subheader_items, side_actions: @subheader_side_actions }
-
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            = render partial: "index_filter"
-            - if @equity_accounts.any?
-              = render partial: "index_list"
-              = paginate @equity_accounts
-            - else
-              %p
-                No accounts found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @equity_accounts.any?
+          = render partial: "index_list"
+          = paginate @equity_accounts
+        - else
+          %p
+            No accounts found

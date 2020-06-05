@@ -11,6 +11,15 @@ class PagesController < ApplicationController
       username: current_user.username,
       roles: current_user.roles
     }
+
+    @subheader_items = [
+      { text: "Operations" }
+    ]
+
+    @subheader_side_actions = [
+      { link: member_form_path, class: "fa fa-plus", text: "New Member" },
+      { link: members_path(status: "pending"), class: "fa fa-arrow-right", text: "Pending Records (#{@pending_members_count})" }
+    ]
   end
 
   def download_backup

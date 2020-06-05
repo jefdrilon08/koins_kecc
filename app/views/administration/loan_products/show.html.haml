@@ -1,98 +1,81 @@
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            %h2
+.row
+  .col
+    .card
+      .card-body
+        %h2
+          #{@loan_product}
+        %hr
+        %table.table.table-bordered.table-hover.table-sm 
+          %tr
+            %th{ width: "20%" }
+              Name
+            %td
               #{@loan_product}
-            %hr
-            %table.table.table-bordered.table-hover.table-sm 
-              %tr
-                %th{ width: "20%" }
-                  Name
-                %td
-                  #{@loan_product}
-              %tr
-                %th
-                  Monthly I.R.
-                %td
-                  #{@loan_product.monthly_interest_rate}
-              %tr
-                %th
-                  Loan Range
-                %td
-                  #{number_to_currency(@loan_product.min_loan_amount, unit: "")} - #{number_to_currency(@loan_product.max_loan_amount, unit: "")} (Denomination: #{number_to_currency(@loan_product.denomination, unit: "")})
-              %tr
-                %th
-                  Insured
-                %td
-                  - if @loan_product.insured
-                    .badge.badge-success
-                      .fa.fa-check
-                      Yes
-                  - else
-                    .badge.badge-danger
-                      .fa.fa-times
-                      No
-              %tr
-                %th
-                  Is Entry Point
-                %td
-                  - if @loan_product.is_entry_point
-                    .badge.badge-success
-                      .fa.fa-check
-                      Yes
-                  - else
-                    .badge.badge-danger
-                      .fa.fa-times
-                      No
-              %tr
-                %th
-                  Priority
-                %td
-                  #{@loan_product.priority}
+          %tr
+            %th
+              Monthly I.R.
+            %td
+              #{@loan_product.monthly_interest_rate}
+          %tr
+            %th
+              Loan Range
+            %td
+              #{number_to_currency(@loan_product.min_loan_amount, unit: "")} - #{number_to_currency(@loan_product.max_loan_amount, unit: "")} (Denomination: #{number_to_currency(@loan_product.denomination, unit: "")})
+          %tr
+            %th
+              Insured
+            %td
+              - if @loan_product.insured
+                .badge.badge-success
+                  .fa.fa-check
+                  Yes
+              - else
+                .badge.badge-danger
+                  .fa.fa-times
+                  No
+          %tr
+            %th
+              Is Entry Point
+            %td
+              - if @loan_product.is_entry_point
+                .badge.badge-success
+                  .fa.fa-check
+                  Yes
+              - else
+                .badge.badge-danger
+                  .fa.fa-times
+                  No
+          %tr
+            %th
+              Priority
+            %td
+              #{@loan_product.priority}
 
-              %tr
-                %th
-                  Prerequisite
-                %td
-                  - if @loan_product.prerequisite.present?
-                    #{@loan_product.prerequisite}
-                  - else
-                    No prerequisite yet.
-                  %span
-                    %small
-                      = link_to "#", id: 'btn-prerequisite' do
-                        .fa.fa-pencil-alt
-                        Modify
-              %tr
-                %th
-                  Maintaining Balance
-                %td
-                  #{number_to_currency(@loan_product.maintaining_balance, unit: '')}
-                  %span
-                    %small
-                      = link_to "#", id: 'btn-maintaining-balance' do
-                        .fa.fa-pencil-alt
-                        Modify
-
-#parameters{ data: { id: @loan_product.id } }
+          %tr
+            %th
+              Prerequisite
+            %td
+              - if @loan_product.prerequisite.present?
+                #{@loan_product.prerequisite}
+              - else
+                No prerequisite yet.
+              %span
+                %small
+                  = link_to "#", id: 'btn-prerequisite' do
+                    .fa.fa-pencil-alt
+                    Modify
+          %tr
+            %th
+              Maintaining Balance
+            %td
+              #{number_to_currency(@loan_product.maintaining_balance, unit: '')}
+              %span
+                %small
+                  = link_to "#", id: 'btn-maintaining-balance' do
+                    .fa.fa-pencil-alt
+                    Modify
 
 = render partial: "administration/loan_products/modals/delete"
 = render partial: "administration/loan_products/modals/prerequisite"
 = render partial: "administration/loan_products/modals/maintaining_balance"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "administration/loan_products/Show.js"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-    var id                = $("#parameters").data('id');
-
-    Show.init({
-      id: id,
-      authenticityToken: authenticityToken
-    });
-  });

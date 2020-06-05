@@ -25,7 +25,13 @@ module DataStores
     def show
       super
 
-      @subheader_items = []
+      @subheader_items = [
+        {
+          is_link: true,
+          path: "/data_stores/icpr",
+          text: "ICPR"
+        }
+      ]
 
       if @record.data["branch"].present?
         @subheader_items << {
