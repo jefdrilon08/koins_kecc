@@ -2088,7 +2088,7 @@ namespace :adjust do
     end
 
     member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved")
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved").order("updated_at ASC")
 
     account_transactions.each do |at|
       puts "Inserting #{at.id}"  
