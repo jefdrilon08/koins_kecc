@@ -182,6 +182,7 @@ GEM
     enumerable-statistics (2.0.1)
     equatable (0.6.1)
     erubi (1.9.0)
+    execjs (2.7.0)
     factory_bot (5.2.0)
       activesupport (>= 4.2.0)
     factory_bot_rails (5.2.0)
@@ -409,6 +410,8 @@ GEM
       tty-screen (~> 0.7)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    uglifier (4.2.0)
+      execjs (>= 0.3.0, < 3)
     unicode-display_width (1.7.0)
     unicode_plot (0.0.4)
       enumerable-statistics (>= 2.0.1)
@@ -487,6 +490,7 @@ DEPENDENCIES
   stackprof
   tty-table
   tzinfo-data
+  uglifier
   web-console (>= 3.3.0)
   webpacker
   whenever
