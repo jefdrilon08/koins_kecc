@@ -301,81 +301,83 @@ export default class DashboardOAS extends React.Component {
             </div>
           </div>
           <br/>
-          <table className="table table-bordered table-sm table-hover">
-            <thead>
-              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
-                <th>
-                  Loan Product
-                </th>
-                <th className="text-center">
-                  Active Loans
-                </th>
-                <th className="text-right">
-                  Principal
-                </th>
-                <th className="text-right">
-                  Principal Paid
-                </th>
-                <th className="text-right">
-                  Portfolio
-                </th>
-                <th className="text-right">
-                  Past Due Amount
-                </th>
-                <th className="text-right">
-                  Par Amount
-                </th>
-                <th className="text-center">
-                  Par Rate
-                </th>
-                <th className="text-center">
-                  RR
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {loanProductRows}
-            </tbody>
-            <tfoot>
-              <tr style={{backgroundColor: "#f0f0f0"}}>
-                <th>
-                  Total
-                </th>
-                <th className="text-center">
-                  {o.total_active_loans}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(o.total_principal)}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(o.total_principal_paid)}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(o.total_portfolio)}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(o.total_principal_past_due_amount)}
-                </th>
-                <th className="text-right">
-                  {numberWithCommas(o.total_par_amount)}
-                </th>
-                <th className="text-center">
-                  {numberAsPercent(o.total_par_rate)}
-                  <div className="progress progress-xs">
-                    <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.total_par_rate)}}>
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm table-hover">
+              <thead>
+                <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                  <th>
+                    Loan Product
+                  </th>
+                  <th className="text-center">
+                    Active Loans
+                  </th>
+                  <th className="text-right">
+                    Principal
+                  </th>
+                  <th className="text-right">
+                    Principal Paid
+                  </th>
+                  <th className="text-right">
+                    Portfolio
+                  </th>
+                  <th className="text-right">
+                    Past Due Amount
+                  </th>
+                  <th className="text-right">
+                    Par Amount
+                  </th>
+                  <th className="text-center">
+                    Par Rate
+                  </th>
+                  <th className="text-center">
+                    RR
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {loanProductRows}
+              </tbody>
+              <tfoot>
+                <tr style={{backgroundColor: "#f0f0f0"}}>
+                  <th>
+                    Total
+                  </th>
+                  <th className="text-center">
+                    {o.total_active_loans}
+                  </th>
+                  <th className="text-right">
+                    {numberWithCommas(o.total_principal)}
+                  </th>
+                  <th className="text-right">
+                    {numberWithCommas(o.total_principal_paid)}
+                  </th>
+                  <th className="text-right">
+                    {numberWithCommas(o.total_portfolio)}
+                  </th>
+                  <th className="text-right">
+                    {numberWithCommas(o.total_principal_past_due_amount)}
+                  </th>
+                  <th className="text-right">
+                    {numberWithCommas(o.total_par_amount)}
+                  </th>
+                  <th className="text-center">
+                    {numberAsPercent(o.total_par_rate)}
+                    <div className="progress progress-xs">
+                      <div className="progress-bar bg-danger" role="progressbar" style={{width: "" + numberAsPercent(o.total_par_rate)}}>
+                      </div>
                     </div>
-                  </div>
-                </th>
-                <th className="text-center">
-                  {numberAsPercent(o.total_rr)}
-                  <div className="progress progress-xs">
-                    <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.total_rr)}}>
+                  </th>
+                  <th className="text-center">
+                    {numberAsPercent(o.total_rr)}
+                    <div className="progress progress-xs">
+                      <div className="progress-bar bg-success" role="progressbar" style={{width: "" + numberAsPercent(o.total_rr)}}>
+                      </div>
                     </div>
-                  </div>
-                </th>
-              </tr>
-            </tfoot>
-          </table>
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       );
     }
@@ -434,34 +436,36 @@ export default class DashboardOAS extends React.Component {
               Member List
             </h2>
             <hr/>
-            <table className="table table-sm table-bordered">
-              <thead>
-                <tr>
-                  <th width={"5%"}>
-                  </th>
-                  <th>
-                    Name
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  this.state.currentMemberList.map((m, index) => (
-                      <tr key={"member-" + index}>
-                        <td className="text-center">
-                          <a href={"/members/" + m.member.id + "/display"}>
-                            <span className="fa fa-search"/>
-                          </a>
-                        </td>
-                        <td>
-                          {m.member.last_name}, {m.member.first_name}
-                        </td>
-                      </tr>
+            <div className="table-responsive">
+              <table className="table table-sm table-bordered">
+                <thead>
+                  <tr>
+                    <th width={"5%"}>
+                    </th>
+                    <th>
+                      Name
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    this.state.currentMemberList.map((m, index) => (
+                        <tr key={"member-" + index}>
+                          <td className="text-center">
+                            <a href={"/members/" + m.member.id + "/display"}>
+                              <span className="fa fa-search"/>
+                            </a>
+                          </td>
+                          <td>
+                            {m.member.last_name}, {m.member.first_name}
+                          </td>
+                        </tr>
+                      )
                     )
-                  )
-                }
-              </tbody>
-            </table>
+                  }
+                </tbody>
+              </table>
+            </div>
             <hr/>
             <button 
               onClick={this.closeCycleCountSummaryModal.bind(this)}
@@ -579,33 +583,35 @@ export default class DashboardOAS extends React.Component {
           <h5>
             Watchlist as of {o.as_of} ({o.records.length})
           </h5>
-
-          <table className="table table-bordered table-sm table-hover">
-            <thead>
-              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
-                <th>
-                </th>
-                <th>
-                  Member
-                </th>
-                <th>
-                  Center
-                </th>
-                <th>
-                  Officer
-                </th>
-                <th>
-                  Loan Product
-                </th>
-                <th className="text-right">
-                  Total Past Due
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows}
-            </tbody>
-          </table>
+          
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm table-hover">
+              <thead>
+                <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                  <th>
+                  </th>
+                  <th>
+                    Member
+                  </th>
+                  <th>
+                    Center
+                  </th>
+                  <th>
+                    Officer
+                  </th>
+                  <th>
+                    Loan Product
+                  </th>
+                  <th className="text-right">
+                    Total Past Due
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows}
+              </tbody>
+            </table>
+          </div>
         </div>
       );
     }
@@ -670,27 +676,29 @@ export default class DashboardOAS extends React.Component {
           <h5>
             Center Meeting Days
           </h5>
-          <table className="table table-bordered table-sm table-hover">
-            <thead>
-              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Officer
-                </th>
-                <th className="text-center">
-                  A | P
-                </th>
-                <th>
-                  Meeting Day
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {centerRecords}
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm table-hover">
+              <thead>
+                <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                  <th>
+                    Name
+                  </th>
+                  <th>
+                    Officer
+                  </th>
+                  <th className="text-center">
+                    A | P
+                  </th>
+                  <th>
+                    Meeting Day
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {centerRecords}
+              </tbody>
+            </table>
+          </div>
         </div>
       );
     }
@@ -718,96 +726,98 @@ export default class DashboardOAS extends React.Component {
             </a>
           </h5>
           {this.renderMemberTypeCounts(o.data.member_type_counts)}
-          <table className="table table-bordered table-sm table-hover">
-            <thead>
-              <tr style={{backgroundColor: "#797979", color: "#fff"}}>
-                <th>
-                </th>
-                <th className="text-center">
-                  Male
-                </th>
-                <th className="text-center">
-                  Female
-                </th>
-                <th className="text-center">
-                  Others
-                </th>
-                <th className="text-center">
-                  TOTAL
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>
-                  Pure Savers
-                </th>
-                <td className="text-center">
-                  {o.data.counts.pure_savers.male}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pure_savers.female}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pure_savers.others}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.pure_savers.total}
-                </td>
-              </tr>
-              <tr>
-                <th>
-                  Active Loaners
-                </th>
-                <td className="text-center">
-                  {o.data.counts.loaners.male}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.loaners.female}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.loaners.others}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.loaners.total}
-                </td>
-              </tr>
-              <tr>
-                <th>
-                  Active Members
-                </th>
-                <td className="text-center">
-                  {o.data.counts.active_members.male}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.active_members.female}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.active_members.others}
-                </td>
-                <td className="text-center">
-                  {o.data.counts.active_members.total}
-                </td>
-              </tr>
-              <tr>
-                <th>
-                  GRAND TOTAL
-                </th>
-                <th className="text-center">
-                  {o.data.counts.active_members.male + o.data.counts.loaners.male + o.data.counts.pure_savers.male}
-                </th>
-                <th className="text-center">
-                  {o.data.counts.active_members.female + o.data.counts.loaners.female + o.data.counts.pure_savers.female}
-                </th>
-                <th className="text-center">
-                  {o.data.counts.active_members.others + o.data.counts.loaners.others + o.data.counts.pure_savers.others}
-                </th>
-                <th className="text-center">
-                  {o.data.counts.active_members.total + o.data.counts.loaners.total + o.data.counts.pure_savers.total}
-                </th>
-              </tr>
-            </tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="table table-bordered table-sm table-hover">
+              <thead>
+                <tr style={{backgroundColor: "#797979", color: "#fff"}}>
+                  <th>
+                  </th>
+                  <th className="text-center">
+                    Male
+                  </th>
+                  <th className="text-center">
+                    Female
+                  </th>
+                  <th className="text-center">
+                    Others
+                  </th>
+                  <th className="text-center">
+                    TOTAL
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>
+                    Pure Savers
+                  </th>
+                  <td className="text-center">
+                    {o.data.counts.pure_savers.male}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.pure_savers.female}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.pure_savers.others}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.pure_savers.total}
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Active Loaners
+                  </th>
+                  <td className="text-center">
+                    {o.data.counts.loaners.male}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.loaners.female}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.loaners.others}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.loaners.total}
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Active Members
+                  </th>
+                  <td className="text-center">
+                    {o.data.counts.active_members.male}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.active_members.female}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.active_members.others}
+                  </td>
+                  <td className="text-center">
+                    {o.data.counts.active_members.total}
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    GRAND TOTAL
+                  </th>
+                  <th className="text-center">
+                    {o.data.counts.active_members.male + o.data.counts.loaners.male + o.data.counts.pure_savers.male}
+                  </th>
+                  <th className="text-center">
+                    {o.data.counts.active_members.female + o.data.counts.loaners.female + o.data.counts.pure_savers.female}
+                  </th>
+                  <th className="text-center">
+                    {o.data.counts.active_members.others + o.data.counts.loaners.others + o.data.counts.pure_savers.others}
+                  </th>
+                  <th className="text-center">
+                    {o.data.counts.active_members.total + o.data.counts.loaners.total + o.data.counts.pure_savers.total}
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       );
     }

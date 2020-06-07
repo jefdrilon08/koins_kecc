@@ -457,11 +457,13 @@ export default class ManagementOverview extends React.Component {
     );
 
     return (
-      <table className="table table-sm table-bordered">
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
+      <div className="table-responsive">
+        <table className="table table-sm table-bordered">
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+      </div>
     );
   }
 
