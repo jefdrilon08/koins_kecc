@@ -2136,6 +2136,36 @@ namespace :adjust do
     puts "\nDone!"
   end
 
+  task :insert_equity_value_to_life_last_transaction => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |ma, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
+
+      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
+        
+      if !last_transaction.nil?  
+        at_data = last_transaction.data.with_indifferent_access
+        ev_amount = at_data[:ending_balance].to_f / 2
+        at_data[:equity_value] = ev_amount
+        last_transaction.update!(data: at_data)
+      end
+    end 
+
+    puts "\nDone!"
+  end
+
   task :update_ev_and_policy_loan_value_for_validation_record => :environment do
     puts "Updating ..."
     member_account_validations = MemberAccountValidation.all
