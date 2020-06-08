@@ -38,13 +38,18 @@ module InsuranceWithdrawalCollections
 
       # For equity amount computation
       if @member_account.account_subtype == Settings.life
-        @member_account_data = @member_account.data.with_indifferent_access
-        equity_value = @member_account_data[:equity_value]
+        if @member_account.data.present?
+          @member_account_data = @member_account.data.with_indifferent_access
 
-        @data[:equity_value]                = (equity_value - (@amount / 2)).round(2)
-        @member_account_data[:equity_value] = (equity_value - (@amount / 2)).round(2)
+          equity_value = @member_account_data[:equity_value]
 
-        @member_account.update!(data: @member_account_data)
+          if equity_value.present?
+            @data[:equity_value]                = (equity_value - (@amount / 2)).round(2)
+            @member_account_data[:equity_value] = (equity_value - (@amount / 2)).round(2)
+
+            @member_account.update!(data: @member_account_data)
+          end
+        end
       end
 
       # Update account balance

@@ -2088,9 +2088,7 @@ namespace :adjust do
     end
 
     member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved").order("updated_at ASC")
-
-
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved").order("updated_at DESC")
 
     size = account_transactions.count
 
@@ -2127,7 +2125,7 @@ namespace :adjust do
       last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
         
       if !last_transaction.nil?  
-        latest_ev_amount = last_transaction.data.with_indifferent_access[:ending_balance] / 2 
+        latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
         if ma.data.nil?
           ma.data = { equity_value: latest_ev_amount }
           ma.save!
