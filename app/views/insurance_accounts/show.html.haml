@@ -95,6 +95,7 @@
                       .badge.badge-danger
                         Matured
         - elsif @insurance_account.account_subtype == Settings.life
+          #react-root
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
@@ -166,6 +167,49 @@
                   %center
                     Type
                 %th.text-right
+                  Amount
+            %tbody
+              - @account_transactions.each do |o|
+                %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      - if o.deposit?
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        .badge.badge-danger
+                          .fa.fa-upload
+                          Withdraw
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+        - else
+          #react-root
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
                   Beginning Balance
                 %th.text-right
                   Amount
@@ -202,36 +246,4 @@
                   %td.text-right
                     #{number_to_currency(o.amount, unit: "")}
                   %td.text-right.text-muted
-                    #{number_to_currency(o.data["ending_balance"], unit: "")} 
-        - else
-          #react-root
-          %table.table.table-hover.table-sm.table-bordered
-            %thead
-              %tr
-                - if current_user.roles.include?("MIS")
-                  %th
-                    %center
-                      Status
-              %tbody
-                - @account_transactions.each do |o|
-                  %tr
-                    - if current_user.roles.include?("MIS")
-                      %td
-                        %small
-                          #{o.id}
-                    %td
-                      %center
-                        %small
-                          #{o.data.with_indifferent_access[:data][:date_approved].to_date.strftime("%B %d, %Y")}
-                    %td
-                      %center
-                        %small
-                          #{number_to_currency(o.amount, unit: "")}
-                    %td
-                      %center
-                        - if (Date.today - o.data.with_indifferent_access[:data][:date_approved].to_date).to_i < 365
-                          .badge.badge-info
-                            Active
-                        - else 
-                          .badge.badge-danger
-                            Matured
+                    #{number_to_currency(o.data["ending_balance"], unit: "")}
