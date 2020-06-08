@@ -2129,6 +2129,10 @@ namespace :adjust do
         if ma.data.nil?
           ma.data = { equity_value: latest_ev_amount }
           ma.save!
+        else
+          ma_data = ma.data.with_indifferent_access
+          ma_data[:equity_value] = latest_ev_amount
+          ma.update!(data: ma_data)
         end
       end
     end 
