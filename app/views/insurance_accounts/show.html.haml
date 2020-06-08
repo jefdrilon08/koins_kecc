@@ -222,16 +222,20 @@
                     %td
                       %center
                         %small
-                          #{o.data.with_indifferent_access[:data][:date_approved].to_date.strftime("%B %d, %Y")}
+                          - if o.data["data"].present?
+                            - if o.data["data"]["date_approved"].present?
+                              #{o.data.with_indifferent_access[:data][:date_approved].to_date.strftime("%B %d, %Y")}
                     %td
                       %center
                         %small
                           #{number_to_currency(o.amount, unit: "")}
                     %td
                       %center
-                        - if (Date.today - o.data.with_indifferent_access[:data][:date_approved].to_date).to_i < 365
-                          .badge.badge-info
-                            Active
-                        - else 
-                          .badge.badge-danger
-                            Matured
+                        - if o.data["data"].present?
+                          - if o.data["data"]["date_approved"].present?
+                            - if (Date.today - o.data.with_indifferent_access[:data][:date_approved].to_date).to_i < 365
+                              .badge.badge-info
+                                Active
+                            - else 
+                              .badge.badge-danger
+                                Matured
