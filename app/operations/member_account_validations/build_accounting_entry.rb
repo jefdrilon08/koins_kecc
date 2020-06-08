@@ -292,7 +292,7 @@ module MemberAccountValidations
         journal_entries << o
       end
 
-      @member_account_validation.member_account_validation_records.sum(:policy_loan) > 0
+      if @member_account_validation.member_account_validation_records.sum(:policy_loan) > 0
         compute_policy_loan.each do |o|
           journal_entries << o
         end 
