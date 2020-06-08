@@ -124,9 +124,6 @@ namespace :api do
     get "/centers", to: "centers#index"
     get "/centers/centers", to: "centers#centers"
 
-    # Print Services
-    post "/print/generate_file", to: "print#generate_file"
-
     # Billing
     post "/billings", to: "billings#create"
     post "/billings/modify_transaction_record", to: "billings#modify_transaction_record"

@@ -96,26 +96,8 @@ var _bindEvents = function() {
       )
     );
 
-    $.ajax({
-      url: "/api/v1/print/generate_file",
-      method: "POST",
-      data: {
-        type: "accounting_entry",
-        id: accountingEntryId,
-        authenticity_token: _authenticityToken
-      },
-      success: function(response) {
-        $printMessage.html(
-          "Success! Redirecting..."
-        );
-
-        $modalPrint.modal("hide");
-        window.open("/print?filename=" + response.filename, '_blank');
-      },
-      error: function(response) {
-        $printMessage.html("Error!");
-      }
-    });
+    $modalPrint.modal("hide");
+    window.open("/print?id=" + accountingEntryId + "&type=accounting_entry");
   });
 
   $btnApprove.on("click", function() {

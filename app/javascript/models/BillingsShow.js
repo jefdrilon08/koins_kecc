@@ -144,26 +144,10 @@ var _bindEvents = function() {
     $modalPrint.modal("show");
     $message.html("");
 
-    $.ajax({
-      url: "/api/v1/print/generate_file",
-      method: 'POST',
-      data: { 
-        id: id,
-        type: "wp",
-        authenticity_token: authenticityToken
-      },
-      success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
+    var type = "wp";
 
-        $modalPrint.modal("hide");
-        window.open("/print?filename=" + response.filename, '_blank');
-      },
-      error: function(response) {
-        $message.html("Error!");
-      }
-    });
+    $modalPrint.modal("hide");
+    window.open("/print?type=" + type + "&id=" + id);
   });
 
   $btnExcel.on("click", function() {
@@ -189,27 +173,10 @@ var _bindEvents = function() {
   $btnPrint.on("click", function() {
     $modalPrint.modal("show");
 
-    $.ajax({
-      url: "/api/v1/print/generate_file",
-      method: 'POST',
-      data: { 
-        id: id,
-        type: "billing",
-        authenticity_token: authenticityToken
-      },
-      success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
+    var type = "billing";
 
-        $modalPrint.modal("hide");
-        window.open("/print?filename=" + response.filename, '_blank');
-        //console.log(response.data);
-      },
-      error: function(response) {
-        $message.html("Error!");
-      }
-    });
+    $modalPrint.modal("hide");
+    window.open("/print?type=" + type + "&id=" + id);
   });
 
   $btnApprove.on("click", function() {

@@ -67,6 +67,7 @@ var _bindEvents = function() {
 
 
   $btnPrint.on("click", function() {
+    var type              = "book";
     var startDate         = $inputStartDate.val();
     var endDate           = $inputEndDate.val();
     var branchId          = $selectBranch.val();
@@ -83,30 +84,8 @@ var _bindEvents = function() {
     $modalPrint.modal("show");
     $message.html("Printing...");
 
-    $.ajax({
-      url: _urlPrint,
-      method: 'POST',
-      data: {
-        start_date: startDate,
-        end_date: endDate,
-        branch_id: branchId,
-        book: book,
-        accounting_fund_id: accountingFundId,
-        type: "book",
-        authenticity_token: authenticityToken
-      },
-      success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
-
-        $modalPrint.modal("hide");
-        window.open("/print?filename=" + response.filename, '_blank');
-      },
-      error: function(response) {
-        $message.html("Error!");
-      }
-    });
+    $modalPrint.modal("hide");
+    window.open("/print?type=" + type + "&start_date=" + startDate + "&end_date=" + endDate + "&branch_id=" + branchId + "&accounting_fund_id=" + accountingFundId);
   });
 
  

@@ -144,35 +144,16 @@ export default class TrialBalanceComponent extends React.Component {
       isLoading: true
     });
 
+    var type        = "trial_balance";
     var start_date  = moment(context.state.start_date).format('YYYY-MM-DD');
     var end_date    = moment(context.state.end_date).format('YYYY-MM-DD');
+    var branch_id   = context.state.currentBranchId;
 
-    $.ajax({
-      url: "/api/v1/print/generate_file",
-      method: 'POST',
-      data: { 
-        start_date: start_date,
-        end_date: end_date,
-        branch_id: context.state.currentBranchId,
-        type: "trial_balance",
-        authenticity_token: context.props.authenticityToken
-      },
-      success: function(response) {
-        window.open("/print?filename=" + response.filename, '_blank');
-
-        context.setState({
-          isLoading: false
-        });
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Error in printing!");
-
-        context.setState({
-          isLoading: false
-        });
-      }
+    context.setState({
+      isLoading: false
     });
+
+    window.open("/print?start_date=" + start_date + "&end_date=" + end_date + "&type=" + type + "&branch_id=" + branch_id);
   }
 
   handleExcelClicked() {

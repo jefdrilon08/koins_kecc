@@ -33,26 +33,10 @@ var _bindEvents = function() {
   $btnPrint.on("click", function() {
     $modalPrint.modal("show");
 
-    $.ajax({
-      url: "/api/v1/print/generate_file",
-      method: 'POST',
-      data: { 
-        id: withdrawalCollectionId,
-        type: "withdrawal_collection",
-        authenticity_token: authenticityToken
-      },
-      success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
+    var type = "withdrawal_collection";
 
-        $modalPrint.modal("hide");
-        window.open("/print?filename=" + response.filename, '_blank');
-      },
-      error: function(response) {
-        $message.html("Error!");
-      }
-    });
+    $modalPrint.modal("hide");
+    window.open("/print?type=" + type + "&id=" + withdrawalCollectionId);
   });
 
   $btnApprove.on("click", function() {

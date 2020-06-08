@@ -31,26 +31,10 @@ var _bindEvents = function() {
 
     $modalPrint.modal("show");
 
-    $.ajax({
-      url: "/api/v1/print/generate_file",
-      method: "POST",
-      data: {
-        id: id,
-        type: "withdrawal_request",
-        authenticity_token: authenticityToken
-      },
-      success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
+    var type = "withdrawal_request";
 
-        $modalPrint.modal("hide");
-        window.open("/print?filename=" + response.filename, '_blank');
-      },
-      error: function(response) {
-        $message.html("Error in printing withdrawal request!");
-      }
-    });
+    $modalPrint.modal("hide");
+    window.open("/print?type=" + type + "&id=" + id);
   });
 };
 
