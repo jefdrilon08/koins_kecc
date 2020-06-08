@@ -13,6 +13,10 @@
 @import "./components/Sidebar";
 @import "./member";
 
+.c-sidebar {
+  background: #2b2c2d;
+}
+
 .tab-pane {
   padding: 10px;
 }
