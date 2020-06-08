@@ -8,7 +8,7 @@
     = csp_meta_tag
     %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
 
-    = stylesheet_pack_tag 'application'
+    = stylesheet_pack_tag 'application', media: "all"
     = javascript_pack_tag 'application'
     = favicon_link_tag "logo_thumb.png"
 

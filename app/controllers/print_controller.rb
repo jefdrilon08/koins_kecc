@@ -10,59 +10,59 @@ class PrintController < ApplicationController
       @accounting_entry_data  = @data[:data]
       @deposit_collection = @data[:data]
       
-      render "print/accounting_entry", layout: "plain"
+      render "print/accounting_entry", layout: "print"
     elsif @data[:type] == "deposit_collection_accounting_entry"
       @accounting_entry_data  = @data[:data]
 
-      render "print/accounting_entry", layout: "plain"
+      render "print/accounting_entry", layout: "print"
     elsif @data[:type] == "member_share"
       @member_share_data  = @data[:data]
 
-      render "print/member_share", layout: "plain"
+      render "print/member_share", layout: "print"
     elsif @data[:type] == "billing"
       @billing  = @data[:data]
 
-      render "print/billing", layout: "plain"
+      render "print/billing", layout: "print"
     elsif @data[:type] == "membership_payment_collection"
       @membership_payment_collection  = @data[:data]
 
-      render "print/membership_payment_collection", layout: "plain"
+      render "print/membership_payment_collection", layout: "print"
     elsif @data[:type] == "trial_balance"
       @trial_balance  = @data[:data]
 
-      render "print/trial_balance", layout: "plain"
+      render "print/trial_balance", layout: "print"
     elsif @data[:type] == "general_ledger"
       @general_ledger = @data[:data]
 
-      render "print/general_ledger", layout: "plain"
+      render "print/general_ledger", layout: "print"
     elsif @data[:type] == "wp"
       @billing  = @data[:data]
 
-      render "print/wp", layout: "plain"
+      render "print/wp", layout: "print"
     elsif @data[:type] == "book"
       @book = @data[:data]
 
-      render "print/book", layout: "plain"
+      render "print/book", layout: "print"
     elsif @data[:type] == "deposit_collection"
       @deposit_collection = @data[:data]
       
-      render "print/deposit_collection", layout: "plain"
+      render "print/deposit_collection", layout: "print"
     elsif @data[:type] == "insurance_fund_transfer_collection"
       @insurance_fund_transfer_collection = @data[:data]
 
-      render "print/insurance_fund_transfer_collection", layout: "plain"
+      render "print/insurance_fund_transfer_collection", layout: "print"
     elsif @data[:type] == "time_deposit_collection"
       @deposit_collection = @data[:data]
 
-      render "print/deposit_collection", layout: "plain"
+      render "print/deposit_collection", layout: "print"
     elsif @data[:type] == "withdrawal_collection"
       @withdrawal_collection = @data[:data]
 
-      render "print/withdrawal_collection", layout: "plain"
+      render "print/withdrawal_collection", layout: "print"
     elsif @data[:type] == "withdrawal_request"
       @withdrawal_request = @data[:data]
 
-      render "print/withdrawal_request", layout: "plain"
+      render "print/withdrawal_request", layout: "print"
     else
       raise "Invalid type #{@data[:type]}"
     end
