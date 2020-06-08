@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => SIDEKIQ_WEB_PATH
   end
 
+  # Change password
+  get "/change_password", to: "pages#change_password"
+
   # dashboard
   get "/dashboard/finance", to: "pages#finance", as: :dashboard_finance
 

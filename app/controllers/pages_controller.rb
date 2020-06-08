@@ -22,6 +22,12 @@ class PagesController < ApplicationController
     ]
   end
 
+  def change_password
+    @subheader_items = [
+      { text: "Change Password" }
+    ]
+  end
+
   def download_backup
     if user_signed_in? and current_user.roles.include?("MIS")
       destination_directory = "#{Rails.root}/db_backup"

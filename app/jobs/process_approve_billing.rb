@@ -35,6 +35,8 @@ class ProcessApproveBilling < ApplicationJob
         )
       end
     rescue Exception => e
+      logger.info "Exception occurred!"
+      logger.info e
       billing.update!(
         status: "pending"
       )
