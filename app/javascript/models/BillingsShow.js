@@ -204,6 +204,7 @@ var _bindEvents = function() {
 
         $modalPrint.modal("hide");
         window.open("/print?filename=" + response.filename, '_blank');
+        //console.log(response.data);
       },
       error: function(response) {
         $message.html("Error!");

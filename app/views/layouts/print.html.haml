@@ -2,10 +2,10 @@
 %html
 %head
   %title= App.name
-  = stylesheet_pack_tag 'application', media: "print"
+  = stylesheet_pack_tag 'application', media: 'all'
   = javascript_pack_tag 'application'
   = favicon_link_tag "logo_thumb.png"
   = csrf_meta_tags
   %meta{name: "viewport", content:"width=device-width, initial-scale=1"}
-%body.c-app{ onload: "window.print();" }
+%body{ onload: "window.print();" }
   = yield
