@@ -18,7 +18,10 @@ module Members
           center: @member.center,
           branch: @member.branch,
           status: "active",
-          maintaining_balance: 0.00
+          maintaining_balance: 0.00,
+          data: {
+            equity_value: 0.00
+          }
         )
       end
     end
