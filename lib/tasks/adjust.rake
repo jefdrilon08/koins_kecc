@@ -2090,8 +2090,13 @@ namespace :adjust do
     member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
     account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved").order("updated_at ASC")
 
-    account_transactions.each do |at|
-      puts "Inserting #{at.id}"  
+
+
+    size = account_transactions.count
+
+    account_transactions.each_with_index do |at, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for transaction #{at.id}... #{progress}%%")  
 
       at_data = at.data.with_indifferent_access
       ev_amount = at_data[:ending_balance].to_f / 2
@@ -2099,7 +2104,7 @@ namespace :adjust do
       at.update!(data: at_data)
     end
 
-    puts "Done!"
+    puts "\nDone!"
   end
 
   task :insert_equity_value_to_life_account => :environment do
@@ -2113,12 +2118,16 @@ namespace :adjust do
 
     member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
 
-    member_accounts.each do |ma|
-      puts "Inserting #{ma.id}"
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |ma, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
+
       last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
         
       if !last_transaction.nil?  
-        latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
+        latest_ev_amount = last_transaction.data.with_indifferent_access[:ending_balance] / 2 
         if ma.data.nil?
           ma.data = { equity_value: latest_ev_amount }
           ma.save!
@@ -2126,7 +2135,7 @@ namespace :adjust do
       end
     end 
 
-    puts "Done!"
+    puts "\nDone!"
   end
 
   task :update_ev_and_policy_loan_value_for_validation_record => :environment do
