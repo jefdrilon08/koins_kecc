@@ -913,8 +913,8 @@ export default class AccountingEntryFormComponent extends React.Component {
     console.log("CURRENT BRANCH IN RENDER");
     console.log(this.state.currentBranch);
     var tempCurrentBranch = {
-      value: this.state.currentBranch.id,
-      label: this.state.currentBranch.name
+      value: this.state.currentBranch.value,
+      label: this.state.currentBranch.label
     };
 
     return (
