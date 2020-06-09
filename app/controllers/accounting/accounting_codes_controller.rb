@@ -95,6 +95,20 @@ module Accounting
       if @accounting_code.save
         redirect_to accounting_accounting_code_path(@accounting_code)
       else
+        @subheader_items = [
+          {
+            text: "Accounting"
+          },
+          {
+            is_link: true,
+            path: accounting_accounting_codes_path,
+            text: "Chart of Accounts"
+          },
+          {
+            text: "New Accounting Code"
+          }
+        ]
+
         render :new
       end
     end
@@ -113,14 +127,26 @@ module Accounting
           text: "Edit: #{@accounting_code}"
         }
       ]
-
-      @subheader_side_actions = []
     end
 
     def update
       if @accounting_code.update(accounting_code_params)
         redirect_to accounting_accounting_code_path(@accounting_code)
       else
+        @subheader_items = [
+          {
+            text: "Accounting"
+          },
+          {
+            is_link: true,
+            path: accounting_accounting_codes_path,
+            text: "Chart of Accounts"
+          },
+          {
+            text: "Edit: #{@accounting_code}"
+          }
+        ]
+
         render :edit
       end
     end
