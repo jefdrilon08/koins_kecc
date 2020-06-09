@@ -56,7 +56,8 @@ class ProcessApproveLoan < ApplicationJob
         }
       )
     rescue Exception => e
-      logger.info "LOAN EXCEPTION #{e}"
+      logger.info "LOAN EXCEPTION #{e} Loan ID: #{loan.try(:id)}"
+      logger.info "BACKTRACE #{e.backtrace}"
       loan.update!(status: "pending")
     end
   end
