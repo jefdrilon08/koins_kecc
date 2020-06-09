@@ -20,8 +20,8 @@ module Accounting
         },
         {
           is_link: true,
-          path: "/accounting/books/#{params[:book].downcase}",
-          text: "#{params[:book].upcase}"
+          path: "/accounting/books/#{@accounting_entry.book.downcase}",
+          text: "#{@accounting_entry.book.upcase}"
         }
       ]
 
