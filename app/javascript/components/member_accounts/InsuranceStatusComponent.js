@@ -11,7 +11,7 @@ export default class InsuranceStatusComponent extends React.Component {
 		this.state = {
 			message: "Hello",
 			isLoading: true,
-			memberAccountId: props.memberAccountId,
+			memberAccountId: props.id,
 			data: false
 		};
 	}
