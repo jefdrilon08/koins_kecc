@@ -2126,13 +2126,15 @@ namespace :adjust do
         
       if !last_transaction.nil?  
         latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
-        if ma.data.nil?
-          ma.data = { equity_value: latest_ev_amount }
-          ma.save!
-        else
-          ma_data = ma.data.with_indifferent_access
-          ma_data[:equity_value] = latest_ev_amount
-          ma.update!(data: ma_data)
+        if !ma.member_id.nil?
+          if ma.data.nil?
+            ma.data = { equity_value: latest_ev_amount }
+            ma.save!
+          else
+            ma_data = ma.data.with_indifferent_access
+            ma_data[:equity_value] = latest_ev_amount
+            ma.update!(data: ma_data)
+          end
         end
       end
     end 
