@@ -56,6 +56,7 @@ class ProcessApproveLoan < ApplicationJob
         }
       )
     rescue Exception => e
+      logger.info "LOAN EXCEPTION #{e}"
       loan.update!(status: "pending")
     end
   end
