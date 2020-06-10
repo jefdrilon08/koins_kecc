@@ -86,7 +86,22 @@
                 %th
                   %center
                     Date Posted
+                %th.text-right
+                  Amount
                 %th
+                  %center
+                    Status
+            %tbody
+              - @account_transactions.each do |o|  
+                %td
+                  %center
+                    %small
+                      #{number_to_currency(o.data.with_indifferent_access[:data][:date_approved].to_date)}
+                %td
+                  %center
+                    %small
+                      #{number_to_currency(o.amount, unit: "")}
+                %td
                   %center
                     - if (Date.today - o.data.with_indifferent_access[:data][:date_approved].to_date).to_i < 365
                       .badge.badge-info
