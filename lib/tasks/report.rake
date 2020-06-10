@@ -1,10 +1,23 @@
 namespace :report do
+  task :member_age => :environment do
+    br_name = ENV['SATO']
+    br_id= Branch.where(name: br_name).ids
+
+    member = Member.where(status: "active" , branch_id: br_id).order('date_of_birth DESC')
+    puts "NAME|CENTER|DATE OF BIRTH|AGE|GENDER"
+    member.each do |mem|
+      puts "#{mem.full_name}|#{mem.center}|#{mem.date_of_birth}|#{mem.age}|#{mem.gender}"  
+    end
+    
+    
+  end
+
   task :midas_report => :environment do
     s_date= ENV['s_date']
     br_name = ENV['SATO']
     rep_type = ENV['MIDAS']
     br_id= Branch.where(name: br_name).ids
-    
+    @data = []    
     if rep_type == 'PODs'
       loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date >=?", br_id , s_date , s_date).order("members.identification_number").uniq
     elsif rep_type == 'BARs'
@@ -72,8 +85,10 @@ namespace :report do
         loan_purpose = 'SE'
       end
 
-      puts "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{y.member.gender}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{y.member.gender}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+    @data << j
     end
+    puts @data
   puts "END"
   end
   task :mem_share => :environment do
