@@ -4012,8 +4012,8 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
-      threshold: 0.00
+      percentage: 0.2
+      threshold: 7001.00
     deductions:
       -
         name: "Service Fee"
