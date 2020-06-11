@@ -40,7 +40,7 @@ branch_config:
     current_date: "2020-04-30"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
     current_date: "2020-05-29"
@@ -48,20 +48,20 @@ branch_config:
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
     current_date: "2020-05-29"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
     current_date: "2020-05-29"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
   -
     id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
     current_date: "2020-05-29"
@@ -71,10 +71,10 @@ branch_config:
     current_date: "2020-05-29"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
 ###############################
 # AUTHORIZATION               #
 ###############################
@@ -4012,8 +4012,8 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
-      threshold: 0.00
+      percentage: 0.2
+      threshold: 7001.00
     deductions:
       -
         name: "Service Fee"
