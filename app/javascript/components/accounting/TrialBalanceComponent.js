@@ -345,6 +345,8 @@ export default class TrialBalanceComponent extends React.Component {
       </option>
     );
 
+    console.log(state.accountingFunds);
+
     for(var i = 0; i < state.accountingFunds.length; i++) {
       accountingFundOptions.push(
         <option value={state.accountingFunds[i].id} key={"acc-fund-" + i}>
