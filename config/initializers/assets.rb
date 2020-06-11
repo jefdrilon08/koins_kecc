@@ -177,5 +177,6 @@ Rails.application.config.assets.precompile += [
   "claims/calamity_form.js",
   "claims/kbente_form.js",
   "claims/scholarship_form.js",
-  "reports/ClaimReport.js"
+  "reports/ClaimReport.js", 
+  "claims/edit/edit_blip_form.js"
 ]

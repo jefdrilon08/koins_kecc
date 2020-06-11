@@ -93,10 +93,19 @@ module Claims
     end
 
     def validate_kalinga_duplication!
-      count = Claim.where("claim_type = ? AND data->>'poc_number' = ?", "K-KALINGA", @poc_number).count
-      if count > 0
-        @errors << "Duplicate KALINGA!"
-      end
+      count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
+        data->>'amount' = ? AND data->>'date_approved' = ? AND data->>'effective_date' = ? AND 
+        data->>'expiration_date' = ? AND data->>'poc_number' = ? AND data->>'name_of_insured' = ? AND 
+        data->>'relationship_to_member' = ? AND data->>'insured_address' = ? AND data->>'civil_status' = ? AND 
+        data->>'date_of_birth' = ? AND data->>'name_of_beneficiary' = ? AND 
+        data->>'date_of_death_or_incident' = ? AND data->>'reason_of_death' = ? AND data->>'gender' = ?", 
+        @claim.member_id, "K-KALINGA", @date_prepared, @amount, @date_approved, @effective_date, 
+        @expiration_date, @poc_number, @name_of_insured, @relationship_to_member, @insured_address, 
+        @civil_status, @date_of_birth, @name_of_beneficiary, @date_of_death_or_incident, @reason_of_death, 
+        @gender).count
+        if count > 0
+          @errors << "Duplicate KALINGA!"
+        end
 
     end
   end

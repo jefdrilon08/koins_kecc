@@ -5,6 +5,12 @@
 %table.table.table-sm.table-hover
   %tbody
     %tr
+      %th Date Prepared
+      %td
+        = @claim.date_prepared.strftime("%b %d, %Y")
+      %th
+      %td
+    %tr
       %th Branch
       %td
         = @claim.member.branch.name

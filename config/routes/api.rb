@@ -337,6 +337,7 @@ namespace :api do
     post "/claims/save", to: "claims#save"
     post "/claims/create", to: "claims#create"
     post "/claims/approved", to: "claims#approved"
-    post "/claims/update", to: "claims#update"
+    # post "/claims/update_claim", to: "claims#update_claim"
+
   end
 end

@@ -7,6 +7,10 @@
     = link_to "#{@claim.member.full_name}", member_path(@claim.member), target: "_blank"
   %li.breadcrumb-menu.d-md-down-none
     - if @claim.approved?
+      .btn-group
+        = link_to edit_claim_path(@claim), class: 'btn btn-app' do
+          %i.fa.fa-edit
+          Edit
       .btn-group    
         = link_to claim_hiip_validation_pdf_path(@claim), target: "_blank", class: "btn btn-app" do
           .fa.fa-download

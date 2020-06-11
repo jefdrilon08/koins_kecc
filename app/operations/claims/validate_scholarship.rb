@@ -66,10 +66,17 @@ module Claims
    private
 
     def validate_scholar_duplication!
-      count = Claim.where("claim_type = ? AND data->>'name_of_beneficiary' = ? AND data->>'school_year' = ?", "KUYA JUN SCHOLARSHIP PROGRAM", @name_of_beneficiary, @school_year).count
-      if count > 0
-        @errors << "Duplicate SCHOLAR!"
-      end
+      count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
+        data->>'amount' = ? AND data->>'name_of_beneficiary' = ? AND data->>'payee' = ? AND 
+        data->>'name_of_school' = ? AND data->>'school_year' = ? AND data->>'year_level' = ? AND 
+        data->>'sem' = ? AND data->>'scholarship_type' = ? AND data->>'final_grade' = ? AND 
+        data->>'classification' = ?", 
+        @claim.member_id, "KUYA JUN SCHOLARSHIP PROGRAM", @date_prepared, @amount, @name_of_beneficiary, @payee, 
+        @name_of_school, @school_year, @year_level, @sem, @scholarship_type, 
+        @final_grade, @classification).count
+        if count > 0
+          @errors << "Duplicate SCHOLAR!"
+        end
     end
   end
 end
