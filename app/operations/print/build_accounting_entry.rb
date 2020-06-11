@@ -8,17 +8,22 @@ module Print
     end
 
     def execute!
-      @data[:id]                = @accounting_entry.id
-      @data[:date_prepared]     = @accounting_entry.date_prepared.strftime("%B %d, %Y")
-      @data[:book]              = @accounting_entry.book
-      @data[:reference_number]  = @accounting_entry.reference_number
-      @data[:data]              = @accounting_entry.data
-      @data[:prepared_by]       = @accounting_entry.prepared_by
-      @data[:approved_by]       = @accounting_entry.approved_by
-      @data[:company_name]      = Settings.company_name
-      @data[:company_address]   = Settings.company_address
-      @data[:branch]            = @accounting_entry.branch.to_s.upcase
-      @data[:particular]        = @accounting_entry.particular
+      @data[:id]                    = @accounting_entry.id
+      @data[:date_prepared]         = @accounting_entry.date_prepared.strftime("%B %d, %Y")
+      @data[:book]                  = @accounting_entry.book
+      @data[:reference_number]      = @accounting_entry.reference_number
+      @data[:data]                  = @accounting_entry.data
+      @data[:prepared_by]           = @accounting_entry.prepared_by
+      @data[:approved_by]           = @accounting_entry.approved_by
+      @data[:company_name]          = Settings.company_name
+      @data[:company_address]       = Settings.company_address
+      @data[:branch]                = @accounting_entry.branch.to_s.upcase
+      @data[:particular]            = @accounting_entry.particular
+      @data[:payee]                 = @accounting_entry.data.with_indifferent_access[:payee]
+      @data[:sub_reference_number]  = @accounting_entry.data.with_indifferent_access[:sub_reference_number]
+      @data[:or_number]  = @accounting_entry.data.with_indifferent_access[:or_number]
+      @data[:check_number]  = @accounting_entry.data.with_indifferent_access[:check_number]
+      @data[:ar_number]  = @accounting_entry.data.with_indifferent_access[:ar_number]
 
       if @accounting_entry.date_posted.present?
         @data[:date_posted] = @accounting_entry.date_posted.strftime("%B %d, %Y")
