@@ -31,7 +31,7 @@ export default class TrialBalanceComponent extends React.Component {
       currentBranchId: "",
       currentAccountingFundId: "",
       branches: [],
-      accountingFunds: props.accountingFunds,
+      accountingFunds: JSON.parse(props.accountingFunds),
       data: false
     };
   }
