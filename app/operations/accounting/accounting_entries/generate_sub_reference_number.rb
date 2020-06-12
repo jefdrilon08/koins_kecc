@@ -2,7 +2,7 @@ module Accounting
   module AccountingEntries
     class GenerateSubReferenceNumber
       def initialize(book:, branch:, accounting_fund:)
-        @book   = book
+        @book   = book.try(:upcase)
         @branch = branch
         @accounting_fund = accounting_fund
 
