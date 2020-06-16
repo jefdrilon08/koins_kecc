@@ -13,10 +13,11 @@
       = link_to members_path, class: "c-sidebar-nav-link #{params[:controller] == "members" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-users
         Members
-    %li.c-sidebar-nav-item
-      = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
-        .c-sidebar-nav-icon.fa.fa-hand-holding-usd
-        Loans
+    - if microloans?
+      %li.c-sidebar-nav-item
+        = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-hand-holding-usd
+          Loans
     %li.c-sidebar-nav-title
       Transactions
     - if microloans?
@@ -46,6 +47,11 @@
         = link_to savings_insurance_transfer_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_insurance_transfer_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Savings Insurance Transfers
+    - if !microloans?
+      %li.c-sidebar-nav-item
+        = link_to deposit_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "deposit_collections" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Deposits
     %li.c-sidebar-nav-item
       = link_to insurance_fund_transfer_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_fund_transfer_collections" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-money-check
@@ -225,32 +231,34 @@
           = link_to "/data_stores/branch_resignations", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Branch Resignations
-        %li.c-sidebar-nav-title
-          Microinsurance
-        %li.c-sidebar-nav-item
-          = link_to member_account_validations_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-users
-            Validations
-        %li.c-sidebar-nav-item
-          = link_to validations_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-users
-            Validations Report
-        %li.c-sidebar-nav-item
-          = link_to insurance_exit_age_members_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-users
-            Members for Exit age
-        %li.c-sidebar-nav-item
-          = link_to lapsed_members_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-users
-            Lapsed Members
+      %li.c-sidebar-nav-title
+        Microinsurance
+      %li.c-sidebar-nav-item
+        = link_to member_account_validations_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-users
+          Validations
+      %li.c-sidebar-nav-item
+        = link_to validations_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-users
+          Validations Report
+      %li.c-sidebar-nav-item
+        = link_to insurance_exit_age_members_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-users
+          Members for Exit age
+      %li.c-sidebar-nav-item
+        = link_to lapsed_members_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-users
+          Lapsed Members
+      - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to members_for_reinsurance_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-users
             Members for Reinsurance
-        %li.c-sidebar-nav-item
-          = link_to daily_report_insurance_account_status_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-users
-            Insurance Account Status
+      %li.c-sidebar-nav-item
+        = link_to daily_report_insurance_account_status_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-users
+          Insurance Account Status
+      - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to seriatim_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-users
@@ -311,8 +319,9 @@
             .c-sidebar-nav-icon.fa.fa-chart-line
             Claims
 
-        %li.c-sidebar-nav-title
-          Administration
+      %li.c-sidebar-nav-title
+        Administration
+      - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to administration_announcements_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-bullhorn
@@ -337,10 +346,11 @@
           = link_to administration_branches_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-list
             Branches
-        %li.c-sidebar-nav-item
-          = link_to administration_centers_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-list
-            Centers
+      %li.c-sidebar-nav-item
+        = link_to administration_centers_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-list
+          Centers
+      - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to administration_surveys_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-list
@@ -366,16 +376,17 @@
             .c-sidebar-nav-icon.fa.fa-stamp
             No Certificates
 
-        %li.c-sidebar-nav-title
-          System Tools
-        %li.c-sidebar-nav-item
-          = link_to upload_deposit_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-upload
-            Upload Deposit
-        %li.c-sidebar-nav-item
-          = link_to upload_fund_transfer_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-upload
-            Upload Fund Transfer
+      %li.c-sidebar-nav-title
+        System Tools
+      %li.c-sidebar-nav-item
+        = link_to upload_deposit_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-upload
+          Upload Deposit
+      %li.c-sidebar-nav-item
+        = link_to upload_fund_transfer_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-upload
+          Upload Fund Transfer
+      - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to upload_insurance_withdrawal_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-upload
@@ -400,19 +411,19 @@
           = link_to import_insurance_account_transactions_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-file-import
             Import Insurance Transactions
-        %li.c-sidebar-nav-item
-          = link_to billing_per_center_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Billing Per Center
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/monthly_new_and_resigned", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Monthly New and Res.
-        %li.c-sidebar-nav-item
-          = link_to export_tools_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Export Tools
-
+      %li.c-sidebar-nav-item
+        = link_to billing_per_center_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Billing Per Center
+      %li.c-sidebar-nav-item
+        = link_to "/data_stores/monthly_new_and_resigned", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Monthly New and Res.
+      %li.c-sidebar-nav-item
+        = link_to export_tools_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Export Tools
+      - if is_not_remote
         %li.c-sidebar-nav-title
           Monitoring
         %li.c-sidebar-nav-item
@@ -427,7 +438,7 @@
           = link_to monitoring_no_membership_payments_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-tv
             No Membership Payments
-        %li.c-sidebar-nav-item
-          = link_to activity_logs_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-tv
-            Activity Logs
+      %li.c-sidebar-nav-item
+        = link_to activity_logs_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-tv
+          Activity Logs

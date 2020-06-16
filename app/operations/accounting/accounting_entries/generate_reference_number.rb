@@ -2,7 +2,7 @@ module Accounting
   module AccountingEntries
     class GenerateReferenceNumber
       def initialize(book:, branch:)
-        @book   = book
+        @book   = book.try(:upcase)
         @branch = branch
 
         @reference_number = ""
