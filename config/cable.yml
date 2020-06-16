@@ -1,11 +1,10 @@
 development:
-  adapter: redis
-  url: <%= REDIS_URL %>
+  adapter: async
 
 test:
-  adapter: async
+  adapter: test
 
 production:
   adapter: redis
-  url: <%= REDIS_URL %>
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
   channel_prefix: koins_production

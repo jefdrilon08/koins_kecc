@@ -28,6 +28,24 @@ class MembershipPaymentCollectionsController < ApplicationController
     end
 
     @membership_payment_collections = @membership_payment_collections.order("status DESC, collection_date DESC").page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Membership Payments"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show
@@ -43,6 +61,49 @@ class MembershipPaymentCollectionsController < ApplicationController
                           @membership_payment_collection.id
                         ).order("created_at DESC")
     end
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: membership_payment_collections_path,
+        text: "Membership Payments"
+      },
+      {
+        text: "Membership Payment: #{@membership_payment_collection.id}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-print",
+        link: "#",
+        class: "fa fa-print",
+        text: "Print"
+      }
+    ]
+
+    if @membership_payment_collection.pending? && (["BK", "SBK", "MIS"] & current_user.roles).any?
+      @subheader_side_actions << {
+        link: membership_payment_collection_path(@membership_payment_collection),
+        class: "fa fa-times",
+        data: { confirm: "Are you sure?", method: :delete },
+        text: "Delete"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-check",
+        id: "btn-approve",
+        text: "Approve"
+      }
+    end
+
+    @payload = {
+      id: @membership_payment_collection.id
+    }
   end
 
   def destroy

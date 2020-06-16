@@ -1,5 +1,5 @@
 class MemberAccountValidation < ApplicationRecord
-	STATUSES = ["approved", "pending", "for-approval", "reversed", "for-validation", "cancelled"]
+	STATUSES = ["approved", "pending", "for-approval", "reversed", "for-validation", "cancelled", "processing"]
 
 	belongs_to :branch
 
@@ -67,6 +67,7 @@ class MemberAccountValidation < ApplicationRecord
 	    self.total_advance_lif = 0.00
 	    self.total_advance_rf = 0.00
 	    self.total_interest = 0.00
+	    self.total_policy_loan = 0.00
 	    self.total = 0.00
 	    self.member_account_validation_records.each do |member_account_validation_record|
 	        if !member_account_validation_record.rf.nil? && !member_account_validation_record.lif_50_percent.nil? && !member_account_validation_record.equity_interest.nil? && !member_account_validation_record.advance_lif.nil? && !member_account_validation_record.advance_rf.nil? && !member_account_validation_record.interest.nil? && !member_account_validation_record.total.nil? 
@@ -76,6 +77,7 @@ class MemberAccountValidation < ApplicationRecord
 	            self.total_advance_lif += member_account_validation_record.advance_lif
 	            self.total_advance_rf += member_account_validation_record.advance_rf
 	            self.total_interest += member_account_validation_record.interest
+	            self.total_policy_loan += member_account_validation_record.policy_loan
 	            self.total += member_account_validation_record.total
 	        end  
 	    end

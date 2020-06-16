@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_27_033940) do
+ActiveRecord::Schema.define(version: 2020_05_26_155205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -334,6 +334,19 @@ ActiveRecord::Schema.define(version: 2020_04_27_033940) do
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
   end
 
+  create_table "equity_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.jsonb "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_equity_withdrawal_collections_on_branch_id"
+    t.index ["center_id"], name: "index_equity_withdrawal_collections_on_center_id"
+  end
+
   create_table "hiip_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id"
     t.uuid "center_id"
@@ -558,6 +571,7 @@ ActiveRecord::Schema.define(version: 2020_04_27_033940) do
     t.date "max_active_date"
     t.uuid "user_id"
     t.date "original_maturity_date"
+    t.boolean "is_restructured"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
@@ -596,6 +610,8 @@ ActiveRecord::Schema.define(version: 2020_04_27_033940) do
     t.datetime "updated_at", null: false
     t.decimal "advance_lif"
     t.json "data"
+    t.decimal "equity_value"
+    t.decimal "policy_loan"
     t.index ["center_id"], name: "index_member_account_validation_records_on_center_id"
     t.index ["member_account_validation_id"], name: "index_member_account_validation_records_uniqueness"
     t.index ["member_id"], name: "index_member_account_validation_records_on_member_id"
@@ -628,6 +644,7 @@ ActiveRecord::Schema.define(version: 2020_04_27_033940) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "data"
+    t.decimal "total_policy_loan"
     t.index ["branch_id"], name: "index_member_account_validations_on_branch_id"
   end
 
@@ -872,6 +889,7 @@ ActiveRecord::Schema.define(version: 2020_04_27_033940) do
   add_foreign_key "account_transaction_collections", "centers"
   add_foreign_key "accounting_entries", "accounting_funds"
   add_foreign_key "accounting_entries", "branches"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "amortization_schedule_entries", "loans"
   add_foreign_key "attachment_files", "members"
   add_foreign_key "beneficiaries", "members"
@@ -891,6 +909,8 @@ ActiveRecord::Schema.define(version: 2020_04_27_033940) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "equity_withdrawal_collections", "branches"
+  add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"
   add_foreign_key "hiip_claims", "centers"
   add_foreign_key "hiip_claims", "members"

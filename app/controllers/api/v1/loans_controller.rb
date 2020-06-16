@@ -3,6 +3,79 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
 
+      def restructure
+        loan_product      = LoanProduct.where(id: params[:loan_product_id]).first
+        co_maker          = params[:co_maker]
+        co_maker_member   = Member.where(id: params[:co_maker_id]).first
+        pn_number         = params[:pn_number]
+        clip_number       = params[:clip_number]
+        date_prepared     = params[:date_prepared]
+        num_installments  = params[:num_installments]
+        term              = params[:term]
+        active_loan_ids   = params[:active_loan_ids] || []
+        member            = Member.where(id: params[:member_id]).first
+        active_loans      = Loan.where(id: active_loan_ids)
+
+        # beneficiary information
+        beneficiary_first_name    = params[:beneficiary_first_name]
+        beneficiary_middle_name   = params[:beneficiary_middle_name]
+        beneficiary_last_name     = params[:beneficiary_last_name]
+        beneficiary_date_of_birth = params[:beneficiary_date_of_birth].try(:to_date)
+        beneficiary_relationship  = params[:beneficiary_relationship]
+
+        config = {
+          user: current_user,
+          co_maker: co_maker,
+          co_maker_member: co_maker_member,
+          loan_product: loan_product,
+          member: member,
+          pn_number: pn_number,
+          clip_number: clip_number,
+          date_prepared: date_prepared,
+          num_installments: num_installments,
+          term: term,
+          active_loans: active_loans,
+          beneficiary_first_name: beneficiary_first_name,
+          beneficiary_middle_name: beneficiary_middle_name,
+          beneficiary_last_name: beneficiary_last_name,
+          beneficiary_date_of_birth: beneficiary_date_of_birth,
+          beneficiary_relationship: beneficiary_relationship
+        }
+
+        errors  = ::Loans::ValidateRestructure.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ActiveRecord::Base.transaction do
+            loan  = ::Loans::Restructure.new(
+                      user: current_user,
+                      co_maker: co_maker,
+                      co_maker_member: co_maker_member,
+                      pn_number: pn_number,
+                      clip_number: clip_number,
+                      date_prepared: date_prepared,
+                      num_installments: num_installments,
+                      term: term,
+                      member: member,
+                      active_loans: active_loans,
+                      loan_product: loan_product,
+                      beneficiary_first_name: beneficiary_first_name,
+                      beneficiary_middle_name: beneficiary_middle_name,
+                      beneficiary_last_name: beneficiary_last_name,
+                      beneficiary_date_of_birth: beneficiary_date_of_birth,
+                      beneficiary_relationship: beneficiary_relationship
+                    ).execute!
+
+            render json: { message: "ok", id: loan.id }
+          rescue Exception => e
+            render json: { message: "error", id: member.id }, status: 500
+          end
+        end
+      end
+
       def approve_adjustment
         adjustment_record = AdjustmentRecord.find(params[:id])
 
@@ -172,35 +245,12 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          loan  = ::Loans::Approve.new(
-                    config: config
-                  ).execute!
+          loan.update!(status: "processing")
 
-          # setup maintaining balance
-          ::Members::SetMaintainingBalance.new(
-            config: {
-              member: loan.member
-            }
-          ).execute!
-
-          # setup maturity date
-          ::Loans::UpdateMaturityDate.new(
-            loan: loan
-          ).execute!
-
-          # Setup original maturity date
-          ::Loans::UpdateOriginalMaturityDate.new(
-            loan: loan
-          ).execute!
-
-          ActivityLog.create!(
-            content: "#{current_user.full_name} approved loan #{loan.id}",
-            activity_type: "approval",
-            data: {
-              user_id: current_user.id,
-              loan_id: loan.id
-            }
-          )
+          ProcessApproveLoan.perform_later({
+            id: loan.id,
+            user_id: current_user.id
+          })
 
           render json: { message: "ok", id: loan.id }
         end
@@ -308,23 +358,27 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          loan_data = JSON.parse(loan.to_json).with_indifferent_access
+          ActiveRecord::Base.transaction do
+            loan_data = JSON.parse(loan.to_json).with_indifferent_access
 
-          loan  = ::Loans::Delete.new(
-                    config: config
-                  ).execute!
+            loan  = ::Loans::Delete.new(
+                      config: config
+                    ).execute!
 
-          ActivityLog.create!(
-            content: "#{current_user.full_name} deleted loan #{loan_data[:id]}",
-            activity_type: "modification",
-            data: {
-              user_id: current_user.id,
-              loan_id: loan_data[:id],
-              loan_data: loan_data
-            }
-          )
+            ActivityLog.create!(
+              content: "#{current_user.full_name} deleted loan #{loan_data[:id]}",
+              activity_type: "modification",
+              data: {
+                user_id: current_user.id,
+                loan_id: loan_data[:id],
+                loan_data: loan_data
+              }
+            )
 
-          render json: { message: "ok", id: member.id }
+            render json: { message: "ok", id: member.id }
+          rescue Exception => e
+            render json: { message: "error", id: member.id }, status: 500
+          end
         end
       end
 
@@ -364,31 +418,6 @@ module Api
               loan_data: loan_data
             }
           )
-
-          render json: { id: loan.id }
-        end
-      end
-
-      def apply
-        loan_product  = LoanProduct.where(id: params[:loan_product_id]).first
-        member        = Member.where(id: params[:member_id]).first
-
-        config  = {
-          loan_product: loan_product,
-          member: member,
-          user: current_user
-        }
-
-        errors  = ::Loans::ValidateApply.new(
-                    config: config
-                  ).execute!
-
-        if errors[:messages].any?
-          render json: errors, status: 400
-        else
-          loan  = ::Loans::Apply.new(
-                    config: config
-                  ).execute!
 
           render json: { id: loan.id }
         end

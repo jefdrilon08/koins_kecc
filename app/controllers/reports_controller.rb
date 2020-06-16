@@ -16,6 +16,87 @@ class ReportsController < ApplicationController
   end
 
   def monthly_remittance
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Monthly Remittance" }
+    ]
+  end
+
+  def insured_loans
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Insured Loans" }
+    ]
+  end
+
+  def member_reports
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Member Reports" }
+    ]
+  end
+
+  def collections_clip
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Collections CLIP" }
+    ]
+  end
+
+  def collections_blip
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Collections BLIP" }
+    ]
+  end
+
+  def member_dependents
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Member Dependents" }
+    ]
+  end
+
+  def member_quarterly_reports
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Member Quarterly Reports" }
+    ]
+  end
+
+  def cic
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "CIC" }
+    ]
+  end
+
+  def monthly_collection
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Monthly Collection" }
+    ]
+  end
+
+  def summary_of_certificates_and_policies
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Summary of Certificates and Policies" }
+    ]
+  end
+
+  def personal_documents
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Personal Documents" }
+    ]
+  end
+
+  def claims
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Claims" }
+    ]
   end
 
   def download_excel_monthly_remittance 

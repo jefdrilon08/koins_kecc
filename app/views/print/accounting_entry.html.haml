@@ -103,21 +103,21 @@
         %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
         %th{:width => "18%"} Doc. No:
         -if Settings.activate_microinsurance == true
-          %th{:width => "25%"} #{@accounting_entry_data[:data][:sub_reference_number]}
+          %th{:width => "25%"} #{@accounting_entry_data[:sub_reference_number]}
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} OR Number:
-            %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
+            %th{:width => "20%"} #{@accounting_entry_data[:or_number]}
           -else
             %th{:width => "17%"} Check No:
-            %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
+            %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
         -else
           %th{:width => "20%"} 
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} OR Number:
-            %th{:width => "20%"} #{@accounting_entry_data[:data][:or_number]}
+            %th{:width => "20%"} #{@accounting_entry_data[:or_number]}
           -else
             %th{:width => "17%"} Check No:
-            %th{:width => "20%"} #{@accounting_entry_data[:data][:check_number]}
+            %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
       %tr
         %th{:width => "17%"} Date Approved:
         %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
@@ -126,11 +126,11 @@
         -if Settings.activate_microinsurance == true
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} AR Number:
-            %th{:width => "20%"} #{@accounting_entry_data[:data][:ar_number]}
-      - if @accounting_entry_data[:data][:payee].present?
+            %th{:width => "20%"} #{@accounting_entry_data[:ar_number]}
+      - if @accounting_entry_data[:payee].present?
         %tr
           %th{:width => "17%"} Payee:
-          %th{:width => "20%"} #{@accounting_entry_data[:data][:payee]}
+          %th{:width => "20%"} #{@accounting_entry_data[:payee]}
     %hr
   %center
     %table.voucher{"border:" => "", :none => ""}

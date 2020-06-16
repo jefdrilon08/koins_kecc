@@ -123,6 +123,10 @@ class Member < ApplicationRecord
     self.status == "resigned"
   end
 
+  def active_resigned?
+    self.status == "resigned" or self.status == "active"
+  end
+  
   def pending?
     self.status == "pending"
   end

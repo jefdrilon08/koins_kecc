@@ -1,4 +1,4 @@
-= form_tag personal_document_path, html: { novalidate: true }, method: "GET" do
+= form_tag personal_documents_path, html: { novalidate: true }, method: "GET" do
   .row
     .col-sm-3
       .form-group
@@ -18,10 +18,3 @@
         = link_to "#", id: 'download-btn', class: 'btn btn-success btn-block' do
           .fa.fa-download
           Excel 
-          
-= javascript_include_tag "reports/PersonalDocumentReport"
-
-:javascript
-  $(document).ready(function() {
-    PersonalDocumentReport.init();
-  });

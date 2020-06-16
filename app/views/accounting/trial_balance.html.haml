@@ -1,13 +1,6 @@
 = title
-= render partial: "trial_balance_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #content
-
-#parameters{ data: { accounting_funds: accounting_funds.to_json } }
-
-= javascript_include_tag 'AccountingTrialBalance.min.react'
+.row
+  .col
+    .card
+      .card-body
+        #react-root

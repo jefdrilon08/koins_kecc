@@ -6,9 +6,10 @@
       = content_for?(:title) ? "#{yield(:title)} - #{App.name}" : "#{App.name}"
     = csrf_meta_tags
     = csp_meta_tag
+    %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
 
-    = stylesheet_link_tag    'application', media: 'all'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag 'application', media: "all"
+    = javascript_pack_tag 'application'
     = favicon_link_tag "logo_thumb.png"
 
   %body

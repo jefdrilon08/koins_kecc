@@ -19,6 +19,24 @@ class InsuranceFundTransferCollectionsController < ApplicationController
     end
 
     @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        text: "Insurance Fund Transfers"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Transaction"
+      }
+    ]
   end
 
   def show
@@ -29,6 +47,63 @@ class InsuranceFundTransferCollectionsController < ApplicationController
                         "data ->> 'insurance_fund_transfer_collection_id' = ?",
                         @insurance_fund_transfer_collection.id
                       ).order("created_at DESC")
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: insurance_fund_transfer_collections_path,
+        text: "Insurance Fund Transfers"
+      },
+      {
+        text: "Record: #{@insurance_fund_transfer_collection.id}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    if @insurance_fund_transfer_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK") || current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("REMOTE-FM"))
+      @subheader_side_actions << {
+        link: insurance_fund_transfer_collection_path(@insurance_fund_transfer_collection),
+        class: "fa fa-times",
+        text: "Delete",
+        data: { method: :delete, confirm: "Are you sure?" }
+      }
+    end
+
+    if @insurance_fund_transfer_collection.pending? && !@insurance_fund_transfer_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
+      @subheader_side_actions << {
+        id: "btn-finalize",
+        link: "#",
+        class: "fa fa-check",
+        text: "Finalize"
+      }
+    end
+
+    if @insurance_fund_transfer_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+      if Settings.activate_microinsurance and @insurance_fund_transfer_collection.finalized?
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      else
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
+    end
+
+    @payload = {
+      id: @insurance_fund_transfer_collection.id,
+      centers: helpers.fetch_centers(@insurance_fund_transfer_collection.branch)
+    }
   end
 
   def destroy
@@ -71,6 +146,4 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       redirect_to insurance_fund_transfer_collection_path(@insurance_fund_transfer_collection)
     end  
   end
-
-
 end

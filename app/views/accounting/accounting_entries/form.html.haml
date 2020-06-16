@@ -1,12 +1,5 @@
-= render partial: "form_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #content
-
-#parameters{ data: { id: params[:id], book: params[:book], accounting_fund_id: params[:accounting_fund_id], branch_id: Settings.try(:defaults).try(:default_branch).try(:id), branch_name: Settings.try(:defaults).try(:default_branch).try(:name) } }
-
-= javascript_include_tag "AccountingEntryForm.min.react"
+.row
+  .col
+    .card
+      .card-body
+        #react-root

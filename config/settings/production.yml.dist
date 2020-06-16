@@ -11,60 +11,70 @@
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
 
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
 
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
 
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    current_date: "2020-03-31"
+    current_date: "2020-04-30"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-03-31"
+    current_date: "2020-05-29"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    current_date: "2020-03-31"
- # -
- #   id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
- #   current_date: "2020-03-31"
+    current_date: "2020-05-29"
+  -
+    id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
+    current_date: "2020-05-29"
+#central1
+  -
+    id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
+    current_date: "2020-05-29"
+  -
+    id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
+    current_date: "2020-05-29"
+  -
+    id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
+    current_date: "2020-05-29"
 ###############################
 # AUTHORIZATION               #
 ###############################
@@ -269,9 +279,11 @@ interest_member_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "K-IMPOK"
-    annual_interest_rate: 0.02
+#    annual_interest_rate: 0.02
+    annual_interest_rate: 0.01
     annual_tax_rate: 0.0
-    dormant_annual_interest_rate: 0.01
+    #dormant_annual_interest_rate: 0.01
+    dormant_annual_interest_rate: 0.005
     dormant_threshold_months: 6
     zero_interest_threshold: 24
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
@@ -281,16 +293,19 @@ interest_member_accounts:
     account_subtype: "Golden K"
     annual_tax_rate: 0.0
     dormant_annual_interest_rate: 0.0
-    annual_interest_rate: 0.10
+#    annual_interest_rate: 0.10
+    annual_interest_rate: 0.05
     dormant_threshold_months: 6
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     credit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
   -
     account_type: "SAVINGS"
     account_subtype: "Personal Savings Account"
-    annual_interest_rate: 0.02
+#    annual_interest_rate: 0.02
+    annual_interest_rate: 0.01
     annual_tax_rate: 0.0
-    dormant_annual_interest_rate: 0.01
+    #dormant_annual_interest_rate: 0.01
+    dormant_annual_interest_rate: 0.005
     dormant_threshold_months: 6
     zero_interest_threshold: 24
     debit_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
@@ -352,7 +367,7 @@ memberships:
     name: "K-MBA"
     type: "Insurance"
     is_main: true
-    fee: 50.00
+    fee: 100.00
     accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
     payment_default: false
 
@@ -391,6 +406,9 @@ default_deposit_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Policy Loan"
 
 default_withdrawal_accounts:
   -
@@ -449,12 +467,20 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Credit Life Insurance Plan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Policy Loan"
 
 # Mba new insurance accounts
 hiip: "Hospital Income Insurance Plan"
 clip: "Credit Life Insurance Plan"
+life: "Life Insurance Fund"
+pl: "Policy Loan"
 
-
+default_equity_withdrawal_accounts:
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Life Insurance Fund"
 
 #Time Deposit Config
 time_deposit_autorenewal_user_id: "72eb76bc-3f42-40f9-a9e8-7f71ee656508"
@@ -737,6 +763,26 @@ branch_accounting_codes:
   -
     branch_id: "505008be-d28c-4ebd-9dfb-bc076bccb638"                              #padilla
     cash_in_bank_accounting_code_id: "dcc43b23-dbcb-4cd2-8394-516a91c6552c"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+
+#central 1
+  -
+    branch_id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"                              #batasan
+    cash_in_bank_accounting_code_id: "2d5b8dcb-4f00-4672-a44e-e9c315e36dde"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"                              #fairview
+    cash_in_bank_accounting_code_id: "c7f37dda-7920-4107-a4de-e835ea3fe460"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "3503b976-d48c-4f88-b007-1534f228d194"                              #tandangsora
+    cash_in_bank_accounting_code_id: "78f46c27-76d0-4740-a3f8-1e45a8b9aedd"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -2202,7 +2248,159 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
-    deductions: []
+    deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "false"
+        for_primary_loan: true
+        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.03
+              -
+                num_installments: 35
+                ratio: 0.045
+              -
+                num_installments: 50
+                ratio: 0.6
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
 
 
   -
@@ -2511,7 +2709,7 @@ loan_products:
         monthly_interest_rate: 0.078
       -
         term: "weekly"
-        min_num_installments: 17
+        min_num_installments: 26
         max_num_installments: 35
         monthly_interest_rate: 0.056
       -
@@ -3062,7 +3260,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3217,7 +3415,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3482,7 +3680,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3637,7 +3835,7 @@ loan_products:
       -
         name: "KMBA Membership Fee"
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
-        amount: 50.00
+        amount: 100.00
         membership_type: "Insurance"
         deduction_type: "membership_fee"
         meta:
@@ -3661,6 +3859,8 @@ loan_products:
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
+        #for_primary_loan: true
+        #primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
         meta:
           member_type: "Regular"
           term_map:
@@ -3803,6 +4003,204 @@ loan_products:
                 ratio: 0.0140
 
 
+  -
+    loan_product_id: "1c2fcdbd-d60b-402c-b04b-824bb90958d1"                         # K-SAGIP
+    receivable_accounting_code_id: "a6913ac9-1a85-495a-8f80-d394549dc52e"
+    interest_receivable_accounting_code_id: "a09f6aea-9ab9-4e55-a994-ca8c4dd5de33"
+    default_amount: 5000.00
+    for_restructuring: true
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.2
+      threshold: 7001.00
+    deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        business_permit_available: true
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        business_permit_amount: 500
+        for_primary_loan: true
+        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        restructuring_offset: true
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.03
+              -
+                num_installments: 35
+                ratio: 0.045
+              -
+                num_installments: 50
+                ratio: 0.06
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        restructuring_secondary: true
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+              -
+                num_installments: 75
+                ratio: 0.021
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+              
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+              -
+                num_installments: 75
+                ratio: 0.021
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Deposit to life insurance fund"
+        accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        restructuring_primary: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Life Insurance Fund"
+          value: 15.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to retirement fund"
+        accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        restructuring_primary: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Retirement Fund"
+          value: 5.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
           
 
 loan_product_accounting_codes:
@@ -3910,4 +4308,8 @@ loan_product_accounting_codes:
     loan_product_id: "eb2908ee-5b98-4730-889d-8cfceb007cc1"                         # K - Noche Buena 
     receivable_accounting_code_id: "46c2bc60-5963-4b14-af9e-f83eedc2fa4e"
     interest_receivable_accounting_code_id: "6380e3c8-baba-4eca-8a69-7da5d0068019"
+  -
+    loan_product_id: "1c2fcdbd-d60b-402c-b04b-824bb90958d1"                         # K - SAGIP
+    receivable_accounting_code_id: "a6913ac9-1a85-495a-8f80-d394549dc52e"
+    interest_receivable_accounting_code_id: "a09f6aea-9ab9-4e55-a994-ca8c4dd5de33"
 ###############################

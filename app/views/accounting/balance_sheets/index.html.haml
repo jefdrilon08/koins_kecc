@@ -1,27 +1,14 @@
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @balance_sheets.any?
-            = render partial: "index_list"
-            = paginate @balance_sheets
-          - else
-            %p
-              No balance sheets found.
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @balance_sheets.any?
+          = render partial: "index_list"
+          = paginate @balance_sheets
+        - else
+          %p
+            No balance sheets found.
 
 = render partial: "accounting/balance_sheets/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "accounting/balance_sheets/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

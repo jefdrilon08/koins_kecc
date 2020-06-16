@@ -4,7 +4,7 @@
       @config = config
       @record   = @config[:record]
       @p        = Axlsx::Package.new
-      @data = @record.data.with_indifferent_access
+      @data     = @record.data.with_indifferent_access
       @records = @data[:records]
     end
 
@@ -28,60 +28,89 @@
           # For header
           sheet.add_row [ 
             "Member",
+            "Status",
             "Officer",
             "Center",
+            "K-IMPOK",
+            "Golden-K",
+            "Savings Investment Fund",
+            "Personal Savings Account",
+            "Time Deposit",
             "Retirement Fund",
             "Life Insurance Fund",
             "Share Capital",
             "CBU",
-            "K-IMPOK",
-            "Personal Savings Account",
-            "Golden-K",
-            "Savings Investment Fund",
-            "Time Deposit"
+            "Hospital Income Plan",
+            "Credit Life Insurance Plan"
           ], 
           style: label_cell
 
           @count = 0
-          @kimpok_total = 0
-          @goldenk_total = 0
-          @sifund_total = 0
-          @psa_total = 0
-          @timed_total = 0
-          @rt_total = 0
-          @lif_total = 0
-          @sc_total = 0
-          @cbu_total = 0
-          
+          @kimpok_total = 0.00
+          @goldenk_total = 0.00
+          @sifund_total = 0.00
+          @psa_total = 0.00
+          @timed_total = 0.00
+          @rf_total = 0.00
+          @lif_total = 0.00
+          @sc_total = 0.00
+          @cbu_total = 0.00
+          @hiip_total = 0.00
+          @clip_total = 0.00
 
           @records.each_with_index do |record, i|
             
             row = []
-            row << "#{record[:member][:last_name]}, #{record[:member][:first_name]}, #{record[:member][:middle_name]}"
-            row << "#{record[:officer][:last_name]}, #{record[:officer][:first_name]}, #{record[:officer][:middle_name]}"
-            row << "#{record[:center][:name]}"
-              record[:accounts].each do |a|
-                row << a[:balance]
-                if a[:account_subtype] == "Retirement Fund"
-                  @rt_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Life Insurance Fund"
-                  @lif_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Share Capital"
-                  @sc_total += a[:balance].to_d
-                elsif a[:account_subtype] == "CBU"
-                  @cbu_total += a[:balance].to_d
-                elsif a[:account_subtype] == "K-IMPOK"
-                  @kimpok_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Personal Savings Account"
-                  @psa_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Golden K"
-                  @goldenk_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Savings Investment Fund"
-                  @sifund_total += a[:balance].to_d
-                elsif a[:account_subtype] == "Time Deposit"
-                  @timed_total += a[:balance].to_d
-                end
-              end
+            row << "#{record[:member][:last_name].try(:upcase)}, #{record[:member][:first_name].try(:upcase)}, #{record[:member][:middle_name].try(:upcase)}"
+            row << "#{record[:member][:status].try(:upcase)}"
+            row << "#{record[:officer][:last_name].try(:upcase)}, #{record[:officer][:first_name].try(:upcase)}, #{record[:officer][:middle_name].try(:upcase)}"
+            row << "#{record[:center][:name].try(:upcase)}"
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "K-IMPOK" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Golden K" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Savings Investment Fund" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Personal Savings Account" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Time Deposit" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Retirement Fund" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Life Insurance Fund" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Share Capital" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "CBU" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Hospital Income Insurance Plan" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Credit Life Insurance Plan" }.first[:balance].to_f.round(2)
+
+            @kimpok_total += record["accounts"].select{ |acc| acc["account_subtype"] == "K-IMPOK" }.first["balance"].to_f.round(2)
+            @goldenk_total += record["accounts"].select{ |acc| acc["account_subtype"] == "Golden K" }.first["balance"].to_f.round(2)
+            @sifund_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Savings Investment Fund" }.first[:balance].to_f.round(2)
+            @psa_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Personal Savings Account" }.first[:balance].to_f.round(2)
+            @timed_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Time Deposit" }.first[:balance].to_f.round(2)
+            @rf_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Retirement Fund" }.first[:balance].to_f.round(2)
+            @lif_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Life Insurance Fund" }.first[:balance].to_f.round(2)
+            @sc_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Share Capital" }.first[:balance].to_f.round(2)
+            @cbu_total += record[:accounts].select{ |acc| acc[:account_subtype] == "CBU" }.first[:balance].to_f.round(2)
+            @hiip_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Hospital Income Insurance Plan" }.first[:balance].to_f.round(2)
+            @clip_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Credit Life Insurance Plan" }.first[:balance].to_f.round(2)
+
+              # record[:accounts].each do |a|
+              #   row << a[:balance]
+              #   if a[:account_subtype] == "Retirement Fund"
+              #     @rt_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "Life Insurance Fund"
+              #     @lif_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "Share Capital"
+              #     @sc_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "CBU"
+              #     @cbu_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "K-IMPOK"
+              #     @kimpok_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "Personal Savings Account"
+              #     @psa_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "Golden K"
+              #     @goldenk_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "Savings Investment Fund"
+              #     @sifund_total += a[:balance].to_d
+              #   elsif a[:account_subtype] == "Time Deposit"
+              #     @timed_total += a[:balance].to_d
+              #   end
+              # end
             
             # @goldenk_total += record[:accounts][1][:balance].to_d
             # @sifund_total += record[:accounts][2][:balance].to_d
@@ -99,19 +128,21 @@
           sheet.add_row [
             "TOTAL",
             @count, 
+            "",
             "", 
             @kimpok_total,
             @goldenk_total, 
             @sifund_total,
             @psa_total,
             @timed_total,
-            @rt_total,
+            @rf_total,
             @lif_total,
             @sc_total,
             @cbu_total,
-            ""
+            @hiip_total,
+            @clip_total
             ],
-          style: [label_cell, count_cell, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold]
+          style: [label_cell, count_cell, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold]
            
           sheet.add_row []
         end

@@ -1,40 +1,24 @@
-= render partial: "survey_answer_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          %h2
-            #{@survey_answer.survey}
+.row
+  .col
+    .card
+      .card-body
+        %h2
+          #{@survey_answer.survey}
+        %hr
+        - @data[:answers].each do |o|
+          %h4
+            #{o[:survey_question][:content]}: #{o[:answer]} - #{o[:score]}
+          - o[:survey_question][:data][:options].each do |option|
+            %div
+              - if option[:content] == o[:answer]
+                .badge.badge-success
+                  .fa.fa-check
+                #{option[:content]}
+              - else
+                .badge.badge-danger
+                  .fa.fa-times
+                #{option[:content]}
           %hr
-          - @data[:answers].each do |o|
-            %h4
-              #{o[:survey_question][:content]}: #{o[:answer]} - #{o[:score]}
-            - o[:survey_question][:data][:options].each do |option|
-              %div
-                - if option[:content] == o[:answer]
-                  .badge.badge-success
-                    .fa.fa-check
-                  #{option[:content]}
-                - else
-                  .badge.badge-danger
-                    .fa.fa-times
-                  #{option[:content]}
-            %hr
+
 = render partial: "members/modals/delete_survey_answer"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "members/SurveyAnswer.js"
-
-#parameters{ data: { id: @survey_answer.id, member_id: @member.id } }
-
-:javascript
-  $(document).ready(function() {
-    var $parameters       = $("#parameters");
-    var id                = $parameters.data('id');
-    var memberId          = $parameters.data('member-id');
-    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
-
-    SurveyAnswer.init({ id: id, memberId: memberId, authenticityToken: authenticityToken });
-  });

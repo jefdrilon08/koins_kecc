@@ -59,10 +59,9 @@ module Claims
       data->>'type_of_calamity'= ? AND data->>'date_of_event'= ? AND data->>'name_of_payee'= ? AND
       data->>'name_of_beneficiary'= ?" , @claim.member_id, @date_prepared, "CALAMITY ASSISTANCE", 
       @amount, @date_requested, @purpose, @type_of_calamity, @date_of_event, @name_of_payee, @name_of_beneficiary).count
-        if count > 0 
-          @errors << "Duplicate CALAMITY!"
-        end
-        
+      if count > 0 
+        @errors << "Duplicate CALAMITY!"
+      end
     end
   end
 end

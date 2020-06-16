@@ -1,12 +1,5 @@
-= render partial: "form_resignation_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #content
-
-#parameters{ data: { id: @member.id, member_resignation_types: member_resignation_types.to_json } }
-
-= javascript_include_tag "MembersFormResignation.min.react"
+.row
+  .col
+    .card
+      .card-body
+        #react-root

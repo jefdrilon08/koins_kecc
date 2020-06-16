@@ -234,11 +234,14 @@ module Api
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
-            member_account_validation  = MemberAccountValidations::ApproveMemberAccountValidation.new(
-                                              config: config
-                                            ).execute!
+            member_account_validation.update!(status: "processing")
 
-            render json: { message: "Successfully approved Member Account Validation" }
+            ProcessApproveValidation.perform_later({
+              id: member_account_validation.id,
+              user_id: current_user.id
+            })
+
+            render json: { message: "Successfully approved Member Account Validation", id: member_account_validation.id }
           end
         else
           errors << "Unauthorized to perform this transaction"

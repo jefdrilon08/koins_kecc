@@ -1,14 +1,8 @@
 = title @record.id
-= render partial: "show_header"
-
-- @meta = @record.meta.with_indifferent_access
-- @data = @record.data.with_indifferent_access
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          %h5
-            #{@meta[:book]} Summary of Entries dating #{@meta[:start_date].to_date.strftime("%B %d, %Y")} to #{@meta[:end_date].to_date.strftime("%B %d, %Y")}
-          = render partial: "records_table"
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          #{@meta[:book]} Summary of Entries dating #{@meta[:start_date].to_date.strftime("%B %d, %Y")} to #{@meta[:end_date].to_date.strftime("%B %d, %Y")}
+        = render partial: "records_table"

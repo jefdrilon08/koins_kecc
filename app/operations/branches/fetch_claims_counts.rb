@@ -18,13 +18,8 @@ module Branches
             calamity_assistance: 0,
             k_kalinga: 0,
             kjsp: 0,
-            blip_amount: 0.00,
-            clip_amount: 0.00,
-            hiip_amount: 0.00,
-            kbente_amount: 0.00,
-            kkalinga_amount: 0.00,
-            calamity_assistance_amount: 0.00,
-            kjsp_amount: 0.00,
+            blip_member_count: 0,
+            blip_spouse_legal_dependent_count: 0,
             total_amount: 0.00,
             total: 0,
             claims: []
@@ -64,6 +59,7 @@ module Branches
                                                       claim_type: o.fetch("claim_type"),
                                                       date_paid: o.fetch("date_paid"),
                                                       amount: o.fetch("amount").try(:to_f).try(:round, 2) || 0.00,
+                                                      classification_of_insured: o.fetch("classification_of_insured"),
                                                       branch: {
                                                         id: @branch.id,
                                                         name: @branch.name
@@ -83,7 +79,8 @@ module Branches
       @data[:counts][:approved_claims][:k_kalinga]            = @data[:counts][:approved_claims][:claims].select{ |o| o[:claim_type] == "K-KALINGA" }.size
       @data[:counts][:approved_claims][:kjsp]                 = @data[:counts][:approved_claims][:claims].select{ |o| o[:claim_type] == "KUYA JUN SCHOLARSHIP PROGRAM" }.size  
 
-      #@data[:counts][:approved_claims][:blip_amount]          += @data[:counts][:approved_claims][:claims].select{ |o| o[:claim_type] == "BLIP" }.amount
+      @data[:counts][:approved_claims][:blip_member_count]                 += @data[:counts][:approved_claims][:claims].select{ |o| o[:classification_of_insured] == "Member" }.size
+      @data[:counts][:approved_claims][:blip_spouse_legal_dependent_count] += @data[:counts][:approved_claims][:claims].select{ |o| o[:classification_of_insured] == "Legal Dependent (Spouse)" }.size
 
       @data[:counts][:approved_claims][:total]                = @data[:counts][:approved_claims][:claims].size
     end
@@ -96,6 +93,12 @@ module Branches
                     claims.claim_type,
                     claims.status,
                     claims.member_id,
+                    claims.data->>'type_of_loan' as type_of_loan,
+                    claims.data->>'creditors_name' as creditors_name,
+                    claims.data->>'classification_of_insured' as classification_of_insured,
+                    claims.data->>'type_of_insurance_policy' as type_of_insurance_policy,
+                    claims.data->>'cause_of_death_tpd_accident' as cause_of_death_tpd_accident,
+                    claims.data->>'gender' as gender,
                     claims.data->>'name_of_insured' as name_of_insured,
                     claims.data->>'identification_number' as identification_number,
                     claims.data->>'policy_number' as policy_number,

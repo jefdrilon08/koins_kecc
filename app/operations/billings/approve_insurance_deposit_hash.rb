@@ -39,6 +39,22 @@ module Billings
       @data[:beginning_balance] = @member_account.balance.round(2)
       @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
 
+      # For equity amount computation
+      if @member_account.account_subtype == Settings.life
+        if @member_account.data.present?
+          @member_account_data = @member_account.data.with_indifferent_access
+
+          equity_value = @member_account_data[:equity_value]
+
+          if equity_value.present?
+            @data[:equity_value]                = ((@amount / 2) + equity_value).round(2)
+            @member_account_data[:equity_value] = ((@amount / 2) + equity_value).round(2)
+
+            @member_account.update!(data: @member_account_data)
+          end
+        end
+      end
+
       # Update account balance
       new_balance = (@member_account.balance + @amount).round(2)
       @member_account.update(

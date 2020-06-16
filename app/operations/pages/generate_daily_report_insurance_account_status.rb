@@ -23,40 +23,41 @@ module Pages
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           
-
-
+          sheet.add_row [
+          "Member",
+          "Recognition Date",
+          "Member Status",
+          "Insurance Status",
+          "Center", 
+          "Length of Membership", 
+          "Certificate Number", 
+          "RF",
+          "Coverage Date", 
+          "Number of Weeks Past Due", 
+          "Amount Past Due", 
+          "Status", 
+          "LIF",
+          "Coverage Date", 
+          "Number of Weeks Past Due", 
+          "Amount Past Due", 
+          "Status"], 
+          style: label_cell
 
           @centers.order("name ASC").each do |center|
+
             sheet.add_row []
-            sheet.add_row []
-            sheet.add_row [
-            "Member",
-            "Recognition Date", 
-            "Length of Membership", 
-            "Certificate Number", 
-            "RF",
-            "Coverage Date", 
-            "Number of Weeks Past Due", 
-            "Amount Past Due", 
-            "Status", 
-            "LIF",
-            "Coverage Date", 
-            "Number of Weeks Past Due", 
-            "Amount Past Due", 
-            "Status"], 
-            style: label_cell
 
             sheet.add_row [
                     center.name
                   ],
             style: label_cell
 
-            @members = Member.active.where(center_id: center.id).order("last_name ASC")
+            @members = Member.active_and_resigned.where(center_id: center.id).order("last_name ASC")
             @members.each_with_index do |member, index|
               recognition_date  = member.recognition_date
               current_date = Date.today
               
-              if recognition_date.present?
+              if recognition_date.present? and member.lif_amount != 0
                 #compute LIF
                 lif_default = 15
                 lif_account = MemberAccount.where(account_subtype: "Life Insurance Fund", member_id: member.id).sum(:balance)
@@ -102,6 +103,9 @@ module Pages
                   sheet.add_row [
                     member.full_name,
                     member.data['recognition_date'],
+                    member.status,
+                    member.insurance_status,
+                    member.center.name,
                     member.length_of_stay,
                     member.identification_number,
                     rf_account,
@@ -119,6 +123,9 @@ module Pages
                   sheet.add_row [
                     member.full_name,
                     member.data['recognition_date'],
+                    member.status,
+                    member.insurance_status,
+                    member.center.name,
                     member.length_of_stay,
                     member.identification_number,
                     rf_account,

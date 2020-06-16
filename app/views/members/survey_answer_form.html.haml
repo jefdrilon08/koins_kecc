@@ -1,10 +1,5 @@
-= render partial: "survey_answer_form_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          #survey-answer-content
-#parameters{ data: { id: "#{@survey_answer.id}", member_id: "#{@member.id}" } }
-= javascript_include_tag "MemberSurveyAnswerUI.min.react"
+.row
+  .col
+    .card
+      .card-body
+        #react-root

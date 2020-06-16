@@ -152,6 +152,7 @@ module MemberAccountValidations
       journal_entries = []
 
       # TODO: Config accounting code for total_lif_accounting_code
+      # For Payable to MBA Life
       if @is_remote
         total_lif_amount          = @member_account_validation.member_account_validation_records.sum(:lif_50_percent)
         equity_interest           = @member_account_validation.member_account_validation_records.sum(:equity_interest)
@@ -290,7 +291,13 @@ module MemberAccountValidations
       compute_equity_interest_credit.each do |o|
         journal_entries << o
       end
-    
+
+      if @member_account_validation.member_account_validation_records.sum(:policy_loan) > 0
+        compute_policy_loan.each do |o|
+          journal_entries << o
+        end 
+      end
+
       journal_entries
     end
 
@@ -305,6 +312,26 @@ module MemberAccountValidations
       end
 
       amount    = @member_account_validation.member_account_validation_records.sum(:equity_interest)
+
+      if amount > 0
+        journal_entries << {
+          accounting_code_id: cr_accounting_code.id,
+          code: cr_accounting_code.code,
+          name: cr_accounting_code.name,
+          amount: amount
+        }
+      end
+
+      journal_entries
+    end
+
+    # For Policy Loan
+    def compute_policy_loan
+      journal_entries = []
+
+      cr_accounting_code  = AccountingCode.find('4d7856fa-d102-450e-a33a-6dfbc1cbd6c3')
+      
+      amount    = @member_account_validation.member_account_validation_records.sum(:policy_loan)
 
       if amount > 0
         journal_entries << {
@@ -365,6 +392,8 @@ module MemberAccountValidations
         savings_amount += @member_account_validation.member_account_validation_records.where("member_classification = ?", "EXIT AGE (GK)").sum(:equity_interest)
         # savings_amount += @total_lif_balance / 2
 
+        savings_amount -= @member_account_validation.member_account_validation_records.where("member_classification = ?", "EXIT AGE (GK)").sum(:policy_loan)
+        
         journal_entries << {
           accounting_code_id: savings_accounting_code.id,
           code: savings_accounting_code.code,
@@ -381,21 +410,23 @@ module MemberAccountValidations
 
       # WIP: Savings = RF + Interest + Equity Interest + Advanced Payment + 50%
       # For Kaagapay
-      if @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").count > 0
+      if @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").count > 0
         savings_amount          = 0.00
         
         savings_accounting_code = AccountingCode.find('ba2c06dc-749a-4ca3-b09c-950669385126')
         
-        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:rf)
-        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:advance_rf)
-        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:interest)
-        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:advance_lif)
-        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:lif_50_percent)
+        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:rf)
+        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:advance_rf)
+        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:interest)
+        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:advance_lif)
+        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:lif_50_percent)
         
         #COMMENT OUT
-        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:equity_interest)
+        savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:equity_interest)
         # savings_amount += @total_lif_balance / 2
 
+        savings_amount -= @member_account_validation.member_account_validation_records.where("member_classification != ? AND data->>'member_type' = ?", "EXIT AGE (GK)", "Kaagapay").sum(:policy_loan)
+        
         journal_entries << {
           accounting_code_id: savings_accounting_code.id,
           code: savings_accounting_code.code,
@@ -411,18 +442,26 @@ module MemberAccountValidations
       journal_entries = []
 
       if !@is_remote
+        total_equity_value = 0.00
         lif_withdrawal_amount = @total_lif_balance
-        lif_withdrawal_amount -= @member_account_validation.member_account_validation_records.sum(:advance_lif)
+        lif_withdrawal_amount -= (@member_account_validation.member_account_validation_records.sum(:advance_lif) / 2 )
+        
+        # @member_account_validation.member_account_validation_records.each do |mavr|
+        #   total_equity_value = total_equity_value + mavr.data.with_indifferent_access[:equity_value]
+        # end
+
+        lif_withdrawal_amount -= @member_account_validation.member_account_validation_records.sum(:equity_value)
         # lif_withdrawal_amount -= @member_account_validation.member_account_validation_records.sum(:lif_50_percent)
         
         if Settings.activate_microloans
+          # MBA LIFE Withdrawal
           lif_withdrawal_accounting_code = AccountingCode.find('819d6e6a-9391-4990-92e0-459ea53821fc')
 
           journal_entries << {
             accounting_code_id: lif_withdrawal_accounting_code.id,
             code: lif_withdrawal_accounting_code.code,
             name: lif_withdrawal_accounting_code.name,
-            amount: lif_withdrawal_amount / 2
+            amount: lif_withdrawal_amount
           }
         end
       end
@@ -435,6 +474,7 @@ module MemberAccountValidations
         if @is_remote
           savings_accounting_code = AccountingCode.find('905c35b2-2388-4458-8de7-60636e10952f')
         else
+          # DUE to members (KCOOP)
           savings_accounting_code = AccountingCode.find('b7c23e58-e44e-46ae-a3ec-b5081d6eed32')
         end
 
@@ -448,6 +488,8 @@ module MemberAccountValidations
         savings_amount += @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' != ?", "EXIT AGE (GK)", "Kaagapay").sum(:equity_interest)
         # savings_amount += @total_lif_balance / 2
 
+        savings_amount -= @member_account_validation.member_account_validation_records.where("member_classification != ?  AND data->>'member_type' != ?", "EXIT AGE (GK)", "Kaagapay").sum(:policy_loan)
+        
         journal_entries << {
           accounting_code_id: savings_accounting_code.id,
           code: savings_accounting_code.code,

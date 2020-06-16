@@ -1,9 +1,10 @@
 %table.table.table-bordered.table-sm.table-hover
   %thead
     %tr
-      %th.text-center
+      %th
+      %th
         Date
-      %th.text-center
+      %th
         Until
       %th
         Branch
@@ -21,9 +22,13 @@
         %td.text-center
           %strong
             = link_to "/data_stores/x_weeks_to_pay/#{o.id}" do
-              #{o.as_of.to_date.strftime("%b %d, %Y")}
-        %td.text-center
-          #{o.date_until.try!(:to_date).try!(:strftime, "%b %d, %Y")}
+              .fa.fa-search
+        %td
+          %strong
+            #{o.as_of.to_date.strftime("%b %d, %Y")}
+        %td
+          %strong
+            #{o.date_until.try!(:to_date).try!(:strftime, "%b %d, %Y")}
         %td
           #{o.branch_name}
         %td.text-center

@@ -1,20 +1,12 @@
-= render partial: "index_header"
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @branches.any?
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @branches.any?
-
-            = render partial: "index_list"
-          - else
-            %p
-              No branches found
-
-= javascript_include_tag "administration/branches/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });
+              = render partial: "index_list"
+            - else
+              %p
+                No branches found

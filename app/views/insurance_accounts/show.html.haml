@@ -1,176 +1,264 @@
 = title @insurance_account.id
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @insurance_account.account_subtype == Settings.clip
-            %table.table.table-hover.table-sm.table-bordered
-              %thead
+.row
+  .col
+    .card
+      .card-body
+        - if @insurance_account.account_subtype == Settings.clip
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Loan Product
+                %th
+                  %center
+                    Loan Amount
+                %th
+                  %center
+                    Term
+                %th
+                  %center
+                    Num Installments
+                %th
+                  %center
+                    Date Released
+                %th
+                  %center
+                    Maturity Date
+                %th
+                  %center
+                    Premium
+                %th
+                  %center
+                    Status
+            %tbody
+              - @account_transactions.each do |o|
+                - @maturity_date = o.data.with_indifferent_access[:data][:maturity_date] != nil ? o.data.with_indifferent_access[:data][:maturity_date] : o.data.with_indifferent_access[:data][:original_maturity_date]
                 %tr
                   - if current_user.roles.include?("MIS")
-                    %th
-                  %th
-                    %center
-                      Loan Product
-                  %th
-                    %center
-                      Loan Amount
-                  %th
-                    %center
-                      Term
-                  %th
-                    %center
-                      Num Installments
-                  %th
-                    %center
-                      Date Released
-                  %th
-                    %center
-                      Maturity Date
-                  %th
-                    %center
-                      Premium
-                  %th
-                    %center
-                      Status
-              %tbody
-                - @account_transactions.each do |o|
-                  - @maturity_date = o.data.with_indifferent_access[:data][:maturity_date] != nil ? o.data.with_indifferent_access[:data][:maturity_date] : o.data.with_indifferent_access[:data][:original_maturity_date]
-                  %tr
-                    - if current_user.roles.include?("MIS")
-                      %td
-                        %small
-                          #{o.id}
                     %td
-                      %center
-                        %small
-                          #{o.data.with_indifferent_access[:data][:loan_product_name]}
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.data.with_indifferent_access[:data][:loan_product_name]}
+                  %td
+                    %center
+                      %small
+                        #{number_to_currency(o.data.with_indifferent_access[:data][:principal], unit: "")}
+                  %td
+                    %center
+                      %small
+                        #{o.data.with_indifferent_access[:data][:term]}
+                  %td
+                    %center
+                      %small
+                        #{o.data.with_indifferent_access[:data][:num_installments]}
+                  %td
+                    %center
+                      %small
+                        #{o.data.with_indifferent_access[:data][:date_released].to_date.strftime("%B %d, %Y")}
+                  %td
+                    %center
+                      %small
+                        #{@maturity_date.to_date.strftime("%B %d, %Y")}
+                  %td
+                    %center
+                      %small
+                        #{number_to_currency(o.amount, unit: "")}
+                  %td
+                    %center
+                      - if @maturity_date.to_date > Date.today
+                        .badge.badge-info
+                          Active
+                      - else 
+                        .badge.badge-danger
+                          Matured
+        - elsif @insurance_account.account_subtype == Settings.hiip
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date Posted
+                %th.text-right
+                  Amount
+                %th
+                  %center
+                    Status
+            %tbody
+              - @account_transactions.each do |o|  
+                %td
+                  %center
+                    %small
+                      #{number_to_currency(o.data.with_indifferent_access[:data][:date_approved].to_date)}
+                %td
+                  %center
+                    %small
+                      #{number_to_currency(o.amount, unit: "")}
+                %td
+                  %center
+                    - if (Date.today - o.data.with_indifferent_access[:data][:date_approved].to_date).to_i < 365
+                      .badge.badge-info
+                        Active
+                    - else 
+                      .badge.badge-danger
+                        Matured
+        - elsif @insurance_account.account_subtype == Settings.life
+          #react-root
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
+                  Beginning Balance
+                %th.text-right
+                  Amount
+                %th.text-right
+                  Ending Balance
+                %th.text-right
+                  Equity Value 
+            %tbody
+              - @account_transactions.each do |o|
+                %tr
+                  - if current_user.roles.include?("MIS")
                     %td
-                      %center
-                        %small
-                          #{number_to_currency(o.data.with_indifferent_access[:data][:principal], unit: "")}
-                    %td
-                      %center
-                        %small
-                          #{o.data.with_indifferent_access[:data][:term]}
-                    %td
-                      %center
-                        %small
-                          #{o.data.with_indifferent_access[:data][:num_installments]}
-                    %td
-                      %center
-                        %small
-                          #{o.data.with_indifferent_access[:data][:date_released].to_date.strftime("%B %d, %Y")}
-                    %td
-                      %center
-                        %small
-                          #{@maturity_date.to_date.strftime("%B %d, %Y")}
-                    %td
-                      %center
-                        %small
-                          #{number_to_currency(o.amount, unit: "")}
-                    %td
-                      %center
-                        - if @maturity_date.to_date > Date.today
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      - if o.deposit?
+                        - if o.interest?
                           .badge.badge-info
-                            Active
-                        - else 
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        - if o.withdraw_ev?
                           .badge.badge-danger
-                            Matured
-          -elsif @insurance_account.account_subtype == Settings.hiip
-            %table.table.table-hover.table-sm.table-bordered
-              %thead
-                %tr
-                  - if current_user.roles.include?("MIS")
-                    %th
-                  %th
-                    %center
-                      Date Posted
-                  %th
-                    %center
-                      Amount
-                  %th
-                    %center
-                      Status
-              %tbody
-                - @account_transactions.each do |o|
-                  %tr
-                    - if current_user.roles.include?("MIS")
-                      %td
-                        %small
-                          #{o.id}
-                    %td
-                      %center
-                        %small
-                          #{o.data.with_indifferent_access[:data][:date_approved].to_date.strftime("%B %d, %Y")}
-                    %td
-                      %center
-                        %small
-                          #{number_to_currency(o.amount, unit: "")}
-                    %td
-                      %center
-                        - if (Date.today - o.data.with_indifferent_access[:data][:date_approved].to_date).to_i < 365
-                          .badge.badge-info
-                            Active
-                        - else 
-                          .badge.badge-danger
-                            Matured
-          -else
-            #content-status
-            %table.table.table-hover.table-sm.table-bordered
-              %thead
-                %tr
-                  - if current_user.roles.include?("MIS")
-                    %th
-                  %th
-                    %center
-                      Date
-                  %th
-                    %center
-                      Type
-                  %th.text-right
-                    Beginning Balance
-                  %th.text-right
-                    Amount
-                  %th.text-right
-                    Ending Balance
-              %tbody
-                - @account_transactions.each do |o|
-                  %tr
-                    - if current_user.roles.include?("MIS")
-                      %td
-                        %small
-                          #{o.id}
-                    %td
-                      %center
-                        %small
-                          #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
-                    %td
-                      %center
-                        - if o.deposit?
-                          - if o.interest?
-                            .badge.badge-info
-                              .fa.fa-plus
-                              Interest
-                          - else
-                            .badge.badge-success
-                              .fa.fa-download
-                              Deposit
-                        - elsif o.withdraw?
+                            .fa.fa-upload
+                            Withdraw EV
+                        - else
                           .badge.badge-danger
                             .fa.fa-upload
                             Withdraw
-                    %td.text-right.text-muted
-                      #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                    %td.text-right
-                      #{number_to_currency(o.amount, unit: "")}
-                    %td.text-right.text-muted
-                      #{number_to_currency(o.data["ending_balance"], unit: "")}
-
-
-#parameters{ data: { member_account_id: @insurance_account.id}}
-
-= javascript_include_tag "MemberAccountInsuranceStatus.min.react.js"
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["beginning_balance"], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["ending_balance"], unit: "")}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["equity_value"], unit: "")}
+        - elsif @insurance_account.account_subtype == Settings.pl
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
+                  Amount
+            %tbody
+              - @account_transactions.each do |o|
+                %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      - if o.deposit?
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        .badge.badge-danger
+                          .fa.fa-upload
+                          Withdraw
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+        - else
+          #react-root
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
+                  Beginning Balance
+                %th.text-right
+                  Amount
+                %th.text-right
+                  Ending Balance
+            %tbody
+              - @account_transactions.each do |o|
+                %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      - if o.deposit?
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        .badge.badge-danger
+                          .fa.fa-upload
+                          Withdraw
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["beginning_balance"], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["ending_balance"], unit: "")}

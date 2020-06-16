@@ -9,6 +9,21 @@ module Accounting
                         )
 
       @balance_sheets = @balance_sheets.page(params[:page]).per(20)
+
+      @subheader_items = [
+        {
+          text: "Balance Sheets"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          id: "btn-new",
+          link: "#",
+          class: "fa fa-plus",
+          text: "New"
+        }
+      ]
     end
 
     def show
@@ -28,6 +43,32 @@ module Accounting
         if sf.present?
           @statutory_funds_beginning = sf
         end
+      end
+
+      @subheader_items = [
+        {
+          is_link: true,
+          path: accounting_balance_sheets_path,
+          text: "Balance Sheets"
+        },
+        {
+          text: "#{@meta["branch_name"]} #{@meta["year"]}"
+        }
+      ]
+
+      @subheader_side_actions = []
+
+      if !@balance_sheet.processing?
+        @subheader_side_actions << {
+          id: "",
+          link: accounting_balance_sheet_path(@balance_sheet),
+          class: "fa fa-times",
+          data: {
+            method: :delete,
+            confirm: "Are you sure?"
+          },
+          text: "Delete"
+        }
       end
     end
 

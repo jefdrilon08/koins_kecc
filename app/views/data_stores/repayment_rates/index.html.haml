@@ -1,42 +1,14 @@
-= title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @records.any?
-            = render partial: "index_list"
-            = paginate @records
-          - else
-            %p
-              No records
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @records.any?
+          = render partial: "index_list"
+          = paginate @records
+        - else
+          %p
+            No records
 
 = render partial: "data_stores/repayment_rates/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "data_stores/repayment_rates/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-
-    App.room  = App.cable.subscriptions.create(
-                  "WebNotificationsChannel",
-                  {
-                    connected: function() {
-                    },
-                    disconnected: function() {
-                    },
-                    received: function(data) {
-                      console.log("received data: " + data);
-                    }
-                  }
-                );
-  });

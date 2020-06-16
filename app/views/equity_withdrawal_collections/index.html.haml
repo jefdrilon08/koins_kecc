@@ -1,0 +1,15 @@
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @equity_withdrawal_collections.any?
+          = render partial: "index_list", locals: { equity_withdrawal_collections: @equity_withdrawal_collections }
+          = paginate @equity_withdrawal_collections
+        - else
+          %p
+            No Equity Withdrawal Collections found
+
+= render partial: "equity_withdrawal_collections/modals/new_transaction"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"

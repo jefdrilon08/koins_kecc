@@ -1,19 +1,10 @@
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @users.any?
-            = render partial: "index_list"
-          - else
-            %p
-              No users found
-
-= javascript_include_tag "administration/users/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @users.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No users found

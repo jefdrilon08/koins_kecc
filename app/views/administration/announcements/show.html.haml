@@ -1,6 +1,7 @@
-= render partial: "show_header"
+= title @announcement.title
 
-.container-fluid
-  .row
-    .col-md-12
-      = render partial: "show_details"
+%main.c-main
+  .container-fluid
+    .row
+      .col-md-12
+        = render partial: "show_details"

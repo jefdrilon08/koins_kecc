@@ -7,17 +7,18 @@
     = csrf_meta_tags
     = csp_meta_tag
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no" }
-    = action_cable_meta_tag
-
-    = stylesheet_link_tag    'application', media: 'all'
-    = javascript_include_tag 'application'
+    %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
+    = stylesheet_pack_tag 'application'
+    = javascript_pack_tag 'application'
     = favicon_link_tag "logo_thumb.png"
 
-  %body.app.header-fixed
-    = render partial: "shared/header"
-    .app-body
-      = render partial: "shared/sidebar"
-      %main.main
-        = yield
+  %body.c-app
+    = render partial: "shared/c_sidebar"
+    .c-wrapper
+      = render partial: "shared/header"
+      .c-body
+        %main.c-main
+          .container-fluid
+            = yield
     = render partial: "templates/error_list"
     = render partial: "templates/loader"

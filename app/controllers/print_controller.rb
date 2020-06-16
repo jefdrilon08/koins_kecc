@@ -2,69 +2,222 @@ class PrintController < ApplicationController
   before_action :authenticate_user!
 
   def print
-    file  = params[:filename]
+    type  = params[:type]
+    data  = {}
 
-    @data = JSON.parse(File.read("#{Rails.root}/tmp/#{file}")).with_indifferent_access
+    errors = {
+      messages: {},
+      full_messages: []
+    }
 
-    if @data[:type] == "accounting_entry"
-      @accounting_entry_data  = @data[:data]
-      @deposit_collection = @data[:data]
+    if type == "accounting_entry"
+      accounting_entry = AccountingEntry.find(params[:id])
+
+      data  = ::Print::BuildAccountingEntry.new(
+                accounting_entry: accounting_entry
+              ).execute!
+
+      @accounting_entry_data  = data
       
-      render "print/accounting_entry", layout: "plain"
-    elsif @data[:type] == "deposit_collection_accounting_entry"
-      @accounting_entry_data  = @data[:data]
+      render "print/accounting_entry", layout: "print"
+    elsif type == "deposit_collection_accounting_entry"
+      deposit_collection = DepositCollection.find(params[:id])
+      accounting_entry   = deposit_collection.approved_accounting_entry
 
-      render "print/accounting_entry", layout: "plain"
-    elsif @data[:type] == "member_share"
-      @member_share_data  = @data[:data]
+      data  = ::Print::BuildAccountingEntry.new(
+                accounting_entry: accounting_entry
+              ).execute!
 
-      render "print/member_share", layout: "plain"
-    elsif @data[:type] == "billing"
-      @billing  = @data[:data]
+      @accounting_entry_data  = data
 
-      render "print/billing", layout: "plain"
-    elsif @data[:type] == "membership_payment_collection"
-      @membership_payment_collection  = @data[:data]
+      render "print/accounting_entry", layout: "print"
+    elsif type == "member_share"
+      member_share = MemberShare.find(params[:id])
 
-      render "print/membership_payment_collection", layout: "plain"
-    elsif @data[:type] == "trial_balance"
-      @trial_balance  = @data[:data]
+      data  = ::Print::BuildMemberShare.new(
+                member_share: member_share
+              ).execute!
 
-      render "print/trial_balance", layout: "plain"
-    elsif @data[:type] == "general_ledger"
-      @general_ledger = @data[:data]
+      # Update printing information
+      member_share.update!(
+        data: {
+          printed: true,
+          date_printed: Date.today
+        }
+      )
 
-      render "print/general_ledger", layout: "plain"
-    elsif @data[:type] == "wp"
-      @billing  = @data[:data]
+      @member_share_data  = data
 
-      render "print/wp", layout: "plain"
-    elsif @data[:type] == "book"
-      @book = @data[:data]
+      render "print/member_share", layout: "print"
+    elsif type == "billing"
+      billing = Billing.find(params[:id])
 
-      render "print/book", layout: "plain"
-    elsif @data[:type] == "deposit_collection"
-      @deposit_collection = @data[:data]
+      data  = ::Print::BuildBilling.new(
+                billing: billing
+              ).execute!
+
+      @billing  = data
+
+      render "print/billing", layout: "print"
+    elsif type == "wp"
+      billing = Billing.find(params[:id])
+
+      data  = ::Print::BuildBilling.new(
+                billing: billing
+              ).execute!
+
+      @billing  = data
+
+      render "print/wp", layout: "print"
+    elsif type == "membership_payment_collection"
+      membership_payment_collection = MembershipPaymentCollection.find(params[:id])
+
+      data  = ::Print::BuildMembershipPaymentCollection.new(
+                membership_payment_collection: membership_payment_collection
+              ).execute!
+
+      @membership_payment_collection = data
+
+      render "print/membership_payment_collection", layout: "print"
+    elsif type == "general_ledger"
+      start_date          = params[:start_date].try(:to_date)
+      end_date            = params[:end_date].try(:to_date)
+      branch_id           = params[:branch_id]
+      accounting_code_ids = params[:accounting_code_ids].try(:split, ",") || []
+      branch              = Branch.find(branch_id)
+
+      config  = {
+        start_date: start_date,
+        end_date: end_date,
+        branch: branch,
+        accounting_code_ids: accounting_code_ids
+      }
+
+      general_ledger_data  = ::Accounting::GenerateGeneralLedger.new(
+                              config: config
+                            ).execute!
+
+      data  = ::Accounting::FormatGeneralLedger.new(
+                general_ledger_data: general_ledger_data
+              ).execute!
+
+      @general_ledger = data
+
+      render "print/general_ledger", layout: "print"
+    elsif type == "trial_balance"
+      start_date  = params[:start_date].try(:to_date)
+      end_date    = params[:end_date].try(:to_date)
+      branch      = Branch.where(id: params[:branch_id]).first
+
+      config  = {
+        start_date: start_date,
+        end_date: end_date,
+        branch: branch
+      }
+
+      trial_balance_data  = ::Accounting::FetchTrialBalance.new(
+                              config: config
+                            ).execute!
+
+      data  = ::Accounting::FetchTrialBalance.new(
+                config: config
+              ).execute!
+
+      @trial_balance  = data
+
+      render "print/trial_balance", layout: "print"
+    elsif type == "book"
+      start_date  = params[:start_date].try(:to_date)
+      end_date    = params[:end_date].try(:to_date)
+      book        = params[:book]
+      branch      = Branch.where(id: params[:branch_id]).first
+
+      config  = {
+        start_date: start_date,
+        end_date: end_date,
+        book: book,
+        branch: branch
+      }
+
+      data  = ::Print::BuildBook.new(
+                config: config
+              ).execute!
+
+      @book = data
+
+      render "print/book", layout: "print"
+    elsif type == "deposit_collection"
+      deposit_collection  = DepositCollection.find(params[:id])
+
+      config  = {
+        deposit_collection: deposit_collection
+      }
+
+      data  = ::Print::BuildDepositCollection.new(
+                config: config
+              ).execute!
+
+      @deposit_collection = data
       
-      render "print/deposit_collection", layout: "plain"
-    elsif @data[:type] == "insurance_fund_transfer_collection"
-      @insurance_fund_transfer_collection = @data[:data]
+      render "print/deposit_collection", layout: "print"
+    elsif type == "insurance_fund_transfer_collection"
+      insurance_fund_transfer_collection  = InsuranceFundTransferCollection.find(params[:id])
 
-      render "print/insurance_fund_transfer_collection", layout: "plain"
-    elsif @data[:type] == "time_deposit_collection"
-      @deposit_collection = @data[:data]
+      config  = {
+        insurance_fund_transfer_collection: insurance_fund_transfer_collection
+      }
 
-      render "print/deposit_collection", layout: "plain"
-    elsif @data[:type] == "withdrawal_collection"
-      @withdrawal_collection = @data[:data]
+      data  = ::Print::BuildFundTransferCollection.new(
+                                            config: config
+                                            ).execute!
 
-      render "print/withdrawal_collection", layout: "plain"
-    elsif @data[:type] == "withdrawal_request"
-      @withdrawal_request = @data[:data]
+      @insurance_fund_transfer_collection = data
 
-      render "print/withdrawal_request", layout: "plain"
+      render "print/insurance_fund_transfer_collection", layout: "print"
+    elsif type == "time_deposit_collection"
+      time_deposit_collection = TimeDepositCollection.find(params[:id])
+
+      config  = {
+        time_deposit_collection: time_deposit_collection
+      }
+
+      data  = ::Print::BuildTimeDepositCollection.new(
+                config: config
+              ).execute!
+
+      @deposit_collection = data
+
+      render "print/deposit_collection", layout: "print"
+    elsif type == "withdrawal_collection"
+      withdrawal_collection = WithdrawalCollection.find(params[:id])
+
+      config  = {
+        withdrawal_collection: withdrawal_collection
+      }
+
+      data  = ::Print::BuildWithdrawalCollection.new(
+                config: config
+              ).execute!
+
+      @withdrawal_collection = data
+
+      render "print/withdrawal_collection", layout: "print"
+    elsif type == "withdrawal_request"
+      data_store = DataStore.find(params[:id])
+
+      config  = {
+        data_store: data_store
+      }
+
+      data  = ::Print::BuildWithdrawalRequest.new(
+                config: config
+              ).execute!
+
+      @withdrawal_request = data
+
+      render "print/withdrawal_request", layout: "print"
     else
-      raise "Invalid type #{@data[:type]}"
+      raise "Invalid type: #{type}"
     end
   end
 end

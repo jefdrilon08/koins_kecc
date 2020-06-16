@@ -2,19 +2,34 @@ class AccountingController < ApplicationController
   before_action :authenticate_user!
 
   def trial_balance
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Trial Balance"
+      }
+    ]
+
+    @subheader_side_actions = [
+    ]
+
+    @payload = {
+      accountingFunds: helpers.accounting_funds.to_json
+    }
   end
 
   def general_ledger_excel_url
-  if params[:branch_id].present?
-    branch = Branch.find(params[:branch_id])
-  end
-  if params[:accounting_code_ids].present?
-    accounting_code_ids = params[:accounting_code_ids]
+    if params[:branch_id].present?
+      branch = Branch.find(params[:branch_id])
+    end
+    if params[:accounting_code_ids].present?
+      accounting_code_ids = params[:accounting_code_ids]
+    end
+
+    render json: { download_url: "#{general_ledger_excel_url_path(start_date: params[:start_date],end_date: params[:end_date], branch_id: branch.try(:id))}"}
   end
 
-  render json: { download_url: "#{general_ledger_excel_url_path(start_date: params[:start_date],end_date: params[:end_date], branch_id: branch.try(:id))}"}
-
-  end
   def general_ledger_excel
         start_date          = params[:start_date].try(:to_date)
         end_date            = params[:end_date].try(:to_date)
@@ -37,6 +52,16 @@ class AccountingController < ApplicationController
       end
 
   def general_ledger
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "General Ledger"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def misc
@@ -70,6 +95,30 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "Miscellaeneous"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "misc"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
+
+    @payload = {
+      book: "MISC"
+    }
   end
 
   def jvb
@@ -109,6 +158,30 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "General Journal"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "jvb"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
+
+    @payload = {
+      book: "JVB"
+    }
   end
 
   def crb
@@ -147,6 +220,30 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "Cash Receipts"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "crb"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
+
+    @payload = {
+      book: "CRB"
+    }
   end
 
   def cdb
@@ -185,6 +282,30 @@ class AccountingController < ApplicationController
     end
 
     @records  = @records.page(params[:page]).per(20)
+
+    @subheader_items = [
+      {
+        text: "Accounting"
+      },
+      {
+        text: "Books"
+      },
+      {
+        text: "Cash Disbursement"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: accounting_accounting_entry_form_path(book: "cdb"),
+        class: "fa fa-plus",
+        text: "New Entry"
+      }
+    ]
+
+    @payload = {
+      book: "CDB"
+    }
   end
 
   def form

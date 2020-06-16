@@ -5,18 +5,24 @@ Rails.application.routes.draw do
 
   as :user do
     get 'login', to: 'pages#login', as: :new_user_session
-    delete 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
+    get 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
   end
 
   authenticate :user do
     mount Sidekiq::Web => SIDEKIQ_WEB_PATH
   end
 
+  # Change password
+  get "/change_password", to: "pages#change_password"
+
   # dashboard
   get "/dashboard/finance", to: "pages#finance", as: :dashboard_finance
 
   # insights
   get "/insights", to: "pages#insights"
+
+  # claims summary
+  get "/blip_summary", to: "pages#blip_summary"
 
   # export tools page
   get "/export_tools", to: "pages#export_tools"
@@ -245,6 +251,11 @@ Rails.application.routes.draw do
     collection { post :upload }
   end
 
+  # Equity Withdrawals
+  resources :equity_withdrawal_collections, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
+
   # Insurance Fund Transfer
   resources :insurance_fund_transfer_collections, only: [:index, :show, :destroy] do
     collection { post :upload}
@@ -373,7 +384,7 @@ Rails.application.routes.draw do
   get "/reports/collections_blip_reports", to: "reports#collections_blip_reports", as: :collections_blip_reports
   get "/reports/collections_blip", to: "reports#collections_blip", as: :collections_blip
   get "/reports/member_dependent_reports", to: "reports#member_dependent_reports", as: :member_dependent_reports
-  get "/reports/member_dependent", to: "reports#member_dependent", as: :member_dependent
+  get "/reports/member_dependents", to: "reports#member_dependents", as: :member_dependents
   get "/reports/cic_reports", to: "reports#cic_reports", as: :cic_reports
   get "/reports/cic", to: "reports#cic", as: :cic
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
@@ -383,7 +394,7 @@ Rails.application.routes.draw do
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
   get "/exports/members_with_beneficiaries_excel", to: "exports#members_with_beneficiaries_excel", as: :export_members_with_beneficiaries_excel
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies
-  get "/reports/personal_document", to: "reports#personal_document", as: :personal_document
+  get "/reports/personal_documents", to: "reports#personal_documents", as: :personal_documents
   get "/reports/personal_document_reports", to: "reports#personal_document_reports", as: :personal_document_reports
   get "/reports/claims_blip", to: "reports#claims_blip", as: :claims_blip
   get "/reports/claims_blip_report", to: "reports#claims_blip_report", as: :claims_blip_report
@@ -401,7 +412,8 @@ Rails.application.routes.draw do
   get "/reports/kbente_reports", to: "reports#kbente_reports", as: :kbente_reports
   get "/reports/kjsp", to: "reports#kjsp", as: :kjsp
   get "/reports/kjsp_reports", to: "reports#kjsp_reports", as: :kjsp_reports
-  get "/reports/claim_reports", to: "reports#claim_reports", as: :claim_reports
+  #get "/reports/claim_reports", to: "reports#claim_reports", as: :claim_reports
+  get "/reports/claims", to: "reports#claims"
   get "/reports/claim_generate_report", to: "reports#claim_generate_report", as: :claim_generate_report
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"

@@ -1,26 +1,8 @@
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "details"
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "details"
 
 = render partial: "templates/error_list"
 = render partial: "administration/user_demerits/modals/approve"
-= javascript_include_tag "administration/user_demerits/Show.js"
-
-#parameters{ data: { id: @user_demerit.id } }
-
-:javascript
-  $(document).ready(function() {
-    var $parameters       = $("#parameters");
-    var id                = $parameters.data("id");
-    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
-
-    Show.init({
-      id: id, 
-      authenticityToken: authenticityToken
-    });
-  });

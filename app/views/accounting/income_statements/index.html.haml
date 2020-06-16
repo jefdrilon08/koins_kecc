@@ -1,27 +1,14 @@
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @income_statements.any?
-            = render partial: "index_list"
-            = paginate @income_statements
-          - else
-            %p
-              No income statements found.
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @income_statements.any?
+          = render partial: "index_list"
+          = paginate @income_statements
+        - else
+          %p
+            No income statements found.
 
 = render partial: "accounting/income_statements/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "accounting/income_statements/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

@@ -114,10 +114,3 @@
     = render partial: "data_stores/member_counts/members_with_savings", locals: { members: @data[:counts][:pure_savers][:members] }
   #loaners.tab-pane{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:loaners][:members] }
-
-:javascript
-  $(document).ready(function() {
-    $(".data-table").DataTable({
-      fixedHeader: true
-    });
-  });

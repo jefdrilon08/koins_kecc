@@ -46,10 +46,3 @@
 .tab-content
   #active-members.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "data_stores/claims_counts/claims", locals: { claims: @data[:counts][:approved_claims][:claims] }
-
-:javascript
-  $(document).ready(function() {
-    $(".data-table").DataTable({
-      fixedHeader: true
-    });
-  });

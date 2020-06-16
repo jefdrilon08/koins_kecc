@@ -1,0 +1,15 @@
+.c-subheader.justify-content-between.px-3
+  %ol.breadcrumb.border-0.m-0.px-0.px-md-3
+    - items.each do |i|
+      %li.breadcrumb-item
+        - if i[:is_link]
+          = link_to i[:path] do
+            #{i[:text]}
+        - else
+          #{i[:text]}
+  - if side_actions.any?
+    .c-subheader-nav.d-md-down-none.mfe-2
+      - side_actions.each do |a|
+        = link_to a[:link], class: "c-subheader-nav-link", id: "#{a[:id]}", data: a[:data] do
+          %div{ class: "c-icon #{a[:class]}" }
+          #{a[:text]}

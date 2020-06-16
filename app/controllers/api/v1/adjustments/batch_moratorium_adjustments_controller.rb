@@ -19,9 +19,14 @@ module Api
           if errors[:messages].any?
             render json: errors, status: 400
           else
-            ::Adjustments::BatchMoratoriumAdjustments::Approve.new(
-              config: config
-            ).execute!
+            args = {
+              id: adjustment_record.id,
+              user_id: current_user.id
+            }
+
+            adjustment_record.update!(status: "processing")
+
+            ProcessApproveBatchMoratoriumAdjustment.perform_later(args)
 
             render json: { message: "ok" }
           end

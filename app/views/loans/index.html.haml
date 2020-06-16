@@ -1,15 +1,12 @@
 = title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @loans.any?
-            = render partial: "index_list", locals: { loans: @loans }
-            = paginate @loans
-          - else
-            %p
-              No loans found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @loans.any?
+          = render partial: "index_list", locals: { loans: @loans }
+          = paginate @loans
+        - else
+          %p
+            No loans found

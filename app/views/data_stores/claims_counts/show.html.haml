@@ -1,14 +1,10 @@
 - @data = @record.data.with_indifferent_access
 / = title @record.id
-
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @record.error?
-            = render partial: "data_stores/error_page"
-          - else
-            = render partial: "show_details"
+.row
+  .col
+    .card
+      .card-body
+        - if @record.error?
+          = render partial: "data_stores/error_page"
+        - else
+          = render partial: "show_details"

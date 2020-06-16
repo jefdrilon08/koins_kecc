@@ -1,22 +1,5 @@
-%ol.breadcrumb
-  %li.breadcrumb-item
-    .fa.fa-chart-pie
-    Reports
-  %li.breadcrumb-item
-    .fa.fa-money-check
-    Insured Loans
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "insured_loan_form"
-      
- 
-= javascript_include_tag "reports/InsuredLoans"
-
-:javascript
-  $(document).ready(function() {
-    InsuredLoans.init();
-  });
-
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "insured_loan_form"

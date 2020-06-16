@@ -1,33 +1,14 @@
 = title @record.id
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @record.error?
-            = render partial: "data_stores/error_page"
-          - else
-            = render partial: "show_details", locals: { record: @record }
-            %hr
-            = render partial: "show_officer_details", locals: { record: @record }
-
-#parameters{ data: { id: "#{@record.id}" } }
+.row
+  .col
+    .card
+      .card-body
+        - if @record.error?
+          = render partial: "data_stores/error_page"
+        - else
+          = render partial: "show_details", locals: { record: @record }
+          %hr
+          = render partial: "show_officer_details", locals: { record: @record }
 
 = render partial: "data_stores/branch_loans_stats/modals/update"
 = render partial: "templates/error_list"
-
-- if !@record.error?
-  = javascript_include_tag "data_stores/branch_loans_stats/Show"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-    var id  = $("#parameters").data('id');
-
-    Show.init({
-      id: id,
-      authenticityToken: authenticityToken
-    });
-  });

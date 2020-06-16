@@ -10,6 +10,13 @@ module Administration
 
     def new
       @user_demerit = UserDemerit.new(date_of_action: Date.today, demerit_type: 'verbal', branch: @branches.first, role: @user.roles.last)
+
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Users", is_link: true, path: administration_users_path },
+        { text: "#{@user.full_name}", is_link: true, path: administration_user_path(@user) },
+        { text: "New Demerit" }
+      ]
     end
 
     def create
@@ -27,22 +34,81 @@ module Administration
       if @user_demerit.save
         redirect_to administration_user_user_demerit_path(@user, @user_demerit)
       else
+        @subheader_items = [
+          { text: "Administration" },
+          { text: "Users", is_link: true, path: administration_users_path },
+          { text: "#{@user.full_name}", is_link: true, path: administration_user_path(@user) },
+          { text: "New Demerit" }
+        ]
+
         render :new
       end
     end
 
     def edit
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Users", is_link: true, path: administration_users_path },
+        { text: "#{@user.full_name}", is_link: true, path: administration_user_path(@user) },
+        { text: "Edit" }
+      ]
     end
 
     def update
       if @user_demerit.update(user_demerit_params)
         redirect_to administration_user_user_demerit_path(@user, @user_demerit)
       else
+        @subheader_items = [
+          { text: "Administration" },
+          { text: "Users", is_link: true, path: administration_users_path },
+          { text: "#{@user.full_name}", is_link: true, path: administration_user_path(@user) },
+          { text: "Edit" }
+        ]
+
         render :edit
       end
     end
 
     def show
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Users", is_link: true, path: administration_users_path },
+        { text: "#{@user.full_name}", is_link: true, path: administration_user_path(@user) },
+        { text: "#{@user_demerit.id}" }
+      ]
+
+      @subheader_side_actions = []
+
+      if @user_demerit.pending?
+        @subheader_side_actions << {
+          id: "btn-approve",
+          class: "fa fa-check",
+          text: "Approve",
+          link: "#"
+        }
+
+        @subheader_side_actions << {
+          id: "#",
+          class: "fa fa-pencil-alt",
+          text: "Edit",
+          link: edit_administration_user_user_demerit_path(@user, @user_demerit)
+        }
+
+        @subheader_side_actions << {
+          id: "#",
+          class: "fa fa-times",
+          text: "Delete",
+          link: administration_user_user_demerit_path(@user, @user_demerit),
+          data: {
+            method: :delete,
+            confirm: "Are you sure?"
+          }
+        }
+      end
+
+      @payload = {
+        id: @user_demerit.id
+      }
     end
 
     def destroy

@@ -74,9 +74,9 @@ module Claims
         @errors << "Name of claimant field is required"
       end
 
-      if Date.today.to_date > @expiration_date_of_coverage.to_date
-        @errors << "Expired HIIP!"
-      end
+      # if Date.today.to_date > @expiration_date_of_coverage.to_date
+      #   @errors << "Expired HIIP!"
+      # end
 
       if @amount.to_i >= 6000.00.to_i
         @errors << "Exceed amount!"

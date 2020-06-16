@@ -17,6 +17,7 @@
           %th Advance LIFE
           %th Advance RF
           %th Interest
+          %th Policy Loan
           %th Total
           %th Actions
       %tbody
@@ -42,6 +43,8 @@
             %td
               = ff.input :interest, as: :string, input_html: { class: "form-control numeric interest" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
             %td
+              = ff.input :policy_loan, as: :string, input_html: { class: "form-control numeric policy-loan" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
+            %td
               = ff.input :total, as: :string, input_html: { class: "form-control numeric total-amount" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true          
             %td
               = link_to "#", class: "btn btn-danger btn-delete", data: { member_account_validation_record_id: ff.object.id, delete_member_id: ff.object.member.id } do
@@ -65,6 +68,8 @@
               %input{type: "text", class: "form-control numeric total-advance-rf", disabled: true, value: 0.00}
             %th 
               %input{type: "text", class: "form-control numeric total-interest", disabled: true, value: 0.00}
+            %th 
+              %input{type: "text", class: "form-control numeric total-policy-loan", disabled: true, value: 0.00}
             %th 
               %input{type: "text", class: "form-control numeric grand-total", disabled: true, value: 0.00}
     %hr

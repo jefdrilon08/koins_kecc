@@ -33,12 +33,51 @@ class EquityAccountsController < ApplicationController
     end
  
     @equity_accounts = @equity_accounts.page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        text: "Equity"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def show
     @equity_account       = MemberAccount.equities.find(params[:id])
+    @member               = @equity_account.member
     @account_transactions = AccountTransaction.where(
                               subsidiary_id: @equity_account.id
                             ).order("transacted_at ASC, updated_at ASC")
+
+    @subheader_items = [
+      {
+        text: "Accounts"
+      },
+      {
+        is_link: true,
+        path: equity_accounts_path,
+        text: "Equity"
+      },
+      {
+        is_link: true,
+        path: member_path(@member),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "#{@equity_account.account_subtype}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        class: "",
+        link: "#",
+        text: "Balance: #{helpers.number_to_currency(@equity_account.balance, unit: '')}"
+      }
+    ]
   end
 end

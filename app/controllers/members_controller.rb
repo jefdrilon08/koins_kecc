@@ -37,10 +37,31 @@ class MembersController < ApplicationController
     end
 
     @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+    @subheader_items = [
+      { text: "Members" },
+    ]
+
+    @subheader_side_actions = [
+      { id: "", link: member_form_path, class: "fa fa-plus", text: "New Member" }
+    ]
   end
 
   def form_resignation
     @member = Member.find(params[:id])
+
+    @subheader_items = [
+      { is_link: true, path: members_path, text: "Members" },
+      { is_link: true, path: member_path(@member), text: "#{@member.full_name}" },
+      { text: "Resignation Form" }
+    ]
+
+    @subheader_side_actions = [
+    ]
+
+    @payload = {
+      id: @member.id,
+      memberResignationTypes: helpers.member_resignation_types
+    }
   end
 
   def form_attachment
@@ -48,6 +69,22 @@ class MembersController < ApplicationController
   end
 
   def form
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        text: "Form"
+      }
+    ]
+
+    @payload = {
+      "id": params[:id],
+      "memberTypes": Settings.default_member_types
+    }
   end
 
   def blip_form_pdf
@@ -68,11 +105,76 @@ class MembersController < ApplicationController
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
     @data           = @survey_answer.data.with_indifferent_access
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        is_link: true,
+        path: member_path(@member.id),
+        text: "#{@member.full_name}"
+      },
+      {
+        text: "#{@survey_answer.survey.name}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        class: "fa fa-pencil-alt",
+        link: member_survey_answer_form_path(@member, @survey_answer),
+        text: "Edit"
+      },
+      {
+        class: "fa fa-times",
+        link: "#",
+        id: "btn-delete-survey-answer",
+        text: "Delete"
+      }
+    ]
+
+    @payload = {
+      id: @survey_answer.id,
+      memberId: @member.id
+    }
   end
 
   def survey_answer_form
     @member         = Member.find(params[:id])
     @survey_answer  = SurveyAnswer.find(params[:survey_answer_id])
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        is_link: true,
+        path: member_path(@member.id),
+        text: "#{@member.full_name}"
+      },
+      {
+        is_link: true,
+        path: member_survey_answer_path(@member, @survey_answer) ,
+        text: "#{@survey_answer.survey.name}"
+      },
+      {
+        text: "Edit"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    @payload = {
+      id: @survey_answer.id,
+      memberId: @member.id
+    }
   end
 
   def show
@@ -117,6 +219,48 @@ class MembersController < ApplicationController
                             member: @member
                           }
                         ).execute!
+
+    @payload = {
+      "memberId": @member.id
+    }
+
+    # subheader items
+    @subheader_items = [
+      {
+        is_link: true,
+        path: members_path,
+        text: "Members"
+      },
+      {
+        text: "#{@member.full_name}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-create-survey",
+        class: "fa fa-plus",
+        link: "#",
+        text: "New Survey"
+      }
+    ]
+
+    if (Settings.activate_microloans and @member.pending?) or (Settings.activate_microinsurance and @member.pending_dormant?)
+      @subheader_side_actions << {
+        id: "btn-delete",
+        class: "fa fa-times",
+        link: "#",
+        text: "Delete"
+      }
+    end
+
+    if @member.active?
+      @subheader_side_actions << {
+        class: "fa fa-plus",
+        link: loan_application_form_path(member_id: @member.id),
+        text: "New Loan"
+      }
+    end
   end
 
   def import_members

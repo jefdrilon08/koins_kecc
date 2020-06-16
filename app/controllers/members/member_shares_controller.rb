@@ -33,6 +33,12 @@ module Members
       end
 
       @member_share = MemberShare.new(date_of_issue: date_of_issue , number_of_shares: number_of_shares)
+
+      @subheader_items = [
+        { text: "Members", is_link: true, path: members_path },
+        { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+        { text: "New" }
+      ]
     end
 
     def create
@@ -57,12 +63,25 @@ module Members
 
         redirect_to member_member_share_path(@member, @member_share)
       else
+        @subheader_items = [
+          { text: "Members", is_link: true, path: members_path },
+          { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+          { text: "New" }
+        ]
+
         render :new
       end
     end
 
     def edit
       @member_share = MemberShare.find(params[:id])
+
+      @subheader_items = [
+        { text: "Members", is_link: true, path: members_path },
+        { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+        { text: "#{@member_share}", is_link: true, path: member_member_share_path(@member, @member_share) },
+        { text: "Edit" }
+      ]
     end
 
     def flag_as_printed
@@ -94,12 +113,37 @@ module Members
 
         redirect_to member_member_share_path(@member, @member_share)
       else
-        render :new
+        @subheader_items = [
+          { text: "Members", is_link: true, path: members_path },
+          { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+          { text: "#{@member_share}", is_link: true, path: member_member_share_path(@member, @member_share) },
+          { text: "Edit" }
+        ]
+
+        render :edit
       end
     end
 
     def show
       @member_share = MemberShare.find(params[:id])
+
+      @subheader_items = [
+        { text: "Members", is_link: true, path: members_path },
+        { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+        { text: "Member Share" }
+      ]
+
+      @subheader_side_actions = []
+
+      if @member_share.data["is_printed"].to_s == "false"
+        @subheader_side_actions << {
+          text: "Flag as Printed", link: member_member_share_flag_as_printed_path(@member, @member_share), class: "fa fa-check"
+        }
+      end
+
+      @subheader_side_actions << { text: "Edit", class: "fa fa-pencil-alt", link: edit_member_member_share_path(@member, @member_share) }
+      @subheader_side_actions << { text: "Print", id: "btn-print", class: "fa fa-print", data: { id: @member_share.id } }
+      @subheader_side_actions << { text: "Delete", class: "fa fa-times", link: member_member_share_path(@member, @member_share), data: { method: :delete, confirm: "Are you sure?" } }
     end
 
     def destroy

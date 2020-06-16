@@ -37,7 +37,8 @@ module MemberAccountValidations
         is_for_loan_payments: false,
         accounting_entry_reference_number: @accounting_entry_reference_number,
         beginning_balance: 0.00,
-        ending_balance: 0.00
+        ending_balance: 0.00,
+        equity_value: 0.00
       }
     end
 
@@ -45,6 +46,11 @@ module MemberAccountValidations
       # Compute beginning and ending balance
       @data[:beginning_balance] = @member_account.balance.round(2)
       @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
+
+      # For equity value data
+      @member_account_data      = @member_account.data.with_indifferent_access
+      equity_value              = @member_account_data[:equity_value]
+      @data[:equity_value]      = equity_value.round(2)
 
       # Update account balance
       new_balance = (@member_account.balance + @amount).round(2)

@@ -1,29 +1,15 @@
 = title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @monthly_closing_collections.any?
-            = render partial: "index_list"
-            = paginate @monthly_closing_collections
-          - else
-            %p
-              No records found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @monthly_closing_collections.any?
+          = render partial: "index_list"
+          = paginate @monthly_closing_collections
+        - else
+          %p
+            No records found
 
 = render partial: "monthly_closing_collections/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "monthly_closing_collections/Index.js"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

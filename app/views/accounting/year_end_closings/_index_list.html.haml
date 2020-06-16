@@ -1,6 +1,7 @@
 %table.table.table-bordered.table-sm.table-hover
   %thead
     %tr
+      %th
       %th.text-center
         Closing Date
       %th
@@ -16,11 +17,12 @@
       - closed_on = o.meta["closing_date"].to_date.strftime("%b %d, %Y")
       %tr
         %td.text-center
+          - if !o.processing?
+            = link_to accounting_year_end_closing_path(o) do
+              .fa.fa-search
+        %td.text-center
           %strong
-            - if o.processing?
-              = closed_on
-            - else
-              = link_to closed_on, accounting_year_end_closing_path(o)
+            = closed_on
         %td= o.meta["branch_name"]
         %td.text-center
           - if o.processing?

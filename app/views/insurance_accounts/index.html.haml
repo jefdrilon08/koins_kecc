@@ -1,15 +1,12 @@
 = title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @insurance_accounts.any?
-            = render partial: "index_list"
-            = paginate @insurance_accounts
-          - else
-            %p
-              No accounts found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @insurance_accounts.any?
+          = render partial: "index_list"
+          = paginate @insurance_accounts
+        - else
+          %p
+            No accounts found

@@ -14,10 +14,44 @@ module Administration
         ORDER BY branches.name ASC
       "
       @branches  = Branch.find_by_sql(sql)
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          text: "Branches"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          id: "btn-new",
+          link: new_administration_branch_path,
+          class: "fa fa-plus",
+          text: "New Branch"
+        }
+      ]
     end
 
     def new
       @branch = Branch.new
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_branches_path,
+          text: "Branches"
+        },
+        {
+          text: "New"
+        }
+      ]
+
+      @subheader_side_actions = []
     end
 
     def create
@@ -26,12 +60,44 @@ module Administration
       if @branch.save
         redirect_to administration_branch_path(@branch)
       else
+        @subheader_items = [
+          {
+            text: "Administration"
+          },
+          {
+            is_link: true,
+            path: administration_branches_path,
+            text: "Branches"
+          },
+          {
+            text: "New"
+          }
+        ]
+
+        @subheader_side_actions = []
+
         render :new
       end
     end
 
     def edit
       @branch = Branch.find(params[:id])
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_branches_path,
+          text: "Branches"
+        },
+        {
+          text: "Edit #{@branch.name}"
+        }
+      ]
+
+      @subheader_side_actions = []
     end
 
     def update
@@ -40,11 +106,43 @@ module Administration
       if @branch.update(branch_params)
         redirect_to administration_branch_path(@branch)
       else
+        @subheader_items = [
+          {
+            text: "Administration"
+          },
+          {
+            is_link: true,
+            path: administration_branches_path,
+            text: "Branches"
+          },
+          {
+            text: "Edit #{@branch.name}"
+          }
+        ]
+
+        @subheader_side_actions = []
+
         render :edit
       end
     end
 
     def show
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_branches_path,
+          text: "Branches"
+        },
+        {
+          text: "#{@branch.name}"
+        }
+      ]
+
+      @subheader_side_actions = []
+
       @branch = Branch.find(params[:id])
     end
 

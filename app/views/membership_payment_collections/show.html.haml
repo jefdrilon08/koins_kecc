@@ -1,41 +1,21 @@
 = title @membership_payment_collection.id
-= render partial: "show_header"
+.row
+  .col
+    .card
+      .card-body
+        - if @membership_payment_collection.pending?
+          .c-callout.c-callout-info
+            %p
+              Pindutin ang amount upang baguhin ito.
+        %h5
+          MembershipPaymentCollection for #{@membership_payment_collection.branch} / #{@membership_payment_collection.center} - #{@membership_payment_collection.collection_date.strftime("%b %d, %Y")}
+        #react-root
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @membership_payment_collection.pending?
-            .callout.callout-info
-              %p
-                Pindutin ang amount upang baguhin ito.
-          %h5
-            MembershipPaymentCollection for #{@membership_payment_collection.branch} / #{@membership_payment_collection.center} - #{@membership_payment_collection.collection_date.strftime("%b %d, %Y")}
-          #membership-payment-collection-content
-
-          - if debug?
-            %pre
-              %code
-                #{JSON.pretty_generate(JSON.parse(@membership_payment_collection.to_json))}
+        - if debug?
+          %pre
+            %code
+              #{JSON.pretty_generate(JSON.parse(@membership_payment_collection.to_json))}
 
 = render partial: "shared/modals/print"
 = render partial: "membership_payment_collections/modals/approve"
 = render partial: "templates/error_list"
-
-#parameters{ data: { id: @membership_payment_collection.id } }
-
-= javascript_include_tag "MembershipPaymentCollectionUI.min.react"
-= javascript_include_tag "membership_payment_collections/Show"
-
-:javascript
-  $(document).ready(function() {
-    var $parameters                   = $("#parameters");
-    var membershipPaymentCollectionId = $parameters.data('id');
-    var authenticityToken             = $("meta[name='csrf-token']").attr('content');
-
-    Show.init({
-      membershipPaymentCollectionId: membershipPaymentCollectionId, 
-      authenticityToken: authenticityToken
-    });
-  });

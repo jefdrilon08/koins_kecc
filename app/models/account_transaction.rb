@@ -26,4 +26,8 @@ class AccountTransaction < ApplicationRecord
   def interest?
     self.transaction_type == "deposit" and self.data.with_indifferent_access[:is_interest] == true
   end
+
+  def withdraw_ev?
+    self.transaction_type == "withdraw" and self.data.with_indifferent_access[:is_withdraw_ev] == true
+  end
 end

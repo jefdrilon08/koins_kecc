@@ -22,6 +22,7 @@ vendor/bundle/
 /yarn-error.log
 
 /public/assets
+/public/packs
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
@@ -58,7 +59,7 @@ config/settings/*development*.yml
 config/settings/_*.yml
 
 # Stray files
-dump.rdb
+*.rdb
 *.csv
 
 /shared
@@ -68,3 +69,10 @@ dump.rdb
 
 # Ignore package-lock.json since we're using yarn
 package-lock.json
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

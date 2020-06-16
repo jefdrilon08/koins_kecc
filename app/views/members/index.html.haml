@@ -1,24 +1,13 @@
-= title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "index_filter"
-          - if @members.any?
-            = render partial: "index_list", locals: { members: @members }
-            = paginate @members
-          - else
-            %p
-              No members found
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @members.any?
+          = render partial: "index_list", locals: { members: @members }
+          = paginate @members
+        - else
+          %p
+            No members found
 
 = render partial: "templates/center_options"
-
-= javascript_include_tag "members/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });

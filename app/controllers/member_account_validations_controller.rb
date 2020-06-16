@@ -31,10 +31,48 @@ class MemberAccountValidationsController < ApplicationController
     if (@branch_id = params[:branch_id]).present?
       @member_account_validations = @member_account_validations.where(branch_id: @branch_id)
     end
+
+    @subheader_items = [
+      {
+        text: "Member Account Validations"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-new-transaction",
+        link: "#",
+        class: "fa fa-plus",
+        text: "New Member Account Validation"
+      }
+    ]
   end
 
   def edit
     @members = Member.active_and_resigned.where("branch_id = ?", @member_account_validation.branch.id).all.order("last_name ASC")
+
+    @subheader_items = [
+      {
+        is_link: true,
+        path: member_account_validations_path,
+        text: "Member Account Validations"
+      },
+      {
+        is_link: true,
+        path: member_account_validation_path(@member_account_validation),
+        text: "#{@member_account_validation.date_prepared} - #{@member_account_validation.status}"
+      },
+      {
+        text: "Form"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    @payload = {
+      id: @member_account_validation.id,
+      memberAccountValidationStatus: @member_account_validation.status
+    }
   end
 
   def update
@@ -43,6 +81,30 @@ class MemberAccountValidationsController < ApplicationController
       redirect_to member_account_validation_path(@member_account_validation)
     else
       flash[:error] = "Error in saving transaction"
+
+      @subheader_items = [
+        {
+          is_link: true,
+          path: member_account_validations_path,
+          text: "Member Account Validations"
+        },
+        {
+          is_link: true,
+          path: member_account_validation_path(@member_account_validation),
+          text: "#{@member_account_validation.date_prepared} - #{@member_account_validation.status}"
+        },
+        {
+          text: "Form"
+        }
+      ]
+
+      @subheader_side_actions = []
+
+      @payload = {
+        id: @member_account_validation.id,
+        memberAccountValidationStatus: @member_account_validation.status
+      }
+
       render :edit
     end
   end
@@ -57,6 +119,23 @@ class MemberAccountValidationsController < ApplicationController
 
     # @members = Member.where(branch_id: @member_account_validation.branch.id).all
     @role = current_user.roles.last
+
+    @subheader_items = [
+      {
+        is_link: true,
+        path: member_account_validations_path,
+        text: "Member Account Validations"
+      },
+      {
+        text: "#{@member_account_validation.date_prepared} - #{@member_account_validation.status}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    @payload = {
+      id: @member_account_validation.id
+    }
   end
 
   def destroy

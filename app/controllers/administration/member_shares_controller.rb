@@ -27,10 +27,16 @@ module Administration
 
       @members       = @members.page(params[:page]).per(LIST_PAGE_SIZE)
       @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
+
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Member Shares Monitoring" }
+      ]
     end
 
     def print
       @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("member_shares.data->> 'date_printed' DESC")
+
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
         #raise @branch_id.inspect
@@ -43,14 +49,18 @@ module Administration
         #d = (params[:end_date].to_date + 1).to_s
         @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
       end
- 
     end
 
     def no_certificates
       @data = {}
       @data[:sfp] = []
-      #x = Member.joins(:member_accounts).where("members.branch_id = ? and members.status = 'active'" , @branches.pluck(:id)).order("member_accounts.updated_at ASC")
-      x = Member.joins(:member_accounts).where("members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital'" ).order("member_accounts.updated_at ASC")
+
+      x = Member.joins(:member_accounts).where(
+            "members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital'" 
+          ).order(
+            "member_accounts.updated_at ASC"
+          ).limit(20)
+
       if params[:start_date].present? and params[:end_date].present?
         d = (params[:end_date].to_date + 1).to_s
         x = x.where("member_accounts.updated_at >= ?  and member_accounts.updated_at <= ?", params[:start_date] , d)
@@ -83,7 +93,12 @@ module Administration
         @data[:sfp] << sfp 
        end
       end
-      @data
+
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Member Shares Monitoring" },
+        { text: "No Certificates" }
+      ]
     end
 
     def no_certificatesx
@@ -140,6 +155,12 @@ module Administration
         .order(date_of_issue: :desc)
         .page(params[:page])
         .per(LIST_PAGE_SIZE)
+
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Member Shares Monitoring" },
+        { text: "Not Printed" }
+      ]
     end
 
     def printed
@@ -163,6 +184,12 @@ module Administration
       end
 
       @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
+
+      @subheader_items = [
+        { text: "Administration" },
+        { text: "Member Shares Monitoring" },
+        { text: "Printed" }
+      ]
     end
   end
 end

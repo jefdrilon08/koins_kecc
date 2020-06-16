@@ -1,34 +1,17 @@
-= render partial: "show_header"
+.row
+  .col
+    .card
+      .card-body
+        - if @savings_insurance_transfer_collection.pending?
+          = render partial: "show_pending_actions"
+          .message
+        %hr
+        - if @records.size == 0
+          %p
+            No records found
+        - else
+          = render partial: "show_list", locals: { records: @records }
+        = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_hash }
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @savings_insurance_transfer_collection.pending?
-            = render partial: "show_pending_actions"
-            .message
-          %hr
-          - if @records.size == 0
-            %p
-              No records found
-          - else
-            = render partial: "show_list", locals: { records: @records }
-          = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_hash }
-
-#parameters{ data: { id: "#{@savings_insurance_transfer_collection.id}" } }
 = render partial: "savings_insurance_transfer_collections/modals/approve"
 = render partial: "shared/errors_template"
-
-= javascript_include_tag "savings_insurance_transfer_collections/Show"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-    var id                = $("#parameters").data("id");
-
-    Show.init({
-      id: id,
-      authenticityToken: authenticityToken
-    });
-  });

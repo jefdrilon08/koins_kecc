@@ -1,20 +1,10 @@
 = title
-= render partial: "index_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @accounting_codes.any?
-            = render partial: "index_list"
-          - else
-            %p
-              No Accounting codes found
-
-= javascript_include_tag "accounting/accounting_codes/Index"
-
-:javascript
-  $(document).ready(function() {
-    Index.init();
-  });
+.row
+  .col
+    .card
+      .card-body
+        - if @accounting_codes.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No Accounting codes found

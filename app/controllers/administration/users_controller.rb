@@ -5,10 +5,44 @@ module Administration
 
     def index
       @users  = User.select("*")
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          text: "Users"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          id: "btn-new",
+          link: new_administration_user_path,
+          class: "fa fa-plus",
+          text: "New User"
+        }
+      ]
     end
 
     def new
       @user = User.new
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_users_path,
+          text: "Users"
+        },
+        {
+          text: "New User"
+        }
+      ]
+
+      @subheader_side_actions = []
     end
 
     def create
@@ -17,23 +51,90 @@ module Administration
       if @user.save
         redirect_to administration_user_path(@user)
       else
+        @subheader_items = [
+          {
+            text: "Administration"
+          },
+          {
+            is_link: true,
+            path: administration_users_path,
+            text: "Users"
+          },
+          {
+            text: "New User"
+          }
+        ]
+
+        @subheader_side_actions = []
+
         render :new
       end
     end
 
     def edit
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_users_path,
+          text: "Users"
+        },
+        {
+          text: "Edit User: #{@user.id}"
+        }
+      ]
+
+      @subheader_side_actions = []
     end
 
     def update
       if @user.update(user_params)
         redirect_to administration_user_path(@user)
       else
+        @subheader_items = [
+          {
+            text: "Administration"
+          },
+          {
+            is_link: true,
+            path: administration_users_path,
+            text: "Users"
+          },
+          {
+            text: "Edit User: #{@user.id}"
+          }
+        ]
+
+        @subheader_side_actions = []
+
         render :edit
       end
     end
 
     def show
       @user_demerits  = @user.user_demerits
+
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          is_link: true,
+          path: administration_users_path,
+          text: "Users"
+        },
+        {
+          text: "User: #{@user.id}"
+        }
+      ]
+
+      @subheader_side_actions = []
+
+      @payload = {
+        id: @user.id
+      }
     end
 
     private

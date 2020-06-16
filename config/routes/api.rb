@@ -107,6 +107,7 @@ namespace :api do
     post "/loans/new_adjustment", to: "loans#new_adjustment"
     post "/loans/delete_adjustment", to: "loans#delete_adjustment"
     post "/loans/approve_adjustment", to: "loans#approve_adjustment"
+    post "/loans/restructure", to: "loans#restructure"
     get "/loans/fetch", to: "loans#fetch"
 
     # Branches
@@ -122,9 +123,6 @@ namespace :api do
     # Centers
     get "/centers", to: "centers#index"
     get "/centers/centers", to: "centers#centers"
-
-    # Print Services
-    post "/print/generate_file", to: "print#generate_file"
 
     # Billing
     post "/billings", to: "billings#create"
@@ -212,6 +210,16 @@ namespace :api do
     get "/insurance_withdrawal_collections/fetch_members", to: "insurance_withdrawal_collections#fetch_members"
     post "/insurance_withdrawal_collections/add_member", to: "insurance_withdrawal_collections#add_member"
     post "/insurance_withdrawal_collections/remove_member", to: "insurance_withdrawal_collections#remove_member"
+
+    # Equity Withdrawal Collection
+    post "/equity_withdrawal_collections", to: "equity_withdrawal_collections#create"
+    post "/equity_withdrawal_collections/modify_transaction_record", to: "equity_withdrawal_collections#modify_transaction_record"
+    post "/equity_withdrawal_collections/approve", to: "equity_withdrawal_collections#approve"
+    post "/equity_withdrawal_collections/update_particular", to: "equity_withdrawal_collections#update_particular"
+    get "/equity_withdrawal_collections/fetch", to: "equity_withdrawal_collections#fetch"
+    get "/equity_withdrawal_collections/fetch_members", to: "equity_withdrawal_collections#fetch_members"
+    post "/equity_withdrawal_collections/add_member", to: "equity_withdrawal_collections#add_member"
+    post "/equity_withdrawal_collections/remove_member", to: "equity_withdrawal_collections#remove_member"
 
     # Insurance Fund Transfer Collection
     post "/insurance_fund_transfer_collections", to: "insurance_fund_transfer_collections#create"

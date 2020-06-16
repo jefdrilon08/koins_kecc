@@ -28,6 +28,15 @@ class DepositCollectionsController < ApplicationController
     end
     
     @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
+
+    @subheader_items = [
+      { text: "Cash Management" },
+      { text: "Deposits" }
+    ]
+
+    @subheader_side_actions = [
+      { id: "btn-new-transaction", link: "#", class: "fa fa-plus", text: "New Transaction" }
+    ]
   end
 
   def show
@@ -44,6 +53,92 @@ class DepositCollectionsController < ApplicationController
                           @deposit_collection.id
                         ).order("created_at DESC")
     end
+
+    @subheader_items = [
+      {
+        text: "Cash Management"
+      },
+      {
+        is_link: true,
+        path: deposit_collections_path,
+        text: "Deposits"
+      },
+      {
+        text: "Deposit: #{@deposit_collection.id}"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        id: "btn-print-accounting-entry",
+        link: "#",
+        class: "fa fa-print",
+        text: "Print Accounting Entry"
+      },
+      {
+        id: "btn-print",
+        link: "#",
+        class: "fa fa-print",
+        text: "Print"
+      }
+    ]
+
+    if @deposit_collection.pending?
+      @subheader_side_actions << {
+        id: "btn-load-branch",
+        link: "#",
+        class: "fa fa-sync",
+        text: "Load Branch"
+      }
+
+      @subheader_side_actions << {
+        id: "btn-load-center",
+        link: "#",
+        class: "fa fa-sync",
+        text: "Load Center"
+      }
+    end
+
+    if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK") || current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("REMOTE-FM"))
+      @subheader_side_actions << {
+        class: "fa fa-times",
+        link: deposit_collection_path(@deposit_collection.id),
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      }
+    end
+
+    if @deposit_collection.pending? && !@deposit_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
+      @subheader_side_actions << {
+        id: "btn-finalize",
+        class: "fa fa-check",
+        link: "#",
+        text: "Finalize"
+      }
+    end
+
+    if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
+      if Settings.activate_microinsurance and @deposit_collection.finalized?
+        @subheader_side_actions << {
+          id: "btn-approve",
+          class: "fa fa-check",
+          link: "#",
+          text: "Approve"
+        }
+      else
+        @subheader_side_actions << {
+          id: "btn-approve",
+          class: "fa fa-check",
+          link: "#",
+          text: "Approve"
+        }
+      end
+    end
+
+    @payload = {
+      id: @deposit_collection.id,
+      centers: helpers.fetch_centers(@deposit_collection.branch)
+    }
   end
 
   def destroy

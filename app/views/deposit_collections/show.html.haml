@@ -1,56 +1,53 @@
 = title @deposit_collection.id
-= render partial: "show_header"
+.row
+  .col
+    .card
+      .card-body
+        - if @deposit_collection.pending?
+          .c-callout.c-callout-info
+            %p
+              Pindutin ang amount upang baguhin ito.
+        %h5
+          Deposit Collection for #{@deposit_collection.branch} / #{@deposit_collection.center} - #{@deposit_collection.collection_date.strftime("%b %d, %Y")} #{@deposit_collection.approved? ? "/ Approved on #{@deposit_collection.date_approved.strftime("%b %d, %Y")}" : ""}
+        #react-root
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @deposit_collection.pending?
-            .callout.callout-info
-              %p
-                Pindutin ang amount upang baguhin ito.
-          %h5
-            Deposit Collection for #{@deposit_collection.branch} / #{@deposit_collection.center} - #{@deposit_collection.collection_date.strftime("%b %d, %Y")} #{@deposit_collection.approved? ? "/ Approved on #{@deposit_collection.date_approved.strftime("%b %d, %Y")}" : ""}
-          #deposit-collection-content
+        #settings
+          .row
+            .col-md-6.col-xs-12
+              %h5
+                Accounting Entry Settings
+              .card
+                .card-body
+                  %p
+                    Currently book: #{@deposit_collection.book}
+                  .row
+                    .col-md-8.col-xs-12
+                      = select_tag :book, options_for_select(["CRB", "JVB"], @deposit_collection.book), class: "form-control select-select2", id: "select-book"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-book.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Use Book
+                  .message
+            .col-md-6.col-xs-12
+              %h5
+                Cash Management Template
+              .card
+                .card-body
+                  %p
+                    Currently being used: #{@deposit_collection.cash_management_template}
+                  .row
+                    .col-md-8.col-xs-12
+                      = select_tag :cash_management_template, options_for_select(cash_management_templates, @deposit_collection.cash_management_template), class: "form-control select-select2", id: "select-cash-management-template", prompt: "-- SELECT --"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-cash-management-template.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Use Template
+                  .message
 
-          #settings
-            .row
-              .col-md-6.col-xs-12
-                %h5
-                  Accounting Entry Settings
-                .card
-                  .card-body
-                    %p
-                      Currently book: #{@deposit_collection.book}
-                    .row
-                      .col-md-8.col-xs-12
-                        = select_tag :book, options_for_select(["CRB", "JVB"], @deposit_collection.book), class: "form-control select-select2", id: "select-book"
-                      .col-md-4.col-xs-12
-                        #btn-confirm-book.btn.btn-block.btn-warning
-                          .fa.fa-sync
-                          Use Book
-                    .message
-              .col-md-6.col-xs-12
-                %h5
-                  Cash Management Template
-                .card
-                  .card-body
-                    %p
-                      Currently being used: #{@deposit_collection.cash_management_template}
-                    .row
-                      .col-md-8.col-xs-12
-                        = select_tag :cash_management_template, options_for_select(cash_management_templates, @deposit_collection.cash_management_template), class: "form-control select-select2", id: "select-cash-management-template", prompt: "-- SELECT --"
-                      .col-md-4.col-xs-12
-                        #btn-confirm-cash-management-template.btn.btn-block.btn-warning
-                          .fa.fa-sync
-                          Use Template
-                    .message
-
-          - if debug?
-            %pre
-              %code
-                #{JSON.pretty_generate(JSON.parse(@deposit_collection.to_json))}
+        - if debug?
+          %pre
+            %code
+              #{JSON.pretty_generate(JSON.parse(@deposit_collection.to_json))}
 
 = render partial: "shared/modals/print"
 = render partial: "deposit_collections/modals/approve"
@@ -58,20 +55,3 @@
 = render partial: "deposit_collections/modals/load_branch"
 = render partial: "deposit_collections/modals/load_center"
 = render partial: "templates/error_list"
-
-#parameters{ data: { id: @deposit_collection.id, centers: fetch_centers(@deposit_collection.branch).to_json } }
-
-= javascript_include_tag "DepositCollectionUI.min.react"
-= javascript_include_tag "deposit_collections/Show"
-
-:javascript
-  $(document).ready(function() {
-    var $parameters                   = $("#parameters");
-    var depositCollectionId = $parameters.data('id');
-    var authenticityToken             = $("meta[name='csrf-token']").attr('content');
-
-    Show.init({
-      depositCollectionId: depositCollectionId, 
-      authenticityToken: authenticityToken
-    });
-  });

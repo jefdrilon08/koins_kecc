@@ -5,11 +5,17 @@ module Adjustments
         @config = config
         @branch = @config[:branch]
         @user   = @config[:user]
+
+        @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
       end
 
       def execute!
         @meta = {
-          date_generated: Date.today,
+          date_generated: @current_date,
           branch: {
             id: @branch.id,
             name: @branch.name
@@ -22,7 +28,7 @@ module Adjustments
           accounting_entry: {
             book: "JVB",
             reference_number: "",
-            date_prepared: Date.today.strftime("%B %d, %Y"),
+            date_prepared: @current_date,
             company_name: Settings.company_name,
             branch: @branch.to_s.upcase,
             prepared_by: @user.to_s,

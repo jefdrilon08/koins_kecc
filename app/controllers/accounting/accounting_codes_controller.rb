@@ -29,6 +29,38 @@ module Accounting
 
     def index
       @accounting_codes = AccountingCode.select("*").order("code ASC")
+
+      @subheader_items = [
+        {
+          text: "Accounting"
+        },
+        {
+          text: "Chart of Accounts"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          link: accounting_download_accounting_codes_path,
+          class: "fa fa-download",
+          text: "Download"
+        },
+        {
+          link: "/accounting/print_chart_of_accounts",
+          class: "fa fa-print",
+          text: "Print"
+        },
+        {
+          link: new_accounting_accounting_code_path,
+          class: "fa fa-plus",
+          text: "New Accounting Code"
+        },
+        {
+          link: "/accounting/download_excel_chart_of_accounts",
+          class: "fa fa-download",
+          text: "Excel"
+        }
+      ]
     end
 
     def print
@@ -39,6 +71,22 @@ module Accounting
 
     def new
       @accounting_code  = AccountingCode.new
+
+      @subheader_items = [
+        {
+          text: "Accounting"
+        },
+        {
+          is_link: true,
+          path: accounting_accounting_codes_path,
+          text: "Chart of Accounts"
+        },
+        {
+          text: "New Accounting Code"
+        }
+      ]
+
+      @subheader_side_actions = []
     end
 
     def create
@@ -47,22 +95,90 @@ module Accounting
       if @accounting_code.save
         redirect_to accounting_accounting_code_path(@accounting_code)
       else
+        @subheader_items = [
+          {
+            text: "Accounting"
+          },
+          {
+            is_link: true,
+            path: accounting_accounting_codes_path,
+            text: "Chart of Accounts"
+          },
+          {
+            text: "New Accounting Code"
+          }
+        ]
+
         render :new
       end
     end
 
     def edit
+      @subheader_items = [
+        {
+          text: "Accounting"
+        },
+        {
+          is_link: true,
+          path: accounting_accounting_codes_path,
+          text: "Chart of Accounts"
+        },
+        {
+          text: "Edit: #{@accounting_code}"
+        }
+      ]
     end
 
     def update
       if @accounting_code.update(accounting_code_params)
         redirect_to accounting_accounting_code_path(@accounting_code)
       else
+        @subheader_items = [
+          {
+            text: "Accounting"
+          },
+          {
+            is_link: true,
+            path: accounting_accounting_codes_path,
+            text: "Chart of Accounts"
+          },
+          {
+            text: "Edit: #{@accounting_code}"
+          }
+        ]
+
         render :edit
       end
     end
 
     def show
+      @subheader_items = [
+        {
+          text: "Accounting"
+        },
+        {
+          is_link: true,
+          path: accounting_accounting_codes_path,
+          text: "Chart of Accounts"
+        },
+        {
+          text: "Accounting Code: #{@accounting_code}"
+        }
+      ]
+
+      @subheader_side_actions = [
+        {
+          link: edit_accounting_accounting_code_path(@accounting_code),
+          class: "fa fa-pencil-alt",
+          text: "Edit"
+        },
+        {
+          link: accounting_accounting_code_path(@accounting_code),
+          data: { method: :delete, confirm: "Are you sure?" },
+          class: "fa fa-times",
+          text: "Delete"
+        }
+      ]
     end
 
     def destroy

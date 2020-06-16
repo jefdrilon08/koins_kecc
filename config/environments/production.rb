@@ -24,7 +24,7 @@ Rails.application.configure do
 
   # Compress JavaScripts and CSS.
   #config.assets.js_compressor = :uglifier
-  config.assets.js_compressor = Uglifier.new(harmony: true)
+  #config.assets.js_compressor = Uglifier.new(harmony: true)
 
   # config.assets.css_compressor = :sass
 
@@ -73,6 +73,7 @@ Rails.application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
+  config.action_view.raise_on_missing_translations = false
   config.i18n.fallbacks = true
 
   # Send deprecation notices to registered listeners.

@@ -1,8 +1,7 @@
-= render partial: "new_header"
+= title
 
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "form", locals: { user: @user }
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "form", locals: { user: @user }

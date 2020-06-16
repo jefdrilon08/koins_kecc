@@ -1,15 +1,13 @@
 = title @savings_account.id
-= render partial: "show_header"
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "show_details"
-          - if @savings_account.time_deposit?
-            = render partial: "show_time_deposit_actions"
-            = render partial: "show_time_deposit_display"
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "show_details"
+        = paginate @account_transactions
+        - if @savings_account.time_deposit?
+          = render partial: "show_time_deposit_actions"
+          = render partial: "show_time_deposit_display"
 
 = render partial: "savings_accounts/modals/sync_maintaining_balance"
 = render partial: "savings_accounts/modals/request_time_deposit_withdrawal"
@@ -17,19 +15,3 @@
 = render partial: "savings_accounts/modals/approve_withdrawal_request"
 = render partial: "shared/modals/print"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "savings_accounts/Show.js"
-
-#parameters{ data: { id: @savings_account.id } }
-
-:javascript
-  $(document).ready(function() {
-    var $parameters       = $("#parameters");
-    var id                = $parameters.data("id");
-    var authenticityToken = $('meta[name="csrf-token"]').attr( 'content' );
-
-    Show.init({
-      id: id,
-      authenticityToken: authenticityToken
-    });
-  });

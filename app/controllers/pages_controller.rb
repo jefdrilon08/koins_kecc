@@ -6,6 +6,26 @@ class PagesController < ApplicationController
       .pending
       .where(branch_id: @branches.pluck(:id))
       .count
+
+    @payload = {
+      username: current_user.username,
+      roles: current_user.roles
+    }
+
+    @subheader_items = [
+      { text: "Operations" }
+    ]
+
+    @subheader_side_actions = [
+      { link: member_form_path, class: "fa fa-plus", text: "New Member" },
+      { link: members_path(status: "pending"), class: "fa fa-arrow-right", text: "Pending Records (#{@pending_members_count})" }
+    ]
+  end
+
+  def change_password
+    @subheader_items = [
+      { text: "Change Password" }
+    ]
   end
 
   def download_backup
@@ -38,6 +58,13 @@ class PagesController < ApplicationController
     render "dashboard/finance"
   end
 
+  def blip_summary
+    @branches = Branch.all
+    @as_of = params[:as_of].try(:to_date) || Date.today
+
+    @records = Pages::BuildClaimsCounts.new(branches: @branches, as_of: @as_of).execute!
+  end
+
   def insights
     @end_date   = Date.today
     @start_date = @end_date - 7.days
@@ -54,6 +81,23 @@ class PagesController < ApplicationController
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
     end
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Members for Exit Age"
+      }
+    ]
+
+    @subheader_side_actions = [
+      {
+        link: download_exit_age_path,
+        class: "fa fa-download",
+        text: "Download"
+      }
+    ]
   end
 
   def lapsed_members
@@ -69,10 +113,36 @@ class PagesController < ApplicationController
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
     end
+
+    @members  = @members.order("last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Lapsed Members"
+      }
+    ]
+
+    @subheader_side_actions = [
+    ]
   end
 
   def members_for_reinsurance
     @members = Insurance::FetchMembersForReinsurance.new.execute!
+
+    @subheader_items = [
+      {
+        text: "Microinsurance"
+      },
+      {
+        text: "Members for Reinsurance"
+      }
+    ]
+
+    @subheader_side_actions = [
+    ]
   end
 
   def download_exit_age
@@ -88,35 +158,77 @@ class PagesController < ApplicationController
   end
 
   def export_tools
+    @subheader_items = [
+      { text: "Export Tools" }
+    ]
   end
 
   def billing_per_center
     @centers  = @branches.first.centers.order("name ASC")
+
+    @subheader_items = [
+      { text: "Billing Per Center" }
+    ]
   end
 
   def upload_deposit
+    @subheader_items = [
+      { text: "Upload Insurance Deposit" }
+    ]
   end
 
   def upload_insurance_withdrawal
+    @subheader_items = [
+      { text: "Upload Insurance Withdrawal" }
+    ]
   end
 
   def upload_fund_transfer
+    @subheader_items = [
+      { text: "Upload Fund Transfer" }
+    ]
   end
 
   def import_members
+    @subheader_items = [
+      { text: "Import Members" }
+    ]
   end
 
   def import_beneficiaries
+    @subheader_items = [
+      { text: "Import Beneficiaries" }
+    ]
   end
 
   def import_legal_dependents
+    @subheader_items = [
+      { text: "Import Legal Dependents" }
+    ]
   end
 
   def import_insurance_accounts
+    @subheader_items = [
+      { text: "Import Insurance Accounts" }
+    ]
   end
 
   def import_insurance_account_transactions
     @records  = DataStore.import_insurance_account_transactions.order("created_at DESC").page(params[:page]).per(35)
+
+    @subheader_items = [
+      { text: "Import Insurance Account Transactions" }
+    ]
+  end
+
+  def seriatim
+    @subheader_items = [
+      {
+        text: "Seriatim Report"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def seriatim_report
@@ -132,6 +244,16 @@ class PagesController < ApplicationController
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def validations
+    @subheader_items = [
+      {
+        text: "Validations Report"
+      }
+    ]
+
+    @subheader_side_actions = []
   end
 
   def validations_report
@@ -153,6 +275,15 @@ class PagesController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def daily_report_insurance_account_status
+    @subheader_items = [
+      {
+        text: "Insurance Account Status"
+      }
+    ]
+
+    @subheader_side_actions = []
+  end
 
   def daily_report_insurance_account_status_excel
     branch = params[:branch]

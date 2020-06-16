@@ -14,8 +14,9 @@
       = select_tag :member_id, options_for_select(@members.includes(:center).collect{ |o| [o.full_name_with_center, o.id] }), class: "select-select2 form-control js-searchable", id: "member-select"
   .col-md-2
     .form-group
-      .pull-right
-        %br
-        = link_to "#", class: "btn btn-primary", id: "btn-add-member" do
-          .fa.fa-plus
-          Add Member
+      %label
+        Actions
+      %br
+      = link_to "#", class: "btn btn-primary", id: "btn-add-member" do
+        .fa.fa-plus
+        Add Member

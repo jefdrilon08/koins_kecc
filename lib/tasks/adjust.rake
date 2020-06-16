@@ -2077,4 +2077,122 @@ namespace :adjust do
       puts "Done!"
     end
   end
+
+  task :insert_equity_value_to_life_transactions => :environment do
+    puts "Inserting ..."
+    
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", member_account_ids, "approved").order("updated_at DESC")
+
+    size = account_transactions.count
+
+    account_transactions.each_with_index do |at, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for transaction #{at.id}... #{progress}%%")  
+
+      at_data = at.data.with_indifferent_access
+      ev_amount = at_data[:ending_balance].to_f / 2
+      at_data[:equity_value] = ev_amount
+      at.update!(data: at_data)
+    end
+
+    puts "\nDone!"
+  end
+
+  task :insert_equity_value_to_life_account => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |ma, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
+
+      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
+        
+      if !last_transaction.nil?  
+        latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
+        if !ma.member_id.nil?
+          if ma.data.nil?
+            ma.data = { equity_value: latest_ev_amount }
+            ma.save!
+          else
+            ma_data = ma.data.with_indifferent_access
+            ma_data[:equity_value] = latest_ev_amount
+            ma.update!(data: ma_data)
+          end
+        end
+      end
+    end 
+
+    puts "\nDone!"
+  end
+
+  task :insert_equity_value_to_life_last_transaction => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |ma, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
+
+      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
+        
+      if !last_transaction.nil?  
+        at_data = last_transaction.data.with_indifferent_access
+        ev_amount = at_data[:ending_balance].to_f / 2
+        at_data[:equity_value] = ev_amount
+        last_transaction.update!(data: at_data)
+      end
+    end 
+
+    puts "\nDone!"
+  end
+
+  task :update_ev_and_policy_loan_value_for_validation_record => :environment do
+    puts "Updating ..."
+    member_account_validations = MemberAccountValidation.all
+
+    if ENV['BRANCH_ID'].present?
+      member_account_validations = member_account_validations.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    member_account_validations.each do |member_account_validation|
+      member_account_validation.member_account_validation_records.each do |member_account_validation_record|
+        
+        if member_account_validation_record.policy_loan.nil?
+          member_account_validation_record.update!(policy_loan: 0.00)
+        end
+
+        if member_account_validation_record.equity_value.nil?
+          member_account_validation_record.update!(equity_value: 0.00)
+        end        
+      end
+    end
+      
+    puts "Done"
+  end
 end
