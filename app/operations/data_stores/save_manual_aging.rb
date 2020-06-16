@@ -36,7 +36,6 @@ module DataStores
         manual_aging: true
       }
 
-      #@data = ::Branches::ComputeRepaymentRates.new(config: config).execute!
       @data = ::Branches::ComputeRr.new(config: config).execute!
 
       @data_store.meta    = @meta

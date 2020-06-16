@@ -5,7 +5,7 @@ module Api
         before_action :authenticate_user!
 
         def fetch
-          record  = DataStore.repayment_rates.where(id: params[:id]).first
+          record  = ReadOnlyDataStore.repayment_rates.where(id: params[:id]).first
 
           if record.blank?
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400

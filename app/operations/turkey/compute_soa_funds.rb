@@ -29,7 +29,7 @@ module Turkey
         EOS
       end
 
-      ActiveRecord::Base.connection.execute(<<-EOS).to_a
+      ReadOnlyDataStore.connection.execute(<<-EOS).to_a
         SELECT
           ma.account_type,
           ma.account_subtype,

@@ -27,7 +27,7 @@ module Api
                            @branches.first
                          end
 
-        rr = DataStore
+        rr = ReadOnlyDataStore
           .repayment_rates
           .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
           .order("(meta->>'as_of')::date ASC")
@@ -38,7 +38,7 @@ module Api
           watchlist          = ::DataStores::BuildWatchlistFromRr.new(records: rr.data["records"], as_of: rr.data["as_of"]).execute!
         end
 
-        member_counts = DataStore
+        member_counts = ReadOnlyDataStore
           .member_counts
           .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
           .order("(meta->>'as_of')::date ASC")

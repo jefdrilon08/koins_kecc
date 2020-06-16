@@ -17,7 +17,7 @@ module Turkey
     end
 
     def run
-      ActiveRecord::Base.connection.execute(<<-EOS).to_a
+      ReadOnlyDataStore.connection.execute(<<-EOS).to_a
         SELECT DISTINCT ON (m.last_name, m.first_name, m.id, ma.account_subtype)
           at.data ->> 'ending_balance' AS ending_balance,
           at.transacted_at,
