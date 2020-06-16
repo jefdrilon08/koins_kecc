@@ -31,8 +31,6 @@ module DataStores
         as_of: @as_of
       }
 
-      @data = ::Branches::ComputeRepaymentRates.new(config: config).execute!
-
       # Save this as a file in s3 (on disk if local) via active storage
       @data = ::Branches::ComputeRr.new(config: config).execute!
 
