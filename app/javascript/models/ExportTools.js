@@ -1,24 +1,23 @@
 import Mustsache from "mustache/mustache";
 
-var $branch = $("#select-branch");
-var $startDate = $("#filter-start-date");
-var $endDate = $("#filter-end-date");
-var $btnDownloadMember  = $("#export-member-segment-csv").find(".btn-download-members-csv");
-var $btnDownloadBeneficiary  = $("#export-member-segment-csv").find(".btn-download-beneficiaries-csv");
-var $btnDownloadDependent  = $("#export-member-segment-csv").find(".btn-download-dependents-csv");
-var $btnDownloadMemberAccount  = $("#export-transaction-segment-csv").find(".btn-download-member-accounts-csv");
-var $btnDownloadAccountTransaction  = $("#export-transaction-segment-csv").find(".btn-download-account-transactions-csv");
+var $branch;
+var $startDate;
+var $endDate;
+var $btnDownloadMember;
+var $btnDownloadBeneficiary;
+var $btnDownloadDependent;
+var $btnDownloadMemberAccount;
+var $btnDownloadAccountTransaction;
+var $btnDownloadMemberPerBranch;
+var $btnDownloadMembersWithBenefeciaries;
 
-var urlExportMember     = "/exports/members";
-var urlExportBeneficiary     = "/exports/beneficiaries";
-var urlExportLegalDependent     = "/exports/legal_dependents";
-var urlExportMemberAccount     = "/exports/member_accounts";
-var urlExportAccountTransaction     = "/exports/account_transactions";
-
-var urlExportMemberPerBranch                                                       = "/exports/members_per_branch_excel";
-var $btnDownloadMemberPerBranch = $("#export-member-per-branch-segment").find(".btn-download-member-per-branch");
+var urlExportMember                   = "/exports/members";
+var urlExportBeneficiary              = "/exports/beneficiaries";
+var urlExportLegalDependent           = "/exports/legal_dependents";
+var urlExportMemberAccount            = "/exports/member_accounts";
+var urlExportAccountTransaction       = "/exports/account_transactions";
+var urlExportMemberPerBranch          = "/exports/members_per_branch_excel";
 var urlExportMembersWithBeneficiaries = "/exports/members_with_beneficiaries_excel";
-var $btnDownloadMembersWithBenefeciaries = $("#export-members-with-beneficiaries-segment").find(".btn-download-members-with-beneficiaries");
 
 var encodeQueryData = function(data) {
   var ret = []
@@ -29,7 +28,21 @@ var encodeQueryData = function(data) {
   return ret.join("&");
 };
 
+var _cacheDom = function() {
+  $branch = $("#select-branch");
+  $startDate = $("#filter-start-date");
+  $endDate = $("#filter-end-date");
+  $btnDownloadMember  = $("#export-member-segment-csv").find(".btn-download-members-csv");
+  $btnDownloadBeneficiary  = $("#export-member-segment-csv").find(".btn-download-beneficiaries-csv");
+  $btnDownloadDependent  = $("#export-member-segment-csv").find(".btn-download-dependents-csv");
+  $btnDownloadMemberAccount  = $("#export-transaction-segment-csv").find(".btn-download-member-accounts-csv");
+  $btnDownloadAccountTransaction  = $("#export-transaction-segment-csv").find(".btn-download-account-transactions-csv");
+  $btnDownloadMemberPerBranch = $("#export-member-per-branch-segment").find(".btn-download-member-per-branch");
+  $btnDownloadMembersWithBenefeciaries = $("#export-members-with-beneficiaries-segment").find(".btn-download-members-with-beneficiaries");
+};
+
 var init  = function() {
+  _cacheDom();
 
   $btnDownloadMembersWithBenefeciaries.on('click', function() {
     var params    = {

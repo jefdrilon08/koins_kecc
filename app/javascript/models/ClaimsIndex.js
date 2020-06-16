@@ -46,7 +46,7 @@ var _bindEvents = function() {
       url: urlCreate,
       method: 'POST',
       data: {
-        authenticity_token: authenticityToken,
+        authenticity_token: _authenticityToken,
         member_id: memberId,
         claim_type: typeOfClaim
       },  

@@ -18,22 +18,17 @@
         .card-body
           - if @claim.claim_type == "BLIP"
             = render partial: "claims/form/blip_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "CLIP"
             = render partial: "claims/form/clip_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "HIIP"
             = render partial: "claims/form/hiip_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "K-KALINGA"
             = render partial: "claims/form/kalinga_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "CALAMITY ASSISTANCE"
             = render partial: "claims/form/calamity_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "K-BENTE"
             = render partial: "claims/form/kbente_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
             = render partial: "claims/form/scholarship_form", locals: { claim: @claim }
-            = render partial: "shared/errors_template"
+
+= render partial: "shared/errors_template"

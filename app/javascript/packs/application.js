@@ -98,7 +98,6 @@ import ValidationsReport from "../models/ValidationsReport.js";
 import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
 import Seriatim from "../models/Seriatim.js";
-import ClaimsIndex from "../models/ClaimsIndex.js";
 import AdministrationUsersIndex from "../models/AdministrationUsersIndex.js";
 import AdministrationLoanProductsShow from "../models/AdministrationLoanProductsShow.js";
 import AdministrationLoanProductsIndex from "../models/AdministrationLoanProductsIndex.js";
@@ -147,6 +146,7 @@ import ReportsClaims from "../models/ReportsClaims.js";
 import UserDemeritsShow from "../models/UserDemeritsShow.js";
 import EquityWithdrawalCollectionsIndex from "../models/EquityWithdrawalCollectionsIndex.js";
 import EquityWithdrawalCollectionsShow from "../models/EquityWithdrawalCollectionsShow.js";
+import ClaimsIndex from "../models/ClaimsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -274,7 +274,7 @@ const hooks = {
   "administration/user_demerits/show":                [UserDemeritsShow],
   "members/form_resignation":                         [FormResignationComponent],
   "equity_withdrawal_collections/index":              [EquityWithdrawalCollectionsIndex],
-  "equity_withdrawal_collections/show":               [EquityWithdrawalCollectionsShow, EquityWithdrawalCollectionUIComponent]
+  "equity_withdrawal_collections/show":               [EquityWithdrawalCollectionsShow, EquityWithdrawalCollectionUIComponent],
 }
 
 document.addEventListener("DOMContentLoaded", () => {
