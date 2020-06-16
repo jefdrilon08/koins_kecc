@@ -17,13 +17,13 @@ module Loans
     end
 
     def execute!
-      @paid_loans = Loan.paid.where(
+      @paid_loans = ReadOnlyLoan.paid.where(
                       "date_approved <= ? AND date_completed > ?",
                       @as_of,
                       @as_of
                     )
 
-      @active_loans = Loan.active.where(
+      @active_loans = ReadOnlyLoan.active.where(
                         "date_approved <= ?",
                         @as_of
                       )
@@ -48,7 +48,7 @@ module Loans
         @active_loans = @active_loans.where(loan_product_id: @loan_product.id)
       end
 
-      @loans  = Loan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
+      @loans  = ReadOnlyLoan.where(id: [@paid_loans.pluck(:id) + @active_loans.pluck(:id)])
 
       @loans
     end

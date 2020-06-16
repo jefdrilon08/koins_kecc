@@ -242,7 +242,7 @@ module Branches
     end
 
     def query!
-      @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+      @result = ReadOnlyDataStore.connection.execute(<<-EOS).to_a
                   SELECT
                     members.id,
                     members.identification_number,
