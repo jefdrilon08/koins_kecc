@@ -64,6 +64,9 @@ module Api
                             branch_name: branch.name,
                             as_of: as_of,
                             data_store_type: data_store_type
+                          },
+                          data: {
+                            status: "processing"
                           }
                         )
             end
