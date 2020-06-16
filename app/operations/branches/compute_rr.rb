@@ -276,7 +276,7 @@ module Branches
     end
 
     def query_result!
-      @result = ActiveRecord::Base.establish_connection(ENV['FOLLOWER_READ_ONLY_DATABASE_URL']).connection.execute(<<-EOS).to_a
+      @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                   SELECT
                     loans.id,
                     loans.pn_number,
