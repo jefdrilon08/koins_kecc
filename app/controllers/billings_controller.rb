@@ -25,7 +25,7 @@ class BillingsController < ApplicationController
       @billings = @billings.where(status: @status)
     end
 
-    @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(100)
+    @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(LIST_PAGE_SIZE)
 
     @subheader_items = [
       { text: "Billings" }

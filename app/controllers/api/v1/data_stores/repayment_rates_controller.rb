@@ -11,6 +11,7 @@ module Api
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
           else
             records = record.data.with_indifferent_access[:records]
+            #records = record.data_json_dump_url
 
             if params[:center_id].present?
               records = records.select{ |o|
@@ -63,9 +64,6 @@ module Api
                             branch_name: branch.name,
                             as_of: as_of,
                             data_store_type: data_store_type
-                          },
-                          data: {
-                            status: "processing"
                           }
                         )
             end

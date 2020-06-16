@@ -8,7 +8,7 @@ module Print
       @start_date = @config[:start_date]
       @end_date   = @config[:end_date]
       @branch     = @config[:branch]
-      @book       = @config[:book]
+      @book       = @config[:book].try(:upcase)
 
       if @book == "JVB"
         @book_display = "General Journal"
