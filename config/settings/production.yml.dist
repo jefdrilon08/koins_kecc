@@ -16,13 +16,13 @@ branch_config:
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
 
 #north 2    
   -
@@ -37,10 +37,10 @@ branch_config:
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-04-30"
+    current_date: "2020-05-29"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
     current_date: "2020-05-29"
