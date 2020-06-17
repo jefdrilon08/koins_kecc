@@ -23,7 +23,7 @@ module DataStores
 
       if !@record.error?
         @subheader_items << {
-          text: "#{@record.data["branch"]["name"]} - #{@record.data["as_of"].to_date.strftime("%B %d, %Y")}"
+          text: "#{@record.meta["branch_name"]} - #{@record.meta["as_of"].to_date.strftime("%B %d, %Y")}"
         }
       end
 
