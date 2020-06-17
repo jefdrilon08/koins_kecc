@@ -85,7 +85,7 @@ class DataStoreController < ApplicationController
   end
 
   def branch_data_stores
-    ReadOnlyDataStore.send(data_store_scope)
+    DataStore.send(data_store_scope)
   end
 
   def list_query_config
