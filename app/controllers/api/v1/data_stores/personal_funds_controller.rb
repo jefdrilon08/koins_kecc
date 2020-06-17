@@ -5,7 +5,7 @@ module Api
         before_action :authenticate_user!
 
         def download_excel
-          record = DataStore.personal_funds.where(id: params[:id]).first
+          record = ReadOnlyDataStore.personal_funds.where(id: params[:id]).first
 
           if record.blank?
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
@@ -37,7 +37,7 @@ module Api
         end
 
         def fetch
-          @record = DataStore.personal_funds.where(id: params[:id]).first
+          @record = ReadOnlyDataStore.personal_funds.find_by_id(params[:id])
 
           if @record.blank?
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
@@ -107,7 +107,6 @@ module Api
           end
         end
       end
-      
     end
   end
 end
