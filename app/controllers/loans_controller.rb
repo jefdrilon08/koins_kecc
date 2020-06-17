@@ -2,7 +2,7 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans            = Loan.includes(:center, :branch, :member, :loan_product)
+    @loans            = ReadOnlyLoan.includes(:center, :branch, :member, :loan_product)
                             .where("loans.branch_id IN (?)", @branches.pluck(:id))
     @q                = params[:q]
     @status           = params[:status]
@@ -12,7 +12,7 @@ class LoansController < ApplicationController
     @centers  = @branches.first.centers
 
     if @q.present?
-      @members  = Member.where(
+      @members  = ReadOnlyMember.where(
                     "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND members.branch_id IN (:b)",
                     q: "#{@q.upcase}%",
                     b: @branches.pluck(:id)
@@ -93,17 +93,17 @@ class LoansController < ApplicationController
   end
 
   def show
-    @loan                   = Loan.find(params[:id])
+    @loan                   = ReadOnlyLoan.find(params[:id])
     @amortization_schedule  = @loan.amortization_schedule_entries.order(
                                 "due_date ASC"
                               )
 
-    @loan_payments  = AccountTransaction.approved_loan_payments.where(
+    @loan_payments  = ReadOnlyAccountTransaction.approved_loan_payments.where(
                         subsidiary_id: @loan.id,
                         subsidiary_type: "Loan"
                       )
 
-    @activity_logs  = ActivityLog.where(
+    @activity_logs  = ReadOnlyActivityLog.where(
                         "data ->> 'loan_id' = ?",
                         @loan.id
                       ).order("created_at DESC")

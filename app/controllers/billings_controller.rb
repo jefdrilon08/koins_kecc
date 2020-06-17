@@ -2,7 +2,7 @@ class BillingsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @billings = Billing
+    @billings = ReadOnlyBilling
       .includes(:center, :branch)
       .where(branch_id: @branches.pluck(:id))
 
@@ -11,12 +11,12 @@ class BillingsController < ApplicationController
     end
 
     if params[:branch_id].present?
-      @branch   = Branch.find(params[:branch_id])
+      @branch   = ReadOnlyBranch.find(params[:branch_id])
       @billings = @billings.where(branch_id: @branch.id)
     end
 
     if params[:center_id].present?
-      @center   = Center.find(params[:center_id])
+      @center   = ReadOnlyCenter.find(params[:center_id])
       @billings = @billings.where(center_id: @center.id)
     end
 
@@ -37,7 +37,7 @@ class BillingsController < ApplicationController
   end
 
   def show
-    @billing  = Billing.find(params[:id])
+    @billing  = ReadOnlyBilling.find(params[:id])
     @data     = @billing.data.with_indifferent_access
 
     @current_date = ::Utils::GetCurrentDate.new(
@@ -46,7 +46,7 @@ class BillingsController < ApplicationController
                       }
                     ).execute!
 
-    @activity_logs  = ActivityLog.where(
+    @activity_logs  = ReadOnlyActivityLog.where(
                         "data ->> 'billing_id' = ?",
                         @billing.id
                       ).order("created_at DESC")

@@ -13,6 +13,6 @@ class ActivityLog < ApplicationRecord
   validates :content, presence: true
 
   def user
-    User.where(id: self.data.with_indifferent_access[:user_id]).first
+    ReadOnlyUser.where(id: self.data.with_indifferent_access[:user_id]).first
   end
 end
