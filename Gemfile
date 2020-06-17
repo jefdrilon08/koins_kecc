@@ -6,7 +6,6 @@ ruby '2.7.1'
 gem 'rails', '~> 6.0'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma'
-#gem 'uglifier'
 gem 'sass-rails', '~> 5.0'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails'
@@ -32,6 +31,9 @@ gem 'tty-table'
 gem 'rollbar'
 gem 'httparty'
 gem 'rack-timeout'
+
+gem 'uglifier'
+gem 'sprockets'
 
 # Webpacker
 gem 'webpacker'

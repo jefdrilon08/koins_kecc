@@ -14,4 +14,10 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile += [
+  "claims/blip_form.js",
+  "claims/hiip_form.js",
+  "claims/kalinga_form.js",
+  "claims/kbente_form.js",
+  "claims/scholarship_form.js",
+  "claims/clip_form.js"
 ]
