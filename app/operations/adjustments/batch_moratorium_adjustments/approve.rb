@@ -11,7 +11,7 @@ module Adjustments
 
         @date_initialized = @data[:date_initialized].to_date
         @number_of_days   = @data[:number_of_days].to_i
-        @branch           = Branch.find(@meta[:branch][:id])
+        @branch           = ReadOnlyBranch.find(@meta[:branch][:id])
 
         @center_ids = Center.where(branch_id: @branch.id).pluck(:id)
 
@@ -19,7 +19,7 @@ module Adjustments
           @center_ids = [@meta[:center][:id]]
         end
 
-        @loan_ids = Loan.active.where(
+        @loan_ids = ReadOnlyLoan.active.where(
                       branch_id: @branch.id,
                       center_id: @center_ids
                     ).pluck(:id)

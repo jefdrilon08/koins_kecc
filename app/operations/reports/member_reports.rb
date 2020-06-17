@@ -142,6 +142,8 @@ module Reports
         record[:lif] = member.equity_value
         record[:rf] = member.rf_amount
         record[:status] = member.status
+        record[:insurance_status] = member.insurance_status
+        record[:identification_number] = member.identification_number
 
         @t_coverage += value
         @t_lif += member.equity_value

@@ -14,6 +14,7 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
 Rails.application.config.assets.precompile += [
+<<<<<<< HEAD
   "savings_insurance_transfer_collections/Index.js",
   "savings_insurance_transfer_collections/Show.js",
   "login.scss",
@@ -178,4 +179,10 @@ Rails.application.config.assets.precompile += [
   "claims/kbente_form.js",
   "claims/scholarship_form.js",
   "reports/ClaimReport.js"
+  "claims/blip_form.js",
+  "claims/hiip_form.js",
+  "claims/kalinga_form.js",
+  "claims/kbente_form.js",
+  "claims/scholarship_form.js",
+  "claims/clip_form.js"
 ]

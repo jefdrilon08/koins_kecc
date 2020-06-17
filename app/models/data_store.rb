@@ -1,8 +1,10 @@
 class DataStore < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   STATUSES = ["processing", "done", "error", "closed", "approved", "pending"]
 
   validates :meta, presence: true
-  validates :data, presence: true
+  #validates :data, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   scope :processing, -> { where(status: "processing") }
@@ -39,7 +41,14 @@ class DataStore < ApplicationRecord
   scope :time_deposit_autorenewal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_AUTORENEWAL") }
   scope :branch_resignations, -> { where("meta->>'data_store_type' = ?", "BRANCH_RESIGNATIONS") }
 
+  # For attaching json dumps
+  has_one_attached :data_json_dump
+
   before_validation :load_defaults
+
+  def data_json_dump_url
+    return rails_blob_path(self.data_json_dump, only_path: true)
+  end
 
   def load_defaults
     if self.new_record? && self.status.blank?
@@ -78,5 +87,4 @@ class DataStore < ApplicationRecord
   def approved?
     self.status == "approved"
   end
-
 end

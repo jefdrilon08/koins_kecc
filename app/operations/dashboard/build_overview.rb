@@ -11,7 +11,7 @@ module Dashboard
         .where(clusters: { branches: { id: @branches.ids }})
         .order("areas.name ASC, clusters.name ASC")
 
-      data_stores = DataStore
+      data_stores = ReadOnlyDataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
         .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ? AND status = ?", %w[REPAYMENT_RATES MEMBER_COUNTS], @branches.ids, @as_of, "done")
         .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC")

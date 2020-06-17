@@ -4,10 +4,12 @@
       <tr>
         <th></th>
         <th>Name</th>
+        <th>Identification Number</th>
         <th>Recognition Date</th>
         <th>Branch</th>
         <th>Center</th>
         <th>Status</th>
+        <th>Insurance Status</th>
         <th>Number of Dependents</th>
         <th class='accounting-curr'>Dependent Coverage Value</th>
         <th class='accounting-curr'>Coverage Value</th>
@@ -20,10 +22,12 @@
         <tr>
           <td>{{index}}</td>
           <td>{{name}}</td>
+          <td>{{identification_number}}</td>
           <td>{{recognition_date}}</td>
           <td>{{branch}}</td>
           <td>{{center}}</td>
           <td>{{status}}</td>
+          <td>{{insurance_status}}</td>
           <td>{{number_of_dependents}}</td>
           <td class='curr'>{{value_dependents}}</td>
           <td class='curr'>{{coverage_value}}</td>
@@ -56,6 +60,8 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
+        <th></th>
         <th>Total Dependents</th>
         <th class='accounting-curr'>Dependent Coverage Value</th>
         <th class='accounting-curr'>Coverage Value</th>
@@ -67,6 +73,8 @@
       {{#totals}}
         <tr class='leader'>
           <td>{{total_member_count}}</td>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
           <td></td>

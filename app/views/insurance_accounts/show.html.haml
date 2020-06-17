@@ -81,8 +81,6 @@
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
-                - if current_user.roles.include?("MIS")
-                  %th
                 %th
                   %center
                     Date Posted
@@ -96,7 +94,7 @@
                 %td
                   %center
                     %small
-                      #{number_to_currency(o.data.with_indifferent_access[:data][:date_approved].to_date)}
+                      #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
                 %td
                   %center
                     %small

@@ -127,6 +127,7 @@ module Administration
     end
 
     def show
+      @branch = Branch.find(params[:id])
       @subheader_items = [
         {
           text: "Administration"
@@ -143,7 +144,6 @@ module Administration
 
       @subheader_side_actions = []
 
-      @branch = Branch.find(params[:id])
     end
 
     private

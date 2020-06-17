@@ -20,7 +20,7 @@ module Accounting
         },
         {
           is_link: true,
-          path: "/accounting/books/#{@accounting_entry.book.downcase}",
+          path: "/accounting/books/#{@accounting_entry.book.upcase}",
           text: "#{@accounting_entry.book.upcase}"
         }
       ]
@@ -94,7 +94,7 @@ module Accounting
         },
         {
           is_link: true,
-          path: "/accounting/books/#{params[:book].downcase}",
+          path: "/accounting/books/#{params[:book]}",
           text: "#{params[:book].upcase}"
         },
         {
@@ -118,7 +118,7 @@ module Accounting
 
       @payload = {
         id: params[:id],
-        book: params[:book],
+        book: params[:book].upcase,
         accountingFundId: params[:accounting_fund_id] || "",
         defaultBranch: defaultBranch
       }

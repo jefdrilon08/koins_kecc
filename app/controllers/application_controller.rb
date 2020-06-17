@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
     if user_signed_in?
       @default_branch_name = Settings.try(:defaults).try(:default_branch).try(:name)
-      @branches = Branch
+      @branches = ReadOnlyBranch
         .joins(user_branches: :user)
         .where(user_branches: { active: true, user_id: @current_user.id })
         .order("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC")

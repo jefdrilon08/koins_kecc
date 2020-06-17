@@ -9,27 +9,27 @@ module Branches
       @area     = @cluster.area
 
       if Settings.activate_microloans
-        @members          = Member.active.where(
+        @members          = ReadOnlyMember.active.where(
                               "branch_id = ?",
                               @branch.id
                             )
 
-      @resigned_members = Member.resigned.where(
+      @resigned_members = ReadOnlyMember.resigned.where(
                             "date_resigned > ? AND branch_id = ?", 
                             @as_of, 
                             @branch.id
                           )
       else
-        @members          = Member.active
+        @members          = ReadOnlyMember.active
 
-        @resigned_members = Member.resigned.where(
+        @resigned_members = ReadOnlyMember.resigned.where(
                             "date_resigned > ?", 
                             @as_of
                           )
       end
 
 
-      @members  = Member.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
+      @members  = ReadOnlyMember.where(id: [@members.pluck(:id) + @resigned_members.pluck(:id)])
 
       @default_savings_key  = Settings.default_savings_key
       @member_accounts      = MemberAccount.where(

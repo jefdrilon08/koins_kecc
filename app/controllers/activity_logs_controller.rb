@@ -2,7 +2,7 @@ class ActivityLogsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @activity_logs = ActivityLog.select("*").order("created_at DESC")
+    @activity_logs = ReadOnlyActivityLog.select("*").order("created_at DESC")
 
     if params[:q].present?
       @q = params[:q]

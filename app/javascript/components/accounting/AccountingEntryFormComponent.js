@@ -103,6 +103,8 @@ export default class AccountingEntryFormComponent extends React.Component {
           data: data
         });
 
+        console.log(accountingFunds);
+
       },
       error: function(response) {
         console.log(response);

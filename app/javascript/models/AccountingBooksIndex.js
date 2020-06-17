@@ -63,9 +63,6 @@ var _bindEvents = function() {
     });
   });
 
-
-
-
   $btnPrint.on("click", function() {
     var type              = "book";
     var startDate         = $inputStartDate.val();
@@ -85,7 +82,7 @@ var _bindEvents = function() {
     $message.html("Printing...");
 
     $modalPrint.modal("hide");
-    window.open("/print?type=" + type + "&start_date=" + startDate + "&end_date=" + endDate + "&branch_id=" + branchId + "&accounting_fund_id=" + accountingFundId);
+    window.open("/print?type=" + type + "&start_date=" + startDate + "&end_date=" + endDate + "&branch_id=" + branchId + "&accounting_fund_id=" + accountingFundId + "&book=" + book);
   });
 
  

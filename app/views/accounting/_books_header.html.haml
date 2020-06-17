@@ -7,6 +7,6 @@
     #{book_title}
   %li.breadcrumb-menu.d-md-down-none
     .btn-group
-      = link_to accounting_accounting_entry_form_path(book: book), class: "btn" do
+      = link_to accounting_accounting_entry_form_path(book: book.upcase), class: "btn" do
         .fa.fa-plus
         New Entry

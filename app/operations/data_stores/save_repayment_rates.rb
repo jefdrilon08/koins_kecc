@@ -17,12 +17,8 @@ module DataStores
           as_of: @as_of,
           branch_id: @branch.id,
           branch_name: @branch.name,
-          data_store_type: @data_store_type,
+          data_store_type: @data_store_type
         }        
-
-        @data = {
-          status: "processing"
-        }
       else
         @meta = @data_store.meta.with_indifferent_access
         @data = @data_store.data.with_indifferent_access
@@ -35,11 +31,18 @@ module DataStores
         as_of: @as_of
       }
 
-      #@data = ::Branches::ComputeRepaymentRates.new(config: config).execute!
+      # Save this as a file in s3 (on disk if local) via active storage
       @data = ::Branches::ComputeRr.new(config: config).execute!
 
-      @data_store.meta    = @meta
+#      @data_store.data_json_dump.attach(
+#        io: StringIO.new(@data.to_json),
+#        filename: "datadump.json",
+#        content_type: 'text/plain'
+#      )
+
       @data_store.data    = @data
+
+      @data_store.meta    = @meta
       @data_store.status  = "done"
 
       @data_store.save!
