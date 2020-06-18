@@ -30,7 +30,7 @@ branch_config:
     #current_date: "2020-05-29"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
     #current_date: "2020-05-29"
