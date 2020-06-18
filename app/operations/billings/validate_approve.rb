@@ -53,13 +53,6 @@ module Billings
         }
       end
 
-#      if @billing.collection_date.try(:to_date) > @current_date
-#        @errors[:messages] << {
-#          key: "collection_date",
-#          message: "Cannot approve billing dated #{@billing.collection_date} for current date #{@current_date}"
-#        }
-#      end
-
       if @data.present? and @data[:accounting_entry][:particular].blank?
         @errors[:messages] << {
           key: "particular",
@@ -77,7 +70,7 @@ module Billings
     end
 
     def validate_accounting_entry!
-      accounting_entry_data = @loan.data.with_indifferent_access[:accounting_entry]
+      accounting_entry_data = @billing.data.with_indifferent_access[:accounting_entry]
 
       dr_amount = 0.00
       cr_amount = 0.00
