@@ -22,7 +22,7 @@ module Accounting
 
     def execute!
       if @branch.present?
-        journal_entries_by_accounting_code  = JournalEntry
+        journal_entries_by_accounting_code  = ReadOnlyJournalEntry
                                                 .eager_load(:accounting_code, :accounting_entry)
                                                 .where(
                                                   "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
@@ -33,7 +33,7 @@ module Accounting
                                                 .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
                                                 .group_by(&:accounting_code_id)
 
-        dr_accounting_codes = AccountingCode.joins(
+        dr_accounting_codes = ReadOnlyAccountingCode.joins(
                                 journal_entries: :accounting_entry
                               )
                               .where(
@@ -45,7 +45,7 @@ module Accounting
                               .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
                               .group("accounting_codes.id")
 
-        cr_accounting_codes = AccountingCode.joins(
+        cr_accounting_codes = ReadOnlyAccountingCode.joins(
                                 journal_entries: :accounting_entry
                               )
                               .where(
@@ -57,7 +57,7 @@ module Accounting
                               .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
                               .group("accounting_codes.id")
       else
-        journal_entries_by_accounting_code  = JournalEntry
+        journal_entries_by_accounting_code  = ReadOnlyJournalEntry
                                                 .eager_load(:accounting_code, :accounting_entry)
                                                 .where(
                                                   "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ?",
@@ -67,7 +67,7 @@ module Accounting
                                                 .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
                                                 .group_by(&:accounting_code_id)
 
-        dr_accounting_codes = AccountingCode.joins(
+        dr_accounting_codes = ReadOnlyAccountingCode.joins(
                                 journal_entries: :accounting_entry
                               )
                               .where(
@@ -78,7 +78,7 @@ module Accounting
                               .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
                               .group("accounting_codes.id")
 
-        cr_accounting_codes = AccountingCode.joins(
+        cr_accounting_codes = ReadOnlyAccountingCode.joins(
                                 journal_entries: :accounting_entry
                               )
                               .where(
@@ -94,16 +94,16 @@ module Accounting
 
       # Fetch accounting codes
       #accounting_codes  = dr_accounting_codes.map{ |o| o.accounting_code_id } | cr_accounting_codes.map{ |o| o.accounting_code_id }
-      accounting_codes  = AccountingCode.all.order("code ASC").pluck(:id)
+      accounting_codes  = ReadOnlyAccountingCode.all.order("code ASC").pluck(:id)
 
       if @accounting_code_ids.any?
-        accounting_codes  = AccountingCode.where(id: @accounting_code_ids).order("code ASC").pluck(:id)
+        accounting_codes  = ReadOnlyAccountingCode.where(id: @accounting_code_ids).order("code ASC").pluck(:id)
       end
 
       mapped_cr_accounting_codes  = cr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
       mapped_dr_accounting_codes  = dr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
 
-      accounting_codes  = AccountingCode.where(id: accounting_codes).order("code ASC")
+      accounting_codes  = ReadOnlyAccountingCode.where(id: accounting_codes).order("code ASC")
 
       accounting_codes.each do |accounting_code|
         a = accounting_code.id

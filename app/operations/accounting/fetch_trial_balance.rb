@@ -1,7 +1,4 @@
 module Accounting
-  # Test in console:
-  #
-  # x = Accounting::FetchTrialBalance.new(config: { start_date: 1.year.ago, end_date: Date.today, branch: Branch.first }).execute!; { total_beginning_debit: x[:total_beginning_debit], total_beginning_credit: x[:total_beginning_credit], total_current_debit: x[:total_current_debit], total_current_credit: x[:total_current_credit], total_ending_debit: x[:total_ending_debit], total_ending_credit: x[:total_ending_credit] }
   class FetchTrialBalance
     def initialize(config:)
       @config           = config
@@ -31,7 +28,7 @@ module Accounting
       }
 
       categories.each do |category|
-        accounting_codes = AccountingCode.send(category)
+        accounting_codes = ReadOnlyAccountingCode.send(category)
 
         data[:"#{category}_beginning"] = build_entries(category: category, phase: :beginning, accounting_codes: accounting_codes)
         data[:"#{category}_current"]   = build_entries(category: category, phase: :current, accounting_codes: accounting_codes)
@@ -87,7 +84,7 @@ module Accounting
     private
 
     def set_closing_date(phase)
-      latest_closing_record = DataStore
+      latest_closing_record = ReadOnlyDataStore
         .year_end_closings
         .where("status = ? AND meta->>'branch_id' = ?", "closed", @branch.id)
         .order("created_at DESC")
@@ -99,13 +96,13 @@ module Accounting
 
       if phase == :beginning
         if @accounting_fund.present?
-          latest_closing_entry = AccountingEntry
+          latest_closing_entry = ReadOnlyAccountingEntry
             .year_end_closing
             .where(accounting_fund_id: @accounting_fund.id)
             .order("date_posted DESC")
             .first
         else
-          latest_closing_entry = AccountingEntry
+          latest_closing_entry = ReadOnlyAccountingEntry
             .year_end_closing
             .order("date_posted DESC")
             .first
@@ -118,7 +115,6 @@ module Accounting
     end
 
     def build_entries(category:, phase:, accounting_codes:)
-      puts "--> build_entries(category: #{category}, phase: #{phase})"
       is_yearly = case category
                   when :assets       then false
                   when :liabilities  then false
@@ -139,7 +135,6 @@ module Accounting
     end
 
     def group_by_code_and_amount(phase, entries, is_yearly:)
-      puts "--> group_by_code_and_amount"
       is_beginning_and_overall = !is_yearly && phase == :beginning
       if closing_date_is_within_range? && !is_beginning_and_overall
         entries = entries.where("accounting_entries.data->'is_closing_record' IS NULL")
@@ -149,7 +144,7 @@ module Accounting
     end
 
     def filter_entries(category, phase, post_type, accounting_fund_id = nil, is_yearly:)
-      entries = AccountingEntry
+      entries = ReadOnlyAccountingEntry
         .joins(journal_entries: :accounting_code)
         .where(
           status: "approved",
