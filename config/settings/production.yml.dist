@@ -30,7 +30,7 @@ branch_config:
     #current_date: "2020-05-29"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
     #current_date: "2020-05-29"
@@ -54,7 +54,7 @@ branch_config:
     #current_date: "2020-05-29"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
@@ -71,7 +71,7 @@ branch_config:
     #current_date: "2020-05-29"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
     #current_date: "2020-05-29"
