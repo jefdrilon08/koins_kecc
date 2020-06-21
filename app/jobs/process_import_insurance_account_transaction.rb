@@ -27,6 +27,8 @@ class ProcessImportInsuranceAccountTransaction < ApplicationJob
           data: data
         )
       rescue Exception => e
+        logger.info "Insurance Import: #{e}"
+        logger.info e
         data_store.update!(
           status: "error",
           data: {
