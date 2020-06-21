@@ -10,6 +10,8 @@ var $selectBranch;
 var $inputStartDate;
 var $inputEndDate;
 
+var id;
+
 var $message;
 var templateErrorList;
 

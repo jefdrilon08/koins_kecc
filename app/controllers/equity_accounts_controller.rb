@@ -2,7 +2,7 @@ class EquityAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @equity_accounts = MemberAccount
+    @equity_accounts = ReadOnlyMemberAccount
       .equities
       .includes(:branch, :member)
       .where(branch_id: @branches.pluck(:id))
@@ -47,9 +47,9 @@ class EquityAccountsController < ApplicationController
   end
 
   def show
-    @equity_account       = MemberAccount.equities.find(params[:id])
+    @equity_account       = ReadOnlyMemberAccount.equities.find(params[:id])
     @member               = @equity_account.member
-    @account_transactions = AccountTransaction.where(
+    @account_transactions = ReadOnlyAccountTransaction.where(
                               subsidiary_id: @equity_account.id
                             ).order("transacted_at ASC, updated_at ASC")
 

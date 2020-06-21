@@ -60,7 +60,7 @@ module Loans
       accounting_entry_data = @loan.data.with_indifferent_access[:accounting_entry]
 
       if @loan.active_or_paid?
-        ac  = AccountingEntry.where(
+        ac  = ReadOnlyAccountingEntry.where(
                 branch_id: @loan.branch.id,
                 reference_number: accounting_entry_data[:reference_number],
                 book: accounting_entry_data[:book]

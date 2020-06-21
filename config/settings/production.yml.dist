@@ -27,17 +27,17 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
     #current_date: "2020-05-29"
@@ -51,14 +51,14 @@ branch_config:
     current_date: "2020-05-29"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
     current_date: "2020-05-29"
@@ -68,13 +68,13 @@ branch_config:
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
-    current_date: "2020-05-29"
+    #current_date: "2020-05-29"
 ###############################
 # AUTHORIZATION               #
 ###############################
@@ -4201,6 +4201,115 @@ loan_products:
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
+  -
+    loan_product_id: "61c7b2c2-7571-4fc9-a214-9f1a6564f111"                         # ALALAY SA K
+    receivable_accounting_code_id: "4ba3a3fe-5391-4068-8803-9826dd551cf6"
+    interest_receivable_accounting_code_id: "8046da37-05dd-4791-8ce6-d285da474d7d"
+    default_amount: 5000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.2
+      threshold: 10001.00
+    deductions:
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
           
 
 loan_product_accounting_codes:
@@ -4312,4 +4421,8 @@ loan_product_accounting_codes:
     loan_product_id: "1c2fcdbd-d60b-402c-b04b-824bb90958d1"                         # K - SAGIP
     receivable_accounting_code_id: "a6913ac9-1a85-495a-8f80-d394549dc52e"
     interest_receivable_accounting_code_id: "a09f6aea-9ab9-4e55-a994-ca8c4dd5de33"
+  -
+    loan_product_id: "61c7b2c2-7571-4fc9-a214-9f1a6564f111"                         # Alalay sa K
+    receivable_accounting_code_id: "4ba3a3fe-5391-4068-8803-9826dd551cf6"
+    interest_receivable_accounting_code_id: "8046da37-05dd-4791-8ce6-d285da474d7d"
 ###############################

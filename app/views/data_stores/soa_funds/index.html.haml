@@ -13,14 +13,3 @@
 
 = render partial: "data_stores/soa_funds/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "data_stores/soa_funds/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

@@ -2,7 +2,7 @@ class InsuranceAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @insurance_accounts = MemberAccount
+    @insurance_accounts = ReadOnlyMemberAccount
       .insurance
       .includes(:branch, :member)
       .where(branch_id: @branches.pluck(:id))
@@ -51,10 +51,10 @@ class InsuranceAccountsController < ApplicationController
   end
 
   def show
-    @insurance_account  = MemberAccount.insurance.find(params[:id])
+    @insurance_account  = ReadOnlyMemberAccount.insurance.find(params[:id])
     @member             = @insurance_account.member
 
-    @account_transactions = AccountTransaction.where(
+    @account_transactions = ReadOnlyAccountTransaction.where(
                               subsidiary_id: @insurance_account.id
                             ).order("transacted_at ASC, updated_at ASC")
 
@@ -117,8 +117,8 @@ class InsuranceAccountsController < ApplicationController
   end
 
   def insurance_account_pdf
-    @insurance_account = MemberAccount.find(params[:id])
-    @insurance_account_transactions = AccountTransaction.where(
+    @insurance_account = ReadOnlyMemberAccount.find(params[:id])
+    @insurance_account_transactions = ReadOnlyAccountTransaction.where(
                                         "subsidiary_id = ? AND amount > 0 AND status IN (?)",
                                         @insurance_account.id, ["approved", "reversed"]
                                       ).order("transacted_at ASC")
