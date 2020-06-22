@@ -75,6 +75,12 @@ branch_config:
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
     #current_date: "2020-05-29"
+
+#central2
+  -
+    id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
+    #current_date: "2020-05-29"
+
 ###############################
 # AUTHORIZATION               #
 ###############################
@@ -783,6 +789,13 @@ branch_accounting_codes:
   -
     branch_id: "3503b976-d48c-4f88-b007-1534f228d194"                              #tandangsora
     cash_in_bank_accounting_code_id: "78f46c27-76d0-4740-a3f8-1e45a8b9aedd"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+#central2
+  -
+    branch_id: "797759bf-97f5-4daa-b036-19db59c24e04"                              #camarin
+    cash_in_bank_accounting_code_id: "18ccc5e3-0692-4779-a4a8-fe83616ea88d"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
