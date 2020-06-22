@@ -15,7 +15,8 @@ module Exports
                             :branch,   
                             :center,
                             :uuid,
-                            :member_uuid
+                            :member_uuid,
+                            :equity_value,
                         ]
 
                 @member_accounts.each do |ma|
@@ -28,6 +29,14 @@ module Exports
                             code = "CLIP"
                         elsif ma.account_subtype == "Hospital Income Insurance Plan"
                             code = "HIIP"
+                        elsif ma.account_subtype == "Policy Loan"
+                            code = "PL"
+                        end
+
+                        if ma.data.nil?
+                            ev = nil
+                        else
+                            ev = ma.data.with_indifferent_access[:equity_value]
                         end
 
                         csv << [
@@ -39,7 +48,8 @@ module Exports
                         ma.branch,
                         ma.center,
                         ma.id,
-                        ma.member.id
+                        ma.member.id,
+                        ev
                         ]
                     end
                 end

@@ -23,16 +23,32 @@ module Insurance
         elsif  row['insurance_type'] == "CLIP"
           acc_subtype = "Credit Life Insurance Plan"
         elsif  row['insurance_type'] == "HIIP"
-          acc_subtype = "Hospital Income Insurance Plan"    
+          acc_subtype = "Hospital Income Insurance Plan"
+        elsif  row['insurance_type'] == "PL"
+          acc_subtype = "Policy Loan"    
         end
 
         if !member.nil?
           insurance_account = member.member_accounts.where(account_subtype: acc_subtype).first
-          if insurance_account.present? 
-            insurance_account.update!(
-              id: row['uuid'],
-              status: row['status']
-            )
+          if insurance_account.present?
+            if row['equity_value'].nil?
+              insurance_account.update!(
+                id: row['uuid'],
+                status: row['status']
+              )
+            else
+              ia_data = insurance_account.data
+         
+              if !ia_data.nil?
+                ia_data[:equity_value] = row['equity_value']
+
+                insurance_account.update!(
+                  id: row['uuid'],
+                  status: row['status'],
+                  data: ia_data
+                )
+              end
+            end
           else
             new_insurance_account = MemberAccount.new
 
@@ -47,6 +63,7 @@ module Insurance
             new_insurance_account.status = row['status']
             new_insurance_account.branch = member.branch
             new_insurance_account.center = member.center
+            new_insurance_account.data = { equity_value: row['equity_value'] }
 
             new_insurance_account.save!
           end
