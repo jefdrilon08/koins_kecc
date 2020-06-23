@@ -94,7 +94,7 @@ module Accounting
         },
         {
           is_link: true,
-          path: "/accounting/books/#{params[:book]}",
+          path: "/accounting/books/#{params[:book].downcase}",
           text: "#{params[:book].upcase}"
         },
         {
