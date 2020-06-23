@@ -1,7 +1,7 @@
 class Member < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  belongs_to :member
+  belongs_to :member, optional: true
 
   STATUSES = [
     "blacklisted",
