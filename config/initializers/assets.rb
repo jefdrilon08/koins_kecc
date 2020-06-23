@@ -181,7 +181,10 @@ Rails.application.config.assets.precompile += [
   "claims/blip_form.js",
   "claims/hiip_form.js",
   "claims/kalinga_form.js",
+  "claims/calamity_form.js",
   "claims/kbente_form.js",
   "claims/scholarship_form.js",
-  "claims/clip_form.js"
+  "claims/clip_form.js",
+  "claims/approved_claim.js",
+  "claims/Index.js"
 ]

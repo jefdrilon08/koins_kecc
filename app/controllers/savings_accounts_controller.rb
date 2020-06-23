@@ -2,7 +2,7 @@ class SavingsAccountsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @savings_accounts = MemberAccount
+    @savings_accounts = ReadOnlyMemberAccount
       .savings
       .includes(:branch, :member)
       .where(branch_id: @branches.pluck(:id))
@@ -47,9 +47,9 @@ class SavingsAccountsController < ApplicationController
   end
 
   def time_deposit_withdrawal
-    @savings_account  = MemberAccount.find(params[:id])
+    @savings_account  = ReadOnlyMemberAccount.find(params[:id])
     @member           = @savings_account.member
-    @data_store       = DataStore.find(params[:data_store_id])
+    @data_store       = ReadOnlyDataStore.find(params[:data_store_id])
 
     @subheader_items = [
       {
@@ -83,10 +83,10 @@ class SavingsAccountsController < ApplicationController
   end
 
   def show
-    @savings_account  = MemberAccount.savings.find(params[:id])
+    @savings_account  = ReadOnlyMemberAccount.savings.find(params[:id])
     @member           = @savings_account.member
 
-    @account_transactions = AccountTransaction.where(
+    @account_transactions = ReadOnlyAccountTransaction.where(
                               subsidiary_id: @savings_account.id
                             ).order("transacted_at ASC, updated_at ASC")
 

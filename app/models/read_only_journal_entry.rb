@@ -1,3 +1,3 @@
-class ReadOnlyMember < Member
+class ReadOnlyJournalEntry < JournalEntry
   establish_connection(ENV['FOLLOWER_READ_ONLY_DATABASE_URL'])
 end

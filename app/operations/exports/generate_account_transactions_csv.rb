@@ -50,7 +50,9 @@ module Exports
                             :term_data,
                             :num_installments_data,
                             :account_transaction_id_data,
-                            :status_data
+                            :status_data,
+                            #ev_amount
+                            :equity_value
                         ]
 
                 @account_transactions.each do |at|
@@ -102,6 +104,12 @@ module Exports
                         status_data = nil
                     end
 
+                    if at_data[:equity_value].nil?
+                        equity_value = nil
+                    else
+                        equity_value = at_data[:equity_value]
+                    end
+
                     member_account = MemberAccount.where(id: at.subsidiary_id)
                     if member_account
                         csv << [
@@ -147,7 +155,8 @@ module Exports
                         term_data,
                         num_installments_data,
                         account_transaction_id_data,
-                        status_data
+                        status_data,
+                        equity_value
                         ]
                     end
                 end

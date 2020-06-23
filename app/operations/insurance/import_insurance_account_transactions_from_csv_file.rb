@@ -1,5 +1,5 @@
 module Insurance
-  class   ImportInsuranceAccountTransactionsFromCsvFile
+  class ImportInsuranceAccountTransactionsFromCsvFile
     def initialize(file:)
       @file = file
     end
@@ -66,6 +66,7 @@ module Insurance
                                                 accounting_entry_particular: row['particular'],
                                                 beginning_balance: row['beginning_balance'],
                                                 ending_balance: row['ending_balance'],
+                                                equity_value: row['equity_value'],
                                                 data: {
                                                   id: row['id_data'],
                                                   principal: row['principal_data'],
@@ -115,6 +116,7 @@ module Insurance
           insurance_account_transaction_record_data[:accounting_entry_particular] = row['particular']
           insurance_account_transaction_record_data[:beginning_balance] = row['beginning_balance']
           insurance_account_transaction_record_data[:ending_balance] = row['ending_balance']
+          insurance_account_transaction_record_data[:equity_value] = row['equity_value']
           
           if !insurance_account_transaction_record_data[:data].nil? 
             insurance_account_transaction_record_data[:data][:id] = row['id_data']
