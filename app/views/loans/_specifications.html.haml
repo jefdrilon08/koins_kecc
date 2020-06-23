@@ -99,8 +99,10 @@
     %th
       Date Completed:
     %td.text-right
-      - if @loan.paid?
+      - if @loan.paid? and @loan.date_completed.present?
         #{@loan.date_completed.strftime("%b %d, %Y")}
+      - else
+        ERROR
   %tr
     %th
       Maturity Date:

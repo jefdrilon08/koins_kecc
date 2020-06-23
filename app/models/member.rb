@@ -1,6 +1,8 @@
 class Member < ApplicationRecord
   include Rails.application.routes.url_helpers
 
+  belongs_to :member, optional: true
+
   STATUSES = [
     "blacklisted",
     "whitelisted",
@@ -14,10 +16,27 @@ class Member < ApplicationRecord
     "for-withdrawal",
     "for-transfer",
     "transferred",
-    "cleared"
+    "cleared",
+    "dependent"
   ]
-  INSURANCE_STATUS = ["inforce", "lapsed", "resigned", "dormant", "pending", "cleared", "archived"]
-  MEMBER_TYPES = ["Regular", "GK", "Kaagapay"]
+
+  INSURANCE_STATUS = [
+    "inforce", 
+    "lapsed", 
+    "resigned", 
+    "dormant", 
+    "pending", 
+    "cleared", 
+    "archived", 
+    "dependent"
+  ]
+
+  MEMBER_TYPES = [
+    "Regular", 
+    "GK", 
+    "Kaagapay", 
+    "Dependent"
+  ]
 
   belongs_to :center
   belongs_to :branch
