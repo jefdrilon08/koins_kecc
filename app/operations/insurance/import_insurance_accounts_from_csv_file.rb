@@ -29,12 +29,15 @@ module Insurance
         end
 
         if !member.nil?
-          insurance_account = member.member_accounts.where(account_subtype: acc_subtype).first
+          insurance_account = MemberAccount.where(id: row['uuid'], account_subtype: acc_subtype, member_id: member.id).first
           if insurance_account.present?
             if row['equity_value'].nil?
               insurance_account.update!(
-                id: row['uuid'],
-                status: row['status']
+                status: row['status'],
+                balance: row['balance'],
+                member_id: member.id,
+                branch: member.branch,
+                center: member.center
               )
             else
               ia_data = insurance_account.data
@@ -43,8 +46,11 @@ module Insurance
                 ia_data[:equity_value] = row['equity_value']
 
                 insurance_account.update!(
-                  id: row['uuid'],
                   status: row['status'],
+                  balance: row['balance'],
+                  member_id: member.id,
+                  branch: member.branch,
+                  center: member.center,
                   data: ia_data
                 )
               end
