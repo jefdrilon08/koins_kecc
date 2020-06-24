@@ -21,10 +21,10 @@ module Turkey
       sums = accounts.map do |key, subtype|
         <<-EOS
           SUM(CASE WHEN account_subtype = '#{subtype}' AND at.transaction_type = 'withdraw' THEN amount ELSE 0 END)
-            OVER(PARTITION BY member_accounts.member_id ORDER BY transacted_at)
+            OVER(PARTITION BY ma.member_id ORDER BY transacted_at)
             AS #{key}_debit,
           SUM(CASE WHEN account_subtype = '#{subtype}' AND at.transaction_type = 'deposit' THEN amount ELSE 0 END)
-            OVER(PARTITION BY member_accounts.member_id ORDER BY transacted_at)
+            OVER(PARTITION BY ma.member_id ORDER BY transacted_at)
             AS #{key}_credit,
         EOS
       end
