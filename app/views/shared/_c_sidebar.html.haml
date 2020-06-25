@@ -40,13 +40,13 @@
           .c-sidebar-nav-icon.fa.fa-money-check
           Time Deposits
       %li.c-sidebar-nav-item
-        = link_to withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "withdrawal_collections" ? 'active' : ''}" do
-          .c-sidebar-nav-icon.fa.fa-money-check
-          Withdrawals
-      %li.c-sidebar-nav-item
         = link_to savings_insurance_transfer_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_insurance_transfer_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Savings Insurance Transfers
+    %li.c-sidebar-nav-item
+      = link_to withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "withdrawal_collections" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-money-check
+        Withdrawals
     - if !microloans?
       %li.c-sidebar-nav-item
         = link_to deposit_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "deposit_collections" ? 'active' : ''}" do
