@@ -29,8 +29,9 @@ module Insurance
         end
 
         if !member.nil?
-          insurance_account = MemberAccount.find(row['uuid'])
-          if insurance_account.present?
+          insurance_account = MemberAccount.where(id: row['uuid']).first
+          
+          if !insurance_account.nil?
             if row['equity_value'].nil?
               insurance_account.update!(
                 status: row['status'],
@@ -41,7 +42,7 @@ module Insurance
               )
             else
               ia_data = insurance_account.data
-         
+              
               if !ia_data.nil?
                 ia_data[:equity_value] = row['equity_value']
 
