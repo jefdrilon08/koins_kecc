@@ -11,12 +11,12 @@ module Members
 
     def execute!
       if @member.blank?
-        @errors << {
+        @errors[:messages] << {
           key: "member",
           message: "Member not found."
         }
       elsif !@member.active?
-        @errors << {
+        @errors[:messages] << {
           key: "member",
           message: "Member is not active."
         }
@@ -34,7 +34,7 @@ module Members
       end
 
       if @user.blank?
-        @errors << {
+        @errors[:messages] << {
           key: "user",
           message: "User not foud"
         }
