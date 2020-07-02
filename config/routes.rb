@@ -114,6 +114,8 @@ Rails.application.routes.draw do
     get "/scholarship_loa_pdf", to: "claims#scholarship_loa_pdf"
     get "/scholarship_contract_highschool_pdf", to: "claims#scholarship_contract_highschool_pdf"
     get "/scholarship_contract_college_pdf", to: "claims#scholarship_contract_college_pdf"
+
+    resources :claim_attachment_files, controller: 'claims/claim_attachment_files'
   end
    get "/claims/new/:id", to: "claims#new"
 

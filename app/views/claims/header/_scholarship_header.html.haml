@@ -17,6 +17,10 @@
           = link_to claim_scholarship_contract_college_pdf_path(@claim), target: "_blank", class: "btn btn-app" do
             .fa.fa-download
             Scholarship Contract for College
+      .btn-group
+        = link_to edit_claim_path(@claim), class: 'btn btn-app' do
+          %i.fa.fa-edit
+          Edit
       .btn-group    
         = link_to claim_scholarship_validation_pdf_path(@claim), target: "_blank", class: "btn btn-app" do
           .fa.fa-download

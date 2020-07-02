@@ -59,7 +59,7 @@ module Claims
         @errors << "Classification field is required"
       end
 
-      validate_scholar_duplication!
+      #validate_scholar_duplication!
       return  @errors
     end
 

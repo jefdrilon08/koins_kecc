@@ -69,7 +69,7 @@ module Claims
         @errors << "Expired K-BENTE!"
       end
 
-      validate_kbente_duplication!
+      #validate_kbente_duplication!
       return  @errors
     end
 

@@ -127,7 +127,7 @@ module Claims
         @errors << "Date Paid field is required"
       end
 
-      validate_blip_duplication!
+      #validate_blip_duplication!
       return  @errors
     end
 

@@ -1,19 +1,30 @@
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          - if @claim.claim_type == "BLIP"
-            = render partial: "claims/details/blip_details", locals: { claim: @claim }
-          - elsif @claim.claim_type == "CLIP"
-            = render partial: "claims/details/clip_details", locals: { claim: @claim }
-          - elsif @claim.claim_type == "HIIP"
-            = render partial: "claims/details/hiip_details", locals: { claim: @claim }
-          - elsif @claim.claim_type == "K-KALINGA"
-            = render partial: "claims/details/kalinga_details", locals: { claim: @claim } 
-          - elsif @claim.claim_type == "CALAMITY ASSISTANCE"
-            = render partial: "claims/details/calamity_details", locals: { claim: @claim } 
-          - elsif @claim.claim_type == "K-BENTE"
-            = render partial: "claims/details/kbente_details", locals: { claim: @claim }
-          - elsif @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
-            = render partial: "claims/details/scholarship_details", locals: { claim: @claim }
+.row
+  .col-md-12.col-xs-12
+    .card
+      .card-body
+        %ul.nav.nav-tabs{:role => "tablist"}
+          %li.nav-item
+            %a.nav-link.active.show{"aria-controls" => "details", "aria-selected" => "true", "data-toggle" => "tab", :href => "#details", :role => "tab"} 
+              Details
+          %li.nav-item
+            %a.nav-link{"aria-controls" => "atttachments", "aria-selected" => "false", "data-toggle" => "tab", :href => "#attachments", :role => "tab"} 
+              Attachments
+        .tab-content
+          #details.tab-pane.active.show{:role => "tabpanel"}
+            - if @claim.claim_type == "BLIP"
+              = render partial: "claims/details/blip_details", locals: { claim: @claim }
+            - elsif @claim.claim_type == "CLIP"
+              = render partial: "claims/details/clip_details", locals: { claim: @claim }
+            - elsif @claim.claim_type == "HIIP"
+              = render partial: "claims/details/hiip_details", locals: { claim: @claim }
+            - elsif @claim.claim_type == "K-KALINGA"
+              = render partial: "claims/details/kalinga_details", locals: { claim: @claim } 
+            - elsif @claim.claim_type == "CALAMITY ASSISTANCE"
+              = render partial: "claims/details/calamity_details", locals: { claim: @claim } 
+            - elsif @claim.claim_type == "K-BENTE"
+              = render partial: "claims/details/kbente_details", locals: { claim: @claim }
+            - elsif @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
+              = render partial: "claims/details/scholarship_details", locals: { claim: @claim }
+          #attachments.tab-pane{:role => "tabpanel"}
+            = render partial: "claims/claim_attachment_files"
+        

@@ -1,5 +1,4 @@
-class AttachmentFile < ApplicationRecord
-  belongs_to :member
+class ClaimAttachmentFile < ApplicationRecord
   belongs_to :claim
 
   has_one_attached :file

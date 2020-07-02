@@ -82,7 +82,7 @@ module Claims
         @errors << "Exceed amount!"
       end
 
-      validate_hiip_duplication!
+      #validate_hiip_duplication!
       return  @errors
     end
 

@@ -8,7 +8,7 @@ module Claims
     end
 
     def execute!
-      validate_kalinga_claim_duplication!
+      #validate_kalinga_claim_duplication!
       @errors
     end
 

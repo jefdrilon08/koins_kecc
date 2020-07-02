@@ -101,7 +101,7 @@ module Claims
         @errors << "Age field is required"
       end
 
-      validate_clip_duplication!
+      #validate_clip_duplication!
       return  @errors
     end
 

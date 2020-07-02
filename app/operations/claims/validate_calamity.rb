@@ -47,7 +47,7 @@ module Claims
         @errors << "Name of beneficiary is required"
       end
 
-      validate_calamity_duplication!
+      #validate_calamity_duplication!
       return  @errors
     end
 

@@ -14,6 +14,8 @@ class Claim < ApplicationRecord
 	belongs_to :center
 	belongs_to :member
 
+  has_many :claim_attachment_files
+
   before_validation :load_defaults
   def age
     	if self.date_of_birth.nil?
