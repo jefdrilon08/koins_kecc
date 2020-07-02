@@ -36,6 +36,7 @@ class LoansController < ApplicationController
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+  
 
     @subheader_items = [
       { text: "Loans" }
