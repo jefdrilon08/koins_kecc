@@ -6,6 +6,8 @@ import SkCubeLoading from '../SkCubeLoading';
 // DASHBOARDS
 import DashboardOAS from './DashboardOAS';
 import DashboardManagement from './DashboardManagement';
+import DashboardMII from './DashboardMII';
+import DashboardManagementMii from './DashboardManagementMii';
 
 export default class MainUI extends React.Component {
   constructor(props) {
@@ -15,7 +17,8 @@ export default class MainUI extends React.Component {
       isError: false,
       isLoading: true,
       roles: props.roles,
-      username: props.username
+      username: props.username,
+      is_microinsurance: props.is_microinsurance
     };
   }
 
@@ -30,17 +33,34 @@ export default class MainUI extends React.Component {
   renderDashboards() {
     var dashboards  = [];
 
-    dashboards.push(
-      <DashboardManagement
-        key={"dashboard-Management"}
-      />
-    );
+    console.log("Parameters: ");
+    console.log(this.state.is_microinsurance);
 
-    dashboards.push(
-      <DashboardOAS
-        key={"dashboard-OAS"}
-      />
-    );
+    if (this.state.is_microinsurance){
+      dashboards.push(
+        <DashboardManagementMii
+          key={"dashboard-Management-Mii"}
+        />
+      );
+
+      dashboards.push(
+        <DashboardMII
+          key={"dashboard-MII"}
+        />
+      );
+    } else {
+      dashboards.push(
+        <DashboardManagement
+          key={"dashboard-Management"}
+        />
+      );
+
+      dashboards.push(
+        <DashboardOAS
+          key={"dashboard-OAS"}
+        />
+      );
+    }
 
     return dashboards;
   }
