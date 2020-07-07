@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var $searchBtn;
 var $downloadBtn;
 var $memberReportsSection;
