@@ -345,7 +345,7 @@ module Branches
                       FROM
                         amortization_schedule_entries
                       WHERE
-                        amortization_schedule_entries.due_date #{@manual_aging ? '<' : '<='} '#{@as_of}'
+                        amortization_schedule_entries.due_date #{@manual_aging ? '<=' : '<'} '#{@as_of}'
                       GROUP BY 1
                     ) at ON loans.id = at.loan_id
                   INNER JOIN centers c ON loans.center_id = c.id
