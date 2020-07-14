@@ -51,7 +51,7 @@ branch_config:
     current_date: "2020-06-30"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
     current_date: "2020-06-30"
