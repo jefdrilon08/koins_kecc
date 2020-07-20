@@ -64,7 +64,7 @@ branch_config:
     current_date: "2020-06-30"
   -
     id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
@@ -85,7 +85,7 @@ branch_config:
     current_date: "2020-06-30"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #BAGONGSILANG
-    #current_date: "2020-06-30"
+    current_date: "2020-06-30"
 
 #east3
 
