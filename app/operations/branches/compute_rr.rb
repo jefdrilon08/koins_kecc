@@ -195,6 +195,10 @@ module Branches
 
         if par > 0 and max_amort.present? and latest_transaction_date.present?
           num_days_par  = (@as_of - max_amort).to_i
+
+          if num_days_par == 0
+            num_days_par = 1
+          end
         elsif par > 0 and latest_transaction_date.blank?
           num_days_par  = (@as_of - first_date_of_payment).to_i
 
