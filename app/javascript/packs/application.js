@@ -147,6 +147,7 @@ import UserDemeritsShow from "../models/UserDemeritsShow.js";
 import EquityWithdrawalCollectionsIndex from "../models/EquityWithdrawalCollectionsIndex.js";
 import EquityWithdrawalCollectionsShow from "../models/EquityWithdrawalCollectionsShow.js";
 import ClaimsIndex from "../models/ClaimsIndex.js";
+import AdjustmentsMoratoriumsIndex from "../models/AdjustmentsMoratoriumsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -206,6 +207,7 @@ const hooks = {
   "adjustments/subsidiary_adjustments/show":          [SubsidiaryAdjustmentsShow],
   "adjustments/batch_moratorium_adjustments/index":   [BatchMoratoriumAdjustmentsIndex],
   "adjustments/batch_moratorium_adjustments/show":    [BatchMoratoriumAdjustmentsShow],
+  "adjustments/moratoriums/index":                    [AdjustmentsMoratoriumsIndex],
   "member_account_validations/index":                 [MemberAccountValidationsIndex],
   "member_account_validations/show":                  [MemberAccountValidationsShow],
   "member_account_validations/edit":                  [MemberAccountValidationsForm],
