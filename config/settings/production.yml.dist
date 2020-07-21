@@ -16,7 +16,7 @@ branch_config:
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
     #current_date: "2020-06-30"
