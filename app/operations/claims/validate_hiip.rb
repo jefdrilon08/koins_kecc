@@ -78,7 +78,7 @@ module Claims
       #   @errors << "Expired HIIP!"
       # end
 
-      if @amount.to_i >= 6000.00.to_i
+      if @amount.to_i > 6000.00.to_i
         @errors << "Exceed amount!"
       end
 
@@ -94,7 +94,7 @@ module Claims
         hiip_data = hiip.data.with_indifferent_access
         if hiip.member_id == @claim.member_id
           total_amount = total_amount + hiip_data[:amount].to_i
-          if total_amount >= 6000.00
+          if total_amount > 6000.00
             @errors << "Exceed amount!"
           end
         end 

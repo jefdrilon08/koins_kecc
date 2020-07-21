@@ -1,6 +1,6 @@
 = simple_form_for [@claim, @claim_attachment_file] do |f|
   .form-group
-    = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: ["BLIPFORM", "BC", "MC", "ID", "COHABITATION", "OTHERFILE"]
+    = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: [ "BLIP APPLICATION FORM", "CLIP APPLICATIOM FORM", "HIIP APPLICATION FORM", "MARRIAGE CONTRACT", "CENOMAR", "BIRTHCERTIFICATE","AFFIDAVIT OF COHABITATION", "ID OF CB", "ID OF CLAIMANT", "ID OF AUTHORIZE PERSON", "IMAGE/PICTURE/OF ATM OR ACCOUNT", "PROOF OF DEATH", "DEATHCERTIFICATE", "KMBA NOTICE ALL IN 1", "SOM ENDORSEMENT LETTER", "CENTER ENDORSEMENT LETTER", "POLICE REPORT/BARANGAY BLOTTER", "PROOF OF CONFINEMENT", "HOSPITAL BILLING", "RECEIPT/OR FOR REIMBURSEMENT",  "MEDICAL CERTIFICATE", "BUGDET REQUEST"
   .form-group
     = f.input :file, as: :file, input_html: { class: 'form-control' }
   %hr
