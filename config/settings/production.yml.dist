@@ -58,7 +58,7 @@ branch_config:
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
     #current_date: "2020-06-30"
@@ -71,7 +71,7 @@ branch_config:
     #current_date: "2020-06-30"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
     #current_date: "2020-06-30"
@@ -780,7 +780,7 @@ branch_accounting_codes:
 #east 2
   -
     branch_id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"                              #masinag
-    cash_in_bank_accounting_code_id: "a5ca6049-f991-448c-a386-ecdbfde954c2"
+    cash_in_bank_accounting_code_id: "8cc1d1df-c437-4d38-9ce0-a23a0fff38c9"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
