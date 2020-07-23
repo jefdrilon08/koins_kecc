@@ -11,7 +11,7 @@
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
 
 #north 3
   -
@@ -22,7 +22,7 @@ branch_config:
     #current_date: "2020-06-30"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
 
 #north 2    
   -
@@ -79,7 +79,7 @@ branch_config:
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
     current_date: "2020-06-30"
