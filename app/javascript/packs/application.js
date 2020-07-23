@@ -148,6 +148,7 @@ import EquityWithdrawalCollectionsIndex from "../models/EquityWithdrawalCollecti
 import EquityWithdrawalCollectionsShow from "../models/EquityWithdrawalCollectionsShow.js";
 import ClaimsIndex from "../models/ClaimsIndex.js";
 import AdjustmentsMoratoriumsIndex from "../models/AdjustmentsMoratoriumsIndex.js";
+import ChangePassword from "../models/ChangePassword.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -277,6 +278,7 @@ const hooks = {
   "members/form_resignation":                         [FormResignationComponent],
   "equity_withdrawal_collections/index":              [EquityWithdrawalCollectionsIndex],
   "equity_withdrawal_collections/show":               [EquityWithdrawalCollectionsShow, EquityWithdrawalCollectionUIComponent],
+  "pages/change_password":                            [ChangePassword]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

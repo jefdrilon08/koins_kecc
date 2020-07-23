@@ -30,6 +30,7 @@ namespace :api do
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
+    post "/change_password", to: "users#change_password"
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"
