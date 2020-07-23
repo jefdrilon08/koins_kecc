@@ -79,7 +79,7 @@ branch_config:
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
     current_date: "2020-06-30"
