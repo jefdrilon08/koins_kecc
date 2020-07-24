@@ -86,6 +86,9 @@ branch_config:
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
     current_date: "2020-06-30"
+  -
+    id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
+    #current_date: "2020-06-30"
 
 #east3
 
@@ -832,6 +835,12 @@ branch_accounting_codes:
   -
     branch_id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"                              #bagongsilang
     cash_in_bank_accounting_code_id: "cd48f570-a2b2-406e-9177-d0f8dd8e76ab"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"                              #lagro
+    cash_in_bank_accounting_code_id: "38edc06c-5499-4305-85e1-ac10cbc68354"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
