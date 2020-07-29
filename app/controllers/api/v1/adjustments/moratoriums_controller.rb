@@ -4,6 +4,35 @@ module Api
       class MoratoriumsController < ApplicationController
         before_action :authenticate_user!
 
+        def process_moratorium
+          member_moratorium_id = params[:id]
+          member_moratorium    = MemberMoratorium.where(id: params[:id]).first
+
+          config = {
+            member_moratorium: member_moratorium,
+            user: current_user
+          }
+
+          validator = ::Adjustments::Moratoriums::ValidateProcess.new(
+                        config: config
+                      )
+
+          validator.execute!
+
+          if validator.errors[:messages].any?
+            render json: validator.errors, status: 400
+          else
+            member_moratorium.update!(status: "processing")
+
+            ProcessMemberMoratorium.perform_later({
+              id: member_moratorium_id,
+              user_id: current_user.id
+            })
+
+            render json: { id: record.id }
+          end
+        end
+
         def delete
           moratorium  = MemberMoratorium.find(params[:id])
 

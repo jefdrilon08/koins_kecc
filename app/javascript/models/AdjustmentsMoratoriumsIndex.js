@@ -2,6 +2,7 @@ import Mustache from "mustache/mustache";
 
 var $modalNew;
 var $modalDelete;
+var $modalProcess;
 var $selectBranch;
 var $selectCenter;
 var $selectMember;
@@ -9,8 +10,10 @@ var $inputDateInitialized;
 var $inputNumberOfDays;
 var $btnNew;
 var $btnDelete;
+var $btnProcess;
 var $btnConfirmNew;
 var $btnConfirmDelete;
+var $btnConfirmProcess;
 var $message;
 var templateErrorList;
 var _authenticityToken;
@@ -32,11 +35,13 @@ var init  = function(options) {
 
 var _urlCreate  = "/api/v1/adjustments/moratoriums/create";
 var _urlDelete  = "/api/v1/adjustments/moratoriums/delete";
+var _urlProcess = "/api/v1/adjustments/moratoriums/process";
 var _urlCenters = "/api/v1/branches/fetch_centers";
 
 var _cacheDom = function() {
   $modalNew             = $("#modal-new");
   $modalDelete          = $("#modal-delete");
+  $modalProcess         = $("#modal-process");
   $selectBranch         = $("#select-branch");
   $selectCenter         = $("#select-center");
   $selectMember         = $("#select-member");
@@ -44,8 +49,10 @@ var _cacheDom = function() {
   $inputNumberOfDays    = $("#input-number-of-days");
   $btnNew               = $("#btn-new");
   $btnDelete            = $(".btn-delete");
+  $btnProcess           = $(".btn-process");
   $btnConfirmNew        = $("#btn-confirm-new");
   $btnConfirmDelete     = $("#btn-confirm-delete");
+  $btnConfirmProcess    = $("#btn-confirm-process");
   $message              = $(".message");
 
   templateErrorList = $("#template-error-list").html();
@@ -75,6 +82,46 @@ var _loadCenterOptions  = function() {
 };
 
 var _bindEvents = function() {
+  $btnProcess.on("click", function() {
+    _moratoriumId = $(this).data("id");
+    $modalProcess.modal("show");
+  });
+
+  $btnConfirmProcess.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmProcess.prop("disabled", true);
+
+    $.ajax({
+      url: _urlProcess,
+      method: "POST",
+      data: {
+        id: _moratoriumId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmProcess.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnDelete.on("click", function() {
     _moratoriumId = $(this).data("id");
     $modalDelete.modal("show");
