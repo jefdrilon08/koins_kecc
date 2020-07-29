@@ -17,11 +17,16 @@
                 %th.text-center
                   Number of Days
                 %th.text-center
+                  Status
+                %th.text-center
+                  Actions
             %tbody
               - @moratoriums.each do |o|
                 %tr
                   %td
-                    #{o.data["member"]["full_name"]}
+                    = link_to member_path(o.data["member"]["id"]), target: "_blank" do
+                      %strong
+                        #{o.data["member"]["full_name"]}
                   %td
                     #{o.data["branch"]["name"]}
                   %td
@@ -30,7 +35,29 @@
                     #{o.date_initialized}
                   %td.text-center
                     #{o.number_of_days}
+                  %td.text-center
+                    - if o.pending?
+                      .badge.badge-danger
+                        Pending
+                    - elsif o.processing?
+                      .badge.badge-info
+                        Processing
+                    - elsif o.approved?
+                      .badge.badge-success
+                        Approved
+                  %td.text-center
+                    - if o.pending?
+                      %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: o.id } }
+                        .fa.fa-times
+                        Delete
+                      %button.btn.btn-sm.btn-info.btn-process{ data: { id: o.id } }
+                        .fa.fa-check
+                        Process
           = paginate @moratoriums
+        - else
+          %p
+            No records found
 
 = render partial: "adjustments/moratoriums/modals/new"
+= render partial: "adjustments/moratoriums/modals/delete"
 = render partial: "templates/error_list"

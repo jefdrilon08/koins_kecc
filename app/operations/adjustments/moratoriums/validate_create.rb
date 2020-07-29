@@ -38,7 +38,7 @@ module Adjustments
         end
 
         if @member.present? and Loan.active.where(member_id: @member.id).count == 0
-          @errors[:message] << {
+          @errors[:messages] << {
             key: "member",
             message: "Member has no active loans"
           }
@@ -70,7 +70,7 @@ module Adjustments
           }
         end
 
-        not_yet_implemented!
+        #not_yet_implemented!
       
         @errors[:messages].each do |m|
           @errors[:full_messages] << m[:message]

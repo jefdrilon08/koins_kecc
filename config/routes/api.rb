@@ -24,6 +24,7 @@ namespace :api do
       post "/batch_moratorium_adjustments/approve", to: "batch_moratorium_adjustments#approve"
       post "/batch_moratorium_adjustments/destroy", to: "batch_moratorium_adjustments#destroy"
       post "/moratoriums/create", to: "moratoriums#create"
+      post "/moratoriums/delete", to: "moratoriums#delete"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"

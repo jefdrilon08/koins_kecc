@@ -13,7 +13,7 @@ class MemberMoratorium < ApplicationRecord
   validates :number_of_days, presence: true
   validates :status, presence: true, inclusion: STATUSES
 
-  has_many :member_loan_moratoria
+  has_many :member_loan_moratoria, dependent: :destroy
 
   before_validation :load_defaults
 

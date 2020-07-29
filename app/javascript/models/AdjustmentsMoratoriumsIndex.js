@@ -1,13 +1,16 @@
 import Mustache from "mustache/mustache";
 
 var $modalNew;
+var $modalDelete;
 var $selectBranch;
 var $selectCenter;
 var $selectMember;
 var $inputDateInitialized;
 var $inputNumberOfDays;
 var $btnNew;
+var $btnDelete;
 var $btnConfirmNew;
+var $btnConfirmDelete;
 var $message;
 var templateErrorList;
 var _authenticityToken;
@@ -18,6 +21,7 @@ var _members  = [];
 var _branchId;
 var _centerId;
 var _memberId;
+var _moratoriumId;
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -27,17 +31,21 @@ var init  = function(options) {
 };
 
 var _urlCreate  = "/api/v1/adjustments/moratoriums/create";
+var _urlDelete  = "/api/v1/adjustments/moratoriums/delete";
 var _urlCenters = "/api/v1/branches/fetch_centers";
 
 var _cacheDom = function() {
   $modalNew             = $("#modal-new");
+  $modalDelete          = $("#modal-delete");
   $selectBranch         = $("#select-branch");
   $selectCenter         = $("#select-center");
   $selectMember         = $("#select-member");
   $inputDateInitialized = $("#input-date-initialized");
   $inputNumberOfDays    = $("#input-number-of-days");
   $btnNew               = $("#btn-new");
+  $btnDelete            = $(".btn-delete");
   $btnConfirmNew        = $("#btn-confirm-new");
+  $btnConfirmDelete     = $("#btn-confirm-delete");
   $message              = $(".message");
 
   templateErrorList = $("#template-error-list").html();
@@ -67,6 +75,34 @@ var _loadCenterOptions  = function() {
 };
 
 var _bindEvents = function() {
+  $btnDelete.on("click", function() {
+    _moratoriumId = $(this).data("id");
+    $modalDelete.modal("show");
+  });
+
+  $btnConfirmDelete.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmDelete.prop("disabled", true);
+
+    $.ajax({
+      url: _urlDelete,
+      method: "POST",
+      data: {
+        id: _moratoriumId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in deleting record!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
   $selectCenter.on("change", function() {
     _centerId = $selectCenter.val();
 

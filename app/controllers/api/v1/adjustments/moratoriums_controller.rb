@@ -4,6 +4,18 @@ module Api
       class MoratoriumsController < ApplicationController
         before_action :authenticate_user!
 
+        def delete
+          moratorium  = MemberMoratorium.find(params[:id])
+
+          if !moratorium.pending?
+            raise "Invalid record #{moratorium.id}"
+          end
+
+          moratorium.destroy!
+
+          render json: { message: "ok" }
+        end
+
         def create
           branch  = Branch.where(id: params[:branch_id]).first
           center  = Center.where(id: params[:center_id]).first

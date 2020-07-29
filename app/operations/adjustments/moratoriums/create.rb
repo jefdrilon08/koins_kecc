@@ -45,13 +45,15 @@ module Adjustments
         build_active_loans!
 
         @member_moratorium.save!
+
+        @member_moratorium
       end
 
       def build_active_loans!
         @active_loans.each do |loan|
           loan_product = loan.loan_product
 
-          member_loan_moratorium  = MemberLoanMoratorium.new(
+          @member_moratorium.member_loan_moratoria.build({
                                       loan: loan,
                                       branch: @branch,
                                       center: @center,
@@ -81,10 +83,9 @@ module Adjustments
                                           identification_number: @member.identification_number
                                         }
                                       }
-                                    )
+                                    })
 
-          @member_moratorium.member_loan_moratoria << member_loan_moratorium
-          @member_moratorium.data[:active_loans] << {
+          @member_moratorium.data["active_loans"] << {
             id: loan.id,
             pn_number: loan.pn_number,
             loan_product: {
