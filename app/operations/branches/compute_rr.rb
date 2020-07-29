@@ -359,7 +359,7 @@ module Branches
                   INNER JOIN members m ON m.id = loans.member_id
                   WHERE
                     (
-                      loans.status = 'active' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
+                      loans.status IN ('active', 'processing') AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
                     )
                     OR
                     (
