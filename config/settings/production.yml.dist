@@ -27,23 +27,23 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
 
 #east1
   -
@@ -54,7 +54,7 @@ branch_config:
     #current_date: "2020-06-30"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
@@ -82,10 +82,13 @@ branch_config:
     #current_date: "2020-06-30"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
-    current_date: "2020-06-30"
+    #current_date: "2020-06-30"
+  -
+    id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
+    #current_date: "2020-06-30"
 
 #east3
 
@@ -832,6 +835,12 @@ branch_accounting_codes:
   -
     branch_id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"                              #bagongsilang
     cash_in_bank_accounting_code_id: "cd48f570-a2b2-406e-9177-d0f8dd8e76ab"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"                              #lagro
+    cash_in_bank_accounting_code_id: "38edc06c-5499-4305-85e1-ac10cbc68354"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
