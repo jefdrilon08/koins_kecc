@@ -536,7 +536,7 @@ namespace :adjust do
                 INNER JOIN
                   amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
                 WHERE
-                  loans.status IN ('active', 'paid')
+                  loans.status IN ('active', 'paid', 'processing')
                 ORDER BY
                   loans.id,
                   amortization_schedule_entries.due_date DESC,

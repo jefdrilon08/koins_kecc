@@ -132,7 +132,7 @@ module Loans
       ###########################################################################
       # Build accounting entry data
       ###########################################################################
-      particular  = " To record loan restructuring of #{@member.full_name}"
+      particular  = "To record #{@loan_product.name} of #{@member.full_name}"
       @book       = "JVB"
 
       ae_cmd  = ::Loans::BuildRestructuredAccountingEntry.new(
