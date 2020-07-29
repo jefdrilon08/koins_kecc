@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_30_064327) do
+ActiveRecord::Schema.define(version: 2020_07_28_113639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -691,6 +691,40 @@ ActiveRecord::Schema.define(version: 2020_06_30_064327) do
     t.index ["member_id"], name: "index_member_accounts_on_member_id"
   end
 
+  create_table "member_loan_moratoria", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_moratorium_id"
+    t.uuid "loan_id", null: false
+    t.uuid "branch_id", null: false
+    t.uuid "center_id", null: false
+    t.uuid "member_id", null: false
+    t.date "date_initialized"
+    t.string "status"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "number_of_days"
+    t.index ["branch_id"], name: "index_member_loan_moratoria_on_branch_id"
+    t.index ["center_id"], name: "index_member_loan_moratoria_on_center_id"
+    t.index ["loan_id"], name: "index_member_loan_moratoria_on_loan_id"
+    t.index ["member_id"], name: "index_member_loan_moratoria_on_member_id"
+    t.index ["member_moratorium_id"], name: "index_member_loan_moratoria_on_member_moratorium_id"
+  end
+
+  create_table "member_moratoria", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "branch_id", null: false
+    t.uuid "center_id", null: false
+    t.uuid "member_id", null: false
+    t.date "date_initialized"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "number_of_days"
+    t.index ["branch_id"], name: "index_member_moratoria_on_branch_id"
+    t.index ["center_id"], name: "index_member_moratoria_on_center_id"
+    t.index ["member_id"], name: "index_member_moratoria_on_member_id"
+  end
+
   create_table "member_shares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id"
     t.string "certificate_number"
@@ -980,6 +1014,14 @@ ActiveRecord::Schema.define(version: 2020_06_30_064327) do
   add_foreign_key "member_accounts", "branches"
   add_foreign_key "member_accounts", "centers"
   add_foreign_key "member_accounts", "members"
+  add_foreign_key "member_loan_moratoria", "branches"
+  add_foreign_key "member_loan_moratoria", "centers"
+  add_foreign_key "member_loan_moratoria", "loans"
+  add_foreign_key "member_loan_moratoria", "member_moratoria"
+  add_foreign_key "member_loan_moratoria", "members"
+  add_foreign_key "member_moratoria", "branches"
+  add_foreign_key "member_moratoria", "centers"
+  add_foreign_key "member_moratoria", "members"
   add_foreign_key "member_shares", "members"
   add_foreign_key "members", "branches"
   add_foreign_key "members", "centers"

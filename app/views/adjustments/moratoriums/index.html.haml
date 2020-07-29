@@ -1,0 +1,36 @@
+.row
+  .col
+    .card
+      .card-body
+        - if @moratoriums.any?
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                  Member
+                %th
+                  Branch
+                %th
+                  Center
+                %th
+                  Date Initialized
+                %th.text-center
+                  Number of Days
+                %th.text-center
+            %tbody
+              - @moratoriums.each do |o|
+                %tr
+                  %td
+                    #{o.data["member"]["full_name"]}
+                  %td
+                    #{o.data["branch"]["name"]}
+                  %td
+                    #{o.data["center"]["name"]}
+                  %td
+                    #{o.date_initialized}
+                  %td.text-center
+                    #{o.number_of_days}
+          = paginate @moratoriums
+
+= render partial: "adjustments/moratoriums/modals/new"
+= render partial: "templates/error_list"

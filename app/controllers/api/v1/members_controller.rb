@@ -640,12 +640,19 @@ module Api
       def index
         members = Member.all.order("last_name ASC")
 
+        if params[:center_id].present?
+          members = members.where(center_id: params[:center_id])
+        end
+
         data  = []
 
         members.each do |o|
           data << {
             id: o.id,
-            name: o.full_name
+            name: o.full_name,
+            first_name: o.first_name,
+            last_name: o.last_name,
+            middle_name: o.middle_name
           }
         end
 
