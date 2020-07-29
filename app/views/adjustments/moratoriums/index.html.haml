@@ -42,9 +42,9 @@
                     - elsif o.processing?
                       .badge.badge-info
                         Processing
-                    - elsif o.approved?
+                    - elsif o.done?
                       .badge.badge-success
-                        Approved
+                        Done
                   %td.text-center
                     - if o.pending?
                       %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: o.id } }

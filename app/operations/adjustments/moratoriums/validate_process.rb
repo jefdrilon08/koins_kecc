@@ -32,7 +32,7 @@ module Adjustments
           }
         end
 
-        not_yet_implemented!
+        #not_yet_implemented!
       
         @errors[:messages].each do |m|
           @errors[:full_messages] << m[:message]

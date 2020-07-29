@@ -29,7 +29,7 @@ module Api
               user_id: current_user.id
             })
 
-            render json: { id: record.id }
+            render json: { message: "ok" }
           end
         end
 

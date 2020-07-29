@@ -13,13 +13,11 @@ class ProcessMemberMoratorium < ApplicationJob
 
       ActiveRecord::Base.transaction do
         member_moratorium.member_loan_moratoria.each do |member_loan_moratorium|
-          if member_loan_moratorium.pending?
-            member_loan_moratorium.update!(status: "processing")
-            ProcessMemberLoanMoratorium.perform_later({
-              id: member_loan_moratorium.id,
-              user_id: user.id
-            })
-          end
+          member_loan_moratorium.update!(status: "processing")
+          ProcessMemberLoanMoratorium.perform_later({
+            id: member_loan_moratorium.id,
+            user_id: user.id
+          })
         end
       end
     rescue Exception => e
