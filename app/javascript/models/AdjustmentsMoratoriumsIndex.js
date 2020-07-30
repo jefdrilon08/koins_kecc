@@ -3,17 +3,21 @@ import Mustache from "mustache/mustache";
 var $modalNew;
 var $modalDelete;
 var $modalProcess;
+var $modalBatchProcess;
 var $selectBranch;
 var $selectCenter;
 var $selectMember;
+var $selectProcessCenter;
 var $inputDateInitialized;
 var $inputNumberOfDays;
 var $btnNew;
 var $btnDelete;
 var $btnProcess;
+var $btnBatchProcess;
 var $btnConfirmNew;
 var $btnConfirmDelete;
 var $btnConfirmProcess;
+var $btnConfirmBatchProcess;
 var $message;
 var templateErrorList;
 var _authenticityToken;
@@ -33,27 +37,32 @@ var init  = function(options) {
   _bindEvents();
 };
 
-var _urlCreate  = "/api/v1/adjustments/moratoriums/create";
-var _urlDelete  = "/api/v1/adjustments/moratoriums/delete";
-var _urlProcess = "/api/v1/adjustments/moratoriums/process";
-var _urlCenters = "/api/v1/branches/fetch_centers";
+var _urlCreate        = "/api/v1/adjustments/moratoriums/create";
+var _urlDelete        = "/api/v1/adjustments/moratoriums/delete";
+var _urlProcess       = "/api/v1/adjustments/moratoriums/process";
+var _urlBatchProcess  = "/api/v1/adjustments/moratoriums/batch_process";
+var _urlCenters       = "/api/v1/branches/fetch_centers";
 
 var _cacheDom = function() {
-  $modalNew             = $("#modal-new");
-  $modalDelete          = $("#modal-delete");
-  $modalProcess         = $("#modal-process");
-  $selectBranch         = $("#select-branch");
-  $selectCenter         = $("#select-center");
-  $selectMember         = $("#select-member");
-  $inputDateInitialized = $("#input-date-initialized");
-  $inputNumberOfDays    = $("#input-number-of-days");
-  $btnNew               = $("#btn-new");
-  $btnDelete            = $(".btn-delete");
-  $btnProcess           = $(".btn-process");
-  $btnConfirmNew        = $("#btn-confirm-new");
-  $btnConfirmDelete     = $("#btn-confirm-delete");
-  $btnConfirmProcess    = $("#btn-confirm-process");
-  $message              = $(".message");
+  $modalNew               = $("#modal-new");
+  $modalDelete            = $("#modal-delete");
+  $modalProcess           = $("#modal-process");
+  $modalBatchProcess      = $("#modal-batch-process");
+  $selectBranch           = $("#select-branch");
+  $selectCenter           = $("#select-center");
+  $selectMember           = $("#select-member");
+  $selectProcessCenter    = $("#select-process-center");
+  $inputDateInitialized   = $("#input-date-initialized");
+  $inputNumberOfDays      = $("#input-number-of-days");
+  $btnNew                 = $("#btn-new");
+  $btnDelete              = $(".btn-delete");
+  $btnProcess             = $(".btn-process");
+  $btnBatchProcess        = $("#btn-batch-process");
+  $btnConfirmNew          = $("#btn-confirm-new");
+  $btnConfirmDelete       = $("#btn-confirm-delete");
+  $btnConfirmProcess      = $("#btn-confirm-process");
+  $btnConfirmBatchProcess = $("#btn-confirm-batch-process");
+  $message                = $(".message");
 
   templateErrorList = $("#template-error-list").html();
 };
@@ -82,6 +91,48 @@ var _loadCenterOptions  = function() {
 };
 
 var _bindEvents = function() {
+  $btnBatchProcess.on("click", function() {
+    $modalBatchProcess.modal("show");
+  });
+
+  $btnConfirmBatchProcess.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmBatchProcess.prop("disabled", true);
+
+    var centerId = $selectProcessCenter.val();
+
+    $.ajax({
+      url: _urlBatchProcess,
+      method: "POST",
+      data: {
+        center_id: centerId,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmBatchProcess.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnProcess.on("click", function() {
     _moratoriumId = $(this).data("id");
     $modalProcess.modal("show");
@@ -95,7 +146,8 @@ var _bindEvents = function() {
       url: _urlProcess,
       method: "POST",
       data: {
-        id: _moratoriumId
+        id: _moratoriumId,
+        authenticity_token: _authenticityToken
       },
       success: function(response) {
         $message.html("Success!");

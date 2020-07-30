@@ -4,6 +4,38 @@ module Api
       class MoratoriumsController < ApplicationController
         before_action :authenticate_user!
 
+        def batch_process
+          center  = Center.where(id: params[:center_id]).first
+
+          config = {
+            center: center,
+            user: current_user
+          }
+
+          validator = ::Adjustments::Moratoriums::ValidateBatchProcess.new(
+                        config: config
+                      )
+
+          validator.execute!
+
+          if validator.errors[:messages].any?
+            render json: validator.errors, status: 400
+          else
+            MemberMoratorium.pending.where(
+              center_id: center.id
+            ).update(
+              status: "processing"
+            )
+
+            ProcessMemberMoratoriumBatchProcess.perform_later({
+              center_id: center.id,
+              user_id: current_user.id
+            })
+
+            render json: { message: "ok" }
+          end
+        end
+
         def process_moratorium
           member_moratorium_id = params[:id]
           member_moratorium    = MemberMoratorium.where(id: params[:id]).first

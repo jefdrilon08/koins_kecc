@@ -44,6 +44,13 @@ module Adjustments
           }
         end
 
+        if @member.present? and MemberMoratorium.pending.where(member_id: @member.id).count > 0
+          @errors[:messages] << {
+            key: "member",
+            message: "Member still has pending moratorium"
+          }
+        end
+
         if @date_initialized.blank?
           @errors[:messages] << {
             key: "date_initialized",
@@ -56,7 +63,7 @@ module Adjustments
             key: "number_of_days",
             message: "Number of days required"
           }
-        elsif @number_of_days <= 0
+        elsif @number_of_days == 0
           @errors[:messages] << {
             key: "number_of_days",
             message: "Invalid number of days"

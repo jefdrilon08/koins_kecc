@@ -15,6 +15,10 @@ class MemberMoratorium < ApplicationRecord
 
   has_many :member_loan_moratoria, dependent: :destroy
 
+  scope :pending, -> { where(status: "pending") }
+  scope :processing, -> { where(status: "processing") }
+  scope :done, -> { where(status: "done") }
+
   before_validation :load_defaults
 
   def load_defaults
