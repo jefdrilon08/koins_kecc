@@ -76,7 +76,7 @@ module Loans
 
       @loan.data = {
         clip_number: @clip_number,
-        beneficiary: {
+        clip_beneficiary: {
           first_name: @beneficiary_first_name,
           middle_name: @beneficiary_middle_name,
           last_name: @beneficiary_last_name,
@@ -91,6 +91,7 @@ module Loans
           middle_name: @co_maker_member.middle_name,
           last_name: @co_maker_member.last_name
         },
+        co_maker_two: @co_maker,
         voucher: {
           or_number: "",
           bank_check_number: "",
@@ -132,7 +133,7 @@ module Loans
       ###########################################################################
       # Build accounting entry data
       ###########################################################################
-      particular  = "To record #{@loan_product.name} of #{@member.full_name}"
+      particular  = "To record #{@loan_product.name} of #{@member.full_name} CLIP ##{@clip_number}"
       @book       = "JVB"
 
       ae_cmd  = ::Loans::BuildRestructuredAccountingEntry.new(
