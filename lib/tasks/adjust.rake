@@ -556,7 +556,7 @@ namespace :adjust do
               end
 
               if last_transaction_date.present?
-                if current_date > last_amortization_date and status == 'active'
+                if current_date > last_amortization_date and ['active', 'processing'].include?(status)
                   max_active_date = current_date
                 elsif last_transaction_date > last_amortization_date
                   max_active_date = last_transaction_date
