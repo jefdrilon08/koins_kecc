@@ -30,18 +30,18 @@ var _centerId;
 var _memberId;
 var _moratoriumId;
 
+var _urlCreate        = "/api/v1/adjustments/moratoriums/create";
+var _urlDelete        = "/api/v1/adjustments/moratoriums/delete";
+var _urlProcess       = "/api/v1/adjustments/moratoriums/process";
+var _urlBatchProcess  = "/api/v1/adjustments/moratoriums/batch_process";
+var _urlCenters       = "/api/v1/branches/fetch_centers";
+
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
 
   _cacheDom();
   _bindEvents();
 };
-
-var _urlCreate        = "/api/v1/adjustments/moratoriums/create";
-var _urlDelete        = "/api/v1/adjustments/moratoriums/delete";
-var _urlProcess       = "/api/v1/adjustments/moratoriums/process";
-var _urlBatchProcess  = "/api/v1/adjustments/moratoriums/batch_process";
-var _urlCenters       = "/api/v1/branches/fetch_centers";
 
 var _cacheDom = function() {
   $modalNew               = $("#modal-new");

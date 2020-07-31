@@ -93,6 +93,9 @@ namespace :api do
     get "/accounting/fetch_general_ledger", to: "accounting#fetch_general_ledger"
     get "/accounting/trial_balance_excel", to: "accounting#trial_balance_excel"
 
+    post "/trial_balances/create", to: "trial_balances#create"
+    post "/trial_balances/delete", to: "trial_balances#delete"
+
     # Accounting Entries
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"
     post "/accounting_entries/save", to: "accounting_entries#save"

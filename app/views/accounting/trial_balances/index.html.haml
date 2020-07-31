@@ -1,0 +1,14 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @trial_balances.any?
+          = render partial: "list", locals: { trial_balances: @trial_balances }
+          = paginate @trial_balances
+        - else
+          %p
+            No records found
+
+= render partial: "accounting/trial_balances/modals/new"
+= render partial: "templates/error_list"
