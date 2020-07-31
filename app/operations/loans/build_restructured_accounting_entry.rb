@@ -14,6 +14,8 @@ module Loans
       @voucher_data = @loan_data[:voucher]
       @active_loans = @config[:active_loans]
 
+      @miscellaneous_offset = 0.00
+
       # Single amount for debit entry computed in build_credit_journal_entries!
       @total_debit = 0.00
 
@@ -106,6 +108,13 @@ module Loans
       
       if @settings_offset.blank?
         raise "No offset settings found for loan_product #{@loan_product.id}"
+      end
+
+      # Offset for miscellaneous expense
+      @settings_miscellaneous_accounting_code_id  = @settings.miscellaneous_accounting_code_id
+
+      if @settings_miscellaneous_accounting_code_id.blank?
+        raise "No miscellaneous offset settings found for loan_product #{@loan_product.id}"
       end
 
       # Branch related accounting code settings
@@ -202,6 +211,21 @@ module Loans
         name: name,
         amount: amount
       }
+
+      if @miscellaneous_offset < 0
+        # Add miscellaneous expense to debit sidte
+        accounting_code = AccountingCode.find(@settings_miscellaneous_accounting_code_id)
+        code            = accounting_code.code
+        name            = accounting_code.name
+        amount          = @miscellaneous_offset.abs
+
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: code,
+          name: name,
+          amount: amount
+        }
+      end
 
       journal_entries
     end
@@ -1365,17 +1389,21 @@ module Loans
         # Get offset and add as part of credit
         offset = (rounded_off_amount - credit_so_far).round(2)
 
-        accounting_code = AccountingCode.find(@settings_offset.accounting_code_id)
-        code            = accounting_code.code
-        name            = accounting_code.name
-        amount          = offset
+        if offset > 0
+          accounting_code = AccountingCode.find(@settings_offset.accounting_code_id)
+          code            = accounting_code.code
+          name            = accounting_code.name
+          amount          = offset
 
-        journal_entries << {
-          accounting_code_id: accounting_code.id,
-          code: code,
-          name: name,
-          amount: amount
-        }
+          journal_entries << {
+            accounting_code_id: accounting_code.id,
+            code: code,
+            name: name,
+            amount: amount
+          }
+        else
+          @miscellaneous_offset = offset
+        end
 
         # Set @total_debit to rounded off value
         @total_debit = rounded_off_amount
