@@ -7,11 +7,33 @@
       .modal-body
         .modal-body-content
           .row
-            .col-12
+            .col-md-6.col-xs-12
               .form-group
                 %label
                   Branch
                 = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Center
+                = select_tag :center_id, options_from_collection_for_select([], :id, :name), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
+          .row
+            .col
+              .form-group
+                %label
+                  Member
+                = select_tag :member_id, options_for_select([]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Date Initialized
+                = date_field_tag :date_initialized, Date.today, class: "form-control", id: "input-date-initialized"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Number of Days
+                = number_field_tag :number_of_days, 0, class: "form-control", id: "input-number-of-days"
           .message
       .modal-footer
         .controls

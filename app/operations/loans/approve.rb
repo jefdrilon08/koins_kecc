@@ -137,102 +137,107 @@ module Loans
         elsif deduction_type == "deposit"
           if @member.member_type != "GK"
             if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
-            if @loan.data.with_indifferent_access[:advance_insurance_available] == false
-              offset          = s_deduction.meta.offset
-              accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
-              name            = accounting_code.name
-              code            = accounting_code.code
-              amount          = 0.00
-              val             = s_deduction.meta.value
+              if @loan.data.with_indifferent_access[:advance_insurance_available] == false
+                offset          = s_deduction.meta.offset
+                accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+                name            = accounting_code.name
+                code            = accounting_code.code
+                amount          = 0.00
+                val             = s_deduction.meta.value
 
-              multiplier  = @num_installments
+                # Base value on accounting entry
+                entry = @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == accounting_code.id }.first
 
-              loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
-              if loan_cycle.present?
-              #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
-                if @term == "weekly"
-                elsif @term == "monthly"
-                  multiplier  = (multiplier * 4.3333333).ceil.to_i
-                elsif @term == "semi-monthly"
-                  # weird unique rule for 12 semi-monthly
-                  if @num_installments ==  12
-                    multiplier  = 12.5 * 2
-                  elsif @num_installments == 6
-                    multiplier  = 15
-                  else
-                    multiplier  = multiplier * 2
-                  end
-                else
-                  raise "Invalid term #{@term}"
+                if entry.present?
+                  amount = entry["amount"].to_f.round(2)
                 end
+#                multiplier  = @num_installments
+#
+#                loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
+#                if loan_cycle.present?
+#                  if @term == "weekly"
+#                  elsif @term == "monthly"
+#                    multiplier  = (multiplier * 4.3333333).ceil.to_i
+#                  elsif @term == "semi-monthly"
+#                    # weird unique rule for 12 semi-monthly
+#                    if @num_installments ==  12
+#                      multiplier  = 12.5 * 2
+#                    elsif @num_installments == 6
+#                      multiplier  = 15
+#                    else
+#                      multiplier  = multiplier * 2
+#                    end
+#                  else
+#                    raise "Invalid term #{@term}"
+#                  end
+#
+#                  amount  = val * (multiplier + offset)
+#                else
+#                  amount  = val
+#                end #end loan cycle present
 
-                amount  = val * (multiplier + offset)
-              else
-                amount  = val
-              end #end loan cycle present
-
-            #### DEPOSIT TRANSACTION ####
+                #### DEPOSIT TRANSACTION ####
         
-            if amount > 0
-              member_account  = MemberAccount.where(
-                                  member_id: @member.id,
-                                  account_type: s_deduction.meta.account_type,
-                                  account_subtype: s_deduction.meta.account_subtype
-                                ).first
+                if amount > 0
+                  member_account  = MemberAccount.where(
+                                    member_id: @member.id,
+                                    account_type: s_deduction.meta.account_type,
+                                    account_subtype: s_deduction.meta.account_subtype
+                                  ).first
 
-              account_transaction = AccountTransaction.new(
-                                      subsidiary_id: member_account.id,
-                                      subsidiary_type: "MemberAccount",
-                                      amount: amount,
-                                      transaction_type: @transaction_type,
-                                      transacted_at: @date_paid,
-                                      status: "approved",
-                                      data: {
-                                        is_withdraw_payment: false,
-                                        is_fund_transfer: false,
-                                        is_interest: false,
-                                        is_adjustment: false,
-                                        is_for_exit_age: false,
-                                        is_for_loan_payments: false,
-                                        accounting_entry_reference_number: nil,
-                                        beginning_balance: 0.00,
-                                        ending_balance: 0.00
-                                      }
-                                    )
+                  account_transaction = AccountTransaction.new(
+                                          subsidiary_id: member_account.id,
+                                          subsidiary_type: "MemberAccount",
+                                          amount: amount,
+                                          transaction_type: @transaction_type,
+                                          transacted_at: @date_paid,
+                                          status: "approved",
+                                          data: {
+                                            is_withdraw_payment: false,
+                                            is_fund_transfer: false,
+                                            is_interest: false,
+                                            is_adjustment: false,
+                                            is_for_exit_age: false,
+                                            is_for_loan_payments: false,
+                                            accounting_entry_reference_number: nil,
+                                            beginning_balance: 0.00,
+                                            ending_balance: 0.00
+                                          }
+                                        )
 
-              # Compute beginning and ending balance
-              account_transaction.data[:beginning_balance]  = member_account.balance.round(2)
-              account_transaction.data[:ending_balance]     = (member_account.balance + amount).round(2)
+                  # Compute beginning and ending balance
+                  account_transaction.data[:beginning_balance]  = member_account.balance.round(2)
+                  account_transaction.data[:ending_balance]     = (member_account.balance + amount).round(2)
 
-              # For equity amount computation
-              if member_account.account_subtype == Settings.life
-                if member_account.data.nil?
-                  # For New Loaner
-                  member_account.data = { equity_value: (amount / 2).round(2) }
-                  member_account.save!
-                  
-                  account_transaction.data[:equity_value] = (amount / 2).round(2)
-                else
-                  # For Reloaner
-                  member_account_data = member_account.data.with_indifferent_access
-                  equity_value = member_account_data[:equity_value]
-                  member_account_data[:equity_value] = ((amount / 2) + equity_value).round(2)
-                  member_account.update!(data: member_account_data)
+                  # For equity amount computation
+                  if member_account.account_subtype == Settings.life
+                    if member_account.data.nil?
+                      # For New Loaner
+                      member_account.data = { equity_value: (amount / 2).round(2) }
+                      member_account.save!
+                      
+                      account_transaction.data[:equity_value] = (amount / 2).round(2)
+                    else
+                      # For Reloaner
+                      member_account_data = member_account.data.with_indifferent_access
+                      equity_value = member_account_data[:equity_value]
+                      member_account_data[:equity_value] = ((amount / 2) + equity_value).round(2)
+                      member_account.update!(data: member_account_data)
 
-                  account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
-                end
+                      account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
+                    end
+                  end
+
+                  # Update account balance
+                  new_balance = (member_account.balance + amount).round(2)
+                  member_account.update!(
+                    balance: new_balance
+                  )
+
+                  account_transaction.save!
+                end 
+                #### DEPOSIT TRANSACTION
               end
-
-              # Update account balance
-              new_balance = (member_account.balance + amount).round(2)
-              member_account.update!(
-                balance: new_balance
-              )
-
-              account_transaction.save!
-            end 
-            #### DEPOSIT TRANSACTION
-            end
             end #s_deduction.meta.algo
           end #gk
         end

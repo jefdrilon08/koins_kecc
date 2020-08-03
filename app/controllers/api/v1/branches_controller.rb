@@ -37,7 +37,27 @@ module Api
         #branch  = @branches.where(id: params[:id]).first
         branch = @branches.select{ |o| o[:id] == params[:id] }.first
 
-        centers = Center.where(branch_id: branch[:id]).order("name ASC").map{ |c| { id: c.id, name:  c.name } }
+        centers = Center.where(branch_id: branch[:id]).order("name ASC").map{ |c| 
+                    members = []
+
+                    if params[:with_members].present?
+                      members = Member.active.where(center_id: c.id).order("last_name ASC").map{ |m|
+                                  {
+                                    id: m.id,
+                                    last_name: m.last_name,
+                                    first_name: m.first_name,
+                                    middle_name: m.middle_name,
+                                    full_name: m.full_name
+                                  }
+                                }
+                    end
+
+                    { 
+                      id: c.id, 
+                      name:  c.name,
+                      members: members
+                    }
+                  }
 
         render json: { centers: centers }
       end

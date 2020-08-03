@@ -127,6 +127,8 @@ module Accounting
           text: "Edit: #{@accounting_code}"
         }
       ]
+
+      @subheader_side_actions = []
     end
 
     def update

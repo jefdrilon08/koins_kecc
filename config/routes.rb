@@ -365,6 +365,9 @@ Rails.application.routes.draw do
     delete "/accounting_entries/:id", to: "accounting_entries#destroy", as: :delete_accounting_entry
     get "/accounting_entry/form", to: "accounting_entries#form", as: :accounting_entry_form
     
+    get "/trial_balances", to: "trial_balances#index"
+    get "/trial_balances/:id", to: "trial_balances#show"
+    delete "/trial_balances/:id", to: "trial_balances#destroy"
   end
 
   def draw(routes_name)

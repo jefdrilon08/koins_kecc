@@ -23,6 +23,10 @@ namespace :api do
       post "/batch_moratorium_adjustments/create", to: "batch_moratorium_adjustments#create"
       post "/batch_moratorium_adjustments/approve", to: "batch_moratorium_adjustments#approve"
       post "/batch_moratorium_adjustments/destroy", to: "batch_moratorium_adjustments#destroy"
+      post "/moratoriums/create", to: "moratoriums#create"
+      post "/moratoriums/delete", to: "moratoriums#delete"
+      post "/moratoriums/process", to: "moratoriums#process_moratorium"
+      post "/moratoriums/batch_process", to: "moratoriums#batch_process"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -30,6 +34,7 @@ namespace :api do
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
+    post "/change_password", to: "users#change_password"
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"
@@ -87,6 +92,9 @@ namespace :api do
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
     get "/accounting/fetch_general_ledger", to: "accounting#fetch_general_ledger"
     get "/accounting/trial_balance_excel", to: "accounting#trial_balance_excel"
+
+    post "/trial_balances/create", to: "trial_balances#create"
+    post "/trial_balances/delete", to: "trial_balances#delete"
 
     # Accounting Entries
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"

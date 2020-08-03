@@ -71,6 +71,7 @@ module Api
 
             render json: { message: "ok", id: loan.id }
           rescue Exception => e
+            logger.info e 
             render json: { message: "error", id: member.id }, status: 500
           end
         end

@@ -50,7 +50,6 @@ module Adjustments
                 else
                   raise "something went wrong"
                 end
-
               end
 
               current_date = o.due_date

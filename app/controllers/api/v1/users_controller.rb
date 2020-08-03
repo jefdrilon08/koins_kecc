@@ -3,6 +3,31 @@ module Api
     class UsersController < ApiController
       before_action :authenticate_user!, except: [:login]
 
+      def change_password
+        password              = params[:password]
+        password_confirmation = params[:password_confirmation]
+
+        validator = ::Users::ValidateChangePassword.new(
+                      password: password,
+                      password_confirmation: password_confirmation,
+                      user: current_user
+                    )
+
+        validator.execute!
+
+        if validator.errors[:full_messages].any?
+          render json: validator.errors, status: 400
+        else
+          ::Users::ChangePassword.new(
+            password: password,
+            password_confirmation: password_confirmation,
+            user: current_user
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def login
         username  = params[:username]
         password  = params[:password]
