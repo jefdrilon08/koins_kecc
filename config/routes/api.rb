@@ -118,6 +118,7 @@ namespace :api do
     post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     post "/loans/restructure", to: "loans#restructure"
     get "/loans/fetch", to: "loans#fetch"
+    get "/loans/fetch_by_member", to: "loans#fetch_by_member"
 
     # Branches
     get "/branches", to: "branches#index"
