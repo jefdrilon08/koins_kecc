@@ -1,6 +1,16 @@
 class MembersController < ApplicationController
   before_action :authenticate_user!
 
+  def search
+    @subheader_items = [
+      { text: "Members", is_link: true, path: members_path },
+      { text: "Search" }
+    ]
+
+    @subheader_side_actions = [
+    ]
+  end
+
   def index
     @members  = Member.select("*")
                       .includes(:center, :branch, :profile_picture_attachment)

@@ -51,6 +51,7 @@ namespace :api do
 
     # Members
     get "/members", to: "members#index"
+    get "/members/search", to: "members#search"
     get "/members/fetch", to: "members#fetch"
     get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
     get "/members/fetch_resignation_details", to: "members#fetch_resignation_details"
