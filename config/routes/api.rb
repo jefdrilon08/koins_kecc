@@ -51,6 +51,7 @@ namespace :api do
 
     # Members
     get "/members", to: "members#index"
+    get "/members/search", to: "members#search"
     get "/members/fetch", to: "members#fetch"
     get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
     get "/members/fetch_resignation_details", to: "members#fetch_resignation_details"
@@ -117,6 +118,7 @@ namespace :api do
     post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     post "/loans/restructure", to: "loans#restructure"
     get "/loans/fetch", to: "loans#fetch"
+    get "/loans/fetch_by_member", to: "loans#fetch_by_member"
 
     # Branches
     get "/branches", to: "branches#index"

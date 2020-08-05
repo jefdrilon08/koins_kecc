@@ -24,6 +24,12 @@
                   Member
                 = select_tag :member_id, options_for_select([]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
           .row
+            .col
+              .form-group
+                %label
+                  Loans
+                = select_tag :loan_ids, options_for_select([]), class: "form-control select-select2 js-searchable", id: "select-loans", multiple: true
+          .row
             .col-md-6.col-xs-12
               .form-group
                 %label

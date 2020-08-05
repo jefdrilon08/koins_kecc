@@ -7,11 +7,13 @@ module Adjustments
         @branch           = @config[:branch]
         @center           = @config[:center]
         @member           = @config[:member]
+        @loans            = @config[:loans]
         @date_initialized = @config[:date_initialized]
         @number_of_days   = @config[:number_of_days].try(:to_i)
         @user             = @config[:user]
         
-        @active_loans = Loan.active.where(member_id: @member.id)
+        #@active_loans = Loan.active.where(member_id: @member.id)
+        @active_loans = @loans
 
         @member_moratorium  = MemberMoratorium.new(
                                 branch: @branch,
@@ -90,7 +92,7 @@ module Adjustments
             pn_number: loan.pn_number,
             loan_product: {
               id: loan_product.id,
-              name: loan_product.id
+              name: loan_product.name
             }
           }
         end

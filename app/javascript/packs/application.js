@@ -151,6 +151,7 @@ import AdjustmentsMoratoriumsIndex from "../models/AdjustmentsMoratoriumsIndex.j
 import ChangePassword from "../models/ChangePassword.js";
 import TrialBalancesIndex from "../models/TrialBalancesIndex.js";
 import TrialBalancesShow from "../models/TrialBalancesShow.js";
+import MembersSearch from "../models/MembersSearch.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -162,6 +163,7 @@ const renderComponent = (Component, payload) => {
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
   "members/index":                                    [MembersIndex],
+  "members/search":                                   [MembersSearch],
   "members/show":                                     [MembersShow],
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],

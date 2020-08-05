@@ -10,12 +10,14 @@ module Adjustments
         @branch           = @config[:branch]
         @center           = @config[:center]
         @member           = @config[:member]
+        @loans            = @config[:loans]
         @date_initialized = @config[:date_initialized]
         @number_of_days   = @config[:number_of_days].try(:to_i)
         @user             = @config[:user]
       end
 
       def execute!
+
         if @branch.blank?
           @errors[:messages] << {
             key: "branch",
@@ -41,6 +43,13 @@ module Adjustments
           @errors[:messages] << {
             key: "member",
             message: "Member has no active loans"
+          }
+        end
+
+        if !@loans.any?
+          @errors[:messages] << {
+            key: "loans",
+            message: "No loans provided"
           }
         end
 

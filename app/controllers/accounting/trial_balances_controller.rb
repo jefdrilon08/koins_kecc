@@ -13,7 +13,35 @@ module Accounting
       @trial_balances = DataStore.trial_balances.where(
                           "meta->>'branch_id' IN (?)",
                           @branches.pluck(:id)
-                        ).order("status DESC")
+                        ).order("status DESC, updated_at DESC")
+
+      # Filter
+      @f_branch_id          = params[:f_branch_id]
+      @f_start_date         = params[:f_start_date].try(:to_date)
+      @f_end_date           = params[:f_end_date].try(:to_date)
+      @f_accounting_fund_id = params[:f_accounting_fund_id]
+
+      if @f_branch_id.present?
+        @trial_balances = @trial_balances.where(
+                            "meta->>'branch_id' = ?",
+                            @f_branch_id
+                          )
+      end
+
+      if @f_start_date.present? and @f_end_date.present? and @f_start_date < @f_end_date
+        @trial_balances = @trial_balances.where(
+                            "DATE(meta->>'start_date') >= ? AND DATE(meta->>'end_date') <= ?",
+                            @f_start_date,
+                            @f_end_date
+                          )
+      end
+
+      if @f_accounting_fund_id.present?
+        @trial_balances = @trial_balances.where(
+                            "meta->>'accounting_fund_id' = ?",
+                            @f_accounting_fund_id
+                          )
+      end
 
       @trial_balances = @trial_balances.page(params[:page]).per(20)
 
