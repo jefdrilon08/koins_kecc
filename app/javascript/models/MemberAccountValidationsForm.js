@@ -46,6 +46,11 @@ var _cacheDom = function() {
   $section                         = $(".transaction-table");
   $btnDelete                       = $(".btn-delete");
   $memberSelect                    = $("#member-select");
+  $memberSelect.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
   $resignationDate                 = $("#resignation-date");
   $btnAddMember                    = $("#btn-add-member");
   $modalLoading                    = $("#modal-loading");
