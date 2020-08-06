@@ -138,11 +138,11 @@ class InsuranceFundTransferCollectionsController < ApplicationController
     end
 
     if @errors[:messages].any?
-      redirect_to upload_deposit_path
+      redirect_to upload_fund_transfer_path
       flash[:error] = @errors[:messages]
     else
       @insurance_fund_transfer_collection = InsuranceFundTransferCollections::LoadFundTransferFromCsvFile.new(config: config).execute!
-      flash[:success] = "Successfully upload deposit."
+      flash[:success] = "Successfully upload fund transfer."
       redirect_to insurance_fund_transfer_collection_path(@insurance_fund_transfer_collection)
     end  
   end
