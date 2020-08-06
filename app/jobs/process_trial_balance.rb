@@ -9,6 +9,8 @@ class ProcessTrialBalance < ApplicationJob
       branch          = Branch.find(data_store.meta["branch_id"])
       start_date      = data_store.meta["start_date"].to_date
       end_date        = data_store.meta["end_date"].to_date
+      raise start_date.inspect
+
       accounting_fund = AccountingFund.where(id: data_store.meta["accounting_fund_id"]).first
       user            = User.find(data_store.meta["user"]["id"])
 
