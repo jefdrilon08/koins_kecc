@@ -4,6 +4,7 @@ module Accounting
       @config           = config
       @start_date       = @config[:start_date]
       @end_date         = @config[:end_date]
+      raise @end_date.inspect
       @branch           = @config[:branch]
       @accounting_fund  = @config[:accounting_fund]
       @accounting_codes = {}
