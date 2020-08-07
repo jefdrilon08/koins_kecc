@@ -14,9 +14,16 @@ module Adjustments
         @date_initialized = @config[:date_initialized]
         @number_of_days   = @config[:number_of_days].try(:to_i)
         @user             = @config[:user]
+        @reason           = @config[:reason]
       end
 
       def execute!
+        if @reason.blank?
+          @errors[:messages] << {
+            key: "reason",
+            message: "Reason required"
+          }
+        end
 
         if @branch.blank?
           @errors[:messages] << {

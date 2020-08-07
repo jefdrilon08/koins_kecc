@@ -2,6 +2,7 @@
   .col
     .card
       .card-body
+        = render partial: "adjustments/moratoriums/index_filter"
         - if @moratoriums.any?
           %table.table.table-sm.table-bordered
             %thead
@@ -14,6 +15,8 @@
                   Center
                 %th
                   Date Initialized
+                %th
+                  Reason
                 %th.text-center
                   Number of Days
                 %th.text-center
@@ -37,6 +40,8 @@
                     #{o.data["center"]["name"]}
                   %td
                     #{o.date_initialized}
+                  %td
+                    #{o.reason}
                   %td.text-center
                     #{o.number_of_days}
                   %td.text-center

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_28_113639) do
+ActiveRecord::Schema.define(version: 2020_08_07_141547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -703,6 +703,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_113639) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "number_of_days"
+    t.string "reason"
     t.index ["branch_id"], name: "index_member_loan_moratoria_on_branch_id"
     t.index ["center_id"], name: "index_member_loan_moratoria_on_center_id"
     t.index ["loan_id"], name: "index_member_loan_moratoria_on_loan_id"
@@ -720,6 +721,7 @@ ActiveRecord::Schema.define(version: 2020_07_28_113639) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "number_of_days"
+    t.string "reason"
     t.index ["branch_id"], name: "index_member_moratoria_on_branch_id"
     t.index ["center_id"], name: "index_member_moratoria_on_center_id"
     t.index ["member_id"], name: "index_member_moratoria_on_member_id"

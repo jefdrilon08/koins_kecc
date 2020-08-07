@@ -82,6 +82,7 @@ module Api
           center  = Center.where(id: params[:center_id]).first
           member  = Member.where(id: params[:member_id]).first
           loans   = Loan.where(id: params[:loan_ids])
+          reason  = params[:reason]
 
           date_initialized  = params[:date_initialized]
           number_of_days    = params[:number_of_days]
@@ -93,7 +94,8 @@ module Api
             date_initialized: date_initialized,
             number_of_days: number_of_days,
             user: current_user,
-            loans: loans
+            loans: loans,
+            reason: reason
           }
 
           validator = ::Adjustments::Moratoriums::ValidateCreate.new(
