@@ -12,8 +12,7 @@ module Api
 
       def create
         start_date          = params[:start_date].try(:to_date)
-        end_date            = params[:jef].try(:to_date)
-        #end_date            = params[:end_date].try(:to_date)
+        end_date            = params[:end_date].try(:to_date)
         branch_id           = params[:branch_id]
         accounting_fund_id  = params[:accounting_fund_id]
 

@@ -18,7 +18,7 @@ module ApplicationHelper
   end
 
   def oas_mis_user
-    oas_mis_user = ["OAS","MIS"].include? current_user.roles.last
+    oas_mis_user = ["OAS","MIS","SO"].include? current_user.roles.last
   end
 
   def title(*args)
