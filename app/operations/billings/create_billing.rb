@@ -1,17 +1,25 @@
 module Billings
   class CreateBilling
-    def initialize(config:)
-      @config           = config
-      @collection_date  = @config[:collection_date]
-      @user             = @config[:user]
-      @branch           = Branch.where(id: @config[:branch_id]).first
-      @center           = Center.where(id: @config[:center_id]).first
+    def initialize(config:, billing: nil)
+      @config = config
+      @user   = @config[:user]
 
-      @billing  = Billing.new(
-                    collection_date: @collection_date,
-                    branch: @branch,
-                    center: @center
-                  )
+      if billing.present?
+        @billing          = billing
+        @collection_date  = @billing.collection_date
+        @branch           = @billing.branch
+        @center           = @billing.center
+      else
+        @collection_date  = @config[:collection_date]
+        @branch           = Branch.where(id: @config[:branch_id]).first
+        @center           = Center.where(id: @config[:center_id]).first
+
+        @billing  = Billing.new(
+                      collection_date: @collection_date,
+                      branch: @branch,
+                      center: @center
+                    )
+      end
 
       @members  = Member.active.where(center_id: @center.id)
 

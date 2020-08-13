@@ -46,7 +46,6 @@ module WithdrawalCollections
           key: "user",
           message: "user not found"
         }
-      else
       end
 
       # Validate current_transaction

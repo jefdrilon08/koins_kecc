@@ -17,6 +17,15 @@ module Billings
         }
       end
 
+      is_cutoff = ::Utils::IsCutoff.new(branch: @branch).execute!
+
+      if is_cutoff
+        @errors[:messages] << {
+          key: "cut_off",
+          message: "Within cutoff period"
+        }
+      end
+
       if @branch.blank?
         @errors[:messages] << {
           key: "branch",
