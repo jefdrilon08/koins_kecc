@@ -15,6 +15,15 @@ module DataStores
           key: "branch",
           message: "Branch not found"
         }
+      elsif @branch.present?
+        is_cutoff = ::Utils::IsCutoff.new(branch: @branch).execute!
+
+        if !is_cutoff
+          @errors[:messages] << {
+            key: "cut_off",
+            message: "Not yet cutoff period"
+          }
+        end
       end
 
       if @as_of.blank?
