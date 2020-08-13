@@ -4,6 +4,7 @@ class LoansController < ApplicationController
   def index
     @loans            = ReadOnlyLoan.includes(:center, :branch, :member, :loan_product)
                             .where("loans.branch_id IN (?)", @branches.pluck(:id))
+
     @q                = params[:q]
     @status           = params[:status]
     @loan_product_id  = params[:loan_product_id]
@@ -32,7 +33,7 @@ class LoansController < ApplicationController
     end
 
     if @status.present?
-      @loans  = @loans.joins(:member).where(status: @status)
+      @loans  = @loans.where(status: @status)
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
