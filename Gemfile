@@ -30,7 +30,7 @@ gem 'zip-zip'
 gem 'tty-table'
 gem 'rollbar'
 gem 'httparty'
-gem 'rack-timeout'
+#gem 'rack-timeout'
 gem 'newrelic_rpm'
 
 gem 'uglifier'
