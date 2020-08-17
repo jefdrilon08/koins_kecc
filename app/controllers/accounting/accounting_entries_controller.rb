@@ -9,11 +9,6 @@ module Accounting
     def show
       @accounting_entry = AccountingEntry.find(params[:id])
 
-      @activity_logs  = ActivityLog.where(
-                          "data ->> 'accounting_entry_id' = ?",
-                          @accounting_entry.id
-                        ).order("created_at DESC")
-
       @subheader_items = [
         {
           text: "Books"

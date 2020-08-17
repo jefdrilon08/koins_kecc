@@ -217,11 +217,6 @@ class MembersController < ApplicationController
 
     @loan_products  = LoanProduct.select("*").order("name ASC")
 
-    @activity_logs  = ActivityLog.where(
-                        "data ->> 'member_id' = ?",
-                        @member.id
-                      ).order("created_at DESC")
-
     @loan_cycles  = @member.data.with_indifferent_access[:loan_cycles]
 
     @missing_accounts = ::Members::FetchMissingAccounts.new(
