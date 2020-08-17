@@ -2,7 +2,8 @@ class Billing < ApplicationRecord
   STATUSES  = [
     "pending",
     "approved",
-    "processing"
+    "processing",
+    "error"
   ]
 
   belongs_to :center

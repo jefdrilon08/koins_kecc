@@ -11,6 +11,7 @@ module Adjustments
         @date_initialized = @config[:date_initialized]
         @number_of_days   = @config[:number_of_days].try(:to_i)
         @user             = @config[:user]
+        @reason           = @config[:reason]
         
         #@active_loans = Loan.active.where(member_id: @member.id)
         @active_loans = @loans
@@ -21,6 +22,7 @@ module Adjustments
                                 member: @member,
                                 date_initialized: @date_initialized,
                                 number_of_days: @number_of_days,
+                                reason: @reason,
                                 data: {
                                   active_loans: [],
                                   branch: {
@@ -62,6 +64,7 @@ module Adjustments
                                       member: @member,
                                       date_initialized: @date_initialized,
                                       number_of_days: @number_of_days,
+                                      reason: @reason,
                                       data: {
                                         pn_number: loan.pn_number,
                                         loan_product: {

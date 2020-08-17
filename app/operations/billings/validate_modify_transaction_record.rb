@@ -6,11 +6,21 @@ module Billings
       @current_transaction  = @config[:current_transaction]
       @current_member       = @config[:current_member]
       @user                 = @config[:user]
+      @branch               = @billing.branch
 
       super()
     end
 
     def execute!
+      is_cutoff = ::Utils::IsCutoff.new(branch: @branch).execute!
+
+      if is_cutoff
+        @errors[:messages] << {
+          key: "cut_off",
+          message: "Within cutoff period"
+        }
+      end
+
       # Validate billing status
       if @billing.blank?
         @errors[:messages] << {

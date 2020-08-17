@@ -13,6 +13,7 @@ var $selectProcessCenter;
 var $selectLoans;
 var $inputDateInitialized;
 var $inputNumberOfDays;
+var $inputReason;
 var $btnNew;
 var $btnDelete;
 var $btnProcess;
@@ -61,6 +62,7 @@ var _cacheDom = function() {
   $selectLoans            = $("#select-loans");
   $inputDateInitialized   = $("#input-date-initialized");
   $inputNumberOfDays      = $("#input-number-of-days");
+  $inputReason            = $("#input-reason");
   $btnNew                 = $("#btn-new");
   $btnDelete              = $(".btn-delete");
   $btnProcess             = $(".btn-process");
@@ -264,7 +266,12 @@ var _bindEvents = function() {
     $selectMember.html("");
     for(var i = 0; i < _members.length; i++) {
       $selectMember.append(new Option(_members[i].full_name, _members[i].id));
+    }
+
+    if(_members.length > 0) {
       _memberId = _members[i].id;
+
+      _fetchLoans();
     }
   });
 
@@ -304,6 +311,7 @@ var _bindEvents = function() {
 
     var dateInitialized = $inputDateInitialized.val();
     var numberOfDays    = $inputNumberOfDays.val();
+    var reason          = $inputReason.val();
 
     $btnConfirmNew.prop("disabled", true);
     $selectBranch.prop("disabled", true);
@@ -312,6 +320,7 @@ var _bindEvents = function() {
     $selectLoans.prop("disabled", true);
     $inputDateInitialized.prop("disabled", true);
     $inputNumberOfDays.prop("disabled", true);
+    $inputReason.prop("disabled", true);
 
     console.log(_loanIds);
 
@@ -327,6 +336,7 @@ var _bindEvents = function() {
         loan_ids: _loanIds,
         date_initialized: dateInitialized,
         number_of_days: numberOfDays,
+        reason: reason,
         authenticity_token: _authenticityToken
       },
       success: function(resonse) {
@@ -357,6 +367,7 @@ var _bindEvents = function() {
           $selectMember.prop("disabled", false);
           $selectLoans.prop("disabled", false);
           $inputDateInitialized.prop("disabled", false);
+          $inputReason.prop("disabled", false);
           $inputNumberOfDays.prop("disabled", false);
         }
       }

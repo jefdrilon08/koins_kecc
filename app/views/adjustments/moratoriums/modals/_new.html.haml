@@ -40,6 +40,12 @@
                 %label
                   Number of Days
                 = number_field_tag :number_of_days, 0, class: "form-control", id: "input-number-of-days"
+          .row
+            .col
+              .form-group
+                %label
+                  Reason
+                = text_field_tag :reason, "", class: "form-control", id: "input-reason", placeholder: "Reason"
           .message
       .modal-footer
         .controls
