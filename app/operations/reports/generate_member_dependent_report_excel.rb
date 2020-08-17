@@ -1,3 +1,4 @@
+
 module Reports
   class GenerateMemberDependentReportExcel
     def initialize(start_date:, end_date:, branch:)
@@ -8,7 +9,7 @@ module Reports
         if Settings.activate_microinsurance
           @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status != ? AND branch_id = ? AND member_type = ?", @start_date, @end_date, "dormant", @branch, "Regular")
         else  
-          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status = ? AND branch_id = ? AND member_type = ?", @start_date, @end_date, "inforce", @branch, "Regular").order("center_id ASC")
+          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular").order("center_id ASC")
         end
       end
 
@@ -38,13 +39,15 @@ module Reports
             "LAST NAME",
             "FIRST NAME",
             "MI",
+            "STATUS",
+            "INSURANCE STATUS",
             "REL",
             "CIVIL STATUS",
             "GENDER",
             "DOB",
             "AGE",
             "BRANCH",
-            "CENTER"
+            "CENTER",
           ], style: header
 
           @members.each_with_index do |member, index|
@@ -325,6 +328,8 @@ module Reports
                   member.last_name.upcase,
                   member.first_name.upcase,
                   member.middle_name[0].try(:upcase),
+                  member.status,
+                  member.insurance_status,
                   "PRINCIPAL",
                   civil_status,
                   gender,
@@ -336,11 +341,13 @@ module Reports
              
                 sheet.add_row [
                     "",
-                    "",
-                    "",
+                    member.identification_number,
+                    member.recognition_date,
                     dependent_last_name,
                     dependent_first_name,
                     dependent_middle_name,
+                    member.status,
+                    member.insurance_status,
                     dependent_relationship_to_member,
                     dependent_civil_status,
                     dependent_gender,
@@ -359,6 +366,8 @@ module Reports
                   member.last_name.upcase,
                   member.first_name.upcase,
                   member.middle_name[0].try(:upcase),
+                  member.status,
+                  member.insurance_status,
                   "PRINCIPAL",
                   civil_status,
                   gender,
@@ -371,11 +380,13 @@ module Reports
                 #if dependent_first_name.present?  
                   sheet.add_row [
                       "",
-                      "",
-                      "",
+                      member.identification_number,
+                      member.recognition_date,
                       dependent_last_name,
                       dependent_first_name,
                       dependent_middle_name,
+                      member.status,
+                      member.insurance_status,
                       dependent_relationship_to_member,
                       dependent_civil_status,
                       dependent_gender,
