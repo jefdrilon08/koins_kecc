@@ -105,7 +105,7 @@ branch_config:
 #south1
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #south2
   -
