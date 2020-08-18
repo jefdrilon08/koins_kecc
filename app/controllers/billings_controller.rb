@@ -95,32 +95,32 @@ class BillingsController < ApplicationController
           text: "Delete"
         }
       end
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-print",
+        id: "btn-print-wp",
+        text: "Print Withdraw Payment"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-print",
+        id: "btn-print",
+        text: "Print Billing"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-download",
+        id: "btn-excel",
+        text: "Download Excel"
+      }
+
+      @payload = {
+        id: @billing.id
+      }
     end
-
-    @subheader_side_actions << {
-      link: "#",
-      class: "fa fa-print",
-      id: "btn-print-wp",
-      text: "Print Withdraw Payment"
-    }
-
-    @subheader_side_actions << {
-      link: "#",
-      class: "fa fa-print",
-      id: "btn-print",
-      text: "Print Billing"
-    }
-
-    @subheader_side_actions << {
-      link: "#",
-      class: "fa fa-download",
-      id: "btn-excel",
-      text: "Download Excel"
-    }
-
-    @payload = {
-      id: @billing.id
-    }
   end
 
   def destroy
