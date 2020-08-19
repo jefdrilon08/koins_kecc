@@ -4233,6 +4233,7 @@ loan_products:
         name: "Golden Protection Fund"
         accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
         amount: 0.00
+        restructuring_primary: true
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "false"
         use_for_special_loan_fund: "true"
