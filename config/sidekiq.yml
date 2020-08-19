@@ -2,9 +2,10 @@ development:
   :concurrency: 2
 production:
   :concurrency: 4
-  :queues:
-    - critical
-    - default
-    - mailers
-    - low
 :timeout: 60
+:queues:
+  - critical
+  - operations
+  - default
+  - mailers
+  - low
