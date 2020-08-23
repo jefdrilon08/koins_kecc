@@ -106,6 +106,9 @@ branch_config:
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
     #current_date: "2020-07-31"
+  -
+    id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
+    #current_date: "2020-07-31"
 
 #south2
   -
@@ -874,6 +877,12 @@ branch_accounting_codes:
   -
     branch_id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"                              #laspinas
     cash_in_bank_accounting_code_id: "a27e51fc-bde0-4c39-affe-bd63fb7763ea"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"                              #paranaque
+    cash_in_bank_accounting_code_id: "7a0995c9-ddf9-4666-8c99-769fa1ffb8d1"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
