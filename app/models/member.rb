@@ -116,6 +116,68 @@ class Member < ApplicationRecord
     end
   end
 
+  def life_number_of_lapsed
+    self.member_accounts.each do |ma|
+      if ma.account_subtype == "Life Insurance Fund"
+        recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
+        current_date = Date.today.to_date
+        
+        account_transactions = AccountTransaction.personal_funds.where(
+                    "subsidiary_id = ?",
+                    ma.id
+                  ).order("transacted_at ASC")
+
+        latest_transaction = account_transactions.last
+        current_balance   = ma.balance
+
+        num_days = (current_date - recognition_date).to_i
+        num_weeks  = (num_days / 7).to_i + 1
+      
+        latest_transaction_date = latest_transaction.try(:transacted_at)
+
+        default_periodic_payment = 15
+
+        coverage_date   = (recognition_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
+        insured_amount  = num_weeks  * default_periodic_payment
+        amt_past_due    = (current_balance - insured_amount) * -1
+        num_weeks_past_due  = (amt_past_due / default_periodic_payment).to_i
+
+        return num_weeks_past_due
+      end
+    end
+  end
+
+  def rf_number_of_lapsed
+    self.member_accounts.each do |ma|
+      if ma.account_subtype == "Retirement Fund"
+        recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
+        current_date = Date.today.to_date
+        
+        account_transactions = AccountTransaction.personal_funds.where(
+                    "subsidiary_id = ?",
+                    ma.id
+                  ).order("transacted_at ASC")
+
+        latest_transaction = account_transactions.last
+        current_balance   = ma.balance
+
+        num_days = (current_date - recognition_date).to_i
+        num_weeks  = (num_days / 7).to_i + 1
+      
+        latest_transaction_date = latest_transaction.try(:transacted_at)
+
+        default_periodic_payment = 5
+
+        coverage_date   = (recognition_date + ((current_balance / default_periodic_payment).to_i).weeks).strftime("%B %d, %Y")
+        insured_amount  = num_weeks  * default_periodic_payment
+        amt_past_due    = (current_balance - insured_amount) * -1
+        num_weeks_past_due  = (amt_past_due / default_periodic_payment).to_i
+
+        return num_weeks_past_due
+      end
+    end
+  end
+
   def profile_picture_url
     if self.profile_picture.attached? and self.profile_picture.representable?
       return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
