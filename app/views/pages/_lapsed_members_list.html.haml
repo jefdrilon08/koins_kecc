@@ -26,11 +26,9 @@
       %th
         LIFE
       %th
-        LIFE Lapsed
-      %th
         RF
       %th
-        RF Lapsed
+        LIFE Lapsed
   %tbody
     - @members.find_each(batch_size: 1000) do |m|
       %tr
@@ -59,9 +57,7 @@
         %td
           #{m.lif_amount}
         %td
-          #{m.life_number_of_lapsed}
-        %td
           #{m.rf_amount}
         %td
-          #{m.rf_number_of_lapsed}
+          #{m.life_number_of_lapsed}
 
