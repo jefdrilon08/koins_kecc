@@ -26,9 +26,6 @@
   %li.nav-item  
     %a.nav-link{"aria-controls" => "membership_payments", "aria-selected" => "false", "data-toggle" => "tab", :href => "#membership_payments", :role => "tab"}
       Membership Payments
-  %li.nav-item
-    %a.nav-link{"aria-controls" => "activity_logs", "aria-selected" => "false", "data-toggle" => "tab", :href => "#activity_logs", :role => "tab"}
-      Activity Logs
 .tab-content
   #home.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "profile_details"
@@ -48,5 +45,3 @@
     = render partial: "members/attachment_files"
   #membership_payments.tab-pane{:role => "tabpanel"}
     = render partial: "members/membership_payments", locals: { membership_payments: @membership_payments }
-  #activity_logs.tab-pane{:role => "tabpanel"}
-    = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }

@@ -113,11 +113,6 @@ module Administration
     def show
       @center = Center.find(params[:id])
 
-      @activity_logs  = ActivityLog.where(
-                          "data ->> 'center_id' = ?",
-                          @center.id
-                        ).order("created_at DESC")
-
       @subheader_items = [
         {
           text: "Administration"

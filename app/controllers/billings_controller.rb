@@ -38,84 +38,89 @@ class BillingsController < ApplicationController
 
   def show
     @billing  = ReadOnlyBilling.find(params[:id])
-    @data     = @billing.data.with_indifferent_access
 
-    @current_date = ::Utils::GetCurrentDate.new(
-                      config: {
-                        branch: @billing.branch
-                      }
-                    ).execute!
+    if @billing.processing?
+      redirect_to billings_path
+    else
+      @data     = @billing.data.with_indifferent_access
 
-    @activity_logs  = ReadOnlyActivityLog.where(
-                        "data ->> 'billing_id' = ?",
-                        @billing.id
-                      ).order("created_at DESC")
+      @current_date = ::Utils::GetCurrentDate.new(
+                        config: {
+                          branch: @billing.branch
+                        }
+                      ).execute!
 
-    @subheader_items = [
-      { is_link: true, path: billings_path, text: "Billings" },
-      { text: "Billing #{@billing.id}" }
-    ]
+      @activity_logs  = ReadOnlyActivityLog.where(
+                          "data ->> 'billing_id' = ?",
+                          @billing.id
+                        ).order("created_at DESC")
 
-    @subheader_side_actions = []
+      @subheader_items = [
+        { is_link: true, path: billings_path, text: "Billings" },
+        { text: "Billing #{@billing.id}" }
+      ]
 
-    if @billing.pending?
-      if helpers.sbk_bk_mis_user
+      @subheader_side_actions = []
+
+      if @billing.pending?
+        if helpers.sbk_bk_mis_user
+          @subheader_side_actions << {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-check",
+            text: "Check"
+          }
+
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            text: "Approve"
+          }
+        end
+
+        if helpers.oas_mis_user
+          @subheader_side_actions << {
+            id: "btn-zero-out",
+            link: "#",
+            class: "fa fa-times",
+            text: "Zero Out"
+          }
+        end
+
         @subheader_side_actions << {
-          id: "btn-check",
-          link: "#",
-          class: "fa fa-check",
-          text: "Check"
-        }
-
-        @subheader_side_actions << {
-          id: "btn-approve",
-          link: "#",
-          class: "fa fa-check",
-          text: "Approve"
-        }
-      end
-
-      if helpers.oas_mis_user
-        @subheader_side_actions << {
-          id: "btn-zero-out",
-          link: "#",
+          link: billing_path(@billing.id),
           class: "fa fa-times",
-          text: "Zero Out"
+          data: { method: :delete, confirm: "Are you sure?" },
+          text: "Delete"
         }
       end
 
       @subheader_side_actions << {
-        link: billing_path(@billing.id),
-        class: "fa fa-times",
-        data: { method: :delete, confirm: "Are you sure?" },
-        text: "Delete"
+        link: "#",
+        class: "fa fa-print",
+        id: "btn-print-wp",
+        text: "Print Withdraw Payment"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-print",
+        id: "btn-print",
+        text: "Print Billing"
+      }
+
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-download",
+        id: "btn-excel",
+        text: "Download Excel"
+      }
+
+      @payload = {
+        id: @billing.id
       }
     end
-
-    @subheader_side_actions << {
-      link: "#",
-      class: "fa fa-print",
-      id: "btn-print-wp",
-      text: "Print Withdraw Payment"
-    }
-
-    @subheader_side_actions << {
-      link: "#",
-      class: "fa fa-print",
-      id: "btn-print",
-      text: "Print Billing"
-    }
-
-    @subheader_side_actions << {
-      link: "#",
-      class: "fa fa-download",
-      id: "btn-excel",
-      text: "Download Excel"
-    }
-
-    @payload = {
-      id: @billing.id
-    }
   end
 
   def destroy

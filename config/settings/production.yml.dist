@@ -14,18 +14,18 @@ cutoff_time_end: "23:59"
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
     #current_date: "2020-07-31"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #north 2    
   -
@@ -36,7 +36,7 @@ branch_config:
     current_date: "2020-07-31"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
@@ -54,7 +54,7 @@ branch_config:
     current_date: "2020-07-31"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
     current_date: "2020-07-31"
@@ -71,18 +71,18 @@ branch_config:
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
     current_date: "2020-07-31"
@@ -105,7 +105,10 @@ branch_config:
 #south1
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
+  -
+    id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
+    #current_date: "2020-07-31"
 
 #south2
   -
@@ -874,6 +877,12 @@ branch_accounting_codes:
   -
     branch_id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"                              #laspinas
     cash_in_bank_accounting_code_id: "a27e51fc-bde0-4c39-affe-bd63fb7763ea"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"                              #paranaque
+    cash_in_bank_accounting_code_id: "7a0995c9-ddf9-4666-8c99-769fa1ffb8d1"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -4233,6 +4242,7 @@ loan_products:
         name: "Golden Protection Fund"
         accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
         amount: 0.00
+        restructuring_primary: true
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "false"
         use_for_special_loan_fund: "true"

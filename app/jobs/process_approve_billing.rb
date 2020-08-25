@@ -1,5 +1,5 @@
 class ProcessApproveBilling < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     billing = Billing.find(args[:id])
