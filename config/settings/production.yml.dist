@@ -88,10 +88,10 @@ branch_config:
     current_date: "2020-07-31"
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #east3
 
