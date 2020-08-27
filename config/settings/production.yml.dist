@@ -30,7 +30,7 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
     current_date: "2020-07-31"
@@ -40,13 +40,13 @@ branch_config:
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
     current_date: "2020-07-31"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #east1
   -
