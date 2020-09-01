@@ -61,10 +61,10 @@ branch_config:
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    #current_date: "2020-07-31"
+    current_date: "2020-08-31"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    #current_date: "2020-07-31"
+    current_date: "2020-08-31"
   -
     id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
     current_date: "2020-07-31"
@@ -100,7 +100,7 @@ branch_config:
     current_date: "2020-08-31"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    #current_date: "2020-07-31"
+    current_date: "2020-08-31"
 
 #south1
   -
