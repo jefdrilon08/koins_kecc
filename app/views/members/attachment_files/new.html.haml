@@ -1,15 +1,5 @@
-%ol.breadcrumb
-  %li.breadcrumb-item
-    .fa.fa-money-check
-      Attachment File
-  %li.breadcrumb-item
-    .fa.fa-user
-    = link_to members_path(@member) do
-      #{@member.full_name} 
-
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "members/attachment_files/form", locals: { attachment_file: @attachment_file }
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "members/attachment_files/form", locals: { attachment_file: @attachment_file }

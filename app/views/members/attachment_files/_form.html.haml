@@ -1,6 +1,15 @@
+- if @attachment_file.errors.any?
+  .callout.callout-danger
+    %h5
+      Errors
+    %ul
+      - @attachment_file.errors.full_messages.each do |e|
+        %li
+          #{e}
+
 = simple_form_for [@member, @attachment_file] do |f|
   .form-group
-    = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: ["BLIPFORM", "BC", "MC", "ID", "COHABITATION", "OTHERFILE"]
+    = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: AttachmentFile::NAMES
   .form-group
     = f.input :file, as: :file, input_html: { class: 'form-control' }
   %hr
