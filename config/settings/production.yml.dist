@@ -100,7 +100,7 @@ branch_config:
     current_date: "2020-08-31"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    current_date: "2020-07-31"
+    #current_date: "2020-07-31"
 
 #south1
   -
