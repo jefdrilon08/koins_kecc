@@ -8,6 +8,15 @@ module Claims
 
     def new
       @claim_attachment_file = ClaimAttachmentFile.new
+
+      @subheader_items = [
+        { text: "Claims", is_link: true, path: claims_path },
+        { text: "#{@claim.id}", is_link: true, path: claim_path(@claim) },
+        { text: "New Claim Attachment File" }
+      ]
+
+      @subheader_side_actions = [
+      ]
     end
 
     def create
@@ -18,6 +27,15 @@ module Claims
         flash[:success] = "Successfully created claim"
         redirect_to claim_path(@claim)
       else
+        @subheader_items = [
+        { text: "Claims", is_link: true, path: claims_path },
+        { text: "#{@claim.id}", is_link: true, path: claim_path(@claim) },
+        { text: "New Claim Attachment File" }
+        ]
+
+        @subheader_side_actions = [
+        ]
+
         flash[:error] = "Error in creating claim_attachment_file"
         render :new
       end
@@ -25,6 +43,15 @@ module Claims
 
     def edit
       @claim_attachment_file = ClaimAttachmentFile.find(params[:id])
+
+      @subheader_items = [
+        { text: "Claims", is_link: true, path: claims_path },
+        { text: "#{@claim.id}", is_link: true, path: claim_path(@claim) },
+        { text: "Edit Claim Attachment File" }
+      ]
+
+      @subheader_side_actions = [
+      ]
     end
 
     def show
@@ -37,6 +64,15 @@ module Claims
       if @claim_attachment_file.update(claim_attachment_file_params)
         redirect_to claim_path(@claim)
       else
+        @subheader_items = [
+        { text: "Claims", is_link: true, path: claims_path },
+        { text: "#{@claim.id}", is_link: true, path: claim_path(@claim) },
+        { text: "Edit Claim Attachment File" }
+        ]
+
+        @subheader_side_actions = [
+        ]
+
         flash[:error] = "Error in saving claim"
         render :new
       end
