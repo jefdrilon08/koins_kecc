@@ -16,7 +16,9 @@
         %tr
           %td
             - if claim_attachment_file.file.attached?        
-              = image_tag rails_blob_path(claim_attachment_file.file, disposition: "attachment", only_path: true, resize: "600x600", align: "middle"), width: "1130", height: "1100"
+              = image_tag rails_blob_path(claim_attachment_file.file, disposition: "attachment", only_path: true), width: "1100", height: "1000"
+              %br
+              = link_to claim_attachment_file.file.record_id, rails_blob_path(claim_attachment_file.file, disposition: "attachment")
             - else
               %p
                 No image found
