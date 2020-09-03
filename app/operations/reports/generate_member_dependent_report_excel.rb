@@ -7,7 +7,7 @@ module Reports
       @branch     = branch
       if !@start_date.nil? &&  !@end_date.nil? && !@branch.nil?
         if Settings.activate_microinsurance
-          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status != ? AND branch_id = ? AND member_type = ?", @start_date, @end_date, "dormant", @branch, "Regular")
+          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular")
         else  
           @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular").order("center_id ASC")
         end
@@ -219,7 +219,7 @@ module Reports
                 if valid_dependents.count > 0
                   dependent_last_name = valid_dependents.first.last_name.upcase
                   dependent_first_name = valid_dependents.first.first_name.upcase
-                  dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+                  dependent_middle_name = valid_dependents.first.middle_name.try(:upcase)
                   dependent_date_of_birth = valid_dependents.first.date_of_birth
                   dependent_civil_status = "SINGLE"
                   dependent_gender = "MALE"
@@ -251,7 +251,7 @@ module Reports
                     if valid_dependents.first.age > 60 
                       dependent_last_name = valid_dependents.first.last_name.upcase
                       dependent_first_name = valid_dependents.first.first_name.upcase
-                      dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+                      dependent_middle_name = valid_dependents.first.middle_name.try(:upcase)
                       dependent_date_of_birth = valid_dependents.first.date_of_birth
                       dependent_civil_status = "MARRIED"
                       dependent_gender = "FEMALE"
@@ -260,7 +260,7 @@ module Reports
                     else  
                       dependent_last_name = valid_dependents.first.last_name.upcase
                       dependent_first_name = valid_dependents.first.first_name.upcase
-                      dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+                      dependent_middle_name = valid_dependents.first.middle_name.try(:upcase)
                       dependent_date_of_birth = valid_dependents.first.date_of_birth
                       dependent_civil_status = "SINGLE"
                       dependent_gender = "MALE"
@@ -291,7 +291,7 @@ module Reports
                   if valid_dependents.count > 0
                     dependent_last_name = valid_dependents.first.last_name.upcase
                     dependent_first_name = valid_dependents.first.first_name.upcase
-                    dependent_middle_name = valid_dependents.first.middle_name[0].try(:upcase)
+                    dependent_middle_name = valid_dependents.first.middle_name.try(:upcase)
                     dependent_date_of_birth = valid_dependents.first.date_of_birth
                     dependent_civil_status = "SINGLE"
                     dependent_gender = "MALE"
@@ -327,7 +327,7 @@ module Reports
                   member.recognition_date,
                   member.last_name.upcase,
                   member.first_name.upcase,
-                  member.middle_name[0].try(:upcase),
+                  member.middle_name.try(:upcase),
                   member.status,
                   member.insurance_status,
                   "PRINCIPAL",
@@ -365,7 +365,7 @@ module Reports
                   member.recognition_date,
                   member.last_name.upcase,
                   member.first_name.upcase,
-                  member.middle_name[0].try(:upcase),
+                  member.middle_name.try(:upcase),
                   member.status,
                   member.insurance_status,
                   "PRINCIPAL",

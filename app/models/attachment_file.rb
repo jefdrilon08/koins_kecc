@@ -9,7 +9,6 @@ class AttachmentFile < ApplicationRecord
   ]
 
   belongs_to :member
-  belongs_to :claim, optional: true
 
   has_one_attached :file
 
