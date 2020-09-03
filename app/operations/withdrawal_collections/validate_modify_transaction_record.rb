@@ -58,7 +58,7 @@ module WithdrawalCollections
             message: "Amount cannot be negative"
           }
         else
-          member_account  = MemberAccount.find(@current_transaction[:member_account_id])
+          member_account  = ReadOnlyMemberAccount.find(@current_transaction[:member_account_id])
           result          = (member_account.balance - amount).round(2)
           
           if member_account.blank?

@@ -66,23 +66,23 @@ module Billings
       content = ""
 
       if @current_transaction[:record_type] == "SAVINGS"
-        member          = Member.find(@current_member[:id])
-        member_account  = MemberAccount.find(@current_transaction[:member_account_id])
+        member          = ReadOnlyMember.find(@current_member[:id])
+        member_account  = ReadOnlyMemberAccount.find(@current_transaction[:member_account_id])
 
         content = "#{@user.full_name} modified deposit amount from #{@original_amount} to #{@current_transaction[:amount]} for SAVINGS account (#{member_account.account_subtype}) of member #{member.full_name}"
       elsif @current_transaction[:record_type] == "INSURANCE"
-        member          = Member.find(@current_member[:id])
-        member_account  = MemberAccount.find(@current_transaction[:member_account_id])
+        member          = ReadOnlyMember.find(@current_member[:id])
+        member_account  = ReadOnlyMemberAccount.find(@current_transaction[:member_account_id])
 
         content = "#{@user.full_name} modified insurance deposit amount from #{@original_amount} to #{@current_transaction[:amount]} for INSURANCE account (#{member_account.account_subtype}) of member #{member.full_name}"
       elsif @current_transaction[:record_type] == "WP"
-        member          = Member.find(@current_member[:id])
-        member_account  = MemberAccount.find(@current_transaction[:member_account_id])
+        member          = ReadOnlyMember.find(@current_member[:id])
+        member_account  = ReadOnlyMemberAccount.find(@current_transaction[:member_account_id])
 
         content = "#{@user.full_name} modified WP amount from #{@original_amount} to #{@current_transaction[:amount]} for SAVINGS account (#{member_account.account_subtype}) of member #{member.full_name}"
       elsif @current_transaction[:record_type] == "LOAN_PAYMENT"
-        member  = Member.find(@current_member[:id])
-        loan    = Loan.find(@current_transaction[:loan_id])
+        member  = ReadOnlyMember.find(@current_member[:id])
+        loan    = ReadOnlyLoan.find(@current_transaction[:loan_id])
 
         content = "#{@user.full_name} modified loan_payment amount from #{@original_amount} to #{@current_transaction[:amount]} for loan (#{loan.pn_number}) of member #{member.full_name}"
       else
