@@ -14,12 +14,64 @@ export default class BillingUIComponent extends React.Component {
     this.state  = {
       isLoading: true,
       isSaving: false,
-      data: false
+      data: false,
+      changes: []
     };
   }
 
   componentDidMount() {
     this.fetchBillingData();
+  }
+
+  handleChangeTransaction(m, t) {
+    console.log("handleChageTransaction");
+    console.log(t);
+    console.log(this.state.data);
+
+    var changes = [];
+
+    var currentData = this.state.data;
+    
+    for(var i = 0; i < currentData.data.records.length; i++) {
+      if(currentData.data.records[i].member.id == m.id) {
+        for(var j = 0; j < currentData.data.records[i].records.length; j++) {
+          if(currentData.data.records[i].records[j].record_type == t.record_type) {
+            if(t.record_type == "LOAN_PAYMENT" && currentData.data.records[i].records[j].loan_id == t.loan_id) {
+              currentData.data.records[i].records[j].amount = t.amount;
+              console.log("Updating LOAN_PAYMENT for member " + m.id + " for loan " + t.loan_id + " to amount " + t.amount);
+            } else if(t.record_type != "LOAN_PAYMENT" && currentData.data.records[i].records[j].member_account_id == t.member_account_id) {
+              currentData.data.records[i].records[j].amount = t.amount;
+              console.log("Updating SUBSIDIARY for member " + m.id + " for loan " + t.member_account_id + " to amount " + t.amount);
+            }
+
+          }
+        }
+      }
+    }
+
+    for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
+      currentData.data.totals[totalsIndex].amount = 0.00;
+    }
+
+    for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
+      var totalObject = currentData.data.totals[totalsIndex];
+
+      for(var i = 0; i < currentData.data.records.length; i++) {
+        for(var j = 0; j < currentData.data.records[i].records.length; j++) {
+          var rr = currentData.data.records[i].records[j];
+
+          if(["SAVINGS", "INSURANCE", "EQUITY"].includes(rr.record_type) && totalObject.key == rr.account_subtype) {
+            currentData.data.totals[totalsIndex].amount += parseFloat(rr.amount);
+          } else if(rr.record_type == "LOAN_PAYMENT" && totalObject.key == rr.loan_product.name) {
+            currentData.data.totals[totalsIndex].amount += parseFloat(rr.amount);
+          } else if(rr.record_type == "WP" && totalObject.key == "WP") {
+            currentData.data.totals[totalsIndex].amount += parseFloat(rr.amount);
+          }
+        }
+      }
+    }
+
+    this.updateData(currentData);
   }
 
   fetchBillingData() {
@@ -398,6 +450,7 @@ export default class BillingUIComponent extends React.Component {
             id={this.props.id}
             data={this.state.data}
             updateData={this.updateData.bind(this)}
+            handleChangeTransaction={this.handleChangeTransaction.bind(this)}
             authenticityToken={this.props.authenticityToken}
           />
           <hr/>

@@ -105,7 +105,8 @@ module Billings
         if t[:record_type] == "SAVINGS"
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
-              if rr[:record_type] == "SAVINGS" and t[:key] == MemberAccount.savings.where(id: rr[:member_account_id]).first.account_subtype
+              #if rr[:record_type] == "SAVINGS" and t[:key] == MemberAccount.savings.where(id: rr[:member_account_id]).first.account_subtype
+              if rr[:record_type] == "SAVINGS" and t[:key] == rr[:account_subtype]
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end
@@ -114,7 +115,8 @@ module Billings
         elsif t[:record_type] == "INSURANCE"
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
-              if rr[:record_type] == "INSURANCE" and t[:key] == MemberAccount.insurance.where(id: rr[:member_account_id]).first.account_subtype
+              #if rr[:record_type] == "INSURANCE" and t[:key] == MemberAccount.insurance.where(id: rr[:member_account_id]).first.account_subtype
+              if rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end
@@ -133,7 +135,8 @@ module Billings
         elsif t[:record_type] == "LOAN_PAYMENT"
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
-              if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and Loan.find(rr[:loan_id]).loan_product.name == t[:key]
+              #if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and Loan.find(rr[:loan_id]).loan_product.name == t[:key]
+              if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and t[:key] == rr[:loan_product][:name]
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
               end
