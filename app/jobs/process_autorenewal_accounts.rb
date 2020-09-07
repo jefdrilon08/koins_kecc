@@ -3,7 +3,7 @@ class ProcessAutorenewalAccounts < ApplicationJob
 
   def perform(args)
     member_accounts = MemberAccount.time_deposits
-    branches        = Branch.all
+    branches        = Branch.where(id: "3726405b-777c-4b61-b6a5-7a4b48db62b6")
     user            = User.find(args[:user_id])
 
     branches.each do |branch|
