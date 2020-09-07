@@ -51,13 +51,13 @@ branch_config:
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    current_date: "2020-07-31"
+    current_date: "2020-08-31"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
     current_date: "2020-08-31"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-07-31"
+    current_date: "2020-08-31"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
@@ -100,6 +100,9 @@ branch_config:
     current_date: "2020-08-31"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
+    current_date: "2020-08-31"
+  -
+    id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
     current_date: "2020-08-31"
 
 #south1
@@ -872,6 +875,12 @@ branch_accounting_codes:
   -
     branch_id: "a181c1d0-6d41-4167-859b-30b2642bc891"                              #binangonan
     cash_in_bank_accounting_code_id: "1473b8a8-4b67-4341-af54-b725e47abf77"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "63748cf0-1215-4078-afa5-b42525ad235d"                              #cainta
+    cash_in_bank_accounting_code_id: "100b2c49-a81c-4382-9506-de036a45fbca"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"

@@ -50,10 +50,10 @@ class BillingsController < ApplicationController
                         }
                       ).execute!
 
-      @activity_logs  = ReadOnlyActivityLog.where(
-                          "data ->> 'billing_id' = ?",
-                          @billing.id
-                        ).order("created_at DESC")
+#      @activity_logs  = ReadOnlyActivityLog.where(
+#                          "data ->> 'billing_id' = ?",
+#                          @billing.id
+#                        ).order("created_at DESC")
 
       @subheader_items = [
         { is_link: true, path: billings_path, text: "Billings" },
