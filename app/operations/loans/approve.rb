@@ -201,7 +201,8 @@ module Loans
                                             is_for_loan_payments: false,
                                             accounting_entry_reference_number: nil,
                                             beginning_balance: 0.00,
-                                            ending_balance: 0.00
+                                            ending_balance: 0.00,
+                                            data: {}
                                           }
                                         )
 
@@ -226,6 +227,30 @@ module Loans
 
                       account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
                     end
+                  elsif member_account.account_subtype == Settings.clip || member_account.account_subtype == Settings.hiip
+                    account_transaction.data[:data] = {
+                                                        id: @loan.id,
+                                                        principal: @loan.principal,
+                                                        interest: @loan.interest,
+                                                        first_date_of_payment: @loan.first_date_of_payment,
+                                                        maturity_date: @loan.maturity_date,
+                                                        original_maturity_date: @loan.original_maturity_date,
+                                                        accounting_entry_id: nil,
+                                                        journal_entry_id: nil,
+                                                        amount: amount,
+                                                        loan_product_id: @loan.loan_product.id,
+                                                        loan_product_name: @loan.loan_product.name,
+                                                        member_id: @loan.member.id,
+                                                        date_approved: @current_date,
+                                                        date_released: @loan.date_released,
+                                                        reference_number: nil,
+                                                        book: @loan.data.with_indifferent_access[:accounting_entry][:book],
+                                                        member_account_id: member_account.id,
+                                                        term: @term,
+                                                        num_installments: @num_installments,
+                                                        account_transaction_id: nil,
+                                                        status: nil
+                                                      }
                   end
 
                   # Update account balance

@@ -1106,6 +1106,18 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
         amount: 20.00
@@ -1285,7 +1297,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
   -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-BAHAY W2
@@ -1449,6 +1472,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -1660,6 +1695,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -1699,7 +1746,19 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
-    deductions: []
+    deductions:
+      -
+        name: "Deposit to hospital income insurance plan"
+        accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Hospital Income Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
   -
     loan_product_id: "7cd86218-60b1-4836-ad4c-d2432bf26d8e"                         # K-EDUKASYON
@@ -1863,7 +1922,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1        
 
   -
     loan_product_id: "4e585cde-cc08-4b3b-b42f-b9a5a90f9b47"                         # K-EDUKASYON W3
@@ -2027,8 +2097,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-
-
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -2194,6 +2274,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -2358,7 +2450,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -2524,6 +2627,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -2687,6 +2802,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
     use_term_interest:
       -
         term: "weekly"
@@ -2819,6 +2946,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
     use_term_interest:
       -
         term: "weekly"
@@ -2951,6 +3090,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
     use_term_interest:
       -
         term: "weekly"
@@ -3072,6 +3223,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
   -
     loan_product_id: "da9b8bc1-8b9b-4e47-b753-9ae4edd0e6e1"                         # K-KASANGKAPAN
@@ -3182,6 +3345,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -3373,6 +3548,18 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
         amount: 20.00
@@ -3528,6 +3715,18 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
         amount: 20.00
@@ -3653,6 +3852,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
   -
     loan_product_id: "90b84b35-b5c3-4b58-8040-55bf7c8be5c5"                         # K-PWD
@@ -3790,6 +4001,18 @@ loan_products:
           account_type: "INSURANCE"
           account_subtype: "Retirement Fund"
           value: 5.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
@@ -3945,6 +4168,18 @@ loan_products:
           account_type: "INSURANCE"
           account_subtype: "Retirement Fund"
           value: 5.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
@@ -4124,6 +4359,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
 
 
   -
@@ -4326,6 +4573,18 @@ loan_products:
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
   -
     loan_product_id: "61c7b2c2-7571-4fc9-a214-9f1a6564f111"                         # ALALAY SA K
     receivable_accounting_code_id: "4ba3a3fe-5391-4068-8803-9826dd551cf6"
@@ -4435,6 +4694,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
   -
     loan_product_id: "8614b439-f27a-4853-b41d-e601889bbe4c"                         # K - Bisikleta 
     receivable_accounting_code_id: "72cfb840-49d1-4d0d-ac37-21b022f41ad4"
@@ -4595,6 +4866,18 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
           
 
 loan_product_accounting_codes:

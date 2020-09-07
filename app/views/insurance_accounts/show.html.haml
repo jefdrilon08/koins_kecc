@@ -64,19 +64,27 @@
                   %td
                     %center
                       %small
-                        #{@maturity_date.to_date.strftime("%B %d, %Y")}
+                        - if @maturity_date.nil?
+                          No maturity date
+                        - else
+                          #{@maturity_date.to_date.strftime("%B %d, %Y")}
                   %td
                     %center
                       %small
                         #{number_to_currency(o.amount, unit: "")}
                   %td
                     %center
-                      - if @maturity_date.to_date > Date.today
+                      - if @maturity_date.nil?
                         .badge.badge-info
-                          Active
-                      - else 
-                        .badge.badge-danger
-                          Matured
+                          Undefined
+                      - else  
+                        - if @maturity_date.to_date > Date.today
+                          .badge.badge-info
+                            Active
+                        - else 
+                          .badge.badge-danger
+                            Matured
+
         - elsif @insurance_account.account_subtype == Settings.hiip
           %table.table.table-hover.table-sm.table-bordered
             %thead
