@@ -23,15 +23,21 @@ export default class BillingUIComponent extends React.Component {
     this.fetchBillingData();
   }
 
-  handleChangeTransaction(m, t) {
+  handleChangeTransaction(m, t, pAmount) {
     console.log("handleChageTransaction");
     console.log(t);
     console.log(this.state.data);
 
-    var changes = [];
+    var changes = this.state.changes;
 
     var currentData = this.state.data;
-    
+
+    changes.push({
+      previousAmount: pAmount,
+      member: m,
+      transaction: t
+    });
+/*    
     for(var i = 0; i < currentData.data.records.length; i++) {
       if(currentData.data.records[i].member.id == m.id) {
         for(var j = 0; j < currentData.data.records[i].records.length; j++) {
@@ -48,6 +54,7 @@ export default class BillingUIComponent extends React.Component {
         }
       }
     }
+*/
 
     for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
       currentData.data.totals[totalsIndex].amount = 0.00;
@@ -72,6 +79,8 @@ export default class BillingUIComponent extends React.Component {
     }
 
     this.updateData(currentData);
+
+    this.setState({ changes: changes });
   }
 
   fetchBillingData() {
@@ -104,6 +113,35 @@ export default class BillingUIComponent extends React.Component {
 
   handleRemoveClicked(index) {
     alert("Not implemented for this module");
+  }
+
+  handleSaveChangesClicked() {
+    var context = this.state;
+
+    this.setState({
+      isLoading: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/update",
+      method: "POST",
+      data: {
+        data: context.data,
+        changes: context.changes,
+        authenticity_token: context.authenticityToken,
+        billing_id: context.data.id
+      },
+      success: function(response) {
+        console.log(response);
+        alert("Successfully updated billing! Reloading...");
+
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in updating billing");
+      }
+    });
   }
 
   saveParticular() {
@@ -376,6 +414,39 @@ export default class BillingUIComponent extends React.Component {
     }
   }
 
+  renderChanges() {
+    if(this.state.changes.length > 0) {
+      return (
+        <div className="c-callout c-callout-danger">
+          <small className="text-muted">
+            Some changes occurred. Please save changes.
+          </small>
+          <ul>
+            {
+              this.state.changes.map(function(o, i) {
+                return (
+                  <li key={"change-" + i}>
+                    Updated {o.transaction.record_type} of {o.member.last_name}, {o.member.first_name} from {o.previousAmount} to {o.transaction.amount}
+                  </li>
+                );
+              })
+            }
+          </ul>
+          <hr/>
+          <button className="btn btn-info" onClick={this.handleSaveChangesClicked.bind(this)}>
+            <span className="fa fa-check"></span>
+            Save Changes
+          </button>
+        </div>
+      );
+    } else {
+      return  (
+        <div>
+        </div>
+      );
+    }
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -389,6 +460,7 @@ export default class BillingUIComponent extends React.Component {
 
       return (
         <div>
+          {this.renderChanges()}
           <table className="table table-sm table-bordered">
             <tbody>
               <tr>

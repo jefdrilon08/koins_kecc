@@ -539,9 +539,8 @@ export default class BillingUITable extends React.Component {
       isLoading: true
     });
 
-    /*
-
-    this.props.handleChangeTransaction(currentMember, currentTransaction);
+/*
+    this.props.handleChangeTransaction(currentMember, currentTransaction, this.state.currentAmountValue);
 
     context.setState({
       currentTransaction: false,
@@ -551,8 +550,8 @@ export default class BillingUITable extends React.Component {
       isLoading: false,
       errors: false
     });
-    */
-
+*/
+    
     $.ajax({
       url: "/api/v1/billings/modify_transaction_record",
       method: "POST",
