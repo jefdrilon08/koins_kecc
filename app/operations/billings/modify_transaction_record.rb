@@ -137,7 +137,7 @@ module Billings
         elsif t[:record_type] == "WP"
           @data[:records].each_with_index do |r, i|
             r[:records].select{ |rr|
-              rr[:record_type] == "WP" and t[:key] == rr[:account_subtype]
+              rr[:record_type] == "WP"
             }.each do |rr|
               total_collected -= rr[:amount].try(:to_f).round(2)
               @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
