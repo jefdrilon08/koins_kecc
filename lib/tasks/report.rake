@@ -52,7 +52,7 @@ namespace :report do
       date_rel = y.date_released.to_date.strftime("%m/%d/%Y")
       mat_date = y.maturity_date.to_date.strftime("%m/%d/%Y")
       int_rate = (y.monthly_interest_rate*12)*100
-      pod_type = "50-01"
+      #pod_type = "50-01"
       tot_loan_balance = y.principal_balance + y.interest_balance
       over_due_days = ( s_date.to_date - y.maturity_date.to_date).to_i
       amort = AmortizationScheduleEntry.where(loan_id: y.id)
@@ -60,6 +60,18 @@ namespace :report do
       outs_payment = amort.where("is_paid IS NULL").count
       last_payment = amort.last.amount_due
 
+      #gender
+      if y.member.gender == 'Female'
+        gend = 'F'
+      elsif y.member.gender == 'Male'
+        gend = 'M'
+      end
+      #POD TYPE
+      if y.maturity_date.to_date == y.original_maturity_date.to_date
+        pod_type = "50-01"  
+      else
+        pod_type = "54-02"
+      end
       #OVER DUE DAYS
       if over_due_days >= -1
         over_due_days = over_due_days
@@ -85,7 +97,7 @@ namespace :report do
         loan_purpose = 'SE'
       end
 
-      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{y.member.gender}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
     @data << j
     end
     puts @data
