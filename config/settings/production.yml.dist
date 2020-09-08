@@ -774,7 +774,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
   -
     branch_id: "70dc66d9-728e-4370-a444-16092ac816c4"                              #tungko
-    cash_in_bank_accounting_code_id: "f846868e-1e22-4995-b37f-bdbe537c8b4a"
+    cash_in_bank_accounting_code_id: "7c9cb9f1-d871-4003-ae46-f65ce0ab369f"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
