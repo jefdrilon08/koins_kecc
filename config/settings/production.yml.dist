@@ -108,10 +108,10 @@ branch_config:
 #south1
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 #south2
   -
