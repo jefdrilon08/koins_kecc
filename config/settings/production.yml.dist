@@ -122,7 +122,7 @@ branch_config:
     current_date: "2020-08-31"
   -
     id: "6a8b4597-af32-4daa-8484-508ae8790f26"  #TRECEMARTIRES
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 
 
