@@ -112,6 +112,9 @@ branch_config:
   -
     id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
     #current_date: "2020-08-31"
+  -
+    id: "48b949af-e682-43b2-a5d2-278cff5f4972"  #SANPEDRO
+    #current_date: "2020-08-31"
 
 #south2
   -
@@ -122,7 +125,7 @@ branch_config:
     current_date: "2020-08-31"
   -
     id: "6a8b4597-af32-4daa-8484-508ae8790f26"  #TRECEMARTIRES
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 
 
@@ -895,6 +898,12 @@ branch_accounting_codes:
   -
     branch_id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"                              #paranaque
     cash_in_bank_accounting_code_id: "7a0995c9-ddf9-4666-8c99-769fa1ffb8d1"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+  -
+    branch_id: "48b949af-e682-43b2-a5d2-278cff5f4972"                              #sanpedro
+    cash_in_bank_accounting_code_id: "b4d5d005-e02f-4946-b748-da5b119b1937"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
