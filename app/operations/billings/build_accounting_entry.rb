@@ -287,7 +287,11 @@ module Billings
     end
 
     def default_particular
-      "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
+      if @data[:accounting_entry].present? and @data[:accounting_entry][:particular].present?
+        return @data[:accounting_entry][:particular]
+      else
+        "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
+      end
     end
   end
 end
