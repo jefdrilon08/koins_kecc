@@ -4,7 +4,7 @@
 
 #current_date: "2019-03-29"
 
-cutoff_time_start: "23:00"
+cutoff_time_start: "18:00"
 cutoff_time_end: "23:59"
 
 ###############################
@@ -14,118 +14,106 @@ cutoff_time_end: "23:59"
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
 
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    #current_date: "2020-08-31"
+    current_date: "2020-07-31"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    #current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
-    #current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 
 #east3
 
   -
     id: "14c17eff-b255-4a78-93b6-373aa1b85a61"  #TAYTAY
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    current_date: "2020-08-31"
-  -
-    id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
-    current_date: "2020-08-31"
+    current_date: "2020-07-31"
 
 #south1
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
-    #current_date: "2020-08-31"
-  -
-    id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
-    #current_date: "2020-08-31"
-  -
-    id: "48b949af-e682-43b2-a5d2-278cff5f4972"  #SANPEDRO
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
 
 #south2
   -
     id: "594fa194-7ed8-45d3-be01-e268b36ce05c"  #GMA
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
   -
     id: "a0161335-a253-4237-9119-e912291c7d92"  #DASMA
-    #current_date: "2020-08-31"
-  -
-    id: "6a8b4597-af32-4daa-8484-508ae8790f26"  #TRECEMARTIRES
-    #current_date: "2020-08-31"
+    #current_date: "2020-07-31"
 
 
 
@@ -777,7 +765,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
   -
     branch_id: "70dc66d9-728e-4370-a444-16092ac816c4"                              #tungko
-    cash_in_bank_accounting_code_id: "7c9cb9f1-d871-4003-ae46-f65ce0ab369f"
+    cash_in_bank_accounting_code_id: "f846868e-1e22-4995-b37f-bdbe537c8b4a"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -881,29 +869,11 @@ branch_accounting_codes:
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  -
-    branch_id: "63748cf0-1215-4078-afa5-b42525ad235d"                              #cainta
-    cash_in_bank_accounting_code_id: "100b2c49-a81c-4382-9506-de036a45fbca"
-    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
-    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
 
 #south1
   -
     branch_id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"                              #laspinas
     cash_in_bank_accounting_code_id: "a27e51fc-bde0-4c39-affe-bd63fb7763ea"
-    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
-    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  -
-    branch_id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"                              #paranaque
-    cash_in_bank_accounting_code_id: "7a0995c9-ddf9-4666-8c99-769fa1ffb8d1"
-    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
-    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  -
-    branch_id: "48b949af-e682-43b2-a5d2-278cff5f4972"                              #sanpedro
-    cash_in_bank_accounting_code_id: "b4d5d005-e02f-4946-b748-da5b119b1937"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -918,12 +888,6 @@ branch_accounting_codes:
   -
     branch_id: "a0161335-a253-4237-9119-e912291c7d92"                              #dasma
     cash_in_bank_accounting_code_id: "22d6c4f2-07e9-44bd-aac8-671d0f31c675"
-    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
-    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  -
-    branch_id: "6a8b4597-af32-4daa-8484-508ae8790f26"                              #trecemartires
-    cash_in_bank_accounting_code_id: "7a57b55f-2f43-4f8d-84ff-1b9750fff669"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -1124,18 +1088,6 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
-      -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
         amount: 20.00
@@ -1315,18 +1267,7 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
+      
 
   -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-BAHAY W2
@@ -1490,18 +1431,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
 
   -
@@ -1713,18 +1642,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
 
   -
@@ -1764,19 +1681,7 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
-    deductions:
-      -
-        name: "Deposit to hospital income insurance plan"
-        accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Hospital Income Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
+    deductions: []
 
   -
     loan_product_id: "7cd86218-60b1-4836-ad4c-d2432bf26d8e"                         # K-EDUKASYON
@@ -1940,18 +1845,7 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1        
+
 
   -
     loan_product_id: "4e585cde-cc08-4b3b-b42f-b9a5a90f9b47"                         # K-EDUKASYON W3
@@ -2115,18 +2009,8 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
+
+
 
 
   -
@@ -2292,18 +2176,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
 
   -
@@ -2468,18 +2340,7 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
+
 
 
   -
@@ -2645,18 +2506,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
 
   -
@@ -2820,18 +2669,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
     use_term_interest:
       -
         term: "weekly"
@@ -2964,18 +2801,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
     use_term_interest:
       -
         term: "weekly"
@@ -3108,18 +2933,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
     use_term_interest:
       -
         term: "weekly"
@@ -3241,18 +3054,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
   -
     loan_product_id: "da9b8bc1-8b9b-4e47-b753-9ae4edd0e6e1"                         # K-KASANGKAPAN
@@ -3363,18 +3164,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
 
   -
@@ -3566,18 +3355,6 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
-      -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
         amount: 20.00
@@ -3733,18 +3510,6 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
-      -
         name: "K-KOOP Membership Fee"
         accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
         amount: 20.00
@@ -3870,18 +3635,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
   -
     loan_product_id: "90b84b35-b5c3-4b58-8040-55bf7c8be5c5"                         # K-PWD
@@ -4019,18 +3772,6 @@ loan_products:
           account_type: "INSURANCE"
           account_subtype: "Retirement Fund"
           value: 5.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
@@ -4186,18 +3927,6 @@ loan_products:
           account_type: "INSURANCE"
           account_subtype: "Retirement Fund"
           value: 5.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
       -
@@ -4377,18 +4106,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
 
 
   -
@@ -4591,18 +4308,6 @@ loan_products:
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
   -
     loan_product_id: "61c7b2c2-7571-4fc9-a214-9f1a6564f111"                         # ALALAY SA K
     receivable_accounting_code_id: "4ba3a3fe-5391-4068-8803-9826dd551cf6"
@@ -4712,18 +4417,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
   -
     loan_product_id: "8614b439-f27a-4853-b41d-e601889bbe4c"                         # K - Bisikleta 
     receivable_accounting_code_id: "72cfb840-49d1-4d0d-ac37-21b022f41ad4"
@@ -4884,18 +4577,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-      -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Credit Life Insurance Plan"
-          value: 0.00
-          algo: "term_multiplier_for_second_cycle_onwards"
-          offset: 1
           
 
 loan_product_accounting_codes:
