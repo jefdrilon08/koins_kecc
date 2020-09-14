@@ -82,13 +82,13 @@ branch_config:
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
     current_date: "2020-08-31"
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
     current_date: "2020-08-31"
