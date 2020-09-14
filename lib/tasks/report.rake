@@ -88,7 +88,7 @@ namespace :report do
         contract_type = 28
       elsif loan_prod == 'K - BISIKLETA'
         contract_type = 17
-      end
+      
       end
 
       #LOAN PURPOSE
@@ -244,6 +244,7 @@ namespace :report do
       end
     end
   end
+
 
 
 
