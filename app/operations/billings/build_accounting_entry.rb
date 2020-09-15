@@ -34,11 +34,15 @@ module Billings
 
       @branch_accounting_code_settings = nil
 
-      Settings.branch_accounting_codes.each do |o|
-        if o.branch_id == @branch.id
-          @branch_accounting_code_settings = o
-        end
-      end
+#      Settings.branch_accounting_codes.each do |o|
+#        if o.branch_id == @branch.id
+#          @branch_accounting_code_settings = o
+#        end
+#      end
+
+      @branch_accounting_code_settings  = Settings.branch_accounting_codes.select{ |o|
+                                            o.branch_id == @branch.id
+                                          }.first
 
       @savings_accounting_codes   = Settings.savings_accounting_codes
       @insurance_accounting_codes = Settings.insurance_accounting_codes
@@ -50,13 +54,20 @@ module Billings
 
       # Get loan_products in this billing
       loan_product_ids  = []
-      @data[:records].each do |o|
-        o[:records].each do |oo|
-          if oo[:record_type] == "LOAN_PAYMENT"
-            loan_product_ids << oo[:loan_product][:id]
-          end
-        end
+      
+      @data[:records].first[:records].select{ |o|
+        o[:record_type] == "LOAN_PAYMENT"
+      }.each do |oo|
+        loan_product_ids << oo[:loan_product][:id]
       end
+
+#      @data[:records].each do |o|
+#        o[:records].each do |oo|
+#          if oo[:record_type] == "LOAN_PAYMENT"
+#            loan_product_ids << oo[:loan_product][:id]
+#          end
+#        end
+#      end
 
       @loan_products  = LoanProduct.where(id: loan_product_ids.uniq)
 
@@ -103,7 +114,7 @@ module Billings
 
       # Cash in Bank
       # if withdraw payment > 0
-      accounting_code = AccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
+      accounting_code = ReadOnlyAccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
       amount          = @data[:total_collected]
 
       if @total_wp > 0
@@ -118,7 +129,7 @@ module Billings
       }
 
       # WP
-      accounting_code = AccountingCode.find(@branch_accounting_code_settings.withdraw_payment_accounting_code_id)
+      accounting_code = ReadOnlyAccountingCode.find(@branch_accounting_code_settings.withdraw_payment_accounting_code_id)
 
       @data[:totals].each do |o|
         if o[:record_type] == "WP"
@@ -149,8 +160,8 @@ module Billings
       @loan_products.each do |loan_product|
         @loan_product_accounting_codes.each do |o|
           if loan_product.id == o.loan_product_id
-            receivable_ac = AccountingCode.where(id: o.receivable_accounting_code_id).first
-            interest_ac   = AccountingCode.where(id: o.interest_receivable_accounting_code_id).first
+            receivable_ac = ReadOnlyAccountingCode.where(id: o.receivable_accounting_code_id).first
+            interest_ac   = ReadOnlyAccountingCode.where(id: o.interest_receivable_accounting_code_id).first
 
             if receivable_ac.blank?
               raise "#{o.receivable_accounting_code_id} not found. #{o.inspect}"
@@ -187,7 +198,7 @@ module Billings
 
       # savings (deposit)
       @savings_accounting_codes.each do |o|
-        accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
+        accounting_code = ReadOnlyAccountingCode.find(o.deposit_accounting_code_id)
 
         is_default_savings  = false
         if Settings.default_savings_key == o.savings_type
@@ -207,7 +218,7 @@ module Billings
 
       # insurance
       @insurance_accounting_codes.each do |o|
-        accounting_code = AccountingCode.find(o.deposit_accounting_code_id)
+        accounting_code = ReadOnlyAccountingCode.find(o.deposit_accounting_code_id)
 
         journal_entries << {
           accounting_code_id: accounting_code.id,
@@ -234,7 +245,7 @@ module Billings
               end
             end
           elsif rr[:record_type] == "LOAN_PAYMENT" and rr[:amount].to_f > 0
-            loan      = Loan.find(rr[:loan_id])
+            loan      = ReadOnlyLoan.find(rr[:loan_id])
             amount    = rr[:amount].to_f
             date_paid = @collection_date
 
@@ -276,7 +287,11 @@ module Billings
     end
 
     def default_particular
-      "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
+      if @data[:accounting_entry].present? and @data[:accounting_entry][:particular].present?
+        return @data[:accounting_entry][:particular]
+      else
+        "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
+      end
     end
   end
 end

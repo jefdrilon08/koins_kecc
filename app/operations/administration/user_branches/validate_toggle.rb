@@ -15,10 +15,11 @@ module Administration
             key: "user",
             message: "user not found"
           }
-        elsif !@current_user.is_mis?
+        #elsif !@current_user.is_mis?
+        elsif !User::FOR_MANAGING_BRANCH_ROLES.include?(@current_user.roles.last)
           @errors[:messages] << {
             key: "user",
-            message: "should be MIS user"
+            message: "should be in FOR_MANAGING_BRANCH_ROLES user"
           }
         end
 

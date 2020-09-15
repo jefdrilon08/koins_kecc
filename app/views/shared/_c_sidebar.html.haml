@@ -40,13 +40,13 @@
           .c-sidebar-nav-icon.fa.fa-money-check
           Time Deposits
       %li.c-sidebar-nav-item
-        = link_to withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "withdrawal_collections" ? 'active' : ''}" do
-          .c-sidebar-nav-icon.fa.fa-money-check
-          Withdrawals
-      %li.c-sidebar-nav-item
         = link_to savings_insurance_transfer_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_insurance_transfer_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Savings Insurance Transfers
+    %li.c-sidebar-nav-item
+      = link_to withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "withdrawal_collections" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-money-check
+        Withdrawals
     - if !microloans?
       %li.c-sidebar-nav-item
         = link_to deposit_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "deposit_collections" ? 'active' : ''}" do
@@ -94,9 +94,9 @@
             .c-sidebar-nav-icon.fa.fa-balance-scale
             Chart of Accounts
         %li.c-sidebar-nav-item
-          = link_to accounting_trial_balance_path, class: "c-sidebar-nav-link" do
+          = link_to accounting_trial_balances_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-balance-scale
-            Trial Balance
+            Trial Balances
         %li.c-sidebar-nav-title
           Journal Entries
         %li.c-sidebar-nav-item
@@ -165,6 +165,10 @@
           = link_to adjustments_batch_moratorium_adjustments_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-eraser
             Batch Moratorium
+        %li.c-sidebar-nav-item
+          = link_to adjustments_moratoriums_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-eraser
+            Moratoriums
         %li.c-sidebar-nav-title
           Branch Reports
         %li.c-sidebar-nav-item
@@ -391,26 +395,26 @@
           = link_to upload_insurance_withdrawal_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-upload
             Upload Insurance Withdrawal
-        %li.c-sidebar-nav-item
-          = link_to import_members_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Import Members
-        %li.c-sidebar-nav-item
-          = link_to import_beneficiaries_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Import Beneficiaries
-        %li.c-sidebar-nav-item
-          = link_to import_legal_dependents_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Import Dependents
-        %li.c-sidebar-nav-item
-          = link_to import_insurance_accounts_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Import Insurance Accounts
-        %li.c-sidebar-nav-item
-          = link_to import_insurance_account_transactions_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-file-import
-            Import Insurance Transactions
+      %li.c-sidebar-nav-item
+        = link_to import_members_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Import Members
+      %li.c-sidebar-nav-item
+        = link_to import_beneficiaries_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Import Beneficiaries
+      %li.c-sidebar-nav-item
+        = link_to import_legal_dependents_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Import Dependents
+      %li.c-sidebar-nav-item
+        = link_to import_insurance_accounts_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Import Insurance Accounts
+      %li.c-sidebar-nav-item
+        = link_to import_insurance_account_transactions_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-file-import
+          Import Insurance Transactions
       %li.c-sidebar-nav-item
         = link_to billing_per_center_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-file-import

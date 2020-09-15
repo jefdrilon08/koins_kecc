@@ -1,0 +1,28 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-3
+      .form-group
+        %label
+          Branch
+        = select_tag :f_branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "f-branch-select", prompt: "-- SELECT --"
+    .col-md-3
+      .form-group
+        %label
+          Status
+        = select_tag :f_status, options_for_select(MemberMoratorium::STATUSES, @status), class: "form-control select-select2", id: "f-status-select", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Start Date
+        = date_field_tag :f_start_date, @start_date, class: "form-control", id: "f-input-start-date"
+    .col-md-2
+      .form-group
+        %label
+          End Date
+        = date_field_tag :f_end_date, @end_date, class: "form-control", id: "f-input-end-date"
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .fa.fa-search

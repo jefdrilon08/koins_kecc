@@ -6,11 +6,21 @@ module Billings
       @current_transaction  = @config[:current_transaction]
       @current_member       = @config[:current_member]
       @user                 = @config[:user]
+      @branch               = @billing.branch
 
       super()
     end
 
     def execute!
+#      is_cutoff = ::Utils::IsCutoff.new(branch: @branch).execute!
+#
+#      if is_cutoff
+#        @errors[:messages] << {
+#          key: "cut_off",
+#          message: "Within cutoff period"
+#        }
+#      end
+
       # Validate billing status
       if @billing.blank?
         @errors[:messages] << {
@@ -91,7 +101,7 @@ module Billings
     private
 
     def validate_loan_payment!
-      loan  = Loan.where(id: @current_transaction[:loan_id]).first
+      loan  = ReadOnlyLoan.where(id: @current_transaction[:loan_id]).first
       
       if loan.blank?
         @errors[:messages] << {
@@ -161,7 +171,7 @@ module Billings
     end
 
     def validate_wp!
-      member_account  = MemberAccount.savings.where(id: @current_transaction[:member_account_id]).first
+      member_account  = ReadOnlyMemberAccount.savings.where(id: @current_transaction[:member_account_id]).first
       amount          = @current_transaction[:amount].try(:to_f)
     
 #      if member_account.member.loans.active.count == 0
@@ -205,7 +215,7 @@ module Billings
     end
 
     def validate_savings!
-      member_account  = MemberAccount.savings.where(id: @current_transaction[:member_account_id]).first
+      member_account  = ReadOnlyMemberAccount.savings.where(id: @current_transaction[:member_account_id]).first
 
       if member_account.blank?
         @errors[:messages] << {

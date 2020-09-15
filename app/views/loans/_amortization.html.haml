@@ -45,11 +45,10 @@
           - running_balance = (running_balance - o.total_paid)
           = number_to_currency(running_balance, unit: "")
         - if @loan.active?
-          - if sbk_mis_user
-            %td.text-center
-              - if o.is_paid.blank?
-                .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: o.id, old_date: "#{o.due_date}" } }
-                  .fa.fa-minus
+          %td.text-center
+            - if o.is_paid.blank?
+              .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: o.id, old_date: "#{o.due_date}" } }
+                .fa.fa-minus
     %tr
       - if current_user.roles.include?("MIS")
         %td

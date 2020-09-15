@@ -14,6 +14,5 @@
           = link_to new_administration_user_user_demerit_path(@user) do
             .fa.fa-plus
             New Demerit
-    - if current_user.is_mis?
+    - if User::FOR_MANAGING_BRANCH_ROLES.include?(current_user.roles.last)
       = render partial: "branch_manager"
-

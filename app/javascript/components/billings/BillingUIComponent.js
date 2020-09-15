@@ -14,12 +14,73 @@ export default class BillingUIComponent extends React.Component {
     this.state  = {
       isLoading: true,
       isSaving: false,
-      data: false
+      data: false,
+      changes: []
     };
   }
 
   componentDidMount() {
     this.fetchBillingData();
+  }
+
+  handleChangeTransaction(m, t, pAmount) {
+    console.log("handleChageTransaction");
+    console.log(t);
+    console.log(this.state.data);
+
+    var changes = this.state.changes;
+
+    var currentData = this.state.data;
+
+    changes.push({
+      previousAmount: pAmount,
+      member: m,
+      transaction: t
+    });
+/*    
+    for(var i = 0; i < currentData.data.records.length; i++) {
+      if(currentData.data.records[i].member.id == m.id) {
+        for(var j = 0; j < currentData.data.records[i].records.length; j++) {
+          if(currentData.data.records[i].records[j].record_type == t.record_type) {
+            if(t.record_type == "LOAN_PAYMENT" && currentData.data.records[i].records[j].loan_id == t.loan_id) {
+              currentData.data.records[i].records[j].amount = t.amount;
+              console.log("Updating LOAN_PAYMENT for member " + m.id + " for loan " + t.loan_id + " to amount " + t.amount);
+            } else if(t.record_type != "LOAN_PAYMENT" && currentData.data.records[i].records[j].member_account_id == t.member_account_id) {
+              currentData.data.records[i].records[j].amount = t.amount;
+              console.log("Updating SUBSIDIARY for member " + m.id + " for loan " + t.member_account_id + " to amount " + t.amount);
+            }
+
+          }
+        }
+      }
+    }
+*/
+
+    for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
+      currentData.data.totals[totalsIndex].amount = 0.00;
+    }
+
+    for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
+      var totalObject = currentData.data.totals[totalsIndex];
+
+      for(var i = 0; i < currentData.data.records.length; i++) {
+        for(var j = 0; j < currentData.data.records[i].records.length; j++) {
+          var rr = currentData.data.records[i].records[j];
+
+          if(["SAVINGS", "INSURANCE", "EQUITY"].includes(rr.record_type) && totalObject.key == rr.account_subtype) {
+            currentData.data.totals[totalsIndex].amount += parseFloat(rr.amount);
+          } else if(rr.record_type == "LOAN_PAYMENT" && totalObject.key == rr.loan_product.name) {
+            currentData.data.totals[totalsIndex].amount += parseFloat(rr.amount);
+          } else if(rr.record_type == "WP" && totalObject.key == "WP") {
+            currentData.data.totals[totalsIndex].amount += parseFloat(rr.amount);
+          }
+        }
+      }
+    }
+
+    this.updateData(currentData);
+
+    this.setState({ changes: changes });
   }
 
   fetchBillingData() {
@@ -52,6 +113,35 @@ export default class BillingUIComponent extends React.Component {
 
   handleRemoveClicked(index) {
     alert("Not implemented for this module");
+  }
+
+  handleSaveChangesClicked() {
+    var context = this.state;
+
+    this.setState({
+      isLoading: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/update",
+      method: "POST",
+      data: {
+        data: context.data,
+        changes: context.changes,
+        authenticity_token: context.authenticityToken,
+        billing_id: context.data.id
+      },
+      success: function(response) {
+        console.log(response);
+        alert("Successfully updated billing! Reloading...");
+
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in updating billing");
+      }
+    });
   }
 
   saveParticular() {
@@ -324,6 +414,39 @@ export default class BillingUIComponent extends React.Component {
     }
   }
 
+  renderChanges() {
+    if(this.state.changes.length > 0) {
+      return (
+        <div className="c-callout c-callout-danger">
+          <small className="text-muted">
+            Some changes occurred. Please save changes.
+          </small>
+          <ul>
+            {
+              this.state.changes.map(function(o, i) {
+                return (
+                  <li key={"change-" + i}>
+                    Updated {o.transaction.record_type} of {o.member.last_name}, {o.member.first_name} from {o.previousAmount} to {o.transaction.amount}
+                  </li>
+                );
+              })
+            }
+          </ul>
+          <hr/>
+          <button className="btn btn-info" onClick={this.handleSaveChangesClicked.bind(this)}>
+            <span className="fa fa-check"></span>
+            Save Changes
+          </button>
+        </div>
+      );
+    } else {
+      return  (
+        <div>
+        </div>
+      );
+    }
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -337,6 +460,7 @@ export default class BillingUIComponent extends React.Component {
 
       return (
         <div>
+          {this.renderChanges()}
           <table className="table table-sm table-bordered">
             <tbody>
               <tr>
@@ -398,6 +522,7 @@ export default class BillingUIComponent extends React.Component {
             id={this.props.id}
             data={this.state.data}
             updateData={this.updateData.bind(this)}
+            handleChangeTransaction={this.handleChangeTransaction.bind(this)}
             authenticityToken={this.props.authenticityToken}
           />
           <hr/>

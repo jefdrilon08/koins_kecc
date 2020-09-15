@@ -101,7 +101,7 @@
     %td.text-right
       - if @loan.paid? and @loan.date_completed.present?
         #{@loan.date_completed.strftime("%b %d, %Y")}
-      - else
+      - elsif @loan.paid? and @loan.date_completed.blank?
         ERROR
   %tr
     %th

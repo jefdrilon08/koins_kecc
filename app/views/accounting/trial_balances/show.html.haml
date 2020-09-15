@@ -1,0 +1,49 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        .table-responsive
+          %table.table.table-bordered.table-sm
+            %thead
+              %tr
+                %th
+                  Accounting Code
+                %th
+                  Accounting Name
+                %th.text-right
+                  Beginning DR
+                %th.text-right
+                  Beginning CR
+                %th.text-right
+                  Current DR
+                %th.text-right
+                  Current CR
+                %th.text-right
+                  Ending DR
+                %th.text-right
+                  Ending CR
+            %tbody
+              - @trial_balance.data["entries"].each do |o|
+                %tr
+                  %td
+                    %strong
+                      #{o["code"]}
+                  %td
+                    %strong
+                      #{o["name"]}
+                  %td.text-right
+                    = number_to_currency(o["beginning_debit"], unit: "")
+                  %td.text-right
+                    = number_to_currency(o["beginning_credit"], unit: "")
+                  %td.text-right
+                    = number_to_currency(o["current_debit"], unit: "")
+                  %td.text-right
+                    = number_to_currency(o["current_credit"], unit: "")
+                  %td.text-right
+                    = number_to_currency(o["ending_debit"], unit: "")
+                  %td.text-right
+                    = number_to_currency(o["ending_credit"], unit: "")
+
+= render partial: "accounting/trial_balances/modals/delete"
+= render partial: "templates/error_list"

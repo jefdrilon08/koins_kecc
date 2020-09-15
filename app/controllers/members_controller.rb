@@ -1,6 +1,16 @@
 class MembersController < ApplicationController
   before_action :authenticate_user!
 
+  def search
+    @subheader_items = [
+      { text: "Members", is_link: true, path: members_path },
+      { text: "Search" }
+    ]
+
+    @subheader_side_actions = [
+    ]
+  end
+
   def index
     @members  = Member.select("*")
                       .includes(:center, :branch, :profile_picture_attachment)
@@ -206,11 +216,6 @@ class MembersController < ApplicationController
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
 
     @loan_products  = LoanProduct.select("*").order("name ASC")
-
-    @activity_logs  = ActivityLog.where(
-                        "data ->> 'member_id' = ?",
-                        @member.id
-                      ).order("created_at DESC")
 
     @loan_cycles  = @member.data.with_indifferent_access[:loan_cycles]
 

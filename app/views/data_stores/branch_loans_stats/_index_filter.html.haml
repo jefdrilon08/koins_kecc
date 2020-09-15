@@ -3,13 +3,23 @@
     .col
       .form-group
         %label
-          Start Date
+          Start Date (As Of)
         = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
     .col
       .form-group
         %label
-          End Date
+          End Date (As Of)
         = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
+    .col
+      .form-group
+        %label
+          Start Date (Last Updated)
+        = text_field_tag :l_start_date, params[:l_start_date], class: 'form-control', type: :date
+    .col
+      .form-group
+        %label
+          End Date (Last Updated)
+        = text_field_tag :l_end_date, params[:l_end_date], class: 'form-control', type: :date
     .col
       .form-group
         %label

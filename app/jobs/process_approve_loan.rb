@@ -1,5 +1,5 @@
 class ProcessApproveLoan < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     loan    = Loan.find(args[:id])

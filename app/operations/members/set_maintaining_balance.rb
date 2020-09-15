@@ -23,11 +23,6 @@ module Members
 
             if member_account.present? and current_loans.any?
               current_loans.each do |loan|
-                if s.loan_product_id == "1c2fcdbd-d60b-402c-b04b-824bb90958d1"
-                  raise (loan.principal.inspect)
-                  raise s.maintaining_balance.threshold.present?.inspect
-                  raise "#{current_loans.pluck(:id)}"
-                end
                 if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
                   maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
                 end

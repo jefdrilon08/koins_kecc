@@ -8,7 +8,7 @@ module Claims
     end
 
     def execute!
-      validate_clip_claim_duplication!
+      #validate_clip_claim_duplication!
       @errors
     end
 

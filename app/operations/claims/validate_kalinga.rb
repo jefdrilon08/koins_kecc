@@ -88,7 +88,7 @@ module Claims
         @errors << "Expired KALINGA!"
       end
 
-      validate_kalinga_duplication!
+      #validate_kalinga_duplication!
       return  @errors
     end
 

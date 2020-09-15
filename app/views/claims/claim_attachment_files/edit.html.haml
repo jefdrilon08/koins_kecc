@@ -1,0 +1,15 @@
+/ %ol.breadcrumb
+/   %li.breadcrumb-item
+/     .fa.fa-money-check
+/       Claim Attachment File
+/   %li.breadcrumb-item
+/     .fa.fa-user
+/       Edit Record for: #{link_to @claim.id, claim_path(@claim), target: '_blank'}
+  
+/ .container-fluid
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "claims/claim_attachment_files/form", locals: { claim_attachment_file: @claim_attachment_file }
+

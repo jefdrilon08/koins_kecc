@@ -32,8 +32,6 @@
           %pre
             %code
               #{JSON.pretty_generate(JSON.parse(@billing.to_json))}
-        %hr
-        = render partial: "shared/activity_logs", locals: { activity_logs: @activity_logs }
 
 = render partial: "shared/modals/print"
 = render partial: "billings/modals/approve"

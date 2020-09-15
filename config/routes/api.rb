@@ -23,6 +23,10 @@ namespace :api do
       post "/batch_moratorium_adjustments/create", to: "batch_moratorium_adjustments#create"
       post "/batch_moratorium_adjustments/approve", to: "batch_moratorium_adjustments#approve"
       post "/batch_moratorium_adjustments/destroy", to: "batch_moratorium_adjustments#destroy"
+      post "/moratoriums/create", to: "moratoriums#create"
+      post "/moratoriums/delete", to: "moratoriums#delete"
+      post "/moratoriums/process", to: "moratoriums#process_moratorium"
+      post "/moratoriums/batch_process", to: "moratoriums#batch_process"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -30,6 +34,7 @@ namespace :api do
     # Users
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
+    post "/change_password", to: "users#change_password"
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"
@@ -46,6 +51,7 @@ namespace :api do
 
     # Members
     get "/members", to: "members#index"
+    get "/members/search", to: "members#search"
     get "/members/fetch", to: "members#fetch"
     get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
     get "/members/fetch_resignation_details", to: "members#fetch_resignation_details"
@@ -88,6 +94,9 @@ namespace :api do
     get "/accounting/fetch_general_ledger", to: "accounting#fetch_general_ledger"
     get "/accounting/trial_balance_excel", to: "accounting#trial_balance_excel"
 
+    post "/trial_balances/create", to: "trial_balances#create"
+    post "/trial_balances/delete", to: "trial_balances#delete"
+
     # Accounting Entries
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"
     post "/accounting_entries/save", to: "accounting_entries#save"
@@ -109,6 +118,7 @@ namespace :api do
     post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     post "/loans/restructure", to: "loans#restructure"
     get "/loans/fetch", to: "loans#fetch"
+    get "/loans/fetch_by_member", to: "loans#fetch_by_member"
 
     # Branches
     get "/branches", to: "branches#index"
@@ -126,6 +136,7 @@ namespace :api do
 
     # Billing
     post "/billings", to: "billings#create"
+    post "/billings/update", to: "billings#update"
     post "/billings/modify_transaction_record", to: "billings#modify_transaction_record"
     post "/billings/toggle_attendance", to: "billings#toggle_attendance"
     post "/billings/toggle_attendance_on", to: "billings#toggle_attendance_on"

@@ -14,7 +14,7 @@ module Dashboard
       data_stores = ReadOnlyDataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
         .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ? AND status = ?", %w[REPAYMENT_RATES MEMBER_COUNTS], @branches.ids, @as_of, "done")
-        .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC")
+        .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC, updated_at DESC")
 
       {
         areas: areas.map do |area|

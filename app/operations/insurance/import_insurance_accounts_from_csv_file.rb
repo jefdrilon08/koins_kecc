@@ -14,7 +14,7 @@ module Insurance
       CSV.foreach(@file.path, headers: true) do |row|
         member_id = row['member_id']
         member_uuid = row['member_uuid']
-        member = Member.where(id: member_uuid).first
+        member = Member.find(member_uuid)
 
         if row['insurance_type'] == "LIF"
           acc_subtype = "Life Insurance Fund"
@@ -29,23 +29,39 @@ module Insurance
         end
 
         if !member.nil?
-          insurance_account = member.member_accounts.where(account_subtype: acc_subtype).first
-          if insurance_account.present?
+          insurance_account = MemberAccount.where(id: row['uuid']).first
+          
+          if !insurance_account.nil?
             if row['equity_value'].nil?
               insurance_account.update!(
-                id: row['uuid'],
-                status: row['status']
+                status: row['status'],
+                balance: row['balance'],
+                member_id: member_uuid,
+                branch: member.branch,
+                center: member.center
               )
             else
               ia_data = insurance_account.data
-         
+              
               if !ia_data.nil?
                 ia_data[:equity_value] = row['equity_value']
 
                 insurance_account.update!(
-                  id: row['uuid'],
                   status: row['status'],
+                  balance: row['balance'],
+                  member_id: member_uuid,
+                  branch: member.branch,
+                  center: member.center,
                   data: ia_data
+                )
+              else
+                insurance_account.update!(
+                  status: row['status'],
+                  balance: row['balance'],
+                  member_id: member_uuid,
+                  branch: member.branch,
+                  center: member.center,
+                  data: { equity_value: row['equity_value'] }
                 )
               end
             end

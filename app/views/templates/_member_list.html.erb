@@ -1,0 +1,13 @@
+<script id="template-member-list" type="x-tmpl-mustache"> 
+  <table class="table table-sm table-bordered">
+    {{#members}}
+      <tr>
+        <td>
+          <a href="/members/{{id}}/display" target='_blank'>
+            {{last_name}}, {{first_name}} {{middle_name}} ({{identification_number}})
+          </a>
+        </td>
+      </tr>
+    {{/members}}
+  </table>
+</script>

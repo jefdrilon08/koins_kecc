@@ -43,7 +43,7 @@ module MemberAccountValidations
       # For equity amount computation
       if @member_account.account_subtype == Settings.life
         @member_account_data = @member_account.data.with_indifferent_access
-        equity_value = @member_account_data[:equity_value]
+        equity_value = @member_account_data[:equity_value].to_f
 
         @data[:equity_value]                = (equity_value - equity_value).round(2)
         @member_account_data[:equity_value] = (equity_value - equity_value).round(2)

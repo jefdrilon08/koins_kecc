@@ -221,8 +221,29 @@ module Api
         end
       end
 
+      def update
+        billing_id  = params[:billing_id]
+        data        = params[:data]
+        changes     = params[:changes]
+
+        billing = Billing.find(billing_id)
+
+        billing.update!(
+          status: "processing"
+        )
+
+        ProcessBillingUpdate.perform_later({
+          id: billing.id,
+          user_id: current_user.id,
+          data: data,
+          changes: changes
+        })
+
+        render json: { message: "ok" }
+      end
+
       def modify_transaction_record
-        billing             = Billing.where(id: params[:id]).first
+        billing             = Billing.find(params[:id])
         current_transaction = params[:current_transaction]
         current_member      = params[:current_member]
 
@@ -267,9 +288,29 @@ module Api
         if errors[:full_messages].any?
           render json: errors, status: 400
         else
-          billing = ::Billings::CreateBilling.new(
-                      config: config
-                    ).execute!
+          branch  = ReadOnlyBranch.find(branch_id)
+          center  = ReadOnlyCenter.find(center_id)
+
+          billing = Billing.new(
+                      collection_date: collection_date,
+                      branch: branch,
+                      center: center,
+                      status: "processing",
+                      data: {
+                        status: "processing"
+                      }
+                    )
+
+          billing.save!
+
+          ProcessCreateBilling.perform_later({
+            id: billing.id,
+            user_id: current_user.id
+          })
+
+#          billing = ::Billings::CreateBilling.new(
+#                      config: config
+#                    ).execute!
         
 
           render json: { id: billing.id }

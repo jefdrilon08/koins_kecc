@@ -8,6 +8,15 @@ module Members
 
     def new
       @attachment_file = AttachmentFile.new
+
+      @subheader_items = [
+        { text: "Members", is_link: true, path: members_path },
+        { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+        { text: "New Attachment File" }
+      ]
+
+      @subheader_side_actions = [
+      ]
     end
 
     def create
@@ -18,6 +27,15 @@ module Members
         flash[:success] = "Successfully created claim"
         redirect_to member_path(@member)
       else
+        @subheader_items = [
+          { text: "Members", is_link: true, path: members_path },
+          { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+          { text: "New Attachment File" }
+        ]
+
+        @subheader_side_actions = [
+        ]
+
         flash[:error] = "Error in creating attachment_file"
         render :new
       end
@@ -25,6 +43,15 @@ module Members
 
     def edit
       @attachment_file = AttachmentFile.find(params[:id])
+
+      @subheader_items = [
+        { text: "Members", is_link: true, path: members_path },
+        { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+        { text: "Edit Attachment File" }
+      ]
+
+      @subheader_side_actions = [
+      ]
     end
 
     def show
@@ -37,13 +64,22 @@ module Members
       if @attachment_file.update(attachment_file_params)
         redirect_to member_path(@member)
       else
-        flash[:error] = "Error in saving claim"
-        render :new
+        @subheader_items = [
+          { text: "Members", is_link: true, path: members_path },
+          { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
+          { text: "Edit Attachment File" }
+        ]
+
+        @subheader_side_actions = [
+        ]
+
+        flash[:error] = "Error in saving Attachment File"
+        render :edit
       end
     end
 
     def destroy
-      @attachment_file    = AttachmentFile.find(params[:id])
+      @attachment_file = AttachmentFile.find(params[:id])
       @attachment_file.file.purge
       @attachment_file.destroy!
 

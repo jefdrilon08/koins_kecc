@@ -8,7 +8,7 @@ module Claims
     end
 
     def execute!
-      validate_calamity_claim_duplication!
+      #validate_calamity_claim_duplication!
       @errors
     end
 

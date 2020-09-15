@@ -1,0 +1,31 @@
+= link_to new_claim_claim_attachment_file_path(@claim), class: "btn btn-primary btn-sm" do
+  .fa.fa-plus
+  New Claim Attachment File
+%hr
+- if @claim.claim_attachment_files.size == 0
+  %p
+    No attachment files for this claim
+- else
+  - @claim.claim_attachment_files.each do |claim_attachment_file|
+    %table.table.table-bordered.table-sm.table-hover
+      %thead
+        %tr
+          %th
+            #{claim_attachment_file.file_name}  
+      %tbody
+        %tr
+          %td
+            - if claim_attachment_file.file.attached?        
+              = image_tag rails_blob_path(claim_attachment_file.file, disposition: "attachment", only_path: true), width: "1100", height: "1000"
+              %br
+              = link_to claim_attachment_file.file.record_id, rails_blob_path(claim_attachment_file.file, disposition: "attachment")
+            - else
+              %p
+                No image found
+    = link_to edit_claim_claim_attachment_file_path(@claim, claim_attachment_file), class: 'btn btn-warning btn-sm' do
+      .fa.fa-pencil-alt
+      Edit
+    = link_to claim_claim_attachment_file_path(@claim, claim_attachment_file), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: "Are you sure?" } do
+      .fa.fa-times
+      Delete
+    %hr

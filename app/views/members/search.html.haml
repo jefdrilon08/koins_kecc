@@ -1,0 +1,11 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = text_field_tag :q, "", id: "input-q", class: "form-control", placeholder: "Search by Name"
+        %hr
+
+        #results
+
+= render partial: "templates/member_list"

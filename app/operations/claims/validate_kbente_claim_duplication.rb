@@ -8,7 +8,7 @@ module Claims
     end
 
     def execute!
-      validate_kbente_claim_duplication!
+      #validate_kbente_claim_duplication!
       @errors
     end
 

@@ -4,6 +4,30 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!
 
+      def search
+        q = params[:q]
+
+        members = Member
+                    .active
+                    .where(
+                      "UPPER(CONCAT(last_name, ' ', first_name)) LIKE :q OR UPPER(CONCAT(first_name, ' ', last_name)) LIKE :q", 
+                      q: "%#{q.upcase}%"
+                    )
+                    .limit(100)
+        
+        members = members.map{ |m|
+                    {
+                      id: m.id,
+                      first_name: m.first_name,
+                      last_name: m.last_name,
+                      middle_name: m.middle_name,
+                      identification_number: m.identification_number
+                    }
+                  }
+
+        render json: { members: members }
+      end
+
       def register
         member  = Member.where(id: params[:id]).first
 
@@ -640,12 +664,19 @@ module Api
       def index
         members = Member.all.order("last_name ASC")
 
+        if params[:center_id].present?
+          members = members.where(center_id: params[:center_id])
+        end
+
         data  = []
 
         members.each do |o|
           data << {
             id: o.id,
-            name: o.full_name
+            name: o.full_name,
+            first_name: o.first_name,
+            last_name: o.last_name,
+            middle_name: o.middle_name
           }
         end
 

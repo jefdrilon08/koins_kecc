@@ -2,7 +2,8 @@ class Billing < ApplicationRecord
   STATUSES  = [
     "pending",
     "approved",
-    "processing"
+    "processing",
+    "error"
   ]
 
   belongs_to :center
@@ -14,6 +15,7 @@ class Billing < ApplicationRecord
 
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
+  scope :processing, -> { where(status: "processing").order("collection_date ASC") }
 
   def load_defaults
     if self.status.blank?

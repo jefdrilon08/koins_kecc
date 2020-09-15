@@ -32,6 +32,11 @@ class User < ApplicationRecord
     "OJT"
   ]
 
+  FOR_MANAGING_BRANCH_ROLES = [
+    "MIS",
+    "AO"
+  ]
+
   validates :username, presence: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true

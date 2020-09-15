@@ -32,6 +32,30 @@ var _cacheDom = function() {
   $selectMember          = $("#select-member");
   $typeOfClaim           = $("#type-of-claims");
 
+  $typeOfClaim.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
+  
+  $selectBranch.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
+
+  $selectCenter.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
+
+  $selectMember.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
+
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 

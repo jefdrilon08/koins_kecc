@@ -536,7 +536,7 @@ namespace :adjust do
                 INNER JOIN
                   amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
                 WHERE
-                  loans.status IN ('active', 'paid')
+                  loans.status IN ('active', 'paid', 'processing')
                 ORDER BY
                   loans.id,
                   amortization_schedule_entries.due_date DESC,
@@ -556,7 +556,7 @@ namespace :adjust do
               end
 
               if last_transaction_date.present?
-                if current_date > last_amortization_date and status == 'active'
+                if current_date > last_amortization_date and ['active', 'processing'].include?(status)
                   max_active_date = current_date
                 elsif last_transaction_date > last_amortization_date
                   max_active_date = last_transaction_date
@@ -1662,6 +1662,7 @@ namespace :adjust do
                                                 accounting_entry_particular: row['particular'],
                                                 beginning_balance: row['beginning_balance'],
                                                 ending_balance: row['ending_balance'],
+                                                equity_value: row['equity_value'],
                                                 data: {
                                                   id: row['id_data'],
                                                   principal: row['principal_data'],
@@ -1715,6 +1716,7 @@ namespace :adjust do
         insurance_account_transaction_record_data[:accounting_entry_particular] = row['particular']
         insurance_account_transaction_record_data[:beginning_balance] = row['beginning_balance']
         insurance_account_transaction_record_data[:ending_balance] = row['ending_balance']
+        insurance_account_transaction_record_data[:equity_value] = row['equity_value']
         
         if !insurance_account_transaction_record_data[:data].nil? 
           insurance_account_transaction_record_data[:data][:id] = row['id_data']

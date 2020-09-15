@@ -5,6 +5,8 @@ class DataStoreController < ApplicationController
     @records      = list_query(branch_data_stores)
     @start_date   = params[:start_date]
     @end_date     = params[:end_date]
+    @l_start_date = params[:l_start_date]
+    @l_end_date   = params[:l_end_date]
     @br_id        = Branch.where(id: params[:branch_id]).first
     @book         = params[:book]
     @book_s_date  = params[:book_start_date]
@@ -19,6 +21,14 @@ class DataStoreController < ApplicationController
     if @end_date.present?
       @records = @records.where(
                   "data ->> 'as_of' <= ?" , @end_date
+                  )
+    end
+
+    if @l_start_date.present? and @l_end_date.present?
+      @records  = @records.where(
+                    "updated_at >= ? and updated_at <= ?",
+                    @l_start_date,
+                    @l_end_date
                   )
     end
 

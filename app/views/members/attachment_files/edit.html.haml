@@ -1,15 +1,6 @@
-%ol.breadcrumb
-  %li.breadcrumb-item
-    .fa.fa-money-check
-      Attachment File
-  %li.breadcrumb-item
-    .fa.fa-user
-      Edit Record for: #{link_to @member.full_name, member_path(@member), target: '_blank'}
-  
-.container-fluid
-  .row
-    .col
-      .card
-        .card-body
-          = render partial: "members/attachment_files/form", locals: { attachment_file: @attachment_file }
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "members/attachment_files/form", locals: { attachment_file: @attachment_file }
 

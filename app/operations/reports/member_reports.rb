@@ -94,6 +94,7 @@ module Reports
       @t_coverage = 0.00
       @t_lif = 0.00
       @t_rf = 0.00
+      value = 0.00
 
       @members.each_with_index do |member, i|
         record = {}

@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 
     get "/batch_moratorium_adjustments", to: "batch_moratorium_adjustments#index", as: :batch_moratorium_adjustments
     get "/batch_moratorium_adjustments/:id", to: "batch_moratorium_adjustments#show", as: :batch_moratorium_adjustment
+
+    get "/moratoriums", to: "moratoriums#index", as: :moratoriums
   end
   
   # EXPORTS
@@ -83,6 +85,7 @@ Rails.application.routes.draw do
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
+  get "/members/search", to: "members#search", as: :members_search
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
@@ -114,6 +117,8 @@ Rails.application.routes.draw do
     get "/scholarship_loa_pdf", to: "claims#scholarship_loa_pdf"
     get "/scholarship_contract_highschool_pdf", to: "claims#scholarship_contract_highschool_pdf"
     get "/scholarship_contract_college_pdf", to: "claims#scholarship_contract_college_pdf"
+
+    resources :claim_attachment_files, controller: 'claims/claim_attachment_files'
   end
    get "/claims/new/:id", to: "claims#new"
 
@@ -361,6 +366,9 @@ Rails.application.routes.draw do
     delete "/accounting_entries/:id", to: "accounting_entries#destroy", as: :delete_accounting_entry
     get "/accounting_entry/form", to: "accounting_entries#form", as: :accounting_entry_form
     
+    get "/trial_balances", to: "trial_balances#index"
+    get "/trial_balances/:id", to: "trial_balances#show"
+    delete "/trial_balances/:id", to: "trial_balances#destroy"
   end
 
   def draw(routes_name)

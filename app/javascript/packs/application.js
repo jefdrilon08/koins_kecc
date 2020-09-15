@@ -147,6 +147,11 @@ import UserDemeritsShow from "../models/UserDemeritsShow.js";
 import EquityWithdrawalCollectionsIndex from "../models/EquityWithdrawalCollectionsIndex.js";
 import EquityWithdrawalCollectionsShow from "../models/EquityWithdrawalCollectionsShow.js";
 import ClaimsIndex from "../models/ClaimsIndex.js";
+import AdjustmentsMoratoriumsIndex from "../models/AdjustmentsMoratoriumsIndex.js";
+import ChangePassword from "../models/ChangePassword.js";
+import TrialBalancesIndex from "../models/TrialBalancesIndex.js";
+import TrialBalancesShow from "../models/TrialBalancesShow.js";
+import MembersSearch from "../models/MembersSearch.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -158,6 +163,7 @@ const renderComponent = (Component, payload) => {
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
   "members/index":                                    [MembersIndex],
+  "members/search":                                   [MembersSearch],
   "members/show":                                     [MembersShow],
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
@@ -206,6 +212,7 @@ const hooks = {
   "adjustments/subsidiary_adjustments/show":          [SubsidiaryAdjustmentsShow],
   "adjustments/batch_moratorium_adjustments/index":   [BatchMoratoriumAdjustmentsIndex],
   "adjustments/batch_moratorium_adjustments/show":    [BatchMoratoriumAdjustmentsShow],
+  "adjustments/moratoriums/index":                    [AdjustmentsMoratoriumsIndex],
   "member_account_validations/index":                 [MemberAccountValidationsIndex],
   "member_account_validations/show":                  [MemberAccountValidationsShow],
   "member_account_validations/edit":                  [MemberAccountValidationsForm],
@@ -275,6 +282,9 @@ const hooks = {
   "members/form_resignation":                         [FormResignationComponent],
   "equity_withdrawal_collections/index":              [EquityWithdrawalCollectionsIndex],
   "equity_withdrawal_collections/show":               [EquityWithdrawalCollectionsShow, EquityWithdrawalCollectionUIComponent],
+  "pages/change_password":                            [ChangePassword],
+  "accounting/trial_balances/index":                  [TrialBalancesIndex],
+  "accounting/trial_balances/show":                   [TrialBalancesShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
