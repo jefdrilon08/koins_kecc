@@ -91,7 +91,7 @@ branch_config:
     #current_date: "2020-08-31"
   -
     id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 #east3
 
