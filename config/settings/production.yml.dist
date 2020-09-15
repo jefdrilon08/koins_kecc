@@ -30,7 +30,7 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
     current_date: "2020-08-31"
