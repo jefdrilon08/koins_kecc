@@ -93,7 +93,7 @@ class Member < ApplicationRecord
   end
   
   def check_name
-    "#{first_name.try(:upcase)} #{middle_name.try(:upcase)} #{last_name.try(:upcase)}"
+    "#{first_name.try(:upcase)} #{last_name.try(:upcase)}"
   end
 
   def full_name

@@ -6,13 +6,13 @@ module Reports
       @branch = branch
 
       if @branch.present? && @start_date.present? && @end_date.present? 
-        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "BLIP").order("date_prepared DESC")
+        @claims = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ? AND status = ?", @start_date, @end_date, @branch, "BLIP", "approved").order("date_prepared DESC")
       elsif  @start_date.present? && @end_date.present? 
-        @claims = Claim.where("date_prepared >= ? AND date_prepared  <= ? AND claim_type = ?", @start_date, @end_date, "BLIP").order("date_prepared DESC")
+        @claims = Claim.where("date_prepared >= ? AND date_prepared  <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "BLIP", "approved").order("date_prepared DESC")
       elsif @branch.present? 
-        @claims = Claim.where("branch_id = ? AND claim_type = ?", @branch, "BLIP").order("date_prepared DESC")
+        @claims = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "BLIP", "approved").order("date_prepared DESC")
       else  
-        @claims = Claim.where(claim_type: 'BLIP').order("date_prepared DESC")
+        @claims = Claim.where(claim_type: 'BLIP', status: "approved").order("date_prepared DESC")
       end
 
       @p        = Axlsx::Package.new
@@ -64,7 +64,8 @@ module Reports
             "Equity Value (LIFE)",
             "Retirement Fund (RF)",
             "Length of Membership",
-            "Prepared by"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @claims.each do |claim|
@@ -93,7 +94,8 @@ module Reports
                 claim.data["equity_value"],
                 claim.data["retirement_fund"],
                 claim.data["length_of_stay"],
-                claim.prepared_by
+                claim.prepared_by,
+                claim.status
               ], style: [nil]
 
             @total_equity_value = @total_equity_value + claim.data["equity_value"].to_i
@@ -127,8 +129,9 @@ module Reports
             @total_equity_value,
             @total_retirement_fund,
             "",
+            "",
             ""
-          ], style: [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, header_cells, nil, currency_cell_right_bold, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, nil, nil]
+          ], style: [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, header_cells, nil, currency_cell_right_bold, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, nil,nil, nil]
 
         end
       end

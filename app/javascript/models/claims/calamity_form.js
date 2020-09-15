@@ -1,3 +1,4 @@
+import Mustache from "mustache/mustache";
 var calamityForm = (function() {
 
   var authenticityToken       = $("meta[name='csrf-token']").attr('content');

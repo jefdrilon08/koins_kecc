@@ -4,7 +4,6 @@ var $filterStartDate;
 var $filterEndDate;
 var $filterLoanStatus;
 var $branchSelect;
-
 var _cacheDom = function() {
   $btnPrint          = $("#btn-print");
   $btnDownloadCsv    = $("#btn-download-csv") 
@@ -25,7 +24,7 @@ var encodeQueryData = function(data) {
 
 var _bindEvents = function() {
   $btnPrint.on('click', function() {
-    data = {
+    var data = {
       start_date: $filterStartDate.val(),
       end_date: $filterEndDate.val(),
       branch_id: $branchSelect.val(),

@@ -7,7 +7,7 @@ module Reports
       @members = []
 
       if @as_of.present? && @branch_id.present?
-        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status != ? AND branch_id = ?", @as_of, "active", "dormant", @branch_id)
+        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND branch_id = ?", @as_of, "active", "inforce", @branch_id)
       elsif @as_of.present?
         @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status != ?", @as_of, "GK", "active", "dormant")
         @resigned = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @as_of, @as_of)

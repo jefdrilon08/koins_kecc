@@ -6,13 +6,13 @@ module Reports
       @branch = branch
       
       if @branch.present? && @start_date.present? && @end_date.present?
-        @calamity   = Claim.where("data->>'date_requested' >= ? AND data->>'date_requested' <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "CALAMITY ASSISTANCE").order("created_at DESC")
+        @calamity   = Claim.where("data->>'date_requested' >= ? AND data->>'date_requested' <= ? AND branch_id = ? AND claim_type = ? AND status = ?", @start_date, @end_date, @branch, "CALAMITY ASSISTANCE", "approved").order("created_at DESC")
       elsif @start_date.present? && @end_date.present?
-        @calamity   = Claim.where("data->>'date_requested' >= ? AND data->>'date_requested' <= ? AND claim_type = ?", @start_date, @end_date, "CALAMITY ASSISTANCE").order("created_at DESC")
+        @calamity   = Claim.where("data->>'date_requested' >= ? AND data->>'date_requested' <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "CALAMITY ASSISTANCE", "approved").order("created_at DESC")
       elsif @branch.present?
-        @calamity   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "CALAMITY ASSISTANCE").order("created_at DESC")
+        @calamity   = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "CALAMITY ASSISTANCE", "approved").order("created_at DESC")
       else
-        @calamity = Claim.where(claim_type: 'CALAMITY ASSISTANCE')
+        @calamity = Claim.where(claim_type: 'CALAMITY ASSISTANCE', status: "approved")
       end  
 
       @p          = Axlsx::Package.new
@@ -47,7 +47,8 @@ module Reports
             "Date of Event",
             "Payee",
             "Name of Beneficiary",
-            "Prepared by"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @calamity.each_with_index do |calamity|
@@ -64,7 +65,8 @@ module Reports
                   calamity.data["date_of_event"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   calamity.data["name_of_payee"],
                   calamity.data["name_of_beneficiary"],
-                  calamity.prepared_by
+                  calamity.prepared_by,
+                  calamity.status
                 ], style: [nil]             
               end
           end

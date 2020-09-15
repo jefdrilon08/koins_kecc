@@ -7,13 +7,13 @@ module Reports
      
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @scholarship   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "KUYA JUN SCHOLARSHIP PROGRAM").order("created_at DESC")
+        @scholarship   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ? AND status = ?", @start_date, @end_date, @branch, "KUYA JUN SCHOLARSHIP PROGRAM", "approved").order("created_at DESC")
       elsif @start_date.present? && @end_date.present?
-        @scholarship   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ?", @start_date, @end_date, "KUYA JUN SCHOLARSHIP PROGRAM").order("created_at DESC")
+        @scholarship   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "KUYA JUN SCHOLARSHIP PROGRAM", "approved").order("created_at DESC")
       elsif @branch.present?
-        @scholarship   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "KUYA JUN SCHOLARSHIP PROGRAM").order("created_at DESC")
+        @scholarship   = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "KUYA JUN SCHOLARSHIP PROGRAM", "approved").order("created_at DESC")
       else
-        @scholarship = Claim.where(claim_type: 'KUYA JUN SCHOLARSHIP PROGRAM')
+        @scholarship = Claim.where(claim_type: 'KUYA JUN SCHOLARSHIP PROGRAM', status: "approved")
       end  
 
       @p          = Axlsx::Package.new
@@ -51,7 +51,8 @@ module Reports
             "Final Grade",
             "Classification",
             "Course",
-            "Prepared by"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @scholarship.each_with_index do |scholarship|
@@ -71,7 +72,8 @@ module Reports
                   scholarship.data["final_grade"],
                   scholarship.data["classification"],
                   scholarship.data["course"],
-                  scholarship.prepared_by
+                  scholarship.prepared_by,
+                  scholarship.status
                 ], style: [nil]             
               end
           end
