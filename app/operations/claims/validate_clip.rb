@@ -108,10 +108,21 @@ module Claims
     private
 
     def validate_clip_duplication!
-      count = Claim.where("claim_type = ? AND data->>'policy_number' = ?", "CLIP", @policy_number).count
-      if count > 0
-        @errors << "Duplicate CLIP!"
-      end
+      count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
+        data->>'amount' = ? AND data->>'gender' = ? AND data->>'policy_number' = ? AND 
+        data->>'creditors_name' = ? AND data->>'member_name' = ? AND data->>'beneficiary' = ? AND 
+        data->>'date_of_death' = ? AND data->>'date_of_birth' = ? AND data->>'cause_of_death' = ? AND 
+        data->>'effective_date_of_coverage' = ? AND data->>'expiration_date_of_coverage' = ? AND 
+        data->>'age' = ? AND data->>'terms' = ? AND data->>'amount_of_loan' = ? AND data->>'amount_payable_to_creditor' = ? AND 
+        data->>'type_of_loan' = ?", 
+        @claim.member_id, "CLIP", @date_prepared, @amount, @gender, @policy_number, 
+        @creditors_name, @member_name, @beneficiary, @date_of_death, @date_of_birth, 
+        @cause_of_death, @effective_date_of_coverage, @expiration_date_of_coverage, @age, @terms, 
+        @amount_of_loan, @amount_payable_to_creditor, @type_of_loan).count
+        if count > 0
+          @errors << "Duplicate CLIP!"
+        end
     end
   end
 end
+

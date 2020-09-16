@@ -41,7 +41,7 @@ module Members
             
             member_row  = []
             member_row  <<  member.identification_number
-            member_row  <<  member.full_name
+            member_row  <<  member.check_name
             member_row  <<  member.status
             member_row  <<  member.insurance_status
             member_row  <<  member.insurance_date_resigned

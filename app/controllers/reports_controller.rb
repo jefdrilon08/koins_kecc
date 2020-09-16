@@ -354,7 +354,7 @@ class ReportsController < ApplicationController
     start_date = params[:start_date]
     end_date = params[:end_date]
     branch = params[:branch]
-   
+    
     if claim_type == "BLIP"
       excel = Reports::GenerateBlipExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
       filename  = "blip_report.xlsx"

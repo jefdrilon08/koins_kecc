@@ -45,7 +45,8 @@ module Exports
                             :old_previous_mii_member_since,
                             :is_balik_kasapi,
                             :center_id,
-                            :branch_id
+                            :branch_id,
+                            :lapse
                             
                         ]
                 @members.each do |m|
@@ -69,6 +70,9 @@ module Exports
                         recognition_date = m.data.with_indifferent_access[:recognition_date]
                         if recognition_date.nil?
                             recognition_date = nil
+                            lapse = nil
+                        else
+                            lapse = m.life_number_of_lapsed
                         end
 
                         
@@ -127,7 +131,8 @@ module Exports
                         "",
                         "",
                         m.center.id,
-                        m.branch.id
+                        m.branch.id,
+                        lapse
                         ]
                     end
                 end

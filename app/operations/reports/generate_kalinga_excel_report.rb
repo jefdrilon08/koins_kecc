@@ -6,13 +6,13 @@ module Reports
       @branch       = branch
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @kalinga   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "K-KALINGA").order("created_at DESC")
+        @kalinga   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND branch_id = ? AND claim_type = ? AND status = ?", @start_date, @end_date, @branch, "K-KALINGA", "approved").order("created_at DESC")
       elsif @start_date.present? && @end_date.present?
-        @kalinga   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND claim_type = ?", @start_date, @end_date, "K-KALINGA").order("created_at DESC")
+        @kalinga   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "K-KALINGA", "approved").order("created_at DESC")
       elsif @branch.present?
-        @kalinga   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "K-KALINGA").order("created_at DESC")
+        @kalinga   = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "K-KALINGA", "approved").order("created_at DESC")
       else
-        @kalinga = Claim.where(claim_type: 'K-KALINGA')
+        @kalinga = Claim.where(claim_type: 'K-KALINGA', status: "approved")
       end
 
       @p          = Axlsx::Package.new
@@ -53,7 +53,8 @@ module Reports
             "Amount",
             "Effective Date",
             "Expiration Date",
-            "Prepared by"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @kalinga.each_with_index do |kalinga|
@@ -76,7 +77,8 @@ module Reports
                   kalinga.data["amount"],
                   kalinga.data["effective_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   kalinga.data["expiration_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  kalinga.prepared_by
+                  kalinga.prepared_by,
+                  kalinga.status
                 ], style: [nil]             
               end
           end

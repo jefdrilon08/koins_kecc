@@ -52,8 +52,7 @@ module Api
           render json: {message: "ok"}                            
         end
       end
-
-
+      
       def approved
         claim = Claim.find(params[:id])
 

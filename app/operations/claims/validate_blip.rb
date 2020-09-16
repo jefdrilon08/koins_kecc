@@ -134,10 +134,21 @@ module Claims
     private
 
     def validate_blip_duplication!
-      count = Claim.where("claim_type = ? AND data->>'type_of_insurance_policy' = ? AND data->>'classification_of_insured' = ? AND data->>'date_of_death_tpd_accident' = ? AND data->>'policy_number' = ?", "BLIP", @type_of_insurance_policy, @classification_of_insured, @date_of_death_tpd_accident, @policy_number).count
-      if count > 0
-        @errors << "Duplicate BLIP!"
-      end
+       count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
+        data->>'date_reported' = ? AND data->>'date_paid' = ? AND data->>'date_of_policy_issue' = ? AND 
+        data->>'type_of_insurance_policy' = ? AND data->>'classification_of_insured' = ? AND 
+        data->>'date_of_death_tpd_accident' = ? AND data->>'length_of_stay' = ? AND data->>'equity_value' = ? AND 
+        data->>'retirement_fund' = ? AND data->>'policy_number' = ? AND data->>'face_amount' = ? AND data->>'name_of_insured' = ? AND 
+        data->>'date_of_birth' = ? AND data->>'age' = ? AND data->>'gender' = ? AND data->>'beneficiary' = ? AND 
+        data->>'returned_contribution' = ? AND data->>'amount' = ? AND data->>'arrears' = ? AND 
+        data->>'category_of_cause_of_death_tpd_accident' = ? AND data->>'cause_of_death_tpd_accident' = ?", 
+        @claim.member_id, "BLIP", @date_prepared, @date_reported, @date_paid, @date_of_policy_issue, 
+        @type_of_insurance_policy, @classification_of_insured, @date_of_death_tpd_accident, @length_of_stay, @equity_value, 
+        @retirement_fund, @policy_number, @face_amount, @name_of_insured, @date_of_birth, @age, @gender, @beneficiary, 
+        @returned_contribution, @amount, @arrears, @category_of_cause_of_death_tpd_accident, @cause_of_death_tpd_accident).count
+        if count > 0
+          @errors << "Duplicate BLIP!"
+        end
     end
   end
 end
