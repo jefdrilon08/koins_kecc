@@ -31,7 +31,7 @@
               .form-group
                 %label
                   Pangalan ng Co-maker (Kasama sa sentro)
-                = select_tag :co_maker_b, options_from_collection_for_select(Member.active.where(center_id: @member.center_id).where.not(id: @member.id), :id, :full_name), class: "form-control", id: "select-co-maker-b"
+                = select_tag :co_maker_b, options_from_collection_for_select(Member.active.where(center_id: @member.center_id).where.not(id: @member.id), :id, :full_name), class: "form-control", id: "select-co-maker-b", prompt: "-- SELECT --"
           .row
             .col-md-6.col-xs-12
               .form-group

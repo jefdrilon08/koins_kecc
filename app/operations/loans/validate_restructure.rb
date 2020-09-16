@@ -66,18 +66,20 @@ module Loans
         end
       end
 
-      if @co_maker.blank?
-        @errors[:messages] << {
-          key: "co_maker",
-          message: "co_maker required"
-        }
-      end
+      if @member.member_type == "Regular"
+        if @co_maker.blank?
+          @errors[:messages] << {
+            key: "co_maker",
+            message: "co_maker required"
+          }
+        end
 
-      if @co_maker_member.blank?
-        @errors[:messages] << {
-          key: "co_maker_member",
-          message: "co_maker_member required"
-        }
+        if @co_maker_member.blank?
+          @errors[:messages] << {
+            key: "co_maker_member",
+            message: "co_maker_member required"
+          }
+        end
       end
 
       if @member.blank?

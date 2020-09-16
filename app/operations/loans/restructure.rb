@@ -84,12 +84,12 @@ module Loans
           relationship: @beneficiary_relationship
         },
         co_maker_one: {
-          value: @co_maker_member.id,
-          label: @co_maker_member.full_name,
-          id: @co_maker_member.id,
-          first_name: @co_maker_member.first_name,
-          middle_name: @co_maker_member.middle_name,
-          last_name: @co_maker_member.last_name
+          value: @co_maker_member.try(:id),
+          label: @co_maker_member.try(:full_name),
+          id: @co_maker_member.try(:id),
+          first_name: @co_maker_member.try(:first_name),
+          middle_name: @co_maker_member.try(:middle_name),
+          last_name: @co_maker_member.try(:last_name)
         },
         co_maker_two: @co_maker,
         voucher: {
