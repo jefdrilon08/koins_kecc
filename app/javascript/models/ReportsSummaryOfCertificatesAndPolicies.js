@@ -1,8 +1,6 @@
 import Mustache from "mustache/mustache";
-<<<<<<< HEAD
-=======
 
->>>>>>> master
+
 var $searchBtn;
 var $downloadBtn;
 var $memberReportsSection;
