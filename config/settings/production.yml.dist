@@ -57,7 +57,7 @@ branch_config:
     #current_date: "2020-08-31"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
