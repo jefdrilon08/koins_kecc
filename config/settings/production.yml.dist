@@ -97,13 +97,13 @@ branch_config:
 
   -
     id: "14c17eff-b255-4a78-93b6-373aa1b85a61"  #TAYTAY
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 #south1
   -
