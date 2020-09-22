@@ -6,10 +6,7 @@ module Turkey
       @branch   = branch
       @from     = from
       @to       = to
-#      @accounts = MemberAccount
-#        .pluck(:account_subtype).uniq
-#        .map { |subtype| [subtype.parameterize.underscore, subtype] }
-#        .to_h
+
       @accounts = Settings.default_member_accounts.map{ |o|
                     [o[:account_subtype].parameterize.underscore, o[:account_subtype]]
                   }.to_h

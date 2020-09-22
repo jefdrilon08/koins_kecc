@@ -131,6 +131,23 @@ module Finance
 
       @schedule = @schedule.sort_by{ |h| -h[:interest] }
 
+      # Patch to fix negative interest
+
+      if @schedule.select{ |h| h[:interest] < 0 }.size > 0
+        negative_hash     = @schedule.select{ |h| h[:interest] < 0 }.first
+        negative_interest = negative_hash[:interest]
+
+        negative_hash[:interest]  = 0.00
+        negative_hash[:principal] += negative_interest
+
+        buffer_hash = @schedule.select{ |h| h[:interest] >= negative_interest.abs }.last
+
+        buffer_hash[:interest]  -= negative_interest.abs
+        buffer_hash[:principal] += negative_interest.abs
+      end
+
+      ####################################
+
       return {
         schedule: @schedule,
         principal: @total_principal,
