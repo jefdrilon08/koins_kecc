@@ -33,48 +33,48 @@ branch_config:
     #current_date: "2020-08-31"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
     #current_date: "2020-08-31"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "a5a866ac-6733-4995-94bf-95430fea2b02"  #SAPANGPALAY
     #current_date: "2020-08-31"
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 #east1
   -
     id: "a898f9c8-83d9-462f-ae83-251a393dd253"  #RHS
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "1c549142-8796-4110-b409-af7612a915d0"  #MARIKINA
     #current_date: "2020-08-31"
   -
     id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"  #Montalban
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 #east2
   -
     id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"  #Masinag
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"  #SUMULONG
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "505008be-d28c-4ebd-9dfb-bc076bccb638"  #PADILLA
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 #central1
   -
     id: "06c2fd58-e93b-4066-afd2-f3fe3a7d4f1c"  #BATASAN
     #current_date: "2020-08-31"
   -
     id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"  #FAIRVIEW
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
     #current_date: "2020-08-31"
@@ -97,13 +97,13 @@ branch_config:
 
   -
     id: "14c17eff-b255-4a78-93b6-373aa1b85a61"  #TAYTAY
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
   -
     id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 #south1
   -
