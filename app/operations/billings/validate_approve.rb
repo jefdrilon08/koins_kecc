@@ -61,7 +61,7 @@ module Billings
       end
 
       if @data.present? and @data[:or_number].present?
-        if Billing.where("branch_id = ? AND data->>'or_number' = ? AND id <> ? AND status = ?", @billing.branch_id, @data[:or_number], @billing.id, "pending").count > 0
+        if Billing.where("branch_id = ? AND data->>'or_number' = ? AND id <> ?", @billing.branch_id, @data[:or_number], @billing.id).count > 0
           @errors[:messages] << {
             key: "or_number",
             message: "Duplicate OR NUMBER"
