@@ -14,7 +14,7 @@ cutoff_time_end: "23:59"
 branch_config:
   -
     id: "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583"  #HEAD OFFICE
-    current_date: "2020-08-31"
+    #current_date: "2020-08-31"
 
 #north 3
   -
