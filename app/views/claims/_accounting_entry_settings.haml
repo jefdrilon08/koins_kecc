@@ -1,0 +1,53 @@
+.row
+  .col
+    .card
+      .card-body
+        #settings
+          .row
+            .col-md-6.col-xs-12
+              %h5
+                Modify Accounting Code
+              .card
+                .card-body
+                  %p
+                    Currently being used: #{@claim.claims_template}
+                  .row
+                    .col-md-8.col-xs-12
+                      = select_tag :claims_template, options_for_select(claims_templates, @claim.claims_template), class: "form-control select-select2", id: "select-claims-template", prompt: "-- SELECT --"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-claims-template.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Use Template
+                  .message
+            .col-md-6.col-xs-12
+              %h5
+                Modify Book
+              .card
+                .card-body
+                  %p
+                    Currently book: #{@claim.book}
+                  .row
+                    .col-md-8.col-xs-12
+                      = select_tag :book, options_for_select(["CDB", "JVB", "CRB"], @claim.book), class: "form-control select-select2", id: "select-book"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-book.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Use Book
+                  .message
+          .row
+            .col-md-12.col-xs-12
+              %h5
+                Modify Particular
+              .card
+                .card-body
+                  %p
+                    Currently being used: #{@claim.particular}
+                  .row
+                    .col-md-8.col-xs-12
+                      = text_area_tag :particular, @claim.particular, class: "form-control select-select2", id: "input-text-particular"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-particular.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Update particular
+                  .message
+

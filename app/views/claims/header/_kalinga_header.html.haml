@@ -23,11 +23,28 @@
         = link_to claims_path do
           .fa.fa-arrow-left
           Back to Claims
-    - else
+    - elsif @claim.for_approval?
       .btn-group
-        = link_to "", class: "btn btn-app", id: "approved-button"  do
+        = link_to "#", class: "btn btn-app", id: "btn-approve" do
           .fa.fa-check
-          Approved
+          Approve
+      .btn-group
+        = link_to edit_claim_path(@claim), class: 'btn btn-app' do
+          %i.fa.fa-edit
+          Edit
+      .btn-group 
+        = link_to claim_path(@claim), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-app" do
+          %i.fa.fa-times
+          Delete
+      .btn-group
+        = link_to claims_path do
+          .fa.fa-arrow-left
+          Back to Claims
+    - elsif @claim.pending?
+      .btn-group  
+        = link_to "#", class: "btn btn-app", id: "btn-check" do
+          .fa.fa-check
+          Check  
       .btn-group
         = link_to edit_claim_path(@claim), class: 'btn btn-app' do
           %i.fa.fa-edit

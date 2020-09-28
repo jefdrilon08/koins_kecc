@@ -161,5 +161,26 @@ class ClaimsController < ApplicationController
   def show
     @claim            = Claim.find(params[:id])
     @data             = @claim.data.try(:with_indifferent_access) || {}
+
+    if !@data.nil?
+      @accounting_entry_data = @claim.data.with_indifferent_access[:accounting_entry]
+    end
+
+    @subheader_items = [
+      {
+        is_link: true,
+        path: claims_path,
+        text: "Claims"
+      },
+      {
+        text: "#{@claim.date_prepared} - #{@claim.status}"
+      }
+    ]
+
+    @subheader_side_actions = []
+
+    @payload = {
+      id: @claim.id
+    }
   end
 end

@@ -3,6 +3,9 @@
 
 %section.content
   = render partial: "content"
+  
+= render partial: "claims/modals/approve"
+= render partial: "claims/modals/check"
 
-#parameters{ data: { id: params[:id]}}
-= javascript_include_tag "claims/approved_claim"
+/ #parameters{ data: { id: params[:id]}}
+/ = javascript_include_tag "claims/approved_claim"

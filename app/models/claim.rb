@@ -10,6 +10,7 @@ class Claim < ApplicationRecord
                   "K-NHA W1","K-NHA W12","K-Noche Buena","K-PWD","K-Toda","K-TRABAHO", "PROJECT LOAN", "MULTI-PURPOSE LOAN", "EMERGENCY LOAN", "UTILITY LOAN", "EDUCATIONAL LOAN"]
   CREDITORS_NAME = ["KCOOP", "JVOMFI", "CAPS-R"]
   GENDER = ["MALE","FEMALE"]
+
   belongs_to :branch
 	belongs_to :center
 	belongs_to :member
@@ -17,6 +18,29 @@ class Claim < ApplicationRecord
   has_many :claim_attachment_files
 
   before_validation :load_defaults
+
+  def book
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:book]
+  end
+
+  def particular
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:particular]
+  end
+
+  def claims_template
+    temp_data = self.data.with_indifferent_access 
+
+    if temp_data[:claims_template].present?
+      temp_data[:claims_template]
+    else
+      "default"
+    end
+  end
+
   def age
     	if self.date_of_birth.nil?
       		"Please set date of birth"
@@ -91,6 +115,42 @@ class Claim < ApplicationRecord
 
   def approved?
     self.status == "approved"
+  end
+
+  def checked?
+    self.status == "checked"
+  end
+
+  def for_approval?
+    self.status == "for-approval"
+  end
+
+  def blip?
+    self.claim_type == "BLIP"
+  end
+
+  def clip?
+    self.claim_type == "CLIP"
+  end
+
+  def hiip?
+    self.claim_type == "HIIP"
+  end
+
+  def calamity?
+    self.claim_type == "CALAMITY ASSISTANCE"
+  end
+
+  def kjsp?
+    self.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
+  end
+
+  def kalinga?
+    self.claim_type == "K-KALINGA"
+  end
+
+  def kbente?
+    self.claim_type == "K-BENTE"
   end
 
   # def balance

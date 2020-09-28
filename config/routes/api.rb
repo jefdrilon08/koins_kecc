@@ -354,7 +354,11 @@ namespace :api do
     #claims
     post "/claims/save", to: "claims#save"
     post "/claims/create", to: "claims#create"
-    post "/claims/approved", to: "claims#approved"
+    post "/claims/approve", to: "claims#approve"
+    post "/claims/check", to: "claims#check"
     post "/claims/update", to: "claims#update"
+    post "/claims/modify_claims_template", to: "claims#modify_claims_template"
+    post "/claims/modify_book", to: "claims#modify_book"
+    post "/claims/modify_particular", to: "claims#modify_particular"
   end
 end
