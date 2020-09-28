@@ -76,9 +76,16 @@ module Claims
     private
 
     def validate_kbente_duplication!
-      count = Claim.where("member_id = ? AND claim_type = ? AND data->>'purpose' = ? AND data->>'date_of_death' = ?",@claim.member_id, "K-BENTE", @purpose, @date_of_death).count
+      count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
+        data->>'amount' = ? AND data->>'date_approved' = ? AND data->>'date_of_birth' = ? AND 
+        data->>'purpose' = ? AND data->>'name_of_insured' = ? AND data->>'name_of_beneficiary' = ? AND 
+        data->>'classification' = ? AND data->>'date_of_death' = ? AND data->>'date_enrolled' = ? AND 
+        data->>'date_expired' = ?", 
+        @claim.member_id, "K-BENTE", @date_prepared, @amount, @date_approved, @date_of_birth, 
+        @purpose, @name_of_insured, @name_of_beneficiary, @classification, @date_of_death, 
+        @date_enrolled, @date_expired).count
         if count > 0
-          @errors << "Duplicate K-BENTE!"
+          @errors << "Duplicate KBENTE!"
         end
        
     end

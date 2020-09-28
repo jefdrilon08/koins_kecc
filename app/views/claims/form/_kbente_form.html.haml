@@ -62,7 +62,7 @@
     .form-group
       %label.col.control-label
         Classification
-        = text_field_tag :classification, @claim.data["classification"], class: 'form-control', id: 'classification'
+        = select_tag :classification, options_for_select(["Member", "Non-Member"], @claim.data["classification"]), class: 'form-control', id: 'classification'
 .row
   .col
     .form-group

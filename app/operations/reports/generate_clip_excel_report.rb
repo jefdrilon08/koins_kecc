@@ -6,13 +6,13 @@ module Reports
       @end_date = end_date
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "CLIP").order("date_prepared DESC")
+        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ? AND status = ? ", @start_date, @end_date, @branch, "CLIP", "approved").order("date_prepared DESC")
       elsif @start_date.present? && @end_date.present?
-        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ?", @start_date, @end_date, "CLIP").order("date_prepared DESC")
+        @clip = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "CLIP", "approved").order("date_prepared DESC")
       elsif @branch.present?
-        @clip = Claim.where("branch_id = ? AND claim_type = ?", @branch, "CLIP").order("date_prepared DESC")
+        @clip = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "CLIP", "approved").order("date_prepared DESC")
       else
-        @clip = Claim.where(claim_type: "CLIP")
+        @clip = Claim.where(claim_type: "CLIP", status: "approved")
       end
 
       @p        = Axlsx::Package.new
@@ -60,7 +60,8 @@ module Reports
             "Terms of Loan (Weeks)",
             "Amount Payable to Beneficiary (Paid Amount)",
             "Amount Payable to Creditor (Balance)",
-            "Prepared by:"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @clip.each do |clip|
@@ -85,7 +86,8 @@ module Reports
               clip.data["terms"],
               clip.data["amount_payable_to_beneficiary"],
               clip.data["amount_payable_to_creditor"],
-              clip.prepared_by
+              clip.prepared_by,
+              clip.status
             ], style: [nil]
 
             @total_amount_of_loan = @total_amount_of_loan + clip.data["amount_of_loan"].to_i
@@ -114,8 +116,9 @@ module Reports
             "",
             @total_amount_payable_to_beneficiary,
             @total_amount_payable_to_creditor,
+            "",
             ""
-            ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, header_cells, nil, currency_cell_right_bold, nil, currency_cell_right_bold, currency_cell_right_bold, nil]
+            ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, header_cells, nil, currency_cell_right_bold, nil, currency_cell_right_bold, currency_cell_right_bold, nil, nil]
 
         end
       end

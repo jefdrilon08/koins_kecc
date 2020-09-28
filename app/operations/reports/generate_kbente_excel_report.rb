@@ -7,13 +7,13 @@ module Reports
      
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @kbente   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "K-BENTE").order("created_at DESC")
+        @kbente   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND branch_id = ? AND claim_type = ? AND status = ?", @start_date, @end_date, @branch, "K-BENTE", "approved").order("created_at DESC")
       elsif @start_date.present? && @end_date.present?
-        @kbente   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND claim_type = ?", @start_date, @end_date, "K-BENTE").order("created_at DESC")
+        @kbente   = Claim.where("data->>'date_approved' >= ? AND data->>'date_approved' <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "K-BENTE", "approved").order("created_at DESC")
       elsif @branch.present?
-        @kbente   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "K-BENTE").order("created_at DESC")
+        @kbente   = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "K-BENTE", "approved").order("created_at DESC")
       else
-        @kbente = Claim.where(claim_type: 'K-BENTE')
+        @kbente = Claim.where(claim_type: 'K-BENTE', status: "approved")
       end
 
       @p          = Axlsx::Package.new
@@ -51,7 +51,8 @@ module Reports
             "Date of Death",
             "Date Enrolled",
             "Date Expired",
-            "Prepared by"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @kbente.each_with_index do |kbente|
@@ -71,7 +72,8 @@ module Reports
                   kbente.data["date_of_death"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   kbente.data["date_enrolled"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   kbente.data["date_expired"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  kbente.prepared_by
+                  kbente.prepared_by,
+                  kbente.status
                 ], style: [nil]             
               end
           end

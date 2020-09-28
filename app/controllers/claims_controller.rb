@@ -97,6 +97,26 @@ class ClaimsController < ApplicationController
     @payload = {
       id: @claim.id
     }
+
+    @subheader_items = [
+      { is_link: true, path: claims_path, text: "Claims" },
+      { is_link: true, path: member_path(@claim.member), text: "#{@claim.member.full_name}" }
+    ]
+
+    @subheader_side_actions = []
+    
+    @subheader_side_actions << {
+        link: claim_path(@claim),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+    }
+
+    @subheader_side_actions << {
+        link: claims_path,
+        class: "fa fa-arrow-left",
+        text: "Back to Claims"
+    }
   end
 
   def edit
@@ -104,6 +124,25 @@ class ClaimsController < ApplicationController
 
     @payload = {
       id: @claim.id
+    }
+
+    @subheader_items = [
+      { is_link: true, path: claims_path, text: "Claims" },
+      { is_link: true, path: member_path(@claim.member), text: "#{@claim.member.full_name}" }
+    ]
+
+    @subheader_side_actions = []
+    
+    @subheader_side_actions << {
+        link: claim_path(@claim),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+    }
+    @subheader_side_actions << {
+        link: claims_path,
+        class: "fa fa-arrow-left",
+        text: "Back to Claims"
     }
   end
 
@@ -149,6 +188,7 @@ class ClaimsController < ApplicationController
         text: "New Claims"
       }
     ]
+
   end
   
   def destroy
@@ -165,19 +205,222 @@ class ClaimsController < ApplicationController
     if !@data.nil?
       @accounting_entry_data = @claim.data.with_indifferent_access[:accounting_entry]
     end
-
+    
     @subheader_items = [
-      {
-        is_link: true,
-        path: claims_path,
-        text: "Claims"
+      { is_link: true, 
+        path: claims_path, 
+        text: "Claims" 
       },
-      {
-        text: "#{@claim.date_prepared} - #{@claim.status}"
+      { is_link: true, 
+        path: member_path(@claim.member), 
+        text: "#{@claim.member.full_name}" 
       }
     ]
 
     @subheader_side_actions = []
+    if @claim.for_approval?
+      @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+      }
+
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_path(@claim),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      } 
+    end
+
+    if @claim.pending?
+      @subheader_side_actions << {
+          id: "btn-check",
+          link: "#",
+          class: "fa fa-check",
+          text: "Check"
+      }
+
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_path(@claim),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      } 
+    end
+
+    if @claim.claim_type == "BLIP" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_blip_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_blip_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    if @claim.claim_type == "CLIP" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_clip_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_clip_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    if @claim.claim_type == "CALAMITY ASSISTANCE" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_calamity_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_calamity_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    if @claim.claim_type == "HIIP" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_hiip_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_hiip_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    if @claim.claim_type == "K-KALINGA" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_kalinga_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_kalinga_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    if @claim.claim_type == "K-BENTE" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_kbente_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_kbente_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    if @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM" and @claim.approved?
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      if @claim.data["year_level"] == "GRADE 7" || @claim.data["year_level"] == "GRADE 8" || @claim.data["year_level"] == "GRADE 9" || @claim.data["year_level"] == "GRADE 10" || @claim.data["year_level"] == "GRADE 11" || @claim.data["year_level"] == "GRADE 12"
+        @subheader_side_actions << {
+          link: claim_scholarship_contract_highschool_pdf_path(@claim),
+          class: "fa fa-print",
+          text: "Scholarship Contract for Highschool"
+        }
+      else
+        @subheader_side_actions << {
+          link: claim_scholarship_contract_college_pdf_path(@claim),
+          class: "fa fa-print",
+          text: "Scholarship Contract for College"
+        }
+      end
+
+      @subheader_side_actions << {
+        link: claim_scholarship_validation_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "Validation PDF"
+      }
+
+      @subheader_side_actions << {
+        link: claim_scholarship_loa_pdf_path(@claim),
+        class: "fa fa-print",
+        text: "LOA"
+      }
+    end
+
+    @subheader_side_actions << {
+        link: claims_path,
+        class: "fa fa-arrow-left",
+        text: "Back to Claims"
+    }
 
     @payload = {
       id: @claim.id

@@ -1,3 +1,5 @@
+
+
 var hiipForm = (function() {
 
   var $amount;
@@ -73,10 +75,8 @@ var hiipForm = (function() {
             console.log(errors);
             console.log(data);
             $message.html(
-                Mustache.render(
-                  $errorsTemplate,
-                  { errors: errors }
-                )
+              $errorsTemplate,
+              { errors: errors }
               );
           }
       });

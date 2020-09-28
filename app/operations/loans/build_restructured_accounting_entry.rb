@@ -974,13 +974,6 @@ module Loans
                 raise "Invalid term: #{@term}"
               end
 
-#              journal_entries << {
-#                accounting_code_id: accounting_code.id,
-#                code: code,
-#                name: name,
-#                amount: amount
-#              }
-
               temp_amount -= amount
               @total_debit += amount
             end
@@ -1258,7 +1251,6 @@ module Loans
               }
 
               temp_amount -= amount
-              #@total_debit += amount
             end
           else
             if @member.member_type == "GK"
@@ -1293,7 +1285,6 @@ module Loans
                 }
 
                 temp_amount -= amount
-                #@total_debit += amount
               end
             else
               if  s_deduction.skip_for_special_loan_fund == "true"
@@ -1327,7 +1318,6 @@ module Loans
                 }
 
                 temp_amount -= amount
-                #@total_debit += amount
               end
             end
           end
@@ -1371,7 +1361,6 @@ module Loans
                 }
 
                 temp_amount -= amount
-                #@total_debit += amount
 
               end #end of advance insurance
             end #end of gk
@@ -1404,10 +1393,10 @@ module Loans
         else
           @miscellaneous_offset = offset
         end
-
-        # Set @total_debit to rounded off value
-        @total_debit = rounded_off_amount
       end
+
+      # Set @total_debit to rounded off value
+      @total_debit = rounded_off_amount
 
       return journal_entries
     end

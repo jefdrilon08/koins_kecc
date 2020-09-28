@@ -52,7 +52,7 @@ namespace :report do
       date_rel = y.date_released.to_date.strftime("%m/%d/%Y")
       mat_date = y.maturity_date.to_date.strftime("%m/%d/%Y")
       int_rate = (y.monthly_interest_rate*12)*100
-      pod_type = "50-01"
+      #pod_type = "50-01"
       tot_loan_balance = y.principal_balance + y.interest_balance
       over_due_days = ( s_date.to_date - y.maturity_date.to_date).to_i
       amort = AmortizationScheduleEntry.where(loan_id: y.id)
@@ -60,6 +60,18 @@ namespace :report do
       outs_payment = amort.where("is_paid IS NULL").count
       last_payment = amort.last.amount_due
 
+      #gender
+      if y.member.gender == 'Female'
+        gend = 'F'
+      elsif y.member.gender == 'Male'
+        gend = 'M'
+      end
+      #POD TYPE
+      if y.maturity_date.to_date == y.original_maturity_date.to_date
+        pod_type = "50-01"  
+      else
+        pod_type = "54-02"
+      end
       #OVER DUE DAYS
       if over_due_days >= -1
         over_due_days = over_due_days
@@ -70,22 +82,25 @@ namespace :report do
       #CONTRACT TYPE
       if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'  or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO'
         contract_type = 12
-      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'
+      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
         contract_type = 22
-      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD'
+      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' 
         contract_type = 28
+      elsif loan_prod == 'K - BISIKLETA'
+        contract_type = 17
+      
       end
 
       #LOAN PURPOSE
       if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'         
         loan_purpose = 'NI'
-      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'
+      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA' or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
         loan_purpose = 'ET'
-      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO'
+      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO' or loan_prod == 'K - BISIKLETA'
         loan_purpose = 'SE'
       end
 
-      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{y.member.gender}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
     @data << j
     end
     puts @data
@@ -229,6 +244,7 @@ namespace :report do
       end
     end
   end
+
 
 
 

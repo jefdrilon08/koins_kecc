@@ -34,11 +34,15 @@ module Billings
 
       @branch_accounting_code_settings = nil
 
-      Settings.branch_accounting_codes.each do |o|
-        if o.branch_id == @branch.id
-          @branch_accounting_code_settings = o
-        end
-      end
+#      Settings.branch_accounting_codes.each do |o|
+#        if o.branch_id == @branch.id
+#          @branch_accounting_code_settings = o
+#        end
+#      end
+
+      @branch_accounting_code_settings  = Settings.branch_accounting_codes.select{ |o|
+                                            o.branch_id == @branch.id
+                                          }.first
 
       @savings_accounting_codes   = Settings.savings_accounting_codes
       @insurance_accounting_codes = Settings.insurance_accounting_codes
@@ -50,13 +54,20 @@ module Billings
 
       # Get loan_products in this billing
       loan_product_ids  = []
-      @data[:records].each do |o|
-        o[:records].each do |oo|
-          if oo[:record_type] == "LOAN_PAYMENT"
-            loan_product_ids << oo[:loan_product][:id]
-          end
-        end
+      
+      @data[:records].first[:records].select{ |o|
+        o[:record_type] == "LOAN_PAYMENT"
+      }.each do |oo|
+        loan_product_ids << oo[:loan_product][:id]
       end
+
+#      @data[:records].each do |o|
+#        o[:records].each do |oo|
+#          if oo[:record_type] == "LOAN_PAYMENT"
+#            loan_product_ids << oo[:loan_product][:id]
+#          end
+#        end
+#      end
 
       @loan_products  = LoanProduct.where(id: loan_product_ids.uniq)
 
@@ -276,7 +287,11 @@ module Billings
     end
 
     def default_particular
-      "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
+      if @data[:accounting_entry].present? and @data[:accounting_entry][:particular].present?
+        return @data[:accounting_entry][:particular]
+      else
+        "Payment of Loan / Deposit of Funds - #{@center.try(:name)}"
+      end
     end
   end
 end

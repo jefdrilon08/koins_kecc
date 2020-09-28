@@ -22,7 +22,11 @@ module Api
       def restructure
         loan_product      = LoanProduct.where(id: params[:loan_product_id]).first
         co_maker          = params[:co_maker]
-        co_maker_member   = Member.where(id: params[:co_maker_id]).first
+
+        if params[:co_maker_id].present?
+          co_maker_member   = Member.where(id: params[:co_maker_id]).first
+        end
+
         pn_number         = params[:pn_number]
         clip_number       = params[:clip_number]
         date_prepared     = params[:date_prepared]

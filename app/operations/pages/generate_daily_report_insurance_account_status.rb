@@ -52,12 +52,12 @@ module Pages
                   ],
             style: label_cell
 
-            @members = Member.active.where(center_id: center.id).order("last_name ASC")
+            @members = Member.active_and_resigned.where(center_id: center.id).order("last_name ASC")
             @members.each_with_index do |member, index|
               recognition_date  = member.recognition_date
               current_date = Date.today
               
-              if recognition_date.present?
+              if recognition_date.present? and member.lif_amount != 0
                 #compute LIF
                 lif_default = 15
                 lif_account = MemberAccount.where(account_subtype: "Life Insurance Fund", member_id: member.id).sum(:balance)

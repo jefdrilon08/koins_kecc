@@ -14,13 +14,13 @@ module Pages
         member_center = {}
         member_center[:center]    = center.to_s
         member_center[:members]   = []
-        @members = Member.active.where(center_id: center.id).order("last_name ASC")
+        @members = Member.active_and_resigned.where(center_id: center.id).order("last_name ASC")
           @members.each_with_index do |member, i|
             recognition_date  = member.data['recognition_date']
             current_date = Date.today
             member_record = {}
             
-            if recognition_date.present?
+            if recognition_date.present? and member.lif_amount != 0
               #rf compute
               @rf_default = 5
               @rf_account  = MemberAccount.where(account_subtype: "Retirement Fund", member_id: member.id).sum(:balance)
@@ -60,6 +60,7 @@ module Pages
               member_record[:index]                  = i+1
               member_record[:name]                   = member.full_name_titleize
               member_record[:recognition_date]       = member.data['recognition_date']
+              member_record[:status]                 = member.status
               member_record[:length_of_stay]         = member.length_of_stay
               member_record[:identification_number]  = member.identification_number
               member_record[:rf_account]             = @rf_account

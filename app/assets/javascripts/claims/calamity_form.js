@@ -1,5 +1,4 @@
 var calamityForm = (function() {
-
   var authenticityToken       = $("meta[name='csrf-token']").attr('content');
   var $errorsTemplate;
   var $parameters;

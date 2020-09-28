@@ -221,6 +221,27 @@ module Api
         end
       end
 
+      def update
+        billing_id  = params[:billing_id]
+        data        = params[:data]
+        changes     = params[:changes]
+
+        billing = Billing.find(billing_id)
+
+        billing.update!(
+          status: "processing"
+        )
+
+        ProcessBillingUpdate.perform_later({
+          id: billing.id,
+          user_id: current_user.id,
+          data: data,
+          changes: changes
+        })
+
+        render json: { message: "ok" }
+      end
+
       def modify_transaction_record
         billing             = Billing.find(params[:id])
         current_transaction = params[:current_transaction]

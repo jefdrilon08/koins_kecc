@@ -104,43 +104,67 @@ module Billings
       @data[:totals].each_with_index do |t, index|
         if t[:record_type] == "SAVINGS"
           @data[:records].each_with_index do |r, i|
-            r[:records].each_with_index do |rr, j|
-              #if rr[:record_type] == "SAVINGS" and t[:key] == MemberAccount.savings.where(id: rr[:member_account_id]).first.account_subtype
-              if rr[:record_type] == "SAVINGS" and t[:key] == rr[:account_subtype]
-                total_collected += rr[:amount].try(:to_f).round(2)
-                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
-              end
+            r[:records].select{ |rr|
+              rr[:record_type] == "SAVINGS" and t[:key] == rr[:account_subtype]
+            }.each do |rr|
+              total_collected += rr[:amount].try(:to_f).round(2)
+              @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
             end
+
+#            r[:records].each_with_index do |rr, j|
+#              if rr[:record_type] == "SAVINGS" and t[:key] == rr[:account_subtype]
+#                total_collected += rr[:amount].try(:to_f).round(2)
+#                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+#              end
+#            end
           end
         elsif t[:record_type] == "INSURANCE"
           @data[:records].each_with_index do |r, i|
-            r[:records].each_with_index do |rr, j|
-              #if rr[:record_type] == "INSURANCE" and t[:key] == MemberAccount.insurance.where(id: rr[:member_account_id]).first.account_subtype
-              if rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
-                total_collected += rr[:amount].try(:to_f).round(2)
-                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
-              end
+            r[:records].select{ |rr|
+              rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
+            }.each do |rr|
+              total_collected += rr[:amount].try(:to_f).round(2)
+              @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
             end
+
+#            r[:records].each_with_index do |rr, j|
+#              if rr[:record_type] == "INSURANCE" and t[:key] == rr[:account_subtype]
+#                total_collected += rr[:amount].try(:to_f).round(2)
+#                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+#              end
+#            end
           end
         elsif t[:record_type] == "WP"
           @data[:records].each_with_index do |r, i|
-            r[:records].each_with_index do |rr, j|
-              if rr[:record_type] == "WP"
-                #total_collected += rr[:amount].try(:to_f).round(3)
-                total_collected -= rr[:amount].try(:to_f).round(2)
-                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
-              end
+            r[:records].select{ |rr|
+              rr[:record_type] == "WP"
+            }.each do |rr|
+              total_collected -= rr[:amount].try(:to_f).round(2)
+              @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
             end
+
+#            r[:records].each_with_index do |rr, j|
+#              if rr[:record_type] == "WP"
+#                total_collected -= rr[:amount].try(:to_f).round(2)
+#                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+#              end
+#            end
           end
         elsif t[:record_type] == "LOAN_PAYMENT"
           @data[:records].each_with_index do |r, i|
-            r[:records].each_with_index do |rr, j|
-              #if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and Loan.find(rr[:loan_id]).loan_product.name == t[:key]
-              if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and t[:key] == rr[:loan_product][:name]
-                total_collected += rr[:amount].try(:to_f).round(2)
-                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
-              end
+            r[:records].select{ |rr|
+              rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and t[:key] == rr[:loan_product][:name]
+            }.each do |rr|
+              total_collected += rr[:amount].try(:to_f).round(2)
+              @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
             end
+
+#            r[:records].each_with_index do |rr, j|
+#              if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and t[:key] == rr[:loan_product][:name]
+#                total_collected += rr[:amount].try(:to_f).round(2)
+#                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+#              end
+#            end
           end
         else
           raise "invalid record_type #{t[:record_type]} in totals"
@@ -151,71 +175,122 @@ module Billings
 
       # Recompute member totals
       total_collected_for_member  = 0.00
-      @data[:records].each_with_index do |r, i|
-        if r[:member][:id] == @current_member[:id]
-          r[:records].each_with_index do |rr, j|
-            if rr[:record_type] != "WP"
-              total_collected_for_member += rr[:amount].try(:to_f).round(2)
-            elsif rr[:record_type] == "WP"
-              total_collected_for_member -= rr[:amount].try(:to_f).round(2)
-            end
-          end
 
-          @data[:records][i][:total_collected] = total_collected_for_member
+      m_record  = @data[:records].select{ |r|
+                    r[:member][:id] == @current_member[:id]
+                  }.first
+
+      m_record[:records].each_with_index do |rr, j|
+        if rr[:record_type] != "WP"
+          total_collected_for_member += rr[:amount].to_f.round(2)
+        elsif rr[:record_type] == "WP"
+          total_collected_for_member -= rr[:amount].to_f.round(2)
         end
       end
+
+      m_record[:total_collected] = total_collected_for_member
+
+#      @data[:records].each_with_index do |r, i|
+#        if r[:member][:id] == @current_member[:id]
+#          r[:records].each_with_index do |rr, j|
+#            if rr[:record_type] != "WP"
+#              total_collected_for_member += rr[:amount].try(:to_f).round(2)
+#            elsif rr[:record_type] == "WP"
+#              total_collected_for_member -= rr[:amount].try(:to_f).round(2)
+#            end
+#          end
+#
+#          @data[:records][i][:total_collected] = total_collected_for_member
+#        end
+#      end
     end
 
     def update_savings!
-      @data[:records].each_with_index do |r, i|
-        if r[:member][:id] == @current_member[:id]
-          r[:records].each_with_index do |rr, j|
-            if rr[:record_type] == "SAVINGS" and rr[:member_account_id] == @current_transaction[:member_account_id]
-              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
-              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
-            end
-          end
-        end
-      end
+      o = @data[:records].select{ |r|
+            r[:member][:id] == @current_member[:id]
+          }.first[:records].select{ |rr|
+            rr[:record_type] == "SAVINGS" and rr[:member_account_id] == @current_transaction[:member_account_id]
+          }.first
+
+      @original_amount  = o[:amount].try(:to_f)
+      o[:amount]        = @current_transaction[:amount].to_f.round(2)
+
+#      @data[:records].each_with_index do |r, i|
+#        if r[:member][:id] == @current_member[:id]
+#          r[:records].each_with_index do |rr, j|
+#            if rr[:record_type] == "SAVINGS" and rr[:member_account_id] == @current_transaction[:member_account_id]
+#              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+#              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+#            end
+#          end
+#        end
+#      end
     end
 
     def update_insurance!
-      @data[:records].each_with_index do |r, i|
-        if r[:member][:id] == @current_member[:id]
-          r[:records].each_with_index do |rr, j|
-            if rr[:record_type] == "INSURANCE" and rr[:member_account_id] == @current_transaction[:member_account_id]
-              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
-              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
-            end
-          end
-        end
-      end
+      o = @data[:records].select{ |r|
+            r[:member][:id] == @current_member[:id]
+          }.first[:records].select{ |rr|
+            rr[:record_type] == "INSURANCE" and rr[:member_account_id] == @current_transaction[:member_account_id]
+          }.first
+
+      @original_amount  = o[:amount].try(:to_f)
+      o[:amount]        = @current_transaction[:amount].to_f.round(2)
+
+#      @data[:records].each_with_index do |r, i|
+#        if r[:member][:id] == @current_member[:id]
+#          r[:records].each_with_index do |rr, j|
+#            if rr[:record_type] == "INSURANCE" and rr[:member_account_id] == @current_transaction[:member_account_id]
+#              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+#              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+#            end
+#          end
+#        end
+#      end
     end
 
     def update_wp!
-      @data[:records].each_with_index do |r, i|
-        if r[:member][:id] == @current_member[:id]
-          r[:records].each_with_index do |rr, j|
-            if rr[:record_type] == "WP" and rr[:member_account_id] == @current_transaction[:member_account_id]
-              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
-              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
-            end
-          end
-        end
-      end
+      o = @data[:records].select{ |r|
+            r[:member][:id] == @current_member[:id]
+          }.first[:records].select{ |rr|
+            rr[:record_type] == "WP" and rr[:member_account_id] == @current_transaction[:member_account_id]
+          }.first
+
+      @original_amount  = o[:amount].try(:to_f)
+      o[:amount]        = @current_transaction[:amount].to_f.round(2)
+
+#      @data[:records].each_with_index do |r, i|
+#        if r[:member][:id] == @current_member[:id]
+#          r[:records].each_with_index do |rr, j|
+#            if rr[:record_type] == "WP" and rr[:member_account_id] == @current_transaction[:member_account_id]
+#              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+#              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+#            end
+#          end
+#        end
+#      end
     end
 
     def update_loan_payment!
-      @data[:records].each_with_index do |r, i|
-        if r[:member][:id] == @current_member[:id]
-          r[:records].each_with_index do |rr, j|
-            if rr[:record_type] == "LOAN_PAYMENT" and rr[:loan_id] == @current_transaction[:loan_id]
-              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
-              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
-            end
-          end
-        end
-      end
+      o = @data[:records].select{ |r|
+            r[:member][:id] == @current_member[:id]
+          }.first[:records].select{ |rr|
+            rr[:record_type] == "LOAN_PAYMENT" and rr[:loan_id] == @current_transaction[:loan_id]
+          }.first
+
+      @original_amount  = o[:amount].try(:to_f)
+      o[:amount]        = @current_transaction[:amount].to_f.round(2)
+
+#      @data[:records].each_with_index do |r, i|
+#        if r[:member][:id] == @current_member[:id]
+#          r[:records].each_with_index do |rr, j|
+#            if rr[:record_type] == "LOAN_PAYMENT" and rr[:loan_id] == @current_transaction[:loan_id]
+#              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+#              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+#            end
+#          end
+#        end
+#      end
     end
   end
 end

@@ -6,13 +6,13 @@ module Reports
       @branch = branch
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @hiip   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ?", @start_date, @end_date, @branch, "HIIP").order("created_at DESC")
+        @hiip   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND branch_id = ? AND claim_type = ? AND status = ?", @start_date, @end_date, @branch, "HIIP", "approved").order("created_at DESC")
       elsif @start_date.present? && @end_date.present?
-        @hiip   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ?", @start_date, @end_date, "HIIP").order("created_at DESC")
+        @hiip   = Claim.where("date_prepared >= ? AND date_prepared <= ? AND claim_type = ? AND status = ?", @start_date, @end_date, "HIIP", "approved").order("created_at DESC")
       elsif @branch.present?
-        @hiip   = Claim.where("branch_id = ? AND claim_type = ?", @branch, "HIIP").order("created_at DESC")
+        @hiip   = Claim.where("branch_id = ? AND claim_type = ? AND status = ?", @branch, "HIIP", "approved").order("created_at DESC")
       else
-        @hiip = Claim.where(claim_type: 'HIIP')
+        @hiip = Claim.where(claim_type: 'HIIP', status: "approved")
       end  
 
       @p          = Axlsx::Package.new
@@ -53,7 +53,8 @@ module Reports
             "Payee",
             "Amount",
             "Balance",
-            "Prepared by"
+            "Prepared by",
+            "Status"
           ], style: header
 
           @hiip.each_with_index do |hiip|
@@ -76,7 +77,8 @@ module Reports
                   hiip.data["name_of_claimant"],
                   hiip.data["amount"],
                   hiip.data["balance"],
-                  hiip.prepared_by
+                  hiip.prepared_by,
+                  hiip.status
                 ], style: [nil]             
               end
           end

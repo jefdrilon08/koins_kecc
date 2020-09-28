@@ -5,13 +5,13 @@ module Reports
       @branch = branch
 
       if @as_of.present? && @branch.present?
-        @active_members  = Member.active.where("data->>'recognition_date' <= ? AND insurance_status != ? AND member_type != ? AND branch_id = ?", @as_of, "dormant", "GK", @branch).order("identification_number ASC")
-        @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? AND branch_id = ? ", @as_of, @as_of, @branch)
-        @members = @active_members + @resigned   
+        @members  = Member.where("insurance_date_resigned <= ? AND member_type != ? AND branch_id = ?", @as_of, "GK", @branch).order("insurance_status ASC")
+        # @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? AND branch_id = ? ", @as_of, @as_of, @branch)
+        # @members = @active_members + @resigned   
       elsif @as_of.present?  
-        @active_members  = Member.active.where("data->>'recognition_date' <= ? AND insurance_status != ? AND member_type != ?", @as_of, "dormant", "GK").order("identification_number ASC")
-        @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? ", @as_of, @as_of)
-        @members = @active_members + @resigned      
+        @members  = Member.where("insurance_date_resigned <= ? AND member_type != ?", @as_of, "GK").order("insurance_status ASC")
+        # @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? ", @as_of, @as_of)
+        # @members = @active_members + @resigned      
       end
 
       @p        = Axlsx::Package.new
@@ -36,6 +36,8 @@ module Reports
           sheet.add_row [ 
             "Certificate Number",
             "Name of Member",
+            "Status",
+            "Insurance Status",
             "Date Resigned",
             "Date of Membership",
             "Basic Benefit",
@@ -44,6 +46,7 @@ module Reports
             "Member's contribution due & uncollected",
             "Total accumulated contributions (LIFE)",
             "Interest on equity value, if any",
+            "RF",
             "Total Equity Value",
             "Rerserves",
             "Policy Number",
@@ -87,12 +90,12 @@ module Reports
               end
             end  
 
-            member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
-            account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.id)
+            lif_member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
+            lif_account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", lif_member_accounts.id)
 
             life = 0
             life_amount = 0
-            account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
+            lif_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
               if at.transaction_type == "withdraw"
                 life = ((life_amount < 0 ? 0 : life_amount) - (at.amount < 0 ? 0 : at.amount))
               elsif at.transaction_type == "deposit" || at.transaction_type == "interest"
@@ -100,11 +103,27 @@ module Reports
               end
               life_amount = life
             end
+
+            rf_member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Retirement Fund", member.id).first
+            rf_account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", rf_member_accounts.id)
+
+            rf = 0
+            rf_amount = 0
+            rf_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
+              if at.transaction_type == "withdraw"
+                rf = ((rf_amount < 0 ? 0 : rf_amount) - (at.amount < 0 ? 0 : at.amount))
+              elsif at.transaction_type == "deposit" || at.transaction_type == "interest"
+                rf = (rf_amount + at.amount).abs
+              end
+              rf_amount = rf
+            end
                 
             if index == 0
               sheet.add_row [
                   member.identification_number,
                   member.full_name_titleize,
+                  member.status,
+                  member.insurance_status,
                   member.insurance_date_resigned,
                   member.data.with_indifferent_access[:recognition_date].try(:to_date),
                   value,
@@ -113,13 +132,16 @@ module Reports
                   "",
                   life_amount,
                   "",
+                  rf_amount,
                   life_amount/2,
                   "",
-                ], style: [nil, nil, date_format_cell,date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                ], style: [nil, nil,nil,nil, date_format_cell,date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
               else
                 sheet.add_row [
                   member.identification_number,
                   member.full_name_titleize,
+                  member.status,
+                  member.insurance_status,
                   member.insurance_date_resigned,
                   member.data.with_indifferent_access[:recognition_date].try(:to_date),
                   value,
@@ -128,9 +150,10 @@ module Reports
                   "",
                   life_amount,
                   "",
+                  rf_amount,
                   life_amount/2,
                   "",
-                ], style: [nil, nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                ], style: [nil, nil,nil,nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
             end
 
           loans = member.loans.where("status = ? AND date_approved <= ?","active", @as_of)
@@ -169,6 +192,9 @@ module Reports
                   "",
                   "",
                   "",
+                  "",
+                  "",
+                  "",
                   loan.pn_number,
                   loan.date_approved,
                   loan.principal,
@@ -182,6 +208,9 @@ module Reports
                 ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
               else
                 sheet.add_row [
+                  "",
+                  "",
+                  "",
                   "",
                   "",
                   "",

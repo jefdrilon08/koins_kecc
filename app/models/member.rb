@@ -94,7 +94,7 @@ class Member < ApplicationRecord
   end
   
   def check_name
-    "#{first_name.try(:upcase)} #{middle_name.try(:upcase)} #{last_name.try(:upcase)}"
+    "#{first_name.try(:upcase)} #{last_name.try(:upcase)}"
   end
 
   def full_name
@@ -158,6 +158,10 @@ class Member < ApplicationRecord
     self.status == "resigned"
   end
 
+  def active_resigned?
+    self.status == "resigned" or self.status == "active"
+  end
+  
   def pending?
     self.status == "pending"
   end
