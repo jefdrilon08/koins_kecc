@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.7em;
+    font-size: 1.2em;
     font-family: arial;
   }
 
@@ -31,6 +31,12 @@
   .body2{
     width: 100%;
   }
+  hr {
+    border-color: black;
+  }
+  tr td {
+    font-size: 1em;
+  }
 
 
 %span.print-text
@@ -41,6 +47,7 @@
       #{@data["date_reported"]}
     - else
       #{@claim.date_prepared}
+  %br
   %left
     - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b" 
       %p
@@ -169,7 +176,33 @@
               Beneficiary:
             %td{:width => "25%"}
               %u  
-                #{@data["beneficiary"]}    
+                #{@data["beneficiary"]}
+          %tr
+            %td{:width => "21%"}
+              Claims Payment Through:
+            %td{:width => "25%"}
+              %u  
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          %tr
+            %td{:width => "21%"}
+              Account Name:
+            %td{:width => "25%"}
+              %u
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          %tr
+            %td{:width => "21%"}
+              Account Number:
+            %td{:width => "25%"}
+              %u
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
     %br
     .body2  
       - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"
