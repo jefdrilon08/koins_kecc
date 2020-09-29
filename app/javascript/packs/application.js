@@ -93,6 +93,7 @@ import BatchMoratoriumAdjustmentsShow from "../models/BatchMoratoriumAdjustments
 import MemberAccountValidationsIndex from "../models/MemberAccountValidationsIndex.js";
 import MemberAccountValidationsShow from "../models/MemberAccountValidationsShow.js";
 import MemberAccountValidationsForm from "../models/MemberAccountValidationsForm.js";
+import ClaimsShow from "../models/ClaimsShow.js";
 import ValidationsReport from "../models/ValidationsReport.js";
 import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
@@ -215,6 +216,7 @@ const hooks = {
   "member_account_validations/index":                 [MemberAccountValidationsIndex],
   "member_account_validations/show":                  [MemberAccountValidationsShow],
   "member_account_validations/edit":                  [MemberAccountValidationsForm],
+  "claims/show":                                      [ClaimsShow],
   "pages/validations":                                [ValidationsReport],
   "accounting/accounting_entries/show":               [AccountingEntriesShow],
   "pages/daily_report_insurance_account_status":      [InsuranceAccountStatusIndex],

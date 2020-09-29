@@ -748,19 +748,19 @@ renderOverviewTableClaims() {
       <tr style={{backgroundColor: branchColor, color: "white"}}>
         <th>
         </th>
-        <th className="text-center" colspan="2">
+        <th className="text-center" colSpan="2">
           KCOOP
         </th>
-        <th className="text-center" colspan="2">
+        <th className="text-center" colSpan="2">
           CAPS-R
         </th>
-        <th className="text-center" colspan="2">
+        <th className="text-center" colSpan="2">
           ASSOCIATE
         </th>
-        <th className="text-center" colspan="2">
+        <th className="text-center" colSpan="2">
           JVOMFI
         </th>
-        <th className="text-center" colspan="2">
+        <th className="text-center" colSpan="2">
           TOTAL
         </th>
       </tr>

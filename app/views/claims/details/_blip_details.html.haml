@@ -91,6 +91,12 @@
         %td
           = @claim.prepared_by
       %tr
+        %th CB Uploaded Documents
+        %td
+          = @claim.member.attachment_files.pluck(:file_name).map(&:inspect).join(", ")
+        %th
+        %td
+      %tr
         %th Approved by
         %td 
           = @claim.try(:approved_by).try(:titleize)

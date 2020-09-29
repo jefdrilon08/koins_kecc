@@ -202,18 +202,50 @@ class ClaimsController < ApplicationController
     @claim            = Claim.find(params[:id])
     @data             = @claim.data.try(:with_indifferent_access) || {}
 
+    if !@data.nil?
+      @accounting_entry_data = @claim.data.with_indifferent_access[:accounting_entry]
+    end
+    
     @subheader_items = [
-      { is_link: true, path: claims_path, text: "Claims" },
-      { is_link: true, path: member_path(@claim.member), text: "#{@claim.member.full_name}" }
+      { is_link: true, 
+        path: claims_path, 
+        text: "Claims" 
+      },
+      { is_link: true, 
+        path: member_path(@claim.member), 
+        text: "#{@claim.member.full_name}" 
+      }
     ]
 
     @subheader_side_actions = []
-    if @claim.pending?
+    if @claim.for_approval?
       @subheader_side_actions << {
-          id: "approved-button",
+          id: "btn-approve",
           link: "#",
           class: "fa fa-check",
           text: "Approve"
+      }
+
+      @subheader_side_actions << {
+        link: edit_claim_path(@claim),
+        class: "fa fa-edit",
+        text: "Edit"
+      }
+
+      @subheader_side_actions << {
+        link: claim_path(@claim),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      } 
+    end
+
+    if @claim.pending?
+      @subheader_side_actions << {
+          id: "btn-check",
+          link: "#",
+          class: "fa fa-check",
+          text: "Check"
       }
 
       @subheader_side_actions << {
@@ -388,6 +420,10 @@ class ClaimsController < ApplicationController
         link: claims_path,
         class: "fa fa-arrow-left",
         text: "Back to Claims"
+    }
+
+    @payload = {
+      id: @claim.id
     }
   end
 end
