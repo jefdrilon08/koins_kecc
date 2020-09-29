@@ -1,6 +1,7 @@
-= link_to new_claim_claim_attachment_file_path(@claim), class: "btn btn-primary btn-sm" do
-  .fa.fa-plus
-  New Claim Attachment File
+- if @claim.pending?
+  = link_to new_claim_claim_attachment_file_path(@claim), class: "btn btn-primary btn-sm" do
+    .fa.fa-plus
+    New Claim Attachment File
 %hr
 - if @claim.claim_attachment_files.size == 0
   %p
@@ -22,10 +23,11 @@
             - else
               %p
                 No image found
-    = link_to edit_claim_claim_attachment_file_path(@claim, claim_attachment_file), class: 'btn btn-warning btn-sm' do
-      .fa.fa-pencil-alt
-      Edit
-    = link_to claim_claim_attachment_file_path(@claim, claim_attachment_file), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: "Are you sure?" } do
-      .fa.fa-times
-      Delete
-    %hr
+    - if @claim.pending?  
+      = link_to edit_claim_claim_attachment_file_path(@claim, claim_attachment_file), class: 'btn btn-warning btn-sm' do
+        .fa.fa-pencil-alt
+        Edit
+      = link_to claim_claim_attachment_file_path(@claim, claim_attachment_file), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: "Are you sure?" } do
+        .fa.fa-times
+        Delete
+      %hr

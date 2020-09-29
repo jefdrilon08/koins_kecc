@@ -97,7 +97,13 @@ var hiipForm = (function() {
       $('#number-of-days-tobepaid').val(days);
       var numberOfDaysTobepaid = $("#number-of-days-tobepaid").val();
       var value = 200.00;
-      var amount = $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value));
+      
+      if (numberOfDaysTobepaid > 30) {
+        var amount = $('#amount').val(30 * parseFloat(value));
+      } else {
+        var amount = $('#amount').val(parseFloat(numberOfDaysTobepaid) * parseFloat(value));
+      }
+
       // $('#balance').val(parseFloat(balance) - (parseFloat(numberOfDaysTobepaid) * parseFloat(value)));
     });
 

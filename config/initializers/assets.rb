@@ -37,8 +37,8 @@ Rails.application.config.assets.precompile += [
   "administration/surveys/Show.js",
   "administration/loan_products/Show.js",
   "administration/loan_products/Index.js",
-	"administration/member_shares/Print.js",
-	"accounting/BooksIndex.js",
+  "administration/member_shares/Print.js",
+  "accounting/BooksIndex.js",
   "adjustments/subsidiary_adjustments/Index.js",
   "adjustments/subsidiary_adjustments/Show.js",
   "adjustments/batch_moratorium_adjustments/Index.js",
@@ -178,13 +178,5 @@ Rails.application.config.assets.precompile += [
   "claims/kbente_form.js",
   "claims/scholarship_form.js",
   "reports/ClaimReport.js",
-  "claims/blip_form.js",
-  "claims/hiip_form.js",
-  "claims/kalinga_form.js",
-  "claims/calamity_form.js",
-  "claims/kbente_form.js",
-  "claims/scholarship_form.js",
-  "claims/clip_form.js",
-  "claims/approved_claim.js",
-  "claims/Index.js"
+  "claims/approved_claim.js"
 ]
