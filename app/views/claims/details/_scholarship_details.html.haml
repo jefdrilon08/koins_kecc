@@ -84,13 +84,6 @@
       %td 
         = @claim.try(:date_checked).try(:strftime, "%b %d, %Y")
     %tr
-      %th Checked by
-      %td 
-        = @claim.try(:checked_by).try(:titleize)
-      %th Date Checked
-      %td 
-        = @claim.try(:date_checked).try(:strftime, "%b %d, %Y")
-    %tr
       %th Approved by
       %td 
         = @claim.try(:approved_by).try(:titleize)

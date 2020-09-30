@@ -24,7 +24,7 @@ module Claims
       @claim.update!(
         status: "approved",
         updated_at: @c_working_date,
-        posted_by: @user,
+        posted_by: @user.print_full_name.titleize,
         date_posted: @c_working_date,
         data: @data
       )

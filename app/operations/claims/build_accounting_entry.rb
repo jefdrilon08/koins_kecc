@@ -39,7 +39,7 @@ module Claims
             company_name: Settings.company_name,
             company_address: Settings.company_address,
             branch: @branch.to_s.upcase,
-            prepared_by: @user.full_name,
+            prepared_by: @user.print_full_name.titleize,
             particular: @particular,
             debit_journal_entries: [],
             credit_journal_entries: [],
