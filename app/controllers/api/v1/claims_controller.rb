@@ -53,6 +53,35 @@ module Api
         end
       end
 
+      def approve
+        claim = Claim.find(params[:id])
+
+        config = {
+          claim: claim,
+          user: current_user
+        }
+
+        if ["MIS"].include? current_user.roles.last
+          errors  = Claims::ValidateClaimForApproval.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim  = Claims::ApproveClaim.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully approved claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
       def save
         claim         = Claim.find(params[:id])
         date_prepared = params[:date_prepared]
@@ -172,7 +201,7 @@ module Api
         end
       end
 
-      def approve
+      def post
         # new code
         claim = Claim.find(params[:id])
 
@@ -182,7 +211,7 @@ module Api
         }
 
         if ["MIS"].include? current_user.roles.last
-          errors =  Claims::ValidateClaimForApproval.new(
+          errors =  Claims::ValidateClaimForPosting.new(
                       config: config
                     ).execute!
           
@@ -191,7 +220,7 @@ module Api
           else
             claim.update!(status: "processing")
 
-            ProcessApproveClaim.perform_later({
+            ProcessPostClaim.perform_later({
               id: claim.id,
               user_id: current_user.id
             })

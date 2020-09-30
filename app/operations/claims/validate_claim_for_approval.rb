@@ -1,41 +1,23 @@
 module Claims
   class ValidateClaimForApproval < AppValidator
+
     def initialize(config:)
-     super()
+      super()
 
       @config = config
+
       @claim = @config[:claim]
-      @branch = @claim.branch
     end
 
     def execute!
-      check_params!
-      @errors
-    end
-
-    private
-
-    def check_params!
-      if @branch.nil?
+      if !@claim.for_approval?
         @errors[:messages] << {
           key: "claim",
-          message: "Branch cant be blank."
+          message: "Invalid status"
         }
       end
 
-      if @claim.date_prepared.nil?
-        @errors[:messages] << {
-          key: "claim",
-          message: "Date Prepared cant be blank."
-        }  
-      end
-
-      if @claim.status != "for-approval"
-        @errors[:messages] << {
-          key: "claim",
-          message: "Claim needs to be check."
-        }  
-      end
+      @errors
     end
   end
 end
