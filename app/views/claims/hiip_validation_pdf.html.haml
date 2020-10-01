@@ -185,6 +185,27 @@
               %u  
                 PhP #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} 
           %td{:width => "28%"}
+        %tr
+          %td{:width => "21%"}
+            Claims Payment Through:
+          %td{:width => "25%"}
+            %b 
+              %u  
+                #{@data["claims_payment"]}
+        %tr
+          %td{:width => "21%"}
+            Account Name:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@data["account_name"]}
+        %tr
+          %td{:width => "21%"}
+            Account Number:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@data["account_number"]} 
       %br     
   %br
   .signatories

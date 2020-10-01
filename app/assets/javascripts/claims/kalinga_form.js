@@ -34,6 +34,9 @@ var kalingaForm = (function() {
     $reasonOfDeath               = $("#reason-of-death");
     $gender                      = $("#gender");
     $issuedDate                  = $("#issued-date");
+    $claimsPayment              = $("#claims-payment");
+    $accountName                = $("#account-name");
+    $accountNumber              = $("#account-number");
  }
 
   var _bindEvents = function() {
@@ -62,7 +65,10 @@ var kalingaForm = (function() {
             date_of_death_or_incident: $dateOfDeathOrIncident.val(),
             reason_of_death: $reasonOfDeath.val(),
             gender: $gender.val(),
-            issued_date: $issuedDate.val()
+            issued_date: $issuedDate.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val()
           },
           authenticity_token: authenticityToken,
           

@@ -34,9 +34,6 @@
   hr {
     border-color: black;
   }
-  tr td {
-    font-size: 1em;
-  }
 
 
 %span.print-text
@@ -47,7 +44,6 @@
       #{@data["date_reported"]}
     - else
       #{@claim.date_prepared}
-  %br
   %left
     - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b" 
       %p
@@ -182,27 +178,19 @@
               Claims Payment Through:
             %td{:width => "25%"}
               %u  
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["claims_payment"]}
           %tr
             %td{:width => "21%"}
               Account Name:
             %td{:width => "25%"}
               %u
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                #{@data["account_name"]}
           %tr
             %td{:width => "21%"}
               Account Number:
             %td{:width => "25%"}
               %u
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    %br
-    %br
-    %br
-    %br
-    %br
-    %br
-    %br
-    %br
+                #{@data["account_number"]}
     %br
     .body2  
       - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"
@@ -224,7 +212,7 @@
             &nbsp;branch with the amount of
             %u
               %b
-                ***#{@data["amount"].to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")})
+                ***#{@data["amount"].to_f.to_words.titleize} Only***&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")})
           %br
             Thank you for your cooperation in this regard.
       - elsif @claim.member.branch.cluster.id == "168eb8bf-59b4-4401-9498-79c87b3c01d4"

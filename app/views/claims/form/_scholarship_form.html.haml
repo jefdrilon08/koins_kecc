@@ -74,6 +74,22 @@
       %label.col.control-label
         Prepared by
         = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', value: current_user.print_full_name.titleize, id: 'prepared-by'
+  .col
+    .form-group
+      %label.col.control-label
+        Claims Payment through
+        = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Account Name
+        = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
+  .col
+    .form-group
+      %label.col.control-label
+        Account Number
+        = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
 .row
   .col
     .form-actions

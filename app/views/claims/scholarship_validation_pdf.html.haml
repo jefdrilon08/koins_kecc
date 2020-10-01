@@ -156,8 +156,27 @@
               %u  
                 #{@data["classification"]}
           %td{:width => "28%"}
-  %br
-  %br
+        %tr
+          %td{:width => "21%"}
+            Claims Payment Through:
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["claims_payment"]}
+        %tr
+          %td{:width => "21%"}
+            Account Name:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@data["account_name"]}
+        %tr
+          %td{:width => "21%"}
+            Account Number:
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@data["account_number"]} 
   %br
   .signatories
     %table{:border => "0"}

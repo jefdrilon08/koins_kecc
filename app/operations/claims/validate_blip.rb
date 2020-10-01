@@ -29,6 +29,9 @@ module Claims
         @date_reported                            = @data[:date_reported]
         @date_paid                                = @data[:date_paid]
         @age                                      = @data[:age]
+        @claims_payment                           = @data[:claims_payment]
+        @account_name                             = @data[:account_name]
+        @account_number                           = @data[:account_number]
       
         @errors = []
     end
@@ -127,6 +130,19 @@ module Claims
         @errors << "Date Paid field is required"
       end
 
+      if @claims_payment.blank?
+        @errors << "Claims Payment field is required"
+      end
+
+      if @account_name.blank?
+        @errors << "Account name field is required"
+      end
+
+      if @account_number.blank?
+        @errors << "Account number field is required"
+      end
+
+
       #validate_blip_duplication!
       return  @errors
     end
@@ -141,11 +157,12 @@ module Claims
         data->>'retirement_fund' = ? AND data->>'policy_number' = ? AND data->>'face_amount' = ? AND data->>'name_of_insured' = ? AND 
         data->>'date_of_birth' = ? AND data->>'age' = ? AND data->>'gender' = ? AND data->>'beneficiary' = ? AND 
         data->>'returned_contribution' = ? AND data->>'amount' = ? AND data->>'arrears' = ? AND 
-        data->>'category_of_cause_of_death_tpd_accident' = ? AND data->>'cause_of_death_tpd_accident' = ?", 
+        data->>'category_of_cause_of_death_tpd_accident' = ? AND data->>'cause_of_death_tpd_accident' = ? AND 
+        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
         @claim.member_id, "BLIP", @date_prepared, @date_reported, @date_paid, @date_of_policy_issue, 
         @type_of_insurance_policy, @classification_of_insured, @date_of_death_tpd_accident, @length_of_stay, @equity_value, 
         @retirement_fund, @policy_number, @face_amount, @name_of_insured, @date_of_birth, @age, @gender, @beneficiary, 
-        @returned_contribution, @amount, @arrears, @category_of_cause_of_death_tpd_accident, @cause_of_death_tpd_accident).count
+        @returned_contribution, @amount, @arrears, @category_of_cause_of_death_tpd_accident, @cause_of_death_tpd_accident, @claims_payment, @account_name, @account_number).count
         if count > 0
           @errors << "Duplicate BLIP!"
         end

@@ -18,7 +18,10 @@ module Claims
       @reason_of_confinement                    = @data[:reason_of_confinement]
       @diagnosis                                = @data[:diagnosis]
       @name_of_claimant                         = @data[:name_of_claimant]
-      @balance                                  = @data[:balance]          
+      @balance                                  = @data[:balance] 
+      @claims_payment                           = @data[:claims_payment]
+      @account_name                             = @data[:account_name]
+      @account_number                           = @data[:account_number]        
       @errors = []
 
     end
@@ -84,6 +87,18 @@ module Claims
 
       if @amount.to_i > 6000.00.to_i
         @errors << "Exceed amount!"
+      end
+
+      if @claims_payment.blank?
+        @errors << "Claims Payment field is required"
+      end
+
+      if @account_name.blank?
+        @errors << "Account name field is required"
+      end
+
+      if @account_number.blank?
+        @errors << "Account number field is required"
       end
 
       #validate_hiip_duplication!

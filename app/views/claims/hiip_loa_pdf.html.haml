@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.7em;
+    font-size: 1.2em;
     font-family: arial;
   }
 
@@ -89,6 +89,24 @@
             %td{:width => "25%"}
               %u  
                 #{@claim.member.full_name}
+          %tr
+            %td{:width => "21%"}
+              Claims Payment Through:
+            %td{:width => "25%"}
+              %u  
+                #{@data["claims_payment"]}
+          %tr
+            %td{:width => "21%"}
+              Account Name:
+            %td{:width => "25%"}
+              %u
+                #{@data["account_name"]}
+          %tr
+            %td{:width => "21%"}
+              Account Number:
+            %td{:width => "25%"}
+              %u
+                #{@data["account_number"]}
 
     %br
     .body2  

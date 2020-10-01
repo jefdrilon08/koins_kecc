@@ -60,3 +60,16 @@
         = @claim.try(:approved_by).try(:titleize)
       %th
       %td
+    %tr
+      %th Claims Payment Through
+      %td
+        = @data[:claims_payment]
+      %th
+      %td
+    %tr
+      %th Account Name
+      %td
+        = @data[:account_name]
+      %th Account Number
+      %td
+        = @data[:account_number]

@@ -28,6 +28,9 @@ var scholarshipForm = (function() {
     $course                      = $("#course");
     $courseField                 = $(".course-field");
     $semField                    = $(".sem-field");
+    $claimsPayment               = $("#claims-payment");
+    $accountName                 = $("#account-name");
+    $accountNumber               = $("#account-number");
  }
 
   var _bindEvents = function() {
@@ -58,7 +61,10 @@ var scholarshipForm = (function() {
             scholarship_type: $scholarshipType.val(),
             final_grade: $finalGrade.val(),
             classification: $classification.val(),
-            course: $course.val()
+            course: $course.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val()
           },
           authenticity_token: authenticityToken,
           
