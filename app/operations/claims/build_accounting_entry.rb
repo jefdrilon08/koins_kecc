@@ -32,7 +32,7 @@ module Claims
         @accounting_fund_id         = AccountingFund.where(name: "General Fund").first.id
       end
 
-      if @claim.pending?
+      if @claim.pending? || @claim.approved? || @claim.for_posting? || @claim.for_approval?
           @accounting_entry_data  = {
             book: @book,
             date_prepared: @current_date.strftime("%B %d, %Y"),
