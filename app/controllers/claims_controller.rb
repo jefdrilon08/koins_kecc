@@ -237,26 +237,30 @@ class ClaimsController < ApplicationController
     end
 
     if @claim.for_approval?
-      @subheader_side_actions << {
-        id: "btn-approve",
-        link: "#",
-        class: "fa fa-check",
-        text: "Approve"
-      }
+      if ["MIS"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
     end
 
     if @claim.for_posting?
-      @subheader_side_actions << {
-        id: "btn-post",
-        link: "#",
-        class: "fa fa-check",
-        text: "Post"
-      }
+      if ["MIS"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-post",
+          link: "#",
+          class: "fa fa-check",
+          text: "Post"
+        }
+      end
     end
 
     # FOR BLIP
     if @claim.claim_type == "BLIP"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         @subheader_side_actions << {
           link: claim_blip_validation_pdf_path(@claim),
           class: "fa fa-print",
@@ -288,7 +292,7 @@ class ClaimsController < ApplicationController
 
     # FOR CLIP
     if @claim.claim_type == "CLIP"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         @subheader_side_actions << {
           link: claim_clip_validation_pdf_path(@claim),
           class: "fa fa-print",
@@ -320,7 +324,7 @@ class ClaimsController < ApplicationController
 
     # FOR CALAMITY
     if @claim.claim_type == "CALAMITY ASSISTANCE"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         @subheader_side_actions << {
           link: claim_calamity_validation_pdf_path(@claim),
           class: "fa fa-print",
@@ -352,7 +356,7 @@ class ClaimsController < ApplicationController
 
     # FOR HIIP
     if @claim.claim_type == "HIIP"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         @subheader_side_actions << {
           link: claim_hiip_validation_pdf_path(@claim),
           class: "fa fa-print",
@@ -384,7 +388,7 @@ class ClaimsController < ApplicationController
 
     # FOR KALINGA
     if @claim.claim_type == "K-KALINGA"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         @subheader_side_actions << {
           link: claim_kalinga_validation_pdf_path(@claim),
           class: "fa fa-print",
@@ -415,7 +419,7 @@ class ClaimsController < ApplicationController
     end
 
     if @claim.claim_type == "K-BENTE"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         @subheader_side_actions << {
           link: claim_kbente_validation_pdf_path(@claim),
           class: "fa fa-print",
@@ -446,7 +450,7 @@ class ClaimsController < ApplicationController
     end
 
     if @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
-      if @claim.pending? || @claim.for_approval? || @claim.for_posting?
+      if @claim.pending? || @claim.for_approval? || @claim.for_posting? || @claim.approved?
         if @claim.data["year_level"] == "GRADE 7" || @claim.data["year_level"] == "GRADE 8" || @claim.data["year_level"] == "GRADE 9" || @claim.data["year_level"] == "GRADE 10" || @claim.data["year_level"] == "GRADE 11" || @claim.data["year_level"] == "GRADE 12"
           @subheader_side_actions << {
             link: claim_scholarship_contract_highschool_pdf_path(@claim),

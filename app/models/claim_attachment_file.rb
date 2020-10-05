@@ -21,7 +21,8 @@ class ClaimAttachmentFile < ApplicationRecord
   	"HOSPITAL BILLING",
   	"RECEIPT/OR FOR REIMBURSEMENT",
   	"MEDICAL CERTIFICATE",
-  	"BUGDET REQUEST"
+  	"BUGDET REQUEST",
+  	"OTHERS"
   ]
 
   belongs_to :claim

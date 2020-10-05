@@ -31,6 +31,30 @@ class Claim < ApplicationRecord
     temp_data[:accounting_entry][:particular]
   end
 
+  def or_number
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:data][:or_number]
+  end
+
+  def check_number
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:data][:check_number]
+  end
+
+  def check_voucher_number
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:data][:check_voucher_number]
+  end
+
+  def payee
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:data][:payee]
+  end
+
   def claims_template
     temp_data = self.data.with_indifferent_access 
 

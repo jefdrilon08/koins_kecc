@@ -16,42 +16,49 @@
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
             - elsif @claim.claim_type == "CLIP"
               = render partial: "claims/details/clip_details", locals: { claim: @claim }
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
             - elsif @claim.claim_type == "HIIP"
               = render partial: "claims/details/hiip_details", locals: { claim: @claim }
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
             - elsif @claim.claim_type == "K-KALINGA"
               = render partial: "claims/details/kalinga_details", locals: { claim: @claim } 
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
             - elsif @claim.claim_type == "CALAMITY ASSISTANCE"
               = render partial: "claims/details/calamity_details", locals: { claim: @claim } 
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
             - elsif @claim.claim_type == "K-BENTE"
               = render partial: "claims/details/kbente_details", locals: { claim: @claim }
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
             - elsif @claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
               = render partial: "claims/details/scholarship_details", locals: { claim: @claim }
               - if !@claim.data["accounting_entry"].nil?
                 = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
                 - if !@claim.approved?
-                  = render partial: "claims/accounting_entry_settings"
+                  - if ["MIS"].include? current_user.roles.last
+                    = render partial: "claims/accounting_entry_settings"
           #attachments.tab-pane{:role => "tabpanel"}
             = render partial: "claims/claim_attachment_files"
