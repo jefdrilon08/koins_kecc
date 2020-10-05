@@ -13,13 +13,6 @@ module Billings
     end
 
     def execute!
-      if !@billing.checked?
-        @errors[:messages] << {
-          key: "billing",
-          message: "this record has not been checked yet"
-        }
-      end
-
       if @billing.blank?
         @errors[:messages] << {
           key: "billing",
@@ -30,9 +23,12 @@ module Billings
           key: "billing",
           message: "billing is not pending"
         }
-      end
-
-      if @data[:records].present? 
+      elsif !@billing.checked?
+        @errors[:messages] << {
+          key: "billing",
+          message: "this record has not been checked yet"
+        }
+      elsif @data[:records].present? 
         @data[:records].each do |record|
           member = Member.find(record[:member][:id])
           record[:records].each do |rec|
@@ -44,23 +40,17 @@ module Billings
             end
           end
         end
-      end
-
-      if @data.present? and @data[:or_number].blank? and @data[:accounting_entry][:book].present? and @data[:accounting_entry][:book] == "CRB"
+      elsif @data.present? and @data[:or_number].blank? and @data[:accounting_entry][:book].present? and @data[:accounting_entry][:book] == "CRB"
         @errors[:messages] << {
           key: "or_number",
           message: "no or number found"
         }
-      end
-
-      if @data.present? and @data[:accounting_entry][:particular].blank?
+      elsif @data.present? and @data[:accounting_entry][:particular].blank?
         @errors[:messages] << {
           key: "particular",
           message: "no particular found"
         }
-      end
-
-      if @data.present? and @data[:or_number].present?
+      elsif @data.present? and @data[:or_number].present?
         if Billing.where("branch_id = ? AND data->>'or_number' = ? AND id <> ?", @billing.branch_id, @data[:or_number], @billing.id).count > 0
           @errors[:messages] << {
             key: "or_number",
