@@ -5,6 +5,7 @@ var approvedClaim = (function() {
   var id;
   var authenticityToken       = $("meta[name='csrf-token']").attr('content');
   var $errorsTemplate;
+  var $checkButton;
 
   var _cacheDom = function() {
     $approvedButton             = $("#approved-button");
@@ -13,6 +14,9 @@ var approvedClaim = (function() {
 
     $message                    = $(".message");
     $errorsTemplate             = $("#errors-template").html();
+    
+    $checkButton                = $("#check-button");
+    $modalCheck                 = $("#modal-check");
  }
 
   var _bindEvents = function() {
@@ -44,9 +48,15 @@ var approvedClaim = (function() {
               );
           }
       });
-     });
+    }); 
 
- 
+    // check
+    $checkButton.on('click', function() {
+      $modalCheck.modal("show");
+      $message.html("");
+    });
+
+
   }
 
   var init = function() {
@@ -62,3 +72,5 @@ var approvedClaim = (function() {
 $(document).ready(function() {
   approvedClaim.init();
 });
+
+export default { init: init };

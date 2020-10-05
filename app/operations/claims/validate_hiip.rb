@@ -78,6 +78,10 @@ module Claims
       #   @errors << "Expired HIIP!"
       # end
 
+      # if @number_of_days_tobepaid.to_s >= 15.to_s
+      #   @amount = 6000.00
+      # end
+
       if @amount.to_i > 6000.00.to_i
         @errors << "Exceed amount!"
       end

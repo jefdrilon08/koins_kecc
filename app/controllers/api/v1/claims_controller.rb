@@ -1,6 +1,8 @@
 module Api
   module V1
     class ClaimsController < ApplicationController
+      before_action :authenticate_user!
+
       def create
         member = Member.find(params[:member_id])
         claim_type = params[:claim_type]
@@ -19,6 +21,64 @@ module Api
           render json: { id: claim.id } 
         else
           render errors: claim.errors
+        end
+      end
+
+      def check
+        claim = Claim.find(params[:id])
+
+        config = {
+          claim: claim,
+          user: current_user
+        }
+
+        if ["MIS", "AO"].include? current_user.roles.last
+          errors  = Claims::ValidateClaimForChecking.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim  = Claims::CheckClaim.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully checked claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
+      def approve
+        claim = Claim.find(params[:id])
+
+        config = {
+          claim: claim,
+          user: current_user
+        }
+
+        if ["MIS"].include? current_user.roles.last
+          errors  = Claims::ValidateClaimForApproval.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim  = Claims::ApproveClaim.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully approved claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
         end
       end
 
@@ -51,14 +111,125 @@ module Api
           claim.update!(data: data, date_prepared: date_prepared, prepared_by: prepared_by)
           render json: {message: "ok"}                            
         end
+
+        branch = Branch.where(id: Settings.try(:defaults).try(:default_branch).try(:id)).first
+        claim_data = claim.data.with_indifferent_access
+        claim_data[:accounting_entry] = {}
+        claim_data[:accounting_entry]  = ::Claims::BuildAccountingEntry.new(
+                                    config: {
+                                      branch: branch,
+                                      claim: claim,
+                                      user: current_user
+                                    }
+                                  ).execute!
+
+        claim.update!(data: claim_data)
       end
-      
-      def approved
+
+      def modify_book
+        claim  = Claim.where(id: params[:id]).first
+        book   = params[:book]
+
+        config  = {
+          book: book,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateModifyBook.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::ModifyBook.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
+      def modify_particular
+        claim        = Claim.where(id: params[:id]).first
+        particular   = params[:particular]
+
+        config  = {
+          particular: particular,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateModifyParticular.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::ModifyParticular.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
+      def modify_claims_template
+        claim     = Claim.where(id: params[:id]).first
+        template  = params[:template]
+
+        config  = {
+          template: template,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateModifyClaimsTemplate.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::ModifyClaimsTemplate.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
+      def post
+        # new code
         claim = Claim.find(params[:id])
 
-        if claim.pending? 
-          claim.update!(status: "approved", approved_by: @current_user.print_full_name)
+        config = {
+          claim: claim,
+          user: current_user
+        }
 
+        if ["MIS"].include? current_user.roles.last
+          errors =  Claims::ValidateClaimForPosting.new(
+                      config: config
+                    ).execute!
+          
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim.update!(status: "processing")
+
+            ProcessPostClaim.perform_later({
+              id: claim.id,
+              user_id: current_user.id
+            })
+
+            render json: { message: "Successfully approved claim", id: claim.id }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+          render json: { message: "Unauthorized", errors: errors }, status: 401
         end
       end
     end

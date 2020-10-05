@@ -6,10 +6,11 @@ class Claim < ApplicationRecord
   TYPES_OF_LOAN = ["K-BAHAY W1","K-BAHAY W2","K-BAHAY W3","K-BENEPISYO W1","K-BENEPISYO W2",
                   "K-BENEPISYO W3","K-EDUKASYON","K-EDUKASYON W2","K-EDUKASYON W3","K-KABUHAYAN",
                   "K-KALAMIDAD","K-KALUSUGAN W1","K-KALUSUGAN W2","K-KALUSUGAN W3","K-KALUSUGAN W4",
-                  "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7","K-KASAL","K-KASANGKAPAN","K-MAGGAGAWA",
+                  "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7","K-KASAL","K-KASANGKAPAN","K-MAGGAGAWA", "K (BUSINESS DISRUPTION LOAD)",
                   "K-NHA W1","K-NHA W12","K-Noche Buena","K-PWD","K-Toda","K-TRABAHO", "PROJECT LOAN", "MULTI-PURPOSE LOAN", "EMERGENCY LOAN", "UTILITY LOAN", "EDUCATIONAL LOAN"]
   CREDITORS_NAME = ["KCOOP", "JVOMFI", "CAPS-R"]
   GENDER = ["MALE","FEMALE"]
+
   belongs_to :branch
 	belongs_to :center
 	belongs_to :member
@@ -17,6 +18,29 @@ class Claim < ApplicationRecord
   has_many :claim_attachment_files
 
   before_validation :load_defaults
+
+  def book
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:book]
+  end
+
+  def particular
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:accounting_entry][:particular]
+  end
+
+  def claims_template
+    temp_data = self.data.with_indifferent_access 
+
+    if temp_data[:claims_template].present?
+      temp_data[:claims_template]
+    else
+      "default"
+    end
+  end
+
   def age
     	if self.date_of_birth.nil?
       		"Please set date of birth"
@@ -91,6 +115,42 @@ class Claim < ApplicationRecord
 
   def approved?
     self.status == "approved"
+  end
+
+  def for_approval?
+    self.status == "for-approval"
+  end
+
+  def for_posting?
+    self.status == "for-posting"
+  end
+
+  def blip?
+    self.claim_type == "BLIP"
+  end
+
+  def clip?
+    self.claim_type == "CLIP"
+  end
+
+  def hiip?
+    self.claim_type == "HIIP"
+  end
+
+  def calamity?
+    self.claim_type == "CALAMITY ASSISTANCE"
+  end
+
+  def kjsp?
+    self.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
+  end
+
+  def kalinga?
+    self.claim_type == "K-KALINGA"
+  end
+
+  def kbente?
+    self.claim_type == "K-BENTE"
   end
 
   # def balance

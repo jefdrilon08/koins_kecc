@@ -35,7 +35,8 @@ class Member < ApplicationRecord
     "Regular", 
     "GK", 
     "Kaagapay", 
-    "Dependent"
+    "Dependent",
+    "Non-Member"
   ]
 
   belongs_to :center

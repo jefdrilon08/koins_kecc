@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_17_095904) do
+ActiveRecord::Schema.define(version: 2020_09_30_015324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -278,6 +278,11 @@ ActiveRecord::Schema.define(version: 2020_09_17_095904) do
     t.json "data"
     t.string "status"
     t.string "approved_by"
+    t.string "checked_by"
+    t.date "date_checked"
+    t.date "date_approved"
+    t.string "posted_by"
+    t.date "date_posted"
     t.index ["branch_id"], name: "index_claims_on_branch_id"
     t.index ["center_id"], name: "index_claims_on_center_id"
     t.index ["member_id"], name: "index_claims_on_member_id"

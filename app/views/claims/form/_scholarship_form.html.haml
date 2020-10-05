@@ -46,7 +46,7 @@
     .form-group.sem-field
       %label.col.control-label
         Semester
-        = select_tag :sem, options_for_select(["1st Sem","2nd Sem"] ,@claim.data["sem"]), class: 'form-control', id: 'sem'
+        = select_tag :sem, options_for_select(["1st Sem","2nd Sem"] ,@claim.data["sem"]), class: 'form-control', id: 'sem', prompt: "-- Select --"
   .col
     .form-group.course-field
       %label.col.control-label

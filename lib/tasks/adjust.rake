@@ -2197,4 +2197,34 @@ namespace :adjust do
       
     puts "Done"
   end
+
+  task :repair_claims_accounting_entry => :environment do
+    puts "Repairing ..."
+    branch = Branch.where(id: Settings.try(:defaults).try(:default_branch).try(:id)).first
+    claim = Claim.find(ENV['CLAIM_ID'])
+
+    first_name = claim.prepared_by.split(" ").first
+    last_name = claim.prepared_by.split(" ").last
+
+    user = User.where(first_name: first_name, last_name: last_name).first
+
+    if user.nil?
+      user = User.find("42ae07d6-521f-4ea8-9d2e-7f48ab716116")
+    end
+
+    claim_data = claim.data.with_indifferent_access
+        
+    claim_data[:accounting_entry] = {}
+    claim_data[:accounting_entry]  = ::Claims::BuildAccountingEntry.new(
+                                config: {
+                                  branch: branch,
+                                  claim: claim,
+                                  user: user
+                                }
+                              ).execute!
+
+    claim.update!(data: claim_data)
+      
+    puts "Done"
+  end
 end

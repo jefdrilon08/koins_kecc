@@ -61,7 +61,7 @@
                   Check Voucher Number:
                 .text-muted
                   #{accounting_entry[:data]["check_voucher_number"]}
-            - if accounting_entry.data["date_of_check"].present?
+            - if accounting_entry[:data]["date_of_check"].present?
               .col
                 %strong
                   Date of Check:

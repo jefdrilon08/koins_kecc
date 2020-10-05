@@ -3,6 +3,21 @@
   %h3
     %strong
       BLIP Details
+- if @claim.approved?
+  .bs-callout.bs-callout-primary
+    %h3
+      .fa.fa-book
+      This has already been posted by #{@claim.posted_by} on #{@claim.date_posted}
+- elsif @claim.for_posting?
+  .bs-callout.bs-callout-primary
+    %h3
+      .fa.fa-thunbs-up
+      This has already been approved by #{@claim.approved_by} on #{@claim.date_approved}
+- elsif @claim.for_approval?
+  .bs-callout.bs-callout-primary
+    %h3
+      .fa.fa-check
+      This has already been checked by #{@claim.checked_by} on #{@claim.date_checked}    
 %table.table.table-sm.table-hover
   %tbody
     %tr
@@ -91,9 +106,33 @@
         %td
           = @claim.prepared_by
       %tr
+        %th CB Uploaded Documents
+        %td
+          = @claim.member.attachment_files.pluck(:file_name).map(&:inspect).join(", ")
+        %th
+        %td
+      %tr
+        %th Checked by
+        %td 
+          = @claim.try(:checked_by).try(:titleize)
+        %th Date Checked
+        %td 
+          = @claim.try(:date_checked).try(:strftime, "%b %d, %Y")
+      %tr
         %th Approved by
         %td 
           = @claim.try(:approved_by).try(:titleize)
+        %th Date Approved
+        %td 
+          = @claim.try(:date_approved).try(:strftime, "%b %d, %Y")
+      %tr
+        %th Posted by
+        %td 
+          = @claim.try(:posted_by).try(:titleize)
+        %th Date Posted
+        %td 
+          = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
+      %tr  
         - if @data[:order_of_child].blank?
           %th
           %td
@@ -101,5 +140,7 @@
           %th Order of Child
           %td
             = @data[:order_of_child]
+        %th
+        %td
       
 
