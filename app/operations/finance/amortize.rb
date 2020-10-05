@@ -148,6 +148,26 @@ module Finance
         end
       end
 
+      ### PATCH FOR UNEQUAL RESULT ###
+      temp_total_principal  = @schedule.inject(0) { |sum, hash| sum + hash[:principal] }
+      temp_total_interest   = @schedule.inject(0) { |sum, hash| sum + hash[:interest] }
+
+      if temp_total_principal != @total_principal or temp_total_interest != @total_interest
+        offset = (temp_total_principal - @total_principal).abs
+
+        while offset > 0
+          h = @schedule.select{ |h| h[:interest] > 0  and h[:principal] > 0 }.last
+
+          if h.present?
+            h[:interest] -= 1
+            h[:principal] += 1
+
+            offset -= 1
+          end
+        end
+      end
+      ################################
+
       ####################################
 
       return {
