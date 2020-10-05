@@ -32,14 +32,14 @@ module Claims
         @accounting_fund_id         = AccountingFund.where(name: "General Fund").first.id
       end
 
-      if @claim.pending?
+      if @claim.pending? || @claim.approved? || @claim.for_posting? || @claim.for_approval?
           @accounting_entry_data  = {
             book: @book,
             date_prepared: @current_date.strftime("%B %d, %Y"),
             company_name: Settings.company_name,
             company_address: Settings.company_address,
             branch: @branch.to_s.upcase,
-            prepared_by: @user.full_name,
+            prepared_by: @user.print_full_name.titleize,
             particular: @particular,
             debit_journal_entries: [],
             credit_journal_entries: [],

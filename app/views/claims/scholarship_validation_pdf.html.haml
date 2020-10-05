@@ -32,6 +32,9 @@
   tr td {
     font-size: 1.2em;
   }
+  i {
+    font-size: small;
+  }
 
 %span.print-text
   %center
@@ -181,28 +184,40 @@
   .signatories
     %table{:border => "0"}
       %tr
-        %td{:width => "20%"}
+        %td{:width => "30%"}
           Recommended by:
+          %br
+          %i DATE: #{@claim.date_prepared}
           %br
           %br
           %u
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{:width => "25%"}
+        %td{:width => "30%"}
           Checked by:
           %br
           %br
-          %u
-            Evelyn A. Lagmay / Analyn Shih
           %br
-            Finance Manager&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        %td{:width => "30%"}
+          %u
+            #{@claim.checked_by}
+          %br
+          Finance Manager
+        %td{:width => "32%"}
           Approved by:
           %br
           %br
+          %br
           %u
-            Silvida Reyes - Antiquera
+            #{@claim.approved_by}
           %br
             KMBA - General Manager
+        %td{:width => "20%"}
+          Released by:
+          %br
+          %br
+          %br
+            %u
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+            %br
   

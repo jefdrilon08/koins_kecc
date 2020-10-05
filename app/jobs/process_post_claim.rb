@@ -1,4 +1,4 @@
-class ProcessApproveClaim < ApplicationJob
+class ProcessPostClaim < ApplicationJob
   queue_as :default
 
   def perform(args)
@@ -11,7 +11,7 @@ class ProcessApproveClaim < ApplicationJob
         user: user
       }
       
-      ::Claims::ApproveClaim.new(
+      ::Claims::PostClaim.new(
                                 config: config
                               ).execute!
 

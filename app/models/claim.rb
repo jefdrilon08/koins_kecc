@@ -117,12 +117,12 @@ class Claim < ApplicationRecord
     self.status == "approved"
   end
 
-  def checked?
-    self.status == "checked"
-  end
-
   def for_approval?
     self.status == "for-approval"
+  end
+
+  def for_posting?
+    self.status == "for-posting"
   end
 
   def blip?

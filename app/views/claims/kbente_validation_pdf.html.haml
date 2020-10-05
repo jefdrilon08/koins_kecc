@@ -26,11 +26,8 @@
     width: 100%;
   }
 
-  hr {
-    border-color: black;
-  }
-  tr td {
-    font-size: 1.2em;
+  i {
+    font-size: small;
   }
 
 %span.print-text
@@ -152,25 +149,35 @@
   .signatories
     %table{:border => "0"}
       %tr
-        %td{:width => "20%"}
-          Validated by:
+        %td{:width => "25%"}
+          Validated by: 
+          %i DATE: #{@claim.date_prepared}
           %br
           %br
           %u
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{:width => "30%"}
+        %td{:width => "25%"}
+          Checked by:
+          %br
+          %br
+          %u
+            #{@claim.checked_by}
+          %br
+          Finance Manager
+        %td{:width => "25%"}
           Approved by:
           %br
           %br
           %u
-            Silvida Reyes - Antiquera
+            #{@claim.approved_by}
           %br
             KMBA - General Manager
-        %td{:width => "10%"}
+        %td{:width => "20%"}
           Released by:
           %br
           %br
-          %br
             %u
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+            %br

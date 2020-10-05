@@ -31,6 +31,9 @@
   .body2{
     width: 100%;
   }
+  i {
+    font-size: small;
+  }
 
 
 %span.print-text
@@ -159,6 +162,7 @@
       %tr
         %td{:width => "25%"}
           Sincerely Yours:
+          %i DATE: #{@claim.date_prepared}
           %br
           %br
           %u
@@ -166,10 +170,18 @@
           %br
           Account Officer
         %td{:width => "25%"}
-          Check and Approved by:
+          Checked by:
           %br
           %br
           %u
-            Silvida Reyes - Antiquera
+            #{@claim.checked_by}
+          %br
+            Finance Manager
+        %td{:width => "25%"}
+          Approved by:
+          %br
+          %br
+          %u
+            #{@claim.approved_by}
           %br
             KMBA - General Manager

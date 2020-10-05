@@ -12,7 +12,7 @@ module Claims
       @claim.update!(
         status: "for-approval",
         date_checked: @c_working_date,
-        checked_by: @user.full_name
+        checked_by: @user.print_full_name.titleize
       )
 
       @claim
