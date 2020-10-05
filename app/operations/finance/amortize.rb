@@ -142,8 +142,10 @@ module Finance
 
         buffer_hash = @schedule.select{ |h| h[:interest] >= negative_interest.abs }.last
 
-        buffer_hash[:interest]  -= negative_interest.abs
-        buffer_hash[:principal] += negative_interest.abs
+        if buffer_hash.present?
+          buffer_hash[:interest]  -= negative_interest.abs
+          buffer_hash[:principal] += negative_interest.abs
+        end
       end
 
       ####################################
