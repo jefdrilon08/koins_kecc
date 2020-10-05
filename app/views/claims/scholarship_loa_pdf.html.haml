@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.7em;
+    font-size: 1.2em;
     font-family: arial;
   }
 
@@ -162,6 +162,7 @@
       %tr
         %td{:width => "25%"}
           Sincerely Yours:
+          %br
           %i DATE: #{@claim.date_prepared}
           %br
           %br
@@ -173,15 +174,26 @@
           Checked by:
           %br
           %br
+          %br
           %u
             #{@claim.checked_by}
           %br
-            Finance Manager
+          Account Officer
         %td{:width => "25%"}
           Approved by:
+          %br
           %br
           %br
           %u
             #{@claim.approved_by}
           %br
-            KMBA - General Manager
+          KMBA-General Manager
+        %td{:width => "20%"}
+          Posted by:
+          %br
+          %br
+          %br
+          %u
+            #{@claim.posted_by}
+          %br
+          Finance Manager

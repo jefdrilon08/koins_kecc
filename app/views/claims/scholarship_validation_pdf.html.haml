@@ -184,7 +184,7 @@
   .signatories
     %table{:border => "0"}
       %tr
-        %td{:width => "30%"}
+        %td{:width => "25%"}
           Recommended by:
           %br
           %i DATE: #{@claim.date_prepared}
@@ -194,7 +194,7 @@
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{:width => "30%"}
+        %td{:width => "25%"}
           Checked by:
           %br
           %br
@@ -202,8 +202,8 @@
           %u
             #{@claim.checked_by}
           %br
-          Finance Manager
-        %td{:width => "32%"}
+          Account Officer
+        %td{:width => "25%"}
           Approved by:
           %br
           %br
@@ -211,13 +211,14 @@
           %u
             #{@claim.approved_by}
           %br
-            KMBA - General Manager
+            KMBA-General Manager
         %td{:width => "20%"}
-          Released by:
+          Posted by:
           %br
           %br
           %br
-            %u
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-            %br
+          %u
+            #{@claim.posted_by}
+          %br
+            Finance Manager
   
