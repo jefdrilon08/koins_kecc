@@ -50,4 +50,35 @@
                         .fa.fa-sync
                         Update particular
                   .message
-
+          .row
+            .col-md-12.col-xs-12
+              %h5
+                Additional Field
+              .card
+                .card-body
+                  .row
+                    .col-md-3.col-xs-12
+                      %p Check Number
+                      = text_field_tag :particular, @claim.check_number, class: "form-control select-select2", id: "input-text-check-number"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-check-number.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                    .col-md-3.col-xs-12
+                      %p Check Voucher Number
+                      = text_field_tag :particular, @claim.check_voucher_number, class: "form-control select-select2", id: "input-text-check-voucher-number"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-check-voucher-number.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                    .col-md-3.col-xs-12
+                      %p Payee
+                      = text_field_tag :particular, @claim.payee, class: "form-control select-select2", id: "input-text-payee"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-payee.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                  .message

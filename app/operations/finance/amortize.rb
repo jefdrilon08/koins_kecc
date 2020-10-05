@@ -142,9 +142,31 @@ module Finance
 
         buffer_hash = @schedule.select{ |h| h[:interest] >= negative_interest.abs }.last
 
-        buffer_hash[:interest]  -= negative_interest.abs
-        buffer_hash[:principal] += negative_interest.abs
+        if buffer_hash.present?
+          buffer_hash[:interest]  -= negative_interest.abs
+          buffer_hash[:principal] += negative_interest.abs
+        end
       end
+
+      ### PATCH FOR UNEQUAL RESULT ###
+      temp_total_principal  = @schedule.inject(0) { |sum, hash| sum + hash[:principal] }
+      temp_total_interest   = @schedule.inject(0) { |sum, hash| sum + hash[:interest] }
+
+      if temp_total_principal != @total_principal or temp_total_interest != @total_interest
+        offset = (temp_total_principal - @total_principal).abs
+
+        while offset > 0
+          h = @schedule.select{ |h| h[:interest] > 0  and h[:principal] > 0 }.last
+
+          if h.present?
+            h[:interest] -= 1
+            h[:principal] += 1
+
+            offset -= 1
+          end
+        end
+      end
+      ################################
 
       ####################################
 

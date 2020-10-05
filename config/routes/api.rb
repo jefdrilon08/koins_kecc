@@ -362,5 +362,8 @@ namespace :api do
     post "/claims/modify_claims_template", to: "claims#modify_claims_template"
     post "/claims/modify_book", to: "claims#modify_book"
     post "/claims/modify_particular", to: "claims#modify_particular"
+    post "/claims/save_payee", to: "claims#save_payee"
+    post "/claims/save_check_number", to: "claims#save_check_number"
+    post "/claims/save_check_voucher_number", to: "claims#save_check_voucher_number"
   end
 end
