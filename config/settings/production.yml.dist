@@ -119,7 +119,7 @@ branch_config:
 #south2
   -
     id: "594fa194-7ed8-45d3-be01-e268b36ce05c"  #GMA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "a0161335-a253-4237-9119-e912291c7d92"  #DASMA
     current_date: "2020-09-30"
