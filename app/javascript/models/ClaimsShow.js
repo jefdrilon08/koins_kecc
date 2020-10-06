@@ -18,6 +18,9 @@ var urlCheckTransaction       = "/api/v1/claims/check";
 var urlModifyClaimsTemplate   = "/api/v1/claims/modify_claims_template";
 var urlModifyBook             = "/api/v1/claims/modify_book";
 var urlModifyParticular       = "/api/v1/claims/modify_particular";
+var urlSaveCheckNumber        = "/api/v1/claims/save_check_number";
+var urlSaveCheckVoucherNumber = "/api/v1/claims/save_check_voucher_number";
+var urlSavePayee              = "/api/v1/claims/save_payee";
 
 var $modalApprove;
 var $modalCheck;
@@ -49,6 +52,21 @@ var $btnConfirmClaimsTemplate;
 
 var $inputTextParticular;
 var $btnConfirmParticular;
+
+var $inputTextPayee;
+var $btnConfirmPayee;
+
+var $inputTextCheckNumber;
+var $btnConfirmCheckNumber;
+
+var $inputTextCheckVoucherNumber;
+var $btnConfirmCheckVoucherNumber;
+
+var $btnPrint;
+var $modalPrint;
+var $printMessage;
+
+var loader;
 
 var _bindEvents = function() {
 
@@ -260,6 +278,141 @@ var _bindEvents = function() {
     });
   });
 
+  $btnConfirmPayee.on("click", function() {
+    var payee  = $inputTextPayee.val();
+
+    $message.html("Loading...");
+
+    $inputTextPayee.prop("disabled", true);
+    $btnConfirmPayee.prop("disabled", true);
+
+    $.ajax({
+      url: urlSavePayee,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        payee: payee,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputTextPayee.prop("disabled", false);
+          $btnConfirmPayee.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnConfirmCheckNumber.on("click", function() {
+    var check_number  = $inputTextCheckNumber.val();
+
+    $message.html("Loading...");
+
+    $inputTextCheckNumber.prop("disabled", true);
+    $btnConfirmCheckNumber.prop("disabled", true);
+
+    $.ajax({
+      url: urlSaveCheckNumber,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        check_number: check_number,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputTextCheckNumber.prop("disabled", false);
+          $btnConfirmCheckNumber.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnConfirmCheckVoucherNumber.on("click", function() {
+    var check_voucher_number  = $inputTextCheckVoucherNumber.val();
+
+    $message.html("Loading...");
+
+    $inputTextCheckVoucherNumber.prop("disabled", true);
+    $btnConfirmCheckVoucherNumber.prop("disabled", true);
+
+    $.ajax({
+      url: urlSaveCheckVoucherNumber,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        check_voucher_number: check_voucher_number,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputTextCheckVoucherNumber.prop("disabled", false);
+          $btnConfirmCheckVoucherNumber.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnConfirmBook.on("click", function() {
     var book  = $selectBook.val();
 
@@ -322,6 +475,22 @@ var _bindEvents = function() {
     $modalPost.modal("show");
     $message.html("");
   });
+
+  $btnPrint.on("click", function() {
+    var accountingEntryId = $btnPrint.data('id');
+    var cId = $btnPrint.data('cid');
+
+    $modalPrint.modal("show");
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrint.modal("hide");
+    window.open("/print?id=" + accountingEntryId + "&type=claims_voucher" + "&cid=" + cId);
+  });
 }
 
 var _cacheDom = function() {
@@ -363,8 +532,23 @@ var _cacheDom = function() {
   $inputTextParticular          = $("#input-text-particular");
   $btnConfirmParticular         = $("#btn-confirm-particular");
 
+  $inputTextPayee               = $("#input-text-payee");
+  $btnConfirmPayee              = $("#btn-confirm-payee");
+
+  $inputTextCheckNumber         = $("#input-text-check-number");
+  $btnConfirmCheckNumber        = $("#btn-confirm-check-number");
+
+  $inputTextCheckVoucherNumber  = $("#input-text-check-voucher-number");
+  $btnConfirmCheckVoucherNumber = $("#btn-confirm-check-voucher-number");
+
   $selectBook                   = $("#select-book");
   $btnConfirmBook               = $("#btn-confirm-book");
+
+  $btnPrint                     = $("#btn-print");
+  $modalPrint                   = $("#modal-print");
+  $printMessage                 = $(".print-message");
+
+  loader                        = $("#template-loader").html();
 }
 
 var init = function(options) {

@@ -17,6 +17,9 @@ module Claims
         @final_grade              = @data[:final_grade]
         @classification           = @data[:classification]
         @course                   = @data[:course]
+        @claims_payment           = @data[:claims_payment]
+        @account_name             = @data[:account_name]
+        @account_number           = @data[:account_number]
 
         @errors = []
 
@@ -59,6 +62,18 @@ module Claims
         @errors << "Classification field is required"
       end
 
+      if @claims_payment.blank?
+        @errors << "Claims Payment field is required"
+      end
+
+      if @account_name.blank?
+        @errors << "Account name field is required"
+      end
+
+      if @account_number.blank?
+        @errors << "Account number field is required"
+      end
+
       #validate_scholar_duplication!
       return  @errors
     end
@@ -70,10 +85,11 @@ module Claims
         data->>'amount' = ? AND data->>'name_of_beneficiary' = ? AND data->>'payee' = ? AND 
         data->>'name_of_school' = ? AND data->>'school_year' = ? AND data->>'year_level' = ? AND 
         data->>'sem' = ? AND data->>'scholarship_type' = ? AND data->>'final_grade' = ? AND 
-        data->>'classification' = ?", 
+        data->>'classification' = ? AND
+        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
         @claim.member_id, "KUYA JUN SCHOLARSHIP PROGRAM", @date_prepared, @amount, @name_of_beneficiary, @payee, 
         @name_of_school, @school_year, @year_level, @sem, @scholarship_type, 
-        @final_grade, @classification).count
+        @final_grade, @classification, @claims_payment, @account_name, @account_number).count
         if count > 0
           @errors << "Duplicate SCHOLAR!"
         end

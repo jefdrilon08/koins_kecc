@@ -176,6 +176,81 @@ module Api
         end
       end
 
+      def save_payee
+        claim   = Claim.where(id: params[:id]).first
+        payee   = params[:payee]
+
+        config  = {
+          payee: payee,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateSavePayee.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::SavePayee.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
+      def save_check_number
+        claim          = Claim.where(id: params[:id]).first
+        check_number   = params[:check_number]
+
+        config  = {
+          check_number: check_number,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateSaveCheckNumber.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::SaveCheckNumber.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
+      def save_check_voucher_number
+        claim                  = Claim.where(id: params[:id]).first
+        check_voucher_number   = params[:check_voucher_number]
+
+        config  = {
+          check_voucher_number: check_voucher_number,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateSaveCheckVoucherNumber.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::SaveCheckVoucherNumber.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
       def modify_claims_template
         claim     = Claim.where(id: params[:id]).first
         template  = params[:template]

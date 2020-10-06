@@ -11,6 +11,7 @@ module Claims
       @claim_data                   = @claim.data.with_indifferent_access
 
       @particular                   = build_particular
+      @payee                        = build_payee
 
       @current_date                 = ::Utils::GetCurrentDate.new(
                                       config: {
@@ -51,10 +52,11 @@ module Claims
             data: {
               or_number: "",
               ar_number: "",
+              check_number: "",
               check_voucher_number: "",
               date_of_check: "",
               sub_reference_number: "",
-              payee: ""
+              payee: @payee
 
             }
           }
@@ -92,6 +94,20 @@ module Claims
     end
 
     private
+
+    def build_payee
+      payee = ""
+
+      if @claim.blip? || @claim.clip?
+        payee = "#{@claim_data[:beneficiary]}"
+      elsif @claim.calamity? || @claim.kbente? || @claim.kjsp? || @claim.kalinga?
+        payee = "#{@claim_data[:name_of_beneficiary]}"
+      elsif @claim.hiip?
+        payee = "#{@claim_data[:name_of_beneficiary]}"
+      end
+
+      payee
+    end
 
     def build_particular
       branch = @claim.branch

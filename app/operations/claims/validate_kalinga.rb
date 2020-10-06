@@ -21,6 +21,9 @@ module Claims
         @date_of_death_or_incident                = @data[:date_of_death_or_incident]
         @reason_of_death                          = @data[:reason_of_death]
         @gender                                   = @data[:gender]
+        @claims_payment                           = @data[:claims_payment]
+        @account_name                             = @data[:account_name]
+        @account_number                           = @data[:account_number]
 
 
         @errors = []
@@ -88,6 +91,18 @@ module Claims
         @errors << "Expired KALINGA!"
       end
 
+      if @claims_payment.blank?
+        @errors << "Claims Payment field is required"
+      end
+
+      if @account_name.blank?
+        @errors << "Account name field is required"
+      end
+
+      if @account_number.blank?
+        @errors << "Account number field is required"
+      end
+
       #validate_kalinga_duplication!
       return  @errors
     end
@@ -98,11 +113,12 @@ module Claims
         data->>'expiration_date' = ? AND data->>'poc_number' = ? AND data->>'name_of_insured' = ? AND 
         data->>'relationship_to_member' = ? AND data->>'insured_address' = ? AND data->>'civil_status' = ? AND 
         data->>'date_of_birth' = ? AND data->>'name_of_beneficiary' = ? AND 
-        data->>'date_of_death_or_incident' = ? AND data->>'reason_of_death' = ? AND data->>'gender' = ?", 
+        data->>'date_of_death_or_incident' = ? AND data->>'reason_of_death' = ? AND data->>'gender' = ? AND
+        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
         @claim.member_id, "K-KALINGA", @date_prepared, @amount, @date_approved, @effective_date, 
         @expiration_date, @poc_number, @name_of_insured, @relationship_to_member, @insured_address, 
         @civil_status, @date_of_birth, @name_of_beneficiary, @date_of_death_or_incident, @reason_of_death, 
-        @gender).count
+        @gender, @claims_payment, @account_name, @account_number).count
         if count > 0
           @errors << "Duplicate KALINGA!"
         end

@@ -111,6 +111,29 @@
           = @claim.member.attachment_files.pluck(:file_name).map(&:inspect).join(", ")
         %th
         %td
+      %tr  
+        - if @data[:order_of_child].blank?
+        - else
+          %th Order of Child
+          %td
+            = @data[:order_of_child]
+          %th
+          %td
+      %tr
+        %th Claims Payment Through
+        %td
+          = @data[:claims_payment]
+        %th
+        %td
+      %tr
+        %th Account Name
+        %td
+          = @data[:account_name]
+        %th Account Number
+        %td
+          = @data[:account_number]
+        %th
+        %td
       %tr
         %th Checked by
         %td 
@@ -132,15 +155,7 @@
         %th Date Posted
         %td 
           = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
-      %tr  
-        - if @data[:order_of_child].blank?
-          %th
-          %td
-        - else
-          %th Order of Child
-          %td
-            = @data[:order_of_child]
-        %th
-        %td
+      
+
       
 
