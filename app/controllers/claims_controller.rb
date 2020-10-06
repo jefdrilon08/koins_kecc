@@ -206,6 +206,13 @@ class ClaimsController < ApplicationController
       @accounting_entry_data = @claim.data.with_indifferent_access[:accounting_entry]
     end
     
+    @accounting_entry        = AccountingEntry.where(
+                                        reference_number: @claim.data.with_indifferent_access[:accounting_entry][:reference_number],
+                                        book: @claim.data.with_indifferent_access[:accounting_entry][:book],
+                                        branch_id: @claim.data.with_indifferent_access[:accounting_entry][:branch_id],
+                                        particular: @claim.data.with_indifferent_access[:accounting_entry][:particular]
+                                        ).first
+
     @subheader_items = [
       { 
         is_link: true, 
@@ -491,6 +498,21 @@ class ClaimsController < ApplicationController
             text: "Delete"
           }
         end
+      end
+    end
+
+    if @claim.approved?
+      if ["MIS"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-print",
+          class: "fa fa-print",
+          link: "#",
+          text: "Print Voucher",
+          data: {
+            id: "#{@accounting_entry.id}",
+            cid: "#{@claim.id}",
+          }
+        }
       end
     end
 
