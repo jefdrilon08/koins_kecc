@@ -1,6 +1,7 @@
 class ClaimAttachmentFile < ApplicationRecord
   FILE_NAMES = [ 
   	"AFFIDAVIT OF COHABITATION",
+  	"AUTHORIZATION LETTER",
   	"BIRTHCERTIFICATE",
   	"BLIP APPLICATION FORM",
   	"BUGDET REQUEST",
@@ -23,6 +24,7 @@ class ClaimAttachmentFile < ApplicationRecord
   	"PROOF OF DEATH",
   	"RECEIPT/OR FOR REIMBURSEMENT",
   	"SOM ENDORSEMENT LETTER",
+  	"WAIVER OF DESIGNATED BENEFICIARY",
   	"OTHERS"
   ]
 
