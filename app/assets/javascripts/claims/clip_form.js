@@ -33,6 +33,9 @@ var clipForm = (function() {
     $submitButton                = $("#submit-button");
     $message                     = $(".message");
     $errorsTemplate              = $("#errors-template").html();
+    $claimsPayment               = $("#claims-payment");
+    $accountName                 = $("#account-name");
+    $accountNumber               = $("#account-number");
  }
 
   var _bindEvents = function() {
@@ -59,7 +62,10 @@ var clipForm = (function() {
             type_of_loan: $typeOfLoan.val(),
             terms: $terms.val(),
             effective_date_of_coverage: $effectiveDateOfCoverage.val(),
-            expiration_date_of_coverage: $expirationDateOfCoverage.val()
+            expiration_date_of_coverage: $expirationDateOfCoverage.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val()
           },
           authenticity_token: authenticityToken,
           

@@ -17,6 +17,9 @@ module Claims
         @date_of_death                            = @data[:date_of_death]
         @date_enrolled                            = @data[:date_enrolled]
         @date_expired                             = @data[:date_expired]
+        @claims_payment                           = @data[:claims_payment]
+        @account_name                             = @data[:account_name]
+        @account_number                           = @data[:account_number]
 
         @errors = []
 
@@ -69,6 +72,18 @@ module Claims
         @errors << "Expired K-BENTE!"
       end
 
+      if @claims_payment.blank?
+        @errors << "Claims Payment field is required"
+      end
+
+      if @account_name.blank?
+        @errors << "Account name field is required"
+      end
+
+      if @account_number.blank?
+        @errors << "Account number field is required"
+      end
+
       #validate_kbente_duplication!
       return  @errors
     end
@@ -80,10 +95,11 @@ module Claims
         data->>'amount' = ? AND data->>'date_approved' = ? AND data->>'date_of_birth' = ? AND 
         data->>'purpose' = ? AND data->>'name_of_insured' = ? AND data->>'name_of_beneficiary' = ? AND 
         data->>'classification' = ? AND data->>'date_of_death' = ? AND data->>'date_enrolled' = ? AND 
-        data->>'date_expired' = ?", 
+        data->>'date_expired' = ? AND
+        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
         @claim.member_id, "K-BENTE", @date_prepared, @amount, @date_approved, @date_of_birth, 
         @purpose, @name_of_insured, @name_of_beneficiary, @classification, @date_of_death, 
-        @date_enrolled, @date_expired).count
+        @date_enrolled, @date_expired, @claims_payment, @account_name, @account_number).count
         if count > 0
           @errors << "Duplicate KBENTE!"
         end

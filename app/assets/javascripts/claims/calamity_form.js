@@ -20,6 +20,9 @@ var calamityForm = (function() {
     $dateOfEvent                 = $("#date-of-event");
     $nameOfPayee                 = $("#name-of-payee");
     $nameOfBeneficiary           = $("#name-of-beneficiary");
+    $claimsPayment               = $("#claims-payment");
+    $accountName                 = $("#account-name");
+    $accountNumber               = $("#account-number");
   
  }
 
@@ -37,7 +40,10 @@ var calamityForm = (function() {
             type_of_calamity: $typeOfCalamity.val(),
             date_of_event: $dateOfEvent.val(),
             name_of_payee: $nameOfPayee.val(),
-            name_of_beneficiary: $nameOfBeneficiary.val()
+            name_of_beneficiary: $nameOfBeneficiary.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val()
           },
           authenticity_token: authenticityToken,
           

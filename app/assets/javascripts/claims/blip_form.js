@@ -44,6 +44,9 @@ var blipForm = (function() {
     $submitButton               = $("#submit-button");
     $message                    = $(".message");
     $errorsTemplate             = $("#errors-template").html();
+    $claimsPayment              = $("#claims-payment");
+    $accountName                = $("#account-name");
+    $accountNumber              = $("#account-number");
 
   }
 
@@ -75,7 +78,10 @@ var blipForm = (function() {
             beneficiary: $beneficiary.val(),
             category_of_cause_of_death_tpd_accident: $categoryOfCauseOfDeathTpdAccident.val(),
             cause_of_death_tpd_accident: $causeOfDeathTpdAccident.val(),
-            age: $age.val()
+            age: $age.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val()
           },
           authenticity_token: authenticityToken,
           

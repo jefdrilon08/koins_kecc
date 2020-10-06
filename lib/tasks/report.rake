@@ -14,14 +14,15 @@ namespace :report do
 
   task :midas_report => :environment do
     s_date= ENV['s_date']
+    mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     rep_type = ENV['MIDAS']
     br_id= Branch.where(name: br_name).ids
     @data = []    
     if rep_type == 'PODs'
-      loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date >=?", br_id , s_date , s_date).order("members.identification_number").uniq
+      loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date >=?", br_id , s_date , mat_date).order("members.identification_number").uniq
     elsif rep_type == 'BARs'
-      loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date <=?", br_id , s_date , s_date).order("members.identification_number").uniq
+      loan_data = Loan.joins(:member , :center).where("loans.status = 'active' and loans.branch_id = ? and date_released <= ? and maturity_date <=?", br_id , s_date , mat_date).order("members.identification_number").uniq
     end
     
     if rep_type == 'PODs'

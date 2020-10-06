@@ -32,6 +32,9 @@ var hiipForm = (function() {
     $submitButton             = $("#submit-button");
     $message                  = $(".message");
     $errorsTemplate           = $("#errors-template").html();
+  $claimsPayment              = $("#claims-payment");
+  $accountName                = $("#account-name");
+  $accountNumber              = $("#account-number");
     
  }
 
@@ -54,7 +57,10 @@ var hiipForm = (function() {
             reason_of_confinement: $reasonOfConfinement.val(),
             diagnosis: $diagnosis.val(),
             name_of_claimant: $nameOfClaimant.val(),
-            balance: $balance.val()
+            balance: $balance.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val()
           },
           authenticity_token: authenticityToken,
           

@@ -82,6 +82,19 @@
       %th
       %td
     %tr
+      %th Claims Payment Through
+      %td
+        = @data[:claims_payment]
+      %th
+      %td
+    %tr
+      %th Account Name
+      %td
+        = @data[:account_name]
+      %th Account Number
+      %td
+        = @data[:account_number]
+    %tr
       %th Checked by
       %td 
         = @claim.try(:checked_by).try(:titleize)
@@ -102,3 +115,4 @@
       %th Date Posted
       %td 
         = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
+

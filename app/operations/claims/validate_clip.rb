@@ -22,6 +22,9 @@ module Claims
       @amount_of_loan                           = @data[:amount_of_loan]
       @amount_payable_to_creditor               = @data[:amount_payable_to_creditor]
       @type_of_loan                             = @data[:type_of_loan]
+      @claims_payment                           = @data[:claims_payment]
+      @account_name                             = @data[:account_name]
+      @account_number                           = @data[:account_number]
       
       @errors = []
 
@@ -101,6 +104,18 @@ module Claims
         @errors << "Age field is required"
       end
 
+      if @claims_payment.blank?
+        @errors << "Claims Payment field is required"
+      end
+
+      if @account_name.blank?
+        @errors << "Account name field is required"
+      end
+
+      if @account_number.blank?
+        @errors << "Account number field is required"
+      end
+
       #validate_clip_duplication!
       return  @errors
     end
@@ -114,11 +129,12 @@ module Claims
         data->>'date_of_death' = ? AND data->>'date_of_birth' = ? AND data->>'cause_of_death' = ? AND 
         data->>'effective_date_of_coverage' = ? AND data->>'expiration_date_of_coverage' = ? AND 
         data->>'age' = ? AND data->>'terms' = ? AND data->>'amount_of_loan' = ? AND data->>'amount_payable_to_creditor' = ? AND 
-        data->>'type_of_loan' = ?", 
+        data->>'type_of_loan' = ? AND 
+        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
         @claim.member_id, "CLIP", @date_prepared, @amount, @gender, @policy_number, 
         @creditors_name, @member_name, @beneficiary, @date_of_death, @date_of_birth, 
         @cause_of_death, @effective_date_of_coverage, @expiration_date_of_coverage, @age, @terms, 
-        @amount_of_loan, @amount_payable_to_creditor, @type_of_loan).count
+        @amount_of_loan, @amount_payable_to_creditor, @type_of_loan, @claims_payment, @account_name, @account_number).count
         if count > 0
           @errors << "Duplicate CLIP!"
         end
