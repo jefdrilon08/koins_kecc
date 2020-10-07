@@ -4,6 +4,9 @@ module Imports
 
     def initialize(actual_url:)
       @actual_url = actual_url
+    end
+
+    def execute!
       @file       = URI.open(@actual_url)
 
       ::Insurance::ImportInsuranceAccountTransactionsFromCsvFile.new(
