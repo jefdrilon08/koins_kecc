@@ -1,0 +1,224 @@
+:css
+  .print-text{
+    font-size: 1.5em;
+  }
+  .print-text.p{
+    font-family: Calibri;
+  }
+  .print-text-book.p {
+    font-family: Calibri;
+  }
+  .print-text-book{
+    font-size: 1.5em;
+  }
+  .print-text-sub.p {
+    font-family: Calibri;
+  }
+  .print-text-sub{
+    font-size: 1.1em;
+  }
+      
+  table.voucher td.amount{
+    text-align: right;
+  }
+
+  table.voucher th.amount{
+    text-align: right;
+    font-size: 1.5em;
+  }
+  table.voucher th{
+    text-align: right;
+    font-size: 1.5em;
+  }
+  table.voucher td.code{
+    text-align: center;
+    font-size: 1.5em;
+  }
+  table.voucher td{
+    text-align: left;
+    font-size: 1.5em;
+  }
+  table.voucher th.header{
+    font-size: 1.5em;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  table.signatories td.overline{
+    text-decoration: overline;
+    font-size: 1.5em;
+  }
+  table.signatories th
+    {
+    font-size: 1.5em;
+    }
+  hr {
+    border-color: black;
+  }
+  p.signatories{
+    font-size: 1.5em;
+  }
+  b.nothing{
+    font-size: 1.5em;
+  }
+
+%span.print-text
+  %center
+    %br
+    %br
+    %p
+      %b
+        #{@accounting_entry_data[:company_name]} - #{@accounting_entry_data[:branch]}
+      %br  
+      %b
+        #{@accounting_entry_data[:company_address]}
+  - if @accounting_entry_data[:book] == "CRB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH VOUCHER
+  - elsif @accounting_entry_data[:book] == "JVB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            JOURNAL VOUCHER
+  - elsif @accounting_entry_data[:book] == "CDB"
+    %span.print-text-book
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH DISBURSEMENT
+    %br
+%left
+  %br
+  %span.print-text-sub
+    %table{:border => "0"}
+      %tr
+        %th{:width => "17%"} System ID:
+        %th{:width => "20%"}
+      %tr
+        %th{:width => "17%"} Reference No:
+        %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
+        %th{:width => "18%"} Doc. No:
+        -if Settings.activate_microinsurance == true
+          %th{:width => "25%"} #{@accounting_entry_data[:sub_reference_number]}
+          -if @accounting_entry_data[:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@accounting_entry_data[:or_number]}
+          -else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
+        -else
+          %th{:width => "20%"} 
+          -if @accounting_entry_data[:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@accounting_entry_data[:or_number]}
+          -else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
+      %tr
+        %th{:width => "17%"} Date Approved:
+        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+        %th{:width => "17%"} Date Requested:
+        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+        -if Settings.activate_microinsurance == true
+          -if @accounting_entry_data[:book] == "CRB"
+            %th{:width => "17%"} AR Number:
+            %th{:width => "20%"} #{@accounting_entry_data[:ar_number]}
+      - if @accounting_entry_data[:payee].present?
+        %tr
+          %th{:width => "17%"} Payee:
+          %th{:width => "20%"} #{@accounting_entry_data[:payee]}
+    %hr
+  %center
+    %table.voucher{"border:" => "", :none => ""}
+      %tr
+        %th.header{width: 250} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
+        %th.header{width: 650} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
+        %th.header{width: 50} 
+        %th.header{width: 180} &emsp;Debit(PHP)&emsp;
+        %th.header{width: 190} &emsp;Credit(PHP)&emsp;
+
+      - @accounting_entry_data[:debit_journal_entries].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td.amount
+            #{o[:amount]}
+          %td 
+      - @accounting_entry_data[:credit_journal_entries].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td
+          %td.amount
+            #{o[:amount]}
+      %tr
+        %th
+        %th
+        %th 
+        %th.amount ___________
+        %th.amount ___________
+      %tr
+        %th
+        %th
+        %th Total 
+        %th.amount
+          #{@accounting_entry_data[:total_debit]}
+        %th.amount
+          #{@accounting_entry_data[:total_credit]}
+%center
+  %p
+    __________________________________________________________
+    %br 
+    %b.nothing
+      *** Nothing Follows ***      
+%left  
+  %hr
+  %p.signatories
+    %b
+      Particular:
+    #{@accounting_entry_data[:particular]}
+  %br
+  %br
+  %br
+  %br
+  %center
+    %table.signatories{"border:" => "", :none => ""}
+      %tr
+        %th{width: 280} 
+          &emsp;#{@claim.prepared_by}
+          %h5
+            &emsp;&emsp;&emsp;#{@claim.date_prepared}
+        %th{width: 300} 
+          &emsp;#{@claim.checked_by}&nbsp;
+          %h5
+            &emsp;&emsp;&emsp;#{@claim.date_checked}
+        %th{width: 300} 
+          &emsp;#{@claim.approved_by}
+          %h5
+            &emsp;&emsp;&emsp;#{@claim.date_approved}
+        %th{width: 300} 
+          &emsp;#{@claim.posted_by}
+          %h5
+            &emsp;&emsp;&emsp;#{@claim.date_posted}
+
+      %tr
+        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Posted by:&emsp;&emsp;
+  %br
+  %br
+  %center
+    %p.signatories
+      ______________________________________________
+      %br
+      Received By:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date:
+
+:javascript
+  window.print();

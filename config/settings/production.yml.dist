@@ -97,7 +97,7 @@ branch_config:
 
   -
     id: "14c17eff-b255-4a78-93b6-373aa1b85a61"  #TAYTAY
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
     current_date: "2020-09-30"
@@ -119,13 +119,13 @@ branch_config:
 #south2
   -
     id: "594fa194-7ed8-45d3-be01-e268b36ce05c"  #GMA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "a0161335-a253-4237-9119-e912291c7d92"  #DASMA
     current_date: "2020-09-30"
   -
     id: "6a8b4597-af32-4daa-8484-508ae8790f26"  #TRECEMARTIRES
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 
 
@@ -569,7 +569,7 @@ time_deposit:
       premature_interest_rate_with_loans: 0.000833333
 
   deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  withdraw_accounting_code_id: ""
+  withdraw_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
   interest_accounting_code_id: ""
 
 defaults:

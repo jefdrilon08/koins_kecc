@@ -62,6 +62,12 @@ var $btnConfirmCheckNumber;
 var $inputTextCheckVoucherNumber;
 var $btnConfirmCheckVoucherNumber;
 
+var $btnPrint;
+var $modalPrint;
+var $printMessage;
+
+var loader;
+
 var _bindEvents = function() {
 
   // Check
@@ -469,6 +475,22 @@ var _bindEvents = function() {
     $modalPost.modal("show");
     $message.html("");
   });
+
+  $btnPrint.on("click", function() {
+    var accountingEntryId = $btnPrint.data('id');
+    var cId = $btnPrint.data('cid');
+
+    $modalPrint.modal("show");
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrint.modal("hide");
+    window.open("/print?id=" + accountingEntryId + "&type=claims_voucher" + "&cid=" + cId);
+  });
 }
 
 var _cacheDom = function() {
@@ -521,6 +543,12 @@ var _cacheDom = function() {
 
   $selectBook                   = $("#select-book");
   $btnConfirmBook               = $("#btn-confirm-book");
+
+  $btnPrint                     = $("#btn-print");
+  $modalPrint                   = $("#modal-print");
+  $printMessage                 = $(".print-message");
+
+  loader                        = $("#template-loader").html();
 }
 
 var init = function(options) {

@@ -20,6 +20,17 @@ class PrintController < ApplicationController
       @accounting_entry_data  = data
       
       render "print/accounting_entry", layout: "print"
+    elsif type == "claims_voucher"
+      accounting_entry = AccountingEntry.find(params[:id])
+
+      data  = ::Print::BuildAccountingEntry.new(
+                accounting_entry: accounting_entry
+              ).execute!
+
+      @accounting_entry_data  = data
+      @claim = Claim.find(params[:cid])
+
+      render "print/claims_voucher", layout: "print"
     elsif type == "deposit_collection_accounting_entry"
       deposit_collection = DepositCollection.find(params[:id])
       accounting_entry   = deposit_collection.approved_accounting_entry
