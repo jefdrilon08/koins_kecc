@@ -569,7 +569,7 @@ time_deposit:
       premature_interest_rate_with_loans: 0.000833333
 
   deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  withdraw_accounting_code_id: ""
+  withdraw_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
   interest_accounting_code_id: ""
 
 defaults:
