@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-family: arial;
   }
 
@@ -174,8 +174,9 @@
   .signatories
     %table{:border => "0"}
       %tr
-        %td{:width => "25%"}
+        %td{:width => "26%"}
           Validated by: 
+          %br
           %i DATE: #{@claim.date_prepared}
           %br
           %br
@@ -183,24 +184,30 @@
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{:width => "25%"}
+        %td{:width => "26%"}
           Checked by:
+          %br
+          %i DATE: #{@claim.date_prepared}
           %br
           %br
           %u
             #{@claim.checked_by}
           %br
           Account Officer
-        %td{:width => "25%"}
+        %td{:width => "27%"}
           Approved by:
+          %br
+          %i DATE: #{@claim.date_prepared}
           %br
           %br
           %u
             #{@claim.approved_by}
           %br
             KMBA - General Manager
-        %td{:width => "20%"}
+        %td{:width => "26%"}
           Posted by:
+          %br
+          %i DATE: #{@claim.date_prepared}
           %br
           %br
           %u
