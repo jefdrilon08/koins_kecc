@@ -97,7 +97,7 @@ branch_config:
 
   -
     id: "14c17eff-b255-4a78-93b6-373aa1b85a61"  #TAYTAY
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
     current_date: "2020-09-30"
@@ -569,7 +569,7 @@ time_deposit:
       premature_interest_rate_with_loans: 0.000833333
 
   deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  withdraw_accounting_code_id: ""
+  withdraw_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
   interest_accounting_code_id: ""
 
 defaults:
