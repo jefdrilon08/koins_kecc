@@ -1,5 +1,7 @@
 module Exports
 	class GenerateAccountTransactionsCsv
+    attr_accessor :account_transactions
+
 		def initialize(account_transactions:)
 			@account_transactions = account_transactions
 		end
