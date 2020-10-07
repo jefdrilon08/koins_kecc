@@ -97,7 +97,7 @@ branch_config:
 
   -
     id: "14c17eff-b255-4a78-93b6-373aa1b85a61"  #TAYTAY
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
     current_date: "2020-09-30"
