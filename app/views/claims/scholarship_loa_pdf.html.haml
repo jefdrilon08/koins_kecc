@@ -98,24 +98,6 @@
             %td{:width => "25%"}
               %u  
                 #{@data["classification"]}
-          %tr
-            %td{:width => "21%"}
-              Claims Payment Through:
-            %td{:width => "25%"}
-              %u  
-                #{@data["claims_payment"]}
-          %tr
-            %td{:width => "21%"}
-              Account Name:
-            %td{:width => "25%"}
-              %u
-                #{@data["account_name"]}
-          %tr
-            %td{:width => "21%"}
-              Account Number:
-            %td{:width => "25%"}
-              %u
-                #{@data["account_number"]}
     %br
     .body2  
       - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"

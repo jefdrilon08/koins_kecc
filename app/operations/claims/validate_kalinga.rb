@@ -91,17 +91,17 @@ module Claims
         @errors << "Expired KALINGA!"
       end
 
-      if @claims_payment.blank?
-        @errors << "Claims Payment field is required"
-      end
+      # if @claims_payment.blank?
+      #   @errors << "Claims Payment field is required"
+      # end
 
-      if @account_name.blank?
-        @errors << "Account name field is required"
-      end
+      # if @account_name.blank?
+      #   @errors << "Account name field is required"
+      # end
 
-      if @account_number.blank?
-        @errors << "Account number field is required"
-      end
+      # if @account_number.blank?
+      #   @errors << "Account number field is required"
+      # end
 
       #validate_kalinga_duplication!
       return  @errors
