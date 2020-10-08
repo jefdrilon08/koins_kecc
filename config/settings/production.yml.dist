@@ -82,16 +82,16 @@ branch_config:
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
     current_date: "2020-09-30"
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #east3
 
@@ -100,7 +100,7 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
     current_date: "2020-09-30"
@@ -111,10 +111,10 @@ branch_config:
     current_date: "2020-09-30"
   -
     id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "48b949af-e682-43b2-a5d2-278cff5f4972"  #SANPEDRO
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #south2
   -
