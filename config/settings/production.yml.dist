@@ -30,13 +30,13 @@ branch_config:
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
     current_date: "2020-09-30"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
@@ -108,7 +108,7 @@ branch_config:
 #south1
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
     #current_date: "2020-09-30"
