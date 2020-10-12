@@ -233,7 +233,11 @@ module Claims
     def compute_blip_debit
       journal_entries = []
 
-      amount = @claim_data[:amount].to_f
+      if @claim_data[:type_of_insurance_policy] == "MVAH"
+        amount = @claim_data[:amount].to_f
+      else
+        amount = @claim_data[:face_amount].to_f
+      end
 
       # TODO: Make this configurable
       dr_accounting_code = AccountingCode.find("a14a60e2-e267-41a7-81c3-390a9b1aadba")
@@ -288,11 +292,15 @@ module Claims
         end
       end
 
-      if @claim_data[:arrears].to_f > 0 
-        half_arrears = @claim_data[:arrears].to_f / 2
-        amount = @claim_data[:amount].to_f - half_arrears
-      else
+      if @claim_data[:type_of_insurance_policy] == "MVAH"
         amount = @claim_data[:amount].to_f
+      else
+        if @claim_data[:arrears].to_f > 0
+          half_arrears = @claim_data[:arrears].to_f / 2
+          amount = @claim_data[:face_amount].to_f - half_arrears
+        else
+          amount = @claim_data[:face_amount].to_f
+        end
       end
 
       if amount > 0
