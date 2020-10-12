@@ -105,8 +105,8 @@ namespace :report do
       j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
     @data << j
     end
-    end
     puts @data
+    end
   puts "END"
   end
   task :mem_share => :environment do
