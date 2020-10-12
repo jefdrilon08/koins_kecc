@@ -2,6 +2,10 @@ class FileRepository < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   FILE_TYPES = [
+    "MEMBERS",
+    "BENEFICIARIES",
+    "LEGAL_DEPENDENTS",
+    "MEMBER_ACCOUNTS",
     "INSURANCE_ACCOUNT_TRANSACTIONS"
   ]
 
@@ -14,7 +18,7 @@ class FileRepository < ApplicationRecord
   end
 
   def actual_url
-    if file_type == "INSURANCE_ACCOUNT_TRANSACTIONS"
+    if file_type == "INSURANCE_ACCOUNT_TRANSACTIONS" || file_type == "MEMBERS" || file_type == "LEGAL_DEPENDENTS" || file_type == "BENEFICIARIES" || file_type == "MEMBER_ACCOUNTS"
       return "#{ENV['BASE_URL']}/#{file_url}"
     else
       raise "Invalid file type #{file_type}"

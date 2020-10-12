@@ -76,6 +76,9 @@ namespace :api do
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
     post "/members/delete_signature", to: "members#delete_signature"
     post "/members/register", to: "members#register"
+    get "/members/process_members_file", to: "members#process_members_file"
+    get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
+    get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
@@ -89,6 +92,7 @@ namespace :api do
     # 
     get "/insurance_accounts/fetch_insurance_status", to: "insurance_accounts#fetch_insurance_status"
     get "/insurance_accounts/process_insurance_account_transactions_file", to: "insurance_accounts#process_insurance_account_transactions_file"
+    get "/insurance_accounts/process_member_accounts_file", to: "insurance_accounts#process_member_accounts_file"
 
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
