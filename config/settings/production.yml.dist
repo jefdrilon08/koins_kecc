@@ -22,10 +22,10 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #north 2    
   -
@@ -103,7 +103,7 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #south1
   -
@@ -122,7 +122,7 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "a0161335-a253-4237-9119-e912291c7d92"  #DASMA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "6a8b4597-af32-4daa-8484-508ae8790f26"  #TRECEMARTIRES
     #current_date: "2020-09-30"
