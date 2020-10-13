@@ -103,7 +103,7 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #south1
   -
