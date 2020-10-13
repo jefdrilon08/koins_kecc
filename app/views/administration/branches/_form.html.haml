@@ -12,6 +12,9 @@
     .col
       .form-group
         = f.input :member_counter, input_html: { class: 'form-control' }
+    .col
+      .form-group
+        = f.input :current_date, as: :string, input_html: { class: 'form-control', type: 'date' }
     
   %hr
   .btn-group

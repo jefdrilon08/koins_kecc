@@ -3,6 +3,13 @@ module Api
     class BranchesController < ApiController
       before_action :authenticate_user!
 
+      def update_current_date
+        branch  = Branch.find(params[:id])
+        branch.update!(current_date: params[:current_date])
+
+        render json: { message: "ok" }
+      end
+
       def index
         if params[:b].present?
           branches = current_user
