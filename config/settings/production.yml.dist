@@ -25,7 +25,7 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #north 2    
   -
