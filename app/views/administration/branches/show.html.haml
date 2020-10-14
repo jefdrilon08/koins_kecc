@@ -1,9 +1,7 @@
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            %h4
-              #{@branch.name}
-            = render partial: "show_details"
+.row
+  .col
+    .card
+      .card-body
+        %h4
+          #{@branch.name}
+        = render partial: "show_details"

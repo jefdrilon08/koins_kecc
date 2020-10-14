@@ -41,7 +41,7 @@ namespace :report do
     puts "CLIENT_REFERENCE|LAST_NAME|FIRST_NAME|MIDDLE_NAME|NO_STREET_SITIO_PUROK|BARANGAY_DISTRICT|CITY_MUNICIPALITY|PROVINCE|ZIP_CODE|BIRTHDATE|GENDER|CONTACT_NO|MOTHER'S MAIDEN FIRST NAME|MOTHER'S MAIDENMIDDLE NAME|MOTHER'S MAIDEN LAST NAME|ID_TYPE|ID_NO|SSS/GSIS|PAGIBIG|PHILHEALTH|TIN|LOAN_REFERENCE|CONTRACT_TYPE|CONTRACT_PHASE|TRANSACTION_TYPE|LOAN_PRINCIPAL|LOAN_BALANCE|DATE_GRANTED|DUE_DATE|INTEREST_RATE|PAY_FREQ|TERM|CURRENCY|LOAN_PURPOSE|#{m_type}_TYPE|TOTAL_LOAN_BALANCE|CONTRACT_ACTUAL_END_DATE|OVERDUE_DAYS|MONTHLY_PAYMENT_AMOUNT|NO_OF_OUTSTANDING_PAYMENT|AMOUNT_OF_LAST_PAYMENT|REMARKS"
       
     loan_data.each do |y|
-      if y.maturity_date >= s_date
+     
       street = y.member.data["address"]["street"]
       brgy = y.member.data["address"]["district"]
       city = y.member.data["address"]["city"]
@@ -101,12 +101,14 @@ namespace :report do
       elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO' or loan_prod == 'K - BISIKLETA'
         loan_purpose = 'SE'
       end
-
+     if y.maturity_date >= s_date
       j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+    end
+    
     @data << j
-    end
-    end
+  
     puts @data
+    end
   puts "END"
   end
   task :mem_share => :environment do

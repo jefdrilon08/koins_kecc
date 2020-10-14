@@ -1,12 +1,9 @@
-%main.c-main
-  .container-fluid
-    .row
-      .col
-        .card
-          .card-body
-            - if @branches.any?
+.col
+  .card
+    .card-body
+      - if @branches.any?
 
-              = render partial: "index_list"
-            - else
-              %p
-                No branches found
+        = render partial: "index_list"
+      - else
+        %p
+          No branches found

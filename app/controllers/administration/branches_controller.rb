@@ -138,12 +138,18 @@ module Administration
           text: "Branches"
         },
         {
-          text: "#{@branch.name}"
+          text: "#{@branch.name} (Current Date: #{::Utils::GetCurrentDate.new(config: { branch: @branch }).execute!.strftime("%b %d, %Y")})"
         }
       ]
 
-      @subheader_side_actions = []
-
+      @subheader_side_actions = [
+        {
+          id: "btn-edit",
+          link: edit_administration_branch_path(@branch),
+          class: "fa fa-pencil-alt",
+          text: "Edit Branch"
+        }
+      ]
     end
 
     private
