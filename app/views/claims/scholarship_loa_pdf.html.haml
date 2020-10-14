@@ -142,8 +142,8 @@
   .signatories
     %table{:border => "0"}
       %tr
-        %td{:width => "26%"}
-          Sincerely Yours:
+        %td{style: "width:42%; height: 25px;"}
+          Prepared by: 
           %br
           %i DATE: #{@claim.date_prepared}
           %br
@@ -152,33 +152,27 @@
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{:width => "26%"}
+        %td{style: "width:42%; height: 25px;"}
           Checked by:
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.try(:date_checked)}
           %br
           %br
-          %u
-            #{@claim.checked_by}
+          - if @claim.prepared_by == "Adrian San Andres" 
+            %u
+              Diobert Calanza
+          - else
+            %u
+              Adrian San Andres
           %br
-          Account Officer
-        %td{:width => "27%"}
+          Underwriter
+        %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.try(:date_approved)}
           %br
           %br
           %u
-            #{@claim.approved_by}
+            Silvida R. Antiquera
           %br
-          KMBA-General Manager
-        %td{:width => "26%"}
-          Posted by:
-          %br
-          %i DATE: #{@claim.date_prepared}
-          %br
-          %br
-          %u
-            #{@claim.posted_by}
-          %br
-          Finance Manager
+          General Manager

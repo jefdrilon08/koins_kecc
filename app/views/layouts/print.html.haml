@@ -4,7 +4,10 @@
   %title= App.name
   = stylesheet_pack_tag 'application', media: 'all'
   = javascript_pack_tag 'application'
-  = favicon_link_tag "logo_thumb.png"
+  - if microinsurance?
+    = favicon_link_tag "kmba.ico"
+  - else
+    = favicon_link_tag "logo_thumb.png"
   = csrf_meta_tags
   %meta{name: "viewport", content:"width=device-width, initial-scale=1"}
 %body{ onload: "window.print();" }
