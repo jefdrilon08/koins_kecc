@@ -14,12 +14,12 @@
       .form-group
         %label
           Type of Claim
-        = select_tag :claim_type,options_for_select(["BLIP", "CLIP", "HIIP", "CALAMITY ASSISTANCE", "K-KALINGA", "K-BENTE", "KUYA JUN SCHOLARSHIP PROGRAM"]), class: "form-control select-select2", id: "type-of-claims", prompt: "-- SELECT --"
+        = select_tag :claim_type, options_for_select(["BLIP", "CLIP", "HIIP", "CALAMITY ASSISTANCE", "K-KALINGA", "K-BENTE", "KUYA JUN SCHOLARSHIP PROGRAM"]), class: "form-control select-select2", id: "type-of-claims", prompt: "-- SELECT --"
     .col-md-2
       .form-group
         %label
           Status
-        = select_tag :status,options_for_select(["approved", "pending"]), class: "form-control select-select2", id: "status", prompt: "-- SELECT --"
+        = select_tag :status, options_for_select(["for checking", "for approval","for posting", "posted"]), class: "form-control select-select2", id: "status", prompt: "-- SELECT --"
     .col-md-2
       .form-group
         %label

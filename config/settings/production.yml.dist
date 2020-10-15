@@ -680,12 +680,18 @@ insurance_accounting_codes:
     insurance_type: "Retirement Fund"
     deposit_accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
     withdrawal_accounting_code_id: "5e6161d2-c5ef-4647-a10e-44b9d3bed5c3"
+  -
+    insurance_type: "Hospital Income Insurance Plan"
+    deposit_accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
+    withdrawal_accounting_code_id: ""
+
+
 
 savings_accounting_codes:
   -
     savings_type: "K-IMPOK"
     deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
   -
     savings_type: "Golden K"
     deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"

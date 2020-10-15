@@ -7,7 +7,10 @@
         .card
           .card-body
             %center
-              = image_tag "logo.png", width: "220px"
+              - if microinsurance?
+                = image_tag "kmba_logo.png", width: "220px"
+              - else
+                = image_tag "logo.png", width: "220px"
             %hr
             .input-group
               .input-group-prepend
