@@ -20,13 +20,7 @@ module SavingsInsuranceTransferCollections
       post_accounting_entry!
       withdraw_funds!
       deposit_funds!
-
-      # Rehash accounts
-      ::MemberAccounts::BulkRehash.new(
-        config: {
-          branch: @branch
-        }
-      ).execute!
+      rehash_accounts!
 
       @savings_insurance_transfer_collection.update!(
         data: @data,
@@ -38,6 +32,9 @@ module SavingsInsuranceTransferCollections
     end
 
     private
+
+    def rehash_accounts!
+    end
 
     def post_accounting_entry!
       # Create new accounting entry
