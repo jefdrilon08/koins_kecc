@@ -146,7 +146,7 @@ module SavingsInsuranceTransferCollections
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
 
         # TODO: Make this to DB trigger function
-        MemberAccount.find(savings_account_id).update!(savings_account_new_balance)
+        MemberAccount.find(savings_account_id).update!(balance: savings_account_new_balance)
       end
 
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
