@@ -72,7 +72,7 @@ module SavingsInsuranceTransferCollections
         end
       end
 
-      if @savings_account.present? and @savings_account.maintaining_balance < @amount
+      if @savings_account.present? and @savings_account.maintaining_balance > (@savings_account.balance - @amount)
         @errors[:messages] << {
           key: "savings_account",
           message: "Not enough balance for savings #{@savings_subtype} (Maintaining balance: #{@savings_account.maintaining_balance}) for member #{@member.full_name}"
