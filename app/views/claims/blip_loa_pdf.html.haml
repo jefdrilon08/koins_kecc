@@ -161,12 +161,17 @@
           /   %td{:width => "25%"}
           /     %u  
           /       &#8369;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          - if @data["arrears"].to_f > 0
+            - @amount_payable = @data["face_amount"].to_f - (@data["arrears"].to_f / 2)  
+          - else
+            - @amount_payable = @data["face_amount"].to_f
           %tr
             %td{:width => "21%"}
               Amount Payable:
             %td{:width => "25%"}
               %u  
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@amount_payable, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Beneficiary:
@@ -239,14 +244,18 @@
           %i DATE: #{@claim.try(:date_checked)}
           %br
           %br
-          - if @claim.prepared_by == "Adrian San Andres" 
-            %u
-              Diobert Calanza
+          - if @claim.checked_by.nil?
+            - if @claim.prepared_by == "Adrian San Andres" 
+              %u
+                Diobert Calanza
+            - else
+              %u
+                Adrian San Andres
           - else
             %u
-              Adrian San Andres
+              #{@claim.checked_by}
           %br
-          Underwriter
+          Account Officer
         %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br

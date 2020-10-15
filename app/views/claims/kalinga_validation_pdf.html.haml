@@ -220,14 +220,18 @@
           %i DATE: #{@claim.try(:date_checked)}
           %br
           %br
-          - if @claim.prepared_by == "Adrian San Andres" 
-            %u
-              Diobert Calanza
+          - if @claim.checked_by.nil?
+            - if @claim.prepared_by == "Adrian San Andres" 
+              %u
+                Diobert Calanza
+            - else
+              %u
+                Adrian San Andres
           - else
             %u
-              Adrian San Andres
+              #{@claim.checked_by}
           %br
-          Underwriter
+          Account Officer
         %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br

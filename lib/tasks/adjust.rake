@@ -136,6 +136,10 @@ namespace :adjust do
       withdrawal_collections = withdrawal_collections.where(branch_id: ENV['BRANCH_ID'])
     end
 
+    if ENV['WITHDRAWAL_ID'].present?
+      withdrawal_collections = withdrawal_collections.where(id: ENV['WITHDRAWAL_ID'])
+    end    
+
     values = []
 
     withdrawal_collections.each do |wc|
