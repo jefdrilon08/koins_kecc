@@ -68,7 +68,7 @@ module SavingsInsuranceTransferCollections
       @accounting_entry
     end
 
-    def withdraw_funds!
+    def deposit_funds!
       values  = []
 
       @data[:records].each do |o|
@@ -101,6 +101,9 @@ module SavingsInsuranceTransferCollections
         }
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+
+        # TODO: Make this to DB trigger function
+        MemberAccount.find(insurance_account_id).update!(balance: insurance_account_new_balance)
       end
 
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
@@ -108,7 +111,7 @@ module SavingsInsuranceTransferCollections
       ActiveRecord::Base.connection.execute(query)
     end
 
-    def deposit_funds!
+    def withdraw_funds!
       values  = []
 
       @data[:records].each do |o|
@@ -141,6 +144,9 @@ module SavingsInsuranceTransferCollections
         }
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+
+        # TODO: Make this to DB trigger function
+        MemberAccount.find(savings_account_id).update!(savings_account_new_balance)
       end
 
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
