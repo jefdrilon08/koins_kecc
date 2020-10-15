@@ -32,12 +32,6 @@ module SavingsInsuranceTransferCollections
         savings_accounts.each do |a|
           r = data[:records].select{ |o| o[:savings_account_id] == a.id }.first
 
-          if a.maintaining_balance < r[:amount]
-            @errors[:messages] << {
-              key: "savings_account",
-              message: "Member #{r[:member][:last_name]}, #{r[:member][:first_name]} has not enough balance (#{a.maintaining_balance})"
-            }
-          end
         end
 
         if data[:records].size == 0
