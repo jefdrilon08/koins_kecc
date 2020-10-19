@@ -267,6 +267,15 @@ class ClaimsController < ApplicationController
           text: "Approve"
         }
       end
+
+      if ["MIS", "AO"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-pending",
+          link: "#",
+          class: "fa fa-undo",
+          text: "Revert Pending"
+        }
+      end
     end
 
     if @claim.for_posting?

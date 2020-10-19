@@ -53,6 +53,35 @@ module Api
         end
       end
 
+      def pending
+        claim = Claim.find(params[:id])
+
+        config = {
+          claim: claim,
+          user: current_user
+        }
+
+        if ["MIS", "AO"].include? current_user.roles.last
+          errors  = Claims::ValidateClaimForPending.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim  = Claims::PendingClaim.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully revert pending claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
       def approve
         claim = Claim.find(params[:id])
 

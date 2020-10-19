@@ -3,10 +3,12 @@ import Mustache from "mustache/mustache";
 var $btnConfirmApprove;
 var $btnConfirmPost;
 var $btnConfirmCheck;
+var $btnConfirmPending;
 
 var $btnApprove;
 var $btnPost;
 var $btnCheck;
+var $btnPending;
 
 var $btnConfirmBook;
 
@@ -15,6 +17,7 @@ var $errorsTemplate;
 var urlApproveTransaction     = "/api/v1/claims/approve";
 var urlPostTransaction        = "/api/v1/claims/post";
 var urlCheckTransaction       = "/api/v1/claims/check";
+var urlPendingTransaction     = "/api/v1/claims/pending";
 var urlModifyClaimsTemplate   = "/api/v1/claims/modify_claims_template";
 var urlModifyBook             = "/api/v1/claims/modify_book";
 var urlModifyParticular       = "/api/v1/claims/modify_particular";
@@ -25,14 +28,18 @@ var urlSavePayee              = "/api/v1/claims/save_payee";
 var $modalApprove;
 var $modalCheck;
 var $modalPost;
+var $modalPending;
+
 var $errors;
 var $errorsTemplate;
 var $modalErrorsApproval;
 var $modalErrorsChecking;
 var $modalErrorsPosting;
+var $modalErrorsPending;
 var $modalSuccessApproval;
 var $modalSuccessChecking;
 var $modalSuccessPosting;
+var $modalSuccessPending;
 var $modalControls;
 var $successTemplate;
 
@@ -104,6 +111,45 @@ var _bindEvents = function() {
           );
 
           $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  // Pending
+  $btnConfirmPending.on("click", function() {
+    $btnConfirmPending.prop("disabled", true);
+
+    $.ajax({
+      url: urlPendingTransaction,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: claimId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmPending.prop("disabled", false);
         }
       }
     });
@@ -476,6 +522,12 @@ var _bindEvents = function() {
     $message.html("");
   });
 
+  // Pending
+  $btnPending.on("click", function() {
+    $modalPending.modal("show");
+    $message.html("");
+  });
+
   $btnPrint.on("click", function() {
     var accountingEntryId = $btnPrint.data('id');
     var cId = $btnPrint.data('cid');
@@ -498,10 +550,12 @@ var _cacheDom = function() {
   $btnApprove                   = $("#btn-approve");
   $btnCheck                     = $("#btn-check");
   $btnPost                      = $("#btn-post");
+  $btnPending                   = $("#btn-pending");
 
   $btnConfirmApprove            = $("#btn-confirm-approval");
   $btnConfirmCheck              = $("#btn-confirm-check");
   $btnConfirmPost               = $("#btn-confirm-posting");
+  $btnConfirmPending            = $("#btn-confirm-pending");
 
   $errors                       = $("#errors");
   $errorsTemplate               = $("#errors-template");
@@ -510,15 +564,18 @@ var _cacheDom = function() {
   $modalCheck                   = $("#modal-check-confirmation");
   $modalApprove                 = $("#modal-approve-confirmation");
   $modalPost                    = $("#modal-post-confirmation");
+  $modalPending                 = $("#modal-pending-confirmation");
 
   
   $modalErrorsApproval          = $(".modal-approve").find(".errors");
   $modalErrorsChecking          = $(".modal-check").find(".errors");
   $modalErrorsPosting           = $(".modal-post").find(".errors");
+  $modalErrorsPending           = $(".modal-pending").find(".errors");
 
   $modalSuccessApproval         = $(".modal-approve").find(".success");
   $modalSuccessChecking         = $(".modal-check").find(".success");
   $modalSuccessPosting          = $(".modal-post").find(".success");
+  $modalSuccessPending          = $(".modal-pending").find(".success");
 
   $modalControls                = $(".modal-controls");
   $successTemplate              = $("#success-template");
