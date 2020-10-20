@@ -2231,4 +2231,27 @@ namespace :adjust do
       
     puts "Done"
   end
+
+  task :insert_equity_value_interest => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |member_account, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{member_account.id}... #{progress}%%")
+
+      ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account).execute!
+    end 
+
+    puts "\nDone!"
+  end
 end
