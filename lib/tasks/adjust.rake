@@ -2121,6 +2121,7 @@ namespace :adjust do
     end
 
     member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+    transactions = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", member_accounts.ids, "approved")
 
     size = member_accounts.count
 
@@ -2128,7 +2129,7 @@ namespace :adjust do
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
 
-      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
+      last_transaction = transactions.where("subsidiary_id = ?", ma.id).order("transacted_at ASC").last   
         
       if !last_transaction.nil?  
         latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
@@ -2235,6 +2236,17 @@ namespace :adjust do
   task :insert_equity_value_interest => :environment do
     puts "Inserting ..."
 
+    @start_date = nil
+    @end_date = nil
+
+    if ENV['START_DATE'].present? 
+      @start_date = ENV['START_DATE'].to_date
+    end
+
+    if ENV['END_DATE'].present? 
+      @end_date = ENV['END_DATE'].to_date
+    end
+
     if ENV['BRANCH_ID'].present?
       @branches = Branch.where(id: ENV['BRANCH_ID'])
     else
@@ -2249,7 +2261,7 @@ namespace :adjust do
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Insreting for member account #{member_account.id}... #{progress}%%")
 
-      ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account).execute!
+      ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account, start_date: @start_date, end_date: @end_date).execute!
     end 
 
     puts "\nDone!"

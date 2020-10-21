@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_13_061144) do
+ActiveRecord::Schema.define(version: 2020_10_20_054119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -348,6 +348,17 @@ ActiveRecord::Schema.define(version: 2020_10_13_061144) do
     t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
+  end
+
+  create_table "equity_value_interests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_account_id"
+    t.uuid "account_transaction_id"
+    t.date "month_of_year_date"
+    t.decimal "interest_amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_transaction_id"], name: "index_equity_value_interests_on_account_transaction_id"
+    t.index ["member_account_id"], name: "index_equity_value_interests_on_member_account_id"
   end
 
   create_table "equity_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -970,6 +981,8 @@ ActiveRecord::Schema.define(version: 2020_10_13_061144) do
   add_foreign_key "clusters", "areas"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "equity_value_interests", "account_transactions"
+  add_foreign_key "equity_value_interests", "member_accounts"
   add_foreign_key "equity_withdrawal_collections", "branches"
   add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"

@@ -136,8 +136,9 @@
                   Ending Balance
                 %th.text-right
                   Equity Value
-                %th.text-right
-                  Equity Value Interest 
+                - if microinsurance?
+                  %th.text-right
+                    Equity Value Interest 
             %tbody
               - @account_transactions.each do |o|
                 %tr
@@ -177,8 +178,9 @@
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
                   %td.text-right.text-muted
                     #{number_to_currency(o.data["equity_value"], unit: "")}
-                  %td.text-right.text-muted
-                    #{number_to_currency(o.data["equity_value_interest"], unit: "")}
+                  - if microinsurance?
+                    %td.text-right.text-muted
+                      #{number_to_currency(o.equity_value_interests.first.try(:interest_amount), unit: "")}
         - elsif @insurance_account.account_subtype == Settings.pl
           %table.table.table-hover.table-sm.table-bordered
             %thead
