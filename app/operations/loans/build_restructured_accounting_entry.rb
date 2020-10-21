@@ -241,7 +241,11 @@ module Loans
         interest_receivable_accounting_code = AccountingCode.find(settings.interest_receivable_accounting_code_id)
 
         loans_receivable    = active_loan.principal_balance.round(2)
-        interest_receivable = active_loan.interest_balance.round(2)
+        #interest_receivable = active_loan.interest_balance.round(2)
+        interest_receivable = active_loan.amortization_schedule_entries.where(
+                                "due_date <= ? AND is_paid IS NULL",
+                                @current_date
+                              ).sum(:interest_balance).round(2)
 
         @total_debit += loans_receivable
         @total_debit += interest_receivable
