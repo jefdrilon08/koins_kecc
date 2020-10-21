@@ -2149,6 +2149,42 @@ namespace :adjust do
     puts "\nDone!"
   end
 
+  task :insert_equity_value_to_life_account_from_balance => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |ma, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
+    
+      balance = ma.balance.to_f
+
+      if balance > 0
+        if !ma.member_id.nil?
+          if ma.data.nil?
+            ma.data = { equity_value: balance / 2 }
+            ma.save!
+          else
+            ma_data = ma.data.with_indifferent_access
+            ma_data[:equity_value] = balance / 2
+            ma.update!(data: ma_data)
+          end
+        end
+      end
+    end 
+
+    puts "\nDone!"
+  end
+
   task :insert_equity_value_to_life_last_transaction => :environment do
     puts "Inserting ..."
 
