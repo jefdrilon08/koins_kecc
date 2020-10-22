@@ -63,7 +63,8 @@ module Loans
       end
 
       # Set principal to be sum of active_loans balances
-      @principal  = (@active_loans.sum(:principal_balance) + @active_loans.sum(:interest_balance)).round(2)
+      #@principal  = (@active_loans.sum(:principal_balance) + @active_loans.sum(:interest_balance)).round(2)
+      @principal  = (@active_loans.sum(:principal_balance)).round(2)
     end
 
     def execute!
@@ -154,7 +155,8 @@ module Loans
       ###########################################################################
 
       # Set loan principal according to debit entry
-      @loan.principal = ae_cmd.total_debit
+      #@loan.principal = ae_cmd.total_debit
+      #@loan.principal = ae_cmd.total_debit
 
       params  = {
         principal: @loan.principal,
