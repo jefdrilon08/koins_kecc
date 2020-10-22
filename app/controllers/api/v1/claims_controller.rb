@@ -37,12 +37,16 @@ module Api
                       config: config
                     ).execute!
 
+          @approving_user = User.where(first_name: "Silvida", last_name: "Antiquera").first
+
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
             claim  = Claims::CheckClaim.new(
                                         config: config
                                       ).execute!
+
+            ::Claims::NotifyUser.new(claim: claim, user: @approving_user).execute!
 
             render json: { message: "Successfully checked claim" }
           end
@@ -90,6 +94,8 @@ module Api
           user: current_user
         }
 
+        @posting_user = User.where(first_name: "Evelyn", last_name: "Lagmay").first
+
         if ["MIS"].include? current_user.roles.last
           errors  = Claims::ValidateClaimForApproval.new(
                       config: config
@@ -101,6 +107,8 @@ module Api
             claim  = Claims::ApproveClaim.new(
                                         config: config
                                       ).execute!
+
+            ::Claims::NotifyUser.new(claim: claim, user: @posting_user).execute!
 
             render json: { message: "Successfully approved claim" }
           end
