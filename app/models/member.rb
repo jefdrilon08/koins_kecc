@@ -100,6 +100,9 @@ class Member < ApplicationRecord
   def full_name
     "#{self.last_name}, #{self.first_name}, #{self.middle_name}"
   end
+  def mother_maiden_name
+    "#{self.data.with_indifferent_access[:mothers_last_name]}, #{self.data.with_indifferent_access[:mothers_first_name]} #{self.data.with_indifferent_access[:mothers_middle_name]}"
+  end
 
   def full_name_with_center
     "#{self.last_name}, #{self.first_name}, #{self.middle_name} (#{self.center})"
