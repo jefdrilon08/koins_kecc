@@ -6,20 +6,26 @@ module Claims
       @claim = claim
       @user = user
       @email_address = @user.email
+
+      if @claim.pending?
+        @status = "For Checking"
+      elsif @claim.for_approval?
+        @status = "For Approval"
+      elsif @claim.for_posting?
+        @status = "For Posting"
+      end
     end
 
     def execute!
       ActiveRecord::Base.transaction do
         from    = Email.new(email: "kmbakoins2020@gmail.com")
         to      = Email.new(email: @email_address)
-        subject = "#{@claim.status.titleize}"
+        subject = "KMBA / CLAIMS / #{@claim.claim_type} / #{@status.upcase} / #{@claim.member.full_name} / #{@claim.branch.name.upcase}"
         content = Content.new(
                     type: "text/html",
-                    value: "Magandang araw po
+                    value: "Claims #{@status.downcase}. click the link below.
                             <br />
-                            Mayroon po tayong claims na #{@claim.status}. I-click ang link sa ibaba.
-                            <br />
-                            Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@claim.member.full_name_titleize} - #{@claim.status}</a>
+                            Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@claim.member.full_name_titleize} - #{@status}</a>
                             "
                   )
 
