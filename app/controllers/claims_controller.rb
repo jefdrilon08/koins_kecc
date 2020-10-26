@@ -278,6 +278,26 @@ class ClaimsController < ApplicationController
       end
     end
 
+    if @claim.pending?
+      if ["AO"].include? current_user.roles.last
+        if @claim.nil?  
+          @subheader_side_actions << {
+            id: "btn-note",
+            link: "#",
+            class: "fa fa-comments",
+            text: "Add Note"
+          }
+        else
+          @subheader_side_actions << {
+            id: "btn-note",
+            link: "#",
+            class: "fa fa-edit",
+            text:  "Edit Note"
+          }
+        end
+      end
+    end
+
     if @claim.for_posting?
       if ["MIS"].include? current_user.roles.last
         @subheader_side_actions << {
@@ -551,7 +571,7 @@ class ClaimsController < ApplicationController
           end
         end
       end
-    end
+    end    
 
     if @claim.approved?
       if ["MIS"].include? current_user.roles.last

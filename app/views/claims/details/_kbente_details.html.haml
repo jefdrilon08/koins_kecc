@@ -109,5 +109,12 @@
       %th Date Posted
       %td 
         = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
-    
+- if @claim.note.present?
+  - if @claim.pending?  
+    .bs-callout.bs-callout-primary
+      %p
+        %b
+          NOTE:
+        #{@claim.note}
+        %hr
 

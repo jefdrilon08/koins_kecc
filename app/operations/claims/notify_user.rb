@@ -23,7 +23,7 @@ module Claims
         subject = "KMBA / CLAIMS / #{@claim.claim_type} / #{@status.upcase} / #{@claim.member.full_name} / #{@claim.branch.name.upcase}"
         content = Content.new(
                     type: "text/html",
-                    value: "Claims #{@status.downcase}. click the link below.
+                    value: "Claims #{@status.downcase}. Click the link below.
                             <br />
                             Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@claim.member.full_name_titleize} - #{@status}</a>
                             "

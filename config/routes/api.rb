@@ -371,5 +371,6 @@ namespace :api do
     post "/claims/save_payee", to: "claims#save_payee"
     post "/claims/save_check_number", to: "claims#save_check_number"
     post "/claims/save_check_voucher_number", to: "claims#save_check_voucher_number"
+    post "/claims/save_note", to: "claims#save_note"
   end
 end

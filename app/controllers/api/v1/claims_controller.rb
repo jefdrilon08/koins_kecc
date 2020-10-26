@@ -244,6 +244,17 @@ module Api
         end
       end
 
+      def save_note
+        claim  = Claim.where(id: params[:id]).first
+        note   = params[:note]
+
+        claim_data = claim.data.with_indifferent_access
+        claim_data[:note] = note
+        claim.update!(data: claim_data)
+
+        render json: { id: claim.id }
+      end
+
       def save_check_number
         claim          = Claim.where(id: params[:id]).first
         check_number   = params[:check_number]

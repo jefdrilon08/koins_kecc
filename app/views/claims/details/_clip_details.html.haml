@@ -85,9 +85,6 @@
       %th Prepared By
       %td
         = @claim.prepared_by
-      %th Approved by
-      %td 
-        = @claim.try(:approved_by).try(:titleize)
     %tr
       %th CB Uploaded Documents
       %td
@@ -127,6 +124,16 @@
         = @claim.try(:posted_by).try(:titleize)
       %th Date Posted
       %td 
-        = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")   
+        = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
+- if @claim.note.present?
+  - if @claim.pending?  
+    .bs-callout.bs-callout-primary
+      %p
+        %b
+          NOTE:
+        #{@claim.note}
+        %hr
+
+
     
 
