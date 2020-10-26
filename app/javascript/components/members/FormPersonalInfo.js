@@ -28,6 +28,25 @@ export default class FormPersonalInfo extends React.Component {
 
     this.props.updateData(data);
   }
+  
+  handleMothersLastNameChanged(event) {
+    var data        = this.props.data;
+    data.data.mothers_last_name  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+  handleMothersFirstNameChanged(event) {
+    var data        = this.props.data;
+    data.data.mothers_first_name  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+  handleMothersMiddleNameChanged(event) {
+    var data        = this.props.data;
+    data.data.mothers_middle_name  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
 
   handleAddressStreetChanged(event) {
     var data                  = this.props.data;
@@ -157,6 +176,49 @@ export default class FormPersonalInfo extends React.Component {
             </div>
           </div>
         </div>
+        <h5>Mothers Maiden Name</h5> 
+          <div className="row">
+            <div className="col-md-4">
+              <div className="form-group">
+                <label>Apelyido</label>
+                  <input
+                    value={this.props.data.data.mothers_last_name}
+                    className="form-control"
+                    onChange={this.handleMothersLastNameChanged.bind(this)}
+                    disabled={this.props.formDisabled}
+                  />
+              </div>
+              </div>
+          
+              <div className="col-md-4">
+              <div className="form-group">
+                <label>Pangalan</label>
+                  <input
+                    value={this.props.data.data.mothers_first_name}
+                    className="form-control"
+                    onChange={this.handleMothersFirstNameChanged.bind(this)}
+                    disabled={this.props.formDisabled}
+                  />
+              </div>
+              </div>
+              <div className="col-md-4">
+              <div className="form-group">
+                <label>Gitnang Pangalan</label>
+                <input
+                  value={this.props.data.data.mothers_middle_name}
+                  className="form-control"
+                  onChange={this.handleMothersMiddleNameChanged.bind(this)}
+                  disabled={this.props.formDisabled}
+                
+                />
+              </div>
+
+            </div>
+          </div>
+
+
+
+
         <h5>
           Tirahan / Address
         </h5>
