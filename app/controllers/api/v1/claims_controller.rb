@@ -160,7 +160,13 @@ module Api
                                     }
                                   ).execute!
 
-        @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com", "adriansanandres08@gmail.com"])
+        if current_user.email == "adriansanandres08@gmail.com"
+          @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com"])
+        elsif current_user.email == "diobertcalanza@yahoo.com"
+          @checking_users = User.where("email IN (?)", ["adriansanandres08@gmail.com"])
+        else
+          @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com", "adriansanandres08@gmail.com"])
+        end
 
         @checking_users.each do |user|
           ::Claims::NotifyUser.new(claim: claim, user: user).execute!
