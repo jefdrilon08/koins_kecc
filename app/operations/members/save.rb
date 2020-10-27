@@ -4,6 +4,7 @@ module Members
       super()
 
       @config       = config
+      #raise @config.inspect
       @member_data  = @config[:member_data]
       @user         = @config[:user]
 

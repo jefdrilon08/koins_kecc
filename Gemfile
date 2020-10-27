@@ -32,6 +32,8 @@ gem 'rollbar'
 gem 'httparty'
 #gem 'rack-timeout'
 gem 'newrelic_rpm'
+gem 'sendgrid-ruby'
+
 
 gem 'uglifier'
 gem 'sprockets'

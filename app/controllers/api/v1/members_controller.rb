@@ -506,7 +506,11 @@ module Api
       end
 
       def save
+        
+
         member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
+      
+
 
         config  = {
           member_data: member_data,
