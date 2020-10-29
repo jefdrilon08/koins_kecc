@@ -169,6 +169,19 @@ module Loans
                   params: params
                ).execute!
 
+      second_result = ::Finance::Amortize.new(
+                        params: {
+                          principal: ae_cmd.total_debit,
+                          annual_interest_rate: (@loan.monthly_interest_rate * 12),
+                          num_installments: @num_installments,
+                          term: @term
+                        }
+                      ).execute!
+
+      # Add the principal based on receivables
+      @loan.principal = ae_cmd.total_debit
+      #######################################
+
       @loan.principal_balance = @loan.principal
       @loan.interest_balance  = result[:interest]
       @loan.interest          = result[:interest]
@@ -179,8 +192,10 @@ module Loans
         @loan.amortization_schedule_entries.delete_all
       end
 
-      result[:schedule].each do |o|
-        principal   = o[:principal].to_f.round(2)
+      # Use the principal on second_result for setting principal
+      result[:schedule].each_with_index do |o, i|
+        #principal   = o[:principal].to_f.round(2)
+        principal   = second_result[:schedule][i][:principal].to_f.round(2)
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
 
