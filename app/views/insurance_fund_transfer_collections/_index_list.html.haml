@@ -27,10 +27,14 @@
             = link_to insurance_fund_transfer_collection_path(o) do
               %strong
                 #{o.created_at.strftime("%b %d, %Y")}
-          %td
-            = link_to insurance_fund_transfer_collection_path(o) do
-              %strong
-                #{o.date_approved.strftime("%b %d, %Y")}
+          - if !o.date_approved.nil?
+            %td
+              = link_to insurance_fund_transfer_collection_path(o) do
+                %strong
+                  #{o.date_approved.strftime("%b %d, %Y")}
+          - else
+            %td
+              =nil
         %td
           = link_to insurance_fund_transfer_collection_path(o) do
             %strong
