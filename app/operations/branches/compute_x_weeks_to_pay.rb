@@ -24,14 +24,17 @@ module Branches
     end
 
     def execute!
+    #raise @date_untiil
       loans = Loan.active_or_paid.where(
-                "loans.maturity_date <= ? AND loans.maturity_date >= ? AND loans.branch_id = ?",
+                "maturity_date <= ? AND maturity_date >= ? AND branch_id = ?",
                 @date_until,
                 @as_of,
                 @branch.id
               )
-
+      
       loans.each do |loan|
+      
+       if (loan.maturity_date.to_date <= @date_until.to_date)
         temp_loan = ::Reports::GenerateLoanRepaymentReport.new(
                       config: {
                         loan: loan,
@@ -39,9 +42,9 @@ module Branches
                       }
                     ).execute!
 
-        @data[:records] << temp_loan
+          @data[:records] << temp_loan
+        end
       end
-
       # Setup centers
       center_ids      = @data[:records].map{ |o| o[:center][:id] }
       @data[:centers] = Center.where(
