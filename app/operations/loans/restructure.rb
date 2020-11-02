@@ -225,6 +225,11 @@ module Loans
 
         @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal - diff
         @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due - diff
+      elsif buffer_principal < @loan.principal
+        diff = @loan.principal - buffer_principal
+
+        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal + diff
+        @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due + diff
       end
 
       @loan.data[:accounting_entry] = accounting_entry_data
