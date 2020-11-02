@@ -148,7 +148,8 @@ module Loans
                     book: @book,
                     loan: @loan,
                     active_loans: @active_loans
-                  }
+                  },
+                  override_current_date: @date_prepared
                 )
 
       accounting_entry_data = ae_cmd.execute!
@@ -191,22 +192,6 @@ module Loans
       if !@loan.new_record?
         @loan.amortization_schedule_entries.delete_all
       end
-
-      ## ADD-ONS ISOLATION ##
-      interest_receivable = 0.00
-      @active_loans.each do |active_loan|
-        settings = Settings.loan_products.select{ |o| o.loan_product_id == active_loan.loan_product_id }.first
-        interest_receivable_accounting_code = AccountingCode.find(settings.interest_receivable_accounting_code_id)
-        interest_receivable = active_loan.amortization_schedule_entries.where(
-                                "due_date <= ? AND is_paid IS NULL",
-                                @current_date
-                              ).sum(:interest_balance).round(2)
-
-        interest_receivable += interest_receivable
-      end
-
-      total_add_ons = @loan.principal - interest_receivable
-      per_payment   = (total_add_ons / result[:schedule].size).round(0)
 
       # Use the principal on second_result for setting principal
       result[:schedule].each_with_index do |o, i|
