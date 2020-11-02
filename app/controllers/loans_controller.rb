@@ -6,7 +6,7 @@ class LoansController < ApplicationController
                             .where("loans.branch_id IN (?)", @branches.pluck(:id))
 
     @q                = params[:q]
-    @status           = params[:status]
+    @status           = params[:status] || "active"
     @loan_product_id  = params[:loan_product_id]
     @branch_id        = params[:branch_id]
 
