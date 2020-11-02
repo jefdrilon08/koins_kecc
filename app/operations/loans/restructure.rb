@@ -196,6 +196,8 @@ module Loans
       total_addons  = @loan.principal - @principal
       per_payment   = (total_addons / result[:schedule].size).round(0)
 
+      buffer_principal  = 0.00
+
       # Use the principal on second_result for setting principal
       result[:schedule].each_with_index do |o, i|
         #principal   = o[:principal].to_f.round(2)
@@ -203,6 +205,8 @@ module Loans
         principal   = o[:principal].to_f.round(2) + per_payment
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
+
+        buffer_principal += principal
 
         @loan.amortization_schedule_entries.build(
           principal: principal,
@@ -216,6 +220,12 @@ module Loans
       end
 
       ### EQUALIZE ###
+      if buffer_principal > @loan.principal
+        diff = buffer_principal - @loan.principal
+
+        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal - diff
+        @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due - diff
+      end
 
       @loan.data[:accounting_entry] = accounting_entry_data
 
