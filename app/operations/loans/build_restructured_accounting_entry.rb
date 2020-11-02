@@ -20,7 +20,7 @@ module Loans
       @total_debit = 0.00
 
       if override_current_date.present?
-        @current_date = override_current_date
+        @current_date = override_current_date.try(:to_date)
       else
         @current_date = ::Utils::GetCurrentDate.new(
                           config: {
