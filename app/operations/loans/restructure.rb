@@ -210,9 +210,9 @@ module Loans
 
       # Use the principal on second_result for setting principal
       result[:schedule].each_with_index do |o, i|
-        principal   = o[:principal].to_f.round(2)
-        #principal   = second_result[:schedule][i][:principal].to_f.round(2)
-        principal   = o[:principal].to_f.round(2) + per_payment
+        #principal   = o[:principal].to_f.round(2)
+        principal   = second_result[:schedule][i][:principal].to_f.round(2)
+        #principal   = o[:principal].to_f.round(2) + per_payment
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
 
