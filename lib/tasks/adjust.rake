@@ -247,13 +247,13 @@ namespace :adjust do
       ActiveRecord::Base.connection.execute(query)
     end
 
-    puts "Rehashing branch..."
-    ::MemberAccounts::BulkRehash.new(
-      config: {
-        branch: branch
-      },
-      account_subtype: account_subtype
-    ).execute!
+    # puts "Rehashing branch..."
+    # ::MemberAccounts::BulkRehash.new(
+    #   config: {
+    #     branch: branch
+    #   },
+    #   account_subtype: account_subtype
+    # ).execute!
 
     puts "Done."
   end
