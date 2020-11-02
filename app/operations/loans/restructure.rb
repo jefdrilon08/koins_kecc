@@ -193,11 +193,14 @@ module Loans
         @loan.amortization_schedule_entries.delete_all
       end
 
+      total_addons  = @loan.principal - @principal
+      per_payment   = (total_addons / result[:schedule].size).round(0)
+
       # Use the principal on second_result for setting principal
       result[:schedule].each_with_index do |o, i|
         #principal   = o[:principal].to_f.round(2)
-        principal   = second_result[:schedule][i][:principal].to_f.round(2)
-        #principal   = o[:principal].to_f.round(2) + per_payment
+        #principal   = second_result[:schedule][i][:principal].to_f.round(2)
+        principal   = o[:principal].to_f.round(2) + per_payment
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
 
