@@ -118,14 +118,18 @@ module MemberAccountValidations
       # For equity interest
       w = ((@resignation_date.to_date - @equity_interest_implementation_date).to_i)/7
       if w >= 1
-        @equity_interest        = ::MemberAccountValidations::GenerateEquityInterest.new(
-                                          lif_member_account: @lif_member_account,
-                                          resignation_date: @resignation_date,
-                                          equity_interest_implementation_date: @equity_interest_implementation_date,
-                                          lif_current_balance: @lif_current_balance
-                                          ).execute!
-        #@equity_interest_amount = (@equity_interest[:equity_interest].last[:running_interest].to_f + @equity_interest[:weekly_interest].last[:running_interest].to_f).round(2)
-        @equity_interest_amount = @equity_interest[:equity_interest].last[:interest].to_f
+        # OLD CODE
+        # @equity_interest        = ::MemberAccountValidations::GenerateEquityInterest.new(
+        #                                   lif_member_account: @lif_member_account,
+        #                                   resignation_date: @resignation_date,
+        #                                   equity_interest_implementation_date: @equity_interest_implementation_date,
+        #                                   lif_current_balance: @lif_current_balance
+        #                                   ).execute!
+        # #@equity_interest_amount = (@equity_interest[:equity_interest].last[:running_interest].to_f + @equity_interest[:weekly_interest].last[:running_interest].to_f).round(2)
+        # @equity_interest_amount = @equity_interest[:equity_interest].last[:interest].to_f
+
+        # NEW CODE
+        @equity_interest_amount = ::MemberAccountValidations::ComputeEquityValueInterest.new(member_account: @lif_member_account, resignation_date: @resignation_date).execute!
       else
         @equity_interest_amount = 0.00
       end

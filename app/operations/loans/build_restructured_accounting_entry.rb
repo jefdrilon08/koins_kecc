@@ -2,7 +2,7 @@ module Loans
   class BuildRestructuredAccountingEntry
     attr_accessor :total_debit
 
-    def initialize(config:)
+    def initialize(config:, override_current_date: nil)
       @config       = config
       @loan         = @config[:loan]
       @member       = @config[:member]
@@ -19,11 +19,15 @@ module Loans
       # Single amount for debit entry computed in build_credit_journal_entries!
       @total_debit = 0.00
 
-      @current_date = ::Utils::GetCurrentDate.new(
-                        config: {
-                          branch: @branch
-                        }
-                      ).execute!
+      if override_current_date.present?
+        @current_date = override_current_date.try(:to_date)
+      else
+        @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
+      end
 
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
@@ -241,7 +245,11 @@ module Loans
         interest_receivable_accounting_code = AccountingCode.find(settings.interest_receivable_accounting_code_id)
 
         loans_receivable    = active_loan.principal_balance.round(2)
-        interest_receivable = active_loan.interest_balance.round(2)
+        #interest_receivable = active_loan.interest_balance.round(2)
+        interest_receivable = active_loan.amortization_schedule_entries.where(
+                                "due_date <= ? AND is_paid IS NULL",
+                                @current_date
+                              ).sum(:interest_balance).round(2)
 
         @total_debit += loans_receivable
         @total_debit += interest_receivable

@@ -10,8 +10,11 @@
 
     = stylesheet_pack_tag 'application', media: "all"
     = javascript_pack_tag 'application'
-    = favicon_link_tag "logo_thumb.png"
-
+    - if microinsurance?
+      = favicon_link_tag "kmba.ico"
+    - else
+      = favicon_link_tag "logo_thumb.png"
+      
   %body
     = yield
     = render partial: "templates/error_list"

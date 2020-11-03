@@ -55,6 +55,12 @@ class Claim < ApplicationRecord
     temp_data[:accounting_entry][:data][:payee]
   end
 
+  def note
+    data = self.data.with_indifferent_access
+
+    data[:note]
+  end
+
   def claims_template
     temp_data = self.data.with_indifferent_access 
 

@@ -1,6 +1,11 @@
 %table.table.table-sm.table-hover.table-bordered
   %thead
     %tr
+      - if microinsurance?
+        %th
+          Date Created
+        %th
+          Date Approved
       %th
         Collection Date
       %th
@@ -17,6 +22,19 @@
   %tbody
     - @insurance_fund_transfer_collections.each do |o|
       %tr
+        - if microinsurance?
+          %td
+            = link_to insurance_fund_transfer_collection_path(o) do
+              %strong
+                #{o.created_at.strftime("%b %d, %Y")}
+          - if !o.date_approved.nil?
+            %td
+              = link_to insurance_fund_transfer_collection_path(o) do
+                %strong
+                  #{o.date_approved.strftime("%b %d, %Y")}
+          - else
+            %td
+              =nil
         %td
           = link_to insurance_fund_transfer_collection_path(o) do
             %strong

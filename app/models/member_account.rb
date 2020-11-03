@@ -10,6 +10,21 @@ class MemberAccount < ApplicationRecord
 
   scope :time_deposits, -> { joins(:member).where("account_subtype = ?", "Time Deposit").order("members.last_name ASC") }
 
+
+  def to_hash
+    {
+      id: self.uuid,
+      member_id: self.member.uuid,
+      account_type: "INSURANCE",
+      account_subtype: self.insurance_type.to_s,
+      balance: self.balance,
+      center_id: self.member.center.uuid,
+      branch_id: self.member.branch.uuid,
+      status: self.status,
+      maintaining_balance: 0.00
+    }
+  end
+
   def savings?
     self.account_type == "SAVINGS"
   end

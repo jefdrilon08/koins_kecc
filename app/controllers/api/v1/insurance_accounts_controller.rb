@@ -1,15 +1,25 @@
 module Api
 	module V1
 		class InsuranceAccountsController < ApplicationController
-      def process_insurance_account_transactions_file
-        actual_url  = params[:actual_url]
+			def process_insurance_account_transactions_file
+				actual_url  = params[:actual_url]
 
-        ProcessInsuranceAccountTransactionsFile.perform_later({
-          actual_url: actual_url
-        })
+				ProcessInsuranceAccountTransactionsFile.perform_later({
+				  actual_url: actual_url
+				})
 
-        render json: { message: "ok" }
-      end
+				render json: { message: "ok" }
+			end
+
+			def process_member_accounts_file
+				actual_url  = params[:actual_url]
+
+				ProcessMemberAccountsFile.perform_later({
+				  actual_url: actual_url
+				})
+
+				render json: { message: "ok" }
+			end
 
 			def fetch_insurance_status
 				member_account = MemberAccount.find(params[:member_account_id])

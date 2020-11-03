@@ -19,24 +19,24 @@ branch_config:
 #north 3
   -
     id: "18cebed1-4838-4335-9023-ffd35c5e2629"  #BALIUAG
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"  #GUIGUINTO
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"  #PULILAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #north 2    
   -
     id: "3cccd843-3fa8-4693-b60c-dea2505c6b57"  #MEYCAUAYAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"  #MARILAO
     current_date: "2020-09-30"
   -
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 #north 1
   -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
@@ -77,21 +77,21 @@ branch_config:
     current_date: "2020-09-30"
   -
     id: "3503b976-d48c-4f88-b007-1534f228d194"  #TANDANGSORA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #central2
   -
     id: "797759bf-97f5-4daa-b036-19db59c24e04"  #CAMARIN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"  #NOVALICHES
     current_date: "2020-09-30"
   -
     id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"  #BAGONGSILANG
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"  #LAGRO
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #east3
 
@@ -100,21 +100,21 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "a181c1d0-6d41-4167-859b-30b2642bc891"  #BINANGONAN
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "63748cf0-1215-4078-afa5-b42525ad235d"  #CAINTA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #south1
   -
     id: "a2ce64a9-b61e-4d8b-b78c-3c1d11ce21fa"  #LASPINAS
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"  #PARANAQUE
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "48b949af-e682-43b2-a5d2-278cff5f4972"  #SANPEDRO
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
 
 #south2
   -
@@ -122,7 +122,7 @@ branch_config:
     #current_date: "2020-09-30"
   -
     id: "a0161335-a253-4237-9119-e912291c7d92"  #DASMA
-    current_date: "2020-09-30"
+    #current_date: "2020-09-30"
   -
     id: "6a8b4597-af32-4daa-8484-508ae8790f26"  #TRECEMARTIRES
     #current_date: "2020-09-30"
@@ -680,6 +680,12 @@ insurance_accounting_codes:
     insurance_type: "Retirement Fund"
     deposit_accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
     withdrawal_accounting_code_id: "5e6161d2-c5ef-4647-a10e-44b9d3bed5c3"
+  -
+    insurance_type: "Hospital Income Insurance Plan"
+    deposit_accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
+    withdrawal_accounting_code_id: ""
+
+
 
 savings_accounting_codes:
   -

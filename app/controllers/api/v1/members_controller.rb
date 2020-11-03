@@ -2,7 +2,7 @@ module Api
   module V1
     class MembersController < ApiController
       skip_before_action :verify_authenticity_token
-      before_action :authenticate_user!
+      before_action :authenticate_user!, except: [:process_members_file, :process_beneficiaries_file, :process_legal_dependents_file]
 
       def search
         q = params[:q]
@@ -506,7 +506,11 @@ module Api
       end
 
       def save
+        
+
         member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
+      
+
 
         config  = {
           member_data: member_data,
@@ -723,6 +727,35 @@ module Api
         end
       end
 
+      def process_members_file
+        actual_url  = params[:actual_url]
+
+        ProcessMembersFile.perform_later({
+          actual_url: actual_url
+        })
+
+        render json: { message: "ok" }
+      end
+
+      def process_beneficiaries_file
+        actual_url  = params[:actual_url]
+
+        ProcessBeneficiariesFile.perform_later({
+          actual_url: actual_url
+        })
+
+        render json: { message: "ok" }
+      end
+
+      def process_legal_dependents_file
+        actual_url  = params[:actual_url]
+
+        ProcessLegalDependentsFile.perform_later({
+          actual_url: actual_url
+        })
+
+        render json: { message: "ok" }
+      end
     end
   end
 end

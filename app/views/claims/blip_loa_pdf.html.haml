@@ -161,12 +161,17 @@
           /   %td{:width => "25%"}
           /     %u  
           /       &#8369;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+          - if @data["arrears"].to_f > 0
+            - @amount_payable = @data["face_amount"].to_f - (@data["arrears"].to_f / 2)  
+          - else
+            - @amount_payable = @data["face_amount"].to_f
           %tr
             %td{:width => "21%"}
               Amount Payable:
             %td{:width => "25%"}
               %u  
-                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &#8369;&nbsp;#{number_with_delimiter(number_with_precision(@amount_payable, precision: 2), delimiter: ",", separator: ".", unit: "")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           %tr
             %td{:width => "21%"}
               Beneficiary:
@@ -223,8 +228,8 @@
   .signatories
     %table{:border => "0"}
       %tr
-        %td{:width => "26%"}
-          Validated by: 
+        %td{style: "width:42%; height: 25px;"}
+          Prepared by: 
           %br
           %i DATE: #{@claim.date_prepared}
           %br
@@ -233,33 +238,31 @@
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{:width => "26%"}
+        %td{style: "width:42%; height: 25px;"}
           Checked by:
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.try(:date_checked)}
           %br
           %br
-          %u
-            #{@claim.checked_by}
+          - if @claim.checked_by.nil?
+            - if @claim.prepared_by == "Adrian San Andres" 
+              %u
+                Diobert Calanza
+            - else
+              %u
+                Adrian San Andres
+          - else
+            %u
+              #{@claim.checked_by}
           %br
           Account Officer
-        %td{:width => "27%"}
+        %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.try(:date_approved)}
           %br
           %br
           %u
-            #{@claim.approved_by}
+            Silvida R. Antiquera
           %br
-            KMBA - General Manager
-        %td{:width => "26%"}
-          Posted by:
-          %br
-          %i DATE: #{@claim.date_prepared}
-          %br
-          %br
-          %u
-            #{@claim.posted_by}
-          %br
-            Finance Manager
+          General Manager

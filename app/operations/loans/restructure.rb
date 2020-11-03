@@ -63,7 +63,8 @@ module Loans
       end
 
       # Set principal to be sum of active_loans balances
-      @principal  = (@active_loans.sum(:principal_balance) + @active_loans.sum(:interest_balance)).round(2)
+      #@principal  = (@active_loans.sum(:principal_balance) + @active_loans.sum(:interest_balance)).round(2)
+      @principal  = (@active_loans.sum(:principal_balance)).round(2)
     end
 
     def execute!
@@ -147,14 +148,16 @@ module Loans
                     book: @book,
                     loan: @loan,
                     active_loans: @active_loans
-                  }
+                  },
+                  override_current_date: @date_prepared
                 )
 
       accounting_entry_data = ae_cmd.execute!
       ###########################################################################
 
       # Set loan principal according to debit entry
-      @loan.principal = ae_cmd.total_debit
+      #@loan.principal = ae_cmd.total_debit
+      #@loan.principal = ae_cmd.total_debit
 
       params  = {
         principal: @loan.principal,
@@ -167,6 +170,19 @@ module Loans
                   params: params
                ).execute!
 
+      second_result = ::Finance::Amortize.new(
+                        params: {
+                          principal: ae_cmd.total_debit,
+                          annual_interest_rate: (@loan.monthly_interest_rate * 12),
+                          num_installments: @num_installments,
+                          term: @term
+                        }
+                      ).execute!
+
+      # Add the principal based on receivables
+      @loan.principal = ae_cmd.total_debit
+      #######################################
+
       @loan.principal_balance = @loan.principal
       @loan.interest_balance  = result[:interest]
       @loan.interest          = result[:interest]
@@ -177,10 +193,20 @@ module Loans
         @loan.amortization_schedule_entries.delete_all
       end
 
-      result[:schedule].each do |o|
-        principal   = o[:principal].to_f.round(2)
+      total_addons  = @loan.principal - @principal
+      per_payment   = (total_addons / result[:schedule].size).round(0)
+
+      buffer_principal  = 0.00
+
+      # Use the principal on second_result for setting principal
+      result[:schedule].each_with_index do |o, i|
+        #principal   = o[:principal].to_f.round(2)
+        #principal   = second_result[:schedule][i][:principal].to_f.round(2)
+        principal   = o[:principal].to_f.round(2) + per_payment
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
+
+        buffer_principal += principal
 
         @loan.amortization_schedule_entries.build(
           principal: principal,
@@ -191,6 +217,19 @@ module Loans
           interest_paid: 0.00,
           amount_due: amount_due
         )
+      end
+
+      ### EQUALIZE ###
+      if buffer_principal > @loan.principal
+        diff = buffer_principal - @loan.principal
+
+        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal - diff
+        @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due - diff
+      elsif buffer_principal < @loan.principal
+        diff = @loan.principal - buffer_principal
+
+        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal + diff
+        @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due + diff
       end
 
       @loan.data[:accounting_entry] = accounting_entry_data

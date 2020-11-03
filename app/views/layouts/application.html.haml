@@ -10,7 +10,10 @@
     %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
     = stylesheet_pack_tag 'application'
     = javascript_pack_tag 'application'
-    = favicon_link_tag "logo_thumb.png"
+    - if microinsurance?
+      = favicon_link_tag "kmba.ico"
+    - else
+      = favicon_link_tag "logo_thumb.png"
 
   %body.c-app
     = render partial: "shared/c_sidebar"

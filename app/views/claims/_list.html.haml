@@ -30,5 +30,15 @@
             = link_to edit_claim_path(claim) do
               %strong
                 #{claim.member.full_name}
-        %td
-          #{claim.status}
+        - if claim.status == "pending"
+          %td
+            for checking
+        - elsif claim.status == "for-approval"
+          %td
+            for approval
+        - elsif claim.status == "for-posting"
+          %td
+            for posting
+        - elsif claim.status == "approved"
+          %td
+            posted

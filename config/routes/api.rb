@@ -76,6 +76,9 @@ namespace :api do
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
     post "/members/delete_signature", to: "members#delete_signature"
     post "/members/register", to: "members#register"
+    get "/members/process_members_file", to: "members#process_members_file"
+    get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
+    get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
 
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
@@ -89,6 +92,7 @@ namespace :api do
     # 
     get "/insurance_accounts/fetch_insurance_status", to: "insurance_accounts#fetch_insurance_status"
     get "/insurance_accounts/process_insurance_account_transactions_file", to: "insurance_accounts#process_insurance_account_transactions_file"
+    get "/insurance_accounts/process_member_accounts_file", to: "insurance_accounts#process_member_accounts_file"
 
     # Accounting
     get "/accounting/fetch_trial_balance", to: "accounting#fetch_trial_balance"
@@ -358,6 +362,7 @@ namespace :api do
     post "/claims/create", to: "claims#create"
     post "/claims/approve", to: "claims#approve"
     post "/claims/post", to: "claims#post"
+    post "/claims/pending", to: "claims#pending"
     post "/claims/check", to: "claims#check"
     post "/claims/update", to: "claims#update"
     post "/claims/modify_claims_template", to: "claims#modify_claims_template"
@@ -366,5 +371,6 @@ namespace :api do
     post "/claims/save_payee", to: "claims#save_payee"
     post "/claims/save_check_number", to: "claims#save_check_number"
     post "/claims/save_check_voucher_number", to: "claims#save_check_voucher_number"
+    post "/claims/save_note", to: "claims#save_note"
   end
 end

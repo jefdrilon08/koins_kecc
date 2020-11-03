@@ -166,6 +166,17 @@ class ClaimsController < ApplicationController
 
     if params[:status].present?
       @status = params[:status]
+
+      if @status == "for checking"
+        @status = "pending"
+      elsif @status == "for approval"
+        @status = "for-approval"
+      elsif @status == "for posting"
+        @status = "for-posting"
+      elsif @status == "posted"
+        @status = "approved"  
+      end
+
       @claims = @claims.where(status: @status)
     end
   
@@ -205,13 +216,15 @@ class ClaimsController < ApplicationController
     if !@data.nil?
       @accounting_entry_data = @claim.data.with_indifferent_access[:accounting_entry]
     end
-    
-    @accounting_entry        = AccountingEntry.where(
+  
+    if !@accounting_entry_data.nil?
+      @accounting_entry        = AccountingEntry.where(
                                         reference_number: @claim.data.with_indifferent_access[:accounting_entry][:reference_number],
                                         book: @claim.data.with_indifferent_access[:accounting_entry][:book],
                                         branch_id: @claim.data.with_indifferent_access[:accounting_entry][:branch_id],
                                         particular: @claim.data.with_indifferent_access[:accounting_entry][:particular]
                                         ).first
+    end
 
     @subheader_items = [
       { 
@@ -235,12 +248,14 @@ class ClaimsController < ApplicationController
     @subheader_side_actions = []
 
     if @claim.pending?
-      @subheader_side_actions << {
+      if ["AO"].include? current_user.roles.last
+        @subheader_side_actions << {
           id: "btn-check",
           link: "#",
           class: "fa fa-check",
           text: " Check"
-      }
+        }
+      end
     end
 
     if @claim.for_approval?
@@ -251,6 +266,35 @@ class ClaimsController < ApplicationController
           class: "fa fa-check",
           text: "Approve"
         }
+      end
+
+      if ["MIS", "AO"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-pending",
+          link: "#",
+          class: "fa fa-undo",
+          text: "Revert Pending"
+        }
+      end
+    end
+
+    if @claim.pending?
+      if ["AO"].include? current_user.roles.last
+        if @claim.nil?  
+          @subheader_side_actions << {
+            id: "btn-note",
+            link: "#",
+            class: "fa fa-comments",
+            text: "Add Note"
+          }
+        else
+          @subheader_side_actions << {
+            id: "btn-note",
+            link: "#",
+            class: "fa fa-edit",
+            text:  "Edit Note"
+          }
+        end
       end
     end
 
@@ -281,18 +325,22 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end
     end
@@ -313,18 +361,22 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end
     end
@@ -345,18 +397,22 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end
     end
@@ -377,18 +433,22 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end
     end
@@ -409,18 +469,22 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end      
     end
@@ -440,18 +504,22 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end
     end
@@ -485,34 +553,40 @@ class ClaimsController < ApplicationController
         }
 
         if @claim.pending? || @claim.for_approval?
-          @subheader_side_actions << {
-            link: edit_claim_path(@claim),
-            class: "fa fa-edit",
-            text: "Edit"
-          }
+          if ["MIS", "AO"].include? current_user.roles.last
+            if @claim.pending?
+              @subheader_side_actions << {
+                link: edit_claim_path(@claim),
+                class: "fa fa-edit",
+                text: "Edit"
+              }
+            end
 
-          @subheader_side_actions << {
-            link: claim_path(@claim),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+            @subheader_side_actions << {
+              link: claim_path(@claim),
+              class: "fa fa-times",
+              data: { method: :delete, confirm: "Are you sure?" },
+              text: "Delete"
+            }
+          end
         end
       end
-    end
+    end    
 
     if @claim.approved?
       if ["MIS"].include? current_user.roles.last
-        @subheader_side_actions << {
-          id: "btn-print",
-          class: "fa fa-print",
-          link: "#",
-          text: "Print Voucher",
-          data: {
-            id: "#{@accounting_entry.id}",
-            cid: "#{@claim.id}",
+        if !@accounting_entry_data.nil?
+          @subheader_side_actions << {
+            id: "btn-print",
+            class: "fa fa-print",
+            link: "#",
+            text: "Print Voucher",
+            data: {
+              id: "#{@accounting_entry.id}",
+              cid: "#{@claim.id}",
+            }
           }
-        }
+        end
       end
     end
 

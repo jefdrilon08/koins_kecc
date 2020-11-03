@@ -3,7 +3,10 @@
     .c-icon.c-icon-lg
       .fa.fa-bars
   = link_to root_path, class: "c-header-brand d-lg-none c-header-brand-sm-up-center" do
-    = image_tag "logo.png", width: "89"
+    - if microinsurance?
+      = image_tag "kmba_logo.png", width: "89"
+    - else
+      = image_tag "logo.png", width: "89"
   %button.c-header-toggler.c-class-toggler.mfs-3.d-md-down-none{ data: { target: "#sidebar", class: "c-sidebar-lg-show" } }
     .c-icon.c-icon-lg
       .fa.fa-bars

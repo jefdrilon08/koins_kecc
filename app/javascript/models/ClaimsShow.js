@@ -3,10 +3,17 @@ import Mustache from "mustache/mustache";
 var $btnConfirmApprove;
 var $btnConfirmPost;
 var $btnConfirmCheck;
+var $btnConfirmPending;
+
+var $btnSaveNote;
 
 var $btnApprove;
 var $btnPost;
 var $btnCheck;
+var $btnPending;
+
+var $btnNote;
+var $inputNote;
 
 var $btnConfirmBook;
 
@@ -15,24 +22,32 @@ var $errorsTemplate;
 var urlApproveTransaction     = "/api/v1/claims/approve";
 var urlPostTransaction        = "/api/v1/claims/post";
 var urlCheckTransaction       = "/api/v1/claims/check";
+var urlPendingTransaction     = "/api/v1/claims/pending";
 var urlModifyClaimsTemplate   = "/api/v1/claims/modify_claims_template";
 var urlModifyBook             = "/api/v1/claims/modify_book";
 var urlModifyParticular       = "/api/v1/claims/modify_particular";
 var urlSaveCheckNumber        = "/api/v1/claims/save_check_number";
 var urlSaveCheckVoucherNumber = "/api/v1/claims/save_check_voucher_number";
 var urlSavePayee              = "/api/v1/claims/save_payee";
+var urlSaveNote               = "/api/v1/claims/save_note";
 
 var $modalApprove;
 var $modalCheck;
 var $modalPost;
+var $modalPending;
+
+var $modalNote;
+
 var $errors;
 var $errorsTemplate;
 var $modalErrorsApproval;
 var $modalErrorsChecking;
 var $modalErrorsPosting;
+var $modalErrorsPending;
 var $modalSuccessApproval;
 var $modalSuccessChecking;
 var $modalSuccessPosting;
+var $modalSuccessPending;
 var $modalControls;
 var $successTemplate;
 
@@ -104,6 +119,45 @@ var _bindEvents = function() {
           );
 
           $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  // Pending
+  $btnConfirmPending.on("click", function() {
+    $btnConfirmPending.prop("disabled", true);
+
+    $.ajax({
+      url: urlPendingTransaction,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: claimId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmPending.prop("disabled", false);
         }
       }
     });
@@ -458,9 +512,61 @@ var _bindEvents = function() {
     });
   });
 
+
+  $btnSaveNote.on("click", function() {
+    var note  = $inputNote.val();
+
+    $message.html("Loading...");
+
+    $inputNote.prop("disabled", true);
+    $btnSaveNote.prop("disabled", true);
+
+    $.ajax({
+      url: urlSaveNote,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        note: note,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputNote.prop("disabled", false);
+          $btnSaveNote.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   // check
   $btnCheck.on("click", function() {
     $modalCheck.modal("show");
+    $message.html("");
+  });
+
+  // Add note
+  $btnNote.on("click", function() {
+    $modalNote.modal("show");
     $message.html("");
   });
 
@@ -473,6 +579,12 @@ var _bindEvents = function() {
   // Post
   $btnPost.on("click", function() {
     $modalPost.modal("show");
+    $message.html("");
+  });
+
+  // Pending
+  $btnPending.on("click", function() {
+    $modalPending.modal("show");
     $message.html("");
   });
 
@@ -498,10 +610,17 @@ var _cacheDom = function() {
   $btnApprove                   = $("#btn-approve");
   $btnCheck                     = $("#btn-check");
   $btnPost                      = $("#btn-post");
+  $btnPending                   = $("#btn-pending");
+
+  $btnNote                      = $("#btn-note");
 
   $btnConfirmApprove            = $("#btn-confirm-approval");
   $btnConfirmCheck              = $("#btn-confirm-check");
   $btnConfirmPost               = $("#btn-confirm-posting");
+  $btnConfirmPending            = $("#btn-confirm-pending");
+
+  $btnSaveNote                  = $("#btn-save-note");
+  $inputNote                    = $("#input-note");
 
   $errors                       = $("#errors");
   $errorsTemplate               = $("#errors-template");
@@ -510,15 +629,20 @@ var _cacheDom = function() {
   $modalCheck                   = $("#modal-check-confirmation");
   $modalApprove                 = $("#modal-approve-confirmation");
   $modalPost                    = $("#modal-post-confirmation");
+  $modalPending                 = $("#modal-pending-confirmation");
+
+  $modalNote                    = $("#modal-note");
 
   
   $modalErrorsApproval          = $(".modal-approve").find(".errors");
   $modalErrorsChecking          = $(".modal-check").find(".errors");
   $modalErrorsPosting           = $(".modal-post").find(".errors");
+  $modalErrorsPending           = $(".modal-pending").find(".errors");
 
   $modalSuccessApproval         = $(".modal-approve").find(".success");
   $modalSuccessChecking         = $(".modal-check").find(".success");
   $modalSuccessPosting          = $(".modal-post").find(".success");
+  $modalSuccessPending          = $(".modal-pending").find(".success");
 
   $modalControls                = $(".modal-controls");
   $successTemplate              = $("#success-template");

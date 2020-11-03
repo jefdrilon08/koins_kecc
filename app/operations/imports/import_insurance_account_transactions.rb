@@ -7,7 +7,14 @@ module Imports
     end
 
     def execute!
-      @file       = URI.open(@actual_url)
+      @temp_file       = URI.open(@actual_url)
+
+      if @temp_file.is_a?(StringIO)
+        @file = Tempfile.new
+        File.write(@file.path, @temp_file.string)
+      else
+        @file = @temp_file
+      end
 
       ::Insurance::ImportInsuranceAccountTransactionsFromCsvFile.new(
         file: @file

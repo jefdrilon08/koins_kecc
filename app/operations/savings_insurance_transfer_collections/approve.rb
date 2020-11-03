@@ -20,13 +20,7 @@ module SavingsInsuranceTransferCollections
       post_accounting_entry!
       withdraw_funds!
       deposit_funds!
-
-      # Rehash accounts
-      ::MemberAccounts::BulkRehash.new(
-        config: {
-          branch: @branch
-        }
-      ).execute!
+      rehash_accounts!
 
       @savings_insurance_transfer_collection.update!(
         data: @data,
@@ -38,6 +32,9 @@ module SavingsInsuranceTransferCollections
     end
 
     private
+
+    def rehash_accounts!
+    end
 
     def post_accounting_entry!
       # Create new accounting entry
@@ -71,7 +68,7 @@ module SavingsInsuranceTransferCollections
       @accounting_entry
     end
 
-    def withdraw_funds!
+    def deposit_funds!
       values  = []
 
       @data[:records].each do |o|
@@ -104,6 +101,9 @@ module SavingsInsuranceTransferCollections
         }
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+
+        # TODO: Make this to DB trigger function
+        MemberAccount.find(insurance_account_id).update!(balance: insurance_account_new_balance)
       end
 
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
@@ -111,7 +111,7 @@ module SavingsInsuranceTransferCollections
       ActiveRecord::Base.connection.execute(query)
     end
 
-    def deposit_funds!
+    def withdraw_funds!
       values  = []
 
       @data[:records].each do |o|
@@ -144,6 +144,9 @@ module SavingsInsuranceTransferCollections
         }
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+
+        # TODO: Make this to DB trigger function
+        MemberAccount.find(savings_account_id).update!(balance: savings_account_new_balance)
       end
 
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"

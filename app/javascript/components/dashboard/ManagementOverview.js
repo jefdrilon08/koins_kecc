@@ -152,10 +152,10 @@ export default class ManagementOverview extends React.Component {
                   Pure Savers
                 </th>
                 <th className="text-center">
-                  Active Loaners
+                  Active Borrowers
                 </th>
                 <th className="text-center">
-                  Active Members
+                  Admitted Members
                 </th>
                 <th>
                   As Of (Member Count)

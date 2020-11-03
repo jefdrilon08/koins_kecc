@@ -68,11 +68,11 @@
                 .text-muted
                   #{accounting_entry[:data]["date_of_check"]}
             - if accounting_entry[:data]["payee"].present?
-              %br
-              %strong
-                Payee:
-              .text-muted
-                #{accounting_entry[:data]["payee"]}
+              .col
+                %strong
+                  Payee:
+                .text-muted
+                  #{accounting_entry[:data]["payee"]}
         %br
         .row
           .col

@@ -23,7 +23,7 @@
             - else
               %p
                 No image found
-    - if @claim.pending?  
+    - if @claim.pending? || @claim.for_approval?  
       = link_to edit_claim_claim_attachment_file_path(@claim, claim_attachment_file), class: 'btn btn-warning btn-sm' do
         .fa.fa-pencil-alt
         Edit

@@ -136,6 +136,10 @@ namespace :adjust do
       withdrawal_collections = withdrawal_collections.where(branch_id: ENV['BRANCH_ID'])
     end
 
+    if ENV['WITHDRAWAL_ID'].present?
+      withdrawal_collections = withdrawal_collections.where(id: ENV['WITHDRAWAL_ID'])
+    end    
+
     values = []
 
     withdrawal_collections.each do |wc|
@@ -243,13 +247,13 @@ namespace :adjust do
       ActiveRecord::Base.connection.execute(query)
     end
 
-    puts "Rehashing branch..."
-    ::MemberAccounts::BulkRehash.new(
-      config: {
-        branch: branch
-      },
-      account_subtype: account_subtype
-    ).execute!
+    # puts "Rehashing branch..."
+    # ::MemberAccounts::BulkRehash.new(
+    #   config: {
+    #     branch: branch
+    #   },
+    #   account_subtype: account_subtype
+    # ).execute!
 
     puts "Done."
   end
@@ -2117,6 +2121,7 @@ namespace :adjust do
     end
 
     member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+    transactions = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", member_accounts.ids, "approved")
 
     size = member_accounts.count
 
@@ -2124,7 +2129,7 @@ namespace :adjust do
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
 
-      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
+      last_transaction = transactions.where("subsidiary_id = ?", ma.id).order("transacted_at ASC").last   
         
       if !last_transaction.nil?  
         latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
@@ -2135,6 +2140,42 @@ namespace :adjust do
           else
             ma_data = ma.data.with_indifferent_access
             ma_data[:equity_value] = latest_ev_amount
+            ma.update!(data: ma_data)
+          end
+        end
+      end
+    end 
+
+    puts "\nDone!"
+  end
+
+  task :insert_equity_value_to_life_account_from_balance => :environment do
+    puts "Inserting ..."
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |ma, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
+    
+      balance = ma.balance.to_f
+
+      if balance > 0
+        if !ma.member_id.nil?
+          if ma.data.nil?
+            ma.data = { equity_value: balance / 2 }
+            ma.save!
+          else
+            ma_data = ma.data.with_indifferent_access
+            ma_data[:equity_value] = balance / 2
             ma.update!(data: ma_data)
           end
         end
@@ -2226,5 +2267,39 @@ namespace :adjust do
     claim.update!(data: claim_data)
       
     puts "Done"
+  end
+
+  task :insert_equity_value_interest => :environment do
+    puts "Inserting ..."
+
+    @start_date = nil
+    @end_date = nil
+
+    if ENV['START_DATE'].present? 
+      @start_date = ENV['START_DATE'].to_date
+    end
+
+    if ENV['END_DATE'].present? 
+      @end_date = ENV['END_DATE'].to_date
+    end
+
+    if ENV['BRANCH_ID'].present?
+      @branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      @branches = Branch.all  
+    end
+
+    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    size = member_accounts.count
+
+    member_accounts.each_with_index do |member_account, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Insreting for member account #{member_account.id}... #{progress}%%")
+
+      ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account, start_date: @start_date, end_date: @end_date).execute!
+    end 
+
+    puts "\nDone!"
   end
 end

@@ -13,6 +13,8 @@ class AccountTransaction < ApplicationRecord
 
   scope :approved_member_account_transactions, -> (subsidiary_id, as_of, types = ["deposit", "withdraw"]) { where("subsidiary_id = ? AND status = ? AND transaction_type IN (?) AND transacted_at <= ?", subsidiary_id, "approved", types, as_of).order("transacted_at ASC") }
 
+  has_many :equity_value_interests, dependent: :delete_all
+
   validates :amount, presence: true, numericality: true
 
   def deposit?
