@@ -140,17 +140,17 @@ module Reports
         record[:number_of_dependents] = number_of_dependents
         record[:value_dependents] = dependent_value
         record[:coverage_value] = value
-        record[:lif] = member.equity_value
-        record[:rf] = member.rf_amount
+        record[:lif] = member.try(:equity_value)
+        record[:rf] = member.try(:rf_amount)
         record[:status] = member.status
         record[:insurance_status] = member.insurance_status
         record[:identification_number] = member.identification_number
 
         @t_coverage += value
-        @t_lif += member.equity_value
-        @t_rf += member.rf_amount
+        @t_lif += member.try(:equity_value)
+        @t_rf += member.try(:rf_amount)
         @t_dependents += number_of_dependents
-        @t_dependents_value += dependent_value
+        @t_dependents_value += dependent_value.to_i
 
         
         @data[:records] << record
