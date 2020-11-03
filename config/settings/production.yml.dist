@@ -691,7 +691,7 @@ savings_accounting_codes:
   -
     savings_type: "K-IMPOK"
     deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    withdrawal_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
   -
     savings_type: "Golden K"
     deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
