@@ -148,7 +148,8 @@ module Loans
                     book: @book,
                     loan: @loan,
                     active_loans: @active_loans
-                  }
+                  },
+                  override_current_date: @date_prepared
                 )
 
       accounting_entry_data = ae_cmd.execute!
@@ -192,12 +193,20 @@ module Loans
         @loan.amortization_schedule_entries.delete_all
       end
 
+      total_addons  = @loan.principal - @principal
+      per_payment   = (total_addons / result[:schedule].size).round(0)
+
+      buffer_principal  = 0.00
+
       # Use the principal on second_result for setting principal
       result[:schedule].each_with_index do |o, i|
         #principal   = o[:principal].to_f.round(2)
-        principal   = second_result[:schedule][i][:principal].to_f.round(2)
+        #principal   = second_result[:schedule][i][:principal].to_f.round(2)
+        principal   = o[:principal].to_f.round(2) + per_payment
         interest    = o[:interest].to_f.round(2)
         amount_due  = (principal + interest).round(2)
+
+        buffer_principal += principal
 
         @loan.amortization_schedule_entries.build(
           principal: principal,
@@ -208,6 +217,19 @@ module Loans
           interest_paid: 0.00,
           amount_due: amount_due
         )
+      end
+
+      ### EQUALIZE ###
+      if buffer_principal > @loan.principal
+        diff = buffer_principal - @loan.principal
+
+        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal - diff
+        @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due - diff
+      elsif buffer_principal < @loan.principal
+        diff = @loan.principal - buffer_principal
+
+        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal + diff
+        @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due + diff
       end
 
       @loan.data[:accounting_entry] = accounting_entry_data

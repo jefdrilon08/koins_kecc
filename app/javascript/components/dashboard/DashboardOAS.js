@@ -2,9 +2,13 @@ import React from 'react';
 import $ from 'jquery';
 import Select from 'react-select';
 import Modal from 'react-modal';
-
+import Collapsible from 'react-collapsible';
 import SkCubeLoading from '../SkCubeLoading';
 import {numberAsPercent, numberWithCommas} from '../utils/helpers';
+import {Accordion, AccordionItem,AccordionItemHeading,AccordionItemButton,AccordionItemPanel}from 'react-accessible-accordion';
+
+
+
 
 const customStyles = {
   content : {
@@ -476,10 +480,14 @@ export default class DashboardOAS extends React.Component {
             </button>
           </Modal>
 
-          <h5>
-            Loan Cycle Count Summary
-          </h5>
-
+          <Accordion allowZeroExpanded>
+						<AccordionItem>
+							<AccordionItemHeading>
+								<AccordionItemButton>
+									Loan Cycle Count Summary
+								</AccordionItemButton>
+							</AccordionItemHeading>
+							<AccordionItemPanel>
           <div className="table-responsive">
             <table className="table table-bordered table-sm">
               <thead>
@@ -511,6 +519,9 @@ export default class DashboardOAS extends React.Component {
               </tfoot>
             </table>
           </div>
+					</AccordionItemPanel>
+					</AccordionItem>
+					</Accordion>
         </div>
       );
     }
@@ -636,6 +647,12 @@ export default class DashboardOAS extends React.Component {
   }
 
   renderCenters() {
+  const collapsible = {
+      backgroundColor: "#808080",
+      padding: "15px",
+      color: "white",
+      fontFamily: "sans-serif"
+  };
     var o = this.state.data.centers;
 
     if(this.state.isLoading) {
@@ -673,9 +690,14 @@ export default class DashboardOAS extends React.Component {
 
       return (
         <div>
-          <h5>
-            Center Meeting Days
-          </h5>
+          <Accordion allowZeroExpanded>
+            <AccordionItem>
+              <AccordionItemHeading>
+                <AccordionItemButton>
+                  Center Meeting
+                  </AccordionItemButton>
+                </AccordionItemHeading>
+              <AccordionItemPanel>
           <div className="table-responsive">
             <table className="table table-bordered table-sm table-hover">
               <thead>
@@ -699,6 +721,9 @@ export default class DashboardOAS extends React.Component {
               </tbody>
             </table>
           </div>
+        </AccordionItemPanel>
+      </AccordionItem>
+    </Accordion>
         </div>
       );
     }
