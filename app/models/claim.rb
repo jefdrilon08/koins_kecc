@@ -13,7 +13,7 @@ class Claim < ApplicationRecord
 
   belongs_to :branch
 	belongs_to :center
-	belongs_to :member
+	belongs_to :member, optional: true
 
   has_many :claim_attachment_files
 
