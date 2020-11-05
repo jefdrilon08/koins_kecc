@@ -26,12 +26,12 @@
           %td
             = link_to claim_path(claim) do
               %strong
-                #{claim.member.full_name}
+                #{claim.member.try(:full_name)}
         - else
           %td
             = link_to edit_claim_path(claim) do
               %strong
-                #{claim.member.full_name}
+                #{claim.member.try(:full_name)}
         - if claim.status == "pending"
           %td
             for checking
