@@ -48,7 +48,7 @@ class Member < ApplicationRecord
   has_many :member_accounts, dependent: :delete_all
   has_many :member_shares
   has_many :membership_payment_records
-  has_many :claims, dependent: :delete_all
+  has_many :claims
   has_many :clip_claims, dependent: :delete_all
   has_many :hiip_claims, dependent: :delete_all
   has_many :kbente_claims, dependent: :delete_all
@@ -56,7 +56,7 @@ class Member < ApplicationRecord
   has_many :calamity_claims, dependent: :delete_all
   has_many :kalinga_claims, dependent: :delete_all
   has_many :membership_payment_records
-  has_many :attachment_files
+  has_many :attachment_files, dependent: :delete_all
   has_many :member_account_validation_records
 
   # ActiveStorage
@@ -375,8 +375,85 @@ class Member < ApplicationRecord
     end
   end
 
-  
+  def to_v2_hash
+    data = self.data.with_indifferent_access
 
+    if !data[:resignation].nil?
+      r_type = data[:resignation][:type]
+      r_code = data[:resignation][:code]
+      r_reason = data[:resignation][:reason]
+      r_accounting_reference_number = data[:resignation][:accounting_reference_number]
+    else
+      r_type = nil
+      r_code = nil
+      r_reason = nil
+      r_accounting_reference_number = nil
+    end
+
+    {
+      id: self.id,
+      center_id: self.center.id,
+      branch_id: self.branch.id,
+      first_name: self.first_name,
+      middle_name: self.middle_name,
+      last_name: self.last_name,
+      gender: self.gender,
+      date_of_birth: self.date_of_birth,
+      civil_status: self.civil_status,
+      home_number: self.home_number,
+      mobile_number: self.mobile_number,
+      processed_by: self.processed_by,
+      approved_by: self.approved_by,
+      identification_number: self.identification_number,
+      place_of_birth: self.place_of_birth,
+      status: self.status,
+      member_type: self.member_type,
+      religion: self.religion.to_s,
+      insurance_status: self.insurance_status,
+      data: {
+        address: {
+          street: data[:address][:street],
+          district: data[:address][:district],
+          city: data[:address][:city]
+        },
+        spouse: {
+          first_name: data[:spouse][:first_name],
+          middle_name: data[:spouse][:middle_name],
+          last_name: data[:spouse][:last_name],
+          date_of_birth: data[:spouse][:date_of_birth],
+          occupation: data[:spouse][:occupation]
+        },
+        government_identification_numbers: {
+          sss_number: data[:government_identification_numbers][:sss_number],
+          pag_ibig_number: data[:government_identification_numbers][:pag_ibig_number],
+          phil_health_number: data[:government_identification_numbers][:phil_health_number],
+          tin_number: data[:government_identification_numbers][:tin_number]
+        },
+        num_children_elementary: data[:num_children_elementary] || 0,
+        num_children_high_school: data[:num_children_high_school] || 0,
+        num_children_college: data[:num_children_college] || 0,
+        num_children: data[:num_children] || 0,
+        reason_for_joining: data[:reason_for_joining],
+        housing: {
+          type: data[:housing][:type],
+          num_months: data[:housing][:num_months],
+          num_years: data[:housing][:num_years],
+          proof: data[:housing][:proof]
+        },
+        resignation: {
+          type: r_type,
+          code: r_code,
+          reason: r_reason,
+          accounting_reference_number: r_accounting_reference_number
+        },
+        is_experienced_with_microfinance: data[:is_experienced_with_microfinance],
+        recognition_date: data[:recognition_date]
+      },
+      date_resigned: self.date_resigned,
+      insurance_date_resigned: self.insurance_date_resigned,
+      meta: self.meta
+    }
+  end
 end
 
            

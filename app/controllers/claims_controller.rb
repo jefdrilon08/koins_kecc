@@ -249,23 +249,27 @@ class ClaimsController < ApplicationController
 
     if @claim.pending?
       if ["AO"].include? current_user.roles.last
-        @subheader_side_actions << {
-          id: "btn-check",
-          link: "#",
-          class: "fa fa-check",
-          text: " Check"
-        }
+        if ["Adrian", "Diobert"].include? current_user.first_name 
+          @subheader_side_actions << {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-check",
+            text: " Check"
+          }
+        end
       end
     end
 
     if @claim.for_approval?
       if ["MIS"].include? current_user.roles.last
-        @subheader_side_actions << {
-          id: "btn-approve",
-          link: "#",
-          class: "fa fa-check",
-          text: "Approve"
-        }
+        if ["Silvida"].include? current_user.first_name
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            text: "Approve"
+          }
+        end
       end
 
       if ["MIS", "AO"].include? current_user.roles.last
@@ -300,12 +304,14 @@ class ClaimsController < ApplicationController
 
     if @claim.for_posting?
       if ["MIS"].include? current_user.roles.last
-        @subheader_side_actions << {
-          id: "btn-post",
-          link: "#",
-          class: "fa fa-check",
-          text: "Post"
-        }
+        if ["Evelyn"].include? current_user.first_name
+          @subheader_side_actions << {
+            id: "btn-post",
+            link: "#",
+            class: "fa fa-check",
+            text: "Post"
+          }
+        end  
       end
     end
 

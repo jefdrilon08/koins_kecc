@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_054119) do
+ActiveRecord::Schema.define(version: 2020_11_03_074915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -974,7 +974,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_054119) do
   add_foreign_key "claim_attachment_files", "claims"
   add_foreign_key "claims", "branches"
   add_foreign_key "claims", "centers"
-  add_foreign_key "claims", "members"
   add_foreign_key "clip_claims", "branches"
   add_foreign_key "clip_claims", "centers"
   add_foreign_key "clip_claims", "members"

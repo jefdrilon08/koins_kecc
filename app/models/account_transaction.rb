@@ -32,4 +32,30 @@ class AccountTransaction < ApplicationRecord
   def withdraw_ev?
     self.transaction_type == "withdraw" and self.data.with_indifferent_access[:is_withdraw_ev] == true
   end
+
+  def to_v2_hash
+    data = self.data.with_indifferent_access
+
+    {
+      id: self.id,
+      subsidiary_id: self.subsidiary_id,
+      subsidiary_type: "MemberAccount",
+      amount: self.amount,
+      transaction_type: self.transaction_type,
+      transacted_at: self.transacted_at,
+      status: self.status,
+      data: {
+        is_withdraw_payment: data[:is_withdraw_payment],
+        is_fund_transfer: data[:is_fund_transfer],
+        is_interest: data[:is_interest],
+        is_adjustment: data[:is_adjustment],
+        is_for_exit_age: data[:is_for_exit_age],
+        is_for_loan_payments: data[:is_for_loan_payments],
+        accounting_entry_reference_number: data[:accounting_entry_reference_number],
+        accounting_entry_particular: data[:accounting_entry_particular],
+        beginning_balance: data[:beginning_balance],
+        ending_balance: data[:ending_balance]
+      }
+    }
+  end
 end
