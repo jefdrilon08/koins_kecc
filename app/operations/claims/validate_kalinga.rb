@@ -87,7 +87,7 @@ module Claims
         @errors << "Gender field is required"
       end
 
-      if Date.today.to_date > @expiration_date.to_date
+      if @date_of_death_or_incident.to_date > @expiration_date.to_date
         @errors << "Expired KALINGA!"
       end
 

@@ -76,11 +76,11 @@ class InsuranceAccountsController < ApplicationController
         text: "#{@insurance_account.account_subtype}"
       }
     ]
-    if @insurance_account.account_subtype == "K-Kalinga" || @insurance_account.account_subtype == "K-20"
-      @subheader_items << {
-        is_link: false,
-      }
-    end
+    # if @insurance_account.account_subtype == "K-Kalinga" || @insurance_account.account_subtype == "K-20"
+    #   @subheader_items << {
+    #     is_link: false,
+    #   }
+    # end
 
     if @insurance_account.account_subtype == "Retirement Fund" || @insurance_account.account_subtype == "Life Insurance Fund" || @insurance_account.account_subtype == " Credit Life Insurance Plan" || @insurance_account.account_subtype == "Hospital Income Insurance Plan" || @insurance_account.account_subtype == "Policy Loan"
         @subheader_items << {
