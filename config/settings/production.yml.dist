@@ -5195,8 +5195,8 @@ loan_product_accounting_codes:
     loan_product_id: "8614b439-f27a-4853-b41d-e601889bbe4c"                         # K - Bisikleta
     receivable_accounting_code_id: "72cfb840-49d1-4d0d-ac37-21b022f41ad4"
     interest_receivable_accounting_code_id: "5a9a7396-6aa6-4122-b3ef-a0eeaad257d4"
-	-
-		loan_product_id: "cc31d1f6-b448-4bf4-854b-41cb08efacdc"                         # K - Motorsiklo 
+  -
+    loan_product_id: "cc31d1f6-b448-4bf4-854b-41cb08efacdc"                         # K - Motorsiklo 
     receivable_accounting_code_id: "dfbeb48e-b310-4611-adae-07c2416d259f"
     interest_receivable_accounting_code_id: "dcf6ea3c-f357-414a-ab7f-8cf9620a22f8"
 
