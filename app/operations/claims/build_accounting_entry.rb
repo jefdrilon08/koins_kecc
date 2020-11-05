@@ -125,7 +125,7 @@ module Claims
           end
         end
       elsif @claim.clip?
-        particular = "CLIP claim of #{@claim.member.full_name}, payable to #{@claim_data[:beneciary]} for #{@claim_data[:type_of_loan]} : #{@claim_data[:amount]} amount payble to beneciary , #{@claim_data[:amount_payable_to_creditor]} amount payable to #{@claim_data[:creditors_name]}"
+        particular = "CLIP claim of #{@claim.member.full_name}, payable to #{@claim_data[:beneficiary]} for #{@claim_data[:type_of_loan]} : #{@claim_data[:amount]} amount payable to beneficiary , #{@claim_data[:amount_payable_to_creditor]} amount payable to #{@claim_data[:creditors_name]}"
       elsif @claim.hiip?
         particular = "HIIP claim of #{@claim.member.full_name} from #{branch.name}"
       elsif @claim.kbente?
