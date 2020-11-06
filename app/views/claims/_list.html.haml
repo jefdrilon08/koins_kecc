@@ -26,12 +26,24 @@
           %td
             = link_to claim_path(claim) do
               %strong
-                #{claim.member.try(:full_name)}
+                - if claim.kalinga?
+                  - if claim.member.check_name == claim.data.with_indifferent_access[:name_of_insured]
+                    #{claim.member.try(:full_name)}
+                  - else
+                    #{claim.member.try(:full_name)} (#{claim.data.with_indifferent_access[:name_of_insured].try(:titleize)})
+                - else
+                  #{claim.member.try(:full_name)}
         - else
           %td
             = link_to edit_claim_path(claim) do
               %strong
-                #{claim.member.try(:full_name)}
+                - if claim.kalinga?
+                  - if claim.member.check_name == claim.data.with_indifferent_access[:name_of_insured]
+                    #{claim.member.try(:full_name)}
+                  - else
+                    #{claim.member.try(:full_name)} (#{claim.data.with_indifferent_access[:name_of_insured].try(:titleize)})
+                - else
+                  #{claim.member.try(:full_name)}
         - if claim.status == "pending"
           %td
             for checking
