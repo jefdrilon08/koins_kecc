@@ -11,6 +11,13 @@ module DepositCollections
       end
 
       @data   = @config[:data].with_indifferent_access
+      
+      if @data[:accounting_entry][:accounting_fund_id].present?
+        @accounting_fund_id = @data[:accounting_entry][:accounting_fund_id]
+      else
+        @accounting_fund_id = ""
+      end
+
       @user   = @config[:user]
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
 
@@ -27,7 +34,7 @@ module DepositCollections
         journal_entries: [],
         branch_id: @branch.id,
         branch_name: @branch.name,
-        accounting_fund_id: "",
+        accounting_fund_id: @accounting_fund_id,
         status: "display",
         data: {
           or_number: "",
@@ -88,6 +95,19 @@ module DepositCollections
       journal_entries = []
 
       accounting_code = AccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
+      
+      if @data[:cash_management_template].present?
+        Settings.cash_management_templates.each do |template|
+          if template.name == @data[:cash_management_template]
+            template.insurance_accounting_codes.each do |a|
+              if a.dr_accounting_code_id.present?
+                accounting_code = AccountingCode.find(a.dr_accounting_code_id)
+              end
+            end
+          end
+        end
+      end
+
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,
