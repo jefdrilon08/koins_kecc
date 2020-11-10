@@ -670,22 +670,24 @@ export default class DashboardOAS extends React.Component {
       var centers       = this.state.data.centers.centers;
 
       for(var i = 0; i < centers.length; i++) {
-        centerRecords.push(
-          <tr key={"center-meeting-day-" + i}>
-            <td>
-              {centers[i].name}
-            </td>
-            <td>
-              {centers[i].officer.last_name}, {centers[i].officer.first_name}
-            </td>
-            <td className="text-center">
-              {centers[i].active_count} | {centers[i].pending_count}
-            </td>
-            <td>
-              {centers[i].meeting_day_display}
-            </td>
-          </tr>
-        );
+        if(centers[i].active_count >= 1) {
+          centerRecords.push(
+            <tr key={"center-meeting-day-" + i}>
+              <td>
+                {centers[i].name}
+              </td>
+              <td>
+                {centers[i].officer.last_name}, {centers[i].officer.first_name}
+              </td>
+              <td className="text-center">
+                {centers[i].active_count} | {centers[i].pending_count}
+              </td>
+              <td>
+                {centers[i].meeting_day_display} 
+              </td>
+            </tr>
+          );
+        }
       }
 
       return (

@@ -14,18 +14,28 @@ module Claims
       elsif @claim.for_posting?
         @status = "For Posting"
       end
+
+      if @claim.kalinga?
+        if @claim.member.check_name == @claim.data.with_indifferent_access[:name_of_insured]
+          @member = @claim.member.try(:full_name)
+        else
+          @member = @claim.member.try(:full_name) + " (" + (@claim.data.with_indifferent_access[:name_of_insured].try(:titleize)) + ")"
+        end
+      else
+        @member = @claim.member.try(:full_name)
+      end
     end
 
     def execute!
       ActiveRecord::Base.transaction do
         from    = Email.new(email: "kmbakoins2020@gmail.com")
         to      = Email.new(email: @email_address)
-        subject = "KMBA / CLAIMS / #{@claim.claim_type} / #{@status.upcase} / #{@claim.member.full_name} / #{@claim.branch.name.upcase}"
+        subject = "KMBA / CLAIMS / #{@claim.claim_type} / #{@status.try(:upcase)} / #{@member} / #{@claim.branch.name.try(:upcase)}"
         content = Content.new(
                     type: "text/html",
                     value: "Claims #{@status.downcase}. Click the link below.
                             <br />
-                            Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@claim.member.full_name_titleize} - #{@status}</a>
+                            Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@member} - #{@status}</a>
                             "
                   )
 

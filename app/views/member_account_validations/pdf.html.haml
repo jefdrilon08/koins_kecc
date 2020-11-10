@@ -82,12 +82,12 @@
       %p
         .pull-left
           %b
-            #{"(#{@accounting_entry.id})" if current_user.roles.last == "MIS"} | #{@accounting_entry.book} | Ref No.: #{@accounting_entry.reference_number}
-            - if @accounting_entry.accounting_fund and @accounting_entry.data.with_indifferent_access[:sub_reference_number]
+            #{"(#{@accounting_entry.try(:id)})" if current_user.roles.last == "MIS"} | #{@accounting_entry.try(:book)} | Ref No.: #{@accounting_entry.try(:reference_number)}
+            - if @accounting_entry.try(:accounting_fund) and @accounting_entry.data.with_indifferent_access[:sub_reference_number]
               |
-              #{@accounting_entry.accounting_fund} | #{@accounting_entry.data.with_indifferent_access[:sub_reference_number]} 
+              #{@accounting_entry.try(:accounting_fund)} | #{@accounting_entry.data.with_indifferent_access[:sub_reference_number]} 
             .float-right
-              = @accounting_entry.date_prepared.strftime("%B %d, %Y") if !@accounting_entry.date_prepared.nil?
+              = @accounting_entry.try(:date_prepared).strftime("%B %d, %Y") if !@accounting_entry.try(:date_prepared).nil?
               |
               Approved By: #{@accounting_entry.approved_by}
       %table.accounting_entry{"border:" => "", :none => ""}
