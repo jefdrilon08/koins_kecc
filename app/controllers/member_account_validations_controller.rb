@@ -162,9 +162,7 @@ class MemberAccountValidationsController < ApplicationController
     if @member_account_validation.approved?
       @accounting_entry = AccountingEntry.where(
                                         reference_number: @member_account_validation.reference_number,
-                                        book: @member_account_validation.data.with_indifferent_access[:accounting_entry][:book],
-                                        branch_id: @member_account_validation.data.with_indifferent_access[:accounting_entry][:branch_id],
-                                        date_posted: @member_account_validation.date_approved
+                                        particular: @member_account_validation.data.with_indifferent_access[:accounting_entry][:particular]
                                         ).first
     else
       @accounting_entry = @member_account_validation.data.with_indifferent_access[:accounting_entry]
