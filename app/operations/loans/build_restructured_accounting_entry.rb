@@ -19,6 +19,7 @@ module Loans
       # Single amount for debit entry computed in build_credit_journal_entries!
       @total_debit = 0.00
       @tot_gpf_amount= 0.00
+      @ttl_amount = 0.00
       if override_current_date.present?
         @current_date = override_current_date.try(:to_date)
       else
@@ -245,12 +246,22 @@ module Loans
         interest_receivable_accounting_code = AccountingCode.find(settings.interest_receivable_accounting_code_id)
         
         #GPF
-        data                                = active_loan.data.with_indifferent_access
-        gpf                                 = data[:accounting_entry][:credit_journal_entries][0]
+        a_data                                = active_loan.data.with_indifferent_access
         
-        if gpf["accounting_code_id"] == "22f6ac03-ab97-4472-ad41-9a894a672e30"
-            @tot_gpf_amount += gpf["amount"].to_f.round(2)
+        if  c=a_data[:accounting_entry][:credit_journal_entries] != nil
+            a_gpf= a_data[:accounting_entry][:credit_journal_entries]
+              if cr= a_gpf.find{ |h1| h1['accounting_code_id']== '22f6ac03-ab97-4472-ad41-9a894a672e30'} == nil             
+              #raise "walang laman".inspect
+              @tot_gpf_amount += 0.00
+              else
+              amount= a_gpf.find{ |h1| h1['accounting_code_id']== '22f6ac03-ab97-4472-ad41-9a894a672e30'}['amount']
+              #raise "may laman".inspect
+              @tot_gpf_amount += amount.to_f.round(2)
+              end
+        else
+            @tot_gpf_amount += 0.00
         end
+        
         #endGPF
 
         loans_receivable    = active_loan.principal_balance.round(2)
@@ -260,11 +271,12 @@ module Loans
                                 @current_date
                               ).sum(:interest_balance).round(2)
         
+        #raise @tot_gpf_amount.to_f.round(2).inspect
+        @total_debit    += loans_receivable
+        @total_debit    += interest_receivable
+        #@tot_gpf_amount += amount.to_f.round(2)
+        @ttl_amount       = @total_debit            #GK loan recievable + interest income
         
-        @total_debit += loans_receivable
-        @total_debit += interest_receivable
-        @ttl_amount = @total_debit + @tot_gpf_amount #GK 
-        #raise @ttl_amount.to_f.round(2).inspect
         if loans_receivable > 0
           journal_entries << {
             accounting_code_id: receivable_accounting_code.id,
@@ -447,22 +459,23 @@ module Loans
               if  s_deduction.use_for_special_loan_fund == "true"
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
+                      #raise @ttl_amount.to_f.round(2).inspect
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @ttl_amount).round(2)
+                      amount  = (s.ratio * (@ttl_amount + @tot_gpf_amount)).round(2)
                       #amount = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @ttl_amount).round(2)
+                      amount  = (s.ratio * (@ttl_amount + @tot_gpf_amount)).round(2)
                       #amount = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @tt_amount).round(2)
+                      amount  = (s.ratio * (@tt_amount + @tot_gpf_amount)).round(2)
                       #amount = (s.ratio * @amount).round(2)
                     end
                   end
