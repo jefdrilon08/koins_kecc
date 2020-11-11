@@ -30,18 +30,19 @@ module Insurance
       @num_days_insured   = (@latest_transaction_date.to_date  - @start_date).to_i
       @num_weeks_insured  = (@num_days_insured / 7).to_i
 
-      @data[:start_date]        = @start_date.strftime("%B %d, %Y")
-      @data[:length_of_membership]  = (@current_date - @start_date).to_i
-      @data[:current_date]      = @current_date.strftime("%B %d, %Y")
-      @data[:last_trans_date]   = @latest_transaction_date.strftime("%B %d, %Y")
-      @data[:num_weeks]         = @num_weeks
-      @data[:insured_amount]    = @num_weeks  * @data[:default_periodic_payment]
-      @data[:periodic_payment]  = @default_periodic_payment
-      @data[:current_balance]   = @current_balance
-      @data[:status]            = nil
-      @data[:coverage_date]     = (@start_date + (@current_balance.to_i / @data[:default_periodic_payment].to_i).weeks).strftime("%B %d, %Y")
-      @data[:amt_past_due]      = (@current_balance - @data[:insured_amount]) * -1
-      @data[:num_weeks_past_due]  = (@data[:amt_past_due] / @data[:default_periodic_payment]).to_i
+      @data[:start_date]            = @start_date.strftime("%B %d, %Y")
+      #@data[:length_of_membership] = (@current_date - @start_date).to_i
+      @data[:length_of_membership]  = @insurance_account.member.length_of_stay.titleize 
+      @data[:current_date]          = @current_date.strftime("%B %d, %Y")
+      @data[:last_trans_date]       = @latest_transaction_date.strftime("%B %d, %Y")
+      @data[:num_weeks]             = @num_weeks
+      @data[:insured_amount]        = @num_weeks  * @data[:default_periodic_payment]
+      @data[:periodic_payment]      = @default_periodic_payment
+      @data[:current_balance]       = @current_balance
+      @data[:status]                = nil
+      @data[:coverage_date]         = (@start_date + (@current_balance.to_i / @data[:default_periodic_payment].to_i).weeks).strftime("%B %d, %Y")
+      @data[:amt_past_due]          = (@current_balance - @data[:insured_amount]) * -1
+      @data[:num_weeks_past_due]    = (@data[:amt_past_due] / @data[:default_periodic_payment]).to_i
 
       @days_lapsed = (@current_date - @latest_transaction_date).to_i
 

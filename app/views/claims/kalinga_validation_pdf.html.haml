@@ -53,7 +53,7 @@
       %br
       %b
         DATE:&nbsp;&nbsp;&nbsp;&nbsp;
-      #{Time.now.strftime("%Y-%m-%d %H:%M:%S")}
+      #{Time.now.strftime("%b %d, %Y %H:%M:%S")}
       %hr
     .body1
       %p
@@ -207,7 +207,7 @@
         %td{style: "width:42%; height: 25px;"}
           Prepared by: 
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.date_prepared.strftime("%b %d, %Y")}
           %br
           %br
           %u
@@ -217,7 +217,8 @@
         %td{style: "width:42%; height: 25px;"}
           Checked by:
           %br
-          %i DATE: #{@claim.try(:date_checked)}
+          - if !@claim.date_checked.nil?
+            %i DATE: #{@claim.try(:date_checked).strftime("%b %d, %Y")}
           %br
           %br
           - if @claim.checked_by.nil?
@@ -235,7 +236,8 @@
         %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br
-          %i DATE: #{@claim.try(:date_approved)}
+          - if !@claim.date_approved.nil?
+            %i DATE: #{@claim.try(:date_approved).strftime("%b %d, %Y")}
           %br
           %br
           %u

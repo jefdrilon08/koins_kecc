@@ -38,9 +38,9 @@
     = image_tag("kmba.ico", :alt => "kmba img", id: "kmba")
   %br
     - if !@claim.date_reported.nil?
-      #{@claim.date_reported}
+      #{@claim.date_reported.strftime("%b %d, %Y")}
     - else
-      #{@claim.date_prepared}
+      #{@claim.date_prepared.strftime("%b %d, %Y")}
   %left
     - if @cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b" 
       %p
@@ -223,7 +223,7 @@
         %td{style: "width:42%; height: 25px;"}
           Prepared by: 
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.date_prepared.strftime("%b %d, %Y")}
           %br
           %br
           %u
@@ -233,7 +233,8 @@
         %td{style: "width:42%; height: 25px;"}
           Checked by:
           %br
-          %i DATE: #{@claim.try(:date_checked)}
+          - if !@claim.date_checked.nil?
+            %i DATE: #{@claim.try(:date_checked).strftime("%b %d, %Y")}
           %br
           %br
           - if @claim.checked_by.nil?
@@ -251,7 +252,8 @@
         %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br
-          %i DATE: #{@claim.try(:date_approved)}
+          - if !@claim.date_approved.nil?
+            %i DATE: #{@claim.try(:date_approved).strftime("%b %d, %Y")}
           %br
           %br
           %u

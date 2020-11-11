@@ -48,10 +48,10 @@
       %b
         DATE:&nbsp;&nbsp;&nbsp;&nbsp
       - if !@claim.date_reported.nil?
-        #{@claim.date_reported}
+        #{@claim.date_reported.strftime("%b %d, %Y")}
         #{Time.now.strftime("%H:%M:%S")}
       - else
-        #{@claim.date_prepared}
+        #{@claim.date_prepared.strftime("%b %d, %Y")}
         #{Time.now.strftime("%H:%M:%S")}
       %hr
     .body1
@@ -93,7 +93,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.date_of_policy_issue}
+                #{@claim.date_of_policy_issue.strftime("%b %d, %Y")}
           %td{:width => "28%"}
             [] Death Certificate
         %tr
@@ -151,7 +151,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.date_of_birth}
+                #{@claim.date_of_birth.strftime("%b %d, %Y")}
           %td{:width => "28%"}
             [] Medical Certificate         
         %tr
@@ -214,7 +214,7 @@
           %td{:width => "25%"}
             %b
               %u  
-                #{@claim.date_of_death_tpd_accident}
+                #{@claim.date_of_death_tpd_accident.strftime("%b %d, %Y")}
           %td{:width => "28%"}
         %tr
           %td{:width => "21%"}
@@ -238,7 +238,7 @@
         %td{style: "width:42%; height: 25px;"}
           Prepared by: 
           %br
-          %i DATE: #{@claim.date_prepared}
+          %i DATE: #{@claim.date_prepared.strftime("%b %d, %Y")}
           %br
           %br
           %u
@@ -248,7 +248,8 @@
         %td{style: "width:42%; height: 25px;"}
           Checked by:
           %br
-          %i DATE: #{@claim.try(:date_checked)}
+          - if !@claim.date_checked.nil?
+            %i DATE: #{@claim.try(:date_checked).strftime("%b %d, %Y")}
           %br
           %br
           - if @claim.checked_by.nil?
@@ -266,7 +267,8 @@
         %td{style: "width:40%; height: 25px;"}
           Approved by:
           %br
-          %i DATE: #{@claim.try(:date_approved)}
+          - if !@claim.date_approved.nil?
+            %i DATE: #{@claim.try(:date_approved).strftime("%b %d, %Y")}
           %br
           %br
           %u
