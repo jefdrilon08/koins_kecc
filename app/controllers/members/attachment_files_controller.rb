@@ -24,7 +24,7 @@ module Members
       @attachment_file.member = @member
 
       if @attachment_file.save
-        flash[:success] = "Successfully created claim"
+        flash[:success] = "Successfully created attachment file"
         redirect_to member_path(@member)
       else
         @subheader_items = [

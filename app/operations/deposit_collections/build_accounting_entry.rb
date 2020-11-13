@@ -11,11 +11,13 @@ module DepositCollections
       end
 
       @data   = @config[:data].with_indifferent_access
+        
+      @accounting_fund_id = ""
       
-      if @data[:accounting_entry][:accounting_fund_id].present?
-        @accounting_fund_id = @data[:accounting_entry][:accounting_fund_id]
-      else
-        @accounting_fund_id = ""
+      if !@data[:accounting_entry].nil?
+        if @data[:accounting_entry][:accounting_fund_id].present?
+          @accounting_fund_id = @data[:accounting_entry][:accounting_fund_id]
+        end
       end
 
       @user   = @config[:user]

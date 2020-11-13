@@ -18,7 +18,7 @@ module Loans
 
       # Single amount for debit entry computed in build_credit_journal_entries!
       @total_debit = 0.00
-
+      @ttl_amount = 0.00
       if override_current_date.present?
         @current_date = override_current_date.try(:to_date)
       else
@@ -222,7 +222,7 @@ module Loans
         code            = accounting_code.code
         name            = accounting_code.name
         amount          = @miscellaneous_offset.abs
-
+        
         journal_entries << {
           accounting_code_id: accounting_code.id,
           code: code,
@@ -243,17 +243,19 @@ module Loans
 
         receivable_accounting_code          = AccountingCode.find(settings.receivable_accounting_code_id)
         interest_receivable_accounting_code = AccountingCode.find(settings.interest_receivable_accounting_code_id)
-
+        
         loans_receivable    = active_loan.principal_balance.round(2)
         #interest_receivable = active_loan.interest_balance.round(2)
         interest_receivable = active_loan.amortization_schedule_entries.where(
                                 "due_date <= ? AND is_paid IS NULL",
                                 @current_date
                               ).sum(:interest_balance).round(2)
-
-        @total_debit += loans_receivable
-        @total_debit += interest_receivable
-
+        
+        
+        @total_debit    += loans_receivable
+        @total_debit    += interest_receivable
+        @ttl_amount       = @total_debit            #GK loan recievable + interest income
+        
         if loans_receivable > 0
           journal_entries << {
             accounting_code_id: receivable_accounting_code.id,
@@ -402,7 +404,8 @@ module Loans
                   if s.num_installments == @num_installments
                   
                     amount  = (s.ratio * @amount).round(2)
-                  end
+                 
+                 end
                 end
               elsif @term == "monthly"
                 s_deduction.meta.term_map.monthly.each do |s|
@@ -435,20 +438,24 @@ module Loans
               if  s_deduction.use_for_special_loan_fund == "true"
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
+                     # raise @ttl_amount.to_f.round(2).inspect
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * @ttl_amount).to_f.round
+                      #amount = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * @ttl_amount).to_f.round
+                      #amount = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                      amount  = (s.ratio * @tt_amount).to_f.round
+                      #amount = (s.ratio * @amount).round(2)
                     end
                   end
                 else

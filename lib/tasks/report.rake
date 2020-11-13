@@ -7,7 +7,8 @@ namespace :report do
     puts "NAME|CENTER|DATE OF BIRTH|AGE|GENDER"
     member.each do |mem|
       puts "#{mem.full_name}|#{mem.center}|#{mem.date_of_birth}|#{mem.age}|#{mem.gender}"  
-    end
+
+  end
     
     
   end
