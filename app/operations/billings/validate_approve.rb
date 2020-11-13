@@ -39,19 +39,19 @@ module Billings
               }
             end
 
-            if rec[:amount] > 0 and !MemberAccountValidationRecord.where(status: "pending", member_id: member.id).nil?
-              @errors[:messages] << {
-                key: "validation",
-                message: "#{member.full_name}, has pending RF validation!"
-              }
-            end  
+            #if rec[:amount] > 0 and !MemberAccountValidationRecord.where(status: "pending", member_id: member.id).nil?
+            #@errors[:messages] << {
+            #key: "validation",
+            #message: "#{member.full_name}, has pending RF validation!"
+            #}
+            #end  
 
-            if rec[:amount] > 0 and !MemberAccountValidationRecord.where(status: "approved", member_id: member.id).nil?
-              @errors[:messages] << {
-                key: "validation",
+            #if rec[:amount] > 0 and !MemberAccountValidationRecord.where(status: "approved", member_id: member.id).nil?
+            #@errors[:messages] << {
+            #key: "validation",
                 message: "#{member.full_name}, is already validated!"
-              }
-            end              
+            #}
+            #end              
           end
         end
       elsif @data.present? and @data[:or_number].blank? and @data[:accounting_entry][:book].present? and @data[:accounting_entry][:book] == "CRB"
