@@ -45,10 +45,10 @@
       %b
         DATE:&nbsp;&nbsp;&nbsp;&nbsp
       - if !@data["date_reported"].nil?
-        #{@data["date_reported"].strftime("%b %d, %Y")}
+        #{@data["date_reported"].to_date.strftime("%b %d, %Y")}
         #{Time.now.strftime("%H:%M:%S")}
       - else
-        #{@claim.date_prepared.strftime("%b %d, %Y")}
+        #{@claim.date_prepared.to_date.strftime("%b %d, %Y")}
         #{Time.now.strftime("%H:%M:%S")}
       %hr
     .body1

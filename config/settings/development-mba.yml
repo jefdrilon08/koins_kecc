@@ -2,15 +2,25 @@
 # CLOSING VALUES              #     
 ###############################                           
                              
-net_closing_accounting_code_id: "47f7cd1f-4141-445c-ac17-7e4f4966fdcb" 
+net_closing_accounting_code_id: "47f7cd1f-4141-445c-ac17-7e4f4966fdcb"
+accounting_fund_year_end_closing_entries:    
+  -    
+    accounting_fund_id: "1b4efc94-017b-4024-b675-95b4b0763bd0" # Mutual benefit    
+    accounting_entry_id: "f760dd0a-b519-4de8-a687-208c5bcc5d6d"         
+  -                                      
+    accounting_fund_id: "8a512ccd-20a8-457f-a7ac-ab6bd76bb814" # General fund     
+    accounting_entry_id: "f45d6021-5fbd-464f-940f-8b2d412a43d9"    
+  -                              
+    accounting_fund_id: "d99d1c46-d426-41fa-ba95-b57b6ca27d1d" # Optional fund    
+    accounting_entry_id: "473d8a68-7f9b-4302-8199-83bf11a3dcfd"
 
 ###############################
 # STATIC VALUES               #
 ###############################
 
 company_name: "KASAGANA-KA MUTUAL BENEFIT ASSOCIATION INC."
-company_address: "5 Don Francisco St, Don Enrique Heights, Quezon Cty"
-company_tin_number: "220-604-788-000"
+company_address: "#5, Matimpiin St, Barangay Pinyahan, Quezon City"
+company_tin_number: "246-220-351-000"
 
 ###############################
 
@@ -201,7 +211,13 @@ default_deposit_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
-
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Policy Loan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "K-Kalinga"
+    
 default_withdrawal_accounts:
   -
     account_type: "INSURANCE"
@@ -209,7 +225,9 @@ default_withdrawal_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
-
+  -
+    account_type: "INSURANCE"
+    account_subtype: "K-Kalinga"
 
 default_member_accounts:
   -
@@ -218,11 +236,29 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Life Insurance Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Hospital Income Insurance Plan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Credit Life Insurance Plan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Policy Loan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "K-Kalinga"
+ 
+default_equity_withdrawal_accounts:
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Life Insurance Fund"
 
 defaults:
   default_branch:
     id: "5116c3b0-6b38-427f-9839-4cb8566151e2"
     name: "KMBA Head Office"
+
   insurance_deposits:
     - 
       account_subtype: "Life Insurance Fund"
@@ -317,14 +353,41 @@ defaults:
 
 ################################
 
+claims_templates:
+  -
+    name: "BLIP FOR CHECK OR CASH"
+    accounting_codes:
+      -
+        cr_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+  -
+    name: "CLIP/HIIP FOR CHECK OR CASH"
+    accounting_codes:
+      -
+        cr_accounting_code_id: "36eb2f24-f574-4ab5-99cf-77dacc2438b6"
+  -
+    name: "KBENTE/KALINGA/KJSP/CALAMITY FOR CHECK OR CASH"
+    accounting_codes:
+      -
+        cr_accounting_code_id: "48ae4de5-8f6b-476b-9541-c4f3672fe931"
+  -
+    name: "CAPS-R BLIP"
+    accounting_codes:
+      -
+        cr_accounting_code_id: "9a31aa7a-4757-40d3-adbb-608f0e110f8c"
+  -
+    name: "CAPS-R CLIP/HIIP"
+    accounting_codes:
+      -
+        cr_accounting_code_id: "5c07471e-1111-4d31-b671-3a5baac767e9"
+
 cash_management_templates:
   -
     name: "Example 1"
     insurance_accounting_codes:
       -
         insurance_type: "Life Insurance Fund"
-        deposit_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
-        withdrawal_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+        deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
+        withdrawal_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
       -
         insurance_type: "Retirement Fund"
         deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
@@ -352,47 +415,20 @@ cash_management_templates:
         withdrawal_accounting_code_id: ""
   -
     name: "Example 2"
-    # NEW
-    insurance_accounting_codes:
-      -
-        insurance_type: "Life Insurance Fund"
-        deposit_accounting_code_id: "c2f80584-a24a-437b-b161-80f4b0a12d9c"
-        withdrawal_accounting_code_id: "c2f80584-a24a-437b-b161-80f4b0a12d9c"
-      -
-        insurance_type: "Retirement Fund"
-        deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
-        withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
-
-    savings_accounting_codes:
-      -
-        savings_type: "K-IMPOK"
-        deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-        withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
-      -
-        savings_type: "Golden K"
-        deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
-        withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
-      -
-        savings_type: "Savings Investment Fund"
-        deposit_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
-        withdrawal_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
-
-
-    equity_accounting_codes:
-      -
-        equity_type: "Share Capital"
-        deposit_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
-        withdrawal_accounting_code_id: ""
 
 insurance_accounting_codes:
   -
     insurance_type: "Life Insurance Fund"
-    deposit_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
-    withdrawal_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
+    withdrawal_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
   -
     insurance_type: "Retirement Fund"
-    deposit_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
-    withdrawal_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
+    withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
+  -
+    insurance_type: "K-Kalinga"
+    deposit_accounting_code_id: "868d7669-85a7-4034-a2c6-b68dc423c952"
+    withdrawal_accounting_code_id: "868d7669-85a7-4034-a2c6-b68dc423c952"
 
 savings_accounting_codes:
   -
@@ -433,23 +469,23 @@ branch_accounting_codes:
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
   -
     branch_id: "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"                              #KMBA Associate
-    cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    cash_in_bank_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "5116c3b0-6b38-427f-9839-4cb8566151e2"                              #KMBA Head Office
-    cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    cash_in_bank_accounting_code_id: "3f2d41e6-415a-4619-89d7-1ea2cbcc535e"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "2e2b2b94-5403-45e8-a8c7-036937e3b332"                              #KCOOP Staff
-    cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    cash_in_bank_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "c64ed07c-c137-4a86-91d1-6fdb5c3028fd"                              #KDCI Staff
-    cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    cash_in_bank_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "2435b32c-0273-4c34-bd8e-bfca1683c2c2"                              #JVOMFI Staff
-    cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    cash_in_bank_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "5ad35856-a92a-4b37-90d9-73e93f819ebf"                              #Baguio
@@ -457,7 +493,7 @@ branch_accounting_codes:
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "236720ba-9976-4131-9213-3832cb7282ec"                              #Bauang
-    cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    cash_in_bank_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
     branch_id: "67e9a5b1-6a2a-4175-bdbc-b5bcdbdca652"                              #La Trinidad
@@ -466,129 +502,56 @@ branch_accounting_codes:
   -
     branch_id: "cf74991b-c211-42c6-bdf7-78dd09862f01"                              #Bantayan
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "770d0aab-b39f-46e4-8390-042c458f47fa"                              #Boljoon
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "ff757405-81b9-4fba-a3f6-9a7903789295"                              #Bogo
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "45ddd309-a3a1-481e-a052-a1e05f659229"                              #Danao
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"  
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"  
   -
     branch_id: "0a6cd6d7-5382-4a6a-b677-58dce89c99ad"                              #Camotes
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "742d8116-fc17-46e9-8817-4eedffb05fe0"                              #Carcar
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "0705db41-9eb3-47ae-9f66-c86d0ec276d0"                              #CAPS-R Staff
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "d8b10e6d-a28e-49f7-8fbe-6b5e80aaa858"                              #CAPS-R Associate
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "7641b827-bae0-4ac1-8f24-52fe1028fc70"                              #Cebu City
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"  
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"  
   -
     branch_id: "4fc72793-0f53-4c0f-875e-376d48937e5f"                              #Toledo
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "07f7306c-3deb-48c2-be96-03faaffeee06"                              #Tuburan
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "b3914df3-8e94-4233-bf5b-a34d217a40c2"                              #Lapu-Lapu
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
   -
     branch_id: "d57361cf-6faf-4369-bc20-18cc3fc672d6"                              #Moalboal
     cash_in_bank_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
-    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
-
-branch_config:
-  -
-    id: "18cebed1-4838-4335-9023-ffd35c5e2629"                              #baliuag
-    current_date: "2019-05-20"
-  -
-    id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"                              #pulilan
-    current_date: "2019-05-20"
-  -
-    id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"                              #guiguinto
-    current_date: "2019-05-20"
-  -
-    id: "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"                              #KMBA Associate
-    current_date: "2019-05-20"
-  -
-    id: "5116c3b0-6b38-427f-9839-4cb8566151e2"                              #KMBA Head Office
-    current_date: "2019-05-20"
-  -
-    id: "2e2b2b94-5403-45e8-a8c7-036937e3b332"                              #KCOOP Staff
-    current_date: "2019-05-20"
-  -
-    id: "c64ed07c-c137-4a86-91d1-6fdb5c3028fd"                              #KDCI Staff
-    current_date: "2019-05-20"
-  -
-    id: "2435b32c-0273-4c34-bd8e-bfca1683c2c2"                              #JVOMFI Staff
-    current_date: "2019-05-20"
-  -
-    id: "5ad35856-a92a-4b37-90d9-73e93f819ebf"                              #Baguio
-    current_date: "2019-05-20"
-  -
-    id: "236720ba-9976-4131-9213-3832cb7282ec"                              #Bauang
-    current_date: "2019-05-20"
-  -
-    id: "67e9a5b1-6a2a-4175-bdbc-b5bcdbdca652"                              #La Trinidad
-    current_date: "2019-05-20"
-  -
-    id: "cf74991b-c211-42c6-bdf7-78dd09862f01"                              #Bantayan
-    current_date: "2019-05-20"
-  -
-    id: "770d0aab-b39f-46e4-8390-042c458f47fa"                              #Boljoon
-    current_date: "2019-05-20"
-  -
-    id: "ff757405-81b9-4fba-a3f6-9a7903789295"                              #Bogo
-    current_date: "2019-05-20"
-  -
-    id: "45ddd309-a3a1-481e-a052-a1e05f659229"                              #Danao
-    current_date: "2019-05-20"
-  -
-    id: "0a6cd6d7-5382-4a6a-b677-58dce89c99ad"                              #Camotes
-    current_date: "2019-05-20"
-  -
-    id: "742d8116-fc17-46e9-8817-4eedffb05fe0"                              #Carcar
-    current_date: "2019-05-20"
-  -
-    id: "0705db41-9eb3-47ae-9f66-c86d0ec276d0"                              #CAPS-R Staff
-    current_date: "2019-05-20"
-  -
-    id: "d8b10e6d-a28e-49f7-8fbe-6b5e80aaa858"                              #CAPS-R Associate
-    current_date: "2019-05-20"
-  -
-    id: "7641b827-bae0-4ac1-8f24-52fe1028fc70"                              #Cebu City
-    current_date: "2019-05-20"
-  -
-    id: "4fc72793-0f53-4c0f-875e-376d48937e5f"                              #Toledo
-    current_date: "2019-05-20"
-  -
-    id: "07f7306c-3deb-48c2-be96-03faaffeee06"                              #Tuburan
-    current_date: "2019-05-20"
-  -
-    id: "b3914df3-8e94-4233-bf5b-a34d217a40c2"                              #Lapu-Lapu
-    current_date: "2019-05-20"
-  -
-    id: "d57361cf-6faf-4369-bc20-18cc3fc672d6"                              #Moalboal
-    current_date: "2019-05-20"
+    withdraw_payment_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+    
 ###############################
 # LOAN PRODUCT CONFIG         #
 ###############################
@@ -606,3 +569,12 @@ activate_microinsurance: true
 
 # Date of membership KMBA
 use_recognition_date: true
+
+# For Adjustment of Date 
+current_date: "2020-08-31"
+
+# Mba new insurance accounts
+hiip: "Hospital Income Insurance Plan"
+clip: "Credit Life Insurance Plan"
+life: "Life Insurance Fund"
+pl: "Policy Loan"

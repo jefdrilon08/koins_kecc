@@ -74,18 +74,26 @@ class InsuranceAccountsController < ApplicationController
       },
       {
         text: "#{@insurance_account.account_subtype}"
-      },
-      {
-        is_link: true,
-        path: insurance_account_claims_copy_pdf_path(@insurance_account),
-        text: "Claims Copy PDF"
-      },
-      {
-        is_link: true,
-        path: insurance_account_pdf_path,
-        text: "Print Subsidiary to PDF"
       }
     ]
+    # if @insurance_account.account_subtype == "K-Kalinga" || @insurance_account.account_subtype == "K-20"
+    #   @subheader_items << {
+    #     is_link: false,
+    #   }
+    # end
+
+    if @insurance_account.account_subtype == "Retirement Fund" || @insurance_account.account_subtype == "Life Insurance Fund" || @insurance_account.account_subtype == " Credit Life Insurance Plan" || @insurance_account.account_subtype == "Hospital Income Insurance Plan" || @insurance_account.account_subtype == "Policy Loan"
+        @subheader_items << {
+          is_link: true,
+          path: insurance_account_claims_copy_pdf_path(@insurance_account),
+          text: "Claims Copy PDF"
+        }
+        @subheader_items << {
+          is_link: true,
+          path: insurance_account_pdf_path,
+          text: "Print Subsidiary to PDF"
+        }
+      end
 
     @subheader_side_actions = [
       {
