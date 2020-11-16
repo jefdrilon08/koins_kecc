@@ -22,7 +22,7 @@ module Claims
         @data                       = @config[:data].with_indifferent_access
       end
 
-      @book                         = 'JVB'
+      @book                         = 'CDB'
       @accounting_fund_id           = ""
  
       if @claim.blip?
