@@ -1,7 +1,7 @@
 module Adjustments
   module AccruedInterest
     class Create
-      def initialize(config)
+      def initialize(config:)
         @config = config
         @branch = @config[:branch]
         @center = @config[:center]
@@ -15,21 +15,6 @@ module Adjustments
         @number_of_moratorium = @config[:number_of_moratorium]
       end
       def execute!
-        @loans.each do |loans|
-            amortization_principal_balance = AmortizationScheduleEntry.where(
-                                                                    "loan_id = ? and
-                                                                     due_date >= ? and
-                                                                     due_date <= ? and
-                                                                     is_paid is null
-                                                                    
-                                                                    "
-                                                                    loans.id,
-                                                                    @start_date,
-                                                                    @end_date
-                                                                    ).order(:due_date).sum(:principal)
-
-            accrued_interest = ((amortization_principal_balance * loans.monthly_interest_rate) * @number_of_days) / 100
-        end
       end
     end
   end
