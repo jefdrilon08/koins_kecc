@@ -12,5 +12,5 @@ class AttachmentFile < ApplicationRecord
 
   has_one_attached :file
 
-  validates :file_name, presence: true, inclusion: { in: NAMES }
+  # validates :file_name, presence: true, inclusion: { in: NAMES }
 end

@@ -1186,6 +1186,7 @@ namespace :adjust do
                       puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
                     else
                       puts "Error in attaching file #{ff}"
+                      puts attachment_file.errors.full_messages
                     end
                   end
                 else
