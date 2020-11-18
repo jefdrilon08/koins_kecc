@@ -152,6 +152,7 @@ import ChangePassword from "../models/ChangePassword.js";
 import TrialBalancesIndex from "../models/TrialBalancesIndex.js";
 import TrialBalancesShow from "../models/TrialBalancesShow.js";
 import MembersSearch from "../models/MembersSearch.js";
+import AdjustmentsAccruedInterestsIndex from "../models/AdjustmentsAccruedInterestsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -213,6 +214,7 @@ const hooks = {
   "adjustments/batch_moratorium_adjustments/index":   [BatchMoratoriumAdjustmentsIndex],
   "adjustments/batch_moratorium_adjustments/show":    [BatchMoratoriumAdjustmentsShow],
   "adjustments/moratoriums/index":                    [AdjustmentsMoratoriumsIndex],
+  "adjustments/accrued_interests/index":              [AdjustmentsAccruedInterestsIndex],
   "member_account_validations/index":                 [MemberAccountValidationsIndex],
   "member_account_validations/show":                  [MemberAccountValidationsShow],
   "member_account_validations/edit":                  [MemberAccountValidationsForm],
