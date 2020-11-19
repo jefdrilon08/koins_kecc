@@ -9,7 +9,7 @@ module Adjustments
         @cut_off_date             = @config[:cut_off_date]
         @start_date               = @config[:start_date]
         @end_date                 = @config[:end_date]
-        @number_of_days           = @config[:number_of_days]
+        @number_of_days           = (@end_date.to_date - @start_date.to_date).to_i
         @accrued_type             = @config[:accrued_type]
         @member                   = @config[:member]
         @loans                    = @config[:loans]

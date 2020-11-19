@@ -9,7 +9,7 @@ module Api
           cut_off_date      = params[:date_initialized]
           start_date        = params[:start_date]
           end_date          = params[:end_date]
-          number_of_days    = params[:number_of_days]
+          #number_of_days    = params[:number_of_days]
           accrued_type      = params[:select_accrued_type]
           number_of_moratorium_days = params[:input_number_of_moratorium_days]
           member            = Member.where(id: params[:member_id]).first
@@ -25,7 +25,6 @@ module Api
             cut_off_date: cut_off_date,
             start_date: start_date,
             end_date:end_date,
-            number_of_days: number_of_days,
             accrued_type: accrued_type,
             member: member,
             loans: loans,
