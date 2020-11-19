@@ -56,35 +56,46 @@ module Adjustments
           end
       
           if @accrued_type == "BLANKET"
-            amortization_details = AmortizationScheduleEntry.where("
+            amortization_details_for_cut_off_paid = AmortizationScheduleEntry.where("
+                                                                loan_id = ? and
+                                                                due_date >= ?  and
+                                                                due_date <= ?",
+                                                                loan.id,@start_date,@end_date).order(:due_date)
+              
+              amortization_details = AmortizationScheduleEntry.where("
                                                                 loan_id = ? and
                                                                 due_date >= ?  and
                                                                 due_date <= ? and
                                                                 is_paid is null",
                                                                 loan.id,@start_date,@end_date).order(:due_date)
+            if amortization_details_for_cut_off_paid.last.is_paid == nil
            
-            last_payment_date = amortization_details.data["payments"].last["payment_date"]
-
-            if last_payment_date.to_date > @end_date.to_date
+            
+            
+            
               principal_balance = amortization_details.sum(:principal_balance).to_f
+        
             else
-              principal_balance = 0.0
+              last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
+              if last_payment_date.to_date > @cut_off_date.to_date
+                principal_balance = amortization_details_for_cut_off_paid.sum(:principal_balance).to_f
+              else
+                principal_balance = amortization_details.sum(:principal_balance).to_f
+              end
+      
             end
 
-          else
+
+          else #individual
             
-            amortization_details = (AmortizationScheduleEntry.where("
+            amortization_details = AmortizationScheduleEntry.where("
                                                                 loan_id = ? and
                                                                 due_date >= ?  and
                                                                 due_date <= ?",
-                                                                loan.id,@start_date,@end_date).sum(:principal_balance)).to_f
+                                                                loan.id,@start_date,@end_date).order(:due_date)
 
-            #principal_balance = amortization_details.sum(:principal_balance)).to_f
-            if last_payment_date.to_date > @end_date.to_date
-              principal_balance = amortization_details.sum(:principal_balance).to_f
-            else
-              principal_balance = 0.0
-            end
+            
+            principal_balance = amortization_details.sum(:principal_balance).to_f
 
           end
           
