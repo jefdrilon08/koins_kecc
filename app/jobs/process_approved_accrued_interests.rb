@@ -1,5 +1,5 @@
 class ProcessApprovedAccruedInterests < ApplicationJob
-  queue_as :default
+  queue_as :operations
   
   def perform(args)
     accrued_interest = AccruedInterest.find(args[:id])
