@@ -46,9 +46,13 @@
                   .bande.badge-success
                     #{ai.status}
               %td
-                %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
-                  .fa.fa-check
-                  Process
+                - if ai.status == "pending"
+                  %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: ai.id } }
+                    .fa.fa-times
+                    Delete
+                  %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
+                    .fa.fa-check
+                    Process
 
                 
             %tr
@@ -74,4 +78,5 @@
 
 
 = render partial: "adjustments/accrued_interests/modals/new"
-= render partial: "adjustments/moratoriums/modals/process"
+= render partial: "adjustments/accrued_interests/modals/process"
+= render partial: "adjustments/accrued_interests/modals/delete"

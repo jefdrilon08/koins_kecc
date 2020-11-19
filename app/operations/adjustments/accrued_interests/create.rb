@@ -76,6 +76,7 @@ module Adjustments
               principal_balance = amortization_details.sum(:principal_balance).to_f
         
             else
+
               last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
               if last_payment_date.to_date > @cut_off_date.to_date
                 principal_balance = amortization_details_for_cut_off_paid.sum(:principal_balance).to_f

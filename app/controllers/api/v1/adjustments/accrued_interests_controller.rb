@@ -56,6 +56,19 @@ module Api
 
           render json: { message: "ok" }
         end
+        def delete
+          accrued_interest = AccruedInterest.find(params[:id])
+          if !accrued_interest.status == "pending"
+            raise "Invalid record #{accrued_interest.id}"
+          else
+            accrued_interest.destroy!
+          end
+          render json: { message: "ok" }
+        end
+
+
+
+
       end
     end
   end
