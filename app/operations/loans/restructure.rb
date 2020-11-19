@@ -222,14 +222,14 @@ module Loans
       ### EQUALIZE ###
       if buffer_principal > @loan.principal
         diff = buffer_principal - @loan.principal
-
         @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal - diff
         @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due - diff
+        @loan.amortization_schedule_entries.last.principal_balance = @loan.amortization_schedule_entries.last.principal
       elsif buffer_principal < @loan.principal
         diff = @loan.principal - buffer_principal
-
-        @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal + diff
+        @loan.amortization_schedule_entries.last.principal = @loan.amortization_schedule_entries.last.principal + diff
         @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due + diff
+        @loan.amortization_schedule_entries.last.principal_balance = @loan.amortization_schedule_entries.last.principal 
       end
 
       @loan.data[:accounting_entry] = accounting_entry_data

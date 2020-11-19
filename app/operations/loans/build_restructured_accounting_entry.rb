@@ -438,23 +438,27 @@ module Loans
               if  s_deduction.use_for_special_loan_fund == "true"
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
+                     #raise @amount.to_f.round(2).inspect
                      # raise @ttl_amount.to_f.round(2).inspect
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @ttl_amount).to_f.round
+                      amount_gpf  = (s.ratio * @ttl_amount).to_f.round
+                      amount = (s.ratio * (@total_debit + amount_gpf)).to_f.round(2)
                       #amount = (s.ratio * @amount).round(2)
-                    end
+                   end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @ttl_amount).to_f.round
+                      amount_gpf  = (s.ratio * @ttl_amount).to_f.round
+                      amount = (s.ratio * (@total_debit + amount_gpf)).to_f.round(2)
                       #amount = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @tt_amount).to_f.round
+                      amount_gpf  = (s.ratio * @ttl_amount).to_f.round
+                      amount = (s.ratio * (@total_debit + amount_gpf)).to_f.round(2)
                       #amount = (s.ratio * @amount).round(2)
                     end
                   end

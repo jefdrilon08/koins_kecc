@@ -1,0 +1,77 @@
+.row
+  .col
+    .card
+      .card-body
+            
+        - @accrued_interests.each do |ai|
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                  Member
+                %th
+                  Branch
+                %th
+                  Cut off date
+                %th
+                  Start date
+                %th
+                  End date
+                %th
+                  Number of days moratorium
+                %th
+                  Status
+                %th
+                  Actions
+            %tr
+              %td
+                = link_to member_path(ai.member), target: "_blank" do
+                  %strong
+                    #{Member.find(ai.member).full_name}
+              %td
+                #{ai.branch}
+              %td
+                #{ai.cut_off_date}
+              %td
+                #{ai.start_date}
+              %td
+                #{ai.end_date}
+              %td
+                #{ai.number_of_moratoium_day}
+              %td
+                - if ai.status == "pending"
+                  .badge.badge-danger
+                    #{ai.status}
+                - else
+                  .bande.badge-success
+                    #{ai.status}
+              %td
+                %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
+                  .fa.fa-check
+                  Process
+
+                
+            %tr
+              %th Loan Product
+              %th{:colspan => "4"} PN Number
+              %th Principal Balance
+              %th Acrued Interest
+              %th Accrued Status
+            - ai.data["active_loans"].each do |al|
+              %tr
+                %td
+                  #{al["loan_product"]["name"]}
+                %td{:colspan => "4"}
+                  #{al["pn_number"]}
+                %td
+                  #{al["principal_balance"]}
+                %td
+                  #{al["cumputed_accrued_interest"]}
+                %td
+                  #{al["cut_off_status"]}
+              
+
+
+
+= render partial: "adjustments/accrued_interests/modals/new"
+= render partial: "adjustments/moratoriums/modals/process"

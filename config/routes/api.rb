@@ -27,6 +27,8 @@ namespace :api do
       post "/moratoriums/delete", to: "moratoriums#delete"
       post "/moratoriums/process", to: "moratoriums#process_moratorium"
       post "/moratoriums/batch_process", to: "moratoriums#batch_process"
+      post "/accrued_interests/create", to: "accrued_interests#create"
+      post "/accrued_interests/process", to: "accrued_interests#process_accrued"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
