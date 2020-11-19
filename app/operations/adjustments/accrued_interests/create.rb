@@ -66,7 +66,7 @@ module Adjustments
             last_payment_date = amortization_details..data["payments"].last["payment_date"]
 
             if last_payment_date.to_date > @end_date.to_date
-              principal_balance = amortization_details.sum(:principal_balance)).to_f
+              principal_balance = amortization_details.sum(:principal_balance).to_f
             else
               principal_balance = 0.0
             end
