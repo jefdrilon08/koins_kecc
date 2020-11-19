@@ -1,5 +1,5 @@
 class ProcessApproveDepositCollection < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     deposit_collection  = DepositCollection.find(args[:id])

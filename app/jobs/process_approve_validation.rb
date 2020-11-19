@@ -1,5 +1,5 @@
 class ProcessApproveValidation < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     member_account_validation = MemberAccountValidation.find(args[:id])

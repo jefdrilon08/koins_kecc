@@ -1,5 +1,5 @@
 class ProcessApproveMembershipPaymentCollection < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     membership_payment_collection = MembershipPaymentCollection.find(args[:id])

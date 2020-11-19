@@ -1,5 +1,5 @@
 class ProcessApproveWithdrawalCollection < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     withdrawal_collection  = WithdrawalCollection.find(args[:id])
