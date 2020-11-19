@@ -102,7 +102,7 @@ export default class InsuranceStatusComponent extends React.Component {
 								Length of Membership
 							</th>
 							<td>
-								{lengthOfMembership} days
+								{lengthOfMembership}
 							</td>
 						</tr>
 						<tr>

@@ -9,7 +9,7 @@ module Reports
         if Settings.activate_microinsurance
           @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular")
         else  
-          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular").order("center_id ASC")
+          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type IN (?)", @start_date, @end_date, ["inforce", "lapsed"], @branch, ["Regular", "Kaagapay"]).order("center_id ASC")
         end
       end
 
@@ -48,6 +48,7 @@ module Reports
             "AGE",
             "BRANCH",
             "CENTER",
+            "MEMBER TYPE",
           ], style: header
 
           @members.each_with_index do |member, index|
@@ -336,7 +337,8 @@ module Reports
                   member.try(:date_of_birth).try(:to_date),
                   member.age,
                   member.branch,
-                  member.center.to_s
+                  member.center.to_s,
+                  member.member_type
                 ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
              
                 sheet.add_row [
@@ -355,7 +357,7 @@ module Reports
                     dependent_age,
                     member.branch,
                     member.center.to_s,
-                    ""
+                    member.member_type
                   ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
     
             else
@@ -374,7 +376,8 @@ module Reports
                   member.try(:date_of_birth).try(:to_date),
                   member.age,
                   member.branch,
-                  member.center.to_s
+                  member.center.to_s,
+                  member.member_type
                 ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
               
                 #if dependent_first_name.present?  
@@ -394,6 +397,7 @@ module Reports
                       dependent_age,
                       member.branch,
                       member.center.to_s,
+                      member.member_type
                     ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
             end
           end
