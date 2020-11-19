@@ -45,13 +45,19 @@ module Api
           accrued_interest = AccruedInterest.where(id: params[:id]).first
           user = current_user
           
-          config = {
-                      accrued_interest: accrued_interest,
-                      user: user
-                    }
+          #config = {
+          #            accrued_interest: accrued_interest,
+          #            user: user
+          #          }
+        
+          args = {
+                    id: accrued_interest_id,
+                    user_id:user.id
+          }
+          accrued_interest.update!(status: "processing")
 
+          ProcessApprovedAccruedInterests.perform_later(args)
 
-          approved_accrued_interest = ::Adjustments::AccruedInterests::ApprovedAccruedInterests.new(config: config).execute!
 
           render json: { message: "ok" }
         end

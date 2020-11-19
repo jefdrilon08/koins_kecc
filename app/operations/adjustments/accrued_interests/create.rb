@@ -68,22 +68,25 @@ module Adjustments
                                                                 due_date <= ? and
                                                                 is_paid is null",
                                                                 loan.id,@start_date,@end_date).order(:due_date)
-            if amortization_details_for_cut_off_paid.last.is_paid == nil
-           
-            
-            
-            
-              principal_balance = amortization_details.sum(:principal_balance).to_f
-        
-            else
 
-              last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
-              if last_payment_date.to_date > @cut_off_date.to_date
-                principal_balance = amortization_details_for_cut_off_paid.sum(:principal_balance).to_f
-              else
+
+            if amortization_details_for_cut_off_paid.count > 0            
+              if amortization_details_for_cut_off_paid.last.is_paid == nil
+           
                 principal_balance = amortization_details.sum(:principal_balance).to_f
-              end
+        
+              else
+
+                last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
+                if last_payment_date.to_date > @cut_off_date.to_date
+                  principal_balance = amortization_details_for_cut_off_paid.sum(:principal_balance).to_f
+                else
+                  principal_balance = amortization_details.sum(:principal_balance).to_f
+                end
       
+              end
+            else
+              principal_balance = 0.0
             end
 
 
@@ -95,9 +98,12 @@ module Adjustments
                                                                 due_date <= ?",
                                                                 loan.id,@start_date,@end_date).order(:due_date)
 
-            
-            principal_balance = amortization_details.sum(:principal_balance).to_f
-
+              
+            if amortization_details > 0
+              principal_balance = amortization_details.sum(:principal_balance).to_f
+            else
+              principal_balance = 0.0
+            end
           end
           
           total_principal_balance = principal_balance

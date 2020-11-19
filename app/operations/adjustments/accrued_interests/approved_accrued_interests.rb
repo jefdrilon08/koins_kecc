@@ -61,7 +61,7 @@ module Adjustments
 
           end
         end #end of accrued_interest_data[:active_loans]
-        @accrued_interest_details.update(status: "approved")    
+        @accrued_interest_details.update!(status: "approved")    
 
       end
 
