@@ -56,14 +56,14 @@ module Adjustments
           end
       
           if @accrued_type == "BLANKET"
-            amortization_details = (AmortizationScheduleEntry.where("
+            amortization_details = AmortizationScheduleEntry.where("
                                                                 loan_id = ? and
                                                                 due_date >= ?  and
                                                                 due_date <= ? and
                                                                 is_paid is null",
                                                                 loan.id,@start_date,@end_date).order(:due_date)
            
-            last_payment_date = amortization_details..data["payments"].last["payment_date"]
+            last_payment_date = amortization_details.data["payments"].last["payment_date"]
 
             if last_payment_date.to_date > @end_date.to_date
               principal_balance = amortization_details.sum(:principal_balance).to_f
@@ -81,7 +81,7 @@ module Adjustments
 
             #principal_balance = amortization_details.sum(:principal_balance)).to_f
             if last_payment_date.to_date > @end_date.to_date
-              principal_balance = amortization_details.sum(:principal_balance)).to_f
+              principal_balance = amortization_details.sum(:principal_balance).to_f
             else
               principal_balance = 0.0
             end
