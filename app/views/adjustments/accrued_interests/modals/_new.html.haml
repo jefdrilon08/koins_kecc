@@ -28,7 +28,7 @@
               .form-group
                 %label
                   Loans
-                = select_tag :loan_ids, options_for_select([]), class: "form-control select-select2 js-searchable", id: "select-loans", multiple: true
+                = select_tag :loan_ids, options_for_select([]), class: "form-control select-select2 js-searchable", id: "select-loans", prompt: "-- SELECT --"  ,multiple: true
           .row
             .col-md-6.col-xs-12
               .form-group

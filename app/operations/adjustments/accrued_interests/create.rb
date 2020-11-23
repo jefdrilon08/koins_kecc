@@ -50,51 +50,69 @@ module Adjustments
         @loans.each do |loan|
           loan_product = loan.loan_product
 
-          if loan.date_approved.to_date < @cut_off_date.to_date || loan.maturity_date.to_date = @cut_off_date.to_date
-            cut_off_status = "valid"
-          else
-            cut_off_status = "invalid"
-          end
+          #if loan.date_approved.to_date < @cut_off_date.to_date || loan.maturity_date.to_date = @cut_off_date.to_date
+           # cut_off_status = "valid"
+          #else
+          #  cut_off_status = "invalid"
+          #end
       
           if @accrued_type == "BLANKET"
-
-
-
-            amortization_details_for_cut_off_paid = AmortizationScheduleEntry.where("
+            
+              if loan.maturity_date.to_date !=  @cut_off_date.to_date
+                
+                   
+                amortization_details_for_cut_off_paid = AmortizationScheduleEntry.where("
                                                                 loan_id = ? and
                                                                 due_date >= ?  and
                                                                 due_date <= ?",
                                                                 loan.id,@start_date,@end_date).order(:due_date)
-              
-            amortization_details = AmortizationScheduleEntry.where("
+
+                amortization_details = AmortizationScheduleEntry.where("
                                                                 loan_id = ? and
                                                                 due_date >= ?  and
                                                                 due_date <= ? and
                                                                 is_paid is null",
                                                                 loan.id,@start_date,@end_date).order(:due_date)
 
-            
-            if amortization_details_for_cut_off_paid.count > 0            
-              if amortization_details_for_cut_off_paid.last.is_paid == nil #nov142020
-           
-                  principal_balance = amortization_details.sum(:principal_balance).to_f
-                  #principal_balance = amortization_details.sum(:principal).to_f
 
-        
-              else
+                
+                if amortization_details_for_cut_off_paid.count > 0     
+                  
+                  if amortization_details_for_cut_off_paid.last.is_paid == nil #nov142020
 
-                last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
-                if last_payment_date.to_date > @cut_off_date.to_date
-                  principal_balance = amortization_details_for_cut_off_paid.sum(:principal_balance).to_f
+                    principal_balance = amortization_details.sum(:principal_balance).to_f
+                    cut_off_status = "valid"
+                  
+                  else
+
+                    last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
+                    
+                    if last_payment_date.to_date > @end_date.to_date
+                      
+                      principal_balance = 0.0
+                      cut_off_status = "invalid"
+                      
+                    else
+                      
+                      principal_balance = amortization_details.sum(:principal_balance).to_f
+                      cut_off_status = "valid"
+                   
+                    end #end of lastpeyment
+
+                  end #end of nov142020
                 else
-                  principal_balance = amortization_details.sum(:principal_balance).to_f
-                end
-      
-              end #end-nov142020
-            else
-              principal_balance = 0.0
-            end
 
+                  principal_balance = 0.0
+                  cut_off_status = "invalid"
+                  
+                end #end of cutoff
+              else
+                      principal_balance = 0.0
+                      cut_off_status = "invalid"
+                
+              
+              end #end of maturity date
+              
 
 
 
