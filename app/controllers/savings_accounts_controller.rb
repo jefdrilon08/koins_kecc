@@ -147,6 +147,12 @@ class SavingsAccountsController < ApplicationController
         text: "Sync Maintaining Balance"
       },
       {
+      id: "btn-print-ledger",
+      link: "#",
+      class: "fa fa-print",
+      text: "Print Ledger"
+      },
+      {
         class: "",
         link: "#",
         text: "Balance: #{helpers.number_to_currency(@savings_account.balance, unit: '')}"
@@ -155,7 +161,8 @@ class SavingsAccountsController < ApplicationController
         class: "",
         link: "#",
         text: "Maintaining Balance: #{helpers.number_to_currency(@savings_account.maintaining_balance, unit: '')}"
-      }
+      },
+      
     ]
 
     @payload = { id: @savings_account.id }
