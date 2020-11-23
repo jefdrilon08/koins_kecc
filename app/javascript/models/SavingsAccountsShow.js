@@ -19,20 +19,22 @@ var $modalApproveWithdrawalRequest;
 
 var $btnPrintWithdrawalRequest;
 var $modalPrint;
+var $btnPrintLedger;
 
 var id;
 var templateErrorList;
 var authenticityToken;
 
 var _currentWithdrawalRequestId;
-
+var _PrintLedgerRequestId;
+var SavingsAccountId; 
 var $message;
 
 var init  = function(options) {
   console.log(options)
   id                = options.id;
   authenticityToken = options.authenticityToken;
-
+  SavingsAccountId  = options.id;
   _cacheDom();
   _bindEvents();
 };
@@ -57,12 +59,24 @@ var _cacheDom = function() {
 
   $btnPrintWithdrawalRequest  = $(".btn-print-withdrawal-request");
   $modalPrint                 = $("#modal-print");
+  
+  $btnPrintLedger             = $("#btn-print-ledger");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 };
 
 var _bindEvents = function() {
+  console.log("TANGINA");
+  $btnPrintLedger.on("click", function() {
+    $modalPrint.modal("show");
+    
+    var type = "print_ledger";
+    
+    $modalPrint.modal("hide");
+    window.open("/print?type=" + type + "&id=" + id);
+  });
+
   $btnPrintWithdrawalRequest.on("click", function() {
     _currentWithdrawalRequestId = $(this).data("id");
     $message.html("");
@@ -272,6 +286,9 @@ var _bindEvents = function() {
       }
     });
   });
+
+
+
 };
 
 export default { init: init }
