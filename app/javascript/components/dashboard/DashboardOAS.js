@@ -242,12 +242,12 @@ export default class DashboardOAS extends React.Component {
             <td className="text-center">
               {e.active_loans}
             </td>
-            <td className="text-right">
+            {/*<td className="text-right">
               {numberWithCommas(e.principal)}
             </td>
             <td className="text-right">
               {numberWithCommas(e.principal_paid)}
-            </td>
+            </td>*/}
             <td className="text-right">
               {numberWithCommas(e.portfolio)}
             </td>
@@ -315,12 +315,12 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     Active Loans
                   </th>
-                  <th className="text-right">
+                  {/*<th className="text-right">
                     Principal
                   </th>
                   <th className="text-right">
                     Principal Paid
-                  </th>
+                  </th>*/}
                   <th className="text-right">
                     Portfolio
                   </th>
@@ -349,12 +349,12 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     {o.total_active_loans}
                   </th>
-                  <th className="text-right">
+                 {/* <th className="text-right">
                     {numberWithCommas(o.total_principal)}
                   </th>
                   <th className="text-right">
                     {numberWithCommas(o.total_principal_paid)}
-                  </th>
+                  </th>*/}
                   <th className="text-right">
                     {numberWithCommas(o.total_portfolio)}
                   </th>
