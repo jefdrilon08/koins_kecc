@@ -41,7 +41,7 @@ var _memberId;
 var _moratoriumId;
 
 var _urlCreate        = "/api/v1/adjustments/accrued_interests/create";
-var _urlDelete        = "#"  //"/api/v1/adjustments/moratoriums/delete";
+var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
 var _urlProcess       =  "#" // "/api/v1/adjustments/moratoriums/process";
 var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
 var _urlBatchProcess  = "#"  //"/api/v1/adjustments/moratoriums/batch_process";

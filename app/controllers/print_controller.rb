@@ -2,6 +2,7 @@ class PrintController < ApplicationController
   before_action :authenticate_user!
 
   def print
+    #raise params[:type].inspect
     type  = params[:type]
     data  = {}
 
@@ -20,6 +21,13 @@ class PrintController < ApplicationController
       @accounting_entry_data  = data
       
       render "print/accounting_entry", layout: "print"
+    
+    elsif type == "print_ledger"
+      savings_account = MemberAccount.find(params[:id])
+      data= ::Print::PrintSavingsLedger.new(member_account: savings_account ).execute!
+      @member_account = data
+      render "print/print_ledger", layout: "print"
+ 
     elsif type == "claims_voucher"
       accounting_entry = AccountingEntry.find(params[:id])
 

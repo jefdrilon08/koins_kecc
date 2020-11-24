@@ -1,5 +1,5 @@
 class ProcessApproveMonthlyClosingCollection < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     monthly_closing_collection  = MonthlyClosingCollection.find(args[:monthly_closing_collection_id])

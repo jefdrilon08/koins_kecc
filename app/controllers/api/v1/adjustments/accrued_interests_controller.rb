@@ -9,7 +9,7 @@ module Api
           cut_off_date      = params[:date_initialized]
           start_date        = params[:start_date]
           end_date          = params[:end_date]
-          number_of_days    = params[:number_of_days]
+          #number_of_days    = params[:number_of_days]
           accrued_type      = params[:select_accrued_type]
           number_of_moratorium_days = params[:input_number_of_moratorium_days]
           member            = Member.where(id: params[:member_id]).first
@@ -25,7 +25,6 @@ module Api
             cut_off_date: cut_off_date,
             start_date: start_date,
             end_date:end_date,
-            number_of_days: number_of_days,
             accrued_type: accrued_type,
             member: member,
             loans: loans,
@@ -46,16 +45,35 @@ module Api
           accrued_interest = AccruedInterest.where(id: params[:id]).first
           user = current_user
           
-          config = {
-                      accrued_interest: accrued_interest,
-                      user: user
-                    }
+          #config = {
+          #            accrued_interest: accrued_interest,
+          #            user: user
+          #          }
+        
+          args = {
+                    id: accrued_interest_id,
+                    user_id:user.id
+          }
+          accrued_interest.update!(status: "processing")
 
+          ProcessApprovedAccruedInterests.perform_later(args)
 
-          approved_accrued_interest = ::Adjustments::AccruedInterests::ApprovedAccruedInterests.new(config: config).execute!
 
           render json: { message: "ok" }
         end
+        def delete
+          accrued_interest = AccruedInterest.find(params[:id])
+          if !accrued_interest.status == "pending"
+            raise "Invalid record #{accrued_interest.id}"
+          else
+            accrued_interest.destroy!
+          end
+          render json: { message: "ok" }
+        end
+
+
+
+
       end
     end
   end
