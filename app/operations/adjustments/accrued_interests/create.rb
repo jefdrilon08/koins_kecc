@@ -16,7 +16,7 @@ module Adjustments
         @loans                    = @config[:loans]
         @number_of_moratorium_day = @config[:number_of_moratorium_days]
       
-
+      
         @accrued_interest = AccruedInterest.new(
                               branch: @branch,
                               center: @center,
@@ -35,8 +35,19 @@ module Adjustments
 
         
                             )
+         @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         @branch.id, 
+                                         @cut_off_date,
+                                         "MANUAL_AGING").last
+
+        @data_store_data = @data_store.data.with_indifferent_access
       end
       def execute!
+
+
         build_active_loans!
 
         @accrued_interest.save!
@@ -49,107 +60,31 @@ module Adjustments
         
         @loans.each do |loan|
           loan_product = loan.loan_product
-
-          #if loan.date_approved.to_date < @cut_off_date.to_date || loan.maturity_date.to_date = @cut_off_date.to_date
-           # cut_off_status = "valid"
-          #else
-          #  cut_off_status = "invalid"
-          #end
+          
+           principal_balance_details = @data_store_data[:records].select{ 
+                                                                    |o|
+                                                                        o[:member][:id] == @member.id and 
+                                                                        o[:id] == loan.id 
+                                                                }
       
           if @accrued_type == "BLANKET"
+          
+                principal_balance =  principal_balance_details.last[:overall_principal_balance]
+                @cut_off_status = "valid"
             
-              if loan.maturity_date.to_date !=  @cut_off_date.to_date
-                
-                   
-                amortization_details_for_cut_off_paid = AmortizationScheduleEntry.where("
-                                                                loan_id = ? and
-                                                                due_date >= ?  and
-                                                                due_date <= ?",
-                                                                loan.id,@start_date,@end_date).order(:due_date)
-
-                amortization_details = AmortizationScheduleEntry.where("
-                                                                loan_id = ? and
-                                                                due_date >= ?  and
-                                                                due_date <= ? and
-                                                                is_paid is null",
-                                                                loan.id,@start_date,@end_date).order(:due_date)
-
-
-                
-                if amortization_details_for_cut_off_paid.count > 0     
-                  
-                  if amortization_details_for_cut_off_paid.last.is_paid == nil #nov142020
-
-                    principal_balance = amortization_details.sum(:principal_balance).to_f
-                    cut_off_status = "valid"
-                  
-                  else
-
-                    last_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
-                    
-                    if last_payment_date.to_date > @end_date.to_date
-                      
-                      principal_balance = 0.0
-                      cut_off_status = "invalid"
-                      
-                    else
-                      
-                      principal_balance = amortization_details.sum(:principal_balance).to_f
-                      cut_off_status = "valid"
-                   
-                    end #end of lastpeyment
-
-                  end #end of nov142020
-                else
-
-                  principal_balance = 0.0
-                  cut_off_status = "invalid"
-                  
-                end #end of cutoff
-              else
-                      principal_balance = 0.0
-                      cut_off_status = "invalid"
-                
-              
-              end #end of maturity date
-              
-
-
-
           else #individual
-            
-            amortization_details = AmortizationScheduleEntry.where("
-                                                                loan_id = ? and
-                                                                due_date >= ?  and
-                                                                due_date <= ?",
-                                                                loan.id,@start_date,@end_date).order(:due_date)
-            
 
-            if amortization_details.first.is_paid == nil
+            if principal_balance_details.last[:num_days_par] > 0
+                @cut_off_status = "invalid"
               
-              principal_balance = 0.0
-              cut_off_status = "invalid"
-            
             else
-
-              first_payment_date = amortization_details_for_cut_off_paid.last.data["payments"].last["payment_date"]
-              
-              if first_payment_date <= @start_date
-
-                if amortization_details.count > 0
-                  principal_balance = amortization_details.sum(:principal_balance).to_f
-                else
-                  principal_balance = 0.0
-                end
-
-              else
-
-                principal_balace = 0.0
-                cut_off_status = "invalid"
-
-              end #end of first_payment_date 
             
-            end #end of amort_details 
+                principal_balance =  principal_balance_details.last[:overall_principal_balance]
+                @cut_off_status = "valid"
+  
+            end
+            
+            
           
           
           
@@ -160,7 +95,8 @@ module Adjustments
           
 
           #accured_interest_computation
-          if cut_off_status == "valid"
+  
+          if @cut_off_status == "valid"
             #raise ((loan.monthly_interest_rate.to_f * 100 ) / 2.to_f).round(2).to_f.inspect
             
             compute_accrued_interest = (((total_principal_balance.to_f * (loan.monthly_interest_rate.to_f * 100 ) / 2.to_f).round(2).to_f * @number_of_days.to_i) / 100).round(2)
@@ -173,7 +109,7 @@ module Adjustments
             pn_number: loan.pn_number,
             principal_balance: principal_balance,
             loan_term: loan.term,
-            cut_off_status: cut_off_status,
+            cut_off_status: @cut_off_status,
             cumputed_accrued_interest: compute_accrued_interest,
             loan_product: {
               id: loan_product.id,

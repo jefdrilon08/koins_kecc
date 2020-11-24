@@ -1,11 +1,9 @@
 module Adjustments
   class AccruedInterestsController < ApplicationController
     def index
-      @accrued_interests =  AccruedInterest.all
-
-      center_ids  = ReadOnlyMemberMoratorium.pending.pluck(:center_id).uniq
       
-      @centers  = Center.where(id: center_ids, branch_id: @branches.pluck(:id))
+      @accrued_interests =  AccruedInterest.where(branch: @branches.pluck(:name))
+
       
       @subheader_items = [
         {

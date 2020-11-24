@@ -242,12 +242,12 @@ export default class DashboardOAS extends React.Component {
             <td className="text-center">
               {e.active_loans}
             </td>
-            <td className="text-right">
+            {/*<td className="text-right">
               {numberWithCommas(e.principal)}
             </td>
             <td className="text-right">
               {numberWithCommas(e.principal_paid)}
-            </td>
+            </td>*/}
             <td className="text-right">
               {numberWithCommas(e.portfolio)}
             </td>
@@ -315,12 +315,12 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     Active Loans
                   </th>
-                  <th className="text-right">
+                  {/*<th className="text-right">
                     Principal
                   </th>
                   <th className="text-right">
                     Principal Paid
-                  </th>
+                  </th>*/}
                   <th className="text-right">
                     Portfolio
                   </th>
@@ -349,12 +349,12 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     {o.total_active_loans}
                   </th>
-                  <th className="text-right">
+                 {/* <th className="text-right">
                     {numberWithCommas(o.total_principal)}
                   </th>
                   <th className="text-right">
                     {numberWithCommas(o.total_principal_paid)}
-                  </th>
+                  </th>*/}
                   <th className="text-right">
                     {numberWithCommas(o.total_portfolio)}
                   </th>
@@ -591,10 +591,14 @@ export default class DashboardOAS extends React.Component {
 
       return  (
         <div>
-          <h5>
-            Watchlist as of {o.as_of} ({o.records.length})
-          </h5>
-          
+          <Accordion allowZeroExpanded>
+						<AccordionItem>
+							<AccordionItemHeading>
+								<AccordionItemButton>
+									Watchlist as of {o.as_of} ({o.records.length})
+								</AccordionItemButton>
+							</AccordionItemHeading>
+						<AccordionItemPanel>
           <div className="table-responsive">
             <table className="table table-bordered table-sm table-hover">
               <thead>
@@ -623,7 +627,10 @@ export default class DashboardOAS extends React.Component {
               </tbody>
             </table>
           </div>
-        </div>
+					</AccordionItemPanel>
+				</AccordionItem>
+				</Accordion>
+				</div>
       );
     }
   }
