@@ -591,10 +591,14 @@ export default class DashboardOAS extends React.Component {
 
       return  (
         <div>
-          <h5>
-            Watchlist as of {o.as_of} ({o.records.length})
-          </h5>
-          
+          <Accordion allowZeroExpanded>
+						<AccordionItem>
+							<AccordionItemHeading>
+								<AccordionItemButton>
+									Watchlist as of {o.as_of} ({o.records.length})
+								</AccordionItemButton>
+							</AccordionItemHeading>
+						<AccordionItemPanel>
           <div className="table-responsive">
             <table className="table table-bordered table-sm table-hover">
               <thead>
@@ -623,7 +627,10 @@ export default class DashboardOAS extends React.Component {
               </tbody>
             </table>
           </div>
-        </div>
+					</AccordionItemPanel>
+				</AccordionItem>
+				</Accordion>
+				</div>
       );
     }
   }
