@@ -98,6 +98,12 @@
             %td{:width => "25%"}
               %u  
                 #{@data["classification"]}
+          %tr
+            %td{:width => "21%"}
+              Date of Letter of Approval(LOA):
+            %td{:width => "25%"}
+              %u  
+                #{@data["date_of_loa"].to_date.strftime("%b %d, %Y")}
     %br
     .body2  
       - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"

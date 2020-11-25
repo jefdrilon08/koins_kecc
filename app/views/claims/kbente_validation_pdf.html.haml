@@ -143,6 +143,13 @@
             %b
               %u
                 #{@data["account_number"]} 
+        %tr
+          %td{:width => "21%"}
+            Date of Letter of Approval(LOA):
+          %td{:width => "25%"}
+            %b
+              %u
+                #{@data["date_of_loa"].to_date.strftime("%b %d, %Y")} 
   %br
   %br
   %br

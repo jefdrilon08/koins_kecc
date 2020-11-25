@@ -1,3 +1,4 @@
+
 var kbenteForm = (function() {
 
   var authenticityToken       = $("meta[name='csrf-token']").attr('content');
@@ -28,6 +29,7 @@ var kbenteForm = (function() {
     $claimsPayment               = $("#claims-payment");
     $accountName                 = $("#account-name");
     $accountNumber               = $("#account-number");
+    $dateOfLoa                  = $("#date-of-loa");
  }
 
   var _bindEvents = function() {
@@ -50,7 +52,8 @@ var kbenteForm = (function() {
             date_expired: $dateExpired.val(),
             claims_payment: $claimsPayment.val(),
             account_name: $accountName.val(),
-            account_number: $accountNumber.val()
+            account_number: $accountNumber.val(),
+            date_of_loa: $dateOfLoa.val()
           },
           authenticity_token: authenticityToken,
           

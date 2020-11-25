@@ -24,6 +24,7 @@ module Claims
         @claims_payment                           = @data[:claims_payment]
         @account_name                             = @data[:account_name]
         @account_number                           = @data[:account_number]
+        @date_of_loa                              = @data[:date_of_loa]
 
 
         @errors = []
@@ -103,7 +104,7 @@ module Claims
       #   @errors << "Account number field is required"
       # end
 
-      #validate_kalinga_duplication!
+      validate_kalinga_duplication!
       return  @errors
     end
 
@@ -114,11 +115,11 @@ module Claims
         data->>'relationship_to_member' = ? AND data->>'insured_address' = ? AND data->>'civil_status' = ? AND 
         data->>'date_of_birth' = ? AND data->>'name_of_beneficiary' = ? AND 
         data->>'date_of_death_or_incident' = ? AND data->>'reason_of_death' = ? AND data->>'gender' = ? AND
-        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
+        data ->> 'claims_payment' = ? AND data ->>'account_name' = ? AND data ->>'account_number' = ? AND data ->>'date_of_loa' = ?", 
         @claim.member_id, "K-KALINGA", @date_prepared, @amount, @date_approved, @effective_date, 
         @expiration_date, @poc_number, @name_of_insured, @relationship_to_member, @insured_address, 
         @civil_status, @date_of_birth, @name_of_beneficiary, @date_of_death_or_incident, @reason_of_death, 
-        @gender, @claims_payment, @account_name, @account_number).count
+        @gender, @claims_payment, @account_name, @account_number, @date_of_loa).count
         if count > 0
           @errors << "Duplicate KALINGA!"
         end

@@ -82,11 +82,12 @@
       %th
       %td
     %tr
+      %th Date of LOA
+      %td
+        = @data[:date_of_loa].to_date.strftime("%b %d, %Y")
       %th Claims Payment Through
       %td
         = @data[:claims_payment]
-      %th
-      %td
     %tr
       %th Account Name
       %td
