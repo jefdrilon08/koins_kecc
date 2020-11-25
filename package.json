@@ -48,7 +48,8 @@
     "select2": "^4.0.13",
     "select2-theme-bootstrap4": "^0.2.0-beta.6",
     "style-loader": "^1.2.1",
-    "terser-webpack-plugin": "^2.3.5"
+    "terser-webpack-plugin": "^2.3.5",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "webpack-build-notifier": "^0.1.30",
