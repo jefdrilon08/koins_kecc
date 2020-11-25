@@ -117,7 +117,7 @@ module MemberAccountValidations
 
       # For equity interest
       w = ((@resignation_date.to_date - @equity_interest_implementation_date).to_i)/7
-      if w >= 1
+      if w >= 1 && @lif_current_balance > 0
         # OLD CODE
         # @equity_interest        = ::MemberAccountValidations::GenerateEquityInterest.new(
         #                                   lif_member_account: @lif_member_account,

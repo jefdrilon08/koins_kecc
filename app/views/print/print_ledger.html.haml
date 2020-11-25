@@ -1,0 +1,56 @@
+:css
+  @page { size: portrait; margin: 25px;}
+
+  table {
+    font-size: 0.9em;
+  }
+
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  #{@member_account[:branch]}
+  %br
+  Member Name: #{@member_account[:last_name]}, #{@member_account[:first_name]} #{@member_account[:middle_name]}
+  %br
+  Center: #{@member_account[:center]}
+  %br
+  Savings Account: #{@member_account[:account_type]}
+  %br
+  Balance: #{@member_account[:balance].to_f}
+%br
+%br
+
+%table{:width=> "100%",:border=>"1"}
+  %tr
+    %th.text-center{:width=> "20%"}
+      Date
+    %th.text-center{:width=> "20%"}
+      Transaction Type
+    %th.text-center{:width=> "20%"}
+      Beginning Balance
+    %th.text-center{:width=> "20%"}
+      Amount
+    %th.text-center{:width=> "20%"}
+      Ending Balance
+  - @member_account[:account_transaction].each do |b|
+    %tr
+      %td.text-center{:width=> "20%"}
+        #{b[:transacted_at].to_date.strftime("%B %d, %Y")}
+      %td.text-center{:width=> "20%"}
+        - if b[:data]["is_interest"] == true
+          Interest
+        -elsif b[:data]["is_withdraw_payment"] == true
+          Withdraw Payment
+        -else
+          #{b[:transaction_type]}
+      %td.text-right{:width=> "20%"}
+        #{number_to_currency(b[:data]["beginning_balance"], unit: '')}
+      %td.text-right{:width=> "20%"}
+        #{number_to_currency(b[:amount],unit: '')}
+      %td.text-right{:width=> "20%"}
+        #{number_to_currency(b[:data]["ending_balance"],unit: '')}
+
+:javascript
+  window.print();

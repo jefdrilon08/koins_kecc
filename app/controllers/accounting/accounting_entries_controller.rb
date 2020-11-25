@@ -63,6 +63,7 @@ module Accounting
           @subheader_side_actions << {
             id: "btn-approve",
             link: "#",
+            text: "Approve",
             data: {
               id: "#{@accounting_entry.id}"
             },

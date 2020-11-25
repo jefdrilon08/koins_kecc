@@ -1,5 +1,5 @@
 class ProcessApproveSavingsInsuranceTransferCollection < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     record  = SavingsInsuranceTransferCollection.find(args[:id])

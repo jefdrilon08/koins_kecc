@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     get "/batch_moratorium_adjustments/:id", to: "batch_moratorium_adjustments#show", as: :batch_moratorium_adjustment
 
     get "/moratoriums", to: "moratoriums#index", as: :moratoriums
+    
+    get "/accrued_interests", to: "accrued_interests#index", as: :accrued_interests
   end
   
   # EXPORTS

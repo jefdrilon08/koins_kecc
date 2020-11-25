@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_03_074915) do
+ActiveRecord::Schema.define(version: 2020_11_10_073702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -79,6 +79,22 @@ ActiveRecord::Schema.define(version: 2020_11_03_074915) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "accrued_interests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "branch"
+    t.string "center"
+    t.string "member"
+    t.date "cut_off_date"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "number_of_days"
+    t.string "accrued_type"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.json "data"
+    t.string "number_of_moratoium_day"
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|

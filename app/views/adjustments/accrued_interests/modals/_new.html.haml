@@ -1,0 +1,68 @@
+#modal-new.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          New Accrued Interest
+      .modal-body
+        .modal-body-content
+          .row
+            .col-md-6-col-xs-12
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Center
+                = select_tag :center_id, options_from_collection_for_select([], :id, :name), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
+          .row
+            .col
+              .form-group
+                %label
+                  Member
+                = select_tag :member_id, options_for_select([]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+          .row
+            .col
+              .form-group
+                %label
+                  Loans
+                = select_tag :loan_ids, options_for_select([]), class: "form-control select-select2 js-searchable", id: "select-loans", prompt: "-- SELECT --"  ,multiple: true
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Cut off date(Manual Aging as_of)
+                = date_field_tag :date_initialized, Date.today, class: "form-control", id: "input-date-initialized"
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Start date
+                = date_field_tag :start_date, Date.today, class: "form-control", id: "input-start-date"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  End date
+                = date_field_tag :end_date, Date.today, class: "form-control", id: "input-end-date"
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Number of days moratorium 
+                = number_field_tag :number_of_moratorium_days, 0, class: "form-control", id: "input-number-of-moratorium-days"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Accrued Type
+                = select_tag :accrued_type, options_for_select([["BLANKET"],["INDIVIDUAL"]]), class: "form-control select-select2", id: "select-accrued-type", prompt: "-- SELECT --"
+                
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

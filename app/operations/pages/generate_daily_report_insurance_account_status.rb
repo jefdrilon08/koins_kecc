@@ -40,7 +40,11 @@ module Pages
           "Coverage Date", 
           "Number of Weeks Past Due", 
           "Amount Past Due", 
-          "Status"], 
+          "Status",
+          "Date of Birth",
+          "Age",
+          "Member Type"
+          ], 
           style: label_cell
 
           @centers.order("name ASC").each do |center|
@@ -117,7 +121,10 @@ module Pages
                     lif_coverage,
                     lif_num_weeks_past_due,
                     lif_amt_past_due,
-                    lif_status
+                    lif_status,
+                    member.try(:date_of_birth).try(:to_date),
+                    member.age,
+                    member.member_type
                     ]
                 else
                   sheet.add_row [
@@ -137,7 +144,10 @@ module Pages
                     lif_coverage,
                     lif_num_weeks_past_due,
                     lif_amt_past_due,
-                    lif_status
+                    lif_status,
+                    member.try(:date_of_birth).try(:to_date),
+                    member.age,
+                    member.member_type
                   ]
                 end  
               end
