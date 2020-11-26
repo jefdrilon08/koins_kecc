@@ -444,7 +444,9 @@ module Loans
     
 
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+           
            if @member.member_type != "GK"
+            
             if @loan_data[:advance_insurance_available] == false
               offset          = s_deduction.meta.offset
               accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
@@ -459,23 +461,41 @@ module Loans
 
               if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
               #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
-                if @term == "weekly"
-                elsif @term == "monthly"
-                  multiplier  = (multiplier * 4.3333333).to_i
-                elsif @term == "semi-monthly"
-                  # weird unique rule for 12 semi-monthly
-                  if @num_installments ==  12
-                    multiplier  = 12.5 * 2
-                  elsif @num_installments == 6
-                    multiplier  = 15
-                  else
-                    multiplier  = multiplier * 2
-                  end #end semimonthly
-                else
-                  raise "Invalid term #{@term}"
-                end #end of term
+                    if @term == "weekly"
+                    elsif @term == "monthly"
+                      multiplier  = (multiplier * 4.3333333).to_i
+                    elsif @term == "semi-monthly"
+                      # weird unique rule for 12 semi-monthly
+                      if @num_installments ==  12
+                        multiplier  = 12.5 * 2
+                      elsif @num_installments == 6
+                        multiplier  = 15
+                      else
+                        multiplier  = multiplier * 2
+                      end #end semimonthly
+                    else
+                      raise "Invalid term #{@term}"
+                    end #end of term
+                    amount  = val * (multiplier + offset)
 
-                amount  = val * (multiplier + offset)
+              elsif loan_cycle == nil and @member.member_type == "Kaagapay"
+                    if @term == "weekly"
+                    elsif @term == "monthly"
+                      multiplier  = (multiplier * 4.3333333).to_i
+                    elsif @term == "semi-monthly"
+                      # weird unique rule for 12 semi-monthly
+                      if @num_installments ==  12
+                        multiplier  = 12.5 * 2
+                      elsif @num_installments == 6
+                        multiplier  = 15
+                      else
+                        multiplier  = multiplier * 2
+                      end #end semimonthly
+                    else
+                      raise "Invalid term #{@term}"
+                    end #end of term
+                    amount  = val * (multiplier + offset)
+                    
               else
                 amount  = val
               end #loan cycle presents
@@ -487,8 +507,11 @@ module Loans
               }
 
               temp_amount -= amount
+            
               end #end of advance insurance
+
             end #end of gk
+          
           else
             raise "Invalid deduction type algo #{s_deduction.meta.algo}"
           end
