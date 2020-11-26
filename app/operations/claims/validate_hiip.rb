@@ -101,7 +101,7 @@ module Claims
       #   @errors << "Account number field is required"
       # end
 
-      #validate_hiip_duplication!
+      validate_hiip_duplication!
       return  @errors
     end
 

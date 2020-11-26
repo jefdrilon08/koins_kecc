@@ -61,7 +61,7 @@ module Claims
       # if @account_number.blank?
       #   @errors << "Account number field is required"
       # end
-      #validate_calamity_duplication!
+      validate_calamity_duplication!
       return  @errors
     end
 

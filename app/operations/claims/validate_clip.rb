@@ -116,7 +116,7 @@ module Claims
       #   @errors << "Account number field is required"
       # end
 
-      #validate_clip_duplication!
+      validate_clip_duplication!
       return  @errors
     end
 
