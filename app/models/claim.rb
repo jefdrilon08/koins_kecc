@@ -17,7 +17,7 @@ class Claim < ApplicationRecord
 
   has_many :claim_attachment_files
 
-  before_validation :load_defaults, :strip_blanks
+  before_validation :load_defaults
 
   
 
@@ -205,11 +205,6 @@ class Claim < ApplicationRecord
   #   self.new_balance - self.data.with_indifferent_access[:amount].to_f
   # end
 
-  protected
-  def strip_blanks
-    if self.claim_type == "CLIP"
-      self.data.with_indifferent_access[:beneficiary] = self.data.with_indifferent_access[:beneficiary].strip
-    end
-  end
+  
 end
 
