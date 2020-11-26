@@ -71,7 +71,33 @@ module Api
           render json: { message: "ok" }
         end
 
+        def create_batch_accrued
+          branch = Branch.where(id: params[:branch_id]).first
+          #center = Center.where(id: params[:center_id]).first
+          cut_off_date      = params[:date_initialized]
+          start_date        = params[:start_date]
+          end_date          = params[:end_date]
+          #accrued_type      = params[:select_accrued_type]
+          number_of_moratorium_days = params[:input_number_of_moratorium_days]
 
+
+        
+
+
+          config = {
+            branch: branch,
+            cut_off_date: cut_off_date,
+            start_date: start_date,
+            end_date: end_date,
+            number_of_moratorium_days:  number_of_moratorium_days
+          
+          }
+
+          record = ::Adjustments::AccruedInterests::CreateBatch.new(
+                                                                config: config
+                                                               ).execute!
+          
+        end
 
 
       end
