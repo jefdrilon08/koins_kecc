@@ -17,9 +17,10 @@ module Api
           loans             = Loan.where(id: params[:loan_ids])
 
 
-      
+              
 
         if member != nil 
+        
           config = {
             branch: branch,
             center: center, 
@@ -39,8 +40,9 @@ module Api
                                                                ).execute!
         else
           
+          
           config = {
-            branch: branch_id,
+            branch: branch,
             cut_off_date: cut_off_date,
             start_date: start_date,
             end_date: end_date,

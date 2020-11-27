@@ -12,12 +12,6 @@ module Adjustments
       ]
       @subheader_side_actions = [
         {
-          id: "btn-batch-process",
-          link: "#",
-          class: "fa fa-sync",
-          text: "Batch Process"
-        },
-        {
           id: "btn-new",
           link: "#",
           class: "fa fa-plus",

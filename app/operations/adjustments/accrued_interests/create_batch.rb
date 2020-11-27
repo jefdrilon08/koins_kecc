@@ -3,9 +3,10 @@ module Adjustments
     class CreateBatch
     def initialize(config:)
         @config         = config
-      
+       
 
         @branch                   = @config[:branch]
+        
         @center                   = @config[:center]
         @cut_off_date             = @config[:cut_off_date]
         @start_date               = @config[:start_date]
@@ -13,11 +14,10 @@ module Adjustments
         @number_of_days           = ((@end_date.to_date - @start_date.to_date).to_f / 365 * 12).round
         @accrued_type             = @config[:accrued_type]
         @number_of_moratorium_day = @config[:number_of_moratorium_days]
-      
+        
       
         @accrued_interest = AccruedInterest.new(
                               branch: @branch,
-                              center: @center,
                               cut_off_date: @cut_off_date,
                               start_date: @start_date,
                               end_date: @end_date,
