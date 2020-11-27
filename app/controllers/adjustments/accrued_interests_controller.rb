@@ -25,5 +25,27 @@ module Adjustments
         }
       ]
     end
+    def show
+      @adjustment_record  = AccruedInterest.find(params[:id])
+
+      #@meta = @adjustment_record.meta.with_indifferent_access
+      #@data = @adjustment_record.data.with_indifferent_access
+      #@accounting_entry = @data[:accounting_entry]
+
+      #@non_subsidiary_members = @adjustment_record.non_subsidiary_members
+      #@subsidiary_members = @adjustment_record.selectable_subsidiary_members
+
+      #@accounting_codes = AccountingCode.order("code ASC")
+
+      @subheader_items = [
+        {
+          is_link: true,
+          path: adjustments_accrued_interests_path,
+          text: "Accrued Interests"
+        }
+      ]
+
+  
+    end
   end
 end

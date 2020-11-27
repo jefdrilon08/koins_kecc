@@ -3,6 +3,7 @@ module Adjustments
     class CreateBatch
     def initialize(config:)
         @config         = config
+      
 
         @branch                   = @config[:branch]
         @center                   = @config[:center]
@@ -42,18 +43,33 @@ module Adjustments
         @data_store_data = @data_store.data.with_indifferent_access
     end
     def execute!
+      process_batch_loans!   
+      
+      @accrued_interest.save!
+
+      @accrued_interest
+
+    end #end of execute
+
+
+    def process_batch_loans!
       @data_store_data[:records].each do |record|
         loan = Loan.find(record[:id])
-        
+  
         if loan.status == "active"
-          raise record[:maturity_date].inspect
-          if record[:maturity_date].to_date < @start_date.to_date
-            if record[:date_released] > @start_date.to_date
-              principal_balance = record[:overall_principal_balance].to_f
-              @cut_off_status = "invalid"
+          if loan.date_released.to_date < @start_date.to_date
+            if loan.maturity_date.to_date > @start_date.to_date
+              if record[:principal_balance].to_f > 0
+                principal_balance = record[:overall_principal_balance].to_f
+              else
+                principal_balance = 0.0
+              end
+              @cut_off_status = "valid"
+
+            
               
               compute_accrued_interest = (((principal_balance.to_f * (loan.monthly_interest_rate.to_f * 100 ) / 2.to_f).round(2).to_f * @number_of_days.to_i) / 100).round(2)
-
+            
               @accrued_interest.data["active_loans"] << {
                 id: loan.id,
                 pn_number: loan.pn_number,
@@ -63,20 +79,27 @@ module Adjustments
                 cumputed_accrued_interest: compute_accrued_interest,
                 loan_product: {
                   id: record[:id],
-                  name: record[:loan_product][:name]
+                  name: record[:loan_product][:name],
+                  par_amount: record[:principal_balance]
+                },
+                member: {
+                  id: record[:member][:id],
+                  first_name: record[:member][:first_name],
+                  last_name: record[:member][:last_name],
+                  middle_name: record[:member][:middle_name],
+                  identification_number: record[:member][:identification_number]
                 }
+                
 
         
               }
             end
           end
-             
         end
 
-      end
-      
+      end #end of data_store_date
+    end #end of process batch loans
 
-    end
     end
   end
 end
