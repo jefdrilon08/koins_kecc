@@ -16,6 +16,8 @@
               %th
                 Number of days moratorium
               %th
+                Status
+              %th
                 Action
           %tbody
             %tr
@@ -29,6 +31,8 @@
                 #{@adjustment_record.end_date}
               %td
                 #{@adjustment_record.number_of_moratoium_day}
+              %td
+                #{@adjustment_record.status}
               %td
                 - if @adjustment_record.status == "pending"
                   %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: @adjustment_record.id } }
