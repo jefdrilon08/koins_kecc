@@ -64,7 +64,9 @@
                   %td
                     #{ i + 1 }
                   %td 
-                    #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
+                    = link_to member_path(a["member"]["id"]), target: "_blank" do
+                      %strong
+                        #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
                   %td
                     #{a["loan_product"]["name"]}
                   %td
