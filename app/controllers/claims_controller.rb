@@ -182,6 +182,10 @@ class ClaimsController < ApplicationController
   
     @claims = @claims.page(params[:page]).per(25)
 
+    if ["Silvida"].include? current_user.first_name
+      @claims = @claims.where(status: "for-approval").page(params[:page]).per(25)
+    end
+
     @subheader_items = [
       {
         text: "Microinsurance"
