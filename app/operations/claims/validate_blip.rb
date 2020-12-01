@@ -143,7 +143,7 @@ module Claims
       # end
 
 
-      #validate_blip_duplication!
+      validate_blip_duplication!
       return  @errors
     end
 

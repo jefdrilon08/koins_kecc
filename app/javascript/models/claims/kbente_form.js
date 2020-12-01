@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var kbenteForm = (function() {
 
   var authenticityToken       = $("meta[name='csrf-token']").attr('content');
@@ -25,6 +27,10 @@ var kbenteForm = (function() {
     $dateOfDeath                 = $("#date-of-death");
     $dateEnrolled                = $("#date-enrolled");
     $dateExpired                 = $("#date-expired");
+    $claimsPayment              = $("#claims-payment");
+    $accountName                = $("#account-name");
+    $accountNumber              = $("#account-number");
+    $dateOfLoa             = $("#date-of-loa");
  }
 
   var _bindEvents = function() {
@@ -44,7 +50,11 @@ var kbenteForm = (function() {
             classification: $classification.val(),
             date_of_death: $dateOfDeath.val(),
             date_enrolled: $dateEnrolled.val(),
-            date_expired: $dateExpired.val()
+            date_expired: $dateExpired.val(),
+            claims_payment: $claimsPayment.val(),
+            account_name: $accountName.val(),
+            account_number: $accountNumber.val(),
+            date_of_loa: $dateOfLoa.val()
           },
           authenticity_token: authenticityToken,
           

@@ -60,7 +60,7 @@ module Adjustments
         
         @loans.each do |loan|
           loan_product = loan.loan_product
-          
+                       
            principal_balance_details = @data_store_data[:records].select{ 
                                                                     |o|
                                                                         o[:member][:id] == @member.id and 
@@ -68,9 +68,20 @@ module Adjustments
                                                                 }
       
           if @accrued_type == "BLANKET"
-          
-                principal_balance =  principal_balance_details.last[:overall_principal_balance]
-                @cut_off_status = "valid"
+            if loan.maturity_date.to_date < @start_date.to_date
+              if loan.date_released.to_date > @start_date.to_date
+              
+                  principal_balance =  principal_balance_details.last[:overall_principal_balance]
+                  @cut_off_status = "valid"
+              else
+                  principal_balance =  0.0
+                  @cut_off_status = "invalid"
+              end
+            else
+                  principal_balance =  0.0
+                  @cut_off_status = "invalid"
+              
+            end
             
           else #individual
 

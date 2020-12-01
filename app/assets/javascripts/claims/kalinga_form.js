@@ -37,6 +37,7 @@ var kalingaForm = (function() {
     $claimsPayment              = $("#claims-payment");
     $accountName                = $("#account-name");
     $accountNumber              = $("#account-number");
+    $dateOfLoa             = $("#date-of-loa");
  }
 
   var _bindEvents = function() {
@@ -68,7 +69,8 @@ var kalingaForm = (function() {
             issued_date: $issuedDate.val(),
             claims_payment: $claimsPayment.val(),
             account_name: $accountName.val(),
-            account_number: $accountNumber.val()
+            account_number: $accountNumber.val(),
+            date_of_loa: $dateOfLoa.val()
           },
           authenticity_token: authenticityToken,
           

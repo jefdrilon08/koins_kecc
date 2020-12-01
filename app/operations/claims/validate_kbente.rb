@@ -20,6 +20,7 @@ module Claims
         @claims_payment                           = @data[:claims_payment]
         @account_name                             = @data[:account_name]
         @account_number                           = @data[:account_number]
+        @date_of_loa                              = @data[:date_of_loa]
 
         @errors = []
 
@@ -84,7 +85,7 @@ module Claims
       #   @errors << "Account number field is required"
       # end
 
-      #validate_kbente_duplication!
+      validate_kbente_duplication!
       return  @errors
     end
 
@@ -96,10 +97,10 @@ module Claims
         data->>'purpose' = ? AND data->>'name_of_insured' = ? AND data->>'name_of_beneficiary' = ? AND 
         data->>'classification' = ? AND data->>'date_of_death' = ? AND data->>'date_enrolled' = ? AND 
         data->>'date_expired' = ? AND
-        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
+        data ->>'claims_payment' = ? AND data ->>'account_name' = ? AND data ->>'account_number' = ? AND data ->>'date_of_loa' = ?", 
         @claim.member_id, "K-BENTE", @date_prepared, @amount, @date_approved, @date_of_birth, 
         @purpose, @name_of_insured, @name_of_beneficiary, @classification, @date_of_death, 
-        @date_enrolled, @date_expired, @claims_payment, @account_name, @account_number).count
+        @date_enrolled, @date_expired, @claims_payment, @account_name, @account_number, @date_of_loa).count
         if count > 0
           @errors << "Duplicate KBENTE!"
         end

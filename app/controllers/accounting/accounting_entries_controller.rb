@@ -69,7 +69,7 @@ module Accounting
             },
             class: "fa fa-check"
           }
-        elsif helpers.bk_mis_user
+        elsif helpers.sbk_bk_mis_user
           @subheader_side_actions << {
             id: "btn-approve",
             link: "#",

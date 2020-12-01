@@ -1,0 +1,83 @@
+.row
+  .col
+    .card
+      .card-body
+        %table.table.table-sm.table-bordered.table-hover
+          %thead
+            %tr
+              %th
+                Branch
+              %th
+                Cut off date
+              %th
+                Start date
+              %th
+                End date
+              %th
+                Number of days moratorium
+              %th
+                Action
+          %tbody
+            %tr
+              %td
+                #{@adjustment_record.branch}
+              %td
+                #{@adjustment_record.cut_off_date}
+              %td
+                #{@adjustment_record.start_date}
+              %td
+                #{@adjustment_record.end_date}
+              %td
+                #{@adjustment_record.number_of_moratoium_day}
+              %td
+                - if @adjustment_record.status == "pending"
+                  %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: @adjustment_record.id } }
+                    .fa.fa-times
+                    Delete
+                  %button.btn.btn-sm.btn-info.btn-process{ data: { id: @adjustment_record.id } }
+                    .fa.fa-check
+                    Process
+                
+
+
+        
+        %table.table.table-sm.table-bordered.table-hover
+
+          %thead
+            %tr
+              %th
+                no.
+              %th
+                Member
+              %th
+                Loan
+              %th
+                PN number
+              %th
+                Principal Balance
+              %th
+                Accrued Interest
+          %tbody
+            - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|
+              %tr
+                %td
+                  #{ i + 1 }
+                %td 
+                  #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
+                %td
+                  #{a["loan_product"]["name"]}
+                %td
+                  #{a["pn_number"]}
+                %td
+                  #{a["principal_balance"]}
+                %td
+                  #{a["cumputed_accrued_interest"]}
+
+
+    
+
+
+
+
+= render partial: "adjustments/accrued_interests/modals/delete"
+= render partial: "adjustments/accrued_interests/modals/process"

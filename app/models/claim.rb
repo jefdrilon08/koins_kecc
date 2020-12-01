@@ -19,6 +19,8 @@ class Claim < ApplicationRecord
 
   before_validation :load_defaults
 
+  
+
   def book
     temp_data = self.data.with_indifferent_access
 
@@ -212,5 +214,7 @@ class Claim < ApplicationRecord
   # def old_balance
   #   self.new_balance - self.data.with_indifferent_access[:amount].to_f
   # end
+
+  
 end
 

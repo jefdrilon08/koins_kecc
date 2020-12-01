@@ -278,8 +278,8 @@ class MembersController < ApplicationController
     
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
-        end_date = DateTime.parse(end_date_string).try(:to_date)
-        start_date = DateTime.parse(start_date_string).try(:to_date)
+        end_date = DateTime.parse(end_date_string).to_date
+        start_date = DateTime.parse(start_date_string).to_date
       # else
       #   end_date = nil
       #   start_date = nil

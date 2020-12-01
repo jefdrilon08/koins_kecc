@@ -74,7 +74,7 @@ module Claims
       #   @errors << "Account number field is required"
       # end
 
-      #validate_scholar_duplication!
+      validate_scholar_duplication!
       return  @errors
     end
 

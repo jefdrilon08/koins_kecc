@@ -8,8 +8,6 @@
             %thead
               %tr
                 %th
-                  Member
-                %th
                   Branch
                 %th
                   Cut off date
@@ -24,10 +22,6 @@
                 %th
                   Actions
             %tr
-              %td
-                = link_to member_path(ai.member), target: "_blank" do
-                  %strong
-                    #{Member.find(ai.member).full_name}
               %td
                 #{ai.branch}
               %td
@@ -53,27 +47,11 @@
                   %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
                     .fa.fa-check
                     Process
+              %td
+                = link_to adjustments_accrued_interest_path(ai.id), class: 'btn btn-primary' do
+                  .fa.fa-search
 
                 
-            %tr
-              %th Loan Product
-              %th{:colspan => "4"} PN Number
-              %th Principal Balance
-              %th Acrued Interest
-              %th Accrued Status
-            - ai.data["active_loans"].each do |al|
-              %tr
-                %td
-                  #{al["loan_product"]["name"]}
-                %td{:colspan => "4"}
-                  #{al["pn_number"]}
-                %td
-                  #{al["principal_balance"]}
-                %td
-                  #{al["cumputed_accrued_interest"]}
-                %td
-                  #{al["cut_off_status"]}
-              
 
 
 

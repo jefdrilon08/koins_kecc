@@ -68,13 +68,18 @@
     .form-group
       %label.col.control-label
         Prepared by
-        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize  
+        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize
+  .col
+    .form-group
+      %label.col.control-label
+        Date of Letter of Approval(LOA)
+        = text_field_tag :date_of_loa, @claim.data["date_of_loa"], class: 'form-control', id: 'date-of-loa', type: 'date'  
+.row
   .col
     .form-group
       %label.col.control-label
         Claims Payment through
         = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-.row
   .col
     .form-group
       %label.col.control-label
