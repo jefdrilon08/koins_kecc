@@ -16,6 +16,8 @@
               %th
                 Number of days moratorium
               %th
+                Status
+              %th
                 Action
           %tbody
             %tr
@@ -29,6 +31,8 @@
                 #{@adjustment_record.end_date}
               %td
                 #{@adjustment_record.number_of_moratoium_day}
+              %td
+                #{@adjustment_record.status}
               %td
                 - if @adjustment_record.status == "pending"
                   %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: @adjustment_record.id } }
@@ -59,19 +63,22 @@
                 Accrued Interest
           %tbody
             - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|
-              %tr
-                %td
-                  #{ i + 1 }
-                %td 
-                  #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
-                %td
-                  #{a["loan_product"]["name"]}
-                %td
-                  #{a["pn_number"]}
-                %td
-                  #{a["principal_balance"]}
-                %td
-                  #{a["cumputed_accrued_interest"]}
+              - if a["principal_balance"] > 0
+                %tr
+                  %td
+                    #{ i + 1 }
+                  %td 
+                    = link_to member_path(a["member"]["id"]), target: "_blank" do
+                      %strong
+                        #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
+                  %td
+                    #{a["loan_product"]["name"]}
+                  %td
+                    #{a["pn_number"]}
+                  %td
+                    #{a["principal_balance"]}
+                  %td
+                    #{a["cumputed_accrued_interest"]}
 
 
     

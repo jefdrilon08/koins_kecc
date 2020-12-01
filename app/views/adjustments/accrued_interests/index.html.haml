@@ -40,14 +40,6 @@
                   .bande.badge-success
                     #{ai.status}
               %td
-                - if ai.status == "pending"
-                  %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: ai.id } }
-                    .fa.fa-times
-                    Delete
-                  %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
-                    .fa.fa-check
-                    Process
-              %td
                 = link_to adjustments_accrued_interest_path(ai.id), class: 'btn btn-primary' do
                   .fa.fa-search
 

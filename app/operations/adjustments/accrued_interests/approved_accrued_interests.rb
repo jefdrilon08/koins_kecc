@@ -12,7 +12,7 @@ module Adjustments
 
       def execute!
         @accrued_interest_data[:active_loans].each do |accrued|
-          if accrued[:cut_off_status] == "valid"
+          if accrued[:cumputed_accrued_interest] > 0
             amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
                                                                                   "loan_id = ? AND 
                                                                                    due_date >= ?",
