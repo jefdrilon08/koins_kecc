@@ -2,6 +2,7 @@
   .col
     .card
       .card-body
+        = render partial: "index_filter"
             
         - @accrued_interests.each do |ai|
           %table.table.table-sm.table-bordered
