@@ -59,19 +59,20 @@
                 Accrued Interest
           %tbody
             - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|
-              %tr
-                %td
-                  #{ i + 1 }
-                %td 
-                  #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
-                %td
-                  #{a["loan_product"]["name"]}
-                %td
-                  #{a["pn_number"]}
-                %td
-                  #{a["principal_balance"]}
-                %td
-                  #{a["cumputed_accrued_interest"]}
+              - if a["principal_balance"] > 0
+                %tr
+                  %td
+                    #{ i + 1 }
+                  %td 
+                    #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
+                  %td
+                    #{a["loan_product"]["name"]}
+                  %td
+                    #{a["pn_number"]}
+                  %td
+                    #{a["principal_balance"]}
+                  %td
+                    #{a["cumputed_accrued_interest"]}
 
 
     
