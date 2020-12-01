@@ -61,10 +61,11 @@ module Adjustments
             if loan.maturity_date.to_date > @start_date.to_date
               if record[:principal_balance].to_f > 0
                 principal_balance = record[:overall_principal_balance].to_f
+                @cut_off_status = "valid"
               else
                 principal_balance = 0.0
+                @cut_off_status = "invalid"
               end
-              @cut_off_status = "valid"
 
             
               
