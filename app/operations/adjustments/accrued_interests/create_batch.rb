@@ -15,7 +15,7 @@ module Adjustments
         @accrued_type             = @config[:accrued_type]
         @number_of_moratorium_day = @config[:number_of_moratorium_days]
         
-      
+        
         @accrued_interest = AccruedInterest.new(
                               branch: @branch,
                               cut_off_date: @cut_off_date,

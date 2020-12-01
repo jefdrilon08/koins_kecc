@@ -46,7 +46,8 @@ module Api
             cut_off_date: cut_off_date,
             start_date: start_date,
             end_date: end_date,
-            number_of_moratorium_days:  number_of_moratorium_days
+            number_of_moratorium_days:  number_of_moratorium_days,
+            accrued_type: accrued_type
           
           }
           record = ::Adjustments::AccruedInterests::CreateBatch.new(
@@ -63,6 +64,8 @@ module Api
           accrued_interest_id = params[:id]
           accrued_interest = AccruedInterest.where(id: params[:id]).first
           user = current_user
+          
+
           
           #config = {
           #            accrued_interest: accrued_interest,

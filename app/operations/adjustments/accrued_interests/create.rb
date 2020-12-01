@@ -3,7 +3,6 @@ module Adjustments
     class Create
       def initialize(config:)
         @config         = config
-
         @branch                   = @config[:branch]
         @center                   = @config[:center]
         @cut_off_date             = @config[:cut_off_date]

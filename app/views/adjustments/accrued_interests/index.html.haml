@@ -18,6 +18,8 @@
                 %th
                   Number of days moratorium
                 %th
+                  Accrued Type
+                %th
                   Status
                 %th
                   Actions
@@ -32,6 +34,8 @@
                 #{ai.end_date}
               %td
                 #{ai.number_of_moratoium_day}
+              %td
+                #{ai.accrued_type}
               %td
                 - if ai.status == "pending"
                   .badge.badge-danger

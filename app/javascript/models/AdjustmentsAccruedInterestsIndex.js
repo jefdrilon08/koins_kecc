@@ -326,6 +326,8 @@ var _bindEvents = function() {
     var inputNumberOfMoratoriumDays =  $inputNumberOfMoratoriumDays.val();
     var selectAccruedType = $selectAccruedType.val();
 
+    
+
     $btnConfirmNew.prop("disabled", true);
     $selectBranch.prop("disabled", true);
     $selectCenter.prop("disabled", true);
