@@ -367,6 +367,8 @@ namespace :api do
     post "/claims/post", to: "claims#post"
     post "/claims/pending", to: "claims#pending"
     post "/claims/check", to: "claims#check"
+    post "/claims/proceed", to: "claims#proceed"
+    post "/claims/declined", to: "claims#declined"
     post "/claims/update", to: "claims#update"
     post "/claims/modify_claims_template", to: "claims#modify_claims_template"
     post "/claims/modify_book", to: "claims#modify_book"

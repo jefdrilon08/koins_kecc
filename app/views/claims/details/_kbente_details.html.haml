@@ -112,9 +112,18 @@
 - if @claim.note.present?
   - if @claim.pending?  
     .bs-callout.bs-callout-primary
-      %p
-        %b
-          NOTE:
-        #{@claim.note}
-        %hr
+      .alert.alert-info  
+        %p
+          %b
+            NOTE:
+          #{@claim.note}
+- if @claim.declined_note.present?
+  - if @claim.pending?  
+    .bs-callout.bs-callout-primary  
+      .alert.alert-danger  
+        %p
+          %i.fa.fa-warning{:style => "font-size:40px;color:red"}
+          %b
+            DECLINED NOTE:
+          #{@claim.declined_note}
 

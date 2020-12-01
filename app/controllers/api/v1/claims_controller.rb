@@ -57,6 +57,83 @@ module Api
         end
       end
 
+      def proceed
+        claim = Claim.find(params[:id])
+
+        config = {
+          claim: claim
+        }
+
+        if ["MIS", "AO"].include? current_user.roles.last
+          errors  = Claims::ValidateClaimForProceeding.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim  = Claims::ProceedClaim.new(
+                                        config: config
+                                      ).execute!
+
+            if current_user.email == "adriansanandres08@gmail.com"
+              @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com"])
+            elsif current_user.email == "diobertcalanza@yahoo.com"
+              @checking_users = User.where("email IN (?)", ["adriansanandres08@gmail.com"])
+            else
+              @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com", "adriansanandres08@gmail.com"])
+            end
+
+            @checking_users.each do |user|
+              ::Claims::NotifyUser.new(claim: claim, user: user).execute!
+            end
+
+            render json: { message: "Successfully proceed claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
+      def declined
+        claim = Claim.find(params[:id])
+        declined_note   = params[:declined_note]
+
+        config = {
+          claim: claim,
+          declined_note: declined_note
+        }
+
+        if ["MIS", "AO"].include? current_user.roles.last
+          errors  = Claims::ValidateClaimForDeclining.new(
+                      config: config
+                    ).execute!
+
+          first_name = claim.prepared_by.split(" ").first
+          last_name = claim.prepared_by.split(" ").last
+
+          @user = User.where(first_name: first_name, last_name: last_name).first
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            claim  = Claims::DeclinedClaim.new(
+                                        config: config
+                                      ).execute!
+
+            ::Claims::NotifyUser.new(claim: claim, user: @user).execute!
+
+            render json: { message: "Successfully proceed claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
       def pending
         claim = Claim.find(params[:id])
 
@@ -158,19 +235,7 @@ module Api
                                       claim: claim,
                                       user: current_user
                                     }
-                                  ).execute!
-
-        if current_user.email == "adriansanandres08@gmail.com"
-          @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com"])
-        elsif current_user.email == "diobertcalanza@yahoo.com"
-          @checking_users = User.where("email IN (?)", ["adriansanandres08@gmail.com"])
-        else
-          @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com", "adriansanandres08@gmail.com"])
-        end
-
-        @checking_users.each do |user|
-          ::Claims::NotifyUser.new(claim: claim, user: user).execute!
-        end 
+                                  ).execute! 
 
         claim.update!(data: claim_data)
       end

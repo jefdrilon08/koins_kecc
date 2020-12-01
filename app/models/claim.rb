@@ -61,6 +61,16 @@ class Claim < ApplicationRecord
     data[:note]
   end
 
+  def declined_note
+    data = self.data.with_indifferent_access
+
+    data[:declined_note]
+  end
+
+  def proceed_checking?
+    self.data.with_indifferent_access[:for_proceed] == true
+  end
+
   def claims_template
     temp_data = self.data.with_indifferent_access 
 

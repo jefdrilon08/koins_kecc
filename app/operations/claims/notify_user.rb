@@ -15,6 +15,10 @@ module Claims
         @status = "For Posting"
       end
 
+      if @claim.declined_note.present?
+        @status = "Declined"
+      end
+
       if @claim.kalinga?
         if @claim.member.check_name == @claim.data.with_indifferent_access[:name_of_insured]
           @member = @claim.member.try(:full_name)

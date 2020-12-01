@@ -247,14 +247,38 @@ class ClaimsController < ApplicationController
 
     @subheader_side_actions = []
 
-    if @claim.pending?
+    if @claim.pending? && !@claim.proceed_checking?
+      if ["AO"].include? current_user.roles.last
+        @subheader_side_actions << {
+            id: "btn-proceed",
+            link: "#",
+            class: "fa fa-check",
+            text: "Proceed for Checking"
+          }
+      end
+    end
+
+    if @claim.pending? && @claim.proceed_checking?
+      if ["AO"].include? current_user.roles.last
+        if ["Adrian", "Diobert"].include? current_user.first_name
+          @subheader_side_actions << {
+            id: "btn-declined",
+            link: "#",
+            class: "fa fa-check",
+            text: "Declined"
+          }
+        end
+      end
+    end
+
+    if @claim.pending? && @claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
         if ["Adrian", "Diobert"].include? current_user.first_name 
           @subheader_side_actions << {
             id: "btn-check",
             link: "#",
             class: "fa fa-check",
-            text: " Check"
+            text: "Check"
           }
         end
       end
@@ -282,9 +306,9 @@ class ClaimsController < ApplicationController
       end
     end
 
-    if @claim.pending?
+    if @claim.pending? && !@claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
-        if @claim.nil?  
+        if @claim.note.nil?  
           @subheader_side_actions << {
             id: "btn-note",
             link: "#",
@@ -332,7 +356,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
@@ -368,7 +392,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
@@ -404,7 +428,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
@@ -440,7 +464,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
@@ -476,7 +500,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
@@ -511,7 +535,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
@@ -560,7 +584,7 @@ class ClaimsController < ApplicationController
 
         if @claim.pending? || @claim.for_approval?
           if ["MIS", "AO"].include? current_user.roles.last
-            if @claim.pending?
+            if @claim.pending? && !@claim.proceed_checking?
               @subheader_side_actions << {
                 link: edit_claim_path(@claim),
                 class: "fa fa-edit",
