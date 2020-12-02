@@ -42,6 +42,7 @@ var _branchId;
 var _centerId;
 var _memberId;
 var _moratoriumId;
+var _memberDetails;
 
 var _urlCreate        = "/api/v1/adjustments/accrued_interests/create";
 var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
@@ -85,7 +86,7 @@ var _cacheDom = function() {
   $btnConfirmBatchProcess       = $("#btn-confirm-batch-process");
   $message                      = $(".message");
 
-  $btnRemove                    = $("#btn-remove")
+  $btnRemove                    = $(".btn-remove")
 
 
   templateErrorList = $("#template-error-list").html();
@@ -247,8 +248,8 @@ var _bindEvents = function() {
 
 
   $btnRemove.on("click", function() {
-  _moratoriumId = $(this).data("id");
-    alert("jef")
+    _memberDetails = $(this).data("id");
+    alert(_memberDetails)
   });
 
 

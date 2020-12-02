@@ -57,8 +57,8 @@ module Adjustments
         loan = Loan.find(record[:id])
   
         if loan.status == "active"
-          if loan.date_released.to_date < @start_date.to_date
-            if loan.maturity_date.to_date > @start_date.to_date
+          if loan.date_released.to_date <= @start_date.to_date
+            if loan.maturity_date.to_date >= @start_date.to_date
               if record[:principal_balance].to_f > 0
                 principal_balance = record[:overall_principal_balance].to_f
                 @cut_off_status = "valid"
