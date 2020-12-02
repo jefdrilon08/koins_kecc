@@ -52,11 +52,6 @@
                 %label
                   Number of days moratorium 
                 = number_field_tag :number_of_moratorium_days, 0, class: "form-control", id: "input-number-of-moratorium-days"
-            .col-md-6.col-xs-12
-              .form-group
-                %label
-                  Accrued Type
-                = select_tag :accrued_type, options_for_select([["BLANKET"],["INDIVIDUAL"]]), class: "form-control select-select2", id: "select-accrued-type", prompt: "-- SELECT --"
                 
       .modal-footer
         .controls

@@ -21,7 +21,7 @@ module Adjustments
           id: "btn-new",
           link: "#",
           class: "fa fa-plus",
-          text: "New"
+          text: "Individual Process"
         }
       ]
     end

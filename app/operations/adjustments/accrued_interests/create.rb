@@ -74,7 +74,7 @@ module Adjustments
                 @cut_off_status = "invalid"
                 principal_balance = principal_balance_details.last[:overall_principal_balance].to_f
               else
-                principal_balance = 0.0
+                principal_balance = principal_balance_details.last[:overall_principal_balance].to_f
                 @cut_off_status = "valid"
 
               end

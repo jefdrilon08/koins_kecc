@@ -11,7 +11,8 @@ module Api
           start_date        = params[:start_date]
           end_date          = params[:end_date]
           #number_of_days    = params[:number_of_days]
-          accrued_type      = params[:select_accrued_type]
+          #accrued_type      = params[:select_accrued_type]
+          accrued_type      = "INDIVIDUAL"
           number_of_moratorium_days = params[:input_number_of_moratorium_days]
           member            = Member.where(id: params[:member_id]).first
           loans             = Loan.where(id: params[:loan_ids])
@@ -81,11 +82,14 @@ module Api
         def batch_process    
           branch_id = params[:branch_id]
           branch = Branch.where(id: params[:branch_id]).first
-          batchnumberOfDays = params[:batchnumberOfDays]
+          #batchnumberOfDays = params[:batchnumberOfDays]
+          batchnumberOfDays = 0
           batchStartDate = params[:batchStartDate]
           batchEndDate = params[:batchEndDate]  
-          batchAccruedType = params[:batchAccruedType]
+          #batchAccruedType = params[:batchAccruedType]
+          batchAccruedType = "BLANKET"
           inputDateInitializedCutOff = params[:inputDateInitializedCutOff]
+          #inputDateInitializedCutOff = 0
           config = {
             branch: branch,
             cut_off_date: inputDateInitializedCutOff,
