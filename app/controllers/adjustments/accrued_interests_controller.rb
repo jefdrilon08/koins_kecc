@@ -12,6 +12,12 @@ module Adjustments
       ]
       @subheader_side_actions = [
         {
+          id: "btn-batch-process",
+          link: "#",
+          class: "fa fa-sync",
+          text: "Batch Process"
+        },
+        {
           id: "btn-new",
           link: "#",
           class: "fa fa-plus",
@@ -21,7 +27,7 @@ module Adjustments
     end
     def show
       @adjustment_record  = AccruedInterest.find(params[:id])
-
+    
       #@meta = @adjustment_record.meta.with_indifferent_access
       #@data = @adjustment_record.data.with_indifferent_access
       #@accounting_entry = @data[:accounting_entry]

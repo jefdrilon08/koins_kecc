@@ -12,12 +12,16 @@ module Adjustments
 
       def execute!
         @accrued_interest_data[:active_loans].each do |accrued|
-          if accrued[:cut_off_status] == "valid"
+          if accrued[:cumputed_accrued_interest] > 0
             amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
                                                                                   "loan_id = ? AND 
                                                                                    due_date >= ?",
                                                                                    accrued[:id],
                                                                                    @accrued_interest_details.start_date)
+
+                                                                                 
+          if @accrued_interest_details.accrued_type != "BLANKET"  
+
             if amortization_schedule_entries.any?
               loan_term = accrued[:loan_term]
               current_date  = amortization_schedule_entries.first.due_date
@@ -46,7 +50,8 @@ module Adjustments
               end #end of amortization
 
             end #end of amortization schedule entry
-          
+
+          end #end of @accrued_interest_details.accrued_type
             #pag save ng interest sa loan
             a = Loan.find(accrued[:id])
             accrued_interest = {
@@ -59,7 +64,7 @@ module Adjustments
             a_data[:accrued_interest] = accrued_interest
             a.update(data: a_data)
 
-          end
+          end #end of accrued[:cumputed_accrued_interest]
         end #end of accrued_interest_data[:active_loans]
         @accrued_interest_details.update!(status: "approved")    
 

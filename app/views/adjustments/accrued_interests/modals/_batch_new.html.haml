@@ -1,0 +1,53 @@
+#modal-batch-process.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Batch
+      .modal-body
+        .modal-body-content
+          .row
+            .col-md-6-col-xs-12
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id_branch, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-batch-branch", prompt: "-- SELECT --"
+            .col-md-6.col-xs-12
+              .form-group
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Cut off date(Manual Aging as_of)
+                = date_field_tag :date_initialized_cut_off, Date.today, class: "form-control", id: "input-date-initialized-cut-off"
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Start date
+                = date_field_tag :batch_start_date, Date.today, class: "form-control", id: "batch-input-start-date"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  End date
+                = date_field_tag :batch_end_date, Date.today, class: "form-control", id: "batch-input-end-date"
+          .row
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Number of days moratorium 
+                = number_field_tag :batch_number_of_moratorium_days, 0, class: "form-control", id: "input-batch-number-of-moratorium-days"
+            .col-md-6.col-xs-12
+              .form-group
+                %label
+                  Accrued Type
+                = select_tag :batch_accrued_type, options_for_select([["BLANKET"],["INDIVIDUAL"]]), class: "form-control select-select2", id: "select-batch-accrued-type", prompt: "-- SELECT --"
+                
+      .modal-footer
+        .controls
+          %button#btn-confirm-batch-process.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

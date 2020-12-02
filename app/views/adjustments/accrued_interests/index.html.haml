@@ -1,8 +1,7 @@
 .row
   .col
     .card
-      .card-body
-            
+      .card-body    
         - @accrued_interests.each do |ai|
           %table.table.table-sm.table-bordered
             %thead
@@ -17,6 +16,8 @@
                   End date
                 %th
                   Number of days moratorium
+                %th
+                  Accrued Type
                 %th
                   Status
                 %th
@@ -33,20 +34,14 @@
               %td
                 #{ai.number_of_moratoium_day}
               %td
+                #{ai.accrued_type}
+              %td
                 - if ai.status == "pending"
                   .badge.badge-danger
                     #{ai.status}
                 - else
                   .bande.badge-success
                     #{ai.status}
-              %td
-                - if ai.status == "pending"
-                  %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: ai.id } }
-                    .fa.fa-times
-                    Delete
-                  %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
-                    .fa.fa-check
-                    Process
               %td
                 = link_to adjustments_accrued_interest_path(ai.id), class: 'btn btn-primary' do
                   .fa.fa-search
@@ -57,4 +52,5 @@
 
 = render partial: "adjustments/accrued_interests/modals/new"
 = render partial: "adjustments/accrued_interests/modals/process"
+= render partial: "adjustments/accrued_interests/modals/batch_new"
 = render partial: "adjustments/accrued_interests/modals/delete"

@@ -112,9 +112,8 @@ module Api
                     ).execute!
 
           first_name = claim.prepared_by.split(" ").first
-          last_name = claim.prepared_by.split(" ").last
 
-          @user = User.where(first_name: first_name, last_name: last_name).first
+          @user = User.where(first_name: first_name).first
 
           if errors[:messages].any?
             render json: { errors: errors }, status: 400

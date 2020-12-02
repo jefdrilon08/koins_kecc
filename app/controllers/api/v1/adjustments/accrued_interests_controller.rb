@@ -15,11 +15,12 @@ module Api
           number_of_moratorium_days = params[:input_number_of_moratorium_days]
           member            = Member.where(id: params[:member_id]).first
           loans             = Loan.where(id: params[:loan_ids])
+          
 
+      
 
               
 
-        if member != nil 
         
           config = {
             branch: branch,
@@ -38,22 +39,6 @@ module Api
           record = ::Adjustments::AccruedInterests::Create.new(
                                                                 config: config
                                                                ).execute!
-        else
-          
-          
-          config = {
-            branch: branch,
-            cut_off_date: cut_off_date,
-            start_date: start_date,
-            end_date: end_date,
-            number_of_moratorium_days:  number_of_moratorium_days
-          
-          }
-          record = ::Adjustments::AccruedInterests::CreateBatch.new(
-                                                                config: config
-                                                               ).execute!
-          
-        end
           
 
 
@@ -63,6 +48,8 @@ module Api
           accrued_interest_id = params[:id]
           accrued_interest = AccruedInterest.where(id: params[:id]).first
           user = current_user
+          
+
           
           #config = {
           #            accrued_interest: accrued_interest,
@@ -91,28 +78,24 @@ module Api
           render json: { message: "ok" }
         end
 
-        def create_batch_accrued
+        def batch_process    
+          branch_id = params[:branch_id]
           branch = Branch.where(id: params[:branch_id]).first
-          #center = Center.where(id: params[:center_id]).first
-          cut_off_date      = params[:date_initialized]
-          start_date        = params[:start_date]
-          end_date          = params[:end_date]
-          #accrued_type      = params[:select_accrued_type]
-          number_of_moratorium_days = params[:input_number_of_moratorium_days]
-
-
-        
-
-
+          batchnumberOfDays = params[:batchnumberOfDays]
+          batchStartDate = params[:batchStartDate]
+          batchEndDate = params[:batchEndDate]  
+          batchAccruedType = params[:batchAccruedType]
+          inputDateInitializedCutOff = params[:inputDateInitializedCutOff]
           config = {
             branch: branch,
-            cut_off_date: cut_off_date,
-            start_date: start_date,
-            end_date: end_date,
-            number_of_moratorium_days:  number_of_moratorium_days
+            cut_off_date: inputDateInitializedCutOff,
+            start_date: batchStartDate,
+            end_date:  batchEndDate,
+            number_of_moratorium_days:  batchnumberOfDays,
+            accrued_type: batchAccruedType
           
           }
-
+        
           record = ::Adjustments::AccruedInterests::CreateBatch.new(
                                                                 config: config
                                                                ).execute!
