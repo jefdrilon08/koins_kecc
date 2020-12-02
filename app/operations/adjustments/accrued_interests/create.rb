@@ -60,8 +60,8 @@ module Adjustments
         
           loan = Loan.find(loan.id)
         
-          if loan.date_released.to_date <= @start_date.to_date
-            if loan.maturity_date.to_date => @start_date.to_date 
+          if loan.date_released.to_date =< @start_date.to_date
+            if loan.maturity_date.to_date >= @start_date.to_date 
           
               principal_balance_details = @data_store_data[:records].select{ 
                                                                     |o|

@@ -30,6 +30,9 @@ var $message;
 var templateErrorList;
 var _authenticityToken;
 
+
+var $btnRemove;
+
 var _centers  = [];
 var _members  = [];
 var _loans    = [];
@@ -81,6 +84,9 @@ var _cacheDom = function() {
   $btnConfirmProcess            = $("#btn-confirm-process");
   $btnConfirmBatchProcess       = $("#btn-confirm-batch-process");
   $message                      = $(".message");
+
+  $btnRemove                    = $("#btn-remove")
+
 
   templateErrorList = $("#template-error-list").html();
 
@@ -238,6 +244,13 @@ var _bindEvents = function() {
       }
     });
   });
+
+
+  $btnRemove.on("click", function() {
+  _moratoriumId = $(this).data("id");
+    alert("jef")
+  });
+
 
   $btnDelete.on("click", function() {
     _moratoriumId = $(this).data("id");
