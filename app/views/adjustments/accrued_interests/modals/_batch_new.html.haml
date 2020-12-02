@@ -31,17 +31,6 @@
                 %label
                   End date
                 = date_field_tag :batch_end_date, Date.today, class: "form-control", id: "batch-input-end-date"
-          .row
-            .col-md-6.col-xs-12
-              .form-group
-                %label
-                  Number of days moratorium 
-                = number_field_tag :batch_number_of_moratorium_days, 0, class: "form-control", id: "input-batch-number-of-moratorium-days"
-            .col-md-6.col-xs-12
-              .form-group
-                %label
-                  Accrued Type
-                = select_tag :batch_accrued_type, options_for_select([["BLANKET"],["INDIVIDUAL"]]), class: "form-control select-select2", id: "select-batch-accrued-type", prompt: "-- SELECT --"
                 
       .modal-footer
         .controls
