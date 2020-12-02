@@ -58,10 +58,11 @@ namespace :report do
       #pod_type = "50-01"
       tot_loan_balance = y.principal_balance + y.interest_balance
       over_due_days = ( s_date.to_date - y.maturity_date.to_date).to_i
-      amort = AmortizationScheduleEntry.where(loan_id: y.id)
+      amort = AmortizationScheduleEntry.where(loan_id: y.id).order(:due_date)
       monthly_payment = amort.first.amount_due * 4
       outs_payment = amort.where("is_paid IS NULL").count
       last_payment = amort.last.amount_due
+
 
       #gender
       if y.member.gender == 'Female'
@@ -102,9 +103,9 @@ namespace :report do
       elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO' or loan_prod == 'K - BISIKLETA'
         loan_purpose = 'SE'
       end
-      if y.maturity_date >= s_date
-        j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
-      end
+    
+      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+
     @data << j
     end  
     puts @data
