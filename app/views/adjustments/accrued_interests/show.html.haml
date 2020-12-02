@@ -70,8 +70,9 @@
           %tbody
                    
             - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|  
-              -if a["accrued_type"] == "BLANKET"   
-                - if a["active_loans"]["principal_balance"] > 0
+              -if @adjustment_record.accrued_type == "BLANKET"   
+                  
+                - if a["principal_balance"] > 0
                   %tr
                     %td
                       #{ i + 1 }
