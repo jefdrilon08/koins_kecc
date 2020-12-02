@@ -253,7 +253,7 @@ class ClaimsController < ApplicationController
 
     if @claim.pending? && !@claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
-        if current_user.first_name == @claim.prepared_by.split(" ").first
+        if current_user.first_name.upcase == @claim.prepared_by.split(" ").first.upcase
           @subheader_side_actions << {
               id: "btn-proceed",
               link: "#",
