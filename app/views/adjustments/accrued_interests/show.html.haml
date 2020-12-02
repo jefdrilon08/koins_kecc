@@ -108,7 +108,10 @@
                     #{a["cumputed_accrued_interest"]}
                   %td
                     #{a["cut_off_status"]}
-
+                  %td
+                    %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: @adjustment_record.id } }
+                      .fa.fa-times
+                      Delete
 
 
     
