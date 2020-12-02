@@ -253,12 +253,14 @@ class ClaimsController < ApplicationController
 
     if @claim.pending? && !@claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
-        @subheader_side_actions << {
-            id: "btn-proceed",
-            link: "#",
-            class: "fa fa-check",
-            text: "Proceed for Checking"
-          }
+        if current_user.first_name == @claim.prepared_by.split(" ").first
+          @subheader_side_actions << {
+              id: "btn-proceed",
+              link: "#",
+              class: "fa fa-check",
+              text: "Proceed for Checking"
+            }
+        end
       end
     end
 
