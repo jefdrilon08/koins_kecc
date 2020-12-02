@@ -253,18 +253,20 @@ class ClaimsController < ApplicationController
 
     if @claim.pending? && !@claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
-        @subheader_side_actions << {
-            id: "btn-proceed",
-            link: "#",
-            class: "fa fa-check",
-            text: "Proceed for Checking"
-          }
+        if current_user.first_name == @claim.prepared_by.split(" ").first
+          @subheader_side_actions << {
+              id: "btn-proceed",
+              link: "#",
+              class: "fa fa-check",
+              text: "Proceed for Checking"
+            }
+        end
       end
     end
 
     if @claim.pending? && @claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
-        if ["Adrian", "Diobert"].include? current_user.first_name
+        if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name
           @subheader_side_actions << {
             id: "btn-declined",
             link: "#",
@@ -277,7 +279,7 @@ class ClaimsController < ApplicationController
 
     if @claim.pending? && @claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
-        if ["Adrian", "Diobert"].include? current_user.first_name 
+        if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name 
           @subheader_side_actions << {
             id: "btn-check",
             link: "#",
@@ -301,12 +303,14 @@ class ClaimsController < ApplicationController
       end
 
       if ["MIS", "AO"].include? current_user.roles.last
-        @subheader_side_actions << {
-          id: "btn-pending",
-          link: "#",
-          class: "fa fa-undo",
-          text: "Revert Pending"
-        }
+        if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name
+          @subheader_side_actions << {
+            id: "btn-pending",
+            link: "#",
+            class: "fa fa-undo",
+            text: "Revert Pending"
+          }
+        end
       end
     end
 
