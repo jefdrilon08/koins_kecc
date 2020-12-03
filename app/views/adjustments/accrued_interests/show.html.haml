@@ -1,3 +1,4 @@
+= hidden_field_tag :accrued_id, @adjustment_record.id, id: "accrued_id" 
 .row
   .col
     .card
@@ -58,9 +59,13 @@
               %th
                 Member
               %th
+                Center
+              %th
                 Loan
               %th
                 PN number
+              %th
+                Maturity Date
               %th
                 Principal Balance
               %th
@@ -72,7 +77,7 @@
             - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|  
               -if @adjustment_record.accrued_type == "BLANKET"   
                   
-                - if a["principal_balance"] > 0
+                - if a["principal_balance"] > 0 && a["cut_off_status"] != "invalid"
                   %tr
                     %td
                       #{ i + 1 }
@@ -81,15 +86,24 @@
                         %strong
                           #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
                     %td
+                      #{a["member"]["center"]}
+                    %td
                       #{a["loan_product"]["name"]}
                     %td
                       #{a["pn_number"]}
                     %td
-                      #{a["principal_balance"]}
+                      #{a["maturity_date"]}
+                    %td
+                      #{a["loan_product"]["maturity_date"]}
                     %td
                       #{a["cumputed_accrued_interest"]}
                     %td
                       #{a["cut_off_status"]}
+                    %td
+                      - if @adjustment_record.status == "pending"
+                        %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                          .fa.fa-times
+                          Remove
               -else   
                 %tr
                   %td
@@ -99,9 +113,13 @@
                       %strong
                         #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
                   %td
+                    #{a["member"]["center"]}
+                  %td
                     #{a["loan_product"]["name"]}
                   %td
                     #{a["pn_number"]}
+                  %td
+                    #{a["loan_product"]["maturity_date"]}
                   %td
                     #{a["principal_balance"]}
                   %td
@@ -109,9 +127,10 @@
                   %td
                     #{a["cut_off_status"]}
                   %td
-                    %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
-                      .fa.fa-times
-                      Remove
+                    - if @adjustment_record.status == "pending"
+                      %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                        .fa.fa-times
+                        Remove
 
 
     
