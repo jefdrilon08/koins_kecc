@@ -34,24 +34,24 @@
               .form-group
                 %label
                   Cut off date(Manual Aging as_of)
-                = date_field_tag :date_initialized, Date.today, class: "form-control", id: "input-date-initialized"
+                = date_field_tag :date_initialized, "2020-11-13", class: "form-control", id: "input-date-initialized"
           .row
             .col-md-6.col-xs-12
               .form-group
                 %label
                   Start date
-                = date_field_tag :start_date, Date.today, class: "form-control", id: "input-start-date"
+                = date_field_tag :start_date, "2020-09-15", class: "form-control", id: "input-start-date"
             .col-md-6.col-xs-12
               .form-group
                 %label
                   End date
-                = date_field_tag :end_date, Date.today, class: "form-control", id: "input-end-date"
+                = date_field_tag :end_date, "2020-11-13", class: "form-control", id: "input-end-date"
           .row
             .col-md-6.col-xs-12
               .form-group
                 %label
                   Number of days moratorium 
-                = number_field_tag :number_of_moratorium_days, 0, class: "form-control", id: "input-number-of-moratorium-days"
+                = number_field_tag :number_of_moratorium_days, 63, class: "form-control", id: "input-number-of-moratorium-days"
                 
       .modal-footer
         .controls

@@ -39,7 +39,7 @@ namespace :report do
     puts "Cut Off Date | #{s_date.to_date.strftime("%m/%d/%Y")}"
     puts "No. Of Clients| #{loan_count}"
     puts "BEGIN"
-    puts "CLIENT_REFERENCE|LAST_NAME|FIRST_NAME|MIDDLE_NAME|NO_STREET_SITIO_PUROK|BARANGAY_DISTRICT|CITY_MUNICIPALITY|PROVINCE|ZIP_CODE|BIRTHDATE|GENDER|CONTACT_NO|MOTHER'S MAIDEN FIRST NAME|MOTHER'S MAIDENMIDDLE NAME|MOTHER'S MAIDEN LAST NAME|ID_TYPE|ID_NO|SSS/GSIS|PAGIBIG|PHILHEALTH|TIN|LOAN_REFERENCE|CONTRACT_TYPE|CONTRACT_PHASE|TRANSACTION_TYPE|LOAN_PRINCIPAL|LOAN_BALANCE|DATE_GRANTED|DUE_DATE|INTEREST_RATE|PAY_FREQ|TERM|CURRENCY|LOAN_PURPOSE|#{m_type}_TYPE|TOTAL_LOAN_BALANCE|CONTRACT_ACTUAL_END_DATE|OVERDUE_DAYS|MONTHLY_PAYMENT_AMOUNT|NO_OF_OUTSTANDING_PAYMENT|AMOUNT_OF_LAST_PAYMENT|REMARKS"
+    puts "CLIENT_REFERENCE|LAST_NAME|FIRST_NAME|MIDDLE_NAME|NO_STREET_SITIO_PUROK|BARANGAY_DISTRICT|CITY_MUNICIPALITY|PROVINCE|ZIP_CODE|BIRTHDATE|BIRTH PLACE|GENDER|CIVIL STATUS|CONTACT_NO|MOTHER'S MAIDEN FIRST NAME|MOTHER'S MAIDENMIDDLE NAME|MOTHER'S MAIDEN LAST NAME|ID_TYPE|ID_NO|SSS/GSIS|PAGIBIG|PHILHEALTH|TIN|LOAN_REFERENCE|CONTRACT_TYPE|CONTRACT_PHASE|TRANSACTION_TYPE|LOAN_PRINCIPAL|LOAN_BALANCE|DATE_GRANTED|DUE_DATE|INTEREST_RATE|PAY_FREQ|TERM|CURRENCY|LOAN_PURPOSE|#{m_type}_TYPE|TOTAL_LOAN_BALANCE|CONTRACT_ACTUAL_END_DATE|OVERDUE_DAYS|MONTHLY_PAYMENT_AMOUNT|NO_OF_OUTSTANDING_PAYMENT|AMOUNT_OF_LAST_PAYMENT|REMARKS"
       
     loan_data.each do |y|
      
@@ -58,10 +58,11 @@ namespace :report do
       #pod_type = "50-01"
       tot_loan_balance = y.principal_balance + y.interest_balance
       over_due_days = ( s_date.to_date - y.maturity_date.to_date).to_i
-      amort = AmortizationScheduleEntry.where(loan_id: y.id)
+      amort = AmortizationScheduleEntry.where(loan_id: y.id).order(:due_date)
       monthly_payment = amort.first.amount_due * 4
       outs_payment = amort.where("is_paid IS NULL").count
       last_payment = amort.last.amount_due
+
 
       #gender
       if y.member.gender == 'Female'
@@ -102,8 +103,9 @@ namespace :report do
       elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO' or loan_prod == 'K - BISIKLETA'
         loan_purpose = 'SE'
       end
-      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
     
+      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+
     @data << j
     end  
     puts @data

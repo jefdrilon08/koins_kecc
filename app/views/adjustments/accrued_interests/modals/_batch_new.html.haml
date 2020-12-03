@@ -19,18 +19,18 @@
               .form-group
                 %label
                   Cut off date(Manual Aging as_of)
-                = date_field_tag :date_initialized_cut_off, Date.today, class: "form-control", id: "input-date-initialized-cut-off"
+                = date_field_tag :date_initialized_cut_off, "2020-11-13", class: "form-control", id: "input-date-initialized-cut-off"
           .row
             .col-md-6.col-xs-12
               .form-group
                 %label
                   Start date
-                = date_field_tag :batch_start_date, Date.today, class: "form-control", id: "batch-input-start-date"
+                = date_field_tag :batch_start_date, "2020-09-15", class: "form-control", id: "batch-input-start-date"
             .col-md-6.col-xs-12
               .form-group
                 %label
                   End date
-                = date_field_tag :batch_end_date, Date.today, class: "form-control", id: "batch-input-end-date"
+                = date_field_tag :batch_end_date, "2020-11-13", class: "form-control", id: "batch-input-end-date"
                 
       .modal-footer
         .controls

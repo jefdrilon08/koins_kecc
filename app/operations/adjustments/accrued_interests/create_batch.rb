@@ -56,9 +56,9 @@ module Adjustments
       @data_store_data[:records].each do |record|
         loan = Loan.find(record[:id])
   
-        if loan.status == "active"
+        #if loan.status == "active"
           if loan.date_released.to_date < @start_date.to_date
-            if loan.maturity_date.to_date > @start_date.to_date
+            if loan.maturity_date.to_date >= @start_date.to_date 
               if record[:principal_balance].to_f > 0
                 principal_balance = record[:overall_principal_balance].to_f
                 @cut_off_status = "valid"
@@ -81,14 +81,16 @@ module Adjustments
                 loan_product: {
                   id: record[:id],
                   name: record[:loan_product][:name],
-                  par_amount: record[:principal_balance]
+                  par_amount: record[:principal_balance],
+                  maturity_date: loan.maturity_date
                 },
                 member: {
                   id: record[:member][:id],
                   first_name: record[:member][:first_name],
                   last_name: record[:member][:last_name],
                   middle_name: record[:member][:middle_name],
-                  identification_number: record[:member][:identification_number]
+                  identification_number: record[:member][:identification_number],
+                  center: loan.center.name
                 }
                 
 
@@ -96,7 +98,7 @@ module Adjustments
               }
             end
           end
-        end
+        #end
 
       end #end of data_store_date
     end #end of process batch loans

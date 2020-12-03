@@ -60,8 +60,8 @@ module Adjustments
         
           loan = Loan.find(loan.id)
         
-          if loan.date_released.to_date < @start_date.to_date
-            if loan.maturity_date.to_date > @start_date.to_date 
+          if loan.date_released.to_date <= @start_date.to_date
+            if loan.maturity_date.to_date >= @start_date.to_date 
           
               principal_balance_details = @data_store_data[:records].select{ 
                                                                     |o|
@@ -94,14 +94,16 @@ module Adjustments
                 loan_product: {
                   id: loan_product.id,
                   name: loan_product.name,
-                  par_amount: principal_balance
+                  par_amount: principal_balance,
+                  maturity_date: loan.maturity_date
                 },
                 member: {
                   id: loan.member.id,
                   first_name: loan.member.first_name,
                   last_name: loan.member.last_name,
                   middle_name: loan.member.middle_name,
-                  identification_number: loan.member.identification_number
+                  identification_number: loan.member.identification_number,
+                  center: loan.center.name
                 }
                 
 

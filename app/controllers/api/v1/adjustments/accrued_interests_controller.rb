@@ -48,7 +48,7 @@ module Api
         def process_accrued
           accrued_interest_id = params[:id]
           accrued_interest = AccruedInterest.where(id: params[:id]).first
-          user = current_user
+          #user = current_user
           
 
           
@@ -59,10 +59,11 @@ module Api
         
           args = {
                     id: accrued_interest_id,
-                    user_id:user.id
+                    user_id: current_user.id
           }
+          
           accrued_interest.update!(status: "processing")
-
+          
           ProcessApprovedAccruedInterests.perform_later(args)
 
 
@@ -103,6 +104,20 @@ module Api
           record = ::Adjustments::AccruedInterests::CreateBatch.new(
                                                                 config: config
                                                                ).execute!
+          
+        end
+
+        def remove
+          data_loan_id =  params[:id]
+          accrued_id = params[:accrued_id]
+          accrued_interest = AccruedInterest.find(params[:accrued_id])
+          accrued_interest_data = accrued_interest.data.with_indifferent_access
+          
+          accrued_interest_data[:active_loans].select{ |o| o[:id] == data_loan_id  }.last[:cut_off_status] = "invalid"
+          
+          
+          accrued_interest.update(data: accrued_interest_data)
+          render json: { message: "ok" }
           
         end
 
