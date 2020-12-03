@@ -15,7 +15,7 @@ class Claim < ApplicationRecord
 	belongs_to :center
 	belongs_to :member, optional: true
 
-  has_many :claim_attachment_files
+  has_many :claim_attachment_files, dependent: :delete_all
 
   before_validation :load_defaults
 
@@ -71,6 +71,14 @@ class Claim < ApplicationRecord
 
   def proceed_checking?
     self.data.with_indifferent_access[:for_proceed] == true
+  end
+
+  def online_transaction?
+    self.data.with_indifferent_access[:transaction_type] == "Online"
+  end
+
+  def check_transaction?
+    self.data.with_indifferent_access[:transaction_type] == "Check"
   end
 
   def claims_template

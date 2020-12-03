@@ -271,7 +271,7 @@ class ClaimsController < ApplicationController
             id: "btn-declined",
             link: "#",
             class: "fa fa-check",
-            text: "Declined"
+            text: "Decline"
           }
         end
       end
