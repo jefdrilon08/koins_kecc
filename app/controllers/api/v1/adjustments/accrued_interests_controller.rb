@@ -48,7 +48,7 @@ module Api
         def process_accrued
           accrued_interest_id = params[:id]
           accrued_interest = AccruedInterest.where(id: params[:id]).first
-          user = current_user
+          #user = current_user
           
 
           
@@ -59,7 +59,7 @@ module Api
         
           args = {
                     id: accrued_interest_id,
-                    user_id:user.id
+                    user_id: current_user.id
           }
           
           accrued_interest.update!(status: "processing")
