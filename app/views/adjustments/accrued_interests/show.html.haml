@@ -73,14 +73,14 @@
               %th
                 Status
           %tbody
-                   
+            - iter = 1
             - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|  
               -if @adjustment_record.accrued_type == "BLANKET"   
                   
                 - if a["principal_balance"] > 0 && a["cut_off_status"] != "invalid"
                   %tr
                     %td
-                      #{ i + 1 }
+                      #{ iter}
                     %td 
                       = link_to member_path(a["member"]["id"]), target: "_blank" do
                         %strong
@@ -104,6 +104,7 @@
                         %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
                           .fa.fa-times
                           Remove
+                  - iter = iter + 1
               -else   
                 %tr
                   %td
