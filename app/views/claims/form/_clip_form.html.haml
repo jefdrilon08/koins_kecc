@@ -120,7 +120,23 @@
     .form-group
       %label.col.control-label
         Account Number
-        = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'    
+        = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
+.row
+  .col
+    .form-group
+      %label.col.control-label
+        Claims Payment through (Creditor)
+        = text_field_tag :claims_payment_creditor, @claim.data["claims_payment_creditor"], class: 'form-control', id: 'claims-payment-creditor'
+  .col
+    .form-group
+      %label.col.control-label
+        Account Name (Creditor)
+        = text_field_tag :account_name_creditor, @claim.data["account_name_creditor"], class: 'form-control', id: 'account-name-creditor'
+  .col
+    .form-group
+      %label.col.control-label
+        Account Number (Creditor)
+        = text_field_tag :account_number_creditor, @claim.data["account_number_creditor"], class: 'form-control', id: 'account-number-creditor'    
 .row
   .col
     .form-actions

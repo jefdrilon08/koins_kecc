@@ -26,6 +26,9 @@ module Claims
       @account_name                             = @data[:account_name]
       @account_number                           = @data[:account_number]
       @transaction_type                         = @data[:transaction_type]
+      @claims_payment_creditor                  = @data[:claims_payment_creditor]
+      @account_name_creditor                    = @data[:account_name_creditor]
+      @account_number_creditor                  = @data[:account_number_creditor]
       
       @errors = []
 
@@ -121,6 +124,18 @@ module Claims
       #   @errors << "Account number field is required"
       # end
 
+      # if @claims_payment_creditor.blank?
+      #   @errors << "Claims Payment field for creditor is required"
+      # end
+
+      # if @account_name_creditor.blank?
+      #   @errors << "Account name field for creditor is required"
+      # end
+
+      # if @account_number_creditor.blank?
+      #   @errors << "Account number field for creditor is required"
+      # end
+
       validate_clip_duplication!
       return  @errors
     end
@@ -136,11 +151,13 @@ module Claims
         data->>'age' = ? AND data->>'terms' = ? AND data->>'amount_of_loan' = ? AND data->>'amount_payable_to_creditor' = ? AND 
         data->>'type_of_loan' = ? AND
         data->>'transaction_type' = ? AND 
-        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
+        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ? AND
+        data ->> 'claims_payment_creditor' = ? AND data ->> 'account_name_creditor' = ? AND data ->> 'account_number_creditor' = ?", 
         @claim.member_id, "CLIP", @date_prepared, @amount, @gender, @policy_number, 
         @creditors_name, @member_name, @beneficiary, @date_of_death, @date_of_birth, 
         @cause_of_death, @effective_date_of_coverage, @expiration_date_of_coverage, @age, @terms, 
-        @amount_of_loan, @amount_payable_to_creditor, @type_of_loan, @transaction_type,  @claims_payment, @account_name, @account_number).count
+        @amount_of_loan, @amount_payable_to_creditor, @type_of_loan, @transaction_type,  @claims_payment, @account_name, @account_number,
+        @claims_payment_creditor, @account_name_creditor, @account_number_creditor).count
         
         if count > 0
           @errors << "Duplicate CLIP!"

@@ -95,15 +95,23 @@
       %th Claims Payment Through
       %td
         = @data[:claims_payment]
-      %th
+      %th Claims Payment Through (Creditor)
       %td
+        = @data[:claims_payment_creditor]
     %tr
       %th Account Name
       %td
         = @data[:account_name]
+      %th Account Name (Creditor)
+      %td
+        = @data[:account_name_creditor]
+    %tr
       %th Account Number
       %td
-        = @data[:account_number] 
+        = @data[:account_number]
+      %th Account Number (Creditor)
+      %td
+        = @data[:account_number_creditor] 
     %tr
       %th Checked by
       %td 
