@@ -103,9 +103,14 @@
   .col
     .form-group
       %label.col.control-label
+        Transaction Type
+        = select_tag :transaction_type, options_for_select(["Online", "Check"], @claim.data["transaction_type"]), class: 'form-control select-select2', id: 'transaction-type'
+.row
+  .col
+    .form-group
+      %label.col.control-label
         Claims Payment through
         = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-.row
   .col
     .form-group
       %label.col.control-label

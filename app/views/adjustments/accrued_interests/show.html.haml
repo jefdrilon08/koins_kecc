@@ -75,6 +75,7 @@
               %th
                 Status
           %tbody
+<<<<<<< HEAD
             -if @ctr_name.present?                   
               -@adjustment_record.data["active_loans"].select { |m| m["member"]["center"] == @ctr_name }.sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|
                 -if @adjustment_record.accrued_type == "BLANKET"   
@@ -165,9 +166,16 @@
                             .fa.fa-times
                             Remove
                 -else   
+=======
+            - iter = 1
+            - @adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|  
+              -if @adjustment_record.accrued_type == "BLANKET"   
+                  
+                - if a["principal_balance"] > 0 && a["cut_off_status"] != "invalid"
+>>>>>>> 58aa176d4c2f821fe79e9c5612e6bf7c749e6ef6
                   %tr
                     %td
-                      #{ i + 1 }
+                      #{ iter}
                     %td 
                       = link_to member_path(a["member"]["id"]), target: "_blank" do
                         %strong
@@ -191,6 +199,43 @@
                         %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
                           .fa.fa-times
                           Remove
+<<<<<<< HEAD
+=======
+                  - iter = iter + 1
+              -else   
+                %tr
+                  %td
+                    #{ i + 1 }
+                  %td 
+                    = link_to member_path(a["member"]["id"]), target: "_blank" do
+                      %strong
+                        #{a["member"]["last_name"]}, #{a["member"]["first_name"]}  
+                  %td
+                    #{a["member"]["center"]}
+                  %td
+                    #{a["loan_product"]["name"]}
+                  %td
+                    #{a["pn_number"]}
+                  %td
+                    #{a["loan_product"]["maturity_date"]}
+                  %td
+                    #{a["principal_balance"]}
+                  %td
+                    #{a["cumputed_accrued_interest"]}
+                  %td
+                    #{a["cut_off_status"]}
+                  %td
+                    - if @adjustment_record.status == "pending"
+                      %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                        .fa.fa-times
+                        Remove
+
+
+    
+
+
+
+>>>>>>> 58aa176d4c2f821fe79e9c5612e6bf7c749e6ef6
 
 = render partial: "adjustments/accrued_interests/modals/delete"
 = render partial: "adjustments/accrued_interests/modals/process"

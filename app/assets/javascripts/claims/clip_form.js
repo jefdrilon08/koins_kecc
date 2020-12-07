@@ -36,6 +36,7 @@ var clipForm = (function() {
     $claimsPayment               = $("#claims-payment");
     $accountName                 = $("#account-name");
     $accountNumber               = $("#account-number");
+    $transactionType             = $("#transaction-type");
  }
 
   var _bindEvents = function() {
@@ -65,7 +66,8 @@ var clipForm = (function() {
             expiration_date_of_coverage: $expirationDateOfCoverage.val(),
             claims_payment: $claimsPayment.val(),
             account_name: $accountName.val(),
-            account_number: $accountNumber.val()
+            account_number: $accountNumber.val(),
+            transaction_type: $transactionType.val(),
           },
           authenticity_token: authenticityToken,
           
