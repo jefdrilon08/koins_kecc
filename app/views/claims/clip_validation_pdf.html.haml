@@ -216,6 +216,11 @@
             %b
               %u  
                 #{@data["creditors_name"]}
+          - if !@claim.online_transaction?
+            %td{:width => "21%", :align => "right"}
+              %b
+                %u  
+                  #{number_with_delimiter(number_with_precision(@data["amount_payable_to_creditor"], precision: 2), delimiter: ",", separator: ".")} PhP
         - if @claim.check_transaction?
           %tr
             %td{:width => "22%"}
@@ -265,14 +270,14 @@
                   #{@data["claims_payment_creditor"]}
           %tr
             %td{:width => "21%"}
-              Account Name:
+              Creditor Account Name:
             %td{:width => "25%"}
               %b
                 %u  
                   #{@data["account_name_creditor"]}
           %tr
             %td{:width => "21%"}
-              Account Number:
+              Creditor Account Number:
             %td{:width => "25%"}
               %b
                 %u  
