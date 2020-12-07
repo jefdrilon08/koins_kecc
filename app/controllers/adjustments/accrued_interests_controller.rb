@@ -27,7 +27,11 @@ module Adjustments
     end
     def show
       @adjustment_record  = AccruedInterest.find(params[:id])
-    
+      if params[:center_id].present?
+        @ctr_name         = Center.find(params[:center_id]).name 
+      end
+      
+      #raise @adjustment_record_id.id
       #@meta = @adjustment_record.meta.with_indifferent_access
       #@data = @adjustment_record.data.with_indifferent_access
       #@accounting_entry = @data[:accounting_entry]
