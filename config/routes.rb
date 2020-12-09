@@ -191,7 +191,10 @@ Rails.application.routes.draw do
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
-
+  
+  # Accrued
+  get "/accrued_payment_collections", to: "accrued_payment_collections#index"
+  
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
