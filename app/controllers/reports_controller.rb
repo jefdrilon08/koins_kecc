@@ -64,6 +64,13 @@ class ReportsController < ApplicationController
     ]
   end
 
+  def member_counts
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Member Counts" }
+    ]
+  end
+
   def cic
     @subheader_items = [
       { text: "Other Reports" },
