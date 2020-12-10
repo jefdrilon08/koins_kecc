@@ -73,7 +73,7 @@ module Loans
       end #end of @loan_data[:restructured_loans]
       
       @jef[:total_principal]  = @jef[:loan_details].inject(0){|sum, x| sum + x[:principal_balance].to_f}
-      @jef[:total_interest]   = @jef[:loan_details].inject(0){|sum, x| sum + x[:interest_balance].to_f}
+      @jef[:total_interest]   = @jef[:loan_details].inject(0){|sum, x| sum + x[:k_sagip_interest_balance].to_f}
       
       #============== para sa interest ========================
       sum = 0
@@ -84,6 +84,9 @@ module Loans
         clip_factor = 0.007 
       when 25
         discount_factor = 22.8836620139337
+        clip_factor = 0.007
+      when 35
+        discount_factor = 30.9876407825742
         clip_factor = 0.0105
       when 50
         discount_factor = 42.1419718090123
@@ -118,10 +121,13 @@ module Loans
               total_amount = 0
               
                 total_loan_amunt_with_insurance = @jef[:total_principal].to_f + @jef[:total_interest].to_f + total_insurance.to_f
-                first_clip = (total_loan_amunt_with_insurance * clip_factor.to_f).round(2)
-                second_clip = ((total_loan_amunt_with_insurance + first_clip.to_f) * clip_factor.to_f).round(2)
+              
+                first_clip = total_loan_amunt_with_insurance.to_f * clip_factor.to_f
+                second_clip = ((total_loan_amunt_with_insurance.to_f + first_clip.to_f) * clip_factor.to_f).round(2)
+            
                 parts = second_clip.to_s.split(".")
                 result = parts.count > 1 ? parts[1].to_s : 0
+                #raise second_clip.inspect
                 @jef[:total_service_fee] = (1.to_f - (result.to_f / 100 )).round(2)
               
               
