@@ -93,7 +93,7 @@ module Loans
         clip_factor = 0.014
       else
         discount_factor = 58.3492770880972
-        clip_factor = 0.21
+        clip_factor = 0.021
       end
 
       total_discount_factor     = (@jef[:total_principal].to_f / discount_factor).round
@@ -121,7 +121,7 @@ module Loans
               total_amount = 0
               
                 total_loan_amunt_with_insurance = @jef[:total_principal].to_f + @jef[:total_interest].to_f + total_insurance.to_f
-              
+                         
                 first_clip = total_loan_amunt_with_insurance.to_f * clip_factor.to_f
                 second_clip = ((total_loan_amunt_with_insurance.to_f + first_clip.to_f) * clip_factor.to_f).round(2)
             
