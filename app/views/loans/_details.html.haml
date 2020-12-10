@@ -63,8 +63,58 @@
           %td.text-right
             #{number_to_currency(rl.fetch("total_balance"), unit: "")}
 
+- if @loan.loan_product_id == "1c2fcdbd-d60b-402c-b04b-824bb90958d1"
+  %h5
+    New Restructured Computation
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-right
+          Principal Balance
+        %th.text-right
+          K-SAGIP Interest Balance
+        %th.text-rigth
+          Total Interest Balance
+    %tbody
+      - @loan["data"]["new_restructured"]["loan_details"].each do |h|
+        %tr
+          %td
+            #{h["pn_number"]}
+          %td
+            #{h["loan_product"]["name"]}
+          %td
+            #{h["principal_balance"]}
+          %td
+            #{h["k_sagip_interest_balance"]}
+          %td
+            #{h["interest_balance"]}
+
+    %table.table.table-bordered.table-sm
+      %tbody
+        - @loan["data"]["new_restructured"]["insurance_details"].each do |i|
+          %tr
+            %th
+              #{i["account_subtype"]}
+            %td
+              #{i["value"]}
+        %tr
+          %th
+            Service Fee
+          %td
+            #{@loan["data"]["new_restructured"]["total_service_fee"]}
+        %tr
+          %th
+            Total Loan Amount
+          %td
+            #{@loan["data"]["new_restructured"]["total_loanable_amount"]}
+      
 .row
   .col-md-4.col-xs-12
+
     %h4
       Details
     = render partial: "specifications"
