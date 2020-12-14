@@ -64,6 +64,9 @@ var $btnRestructure;
 var $btnConfirmRestructure;
 var $modalRestructure;
 var $selectRestructureLoanProduct;
+var $btnRecomputeRestructure;
+var $modalRecomputeRestructure;
+var $modalConfirmRecomputeRestructure;
 var $selectActiveLoans;
 var $inputCoMakerA;
 var $selectCoMakerB;
@@ -82,6 +85,7 @@ var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
 var _urlSaveSignature           = "/api/v1/members/save_signature";
 var _urlNewLoan                 = "/api/v1/loans/apply";
 var _urlRestructure             = "/api/v1/loans/restructure";
+var _urlRecomputeRestructure    = "/api/v1/loans/recompute_restructure";
 var _urlCreateSurvey            = "/api/v1/members/create_survey";
 var _urlDelete                  = "/api/v1/members/delete";
 var _urlUnlock                  = "/api/v1/members/unlock";
@@ -183,6 +187,11 @@ var _cacheDom = function() {
   $inputBeneficiaryDateOfBirth  = $("#input-beneficiary-date-of-birth");
   $inputBeneficiaryRelationship = $("#input-beneficiary-relationship");
 
+
+  $btnRecomputeRestructure               = $("#btn-recompute-restructure");
+  $modalRecomputeRestructure             = $("#modal-recompute-restructure");
+  $modalConfirmRecomputeRestructure      = $("#btn-confirm-recompute-restructure")
+
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 
@@ -219,6 +228,30 @@ var _bindEvents = function() {
   $btnRestructure.on("click", function() {
     $message.html("");
     $modalRestructure.modal("show");
+  });
+
+  $btnRecomputeRestructure.on("click", function() {
+    $modalRecomputeRestructure.modal("show");
+  });
+
+  $modalConfirmRecomputeRestructure.on("click", function(){
+    
+    $btnRecomputeRestructure.prop("disabled", true)
+    var data  = {
+      id: _memberId,
+      authenticity_token: _authenticityToken
+    }
+  
+    $.ajax({
+      url: _urlRecomputeRestructure ,
+      method: "POST",
+      data: data,
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.href = "/loans/" + response.id;
+      },
+
+    });
   });
 
   $btnConfirmRestructure.on("click", function() {

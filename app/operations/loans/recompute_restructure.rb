@@ -19,13 +19,15 @@ module Loans
         ksagip_payment = AccountTransaction.where("subsidiary_id =?", loan_data[:id]).order(:transacted_at).last
          
 
-
         last_regular_payment_data =  last_regular_payment.data.with_indifferent_access
 
         a = last_regular_payment_data[:amort_entries].sort_by{ |o| o["due_date"]}.last[:due_date]
                  
           if last_regular_payment.transacted_at.to_date <= a.to_date 
+
+            if last_regular_payment.transacted_at.to_date > ksagip_payment.transacted_at.to_date
              #pag walang past due
+             
              new_restructure = { id: reg_loan.id,
                               pn_number: reg_loan.pn_number,
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
@@ -37,6 +39,27 @@ module Loans
                               }
 
                             }
+              
+            else
+        
+              total_interest = 0
+              ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_approved.to_date}.each do |kpayment|
+                total_interest = total_interest.to_f + kpayment[:interest_paid].to_f
+              end
+            
+              new_restructure = { id: reg_loan.id,
+                              pn_number: reg_loan.pn_number,
+                              principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
+                              k_sagip_interest_balance: total_interest,
+                              interest_balance: ksagip_payment.data.with_indifferent_access[:total_interest_paid],
+                              total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid].to_f + total_interest.to_f,
+                              loan_product: {
+                                id: reg_loan.loan_product.id,
+                                name: reg_loan.loan_product.name
+                              }
+
+                            }
+            end
           else
             
           
@@ -48,7 +71,8 @@ module Loans
             new_restructure = { id: reg_loan.id,
                               pn_number: reg_loan.pn_number,
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
-                              interest_balance: total_interest,
+                              k_sagip_interest_balance: total_interest,
+                              interest_balance: ksagip_payment.data.with_indifferent_access[:total_interest_paid],
                               total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid].to_f + total_interest.to_f,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
@@ -72,7 +96,7 @@ module Loans
       end #end of @loan_data[:restructured_loans]
       
       @jef[:total_principal]  = @jef[:loan_details].inject(0){|sum, x| sum + x[:principal_balance].to_f}
-      @jef[:total_interest]   = @jef[:loan_details].inject(0){|sum, x| sum + x[:interest_balance].to_f}
+      @jef[:total_interest]   = @jef[:loan_details].inject(0){|sum, x| sum + x[:k_sagip_interest_balance].to_f}
       
       #============== para sa interest ========================
       sum = 0
@@ -83,13 +107,16 @@ module Loans
         clip_factor = 0.007 
       when 25
         discount_factor = 22.8836620139337
+        clip_factor = 0.007
+      when 35
+        discount_factor = 30.9876407825742
         clip_factor = 0.0105
       when 50
         discount_factor = 42.1419718090123
         clip_factor = 0.014
       else
         discount_factor = 58.3492770880972
-        clip_factor = 0.21
+        clip_factor = 0.021
       end
 
       total_discount_factor     = (@jef[:total_principal].to_f / discount_factor).round
@@ -117,10 +144,13 @@ module Loans
               total_amount = 0
               
                 total_loan_amunt_with_insurance = @jef[:total_principal].to_f + @jef[:total_interest].to_f + total_insurance.to_f
-                first_clip = (total_loan_amunt_with_insurance * clip_factor.to_f).round(2)
-                second_clip = ((total_loan_amunt_with_insurance + first_clip.to_f) * clip_factor.to_f).round(2)
+                         
+                first_clip = total_loan_amunt_with_insurance.to_f * clip_factor.to_f
+                second_clip = ((total_loan_amunt_with_insurance.to_f + first_clip.to_f) * clip_factor.to_f).round(2)
+            
                 parts = second_clip.to_s.split(".")
                 result = parts.count > 1 ? parts[1].to_s : 0
+                #raise second_clip.inspect
                 @jef[:total_service_fee] = (1.to_f - (result.to_f / 100 )).round(2)
               
               

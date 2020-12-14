@@ -43,6 +43,10 @@
   %button#btn-restructure.btn.btn-info.text-white
     .fa.fa-sync
     Restructure
+  - if @member.data["loan_cycles"].select{ |o| o["loan_product_id"] == "1c2fcdbd-d60b-402c-b04b-824bb90958d1" }.count > 0
+    %button#btn-recompute-restructure.btn.btn-info.text-white
+      .fa.fa-sync
+      Recompute Restructure
 - else
   %p
     No active loans found.

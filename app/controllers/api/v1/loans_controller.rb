@@ -464,6 +464,17 @@ module Api
           render json: { message: "ok", id: loan.id }
         end
       end
+      def recompute_restructure
+        loan = Loan.where(
+                          member_id: params[:id], 
+                          loan_product_id: "1c2fcdbd-d60b-402c-b04b-824bb90958d1"
+                          ).last
+        config = {loan: loan }
+        recompute = ::Loans::RecomputeRestructure.new(config: config).execute!
+
+        render json: { message: "ok", id: loan.id }
+                          
+      end
     end
   end
 end

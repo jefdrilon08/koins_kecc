@@ -1,0 +1,17 @@
+#modal-recompute-restructure.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Recompute Restructure Loans
+      .modal-body
+        .modal-body-content
+          Are you sure to recompute member K-SAGIP  
+      .modal-footer
+        .controls
+          %button#btn-confirm-recompute-restructure.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
