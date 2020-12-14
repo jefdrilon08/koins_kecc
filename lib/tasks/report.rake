@@ -62,7 +62,17 @@ namespace :report do
       monthly_payment = amort.first.amount_due * 4
       outs_payment = amort.where("is_paid IS NULL").count
       last_payment = amort.last.amount_due
-
+      
+      #civil_status
+      if y.member.civil_status == 'May Kinakasama' or y.member.civil_status == 'Single' or y.member.civil_status == 'single'
+        civil_stat = 1
+      elsif y.member.civil_status == 'Kasal' or y.member.civil_status == 'married'
+        civil_stat = 2
+      elsif y.member.civil_status == 'Hiwalay' or y.member.civil_status == 'separated'
+        civil_stat = 3
+      elsif y.member.civil_status == 'Biyudo/a' or y.member.civil_status == 'widowed'
+        civil_stat = 4
+      end
 
       #gender
       if y.member.gender == 'Female'
@@ -104,7 +114,7 @@ namespace :report do
         loan_purpose = 'SE'
       end
     
-      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{gend}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
+      j = "#{y.member.identification_number}|#{y.member.last_name}|#{y.member.first_name}|#{y.member.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{y.member.place_of_birth}|#{gend}|#{civil_stat}|#{y.member.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{y.pn_number}|#{contract_type}|AC|NA|#{y.principal}|#{y.principal_balance}|#{date_rel}|#{mat_date}|#{int_rate}|#{y.term}|#{y.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{tot_loan_balance}|#{mat_date}|#{over_due_days}|#{monthly_payment}|#{outs_payment}|#{last_payment}"
 
     @data << j
     end  
