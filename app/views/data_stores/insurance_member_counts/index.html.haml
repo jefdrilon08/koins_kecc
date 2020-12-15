@@ -1,7 +1,10 @@
+= title
+
 .row
   .col
     .card
       .card-body
+        = render partial: "index_filter"
         - if @records.any?
           = render partial: "index_list"
           = paginate @records
@@ -11,14 +14,3 @@
 
 = render partial: "data_stores/insurance_member_counts/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "data_stores/insurance_member_counts/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });
