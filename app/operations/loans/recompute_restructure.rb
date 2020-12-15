@@ -146,11 +146,13 @@ module Loans
                 total_loan_amunt_with_insurance = @jef[:total_principal].to_f + @jef[:total_interest].to_f + total_insurance.to_f
                          
                 first_clip = total_loan_amunt_with_insurance.to_f * clip_factor.to_f
-                second_clip = ((total_loan_amunt_with_insurance.to_f + first_clip.to_f) * clip_factor.to_f).round(2)
-            
+                second_clip_details = (total_loan_amunt_with_insurance.to_f + first_clip.to_f)
+                second_clip =  (second_clip_details.round * clip_factor.to_f).round(2)
+                
                 parts = second_clip.to_s.split(".")
                 result = parts.count > 1 ? parts[1].to_s : 0
                 #raise second_clip.inspect
+
                 @jef[:total_service_fee] = (1.to_f - (result.to_f / 100 )).round(2)
               
               
