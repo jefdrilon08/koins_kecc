@@ -15,7 +15,7 @@ module Loans
         
         reg_loan = Loan.find(loan_data[:id])
       
-        last_regular_payment = AccountTransaction.where("subsidiary_id =? and transacted_at < ? and status = ? and amount > 0", loan_data[:id], @loan.date_approved,"approved" ).order(:transacted_at).last
+        last_regular_payment = AccountTransaction.where("subsidiary_id =? and transacted_at < ? and status = ? and amount > 0", loan_data[:id], @loan.date_prepared,"approved" ).order(:transacted_at).last
         ksagip_payment = AccountTransaction.where("subsidiary_id =?", loan_data[:id]).order(:transacted_at).last
          
 
@@ -43,7 +43,7 @@ module Loans
             else
         
               total_interest = 0
-              ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_approved.to_date}.each do |kpayment|
+              ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_prepared.to_date}.each do |kpayment|
                 total_interest = total_interest.to_f + kpayment[:interest_paid].to_f
               end
             
@@ -64,7 +64,7 @@ module Loans
             
           
             total_interest = 0
-            ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_approved.to_date}.each do |kpayment|
+            ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_prepared.to_date}.each do |kpayment|
               total_interest = total_interest.to_f + kpayment[:interest_paid].to_f
             end
             
