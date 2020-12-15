@@ -38,6 +38,20 @@ module Billings
                 message: "Cannot deposit #{rec[:account_subtype]} for #{member.full_name}, member is already 65 years old!"
               }
             end
+
+            if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and MemberAccountValidationRecord.where(status: "pending", member_id: member.id).present?
+              @errors[:messages] << {
+                key: "validation",
+                message: "#{member.full_name}, has pending validation!"
+              }
+            end
+
+            if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and MemberAccountValidationRecord.where(status: "approved", member_id: member.id).present?
+              @errors[:messages] << {
+                key: "validation",
+                message: "#{member.full_name}, is already validated!"
+              }
+            end
           end
         end
       elsif @data.present? and @data[:or_number].blank? and @data[:accounting_entry][:book].present? and @data[:accounting_entry][:book] == "CRB"
