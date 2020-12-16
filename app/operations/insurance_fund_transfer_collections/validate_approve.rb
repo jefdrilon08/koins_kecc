@@ -40,7 +40,7 @@ module InsuranceFundTransferCollections
             member = Member.find(record[:member][:id])
             record[:records].each do |rec|
               
-              if rec[:record_type] == "INSURANCE" and rec[:amount] > 0 and member.age >= 65
+              if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and member.age >= 65
                 @errors[:messages] << {
                   key: "validation",
                   message: "Cannot deposit #{rec[:account_subtype]} for #{member.full_name}, member is already 65 years old!"
