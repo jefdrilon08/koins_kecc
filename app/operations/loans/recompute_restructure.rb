@@ -15,7 +15,7 @@ module Loans
         
         reg_loan = Loan.find(loan_data[:id])
       
-        last_regular_payment = AccountTransaction.where("subsidiary_id =? and transacted_at < ? and status = ? and amount > 0", loan_data[:id], @loan.date_approved,"approved" ).order(:transacted_at).last
+        last_regular_payment = AccountTransaction.where("subsidiary_id =? and transacted_at < ? and status = ? and amount > 0", loan_data[:id], @loan.date_prepared,"approved" ).order(:transacted_at).last
         ksagip_payment = AccountTransaction.where("subsidiary_id =?", loan_data[:id]).order(:transacted_at).last
          
 
@@ -43,7 +43,7 @@ module Loans
             else
         
               total_interest = 0
-              ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_approved.to_date}.each do |kpayment|
+              ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_prepared.to_date}.each do |kpayment|
                 total_interest = total_interest.to_f + kpayment[:interest_paid].to_f
               end
             
@@ -64,7 +64,7 @@ module Loans
             
           
             total_interest = 0
-            ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_approved.to_date}.each do |kpayment|
+            ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_prepared.to_date}.each do |kpayment|
               total_interest = total_interest.to_f + kpayment[:interest_paid].to_f
             end
             
@@ -146,11 +146,13 @@ module Loans
                 total_loan_amunt_with_insurance = @jef[:total_principal].to_f + @jef[:total_interest].to_f + total_insurance.to_f
                          
                 first_clip = total_loan_amunt_with_insurance.to_f * clip_factor.to_f
-                second_clip = ((total_loan_amunt_with_insurance.to_f + first_clip.to_f) * clip_factor.to_f).round(2)
-            
+                second_clip_details = (total_loan_amunt_with_insurance.to_f + first_clip.to_f)
+                second_clip =  (second_clip_details.round * clip_factor.to_f).round(2)
+                
                 parts = second_clip.to_s.split(".")
                 result = parts.count > 1 ? parts[1].to_s : 0
                 #raise second_clip.inspect
+
                 @jef[:total_service_fee] = (1.to_f - (result.to_f / 100 )).round(2)
               
               
