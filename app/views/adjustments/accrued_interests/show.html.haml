@@ -102,11 +102,17 @@
                         #{a["cumputed_accrued_interest"]}
                       %td
                         #{a["cut_off_status"]}
-                      %td
-                        - if @adjustment_record.status == "pending"
-                          %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
-                            .fa.fa-times
-                            Remove
+                      - if current_user.roles.include?("SBK")
+                        %td
+                          - if @adjustment_record.status == "pending"
+                            %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                              .fa.fa-times
+                              Remove
+                        %td
+                          - if @adjustment_record.status == "approved"
+                            %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: a["id"] } }
+                              .fa.fa-times
+                              Delete
                     - iter = iter + 1
                 -else   
                   %tr
@@ -130,11 +136,17 @@
                       #{a["cumputed_accrued_interest"]}
                     %td
                       #{a["cut_off_status"]}
-                    %td
-                      - if @adjustment_record.status == "pending"
-                        %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
-                          .fa.fa-times
-                          Remove
+                    - if current_user.roles.include?("SBK")
+                      %td
+                        - if @adjustment_record.status == "pending"
+                          %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                            .fa.fa-times
+                            Remove
+                      %td
+                        - if @adjustment_record.status == "approved"
+                          %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: a["id"] } }
+                            .fa.fa-times
+                            Delete
                   - iter = iter + 1
             -else                   
               -@adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|
@@ -162,11 +174,17 @@
                         #{a["cumputed_accrued_interest"]}
                       %td
                         #{a["cut_off_status"]}
-                      %td
-                        - if @adjustment_record.status == "pending"
-                          %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
-                            .fa.fa-times
-                            Remove
+                      - if current_user.roles.include?("SBK")
+                        %td
+                          - if @adjustment_record.status == "pending"
+                            %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                              .fa.fa-times
+                              Remove
+                        %td
+                          - if @adjustment_record.status == "approved"
+                            %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: a["id"], jef: a["id"] } }
+                              .fa.fa-times
+                              Delete
                     - iter = iter + 1
                 -else   
                   %tr
@@ -190,12 +208,19 @@
                       #{a["cumputed_accrued_interest"]}
                     %td
                       #{a["cut_off_status"]}
-                    %td
-                      - if @adjustment_record.status == "pending"
-                        %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
-                          .fa.fa-times
-                          Remove
+                    - if current_user.roles.include?("SBK")
+                      %td
+                        - if @adjustment_record.status == "pending"
+                          %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
+                            .fa.fa-times
+                            Remove
+                      %td
+                        - if @adjustment_record.status == "approved"
+                          %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: a["id"], jef: a["id"] } }
+                            .fa.fa-times
+                            Delete
 
 = render partial: "adjustments/accrued_interests/modals/delete"
 = render partial: "adjustments/accrued_interests/modals/process"
 = render partial: "adjustments/accrued_interests/modals/remove"
+= render partial: "adjustments/accrued_interests/modals/erase"
