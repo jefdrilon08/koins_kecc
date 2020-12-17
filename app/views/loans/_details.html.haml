@@ -66,7 +66,7 @@
 - if @loan.data["new_restructured"]
   - if @loan.loan_product_id == "1c2fcdbd-d60b-402c-b04b-824bb90958d1"
     %h5
-      New Restructured Computation
+      K-Sagip computation
     %table.table.table-bordered.table-sm
       %thead
         %tr
@@ -77,9 +77,9 @@
           %th.text-right
             Principal Balance
           %th.text-right
-            K-SAGIP Interest Balance
-          %th.text-rigth
-            Total Interest Balance
+            Unpaid Interest Balance
+          %th.text-right
+            Account Type
       %tbody
         - @loan["data"]["new_restructured"]["loan_details"].each do |h|
           %tr
@@ -92,26 +92,47 @@
             %td
               #{h["k_sagip_interest_balance"]}
             %td
-              #{h["interest_balance"]}
+              #{h["transaction_type"]}
 
       %table.table.table-bordered.table-sm
+        %thead
+          %tr
+            %th Accounting Code
+            %th Debit
+            %th Credit
         %tbody
+          %tr
+            %th
+              11301028 - Loans Receivables - K-SAGIP
+            %td
+              #{@loan["data"]["new_restructured"]["total_loanable_amount"]}
+            %td
+          - @loan["data"]["new_restructured"]["loan_details"].each do |h|
+            %tr
+              %th
+                #{AccountingCode.find (Settings.loan_products.select{ |o| o[:loan_product_id] == h["loan_product"]["id"] }.last.receivable_accounting_code_id)}
+              %td 
+              %td
+                #{h["principal_balance"]}
+            %tr
+              %th
+                #{AccountingCode.find (Settings.loan_products.select{ |o| o[:loan_product_id] == h["loan_product"]["id"] }.last.interest_receivable_accounting_code_id)}
+              %td
+              %td
+                #{h["k_sagip_interest_balance"]}
           - @loan["data"]["new_restructured"]["insurance_details"].each do |i|
             %tr
               %th
-                #{i["account_subtype"]}
+                #{AccountingCode.find(i["accounting_entry"]).code} - #{AccountingCode.find(i["accounting_entry"]).name}
+              %td
               %td
                 #{i["value"]}
           %tr
             %th
-              Service Fee
+              40200000 - SERVICE FEE
+            %td
             %td
               #{@loan["data"]["new_restructured"]["total_service_fee"]}
-          %tr
-            %th
-              Total Loan Amount
-            %td
-              #{@loan["data"]["new_restructured"]["total_loanable_amount"]}
       
 .row
   .col-md-4.col-xs-12

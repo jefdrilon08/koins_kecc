@@ -33,6 +33,8 @@ module Loans
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
                               interest_balance: 0.0,
                               total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
+                              transaction_type: "current",
+                              sagip_transaction_date: @loan.date_prepared,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
                                 name: reg_loan.loan_product.name
@@ -53,6 +55,8 @@ module Loans
                               k_sagip_interest_balance: total_interest,
                               interest_balance: ksagip_payment.data.with_indifferent_access[:total_interest_paid],
                               total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid].to_f + total_interest.to_f,
+                              transaction_type: "pastdue",
+                              sagip_transaction_date: @loan.date_prepared,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
                                 name: reg_loan.loan_product.name
@@ -62,18 +66,28 @@ module Loans
             end
           else
             
-          
+            if reg_loan.maturity_date.to_date >  ksagip_payment.transacted_at.to_date
+              trans_type = "pastdue"
+            else
+              trans_type = "overdue"
+            
+            end
             total_interest = 0
             ksagip_payment.data.with_indifferent_access[:amort_entries].select{ |p| p[:due_date].to_date <= @loan.date_prepared.to_date}.each do |kpayment|
               total_interest = total_interest.to_f + kpayment[:interest_paid].to_f
             end
             
+            
+
+
             new_restructure = { id: reg_loan.id,
                               pn_number: reg_loan.pn_number,
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
                               k_sagip_interest_balance: total_interest,
                               interest_balance: ksagip_payment.data.with_indifferent_access[:total_interest_paid],
                               total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid].to_f + total_interest.to_f,
+                              transaction_type: trans_type,
+                              sagip_transaction_date: @loan.date_prepared,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
                                 name: reg_loan.loan_product.name
@@ -127,6 +141,7 @@ module Loans
         a = Settings.loan_products.select{ |o| o[:loan_product_id] == "1c2fcdbd-d60b-402c-b04b-824bb90958d1" }.last
         total_insurance = 0
         a.deductions.each do |b|
+
           deduction_type  = b.meta["account_type"]
           if deduction_type == "INSURANCE"
             if b.meta["value"] != 0
@@ -134,6 +149,7 @@ module Loans
               new_computed_insurance = {
                   account_type: b.meta["account_type"],
                   account_subtype: b.meta["account_subtype"],
+                  accounting_entry: b["accounting_code_id"],
                   value: computed_value
 
               } 
@@ -160,6 +176,7 @@ module Loans
               new_computed_insurance = {
                   account_type: b.meta["account_type"],
                   account_subtype: b.meta["account_subtype"],
+                  accounting_entry: b["accounting_code_id"],
                   value: second_clip
 
               } 
