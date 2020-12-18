@@ -8,16 +8,33 @@ module Adjustments
         @accrued_interest_details = @config[:accrued_interest]
         @user                     = @config[:user] 
         @accrued_interest_data = @accrued_interest_details.data.with_indifferent_access
+        
       end
 
       def execute!
+        if @accrued_interest_details["accrued_type"] == "INDIVIDUAL"
+          individual!
+        else
+           by_batch!
+        end
+        @accrued_interest_details.update!(status: "approved")    
+      end
+
+
+      def individual!
         @accrued_interest_data[:active_loans].each do |accrued|
-          if accrued[:cut_off_status] == "valid"
+        
+          if accrued[:cumputed_accrued_interest] > 0
             amortization_schedule_entries = AmortizationScheduleEntry.unpaid.where(
                                                                                   "loan_id = ? AND 
                                                                                    due_date >= ?",
                                                                                    accrued[:id],
                                                                                    @accrued_interest_details.start_date)
+
+                                                                                          
+          if accrued["cut_off_status"] == "valid"  
+          
+           
             if amortization_schedule_entries.any?
               loan_term = accrued[:loan_term]
               current_date  = amortization_schedule_entries.first.due_date
@@ -46,7 +63,9 @@ module Adjustments
               end #end of amortization
 
             end #end of amortization schedule entry
-          
+
+
+      
             #pag save ng interest sa loan
             a = Loan.find(accrued[:id])
             accrued_interest = {
@@ -59,11 +78,31 @@ module Adjustments
             a_data[:accrued_interest] = accrued_interest
             a.update(data: a_data)
 
-          end
+            end #end of @accrued_interest_details.accrued_type
+          end #end of accrued[:cumputed_accrued_interest]
         end #end of accrued_interest_data[:active_loans]
-        @accrued_interest_details.update!(status: "approved")    
 
       end
+
+      def by_batch!
+        @accrued_interest_data[:active_loans].each do |accrued|
+          if accrued["cut_off_status"] == "valid"  
+            #pag save ng interest sa loan
+            a = Loan.find(accrued[:id])
+            accrued_interest = {
+                              original_maturity_date: a.original_maturity_date,
+                              total_accrued_interest: accrued[:cumputed_accrued_interest],
+                              total_accrued_interest_balance: 0.0
+                            
+                            }
+            a_data = a.data.with_indifferent_access
+            a_data[:accrued_interest] = accrued_interest
+            a.update(data: a_data)
+
+          end #end of @accrued_interest_details.accrued_type
+        end #end of accrued_interest_data[:active_loans]
+
+      end #end by_batch
 
     end
   end

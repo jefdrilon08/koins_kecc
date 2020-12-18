@@ -36,6 +36,15 @@ module Members
       ld_remaining_uuids = []
       ld_current_uuids   = @member.legal_dependents.pluck(:id)
 
+      if @member_data[:id].present?
+         active_loans  = Loan.active.where(member_id: @member_data[:id]).ids
+         if active_loans.present?
+            active_loans.each do |al|
+              Loan.find(al).update(center_id: @center.id)
+            end
+         end
+      end
+      
       if @member_data[:legal_dependents].any?
         @member_data[:legal_dependents].each do |o|
           # Update if any

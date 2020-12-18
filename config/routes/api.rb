@@ -30,6 +30,9 @@ namespace :api do
       post "/accrued_interests/create", to: "accrued_interests#create"
       post "/accrued_interests/process", to: "accrued_interests#process_accrued"
       post "/accrued_interests/delete", to: "accrued_interests#delete"
+      post "/accrued_interests/batch_process", to: "accrued_interests#batch_process"
+      post "/accrued_interests/remove", to: "accrued_interests#remove"
+      post "/accrued_interests/erase_record", to: "accrued_interests#erase_record"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -127,6 +130,7 @@ namespace :api do
     post "/loans/restructure", to: "loans#restructure"
     get "/loans/fetch", to: "loans#fetch"
     get "/loans/fetch_by_member", to: "loans#fetch_by_member"
+    post "/loans/recompute_restructure", to: "loans#recompute_restructure"
 
     # Branches
     get "/branches", to: "branches#index"
@@ -355,6 +359,7 @@ namespace :api do
     get 'reports/member_dependent_reports', to: 'reports#member_dependent_reports'
     get 'reports/cic_reports', to: 'reports#cic_reports'
     get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
+    get 'reports/member_counts', to: 'reports#member_counts'
     get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
     get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
@@ -367,6 +372,8 @@ namespace :api do
     post "/claims/post", to: "claims#post"
     post "/claims/pending", to: "claims#pending"
     post "/claims/check", to: "claims#check"
+    post "/claims/proceed", to: "claims#proceed"
+    post "/claims/declined", to: "claims#declined"
     post "/claims/update", to: "claims#update"
     post "/claims/modify_claims_template", to: "claims#modify_claims_template"
     post "/claims/modify_book", to: "claims#modify_book"

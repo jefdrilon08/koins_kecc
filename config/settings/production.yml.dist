@@ -737,7 +737,7 @@ branch_accounting_codes:
 
   -
     branch_id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"                              #pulilan
-    cash_in_bank_accounting_code_id: "da8bd55c-2cf5-4cfe-b7a5-8f9834f304f2"
+    cash_in_bank_accounting_code_id: "c15f8fc4-3837-48b9-bb03-111ee0ec3e8c"
     #cash_in_bank_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
@@ -5245,6 +5245,30 @@ loan_products:
           account_type: "INSURANCE"
           account_subtype: "Credit Life Insurance Plan"
           value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to life insurance fund"
+        accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Life Insurance Fund"
+          value: 15.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to retirement fund"
+        accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Retirement Fund"
+          value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
   -

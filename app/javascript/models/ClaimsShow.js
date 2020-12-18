@@ -3,6 +3,8 @@ import Mustache from "mustache/mustache";
 var $btnConfirmApprove;
 var $btnConfirmPost;
 var $btnConfirmCheck;
+var $btnConfirmProceed;
+var $btnConfirmDeclined;
 var $btnConfirmPending;
 
 var $btnSaveNote;
@@ -10,10 +12,13 @@ var $btnSaveNote;
 var $btnApprove;
 var $btnPost;
 var $btnCheck;
+var $btnProceed;
+var $btnDeclined;
 var $btnPending;
 
 var $btnNote;
 var $inputNote;
+var $inputDeclinedNote;
 
 var $btnConfirmBook;
 
@@ -22,6 +27,8 @@ var $errorsTemplate;
 var urlApproveTransaction     = "/api/v1/claims/approve";
 var urlPostTransaction        = "/api/v1/claims/post";
 var urlCheckTransaction       = "/api/v1/claims/check";
+var urlProceedTransaction     = "/api/v1/claims/proceed";
+var urlDeclinedTransaction     = "/api/v1/claims/declined";
 var urlPendingTransaction     = "/api/v1/claims/pending";
 var urlModifyClaimsTemplate   = "/api/v1/claims/modify_claims_template";
 var urlModifyBook             = "/api/v1/claims/modify_book";
@@ -33,6 +40,8 @@ var urlSaveNote               = "/api/v1/claims/save_note";
 
 var $modalApprove;
 var $modalCheck;
+var $modalProceed;
+var $modalDeclined;
 var $modalPost;
 var $modalPending;
 
@@ -42,10 +51,14 @@ var $errors;
 var $errorsTemplate;
 var $modalErrorsApproval;
 var $modalErrorsChecking;
+var $modalErrorsProceeding;
+var $modalErrorsDeclining;
 var $modalErrorsPosting;
 var $modalErrorsPending;
 var $modalSuccessApproval;
 var $modalSuccessChecking;
+var $modalSuccessProceeding;
+var $modalSuccessDeclining;
 var $modalSuccessPosting;
 var $modalSuccessPending;
 var $modalControls;
@@ -119,6 +132,91 @@ var _bindEvents = function() {
           );
 
           $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  // Proceed
+  $btnConfirmProceed.on("click", function() {
+    $btnConfirmProceed.prop("disabled", true);
+
+    $.ajax({
+      url: urlProceedTransaction,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: claimId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmProceed.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  // Declined
+  $btnConfirmDeclined.on("click", function() {
+    var declinedNote  = $inputDeclinedNote.val();
+
+    $message.html("Loading...");
+
+    $btnConfirmDeclined.prop("disabled", true);
+    $inputDeclinedNote.prop("disabled", true);
+    
+    $.ajax({
+      url: urlDeclinedTransaction,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: claimId,
+        declined_note: declinedNote,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputDeclinedNote.prop("disabled", false);
+          $btnConfirmDeclined.prop("disabled", false);
         }
       }
     });
@@ -564,6 +662,18 @@ var _bindEvents = function() {
     $message.html("");
   });
 
+  // proceed
+  $btnProceed.on("click", function() {
+    $modalProceed.modal("show");
+    $message.html("");
+  });
+
+  // declined
+  $btnDeclined.on("click", function() {
+    $modalDeclined.modal("show");
+    $message.html("");
+  });
+
   // Add note
   $btnNote.on("click", function() {
     $modalNote.modal("show");
@@ -609,6 +719,8 @@ var _cacheDom = function() {
   $confirmationModal            = $("#confirmation-modal"); 
   $btnApprove                   = $("#btn-approve");
   $btnCheck                     = $("#btn-check");
+  $btnProceed                   = $("#btn-proceed");
+  $btnDeclined                  = $("#btn-declined");
   $btnPost                      = $("#btn-post");
   $btnPending                   = $("#btn-pending");
 
@@ -616,17 +728,23 @@ var _cacheDom = function() {
 
   $btnConfirmApprove            = $("#btn-confirm-approval");
   $btnConfirmCheck              = $("#btn-confirm-check");
+  $btnConfirmProceed            = $("#btn-confirm-proceed");
+  $btnConfirmDeclined           = $("#btn-confirm-declined");
   $btnConfirmPost               = $("#btn-confirm-posting");
   $btnConfirmPending            = $("#btn-confirm-pending");
 
   $btnSaveNote                  = $("#btn-save-note");
   $inputNote                    = $("#input-note");
 
+  $inputDeclinedNote            = $("#input-declined-note");
+
   $errors                       = $("#errors");
   $errorsTemplate               = $("#errors-template");
   
   // Validate
   $modalCheck                   = $("#modal-check-confirmation");
+  $modalProceed                 = $("#modal-proceed-confirmation");
+  $modalDeclined                = $("#modal-declined-confirmation");
   $modalApprove                 = $("#modal-approve-confirmation");
   $modalPost                    = $("#modal-post-confirmation");
   $modalPending                 = $("#modal-pending-confirmation");
@@ -636,11 +754,15 @@ var _cacheDom = function() {
   
   $modalErrorsApproval          = $(".modal-approve").find(".errors");
   $modalErrorsChecking          = $(".modal-check").find(".errors");
+  $modalErrorsProceeding        = $(".modal-proceed").find(".errors");
+  $modalErrorsDeclining         = $(".modal-declined").find(".errors");
   $modalErrorsPosting           = $(".modal-post").find(".errors");
   $modalErrorsPending           = $(".modal-pending").find(".errors");
 
   $modalSuccessApproval         = $(".modal-approve").find(".success");
   $modalSuccessChecking         = $(".modal-check").find(".success");
+  $modalSuccessProceeding       = $(".modal-proceed").find(".success");
+  $modalSuccessDeclining       = $(".modal-declined").find(".success");
   $modalSuccessPosting          = $(".modal-post").find(".success");
   $modalSuccessPending          = $(".modal-pending").find(".success");
 

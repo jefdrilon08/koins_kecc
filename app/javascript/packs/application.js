@@ -138,6 +138,7 @@ import ReportsCollectionsCLIP from "../models/ReportsCollectionsCLIP.js";
 import ReportsCollectionsBLIP from "../models/ReportsCollectionsBLIP.js";
 import ReportsMemberDependents from "../models/ReportsMemberDependents.js";
 import ReportsMemberQuarterlyReports from "../models/ReportsMemberQuarterlyReports.js";
+import ReportsMemberCounts from "../models/ReportsMemberCounts.js";
 import ReportsCIC from "../models/ReportsCIC.js";
 import ReportsMonthlyCollection from "../models/ReportsMonthlyCollection.js";
 import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfCertificatesAndPolicies.js";
@@ -153,6 +154,7 @@ import TrialBalancesIndex from "../models/TrialBalancesIndex.js";
 import TrialBalancesShow from "../models/TrialBalancesShow.js";
 import MembersSearch from "../models/MembersSearch.js";
 import AdjustmentsAccruedInterestsIndex from "../models/AdjustmentsAccruedInterestsIndex.js";
+import AdjustmentsAccruedInterestsShow from "../models/AdjustmentsAccruedInterestsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -215,6 +217,7 @@ const hooks = {
   "adjustments/batch_moratorium_adjustments/show":    [BatchMoratoriumAdjustmentsShow],
   "adjustments/moratoriums/index":                    [AdjustmentsMoratoriumsIndex],
   "adjustments/accrued_interests/index":              [AdjustmentsAccruedInterestsIndex],
+  "adjustments/accrued_interests/show":               [AdjustmentsAccruedInterestsShow],
   "member_account_validations/index":                 [MemberAccountValidationsIndex],
   "member_account_validations/show":                  [MemberAccountValidationsShow],
   "member_account_validations/edit":                  [MemberAccountValidationsForm],
@@ -274,6 +277,7 @@ const hooks = {
   "reports/collections_blip":                         [ReportsCollectionsBLIP],
   "reports/member_dependents":                        [ReportsMemberDependents],
   "reports/member_quarterly_reports":                 [ReportsMemberQuarterlyReports],
+  "reports/member_counts":                            [ReportsMemberCounts],
   "reports/cic":                                      [ReportsCIC],
   "reports/monthly_collection":                       [ReportsMonthlyCollection],
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],

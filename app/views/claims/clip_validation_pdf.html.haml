@@ -175,81 +175,122 @@
               %u  
                 #{@data["beneficiary"]}
           %td{:width => "28%"}
+        - if @claim.online_transaction?  
+          %tr
+            %td{:width => "21%"}
+              Claims Payment Through:
+            %td{:width => "25%"}
+              %b
+                %u  
+                  #{@data["claims_payment"]}
+          %tr
+            %td{:width => "21%"}
+              Account Name:
+            %td{:width => "25%"}
+              %b
+                %u
+                  #{@data["account_name"]}
+          %tr
+            %td{:width => "21%"}
+              Account Number:
+            %td{:width => "25%"}
+              %b
+                %u
+                  #{@data["account_number"]} 
         %tr
+          %td{:width => "22%"}
+            Amount of balance payable to beneficiary:
           %td{:width => "21%"}
-            Claims Payment Through:
-          %td{:width => "25%"}
             %b
               %u  
-                #{@data["claims_payment"]}
-        %tr
-          %td{:width => "21%"}
-            Account Name:
-          %td{:width => "25%"}
-            %b
-              %u
-                #{@data["account_name"]}
-        %tr
-          %td{:width => "21%"}
-            Account Number:
-          %td{:width => "25%"}
-            %b
-              %u
-                #{@data["account_number"]} 
+                #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} PhP
     .body2  
       %p
         %b
           %br
       %table{:border => "0"}  
         %tr
-          %td{:width => "22%"}
+          %td{:width => "21%"}
             Amount of balance payable to:
-          %td{:width => "27%"}
+          %td{:width => "25%"}
             %b
               %u  
                 #{@data["creditors_name"]}
-          %td{:width => "21%", :align => "right"}
-            %b
-              %u  
-                #{number_with_delimiter(number_with_precision(@data["amount_payable_to_creditor"], precision: 2), delimiter: ",", separator: ".")} PhP
-        %tr
-          %td{:width => "22%"}
-            Check payee to:
-          - if @data["creditors_name"] == "KCOOP"  
-            %td{:colspan => "2", :width => "58%"}
-              %font{:size => "2"}  
+          - if !@claim.online_transaction?
+            %td{:width => "21%", :align => "right"}
+              %b
+                %u  
+                  #{number_with_delimiter(number_with_precision(@data["amount_payable_to_creditor"], precision: 2), delimiter: ",", separator: ".")} PhP
+        - if @claim.check_transaction?
+          %tr
+            %td{:width => "22%"}
+              Check payee to:
+            - if @data["creditors_name"] == "KCOOP"  
+              %td{:colspan => "2", :width => "58%"}
+                %font{:size => "2"}  
+                  %b
+                    %u 
+                      KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE        
+            - elsif @data["creditors_name"] == "JVOMFI"  
+              %td{:colspan => "2", :width => "58%"}
                 %b
-                  %u 
-                    KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE        
-          - elsif @data["creditors_name"] == "JVOMFI"  
-            %td{:colspan => "2", :width => "58%"}
+                  %u  
+                    JVOMFI
+            - elsif @data["creditors_name"] == "CAPS-R"  
+              %td{:colspan => "2", :width => "58%"}
+                %b
+                  %u  
+                    CAPS-R
+          %tr
+            %td{:width => "22%"}
+              Payment to be returned to:
+            %td{:width => "27%"}
               %b
                 %u  
-                  JVOMFI
-          - elsif @data["creditors_name"] == "CAPS-R"  
-            %td{:colspan => "2", :width => "58%"}
+                  #{@data["beneficiary"]}
+            %td{:width => "21%", :align => "right"}
               %b
                 %u  
-                  CAPS-R
-        %tr
-          %td{:width => "22%"}
-            Payment to be returned to:
-          %td{:width => "27%"}
-            %b
-              %u  
-                #{@data["beneficiary"]}
-          %td{:width => "21%", :align => "right"}
-            %b
-              %u  
-                #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} PhP
-        %tr
-          %td{:width => "22%"}
-            Total amount of loan:
-          %td{:width => "27%"}
-          %td{:width => "21%", :align => "right"}
-            %b
-              %u  
-                #{number_with_delimiter(number_with_precision(@data["amount_of_loan"], precision: 2), delimiter: ",", separator: ".")} PhP 
+                  #{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".")} PhP
+          %tr
+            %td{:width => "22%"}
+              Total amount of loan:
+            %td{:width => "27%"}
+            %td{:width => "21%", :align => "right"}
+              %b
+                %u  
+                  #{number_with_delimiter(number_with_precision(@data["amount_of_loan"], precision: 2), delimiter: ",", separator: ".")} PhP 
+        - elsif @claim.online_transaction?
+          %tr
+            %td{:width => "21%"}
+              Loan balance payment through:
+            %td{:width => "25%"}
+              %b
+                %u  
+                  #{@data["claims_payment_creditor"]}
+          %tr
+            %td{:width => "21%"}
+              Creditor Account Name:
+            %td{:width => "25%"}
+              %b
+                %u  
+                  #{@data["account_name_creditor"]}
+          %tr
+            %td{:width => "21%"}
+              Creditor Account Number:
+            %td{:width => "25%"}
+              %b
+                %u  
+                  #{@data["account_number_creditor"]}
+          %tr
+            %td{:width => "21%"}
+              Amount of balance payable to creditor:
+            %td{:width => "25%"}
+              %b
+                %u  
+                  #{number_with_delimiter(number_with_precision(@data["amount_payable_to_creditor"], precision: 2), delimiter: ",", separator: ".")} PhP
+
+
   %br
   %br
   %br

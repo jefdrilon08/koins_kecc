@@ -30,6 +30,16 @@ var $message;
 var templateErrorList;
 var _authenticityToken;
 
+
+
+var $inputBatchNumberOfDays;
+var $selectBatchBranch;
+var $inputDateInitializedCutOff;
+var $batchStartDate;
+var $batchEndDate;
+var $batchAccruedType;
+
+
 var _centers  = [];
 var _members  = [];
 var _loans    = [];
@@ -44,7 +54,7 @@ var _urlCreate        = "/api/v1/adjustments/accrued_interests/create";
 var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
 var _urlProcess       =  "#" // "/api/v1/adjustments/moratoriums/process";
 var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
-var _urlBatchProcess  = "#"  //"/api/v1/adjustments/moratoriums/batch_process";
+var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 
@@ -81,6 +91,13 @@ var _cacheDom = function() {
   $btnConfirmProcess            = $("#btn-confirm-process");
   $btnConfirmBatchProcess       = $("#btn-confirm-batch-process");
   $message                      = $(".message");
+
+  $inputBatchNumberOfDays       = $("#input-batch-number-of-moratorium-days");
+  $selectBatchBranch       = $("#select-batch-branch");
+  $inputDateInitializedCutOff = $("#input-date-initialized-cut-off");
+  $batchStartDate             = $("#batch-input-start-date")
+  $batchEndDate             = $("#batch-input-end-date")
+  $batchAccruedType         = $("#select-batch-accrued-type")
 
   templateErrorList = $("#template-error-list").html();
 
@@ -157,21 +174,36 @@ var _bindEvents = function() {
   });
 
   $btnBatchProcess.on("click", function() {
+  
     $modalBatchProcess.modal("show");
   });
 
   $btnConfirmBatchProcess.on("click", function() {
+  
+   var batchnumberOfDays    = $inputBatchNumberOfDays.val();
+   var selectBatchBranch    = $selectBatchBranch.val();
+   var inputDateInitializedCutOff =  $inputDateInitializedCutOff.val()
+    
+  var batchStartDate = $batchStartDate.val()       
+  var batchEndDate = $batchEndDate.val()  
+  var batchAccruedType = $batchAccruedType.val()
+
+  
     $message.html("Loading...");
     $btnConfirmBatchProcess.prop("disabled", true);
 
-    var centerId = $selectProcessCenter.val();
 
     $.ajax({
       url: _urlBatchProcess,
       method: "POST",
       data: {
-        center_id: centerId,
-        authenticity_token: _authenticityToken
+        branch_id:  selectBatchBranch,
+        batchnumberOfDays: batchnumberOfDays,
+        inputDateInitializedCutOff: inputDateInitializedCutOff,
+        batchStartDate: batchStartDate,
+        batchEndDate: batchEndDate,  
+        batchAccruedType: batchAccruedType
+    
       },
       success: function(response) {
         $message.html("Success!");
@@ -325,6 +357,8 @@ var _bindEvents = function() {
     var endDate         = $inputEndDate.val();
     var inputNumberOfMoratoriumDays =  $inputNumberOfMoratoriumDays.val();
     var selectAccruedType = $selectAccruedType.val();
+
+    
 
     $btnConfirmNew.prop("disabled", true);
     $selectBranch.prop("disabled", true);

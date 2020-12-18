@@ -1,14 +1,11 @@
 .row
   .col
     .card
-      .card-body
-            
+      .card-body    
         - @accrued_interests.each do |ai|
           %table.table.table-sm.table-bordered
             %thead
               %tr
-                %th
-                  Member
                 %th
                   Branch
                 %th
@@ -20,14 +17,12 @@
                 %th
                   Number of days moratorium
                 %th
+                  Accrued Type
+                %th
                   Status
                 %th
                   Actions
             %tr
-              %td
-                = link_to member_path(ai.member), target: "_blank" do
-                  %strong
-                    #{Member.find(ai.member).full_name}
               %td
                 #{ai.branch}
               %td
@@ -39,6 +34,8 @@
               %td
                 #{ai.number_of_moratoium_day}
               %td
+                #{ai.accrued_type}
+              %td
                 - if ai.status == "pending"
                   .badge.badge-danger
                     #{ai.status}
@@ -46,37 +43,14 @@
                   .bande.badge-success
                     #{ai.status}
               %td
-                - if ai.status == "pending"
-                  %button.btn.btn-sm.btn-danger.btn-delete{ data: { id: ai.id } }
-                    .fa.fa-times
-                    Delete
-                  %button.btn.btn-sm.btn-info.btn-process{ data: { id: ai.id } }
-                    .fa.fa-check
-                    Process
+                = link_to adjustments_accrued_interest_path(ai.id), class: 'btn btn-primary' do
+                  .fa.fa-search
 
                 
-            %tr
-              %th Loan Product
-              %th{:colspan => "4"} PN Number
-              %th Principal Balance
-              %th Acrued Interest
-              %th Accrued Status
-            - ai.data["active_loans"].each do |al|
-              %tr
-                %td
-                  #{al["loan_product"]["name"]}
-                %td{:colspan => "4"}
-                  #{al["pn_number"]}
-                %td
-                  #{al["principal_balance"]}
-                %td
-                  #{al["cumputed_accrued_interest"]}
-                %td
-                  #{al["cut_off_status"]}
-              
 
 
 
 = render partial: "adjustments/accrued_interests/modals/new"
 = render partial: "adjustments/accrued_interests/modals/process"
+= render partial: "adjustments/accrued_interests/modals/batch_new"
 = render partial: "adjustments/accrued_interests/modals/delete"
