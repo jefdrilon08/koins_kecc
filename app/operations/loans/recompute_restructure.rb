@@ -173,10 +173,14 @@ module Loans
                 second_clip =  (second_clip_details.round * clip_factor.to_f).round(2)
                 
                 parts = second_clip.to_s.split(".")
-                result = parts.count > 1 ? parts[1].to_s : 0
-                #raise second_clip.inspect
+                
+                result = parts.count > 1 ? (((parts[0].to_i + 1.to_i) - second_clip.to_f).round(2) ) : second_clip
+              
+              
+            
+                
 
-                @jef[:total_service_fee] = (1.to_f - (result.to_f / 100 )).round(2)
+                @jef[:total_service_fee] = result
               
               
               
