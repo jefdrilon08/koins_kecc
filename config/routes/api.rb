@@ -32,6 +32,7 @@ namespace :api do
       post "/accrued_interests/delete", to: "accrued_interests#delete"
       post "/accrued_interests/batch_process", to: "accrued_interests#batch_process"
       post "/accrued_interests/remove", to: "accrued_interests#remove"
+      post "/accrued_interests/erase_record", to: "accrued_interests#erase_record"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -160,6 +161,9 @@ namespace :api do
     post "/billings/update_particular", to: "billings#update_particular"
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
+
+    #Accrued_Billing
+    post "/accrued_payment_collections", to: "accrued_payment_collections#create"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"

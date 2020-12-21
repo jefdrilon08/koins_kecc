@@ -22,7 +22,7 @@
     %tr
       %th Date Prepared
       %td
-        = @claim.date_prepared.strftime("%b %d, %Y")
+        = @claim.try(:date_prepared).try(:strftime, "%b %d, %Y")
       %th
       %td
     %tr
@@ -38,7 +38,7 @@
         = @data[:beneficiary]
       %th Date of Birth
       %td 
-        = @data[:date_of_birth].to_date.strftime("%b %d, %Y")
+        = @data[:date_of_birth].try(:strftime, "%b %d, %Y")
     %tr
       %th Age
       %td 
@@ -49,7 +49,7 @@
     %tr
       %th Date of Death
       %td
-        = @data[:date_of_death].to_date.strftime("%b %d, %Y")
+        = @data[:date_of_death].try(:strftime, "%b %d, %Y")
       %th Cause of Death
       %td
         = @data[:cause_of_death]
@@ -63,10 +63,10 @@
     %tr
       %th Effective Date of Coverage
       %td
-        = @data[:effective_date_of_coverage].to_date.strftime("%b %d, %Y")
+        = @data[:effective_date_of_coverage].try(:strftime, "%b %d, %Y")
       %th Expiration Date of Coverage
       %td
-        = @data[:expiration_date_of_coverage].to_date.strftime("%b %d, %Y")
+        = @data[:expiration_date_of_coverage].try(:strftime, "%b %d, %Y")
     %tr
       %th Policy Number
       %td 
@@ -85,6 +85,9 @@
       %th Prepared By
       %td
         = @claim.prepared_by
+      %th Transaction Type
+      %td
+        = @data[:transaction_type]
     %tr
       %th CB Uploaded Documents
       %td

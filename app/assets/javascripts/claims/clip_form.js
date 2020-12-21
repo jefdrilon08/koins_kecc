@@ -109,16 +109,37 @@ var clipForm = (function() {
       $('#amount-payable-to-creditor').val(parseFloat(amountOfLoanValue) - parseFloat(amountPayableToBeneficiaryValue))
     });
 
+
     $effectiveDateOfCoverage.on('change', function(){
       var effectiveDateOfCoverage = $("#effective-date-of-coverage").val();
-      var expireDate = new Date(effectiveDateOfCoverage);
-      expireDate.setFullYear(expireDate.getFullYear() + 1);
-      expireDate.setDate(expireDate.getDate() -1);
-      var dd = ("0" + expireDate.getDate()).slice(-2);
-      var mm = ("0"+(expireDate.getMonth()+1)).slice(-2); 
-      var y = expireDate.getFullYear();           
-      $("#expiration-date-of-coverage").val(y + "-" + mm + "-" + dd);
+      var terms = $("#terms").val();
+      var effectiveDate = new Date(effectiveDateOfCoverage);
+      var days = terms * 7;
 
+      effectiveDate.setDate(effectiveDate.getDate() + days);
+      var dd = ("0" + effectiveDate.getDate()).slice(-2);
+      var mm = ("0"+(effectiveDate.getMonth()+1)).slice(-2); 
+      var yy = effectiveDate.getFullYear();           
+      $("#expiration-date-of-coverage").val(yy + "-" + mm + "-" + dd);
+    });
+
+
+    $terms.on('change', function(){
+      var terms = $("#terms").val();
+      var effectiveDate = new Date();
+      var ddd = ("0" + effectiveDate.getDate()).slice(-2);
+      var mmm = ("0"+(effectiveDate.getMonth()+1)).slice(-2); 
+      var yyy = effectiveDate.getFullYear(); 
+      $("#effective-date-of-coverage").val(yyy + "-" + mmm + "-" + ddd);
+
+      var expirationDate = new Date();
+      var days = terms * 7;
+
+      expirationDate.setDate(expirationDate.getDate() + days);
+      var dd = ("0" + expirationDate.getDate()).slice(-2);
+      var mm = ("0"+(expirationDate.getMonth()+1)).slice(-2); 
+      var yy = expirationDate.getFullYear();           
+      $("#expiration-date-of-coverage").val(yy + "-" + mm + "-" + dd);
     });
 
     $dateOfBirth.on('change', function(){

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_10_073702) do
+ActiveRecord::Schema.define(version: 2020_12_15_064929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -86,6 +86,19 @@ ActiveRecord::Schema.define(version: 2020_11_10_073702) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "accrued_billings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "collection_date"
+    t.json "data"
+    t.string "status"
+    t.date "date_approved"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.index ["branch_id"], name: "index_accrued_billings_on_branch_id"
+    t.index ["center_id"], name: "index_accrued_billings_on_center_id"
   end
 
   create_table "accrued_interests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -996,6 +1009,8 @@ ActiveRecord::Schema.define(version: 2020_11_10_073702) do
   add_foreign_key "account_transaction_collections", "centers"
   add_foreign_key "accounting_entries", "accounting_funds"
   add_foreign_key "accounting_entries", "branches"
+  add_foreign_key "accrued_billings", "branches"
+  add_foreign_key "accrued_billings", "centers"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "amortization_schedule_entries", "loans"
   add_foreign_key "attachment_files", "members"
