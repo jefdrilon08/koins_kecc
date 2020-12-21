@@ -37,7 +37,10 @@ module Loans
                               sagip_transaction_date: @loan.date_prepared,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
-                                name: reg_loan.loan_product.name
+                                name: reg_loan.loan_product.name,
+                                receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id,
+                                interest_receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
+                      
                               }
 
                             }
@@ -59,7 +62,9 @@ module Loans
                               sagip_transaction_date: @loan.date_prepared,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
-                                name: reg_loan.loan_product.name
+                                name: reg_loan.loan_product.name,
+                                receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id,
+                                interest_receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
                               }
 
                             }
@@ -90,7 +95,9 @@ module Loans
                               sagip_transaction_date: @loan.date_prepared,
                               loan_product: {
                                 id: reg_loan.loan_product.id,
-                                name: reg_loan.loan_product.name
+                                name: reg_loan.loan_product.name,
+                                receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id,
+                                interest_receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
                               }
 
                             }
