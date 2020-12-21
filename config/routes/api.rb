@@ -162,6 +162,9 @@ namespace :api do
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
 
+    #Accrued_Billing
+    post "/accrued_payment_collections", to: "accrued_payment_collections#create"
+
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
     post "/monthly_closing_collections", to: "monthly_closing_collections#create"
