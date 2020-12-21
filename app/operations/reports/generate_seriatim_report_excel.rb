@@ -5,11 +5,11 @@ module Reports
       @branch = branch
 
       if @as_of.present? && @branch.present?
-        @members  = Member.where("insurance_date_resigned <= ? AND member_type != ? AND branch_id = ?", @as_of, "GK", @branch).order("insurance_status ASC")
+        @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ? AND branch_id = ?", @as_of, "GK", @branch).order("insurance_status ASC")
         # @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? AND branch_id = ? ", @as_of, @as_of, @branch)
         # @members = @active_members + @resigned   
       elsif @as_of.present?  
-        @members  = Member.where("insurance_date_resigned <= ? AND member_type != ?", @as_of, "GK").order("insurance_status ASC")
+        @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ?", @as_of, "GK").order("insurance_status ASC")
         # @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? ", @as_of, @as_of)
         # @members = @active_members + @resigned      
       end

@@ -405,6 +405,7 @@ Rails.application.routes.draw do
   get "/reports/monthly_collection", to: "reports#monthly_collection", as: :monthly_collection
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
+  get "/reports/member_counts", to: "reports#member_counts", as: :member_counts
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel
   get "/exports/members_with_beneficiaries_excel", to: "exports#members_with_beneficiaries_excel", as: :export_members_with_beneficiaries_excel
   get "/reports/summary_of_certificates_and_policies", to: "reports#summary_of_certificates_and_policies", as: :summary_of_certificates_and_policies

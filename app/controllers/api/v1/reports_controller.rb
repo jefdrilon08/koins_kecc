@@ -48,6 +48,27 @@ module Api
                               )
         render json: data
       end
+
+      def member_counts
+        start_date    = params[:start_date]
+        end_date      = params[:end_date]
+
+        if start_date.to_date.year == end_date.to_date.year
+          data = Reports::MemberCounts.new(
+                  start_date: start_date,
+                  end_date: end_date
+                ).execute!
+
+          data[:download_url] = member_counts_path(
+                                start_date: start_date,
+                                download: true,
+                                end_date: end_date
+                              )
+          render json: data
+        else
+          render json: errors, status: 400
+        end
+      end
       
       def summary_of_certificates_and_policies
         branch_id     = params[:branch_id]

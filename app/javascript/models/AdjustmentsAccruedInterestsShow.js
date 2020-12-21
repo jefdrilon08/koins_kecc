@@ -36,6 +36,9 @@ var $modalRemove;
 var $btnConfirmRemove;
 var $inputAccruedId;
 
+var $btnErase;
+var $modalErase;
+var $btnConfirmErase;
 
 var _centers  = [];
 var _members  = [];
@@ -55,7 +58,8 @@ var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
 var _urlBatchProcess  = "#"  //"/api/v1/adjustments/moratoriums/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
-var _urlRemove        = "/api/v1/adjustments/accrued_interests/remove";;
+var _urlRemove        = "/api/v1/adjustments/accrued_interests/remove";
+var _urlEraseRecord        = "/api/v1/adjustments/accrued_interests/erase_record";
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
 
@@ -94,6 +98,9 @@ var _cacheDom = function() {
   $modalRemove                  = $("#modal-remove");
   $btnConfirmRemove             = $("#btn-confirm-remove");
   $inputAccruedId               = $("#accrued_id");
+  $btnErase                    = $(".btn-erase"); 
+  $modalErase                  = $("#modal-erase");
+  $btnConfirmErase             = $("#btn-confirm-erase");
 
   templateErrorList = $("#template-error-list").html();
 
@@ -252,7 +259,31 @@ var _bindEvents = function() {
     });
   });
 
+  $btnErase.on("click", function(){
+    _memberDetails = $(this).data("id");
+    $modalErase.modal("show");
+  });
 
+  $btnConfirmErase.on("click", function(){
+    $message.html("Loading...");
+    $btnConfirmErase.prop("disabled", true);
+    var inputAccruedId =  $inputAccruedId.val()
+      
+      $.ajax({
+        url: _urlEraseRecord,
+        method: "POST",
+        data: {
+          id: _memberDetails,
+          accrued_id: inputAccruedId
+        },
+        success: function(response) {
+          $message.html("Success!");
+          window.location.reload();
+        }
+      });
+    
+  });
+  
   $btnRemove.on("click", function() {
     _memberDetails = $(this).data("id");
     $modalRemove.modal("show");

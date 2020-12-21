@@ -1,0 +1,115 @@
+<script id="member-counts-template" type="x-tmpl-mustache">
+  <table class='ui small teal table sticky'>
+    <thead>
+      <tr>
+        <th width='auto'>Branch</th>
+        <th width='auto'>Active Members</th>
+        <th width='auto'>Jan New</th>
+        <th width='auto'>Feb New</th>
+        <th width='auto'>Mar New</th>
+        <th width='auto'>Apr New</th>
+        <th width='auto'>May New</th>
+        <th width='auto'>Jun New</th>
+        <th width='auto'>Jul New</th>
+        <th width='auto'>Aug New</th>
+        <th width='auto'>Sep New</th>
+        <th width='auto'>Oct New</th>
+        <th width='auto'>Nov New</th>
+        <th width='auto'>Dec New</th>
+        <th width='auto'>Jan Resigned</th>
+        <th width='auto'>Feb Resigned</th>
+        <th width='auto'>Mar Resigned</th>
+        <th width='auto'>Apr Resigned</th>
+        <th width='auto'>May Resigned</th>
+        <th width='auto'>Jun Resigned</th>
+        <th width='auto'>Jul Resigned</th>
+        <th width='auto'>Aug Resigned</th>
+        <th width='auto'>Sep Resigned</th>
+        <th width='auto'>Oct Resigned</th>
+        <th width='auto'>Nov Resigned</th>
+        <th width='auto'>Dec Resigned</th>
+        <th width='auto'>Active Inforce</th>
+        <th width='auto'>Active Lapsed</th>
+        <th width='auto'>GK</th>
+        <th width='auto'>Active MFI - Resigned MII Members</t>
+        <th width='auto'>Active Pending</th>
+        <th width='auto'>Depen</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#members}}
+        <tr>  
+          <td>{{branch}}</td>
+          <td>{{active_count}}</td>
+          <td>{{new_jan_count}}</td>
+          <td>{{new_feb_count}}</td>
+          <td>{{new_mar_count}}</td>
+          <td>{{new_apr_count}}</td>
+          <td>{{new_may_count}}</td>
+          <td>{{new_jun_count}}</td>
+          <td>{{new_jul_count}}</td>
+          <td>{{new_aug_count}}</td>
+          <td>{{new_sep_count}}</td>
+          <td>{{new_oct_count}}</td>
+          <td>{{new_nov_count}}</td>
+          <td>{{new_dec_count}}</td>
+          <td>{{resigned_jan_count}}</td>
+          <td>{{resigned_feb_count}}</td>
+          <td>{{resigned_mar_count}}</td>
+          <td>{{resigned_apr_count}}</td>
+          <td>{{resigned_may_count}}</td>
+          <td>{{resigned_jun_count}}</td>
+          <td>{{resigned_jul_count}}</td>
+          <td>{{resigned_aug_count}}</td>
+          <td>{{resigned_sep_count}}</td>
+          <td>{{resigned_oct_count}}</td>
+          <td>{{resigned_nov_count}}</td>
+          <td>{{resigned_dec_count}}</td>
+          <td>{{active_inforce}}</td>
+          <td>{{active_lapsed}}</td>
+          <td>{{gk_count}}</td>
+          <td>{{active_resigned_insurance}}</td>
+          <td>{{active_pending}}</td>
+          <td>{{valid_dependent_count}}</td>
+        </tr>
+      {{/members}}
+      <hr>
+      {{#total_members}}
+        <tr class='leader'>
+          <th>Total:</th>
+          <th>{{total_active}}</th>
+          <th>{{total_new_jan}}</th>
+          <th>{{total_new_feb}}</th>
+          <th>{{total_new_mar}}</th>
+          <th>{{total_new_apr}}</th>
+          <th>{{total_new_may}}</th>
+          <th>{{total_new_jun}}</th>
+          <th>{{total_new_jul}}</th>
+          <th>{{total_new_aug}}</th>
+          <th>{{total_new_sep}}</th>
+          <th>{{total_new_oct}}</th>
+          <th>{{total_new_nov}}</th>
+          <th>{{total_new_dec}}</th>
+          <th>{{total_resigned_jan}}</th>
+          <th>{{total_resigned_feb}}</th>
+          <th>{{total_resigned_mar}}</th>
+          <th>{{total_resigned_apr}}</th>
+          <th>{{total_resigned_may}}</th>
+          <th>{{total_resigned_jun}}</th>
+          <th>{{total_resigned_jul}}</th>
+          <th>{{total_resigned_aug}}</th>
+          <th>{{total_resigned_sep}}</th>
+          <th>{{total_resigned_oct}}</th>
+          <th>{{total_resigned_nov}}</th>
+          <th>{{total_resigned_dec}}</th>
+          <th>{{total_active_inforce}}</th>
+          <th>{{total_active_lapsed}}</th>
+          <th>{{total_gk}}</th>
+          <th>{{total_active_resigned_insurance}}</th>
+          <th>{{total_active_pending}}</th>
+          <th>{{total_valid_dependent}}</th>
+        </tr>
+      {{/total_members}}
+    </tbody>
+  </table>
+</script>
