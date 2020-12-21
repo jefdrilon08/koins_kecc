@@ -358,7 +358,7 @@ module Reports
                     member.branch,
                     member.center.to_s,
                     member.member_type
-                  ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
+                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
     
             else
               sheet.add_row [
@@ -398,7 +398,7 @@ module Reports
                       member.branch,
                       member.center.to_s,
                       member.member_type
-                    ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
+                    ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil]
             end
           end
         end
