@@ -25,7 +25,6 @@ module AccruedPaymentCollections
     def execute!
       @accrued_payment_collection.data = @data
       @accrued_payment_collection.save!
-
       @accrued_payment_collection
     end
   end

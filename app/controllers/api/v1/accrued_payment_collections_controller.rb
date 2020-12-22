@@ -2,7 +2,7 @@ module Api
   module V1
     class AccruedPaymentCollectionsController < ApplicationController
     	def create
-    		collection_date = params[:collection_date].try(:to_date)
+    		collection_date   = params[:collection_date].try(:to_date)
         	branch_id       = params[:branch_id]
         	center_id       = params[:center_id]
 
@@ -23,6 +23,7 @@ module Api
           accrued_payment_collection = ::AccruedPaymentCollections::CreateAccruedPaymentCollection.new(
                                             config: config
                                           ).execute!
+          render json: { message: "ok", id: accrued_payment_collection.id }
     	end
     end
   end

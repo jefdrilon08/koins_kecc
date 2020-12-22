@@ -123,17 +123,12 @@ module Api
 
         def erase_record
           data_loan_id = params[:id]
-          accrued_id = params[:accrued_id]
+          #accrued_id = params[:accrued_id]
          
-          accrued_interest = AccruedInterest.find(params[:accrued_id])
-          accrued_interest_data = accrued_interest.data.with_indifferent_access
-          
-          accrued_interest_data[:active_loans].select{ |o| o[:id] == data_loan_id  }.last[:cut_off_status] = "invalid"
-          accrued_interest.update(data: accrued_interest_data)
 
           loan = Loan.find(data_loan_id)
           loan_data = loan.data.with_indifferent_access
-          loan_data[:accrued_interest] = []
+          loan_data[:accrued_interest][:status] = "remove"
           loan.update(data: loan_data)
           render json: { message: "ok" }
         

@@ -142,11 +142,6 @@
                           %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
                             .fa.fa-times
                             Remove
-                      %td
-                        - if @adjustment_record.status == "approved"
-                          %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: a["id"] } }
-                            .fa.fa-times
-                            Delete
                   - iter = iter + 1
             -else                   
               -@adjustment_record.data["active_loans"].sort_by { |m| m["member"]["last_name"] }.each.with_index do |a,i|
@@ -180,11 +175,6 @@
                             %button.btn.btn-sm.btn-danger.btn-remove{ data: { id: a["id"] } }
                               .fa.fa-times
                               Remove
-                        %td
-                          - if @adjustment_record.status == "approved"
-                            %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: a["id"], jef: a["id"] } }
-                              .fa.fa-times
-                              Delete
                     - iter = iter + 1
                 -else   
                   %tr
