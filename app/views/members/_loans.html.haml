@@ -130,11 +130,13 @@
                 #{loan.data["accrued_interest"]["status"]}
               -else
                 Active
-            %td
-              -if loan.data["accrued_interest"]["status"] != "remove"
-                %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: loan.id } }
-                  .fa.fa-times
-                  Delete
+
+            - if current_user.roles.include?("SBK")
+              %td
+                -if loan.data["accrued_interest"]["status"] != "remove"
+                  %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: loan.id } }
+                    .fa.fa-times
+                    Delete
 
       - @paid_loans.each do |loan|
         - if loan.data["accrued_interest"].present?
@@ -156,11 +158,12 @@
               -else
                 Active
 
-            %td
-              -if loan.data["accrued_interest"]["status"] != "remove"
-                %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: loan.id } }
-                  .fa.fa-times
-                  Delete
+            - if current_user.roles.include?("SBK")
+              %td
+                -if loan.data["accrued_interest"]["status"] != "remove"
+                  %button.btn.btn-sm.btn-danger.btn-erase{ data: { id: loan.id } }
+                    .fa.fa-times
+                    Delete
 
 
 %hr
