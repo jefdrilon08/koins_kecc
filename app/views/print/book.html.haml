@@ -33,7 +33,10 @@
             %strong
               #{Settings.company_name}
               %br
-              #{Settings.company_address}
+              -if @book[:start_date] >= '12-01-2020'  
+                #{Settings.company_address}
+              -else
+                #{Settings.old_company_address}
               %br
               VAT Registration Tin Number: #{Settings.company_tin_number}
               %br

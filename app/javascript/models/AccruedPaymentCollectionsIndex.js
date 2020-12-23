@@ -14,7 +14,7 @@ var templateErrorList;
 
 var branches  = [];
 
-var urlBranches                           = "/api/v1/branches";
+var urlBranches                        = "/api/v1/branches";
 var urlCreateAccruedPaymentCollection  = "/api/v1/accrued_payment_collections";
 
 var _authenticityToken;
@@ -62,7 +62,7 @@ var _bindEvents = function() {
           "Success! Redirecting..."
         );
 
-        window.location.href="/membership_payment_collections/" + response.id;
+        window.location.href="/accrued_payment_collections/" + response.id;
       },
       error: function(response) {
         var errors  = [];

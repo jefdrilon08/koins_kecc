@@ -81,6 +81,10 @@ var $inputBeneficiaryLastName;
 var $inputBeneficiaryDateOfBirth;
 var $inputBeneficiaryRelationship;
 
+var $btnErase;
+var $modalErase;
+var $btnConfirmErase;
+
 var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
 var _urlSaveSignature           = "/api/v1/members/save_signature";
 var _urlNewLoan                 = "/api/v1/loans/apply";
@@ -99,8 +103,10 @@ var _urlDeleteProfilePicture    = "/api/v1/members/delete_profile_picture";
 var _urlUploadSignature         = "/api/v1/members/upload_signature";
 var _urlDeleteSignature         = "/api/v1/members/delete_signature";
 var _urlRegister                = "/api/v1/members/register";
+var _urlEraseRecord             = "/api/v1/adjustments/accrued_interests/erase_record";
 var _memberId;
 var _authenticityToken;
+var _loanId;
 
 var _canvas;
 var _signaturePad;
@@ -192,6 +198,10 @@ var _cacheDom = function() {
   $modalRecomputeRestructure             = $("#modal-recompute-restructure");
   $modalConfirmRecomputeRestructure      = $("#btn-confirm-recompute-restructure")
 
+  $btnErase                    = $(".btn-erase"); 
+  $modalErase                  = $("#modal-erase");
+  $btnConfirmErase             = $("#btn-confirm-erase");
+  
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 
@@ -349,6 +359,31 @@ var _bindEvents = function() {
         }
       }
     });
+  });
+  
+  $btnErase.on("click", function(){
+    
+    _loanId = $(this).data("id");
+    $modalErase.modal("show");
+  });
+
+  $btnConfirmErase.on("click", function(){
+    $message.html("Loading...");
+    $btnConfirmErase.prop("disabled", true);
+    
+      
+      $.ajax({
+        url: _urlEraseRecord,
+        method: "POST",
+        data: {
+          id: _loanId
+        },
+        success: function(response) {
+          $message.html("Success!");
+          window.location.reload();
+        }
+      });
+    
   });
 
   $btnRegister.on("click", function() {

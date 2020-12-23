@@ -194,7 +194,7 @@ Rails.application.routes.draw do
   
   # Accrued
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"
-  
+  get "/accrued_payment_collections/:id", to: "accrued_payment_collections#show"
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account

@@ -1,6 +1,6 @@
 class AccruedPaymentCollectionsController < ApplicationController
 	def index
-		@sample = "Hello World"
+		@sample = ""
 
 		@subheader_items = [
         {
@@ -11,4 +11,7 @@ class AccruedPaymentCollectionsController < ApplicationController
       	{ id: "btn-new-transaction", link: "#", class: "fa fa-plus", text: "New Transaction" }
       ]
 	end
+  def show
+    @accrued_interest_collection  = "ariel"
+  end
 end

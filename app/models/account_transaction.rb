@@ -8,6 +8,7 @@ class AccountTransaction < ApplicationRecord
   scope :savings_deposits, -> { where(transaction_type: "deposit").order("transacted_at ASC, updated_at ASC") }
   scope :savings_withdrawals, -> { where(transaction_type: "withdraw").order("transacted_at ASC, updated_at ASC") }
   scope :approved_loan_payments, -> { where("transaction_type = ? AND amount > 0 AND status = ?", "loan_payment", "approved").order("transacted_at ASC") }
+  scope :accrued_interest_payments, -> { where("transaction_type = ? AND amount > 0 AND status = ?", "deposit", "approved").order("transacted_at ASC") }
   scope :approved, -> { where(status: "approved") }
   scope :interest, -> { where("transaction_type = ? AND CAST(data->>'is_interest' AS boolean) = ?", "deposit", 't') }
 
