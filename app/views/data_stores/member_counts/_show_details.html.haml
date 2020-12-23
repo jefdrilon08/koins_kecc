@@ -78,7 +78,9 @@
     %th.text-center
       #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
 %hr
-%table.table.table-bordered.table-hover.table-sm
+%h5
+  Member Counts
+%table.table.table-bordered.table-hover.table-sm  
   %tr
     %th{ width: "50%" }
     - if microinsurance?
@@ -91,9 +93,9 @@
     %th.text-center
       Regular/Primary
     %th.text-center
-      Kaagapay
-    %th.text-center
       GK
+    %th.text-center
+      Kaagapay
     %th.text-center
       Total
   - if microloans?
@@ -106,16 +108,16 @@
         - @data[:counts][:pure_savers][:members].each do |member_type| 
           - if member_type[:member_type] == "Regular"
             - $regular += 1 
-          - elsif member_type[:member_type] == "Kaagapay"
-            - $kaagapay  +=1
+          - elsif member_type[:member_type] == "GK"
+            - $gk  +=1
           - else 
-            - $gk +=1
+            - $kaagapay +=1
         %td.text-center
           #{$regular}
         %td.text-center
-          #{$kaagapay}
-        %td.text-center
           #{$gk}
+        %td.text-center
+          #{$kaagapay}
         %td.text-center
           #{@data[:counts][:pure_savers][:total]}
     %tr
@@ -127,16 +129,16 @@
         - @data[:counts][:loaners][:members].each do |member_type|
           - if member_type[:member_type] == "Regular"
             - $regular += 1 
-          - elsif member_type[:member_type] == "Kaagapay"
-            - $kaagapay  +=1
+          - elsif member_type[:member_type] == "GK"
+            - $gk  +=1
           - else 
-            - $gk +=1
+            - $kaagapay +=1
         %td.text-center
           #{$regular}
         %td.text-center
-          #{$kaagapay}
-        %td.text-center
           #{$gk}
+        %td.text-center
+          #{$kaagapay}
         %td.text-center
           #{@data[:counts][:loaners][:total]}
   %tr
@@ -155,38 +157,28 @@
     - @data[:counts][:active_members][:members].each do |member_type|
       - if member_type[:member_type] == "Regular"
         - $regular += 1 
-      - elsif member_type[:member_type] == "Kaagapay"
-        - $kaagapay  +=1
+      - elsif member_type[:member_type] == "GK"
+        - $gk  +=1
       - else 
-        - $gk +=1 
+        - $kaagapay +=1 
     %td.text-center
       #{$regular}
     %td.text-center
-      #{$kaagapay}
-    %td.text-center
       #{$gk}
     %td.text-center
+      #{$kaagapay}
+    %td.text-center
       #{@data[:counts][:active_members][:total]}
-  
-
-%hr
-- if @data[:member_type_counts].present?
-  %h5
-    Member Type Count
-  %table.table.table-bordered.table-hover.table-sm
-    %tbody
-      %tr
-      - @data[:member_type_counts].each do |o|
-        %tr
-          %th{ width: "50%" }
-            #{o[:member_type]}
-          %td
+  %tr
+    %th
+      TOTAL COUNTS PER MEMBER TYPE
+      - if @data[:member_type_counts].present?
+        - @data[:member_type_counts].each do |o|
+          %th.text-center
             #{o[:count]}
-- else
-  %p
-    No membership type counts.
+    %th.text-center
+      #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
 
-%hr
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
     %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
