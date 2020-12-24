@@ -54,6 +54,11 @@ Rails.application.routes.draw do
     
     get "/accrued_interests", to: "accrued_interests#index", as: :accrued_interests
     get "/accrued_interests/:id", to: "accrued_interests#show", as: :accrued_interest
+  
+    
+
+    get "/recompute_restructures", to: "recompute_restructures#index", as: :recompute_restructures
+    get "/recompute_restructures/:id", to: "recompute_restructures#show", as: :recompute_restructure
   end
   
   # EXPORTS

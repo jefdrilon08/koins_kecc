@@ -1,0 +1,3 @@
+class RecomputeRestructure < ApplicationRecord
+  
+end

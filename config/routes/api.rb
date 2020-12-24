@@ -33,6 +33,9 @@ namespace :api do
       post "/accrued_interests/batch_process", to: "accrued_interests#batch_process"
       post "/accrued_interests/remove", to: "accrued_interests#remove"
       post "/accrued_interests/erase_record", to: "accrued_interests#erase_record"
+      
+      
+      post "/recompute_restructures/create", to: "recompute_restructures#create"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"

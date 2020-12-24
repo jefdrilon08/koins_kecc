@@ -156,6 +156,7 @@ import MembersSearch from "../models/MembersSearch.js";
 import AdjustmentsAccruedInterestsIndex from "../models/AdjustmentsAccruedInterestsIndex.js";
 import AdjustmentsAccruedInterestsShow from "../models/AdjustmentsAccruedInterestsShow.js";
 import AccruedPaymentCollectionsIndex  from "../models/AccruedPaymentCollectionsIndex.js";
+import AdjustmentsRecomputeRestructuresIndex from "../models/AdjustmentsRecomputeRestructuresIndex.js";
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
@@ -217,6 +218,7 @@ const hooks = {
   "adjustments/batch_moratorium_adjustments/show":    [BatchMoratoriumAdjustmentsShow],
   "adjustments/moratoriums/index":                    [AdjustmentsMoratoriumsIndex],
   "adjustments/accrued_interests/index":              [AdjustmentsAccruedInterestsIndex],
+  "adjustments/recompute_restructures/index":         [AdjustmentsRecomputeRestructuresIndex],
   "accrued_payment_collections/index":                [AccruedPaymentCollectionsIndex],
   "adjustments/accrued_interests/show":               [AdjustmentsAccruedInterestsShow],
   "member_account_validations/index":                 [MemberAccountValidationsIndex],

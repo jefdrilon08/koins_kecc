@@ -523,8 +523,11 @@ namespace :adjust do
   end
 
   task :set_max_active_date => :environment do
+    branch  = Branch.find(ENV['BRANCH_ID'])
+
     puts "Starting set_max_active_date..."
-    current_date  = Date.today
+    #current_date  = Date.today
+    current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
 
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
               SELECT DISTINCT ON (loans.id)
@@ -540,7 +543,8 @@ namespace :adjust do
                 INNER JOIN
                   amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
                 WHERE
-                  loans.status IN ('active', 'paid', 'processing')
+                  loans.status IN ('active', 'paid', 'processing') and
+                  loans.branch_id  = '#{branch.id}'
                 ORDER BY
                   loans.id,
                   amortization_schedule_entries.due_date DESC,
