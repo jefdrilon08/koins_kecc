@@ -102,11 +102,15 @@ namespace :report do
 
       #Overdue_Days
       if mat_date <= s_date
-        overdue_days = l[:num_days_par]
+        if l[:num_days_par] >= 0
+          overdue_days = l[:num_days_par]
+        else
+          overdue_days = 0
+        end  
       else
         overdue_days = 0
       end
-    j = "#{mem.identification_number}|#{mem.last_name}|#{mem.first_name}|#{mem.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{mem.place_of_birth}|#{gend}|#{civil_stat}|#{mem.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{l[:pn_number]}|#{contract_type}|AC|NA|#{l[:principal]}|#{l[:overall_principal_balance]}|#{date_rel}|#{mat_date}|#{int_rate}|#{loan_data.term}|#{loan_data.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{l[:overall_balance]}|#{mat_date}|#{overdue_days}||#{outs_weeks}|#{last_payment}"
+    j = "#{mem.identification_number}|#{mem.last_name}|#{mem.first_name}|#{mem.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{mem.place_of_birth}|#{gend}|#{civil_stat}|#{mem.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{l[:pn_number]}|#{contract_type}|AC|NA|#{l[:principal]}|#{l[:overall_principal_balance]}|#{date_rel}|#{mat_date}|#{int_rate}|#{loan_data.term}|#{loan_data.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{l[:overall_balance]}|#{mat_date}|#{overdue_days}|#{monthly_payment}|#{outs_weeks}|#{last_payment}"
     @data << j
    end
    puts @data
