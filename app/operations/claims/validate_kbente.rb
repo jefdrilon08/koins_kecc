@@ -69,9 +69,9 @@ module Claims
         @errors << "Date expired field is required"
       end
 
-      if Date.today.to_date > @date_expired.to_date
-        @errors << "Expired K-BENTE!"
-      end
+      # if Date.today.to_date > @date_expired.to_date
+      #   @errors << "Expired K-BENTE!"
+      # end
 
       # if @claims_payment.blank?
       #   @errors << "Claims Payment field is required"
