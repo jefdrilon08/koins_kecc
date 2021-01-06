@@ -32,88 +32,90 @@ namespace :report do
 
    @data_store_data[:records].each.with_index do |l|
     loan_data = Loan.find(l[:id])
-
+    if loan_data.present? 
     #member_details
-    mem = Member.find(loan_data.member_id)
-      street      = mem.data["address"]["street"]
-      brgy        = mem.data["address"]["district"]
-      city        = mem.data["address"]["city"]
-      bday        = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
-      sss         = mem.data["government_identification_numbers"]["sss_number"]
-      pag_ibig    = mem.data["government_identification_numbers"]["pag_ibig_number"]
-      phil_health = mem.data["government_identification_numbers"]["phil_health_number"]
-      tin         = mem.data["government_identification_numbers"]["tin_number"] 
-    if rep_type == 'PODs'
-      m_type = 'POD'
-    elsif rep_type == 'BARs'
-      m_type = 'BAR'
-    end
-     #civil_status
-      if mem.civil_status == 'May Kinakasama' or mem.civil_status == 'Single' or mem.civil_status == 'single'
-        civil_stat = 1
-      elsif mem.civil_status == 'Kasal' or mem.civil_status == 'married'
-        civil_stat = 2
-      elsif mem.civil_status == 'Hiwalay' or mem.civil_status == 'separated'
-        civil_stat = 3
-      elsif mem.civil_status == 'Biyudo/a' or mem.civil_status == 'widowed'
-        civil_stat = 4
+      mem = Member.find(loan_data.member_id)
+        street      = mem.data["address"]["street"]
+        brgy        = mem.data["address"]["district"]
+        city        = mem.data["address"]["city"]
+        bday        = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
+        sss         = mem.data["government_identification_numbers"]["sss_number"]
+        pag_ibig    = mem.data["government_identification_numbers"]["pag_ibig_number"]
+        phil_health = mem.data["government_identification_numbers"]["phil_health_number"]
+        tin         = mem.data["government_identification_numbers"]["tin_number"] 
+      if rep_type == 'PODs'
+        m_type = 'POD'
+      elsif rep_type == 'BARs'
+        m_type = 'BAR'
       end
-      #gender
-      if mem.gender == 'Female'
-        gend = 'F'
-      elsif mem.gender == 'Male'
-        gend = 'M'
-      end
-      #LOAN PURPOSE
-      loan_prod = l[:loan_product][:name]
-      if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'         
-        loan_purpose = 'NI'
-      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA' or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
-        loan_purpose = 'ET'
-      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO' or loan_prod == 'K - BISIKLETA'
-        loan_purpose = 'SE'
-      end
-      #CONTRACT TYPE
-      if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'  or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO'
-        contract_type = 12
-      elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
-        contract_type = 22
-      elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' 
-        contract_type = 28
-      elsif loan_prod == 'K - BISIKLETA'
-        contract_type = 17
-      end
-      #POD TYPE
-      if loan_data.maturity_date.to_date == loan_data.original_maturity_date.to_date
-        pod_type = "50-01"  
-      else
-        pod_type = "54-02"
-      end
-      #mat_date
-      mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")      
-      date_rel = loan_data.date_released.to_date.strftime("%m/%d/%Y")
-      int_rate = (loan_data.monthly_interest_rate*12)*100
+       #civil_status
+        if mem.civil_status == 'May Kinakasama' or mem.civil_status == 'Single' or mem.civil_status == 'single'
+          civil_stat = 1
+        elsif mem.civil_status == 'Kasal' or mem.civil_status == 'married'
+          civil_stat = 2
+        elsif mem.civil_status == 'Hiwalay' or mem.civil_status == 'separated'
+          civil_stat = 3
+        elsif mem.civil_status == 'Biyudo/a' or mem.civil_status == 'widowed'
+          civil_stat = 4
+        end
+        #gender
+        if mem.gender == 'Female'
+          gend = 'F'
+        elsif mem.gender == 'Male'
+          gend = 'M'
+        end
+        #LOAN PURPOSE
+        loan_prod = l[:loan_product][:name]
+        if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'         
+          loan_purpose = 'NI'
+        elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA' or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
+          loan_purpose = 'ET'
+        elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO' or loan_prod == 'K - BISIKLETA'
+          loan_purpose = 'SE'
+        end
+        #CONTRACT TYPE
+        if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'  or loan_prod == 'K -KASAL' or loan_prod == 'K - TRABAHO'
+          contract_type = 12
+        elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
+          contract_type = 22
+        elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' 
+          contract_type = 28
+        elsif loan_prod == 'K - BISIKLETA'
+          contract_type = 17
+        end
+        #POD TYPE
+        if loan_data.maturity_date.to_date == loan_data.original_maturity_date.to_date
+          pod_type = "50-01"  
+        else
+          pod_type = "54-02"
+        end
+        #mat_date
+        mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")      
+        date_rel = loan_data.date_released.to_date.strftime("%m/%d/%Y")
+        int_rate = (loan_data.monthly_interest_rate*12)*100
 
-      no_days_par = l[:num_days_par]
-      n = (s_date.to_date - no_days_par)
-      outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
-      last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
-      monthly_payment = last_payment * 4
+        no_days_par = l[:num_days_par]
+        n = (s_date.to_date - no_days_par)
+        outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
+        last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
+        monthly_payment = last_payment * 4
 
-      #Overdue_Days
-      if mat_date <= s_date
-        if l[:num_days_par] >= 0
-          overdue_days = l[:num_days_par]
+        #Overdue_Days
+        if mat_date <= s_date
+          if l[:num_days_par] >= 0
+            overdue_days = l[:num_days_par]
+          else
+            overdue_days = 0
+          end  
         else
           overdue_days = 0
-        end  
-      else
-        overdue_days = 0
-      end
-    j = "#{mem.identification_number}|#{mem.last_name}|#{mem.first_name}|#{mem.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{mem.place_of_birth}|#{gend}|#{civil_stat}|#{mem.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{l[:pn_number]}|#{contract_type}|AC|NA|#{l[:principal]}|#{l[:overall_principal_balance]}|#{date_rel}|#{mat_date}|#{int_rate}|#{loan_data.term}|#{loan_data.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{l[:overall_balance]}|#{mat_date}|#{overdue_days}|#{monthly_payment}|#{outs_weeks}|#{last_payment}"
-    @data << j
-   end
+        end
+      j = "#{mem.identification_number}|#{mem.last_name}|#{mem.first_name}|#{mem.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{mem.place_of_birth}|#{gend}|#{civil_stat}|#{mem.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{l[:pn_number]}|#{contract_type}|AC|NA|#{l[:principal]}|#{l[:overall_principal_balance]}|#{date_rel}|#{mat_date}|#{int_rate}|#{loan_data.term}|#{loan_data.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{l[:overall_balance]}|#{mat_date}|#{overdue_days}|#{monthly_payment}|#{outs_weeks}|#{last_payment}"
+      @data << j
+     end
+    end
    puts @data
+   puts "END"
   end
   task :mem_share => :environment do
     x = Member.where("status = 'active' and branch_id = '3726405b-777c-4b61-b6a5-7a4b48db62b6'")
