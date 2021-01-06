@@ -129,7 +129,7 @@ module Claims
       elsif @claim.hiip?
         particular = "HIIP claim of #{@claim.member.full_name} from #{branch.name}"
       elsif @claim.kbente?
-        particular = "Claims on K-bente of #{@claim.member.full_name} (Member & Brother) of #{@claim_data[:name_of_insured]} from #{branch.name}"
+        particular = "Claims on K-bente of #{@claim.member.full_name} (Member) and his/her beneficiary is #{@claim_data[:name_of_beneficiary]} from #{branch.name}"
       elsif @claim.calamity?
         particular = "Calamity Assistance of #{@claim.member.full_name} from #{branch.name} due to #{@claim_data[:type_of_calamity]}"
       elsif @claim.kalinga?
