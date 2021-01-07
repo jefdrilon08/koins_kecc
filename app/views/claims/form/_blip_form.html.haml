@@ -76,7 +76,7 @@
   .col
     .form-group
       %label.col.control-label
-        Date of Birth
+        Birthdate of Insured
         = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', id: 'date-of-birth', type: 'date', value: @claim.member.date_of_birth
   .col
     .form-group
