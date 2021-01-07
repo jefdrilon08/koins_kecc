@@ -85,6 +85,13 @@ class InsuranceFundTransferCollectionsController < ApplicationController
     if @insurance_fund_transfer_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
       if Settings.activate_microinsurance and @insurance_fund_transfer_collection.finalized?
         @subheader_side_actions << {
+          id: "btn-revert",
+          link: "#",
+          class: "fa fa-undo",
+          text: "Revert"
+        }
+
+        @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
           class: "fa fa-check",

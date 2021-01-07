@@ -78,7 +78,7 @@
     %tr
       %th Date of Letter of Approval(LOA)
       %td
-        = @data[:date_of_loa].to_date.strftime("%b %d, %Y")
+        = @data[:date_of_loa].try(:to_date).try(:strftime, "%b %d, %Y")
       %th Claims Payment Through
       %td
         = @data[:claims_payment]

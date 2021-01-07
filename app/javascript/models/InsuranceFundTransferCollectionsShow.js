@@ -12,15 +12,20 @@ var $btnFinalize;
 var $btnConfirmFinalize;
 var $modalFinalize;
 
+var $btnRevert;
+var $btnConfirmRevert;
+var $modalRevert;
+
 var $btnPrint;
 var $modalPrint;
 
 var $message;
 var templateErrorList;
 
-var _urlApprove   = "/api/v1/insurance_fund_transfer_collections/approve";
-var _urlPrint     = "/api/v1/print/generate_file";
-var _urlFinalize  = "/api/v1/insurance_fund_transfer_collections/finalize";
+var _urlApprove       = "/api/v1/insurance_fund_transfer_collections/approve";
+var _urlRevert        = "/api/v1/insurance_fund_transfer_collections/revert";
+var _urlPrint         = "/api/v1/print/generate_file";
+var _urlFinalize      = "/api/v1/insurance_fund_transfer_collections/finalize";
 
 var _cacheDom = function() {
   $btnApprove         = $("#btn-approve");
@@ -30,6 +35,10 @@ var _cacheDom = function() {
   $btnFinalize        = $("#btn-finalize");
   $btnConfirmFinalize = $("#btn-confirm-finalize");
   $modalFinalize      = $("#modal-finalize");
+
+  $btnRevert          = $("#btn-revert");
+  $btnConfirmRevert   = $("#btn-confirm-revert");
+  $modalRevert        = $("#modal-revert");
 
   $btnPrint   = $("#btn-print");
   $modalPrint = $("#modal-print");
@@ -51,6 +60,11 @@ var _bindEvents = function() {
   $btnFinalize.on("click", function() {
     $message.html("");
     $modalFinalize.modal("show");
+  });
+
+   $btnRevert.on("click", function() {
+    $message.html("");
+    $modalRevert.modal("show");
   });
 
   $btnConfirmFinalize.on("click", function() {
@@ -87,6 +101,45 @@ var _bindEvents = function() {
           );
 
           $btnConfirmFinalize.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnConfirmRevert.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmRevert.prop("disabled", true);
+
+    $.ajax({
+      url: _urlRevert,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: insuranceFundTransferCollectionId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmRevert.prop("disabled", false);
         }
       }
     });
