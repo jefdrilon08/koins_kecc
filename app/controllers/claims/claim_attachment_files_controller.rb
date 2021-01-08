@@ -80,14 +80,16 @@ module Claims
 
     def destroy
       @claim_attachment_file    = ClaimAttachmentFile.find(params[:id])
-      @claim_attachment_file.file.purge
+      # @claim_attachment_file.file.purge
+      @claim_attachment_file.files.purge
       @claim_attachment_file.destroy!
 
       redirect_to claim_path(@claim)
     end
 
     def claim_attachment_file_params
-      params.require(:claim_attachment_file).permit(:file_name, :file, :data)
+      # params.require(:claim_attachment_file).permit(:file_name, :file, :data)
+      params.require(:claim_attachment_file).permit(:file_name, :data, files: [])
     end
 
   end

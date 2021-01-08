@@ -8,21 +8,22 @@
     No attachment files for this claim
 - else
   - @claim.claim_attachment_files.each do |claim_attachment_file|
-    %table.table.table-bordered.table-sm.table-hover
-      %thead
-        %tr
-          %th
-            #{claim_attachment_file.file_name}  
-      %tbody
-        %tr
-          %td
-            - if claim_attachment_file.file.attached?        
-              = image_tag rails_blob_path(claim_attachment_file.file, disposition: "attachment", only_path: true), width: "1100", height: "1000"
-              %br
-              = link_to claim_attachment_file.file.record_id, rails_blob_path(claim_attachment_file.file, disposition: "attachment")
-            - else
-              %p
-                No image found
+    - if claim_attachment_file.files.attached?        
+      / = image_tag rails_blob_path(claim_attachment_file.file, disposition: "attachment", only_path: true), width: "1100", height: "1000"
+      / %br
+      / = link_to claim_attachment_file.file.record_id, rails_blob_path(claim_attachment_file.file, disposition: "attachment")
+      - claim_attachment_file.files.each do |file|
+        %div{:style => "width: 1000px; height: 1000px;"}
+          %b
+            .h3
+              #{file.blob.filename.base}
+          = image_tag rails_blob_path(file, disposition: "attachment", only_path: true), width: "1100px", height: "1000px"
+        %br
+        %br
+        %hr
+    - else
+      %p
+        No image found
     - if @claim.pending? || @claim.for_approval?  
       = link_to edit_claim_claim_attachment_file_path(@claim, claim_attachment_file), class: 'btn btn-warning btn-sm' do
         .fa.fa-pencil-alt
@@ -30,4 +31,3 @@
       = link_to claim_claim_attachment_file_path(@claim, claim_attachment_file), method: :delete, class: 'btn btn-danger btn-sm', data: { confirm: "Are you sure?" } do
         .fa.fa-times
         Delete
-      %hr

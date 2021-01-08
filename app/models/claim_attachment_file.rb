@@ -33,7 +33,9 @@ class ClaimAttachmentFile < ApplicationRecord
 
   belongs_to :claim
 
-  has_one_attached :file
+  # has_one_attached :file
 
-  validates :file_name, presence: true, inclusion: { in: FILE_NAMES }
+  has_many_attached :files
+
+  # validates :file_name, presence: true, inclusion: { in: FILE_NAMES }
 end
