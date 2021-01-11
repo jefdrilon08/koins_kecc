@@ -122,11 +122,18 @@
           - else
             %th{:width => "17%"} Check No:
             %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
-      %tr
-        %th{:width => "17%"} Date Requested:
-        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
-        %th{:width => "17%"} Date Approved:
-        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+      - if Settings.activate_microloans == true  
+        %tr
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+      - if Settings.activate_microinsurance == true  
+        %tr
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}  
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
         -if Settings.activate_microinsurance == true
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} AR Number:
