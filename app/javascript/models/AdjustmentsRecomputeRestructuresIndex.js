@@ -51,11 +51,11 @@ var _memberId;
 var _moratoriumId;
 
 var _urlCreate        = "/api/v1/adjustments/recompute_restructures/create";
-//var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
-//var _urlProcess       =  "#" // "/api/v1/adjustments/moratoriums/process";
-//var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
-//var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
-var _urlCenters       = "/api/v1/branches/fetch_centers";
+var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
+var _urlProcess       =  "#" // "/api/v1/adjustments/moratoriums/process";
+var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
+var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
+var _urlCenters       = "/api/v1/branches/fetch_centers_for_restructure";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 
 var init  = function(options) {
@@ -309,6 +309,11 @@ var _bindEvents = function() {
       $selectMember.append(new Option(_members[i].full_name, _members[i].id));
     }
 
+    if(_members.length > 0) {
+      _memberId = _members[i].id;
+
+      _fetchLoans();
+    }
   });
 
   $selectBranch.on("change", function() {
@@ -342,6 +347,7 @@ var _bindEvents = function() {
   $btnConfirmNew.on("click", function() {
     _branchId           = $selectBranch.val();
     _centerId           = $selectCenter.val();
+    _memberId           = $selectMember.val();
 
 
     
@@ -349,6 +355,7 @@ var _bindEvents = function() {
     $btnConfirmNew.prop("disabled", true);
     $selectBranch.prop("disabled", true);
     $selectCenter.prop("disabled", true);
+    $selectMember.prop("disabled", true);
 
     console.log(_loanIds);
 
@@ -359,14 +366,15 @@ var _bindEvents = function() {
       method: "POST",
       data: {
         branch_id: _branchId,
-        center_id: _centerId
+        center_id: _centerId,
+        member_id: _memberId,
+        authenticity_token: _authenticityToken
       },
       success: function(response) {
         $message.html(
           "Success! Redirecting..."
         );
 
-      
         window.location.href="/adjustments/recompute_restructures/" + response.id;
       },
       error: function(response) {
@@ -387,6 +395,11 @@ var _bindEvents = function() {
           $btnConfirmNew.prop("disabled", false);
           $selectBranch.prop("disabled", false);
           $selectCenter.prop("disabled", false);
+          $selectMember.prop("disabled", false);
+          $selectLoans.prop("disabled", false);
+          $inputDateInitialized.prop("disabled", false);
+          $inputReason.prop("disabled", false);
+          $inputNumberOfDays.prop("disabled", false);
         }
       }
     });

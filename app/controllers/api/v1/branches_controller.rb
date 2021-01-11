@@ -2,6 +2,38 @@ module Api
   module V1
     class BranchesController < ApiController
       before_action :authenticate_user!
+      def fetch_centers_for_restructure
+        #branch  = @branches.where(id: params[:id]).first
+        branch = @branches.select{ |o| o[:id] == params[:id] }.first
+
+        if branch.present?
+          centers = Center.where(branch_id: branch[:id]).order("name ASC").map{ |c| 
+                      members = []
+
+                      if params[:with_members].present?
+                        members = Member.active.joins(:loans).where("members.center_id = ? and loans.loan_product_id = ?", c.id, "1c2fcdbd-d60b-402c-b04b-824bb90958d1").order("last_name ASC").map{ |m|
+                                    {
+                                      id: m.id,
+                                      last_name: m.last_name,
+                                      first_name: m.first_name,
+                                      middle_name: m.middle_name,
+                                      full_name: m.full_name
+                                    }
+                                  }
+                      end
+
+                      { 
+                        id: c.id, 
+                        name:  c.name,
+                        members: members
+                      }
+                    }
+        else
+          centers = []  
+        end
+
+        render json: { centers: centers }
+      end
 
       def update_current_date
         branch  = Branch.find(params[:id])

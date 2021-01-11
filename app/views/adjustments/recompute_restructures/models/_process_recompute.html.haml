@@ -3,7 +3,7 @@
     .modal-content
       .modal-header
         %h3.modal-title
-          Recompute Restructure
+          Recompute Accrued Interest
       .modal-body
         .modal-body-content
           .row
@@ -17,6 +17,12 @@
                 %label
                   Center
                 = select_tag :center_id, options_from_collection_for_select([], :id, :name), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
+          .row
+            .col
+              .form-group
+                %label
+                  Member
+                = select_tag :member_id, options_for_select([]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
                 
       .modal-footer
         .controls

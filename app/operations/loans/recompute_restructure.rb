@@ -17,7 +17,15 @@ module Loans
       
         last_regular_payment = AccountTransaction.where("subsidiary_id =? and transacted_at < ? and status = ? and amount > 0", loan_data[:id], @loan.date_prepared,"approved" ).order(:transacted_at).last
         ksagip_payment = AccountTransaction.where("subsidiary_id =?", loan_data[:id]).order(:transacted_at).last
+        
+        receivable_accounting_code = Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id
+        interest_receivable_accounting_code = Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
          
+            if @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] ==  interest_receivable_accounting_code}.present?
+              old_loan_interest = @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] ==  interest_receivable_accounting_code}.last["amount"]
+            else
+              old_loan_interest = 0.0
+            end
 
         last_regular_payment_data =  last_regular_payment.data.with_indifferent_access
 
@@ -38,8 +46,10 @@ module Loans
                               loan_product: {
                                 id: reg_loan.loan_product.id,
                                 name: reg_loan.loan_product.name,
-                                receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id,
-                                interest_receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
+                                receivable_accounting_code_id: receivable_accounting_code,
+                                interest_receivable_accounting_code_id: interest_receivable_accounting_code,
+                                old_receivable_amount: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] ==  receivable_accounting_code}.last["amount"],
+                                old_interest_receivable_amount: old_loan_interest
                       
                               }
 
@@ -63,8 +73,10 @@ module Loans
                               loan_product: {
                                 id: reg_loan.loan_product.id,
                                 name: reg_loan.loan_product.name,
-                                receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id,
-                                interest_receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
+                                receivable_accounting_code_id: receivable_accounting_code,
+                                interest_receivable_accounting_code_id: interest_receivable_accounting_code,
+                                old_receivable_amount: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] ==  receivable_accounting_code}.last["amount"],
+                                old_interest_receivable_amount: old_loan_interest
                               }
 
                             }
@@ -83,8 +95,7 @@ module Loans
             end
             
             
-
-
+                        
             new_restructure = { id: reg_loan.id,
                               pn_number: reg_loan.pn_number,
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
@@ -96,8 +107,10 @@ module Loans
                               loan_product: {
                                 id: reg_loan.loan_product.id,
                                 name: reg_loan.loan_product.name,
-                                receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id,
-                                interest_receivable_accounting_code_id: Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.interest_receivable_accounting_code_id
+                                receivable_accounting_code_id: receivable_accounting_code,
+                                interest_receivable_accounting_code_id: interest_receivable_accounting_code,
+                                old_receivable_amount: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] ==  receivable_accounting_code}.last["amount"],
+                                old_interest_receivable_amount: old_loan_interest
                               }
 
                             }
@@ -148,7 +161,7 @@ module Loans
         a = Settings.loan_products.select{ |o| o[:loan_product_id] == "1c2fcdbd-d60b-402c-b04b-824bb90958d1" }.last
         total_insurance = 0
         a.deductions.each do |b|
-
+        
           deduction_type  = b.meta["account_type"]
           if deduction_type == "INSURANCE"
             if b.meta["value"] != 0
@@ -157,7 +170,8 @@ module Loans
                   account_type: b.meta["account_type"],
                   account_subtype: b.meta["account_subtype"],
                   accounting_entry: b["accounting_code_id"],
-                  value: computed_value
+                  value: computed_value,
+                  old_value: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == b["accounting_code_id"]}.last["amount"]
 
               } 
               total_insurance = total_insurance + computed_value
@@ -181,6 +195,7 @@ module Loans
                 
 
                 @jef[:total_service_fee] = result
+                @jef[:total_old_service_fee] = @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "9f4b1331-cd5a-4edb-9920-a5029759885d"}.last["amount"]
               
               
               
@@ -188,7 +203,8 @@ module Loans
                   account_type: b.meta["account_type"],
                   account_subtype: b.meta["account_subtype"],
                   accounting_entry: b["accounting_code_id"],
-                  value: second_clip
+                  value: second_clip,
+                  old_value: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == b["accounting_code_id"]}.last["amount"]
 
               } 
         
@@ -208,9 +224,9 @@ module Loans
       
 
       #raise @jef.inspect
-      @loan_data[:new_restructured] = @jef
-      @loan.update(data: @loan_data)
-
+      #@loan_data[:new_restructured] = @jef
+      #@loan.update(data: @loan_data)
+       @jef
     end
   
   end

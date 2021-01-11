@@ -4,11 +4,12 @@ module Api
       class RecomputeRestructuresController < ApplicationController
         def create
           branch_id = params[:branch_id]
-          branch = Branch.where(id: params[:branch_id]).first
-          center = Center.where(id: params[:center_id]).first
+          center_id = params[:center_id]  
+          member_id = params[:member_id]
           config = {
-            branch_id: params[:branch_id],
-            center_id: params[:center_id]
+            branch_id: branch_id,
+            center_id: center_id,
+            member_id: member_id
           }
     
           record =  ::Adjustments::RecomputeRestructures::Create.new(
@@ -17,6 +18,19 @@ module Api
           
           render json: { id: record.id}
         end
+
+        def approve
+          recompute_restructure_id = params[:id]
+          recompute_restructure_details = RecomputeRestructure.find(recompute_restructure_id)
+          config = {
+            recompute_restructure: recompute_restructure_details
+          }
+          record =  ::Adjustments::RecomputeRestructures::Approve.new(
+                                                                config: config
+                                                               ).execute!
+          
+        end
+
       end
     end
   end
