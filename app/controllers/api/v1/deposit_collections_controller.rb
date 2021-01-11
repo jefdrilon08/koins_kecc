@@ -265,14 +265,26 @@ module Api
         deposit_collection   = DepositCollection.find(params[:id])
         data      = deposit_collection.try(:data).try(:with_indifferent_access)
         
+        config  = {
+            deposit_collection: deposit_collection,
+            user: current_user
+          }
+
         if deposit_collection.pending?
-          data[:finalize]                             = true
+          errors  = ::DepositCollections::ValidateFinalize.new(
+                    config: config
+                  ).execute!
+          if errors[:messages].any?
+            render json: errors, status: 400
+          else
+            data[:finalize] = true
 
-          deposit_collection.update!(
-            data: data
-          )
+            deposit_collection.update!(
+              data: data
+            )
 
-          render json: { message: "ok" }
+            render json: { message: "ok" }
+          end
         else
           render json: { message: "error" }, status: 400
         end

@@ -130,18 +130,48 @@ module Api
         end
       end
 
-      def finalize
+      def revert
         insurance_fund_transfer_collection   = InsuranceFundTransferCollection.find(params[:id])
         data                                 = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
         
         if insurance_fund_transfer_collection.pending?
-          data[:finalize] = true
+          data[:finalize] = false
 
           insurance_fund_transfer_collection.update!(
             data: data
           )
 
           render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
+      def finalize
+        insurance_fund_transfer_collection   = InsuranceFundTransferCollection.find(params[:id])
+        data                                 = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
+        
+        config  = {
+          insurance_fund_transfer_collection: insurance_fund_transfer_collection,
+          user: current_user
+        }
+
+        if insurance_fund_transfer_collection.pending?
+          errors  = ::InsuranceFundTransferCollections::ValidateFinalize.new(
+                    config: config
+                  ).execute!
+
+          if errors[:messages].any?
+            render json: errors, status: 400
+          else
+            data[:finalize] = true
+
+            insurance_fund_transfer_collection.update!(
+              data: data
+            )
+
+            render json: { message: "ok" }
+          end
         else
           render json: { message: "error" }, status: 400
         end

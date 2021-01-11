@@ -8,10 +8,10 @@
           #{e}
 
 = simple_form_for [@claim, @claim_attachment_file] do |f|
+  / .form-group
+  /   = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: ClaimAttachmentFile::FILE_NAMES
   .form-group
-    = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: ClaimAttachmentFile::FILE_NAMES
-  .form-group
-    = f.input :file, as: :file, input_html: { class: 'form-control' }
+    = f.input :files, as: :file, input_html: { class: 'form-control' , multiple: true}
   %hr
   .btn-group
     %button.btn.btn-primary{ type: "submit" }
