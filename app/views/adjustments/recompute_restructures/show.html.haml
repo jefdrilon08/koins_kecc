@@ -1,0 +1,128 @@
+= title @restucture_details.id
+
+.row
+  .col
+    .card
+      .card-body
+        %table
+          %tr
+            %th
+              %h2
+                #{Loan.find(@restucture_details.loan).member.full_name}
+              (#{Loan.find(@restucture_details.loan).loan_product.name} - #{Loan.find(@restucture_details.loan).pn_number} )
+        %table.table.table-sm.table-bordered.table-hover
+          %thead
+            %tr
+              %th{:rowspan => "2"} PN Number
+              %th{:rowspan => "2"} Loan Product
+              %th{:colspan => "2", :style => "text-align:center;"} Old
+              %th{:colspan => "2", :style => "text-align:center;"} New
+              %th{:rowspan => "2"} Account Type
+            %tr
+            
+              %th Principal Balance
+              %th Interest Balance
+              %th Principal Balance
+              %th Interest Balance
+          %tbody
+            - @loan.data["restructured_loans"].each do |l|
+              %tr
+                %td #{l["pn_number"]} 
+                %td #{l["loan_product"]["name"]}
+                %td #{l["principal_balance"]}
+                %td #{l["interest_balance"]}
+                - @restucture_details.data["loans"].each do |rd|
+                  %td
+                    #{rd["loan_details"].select{ |o| o["loan_product"]["id"] == l["loan_product"]["id"]}.last["principal_balance"]  }
+                  %td
+                    #{rd["loan_details"].select{ |o| o["loan_product"]["id"] == l["loan_product"]["id"]}.last["k_sagip_interest_balance"]  }
+                  %td
+                    #{rd["loan_details"].select{ |o| o["loan_product"]["id"] == l["loan_product"]["id"]}.last["transaction_type"]  }
+
+        %table.table.table-sm.table-bordered.table-hover
+          %thead
+            %tr
+              %th{:rowspan => "2"} Accounting Code
+              %th{:colspan => "2"} OLD
+              %th{:colspan => "2" } New
+              %th{:rowspan => "2"} Difference
+            %tr
+              %th Debit
+              %th Credit
+              %th Debit
+              %th Credit
+          %tbody
+            %tr
+              %td
+                #{AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e").name}
+              %td
+                #{Loan.find(@restucture_details.loan).data["accounting_entry"]["debit_journal_entries"].last["amount"]}
+              %td
+              %td
+                #{@restucture_details.data["loans"].last["total_loanable_amount"]}
+              %td
+              %td
+                #{(Loan.find(@restucture_details.loan).data["accounting_entry"]["debit_journal_entries"].last["amount"].to_f - @restucture_details.data["loans"].last["total_loanable_amount"].to_f).round(2)}
+
+            - @restucture_details.data["loans"].each do |rd| 
+                  
+              - rd["loan_details"].each do |ld|
+                %tr
+                  %td 
+                    #{AccountingCode.find(ld["loan_product"]["receivable_accounting_code_id"]).name}
+                  %td
+                  %td
+                    #{ld["loan_product"]["old_receivable_amount"]}
+                  %td
+                  %td
+                    #{ld["principal_balance"]}
+                  %td
+                    #{ld["loan_product"]["old_receivable_amount"].to_f - ld["principal_balance"].to_f}
+                    
+                %tr
+                  %td 
+                    #{AccountingCode.find(ld["loan_product"]["interest_receivable_accounting_code_id"]).name}
+                  %td
+                  %td
+                    #{ld["loan_product"]["old_interest_receivable_amount"]}
+                  %td
+                  %td
+                    #{ld["k_sagip_interest_balance"]}
+                  %td
+                    #{ld["loan_product"]["old_interest_receivable_amount"].to_f - ld["k_sagip_interest_balance"].to_f}
+                    
+
+              - rd["insurance_details"].each do |idetails|
+                %tr
+                  %td
+                    #{AccountingCode.find(idetails["accounting_entry"]).name}
+                  %td
+                  %td
+                    #{idetails["old_value"]}
+                  %td
+                  %td
+                    #{idetails["value"]}
+                  %td
+                    #{(idetails["old_value"].to_f - idetails["value"].to_f).round(2)}
+              %tr
+                %td
+                  #{AccountingCode.find("1bbcc6da-ec23-4293-b292-7580f607575d").name}
+                %td
+                %td
+                  #{@restucture_details.data["loans"].last["total_old_service_fee"]}
+                %td
+                %td
+                  #{@restucture_details.data["loans"].last["total_service_fee"]}
+                %td
+                  #{(@restucture_details.data["loans"].last["total_old_service_fee"].to_f - @restucture_details.data["loans"].last["total_service_fee"].to_f).round(2)}
+                  
+
+                  
+  
+              
+            
+          
+                
+= render partial: "adjustments/recompute_restructures/models/approve"
+
+

@@ -36,6 +36,7 @@ namespace :api do
       
       
       post "/recompute_restructures/create", to: "recompute_restructures#create"
+      post "/recompute_restructures/approve", to: "recompute_restructures#approve"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -139,6 +140,7 @@ namespace :api do
     get "/branches", to: "branches#index"
     get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
+    get "/branches/fetch_centers_for_restructure", to: "branches#fetch_centers_for_restructure"
 
     # Clusters
     get "/clusters", to: "clusters#index"
