@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.4em;
+    font-size: 1em;
     font-family: arial;
   }
 
@@ -16,6 +16,11 @@
 
   .signatories{
     width: 100%;
+  }
+
+  .acknowledgement{
+    text-align: center;
+    margin: auto;
   }
 
   #kmba{
@@ -224,3 +229,35 @@
             Silvida R. Antiquera
           %br
           General Manager
+  %br
+  %hr{:style => "border-top: dashed 1px;"}
+  .acknowledgement
+    %h6
+      %b
+        Acknowledgement Receipt
+  .acknowledgement-body
+    %p
+      I
+      %u
+        #{@data["beneficiary"].titleize}
+      , of legal age with residence and postal address at ____________________________________________________ hereby declare:
+      %br
+      &nbsp;&nbsp;1. That, I am the beneficiary of the late &nbsp;
+      %u
+        #{@claim.member.full_name.titleize}
+      %br
+      &nbsp;&nbsp;2. That, I acknowledge the amount of 
+      %u
+        &nbsp;&#8369;(#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")})
+      in cash representing CLIP claim benefit for the paid insured loan
+      %br
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of the late, &nbsp;
+      %u
+        #{@claim.member.full_name.titleize}
+      from
+      %b
+        CAPS R #{@claim.member.branch.name}
+      %br
+      &nbsp;&nbsp;3. That, as a result or our voluntary acceptance of the said amount, we are relinquishing our right over the
+      %br
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;claim benefit proceeds of the above-policy in favor of CAPS-R Inc to be collected from and to

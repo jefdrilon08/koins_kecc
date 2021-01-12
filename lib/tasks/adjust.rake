@@ -1162,17 +1162,23 @@ namespace :adjust do
 
   task :repair_validation_accounting_entry_by_id => :environment do
     puts "Repairing ..."
+    is_remote = false
+      
+    if ENV['IS_REMOTE'].present?
+      is_remote = ENV['IS_REMOTE']
+    end
+
     member_account_validation = MemberAccountValidation.find(ENV['VALIDATION_ID'])
     data = member_account_validation.data.with_indifferent_access
     last_name = member_account_validation.prepared_by.split(", ").first
     first_name = member_account_validation.prepared_by.split(", ").last
-    current_user = User.where(last_name: last_name, first_name: first_name).first
+    current_user = User.where("lower(last_name) = ? AND lower(first_name) = ?", last_name.downcase, first_name.downcase).first
     data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
                                         config: 
                                         {
                                           branch: member_account_validation.branch,
                                           member_account_validation: member_account_validation,
-                                          is_remote: false,
+                                          is_remote: is_remote,
                                           user: current_user
                                         }
                                 ).execute!
