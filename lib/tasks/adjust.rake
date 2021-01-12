@@ -1320,16 +1320,16 @@ namespace :adjust do
                     new_status = "resigned"
                   elsif current_balance == 0.00 && !insurance_date_resigned.nil?
                     new_status = "resigned"
+                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due >= 163
+                    new_status = "lapsed"
+                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due >= 163
+                    new_status = "lapsed"
                   elsif days_lapsed <= 76 && current_balance >= insured_amount
                     new_status = "inforce"
                   elsif days_lapsed > 76 && current_balance >= insured_amount
                     new_status = "inforce"
                   elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due < 163
                     new_status = "inforce"
-                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due >= 163
-                    new_status = "lapsed"
-                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due >= 163
-                    new_status = "lapsed"
                   elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due < 163
                     new_status = "inforce"
                   end
@@ -1560,16 +1560,16 @@ namespace :adjust do
               member.update(insurance_status: "resigned")
             elsif current_balance == 0.00
               member.update(insurance_status: "dormant")
+            elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
+              member.update(insurance_status: "lapsed")  
+            elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
+              member.update(insurance_status: "lapsed")
             elsif days_lapsed <= 45 && current_balance >= insured_amount
               member.update(insurance_status: "inforce")
             elsif days_lapsed > 45 && current_balance >= insured_amount
               member.update(insurance_status: "inforce")
             elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
               member.update(insurance_status: "inforce")
-            elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
-              member.update(insurance_status: "lapsed")  
-            elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
-              member.update(insurance_status: "lapsed")
             elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
               member.update(insurance_status: "inforce")  
             end
