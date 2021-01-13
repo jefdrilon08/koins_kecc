@@ -1,4 +1,50 @@
 namespace :report do
+  task :watchlist => :environment do
+  s_date= ENV['s_date']
+    #mat_date = ENV['mat_date']
+    br_name = ENV['SATO']
+    br_id= Branch.where(name: br_name).ids
+    @data = [] 
+
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "WATCHLIST").last
+    @data_store_data = @data_store.data.with_indifferent_access
+    @data_store_data[:records].each do |r|
+      ctr = Loan.find(r[:id]).center.name
+      j = "#{r[:member][:last_name]}, #{r[:member][:first_name]}|#{ctr}"
+      @data << j
+    end
+      puts @data
+  end
+
+  task :active_loaners => :environment do
+  s_date= ENV['s_date']
+    #mat_date = ENV['mat_date']
+    br_name = ENV['SATO']
+    br_id= Branch.where(name: br_name).ids
+    @data = [] 
+
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "MEMBER_COUNTS").last
+    @data_store_data[:counts][:loaners][:members].each do |m|
+      ctr = m[:center][:name]
+      j = "#{m[:last_name]}, #{m[:first_name]}|#{ctr}"
+      @data << j
+    end
+  
+      puts @data
+  end
+  
   task :member_age => :environment do
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
