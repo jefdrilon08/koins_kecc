@@ -523,35 +523,11 @@ namespace :adjust do
   end
 
   task :set_max_active_date => :environment do
-    branch  = Branch.find(ENV['BRANCH_ID'])
+    #branch  = Branch.find(ENV['BRANCH_ID'])
 
     puts "Starting set_max_active_date..."
     #current_date  = Date.today
-    current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
-    if ENV['BRANCH_ID'].present?
-
-    data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
-              SELECT DISTINCT ON (loans.id)
-                loans.id AS loan_id,
-                loans.first_date_of_payment,
-                loans.status AS status,
-                DATE(account_transactions.transacted_at) as last_transaction_date,
-                DATE(amortization_schedule_entries.due_date) as last_amortization_date
-              FROM
-                loans
-                LEFT OUTER JOIN
-                  account_transactions ON account_transactions.subsidiary_id = loans.id
-                INNER JOIN
-                  amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
-                WHERE
-                  loans.status IN ('active', 'paid', 'processing') and
-                  loans.branch_id  = '#{branch.id}'
-                ORDER BY
-                  loans.id,
-                  amortization_schedule_entries.due_date DESC,
-                  account_transactions.transacted_at DESC
-            EOS
-    else
+    #current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
               SELECT DISTINCT ON (loans.id)
                 loans.id AS loan_id,
@@ -574,7 +550,7 @@ namespace :adjust do
             EOS
     
 
-    end
+  
 
     sets  = data.map{ |d|
               loan_id                 = d.fetch("loan_id")
