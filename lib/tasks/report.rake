@@ -36,6 +36,7 @@ namespace :report do
                                          br_id, 
                                          s_date,
                                          "MEMBER_COUNTS").last
+    @data_store_data = @data_store.data.with_indifferent_access
     @data_store_data[:counts][:loaners][:members].each do |m|
       ctr = m[:center][:name]
       j = "#{m[:last_name]}, #{m[:first_name]}|#{ctr}"
