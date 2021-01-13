@@ -16,7 +16,7 @@ namespace :report do
     @data_store_data = @data_store.data.with_indifferent_access
     @data_store_data[:records].each do |r|
       ctr = Loan.find(r[:id]).center.name
-      j = "#{r[:identification_number]}|#{r[:member][:last_name]}, #{r[:member][:first_name]}|#{ctr}"
+      j = "#{r[:member][:identification_number]}|#{r[:member][:last_name]}, #{r[:member][:first_name]}|#{ctr}"
       @data << j
     end
       puts @data
