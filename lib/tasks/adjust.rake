@@ -526,7 +526,7 @@ namespace :adjust do
     #branch  = Branch.find(ENV['BRANCH_ID'])
 
     puts "Starting set_max_active_date..."
-    #current_date  = Date.today
+    current_date  = Date.today
     #current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
               SELECT DISTINCT ON (loans.id)

@@ -52,17 +52,30 @@
               %th Debit
               %th Credit
           %tbody
-            %tr
-              %td
-                #{AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e").name}
-              %td
-                #{Loan.find(@restucture_details.loan).data["accounting_entry"]["debit_journal_entries"].last["amount"]}
-              %td
-              %td
-                #{@restucture_details.data["loans"].last["total_loanable_amount"]}
-              %td
-              %td
-                #{(Loan.find(@restucture_details.loan).data["accounting_entry"]["debit_journal_entries"].last["amount"].to_f - @restucture_details.data["loans"].last["total_loanable_amount"].to_f).round(2)}
+            
+            - Loan.find(@restucture_details.loan).data["accounting_entry"]["debit_journal_entries"].each do |l|
+              %tr
+                %td
+                  #{l["name"]}
+                %td
+                  #{l["amount"]}
+                %td
+                %td
+                  - if l["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"
+                    #{@restucture_details.data["loans"].last["total_loanable_amount"]}
+                  - else
+                    0
+                %td
+                %td
+                  - if l["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"
+                    #{l["amount"].to_f   -  @restucture_details.data["loans"].last["total_loanable_amount"]}
+                  - else
+                    #{l["amount"].to_f -   0.to_f }
+                  
+                  
+
+
+              
 
             - @restucture_details.data["loans"].each do |rd| 
                   
@@ -78,6 +91,7 @@
                     #{ld["principal_balance"]}
                   %td
                     #{ld["loan_product"]["old_receivable_amount"].to_f - ld["principal_balance"].to_f}
+
                     
                 %tr
                   %td 
@@ -106,7 +120,7 @@
                     #{(idetails["old_value"].to_f - idetails["value"].to_f).round(2)}
               %tr
                 %td
-                  #{AccountingCode.find("1bbcc6da-ec23-4293-b292-7580f607575d").name}
+                  #{AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d").name}
                 %td
                 %td
                   #{@restucture_details.data["loans"].last["total_old_service_fee"]}
