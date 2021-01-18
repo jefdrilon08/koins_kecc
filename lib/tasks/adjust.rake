@@ -1302,17 +1302,17 @@ namespace :adjust do
                     new_status = "resigned"
                   elsif current_balance == 0.00 && !insurance_date_resigned.nil?
                     new_status = "resigned"
-                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due >= 163
+                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due >= 163 && insurance_status != "resigned"
                     new_status = "lapsed"
-                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due >= 163
+                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due >= 163 && insurance_status != "resigned"
                     new_status = "lapsed"
-                  elsif days_lapsed <= 76 && current_balance >= insured_amount
+                  elsif days_lapsed <= 76 && current_balance >= insured_amount && insurance_status != "resigned"
                     new_status = "inforce"
-                  elsif days_lapsed > 76 && current_balance >= insured_amount
+                  elsif days_lapsed > 76 && current_balance >= insured_amount && insurance_status != "resigned"
                     new_status = "inforce"
-                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due < 163
+                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due < 163 && insurance_status != "resigned"
                     new_status = "inforce"
-                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due < 163
+                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due < 163 && insurance_status != "resigned"
                     new_status = "inforce"
                   end
                 else
