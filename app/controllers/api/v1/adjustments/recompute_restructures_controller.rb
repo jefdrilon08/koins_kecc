@@ -30,6 +30,7 @@ module Api
                                                                 config: config
                                                                ).execute!
           
+          render json: { message: "ok" }
         end
 
       end

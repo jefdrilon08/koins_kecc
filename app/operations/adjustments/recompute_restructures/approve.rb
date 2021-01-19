@@ -15,8 +15,6 @@ module Adjustments
       end
       def execute!
 
-
-
         if @loan.status == "active"
           amort_entries = []
           total_distribute = @amount
@@ -87,7 +85,9 @@ module Adjustments
           @account_transaction.save!
           ::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
           @recompute_restructure_details.update(status: "approved")
+        
         else
+          
           @account_transaction  = AccountTransaction.new(
                                     subsidiary_type: "MemberAccount",
                                     amount: @amount,
@@ -128,7 +128,7 @@ module Adjustments
 
 
   
-        raise @account_transaction.inspect
+        @account_transaction
 
       end
     end
