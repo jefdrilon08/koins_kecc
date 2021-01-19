@@ -1,6 +1,7 @@
 module Adjustments
   class RecomputeRestructuresController < ApplicationController
     def index
+      @restucture_details = RecomputeRestructure.where(branch: @branches.pluck(:id))
       @subheader_items = [
         {
           text: "Recompute Restructure"
@@ -18,6 +19,8 @@ module Adjustments
     def show
       @subheader_items = [
         {
+          is_link: true,
+          path: adjustments_recompute_restructures_path, 
           text: "Recompute Restructure"
         }
       ]
@@ -28,20 +31,22 @@ module Adjustments
      
       @subheader_side_actions = []
      
-      @subheader_side_actions << {
+      if @restucture_details.status == "pending"
+
+        @subheader_side_actions << {
       
-        class: "fa fa-times",
-        data: { method: :delete, confirm: "Are you sure?" },
-        text: "Delete"
-      }
+          class: "fa fa-times",
+          data: { method: :delete, confirm: "Are you sure?" },
+          text: "Delete"
+        }
 
-      @subheader_side_actions << {
-        id: "btn-approve",
-        link: "#",
-        class: "fa fa-check",
-        text: "Approve"
-      }
-
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
     @payload = {
       id:  @restucture_details.id
     }

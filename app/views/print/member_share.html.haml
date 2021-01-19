@@ -41,7 +41,7 @@
 
   .kalihim-name{
     font-size: 15px;
-    margin-left:230px;
+    margin-left:170px;
     margin-right:270px;
   }
 
@@ -77,7 +77,7 @@
         tatlong (3)
 
 
-
+  - x = "#{@member_share_data[:date_of_issue_year]}-#{@member_share_data[:date_of_issue_month]}-#{@member_share_data[:date_of_issue_day].to_i}"
   .member-details
     %label
       #{@member_share_data[:date_of_issue_day]}
@@ -87,12 +87,19 @@
       #{@member_share_data[:date_of_issue_year]}
   .sign
     %label.pangulo-sign
-      = image_tag "signatures/kalihim.bmp", class: "img-responsive" , size: "110"
+      -if x >= '2020-12-3'
+        = image_tag "signatures/kalihim_2020.bmp", class: "img-responsive" , size: "110"
+      -else
+        = image_tag "signatures/kalihim.bmp", class: "img-responsive" , size: "110"
     %label
       = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "110"
   .name
-    %label.kalihim-name
-      #{Settings.kalihim}
+    -if x >= '2020-12-3'
+      %label.kalihim-name
+        #{Settings.kalihim}
+    -else
+      %label.kalihim-name
+        #{Settings.old_kalihim}
     %label.pangulo-name
       #{Settings.taga_pangulo}
   .pos
@@ -100,3 +107,4 @@
       Kalihim
     %label.pangulo-pos
       Taga Pangulo
+  

@@ -1,4 +1,50 @@
+.row
+  .col
+    .card
+      .card-body
+        %table.table.table-sm.table-bordered
+          %thead
+            %tr
+              %th #
+              %th Member Name
+              %th Branch
+              %th Center
+              %th PN numbeir
+              %th Old Loan Amount
+              %th New Loan Amount
+              %th Status
+              %th Action
+              
+          - @restucture_details.each_with_index do |rd, i|
+            %tbody
+              %tr
+                %td
+                  #{  i + 1}
+                %td
+                  #{Loan.find(rd.loan).member.full_name}
+                %td
+                  #{Loan.find(rd.loan).branch.name}
+                %td
+                  #{Loan.find(rd.loan).center.name}
+                %td
+                  #{Loan.find(rd.loan).pn_number}
+                %td
+                  #{Loan.find(rd.loan).principal}
+                %td
+                  #{rd.data["loans"].last["total_loanable_amount"]}
+                %td
+                  - if rd.status == "pending"
+                    .badge.badge-danger
+                      #{rd.status}
+                  - else
+                    .badge.badge-success
+                      #{rd.status}
 
+                %td
+                  = link_to adjustments_recompute_restructure_path(rd.id), class: 'btn btn-primary' do
+                    .fa.fa-search
+                  
+        
 
 
 

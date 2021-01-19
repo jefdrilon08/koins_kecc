@@ -13,10 +13,24 @@ module MemberAccountValidations
                                             branch: @member_account_validation.branch
                                           }
                                         ).execute!
+
+      @d = {}
     end
 
     def execute!
       create_member_account_validation_cancellation!
+
+      # Update accounting_entry
+      @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+                                    config: {
+                                      branch: @member_account_validation.branch,
+                                      member_account_validation: @member_account_validation,
+                                      is_remote: @member_account_validation.is_remote,
+                                      user: @user
+                                    }
+                                  ).execute!
+
+      @member_account_validation.data = @d
 
       @member_account_validation_cancellation.save!
     end

@@ -1,6 +1,6 @@
 :css
   .print-text {
-    font-size: 1.4em;
+    font-size: 1.1em;
     font-family: arial;
   }
 
@@ -35,6 +35,14 @@
     font-size: small;
   }
 
+  .acknowledgement-body{
+    margin: auto;                                                                                                                                                             
+  }
+
+  .acknowledgement{
+    text-align: center;
+    margin: auto;
+  }
 
 %span.print-text
   %left
@@ -182,3 +190,64 @@
             Silvida R. Antiquera
           %br
           General Manager
+  - if @claim.member.branch.cluster.id == "4350b839-9774-4b0a-a79b-f71409ad6d2b"
+    %hr{:style => "border-top: dashed 1px;"}
+    .acknowledgement
+      %h5
+        %b
+          Acknowledgement Receipt
+    .acknowledgement-body
+      %p
+        I
+        %u
+          %b
+            #{@data["beneficiary"].try(:titleize)}
+        , of legal age with residence and postal address at ______________________________________________________________ 
+        %br
+        hereby declare:
+        %br
+        &nbsp;&nbsp;1. That, I am the beneficiary of the late &nbsp;
+        %u
+          %b
+            #{@claim.member.full_name.try(:titleize)}
+        %br
+        &nbsp;&nbsp;2. That, I acknowledge the amount of 
+        %u
+          &nbsp;&#8369;#{number_with_delimiter(number_with_precision(@data["amount"], precision: 2), delimiter: ",", separator: ".", unit: "")}
+        in cash representing #{@claim.claim_type} claim benefit for the paid insured loan
+        %br
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of the late, &nbsp;
+        %u
+          %b
+            #{@claim.member.full_name.try(:titleize)}
+        &nbsp;from
+        %b
+          CAPS R #{@claim.member.branch.name}
+        %br
+        &nbsp;&nbsp;3. That, as a result or our voluntary acceptance of the said amount, we are relinquishing our right over the #{@claim.claim_type}
+        %br
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;claim benefit proceeds of the above-policy in favor of CAPS-R Inc to be collected from and to wire transffered by
+        %br
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kasagana-Ka Mutual Benefit Association Inc to the following bank Account Details
+        %br
+        %br
+        %b
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CAPS-R Account Name
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________________
+        %br
+        %b
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CAPS-R Account Number
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________________
+        %br
+        %b
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Amount
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________________________________
+        %br
+        %br
+        %br
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;___________________________/___________________
+        %br
+        %b
+          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#{@data["beneficiary"].try(:titleize)}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date
+        %br
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;Beneficiary

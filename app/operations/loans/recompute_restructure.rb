@@ -195,8 +195,11 @@ module Loans
                 
 
                 @jef[:total_service_fee] = result
-                @jef[:total_old_service_fee] = @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "9f4b1331-cd5a-4edb-9920-a5029759885d"}.last["amount"]
-              
+                if @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "9f4b1331-cd5a-4edb-9920-a5029759885d"}.count == 0
+                  @jef[:total_old_service_fee] = 0
+                else
+                  @jef[:total_old_service_fee] = @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "9f4b1331-cd5a-4edb-9920-a5029759885d"}.last["amount"]
+                end
               
               
               new_computed_insurance = {

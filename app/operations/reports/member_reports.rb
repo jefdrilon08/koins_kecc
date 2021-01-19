@@ -9,79 +9,79 @@ module Reports
       @end_date         =  end_date
 
       
-      if @branch_id.present? && @insurance_status.present? && @member_type.present? && @status.present? && @start_date.present? && @end_date.present?
-        if status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ? AND insurance_status = ? AND member_type = ?", @start_date, @end_date, @status, @branch_id, @insurance_status, @member_type).order("last_name ASC")
+      if @branch_id.present? && @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
+        if insurance_status == "resigned"
+          @members      = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND branch_id = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @branch_id, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         elsif status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status = ? AND member_type = ? AND insurance_status != ?", @start_date, @end_date, @status, @branch_id, @insurance_status, @member_type, "dormant").order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status = ? AND member_type = ?", @start_date, @end_date, @status, @branch_id, @insurance_status, @member_type).order("last_name ASC")
+          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @branch_id, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         end
-      elsif @insurance_status.present? && @branch_id.present? && @member_type.present? && @start_date.present? && @end_date.present?
-        if @insurance_status == "resigned" 
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND insurance_status = ? AND branch_id = ? AND member_type = ?",  @start_date, @end_date, @insurance_status, @branch_id, @member_type).order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status = ? AND branch_id = ? AND member_type = ?",  @start_date, @end_date, @insurance_status, @branch_id, @member_type).order("last_name ASC")
-        end
-      elsif @branch_id.present? && @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
-        if @status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ? AND insurance_status = ?", @start_date, @end_date, @status, @branch_id, @insurance_status).order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND branch_id = ? AND member_type != ?", @start_date, @end_date, @status, @insurance_status, @branch_id, "GK").order("last_name ASC")
-        end
-      elsif @branch_id.present? && @member_type.present? && @status.present? && @start_date.present? && @end_date.present?
-        if @status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ? AND member_type = ?", @start_date, @end_date, @status, @branch_id, @member_type).order("last_name ASC")
-        elsif @status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND member_type = ? AND insurance_status != ?", @start_date, @end_date, @status, @branch_id, @member_type, "dormant").order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND member_type = ? AND branch_id = ?", @start_date, @end_date, @status, @member_type, @branch_id).order("last_name ASC")
-        end  
-      elsif @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
-        if @status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ?", @start_date, @end_date, @status).order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ?", @start_date, @end_date, @status, @insurance_status).order("last_name ASC")
-        end      
-      elsif @branch_id.present? && @status.present? && @start_date.present? && @end_date.present?
-        if @status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, @status, @branch_id).order("last_name ASC")
-        elsif @status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status != ?", @start_date, @end_date, @status, @branch_id, "dormant").order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, @status, @branch_id).order("last_name ASC")
-        end
-      elsif @start_date.present? && @end_date.present? && @status.present?    
-        if @status == "resigned"
-          @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ?", @start_date, @end_date, @status).order("last_name ASC")
-        elsif @status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status != ?", @start_date, @end_date, @status, "dormant").order("last_name ASC")
-        else
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ?", @start_date, @end_date, @status).order("last_name ASC")
-        end
-      elsif @start_date.present? && @end_date.present? && @branch_id.present?
-        @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status != ? AND branch_id = ?", @start_date, @end_date, "archived", @branch_id).order("last_name ASC")
-		  elsif @status.present? && @branch_id.present?
-        if @status == "active"
-          @members      = Member.where("status = ? AND branch_id = ? AND insurance_status != ?", @status, @branch_id, "dormant").order("last_name ASC")
-        else
-          @members      = Member.where("status = ? AND branch_id = ?", @status, @branch_id).order("last_name ASC")
-        end
-      elsif @insurance_status.present? && @branch_id.present?
-        @members      = Member.where("insurance_status = ? AND status != ? AND branch_id = ?", @insurance_status, "archived", @branch_id).order("last_name ASC")
-      elsif @status.present?
-        if @status == "active" 
-          @members      = Member.where("status = ? AND insurance_status != ?", @status, "dormant").order("last_name ASC")
-        else
-          @members      = Member.where("status = ?", @status).order("last_name ASC")
-        end
-      elsif @insurance_status.present?
-        @members      = Member.where("insurance_status = ? AND status != ?", @insurance_status, "archived").order("last_name ASC")
-      elsif @member_type.present?
-        @members      = Member.where("member_type = ? AND status != ?", @member_type, "archived").order("last_name ASC")
-      else
-        @members      = Member.where("status != ?", "archived").order("last_name ASC")
       end
+      
+    #   elsif @insurance_status.present? && @branch_id.present? && @member_type.present? && @start_date.present? && @end_date.present?
+    #     if @insurance_status == "resigned" 
+    #       @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND insurance_status = ? AND branch_id = ? AND member_type = ?",  @start_date, @end_date, @insurance_status, @branch_id, @member_type).order("last_name ASC")
+    #     else
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status = ? AND branch_id = ? AND member_type = ?",  @start_date, @end_date, @insurance_status, @branch_id, @member_type).order("last_name ASC")
+    #     end
+    #   elsif @branch_id.present? && @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
+    #     if @status == "resigned"
+    #       @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ? AND insurance_status = ?", @start_date, @end_date, @status, @branch_id, @insurance_status).order("last_name ASC")
+    #     else
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND branch_id = ? AND member_type != ?", @start_date, @end_date, @status, @insurance_status, @branch_id, "GK").order("last_name ASC")
+    #     end
+    #   elsif @branch_id.present? && @member_type.present? && @status.present? && @start_date.present? && @end_date.present?
+    #     if @status == "resigned"
+    #       @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ? AND member_type = ?", @start_date, @end_date, @status, @branch_id, @member_type).order("last_name ASC")
+    #     elsif @status == "active"
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND member_type = ? AND insurance_status != ?", @start_date, @end_date, @status, @branch_id, @member_type, "dormant").order("last_name ASC")
+    #     else
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND member_type = ? AND branch_id = ?", @start_date, @end_date, @status, @member_type, @branch_id).order("last_name ASC")
+    #     end  
+    #   elsif @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
+    #     if @status == "resigned"
+    #       @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ?", @start_date, @end_date, @status).order("last_name ASC")
+    #     else
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ?", @start_date, @end_date, @status, @insurance_status).order("last_name ASC")
+    #     end      
+    #   elsif @branch_id.present? && @status.present? && @start_date.present? && @end_date.present?
+    #     if @status == "resigned"
+    #       @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, @status, @branch_id).order("last_name ASC")
+    #     elsif @status == "active"
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status != ?", @start_date, @end_date, @status, @branch_id, "dormant").order("last_name ASC")
+    #     else
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, @status, @branch_id).order("last_name ASC")
+    #     end
+    #   elsif @start_date.present? && @end_date.present? && @status.present?    
+    #     if @status == "resigned"
+    #       @members      = Member.where("date_resigned >= ? AND date_resigned <= ? AND status = ?", @start_date, @end_date, @status).order("last_name ASC")
+    #     elsif @status == "active"
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status != ?", @start_date, @end_date, @status, "dormant").order("last_name ASC")
+    #     else
+    #       @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ?", @start_date, @end_date, @status).order("last_name ASC")
+    #     end
+    #   elsif @start_date.present? && @end_date.present? && @branch_id.present?
+    #     @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status != ? AND branch_id = ?", @start_date, @end_date, "archived", @branch_id).order("last_name ASC")
+		  # elsif @status.present? && @branch_id.present?
+    #     if @status == "active"
+    #       @members      = Member.where("status = ? AND branch_id = ? AND insurance_status != ?", @status, @branch_id, "dormant").order("last_name ASC")
+    #     else
+    #       @members      = Member.where("status = ? AND branch_id = ?", @status, @branch_id).order("last_name ASC")
+    #     end
+    #   elsif @insurance_status.present? && @branch_id.present?
+    #     @members      = Member.where("insurance_status = ? AND status != ? AND branch_id = ?", @insurance_status, "archived", @branch_id).order("last_name ASC")
+    #   elsif @status.present?
+    #     if @status == "active" 
+    #       @members      = Member.where("status = ? AND insurance_status != ?", @status, "dormant").order("last_name ASC")
+    #     else
+    #       @members      = Member.where("status = ?", @status).order("last_name ASC")
+    #     end
+    #   elsif @insurance_status.present?
+    #     @members      = Member.where("insurance_status = ? AND status != ?", @insurance_status, "archived").order("last_name ASC")
+    #   elsif @member_type.present?
+    #     @members      = Member.where("member_type = ? AND status != ?", @member_type, "archived").order("last_name ASC")
+    #   else
+    #     @members      = Member.where("status != ?", "archived").order("last_name ASC")
+    #   end
     end
 
 		def execute!

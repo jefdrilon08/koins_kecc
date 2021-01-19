@@ -523,35 +523,11 @@ namespace :adjust do
   end
 
   task :set_max_active_date => :environment do
-    branch  = Branch.find(ENV['BRANCH_ID'])
+    #branch  = Branch.find(ENV['BRANCH_ID'])
 
     puts "Starting set_max_active_date..."
-    #current_date  = Date.today
-    current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
-    if ENV['BRANCH_ID'].present?
-
-    data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
-              SELECT DISTINCT ON (loans.id)
-                loans.id AS loan_id,
-                loans.first_date_of_payment,
-                loans.status AS status,
-                DATE(account_transactions.transacted_at) as last_transaction_date,
-                DATE(amortization_schedule_entries.due_date) as last_amortization_date
-              FROM
-                loans
-                LEFT OUTER JOIN
-                  account_transactions ON account_transactions.subsidiary_id = loans.id
-                INNER JOIN
-                  amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
-                WHERE
-                  loans.status IN ('active', 'paid', 'processing') and
-                  loans.branch_id  = '#{branch.id}'
-                ORDER BY
-                  loans.id,
-                  amortization_schedule_entries.due_date DESC,
-                  account_transactions.transacted_at DESC
-            EOS
-    else
+    current_date  = Date.today
+    #current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
     data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
               SELECT DISTINCT ON (loans.id)
                 loans.id AS loan_id,
@@ -574,7 +550,7 @@ namespace :adjust do
             EOS
     
 
-    end
+  
 
     sets  = data.map{ |d|
               loan_id                 = d.fetch("loan_id")
@@ -1162,17 +1138,23 @@ namespace :adjust do
 
   task :repair_validation_accounting_entry_by_id => :environment do
     puts "Repairing ..."
+    is_remote = false
+      
+    if ENV['IS_REMOTE'].present?
+      is_remote = ENV['IS_REMOTE']
+    end
+
     member_account_validation = MemberAccountValidation.find(ENV['VALIDATION_ID'])
     data = member_account_validation.data.with_indifferent_access
     last_name = member_account_validation.prepared_by.split(", ").first
     first_name = member_account_validation.prepared_by.split(", ").last
-    current_user = User.where(last_name: last_name, first_name: first_name).first
+    current_user = User.where("lower(last_name) = ? AND lower(first_name) = ?", last_name.downcase, first_name.downcase).first
     data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
                                         config: 
                                         {
                                           branch: member_account_validation.branch,
                                           member_account_validation: member_account_validation,
-                                          is_remote: false,
+                                          is_remote: is_remote,
                                           user: current_user
                                         }
                                 ).execute!
@@ -1320,17 +1302,17 @@ namespace :adjust do
                     new_status = "resigned"
                   elsif current_balance == 0.00 && !insurance_date_resigned.nil?
                     new_status = "resigned"
-                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due >= 163
+                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due >= 163 && insurance_status != "resigned"
                     new_status = "lapsed"
-                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due >= 163
+                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due >= 163 && insurance_status != "resigned"
                     new_status = "lapsed"
-                  elsif days_lapsed <= 76 && current_balance >= insured_amount
+                  elsif days_lapsed <= 76 && current_balance >= insured_amount && insurance_status != "resigned"
                     new_status = "inforce"
-                  elsif days_lapsed > 76 && current_balance >= insured_amount
+                  elsif days_lapsed > 76 && current_balance >= insured_amount && insurance_status != "resigned"
                     new_status = "inforce"
-                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due < 163
+                  elsif days_lapsed <= 76 && current_balance < insured_amount && amt_past_due < 163 && insurance_status != "resigned"
                     new_status = "inforce"
-                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due < 163
+                  elsif days_lapsed > 76 && current_balance < insured_amount && amt_past_due < 163 && insurance_status != "resigned"
                     new_status = "inforce"
                   end
                 else
