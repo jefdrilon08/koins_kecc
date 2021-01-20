@@ -2,6 +2,17 @@ module Api
   module V1
     class CentersController < ApiController
       before_action :authenticate_user!
+      before_action :authenticate_app_request!, only: [:fetch_centers]
+
+      def fetch_centers
+        if params[:branch_id].blank?
+          render json: { message: "branch_id required" }, status: 400
+        else
+          centers = Center.where(branch_id: params[:branch_id])
+
+          render json: { centers: centers }
+        end
+      end
 
       def assign_officer
         officer = User.where(id: params[:officer_id]).first

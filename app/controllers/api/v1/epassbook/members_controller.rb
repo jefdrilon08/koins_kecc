@@ -33,7 +33,8 @@ module Api
               branch: branch.to_s,
               branch_id: branch.id,
               center: center.to_s,
-              center_id: center.id
+              center_id: center.id,
+              center_name: center.name
             }
 
             render json: data
