@@ -20,6 +20,9 @@ module Api
           if member.blank?
             render json: { message: "member not found" }, status: 400
           else
+            branch  = member.branch
+            center  = member.center
+
             data  = {
               id: member.id,
               first_name: member.first_name,
@@ -27,12 +30,13 @@ module Api
               status: member.status,
               last_name: member.last_name,
               full_name: member.full_name,
-              branch: member.branch.to_s,
-              center: member.center.to_s
+              branch: branch.to_s,
+              branch_id: branch.id,
+              center: center.to_s,
+              center_id: center.id
             }
 
             render json: data
-
           end
         end
       end

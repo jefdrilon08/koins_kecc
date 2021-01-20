@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_12_28_061959) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -42,6 +43,8 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
+    t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
+    t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
@@ -55,6 +58,7 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["category"], name: "manual_idx_19"
   end
 
   create_table "accounting_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -72,7 +76,10 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.datetime "updated_at", null: false
     t.uuid "accounting_fund_id"
     t.index ["accounting_fund_id"], name: "index_accounting_entries_on_accounting_fund_id"
+    t.index ["book", "reference_number", "particular"], name: "manual_idx_9"
+    t.index ["branch_id", "date_posted"], name: "manual_idx_17", where: "((status)::text = 'approved'::text)"
     t.index ["branch_id"], name: "index_accounting_entries_on_branch_id"
+    t.index ["date_prepared"], name: "manual_idx_16"
   end
 
   create_table "accounting_funds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -136,6 +143,10 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "((data ->> 'billing_id'::text)), created_at DESC", name: "manual_idx_13"
+    t.index "((data ->> 'loan_id'::text)), created_at DESC", name: "manual_idx_8"
+    t.index "((data ->> 'member_id'::text)), created_at DESC", name: "manual_idx_15"
+    t.index ["created_at"], name: "manual_idx_4", order: :desc
   end
 
   create_table "adjustment_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -364,6 +375,8 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status"
+    t.index "((meta ->> 'data_store_type'::text)), ((meta ->> 'branch_id'::text)), ((meta ->> 'as_of'::text)) DESC", name: "manual_idx_11"
+    t.index "status, ((meta ->> 'data_store_type'::text)), ((meta ->> 'branch_id'::text)), ((meta ->> 'as_of'::text)) DESC", name: "manual_idx_5"
   end
 
   create_table "deposit_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -473,7 +486,9 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.decimal "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
+    t.index ["accounting_entry_id", "post_type", "accounting_code_id"], name: "manual_idx_18"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
   end
 
@@ -587,6 +602,7 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.datetime "updated_at", null: false
     t.json "data"
     t.integer "priority"
+    t.index ["priority"], name: "manual_idx_6"
   end
 
   create_table "loan_repayment_rates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -722,6 +738,7 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.json "data"
+    t.index ["account_type", "account_subtype"], name: "manual_idx_12"
     t.index ["branch_id"], name: "index_member_accounts_on_branch_id"
     t.index ["center_id"], name: "index_member_accounts_on_center_id"
     t.index ["member_id"], name: "index_member_accounts_on_member_id"
@@ -808,6 +825,7 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
+    t.index ["status", "center_id"], name: "manual_idx_7"
   end
 
   create_table "membership_payment_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -846,7 +864,9 @@ ActiveRecord::Schema.define(version: 2020_12_28_061959) do
     t.uuid "branch_id"
     t.string "status"
     t.string "account_subtype"
+    t.index ["branch_id", "closing_date"], name: "manual_idx_3", order: { closing_date: :desc }
     t.index ["branch_id"], name: "index_monthly_closing_collections_on_branch_id"
+    t.index ["closing_date"], name: "manual_idx_2", order: :desc
   end
 
   create_table "project_type_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
