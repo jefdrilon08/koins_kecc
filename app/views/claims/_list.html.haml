@@ -17,7 +17,10 @@
         %td
           #{claim.date_prepared.try(:strftime, "%B %d, %Y")}
         %td
-          #{claim.claim_type}
+          - if claim.clip?
+            #{claim.claim_type} (#{claim.data.with_indifferent_access[:type_of_loan].try(:titleize)})
+          - else  
+            #{claim.claim_type}
         %td
           %strong
             #{claim.branch.name}

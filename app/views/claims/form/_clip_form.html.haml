@@ -107,33 +107,33 @@
         Transaction Type
         = select_tag :transaction_type, options_for_select(["Online", "Check"], @claim.data["transaction_type"]), class: 'form-control select-select2', id: 'transaction-type'
 .row
-  .col
+  .col-md-3
     .form-group
       %label.col.control-label
         Claims Payment through
         = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-  .col
+  .col-md-5
     .form-group
       %label.col.control-label
         Account Name
         = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
-  .col
+  .col-md-4
     .form-group
       %label.col.control-label
         Account Number
         = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
 .row
-  .col
+  .col-md-3
     .form-group
       %label.col.control-label
         Claims Payment through (Creditor)
         = text_field_tag :claims_payment_creditor, @claim.data["claims_payment_creditor"], class: 'form-control', id: 'claims-payment-creditor'
-  .col
+  .col-md-5
     .form-group
       %label.col.control-label
         Account Name (Creditor)
-        = text_field_tag :account_name_creditor, @claim.data["account_name_creditor"], class: 'form-control', id: 'account-name-creditor'
-  .col
+        = select_tag :account_name_creditor, options_for_select(Claim::CREDITORS_NAME_FULL ,@claim.data["account_name_creditor"]), class: 'form-control', id: 'account-name-creditor' , prompt: "-- Select --"
+  .col-md-4
     .form-group
       %label.col.control-label
         Account Number (Creditor)
