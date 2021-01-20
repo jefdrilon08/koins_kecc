@@ -138,6 +138,7 @@ namespace :api do
 
     # Branches
     get "/branches", to: "branches#index"
+    get "/branches/list_centers", to: "branches#list_centers"
     get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
     get "/branches/fetch_centers_for_restructure", to: "branches#fetch_centers_for_restructure"
