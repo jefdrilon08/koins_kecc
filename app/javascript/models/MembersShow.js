@@ -413,12 +413,11 @@ var _bindEvents = function() {
         console.log(response);
         var errors  = [];
         try {
-          errors  = JSON.parse(response.responseText).full_messages;
-          console.log(errors);
+          errors  = JSON.parse(response.responseText).errors.full_messages;
         } catch(err) {
           errors  = ["Something went wrong"];
-          console.log(err);
         } finally {
+          console.log("errors:");
           console.log(errors);
           $message.html(
             Mustache.render(

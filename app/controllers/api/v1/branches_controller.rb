@@ -1,7 +1,19 @@
 module Api
   module V1
     class BranchesController < ApiController
-      before_action :authenticate_user!
+      before_action :authenticate_user!, except: [:list_centers]
+      before_action :authenticate_app_request!, only: [:list_centers]
+
+      def list_centers
+        if params[:id].blank?
+          render json: { message: "id required" }, status: 400
+        else
+          centers = Center.where(branch_id: params[:id])
+
+          render json: { centers: centers.map{ |o| { id: o.id, name: o.name } } }
+        end
+      end
+
       def fetch_centers_for_restructure
         #branch  = @branches.where(id: params[:id]).first
         branch = @branches.select{ |o| o[:id] == params[:id] }.first
