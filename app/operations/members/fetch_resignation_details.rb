@@ -47,6 +47,7 @@ module Members
       end
 
       @closing_fee                  = @resignation_settings.closing_fee
+      @number_of_years              = @resignation_settings.number_of_years
       @closing_fee_accounting_code  = AccountingCode.find(@resignation_settings.closing_fee_accounting_code_id)
       @deposits_accounting_code     = AccountingCode.find(@resignation_settings.deposits_accounting_code_id)
 
@@ -90,7 +91,6 @@ module Members
                             account_type: s_eq.account_type,
                             account_subtype: s_eq.account_subtype
                           ).first
-
         if member_account.present? and member_account.balance > 0
           @data[:equity_accounts] << {
             id: member_account.id,
@@ -98,6 +98,18 @@ module Members
             account_type: member_account.account_type,
             account_subtype: member_account.account_subtype
           }
+
+            #for 4yrs 
+            f_eq= AccountTransaction.where(subsidiary_id: member_account.id).first
+            date_closing = f_eq.transacted_at + @number_of_years.years
+            dt = Date.today
+            if date_closing <= dt
+              @closing_fee = @resignation_settings.closing_fee
+            else
+               @closing_fee = 0
+            end
+            #end 
+
         end
       end
 
@@ -190,12 +202,14 @@ module Members
       journal_entries = []
 
       # Closing fee
+      if @closing_fee  > 0
       journal_entries << {
         accounting_code_id: @closing_fee_accounting_code.id,
         code: @closing_fee_accounting_code.code,
         name: @closing_fee_accounting_code.name,
         amount: @closing_fee
       }
+      end
 
       # Deposit amount
       deposit_amount  = 0.00
