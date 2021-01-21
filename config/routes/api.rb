@@ -101,7 +101,7 @@ namespace :api do
     # Member Parameter
     # 
     get "/insurance_accounts/fetch_insurance_status", to: "insurance_accounts#fetch_insurance_status"
-    get "/insurance_accounts/process_insurance_account_transactions_file", to: "insurance_accounts#process_insurance_account_transactions_file"
+    get "/insurance_accounts/process_account_transactions_file", to: "insurance_accounts#process_account_transactions_file"
     get "/insurance_accounts/process_member_accounts_file", to: "insurance_accounts#process_member_accounts_file"
 
     # Accounting

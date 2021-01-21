@@ -1,10 +1,10 @@
 module Api
 	module V1
 		class InsuranceAccountsController < ApplicationController
-			def process_insurance_account_transactions_file
+			def process_account_transactions_file
 				actual_url  = params[:actual_url]
 
-				ProcessInsuranceAccountTransactionsFile.perform_later({
+				ProcessAccountTransactionsFile.perform_later({
 				  actual_url: actual_url
 				})
 

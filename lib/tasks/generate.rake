@@ -119,7 +119,7 @@ namespace :generate do
     end
   end
 
-  task :insurance_account_transactions_file => :environment do
+  task :account_transactions_file => :environment do
     start_date  = ENV["START_DATE"] || Date.today
     end_date    = ENV["END_DATE"] || Date.today
 
@@ -134,7 +134,7 @@ namespace :generate do
       file_repository = cmd.file_repository
       actual_url      = file_repository.actual_url
 
-      api_url = "#{ENV['INSURANCE_KOINS_URL']}/api/v1/insurance_accounts/process_insurance_account_transactions_file"
+      api_url = "#{ENV['INSURANCE_KOINS_URL']}/api/v1/insurance_accounts/process_account_transactions_file"
 
       response = HTTParty.get(api_url, { query: { actual_url: actual_url } })
 
