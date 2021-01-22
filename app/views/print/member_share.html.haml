@@ -87,14 +87,14 @@
       #{@member_share_data[:date_of_issue_year]}
   .sign
     %label.pangulo-sign
-      -if x >= '2020-12-3'
+      -if x >= '2020-12-03'
         = image_tag "signatures/kalihim_2020.bmp", class: "img-responsive" , size: "110"
       -else
         = image_tag "signatures/kalihim.bmp", class: "img-responsive" , size: "110"
     %label
       = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "110"
   .name
-    -if x >= '2020-12-3'
+    -if x >= '2020-12-03'
       %label.kalihim-name
         #{Settings.kalihim}
     -else

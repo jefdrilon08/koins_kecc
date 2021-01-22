@@ -100,16 +100,17 @@ module Members
           }
 
             #for 4yrs 
-            f_eq= AccountTransaction.where(subsidiary_id: member_account.id).first
+            f_eq= AccountTransaction.where(subsidiary_id: member_account.id).order("transacted_at DESC").last
             date_closing = f_eq.transacted_at + @number_of_years.years
-            dt = Date.today
-            if date_closing <= dt
-              @closing_fee = @resignation_settings.closing_fee
+            dt = DateTime.now.to_date
+            
+            if dt >= date_closing 
+              @closing_fee = 0
             else
-               @closing_fee = 0
+              @closing_fee = @resignation_settings.closing_fee
             end
             #end 
-
+            
         end
       end
 
