@@ -23,7 +23,7 @@ module Api
                       members = []
 
                       if params[:with_members].present?
-                        members = Member.active.joins(:loans).where("members.center_id = ? and loans.loan_product_id = ?", c.id, "1c2fcdbd-d60b-402c-b04b-824bb90958d1").order("last_name ASC").map{ |m|
+                        members = Member.active.joins(:loans).where("loans.center_id = ? and loans.loan_product_id = ?", c.id, "1c2fcdbd-d60b-402c-b04b-824bb90958d1").order("last_name ASC").map{ |m|
                                     {
                                       id: m.id,
                                       last_name: m.last_name,
