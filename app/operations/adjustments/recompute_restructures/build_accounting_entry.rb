@@ -78,7 +78,7 @@ module Adjustments
         
         # debit loan recievable
           @loan.data["accounting_entry"]["debit_journal_entries"].each do |l|
-            total_diff = l["amount"] - @recompute_restructure.data["loans"].last["total_loanable_amount"]
+            total_diff = l["amount"].to_f - @recompute_restructure.data["loans"].last["total_loanable_amount"].to_f
             if total_diff > 0 
               journal_entries << {
                 accounting_code_id: l["accounting_code_id"],
