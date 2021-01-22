@@ -10,6 +10,8 @@ class MemberAccountValidationRecord < ApplicationRecord
   
  	before_validation :load_defaults
 
+ 	has_many_attached :files
+
   	after_save do
     	member_account_validation.touch
   	end

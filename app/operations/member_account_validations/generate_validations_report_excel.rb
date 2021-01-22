@@ -57,10 +57,12 @@ module MemberAccountValidations
           
           sheet.add_row [ 
             "Name of Member",
+            "Member Age",
             "Recognition Date",
             "Center",
             "Resignation Date",
             "Status",
+            "Classification",
             "Transaction Number",
             "LIFE",
             "RF",
@@ -80,10 +82,12 @@ module MemberAccountValidations
               if index == 0
                 sheet.add_row [
                     iavr.member.full_name,
+                    iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
                     iavr.member.center.name,
                     iavr.resignation_date,
                     iavr.status,
+                    iavr.member_classification,
                     iavr.transaction_number,
                     AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i,
                     iavr.rf,
@@ -97,10 +101,12 @@ module MemberAccountValidations
                 else
                   sheet.add_row [
                     iavr.member.full_name,
+                    iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
                     iavr.member.center.name,
                     iavr.resignation_date,
                     iavr.status,
+                    iavr.member_classification,
                     iavr.transaction_number,
                     AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i,
                     iavr.rf,
@@ -127,6 +133,8 @@ module MemberAccountValidations
 
           sheet.add_row [ 
             "TOTAL",
+            "",
+            "",
             "",
             "",
             "",
