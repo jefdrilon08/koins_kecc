@@ -234,7 +234,8 @@ resignation:
   closing_fee: 100
   closing_fee_accounting_code_id: "1fba3b59-fdaf-4c11-8b66-bd62ecb67aee"
   deposits_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-  savings_account:
+  number_of_years: 4
+	savings_account:
     account_type: "SAVINGS"
     account_subtype: "K-IMPOK"
     credit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
