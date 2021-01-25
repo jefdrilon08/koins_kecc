@@ -25,7 +25,8 @@ module Adjustments
                                loan: @member_loans.id,
                                status: "pending",
                                data: {
-                                  loans: []
+                                  loans: [],
+                                  accounting_entry_id: []
                                }
 
                                           )

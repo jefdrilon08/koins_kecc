@@ -134,9 +134,10 @@
                   
   
               
-            
-          
-                
+        
+        - @restucture_details.data["accounting_entry_id"].each do |a|
+          = render partial: "accounting_entry_display", locals: { accounting_entry: AccountingEntry.find(a)}               
 = render partial: "adjustments/recompute_restructures/models/approve"
+
 
 
