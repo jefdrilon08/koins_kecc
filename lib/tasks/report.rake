@@ -1,6 +1,38 @@
 namespace :report do
+  task :member_age => :environment do
+    s_date= ENV['s_date']
+    br_name = ENV['SATO']
+    br_id= Branch.where(name: br_name).ids
+
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "MEMBER_COUNTS").last
+
+    @data = []
+    @data_store_data = @data_store.data.with_indifferent_access
+      @data_store_data[:counts][:pure_savers][:members].each do |m|
+        mem = Member.find(m[:id])
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}"
+        @data << j
+      end
+      @data_store_data[:counts][:loaners][:members].each do |m|
+        mem = Member.find(m[:id])
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}"
+        @data << j
+      end
+      @data_store_data[:counts][:active_members][:members].each do |m|
+        mem = Member.find(m[:id])
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}"
+        @data << j
+      end
+      puts @data
+  end
   task :watchlist => :environment do
-  s_date= ENV['s_date']
+    s_date= ENV['s_date']
     #mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
@@ -44,20 +76,6 @@ namespace :report do
     end
   
       puts @data
-  end
-  
-  task :member_age => :environment do
-    br_name = ENV['SATO']
-    br_id= Branch.where(name: br_name).ids
-
-    member = Member.where(status: "active" , branch_id: br_id).order('date_of_birth DESC')
-    puts "NAME|CENTER|DATE OF BIRTH|AGE|GENDER"
-    member.each do |mem|
-      puts "#{mem.full_name}|#{mem.center}|#{mem.date_of_birth}|#{mem.age}|#{mem.gender}"  
-
-  end
-    
-    
   end
 
   task :midas_report => :environment do
