@@ -2327,4 +2327,25 @@ namespace :adjust do
 
     puts "\nDone!"
   end
+
+  task :delete_wrong_member_accounts => :environment do
+    file_location = ENV['MEMBER_ACCOUNTS_CSV']
+    puts file_location
+
+    branch_names = []
+    valid_member_accounts = []
+
+    CSV.foreach(file_location, headers: true) do |row|
+      puts "Processing #{row['uuid']} ..."
+      branch_names <<  row['branch']
+      valid_member_accounts << row['uuid']
+    end
+    
+    branch = Branch.where("lower(name) = ?", branch_names.uniq.first.downcase).first
+    to_delete_member_accounts = MemberAccount.where("branch_id = ? AND account_type = ? AND id NOT IN (?)", branch.id, "INSURANCE", valid_member_accounts)
+
+    to_delete_member_accounts.destroy_all
+
+    puts "Done!"
+  end
 end

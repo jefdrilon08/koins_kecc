@@ -3,7 +3,7 @@ module Adjustments
     class Approve
       def initialize(config:)
         @config = config
-        @user = @config[:user_full_name]
+        @user = @config[:user]
         @recompute_restructure_details =  @config[:recompute_restructure]
         
         @loan = Loan.find(@recompute_restructure_details.loan)
@@ -16,24 +16,40 @@ module Adjustments
       def execute!
 
         if @loan.status == "active"
+          loan_balance = @loan.principal_balance.to_f + @loan.interest_balance.to_f
+          
           amort_entries = []
-          total_distribute = @amount
+          #total_distribute = @amount
           amort_amount = 0
-          amount = @amount
-            
+          if @amount >= loan_balance 
+            total_distribute =  loan_balance
+            @for_savings_distribution = @amount - loan_balance
+            amount = total_distribute
+          else
+            amount = @amount
+            @for_savings_distribution = 0
+          end
+          
+          if @for_savings_distribution > 0 
+            for_savings! 
+          end
+                 
           @account_transaction  = AccountTransaction.new(
                                     subsidiary_id: @recompute_restructure_details.loan,
                                     subsidiary_type: "Loan",
-                                    amount: @amount,
+                                    amount: amount,
                                     transaction_type: "loan_payment",
                                     transacted_at: @current_date,
                                     status: "approved",
                                     data: {}
                                   )
+          
           AmortizationScheduleEntry.where(loan_id: @recompute_restructure_details.loan, is_paid: nil).order(:due_date).each do |ase|
+            
             amort_amount = ase.principal_balance + ase.interest_balance
             if amount > 0 
               if amount >= amort_amount 
+              
                 test = amort_amount
                 for_principal = test - ase.interest_balance
                 amount  = amount - test
@@ -41,7 +57,7 @@ module Adjustments
                 @payments = { id: ase.id, due_date: ase.due_date, principal_paid: for_principal, interest_paid: ase.interest_balance }
                 amort_amount = amort_amount + test
               else
-                #raise amort_amount.to_f.inspect
+              
                 if amount > 0
                   test = amount
                   if ase.interest_balance != 0
@@ -65,11 +81,13 @@ module Adjustments
                 end
             end
             
-          
+              
               amort_entries << @payments
+              
             end
             
           end
+        
           
             
           @account_transaction.data[:amort_entries] = amort_entries
@@ -80,21 +98,62 @@ module Adjustments
 
           @account_transaction.data[:amount_due] =  total_interest_paid + total_principal_paid
           @account_transaction.data[:particular] =  "To record rebates of member's for k-sagip installement on old policy"
-          @account_transaction.data[:approved_by] =  @user
+          @account_transaction.data[:approved_by] =  @user.full_name
           
           @account_transaction.save!
-          ::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
           @recompute_restructure_details.update(status: "approved")
+          for_entry = {
+            account_transaction: @account_transaction,
+            account_transaction_details: @recompute_restructure_details,
+            user: @user,
+            for_savings_distribution: nil
         
-        else
+          }
           
-          @account_transaction  = AccountTransaction.new(
+          @accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
+                    ).execute!
+       
+          save_accounting_entry_data! #entry para sa distribution ng loan payment
+          
+          ::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
+
+        else
+          for_savings!
+         
+        end #end of active
+
+        @account_transaction_details = @account_transaction
+        post_accounting_entry
+
+        @account_transaction
+      
+      end
+
+      private
+
+
+      def for_savings!
+          
+          if @for_savings_distribution == nil
+              
+            @account_transaction  = AccountTransaction.new(
                                     subsidiary_type: "MemberAccount",
                                     amount: @amount,
                                     transaction_type: "deposit",
                                     transacted_at: @current_date,
                                     status: "approved"
                                   )
+          else
+            
+            @account_transaction  = AccountTransaction.new(
+                                    subsidiary_type: "MemberAccount",
+                                    amount: @for_savings_distribution,
+                                    transaction_type: "deposit",
+                                    transacted_at: @current_date,
+                                    status: "approved"
+                                  )
+            
+          end
           @data = {
             is_withdraw_payment: false,
             is_fund_transfer: false,
@@ -117,20 +176,82 @@ module Adjustments
           end
           @account_transaction.data = @data
 
+          
+
           @account_transaction.save!
         
-          ::MemberAccounts::Rehash.new(
-            member_account: @savings_account_id.last
-          ).execute!
+          ::MemberAccounts::Rehash.new(member_account: @savings_account_id.last).execute!
 
           rRestract = RecomputeRestructure.find(@recompute_restructure_details.id).update(status: "approved",transaction_date: @current_date)  
-        end #end of active
+          for_entry = {
+            account_transaction: @account_transaction,
+            account_transaction_details: @recompute_restructure_details,
+            user: @user,
+            for_savings_distribution: @for_savings_distribution
+        
+          }
 
-
-  
-        @account_transaction
-
+          @accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
+                    ).execute!
+       
+          save_accounting_entry_data! #entry para sa distribution sa savings
       end
+      
+      def post_accounting_entry
+      for_entry = {
+          account_transaction: @account_transaction_details,
+          recompute_restructure: @config[:recompute_restructure],
+          user: @user
+        } 
+        
+        accounting_entry_data = ::Adjustments::RecomputeRestructures::BuildAccountingEntry.new(config: for_entry
+                    ).execute!
+        config = {
+            accounting_entry_data: accounting_entry_data,
+            user: @user
+        }
+
+        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                              config: config
+                            ).execute!
+      # Post to books
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
+      @accounting_entry
+           
+      end
+
+      def save_accounting_entry_data!
+        
+        config = {
+            accounting_entry_data: @accounting_entry_details,
+            user: @user
+        }
+
+        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                              config: config
+                            ).execute!
+       # Post to books
+        config  = {
+          accounting_entry: accounting_entry,
+          user: @user
+        }
+
+        @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
+        @accounting_entry
+        
+      end
+
     end
   end
 end

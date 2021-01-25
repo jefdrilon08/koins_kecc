@@ -24,7 +24,7 @@ module Api
           recompute_restructure_details = RecomputeRestructure.find(recompute_restructure_id)
           config = {
             recompute_restructure: recompute_restructure_details,
-            user_full_name: current_user.full_name
+            user: current_user
           }
           record =  ::Adjustments::RecomputeRestructures::Approve.new(
                                                                 config: config

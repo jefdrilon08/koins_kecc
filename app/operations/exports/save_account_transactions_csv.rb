@@ -27,12 +27,12 @@ module Exports
       @csv_object = cmd.execute!
 
       @file_repository  = FileRepository.new(
-                            file_type: "INSURANCE_ACCOUNT_TRANSACTIONS"
+                            file_type: "ACCOUNT_TRANSACTIONS"
                           )
 
       @file_repository.file.attach(
         io: StringIO.new(@csv_object),
-        filename: "insurance_account_transactions.csv",
+        filename: "account_transactions.csv",
         content_type: "text/csv"
       )
 
