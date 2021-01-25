@@ -232,6 +232,15 @@ module Api
             config: config
           ).execute!
 
+          # Trigger koins resignation
+          member = Member.find(data[:member][:id])
+
+          if member.access_token.present?
+            ::Epassbook::TriggerResign.new(
+              identification_number: member.identification_number
+            ).execute!
+          end
+
           render json: { message: "ok" }
         end
       end
@@ -686,30 +695,6 @@ module Api
 
         render json: { members: data }
       end
-
-      def resign
-          member        = Member.where(id: params[:member_id]).first
-          date_resigned = params[:date_resigned]
-          reason        = params[:reason]
-          errors        = ::Members::ValidateResign.new(
-                            member: member,
-                            date_resigned: date_resigned
-                          ).execute!
-
-          if errors.size == 0
-            ::Members::Resign.new(
-              member: member,
-              date_resigned: date_resigned,
-              reason: reason,
-              resigned_by: current_user.full_name
-            ).execute!
-
-            render json: { id: member.id }
-          else
-            render json: { errors: errors }, status: 402
-          end
-        end
-
 
       def generate_access_token
         member  = Member.where(id: params[:id]).first
