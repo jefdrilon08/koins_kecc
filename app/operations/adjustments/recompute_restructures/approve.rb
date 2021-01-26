@@ -101,7 +101,6 @@ module Adjustments
           @account_transaction.data[:approved_by] =  @user.full_name
           
           @account_transaction.save!
-          @recompute_restructure_details.update(status: "approved")
           for_entry = {
             account_transaction: @account_transaction,
             account_transaction_details: @recompute_restructure_details,
@@ -112,8 +111,11 @@ module Adjustments
           
           @accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
                     ).execute!
+
+          @recompute_restructure_details.update(status: "approved")
        
           save_accounting_entry_data! #entry para sa distribution ng loan payment
+          
           
           ::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
 
@@ -224,6 +226,9 @@ module Adjustments
                             config: config
                           ).execute!
 
+        a_data =  @recompute_restructure_details.data.with_indifferent_access
+        a_data[:accounting_entry_id] << @accounting_entry.id
+        @recompute_restructure_details.update(data: a_data)
       @accounting_entry
            
       end
@@ -247,9 +252,11 @@ module Adjustments
         @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
                             config: config
                           ).execute!
-
-        @accounting_entry
         
+        a_data =  @recompute_restructure_details.data.with_indifferent_access
+        a_data[:accounting_entry_id] << @accounting_entry.id
+        @recompute_restructure_details.update(data: a_data)
+        @accounting_entry
       end
 
     end
