@@ -10,11 +10,15 @@ var $btnConfirmNew;
 var $message;
 var templateErrorList;
 var _authenticityToken;
-
-var _urlCreate  = "/api/v1/trial_balances/create";
+var _xKoinsAppAuthSecret;
+var _urlCreate;
+var _userId;
 
 var init  = function(options) {
-  _authenticityToken  = options.authenticityToken;
+  _authenticityToken    = options.authenticityToken;
+  _xKoinsAppAuthSecret  = options.xKoinsAppAuthSecret;
+  _urlCreate            = options.urlCreate;
+  _userId               = options.userId;
 
   _cacheDom();
   _bindEvents();
@@ -55,12 +59,16 @@ var _bindEvents = function() {
     $.ajax({
       url: _urlCreate,
       method: "POST",
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret
+      },
       data: {
         start_date: startDate,
         end_date: endDate,
         branch_id: branchId,
         accounting_fund_id: accountingFundId,
-        authenticity_token: _authenticityToken
+        authenticity_token: _authenticityToken,
+        user_id: _userId
       },
       success: function(response) {
         $message.html("Success!");

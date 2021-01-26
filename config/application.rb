@@ -27,6 +27,17 @@ module Koins
       g.orm :active_record, primary_key_type: :uuid
     end
 
+    # Allow CORS
+    config.middleware.use Rack::Cors do
+      allow do
+        origins '*'
+        resource '*',
+          :headers => :any,
+          :methods => [:get, :put, :patch, :options],
+          :max_age => 15
+      end
+    end
+
     # ActionCable
     config.action_cable.mount_path = '/websocket'
 

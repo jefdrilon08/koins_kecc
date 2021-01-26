@@ -1,9 +1,23 @@
 class ApiController < ApplicationController
+  protect_from_forgery with: :null_session
+
   def authenticate_app_request! 
     if request.headers["X-KOINS-APP-AUTH-SECRET"].blank?
       render json: { message: "unauthenticated" }, status: 400
     elsif request.headers["X-KOINS-APP-AUTH-SECRET"] != app_auth_secret
       render json: { message: "invalid auth token" }, status: 400
+    end
+  end
+
+  def authenticate_core_user!
+    if params[:user_id].blank?
+      render json: { message: "user_id required" }, status: 400
+    else
+      @core_user = User.find_by_id(params[:user_id])
+
+      if @core_user.blank?
+        render json: { message: "core user not found" }
+      end
     end
   end
 

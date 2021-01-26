@@ -59,6 +59,12 @@ module Accounting
           text: "New"
         }
       ]
+
+      @payload = {
+        urlCreate: "#{ENV['BACKEND_API_URL']}/api/v1/trial_balances/create",
+        userId: current_user.id,
+        xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
+      }
     end
 
     def show

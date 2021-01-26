@@ -1,7 +1,8 @@
 module Api
   module V1
-    class TrialBalancesController < ApplicationController
-      before_action :authenticate_user!
+    class TrialBalancesController < ApiController
+      before_action :authenticate_app_request!
+      before_action :authenticate_core_user!
       
       def delete
         trial_balance = DataStore.trial_balances.done.find(params[:id])
@@ -24,7 +25,7 @@ module Api
                       end_date: end_date,
                       branch: branch,
                       accounting_fund: accounting_fund,
-                      user: current_user
+                      user: @core_user
                     )
 
         validator.execute!
@@ -45,9 +46,9 @@ module Api
                         accounting_fund_id: accounting_fund.try(:id),
                         accounting_fund_name: accounting_fund.try(:name),
                         user: {
-                          id: current_user.id,
-                          first_name: current_user.first_name,
-                          last_name: current_user.last_name
+                          id: @core_user.id,
+                          first_name: @core_user.first_name,
+                          last_name: @core_user.last_name
                         }
                       },
                       data: {
