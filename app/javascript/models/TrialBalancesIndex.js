@@ -60,7 +60,11 @@ var _bindEvents = function() {
       url: _urlCreate,
       method: "POST",
       headers: {
-        'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret
+        'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
       },
       data: {
         start_date: startDate,
