@@ -102,7 +102,10 @@ module Accounting
         ]
 
         @payload = {
-          id: @trial_balance.id
+          id: @trial_balance.id,
+          urlDelete: "#{ENV['BACKEND_API_URL']}/api/v1/trial_balances/delete",
+          userId: current_user.id,
+          xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
         }
       end
     end

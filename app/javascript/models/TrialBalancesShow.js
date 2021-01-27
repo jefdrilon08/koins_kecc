@@ -7,12 +7,16 @@ var $message;
 var templateErrorList;
 var _authenticityToken;
 
-var _urlDelete  = "/api/v1/trial_balances/delete";
+var _urlDelete;
 var _id;
+var _xKoinsAppAuthSecret;
+var _userId;
 
 var init  = function(options) {
-  _authenticityToken  = options.authenticityToken;
   _id                 = options.id;
+  _authenticityToken  = options.authenticityToken;
+  _urlDelete          = options.urlDelete;
+  _userId             = options.userId;
 
   _cacheDom();
   _bindEvents();
@@ -38,9 +42,17 @@ var _bindEvents = function() {
     $.ajax({
       url: _urlDelete,
       method: "POST",
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
       data: {
         id: _id,
-        authenticity_token: _authenticityToken
+        authenticity_token: _authenticityToken,
+        user_id: _userId
       },
       success: function(response) {
         $message.html("Success!");
