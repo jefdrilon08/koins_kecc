@@ -8,6 +8,10 @@ var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
 
+var $btnDelete;
+var $modalDelete;
+var $btnConfirmDelete;
+
 var $btnPrint;
 var $modalPrint;
 
@@ -16,12 +20,17 @@ var templateErrorList;
 
 var _urlApprove = "/api/v1/adjustments/recompute_restructures/approve";
 var _urlPrint   = "#" //"/api/v1/print/generate_file";
+var _urlDelete = "/api/v1/adjustments/recompute_restructures/destroy";
 
 var _cacheDom = function() {
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $modalApprove       = $("#modal-approve");
 
+  $btnDelete         = $("#btn-delete");
+  $modalDelete       = $("#modal-delete");
+  $btnConfirmDelete  = $("#btn-confirm-delete");
+  
   $btnPrint   = $("#btn-print");
   $modalPrint = $("#modal-print");
 
@@ -55,10 +64,39 @@ var _bindEvents = function() {
     });
   });
 
+  $btnDelete.on("click", function(){
+    $message.html("");
+    $modalDelete.modal("show");
+  });
+
+  $btnConfirmDelete.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmDelete.prop("disabled", true);
+
+    $.ajax({
+      url: _urlDelete,
+      method: "POST",
+      data: {
+        id: recomputeRestructureId,
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.href="/adjustments/recompute_restructures/";
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in deleting record!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
   $btnApprove.on("click", function() {
     $message.html("");
     $modalApprove.modal("show");
   });
+  
 
   $btnConfirmApprove.on("click", function() {
     $message.html("Loading...");

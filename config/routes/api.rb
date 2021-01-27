@@ -37,6 +37,7 @@ namespace :api do
       
       post "/recompute_restructures/create", to: "recompute_restructures#create"
       post "/recompute_restructures/approve", to: "recompute_restructures#approve"
+      post "/recompute_restructures/destroy", to: "recompute_restructures#destroy"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"

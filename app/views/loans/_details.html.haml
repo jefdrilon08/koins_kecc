@@ -63,115 +63,44 @@
           %td.text-right
             #{number_to_currency(rl.fetch("total_balance"), unit: "")}
 
-- if @loan.data["new_restructured"]
-  - if @loan.loan_product_id == "1c2fcdbd-d60b-402c-b04b-824bb90958d1"
-    %h5
-      should be K-Sagip computation
-    %table.table.table-bordered.table-sm
-      %thead
+
+- if @loan.data["new_restructured_loans"]
+  %h5
+    Should be K-Sagip Amount
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-right
+          Principal Balance
+        %th.text-right
+          Interest Balance
+        %th.text-right
+          Total Balance
+    %tbody
+      - @loan.data["new_restructured_loans"].each do |rl|
         %tr
-          %th
-            PN Number
-          %th
-            Loan Product
-          %th.text-right
-            Principal Balance
-          %th.text-right
-            Unpaid Interest Balance
-          %th.text-right
-            Account Type
-      %tbody
-        - @loan["data"]["new_restructured"]["loan_details"].each do |h|
-          %tr
-            %td
-              #{h["pn_number"]}
-            %td
-              #{h["loan_product"]["name"]}
-            %td
-              #{h["principal_balance"]}
-            %td
-              #{h["k_sagip_interest_balance"]}
-            %td
-              #{h["transaction_type"]}
-
-      %table.table.table-bordered.table-sm
-        %thead
-          %tr
-            %th{:rowspan => "2", :style => "text-align:center;"} Accounting Code
-            %th{:colspan => "2", :style => "text-align:center;"} Old
-            %th{:colspan => "2", :style => "text-align:center;"} New
-            %th{:rowspan => "2", :style => "text-align:center;"} Difference
-          %tr
-             
-            %th Debit
-            %th Credit
-            %th Debit
+          %td
+            = link_to loan_path(rl.fetch("id")) do
+              #{rl.fetch("pn_number")}
+          %td
+            #{rl["loan_product"]["name"]}
+          %td.text-right
+            #{number_to_currency(rl.fetch("principal_balance"), unit: "")}
+          %td.text-right
+            #{number_to_currency(rl.fetch("k_sagip_interest_balance"), unit: "")}
+          %td.text-right
+            #{number_to_currency(rl.fetch("principal_balance").to_f + rl.fetch("k_sagip_interest_balance").to_f, unit: "") }
+      %tr
+        %th{colspan: "4"}
+          Total
+        %td.text-right
+          #{number_to_currency(@loan.data["new_restructured_loans"].sum{ |a| a["principal_balance"].to_f }, unit: "") }
             
-        %tbody
-          %tr
-            %th
-              11301028 - Loans Receivables - K-SAGIP
-            %td
-              #{@loan["data"]["accounting_entry"]["debit_journal_entries"].select{ |o| o["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"}.last["amount"]}
-            %td
-            %td
-              #{@loan["data"]["new_restructured"]["total_loanable_amount"]}
-            %td
-            %td
-              #{(@loan["data"]["accounting_entry"]["debit_journal_entries"].select{ |o| o["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"}.last["amount"].to_f - @loan["data"]["new_restructured"]["total_loanable_amount"].to_f ).round(2)}
-
-          - @loan["data"]["new_restructured"]["loan_details"].each do |h|
-            %tr
-              %th
-                #{AccountingCode.find (Settings.loan_products.select{ |o| o[:loan_product_id] == h["loan_product"]["id"] }.last.receivable_accounting_code_id)}
-              %td 
-              %td
-                #{@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == h["loan_product"]["receivable_accounting_code_id"]   }.last["amount"]}
-              %td
-              %td
-                #{h["principal_balance"]}
-              %td
-                #{(@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == h["loan_product"]["receivable_accounting_code_id"]}.last["amount"].to_f - h["principal_balance"].to_f).round(2) }
-                
-            %tr
-              %th
-                #{AccountingCode.find (Settings.loan_products.select{ |o| o[:loan_product_id] == h["loan_product"]["id"] }.last.interest_receivable_accounting_code_id)}
-              %td
-              %td
-                #{@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == h["loan_product"]["interest_receivable_accounting_code_id"]   }.last["amount"]}
-              %td
-              %td
-                #{h["k_sagip_interest_balance"]}
-              %td
-                #{(@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == h["loan_product"]["interest_receivable_accounting_code_id"] }.last["amount"].to_f - h["k_sagip_interest_balance"].to_f).round(2)}
-                
-
-          - @loan["data"]["new_restructured"]["insurance_details"].each do |i|
-            %tr
-              %th
-                #{AccountingCode.find(i["accounting_entry"]).code} - #{AccountingCode.find(i["accounting_entry"]).name}
-              %td
-              %td
-                #{@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == i["accounting_entry"]}.last["amount"]}
-              %td
-              %td
-                #{i["value"]}
-              %td
-                #{(@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == i["accounting_entry"]}.last["amount"].to_f - i["value"].to_f ).round(2)}
-
-          %tr
-            %th
-              40200000 - SERVICE FEE
-            %td
-            %td
-              #{@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "9f4b1331-cd5a-4edb-9920-a5029759885d"}.last["amount"]}
-            %td
-            %td
-              #{@loan["data"]["new_restructured"]["total_service_fee"]}
-            %td
-              #{(@loan["data"]["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "9f4b1331-cd5a-4edb-9920-a5029759885d"}.last["amount"].to_f - @loan["data"]["new_restructured"]["total_service_fee"].to_f).round(2)}
-              
-
+  
 
       
 .row
