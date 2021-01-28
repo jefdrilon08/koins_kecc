@@ -377,7 +377,8 @@ module MemberAccountValidations
         savings_amount          = 0.00
 
         if @is_remote
-          savings_accounting_code = AccountingCode.find('905c35b2-2388-4458-8de7-60636e10952f')
+          savings_accounting_code = AccountingCode.find('184a4473-8795-46b2-aec7-33561471353b')
+          #savings_accounting_code = AccountingCode.find('905c35b2-2388-4458-8de7-60636e10952f')
         else
           savings_accounting_code = AccountingCode.find('f719c253-a9ba-4d81-ae52-dc8d8d0848f2')
         end
@@ -472,7 +473,8 @@ module MemberAccountValidations
         savings_amount          = 0.00
 
         if @is_remote
-          savings_accounting_code = AccountingCode.find('905c35b2-2388-4458-8de7-60636e10952f')
+          savings_accounting_code = AccountingCode.find('184a4473-8795-46b2-aec7-33561471353b')
+          # savings_accounting_code = AccountingCode.find('905c35b2-2388-4458-8de7-60636e10952f')
         else
           # DUE to members (KCOOP)
           savings_accounting_code = AccountingCode.find('b7c23e58-e44e-46ae-a3ec-b5081d6eed32')

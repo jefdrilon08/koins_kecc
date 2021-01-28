@@ -2,7 +2,6 @@
   = link_to new_claim_claim_attachment_file_path(@claim), class: "btn btn-primary btn-sm" do
     .fa.fa-plus
     New Claim Attachment File
-%hr
 - if @claim.claim_attachment_files.size == 0
   %p
     No attachment files for this claim
@@ -13,11 +12,11 @@
       / %br
       / = link_to claim_attachment_file.file.record_id, rails_blob_path(claim_attachment_file.file, disposition: "attachment")
       - claim_attachment_file.files.each do |file|
-        %div{:style => "width: 1000px; height: 1000px;"}
+        %div{:style => "width: 100%; height: auto;"}
           %b
             .h3
               #{file.blob.filename.base}
-          = image_tag rails_blob_path(file, disposition: "attachment", only_path: true), width: "1100px", height: "1000px"
+          = image_tag rails_blob_path(file, disposition: "attachment", only_path: true), width: "100%", height: "auto"
         %br
         %br
         %hr

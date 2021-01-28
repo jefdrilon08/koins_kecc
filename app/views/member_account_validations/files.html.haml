@@ -1,0 +1,26 @@
+= title
+.container-fluid  
+  .row
+    .col
+      .card
+        .card-body
+          .errors_template
+          %h3
+            Validation Attachment Files 
+          %br
+          .row
+            .col
+              %div{:style => "width: 100%; height: auto"}
+                - if @member_account_validation_record.files.attached?        
+                  - @member_account_validation_record.files.each do |file|
+                    = image_tag rails_blob_path(file, disposition: "attachment", only_path: true), width: "100%", height: "auto"
+                    %br
+                    %br
+                    %hr
+                    %br
+                  = link_to member_account_validation_delete_files_path(@member_account_validation,@member_account_validation_record), class: "btn btn-danger btn-sm", id: "btn-delete-files", data: { confirm: "Are you sure?" } do
+                    .fa.fa-image
+                    Delete Files
+                - else
+                  %p
+                    No image found

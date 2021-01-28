@@ -19,6 +19,8 @@
           %th Interest
           %th Policy Loan
           %th Total
+          - if Settings.activate_microinsurance  
+            %th Attach FIles
           %th Actions
       %tbody
         = f.simple_fields_for :member_account_validation_records, f.object.member_account_validation_records.includes(:member).order("members.last_name ASC") do |ff|
@@ -46,6 +48,9 @@
               = ff.input :policy_loan, as: :string, input_html: { class: "form-control numeric policy-loan" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true
             %td
               = ff.input :total, as: :string, input_html: { class: "form-control numeric total-amount" , data: { member_id: "#{ff.object.member.id}" } }, label: false, disabled: true          
+            - if Settings.activate_microinsurance  
+              %td
+                = ff.input :files, as: :file, input_html: { class: 'form-control' , multiple: true}, label: false
             %td
               = link_to "#", class: "btn btn-danger btn-delete", data: { member_account_validation_record_id: ff.object.id, delete_member_id: ff.object.member.id } do
                 .fa.fa-times   
