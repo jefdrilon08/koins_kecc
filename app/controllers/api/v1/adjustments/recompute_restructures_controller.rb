@@ -12,13 +12,31 @@ module Api
             member_id: member_id
           }
           
-          #for_member_validation = RecomputeRestructure.where(member: member_id)o
+          config_validation = {
+            branch_id: branch_id,
+            member_id: member_id
+          }
+          
+          validator = ::Adjustments::RecomputeRestructures::ValidateCreate.new(
+                        config: config_validation
+                      )
+          
+          validator.execute!
+        
+          if validator.errors[:messages].any?
 
-          record =  ::Adjustments::RecomputeRestructures::Create.new(
+            render json: validator.errors, status: 400
+            
+          else
+          
+
+            for_member_validation = RecomputeRestructure.where(member: member_id).count
+
+            record =  ::Adjustments::RecomputeRestructures::Create.new(
                                                                 config: config
                                                                ).execute!
-          
-          render json: { id: record.id}
+            render json: { id: record.id}
+          end
         end
 
         def approve
