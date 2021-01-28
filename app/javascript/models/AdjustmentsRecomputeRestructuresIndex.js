@@ -392,14 +392,6 @@ var _bindEvents = function() {
             )
           );
 
-          $btnConfirmNew.prop("disabled", false);
-          $selectBranch.prop("disabled", false);
-          $selectCenter.prop("disabled", false);
-          $selectMember.prop("disabled", false);
-          $selectLoans.prop("disabled", false);
-          $inputDateInitialized.prop("disabled", false);
-          $inputReason.prop("disabled", false);
-          $inputNumberOfDays.prop("disabled", false);
         }
       }
     });
