@@ -196,6 +196,8 @@ Rails.application.routes.draw do
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
+
+  get '/loans/:id/amortization_pdf', to: 'loans#amortization_pdf', as: :amortization_pdf
   
   # Accrued
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"

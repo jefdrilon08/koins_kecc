@@ -16,17 +16,17 @@ namespace :report do
     @data_store_data = @data_store.data.with_indifferent_access
       @data_store_data[:counts][:pure_savers][:members].each do |m|
         mem = Member.find(m[:id])
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}"
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}"
         @data << j
       end
       @data_store_data[:counts][:loaners][:members].each do |m|
         mem = Member.find(m[:id])
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}"
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}"
         @data << j
       end
       @data_store_data[:counts][:active_members][:members].each do |m|
         mem = Member.find(m[:id])
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}"
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}"
         @data << j
       end
       puts @data

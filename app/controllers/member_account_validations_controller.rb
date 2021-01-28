@@ -169,6 +169,24 @@ class MemberAccountValidationsController < ApplicationController
     end
   end
 
+  def files
+    @member_account_validation = MemberAccountValidation.find(params[:member_account_validation_id])
+    @member_account_validation_record = MemberAccountValidationRecord.find(params[:member_account_validation_record_id])
+  end
+
+  def delete_files
+    @member_account_validation = MemberAccountValidation.find(params[:member_account_validation_id])
+    @member_account_validation_record = MemberAccountValidationRecord.find(params[:member_account_validation_record_id])
+    @member_account_validation_record.files.purge
+    
+    redirect_to member_account_validation_path(@member_account_validation)
+
+
+    # @file = ActiveStorage::Attachment.find(params[:id])
+    # @file.purge
+    # redirect_to member_account_validation_path(@member_account_validation)
+  end
+
   def member_account_validation_params
     params.require(:member_account_validation).permit!
   end

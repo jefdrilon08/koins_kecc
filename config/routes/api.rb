@@ -37,6 +37,7 @@ namespace :api do
       
       post "/recompute_restructures/create", to: "recompute_restructures#create"
       post "/recompute_restructures/approve", to: "recompute_restructures#approve"
+      post "/recompute_restructures/destroy", to: "recompute_restructures#destroy"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -80,6 +81,7 @@ namespace :api do
     post "/members/generate_missing_accounts", to: "members#generate_missing_accounts"
     post "/members/change_member_type", to: "members#change_member_type"
     post "/members/change_recognition_date", to: "members#change_recognition_date"
+    post "/members/resign", to: "members#resign"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"

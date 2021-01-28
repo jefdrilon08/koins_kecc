@@ -25,7 +25,8 @@ class ApplicationController < ActionController::Base
     "claims",
     "member_account_validations",
     "insurance_accounts",
-    "members"
+    "members",
+    "loans"
   ]
 
   FOR_PDF = [
@@ -49,7 +50,8 @@ class ApplicationController < ActionController::Base
     "scholarship_contract_highschool_pdf",
     "scholarship_contract_college_pdf",
     "calamity_validation_pdf",
-    "calamity_loa_pdf"
+    "calamity_loa_pdf",
+    "amortization_pdf"
   ]
 
   def layout_by_resource

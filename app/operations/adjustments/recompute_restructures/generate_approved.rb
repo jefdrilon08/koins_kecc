@@ -1,7 +1,8 @@
 module Adjustments
   module RecomputeRestructures
-    class Approve
+    class GenerateApproved
       def initialize(config:)
+        @accounting_entry = []
         @config = config
         @user = @config[:user]
         @recompute_restructure_details =  @config[:recompute_restructure]
@@ -9,12 +10,11 @@ module Adjustments
         @loan = Loan.find(@recompute_restructure_details.loan)
         @current_date  = ::Utils::GetCurrentDate.new(config: { branch: @loan.branch }).execute!
         @amount = @loan.principal - @recompute_restructure_details.data["loans"].last["total_loanable_amount"]
-        
 
+        @accounting_entry_details = []
          
       end
       def execute!
-
         if @loan.status == "active"
           loan_balance = @loan.principal_balance.to_f + @loan.interest_balance.to_f
           
@@ -109,29 +109,26 @@ module Adjustments
         
           }
           
-          @accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
+          @accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
                     ).execute!
 
-          @recompute_restructure_details.update(status: "approved")
-       
-          save_accounting_entry_data! #entry para sa distribution ng loan payment
+          
+           
+          #save_accounting_entry_data! #entry para sa distribution ng loan payment
           
           
-          ::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
+          #::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
 
         else
           for_savings!
          
         end #end of active
 
-        @account_transaction_details = @account_transaction
+      
         post_accounting_entry
-        #new_restructure_amount
-        @loan_data = @loan.data.with_indifferent_access
-        new_restructured_data = @recompute_restructure_details.data["loans"].last["loan_details"]
-        @loan_data[:new_restructured_loans] = new_restructured_data
-        @loan.update(data: @loan_data)
-        @account_transaction
+        
+        @accounting_entry_details
+        
       
       end
 
@@ -139,7 +136,6 @@ module Adjustments
 
 
       def for_savings!
-          
           if @for_savings_distribution == nil
               
             @account_transaction  = AccountTransaction.new(
@@ -197,10 +193,11 @@ module Adjustments
         
           }
 
-          @accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
+          @accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
                     ).execute!
        
-          save_accounting_entry_data! #entry para sa distribution sa savings
+        
+        
       end
       
       def post_accounting_entry
@@ -210,58 +207,11 @@ module Adjustments
           user: @user
         } 
         
-        accounting_entry_data = ::Adjustments::RecomputeRestructures::BuildAccountingEntry.new(config: for_entry
+        @accounting_entry_details <<  ::Adjustments::RecomputeRestructures::BuildAccountingEntry.new(config: for_entry
                     ).execute!
-        config = {
-            accounting_entry_data: accounting_entry_data,
-            user: @user
-        }
-
-        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
-                              config: config
-                            ).execute!
-      # Post to books
-      config  = {
-        accounting_entry: accounting_entry,
-        user: @user
-      }
-
-      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
-                            config: config
-                          ).execute!
-
-        a_data =  @recompute_restructure_details.data.with_indifferent_access
-        a_data[:accounting_entry_id] << @accounting_entry.id
-        @recompute_restructure_details.update(data: a_data)
-      @accounting_entry
-           
+        
       end
 
-      def save_accounting_entry_data!
-        
-        config = {
-            accounting_entry_data: @accounting_entry_details,
-            user: @user
-        }
-
-        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
-                              config: config
-                            ).execute!
-       # Post to books
-        config  = {
-          accounting_entry: accounting_entry,
-          user: @user
-        }
-
-        @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
-                            config: config
-                          ).execute!
-        
-        a_data =  @recompute_restructure_details.data.with_indifferent_access
-        a_data[:accounting_entry_id] << @accounting_entry.id
-        @recompute_restructure_details.update(data: a_data)
-        @accounting_entry
-      end
 
     end
   end

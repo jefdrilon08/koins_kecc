@@ -128,7 +128,7 @@ namespace :generate do
             end_date: end_date
           )
 
-    if cmd.account_transactions.any?
+    # if cmd.account_transactions.any?
       cmd.execute!
 
       file_repository = cmd.file_repository
@@ -145,6 +145,6 @@ namespace :generate do
         puts "api_url: #{api_url}"
         puts "actual_url: #{actual_url}"
       end
-    end
+    # end
   end
 end

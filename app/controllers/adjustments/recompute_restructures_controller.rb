@@ -17,6 +17,7 @@ module Adjustments
       ]
     end
     def show
+      
       @subheader_items = [
         {
           is_link: true,
@@ -29,14 +30,22 @@ module Adjustments
      
      @loan = Loan.find(@restucture_details.loan)
      
+     config = {
+            recompute_restructure: @restucture_details,
+            user: current_user
+          }
+     @accounting_entry =  ::Adjustments::RecomputeRestructures::GenerateApproved.new(
+                                                                config: config).execute!
+     
+
       @subheader_side_actions = []
      
       if @restucture_details.status == "pending"
 
         @subheader_side_actions << {
-      
+          id: "btn-delete",
+          link: "#",
           class: "fa fa-times",
-          data: { method: :delete, confirm: "Are you sure?" },
           text: "Delete"
         }
 

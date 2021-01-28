@@ -171,7 +171,7 @@ module Api
         member_account_validation = member_account_validation_record.member_account_validation
         data = member_account_validation.data.with_indifferent_access
         # member_account_validation.update!(updated_at: Time.now)
-
+        member_account_validation_record.files.purge
         member_account_validation_record.destroy!
 
         data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(

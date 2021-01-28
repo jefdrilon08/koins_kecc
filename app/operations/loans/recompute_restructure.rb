@@ -16,6 +16,20 @@ module Loans
         reg_loan = Loan.find(loan_data[:id])
       
         last_regular_payment = AccountTransaction.where("subsidiary_id =? and transacted_at < ? and status = ? and amount > 0", loan_data[:id], @loan.date_prepared,"approved" ).order(:transacted_at).last
+        
+        if last_regular_payment == nil
+          amort_details =  AmortizationScheduleEntry.where(loan_id: loan_data[:id]).order(:due_date).first
+          a = amort_details.due_date
+          last_regular_payment_transacted_at = amort_details.due_date
+          
+        else
+          last_regular_payment_data =  last_regular_payment.data.with_indifferent_access
+          a = last_regular_payment_data[:amort_entries].sort_by{ |o| o["due_date"]}.last[:due_date]
+          last_regular_payment_transacted_at = last_regular_payment.transacted_at.to_date
+
+        end
+
+
         ksagip_payment = AccountTransaction.where("subsidiary_id =?", loan_data[:id]).order(:transacted_at).last
         
         receivable_accounting_code = Settings.loan_products.select{ |o| o[:loan_product_id] == reg_loan.loan_product.id }.last.receivable_accounting_code_id
@@ -27,13 +41,13 @@ module Loans
               old_loan_interest = 0.0
             end
 
-        last_regular_payment_data =  last_regular_payment.data.with_indifferent_access
+        #last_regular_payment_data =  last_regular_payment.data.with_indifferent_access
+        #a = last_regular_payment_data[:amort_entries].sort_by{ |o| o["due_date"]}.last[:due_date]
 
-        a = last_regular_payment_data[:amort_entries].sort_by{ |o| o["due_date"]}.last[:due_date]
                  
-          if last_regular_payment.transacted_at.to_date <= a.to_date 
+          if last_regular_payment_transacted_at.to_date <= a.to_date 
 
-            if last_regular_payment.transacted_at.to_date > ksagip_payment.transacted_at.to_date
+            if last_regular_payment_transacted_at.to_date > ksagip_payment.transacted_at.to_date
              #pag walang past due
              
              new_restructure = { id: reg_loan.id,
@@ -124,7 +138,7 @@ module Loans
 
         @jef[:loan_details] << new_restructure
         
-
+        
 
 
       end #end of @loan_data[:restructured_loans]
