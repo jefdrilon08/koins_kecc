@@ -193,14 +193,11 @@ Rails.application.routes.draw do
 
     get "/:member_account_validation_record_id/withdrawal_pdf", to: "member_account_validations#withdrawal_pdf", as: :withdrawal_pdf
     get "/pdf", to: "member_account_validations#pdf", as: :pdf
-
-    get "/:member_account_validation_record_id/files", to: "member_account_validations#files", as: :files
-
-    
-    get "/:member_account_validation_record_id/delete_files", to: "member_account_validations#delete_files", as: :delete_files
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
+
+  get '/loans/:id/amortization_pdf', to: 'loans#amortization_pdf', as: :amortization_pdf
   
   # Accrued
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"

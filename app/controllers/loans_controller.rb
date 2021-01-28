@@ -131,8 +131,17 @@ class LoansController < ApplicationController
         text: "#{@loan.pn_number} - #{@loan.cycle.present? ? "Cycle #{@loan.cycle}" : "NO LOAN CYCLE PRESENT"}"
       }
     ]
+    
+    @subheader_items << {
+      is_link: true,
+      path: amortization_pdf_path,
+      class: "fa fa-print",
+      target: "_blank",
+      text: "Print Amortization PDF"
+    }
 
     @subheader_side_actions = []
+
 
     if @loan.pending?
       @subheader_side_actions << {
@@ -158,9 +167,17 @@ class LoansController < ApplicationController
       }
     end
 
+
     @payload = {
       id: @loan.id,
       memberId: @loan.member_id
     }
+  end
+
+  def amortization_pdf
+    @loan                   = ReadOnlyLoan.find(params[:id])
+    @amortization_schedule  = @loan.amortization_schedule_entries.order(
+                                "due_date ASC"
+                              )
   end
 end

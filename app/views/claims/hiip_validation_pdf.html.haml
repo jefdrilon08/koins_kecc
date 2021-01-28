@@ -225,13 +225,9 @@
             %i DATE: #{@claim.try(:date_checked).strftime("%b %d, %Y")}
           %br
           %br
-          - if @claim.checked_by.nil?
-            - if @claim.prepared_by == "Adrian San Andres" 
-              %u
-                Diobert Calanza
-            - else
-              %u
-                Adrian San Andres
+          - if @claim.checked_by.nil? 
+            %u
+              Adrian San Andres / Diobert Calanza
           - else
             %u
               #{@claim.checked_by}
