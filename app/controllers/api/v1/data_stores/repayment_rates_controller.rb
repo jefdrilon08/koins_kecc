@@ -1,8 +1,9 @@
 module Api
   module V1
     module DataStores
-      class RepaymentRatesController < ApplicationController
-        before_action :authenticate_user!
+      class RepaymentRatesController < ApiController
+        before_action :authenticate_app_request!
+        before_action :authenticate_core_user!, except: [:fetch]
 
         def fetch
           record  = ReadOnlyDataStore.repayment_rates.where(id: params[:id]).first
@@ -40,7 +41,6 @@ module Api
         def queue
           data_store_type = params[:data_store_type] || "REPAYMENT_RATES"
           as_of           = params[:as_of].try(:to_date)
-          #branch          = @branches.where(id: params[:branch_id]).first
           branch          = @branches.select{ |o| o[:id] == params[:branch_id] }.first
 
           errors  = ::DataStores::ValidateRepaymentRatesQueue.new(
