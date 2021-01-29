@@ -126,7 +126,7 @@ module Loans
             )
 
             # Check if we already have loans (for old accounts transferred form 1.0)
-            if @member.loans.active_or_paid.count > 0
+            if @member.loans.active_or_paid.count > 0 && @member_data[:restoration_records].last.nil? && @member.insurance_status != "pending"
               @member_data[:recognition_date] = @member.loans.active_or_paid.order("date_approved ASC").first.date_approved
             else
               @member_data[:recognition_date] = @date_paid
