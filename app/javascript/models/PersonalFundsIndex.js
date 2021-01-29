@@ -12,6 +12,10 @@ var $inputAsOf;
 var $message;
 var templateErrorList;
 
+var _urlQueue;
+var _userId;
+var _xKoinsAppAuthSecret;
+
 var _cacheDom = function() {
   $modalNew      = $("#modal-new");
   $btnNew        = $("#btn-new");
@@ -42,12 +46,20 @@ var _bindEvents = function() {
     var data  = {
       as_of: asOf,
       branch_id: branchId,
-      authenticity_token: authenticityToken
+      authenticity_token: authenticityToken,
+      user_id: _userId
     }
 
     $.ajax({
-      url: "/api/v1/data_stores/personal_funds/queue",
+      url: _urlQueue,
       method: 'POST',
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
       data: data,
       success: function(response) {
         $message.html("Success! Redirecting...");
@@ -79,7 +91,10 @@ var _bindEvents = function() {
 }
 
 var init  = function(config) {
-  authenticityToken = config.authenticityToken;
+  authenticityToken     = config.authenticityToken;
+  _urlQueue             = config.urlQueue;
+  _userId               = config.userId;
+  _xKoinsAppAuthSecret  = config.xKoinsAppAuthSecret;
 
   _cacheDom();
   _bindEvents();

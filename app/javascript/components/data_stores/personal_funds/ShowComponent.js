@@ -21,7 +21,9 @@ export default class ShowComponent extends React.Component {
       officers: [],
       centers: [],
       currentOfficerId: "",
-      currentCenterId: ""
+      currentCenterId: "",
+      xKoinsAppAuthSecret: props.xKoinsAppAuthSecret,
+      userId: props.userId
     };
   }
 
@@ -49,6 +51,13 @@ export default class ShowComponent extends React.Component {
       url: "/api/v1/data_stores/personal_funds/fetch",
       data: data,
       method: 'GET',
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
       success: function(response) {
         console.log(response);
 
@@ -74,6 +83,13 @@ export default class ShowComponent extends React.Component {
         id: context.props.id
       },
       method: 'GET',
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
       success: function(response) {
         console.log(response);
 
@@ -125,12 +141,20 @@ export default class ShowComponent extends React.Component {
     var data  = {
       id: this.props.id,
       officer_id: officerId,
-      center_id: centerId
+      center_id: centerId,
+      user_id: context.state.userId
     }
 
     $.ajax({
       url: "/api/v1/data_stores/personal_funds/download_excel",
       data: data,
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
       method: 'GET',
       success: function(response) {
         console.log(response);

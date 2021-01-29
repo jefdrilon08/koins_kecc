@@ -26,7 +26,9 @@ export default class ShowComponent extends React.Component {
       currentOfficerId: "",
       currentCenterId: "",
       currentLoanProductId: "",
-      currentView: "RR"
+      currentView: "RR",
+      xKoinsAppAuthSecret: props.xKoinsAppAuthSecret,
+      urlFetch: props.urlFetch
     };
   }
 
@@ -56,6 +58,13 @@ export default class ShowComponent extends React.Component {
       url: "/api/v1/data_stores/repayment_rates/fetch",
       data: data,
       method: 'GET',
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
       success: function(response) {
         console.log(response);
 
@@ -78,6 +87,13 @@ export default class ShowComponent extends React.Component {
       url: "/api/v1/data_stores/repayment_rates/fetch",
       data: {
         id: context.props.id
+      },
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
       },
       method: 'GET',
       success: function(response) {

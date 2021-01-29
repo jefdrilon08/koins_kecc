@@ -1,8 +1,9 @@
 module Api
   module V1
     module DataStores
-      class PersonalFundsController < ApplicationController
-        before_action :authenticate_user!
+      class PersonalFundsController < ApiController
+        before_action :authenticate_app_request!
+        before_action :authenticate_core_user!, except: [:fetch]
 
         def download_excel
           record = ReadOnlyDataStore.personal_funds.where(id: params[:id]).first
