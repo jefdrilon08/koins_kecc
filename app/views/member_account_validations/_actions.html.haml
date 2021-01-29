@@ -24,7 +24,7 @@
       .fa.fa-times
       Cancel  
 - if member_account_validation.for_approval?  
-  - if role == "BK" || role == "MIS"
+  - if role == "BK" || role == "MIS" || role == "SBK"
     = link_to "#", class: "btn btn-primary btn-lg", id: "btn-approve" do
       .fa.fa-check
       Approve

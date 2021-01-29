@@ -5,6 +5,11 @@
 %table.table.table-bordered.table-sm
   %tr
     %th{:style => "width:10%"}
+      Name:
+    %td.text{:style => "width:50%"}
+      #{@loan.member.full_name_formatted}
+  %tr
+    %th{:style => "width:10%"}
       Branch:
     %td.text{:style => "width:50%"}
       #{@loan.branch}
@@ -37,10 +42,16 @@
         #{@loan.first_date_of_payment.strftime("%b %d, %Y")}
   %tr
     %th
-      Maturity Date:
+      Original Maturity Date:
     %td.text
       - if @loan.active? || @loan.paid?
-        #{@loan.maturity_date}
+        #{@loan.original_maturity_date.strftime("%b %d, %Y")}
+  %tr
+    %th
+      Current Maturity Date:
+    %td.text
+      - if @loan.active? || @loan.paid?
+        #{@loan.maturity_date.to_date.strftime("%b %d, %Y")}
   %tr
     %th
       Term:
@@ -58,7 +69,7 @@
       #{@loan.beneficiary_first_name.try(:titleize)} #{@loan.beneficiary_middle_name.try(:titleize)} #{@loan.beneficiary_last_name.try(:titleize)}
   %tr
     %th
-      Date of Birth
+      Birthdate of Beneficiary
     %td.text
       #{@loan.beneficiary_date_of_birth}
   %tr
