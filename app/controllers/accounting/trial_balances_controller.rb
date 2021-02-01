@@ -10,7 +10,7 @@ module Accounting
 
       @accounting_funds = AccountingFund.all
 
-      @trial_balances = DataStore.trial_balances.where(
+      @trial_balances = DataStore.select(:id, :meta, :status, :updated_at).trial_balances.where(
                           "meta->>'branch_id' IN (?)",
                           @branches.pluck(:id)
                         ).order("status DESC, updated_at DESC")
