@@ -81,6 +81,9 @@ var _bindEvents = function() {
       error: function(response) {
         var errors  = [];
 
+        console.log("ERROR");
+        console.log(response);
+
         try {
           errors  = JSON.parse(response.responseText).full_messages;
         } catch(err) {
