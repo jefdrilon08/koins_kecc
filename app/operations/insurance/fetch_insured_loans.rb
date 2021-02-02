@@ -12,7 +12,7 @@ module Insurance
         if @loan_status == "paid"
           #@entry_level_loans  = Loan.where("maturity_date >= ? AND maturity_date <= ? AND status = ?", @start_date, @end_date, @loan_status).insured
           #Loan.where("extract(month from maturity_date) = ? AND extract(year from maturity_date) = ? AND extract(month from maturity_date) = ? AND extract(year from maturity_date) = ? AND status = ?", @start_date.month, @start_date.year, @end_date.month, @end_date.year, @loan_status).each do |loan|
-          Loan.where("status = ? AND maturity_date >= ? AND maturity_date <= ? AND branch_id = ?", @loan_status, @start_date, @end_date, @branch_id).each do |loan|
+          Loan.where("status = ? AND original_maturity_date >= ? AND original_maturity_date <= ? AND branch_id = ?", @loan_status, @start_date, @end_date, @branch_id).each do |loan|
             accounting_entry = loan.accounting_entry
             if !accounting_entry.nil?
               clip = accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
