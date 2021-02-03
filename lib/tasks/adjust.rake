@@ -1412,7 +1412,7 @@ namespace :adjust do
                   recognition_date          = o.fetch("recognition_date").try(:to_date)
                   transactions_count        = o.fetch("acc_trans_count")
 
-                  new_status  = "dormant"
+                  new_status  = "pending"
                   insurance_status  = o.fetch("insurance_status")
                   insurance_date_resigned  = o.fetch("insurance_date_resigned")
                   status      = o.fetch("status")
@@ -1431,15 +1431,15 @@ namespace :adjust do
 
                       is_withdraw_payment = o.fetch("is_withdraw_payment")
 
-                      if o.fetch("balance").to_f.round(2) == 0.00 && insurance_status == "resigned"  
-                        new_status = "resigned"
-                      elsif current_balance == 0.00 && is_withdraw_payment == "true"
+                      if current_balance == 0.00 && insurance_status == "resigned"  
                         new_status = "resigned"
                       elsif current_balance == 0.00 && !insurance_date_resigned.nil?
                         new_status = "resigned"
-                      elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && insurance_status != "resigned"
+                      elsif amt_past_due >= 780 && insurance_status != "resigned"
+                        new_status = "dormant"
+                      elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned"
                         new_status = "lapsed"
-                      elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && insurance_status != "resigned"
+                      elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned"
                         new_status = "lapsed"
                       elsif days_lapsed <= 45 && current_balance >= insured_amount && insurance_status != "resigned"
                         new_status = "inforce"
@@ -1450,25 +1450,17 @@ namespace :adjust do
                       elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned"
                         new_status = "inforce"
                       end
-                    else
-                      new_status = "dormant"
                     end
                   elsif recognition_date.present? and transactions_count == 0
-                    new_status = "dormant"
+                    new_status = "pending"
                   else
                     new_status = "pending"
                   end
 
                   if member_type == "GK"
                     new_status = "resigned"
-                  elsif status == "active" && recognition_date.nil?
+                  elsif status == "active" && recognition_date.nil? && current_balance == 0.00
                     new_status = "pending"
-                  elsif status == "pending"
-                    new_status = "pending"
-                  elsif status == "archived"
-                    new_status = "archived"
-                  elsif status == "cleared"
-                    new_status = "cleared"
                   elsif status == "resigned" && !insurance_date_resigned.nil?
                     new_status = "resigned"  
                   end

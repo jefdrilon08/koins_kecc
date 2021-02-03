@@ -576,7 +576,6 @@ module Api
 
           if member.pending? && member.insurance_pending?
             status = "active"
-            insurance_status = "dormant"
           else
             status = member.status
             insurance_status = member.status
