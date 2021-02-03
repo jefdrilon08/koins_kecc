@@ -41,7 +41,15 @@ module Api
         def queue
           data_store_type = params[:data_store_type] || "REPAYMENT_RATES"
           as_of           = params[:as_of].try(:to_date)
-          branch          = @branches.select{ |o| o[:id] == params[:branch_id] }.first
+
+          # fetch branches according to @core_user since we're using API calls
+          @default_branch_name = Settings.try(:defaults).try(:default_branch).try(:name)
+          @branches = ReadOnlyBranch
+            .joins(user_branches: :user)
+            .where(user_branches: { active: true, user_id: @core_user.id })
+            .order("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC")
+
+          branch = @branches.select{ |o| o[:id] == params[:branch_id] }.first
 
           errors  = ::DataStores::ValidateRepaymentRatesQueue.new(
                       config: {
