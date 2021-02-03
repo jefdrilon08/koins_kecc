@@ -28,13 +28,19 @@ module Claims
       else
         @member = @claim.member.try(:full_name)
       end
+
+      if @claim.clip?
+        @claim_type = @claim.claim_type + " (" + (@claim.data.with_indifferent_access[:type_of_loan].try(:titleize)) + ")"
+      else
+        @claim_type = @claim.claim_type
+      end
     end
 
     def execute!
       ActiveRecord::Base.transaction do
         from    = Email.new(email: "kmbakoins2020@gmail.com")
         to      = Email.new(email: @email_address)
-        subject = "KMBA / CLAIMS / #{@claim.claim_type} / #{@status.try(:upcase)} / #{@member} / #{@claim.branch.name.try(:upcase)}"
+        subject = "KMBA / CLAIMS / #{@claim_type} / #{@status.try(:upcase)} / #{@member} / #{@claim.branch.name.try(:upcase)}"
         content = Content.new(
                     type: "text/html",
                     value: "Claims #{@status.downcase}. Click the link below.
