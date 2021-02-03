@@ -53,6 +53,7 @@ module Loans
              new_restructure = { id: reg_loan.id,
                               pn_number: reg_loan.pn_number,
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
+                              k_sagip_interest_balance: total_interest,
                               interest_balance: 0.0,
                               total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
                               transaction_type: "current",

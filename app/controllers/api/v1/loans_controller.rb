@@ -19,6 +19,22 @@ module Api
         render json: { loans: result }
       end
 
+      def fetch_by_member_for_recompute
+        active_loans  = Loan.active.includes(:loan_product).where(member_id: params[:member_id])
+
+        result  = active_loans.map{ |o|
+                    {
+                      id: o.id,
+                      loan_product: {
+                        id: o.loan_product.id,
+                        name: o.loan_product.name
+                      }
+                    }
+                  }
+
+        render json: { loans: result }
+      end
+
       def restructure
         loan_product      = LoanProduct.where(id: params[:loan_product_id]).first
         co_maker          = params[:co_maker]
