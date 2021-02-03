@@ -50,7 +50,7 @@ module Branches
 
     def compute_claims_counts!
       @data[:counts][:approved_claims][:claims] = @result.select{ |o|
-                                                    ((o.fetch("status") == "pending"))
+                                                    ((o.fetch("status") == "approved"))
                                                   }.map{ |o|
                                                     {
                                                       id: o.fetch("id"),

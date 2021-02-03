@@ -191,6 +191,7 @@ Rails.application.routes.draw do
     get "approve", to: "member_account_validations#approve", as: :approve
     get "reverse", to: "member_account_validations#reverse", as: :reverse
 
+    get "/:member_account_validation_record_id/files", to: "member_account_validations#files", as: :files
     get "/:member_account_validation_record_id/withdrawal_pdf", to: "member_account_validations#withdrawal_pdf", as: :withdrawal_pdf
     get "/pdf", to: "member_account_validations#pdf", as: :pdf
   end
