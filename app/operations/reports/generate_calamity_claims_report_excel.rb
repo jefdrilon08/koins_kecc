@@ -35,7 +35,9 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
-            "Date",
+            "Date Encoded",
+            "Time Encoded",
+            "Date Prepared",
             "Cluster",
             "Branch",
             "Center",
@@ -53,7 +55,9 @@ module Reports
 
           @calamity.each_with_index do |calamity|
               sheet.add_row [
-                  calamity.date_prepared.try(:strftime, "%b %d, %Y"),
+                  claim.created_at.try(:strftime, "%b %d, %Y"),
+                  claim.created_at.strftime("%I:%M%P"),
+                  claim.date_prepared.try(:strftime, "%b %d, %Y"),
                   calamity.branch.cluster.name,
                   calamity.branch.name,
                   calamity.center.name,

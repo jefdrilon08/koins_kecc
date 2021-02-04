@@ -40,6 +40,8 @@ module Reports
 
           
           sheet.add_row [ 
+            "Date Encoded",
+            "Time Encoded",
             "Date Prepared",
             "Cluster",
             "Branch",
@@ -66,7 +68,9 @@ module Reports
 
           @clip.each do |clip|
             sheet.add_row [
-              clip.date_prepared.strftime("%b %d, %Y"),
+              clip.created_at.try(:strftime, "%b %d, %Y"),
+              clip.created_at.strftime("%I:%M%P"),
+              clip.date_prepared.try(:strftime, "%b %d, %Y"),
               clip.branch.cluster.name,
               clip.branch.name,
               clip.data["creditors_name"],

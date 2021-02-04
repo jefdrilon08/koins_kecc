@@ -40,7 +40,9 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
           
           sheet.add_row [ 
-            "Date",
+            "Date Encoded",
+            "Time Encoded",
+            "Date Prepared",
             "Cluster",
             "Branch",
             "Name of Member",
@@ -70,7 +72,9 @@ module Reports
 
           @claims.each do |claim|
             sheet.add_row [
-                claim.date_prepared,
+                claim.created_at.try(:strftime, "%b %d, %Y"),
+                claim.created_at.strftime("%I:%M%P"),
+                claim.date_prepared.try(:strftime, "%b %d, %Y"),
                 claim.branch.cluster.name,
                 claim.branch.name,
                 claim.member.full_name,
@@ -86,8 +90,8 @@ module Reports
                 claim.data["face_amount"],
                 claim.data["arrears"],
                 claim.data["date_of_death_tpd_accident"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                claim.date_prepared,
-                claim.date_prepared,
+                claim.date_prepared.try(:strftime, "%b %d, %Y"),
+                claim.date_prepared.try(:strftime, "%b %d, %Y"),
                 claim.data["cause_of_death_tpd_accident"],
                 claim.data["category_of_cause_of_death_tpd_accident"],
                 claim.data["face_amount"],
