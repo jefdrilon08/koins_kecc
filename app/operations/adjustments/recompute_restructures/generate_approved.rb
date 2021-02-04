@@ -110,8 +110,7 @@ module Adjustments
           }
           #raise for_entry.inspect
           #raise @account_transaction.inspect
-          @accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
-                    ).execute!
+          #@accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
 
                   
            
