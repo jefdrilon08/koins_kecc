@@ -76,6 +76,10 @@ module Branches
         build_rr!(rr)
       end
 
+      if mc.present?
+        build_mc!(mc)
+      end
+
       @daily_branch_metric.status = "done"
 
       @daily_branch_metric.save!
@@ -136,22 +140,26 @@ module Branches
     def build_mc!(mc)
       counts = mc.data["counts"]
 
-      @daily_branch_metric.data[:member_counts_as_of] = mc.meta["as_of"]
+      @data = @daily_branch_metric.data.with_indifferent_access
 
-      @daily_branch_metric.data[:pure_savers][:male]   = counts["pure_savers"]["male"]
-      @daily_branch_metric.data[:pure_savers][:female] = counts["pure_savers"]["female"]
-      @daily_branch_metric.data[:pure_savers][:others] = counts["pure_savers"]["others"]
-      @daily_branch_metric.data[:pure_savers][:total]  = counts["pure_savers"]["total"]
+      @daily_branch_metric.data["member_counts_as_of"] = @as_of
 
-      @daily_branch_metric.data[:loaners][:male]   = counts["loaners"]["male"]
-      @daily_branch_metric.data[:loaners][:female] = counts["loaners"]["female"]
-      @daily_branch_metric.data[:loaners][:others] = counts["loaners"]["others"]
-      @daily_branch_metric.data[:loaners][:total]  = counts["loaners"]["total"]
+      @data[:pure_savers][:male]   = counts["pure_savers"]["male"]
+      @data[:pure_savers][:female] = counts["pure_savers"]["female"]
+      @data[:pure_savers][:others] = counts["pure_savers"]["others"]
+      @data[:pure_savers][:total]  = counts["pure_savers"]["total"]
 
-      @daily_branch_metric.data[:active_members][:male]   = counts["active_members"]["male"]
-      @daily_branch_metric.data[:active_members][:female] = counts["active_members"]["female"]
-      @daily_branch_metric.data[:active_members][:others] = counts["active_members"]["others"]
-      @daily_branch_metric.data[:active_members][:total]  = counts["active_members"]["total"]
+      @data[:loaners][:male]   = counts["loaners"]["male"]
+      @data[:loaners][:female] = counts["loaners"]["female"]
+      @data[:loaners][:others] = counts["loaners"]["others"]
+      @data[:loaners][:total]  = counts["loaners"]["total"]
+
+      @data[:active_members][:male]   = counts["active_members"]["male"]
+      @data[:active_members][:female] = counts["active_members"]["female"]
+      @data[:active_members][:others] = counts["active_members"]["others"]
+      @data[:active_members][:total]  = counts["active_members"]["total"]
+
+      @daily_branch_metric.data = @data
     end
   end
 end
