@@ -46,6 +46,8 @@ module Exports
                             :is_balik_kasapi,
                             :center_id,
                             :branch_id,
+                            :insurance_date_resigned_data,
+                            :insurance_resignation_reason_data,
                             :lapse
                             
                         ]
@@ -92,47 +94,57 @@ module Exports
                             resignation_reason = nil
                         end
 
+                        if !m.data.with_indifferent_access[:insurance_resignation].nil?
+                            insurance_date_resigned_data = m.data.with_indifferent_access[:insurance_resignation][:date_resigned]
+                            insurance_resignation_reason_data = m.data.with_indifferent_access[:insurance_resignation][:resignation_reason]
+                        else
+                            insurance_date_resigned_data = nil
+                            insurance_resignation_reason_data = nil
+                        end
+
                         csv << [
-                        m.identification_number,
-                        m.member_type,
-                        m.status,
-                        m.insurance_status,    
-                        m.first_name,
-                        m.middle_name,
-                        m.last_name,
-                        recognition_date,
-                        m.center,
-                        m.branch,
-                        m.gender,
-                        m.date_of_birth,
-                        m.place_of_birth,
-                        m.civil_status,
-                        m.data[:number_children],
-                        m.data.with_indifferent_access[:spouse][:first_name],
-                        m.data.with_indifferent_access[:spouse][:last_name],
-                        m.data.with_indifferent_access[:spouse][:middle_name],
-                        m.data.with_indifferent_access[:spouse][:date_of_birth],
-                        m.data.with_indifferent_access[:address][:street],
-                        m.data.with_indifferent_access[:address][:district],
-                        m.data.with_indifferent_access[:address][:city],
-                        sss,
-                        tin,
-                        pag_ibig,
-                        phil_health,
-                        m.mobile_number,
-                        m.id,
-                        meta_id,
-                        m.date_resigned,
-                        resignation_type,
-                        resignation_code,
-                        resignation_reason,
-                        insurance_date_resigned,
-                        "",
-                        "",
-                        "",
-                        m.center.id,
-                        m.branch.id,
-                        lapse
+                            m.identification_number,
+                            m.member_type,
+                            m.status,
+                            m.insurance_status,    
+                            m.first_name,
+                            m.middle_name,
+                            m.last_name,
+                            recognition_date,
+                            m.center,
+                            m.branch,
+                            m.gender,
+                            m.date_of_birth,
+                            m.place_of_birth,
+                            m.civil_status,
+                            m.data[:number_children],
+                            m.data.with_indifferent_access[:spouse][:first_name],
+                            m.data.with_indifferent_access[:spouse][:last_name],
+                            m.data.with_indifferent_access[:spouse][:middle_name],
+                            m.data.with_indifferent_access[:spouse][:date_of_birth],
+                            m.data.with_indifferent_access[:address][:street],
+                            m.data.with_indifferent_access[:address][:district],
+                            m.data.with_indifferent_access[:address][:city],
+                            sss,
+                            tin,
+                            pag_ibig,
+                            phil_health,
+                            m.mobile_number,
+                            m.id,
+                            meta_id,
+                            m.date_resigned,
+                            resignation_type,
+                            resignation_code,
+                            resignation_reason,
+                            insurance_date_resigned,
+                            "",
+                            "",
+                            "",
+                            m.center.id,
+                            m.branch.id,
+                            insurance_date_resigned_data,
+                            insurance_resignation_reason_data,
+                            lapse
                         ]
                     end
                 end
