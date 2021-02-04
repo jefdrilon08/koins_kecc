@@ -72,28 +72,28 @@ module Dashboard
       if metric.present?
         d[:as_of] = @as_of
 
-        d[:principal]                 = metric.principal 
-        d[:interest]                  = metric.interest 
-        d[:total]                     = metric.total 
-        d[:principal_due]             = metric.principal_due 
-        d[:interest_due]              = metric.interest_due 
-        d[:total_due]                 = metric.total_due 
-        d[:principal_paid]            = metric.principal_paid 
-        d[:interest_paid]             = metric.interest_paid
-        d[:portfolio]                 = metric.portfolio
-        d[:principal_paid_due]        = metric.principal_paid_due 
-        d[:interest_paid_due]         = metric.interest_paid_due 
-        d[:total_paid_due]            = metric.total_paid_due 
-        d[:total_paid]                = metric.total_paid 
-        d[:principal_balance]         = metric.principal_balance 
-        d[:interest_balance]          = metric.interest_balance
-        d[:total_balance]             = metric.total_balance 
-        d[:overall_principal_balance] = metric.overall_principal_balance
-        d[:overall_interest_balance]  = metric.overall_interest_balance
+        d[:principal]                 = metric.principal.to_f.round(2) 
+        d[:interest]                  = metric.interest.to_f.round(2)
+        d[:total]                     = metric.total.to_f.round(2)
+        d[:principal_due]             = metric.principal_due.to_f.round(2)
+        d[:interest_due]              = metric.interest_due.to_f.round(2) 
+        d[:total_due]                 = metric.total_due.to_f.round(2) 
+        d[:principal_paid]            = metric.principal_paid.to_f.round(2)
+        d[:interest_paid]             = metric.interest_paid.to_f.round(2)
+        d[:portfolio]                 = metric.portfolio.to_f.round(2)
+        d[:principal_paid_due]        = metric.principal_paid_due.to_f.round(2) 
+        d[:interest_paid_due]         = metric.interest_paid_due.to_f.round(2) 
+        d[:total_paid_due]            = metric.total_paid_due.to_f.round(2) 
+        d[:total_paid]                = metric.total_paid.to_f.round(2) 
+        d[:principal_balance]         = metric.principal_balance.to_f.round(2) 
+        d[:interest_balance]          = metric.interest_balance.to_f.round(2)
+        d[:total_balance]             = metric.total_balance.to_f.round(2)
+        d[:overall_principal_balance] = metric.overall_principal_balance.to_f.round(2)
+        d[:overall_interest_balance]  = metric.overall_interest_balance.to_f.round(2)
 
-        d[:par_amount]    = metric.par_amount
-        d[:principal_rr]  = metric.principal_rr
-        d[:par]           = metric.par
+        d[:par_amount]    = metric.par_amount.to_f.round(2)
+        d[:principal_rr]  = metric.principal_rr.to_f.round(2)
+        d[:par]           = metric.par.to_f.round(2)
 
         d[:member_counts_as_of] = metric.as_of
 
