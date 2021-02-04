@@ -59,7 +59,7 @@ module Api
                     ).execute!
 
           if errors[:messages].size == 0
-            record  = DataStore.repayment_rates.where(
+            record  = DataStore.select("id, meta, status").where(
                         "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
                         params[:branch_id],
                         as_of

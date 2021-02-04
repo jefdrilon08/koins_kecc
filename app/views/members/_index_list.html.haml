@@ -1,52 +1,53 @@
-%table.table.table-sm.table-hover
-  %thead
-    %tr
-      %th
-      %th{ width: "10%" }
-        ID Number
-      %th
-        Name
-      %th
-        Branch
-      %th
-        Center
-      %th
-        Recognition Date
-      %th.text-center
-        Type
-      %th.text-center
-        Status
-  %tbody
-    - members.each do |o|
+.table-responsive
+  %table.table.table-sm.table-hover
+    %thead
       %tr
-        %td.text-center
-          %img{ src: "#{o.profile_picture_url}", width: 25 }
-        %td
-          = link_to member_path(o) do
-            %strong
-              #{o.identification_number}
-        %td
-          = link_to member_path(o) do
-            %strong
-              #{o.full_name}
-        %td.text-muted
-          %small
-            #{o.branch.name}
-        %td.text-muted
-          %small
-            #{o.center.name}
-        %td.text-muted
-          - if o.recognition_date.present?
+        %th
+        %th{ width: "10%" }
+          ID Number
+        %th
+          Name
+        %th
+          Branch
+        %th
+          Center
+        %th
+          Recognition Date
+        %th.text-center
+          Type
+        %th.text-center
+          Status
+    %tbody
+      - members.each do |o|
+        %tr
+          %td.text-center
+            %img{ src: "#{o.profile_picture_url}", width: 25 }
+          %td
+            = link_to member_path(o) do
+              %strong
+                #{o.identification_number}
+          %td
+            = link_to member_path(o) do
+              %strong
+                #{o.full_name}
+          %td.text-muted
             %small
-              #{o.recognition_date.strftime("%b %d, %Y")}
-        %td.text-center
-          %small
-            #{o.member_type}
-        %td
-          %center
-            - if o.active?
-              .badge.badge-success
-                #{o.status}
-            - else
-              .badge.badge-danger
-                #{o.status}
+              #{o.branch.name}
+          %td.text-muted
+            %small
+              #{o.center.name}
+          %td.text-muted
+            - if o.recognition_date.present?
+              %small
+                #{o.recognition_date.strftime("%b %d, %Y")}
+          %td.text-center
+            %small
+              #{o.member_type}
+          %td
+            %center
+              - if o.active?
+                .badge.badge-success
+                  #{o.status}
+              - else
+                .badge.badge-danger
+                  #{o.status}

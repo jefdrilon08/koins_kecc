@@ -158,6 +158,8 @@ import AdjustmentsAccruedInterestsShow from "../models/AdjustmentsAccruedInteres
 import AccruedPaymentCollectionsIndex  from "../models/AccruedPaymentCollectionsIndex.js";
 import AdjustmentsRecomputeRestructuresIndex from "../models/AdjustmentsRecomputeRestructuresIndex.js";
 import AdjustmentsRecomputeRestructuresShow from "../models/AdjustmentsRecomputeRestructuresShow.js";
+import DailyBranchMetricsIndex from "../models/DailyBranchMetricsIndex.js";
+
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
@@ -296,7 +298,8 @@ const hooks = {
   "equity_withdrawal_collections/show":               [EquityWithdrawalCollectionsShow, EquityWithdrawalCollectionUIComponent],
   "pages/change_password":                            [ChangePassword],
   "accounting/trial_balances/index":                  [TrialBalancesIndex],
-  "accounting/trial_balances/show":                   [TrialBalancesShow]
+  "accounting/trial_balances/show":                   [TrialBalancesShow],
+  "daily_branch_metrics/index":                       [DailyBranchMetricsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

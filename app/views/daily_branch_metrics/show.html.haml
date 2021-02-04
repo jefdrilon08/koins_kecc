@@ -1,0 +1,132 @@
+.row
+  .col
+    .card
+      .card-body
+        %h4
+          #{@daily_branch_metric.branch}
+          %small.text-muted
+            #{@daily_branch_metric.as_of.strftime("%B %d, %Y")}
+        %hr
+
+        %table.table.table-bordered.table-sm
+          %tbody
+            %tr
+              %th
+                Principal
+              %td
+                #{number_to_currency(@daily_branch_metric.principal, unit: '')}
+            %tr
+              %th
+                Interest
+              %td
+                #{number_to_currency(@daily_branch_metric.interest, unit: '')}
+            %tr
+              %th
+                Total
+              %td
+                #{number_to_currency(@daily_branch_metric.total, unit: '')}
+            %tr
+              %th
+                Principal Due
+              %td
+                #{number_to_currency(@daily_branch_metric.principal_due, unit: '')}
+            %tr
+              %th
+                Interest Due
+              %td
+                #{number_to_currency(@daily_branch_metric.interest_due, unit: '')}
+            %tr
+              %th
+                Total Due
+              %td
+                #{number_to_currency(@daily_branch_metric.total_due, unit: '')}
+            %tr
+              %th
+                Principal Paid
+              %td
+                #{number_to_currency(@daily_branch_metric.principal_paid, unit: '')}
+            %tr
+              %th
+                Interest Paid
+              %td
+                #{number_to_currency(@daily_branch_metric.interest_paid, unit: '')}
+            %tr
+              %th
+                Total Paid
+              %td
+                #{number_to_currency(@daily_branch_metric.total_paid, unit: '')}
+            %tr
+              %th
+                Principal Paid Due
+              %td
+                #{number_to_currency(@daily_branch_metric.principal_paid_due, unit: '')}
+            %tr
+              %th
+                Interest Paid Due
+              %td
+                #{number_to_currency(@daily_branch_metric.interest_paid_due, unit: '')}
+            %tr
+              %th
+                Total Paid Due
+              %td
+                #{number_to_currency(@daily_branch_metric.total_paid_due, unit: '')}
+            %tr
+              %th
+                Principal Balance
+              %td
+                #{number_to_currency(@daily_branch_metric.principal_balance, unit: '')}
+            %tr
+              %th
+                Interest Balance
+              %td
+                #{number_to_currency(@daily_branch_metric.interest_balance, unit: '')}
+            %tr
+              %th
+                Total Balance
+              %td
+                #{number_to_currency(@daily_branch_metric.total_balance, unit: '')}
+            %tr
+              %th
+                Overall Principal Balance
+              %td
+                #{number_to_currency(@daily_branch_metric.overall_principal_balance, unit: '')}
+            %tr
+              %th
+                Overall Interest Balance
+              %td
+                #{number_to_currency(@daily_branch_metric.overall_interest_balance, unit: '')}
+            %tr
+              %th
+                Overall Balance
+              %td
+                #{number_to_currency(@daily_branch_metric.overall_balance, unit: '')}
+            %tr
+              %th
+                Principal RR
+              %td
+                #{number_to_currency(@daily_branch_metric.principal_rr, unit: '')}
+            %tr
+              %th
+                Interest RR
+              %td
+                #{number_to_currency(@daily_branch_metric.interest_rr, unit: '')}
+            %tr
+              %th
+                Total RR
+              %td
+                #{number_to_currency(@daily_branch_metric.total_rr, unit: '')}
+            %tr
+              %th
+                PAR Amount
+              %td
+                #{number_to_currency(@daily_branch_metric.par_amount, unit: '')}
+            %tr
+              %th
+                PAR
+              %td
+                #{number_to_currency(@daily_branch_metric.par, unit: '')}
+            %tr
+              %th
+                Number of Days PAR
+              %td
+                #{number_to_currency(@daily_branch_metric.num_days_par, unit: '')}

@@ -6,7 +6,7 @@ module Dashboard
     end
 
     def execute!
-      areas = Area
+      areas = ReadOnlyArea
         .includes(clusters: :branches)
         .where(clusters: { branches: { id: @branches.ids }})
         .order("areas.name ASC, clusters.name ASC")

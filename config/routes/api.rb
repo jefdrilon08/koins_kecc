@@ -1,4 +1,8 @@
 namespace :api do
+  namespace :v2 do
+    post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
+  end
+
   namespace :v1 do
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
