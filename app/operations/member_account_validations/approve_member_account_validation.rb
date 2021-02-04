@@ -107,7 +107,7 @@ module MemberAccountValidations
           end
         elsif Settings.activate_microinsurance
            member_data[:insurance_resignation] = {
-                                                  date_resigned: @c_working_date,
+                                                  date_resigned: member_account_validation_record.resignation_date,
                                                   resignation_reason: "Resigned to MFI"
                                                   }
 

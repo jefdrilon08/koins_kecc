@@ -100,7 +100,7 @@ module Adjustments
           @account_transaction.data[:particular] =  "To record rebates of member's for k-sagip installement on old policy"
           @account_transaction.data[:approved_by] =  @user.full_name
           
-          @account_transaction.save!
+          #@account_transaction.save!
           for_entry = {
             account_transaction: @account_transaction,
             account_transaction_details: @recompute_restructure_details,
@@ -108,11 +108,11 @@ module Adjustments
             for_savings_distribution: nil
         
           }
-          
-          @accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
-                    ).execute!
+          #raise for_entry.inspect
+          #raise @account_transaction.inspect
+          #@accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
 
-          
+                  
            
           #save_accounting_entry_data! #entry para sa distribution ng loan payment
           
@@ -180,11 +180,11 @@ module Adjustments
 
           
 
-          @account_transaction.save!
+          #@account_transaction.save!
         
-          ::MemberAccounts::Rehash.new(member_account: @savings_account_id.last).execute!
+          #::MemberAccounts::Rehash.new(member_account: @savings_account_id.last).execute!
 
-          rRestract = RecomputeRestructure.find(@recompute_restructure_details.id).update(status: "approved",transaction_date: @current_date)  
+          #rRestract = RecomputeRestructure.find(@recompute_restructure_details.id).update(status: "approved",transaction_date: @current_date)  
           for_entry = {
             account_transaction: @account_transaction,
             account_transaction_details: @recompute_restructure_details,

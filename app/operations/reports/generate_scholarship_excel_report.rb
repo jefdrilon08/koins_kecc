@@ -36,6 +36,8 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
+            "Date Encoded",
+            "Time Encoded",
             "Date Prepared",
             "Cluster",
             "Branch",
@@ -57,6 +59,8 @@ module Reports
 
           @scholarship.each_with_index do |scholarship|
               sheet.add_row [
+                  scholarship.created_at.try(:strftime, "%b %d, %Y"),
+                  scholarship.created_at.strftime("%I:%M%P"),
                   scholarship.date_prepared.try(:strftime, "%b %d, %Y"),
                   scholarship.branch.cluster.name,
                   scholarship.branch.name,

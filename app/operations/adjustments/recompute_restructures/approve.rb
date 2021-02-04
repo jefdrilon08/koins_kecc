@@ -109,8 +109,7 @@ module Adjustments
         
           }
           
-          @accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry
-                    ).execute!
+          #@accounting_entry_details = ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
 
           @recompute_restructure_details.update(status: "approved")
        

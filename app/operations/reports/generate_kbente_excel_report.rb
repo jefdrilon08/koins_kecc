@@ -36,6 +36,8 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
+            "Date Encoded",
+            "Time Encoded",
             "Date Prepared",
             "Cluster",
             "Branch",
@@ -57,6 +59,8 @@ module Reports
 
           @kbente.each_with_index do |kbente|
               sheet.add_row [
+                  kbente.created_at.try(:strftime, "%b %d, %Y"),
+                  kbente.created_at.strftime("%I:%M%P"),
                   kbente.date_prepared.try(:strftime, "%b %d, %Y"),
                   kbente.branch.cluster.name,
                   kbente.member.branch.name,

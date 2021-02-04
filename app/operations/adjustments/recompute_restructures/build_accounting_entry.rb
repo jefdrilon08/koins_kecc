@@ -73,19 +73,29 @@ module Adjustments
       
       private
 
-      def build_credit_journal_entries!
+      def build_debit_journal_entries!
         journal_entries = []
         
         # debit loan recievable
           @loan.data["accounting_entry"]["debit_journal_entries"].each do |l|
             total_diff = l["amount"].to_f - @recompute_restructure.data["loans"].last["total_loanable_amount"].to_f
-            if total_diff > 0 
-              journal_entries << {
-                accounting_code_id: l["accounting_code_id"],
-                code: l["code"],
-                name: l["name"],
-                amount: total_diff.abs
-              }
+            if total_diff > 0
+              if l["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"
+                a_code = AccountingCode.find("731adf24-dc8a-41a4-a804-292562b390fa")
+                journal_entries << {
+                  accounting_code_id: a_code.id,
+                  code: a_code.code,
+                  name: a_code.name,
+                  amount: total_diff.abs
+                }
+              else
+                journal_entries << {
+                  accounting_code_id: l["accounting_code_id"],
+                  code: l["code"],
+                  name: l["name"],
+                  amount: total_diff.abs
+                }
+              end
             end
           end #end of loan loop
 
@@ -137,7 +147,7 @@ module Adjustments
 
       end
 
-      def build_debit_journal_entries!
+      def build_credit_journal_entries!
         journal_entries = []
         
         # debit loan recievable

@@ -278,7 +278,7 @@ module Claims
     def compute_blip_credit
       journal_entries = []
 
-      cr_accounting_code  = AccountingCode.find("3f2d41e6-415a-4619-89d7-1ea2cbcc535e")
+      cr_accounting_code  = AccountingCode.find("184a4473-8795-46b2-aec7-33561471353b")
 
       if !@data.nil?
         if @data[:claims_template].present?
@@ -360,7 +360,7 @@ module Claims
     def compute_clip_credit
       journal_entries = []
 
-      cr_accounting_code  = AccountingCode.find("18edb2e9-0843-4110-8d47-7f72750e8dd2")
+      cr_accounting_code  = AccountingCode.find("4f426778-32e3-482c-b7f3-ba69c9e4adfb")
 
       if !@data.nil?
         if @data[:claims_template].present?

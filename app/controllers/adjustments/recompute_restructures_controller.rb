@@ -34,6 +34,7 @@ module Adjustments
             recompute_restructure: @restucture_details,
             user: current_user
           }
+  
      @accounting_entry =  ::Adjustments::RecomputeRestructures::GenerateApproved.new(
                                                                 config: config).execute!
      

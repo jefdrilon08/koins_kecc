@@ -44,7 +44,7 @@ module Adjustments
           }
         }
 
-        
+                
       end
       def execute!
         @accounting_entry_data[:debit_journal_entries]  = build_debit_journal_entries!
@@ -80,18 +80,18 @@ module Adjustments
         journal_entries = []
         account_code = AccountingCode.find("731adf24-dc8a-41a4-a804-292562b390fa")
         if @for_savings_distribution  == nil
-          total_amount = @account_transaction[:amount].to_f
+         # total_amount = @account_transaction[:amount].to_f
         else
           total_amount = @for_savings_distribution
-          
-        end
-    
-        journal_entries << {
+          journal_entries << {
                   accounting_code_id: account_code.id,
                   code: account_code.code,
                   name: account_code.name,
                   amount: total_amount
               }
+          
+        end
+    
         journal_entries
       end
 
@@ -102,23 +102,23 @@ module Adjustments
         if @loan.status == "active"
         
           if @for_savings_distribution == nil
+            #total_amount_principal = account_transaction_data.data.with_indifferent_access[:total_principal_paid].to_f.abs
           
-            total_amount_principal = account_transaction_data.data["total_principal_paid"].to_f.abs
-            total_amount_interest = account_transaction_data.data["total_interest_paid"].to_f.abs
-            account_code_principal = AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e")
-            account_code_interest = AccountingCode.find("a09f6aea-9ab9-4e55-a994-ca8c4dd5de33")
-            journal_entries << {
-                  accounting_code_id: account_code_principal.id,
-                  code: account_code_principal.code,
-                  name: account_code_principal.name,
-                  amount: total_amount_principal
-                }
-            journal_entries << {
-                  accounting_code_id: account_code_interest.id,
-                  code: account_code_interest.code,
-                  name: account_code_interest.name,
-                  amount: total_amount_interest
-                }
+            #total_amount_interest = account_transaction_data.data.with_indifferent_access[:total_interest_paid].to_f.abs
+            #account_code_principal = AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e")
+            #account_code_interest = AccountingCode.find("a09f6aea-9ab9-4e55-a994-ca8c4dd5de33")
+            #journal_entries << {
+            #      accounting_code_id: account_code_principal.id,
+            #      code: account_code_principal.code,
+            #      name: account_code_principal.name,
+            #      amount: total_amount_principal
+            #    }
+            #journal_entries << {
+            #      accounting_code_id: account_code_interest.id,
+            #      code: account_code_interest.code,
+            #      name: account_code_interest.name,
+            #      amount: total_amount_interest
+            #    }
             else
               
               account_code_regular = AccountingCode.find("b7c23e58-e44e-46ae-a3ec-b5081d6eed32")

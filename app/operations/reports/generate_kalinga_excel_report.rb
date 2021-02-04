@@ -35,6 +35,8 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [
+            "Date Encoded",
+            "Time Encoded",
             "Date Prepared",
             "Cluster",
             "Branch",
@@ -59,6 +61,8 @@ module Reports
 
           @kalinga.each_with_index do |kalinga|
               sheet.add_row [
+                  kalinga.created_at.try(:strftime, "%b %d, %Y"),
+                  kalinga.created_at.strftime("%I:%M%P"),
                   kalinga.date_prepared.try(:strftime, "%b %d, %Y"),
                   kalinga.branch.cluster.name,
                   kalinga.branch.name,

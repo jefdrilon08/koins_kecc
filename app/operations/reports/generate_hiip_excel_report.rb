@@ -35,6 +35,8 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
+            "Date Encoded",
+            "Time Encoded",
             "Date Prepared",
             "Cluster",
             "Branch",
@@ -59,6 +61,8 @@ module Reports
 
           @hiip.each_with_index do |hiip|
               sheet.add_row [
+                  hiip.created_at.try(:strftime, "%b %d, %Y"),
+                  hiip.created_at.strftime("%I:%M%P"),
                   hiip.date_prepared.try(:strftime, "%b %d, %Y"),
                   hiip.branch.cluster.name,
                   hiip.branch.name,

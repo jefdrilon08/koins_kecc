@@ -109,6 +109,18 @@ module Members
           if tin_num.nil?
             tin_num = ""
           end
+
+          if row['insurance_date_resigned_data'].present?
+            insurance_date_resigned_data = row['insurance_date_resigned_data']
+          else
+            insurance_date_resigned_data = nil
+          end
+
+          if row['insurance_resignation_reason_data'].present?
+            insurance_resignation_reason_data = row['insurance_resignation_reason_data']
+          else
+            insurance_resignation_reason_data = nil
+          end
   
           member.place_of_birth = row['place_of_birth']
           member.mobile_number = row['cellphone_number']
@@ -139,6 +151,11 @@ module Members
                               code: row['resignation_code'],
                               reason: row['resignation_reason'],
                               accounting_reference_number: ''
+                            },
+                            insurance_resignation: 
+                            { 
+                              date_resigned: insurance_date_resigned_data,
+                              resignation_reason: insurance_resignation_reason_data,
                             },
                           government_identification_numbers:
                             {

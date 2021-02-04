@@ -38,22 +38,22 @@ module Members
               if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true
                 insurance_status = "resigned"
               elsif current_balance == 0.00
-                insurance_status = "dormant"
+                insurance_status = "pending"
+              elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
+                insurance_status = "lapsed"  
+              elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
+                insurance_status = "lapsed"
               elsif days_lapsed <= 45 && current_balance >= insured_amount
                 insurance_status = "inforce"
               elsif days_lapsed > 45 && current_balance >= insured_amount
                 insurance_status = "inforce"
               elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
                 insurance_status = "inforce"
-              elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
-                insurance_status = "lapsed"  
-              elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
-                insurance_status = "lapsed"
               elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
                 insurance_status = "inforce"  
               end
             elsif transactions.size == 0
-              insurance_status = "dormant"
+              insurance_status = "pending"
             end
           end
         else
