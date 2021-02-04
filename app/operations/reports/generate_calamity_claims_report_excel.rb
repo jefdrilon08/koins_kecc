@@ -55,9 +55,9 @@ module Reports
 
           @calamity.each_with_index do |calamity|
               sheet.add_row [
-                  claim.created_at.try(:strftime, "%b %d, %Y"),
-                  claim.created_at.strftime("%I:%M%P"),
-                  claim.date_prepared.try(:strftime, "%b %d, %Y"),
+                  calamity.created_at.try(:strftime, "%b %d, %Y"),
+                  calamity.created_at.strftime("%I:%M%P"),
+                  calamity.date_prepared.try(:strftime, "%b %d, %Y"),
                   calamity.branch.cluster.name,
                   calamity.branch.name,
                   calamity.center.name,
