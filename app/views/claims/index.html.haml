@@ -6,14 +6,6 @@
         = render partial: "claims/new_transaction"
         = render partial: "claims/filter"
 
-        - if user.errors.full_messages.any?
-          %h5
-            Errors
-          %ul
-          - user.errors.full_messages.each do |o|
-            %li
-              #{o}
-
         - if @claims.any?
           = render partial: "claims/list", locals: { claims: @claims }
           = paginate @claims
