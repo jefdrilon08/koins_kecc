@@ -1,7 +1,14 @@
 class DataStore < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  STATUSES = ["processing", "done", "error", "closed", "approved", "pending"]
+  STATUSES = [
+    "processing", 
+    "done", 
+    "error", 
+    "closed", 
+    "approved", 
+    "pending"
+  ]
 
   validates :meta, presence: true
   #validates :data, presence: true

@@ -1,53 +1,54 @@
-%table.table.table-sm.table-hover
-  %thead
-    %tr
-      %th{ width: "25%" }
-        Member
-      %th
-        Type
-      %th
-        Branch / Center
-      %th
-        %center
-          Maturity Date
-      %th.text-right
-        Amount
-      %th.text-right
-        Balance
-      %th
-        %center
-          Status
-  %tbody
-    - @loans.each do |loan|
+.table-responsive
+  %table.table.table-sm.table-hover
+    %thead
       %tr
-        %td
-          %strong
-            = link_to loan_path(loan.id), target: '_blank' do
-              #{loan.member.full_name}
-        %td
-          %small
-            %strong
-              #{loan.loan_product}
-        %td
-          %small
-            #{loan.branch.name} / #{loan.center.name}
-        %td
-          - if loan.active_or_paid?
-            %center
-              %small
-                - if loan.amortization_schedule_entries.order("due_date ASC").last
-                  #{loan.amortization_schedule_entries.order("due_date ASC").last.due_date.strftime("%b %d, %Y")}
-        %td.text-right
-          %strong
-            #{number_to_currency(loan.total_dues, unit: "")}
-        %td.text-right
-          .text-muted
-            #{number_to_currency(loan.total_balance, unit: "")}
-        %td
+        %th{ width: "25%" }
+          Member
+        %th
+          Type
+        %th
+          Branch / Center
+        %th
           %center
-            - if loan.pending?
-              .badge.badge-danger
-                #{loan.status}
-            - else
-              .badge.badge-success
-                #{loan.status}
+            Maturity Date
+        %th.text-right
+          Amount
+        %th.text-right
+          Balance
+        %th
+          %center
+            Status
+    %tbody
+      - @loans.each do |loan|
+        %tr
+          %td
+            %strong
+              = link_to loan_path(loan.id), target: '_blank' do
+                #{loan.member.full_name}
+          %td
+            %small
+              %strong
+                #{loan.loan_product}
+          %td
+            %small
+              #{loan.branch.name} / #{loan.center.name}
+          %td
+            - if loan.active_or_paid?
+              %center
+                %small
+                  - if loan.amortization_schedule_entries.order("due_date ASC").last
+                    #{loan.amortization_schedule_entries.order("due_date ASC").last.due_date.strftime("%b %d, %Y")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            .text-muted
+              #{number_to_currency(loan.total_balance, unit: "")}
+          %td
+            %center
+              - if loan.pending?
+                .badge.badge-danger
+                  #{loan.status}
+              - else
+                .badge.badge-success
+                  #{loan.status}

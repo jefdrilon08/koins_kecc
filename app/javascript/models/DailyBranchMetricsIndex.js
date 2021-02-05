@@ -1,37 +1,33 @@
 import Mustache from "mustache/mustache";
 
 var authenticityToken;
+var _urlSave;
+var _userId;
+var _xKoinsAppAuthSecret;
 
 var $modalNew;
 var $btnNew;
 var $btnConfirmNew;
-
-var $selectBranch;
 var $inputAsOf;
+var $selectBranch;
 
 var $message;
 var templateErrorList;
 
-var _urlQueue;
-var _userId;
-var _xKoinsAppAuthSecret;
-
 var _cacheDom = function() {
-  $modalNew      = $("#modal-new");
-  $btnNew        = $("#btn-new");
-  $btnConfirmNew = $("#btn-confirm-new");
-
-  $selectBranch = $("#select-branch");
+  $modalNew       = $("#modal-new");
+  $btnNew         = $("#btn-new");
+  $btnConfirmNew  = $("#btn-confirm-new");
   $inputAsOf      = $("#input-as-of");
+  $selectBranch   = $("#select-branch");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
-}
+};
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
     $modalNew.modal("show");
-    $message.html("");
   });
 
   $btnConfirmNew.on("click", function() {
@@ -46,12 +42,12 @@ var _bindEvents = function() {
     var data  = {
       as_of: asOf,
       branch_id: branchId,
-      user_id: _userId,
-      authenticity_token: authenticityToken
+      authenticity_token: authenticityToken,
+      user_id: _userId
     }
 
     $.ajax({
-      url: _urlQueue,
+      url: _urlSave,
       method: 'POST',
       headers: {
         'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret,
@@ -63,26 +59,42 @@ var _bindEvents = function() {
       data: data,
       success: function(response) {
         $message.html("Success! Redirecting...");
-        window.location.href="/data_stores/member_counts";
+        window.location.reload();
       },
       error: function(response) {
-        $message.html("Something went wrong...");
-        $btnConfirmNew.prop("disabled", false);
-        $selectBranch.prop("disabled", false);
-        $inputAsOf.prop("disabled", false);
+        console.log(response.responseText);
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          console.log(err);
+          errors  = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmNew.prop("disabled", false);
+          $selectBranch.prop("disabled", false);
+          $inputAsOf.prop("disabled", false);
+        }
       }
     });
   });
-}
+};
 
-var init  = function(config) {
-  authenticityToken = config.authenticityToken;
-  _urlQueue             = config.urlQueue;
-  _userId               = config.userId;
-  _xKoinsAppAuthSecret  = config.xKoinsAppAuthSecret;
+var init = function(options) {
+  authenticityToken     = options.authenticityToken;
+  _urlSave              = options.urlSave;
+  _userId               = options.userId;
+  _xKoinsAppAuthSecret  = options.xKoinsAppAuthSecret;
 
   _cacheDom();
   _bindEvents();
-}
+};
 
 export default { init: init };

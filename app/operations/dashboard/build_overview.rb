@@ -6,15 +6,15 @@ module Dashboard
     end
 
     def execute!
-      areas = Area
+      areas = ReadOnlyArea
         .includes(clusters: :branches)
         .where(clusters: { branches: { id: @branches.ids }})
         .order("areas.name ASC, clusters.name ASC")
 
-      data_stores = ReadOnlyDataStore
-        .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
-        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ? AND status = ?", %w[REPAYMENT_RATES MEMBER_COUNTS], @branches.ids, @as_of, "done")
-        .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC, updated_at DESC")
+      branch_metrics = ReadOnlyDailyBranchMetric
+        .select("DISTINCT ON (branch_id) *")
+        .where("branch_id IN (?) AND DATE(as_of) <= ? AND status = ?", @branches.ids, @as_of, "done")
+        .order("branch_id, as_of DESC, updated_at DESC")
 
       {
         areas: areas.map do |area|
@@ -23,7 +23,7 @@ module Dashboard
               {
                 id:       c.id,
                 name:     c.name,
-                branches: c.branches.map { |b| build_branch(data_stores, b) }
+                branches: c.branches.map { |b| build_branch(branch_metrics, b) }
               }
             end
           { id: area.id, name: area.name, clusters: clusters }
@@ -33,12 +33,12 @@ module Dashboard
 
     private
 
-    def build_branch(data_stores, branch)
-      rr = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "REPAYMENT_RATES" }
-      mc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "MEMBER_COUNTS" }
+    def build_branch(branch_metrics, branch)
+      metric = branch_metrics.find{ |bm| bm.branch_id == branch.id }
+
       d = {
-        as_of: "",
-        member_counts_as_of: "",
+        as_of: @as_of,
+        member_counts_as_of: @as_of,
         principal: 0.00,
         interest: 0.00,
         total: 0.00,
@@ -69,75 +69,48 @@ module Dashboard
         active_members: { male: 0, female: 0, others: 0, total: 0 }
       }
 
-      if rr.present?
-        d[:as_of] = rr.meta["as_of"]
+      if metric.present?
+        d[:as_of] = @as_of
 
-        rr.data["records"].each do |r|
-          d[:principal]                 += r["principal"].to_f.round(2)
-          d[:interest]                  += r["interest"].to_f.round(2)
-          d[:total]                     += r["total"].to_f.round(2)
-          d[:principal_due]             += r["principal_due"].to_f.round(2)
-          d[:interest_due]              += r["interest_due"].to_f.round(2)
-          d[:total_due]                 += r["total_due"].to_f.round(2)
-          d[:principal_paid]            += r["principal_paid"].to_f.round(2)
-          d[:interest_paid]             += r["interest_paid"].to_f.round(2)
-          d[:portfolio]                 += (r["principal"].to_f - r["principal_paid"].to_f).round(2)
-          d[:principal_paid_due]        += r["principal_paid_due"].to_f.round(2)
-          d[:interest_paid_due]         += r["interest_paid_due"].to_f.round(2)
-          d[:total_paid_due]            += r["total_paid_due"].to_f.round(2)
-          d[:total_paid]                += r["total_paid"].to_f.round(2)
-          d[:principal_balance]         += r["principal_balance"].to_f.round(2)
-          d[:interest_balance]          += r["interest_balance"].to_f.round(2)
-          d[:total_balance]             += r["total_balance"].to_f.round(2)
-          d[:overall_principal_balance] += r["overall_principal_balance"].to_f.round(2)
-          d[:overall_interest_balance]  += r["overall_interest_balance"].to_f.round(2)
+        d[:principal]                 = metric.principal.to_f.round(2) 
+        d[:interest]                  = metric.interest.to_f.round(2)
+        d[:total]                     = metric.total.to_f.round(2)
+        d[:principal_due]             = metric.principal_due.to_f.round(2)
+        d[:interest_due]              = metric.interest_due.to_f.round(2) 
+        d[:total_due]                 = metric.total_due.to_f.round(2) 
+        d[:principal_paid]            = metric.principal_paid.to_f.round(2)
+        d[:interest_paid]             = metric.interest_paid.to_f.round(2)
+        d[:portfolio]                 = metric.portfolio.to_f.round(2)
+        d[:principal_paid_due]        = metric.principal_paid_due.to_f.round(2) 
+        d[:interest_paid_due]         = metric.interest_paid_due.to_f.round(2) 
+        d[:total_paid_due]            = metric.total_paid_due.to_f.round(2) 
+        d[:total_paid]                = metric.total_paid.to_f.round(2) 
+        d[:principal_balance]         = metric.principal_balance.to_f.round(2) 
+        d[:interest_balance]          = metric.interest_balance.to_f.round(2)
+        d[:total_balance]             = metric.total_balance.to_f.round(2)
+        d[:overall_principal_balance] = metric.overall_principal_balance.to_f.round(2)
+        d[:overall_interest_balance]  = metric.overall_interest_balance.to_f.round(2)
 
-          # Par Amount. Add if num_days_par > 0
-          #if r["num_days_par"].to_i > 0
-          if r["par"].to_f > 0
-            d[:par_amount] += r["overall_principal_balance"].to_f.round(2)
-          end
-        end
+        d[:par_amount]    = metric.par_amount.to_f.round(2)
+        d[:principal_rr]  = metric.principal_rr.to_f.round(2)
+        d[:par]           = metric.par.to_f.round(2)
 
-        # Compute principal
-        d[:principal_rr] = (d[:principal_paid_due] / d[:principal_due]).round(4)
+        d[:member_counts_as_of] = metric.as_of
 
-        if d[:principal_paid_due] > 0
-        else
-          d[:principal_rr] = 0.00
-        end
+        d[:pure_savers][:male]   = metric.data["pure_savers"]["male"]
+        d[:pure_savers][:female] = metric.data["pure_savers"]["female"]
+        d[:pure_savers][:others] = metric.data["pure_savers"]["others"]
+        d[:pure_savers][:total]  = metric.data["pure_savers"]["total"]
 
-        if d[:principal_rr] > 1
-          d[:principal_rr] = 1
-        end
+        d[:loaners][:male]   = metric.data["loaners"]["male"]
+        d[:loaners][:female] = metric.data["loaners"]["female"]
+        d[:loaners][:others] = metric.data["loaners"]["others"]
+        d[:loaners][:total]  = metric.data["loaners"]["total"]
 
-        if d[:principal_rr] >= 1 and d[:principal_paid] < d[:principal_due]
-          d[:principal_rr] = 0.99
-        end
-
-        # Compute par
-        d[:par] = (d[:par_amount] / d[:portfolio]).round(4)
-      end
-
-      if mc.present?
-        counts = mc.data["counts"]
-
-        d[:member_counts_as_of] = mc.meta["as_of"]
-
-        d[:pure_savers][:male]   = counts["pure_savers"]["male"]
-        d[:pure_savers][:female] = counts["pure_savers"]["female"]
-        d[:pure_savers][:others] = counts["pure_savers"]["others"]
-        d[:pure_savers][:total]  = counts["pure_savers"]["total"]
-
-        d[:loaners][:male]   = counts["loaners"]["male"]
-        d[:loaners][:female] = counts["loaners"]["female"]
-        d[:loaners][:others] = counts["loaners"]["others"]
-        d[:loaners][:total]  = counts["loaners"]["total"]
-
-        d[:active_members][:male]   = counts["active_members"]["male"]
-        d[:active_members][:female] = counts["active_members"]["female"]
-        d[:active_members][:others] = counts["active_members"]["others"]
-        d[:active_members][:total]  = counts["active_members"]["total"]
+        d[:active_members][:male]   = metric.data["active_members"]["male"]
+        d[:active_members][:female] = metric.data["active_members"]["female"]
+        d[:active_members][:others] = metric.data["active_members"]["others"]
+        d[:active_members][:total]  = metric.data["active_members"]["total"]
       end
 
       {

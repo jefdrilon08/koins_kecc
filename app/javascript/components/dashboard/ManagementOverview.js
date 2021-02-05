@@ -62,7 +62,7 @@ export default class ManagementOverview extends React.Component {
   renderOverviewTable() {
     var areas   = this.state.data.areas;
     var rows    = [];
-    var colSpan = 13;
+    var colSpan = 12;
 
     var areaColor     = "#bad5fd";
     var clusterColor  = "#c5ffc1";
@@ -145,9 +145,6 @@ export default class ManagementOverview extends React.Component {
                 <th className="">
                   RR
                 </th>
-                <th>
-                  As Of
-                </th>
                 <th className="text-center">
                   Pure Savers
                 </th>
@@ -158,7 +155,7 @@ export default class ManagementOverview extends React.Component {
                   Admitted Members
                 </th>
                 <th>
-                  As Of (Member Count)
+                  As Of
                 </th>
               </tr>
             );
@@ -219,9 +216,6 @@ export default class ManagementOverview extends React.Component {
               <td className="">
                 {numberAsPercent(branches[k].data.principal_rr)}
               </td>
-              <td>
-                {branches[k].data.as_of}
-              </td>
               <td className="text-center">
                 {branches[k].data.pure_savers.total}
               </td>
@@ -232,7 +226,7 @@ export default class ManagementOverview extends React.Component {
                 {branches[k].data.active_members.total}
               </td>
               <td>
-                {branches[k].data.member_counts_as_of}
+                {branches[k].data.as_of}
               </td>
             </tr>
           );
@@ -287,8 +281,6 @@ export default class ManagementOverview extends React.Component {
               <strong>
                 {numberAsPercent(cPrincipalRR)}
               </strong>
-            </td>
-            <td>
             </td>
             <td className="text-center">
               <strong>
@@ -361,8 +353,6 @@ export default class ManagementOverview extends React.Component {
               {numberAsPercent(aPrincipalRR)}
             </strong>
           </td>
-          <td>
-          </td>
           <td className="text-center">
             <strong>
               {aPureSavers}
@@ -433,8 +423,6 @@ export default class ManagementOverview extends React.Component {
           <strong>
             {numberAsPercent(tPrincipalRR)}
           </strong>
-        </td>
-        <td>
         </td>
         <td className="text-center">
           <strong>

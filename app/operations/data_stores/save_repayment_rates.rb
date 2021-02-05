@@ -34,12 +34,6 @@ module DataStores
       # Save this as a file in s3 (on disk if local) via active storage
       @data = ::Branches::ComputeRr.new(config: config).execute!
 
-#      @data_store.data_json_dump.attach(
-#        io: StringIO.new(@data.to_json),
-#        filename: "datadump.json",
-#        content_type: 'text/plain'
-#      )
-
       @data_store.data    = @data
 
       @data_store.meta    = @meta

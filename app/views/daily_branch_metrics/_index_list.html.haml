@@ -1,0 +1,34 @@
+.table-responsive
+  %table.table.table-sm.table-hover
+    %thead
+      %tr
+        %th
+        %th
+          Branch
+        %th
+          As Of
+        %th
+          Updated At
+        %th
+          Status
+    %tbody
+      - daily_branch_metrics.each do |o|
+        %tr
+          %td.text-center
+            = link_to "/daily_branch_metrics/#{o.id}" do
+              .fa.fa-search
+          %td
+            #{o.branch}
+          %td
+            #{o.as_of.strftime("%B %d, %Y")}
+          %td
+            #{o.updated_at.strftime("%B %d, %Y %H:%M")}
+          %td
+            - if o.processing?
+              .badge.badge-info
+                Processing
+            - elsif o.done?
+              .badge.badge-success
+                Done
+
+  = paginate daily_branch_metrics

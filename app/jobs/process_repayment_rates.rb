@@ -19,6 +19,12 @@ class ProcessRepaymentRates < ApplicationJob
                       config: config
                     ).execute!
 
+      # Create daily_branch_metric
+      ::Branches::SaveDailyBranchMetric.new(
+        branch: branch,
+        as_of: as_of
+      ).execute!
+
     rescue Exception => e
       record.update!(
         status: "error",

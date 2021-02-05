@@ -3,11 +3,9 @@ class ProcessBranchMemberCounts < ApplicationJob
 
   def perform(args)
     begin 
-      record  = args[:record]
-      branch  = Branch.find(record.meta.with_indifferent_access[:branch_id])
+      record  = ReadOnlyDataStore.find(args[:record_id])
+      branch  = ReadOnlyBranch.find(record.meta.with_indifferent_access[:branch_id])
       as_of   = record.meta.with_indifferent_access[:as_of].to_date
-
-      record.update!(status: "processing")
 
       config  = {
         id: record.id,
@@ -19,6 +17,13 @@ class ProcessBranchMemberCounts < ApplicationJob
       data_store  = ::DataStores::SaveMemberCounts.new(
                       config: config
                     ).execute!
+
+      # Create daily_branch_metric
+      ::Branches::SaveDailyBranchMetric.new(
+        branch: branch,
+        as_of: as_of
+      ).execute!
+
     rescue Exception => e
       record.update!(
         status: "error",

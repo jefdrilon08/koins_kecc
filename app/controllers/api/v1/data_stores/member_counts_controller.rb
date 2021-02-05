@@ -1,15 +1,16 @@
 module Api
   module V1
     module DataStores
-      class MemberCountsController < ApplicationController
-        before_action :authenticate_user!
+      class MemberCountsController < ApiController
+        before_action :authenticate_app_request!
+        before_action :authenticate_core_user!
 
         def queue
           @data_store_type  = "MEMBER_COUNTS"
           @as_of            = params[:as_of].try(:to_date) || Date.today
-          @branch           = Branch.find(params[:branch_id])
+          @branch           = ReadOnlyBranch.find(params[:branch_id])
 
-          @record = DataStore.member_counts.where(
+          @record = ReadOnlyDataStore.member_counts.where(
                       "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
                       @branch.id,
                       @as_of
@@ -17,6 +18,7 @@ module Api
 
           if @record.blank?
             @record = DataStore.create!(
+                        status: "processing",
                         meta: {
                           branch_id: @branch.id,
                           branch_name: @branch.name,
@@ -33,7 +35,7 @@ module Api
                       )
 
             args  = {
-              record: @record,
+              record_id: @record.id,
               data_store_type: @data_store_type
             }
 

@@ -11,6 +11,12 @@ module DataStores
       @subheader_side_actions = [
         { text: "New", link: "#", class: "fa fa-plus", id: "btn-new" }
       ]
+
+      @payload = {
+        urlQueue: "#{ENV['BACKEND_API_URL']}/api/v1/data_stores/member_counts/queue",
+        userId: current_user.id,
+        xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
+      }
     end
 
     def show

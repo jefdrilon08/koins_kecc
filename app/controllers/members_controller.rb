@@ -189,7 +189,6 @@ class MembersController < ApplicationController
 
   def show
     @member           = Member.find(params[:id])
-    #raise @member[:data].inspect
     @data             = @member.data.with_indifferent_access
     @address          = @data[:address]
     @addressVal       = [@address[:street],@address[:district],@address[:city]]

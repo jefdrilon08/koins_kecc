@@ -374,6 +374,10 @@ Rails.application.routes.draw do
     delete "/branch_resignations/:id", to: "branch_resignations#destroy"
   end
 
+  # daily_branch_metrics
+  get "/daily_branch_metrics", to: "daily_branch_metrics#index"
+  get "/daily_branch_metrics/:id", to: "daily_branch_metrics#show"
+
   namespace :accounting do
     get "/accounting_entries", to: "acounting_entries#index", as: :accounting_entries
     get "/accounting_entries/:id", to: "accounting_entries#show", as: :accounting_entry
