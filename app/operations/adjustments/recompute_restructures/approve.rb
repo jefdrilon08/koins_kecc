@@ -113,7 +113,7 @@ module Adjustments
 
           @recompute_restructure_details.update(status: "approved")
        
-          save_accounting_entry_data! #entry para sa distribution ng loan payment
+          #save_accounting_entry_data! #entry para sa distribution ng loan payment
           
           
           ::Loans::FixAmort.new(loan: Loan.find(@recompute_restructure_details.loan)).execute!  
