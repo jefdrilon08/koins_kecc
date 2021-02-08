@@ -84,40 +84,41 @@ module Adjustments
       def build_debit_journal_entries!
         journal_entries = []
 
+        if @for_savings_distribution == nil
 
-        #para sa clip      
-        clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
-        clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
-        dif_clip = (clip_old_value - clip_new_value).round(2)
-        if dif_clip.to_f > 0
-          dif_clip_total = dif_clip
-          clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
-          journal_entries << {
+          #para sa clip      
+          clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
+          clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
+          dif_clip = (clip_old_value - clip_new_value).round(2)
+          if dif_clip.to_f > 0
+            dif_clip_total = dif_clip
+            clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
+            journal_entries << {
                   accounting_code_id: clip_account_code.id,
                   code: clip_account_code.code,
                   name: clip_account_code.name,
                   amount: dif_clip
               }
           
-        end
+          end
 
-        #para sa service fee 
-        service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
-        service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
-        dif_service_fee = service_fee_old - service_fee_new
+          #para sa service fee 
+          service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
+          service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
+          dif_service_fee = service_fee_old - service_fee_new
         
-        if dif_service_fee > 0
-          dif_service_fee_total = dif_service_fee
-          service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
-          journal_entries << {
+          if dif_service_fee > 0
+            dif_service_fee_total = dif_service_fee
+            service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
+            journal_entries << {
                   accounting_code_id: service_fee_account_code.id,
                   code: service_fee_account_code.code,
                   name: service_fee_account_code.name,
-                  amount: dif_service_fee
+                  amount: dif_service_fee.round(2)
               }
         
+          end
         end
-        
         account_code = AccountingCode.find("731adf24-dc8a-41a4-a804-292562b390fa")
         if @for_savings_distribution  == nil
           total_amount = @account_transaction[:amount].to_f - dif_service_fee_total.to_f.abs - dif_clip_total.to_f.abs
@@ -205,36 +206,6 @@ module Adjustments
                 }
           end
           
-        end
-        #para sa clip      
-        clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
-        clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
-        dif_clip = (clip_old_value - clip_new_value).round(2)
-        if dif_clip.to_f < 0
-          clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
-          journal_entries << {
-                  accounting_code_id: clip_account_code.id,
-                  code: clip_account_code.code,
-                  name: clip_account_code.name,
-                  amount: dif_clip.abs
-              }
-          
-        end
-
-        #para sa service fee 
-        service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
-        service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
-        dif_service_fee = service_fee_old - service_fee_new
-        
-        if dif_service_fee > 0
-          service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
-          journal_entries << {
-                  accounting_code_id: service_fee_account_code.id,
-                  code: service_fee_account_code.code,
-                  name: service_fee_account_code.name,
-                  amount: dif_service_fee.abs
-              }
-        
         end
         journal_entries
       end
