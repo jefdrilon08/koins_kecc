@@ -7,6 +7,11 @@ module Adjustments
         
         @user = @config[:user]
         @account_transaction_details = @config[:account_transaction_details]
+        @clip_account = @account_transaction_details.data.with_indifferent_access[:loans].last[:insurance_details]
+        #raise @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].inspect
+        #raise @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].inspect
+        #raise @account_transaction_details.data.with_indifferent_access[:loans].last[:insurance_details].each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].inspect
+        
         @account_transaction = @config[:account_transaction]
         #raise  @account_transaction[:amount].to_f.inspect
         @book = "JVB"
@@ -78,9 +83,44 @@ module Adjustments
 
       def build_debit_journal_entries!
         journal_entries = []
+
+
+        #para sa clip      
+        clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
+        clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
+        dif_clip = (clip_old_value - clip_new_value).round(2)
+        if dif_clip.to_f > 0
+          dif_clip_total = dif_clip
+          clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
+          journal_entries << {
+                  accounting_code_id: clip_account_code.id,
+                  code: clip_account_code.code,
+                  name: clip_account_code.name,
+                  amount: dif_clip
+              }
+          
+        end
+
+        #para sa service fee 
+        service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
+        service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
+        dif_service_fee = service_fee_old - service_fee_new
+        
+        if dif_service_fee > 0
+          dif_service_fee_total = dif_service_fee
+          service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
+          journal_entries << {
+                  accounting_code_id: service_fee_account_code.id,
+                  code: service_fee_account_code.code,
+                  name: service_fee_account_code.name,
+                  amount: dif_service_fee
+              }
+        
+        end
+        
         account_code = AccountingCode.find("731adf24-dc8a-41a4-a804-292562b390fa")
         if @for_savings_distribution  == nil
-          total_amount = @account_transaction[:amount].to_f
+          total_amount = @account_transaction[:amount].to_f - dif_service_fee_total.to_f.abs - dif_clip_total.to_f.abs
         else
           total_amount = @for_savings_distribution
           
@@ -92,6 +132,8 @@ module Adjustments
                   name: account_code.name,
                   amount: total_amount
               }
+
+
         journal_entries
       end
 
@@ -100,11 +142,11 @@ module Adjustments
         account_transaction_data = @account_transaction
         
         if @loan.status == "active"
-        
+            
           if @for_savings_distribution == nil
           
-            total_amount_principal = account_transaction_data.data["total_principal_paid"].to_f.abs
-            total_amount_interest = account_transaction_data.data["total_interest_paid"].to_f.abs
+            total_amount_principal = account_transaction_data.data.with_indifferent_access["total_principal_paid"].to_f.abs
+            total_amount_interest = account_transaction_data.data.with_indifferent_access["total_interest_paid"].to_f.abs
             account_code_principal = AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e")
             account_code_interest = AccountingCode.find("a09f6aea-9ab9-4e55-a994-ca8c4dd5de33")
             journal_entries << {
@@ -143,8 +185,6 @@ module Adjustments
 
             end
           
-        
-
         else
           account_code_regular = AccountingCode.find("b7c23e58-e44e-46ae-a3ec-b5081d6eed32")
           account_code_gk = AccountingCode.find("f719c253-a9ba-4d81-ae52-dc8d8d0848f2")
@@ -166,12 +206,42 @@ module Adjustments
           end
           
         end
+        #para sa clip      
+        clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
+        clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
+        dif_clip = (clip_old_value - clip_new_value).round(2)
+        if dif_clip.to_f < 0
+          clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
+          journal_entries << {
+                  accounting_code_id: clip_account_code.id,
+                  code: clip_account_code.code,
+                  name: clip_account_code.name,
+                  amount: dif_clip.abs
+              }
+          
+        end
+
+        #para sa service fee 
+        service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
+        service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
+        dif_service_fee = service_fee_old - service_fee_new
+        
+        if dif_service_fee > 0
+          service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
+          journal_entries << {
+                  accounting_code_id: service_fee_account_code.id,
+                  code: service_fee_account_code.code,
+                  name: service_fee_account_code.name,
+                  amount: dif_service_fee.abs
+              }
+        
+        end
         journal_entries
       end
 
 
       def default_particular
-        "To record rebates of #{ @loan.member.full_name } for k-sagip availment on old policy.  "
+        "To record rebates of k-sagip loan enhancement - #{ @loan.member.full_name }  "
       end
     end
   end

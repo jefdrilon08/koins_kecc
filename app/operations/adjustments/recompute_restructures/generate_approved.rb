@@ -109,7 +109,7 @@ module Adjustments
         
           }
           
-          #@accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
+          @accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
 
           
            
@@ -124,7 +124,7 @@ module Adjustments
         end #end of active
 
       
-        post_accounting_entry
+        #post_accounting_entry
         
         @accounting_entry_details
         

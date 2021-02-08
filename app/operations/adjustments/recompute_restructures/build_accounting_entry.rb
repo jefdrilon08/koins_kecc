@@ -164,30 +164,30 @@ module Adjustments
             end
           end #end of loan loop
 
-          recRestruct = @recompute_restructure.data["loans"].last["loan_details"]
+          #recRestruct = @recompute_restructure.data["loans"].last["loan_details"]
 
-          account_code_principal = AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e")
-          account_code_interest = AccountingCode.find("a09f6aea-9ab9-4e55-a994-ca8c4dd5de33")
-          total_diff_principal =  recRestruct.map{ |a|a["loan_product"]["old_receivable_amount"].to_f }.sum - recRestruct.map{ |a| a["principal_balance"].to_f  }.sum
-          total_diff_interest = recRestruct.map{ |a|a["loan_product"]["old_interest_receivable_amount"].to_f }.sum - recRestruct.map{ |a| a["k_sagip_interest_balance"].to_f  }.sum
+          #account_code_principal = AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e")
+          #account_code_interest = AccountingCode.find("a09f6aea-9ab9-4e55-a994-ca8c4dd5de33")
+          #total_diff_principal =  recRestruct.map{ |a|a["loan_product"]["old_receivable_amount"].to_f }.sum - recRestruct.map{ |a| a["principal_balance"].to_f  }.sum
+          #total_diff_interest = recRestruct.map{ |a|a["loan_product"]["old_interest_receivable_amount"].to_f }.sum - recRestruct.map{ |a| a["k_sagip_interest_balance"].to_f  }.sum
         
-          if total_diff_principal > 0
-            journal_entries << {
-                  accounting_code_id: account_code_principal.id,
-                  code: account_code_interest.code,
-                  name: account_code_principal.name,
-                  amount: total_diff_principal.abs
-                }
-          end #para sa principal
+          #if total_diff_principal > 0
+          #  journal_entries << {
+          #        accounting_code_id: account_code_principal.id,
+          #        code: account_code_interest.code,
+          #        name: account_code_principal.name,
+          #        amount: total_diff_principal.abs
+          #      }
+          #end #para sa principal
 
-          if total_diff_interest > 0
-            journal_entries << {
-                  accounting_code_id: account_code_interest.id,
-                  code: account_code_interest.code,
-                  name: account_code_interest.name,
-                  amount: total_diff_interest.abs
-                }
-          end #para sa interest
+          #if total_diff_interest > 0
+          #  journal_entries << {
+          #        accounting_code_id: account_code_interest.id,
+          #        code: account_code_interest.code,
+          #        name: account_code_interest.name,
+          #        amount: total_diff_interest.abs
+          #      }
+          #end #para sa interest
 
 
           
@@ -195,29 +195,29 @@ module Adjustments
 
           @recompute_restructure.data["loans"].each do |rd|
 
-           # rd["loan_details"].each do |ld| #loan details
-           #   account_code = AccountingCode.find(ld["loan_product"]["receivable_accounting_code_id"])
-           #   account_code_interest = AccountingCode.find(ld["loan_product"]["interest_receivable_accounting_code_id"])
+            rd["loan_details"].each do |ld| #loan details
+              account_code = AccountingCode.find(ld["loan_product"]["receivable_accounting_code_id"])
+              account_code_interest = AccountingCode.find(ld["loan_product"]["interest_receivable_accounting_code_id"])
 
-           #   total_diff = ld["loan_product"]["old_receivable_amount"].to_f - ld["principal_balance"].to_f
-           #   total_diff_interest = ld["loan_product"]["old_interest_receivable_amount"].to_f - ld["k_sagip_interest_balance"].to_f
-           #   if total_diff > 0
-           #     journal_entries << {
-           #       accounting_code_id: account_code.id,
-           #       code: account_code.code,
-           #       name: account_code.name,
-           #       amount: total_diff.abs
-           #     }
+              total_diff = ld["loan_product"]["old_receivable_amount"].to_f - ld["principal_balance"].to_f
+              total_diff_interest = ld["loan_product"]["old_interest_receivable_amount"].to_f - ld["k_sagip_interest_balance"].to_f
+              if total_diff > 0
+                journal_entries << {
+                  accounting_code_id: account_code.id,
+                  code: account_code.code,
+                  name: account_code.name,
+                  amount: total_diff.abs
+                }
 
-           #   end #end of total_diff < 0
+              end #end of total_diff < 0
             
-           #   journal_entries << {
-           #       accounting_code_id: account_code_interest.id,
-           #       code: account_code_interest.code,
-           #       name: account_code_interest.name,
-           #       amount: total_diff_interest.abs
-           #   }
-           # end #end of rd["loan_details"]
+              journal_entries << {
+                  accounting_code_id: account_code_interest.id,
+                  code: account_code_interest.code,
+                  name: account_code_interest.name,
+                  amount: total_diff_interest.abs
+              }
+            end #end of rd["loan_details"]
 
 
             rd["insurance_details"].each do |idetails|
