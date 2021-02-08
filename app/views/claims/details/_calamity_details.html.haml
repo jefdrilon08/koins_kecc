@@ -20,10 +20,10 @@
 %table.table.table-sm.table-hover
   %tbody
     %tr
-      %th Date of Requested
+      %th Date Requested
       %td 
         = @data[:date_requested].to_date.strftime("%b %d, %Y")  
-      %th Date of Event
+      %th Date of Incident
       %td 
         = @data[:date_of_event].to_date.strftime("%b %d, %Y")  
     %tr

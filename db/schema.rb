@@ -993,23 +993,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_142322) do
     t.index ["center_id"], name: "index_time_deposit_collections_on_center_id"
   end
 
-  create_table "trial_balance_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "data_store_id", null: false
-    t.uuid "accounting_code_id", null: false
-    t.decimal "dr_beginning"
-    t.decimal "cr_beginning"
-    t.decimal "dr_current"
-    t.decimal "cr_current"
-    t.decimal "cr_ending"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "name"
-    t.string "code"
-    t.string "category"
-    t.index ["accounting_code_id"], name: "index_trial_balance_entries_on_accounting_code_id"
-    t.index ["data_store_id"], name: "index_trial_balance_entries_on_data_store_id"
-  end
-
   create_table "user_branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.uuid "branch_id"
@@ -1166,8 +1149,6 @@ ActiveRecord::Schema.define(version: 2021_02_03_142322) do
   add_foreign_key "survey_questions", "surveys"
   add_foreign_key "time_deposit_collections", "branches"
   add_foreign_key "time_deposit_collections", "centers"
-  add_foreign_key "trial_balance_entries", "accounting_codes"
-  add_foreign_key "trial_balance_entries", "data_stores"
   add_foreign_key "user_demerits", "branches"
   add_foreign_key "user_demerits", "users"
   add_foreign_key "withdrawal_collections", "branches"
