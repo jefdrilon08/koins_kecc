@@ -106,15 +106,15 @@ module Adjustments
           service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
           service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
           dif_service_fee = service_fee_old - service_fee_new
-        
-          if dif_service_fee > 0
+         #raise "jef"  
+          if dif_service_fee < 1
             dif_service_fee_total = dif_service_fee
             service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
             journal_entries << {
                   accounting_code_id: service_fee_account_code.id,
                   code: service_fee_account_code.code,
                   name: service_fee_account_code.name,
-                  amount: dif_service_fee.round(2)
+                  amount: dif_service_fee.round(2).abs
               }
         
           end
@@ -131,7 +131,7 @@ module Adjustments
                   accounting_code_id: account_code.id,
                   code: account_code.code,
                   name: account_code.name,
-                  amount: total_amount
+                  amount: (total_amount).round(2)
               }
 
 
