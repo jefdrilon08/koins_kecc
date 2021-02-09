@@ -106,7 +106,8 @@ module Adjustments
           service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
           service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
           dif_service_fee = service_fee_old - service_fee_new
-         #raise "jef"  
+         #raise "jef"
+               
           if dif_service_fee > 0
             dif_service_fee_total = dif_service_fee
             service_fee_account_code = AccountingCode.find("216f35d5-2809-4696-b5b9-83d30c2bce6d")
@@ -120,11 +121,22 @@ module Adjustments
           else
           dif_service_fee_total = 0.0
           end
-
         end
         account_code = AccountingCode.find("731adf24-dc8a-41a4-a804-292562b390fa")
         if @for_savings_distribution  == nil
-          total_amount = @account_transaction[:amount].to_f - dif_service_fee_total.to_f.abs - dif_clip_total.to_f.abs
+            
+            if  dif_service_fee_total.to_f == 0.0.to_f
+             if @loan.status == "paid" 
+              total_amount = @account_transaction[:amount].to_f
+             else
+              total_amount = @account_transaction[:amount].to_f - dif_clip_total.to_f.abs
+
+             end
+            else
+              
+             total_amount = @account_transaction[:amount].to_f - dif_service_fee_total.to_f.abs - dif_clip_total.to_f.abs
+            end
+          
         else
           total_amount = @for_savings_distribution
           
@@ -169,18 +181,19 @@ module Adjustments
               service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
               service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
               dif_service_fee = service_fee_new - service_fee_old
+              for_dif_service_fee_old_new = service_fee_old - service_fee_new
               #raise "jef"  
-           
-              if dif_service_fee > 0.0
-                dif_service_fee_total = dif_service_fee.abs
-                service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
-                journal_entries << {
-                  accounting_code_id: service_fee_account_code.id,
-                  code: service_fee_account_code.code,
-                  name: service_fee_account_code.name,
-                  amount: dif_service_fee.round(2).abs
-                }
-        
+              if for_dif_service_fee_old_new > 0
+                if dif_service_fee > 0.0
+                  dif_service_fee_total = dif_service_fee.abs
+                  service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
+                  journal_entries << {
+                    accounting_code_id: service_fee_account_code.id,
+                    code: service_fee_account_code.code,
+                    name: service_fee_account_code.name,
+                    amount: dif_service_fee.round(2).abs
+                  }
+                end
               end
             else
               
