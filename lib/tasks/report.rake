@@ -22,11 +22,13 @@ namespace :report do
       end
       @data_store_data[:counts][:loaners][:members].each do |m|
         mem = Member.find(m[:id])
+        tin = mem.data["government_identification_numbers"]["tin_number"]
         j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}|#{tin}"
         @data << j
       end
       @data_store_data[:counts][:active_members][:members].each do |m|
         mem = Member.find(m[:id])
+        tin = mem.data["government_identification_numbers"]["tin_number"]
         j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}|#{tin}"
         @data << j
       end
