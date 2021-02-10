@@ -183,7 +183,7 @@ module Adjustments
               dif_service_fee = service_fee_new - service_fee_old
               for_dif_service_fee_old_new = service_fee_old - service_fee_new
               #raise "jef"  
-              if for_dif_service_fee_old_new < 0 
+              if for_dif_service_fee_old_new < 1
                 if dif_service_fee > 0.0
                   dif_service_fee_total = dif_service_fee.abs
                   service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
