@@ -195,7 +195,7 @@ namespace :report do
         last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1", l[:id] , s_date).order(:transacted_at).last
         
         last_date = last_at.data['amort_entries'].last["due_date"]
-        outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , s_date , last_date).count
+        outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , last_date).count
         last_payment = last_at.amount.to_i  
         monthly_payment = last_payment * 4
 
