@@ -1461,7 +1461,7 @@ namespace :adjust do
                     new_status = "resigned"
                   elsif status == "active" && recognition_date.nil? && current_balance == 0.00
                     new_status = "pending"
-                  elsif status == "active" && current_balance == 0.00
+                  elsif current_balance == 0.00
                     new_status = "pending"
                   elsif status == "resigned" && !insurance_date_resigned.nil?
                     new_status = "resigned"  
