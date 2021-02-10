@@ -178,22 +178,22 @@ module Adjustments
                   amount: total_amount_interest
                 }
             #para sa service fee 
-              service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
-              service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
-              dif_service_fee = service_fee_new - service_fee_old
-              for_dif_service_fee_old_new = service_fee_old - service_fee_new
+            #  service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
+            #  service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
+            #  dif_service_fee = service_fee_new - service_fee_old
+            #  for_dif_service_fee_old_new = service_fee_old - service_fee_new
               #raise "jef"  
               #if for_dif_service_fee_old_new > 0
-                if dif_service_fee > 0.0
-                  dif_service_fee_total = dif_service_fee.abs
-                  service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
-                  journal_entries << {
-                    accounting_code_id: service_fee_account_code.id,
-                    code: service_fee_account_code.code,
-                    name: service_fee_account_code.name,
-                    amount: dif_service_fee.round(2).abs
-                  }
-                end
+            #    if dif_service_fee > 0.0
+            #      dif_service_fee_total = dif_service_fee.abs
+            #      service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
+            #      journal_entries << {
+            #        accounting_code_id: service_fee_account_code.id,
+            #        code: service_fee_account_code.code,
+            #        name: service_fee_account_code.name,
+            #        amount: dif_service_fee.round(2).abs
+            #      }
+            #    end
               #end
             else
               
