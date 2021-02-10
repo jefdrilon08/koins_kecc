@@ -108,28 +108,28 @@ namespace :report do
         brgy        = mem.data["address"]["district"]
         city        = mem.data["address"]["city"]
         bday        = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
-        sss_no         = mem.data["government_identification_numbers"]["sss_number"].gsub(/[^0-9]/ ,"") 
+        sss_no      = mem.data["government_identification_numbers"]["sss_number"].to_s.gsub(/[^0-9]/ ,"") 
         if sss_no.length == 10
           sss = sss_no
         else
           sss = ""
         end
 
-        pag_ibig_no    = mem.data["government_identification_numbers"]["pag_ibig_number"].gsub(/[^0-9]/ ,"")
+        pag_ibig_no    = mem.data["government_identification_numbers"]["pag_ibig_number"].to_s.gsub(/[^0-9]/ ,"")
         if pag_ibig_no.length == 12
           pag_ibig = pag_ibig_no
         else
           pag_ibig = ""
         end
 
-        phil_health_no = mem.data["government_identification_numbers"]["phil_health_number"].gsub(/[^0-9]/ ,"")
+        phil_health_no = mem.data["government_identification_numbers"]["phil_health_number"].to_s.gsub(/[^0-9]/ ,"")
         if phil_health_no.length == 12
           phil_health = phil_health_no
         else
           phil_health = ""
         end
         
-        tin_no         = mem.data["government_identification_numbers"]["tin_number"].gsub(/[^0-9]/ ,"")
+        tin_no         = mem.data["government_identification_numbers"]["tin_number"].to_s.gsub(/[^0-9]/ ,"")
         if tin_no.length == 12 || tin_no.length == 9
           tin = tin_no
         else
@@ -193,10 +193,16 @@ namespace :report do
         #last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
         
         last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1", l[:id] , s_date).order(:transacted_at).last
+        if last_at.nil?
+          last_date = s_date
+          last_payment = 0
+        else
+          last_date = last_at.data['amort_entries'].last["due_date"]
+          last_payment = last_at.amount.to_i
+        end  
         
-        last_date = last_at.data['amort_entries'].last["due_date"]
         outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , last_date).count
-        last_payment = last_at.amount.to_i  
+          
         monthly_payment = last_payment * 4
 
         #Overdue_Days
