@@ -532,7 +532,7 @@ var _bindEvents = function() {
     $message.html("Uploading signature...");
     $btnConfirmUploadSignature.prop("disabled", true);
 
-    errors  = [];
+    var errors  = [];
     if($fileSignature[0].files.length == 0) {
       errors.push("Signature required");
 
@@ -599,7 +599,7 @@ var _bindEvents = function() {
     $message.html("Uploading profile picture...");
     $btnConfirmUploadProfilePicture.prop("disabled", true);
 
-    errors  = [];
+    var errors  = [];
 
     if($fileProfilePicture[0].files.length == 0) {
       errors.push("Profile picture required");
