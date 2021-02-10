@@ -84,7 +84,7 @@ module Insurance
         record[:maturity_date]  = @maturity_date
         record[:date_released] = loan.date_released
 
-       lde = loan.accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
+       lde = loan.accounting_entry.journal_entries.where("accounting_code_id = ? AND amount > 0", "af83062d-628a-4fdd-acfd-bdebe2696513").first
         if lde.present?
             record[:insured_amount] = lde.amount
         end
