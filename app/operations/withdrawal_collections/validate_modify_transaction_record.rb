@@ -66,7 +66,8 @@ module WithdrawalCollections
               key: "account",
               message: "Account not found"
             }
-          elsif amount > member_account.balance
+          #elsif amount > member_account.balance
+          elsif result < 0
           @errors[:messages]<< {
             key: "balance",
             message: "Invalid Withdrawal Amount #{amount} Balance is #{member_account.balance}"

@@ -108,10 +108,34 @@ namespace :report do
         brgy        = mem.data["address"]["district"]
         city        = mem.data["address"]["city"]
         bday        = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
-        sss         = mem.data["government_identification_numbers"]["sss_number"]
-        pag_ibig    = mem.data["government_identification_numbers"]["pag_ibig_number"]
-        phil_health = mem.data["government_identification_numbers"]["phil_health_number"]
-        tin         = mem.data["government_identification_numbers"]["tin_number"] 
+        sss_no         = mem.data["government_identification_numbers"]["sss_number"].gsub(/[^0-9]/ ,"") 
+        if sss_no.length == 10
+          sss = sss_no
+        else
+          sss = ""
+        end
+
+        pag_ibig_no    = mem.data["government_identification_numbers"]["pag_ibig_number"].gsub(/[^0-9]/ ,"")
+        if pag_ibig_no.length == 12
+          pag_ibig = pag_ibig_no
+        else
+          pag_ibig = ""
+        end
+
+        phil_health_no = mem.data["government_identification_numbers"]["phil_health_number"].gsub(/[^0-9]/ ,"")
+        if phil_health_no.length == 12
+          phil_health = phil_health_no
+        else
+          phil_health = ""
+        end
+        
+        tin_no         = mem.data["government_identification_numbers"]["tin_number"].gsub(/[^0-9]/ ,"")
+        if tin_no.length == 12 || tin_no.length == 9
+          tin = tin_no
+        else
+          tin = ""
+        end
+
       if rep_type == 'PODs'
         m_type = 'POD'
       elsif rep_type == 'BARs'
@@ -165,21 +189,41 @@ namespace :report do
 
         no_days_par = l[:num_days_par]
         n = (s_date.to_date - no_days_par)
-        outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
-        last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
+        #outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
+        #last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
+        
+        last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1", l[:id] , s_date).order(:transacted_at).last
+        
+        last_date = last_at.data['amort_entries'].last["due_date"]
+        outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , s_date , last_date).count
+        last_payment = last_at.amount.to_i  
         monthly_payment = last_payment * 4
 
         #Overdue_Days
         if mat_date <= s_date
-          if l[:num_days_par] >= 0
-            overdue_days = l[:num_days_par]
+          if l[:num_days_par] >= 1
+            overdue = l[:num_days_par]
+            if overdue >= 1 and overdue <= 30
+              overdue_days = 1
+            elsif overdue >= 31 and overdue <= 60
+              overdue_days = 2
+            elsif overdue >= 61 and overdue <= 90
+              overdue_days = 3
+            elsif overdue >= 91 and overdue <= 180
+              overdue_days = 4
+            elsif overdue >= 181 and overdue <= 365
+              overdue_days = 5
+            elsif overdue >= 366
+              overdue_days = 6
+            end
           else
             overdue_days = 0
           end  
         else
           overdue_days = 0
         end
-      j = "#{mem.identification_number}|#{mem.last_name}|#{mem.first_name}|#{mem.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{mem.place_of_birth}|#{gend}|#{civil_stat}|#{mem.mobile_number}||||||#{sss}|#{pag_ibig}|#{phil_health}|#{tin}|#{l[:pn_number]}|#{contract_type}|AC|NA|#{l[:principal]}|#{l[:overall_principal_balance]}|#{date_rel}|#{mat_date}|#{int_rate}|#{loan_data.term}|#{loan_data.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{l[:overall_balance]}|#{mat_date}|#{overdue_days}|#{monthly_payment}|#{outs_weeks}|#{last_payment}"
+
+      j = "#{mem.identification_number}|#{mem.last_name}|#{mem.first_name}|#{mem.middle_name}|#{street}|#{brgy}|#{city}|||#{bday}|#{mem.place_of_birth}|#{gend}|#{civil_stat}|#{mem.mobile_number}||||||#{sss}||#{phil_health}|#{tin}|#{l[:pn_number]}|#{contract_type}|AC|NA|#{l[:principal]}|#{l[:overall_principal_balance]}|#{date_rel}|#{mat_date}|#{int_rate}|#{loan_data.term}|#{loan_data.num_installments}|Php|#{loan_purpose}|#{pod_type}|#{l[:overall_balance]}|#{mat_date}|#{overdue_days}|#{monthly_payment}|#{outs_weeks}|#{last_payment}"
       @data << j
      end
     end

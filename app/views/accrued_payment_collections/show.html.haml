@@ -6,4 +6,7 @@
           %thead
             %tr
               %th
-                #{@accrued_interest_collection}
+                NAME
+              -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
+                %th
+                  #{hders[:name]}
