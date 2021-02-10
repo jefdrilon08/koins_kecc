@@ -203,7 +203,9 @@ module Loans
                 
                 parts = second_clip.to_s.split(".")
                 
-                result = parts.count > 1 ? (((parts[0].to_i + 1.to_i) - second_clip.to_f).round(2) ) : second_clip
+                #result = parts.count > 1 ? (((parts[0].to_i + 1.to_i) - second_clip.to_f).round(2) ) : second_clip
+                result = ((total_loan_amunt_with_insurance + second_clip).round - (total_loan_amunt_with_insurance + second_clip).to_f).round(2)
+              
               
               
             
@@ -238,7 +240,7 @@ module Loans
       #============== insurance ===========================
       
       sum_total_laonable = 0
-      @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee]).to_f
+      @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee]).to_f.round
       
 
       #raise @jef.inspect
