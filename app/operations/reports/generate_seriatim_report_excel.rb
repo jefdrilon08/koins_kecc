@@ -3,15 +3,29 @@ module Reports
     def initialize(as_of:, branch:)
       @as_of = as_of
       @branch = branch
+      @valid_members = []
+
 
       if @as_of.present? && @branch.present?
-        @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ? AND branch_id = ?", @as_of, "GK", @branch).order("insurance_status ASC")
-        # @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? AND branch_id = ? ", @as_of, @as_of, @branch)
-        # @members = @active_members + @resigned   
+        if Settings.activate_microloans
+          @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ? AND insurance_status NOT IN (?) AND status IN (?) AND branch_id = ?", @as_of.to_date, "GK", ["resigned", "pending"], ["active", "resigned", "pending"], @branch).order("insurance_status ASC")
+          @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned > ? AND insurance_status = ? AND branch_id = ?", @as_of.to_date, @as_of.to_date, "resigned", @branch).order("insurance_status ASC")
+          @valid_members = @members + @resigned   
+        elsif Settings.activate_microinsurance
+          @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ? AND insurance_status NOT IN (?) AND status = ? AND branch_id = ?", @as_of.to_date, "GK", ["resigned", "pending"], "active", @branch).order("insurance_status ASC")          
+          @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned > ? AND insurance_status = ? AND branch_id = ?", @as_of.to_date, @as_of.to_date, "resigned", @branch).order("insurance_status ASC")
+          @valid_members = @members + @resigned
+        end
       elsif @as_of.present?  
-        @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ?", @as_of, "GK").order("insurance_status ASC")
-        # @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned >= ? ", @as_of, @as_of)
-        # @members = @active_members + @resigned      
+        if Settings.activate_microloans
+          @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ? AND insurance_status NOT IN (?) AND status IN (?)", @as_of.to_date, "GK", ["resigned", "pending"], ["active", "resigned", "pending"]).order("insurance_status ASC")
+          @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned > ? AND insurance_status = ?", @as_of.to_date, @as_of.to_date, "resigned").order("insurance_status ASC")
+          @valid_members = @members + @resigned       
+        elsif Settings.activate_microinsurance
+          @members  = Member.where("data->>'recognition_date' <= ? AND member_type != ? AND insurance_status NOT IN (?) AND status = ?", @as_of.to_date, "GK", ["resigned", "pending"], "active").order("insurance_status ASC")          
+          @resigned = Member.where("data->>'recognition_date' <= ? AND insurance_date_resigned > ? AND insurance_status = ?", @as_of.to_date, @as_of.to_date, "resigned").order("insurance_status ASC")
+          @valid_members = @members + @resigned
+        end
       end
 
       @p        = Axlsx::Package.new
@@ -98,7 +112,7 @@ module Reports
             lif_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
               if at.transaction_type == "withdraw"
                 life = ((life_amount < 0 ? 0 : life_amount) - (at.amount < 0 ? 0 : at.amount))
-              elsif at.transaction_type == "deposit" || at.transaction_type == "interest"
+              elsif at.transaction_type == "deposit"
                 life = (life_amount + at.amount).abs
               end
               life_amount = life
@@ -112,7 +126,7 @@ module Reports
             rf_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
               if at.transaction_type == "withdraw"
                 rf = ((rf_amount < 0 ? 0 : rf_amount) - (at.amount < 0 ? 0 : at.amount))
-              elsif at.transaction_type == "deposit" || at.transaction_type == "interest"
+              elsif at.transaction_type == "deposit"
                 rf = (rf_amount + at.amount).abs
               end
               rf_amount = rf

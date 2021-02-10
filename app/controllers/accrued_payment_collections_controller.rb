@@ -12,6 +12,6 @@ class AccruedPaymentCollectionsController < ApplicationController
       ]
 	end
   def show
-    @accrued_interest_collection  = "ariel"
+    @accrued_interest_collection  = AccruedBilling.find(params[:id])
   end
 end

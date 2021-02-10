@@ -13,7 +13,8 @@ module AccruedPaymentCollections
                                           center_id: @center,
                                           status: 'pending',
                                           data: {
-                                            loans:[]
+                                            headers:[],
+                                            records:[]
                                           }
                                         )
 
@@ -26,34 +27,19 @@ module AccruedPaymentCollections
     end
 
     def process_accrued_data!
-    
-      @l_ids  = []
-      l_id = Loan.where(center_id: @center).ids
-      l_id.each do |l|
-        a = Loan.find(l)
-        a_data = a.data.with_indifferent_access
-        if a_data[:accrued_interest].present?
-          laman = a.id
-          lp = LoanProduct.find(a.loan_product_id)
-          @l_ids << laman
+      @header = []
+      dta = Member.joins(:loans).where("members.center_id = '844264f4-a566-4ca7-89a1-39278dbd183f' and loans.data ->> 'accrued_interest' IS NOT NULL" , @center)   
+      dta.each do |dt|
+        loan = dt.loans.ids
+        loan.each do |l|
+          @header << Loan.find(l).loan_product.name
         end
       end
-      @l_ids.each do |al|
-        loan = Loan.find(al)
-        amount = loan.data['accrued_interest']['total_accrued_interest'] - loan.data['accrued_interest']['total_accrued_interest_balance']
-        @accrued_billing.data['loans'] << {
-          id: loan.id,
-          amount: amount,   
-          member: {
-                  id: loan.member.id,
-                  first_name: loan.member.first_name,
-                  last_name: loan.member.last_name,
-                  middle_name: loan.member.middle_name,
-                  identification_number: loan.member.identification_number,
-                  center: loan.center.name
-                }
+      @header.uniq.each do |hd|
+        @accrued_billing.data['headers'] << {
+          name: hd
         }
-      end   
+      end
     end
 
   end
