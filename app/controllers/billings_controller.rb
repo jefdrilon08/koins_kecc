@@ -71,6 +71,7 @@ class BillingsController < ApplicationController
             text: "Check"
           }
 
+
           @subheader_side_actions << {
             id: "btn-approve",
             link: "#",
@@ -117,6 +118,13 @@ class BillingsController < ApplicationController
         text: "Download Excel"
       }
 
+       @subheader_side_actions << {
+        link: billing_path(@billing.id),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
+      }
+
       @payload = {
         id: @billing.id
       }
@@ -127,6 +135,10 @@ class BillingsController < ApplicationController
     @billing  = Billing.find(params[:id])
 
     if @billing.pending?
+      @billing.destroy!
+
+      redirect_to billings_path
+    elsif @billing.status == "error"
       @billing.destroy!
 
       redirect_to billings_path
