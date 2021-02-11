@@ -9,7 +9,6 @@ class CreateMemberAccountValidationRecords < ActiveRecord::Migration[5.2]
       t.decimal :rf
       t.decimal :lif_50_percent
       t.decimal :advance_rf
-      t.decimal :advance_rf
       t.decimal :interest
       t.decimal :equity_interest
       t.decimal :total

@@ -130,3 +130,8 @@
                 Number of Days PAR
               %td
                 #{number_to_currency(@daily_branch_metric.num_days_par, unit: '')}
+
+        %hr
+        = link_to daily_branch_metric_path(@daily_branch_metric.id), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger' do
+          .fa.fa-times
+          Delete

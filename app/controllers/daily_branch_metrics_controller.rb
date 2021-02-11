@@ -23,6 +23,13 @@ class DailyBranchMetricsController < ApplicationController
     }
   end
 
+  def destroy
+    @daily_branch_metric = ReadOnlyDailyBranchMetric.find(params[:id])
+    @daily_branch_metric.destroy!
+
+    redirect_to daily_branch_metrics_path
+  end
+
   def index
     @daily_branch_metrics = ReadOnlyDailyBranchMetric
                               .includes(:branch)
@@ -30,7 +37,7 @@ class DailyBranchMetricsController < ApplicationController
                               .where(branch_id: @branches.pluck(:id))                      
 
     @branch     = ReadOnlyBranch.find_by_id(params[:branch_id])
-    @start_date = params[:start_date].try(:to_date) || @current_date
+    @start_date = params[:start_date].try(:to_date) || @current_date - 1.month
     @end_date   = params[:end_date].try(:to_date) || @current_date
 
     if @branch.present?

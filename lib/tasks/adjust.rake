@@ -1,4 +1,14 @@
 namespace :adjust do
+  task :load_dates_in_data_stores => :environment do
+    DataStore.select("id, meta, as_of, start_date, end_date, status").find_in_batches(batch_size: 100) do |group|
+      group.each do |data_store|
+        puts "Updating data_store #{data_store.id}"
+
+        data_store.update!(updated_at: Time.now)
+      end
+    end
+  end
+
   task :offset_hours => :environment do
     start_date  = ENV['START_DATE']
     end_date    = ENV['END_DATE']

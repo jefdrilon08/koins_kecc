@@ -11,10 +11,13 @@ class ProcessSaveDailyBranchMetric < ApplicationJob
                               as_of: as_of
                             ).execute!
     rescue Exception => e
+      daily_branch_metric = DailyBranchMetric.where(
+                              as_of: as_of,
+                              branch_id: branch.id
+                            ).first
+
       if daily_branch_metric.present?
-        daily_branch_metric.update(
-          status: "error"
-        )
+        daily_branch_metric.update!(status: "error")
       end
 
       logger.error e.message

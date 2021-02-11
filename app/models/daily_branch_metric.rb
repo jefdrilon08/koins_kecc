@@ -7,6 +7,7 @@ class DailyBranchMetric < ApplicationRecord
 
   scope :processing, -> { where(status: "processing") }
   scope :done, -> { where(status: "done") }
+  scope :error, -> { where(status: "error") }
 
   belongs_to :branch
   belongs_to :cluster
@@ -40,6 +41,10 @@ class DailyBranchMetric < ApplicationRecord
   validates :par, presence: true, numericality: true
   validates :num_days_par, presence: true, numericality: true
   validates :as_of, presence: true
+
+  def error?
+    self.status == "error"
+  end
 
   def processing?
     self.status == "processing"

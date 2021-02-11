@@ -375,8 +375,7 @@ Rails.application.routes.draw do
   end
 
   # daily_branch_metrics
-  get "/daily_branch_metrics", to: "daily_branch_metrics#index"
-  get "/daily_branch_metrics/:id", to: "daily_branch_metrics#show"
+  resources :daily_branch_metrics, only: [:index, :show, :destroy]
 
   namespace :accounting do
     get "/accounting_entries", to: "acounting_entries#index", as: :accounting_entries
