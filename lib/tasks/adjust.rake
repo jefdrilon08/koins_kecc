@@ -1,10 +1,10 @@
 namespace :adjust do
   task :load_dates_in_data_stores => :environment do
-    DataStore.select("id, meta, as_of, start_date, end_date").find_in_batches(batch_size: 100) do |group|
+    DataStore.select("id, meta, as_of, start_date, end_date, status").find_in_batches(batch_size: 100) do |group|
       group.each do |data_store|
         puts "Updating data_store #{data_store.id}"
 
-        data_store.touch
+        data_store.update!(updated_at: Time.now)
       end
     end
   end
