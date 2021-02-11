@@ -272,7 +272,7 @@ namespace :db do
   private
 
   def with_config
-    yield Rails.application.class.parent_name.underscore,
+    yield Rails.application.class.name.partition('::').first,
       ActiveRecord::Base.connection_config[:host],
       ActiveRecord::Base.connection_config[:database],
       ActiveRecord::Base.connection_config[:username],

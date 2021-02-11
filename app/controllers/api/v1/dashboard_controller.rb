@@ -30,7 +30,7 @@ module Api
         rr = ReadOnlyDataStore
           .repayment_rates
           .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
-          .order("(meta->>'as_of')::date ASC, updated_at ASC")
+          .order("updated_at ASC")
           .last
 
         if rr.present?
@@ -41,7 +41,7 @@ module Api
         member_counts = ReadOnlyDataStore
           .member_counts
           .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
-          .order("(meta->>'as_of')::date ASC, updated_at ASC")
+          .order("updated_at ASC")
           .last
 
         render json: {

@@ -599,7 +599,7 @@ var _bindEvents = function() {
     $message.html("Uploading profile picture...");
     $btnConfirmUploadProfilePicture.prop("disabled", true);
 
-    errors  = [];
+    var errors  = [];
 
     if($fileProfilePicture[0].files.length == 0) {
       errors.push("Profile picture required");

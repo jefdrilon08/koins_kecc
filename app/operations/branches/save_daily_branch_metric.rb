@@ -67,7 +67,7 @@ module Branches
       data_stores = ReadOnlyDataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
         .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ? AND status = ?", %w[REPAYMENT_RATES MEMBER_COUNTS], @branch.id, @as_of, "done")
-        .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC, updated_at DESC")
+        .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC, updated_at DESC"))
 
       rr = data_stores.find { |ds| ds.meta["branch_id"] == @branch.id && ds.meta["data_store_type"] == "REPAYMENT_RATES" }
       mc = data_stores.find { |ds| ds.meta["branch_id"] == @branch.id && ds.meta["data_store_type"] == "MEMBER_COUNTS" }

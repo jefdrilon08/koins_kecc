@@ -30,5 +30,8 @@
             - elsif o.done?
               .badge.badge-success
                 Done
+            - elsif o.error?
+              .badge.badge-danger
+                Error
 
   = paginate daily_branch_metrics

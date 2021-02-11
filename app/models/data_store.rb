@@ -62,6 +62,15 @@ class DataStore < ApplicationRecord
     if self.new_record? && self.status.blank?
       self.status = "processing"
     end
+
+    if self.meta.present? and self.meta["as_of"].present?
+      self.as_of = self.meta["as_of"]
+    end
+
+    if self.meta.present? and self.meta["start_date"].present? and self.meta["end_date"].present?
+      self.start_date = self.meta["start_date"]
+      self.end_date   = self.meta["end_date"]
+    end
   end
 
   def progress_as_percent
