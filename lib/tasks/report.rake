@@ -203,7 +203,7 @@ namespace :report do
         
         outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , last_date).count
           
-        monthly_payment = last_payment * 4
+        monthly_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).first.amount_due * 4
 
         #Overdue_Days
         if mat_date <= s_date
