@@ -1388,6 +1388,7 @@ namespace :adjust do
                       member_accounts.id AS member_account_id,
                       member_accounts.account_type,
                       member_accounts.account_subtype,
+                      COALESCE(member_accounts.balance, '0.00')::float AS ma_balance,
                       account_transactions.id AS transaction_id,
                       account_transactions.transacted_at,
                       COALESCE(account_transactions.data->>'ending_balance', '0.00')::float AS balance,
@@ -1421,61 +1422,85 @@ namespace :adjust do
                   default_periodic_payment  = 15
                   recognition_date          = o.fetch("recognition_date").try(:to_date)
                   transactions_count        = o.fetch("acc_trans_count")
-
+                  
                   new_status  = "pending"
                   insurance_status  = o.fetch("insurance_status")
                   insurance_date_resigned  = o.fetch("insurance_date_resigned")
                   status      = o.fetch("status")
                   member_type = o.fetch("member_type")
                   last_payment_date = o.fetch("transacted_at").try(:to_date)
+                  #current_balance   = o.fetch("balance").to_f.round(2)
+                  current_balance   = o.fetch("ma_balance").to_f.round(2)
+                  
+                  puts "ID: #{member_id}"
+                  puts "current_balance: #{current_balance}"
+                  #puts "ma_current_balance: #{ma_current_balance}"
+                  puts "last_payment_date: #{last_payment_date}"
+                  puts "current_date: #{current_date}"
+                  puts "recognition_date: #{recognition_date}"
+                  puts "transactions_count: #{transactions_count}"
+                  puts "insurance_date_resigned: #{insurance_date_resigned}"
+                  puts "status: #{status}"
 
                   if recognition_date.present? and last_payment_date.present?
                     # Code
                     if transactions_count > 0 
-                      current_balance         = o.fetch("balance").to_f.round(2)
                       num_days                = (current_date - recognition_date).to_i
                       num_weeks               = (num_days / 7).to_i + 1
                       insured_amount          = num_weeks * default_periodic_payment
                       amt_past_due            = (current_balance - insured_amount).to_i * -1
                       days_lapsed             = (current_date - last_payment_date).to_i
 
-                      is_withdraw_payment = o.fetch("is_withdraw_payment")
+                      if member_type == "GK"
+                        new_status = "resigned"
+                      end
 
-                      if current_balance == 0.00 && insurance_status == "resigned"  
+                      if current_balance == 0.0 && insurance_status == "resigned"
                         new_status = "resigned"
-                      elsif current_balance == 0.00 && !insurance_date_resigned.nil?
+                      end
+
+                      if current_balance == 0.0 && insurance_date_resigned.present?
                         new_status = "resigned"
-                      elsif amt_past_due >= 780 && insurance_status != "resigned"
+                      end
+
+                      if status == "resigned" && insurance_date_resigned.present? && current_balance == 0.0
+                        new_status = "resigned"  
+                      end
+
+                      if amt_past_due >= 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
                         new_status = "dormant"
-                      elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned"
+                      end
+
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
                         new_status = "lapsed"
-                      elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned"
+                      end
+
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
                         new_status = "lapsed"
-                      elsif days_lapsed <= 45 && current_balance >= insured_amount && insurance_status != "resigned"
+                      end
+
+                      if days_lapsed <= 45 && current_balance >= insured_amount && insurance_status != "resigned" && member_type != "GK"
                         new_status = "inforce"
-                      elsif days_lapsed > 45 && current_balance >= insured_amount && insurance_status != "resigned"
+                      end
+
+                      if days_lapsed > 45 && current_balance >= insured_amount && insurance_status != "resigned" && member_type != "GK"
                         new_status = "inforce"
-                      elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned"
+                      end
+
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned" && member_type != "GK"
                         new_status = "inforce"
-                      elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned"
+                      end
+
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned" && member_type != "GK"
                         new_status = "inforce"
                       end
                     end
-                  elsif recognition_date.present? and transactions_count == 0 && insurance_status != "resigned"
-                    new_status = "pending"
                   else
                     new_status = "pending"
                   end
 
-                  if member_type == "GK"
-                    new_status = "resigned"
-                  elsif status == "active" && recognition_date.nil? && current_balance == 0.00 && insurance_status != "resigned"
-                    new_status = "pending"
-                  elsif current_balance == 0.00 && insurance_status != "resigned"
-                    new_status = "pending"
-                  elsif status == "resigned" && !insurance_date_resigned.nil?
-                    new_status = "resigned"  
-                  end
+                  puts "insurance_status: #{new_status}"
+                  puts "\n"
 
                   "('#{member_id}', '#{new_status}')"
                 }.join(",")
