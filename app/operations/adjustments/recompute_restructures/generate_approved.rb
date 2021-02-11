@@ -108,11 +108,10 @@ module Adjustments
             for_savings_distribution: nil
         
           }
-          #raise for_entry.inspect
-          #raise @account_transaction.inspect
-          #@accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
+          
+          @accounting_entry_details << ::Adjustments::RecomputeRestructures::BuildAccountingEntryForDistribution.new(config: for_entry).execute!
 
-                  
+          
            
           #save_accounting_entry_data! #entry para sa distribution ng loan payment
           
@@ -125,7 +124,7 @@ module Adjustments
         end #end of active
 
       
-        post_accounting_entry
+        #post_accounting_entry
         
         @accounting_entry_details
         

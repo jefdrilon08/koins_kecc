@@ -59,6 +59,13 @@ module Insurance
     def execute!
       @entry_level_loans.each do |loan|
         record = {}
+
+        if !loan.original_maturity_date.nil?
+          @maturity_date = loan.original_maturity_date 
+        else
+          @maturity_date = loan.maturity_date
+        end
+
         record[:loan]         = loan
         record[:pn_number]    = loan.pn_number
         record[:member]        = loan.member.full_name
@@ -74,10 +81,10 @@ module Insurance
         record[:date_of_birth]  = loan.member.date_of_birth
         record[:amount] = loan.principal
         record[:num_installments] = loan.try(:num_installments)
-        record[:maturity_date]  = loan.original_maturity_date
+        record[:maturity_date]  = @maturity_date
         record[:date_released] = loan.date_released
 
-       lde = loan.accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
+       lde = loan.accounting_entry.journal_entries.where("accounting_code_id = ? AND amount > 0", "af83062d-628a-4fdd-acfd-bdebe2696513").first
         if lde.present?
             record[:insured_amount] = lde.amount
         end

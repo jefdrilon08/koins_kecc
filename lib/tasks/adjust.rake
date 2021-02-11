@@ -1461,7 +1461,7 @@ namespace :adjust do
                         new_status = "inforce"
                       end
                     end
-                  elsif recognition_date.present? and transactions_count == 0
+                  elsif recognition_date.present? and transactions_count == 0 && insurance_status != "resigned"
                     new_status = "pending"
                   else
                     new_status = "pending"
@@ -1469,7 +1469,9 @@ namespace :adjust do
 
                   if member_type == "GK"
                     new_status = "resigned"
-                  elsif status == "active" && recognition_date.nil? && current_balance == 0.00
+                  elsif status == "active" && recognition_date.nil? && current_balance == 0.00 && insurance_status != "resigned"
+                    new_status = "pending"
+                  elsif current_balance == 0.00 && insurance_status != "resigned"
                     new_status = "pending"
                   elsif status == "resigned" && !insurance_date_resigned.nil?
                     new_status = "resigned"  

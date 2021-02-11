@@ -91,13 +91,21 @@
             [] Brgy. Certification/Certification
         %tr
           %td{:width => "21%"}
+            Date of Incident
+          %td{:width => "25%"}
+            %b
+              %u  
+                #{@data["date_of_event"].to_date.strftime("%b %d, %Y")}
+          %td{:width => "28%"}
+            [] Monitoring Tool / Claims Copy PDF
+        %tr
+          %td{:width => "21%"}
             Name of Member
           %td{:width => "25%"}
             %b
               %u  
                 #{@claim.member.full_name}
           %td{:width => "28%"}
-            [] Monitoring Tool / Claims Copy PDF
         %tr
           %td{:width => "21%"}
             Amount
