@@ -104,17 +104,17 @@
               %th
                 Principal RR
               %td
-                #{number_to_currency(@daily_branch_metric.principal_rr, unit: '')}
+                #{number_to_currency(@daily_branch_metric.principal_rr * 100, unit: '')}
             %tr
               %th
                 Interest RR
               %td
-                #{number_to_currency(@daily_branch_metric.interest_rr, unit: '')}
+                #{number_to_currency(@daily_branch_metric.interest_rr * 100, unit: '')}
             %tr
               %th
                 Total RR
               %td
-                #{number_to_currency(@daily_branch_metric.total_rr, unit: '')}
+                #{number_to_currency(@daily_branch_metric.total_rr * 100, unit: '')}
             %tr
               %th
                 PAR Amount
@@ -124,12 +124,76 @@
               %th
                 PAR
               %td
-                #{number_to_currency(@daily_branch_metric.par, unit: '')}
+                #{number_to_currency(@daily_branch_metric.par * 100, unit: '')}
             %tr
               %th
                 Number of Days PAR
               %td
                 #{number_to_currency(@daily_branch_metric.num_days_par, unit: '')}
+
+        %h5
+          Member Counts
+        %table.table.table-sm.table-bordered
+          %thead
+            %tr
+              %th
+              %th.text-right
+                Male
+              %th.text-right
+                Female
+              %th.text-right
+                Others
+              %th.text-right
+                Total
+          %tbody
+            %tr
+              %td
+                %b
+                  Loaners
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["male"]}
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["female"]}
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["others"]}
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["total"]}
+            %tr
+              %td
+                %b
+                  Pure Savers
+              %td.text-right
+                #{@daily_branch_metric.data["pure_savers"]["male"]}
+              %td.text-right
+                #{@daily_branch_metric.data["pure_savers"]["female"]}
+              %td.text-right
+                #{@daily_branch_metric.data["pure_savers"]["others"]}
+              %td.text-right
+                #{@daily_branch_metric.data["pure_savers"]["total"]}
+            %tr
+              %td
+                %b
+                  Admitted Members
+              %td.text-right
+                #{@daily_branch_metric.data["active_members"]["male"]}
+              %td.text-right
+                #{@daily_branch_metric.data["active_members"]["female"]}
+              %td.text-right
+                #{@daily_branch_metric.data["active_members"]["others"]}
+              %td.text-right
+                #{@daily_branch_metric.data["active_members"]["total"]}
+            %tr
+              %td
+                %b
+                  Total
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["male"] + @daily_branch_metric.data["pure_savers"]["male"] + @daily_branch_metric.data["active_members"]["male"]}
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["female"] + @daily_branch_metric.data["pure_savers"]["female"] + @daily_branch_metric.data["active_members"]["female"]}
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["others"] + @daily_branch_metric.data["pure_savers"]["others"] + @daily_branch_metric.data["active_members"]["others"]}
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["total"] + @daily_branch_metric.data["pure_savers"]["total"] + @daily_branch_metric.data["active_members"]["total"]}
 
         %hr
         = link_to daily_branch_metric_path(@daily_branch_metric.id), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger' do
