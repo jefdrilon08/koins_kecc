@@ -1,5 +1,8 @@
 module Loans
   class Fetch
+    attr_accessor :loan,
+                  :data
+
     def initialize(config:)
       @config = config
       @member = @config[:member]
@@ -8,8 +11,8 @@ module Loans
       if @loan.blank?
         @loan = Loan.new(
                   id: "",
-                  branch_id: @member.branch.id,
-                  center_id: @member.center.id,
+                  branch_id: @member.branch_id,
+                  center_id: @member.center_id,
                   date_prepared: Date.today,
                   member_id: @member.id,
                   principal: 5000.00,

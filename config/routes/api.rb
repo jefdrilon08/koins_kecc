@@ -1,6 +1,15 @@
 namespace :api do
   namespace :v2 do
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
+    
+    # loans
+    post "/loans/apply", to: "loans#apply"
+    get "/loans/project_type_categories", to: "loans#project_type_categories"
+    get "/loans", to: "loans#index"
+
+    # members
+    get "/members/co_makers", to: "members#co_makers"
+    get "/members/loan_products", to: "members#loan_products"
   end
 
   namespace :v1 do
