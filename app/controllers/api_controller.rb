@@ -9,6 +9,14 @@ class ApiController < ApplicationController
     end
   end
 
+  def authenticate_api_member!
+    if access_token.blank?
+      render json: { message: "unauthenticated" }, status: 400
+    else
+      @member = Member.where(access_token: access_token).first
+    end
+  end
+
   def authenticate_core_user!
     if params[:user_id].blank?
       render json: { message: "user_id required" }, status: 400
@@ -23,5 +31,9 @@ class ApiController < ApplicationController
 
   def app_auth_secret
     ENV['KOINS_APP_AUTH_SECRET']
+  end
+
+  def access_token
+    request.headers["X-KOINS-ACCESS-TOKEN"]
   end
 end

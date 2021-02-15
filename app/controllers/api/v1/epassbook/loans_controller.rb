@@ -15,7 +15,7 @@ module Api
             id: loan.id,
             pn_number: loan.pn_number,
             loan_product: loan.loan_product.to_s,
-            date_released: loan.date_released.strftime("%b %d, %Y"),
+            date_released: loan.date_released.try(:strftime, "%b %d, %Y") || "N/A",
             beggining_balance: number_to_currency(beggining_balance, unit: ""),
             payments: []
           }
