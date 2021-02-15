@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
       @branches = ReadOnlyBranch
         .joins(user_branches: :user)
         .where(user_branches: { active: true, user_id: @current_user.id })
-        .order("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC")
+        .order(Arel.sql("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC"))
     end
   end
 

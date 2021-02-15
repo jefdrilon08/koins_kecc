@@ -42,7 +42,7 @@ module Api
         member_counts = DataStore
           .member_counts
           .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
-          .order("(meta->>'as_of')::date ASC")
+          .order(Arel.sql("(meta->>'as_of')::date ASC"))
           .last
 
         render json: {

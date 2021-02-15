@@ -14,7 +14,7 @@ module Pages
       data_stores = DataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
         .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[CLAIMS_COUNTS], @branches.ids, @as_of)
-        .order("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC")
+        .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC"))
 
       {
         areas: areas.map do |area|
