@@ -126,14 +126,16 @@ module Adjustments
         if @for_savings_distribution  == nil
             
             if  dif_service_fee_total.to_f == 0.0.to_f
+              
              if @loan.status == "paid" 
               total_amount = @account_transaction[:amount].to_f
              else
-              total_amount = @account_transaction[:amount].to_f - dif_clip_total.to_f.abs
-
+              
+              total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+              
              end
             else
-              
+            
              total_amount = @account_transaction[:amount].to_f - dif_service_fee_total.to_f.abs - dif_clip_total.to_f.abs
             end
           
@@ -141,7 +143,9 @@ module Adjustments
           total_amount = @for_savings_distribution
           
         end
-    
+        
+        
+
         journal_entries << {
                   accounting_code_id: account_code.id,
                   code: account_code.code,
