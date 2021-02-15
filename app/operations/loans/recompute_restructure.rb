@@ -145,8 +145,9 @@ module Loans
       end #end of @loan_data[:restructured_loans]
       
       @jef[:total_principal]  = @jef[:loan_details].inject(0){|sum, x| sum + x[:principal_balance].to_f}
-      @jef[:total_interest]   = @jef[:loan_details].inject(0){|sum, x| sum + x[:k_sagip_interest_balance].to_f}
       
+      @jef[:total_interest]   = @jef[:loan_details].inject(0){|sum, x| sum + x[:k_sagip_interest_balance].to_f}
+    
       #============== para sa interest ========================
       sum = 0
 
@@ -204,8 +205,18 @@ module Loans
                 parts = second_clip.to_s.split(".")
                 
                 #result = parts.count > 1 ? (((parts[0].to_i + 1.to_i) - second_clip.to_f).round(2) ) : second_clip
-                result = ((total_loan_amunt_with_insurance + second_clip).round - (total_loan_amunt_with_insurance + second_clip).to_f).round(2)
+                result1 =  ((total_loan_amunt_with_insurance + second_clip).round - (total_loan_amunt_with_insurance + second_clip).to_f).round(2)
+                if result1 < 0
+                  
+                  #result = ((1.to_f - result1.to_f.abs) * -1.to_i )
+                  result = 1.to_f - result1.to_f.abs
+                else
+                
+                  result = result1.to_f.abs
+                end
+
               
+                  
               
               
             
@@ -240,7 +251,7 @@ module Loans
       #============== insurance ===========================
       
       sum_total_laonable = 0
-      @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee]).to_f.round
+      @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
       
 
       #raise @jef.inspect
