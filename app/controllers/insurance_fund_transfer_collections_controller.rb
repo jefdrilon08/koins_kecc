@@ -73,7 +73,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       }
     end
 
-    if @insurance_fund_transfer_collection.pending? && !@insurance_fund_transfer_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
+    if Settings.activate_microinsurance && @insurance_fund_transfer_collection.pending? && !@insurance_fund_transfer_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
       @subheader_side_actions << {
         id: "btn-finalize",
         link: "#",
@@ -82,7 +82,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       }
     end
 
-    if Settings.activate_microinsurance and @insurance_fund_transfer_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
+    if Settings.activate_microinsurance && @insurance_fund_transfer_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
       @subheader_side_actions << {
           id: "btn-revert",
           link: "#",
@@ -92,13 +92,15 @@ class InsuranceFundTransferCollectionsController < ApplicationController
     end
 
     if @insurance_fund_transfer_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
-      if Settings.activate_microinsurance and @insurance_fund_transfer_collection.finalized?
-        @subheader_side_actions << {
-          id: "btn-approve",
-          link: "#",
-          class: "fa fa-check",
-          text: "Approve"
-        }
+      if Settings.activate_microinsurance
+        if @insurance_fund_transfer_collection.finalized?
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            text: "Approve"
+          }
+        end
       else
         @subheader_side_actions << {
           id: "btn-approve",
