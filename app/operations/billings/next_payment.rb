@@ -18,13 +18,13 @@ module Billings
       @member           = @config[:member]
       @collection_date  = @config[:collection_date]
 
-      @active_loans = Loan.active.where(member_id: @member.id)
+      @active_loans = ReadOnlyLoan.active.where(member_id: @member.id)
 
-      @members  = Member.active.where(center_id: @member.center.id)
-      valid_loan_product_ids  = Loan.active.where(member_id: @members.pluck(:id)).pluck(:loan_product_id).uniq
+      @members  = ReadOnlyMember.active.where(center_id: @member.center.id)
+      valid_loan_product_ids  = ReadOnlyLoan.active.where(member_id: @members.pluck(:id)).pluck(:loan_product_id).uniq
 
-      @entry_point_loan_products      = LoanProduct.entry_point.where(id: valid_loan_product_ids)
-      @non_entry_point_loan_products  = LoanProduct.non_entry_point.where(id: valid_loan_product_ids)
+      @entry_point_loan_products      = ReadOnlyLoanProduct.entry_point.where(id: valid_loan_product_ids)
+      @non_entry_point_loan_products  = ReadOnlyLoanProduct.non_entry_point.where(id: valid_loan_product_ids)
 
       @settings_savings_deposits  = Settings.try(:defaults).try(:savings_deposits)
 
