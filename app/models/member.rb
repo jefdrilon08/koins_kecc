@@ -173,6 +173,10 @@ class Member < ApplicationRecord
     self.insurance_status == "dormant" or self.insurance_status == "pending"
   end
 
+  def insurance_active?
+    self.insurance_status == "dormant" or self.insurance_status == "inforce" or self.insurance_status == "lapsed"
+  end
+
   def active?
     self.status == "active"
   end

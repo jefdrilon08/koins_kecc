@@ -131,7 +131,27 @@ module Adjustments
               total_amount = @account_transaction[:amount].to_f
              else
               
-              total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+              @loan.data["accounting_entry"]["debit_journal_entries"].each do |ld|
+                if ld["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"
+                  old_loan = @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["loan_product"]["old_receivable_amount"].to_f } + @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["loan_product"]["old_interest_receivable_amount"].to_f }
+
+                  new_loan = @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["principal_balance"].to_f } + @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["k_sagip_interest_balance"].to_f }
+                  
+                  
+                  
+                  for_dif_loan = @account_transaction[:amount].to_f - (old_loan.to_f - new_loan.to_f)
+                   #raise @account_transaction[:amount].to_f.inspect
+                  #raise for_dif_loan.inspect
+                  
+                  if for_dif_loan > 0
+                    total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+                  else
+                    total_amount = @account_transaction[:amount].to_f
+                    
+                  end
+                end
+              end
+            
               
              end
             else
