@@ -21,6 +21,24 @@ class Billing < ApplicationRecord
     if self.status.blank?
       self.status = "pending"
     end
+
+    if self.data.present?
+      if self.data["or_number"].present?
+        self.or_number = self.data["or_number"]
+      end
+
+      if self.data["ar_number"].present?
+        self.ar_number = self.data["ar_number"]
+      end
+
+      if self.data["total_expected_collections"].present?
+        self.total_expected_collections = self.data["total_expected_collections"].to_f.round(2)
+      end
+
+      if self.data["total_collected"].present?
+        self.total_collected = self.data["total_collected"].to_f.round(2)
+      end
+    end
   end
 
   def checked?
@@ -47,14 +65,6 @@ class Billing < ApplicationRecord
     else
       return "N/A"
     end
-  end
-
-  def total_expected_collections
-    self.data["total_expected_collections"]
-  end
-
-  def total_collected
-    self.data["total_collected"]
   end
 
   def pending?
@@ -135,10 +145,6 @@ class Billing < ApplicationRecord
     end
 
     records
-  end
-
-  def or_number
-    self.data.with_indifferent_access[:or_number]
   end
 
   def book

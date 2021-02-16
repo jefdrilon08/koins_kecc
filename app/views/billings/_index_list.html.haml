@@ -37,10 +37,10 @@
           #{o.center.name} / #{o.branch}
         %td.text-right
           .text-muted
-            #{number_to_currency(o.total_expected_collections, unit: "")}
+            #{number_to_currency(o.total_expected_collections || 0, unit: "")}
         %td.text-right
           %strong
-            #{number_to_currency(o.total_collected, unit: "")}
+            #{number_to_currency(o.total_collected || 0, unit: "")}
         %td
           %center
             - if o.pending?

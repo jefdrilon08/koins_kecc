@@ -1,4 +1,24 @@
 namespace :adjust do
+  task :load_additional_fields_in_membership_payment_collections => :environment do
+    MembershipPaymentCollection.select("id,or_number,ar_number,total_collected,data,status,center_id,branch_id,updated_at").find_in_batches(batch_size: 100) do |group|
+      group.each do |o|
+        puts "Updating membership payment collection #{o.id}"
+
+        o.update!(updated_at: Time.now)
+      end
+    end
+  end
+
+  task :load_additional_fields_in_billings => :environment do
+    Billing.select("id,date_approved,data,updated_at,or_number,ar_number,total_collected,total_expected_collections,updated_at,status,center_id,branch_id,collection_date").find_in_batches(batch_size: 100) do |group|
+      group.each do |o|
+        puts "Updating billing #{o.id}"
+
+        o.update!(updated_at: Time.now)
+      end
+    end
+  end
+
   task :load_dates_in_data_stores => :environment do
     DataStore.select("id, meta, as_of, start_date, end_date, status").find_in_batches(batch_size: 100) do |group|
       group.each do |data_store|

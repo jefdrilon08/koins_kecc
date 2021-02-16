@@ -19,10 +19,6 @@ class MembershipPaymentCollection < ApplicationRecord
     self.status != "pending"
   end
 
-  def or_number
-    self.data.with_indifferent_access[:or_number]
-  end
-
   def member_ids
     records = []
     self.data.with_indifferent_access[:records].each do |o|
@@ -101,10 +97,6 @@ class MembershipPaymentCollection < ApplicationRecord
     records
   end
 
-  def total_collected
-    self.data["total_collected"]
-  end
-
   def accounting_entry
     self.data.with_indifferent_access[:accounting_entry]
   end
@@ -112,6 +104,20 @@ class MembershipPaymentCollection < ApplicationRecord
   def load_defaults
     if self.status.blank?
       self.status = "pending"
+    end
+
+    if self.data.present?
+      if self.data["total_collected"].present?
+        self.total_collected = self.data["total_collected"].to_f.round(2)
+      end
+      
+      if self.data["or_number"].present?
+        self.or_number = self.data["or_number"]
+      end
+
+      if self.data["ar_number"].present?
+        self.ar_number = self.data["ar_number"]
+      end
     end
   end
 
