@@ -1,4 +1,13 @@
 namespace :report do
+  task :write_off => :environment do
+    br_name = ENV['SATO']
+    @data_store =  DataStore.where(
+                                  "meta->>'branch_id' = ? AND
+                                    meta->>'data_store_type' = ?", 
+                                    br_id,
+                                    "MANUAL_AGING").order(:as_of).last
+  end 
+  
   task :member_age => :environment do
     s_date= ENV['s_date']
     br_name = ENV['SATO']
