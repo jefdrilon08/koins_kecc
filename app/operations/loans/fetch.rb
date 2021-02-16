@@ -62,18 +62,20 @@ module Loans
       data                  = @loan.data.with_indifferent_access
       accounting_entry_data = @loan.data.with_indifferent_access[:accounting_entry]
 
+      branch = @loan.branch
+
       if @loan.active_or_paid?
         ac  = ReadOnlyAccountingEntry.where(
-                branch_id: @loan.branch.id,
+                branch_id: branch.id,
                 reference_number: accounting_entry_data[:reference_number],
                 book: accounting_entry_data[:book]
               ).first
 
         data[:accounting_entry] = JSON.parse(ac.to_json).with_indifferent_access
 
-        data[:accounting_entry][:branch_id]       = @loan.branch.id
-        data[:accounting_entry][:branch_name]     = @loan.branch.name
-        data[:accounting_entry][:branch]          = @loan.branch.to_s.upcase
+        data[:accounting_entry][:branch_id]       = branch.id
+        data[:accounting_entry][:branch_name]     = branch.name
+        data[:accounting_entry][:branch]          = branch.to_s.upcase
         data[:accounting_entry][:journal_entries] = ac.journal_entries.map{ |o| 
                                                       {
                                                         id: o.id,

@@ -37,8 +37,8 @@ module Dashboard
       metric = branch_metrics.find{ |bm| bm.branch_id == branch.id }
 
       d = {
-        as_of: @as_of,
-        member_counts_as_of: @as_of,
+        as_of: metric.as_of,
+        member_counts_as_of: metric.as_of,
         principal: 0.00,
         interest: 0.00,
         total: 0.00,
@@ -70,7 +70,7 @@ module Dashboard
       }
 
       if metric.present?
-        d[:as_of] = @as_of
+        d[:as_of] = metric.as_of
 
         d[:principal]                 = metric.principal.to_f.round(2) 
         d[:interest]                  = metric.interest.to_f.round(2)
