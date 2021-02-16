@@ -1185,7 +1185,7 @@ namespace :adjust do
         member  = Member.where(identification_number: sub_dir_name).first
 
         if member
-          if member.active?
+          if member.insurance_active?
             puts "Found directory for member #{member.full_name}"
             Dir["#{f}/*"].each do |ff|
               if !File.directory? ff
@@ -1457,6 +1457,10 @@ namespace :adjust do
 
                       if current_balance == 0.0 && insurance_status == "resigned"
                         new_status = "resigned"
+                      end
+
+                      if status == "resigned" && current_balance == 0.0
+                        new_status = "resigned"  
                       end
 
                       if current_balance == 0.0 && insurance_date_resigned.present?
