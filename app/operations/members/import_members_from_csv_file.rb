@@ -215,7 +215,6 @@ module Members
           center = Center.where(id: center_id, branch_id: branch.id).first
           if center.nil?
             center = Center.new
-            center.id = center_id
             center.name = row['center'].try(:upcase)
             center.short_name = row['center'].try(:upcase)
             center.meeting_day = 1
@@ -253,7 +252,6 @@ module Members
             
             if center.nil?
               center = Center.new
-              center.id = center_id
               center.name = row['center'].try(:upcase)
               center.short_name = row['center'].try(:upcase)
               center.meeting_day = 1
@@ -292,6 +290,18 @@ module Members
               tin_number = ''
             else
               tin_number = tin_num
+            end
+
+            if row['insurance_date_resigned_data'].present?
+              insurance_date_resigned_data = row['insurance_date_resigned_data']
+            else
+              insurance_date_resigned_data = nil
+            end
+
+            if row['insurance_resignation_reason_data'].present?
+              insurance_resignation_reason_data = row['insurance_resignation_reason_data']
+            else
+              insurance_resignation_reason_data = nil
             end
 
             insurance_status = row['insurance_status']
@@ -343,6 +353,8 @@ module Members
               member_data[:resignation][:type] = row['resignation_type']
               member_data[:resignation][:code] = row['resignation_code']
               member_data[:resignation][:reason] = row['resignation_reason']
+              member_data[:insurance_resignation][:code] = row['resignation_code']
+              member_data[:insurance_resignation][:reason] = row['resignation_reason']
               member_data[:government_identification_numbers][:sss_number] = sss_number
               member_data[:government_identification_numbers][:tin_number] = tin_number
               member_data[:government_identification_numbers][:pag_ibig_number] = pag_ibig_number
