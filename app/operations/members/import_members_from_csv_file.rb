@@ -215,6 +215,11 @@ module Members
           center = Center.where(id: center_id, branch_id: branch.id).first
           if center.nil?
             center = Center.new
+            
+            if !center_id.nil?
+              center.id = center_id                
+            end
+
             center.name = row['center'].try(:upcase)
             center.short_name = row['center'].try(:upcase)
             center.meeting_day = 1
@@ -252,6 +257,11 @@ module Members
             
             if center.nil?
               center = Center.new
+
+              if !center_id.nil?
+                center.id = center_id                
+              end
+
               center.name = row['center'].try(:upcase)
               center.short_name = row['center'].try(:upcase)
               center.meeting_day = 1
