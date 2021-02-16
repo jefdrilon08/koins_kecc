@@ -13,12 +13,6 @@ module Billings
         @collection_date  = @config[:collection_date]
         @branch           = ReadOnlyBranch.where(id: @config[:branch_id]).first
         @center           = ReadOnlyCenter.where(id: @config[:center_id]).first
-
-        @billing  = Billing.new(
-                      collection_date: @collection_date,
-                      branch: @branch,
-                      center: @center
-                    )
       end
 
       @members  = ReadOnlyMember.active.where(center_id: @center.id)
@@ -87,6 +81,12 @@ module Billings
                                       center: @center
                                     }
                                   ).execute!
+
+      @billing  = Billing.new(
+                    collection_date: @collection_date,
+                    branch: @branch,
+                    center: @center
+                  )
 
       @billing.data = @data
     

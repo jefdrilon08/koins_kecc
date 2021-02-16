@@ -3,6 +3,7 @@ class BillingsController < ApplicationController
 
   def index
     @billings = ReadOnlyBilling
+      .select("id,branch_id,center_id,collection_date,date_approved,status,meta")
       .includes(:center, :branch)
       .where(branch_id: @branches.pluck(:id))
 
