@@ -11,6 +11,7 @@ class DataStoreController < ApplicationController
     @book         = params[:book]
     @book_s_date  = params[:book_start_date]
     @book_e_date  = params[:book_end_date]
+    @status       = params[:status]
 
     if @start_date.present?
       @records = @records.where(
@@ -56,6 +57,12 @@ class DataStoreController < ApplicationController
       @records = @records.where(
                   "meta ->> 'end_date' = ?" , @book_e_date
                   )
+    end
+
+    if @status.present?
+      @records  = @records.where(
+                    status: @status
+                  ) 
     end
   end
 
