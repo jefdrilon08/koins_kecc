@@ -27,7 +27,7 @@
           %strong
             #{o.end_date.to_date.strftime("%b %d, %Y")}
         %td
-          #{o.branch_name}
+          #{o.meta["branch_name"]}
         %td.text-center
           - if o.processing?
             .badge.badge-info
