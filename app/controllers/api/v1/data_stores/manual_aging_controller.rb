@@ -37,7 +37,7 @@ module Api
         end
 
         def queue
-          data_store_type = params[:data_store_type] || "MANUAL_AGING"
+          data_store_type = "MANUAL_AGING"
           as_of           = params[:as_of].try(:to_date)
           #branch          = @branches.where(id: params[:branch_id]).first
           branch          = @branches.select{ |o| o[:id] == params[:branch_id] }.first
@@ -50,7 +50,7 @@ module Api
                     ).execute!
 
           if errors[:messages].size == 0
-            record  = DataStore.manual_aging.where(
+            record  = DataStore.select("id, meta, status").manual_aging.where(
                         "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
                         params[:branch_id],
                         as_of
