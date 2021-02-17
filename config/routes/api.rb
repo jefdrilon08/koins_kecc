@@ -10,6 +10,9 @@ namespace :api do
     # members
     get "/members/co_makers", to: "members#co_makers"
     get "/members/loan_products", to: "members#loan_products"
+
+    # dashboard
+    post "/dashboard/generate_daily_report", to: "dashboard#generate_daily_report"
   end
 
   namespace :v1 do

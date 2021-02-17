@@ -159,6 +159,7 @@ import AccruedPaymentCollectionsIndex  from "../models/AccruedPaymentCollections
 import AdjustmentsRecomputeRestructuresIndex from "../models/AdjustmentsRecomputeRestructuresIndex.js";
 import AdjustmentsRecomputeRestructuresShow from "../models/AdjustmentsRecomputeRestructuresShow.js";
 import DailyBranchMetricsIndex from "../models/DailyBranchMetricsIndex.js";
+import Dashboard from "../models/Dashboard.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -174,7 +175,7 @@ const hooks = {
   "members/show":                                     [MembersShow],
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
-  "pages/index":                                      [DashboardMainUI],
+  "pages/index":                                      [DashboardMainUI, Dashboard],
   "pages/login":                                      [PagesLogin],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],

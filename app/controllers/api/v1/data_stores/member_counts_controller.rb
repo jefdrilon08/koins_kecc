@@ -33,16 +33,18 @@ module Api
                           status: "processing"
                         }
                       )
-
-            args  = {
-              record_id: @record.id,
-              data_store_type: @data_store_type
-            }
-
-            ProcessBranchMemberCounts.perform_later(args)
-
-            render json: { message: "ok" }
+          else
+            @record.update!(status: "processing")
           end
+
+          args  = {
+            record_id: @record.id,
+            data_store_type: @data_store_type
+          }
+
+          ProcessBranchMemberCounts.perform_later(args)
+
+          render json: { message: "ok" }
         end
       end
     end

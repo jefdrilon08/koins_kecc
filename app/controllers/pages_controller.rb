@@ -2,15 +2,19 @@ class PagesController < ApplicationController
   before_action :authenticate_user!, except: [:login]
 
   def index
-    @pending_members_count = Member
+    @pending_members_count = ReadOnlyMember
+      .select("id,status,branch_id,last_name")
       .pending
       .where(branch_id: @branches.pluck(:id))
-      .count
+      .count("id")
 
     @payload = {
       username: current_user.username,
       roles: current_user.roles,
-      is_microinsurance: Settings.activate_microinsurance
+      is_microinsurance: Settings.activate_microinsurance,
+      urlGenerateDailyReport: "#{ENV['BACKEND_API_URL']}/api/v2/dashboard/generate_daily_report",
+      userId: current_user.id,
+      xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
     }
 
     @subheader_items = [
@@ -18,6 +22,7 @@ class PagesController < ApplicationController
     ]
 
     @subheader_side_actions = [
+      { link: "#", id: "btn-generate-daily-report", class: "fa fa-sync", text: "Generate Daily Report" },
       { link: member_form_path, class: "fa fa-plus", text: "New Member" },
       { link: members_path(status: "pending"), class: "fa fa-arrow-right", text: "Pending Records (#{@pending_members_count})" }
     ]
