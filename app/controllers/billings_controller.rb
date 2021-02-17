@@ -118,14 +118,17 @@ class BillingsController < ApplicationController
         id: "btn-excel",
         text: "Download Excel"
       }
-
+      
+      if @billing.status != "approved"
+       
        @subheader_side_actions << {
         link: billing_path(@billing.id),
         class: "fa fa-times",
         data: { method: :delete, confirm: "Are you sure?" },
         text: "Delete"
       }
-
+      end
+      
       @payload = {
         id: @billing.id
       }
