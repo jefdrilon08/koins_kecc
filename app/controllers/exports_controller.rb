@@ -8,10 +8,10 @@ class ExportsController < ApplicationController
 
     if !@start_date.nil? && !@end_date.nil? && !@branch_id.nil?
       #@members = Member.where(created_at: @start_date.beginning_of_day..@end_date.end_of_day)
-      @members = Member.where("Date(members.updated_at) >= ? AND Date(members.updated_at) <= ? AND branch_id = ?", @start_date, @end_date, @branch_id)
+      @members = Member.where("Date(members.updated_at) >= ? AND Date(members.updated_at) <= ? AND branch_id = ?", @start_date, @end_date, @branch_id).order("created_at ASC")
       send_data Exports::GenerateMembersCsv.new(members: @members).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=members #{@start_date}_#{@end_date}.csv"
     elsif !@branch_id.nil?
-      @members = Member.where(branch_id: @branch_id)
+      @members = Member.where(branch_id: @branch_id).order("created_at ASC")
       send_data Exports::GenerateMembersCsv.new(members: @members).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=members.csv"
     else
       @members = Member.all

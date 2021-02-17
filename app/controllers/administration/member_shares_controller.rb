@@ -168,7 +168,7 @@ module Administration
         .printed
         .includes(member: [:branch, :center])
         .where(members: { branch_id: @branches.pluck(:id) })
-        .order("member_shares.data->>'date_printed' DESC")
+        .order(Arel.sql("member_shares.data->>'date_printed' DESC"))
 
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
