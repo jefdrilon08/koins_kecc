@@ -9,7 +9,6 @@ module DataStores
       ]
 
       @subheader_side_actions = [
-        { text: "New", link: "#", class: "fa fa-plus", id: "btn-new" }
       ]
 
       @payload = {
