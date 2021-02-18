@@ -26,7 +26,7 @@
         %td
           #{o.meta["end_date"].to_date.strftime("%b %d, %Y") if o.meta.present? and o.meta["end_date"].present?}
         %td
-          #{o.branch_name}
+          #{o.meta["branch_name"]}
         %td.text-center
           - if o.processing?
             .badge.badge-info

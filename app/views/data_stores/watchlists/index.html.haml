@@ -13,14 +13,3 @@
 
 = render partial: "data_stores/watchlists/modals/new"
 = render partial: "templates/error_list"
-
-= javascript_include_tag "data_stores/watchlists/Index"
-
-:javascript
-  $(document).ready(function() {
-    var authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-    Index.init({
-      authenticityToken: authenticityToken
-    });
-  });

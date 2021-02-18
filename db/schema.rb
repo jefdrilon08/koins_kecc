@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_16_113547) do
+ActiveRecord::Schema.define(version: 2021_02_17_161516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -539,10 +539,21 @@ ActiveRecord::Schema.define(version: 2021_02_16_113547) do
     t.decimal "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+<<<<<<< HEAD
+    t.string "book"
+    t.uuid "branch_id"
+    t.uuid "accounting_fund_id"
+    t.string "status"
+    t.date "date_posted"
+    t.date "date_prepared"
+=======
+>>>>>>> 9cf3697122d8d7b2ef6d8bfb3854185d6ce5f17e
     t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
     t.index ["accounting_entry_id", "post_type", "accounting_code_id"], name: "manual_idx_18"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
+    t.index ["accounting_fund_id"], name: "index_journal_entries_on_accounting_fund_id"
+    t.index ["branch_id"], name: "index_journal_entries_on_branch_id"
   end
 
   create_table "kalinga_claims", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1116,6 +1127,8 @@ ActiveRecord::Schema.define(version: 2021_02_16_113547) do
   add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
+  add_foreign_key "journal_entries", "accounting_funds"
+  add_foreign_key "journal_entries", "branches"
   add_foreign_key "kalinga_claims", "branches"
   add_foreign_key "kalinga_claims", "centers"
   add_foreign_key "kalinga_claims", "members"

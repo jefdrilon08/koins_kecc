@@ -102,7 +102,7 @@ class DataStoreController < ApplicationController
   end
 
   def branch_data_stores
-    DataStore.send(data_store_scope)
+    ReadOnlyDataStore.send(data_store_scope)
   end
 
   def list_query_config
@@ -130,12 +130,10 @@ class DataStoreController < ApplicationController
 
   def list_query(scope)
     config = list_query_config.fetch(data_store_scope)
-    meta_fields = config.fetch(:meta).map { |f| "meta->>'#{f}' as #{f}" }
-    #data_fields = config.fetch(:data).map { |f| "data->>'#{f}' as #{f}" }
     order_field = config.fetch(:order)
 
     scope
-      .select("id, meta, status, created_at, updated_at, start_date, end_date, #{(meta_fields).join(", ")}")
+      .select("id, meta, status, created_at, updated_at, start_date, end_date, as_of")
       .where("meta->>'branch_id' IN (?)", @branches.pluck(:id))
       .order(order_field)
       .page(params[:page])

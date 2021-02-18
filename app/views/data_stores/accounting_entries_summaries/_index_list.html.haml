@@ -24,7 +24,7 @@
             = link_to "/data_stores/accounting_entries_summaries/#{o.id}" do
               .fa.fa-search
         %td.text-center.text-muted
-          #{o.book}
+          #{o.meta["book"]}
         %td.text-center
           %strong
             #{o.start_date.to_date.strftime("%b %d, %Y")}
@@ -32,7 +32,7 @@
           %strong
             #{o.end_date.to_date.strftime("%b %d, %Y")}
         %td
-          #{o.branch_name}
+          #{o.meta["branch_name"]}
         %td.text-center
           - if o.processing?
             .badge.badge-info

@@ -57,7 +57,7 @@ module Api
           @record.update!(status: "processing")
 
           args = {
-            record: @record,
+            id: @record.id,
             data_store_type: @data_store_type,
             include_centers: @include_centers
           }
