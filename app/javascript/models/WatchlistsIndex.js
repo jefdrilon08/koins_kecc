@@ -80,7 +80,6 @@ var _bindEvents = function() {
 }
 
 var init  = function(config) {
-  id                = config.id;
   authenticityToken = config.authenticityToken;
 
   _cacheDom();

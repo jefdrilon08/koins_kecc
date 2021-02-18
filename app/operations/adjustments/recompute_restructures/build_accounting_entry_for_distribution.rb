@@ -184,8 +184,9 @@ module Adjustments
         if @loan.status == "active"
             
           if @for_savings_distribution == nil
+                      
+            total_amount_principal = account_transaction_data.data.with_indifferent_access[:total_principal_paid].to_f.abs
           
-            total_amount_principal = account_transaction_data.data.with_indifferent_access["total_principal_paid"].to_f.abs
             total_amount_interest = account_transaction_data.data.with_indifferent_access["total_interest_paid"].to_f.abs
             account_code_principal = AccountingCode.find("a6913ac9-1a85-495a-8f80-d394549dc52e")
             account_code_interest = AccountingCode.find("a09f6aea-9ab9-4e55-a994-ca8c4dd5de33")

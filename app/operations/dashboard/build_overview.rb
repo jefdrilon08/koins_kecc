@@ -92,8 +92,8 @@ module Dashboard
         d[:overall_interest_balance]  = metric.overall_interest_balance.to_f.round(2)
 
         d[:par_amount]    = metric.par_amount.to_f.round(2)
-        d[:principal_rr]  = metric.principal_rr.to_f.round(2)
-        d[:par]           = metric.par.to_f.round(2)
+        d[:principal_rr]  = metric.principal_rr.to_f
+        d[:par]           = metric.par.to_f
 
         d[:member_counts_as_of] = metric.as_of
 

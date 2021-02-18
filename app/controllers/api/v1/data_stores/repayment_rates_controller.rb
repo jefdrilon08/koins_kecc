@@ -39,7 +39,7 @@ module Api
         end
 
         def queue
-          data_store_type = params[:data_store_type] || "REPAYMENT_RATES"
+          data_store_type = "REPAYMENT_RATES"
           as_of           = params[:as_of].try(:to_date)
 
           # fetch branches according to @core_user since we're using API calls
@@ -60,9 +60,10 @@ module Api
 
           if errors[:messages].size == 0
             record  = DataStore.select("id, meta, status").where(
-                        "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                        "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ? AND meta->>'data_store_type' = ?",
                         params[:branch_id],
-                        as_of
+                        as_of,
+                        "REPAYMENT_RATES"
                       ).first
 
             if record.blank?

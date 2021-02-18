@@ -11,16 +11,17 @@ class DataStoreController < ApplicationController
     @book         = params[:book]
     @book_s_date  = params[:book_start_date]
     @book_e_date  = params[:book_end_date]
+    @status       = params[:status]
 
     if @start_date.present?
       @records = @records.where(
-                  "data ->> 'as_of' >= ?" , @start_date
+                  "as_of >= ?" , @start_date
                   )
     end
 
     if @end_date.present?
       @records = @records.where(
-                  "data ->> 'as_of' <= ?" , @end_date
+                  "as_of <= ?" , @end_date
                   )
     end
 
@@ -56,6 +57,12 @@ class DataStoreController < ApplicationController
       @records = @records.where(
                   "meta ->> 'end_date' = ?" , @book_e_date
                   )
+    end
+
+    if @status.present?
+      @records  = @records.where(
+                    status: @status
+                  ) 
     end
   end
 
@@ -124,11 +131,11 @@ class DataStoreController < ApplicationController
   def list_query(scope)
     config = list_query_config.fetch(data_store_scope)
     meta_fields = config.fetch(:meta).map { |f| "meta->>'#{f}' as #{f}" }
-    data_fields = config.fetch(:data).map { |f| "data->>'#{f}' as #{f}" }
+    #data_fields = config.fetch(:data).map { |f| "data->>'#{f}' as #{f}" }
     order_field = config.fetch(:order)
 
     scope
-      .select("id, meta, status, created_at, updated_at, #{(meta_fields + data_fields).join(", ")}")
+      .select("id, meta, status, created_at, updated_at, start_date, end_date, #{(meta_fields).join(", ")}")
       .where("meta->>'branch_id' IN (?)", @branches.pluck(:id))
       .order(order_field)
       .page(params[:page])

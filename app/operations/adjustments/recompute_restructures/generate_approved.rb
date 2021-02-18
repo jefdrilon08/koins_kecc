@@ -47,7 +47,8 @@ module Adjustments
           AmortizationScheduleEntry.where(loan_id: @recompute_restructure_details.loan, is_paid: nil).order(:due_date).each do |ase|
             
             amort_amount = ase.principal_balance + ase.interest_balance
-            if amount > 0 
+            if amount > 0
+              
               if amount >= amort_amount 
               
                 test = amort_amount
@@ -73,12 +74,26 @@ module Adjustments
                       
                       
 
-                    
-                  end
+            
+              else
+               test = amount
+               if ase.interest_balance > 0
+                for_principal = 0.0
+                total_interest = test
+              
+               else
+                for_principal = test
+                total_interest = 0.0
+                
+               end
+
+              end
                   amount = amount - amount
                   @payments = { id: ase.id, due_date: ase.due_date,principal_paid: for_principal, interest_paid: total_interest }
-                
+                  #raise @payments.inspect  
+          
                 end
+          
             end
             
               
@@ -99,7 +114,7 @@ module Adjustments
           @account_transaction.data[:amount_due] =  total_interest_paid + total_principal_paid
           @account_transaction.data[:particular] =  "To record rebates of member's for k-sagip installement on old policy"
           @account_transaction.data[:approved_by] =  @user.full_name
-          
+          #raise @account_transaction.inspect 
           #@account_transaction.save!
           for_entry = {
             account_transaction: @account_transaction,
