@@ -110,12 +110,12 @@ module Reports
         record[:number_of_dependents] = number_of_dependents
         record[:value_dependents] = dependent_value
         record[:coverage_value] = value
-        record[:lif] = member.equity_value
+        record[:lif] = member.lif_amount
         record[:rf] = member.rf_amount
         record[:status] = member.status
 
         @t_coverage += value
-        @t_lif += member.equity_value
+        @t_lif += member.lif_amount
         @t_rf += member.rf_amount
         @t_dependents += number_of_dependents
         @t_dependents_value += dependent_value

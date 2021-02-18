@@ -539,12 +539,15 @@ ActiveRecord::Schema.define(version: 2021_02_17_161516) do
     t.decimal "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+<<<<<<< HEAD
     t.string "book"
     t.uuid "branch_id"
     t.uuid "accounting_fund_id"
     t.string "status"
     t.date "date_posted"
     t.date "date_prepared"
+=======
+>>>>>>> 9cf3697122d8d7b2ef6d8bfb3854185d6ce5f17e
     t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
     t.index ["accounting_entry_id", "post_type", "accounting_code_id"], name: "manual_idx_18"

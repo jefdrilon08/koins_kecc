@@ -213,20 +213,27 @@ module Members
           center_name = row['center'].try(:upcase)
           center_id = row['center_id']
           center = Center.where(id: center_id, branch_id: branch.id).first
+          
           if center.nil?
-            center = Center.new
-            
-            if !center_id.nil?
-              center.id = center_id                
-            end
+            c = Center.where("upper(name) = ?", center_name).first
 
-            center.name = row['center'].try(:upcase)
-            center.short_name = row['center'].try(:upcase)
-            center.meeting_day = 1
-            center.user = @user
-            center.branch = branch
-            center.save!
-            member.center = center
+            if c.nil?
+              center = Center.new
+            
+              if !center_id.nil?
+                center.id = center_id                
+              end
+
+              center.name = row['center'].try(:upcase)
+              center.short_name = row['center'].try(:upcase)
+              center.meeting_day = 1
+              center.user = @user
+              center.branch = branch
+              center.save!
+              member.center = center
+            else
+              member.center = c
+            end
           else
             center.update!(name: row['center'].try(:upcase))
             member.center = center

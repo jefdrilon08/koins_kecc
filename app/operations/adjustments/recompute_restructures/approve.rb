@@ -71,6 +71,17 @@ module Adjustments
                       end
                       
                       
+              else
+               test = amount
+               if ase.interest_balance > 0
+                for_principal = 0.0
+                total_interest = test
+              
+               else
+                for_principal = test
+                total_interest = 0.0
+                
+               end
                       
 
                     

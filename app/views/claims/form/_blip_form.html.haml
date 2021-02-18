@@ -52,7 +52,7 @@
     .form-group
       %label.col.control-label
         Member's Contribution (LIF)
-        = text_field_tag :equity_value, @claim.data["equity_value"], class: 'form-control', id: 'equity-value',value: @claim.member.equity_value
+        = text_field_tag :equity_value, @claim.data["equity_value"], class: 'form-control', id: 'equity-value',value: @claim.member.lif_amount
   .col
     .form-group   
       %label.col.control-label
