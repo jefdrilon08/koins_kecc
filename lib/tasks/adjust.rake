@@ -1,4 +1,14 @@
 namespace :adjust do
+  task :load_additional_fields_in_journal_entries => :environment do
+    JournalEntry.select("*").find_in_batches(batch_size: 100) do |group|
+      group.each do |o|
+        puts "Updating journal entry #{o.id}"
+
+        o.update!(updated_at: Time.now)
+      end
+    end
+  end
+
   task :load_additional_fields_in_membership_payment_collections => :environment do
     MembershipPaymentCollection.select("id,or_number,ar_number,total_collected,data,status,center_id,branch_id,updated_at").find_in_batches(batch_size: 100) do |group|
       group.each do |o|

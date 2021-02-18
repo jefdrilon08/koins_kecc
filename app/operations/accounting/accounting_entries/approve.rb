@@ -37,8 +37,6 @@ module Accounting
                                           ).execute!
         end
 
-        #raise new_reference_number.inspect
-
         @accounting_entry.update!(
           status: "approved",
           date_posted: @current_date,

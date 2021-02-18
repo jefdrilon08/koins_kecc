@@ -32,7 +32,13 @@ class AccountingEntry < ApplicationRecord
   scope :year_end_closing, -> { where("book = ? AND status = ? AND data->>'is_closing_record' = ?", "MISC", "approved", "true").order("date_prepared DESC") }
 
   before_validation :load_defaults
-  
+  before_save :update_journal_entries
+
+  def update_journal_entries
+    self.journal_entries.each do |o|
+      o.update!(updated_at: Time.now)
+    end
+  end
   
   def load_defaults
     if self.new_record?
