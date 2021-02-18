@@ -2411,4 +2411,45 @@ namespace :adjust do
 
     puts "Done!"
   end
+
+
+  task :repair_members_center => :environment do
+    if ENV['BRANCH_ID'].present?
+      branches = Branch.where(id: ENV['BRANCH_ID'])
+    else
+      branches = Branch.all  
+    end
+
+    branches.each do |branch|
+      members = Member.where("branch_id = ?", branch.id)
+
+      members.each do |member|
+        puts "Member: #{member.id}"
+        center = member.center
+        c_name = center.name.upcase
+
+        if center.branch_id != branch.id
+          puts "Repairing"
+
+          c = Center.where("upper(name) = ? AND branch_id = ?", c_name, branch.id).first
+
+          if c.nil?
+            n_center = Center.new
+            n_center.name = c_name
+            n_center.short_name = c_name
+            n_center.meeting_day = 1
+            n_center.user = User.find("42ae07d6-521f-4ea8-9d2e-7f48ab716116")
+            n_center.branch = branch
+            n_center.save!
+
+            member.update!(center: n_center)
+          else
+            member.update!(center: c)
+          end
+        end
+      end
+    end
+
+    puts "Done!"
+  end
 end
