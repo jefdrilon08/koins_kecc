@@ -77,14 +77,14 @@ module Accounting
           end
         end
 
-        data[:total_beginning_debit]  += data.fetch(:"#{category}_beginning").fetch(:total_debit)
-        data[:total_beginning_credit] += data.fetch(:"#{category}_beginning").fetch(:total_credit)
-        data[:total_current_debit]    += data.fetch(:"#{category}_current").fetch(:total_debit)
-        data[:total_current_credit]   += data.fetch(:"#{category}_current").fetch(:total_credit)
-        data[:total_ending_debit]     += data.fetch(:"#{category}_ending").fetch(:total_debit)
-        data[:total_ending_credit]    += data.fetch(:"#{category}_ending").fetch(:total_credit)
+        @data[:total_beginning_debit]  += data.fetch(:"#{category}_beginning").fetch(:total_debit)
+        @data[:total_beginning_credit] += data.fetch(:"#{category}_beginning").fetch(:total_credit)
+        @data[:total_current_debit]    += data.fetch(:"#{category}_current").fetch(:total_debit)
+        @data[:total_current_credit]   += data.fetch(:"#{category}_current").fetch(:total_credit)
+        @data[:total_ending_debit]     += data.fetch(:"#{category}_ending").fetch(:total_debit)
+        @data[:total_ending_credit]    += data.fetch(:"#{category}_ending").fetch(:total_credit)
 
-        data
+        @data
       end
 
       def group_by_code_and_amount(phase, entries, is_yearly:)

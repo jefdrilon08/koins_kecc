@@ -147,13 +147,16 @@ module Accounting
       entries = ReadOnlyAccountingEntry
         .joins(journal_entries: :accounting_code)
         .where(
-          status: "approved",
-          branch_id: @branch.id,
+          "accounting_entries.status = ? AND accounting_entries.branch_id = ?",
+          "approved",
+          @branch.id
+        )
+        .where(
           journal_entries: { post_type: post_type },
           accounting_codes: { category: category.to_s.upcase.gsub("_", " ") },
         )
 
-      entries = entries.where(accounting_fund_id: accounting_fund_id) if accounting_fund_id
+      entries = entries.where("accounting_entries.accounting_fund_id = ?", accounting_fund_id) if accounting_fund_id
 
       case phase
       when :beginning
