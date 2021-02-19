@@ -157,14 +157,14 @@ module Accounting
 
       case phase
       when :beginning
-        entries = entries.where("date_posted < ?", @start_date)
-        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @start_date.year) if is_yearly
+        entries = entries.where("accounting_entries.date_posted < ?", @start_date)
+        entries = entries.where("EXTRACT(YEAR FROM accounting_entries.date_posted) = ?", @start_date.year) if is_yearly
       when :current
-        entries = entries.where("date_posted >= ? AND date_posted <= ?", @start_date, @end_date)
-        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @start_date.year) if is_yearly
+        entries = entries.where("accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ?", @start_date, @end_date)
+        entries = entries.where("EXTRACT(YEAR FROM accounting_entries.date_posted) = ?", @start_date.year) if is_yearly
       when :ending
         entries = entries.where("date_posted <= ?", @end_date)
-        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @end_date.year) if is_yearly
+        entries = entries.where("EXTRACT(YEAR FROM accounting_entries.date_posted) = ?", @end_date.year) if is_yearly
       else
         raise "Invalid phase, given #{phase}"
       end
