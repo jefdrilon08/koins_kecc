@@ -52,31 +52,6 @@ module Accounting
         data[:"#{category}_current"]   = build_entries(category: category.upcase, phase: :current)
         data[:"#{category}_ending"]    = build_entries(category: category.upcase, phase: :ending)
 
-        data.fetch(:"#{category}_beginning")[:entries].each_with_index do |entry, i|
-          entry = {
-            id:               entry.fetch(:accounting_code_id),
-            name:             entry.fetch(:accounting_code_name),
-            code:             entry.fetch(:accounting_code_code),
-            beginning_debit:  entry.fetch(:debit),
-            beginning_credit: entry.fetch(:credit),
-            current_debit:    data.fetch(:"#{category}_current")[:entries][i][:debit],
-            current_credit:   data.fetch(:"#{category}_current")[:entries][i][:credit],
-            ending_debit:     data.fetch(:"#{category}_ending")[:entries][i][:debit],
-            ending_credit:    data.fetch(:"#{category}_ending")[:entries][i][:credit],
-          }
-
-          if [
-            entry[:beginning_debit],
-            entry[:beginning_credit],
-            entry[:current_debit],
-            entry[:current_credit],
-            entry[:ending_debit],
-            entry[:ending_credit],
-          ].any? { |e| e > 0 }
-            data[:entries] << entry
-          end
-        end
-
         @data[:total_beginning_debit]  += data.fetch(:"#{category}_beginning").fetch(:total_debit)
         @data[:total_beginning_credit] += data.fetch(:"#{category}_beginning").fetch(:total_credit)
         @data[:total_current_debit]    += data.fetch(:"#{category}_current").fetch(:total_debit)
