@@ -215,7 +215,7 @@ module Members
           center = Center.where(id: center_id, branch_id: branch.id).first
           
           if center.nil?
-            c = Center.where("upper(name) = ?", center_name).first
+            c = Center.where("upper(name) = ? AND branch_id = ?", center_name, branch.id).first
 
             if c.nil?
               center = Center.new
