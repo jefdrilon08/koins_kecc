@@ -1,4 +1,9 @@
 class AccountingCodeBalance < ApplicationRecord
+  STATUSES = [
+    "processing",
+    "done"
+  ]
+
   belongs_to :accounting_code
   belongs_to :accounting_fund, optional: true
   belongs_to :branch
@@ -19,4 +24,27 @@ class AccountingCodeBalance < ApplicationRecord
   scope :income, -> { joins(:accounting_code).where("accounting_code_balances.category = ?", "INCOME").order("code ASC") }
   scope :liabilities, -> { joins(:accounting_code).where("accounting_code_balances.category = ?", "LIABILITIES").order("code ASC") }
   scope :fund_balance, -> { joins(:accounting_code).where("accounting_code_balances.category = ?", "FUND BALANCE").order("code ASC") }
+
+  scope :processing, -> { where(status: "processing") }
+  scope :done, -> { where(status: "done") }
+
+  before_validation :load_defaults
+
+  def load_defaults
+    self.status                 = "processing" if self.status.blank?
+    self.total_beginning_debit  = 0.00 if self.total_beginning_debit.blank?
+    self.total_beginning_credit = 0.00 if self.total_beginning_credit.blank?
+    self.total_current_debit    = 0.00 if self.total_current_debit.blank?
+    self.total_current_credit   = 0.00 if self.total_current_credit.blank?
+    self.total_ending_debit     = 0.00 if self.total_ending_debit.blank?
+    self.total_ending_credit    = 0.00 if self.total_ending_credit.blank?
+  end
+
+  def processing?
+    self.status == "processing"
+  end
+
+  def done?
+    self.status == "done"
+  end
 end

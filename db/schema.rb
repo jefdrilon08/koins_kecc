@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_19_032114) do
+ActiveRecord::Schema.define(version: 2021_02_20_075523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_032114) do
     t.decimal "total_ending_credit"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "status"
     t.index ["accounting_code_id", "category", "branch_id", "start_date", "end_date"], name: "idx_acb_ac_id_cat_branch_id_sd_ed"
     t.index ["accounting_code_id"], name: "index_accounting_code_balances_on_accounting_code_id"
     t.index ["accounting_fund_id"], name: "index_accounting_code_balances_on_accounting_fund_id"
