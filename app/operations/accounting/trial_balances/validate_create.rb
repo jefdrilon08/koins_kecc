@@ -36,6 +36,22 @@ module Accounting
         end
 
         if @start_date and @end_date.present? and @branch.present?
+          # Check existing trial balance
+          existing_tb = DataStore.select("id,meta,status,as_of,start_date,end_date,created_at,updated_at").trial_balances.where(
+                          "meta->>'branch_id' = ? AND start_date = ? AND end_date = ?",
+                          branch.id,
+                          start_date,
+                          end_date
+                        ).first
+
+          if existing_tb.present?
+            @errors[:messages] << {
+              key: "trial_balance",
+              message: "Existing trial balance detected (ID: #{existing_tb.id}). Please delete first. Branch ID: #{branch.id} Start Date: #{start_date} End Date: #{end_date}."
+            }
+          end
+
+          # Check against closing records
           latest_closing_record = DataStore.year_end_closings.where(
                                     "status = ? AND meta->>'branch_id' = ?",
                                     "closed",

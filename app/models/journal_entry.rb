@@ -39,7 +39,7 @@ class JournalEntry < ApplicationRecord
       end
 
       if self.accounting_entry.date_posted.present?
-        self.date_posted = self.accounting_entry.date_posted
+        self.ae_date_posted = self.accounting_entry.date_posted
       end
 
       if self.accounting_entry.date_prepared.present?

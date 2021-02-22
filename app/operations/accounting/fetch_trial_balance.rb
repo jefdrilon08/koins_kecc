@@ -147,24 +147,27 @@ module Accounting
       entries = ReadOnlyAccountingEntry
         .joins(journal_entries: :accounting_code)
         .where(
-          status: "approved",
-          branch_id: @branch.id,
+          "accounting_entries.status = ? AND accounting_entries.branch_id = ?",
+          "approved",
+          @branch.id
+        )
+        .where(
           journal_entries: { post_type: post_type },
           accounting_codes: { category: category.to_s.upcase.gsub("_", " ") },
         )
 
-      entries = entries.where(accounting_fund_id: accounting_fund_id) if accounting_fund_id
+      entries = entries.where("accounting_entries.accounting_fund_id = ?", accounting_fund_id) if accounting_fund_id
 
       case phase
       when :beginning
-        entries = entries.where("date_posted < ?", @start_date)
-        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @start_date.year) if is_yearly
+        entries = entries.where("accounting_entries.date_posted < ?", @start_date)
+        entries = entries.where("EXTRACT(YEAR FROM accounting_entries.date_posted) = ?", @start_date.year) if is_yearly
       when :current
-        entries = entries.where("date_posted >= ? AND date_posted <= ?", @start_date, @end_date)
-        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @start_date.year) if is_yearly
+        entries = entries.where("accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ?", @start_date, @end_date)
+        entries = entries.where("EXTRACT(YEAR FROM accounting_entries.date_posted) = ?", @start_date.year) if is_yearly
       when :ending
         entries = entries.where("date_posted <= ?", @end_date)
-        entries = entries.where("EXTRACT(YEAR FROM date_posted) = ?", @end_date.year) if is_yearly
+        entries = entries.where("EXTRACT(YEAR FROM accounting_entries.date_posted) = ?", @end_date.year) if is_yearly
       else
         raise "Invalid phase, given #{phase}"
       end

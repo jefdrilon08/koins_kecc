@@ -13,10 +13,11 @@ var _xKoinsAppAuthSecret;
 var _userId;
 
 var init  = function(options) {
-  _id                 = options.id;
-  _authenticityToken  = options.authenticityToken;
-  _urlDelete          = options.urlDelete;
-  _userId             = options.userId;
+  _id                   = options.id;
+  _authenticityToken    = options.authenticityToken;
+  _urlDelete            = options.urlDelete;
+  _userId               = options.userId;
+  _xKoinsAppAuthSecret  = options.xKoinsAppAuthSecret;
 
   _cacheDom();
   _bindEvents();

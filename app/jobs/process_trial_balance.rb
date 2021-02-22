@@ -20,11 +20,40 @@ class ProcessTrialBalance < ApplicationJob
         accounting_fund: accounting_fund || ""
       }
 
-      data  = ::Accounting::FetchTrialBalance.new(
-                config: config
-              ).execute!
+#      data  = ::Accounting::FetchTrialBalance.new(
+#                config: config
+#              ).execute!
+#
+#      data_store.update!(data: data, status: "done")
+      
+      # Delete all accounting_code_balances with same parameters
+      AccountingCodeBalance.where(
+        branch_id:          branch.id,
+        start_date:         start_date,
+        end_date:           end_date,
+        accounting_fund_id: accounting_fund.try(:id)
+      ).delete_all
 
-      data_store.update!(data: data, status: "done")
+      ReadOnlyAccountingCode.all.each do |a|
+        acb = AccountingCodeBalance.create!(
+                status:             "processing",
+                branch_id:          branch.id,
+                start_date:         start_date,
+                end_date:           end_date,
+                accounting_fund_id: accounting_fund.try(:id),
+                accounting_code:    a,
+                category:           a.category
+              )
+
+        ProcessAccountingCodeBalance.perform_later({
+          id:                 acb.id,
+          branch_id:          branch.id,
+          accounting_code_id: a.id,
+          accounting_fund_id: accounting_fund.try(:id),
+          start_date:         start_date,
+          end_date:           end_date
+        })
+      end
     rescue Exception => e
       data_store.update!(
         status: "error",

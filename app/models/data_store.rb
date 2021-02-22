@@ -19,6 +19,7 @@ class DataStore < ApplicationRecord
   scope :closed, -> { where(status: "closed") }
   scope :approved, -> { where(status: "approved") }
   scope :pending, -> { where(status: "pending") }
+  scope :error, -> { where(status: "error") }
 
   scope :branch_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_LOANS_STATS") }
   scope :branch_with_centers_loans_stats, -> { where("meta->>'data_store_type' = ?", "BRANCH_WITH_CENTERS_LOANS_STATS") }

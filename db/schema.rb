@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_161516) do
+ActiveRecord::Schema.define(version: 2021_02_20_075523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -46,6 +46,28 @@ ActiveRecord::Schema.define(version: 2021_02_17_161516) do
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
     t.index ["transaction_type"], name: "index_account_transactions_on_transaction_type"
+  end
+
+  create_table "accounting_code_balances", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "accounting_code_id", null: false
+    t.uuid "accounting_fund_id"
+    t.uuid "branch_id", null: false
+    t.string "category"
+    t.date "start_date"
+    t.date "end_date"
+    t.decimal "total_beginning_debit"
+    t.decimal "total_beginning_credit"
+    t.decimal "total_current_debit"
+    t.decimal "total_current_credit"
+    t.decimal "total_ending_debit"
+    t.decimal "total_ending_credit"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "status"
+    t.index ["accounting_code_id", "category", "branch_id", "start_date", "end_date"], name: "idx_acb_ac_id_cat_branch_id_sd_ed"
+    t.index ["accounting_code_id"], name: "index_accounting_code_balances_on_accounting_code_id"
+    t.index ["accounting_fund_id"], name: "index_accounting_code_balances_on_accounting_fund_id"
+    t.index ["branch_id"], name: "index_accounting_code_balances_on_branch_id"
   end
 
   create_table "accounting_codes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -530,8 +552,9 @@ ActiveRecord::Schema.define(version: 2021_02_17_161516) do
     t.uuid "branch_id"
     t.uuid "accounting_fund_id"
     t.string "status"
-    t.date "date_posted"
     t.date "date_prepared"
+    t.date "ae_date_posted"
+    t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
     t.index ["accounting_fund_id"], name: "index_journal_entries_on_accounting_fund_id"
@@ -1063,6 +1086,9 @@ ActiveRecord::Schema.define(version: 2021_02_17_161516) do
 
   add_foreign_key "account_transaction_collections", "branches"
   add_foreign_key "account_transaction_collections", "centers"
+  add_foreign_key "accounting_code_balances", "accounting_codes"
+  add_foreign_key "accounting_code_balances", "accounting_funds"
+  add_foreign_key "accounting_code_balances", "branches"
   add_foreign_key "accounting_entries", "accounting_funds"
   add_foreign_key "accounting_entries", "branches"
   add_foreign_key "accrued_billings", "branches"

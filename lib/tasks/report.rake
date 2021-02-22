@@ -193,7 +193,7 @@ namespace :report do
         #outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
         #last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
         
-        last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1", l[:id] , s_date).order(:transacted_at).last
+        last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1 and transaction_type = 'loan_payment'", l[:id] , s_date).order(:transacted_at).last
         if last_at.nil?
           last_date = s_date
           last_payment = 0
