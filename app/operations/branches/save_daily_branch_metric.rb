@@ -90,6 +90,27 @@ module Branches
     private
 
     def build_rr!(rr)
+      # RESET TO 0.00
+      @daily_branch_metric.principal                 = 0.00 
+      @daily_branch_metric.interest                  = 0.00 
+      @daily_branch_metric.total                     = 0.00 
+      @daily_branch_metric.principal_due             = 0.00 
+      @daily_branch_metric.interest_due              = 0.00 
+      @daily_branch_metric.total_due                 = 0.00 
+      @daily_branch_metric.principal_paid            = 0.00 
+      @daily_branch_metric.interest_paid             = 0.00 
+      @daily_branch_metric.portfolio                 = 0.00 
+      @daily_branch_metric.principal_paid_due        = 0.00 
+      @daily_branch_metric.interest_paid_due         = 0.00 
+      @daily_branch_metric.total_paid_due            = 0.00 
+      @daily_branch_metric.total_paid                = 0.00 
+      @daily_branch_metric.principal_balance         = 0.00 
+      @daily_branch_metric.interest_balance          = 0.00 
+      @daily_branch_metric.total_balance             = 0.00 
+      @daily_branch_metric.overall_principal_balance = 0.00 
+      @daily_branch_metric.overall_interest_balance  = 0.00 
+      @daily_branch_metric.overall_balance           = 0.00 
+
       rr.data["records"].each do |r|
         @daily_branch_metric.principal                  += r["principal"].to_f.round(2)
         @daily_branch_metric.interest                   += r["interest"].to_f.round(2)
