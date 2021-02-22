@@ -9,7 +9,6 @@ module DataStores
       ]
 
       @subheader_side_actions = [
-        { text: "New", link: "#", class: "fa fa-plus", id: "btn-new" }
       ]
     end
 
@@ -31,7 +30,6 @@ module DataStores
       end
 
       @subheader_side_actions = [
-        { text: "Delete", class: "fa fa-times", link: "/data_stores/watchlists/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
 
       @payload = {

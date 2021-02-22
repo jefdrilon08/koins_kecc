@@ -115,34 +115,36 @@ export default class ShowComponent extends React.Component {
     var totalPastDue  = 0.00;
 
     for(var i = 0; i < records.length; i++) {
-      totalPastDue += parseFloat(records[i].total_balance);
+      if(records[i].total_balance > 0) {
+        totalPastDue += parseFloat(records[i].total_balance);
 
-      rows.push(
-        <tr key={"member-row-" + records[i].member.id + "-" + i}>
-          <td className="text-center">
-            {i+1}
-          </td>
-          <td>
-            <strong>
-              <a href={"/loans/" + records[i].id} target='_blank'>
-                {records[i].member.last_name}, {records[i].member.first_name}
-              </a>
-            </strong>
-          </td>
-          <td>
-            {records[i].center.name}
-          </td>
-          <td>
-            {records[i].officer.last_name}, {records[i].officer.first_name}
-          </td>
-          <td>
-            {records[i].loan_product.name}
-          </td>
-          <td className="text-right">
-            {numberWithCommas(records[i].total_balance)}
-          </td>
-        </tr>
-      );
+        rows.push(
+          <tr key={"member-row-" + records[i].member.id + "-" + i}>
+            <td className="text-center">
+              {i+1}
+            </td>
+            <td>
+              <strong>
+                <a href={"/loans/" + records[i].id} target='_blank'>
+                  {records[i].member.last_name}, {records[i].member.first_name}
+                </a>
+              </strong>
+            </td>
+            <td>
+              {records[i].center.name}
+            </td>
+            <td>
+              {records[i].officer.last_name}, {records[i].officer.first_name}
+            </td>
+            <td>
+              {records[i].loan_product.name}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(records[i].total_balance)}
+            </td>
+          </tr>
+        );
+      }
     }
 
     rows.push(
