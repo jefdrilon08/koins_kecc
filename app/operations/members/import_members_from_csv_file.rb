@@ -358,24 +358,32 @@ module Members
             #   status = "pending"
             # end
               
-              member_data[:recognition_date] = row['recognition_date']
-              member_data[:address][:street] = row['address_street']
-              member_data[:address][:district] = row['address_barangay']
-              member_data[:address][:city] = row['address_city']
-              member_data[:num_children] = row['number_of_children']
-              member_data[:spouse][:first_name] = row['spouse_first_name']
-              member_data[:spouse][:last_name] = row['spouse_last_name']
-              member_data[:spouse][:middle_name] = row['spouse_middle_name']
-              member_data[:spouse][:date_of_birth] = row['spouse_date_of_birth']
-              member_data[:resignation][:type] = row['resignation_type']
-              member_data[:resignation][:code] = row['resignation_code']
-              member_data[:resignation][:reason] = row['resignation_reason']
+            if member_data[:insurance_resignation].nil?
+              member_data[:insurance_resignation] = {
+                code: row['resignation_code'],
+                reason: row['resignation_reason']
+              }
+            else
               member_data[:insurance_resignation][:code] = row['resignation_code']
               member_data[:insurance_resignation][:reason] = row['resignation_reason']
-              member_data[:government_identification_numbers][:sss_number] = sss_number
-              member_data[:government_identification_numbers][:tin_number] = tin_number
-              member_data[:government_identification_numbers][:pag_ibig_number] = pag_ibig_number
-              member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
+            end
+
+            member_data[:recognition_date] = row['recognition_date']
+            member_data[:address][:street] = row['address_street']
+            member_data[:address][:district] = row['address_barangay']
+            member_data[:address][:city] = row['address_city']
+            member_data[:num_children] = row['number_of_children']
+            member_data[:spouse][:first_name] = row['spouse_first_name']
+            member_data[:spouse][:last_name] = row['spouse_last_name']
+            member_data[:spouse][:middle_name] = row['spouse_middle_name']
+            member_data[:spouse][:date_of_birth] = row['spouse_date_of_birth']
+            member_data[:resignation][:type] = row['resignation_type']
+            member_data[:resignation][:code] = row['resignation_code']
+            member_data[:resignation][:reason] = row['resignation_reason']
+            member_data[:government_identification_numbers][:sss_number] = sss_number
+            member_data[:government_identification_numbers][:tin_number] = tin_number
+            member_data[:government_identification_numbers][:pag_ibig_number] = pag_ibig_number
+            member_data[:government_identification_numbers][:phil_health_number] = phil_health_number
     
             member_record.update!(
               identification_number: identification_number,
