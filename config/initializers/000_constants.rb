@@ -19,5 +19,5 @@ MONTHS_FOR_SELECT = [
   ["September", 9],
   ["October", 10],
   ["November", 11],
-  ["Decemter", 12],
+  ["December", 12],
 ]
