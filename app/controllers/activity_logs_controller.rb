@@ -22,7 +22,7 @@ class ActivityLogsController < ApplicationController
       @activity_logs  = @activity_logs.where("Date(activity_logs.created_at) BETWEEN ? AND ?", @start_date, @end_date)
     end
 
-    @activity_logs = @activity_logs.page(params[:page])
+    @activity_logs = @activity_logs.page(params[:page]).per(LIST_PAGE_SIZE)
 
     @subheader_items = [
       { text: "Activity Logs" }
