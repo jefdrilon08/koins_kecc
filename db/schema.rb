@@ -554,7 +554,6 @@ ActiveRecord::Schema.define(version: 2021_02_20_075523) do
     t.string "status"
     t.date "date_prepared"
     t.date "ae_date_posted"
-    t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
     t.index ["accounting_fund_id"], name: "index_journal_entries_on_accounting_fund_id"
