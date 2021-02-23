@@ -160,6 +160,7 @@ import AdjustmentsRecomputeRestructuresIndex from "../models/AdjustmentsRecomput
 import AdjustmentsRecomputeRestructuresShow from "../models/AdjustmentsRecomputeRestructuresShow.js";
 import DailyBranchMetricsIndex from "../models/DailyBranchMetricsIndex.js";
 import Dashboard from "../models/Dashboard.js";
+import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCodeSummariesIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -300,7 +301,8 @@ const hooks = {
   "pages/change_password":                            [ChangePassword],
   "accounting/trial_balances/index":                  [TrialBalancesIndex],
   "accounting/trial_balances/show":                   [TrialBalancesShow],
-  "daily_branch_metrics/index":                       [DailyBranchMetricsIndex]
+  "daily_branch_metrics/index":                       [DailyBranchMetricsIndex],
+  "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

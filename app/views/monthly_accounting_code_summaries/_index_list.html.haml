@@ -1,0 +1,31 @@
+.table-responsive
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th
+          Accounting Code
+        %th
+          Branch
+        %th.text-right
+          DR Amount
+        %th.text-right
+          CR Amount
+        %th.text-center
+          Month
+        %th.text-center
+          Year
+    %tbody
+      - @monthly_accounting_code_summaries.each do |o|
+        %tr
+          %td
+            #{o.accounting_code.name}
+          %td
+            #{o.branch.name}
+          %td.text-right
+            #{number_to_currency(o.dr_amount, unit: '')}
+          %td.text-right
+            #{number_to_currency(o.cr_amount, unit: '')}
+          %td.text-center
+            #{MONTHS_FOR_SELECT.select{ |m| m[1] == o.month }.first[0]}
+          %td.text-center
+            #{o.year}
