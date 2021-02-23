@@ -36,7 +36,8 @@ class DataStore < ApplicationRecord
   scope :soa_expenses, -> { where("meta->>'data_store_type' = ?", "SOA_EXPENSES") }
   scope :soa_loans, -> { where("meta->>'data_store_type' = ?", "SOA_LOANS") }
   scope :accounting_entries_summaries, -> { where("meta->>'data_store_type' = ?", "ACCOUNTING_ENTRIES_SUMMARY") }
-  scope :watchlists, -> { where("meta->>'data_store_type' = ?", "WATCHLIST") }
+  #scope :watchlists, -> { where("meta->>'data_store_type' = ?", "WATCHLIST") }
+  scope :watchlists, -> { where("meta->>'data_store_type' = ?", "REPAYMENT_RATES") }  # USE REPAYMENT_RATES FOR WATCHLIST
   scope :repayment_rates, -> { where("meta->>'data_store_type' = ?", "REPAYMENT_RATES") }
   scope :monthly_new_and_resigned, -> { where("meta->>'data_store_type' = ?", "MONTHLY_NEW_AND_RESIGNED") }
   scope :x_weeks_to_pay,  -> { where("meta->>'data_store_type' = ?", "X_WEEKS_TO_PAY") }

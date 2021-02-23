@@ -1,0 +1,15 @@
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @monthly_accounting_code_summaries.any?
+          = render partial: "index_list", locals: { monthly_accounting_code_summaries: @monthly_accounting_code_summaries }
+          = paginate @monthly_accounting_code_summaries
+        - else
+          %p
+            No records found
+
+= render partial: "monthly_accounting_code_summaries/modals/new"
+= render partial: "templates/error_list"
+= render partial: "templates/success_message"

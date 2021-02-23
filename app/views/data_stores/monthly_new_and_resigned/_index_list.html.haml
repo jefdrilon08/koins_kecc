@@ -7,10 +7,6 @@
       %th
         Branch
       %th.text-center
-        \# New
-      %th.text-center
-        \# Resigned
-      %th.text-center
         Status
       %th.text-center
         Started
@@ -26,13 +22,7 @@
           %strong
             #{o.as_of.to_date.strftime("%B %Y")}
         %td
-          #{o.branch_name}
-        %td.text-center
-          - if o.done?
-            #{o.num_new}
-        %td.text-center
-          - if o.done?
-            #{o.num_resigned}
+          #{o.meta["branch_name"]}
         %td.text-center
           - if o.processing?
             .badge.badge-info

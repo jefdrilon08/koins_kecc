@@ -1,0 +1,33 @@
+#modal-new.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          New Monthly Accounting Code Summaries
+      .modal-body
+        .modal-body-content
+          .row
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch_id), class: "form-control x-form-control", id: "select-branch"
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Month
+                = select_tag :month, options_for_select(MONTHS_FOR_SELECT), class: "form-control x-form-control", id: "select-month"
+            .col-md-4.col-xs-12
+              .form-group
+                %label
+                  Year
+                = select_tag :year, options_for_select([Date.today.year, Date.today.year - 1, Date.today.year - 2, Date.today.year - 3]), class: "form-control x-form-control", id: "select-year"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary.x-form-control
+            .fa.fa-check
+            Confirm
+          %button.x-form-control.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
