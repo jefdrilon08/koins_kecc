@@ -48,7 +48,9 @@ module Exports
                             :branch_id,
                             :insurance_date_resigned_data,
                             :insurance_resignation_reason_data,
-                            :lapse
+                            :lapse,
+                            # :life_amount,
+                            # :rf_amount
                             
                         ]
                 @members.each do |m|
@@ -144,7 +146,9 @@ module Exports
                             m.branch.id,
                             insurance_date_resigned_data,
                             insurance_resignation_reason_data,
-                            lapse
+                            lapse,
+                            # m.lif_amount,
+                            # m.rf_amount
                         ]
                     end
                 end
