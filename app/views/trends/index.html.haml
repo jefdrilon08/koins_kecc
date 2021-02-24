@@ -1,13 +1,41 @@
 = render partial: "trends/index_filter"
 
 .card
+  .card-header
+    Accounting Balances
   .card-body
-    %h5
-      Accounting Balances
     .form-group
       = select_tag :accounting_code_id, options_from_collection_for_select(AccountingCode.select("id, name, code").order("name ASC"), :id, :name), id: "select-accounting-code", class: "form-control x-form-control"
-    #content-accounting-balance
+    %div
       %canvas#chart-accounting-balance{ width: "400", height: "400" }
+
+.card
+  .card-header
+    Pure Savers
+  .card-body
+    %div
+      %canvas#chart-pure-savers{ width: "400", height: "400" }
+
+.card
+  .card-header
+    Active Loaners
+  .card-body
+    %div
+      %canvas#chart-active-loaners{ width: "400", height: "400" }
+
+.card
+  .card-header
+    Active Members
+  .card-body
+    %div
+      %canvas#chart-active-members{ width: "400", height: "400" }
+
+.card
+  .card-header
+    Total Members
+  .card-body
+    %div
+      %canvas#chart-total-members{ width: "400", height: "400" }
 
 = render partial: "templates/error_list"
 = render partial: "templates/success_message"

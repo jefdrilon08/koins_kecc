@@ -22,6 +22,18 @@ var _xKoinsAppAuthSecret;
 var ctxAccountingBalance;
 var chartAccountingBalance;
 
+var ctxPureSavers;
+var chartPureSavers;
+
+var ctxActiveLoaners;
+var chartActiveLoaners;
+
+var ctxActiveMembers;
+var chartActiveMembers;
+
+var ctxTotalMembers;
+var chartTotalMembers;
+
 var _cacheDom = function() {
   $btnSync              = $("#btn-sync");
   $selectYear           = $("#select-year");
@@ -35,17 +47,30 @@ var _cacheDom = function() {
   templateSuccessMessage  = $("#template-success-message").html();
 
   ctxAccountingBalance  = document.getElementById('chart-accounting-balance').getContext('2d');
+  ctxPureSavers         = document.getElementById('chart-pure-savers').getContext('2d');
+  ctxActiveLoaners      = document.getElementById('chart-active-loaners').getContext('2d');
+  ctxActiveMembers      = document.getElementById('chart-active-members').getContext('2d');
+  ctxTotalMembers       = document.getElementById('chart-total-members').getContext('2d');
 };
 
 var _clearCharts = function() {
-  chartAccountingBalance.data.datasets = [];
+  chartAccountingBalance.data.datasets  = [];
+  chartPureSavers.data.datasets         = [];
+  chartActiveLoaners.data.datasets      = [];
+  chartActiveMembers.data.datasets      = [];
+  chartTotalMembers.data.datasets       = [];
 
   chartAccountingBalance.update();
+  chartPureSavers.update();
+  chartActiveLoaners.update();
+  chartActiveMembers.update();
+  chartTotalMembers.update();
 };
 
 var _updateData = function(data) {
-  data.forEach(function(d) {
-    // Additional options for line
+  chartAccountingBalance.data.datasets = [];
+
+  data.accounting_code_balances.forEach(function(d) {
     d.backgroundColor = d.color;
     d.lineTension     = 0;
 
@@ -53,47 +78,193 @@ var _updateData = function(data) {
   });
 
   chartAccountingBalance.update();
+
+  data.pure_savers.forEach(function(d) {
+    d.backgroundColor = d.color;
+    d.lineTension     = 0;
+
+    chartPureSavers.data.datasets.push(d);
+  });
+
+  chartPureSavers.update();
+
+  data.loaners.forEach(function(d) {
+    d.backgroundColor = d.color;
+    d.lineTension     = 0;
+
+    chartActiveLoaners.data.datasets.push(d);
+  });
+
+  chartActiveLoaners.update();
+
+  data.active_members.forEach(function(d) {
+    d.backgroundColor = d.color;
+    d.lineTension     = 0;
+
+    chartActiveMembers.data.datasets.push(d);
+  });
+
+  chartActiveMembers.update();
+
+  data.active_members.forEach(function(d) {
+    d.backgroundColor = d.color;
+    d.lineTension     = 0;
+
+    chartActiveMembers.data.datasets.push(d);
+  });
+
+  chartActiveMembers.update();
+
+  data.total_members.forEach(function(d) {
+    d.backgroundColor = d.color;
+    d.lineTension     = 0;
+
+    chartTotalMembers.data.datasets.push(d);
+  });
+
+  chartTotalMembers.update();
 }
 
-var _bindEvents = function() {
-  $selectChartType.on("change", function() {
-    _chartType = $selectChartType.val();
+var _reloadCharts = function() {
+  chartTotalMembers = new Chart(ctxTotalMembers, {
+                        type: _chartType,
+                        data: {
+                          labels: [
+                            'January',
+                            'February',
+                            'March',
+                            'April',
+                            'May',
+                            'June',
+                            'July',
+                            'August',
+                            'September',
+                            'October',
+                            'November',
+                            'December'
+                          ],
+                          datasets: []
+                        },
+                        options: {
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          scales: {
+                            yAxes: [{
+                              ticks: {
+                                beginAtZero: true,
+                                userCallback: function(value, index, values) {
+                                  return value.toLocaleString();
+                                }
+                              }
+                            }]
+                          }
+                        }
+                      });
 
-    chartAccountingBalance  = new Chart(ctxAccountingBalance, {
-                                type: _chartType,
-                                data: {
-                                  labels: [
-                                    'January',
-                                    'February',
-                                    'March',
-                                    'April',
-                                    'May',
-                                    'June',
-                                    'July',
-                                    'August',
-                                    'September',
-                                    'October',
-                                    'November',
-                                    'December'
-                                  ],
-                                  datasets: []
-                                },
-                                options: {
-                                  responsive: true,
-                                  maintainAspectRatio: false,
-                                  scales: {
-                                    yAxes: [{
-                                      ticks: {
-                                        beginAtZero: true,
-                                        userCallback: function(value, index, values) {
-                                          return value.toLocaleString();
-                                        }
-                                      }
-                                    }]
+  chartActiveMembers  = new Chart(ctxActiveMembers, {
+                          type: _chartType,
+                          data: {
+                            labels: [
+                              'January',
+                              'February',
+                              'March',
+                              'April',
+                              'May',
+                              'June',
+                              'July',
+                              'August',
+                              'September',
+                              'October',
+                              'November',
+                              'December'
+                            ],
+                            datasets: []
+                          },
+                          options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                              yAxes: [{
+                                ticks: {
+                                  beginAtZero: true,
+                                  userCallback: function(value, index, values) {
+                                    return value.toLocaleString();
                                   }
                                 }
-                              });
-  });
+                              }]
+                            }
+                          }
+                        });
+
+  chartActiveLoaners  = new Chart(ctxActiveLoaners, {
+                          type: _chartType,
+                          data: {
+                            labels: [
+                              'January',
+                              'February',
+                              'March',
+                              'April',
+                              'May',
+                              'June',
+                              'July',
+                              'August',
+                              'September',
+                              'October',
+                              'November',
+                              'December'
+                            ],
+                            datasets: []
+                          },
+                          options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                              yAxes: [{
+                                ticks: {
+                                  beginAtZero: true,
+                                  userCallback: function(value, index, values) {
+                                    return value.toLocaleString();
+                                  }
+                                }
+                              }]
+                            }
+                          }
+                        });
+
+  chartPureSavers = new Chart(ctxPureSavers, {
+                      type: _chartType,
+                      data: {
+                        labels: [
+                          'January',
+                          'February',
+                          'March',
+                          'April',
+                          'May',
+                          'June',
+                          'July',
+                          'August',
+                          'September',
+                          'October',
+                          'November',
+                          'December'
+                        ],
+                        datasets: []
+                      },
+                      options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                          yAxes: [{
+                            ticks: {
+                              beginAtZero: true,
+                              userCallback: function(value, index, values) {
+                                return value.toLocaleString();
+                              }
+                            }
+                          }]
+                        }
+                      }
+                    });
 
   chartAccountingBalance  = new Chart(ctxAccountingBalance, {
                               type: _chartType,
@@ -129,6 +300,15 @@ var _bindEvents = function() {
                                 }
                               }
                             });
+};
+
+var _bindEvents = function() {
+  _reloadCharts();
+
+  $selectChartType.on("change", function() {
+    _chartType = $selectChartType.val();
+    _reloadCharts();
+  });
 
   $selectBranches.select2();
 

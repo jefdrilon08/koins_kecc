@@ -10,10 +10,81 @@ module Trends
       @branches         = branches
       @accounting_code  = accounting_code
 
-      @data = []
+      @data = {
+        accounting_code_balances: [],
+        pure_savers: [],
+        loaners: [],
+        active_members: [],
+        total_members: []
+      }
     end
 
     def execute!
+      build_accounting_code_balances!
+      build_member_counts!
+
+      @data
+    end
+
+    private
+
+    def build_member_counts!
+      branches.each do |b|
+        d_pure_savers = {
+          label: b.name,
+          data: [],
+          color: b.color || "#f0ffff"
+        }
+
+        d_loaners = {
+          label: b.name,
+          data: [],
+          color: b.color || "#f0ffff"
+        }
+
+        d_active_members = {
+          label: b.name,
+          data: [],
+          color: b.color || "#f0ffff"
+        }
+
+        d_total_members = {
+          label: b.name,
+          data: [],
+          color: b.color || "#f0ffff"
+        }
+
+        12.times do |m|
+          month = m + 1
+
+          entry = ReadOnlyDataStore.member_counts.where(
+                    "meta ->> 'branch_id' = ? AND EXTRACT(MONTH from as_of) = ? AND EXTRACT(YEAR from as_of) = ?",
+                    b.id,
+                    month,
+                    year
+                  ).order("updated_at DESC").first
+
+          if entry.present?
+            d_pure_savers[:data]    << entry.data["counts"]["pure_savers"]["total"]
+            d_loaners[:data]        << entry.data["counts"]["loaners"]["total"]
+            d_active_members[:data] << entry.data["counts"]["active_members"]["total"]
+            d_total_members[:data]  << entry.data["counts"]["pure_savers"]["total"] + entry.data["counts"]["loaners"]["total"] + entry.data["counts"]["active_members"]["total"]
+          else
+            d_pure_savers[:data]    << 0
+            d_loaners[:data]        << 0
+            d_active_members[:data] << 0
+            d_total_members[:data]  << 0
+          end
+        end
+
+        data[:pure_savers]    << d_pure_savers
+        data[:loaners]        << d_loaners
+        data[:active_members] << d_active_members
+        data[:total_members]  << d_total_members
+      end
+    end
+
+    def build_accounting_code_balances!
       branches.each do |b|
         d = {
           label: b.name,
@@ -21,7 +92,7 @@ module Trends
           color: b.color || "#f0ffff"
         }
 
-        monthly_accounting_code_summaries = MonthlyAccountingCodeSummary.where(
+        monthly_accounting_code_summaries = ReadOnlyMonthlyAccountingCodeSummary.where(
                                               accounting_code_id: accounting_code.id,
                                               branch_id:          b.id,
                                               year:               year
@@ -45,10 +116,8 @@ module Trends
           end
         end
 
-        @data << d
+        @data[:accounting_code_balances] << d
       end
-
-      @data
     end
   end
 end
