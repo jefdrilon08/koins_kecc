@@ -21,7 +21,7 @@ module Accounting
         entries = JournalEntry.joins(:accounting_entry).select(
                     "journal_entries.id AS id, accounting_entries.date_posted, accounting_entries.status, journal_entries.amount, journal_entries.post_type, journal_entries.accounting_code_id"
                   ).where(
-                    "EXTRACT(YEAR from accounting_entries.date_posted) = ? AND EXTRACT(MONTH from accounting_entries.date_posted) = ? AND accounting_entries.status = ? AND journal_entries.accounting_code_id = ?",
+                    "EXTRACT(YEAR from accounting_entries.date_posted) <= ? AND EXTRACT(MONTH from accounting_entries.date_posted) <= ? AND accounting_entries.status = ? AND journal_entries.accounting_code_id = ?",
                     @year,
                     @month,
                     "approved",

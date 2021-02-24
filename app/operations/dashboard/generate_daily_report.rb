@@ -42,7 +42,7 @@ module Dashboard
       ProcessRepaymentRates.perform_later(args)
 
       ##### MEMBER COUNTS ####
-      record  = ReadOnlyDataStore
+      record  = DataStore
                 .select("id, status, as_of, meta")
                 .member_counts.where(
                   "meta->>'branch_id' = ? AND as_of = ?",

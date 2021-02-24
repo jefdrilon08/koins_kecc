@@ -161,6 +161,7 @@ import AdjustmentsRecomputeRestructuresShow from "../models/AdjustmentsRecompute
 import DailyBranchMetricsIndex from "../models/DailyBranchMetricsIndex.js";
 import Dashboard from "../models/Dashboard.js";
 import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCodeSummariesIndex.js";
+import TrendsIndex from "../models/TrendsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -302,7 +303,8 @@ const hooks = {
   "accounting/trial_balances/index":                  [TrialBalancesIndex],
   "accounting/trial_balances/show":                   [TrialBalancesShow],
   "daily_branch_metrics/index":                       [DailyBranchMetricsIndex],
-  "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex]
+  "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
+  "trends/index":                                     [TrendsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

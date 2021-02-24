@@ -1,4 +1,29 @@
 .card
+  .card-header
+    Filter
   .card-body
-    %h6
+    .row
+      .col-md-8.col-xs-12
+        .form-group
+          %label
+            Branches
+          = select_tag :branch, options_from_collection_for_select(@branches, :id, :name), id: "select-branches", class: "form-control x-form-control", multiple: true
+      .col-md-2.col-xs-12
+        .form-group
+          %label
+            Year
+          = select_tag :year, options_for_select([Date.today.year, Date.today.year - 1, Date.today.year - 2, Date.today.year - 3]), class: "form-control x-form-control", id: "select-year"
+      .col-md-2.col-xs-12
+        .form-group
+          %label
+            Actions
+          #btn-sync.btn.btn-success.btn-block.x-form-control
+            .fa.fa-sync
+    .message
+.card
+  .card-body
+    %h5
       Accounting Codes
+
+= render partial: "templates/error_list"
+= render partial: "templates/success_message"
