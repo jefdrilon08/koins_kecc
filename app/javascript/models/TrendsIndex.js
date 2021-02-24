@@ -41,6 +41,10 @@ var _clearCharts = function() {
 
 var _updateData = function(data) {
   data.forEach(function(d) {
+    // Additional options for line
+    d.backgroundColor = d.color;
+    d.lineTension     = 0;
+
     chartAccountingBalance.data.datasets.push(d);
   });
 
@@ -68,7 +72,6 @@ var _bindEvents = function() {
                                 datasets: []
                               },
                               options: {
-                                bezierCurve: false,
                                 responsive: true,
                                 maintainAspectRatio: false,
                                 scales: {

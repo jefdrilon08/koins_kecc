@@ -15,7 +15,7 @@
           %center
             \# Members
     %tbody
-      - @branch.centers.order("name ASC").each do |center|
+      - @branch.centers.includes([:user]).order("name ASC").each do |center|
         %tr
           %td
             = link_to administration_center_path(center.id), target: '_blank' do

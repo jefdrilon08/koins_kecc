@@ -17,7 +17,8 @@ module Trends
       branches.each do |b|
         d = {
           label: b.name,
-          data: []
+          data: [],
+          color: b.color || "#f0ffff"
         }
 
         monthly_accounting_code_summaries = MonthlyAccountingCodeSummary.where(
