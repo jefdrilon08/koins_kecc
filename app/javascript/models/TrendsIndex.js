@@ -6,11 +6,14 @@ var $btnSync;
 var $selectYear;
 var $selectBranches;
 var $selectAccountingCode;
+var $selectChartType;
 var $xFormControl;
 
 var $message;
 var templateErrorList;
 var templateSuccessMessage;
+
+var _chartType = 'line';
 
 var _urlSync;
 var _userId;
@@ -24,6 +27,7 @@ var _cacheDom = function() {
   $selectYear           = $("#select-year");
   $selectBranches       = $("#select-branches");
   $selectAccountingCode = $("#select-accounting-code");
+  $selectChartType      = $("#select-chart-type");
   $xFormControl         = $(".x-form-control");
 
   $message                = $(".message");
@@ -52,8 +56,47 @@ var _updateData = function(data) {
 }
 
 var _bindEvents = function() {
+  $selectChartType.on("change", function() {
+    _chartType = $selectChartType.val();
+
+    chartAccountingBalance  = new Chart(ctxAccountingBalance, {
+                                type: _chartType,
+                                data: {
+                                  labels: [
+                                    'January',
+                                    'February',
+                                    'March',
+                                    'April',
+                                    'May',
+                                    'June',
+                                    'July',
+                                    'August',
+                                    'September',
+                                    'October',
+                                    'November',
+                                    'December'
+                                  ],
+                                  datasets: []
+                                },
+                                options: {
+                                  responsive: true,
+                                  maintainAspectRatio: false,
+                                  scales: {
+                                    yAxes: [{
+                                      ticks: {
+                                        beginAtZero: true,
+                                        userCallback: function(value, index, values) {
+                                          return value.toLocaleString();
+                                        }
+                                      }
+                                    }]
+                                  }
+                                }
+                              });
+  });
+
   chartAccountingBalance  = new Chart(ctxAccountingBalance, {
-                              type: 'line',
+                              type: _chartType,
                               data: {
                                 labels: [
                                   'January',
