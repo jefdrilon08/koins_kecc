@@ -23,7 +23,11 @@
 .card
   .card-body
     %h5
-      Accounting Codes
+      Accounting Balances
+    .form-group
+      = select_tag :accounting_code_id, options_from_collection_for_select(AccountingCode.select("id, name, code").order("name ASC"), :id, :name), id: "select-accounting-code", class: "form-control x-form-control"
+    #content-accounting-balance
+      %canvas#chart-accounting-balance{ width: "400", height: "400" }
 
 = render partial: "templates/error_list"
 = render partial: "templates/success_message"
