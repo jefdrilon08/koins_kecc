@@ -91,25 +91,27 @@ module Branches
 
     def build_rr!(rr)
       # RESET TO 0.00
-      @daily_branch_metric.principal                 = 0.00 
-      @daily_branch_metric.interest                  = 0.00 
-      @daily_branch_metric.total                     = 0.00 
-      @daily_branch_metric.principal_due             = 0.00 
-      @daily_branch_metric.interest_due              = 0.00 
-      @daily_branch_metric.total_due                 = 0.00 
-      @daily_branch_metric.principal_paid            = 0.00 
-      @daily_branch_metric.interest_paid             = 0.00 
-      @daily_branch_metric.portfolio                 = 0.00 
-      @daily_branch_metric.principal_paid_due        = 0.00 
-      @daily_branch_metric.interest_paid_due         = 0.00 
-      @daily_branch_metric.total_paid_due            = 0.00 
-      @daily_branch_metric.total_paid                = 0.00 
-      @daily_branch_metric.principal_balance         = 0.00 
-      @daily_branch_metric.interest_balance          = 0.00 
-      @daily_branch_metric.total_balance             = 0.00 
-      @daily_branch_metric.overall_principal_balance = 0.00 
-      @daily_branch_metric.overall_interest_balance  = 0.00 
-      @daily_branch_metric.overall_balance           = 0.00 
+      @daily_branch_metric.principal                   = 0.00 
+      @daily_branch_metric.interest                    = 0.00 
+      @daily_branch_metric.total                       = 0.00 
+      @daily_branch_metric.principal_due               = 0.00 
+      @daily_branch_metric.interest_due                = 0.00 
+      @daily_branch_metric.total_due                   = 0.00 
+      @daily_branch_metric.principal_paid              = 0.00 
+      @daily_branch_metric.interest_paid               = 0.00 
+      @daily_branch_metric.portfolio                   = 0.00 
+      @daily_branch_metric.principal_paid_due          = 0.00 
+      @daily_branch_metric.interest_paid_due           = 0.00 
+      @daily_branch_metric.total_paid_due              = 0.00 
+      @daily_branch_metric.total_paid                  = 0.00 
+      @daily_branch_metric.principal_balance           = 0.00 
+      @daily_branch_metric.interest_balance            = 0.00 
+      @daily_branch_metric.total_balance               = 0.00 
+      @daily_branch_metric.overall_principal_balance   = 0.00 
+      @daily_branch_metric.overall_interest_balance    = 0.00 
+      @daily_branch_metric.overall_balance             = 0.00 
+      @daily_branch_metric.par_amount                  = 0.00
+      @daily_branch_metric.principal_rr                = 0.00
 
       rr.data["records"].each do |r|
         @daily_branch_metric.principal                  += r["principal"].to_f.round(2)

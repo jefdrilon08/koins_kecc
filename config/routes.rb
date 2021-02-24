@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => SIDEKIQ_WEB_PATH
   end
 
+  # Trends
+  get "/trends", to: "trends#index", as: :trends
+
   # Change password
   get "/change_password", to: "pages#change_password"
 
