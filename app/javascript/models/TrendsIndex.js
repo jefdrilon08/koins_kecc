@@ -106,15 +106,6 @@ var _updateData = function(data) {
 
   chartActiveMembers.update();
 
-  data.active_members.forEach(function(d) {
-    d.backgroundColor = d.color;
-    d.lineTension     = 0;
-
-    chartActiveMembers.data.datasets.push(d);
-  });
-
-  chartActiveMembers.update();
-
   data.total_members.forEach(function(d) {
     d.backgroundColor = d.color;
     d.lineTension     = 0;
