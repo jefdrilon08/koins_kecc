@@ -136,13 +136,13 @@ module Adjustments
               for_dif_loan = @account_transaction[:amount].to_f - (old_loan.to_f - new_loan.to_f)
                      
   
-                  if for_dif_loan > 0
-                    total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+                  #if for_dif_loan > 0
+                  #  total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
                  
-                  else
-                    total_amount = @account_transaction[:amount].to_f
+                  #else
+                    total_amount = old_loan - new_loan
                     
-                  end
+                  #end
 
 
              else
@@ -160,12 +160,12 @@ module Adjustments
                    #raise @account_transaction[:amount].to_f.inspect
                   #raise for_dif_loan.inspect
                   
-                  if for_dif_loan > 0
-                    total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
-                  else
-                    total_amount = @account_transaction[:amount].to_f
+                  #if for_dif_loan > 0
+                  #  total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+                  #else
+                    total_amount = old_loan - new_loan
                     
-                  end
+                  #end
                 end
               end
             
