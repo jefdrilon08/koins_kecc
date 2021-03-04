@@ -20,7 +20,7 @@
             .fa.fa-search
         %td.text-center
           %strong
-            #{o.as_of.to_date.strftime("%B %Y")}
+            #{o.as_of.try(:to_date).try(:strftime, "%B %Y")}
         %td
           #{o.meta["branch_name"]}
         %td.text-center
