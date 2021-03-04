@@ -15,7 +15,8 @@ class ProcessAccountingCodeBalance < ApplicationJob
                 accounting_code: accounting_code,
                 branch: branch,
                 start_date: start_date,
-                end_date: end_date
+                end_date: end_date,
+                accounting_fund: accounting_fund
               }
             ).execute!
 
