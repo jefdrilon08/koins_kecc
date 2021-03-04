@@ -38,10 +38,11 @@ module Accounting
         if @start_date and @end_date.present? and @branch.present?
           # Check existing trial balance
           existing_tb = DataStore.select("id,meta,status,as_of,start_date,end_date,created_at,updated_at").trial_balances.where(
-                          "meta->>'branch_id' = ? AND start_date = ? AND end_date = ?",
+                          "meta->>'branch_id' = ? AND start_date = ? AND end_date = ? AND meta->>'accounting_fund_id' = ?",
                           branch.id,
                           start_date,
-                          end_date
+                          end_date,
+                          accounting_fund.id
                         ).first
 
           if existing_tb.present?
