@@ -13,6 +13,12 @@ namespace :api do
 
     # dashboard
     post "/dashboard/generate_daily_report", to: "dashboard#generate_daily_report"
+
+    # monthly_accounting_code_summaries
+    post "/monthly_accounting_code_summaries/create", to: "monthly_accounting_code_summaries#create"
+
+    # trends
+    get "/trends/fetch_yearly_data", to: "trends#fetch_yearly_data"
   end
 
   namespace :v1 do

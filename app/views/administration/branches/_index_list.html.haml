@@ -16,8 +16,9 @@
   %tbody
     - @branches.each do |branch|
       %tr
-        %td
-          #{branch.name.upcase}
+        %td{ style: "color: #{branch.color || '#000'}" }
+          %b
+            #{branch.name.upcase}
         %td
           #{branch.short_name.upcase}
         %td

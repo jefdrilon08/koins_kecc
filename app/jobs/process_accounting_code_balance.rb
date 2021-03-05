@@ -1,5 +1,5 @@
 class ProcessAccountingCodeBalance < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     accounting_code_balance = AccountingCodeBalance.find(args[:id])
@@ -15,7 +15,8 @@ class ProcessAccountingCodeBalance < ApplicationJob
                 accounting_code: accounting_code,
                 branch: branch,
                 start_date: start_date,
-                end_date: end_date
+                end_date: end_date,
+                accounting_fund: accounting_fund
               }
             ).execute!
 

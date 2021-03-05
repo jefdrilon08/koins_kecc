@@ -1,0 +1,28 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-3.col-xs-12
+      .form-group
+        %label
+          Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control", id: "branch-select", prompt: "-- SELECT --"
+    .col-md-3.col-xs-12
+      .form-group
+        %label
+          Accounting Code
+        = select_tag :accounting_code_id, options_from_collection_for_select(@accounting_codes, :id, :name, @accounting_code.try(:id)), class: "form-control", id: "accounting-code-select", prompt: "-- SELECT --"
+    .col-md-2.col-xs-12
+      .form-group
+        %label
+          Month
+        = select_tag :month, options_for_select(MONTHS_FOR_SELECT), class: "form-control", id: "month-select", prompt: "-- SELECT --"
+    .col-md-2.col-xs-12
+      .form-group
+        %label
+          Year
+        = select_tag :year, options_for_select([Date.today.year, Date.today.year - 1, Date.today.year - 2, Date.today.year - 3]), class: "form-control", id: "year-select", prompt: "-- SELECT --"
+    .col-md-2.col-xs-12
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .fa.fa-search

@@ -82,7 +82,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
       }
     end
 
-    if Settings.activate_microinsurance && @insurance_fund_transfer_collection.finalized? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
+    if Settings.activate_microinsurance && @insurance_fund_transfer_collection.finalized? && !@insurance_fund_transfer_collection.approved? && (current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("MIS") || current_user.roles.include?("REMOTE-FM"))
       @subheader_side_actions << {
           id: "btn-revert",
           link: "#",

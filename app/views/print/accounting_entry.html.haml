@@ -105,7 +105,10 @@
         - if Settings.activate_microloans == true  
           %th{:width => "17%"} Reference No:
           %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
-        %th{:width => "18%"} Doc. No:
+        - if Settings.activate_microinsurance == true
+          %th{:width => "18%"} Ref. No:
+        - if Settings.activate_microloans == true
+          %th{:width => "18%"} Doc. No:  
         - if Settings.activate_microinsurance == true
           %th{:width => "25%"} #{@accounting_entry_data[:sub_reference_number]}
           -if @accounting_entry_data[:book] == "CRB"

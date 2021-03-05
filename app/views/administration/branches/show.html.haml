@@ -2,6 +2,6 @@
   .col
     .card
       .card-body
-        %h4
+        %h4{ style: "color: #{@branch.color || "#000"}" }
           #{@branch.name}
         = render partial: "show_details"

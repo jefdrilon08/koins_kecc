@@ -7,6 +7,7 @@ module Adjustments
         
         @user = @config[:user]
         @account_transaction_details = @config[:account_transaction_details]
+
         @clip_account = @account_transaction_details.data.with_indifferent_access[:loans].last[:insurance_details]
         #raise @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].inspect
         #raise @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].inspect
@@ -97,7 +98,7 @@ module Adjustments
                   accounting_code_id: clip_account_code.id,
                   code: clip_account_code.code,
                   name: clip_account_code.name,
-                  amount: dif_clip
+                  amount: (dif_clip).round(2)
               }
           
           end
@@ -129,7 +130,24 @@ module Adjustments
               
              if @loan.status == "paid" 
               total_amount = @account_transaction[:amount].to_f
+              old_loan = @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["loan_product"]["old_receivable_amount"].to_f } + @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["loan_product"]["old_interest_receivable_amount"].to_f }
+
+              new_loan = @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["principal_balance"].to_f } + @account_transaction_details.data["loans"].last["loan_details"].inject(0){ |sum, x| sum + x["k_sagip_interest_balance"].to_f }
+              
+              for_dif_loan = @account_transaction[:amount].to_f - (old_loan.to_f - new_loan.to_f)
+                     
+  
+                  #if for_dif_loan > 0
+                  #  total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+                 
+                  #else
+                    total_amount = old_loan - new_loan
+                    
+                  #end
+
+
              else
+              
               
               @loan.data["accounting_entry"]["debit_journal_entries"].each do |ld|
                 if ld["accounting_code_id"] == "a6913ac9-1a85-495a-8f80-d394549dc52e"
@@ -143,12 +161,12 @@ module Adjustments
                    #raise @account_transaction[:amount].to_f.inspect
                   #raise for_dif_loan.inspect
                   
-                  if for_dif_loan > 0
-                    total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
-                  else
-                    total_amount = @account_transaction[:amount].to_f
+                  #if for_dif_loan > 0
+                  #  total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
+                  #else
+                    total_amount = old_loan - new_loan
                     
-                  end
+                  #end
                 end
               end
             
@@ -165,12 +183,13 @@ module Adjustments
         end
         
         
+      
 
         journal_entries << {
                   accounting_code_id: account_code.id,
                   code: account_code.code,
                   name: account_code.name,
-                  amount: (total_amount).round
+                  amount: (total_amount).round(2)
               }
 
 
@@ -180,7 +199,23 @@ module Adjustments
       def build_credit_journal_entries!
         journal_entries = []
         account_transaction_data = @account_transaction
+        for_misc = Loan.find(@account_transaction_details.loan).data["accounting_entry"]["debit_journal_entries"]
+      
+        @misc_details = 0
+        for_misc.each do |fmc|
         
+          if fmc["accounting_code_id"] == "216f35d5-2809-4696-b5b9-83d30c2bce6d"
+              
+            @misc_detils_data = fmc["amount"]
+
+          end
+        
+          
+        end
+        #raise @misc_detils_data.inspect
+        
+        #raise @misc_details.inspect
+
         if @loan.status == "active"
             
           if @for_savings_distribution == nil
@@ -194,19 +229,19 @@ module Adjustments
                   accounting_code_id: account_code_principal.id,
                   code: account_code_principal.code,
                   name: account_code_principal.name,
-                  amount: total_amount_principal
+                  amount: (total_amount_principal).round(2)
                 }
             journal_entries << {
                   accounting_code_id: account_code_interest.id,
                   code: account_code_interest.code,
                   name: account_code_interest.name,
-                  amount: total_amount_interest
+                  amount: (total_amount_interest).round(2)
                 }
             #para sa service fee 
               service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
               service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
-              dif_service_fee = service_fee_new - service_fee_old
-              for_dif_service_fee_old_new = service_fee_old - service_fee_new
+              dif_service_fee = (service_fee_new - service_fee_old) + @misc_detils_data.to_f
+              for_dif_service_fee_old_new = (service_fee_old - service_fee_new)
               #raise "jef"  
               if for_dif_service_fee_old_new < 1
                 if dif_service_fee > 0.0
@@ -230,14 +265,14 @@ module Adjustments
                   accounting_code_id: account_code_gk.id,
                   code: account_code_gk.code,
                   name: account_code_gk.name,
-                  amount: total_amount
+                  amount: (total_amount).round(2)
                 }
               else
                 journal_entries << {
                   accounting_code_id: account_code_regular.id,
                   code: account_code_regular.code,
                   name: account_code_regular.name,
-                  amount: total_amount
+                  amount: (total_amount).round(2)
                 }
               end
 
@@ -265,24 +300,26 @@ module Adjustments
           end
           
           if @loan.status == "paid"
-          
             #para sa service fee 
               service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
               service_fee_old = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_old_service_fee].to_f
-              dif_service_fee = service_fee_new - service_fee_old
-              #raise "jef"  
-           
-              if dif_service_fee > 0.0
-                dif_service_fee_total = dif_service_fee.abs
-                service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
-                journal_entries << {
-                  accounting_code_id: service_fee_account_code.id,
-                  code: service_fee_account_code.code,
-                  name: service_fee_account_code.name,
-                  amount: dif_service_fee.round(2).abs
-                }
-        
+              dif_service_fee = (service_fee_new - service_fee_old) + @misc_detils_data.to_f
+              for_dif_service_fee_old_new = (service_fee_old - service_fee_new)
+                
+            
+              if for_dif_service_fee_old_new < 1
+                if dif_service_fee > 0.0
+                  dif_service_fee_total = dif_service_fee.abs
+                  service_fee_account_code = AccountingCode.find("9f4b1331-cd5a-4edb-9920-a5029759885d")
+                  journal_entries << {
+                    accounting_code_id: service_fee_account_code.id,
+                    code: service_fee_account_code.code,
+                    name: service_fee_account_code.name,
+                    amount: dif_service_fee.round(2).abs
+                  }
+                end
               end
+          
           end
           
         end

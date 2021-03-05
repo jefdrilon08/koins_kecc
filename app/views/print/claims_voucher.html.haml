@@ -95,34 +95,48 @@
   %br
   %span.print-text-sub
     %table{:border => "0"}
+      // Remove
+      - if Settings.activate_microloans == true
+        %tr
+          %th{:width => "17%"} System ID:
+          %th{:width => "20%"}
       %tr
-        %th{:width => "17%"} System ID:
-        %th{:width => "20%"}
-      %tr
-        %th{:width => "17%"} Reference No:
-        %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
-        %th{:width => "18%"} Doc. No:
-        -if Settings.activate_microinsurance == true
+        // Remove
+        - if Settings.activate_microloans == true  
+          %th{:width => "17%"} Reference No:
+          %th{:width => "20%"} #{@accounting_entry_data[:reference_number]}
+        - if Settings.activate_microinsurance == true
+          %th{:width => "18%"} Ref. No:
+        - if Settings.activate_microloans == true
+          %th{:width => "18%"} Doc. No:  
+        - if Settings.activate_microinsurance == true
           %th{:width => "25%"} #{@accounting_entry_data[:sub_reference_number]}
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} OR Number:
             %th{:width => "20%"} #{@accounting_entry_data[:or_number]}
-          -else
+          - else
             %th{:width => "17%"} Check No:
             %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
-        -else
+        - else
           %th{:width => "20%"} 
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} OR Number:
             %th{:width => "20%"} #{@accounting_entry_data[:or_number]}
-          -else
+          - else
             %th{:width => "17%"} Check No:
             %th{:width => "20%"} #{@accounting_entry_data[:check_number]}
-      %tr
-        %th{:width => "17%"} Date Approved:
-        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
-        %th{:width => "17%"} Date Requested:
-        %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+      - if Settings.activate_microloans == true  
+        %tr
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
+      - if Settings.activate_microinsurance == true  
+        %tr
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}  
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@accounting_entry_data[:date_posted]}
         -if Settings.activate_microinsurance == true
           -if @accounting_entry_data[:book] == "CRB"
             %th{:width => "17%"} AR Number:

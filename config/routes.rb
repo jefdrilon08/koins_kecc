@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => SIDEKIQ_WEB_PATH
   end
 
+  # Trends
+  get "/trends", to: "trends#index", as: :trends
+
   # Change password
   get "/change_password", to: "pages#change_password"
 
@@ -228,6 +231,7 @@ Rails.application.routes.draw do
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
   get "/accounting/books/misc", to: "accounting#misc", as: :accounting_books_misc
   get "/accounting/form", to: "accounting#form", as: :accounting_form
+  get "/monthly_accounting_code_summaries", to: "monthly_accounting_code_summaries#index", as: :monthly_accounting_code_summaries
   
   #books
   get "/books/excel", to: "books#excel"

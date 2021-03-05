@@ -16,6 +16,10 @@
       = link_to members_path, class: "c-sidebar-nav-link #{params[:controller] == "members" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-users
         Members
+    %li.c-sidebar-nav-item
+      = link_to trends_path, class: "c-sidebar-nav-link #{params[:controller] == "trends" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-check
+        Trends
     - if microloans?
       %li.c-sidebar-nav-item
         = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
@@ -100,6 +104,11 @@
           = link_to accounting_trial_balances_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-balance-scale
             Trial Balances
+        %li.c-sidebar-nav-item
+          = link_to monthly_accounting_code_summaries_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-balance-scale
+            Monthly AC Summaries
+
         %li.c-sidebar-nav-title
           Journal Entries
         %li.c-sidebar-nav-item

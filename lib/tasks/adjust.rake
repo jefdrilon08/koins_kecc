@@ -2412,7 +2412,6 @@ namespace :adjust do
     puts "Done!"
   end
 
-
   task :repair_members_center => :environment do
     if ENV['BRANCH_ID'].present?
       branches = Branch.where(id: ENV['BRANCH_ID'])
@@ -2447,6 +2446,23 @@ namespace :adjust do
             member.update!(center: c)
           end
         end
+      end
+    end
+
+    puts "Done!"
+  end
+
+  task :delete_member_by_uuid => :environment do
+    file_location = ENV['FILE_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(id: row['uuid']).first
+
+      if member.present?
+        puts "Deleting #{row['uuid']}..."
+        puts "#{member.full_name}"
+        member.destroy!
       end
     end
 

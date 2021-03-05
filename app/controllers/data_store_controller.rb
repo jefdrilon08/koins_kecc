@@ -78,7 +78,7 @@ class DataStoreController < ApplicationController
   end
 
   def destroy
-    @record = branch_data_stores.find(params[:id])
+    @record = DataStore.find(params[:id])
 
     if !@record.processing?
       @record.destroy!
