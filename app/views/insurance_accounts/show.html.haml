@@ -89,6 +89,8 @@
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
+                - if current_user.roles.include?("MIS")
+                  %th
                 %th
                   %center
                     Date Posted
@@ -99,22 +101,27 @@
                     Status
             %tbody
               - @account_transactions.each do |o|  
-                %td
-                  %center
-                    %small
-                      #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
-                %td
-                  %center
-                    %small
-                      #{number_to_currency(o.amount, unit: "")}
-                %td
-                  %center
-                    - if (Date.today - o.transacted_at.to_date).to_i < 365
-                      .badge.badge-info
-                        Active
-                    - else 
-                      .badge.badge-danger
-                        Matured
+                %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      %small
+                        #{number_to_currency(o.amount, unit: "")}
+                  %td
+                    %center
+                      - if (Date.today - o.transacted_at.to_date).to_i < 365
+                        .badge.badge-info
+                          Active
+                      - else 
+                        .badge.badge-danger
+                          Matured
         - elsif @insurance_account.account_subtype == Settings.life
           #react-root
           %table.table.table-hover.table-sm.table-bordered
@@ -227,6 +234,8 @@
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
+                - if current_user.roles.include?("MIS")
+                  %th
                 %th
                   %center
                     Date
@@ -234,6 +243,10 @@
                   Amount
             %tbody
               - @account_transactions.each do |o|  
+                - if current_user.roles.include?("MIS")
+                  %td
+                    %small
+                      #{o.id}
                 %td
                   %center
                     %small

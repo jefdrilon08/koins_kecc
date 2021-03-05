@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_075523) do
+ActiveRecord::Schema.define(version: 2021_02_24_113855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -272,6 +272,7 @@ ActiveRecord::Schema.define(version: 2021_02_20_075523) do
     t.datetime "updated_at", null: false
     t.integer "member_counter"
     t.date "current_date"
+    t.string "color"
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 
@@ -940,6 +941,22 @@ ActiveRecord::Schema.define(version: 2021_02_20_075523) do
     t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
   end
 
+  create_table "monthly_accounting_code_summaries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "month"
+    t.integer "year"
+    t.uuid "branch_id", null: false
+    t.uuid "accounting_code_id", null: false
+    t.string "category"
+    t.string "name"
+    t.decimal "dr_amount"
+    t.decimal "cr_amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["accounting_code_id"], name: "index_monthly_accounting_code_summaries_on_accounting_code_id"
+    t.index ["branch_id"], name: "index_monthly_accounting_code_summaries_on_branch_id"
+    t.index ["month", "year", "accounting_code_id", "branch_id"], name: "idx_macs_m_y_ac_id_b_id"
+  end
+
   create_table "monthly_closing_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "closing_date"
     t.date "closed_at"
@@ -1194,6 +1211,8 @@ ActiveRecord::Schema.define(version: 2021_02_20_075523) do
   add_foreign_key "membership_payment_collections", "branches"
   add_foreign_key "membership_payment_collections", "centers"
   add_foreign_key "membership_payment_records", "members"
+  add_foreign_key "monthly_accounting_code_summaries", "accounting_codes"
+  add_foreign_key "monthly_accounting_code_summaries", "branches"
   add_foreign_key "monthly_closing_collections", "branches"
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "savings_insurance_transfer_collections", "branches"

@@ -133,6 +133,7 @@ import XWeeksToPayIndex from "../models/XWeeksToPayIndex.js";
 import BranchResignationsIndex from "../models/BranchResignationsIndex.js";
 import ReportsMonthlyRemittance from "../models/ReportsMonthlyRemittance.js";
 import ReportsInsuredLoans from "../models/ReportsInsuredLoans.js";
+import ReportsHiipReport from "../models/ReportsHiipReport.js";
 import ReportsMemberReports from "../models/ReportsMemberReports.js";
 import ReportsCollectionsCLIP from "../models/ReportsCollectionsCLIP.js";
 import ReportsCollectionsBLIP from "../models/ReportsCollectionsBLIP.js";
@@ -280,6 +281,7 @@ const hooks = {
   "data_stores/branch_resignations/show":             [BranchResignationsShowComponent],
   "reports/monthly_remittance":                       [ReportsMonthlyRemittance],
   "reports/insured_loans":                            [ReportsInsuredLoans],
+  "reports/hiip_report":                              [ReportsHiipReport],
   "reports/member_reports":                           [ReportsMemberReports],
   "reports/collections_clip":                         [ReportsCollectionsCLIP],
   "reports/collections_blip":                         [ReportsCollectionsBLIP],

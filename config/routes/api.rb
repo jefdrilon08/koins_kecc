@@ -380,6 +380,7 @@ namespace :api do
       post "/loan_products/modify_prerequisite", to: "loan_products#modify_prerequisite"
       post "/loan_products/modify_maintaining_balance", to: "loan_products#modify_maintaining_balance"
     end
+    
     get 'reports/member_reports', to: 'reports#member_reports'
     get 'reports/collections_clip_reports', to: 'reports#collections_clip_reports'
     get 'reports/collections_blip_reports', to: 'reports#collections_blip_reports'

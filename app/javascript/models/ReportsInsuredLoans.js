@@ -4,6 +4,7 @@ var $filterStartDate;
 var $filterEndDate;
 var $filterLoanStatus;
 var $branchSelect;
+
 var _cacheDom = function() {
   $btnPrint          = $("#btn-print");
   $btnDownloadCsv    = $("#btn-download-csv") 

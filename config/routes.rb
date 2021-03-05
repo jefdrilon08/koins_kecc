@@ -441,6 +441,9 @@ Rails.application.routes.draw do
   #get "/reports/claim_reports", to: "reports#claim_reports", as: :claim_reports
   get "/reports/claims", to: "reports#claims"
   get "/reports/claim_generate_report", to: "reports#claim_generate_report", as: :claim_generate_report
+  get "/reports/hiip_report", to: "reports#hiip_report", as: :hiip_report
+  get "/reports/hiip_report_excel", to: "reports#hiip_report_excel", as: :hiip_report_excel
+
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

@@ -43,6 +43,13 @@ class ReportsController < ApplicationController
     ]
   end
 
+  def hiip_report
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "HIIP Report" }
+    ]
+  end
+
   def collections_blip
     @subheader_items = [
       { text: "Other Reports" },
@@ -351,6 +358,19 @@ class ReportsController < ApplicationController
   
     excel = Reports::GeneratePersonalDocumentsReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
     filename  = "#{branch_name}_personal_documents_report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+
+  def hiip_report_excel
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    branch = params[:branch]
+
+    excel = Reports::GenerateHiipReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+    filename  = "hiip_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

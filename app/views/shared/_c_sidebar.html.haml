@@ -341,7 +341,10 @@
           = link_to "/reports/claims", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Claims
-
+        %li.c-sidebar-nav-item
+          = link_to "/reports/hiip_report", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            HIIP Report
       %li.c-sidebar-nav-title
         Administration
       - if is_not_remote
