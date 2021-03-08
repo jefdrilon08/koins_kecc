@@ -137,6 +137,7 @@ namespace :api do
 
     post "/general_ledgers/create", to: "general_ledgers#create"
     post "/general_ledgers/delete", to: "general_ledgers#delete"
+    get "/general_ledgers/fetch", to: "general_ledgers#fetch"
 
     # Accounting Entries
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"

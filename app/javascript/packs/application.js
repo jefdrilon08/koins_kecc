@@ -50,6 +50,7 @@ import AccountingEntrySubsidiaryBalancingComponent from "../components/monitorin
 import AccountingEntryPrecisionComponent from "../components/monitoring/AccountingEntryPrecisionComponent.js";
 import FormResignationComponent from "../components/members/FormResignationComponent.js";
 import EquityWithdrawalCollectionUIComponent from "../components/equity_withdrawal_collections/EquityWithdrawalCollectionUIComponent.js";
+import GeneralLedgerDisplayComponent from "../components/accounting/GeneralLedgerDisplayComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -307,7 +308,7 @@ const hooks = {
   "accounting/trial_balances/index":                  [TrialBalancesIndex],
   "accounting/trial_balances/show":                   [TrialBalancesShow],
   "accounting/general_ledgers/index":                 [GeneralLedgersIndex],
-  "accounting/general_ledgers/show":                  [GeneralLedgersShow],
+  "accounting/general_ledgers/show":                  [GeneralLedgersShow, GeneralLedgerDisplayComponent],
   "daily_branch_metrics/index":                       [DailyBranchMetricsIndex],
   "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
   "trends/index":                                     [TrendsIndex]

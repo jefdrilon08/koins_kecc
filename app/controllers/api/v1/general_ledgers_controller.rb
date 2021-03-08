@@ -11,6 +11,12 @@ module Api
         render json: { message: "ok" }
       end
 
+      def fetch
+        general_ledger = DataStore.general_ledgers.done.find(params[:id])
+
+        render json: { data: general_ledger.data }
+      end
+
       def create
         start_date          = params[:start_date].try(:to_date)
         end_date            = params[:end_date].try(:to_date)
