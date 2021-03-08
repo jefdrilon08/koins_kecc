@@ -1,5 +1,5 @@
 module Accounting
-  class TrialBalancesController < ApplicationController
+  class GeneralLedgersController < ApplicationController
     before_action :authenticate_user!
 
     def index
@@ -10,7 +10,7 @@ module Accounting
 
       @accounting_funds = ReadOnlyAccountingFund.all
 
-      @trial_balances = DataStore.select(:id, :meta, :status, :updated_at).trial_balances.where(
+      @general_ledgers = DataStore.select(:id, :meta, :status, :updated_at).general_ledgers.where(
                           "meta->>'branch_id' IN (?)",
                           @branches.pluck(:id)
                         ).order("status DESC, updated_at DESC")
@@ -22,14 +22,14 @@ module Accounting
       @f_accounting_fund_id = params[:f_accounting_fund_id]
 
       if @f_branch_id.present?
-        @trial_balances = @trial_balances.where(
+        @general_ledgers = @general_ledgers.where(
                             "meta->>'branch_id' = ?",
                             @f_branch_id
                           )
       end
 
       if @f_start_date.present? and @f_end_date.present? and @f_start_date < @f_end_date
-        @trial_balances = @trial_balances.where(
+        @general_ledgers = @general_ledgers.where(
                             "DATE(meta->>'start_date') >= ? AND DATE(meta->>'end_date') <= ?",
                             @f_start_date,
                             @f_end_date
@@ -37,17 +37,17 @@ module Accounting
       end
 
       if @f_accounting_fund_id.present?
-        @trial_balances = @trial_balances.where(
+        @general_ledgers = @general_ledgers.where(
                             "meta->>'accounting_fund_id' = ?",
                             @f_accounting_fund_id
                           )
       end
 
-      @trial_balances = @trial_balances.page(params[:page]).per(20)
+      @general_ledgers = @general_ledgers.page(params[:page]).per(20)
 
       @subheader_items = [
         {
-          text: "Trial Balances"
+          text: "General Ledgers"
         }
       ]
 
@@ -61,27 +61,27 @@ module Accounting
       ]
 
       @payload = {
-        urlCreate: "#{ENV['BACKEND_API_URL']}/api/v1/trial_balances/create",
+        urlCreate: "#{ENV['BACKEND_API_URL']}/api/v1/general_ledgers/create",
         userId: current_user.id,
         xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
       }
     end
 
     def show
-      @trial_balance  = DataStore.find(params[:id])
+      @general_ledger  = DataStore.find(params[:id])
 
-      if @trial_balance.processing?
-        redirect_to accounting_trial_balances_path
+      if @general_ledger.processing?
+        redirect_to accounting_general_ledgers_path
       else
-        @start_date           = @trial_balance.meta["start_date"].to_date.strftime("%B %d, %Y")
-        @end_date             = @trial_balance.meta["end_date"].to_date.strftime("%B %d, %Y")
-        @branch_name          = @trial_balance.meta["branch_name"]
-        @updated_at           = @trial_balance.updated_at.strftime("%B %d, %Y %H:%M")
-        @accounting_fund_name = @trial_balance.meta["accounting_fund_name"]
-        @prepared_by          = "#{@trial_balance.meta["user"]["last_name"]}, #{@trial_balance.meta["user"]["first_name"]}"
+        @start_date           = @general_ledger.meta["start_date"].to_date.strftime("%B %d, %Y")
+        @end_date             = @general_ledger.meta["end_date"].to_date.strftime("%B %d, %Y")
+        @branch_name          = @general_ledger.meta["branch_name"]
+        @updated_at           = @general_ledger.updated_at.strftime("%B %d, %Y %H:%M")
+        @accounting_fund_name = @general_ledger.meta["accounting_fund_name"]
+        @prepared_by          = "#{@general_ledger.meta["user"]["last_name"]}, #{@general_ledger.meta["user"]["first_name"]}"
 
         @subheader_items = [
-          { is_link: true, path: accounting_trial_balances_path, text: "Trial Balances" },
+          { is_link: true, path: accounting_general_ledgers_path, text: "General Ledgers" },
           { text: "#{@branch_name} #{@start_date} to #{@end_date} (Updated: #{@updated_at})" }
         ]
 
@@ -102,8 +102,8 @@ module Accounting
         ]
 
         @payload = {
-          id: @trial_balance.id,
-          urlDelete: "#{ENV['BACKEND_API_URL']}/api/v1/trial_balances/delete",
+          id: @general_ledger.id,
+          urlDelete: "#{ENV['BACKEND_API_URL']}/api/v1/general_ledgers/delete",
           userId: current_user.id,
           xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
         }

@@ -390,6 +390,10 @@ Rails.application.routes.draw do
     get "/trial_balances", to: "trial_balances#index"
     get "/trial_balances/:id", to: "trial_balances#show"
     delete "/trial_balances/:id", to: "trial_balances#destroy"
+
+    get "/general_ledgers", to: "general_ledgers#index"
+    get "/general_ledgers/:id", to: "general_ledgers#show"
+    delete "/general_ledgers/:id", to: "general_ledgers#destroy"
   end
 
   def draw(routes_name)

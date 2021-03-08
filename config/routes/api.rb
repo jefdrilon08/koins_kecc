@@ -135,6 +135,9 @@ namespace :api do
     post "/trial_balances/create", to: "trial_balances#create"
     post "/trial_balances/delete", to: "trial_balances#delete"
 
+    post "/general_ledgers/create", to: "general_ledgers#create"
+    post "/general_ledgers/delete", to: "general_ledgers#delete"
+
     # Accounting Entries
     get "/accounting_entries/fetch", to: "accounting_entries#fetch"
     post "/accounting_entries/save", to: "accounting_entries#save"

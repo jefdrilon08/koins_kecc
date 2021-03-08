@@ -1,0 +1,16 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        %hr
+        - if @general_ledgers.any?
+          = render partial: "list", locals: { general_ledgers: @general_ledgers }
+          = paginate @general_ledgers
+        - else
+          %p
+            No records found
+
+= render partial: "accounting/general_ledgers/modals/new"
+= render partial: "templates/error_list"

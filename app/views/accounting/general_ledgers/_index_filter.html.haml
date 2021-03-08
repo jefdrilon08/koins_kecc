@@ -1,0 +1,29 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col
+      .form-group
+        %label
+          Branch
+        = select_tag :f_branch_id, options_from_collection_for_select(@branches, :id, :name, @f_branch_id), class: "form-control select-select2", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label
+          Start Date
+        = date_field_tag :f_start_date, @f_start_date, class: "form-control"
+
+    .col
+      .form-group
+        %label
+          End Date
+        = date_field_tag :f_end_date, @f_end_date, class: "form-control"
+    .col
+      .form-group
+        %label
+          Accounting Fund
+        = select_tag :f_accounting_fund_id, options_from_collection_for_select(@accounting_funds, :id, :name, @f_accounting_fund_id), class: "form-control select-select2", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .fa.fa-search
