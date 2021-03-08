@@ -86,9 +86,9 @@ Rails.application.routes.draw do
   get "/pages/daily_report_insurance_account_status_excel", to: "pages#daily_report_insurance_account_status_excel", as: :daily_report_insurance_account_status_excel
   
   # Monitoring
-  get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
-  get "/monitoring/accounting_entry_precision", to: "monitoring#accounting_entry_precision", as: :monitoring_accounting_entry_precision
-  get "/monitoring/no_membership_payments", to: "monitoring#no_membership_payments"
+#  get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
+#  get "/monitoring/accounting_entry_precision", to: "monitoring#accounting_entry_precision", as: :monitoring_accounting_entry_precision
+#  get "/monitoring/no_membership_payments", to: "monitoring#no_membership_payments"
 
   # Members
   get "/members", to: "members#index"
@@ -457,7 +457,7 @@ Rails.application.routes.draw do
   end
 
   # ACTIVITY LOGS
-  resources :activity_logs, only: [:index]
+  #resources :activity_logs, only: [:index]
 
   # turkey tools
   get "turkey", to: "turkey#index"
