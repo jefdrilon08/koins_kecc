@@ -42,7 +42,7 @@ module Accounting
                           branch.id,
                           start_date,
                           end_date,
-                          accounting_fund.id
+                          accounting_fund.try(:id)
                         ).first
 
           if existing_tb.present?
@@ -74,7 +74,7 @@ module Accounting
 
           # Check according to accounting entry closing record
           if accounting_fund.present?
-            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).where(accounting_fund_id: accounting_fund.id, branch_id: branch.id).order("date_posted DESC").first
+            latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ?", end_date).where(accounting_fund_id: accounting_fund.try(:id), branch_id: branch.id).order("date_posted DESC").first
           else
             latest_closing_entry = AccountingEntry.year_end_closing.where("date_posted <= ? AND branch_id = ?", end_date, branch.id).order("date_posted DESC").first
           end
