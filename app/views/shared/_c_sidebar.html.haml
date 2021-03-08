@@ -458,22 +458,3 @@
         = link_to export_tools_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-file-import
           Export Tools
-      - if is_not_remote
-        %li.c-sidebar-nav-title
-          Monitoring
-        %li.c-sidebar-nav-item
-          = link_to monitoring_accounting_entry_subsidiary_balancing_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-tv
-            Balancing
-        %li.c-sidebar-nav-item
-          = link_to monitoring_accounting_entry_precision_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-tv
-            Accounting Precision
-        %li.c-sidebar-nav-item
-          = link_to monitoring_no_membership_payments_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-tv
-            No Membership Payments
-      %li.c-sidebar-nav-item
-        = link_to activity_logs_path, class: "c-sidebar-nav-link" do
-          .c-sidebar-nav-icon.fa.fa-tv
-          Activity Logs
