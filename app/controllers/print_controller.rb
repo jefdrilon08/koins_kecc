@@ -99,26 +99,7 @@ class PrintController < ApplicationController
 
       render "print/membership_payment_collection", layout: "print"
     elsif type == "general_ledger"
-      start_date          = params[:start_date].try(:to_date)
-      end_date            = params[:end_date].try(:to_date)
-      branch_id           = params[:branch_id]
-      accounting_code_ids = params[:accounting_code_ids].try(:split, ",") || []
-      branch              = Branch.find(branch_id)
-
-      config  = {
-        start_date: start_date,
-        end_date: end_date,
-        branch: branch,
-        accounting_code_ids: accounting_code_ids
-      }
-
-      general_ledger_data  = ::Accounting::GenerateGeneralLedger.new(
-                              config: config
-                            ).execute!
-
-      data  = ::Accounting::FormatGeneralLedger.new(
-                general_ledger_data: general_ledger_data
-              ).execute!
+      data = DataStore.general_ledgers.find(params[:id]).data.with_indifferent_access
 
       @general_ledger = data
 
