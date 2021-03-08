@@ -204,28 +204,45 @@
   %center
     %table.signatories{"border:" => "", :none => ""}
       %tr
-        %th{width: 280} 
-          &emsp;#{@claim.prepared_by}
-          %h5
-            &emsp;&emsp;&emsp;#{@claim.date_prepared}
-        %th{width: 300} 
-          &emsp;#{@claim.checked_by}&nbsp;
-          %h5
-            &emsp;&emsp;&emsp;#{@claim.date_checked}
-        %th{width: 300} 
-          &emsp;#{@claim.approved_by}
-          %h5
-            &emsp;&emsp;&emsp;#{@claim.date_approved}
-        %th{width: 300} 
-          &emsp;#{@claim.posted_by}
-          %h5
-            &emsp;&emsp;&emsp;#{@claim.date_posted}
-
+        %th{width: 350} 
+          #{@accounting_entry_data[:posted_by]}
+        -if Settings.activate_microinsurance == true
+          %th{width: 255} #{"EVELYN LAGMAY"}
+        -else
+          %th{width: 255}
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{"SILVIDA ANTIQUERA"}
+        -else
+          %th{width: 350}
       %tr
         %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
         %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Posted by:&emsp;&emsp;
+  / %center
+  /   %table.signatories{"border:" => "", :none => ""}
+  /     %tr
+  /       %th{width: 280} 
+  /         &emsp;#{@claim.prepared_by}
+  /         %h5
+  /           &emsp;&emsp;&emsp;#{@claim.date_prepared}
+  /       %th{width: 300} 
+  /         &emsp;#{@claim.checked_by}&nbsp;
+  /         %h5
+  /           &emsp;&emsp;&emsp;#{@claim.date_checked}
+  /       %th{width: 300} 
+  /         &emsp;#{@claim.approved_by}
+  /         %h5
+  /           &emsp;&emsp;&emsp;#{@claim.date_approved}
+  /       %th{width: 300} 
+  /         &emsp;#{@claim.posted_by}
+  /         %h5
+  /           &emsp;&emsp;&emsp;#{@claim.date_posted}
+
+  /     %tr
+  /       %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+  /       %td.overline &emsp;&emsp;Checked by:&emsp;&emsp;
+  /       %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  /       %td.overline &emsp;&emsp;Posted by:&emsp;&emsp;
   %br
   %br
   %center
