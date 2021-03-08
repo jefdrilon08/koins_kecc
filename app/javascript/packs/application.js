@@ -154,6 +154,7 @@ import ChangePassword from "../models/ChangePassword.js";
 import TrialBalancesIndex from "../models/TrialBalancesIndex.js";
 import TrialBalancesShow from "../models/TrialBalancesShow.js";
 import GeneralLedgersIndex from "../models/GeneralLedgersIndex.js";
+import GeneralLedgersShow from "../models/GeneralLedgersShow.js";
 import MembersSearch from "../models/MembersSearch.js";
 import AdjustmentsAccruedInterestsIndex from "../models/AdjustmentsAccruedInterestsIndex.js";
 import AdjustmentsAccruedInterestsShow from "../models/AdjustmentsAccruedInterestsShow.js";
@@ -306,6 +307,7 @@ const hooks = {
   "accounting/trial_balances/index":                  [TrialBalancesIndex],
   "accounting/trial_balances/show":                   [TrialBalancesShow],
   "accounting/general_ledgers/index":                 [GeneralLedgersIndex],
+  "accounting/general_ledgers/show":                  [GeneralLedgersShow],
   "daily_branch_metrics/index":                       [DailyBranchMetricsIndex],
   "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
   "trends/index":                                     [TrendsIndex]
