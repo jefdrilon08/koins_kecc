@@ -8,6 +8,7 @@ class MemberAccountValidation < ApplicationRecord
  	accepts_nested_attributes_for :member_account_validation_records
 
  	scope :approved, -> { where(status: "approved") }
+ 	scope :pending, -> { where(status: "pending").order("date_prepared ASC") }
 
 	validates :branch, presence: true
 	validates :date_prepared, presence: true

@@ -27,6 +27,7 @@ var _loadDefaults = function() {
 var _bindEvents = function() {
   $downloadBtn.on('click', function() {
     $downloadBtn.addClass('loading');
+    $message.html("Loading...");
 
     var startDate  = $startDate.val();
     var endDate = $endDate.val();
@@ -43,6 +44,7 @@ var _bindEvents = function() {
       data: params,
       success: function(data) {
         console.log(data);
+        $message.html("Success! Redirecting...");
         $memberQuarterlyReportsSection.html(Mustache.render($memberQuarterlyReportsTemplate, data));
         
         $downloadBtn.removeClass('loading');

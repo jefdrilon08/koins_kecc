@@ -1204,6 +1204,57 @@ namespace :adjust do
     puts "Done!"
   end
 
+
+  task :repair_validation_accounting_entry => :environment do
+    puts "Repairing ..."
+    is_remote = true
+      
+    if ENV['IS_REMOTE'].present?
+      is_remote = ENV['IS_REMOTE']
+    end
+
+    if ENV['VALIDATION_ID'].present?
+      member_account_validations = MemberAccountValidation.where(id: ENV['VALIDATION_ID'])
+    end
+
+    member_account_validations = MemberAccountValidation.where("status != ? AND is_remote = ?", "approved", true)
+
+    member_account_validations.each do |member_account_validation|
+      if member_account_validation.data.present?
+        puts "#{member_account_validation.id}"
+        
+        data = member_account_validation.data.with_indifferent_access
+
+        last_name = member_account_validation.prepared_by.split(", ").first
+        first_name = member_account_validation.prepared_by.split(", ").last
+        current_user = User.where("lower(last_name) = ? AND lower(first_name) = ?", last_name.downcase, first_name.downcase).first
+
+        if current_user.nil?
+          if member_account_validation.branch.cluster.name == "CEBU CITY"
+            current_user = User.find("61eeaa77-0288-47fa-a437-538a54740113")
+          else
+            current_user = User.find("d6050c1c-797b-497a-9ac5-e4a8726c6cbe")
+          end
+        end
+        
+        data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+                                            config: 
+                                            {
+                                              branch: member_account_validation.branch,
+                                              member_account_validation: member_account_validation,
+                                              is_remote: is_remote,
+                                              user: current_user
+                                            }
+                                    ).execute!
+        
+        member_account_validation.data = data
+        member_account_validation.save!
+      end
+    end
+
+    puts "Done!"
+  end
+
   task :upload_attachment_files_from_dir => :environment do
     dir_location  = ENV['DIR_LOCATION']
     puts "Searching in directory #{dir_location}"

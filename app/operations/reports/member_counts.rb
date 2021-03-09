@@ -19,7 +19,7 @@ module Reports
 
       
       if @start_date.present? && @end_date.present?
-        @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed"])
+        @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed", "dormant"])
         @new_members                = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ?", @start_date, @end_date)
         @resigned_members           = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND insurance_status = ?", @start_date, @end_date, "resigned")
 
@@ -51,6 +51,7 @@ module Reports
         
         @active_lapsed_members      = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "lapsed")
         @active_inforce_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
+        @active_dormant_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "dormant")
         @gk_members                 = Member.where("member_type = ?", "GK")
         @active_resigned_insurance  = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "resigned")
         @active_pending             = Member.active.where("insurance_status = ?", "pending")
@@ -94,6 +95,7 @@ module Reports
 
       @total_active_lapsed = 0
       @total_active_inforce = 0
+      @total_active_dormant = 0
       @total_gk = 0
       @total_active_resigned_insurance = 0
       @total_active_pending = 0
@@ -101,6 +103,7 @@ module Reports
       @total_valid_dependent = 0
       @total_valid_dependent_inforce = 0
       @total_valid_dependent_lapsed = 0
+      @total_valid_dependent_dormant = 0
       @total_valid_dependent_resigned = 0
 
       Branch.all.order("cluster_id ASC").each do |branch|
@@ -137,11 +140,12 @@ module Reports
 
         member[:active_lapsed] = @active_lapsed_members.where(branch_id: branch).count
         member[:active_inforce] = @active_inforce_members.where(branch_id: branch).count
+        member[:active_dormant] = @active_dormant_members.where(branch_id: branch).count
         member[:gk_count] = @gk_members.where(branch_id: branch).count
         member[:active_resigned_insurance] = @active_resigned_insurance.where(branch_id: branch).count
         member[:active_pending] = @active_pending.where(branch_id: branch).count
         
-        member[:valid_dependent_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ? AND insurance_status IN (?)", branch, @end_date, ["inforce", "lapsed"]).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        member[:valid_dependent_count] = LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ? AND insurance_status IN (?)", branch, @end_date, ["inforce", "lapsed", "dormant"]).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
         
         @total_active += @active_members.where(branch_id: branch).count
         @total_new_jan += @new_jan.where(branch_id: branch).count
@@ -172,11 +176,12 @@ module Reports
 
         @total_active_lapsed += @active_lapsed_members.where(branch_id: branch).count
         @total_active_inforce += @active_inforce_members.where(branch_id: branch).count
+        @total_active_dormant += @active_dormant_members.where(branch_id: branch).count
         @total_gk += @gk_members.where(branch_id: branch).count
         @total_active_resigned_insurance += @active_resigned_insurance.where(branch_id: branch).count
         @total_active_pending += @active_pending.where(branch_id: branch).count
         
-        @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ? AND insurance_status IN (?)", branch, @end_date, ["inforce", "lapsed"]).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
+        @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ? AND insurance_status IN (?)", branch, @end_date, ["inforce", "lapsed", "dormant"]).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
         
         @data[:members] << member
       end
@@ -211,6 +216,7 @@ module Reports
 
       total[:total_active_lapsed] = @total_active_lapsed
       total[:total_active_inforce] = @total_active_inforce
+      total[:total_active_dormant] = @total_active_dormant
       total[:total_gk] = @total_gk
       total[:total_active_resigned_insurance] = @total_active_resigned_insurance
       total[:total_active_pending] = @total_active_pending
