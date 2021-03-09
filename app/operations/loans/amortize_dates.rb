@@ -39,6 +39,10 @@ module Loans
         end
       end
 
+      ::Loans::UpdateMaturityDate.new(
+        loan: @loan
+      ).execute!
+
       @loan
     end
   end
