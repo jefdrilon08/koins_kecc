@@ -15,7 +15,7 @@ module Members
       @current_date = @as_of
       @default_periodic_payment  = 15
 
-      insurance_status = nil
+      @i_status = nil
 
       @a_members.each_with_index do |member, i|
         recognition_date          = member.recognition_date
@@ -38,37 +38,37 @@ module Members
               days_lapsed              = (@current_date - last_payment_date).to_i
               
               if amt_past_due >= 780
-                insurance_status = "dormant"
+                @i_status = "dormant"
               end
 
               if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780
-                insurance_status = "lapsed"
+                @i_status = "lapsed"
               end
 
               if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780
-                insurance_status = "lapsed"
+                @i_status = "lapsed"
               end
 
               if days_lapsed <= 45 && current_balance >= insured_amount
-                insurance_status = "inforce"
+                @i_status = "inforce"
               end
 
               if days_lapsed > 45 && current_balance >= insured_amount
-                insurance_status = "inforce"
+                @i_status = "inforce"
               end
 
               if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
-                insurance_status = "inforce"
+                @i_status = "inforce"
               end
 
               if days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
-                insurance_status = "inforce"
+                @i_status = "inforce"
               end
             end
           end
         end
 
-        if insurance_status == @insurance_status
+        if @i_status == @insurance_status
           @members << member
         end
       end
