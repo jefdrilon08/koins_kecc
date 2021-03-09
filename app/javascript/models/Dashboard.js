@@ -1,10 +1,17 @@
 import Mustache from "mustache/mustache";
 
+var $btnGenerateAccountingReport;
 var $btnGenerateDailyReport;
 var $btnConfirmGenerateDailyReport;
+var $btnConfirmGenerateAccountingReport;
 var $modalGenerateDailyReport;
+var $modalGenerateAccountingReport;
 var $selectBranch;
 var $inputAsOf;
+var $selectAccReportBranch;
+var $selectAccReportAccountingFund;
+var $inputAccReportStartDate;
+var $inputAccReportEndDate;
 var $xFormControl;
 
 var $message;
@@ -12,16 +19,24 @@ var templateErrorList;
 var templateSuccessMessage;
 
 var _urlGenerateDailyReport;
+var _urlGenerateAccountingReport;
 var _userId;
 var _xKoinsAppAuthSecret;
 
 var _cacheDom = function() {
-  $btnGenerateDailyReport         = $("#btn-generate-daily-report");
-  $btnConfirmGenerateDailyReport  = $("#btn-confirm-generate-daily-report");
-  $modalGenerateDailyReport       = $("#modal-generate-daily-report");
-  $selectBranch                   = $("#select-branch");
-  $inputAsOf                      = $("#input-as-of");
-  $xFormControl                   = $(".x-form-control");
+  $btnGenerateDailyReport             = $("#btn-generate-daily-report");
+  $btnGenerateAccountingReport        = $("#btn-generate-accounting-report");
+  $btnConfirmGenerateDailyReport      = $("#btn-confirm-generate-daily-report");
+  $btnConfirmGenerateAccountingReport = $("#btn-confirm-generate-accounting-report");
+  $modalGenerateDailyReport           = $("#modal-generate-daily-report");
+  $modalGenerateAccountingReport      = $("#modal-generate-accounting-report");
+  $selectBranch                       = $("#select-branch");
+  $inputAsOf                          = $("#input-as-of");
+  $selectAccReportBranch              = $("#select-acc-report-branch");
+  $selectAccReportAccountingFund      = $("#select-acc-report-accounting-fund");
+  $inputAccReportStartDate            = $("#input-acc-report-start-date");
+  $inputAccReportEndDate              = $("#input-acc-report-end-date");
+  $xFormControl                       = $(".x-form-control");
 
   $message                = $(".message");
   templateErrorList       = $("#template-error-list").html();
@@ -29,6 +44,73 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+  $btnGenerateAccountingReport.on("click", function() {
+    $modalGenerateAccountingReport.modal("show");
+  });
+
+  $btnConfirmGenerateAccountingReport.on("click", function() {
+    var accountingFundId  = $selectAccReportAccountingFund.val();
+    var branchId          = $selectAccReportBranch.val();
+    var startDate         = $inputAccReportStartDate.val();
+    var endDate           = $inputAccReportEndDate.val();
+
+    var data = {
+      start_date: startDate,
+      end_date: endDate,
+      branch_id: branchId,
+      accounting_fund_id: accountingFundId,
+      user_id: _userId
+    }
+
+    $xFormControl.prop("disabled", true);
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlGenerateAccountingReport,
+      method: 'POST',
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': _xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      data: data,
+      success: function(response) {
+        $message.html(
+          Mustache.render(
+            templateSuccessMessage,
+            { message: "Success! You may now close this window" }
+          )
+        );
+
+
+        $xFormControl.prop("disabled", false);
+        $selectAccReportBranch.val("");
+      },
+      error: function(response) {
+        console.log(response.responseText);
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          console.log(err);
+          errors  = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $xFormControl.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnGenerateDailyReport.on("click", function() {
     $modalGenerateDailyReport.modal("show");
   });
@@ -94,9 +176,10 @@ var _bindEvents = function() {
 };
 
 var init = function(config) {
-  _urlGenerateDailyReport = config.urlGenerateDailyReport;
-  _userId                 = config.userId;
-  _xKoinsAppAuthSecret    = config.xKoinsAppAuthSecret;
+  _urlGenerateDailyReport       = config.urlGenerateDailyReport;
+  _urlGenerateAccountingReport  = config.urlGenerateAccountingReport;
+  _userId                       = config.userId;
+  _xKoinsAppAuthSecret          = config.xKoinsAppAuthSecret;
 
   _cacheDom();
   _bindEvents();

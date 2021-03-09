@@ -1,5 +1,6 @@
 class ProcessGeneralLedger < ApplicationJob
-  queue_as :default
+  #queue_as :default
+  queue_as :accounting
 
   def perform(args)
     data_store      = DataStore.find(args[:id])
