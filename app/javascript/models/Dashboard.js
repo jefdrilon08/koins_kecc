@@ -45,6 +45,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnGenerateAccountingReport.on("click", function() {
+    $message.html("");
     $modalGenerateAccountingReport.modal("show");
   });
 
@@ -112,6 +113,7 @@ var _bindEvents = function() {
   });
 
   $btnGenerateDailyReport.on("click", function() {
+    $message.html("");
     $modalGenerateDailyReport.modal("show");
   });
 
