@@ -50,6 +50,7 @@ class DataStore < ApplicationRecord
   scope :time_deposit_withdrawal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_WITHDRAWAL") }
   scope :time_deposit_autorenewal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_AUTORENEWAL") }
   scope :branch_resignations, -> { where("meta->>'data_store_type' = ?", "BRANCH_RESIGNATIONS") }
+  scope :general_ledgers, -> { where("meta->>'data_store_type' = ?", "GENERAL_LEDGER") }
 
   # For attaching json dumps
   has_one_attached :data_json_dump
@@ -72,14 +73,6 @@ class DataStore < ApplicationRecord
     if self.meta.present? and self.meta["start_date"].present? and self.meta["end_date"].present?
       self.start_date = self.meta["start_date"]
       self.end_date   = self.meta["end_date"]
-    end
-  end
-
-  def progress_as_percent
-    if meta.present? and meta.with_indifferent_access[:progress].present?
-      "#{meta.with_indifferent_access[:progress]}%"
-    else
-      "0%"
     end
   end
 

@@ -1,0 +1,48 @@
+.table-responsive
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th.text-center
+          Actions
+        %th
+          Start Date
+        %th
+          End Date
+        %th
+          Branch
+        %th
+          Accounting Fund
+        %th
+          Prepared By
+        %th
+          Last Updated
+        %th.text-center
+          Status
+    %tbody
+      - general_ledgers.each do |o|
+        %tr
+          %td.text-center
+            = link_to "/accounting/general_ledgers/#{o.id}" do
+              .fa.fa-search
+          %td
+            #{o["meta"]["start_date"].to_date.strftime("%B %d, %Y")}
+          %td
+            #{o["meta"]["end_date"].to_date.strftime("%B %d, %Y")}
+          %td
+            #{o["meta"]["branch_name"]}
+          %td
+            #{o["meta"]["accounting_fund_name"]}
+          %td
+            #{o["meta"]["user"]["last_name"]}, #{o["meta"]["user"]["first_name"]}
+          %td
+            #{o.updated_at.strftime("%B %d, %Y %H:%M")}
+          %td.text-center
+            - if o.pending?
+              .badge.badge-danger
+                Pending
+            - if o.processing?
+              .badge.badge-info
+                Processing
+            - if o.done?
+              .badge.badge-success
+                Done

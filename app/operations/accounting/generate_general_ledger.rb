@@ -1,11 +1,15 @@
 module Accounting
   class GenerateGeneralLedger
+    attr_accessor :data
+
     def initialize(config:)
       @config = config
 
       @start_date = @config[:start_date]
       @end_date   = @config[:end_date]
       @branch     = @config[:branch]
+
+      @accounting_fund  = @config[:accounting_fund]
 
       @accounting_code_ids  = @config[:accounting_code_ids] || []
 
@@ -21,74 +25,59 @@ module Accounting
     end
 
     def execute!
-      if @branch.present?
-        journal_entries_by_accounting_code  = ReadOnlyJournalEntry
-                                                .eager_load(:accounting_code, :accounting_entry)
-                                                .where(
-                                                  "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
-                                                  @start_date,
-                                                  @end_date,
-                                                  @branch.id
-                                                )
-                                                .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
-                                                .group_by(&:accounting_code_id)
+      journal_entries_by_accounting_code  = ReadOnlyJournalEntry
+                                              .eager_load(:accounting_code, :accounting_entry)
+                                              .where(
+                                                "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
+                                                @start_date,
+                                                @end_date,
+                                                @branch.id
+                                              )
 
-        dr_accounting_codes = ReadOnlyAccountingCode.joins(
-                                journal_entries: :accounting_entry
-                              )
-                              .where(
-                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
-                                "DR",
-                                @start_date,
-                                @branch.id
-                              )
-                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
-                              .group("accounting_codes.id")
-
-        cr_accounting_codes = ReadOnlyAccountingCode.joins(
-                                journal_entries: :accounting_entry
-                              )
-                              .where(
-                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
-                                "CR",
-                                @start_date,
-                                @branch.id
-                              )
-                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
-                              .group("accounting_codes.id")
-      else
-        journal_entries_by_accounting_code  = ReadOnlyJournalEntry
-                                                .eager_load(:accounting_code, :accounting_entry)
-                                                .where(
-                                                  "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ?",
-                                                  @start_date,
-                                                  @end_date
-                                                )
-                                                .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
-                                                .group_by(&:accounting_code_id)
-
-        dr_accounting_codes = ReadOnlyAccountingCode.joins(
-                                journal_entries: :accounting_entry
-                              )
-                              .where(
-                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ?",
-                                "DR",
-                                @start_date
-                              )
-                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
-                              .group("accounting_codes.id")
-
-        cr_accounting_codes = ReadOnlyAccountingCode.joins(
-                                journal_entries: :accounting_entry
-                              )
-                              .where(
-                                "journal_entries.post_type = ? AND accounting_entries.date_posted < ?",
-                                "CR",
-                                @start_date
-                              )
-                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
-                              .group("accounting_codes.id")
+      if @accounting_fund.present?
+        journal_entries_by_accounting_code = journal_entries_by_accounting_code.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
       end
+      
+      journal_entries_by_accounting_code  = journal_entries_by_accounting_code
+                                              .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
+                                              .group_by(&:accounting_code_id)
+
+      dr_accounting_codes = ReadOnlyAccountingCode.joins(
+                              journal_entries: :accounting_entry
+                            )
+                            .where(
+                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
+                              "DR",
+                              @start_date,
+                              @branch.id
+                            )
+
+      if @accounting_fund.present?
+        dr_accounting_codes = dr_accounting_codes.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
+      end
+
+      dr_accounting_codes = dr_accounting_codes
+                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
+                              .group("accounting_codes.id")
+
+
+      cr_accounting_codes = ReadOnlyAccountingCode.joins(
+                              journal_entries: :accounting_entry
+                            )
+                            .where(
+                              "journal_entries.post_type = ? AND accounting_entries.date_posted < ? AND accounting_entries.branch_id = ?",
+                              "CR",
+                              @start_date,
+                              @branch.id
+                            )
+
+      if @accounting_fund.present?
+        cr_accounting_codes = cr_accounting_codes.where("accounting_entries.accounting_fund_id = ?", @accounting_fund.id)
+      end
+
+      cr_accounting_codes = cr_accounting_codes
+                              .select("accounting_codes.id as accounting_code_id, accounting_codes.name as accounting_code_name, sum(journal_entries.amount) as sum")
+                              .group("accounting_codes.id")
 
       entries = []
 

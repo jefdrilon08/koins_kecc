@@ -25,6 +25,10 @@ class MemberAccount < ApplicationRecord
     }
   end
 
+  def account_transactions
+    AccountTransaction.where(subsidiary_id: self.id)
+  end
+
   def savings?
     self.account_type == "SAVINGS"
   end

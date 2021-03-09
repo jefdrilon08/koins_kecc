@@ -2,7 +2,7 @@ class ActivityLogsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @activity_logs = ReadOnlyActivityLog.select("*").order("created_at DESC")
+    @activity_logs = ReadOnlyActivityLog.select("*")
 
     if params[:q].present?
       @q = params[:q]
@@ -22,7 +22,7 @@ class ActivityLogsController < ApplicationController
       @activity_logs  = @activity_logs.where("Date(activity_logs.created_at) BETWEEN ? AND ?", @start_date, @end_date)
     end
 
-    @activity_logs = @activity_logs.page(params[:page]).per(LIST_PAGE_SIZE)
+    @activity_logs = @activity_logs.page(params[:page]).per(LIST_PAGE_SIZE).order("created_at DESC")
 
     @subheader_items = [
       { text: "Activity Logs" }
