@@ -85,13 +85,19 @@ module Loans
       @member_data[:entry_point_loan_cycle] = @entry_point_loan_cycle
       @member.update!(data: @member_data)
 
+      amorts = @loan.amortization_schedule_entries.order("due_date DESC")
+
       # setup max_active_date
-      max_active_date = @loan.amortization_schedule_entries.order("due_date DESC").first.due_date
+      max_active_date = amorts.first.due_date
+
+      # setup maturity_date
+      maturity_date = amorts.last.due_date
 
       @loan.update!(
         status: "active",
         date_approved: @current_date,
-        max_active_date: max_active_date
+        max_active_date: max_active_date,
+        maturity_date: maturity_date
       )
 
       @loan
