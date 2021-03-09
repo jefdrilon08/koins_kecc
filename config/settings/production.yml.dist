@@ -965,7 +965,7 @@ loan_products:
         amount: 0.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
-        business_permit_amount: 1500
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
