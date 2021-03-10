@@ -570,7 +570,7 @@ namespace :adjust do
     #current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
 
     # Do this in batches
-    Loan.where(status: ['active', 'paid', 'processing']).find_in_batches(batch_size: 1000) do |group|
+    Loan.where(status: ['active']).find_in_batches(batch_size: 2500) do |group|
      
      ids = group.pluck(:id).map{ |o| "'#{o}'" }.join(",")
 
@@ -588,7 +588,7 @@ namespace :adjust do
                   INNER JOIN
                     amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
                   WHERE
-                    loans.status IN ('active', 'paid', 'processing') AND loans.id IN (#{ids})
+                    loans.status IN ('active') AND loans.id IN (#{ids})
                   ORDER BY
                     loans.id,
                     amortization_schedule_entries.due_date DESC,
