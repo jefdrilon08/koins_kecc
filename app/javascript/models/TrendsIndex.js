@@ -71,8 +71,10 @@ var _updateData = function(data) {
   chartAccountingBalance.data.datasets = [];
 
   data.accounting_code_balances.forEach(function(d) {
+    d.borderColor     = d.color;
     d.backgroundColor = d.color;
     d.lineTension     = 0;
+    d.fill            = false;
 
     chartAccountingBalance.data.datasets.push(d);
   });
@@ -80,8 +82,10 @@ var _updateData = function(data) {
   chartAccountingBalance.update();
 
   data.pure_savers.forEach(function(d) {
+    d.borderColor     = d.color;
     d.backgroundColor = d.color;
     d.lineTension     = 0;
+    d.fill            = false;
 
     chartPureSavers.data.datasets.push(d);
   });
@@ -89,8 +93,10 @@ var _updateData = function(data) {
   chartPureSavers.update();
 
   data.loaners.forEach(function(d) {
+    d.borderColor     = d.color;
     d.backgroundColor = d.color;
     d.lineTension     = 0;
+    d.fill            = false;
 
     chartActiveLoaners.data.datasets.push(d);
   });
@@ -98,8 +104,10 @@ var _updateData = function(data) {
   chartActiveLoaners.update();
 
   data.active_members.forEach(function(d) {
+    d.borderColor     = d.color;
     d.backgroundColor = d.color;
     d.lineTension     = 0;
+    d.fill            = false;
 
     chartActiveMembers.data.datasets.push(d);
   });
@@ -107,8 +115,10 @@ var _updateData = function(data) {
   chartActiveMembers.update();
 
   data.total_members.forEach(function(d) {
+    d.borderColor     = d.color;
     d.backgroundColor = d.color;
     d.lineTension     = 0;
+    d.fill            = false;
 
     chartTotalMembers.data.datasets.push(d);
   });
