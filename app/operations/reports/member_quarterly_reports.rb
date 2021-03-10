@@ -118,14 +118,14 @@ module Reports
         # member[:resigned_before_lapsed] = @resigned_before_lapsed.select{|o| o[:branch_id] == branch}.count
         # member[:resigned_before_dormant] = @resigned_before_dormant.select{|o| o[:branch_id] == branch}.count
         
-        member[:male_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id; o[:gender] == "Male"}.count
-        member[:female_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id; o[:gender] == "Female"}.count
+        member[:male_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        member[:female_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
 
-        member[:male_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id; o[:gender] == "Male"}.count
-        member[:female_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id; o[:gender] == "Female"}.count
+        member[:male_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        member[:female_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
         
-        member[:male_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id; o[:gender] == "Male"}.count
-        member[:female_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id; o[:gender] == "Female"}.count
+        member[:male_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        member[:female_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
 
         member[:male_resigned_count] = @all_resigned_members.where(branch_id: branch, gender: "Male").count
         member[:female_resigned_count] = @all_resigned_members.where(branch_id: branch, gender: "Female").count
@@ -163,14 +163,14 @@ module Reports
         @total_with_spouse += @members_with_spouse.select{|o| o[:branch_id] == branch.id}.count
         @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
 
-        @total_inforce_male += @all_inforce.select{|o| o[:branch_id] == branch.id; o[:gender] == "Male"}.count
-        @total_inforce_female += @all_inforce.select{|o| o[:branch_id] == branch.id; o[:gender] == "Female"}.count
+        @total_inforce_male += @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        @total_inforce_female += @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
 
-        @total_lapsed_male += @all_lapsed.select{|o| o[:branch_id] == branch.id; o[:gender] == "Male"}.count
-        @total_lapsed_female += @all_lapsed.select{|o| o[:branch_id] == branch.id; o[:gender] == "Female"}.count
+        @total_lapsed_male += @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        @total_lapsed_female += @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
 
-        @total_dormant_male += @all_dormant.select{|o| o[:branch_id] == branch.id; o[:gender] == "Male"}.count
-        @total_dormant_female += @all_dormant.select{|o| o[:branch_id] == branch.id; o[:gender] == "Female"}.count
+        @total_dormant_male += @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        @total_dormant_female += @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
         
         @total_resigned_male += @all_resigned_members.where(branch_id: branch, gender: "Male").count
         @total_resigned_female += @all_resigned_members.where(branch_id: branch, gender: "Female").count
