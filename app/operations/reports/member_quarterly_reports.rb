@@ -25,7 +25,7 @@ module Reports
         @resigned_before_dormant    = ::Members::FetchInsuranceMembers.new(config: {members: @resigned_before, as_of: @end_date, insurance_status: "dormant"}).execute!
         @all_dormant                = @active_dormant_members + @resigned_before_dormant
         
-        @all_active_members         = @active_members + @resigned_before_inforce + @resigned_before_lapsed + @resigned_before_dormant
+        @all_active_members         = @all_inforce + @all_lapsed + @all_dormant
         
         @resigned_members           = Member.insurance_resigned.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ?", @start_date, @end_date)
         @all_resigned_members       = Member.insurance_resigned.where("insurance_date_resigned <= ?", @end_date)

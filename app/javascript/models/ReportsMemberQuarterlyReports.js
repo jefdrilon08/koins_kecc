@@ -11,6 +11,7 @@ var $endDate;
 var $memberQuarterlyReportsSection;
 var $memberQuarterlyReportsTemplate;
 var memberQuarterlyReportsUrl  = "/api/v1/reports/member_quarterly_reports";
+var $message;
 
 var _cacheDom = function() {
   $startDate                      = $("#start-date");
@@ -19,6 +20,8 @@ var _cacheDom = function() {
   $downloadBtn                    = $("#download-btn");
   $memberQuarterlyReportsSection  = $("#member-quarterly-reports-section");
   $memberQuarterlyReportsTemplate = $("#member-quarterly-reports-template").html();
+
+  $message                        = $(".message");
 }
 
 var _loadDefaults = function() {
