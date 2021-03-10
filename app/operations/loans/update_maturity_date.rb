@@ -5,7 +5,7 @@ module Loans
     end
 
     def execute!
-      maturity_date = @loan.amortization_schedule_entries.order(
+      maturity_date = AmortizationScheduleEntry.where(loan_id: @loan.id).order(
                         "due_date ASC"
                       ).last.due_date
 

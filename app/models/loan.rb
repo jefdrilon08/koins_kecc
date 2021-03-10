@@ -98,16 +98,6 @@ class Loan < ApplicationRecord
     self.principal + self.interest
   end
 
-  def maturity_date
-    last_amort  = self.amortization_schedule_entries.order("due_date ASC").last
-
-    if last_amort.present? && last_amort.due_date.present?
-      return last_amort.due_date.strftime("%b %d, %Y")
-    else
-      return ""
-    end
-  end
-
   def num_weeks
 #    start_date  = self.amortization_schedule_entries.order("due_date ASC").first.due_date
 #    end_date    = self.amortization_schedule_entries.order("due_date ASC").last.due_date

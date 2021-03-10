@@ -13,6 +13,7 @@ class PagesController < ApplicationController
       roles: current_user.roles,
       is_microinsurance: Settings.activate_microinsurance,
       urlGenerateDailyReport: "#{ENV['BACKEND_API_URL']}/api/v2/dashboard/generate_daily_report",
+      urlGenerateAccountingReport: "#{ENV['BACKEND_API_URL']}/api/v2/dashboard/generate_accounting_report",
       userId: current_user.id,
       xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
     }
@@ -22,7 +23,8 @@ class PagesController < ApplicationController
     ]
 
     @subheader_side_actions = [
-      { link: "#", id: "btn-generate-daily-report", class: "fa fa-sync", text: "Generate Daily Report" },
+      { link: "#", id: "btn-generate-accounting-report", class: "fa fa-sync", text: "Generate Accounting Report" },
+      { link: "#", id: "btn-generate-daily-report", class: "fa fa-sync", text: "Generate Daily Report (Ops)" },
       { link: member_form_path, class: "fa fa-plus", text: "New Member" },
       { link: members_path(status: "pending"), class: "fa fa-arrow-right", text: "Pending Records (#{@pending_members_count})" }
     ]

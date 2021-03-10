@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_24_113855) do
+ActiveRecord::Schema.define(version: 2021_03_09_104136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -741,6 +741,21 @@ ActiveRecord::Schema.define(version: 2021_02_24_113855) do
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
   end
 
+  create_table "member_account_daily_statements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id", null: false
+    t.uuid "member_account_id", null: false
+    t.date "transacted_at"
+    t.uuid "branch_id", null: false
+    t.decimal "debit_amount"
+    t.decimal "credit_amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["branch_id"], name: "index_member_account_daily_statements_on_branch_id"
+    t.index ["member_account_id"], name: "index_member_account_daily_statements_on_member_account_id"
+    t.index ["member_id", "member_account_id", "branch_id", "transacted_at"], name: "idx_macds_m_ma_b_t"
+    t.index ["member_id"], name: "index_member_account_daily_statements_on_member_id"
+  end
+
   create_table "member_account_validation_cancellations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_account_validation_id"
     t.uuid "member_id"
@@ -1186,6 +1201,9 @@ ActiveRecord::Schema.define(version: 2021_02_24_113855) do
   add_foreign_key "loans", "loan_products"
   add_foreign_key "loans", "members"
   add_foreign_key "loans", "project_types"
+  add_foreign_key "member_account_daily_statements", "branches"
+  add_foreign_key "member_account_daily_statements", "member_accounts"
+  add_foreign_key "member_account_daily_statements", "members"
   add_foreign_key "member_account_validation_cancellations", "branches"
   add_foreign_key "member_account_validation_cancellations", "member_account_validations"
   add_foreign_key "member_account_validation_cancellations", "members"
