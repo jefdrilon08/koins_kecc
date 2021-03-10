@@ -127,8 +127,8 @@ module Reports
         member[:male_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
         member[:female_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
 
-        member[:male_resigned_count] = @all_resigned_members.where(branch_id: branch, gender: "Male").count
-        member[:female_resigned_count] = @all_resigned_members.where(branch_id: branch, gender: "Female").count
+        member[:male_resigned_count] = @resigned_members.where(branch_id: branch, gender: "Male").count
+        member[:female_resigned_count] = @resigned_members.where(branch_id: branch, gender: "Female").count
         
         member[:male_count] = @male_members.select{|o| o[:branch_id] == branch.id}.count
         member[:female_count] = @female_members.select{|o| o[:branch_id] == branch.id}.count
@@ -172,8 +172,8 @@ module Reports
         @total_dormant_male += @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
         @total_dormant_female += @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
         
-        @total_resigned_male += @all_resigned_members.where(branch_id: branch, gender: "Male").count
-        @total_resigned_female += @all_resigned_members.where(branch_id: branch, gender: "Female").count
+        @total_resigned_male += @resigned_members.where(branch_id: branch, gender: "Male").count
+        @total_resigned_female += @resigned_members.where(branch_id: branch, gender: "Female").count
         
         # @total_resigned_before += @resigned_before.where(branch_id: branch).count
         # @total_resigned_before_inforce += @resigned_before_inforce.select{|o| o[:branch_id] == branch}.count

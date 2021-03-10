@@ -4,7 +4,9 @@
     .card
       .card-body
         = render partial: "form", locals: { member_account_validation: @member_account_validation }
-        .message
+.row
+  .col        
+    .message
 
 = render partial: "templates/error_list"
 = render partial: "member_account_validations/modals/member_cancel"

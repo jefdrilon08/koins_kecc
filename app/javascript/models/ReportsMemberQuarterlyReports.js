@@ -56,7 +56,7 @@ var _bindEvents = function() {
         window.open(tempUrl, '_blank');
 
         // Make sticky
-        $(".sticky").stickyTableHeaders();
+        // $(".sticky").stickyTableHeaders();
       },
       error: function(data) {
         $downloadBtn.removeClass('loading');
@@ -65,7 +65,8 @@ var _bindEvents = function() {
   });
 
   $searchBtn.on('click', function() {
-    $searchBtn.addClass('loading');  
+    $searchBtn.addClass('loading');
+    $message.html("Loading...");  
     
     var startDate  = $startDate.val();
     var endDate = $endDate.val();
@@ -82,6 +83,7 @@ var _bindEvents = function() {
       data: params,
       success: function(data) {
         console.log(data);
+        $message.html("Success! Redirecting...");
         $memberQuarterlyReportsSection.html(Mustache.render($memberQuarterlyReportsTemplate, data));
 
         $memberQuarterlyReportsSection.find(".curr").each(function() {
@@ -91,7 +93,7 @@ var _bindEvents = function() {
         $searchBtn.removeClass('loading');
 
         // Make sticky
-        $(".sticky").stickyTableHeaders();
+        // $(".sticky").stickyTableHeaders();
       },
       error: function(data) {
         $searchBtn.removeClass('loading');
