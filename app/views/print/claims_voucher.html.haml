@@ -204,16 +204,12 @@
   %center
     %table.signatories{"border:" => "", :none => ""}
       %tr
-        %th{width: 350} 
-          #{@accounting_entry_data[:posted_by]}
-        -if Settings.activate_microinsurance == true
-          %th{width: 255} #{"EVELYN LAGMAY"}
-        -else
-          %th{width: 255}
-        -if Settings.activate_microinsurance == true
-          %th{width: 350} #{"SILVIDA ANTIQUERA"}
-        -else
-          %th{width: 350}
+        %th{width: 340} 
+          #{@accounting_entry_data[:approved_by]}
+        %th{width: 340}
+          #{"EVELYN LAGMAY"}
+        %th{width: 340}
+          #{"SILVIDA ANTIQUERA"}
       %tr
         %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
         %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
