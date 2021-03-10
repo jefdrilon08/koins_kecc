@@ -1,6 +1,6 @@
 import Mustache from "mustache/mustache";
 
-var $searchBtn;
+var $generateBtn;
 var $downloadBtn;
 var $memberReportsSection;
 var $memberReportsTemplate;
@@ -13,11 +13,12 @@ var accountClass;
 var $data;
 var $startDate;
 var $endDate;
+var $message;
 
 var memberReportsUrl  = "/api/v1/reports/member_reports";
 
 var _cacheDom = function() {
-  $searchBtn              = $("#search-btn");
+  $generateBtn            = $("#generate-btn");
   $downloadBtn            = $("#download-btn");
   $memberReportsSection   = $("#reports-members-section");
   $memberReportsTemplate  = $("#reports-members-template").html();
@@ -27,6 +28,7 @@ var _cacheDom = function() {
   $branchSelect           = $("#branch-select");
   $startDate              = $("#start-date");
   $endDate                = $("#end-date");
+  $message                = $(".message");
 }
 
 var _loadDefaults = function() {
@@ -36,6 +38,7 @@ var _bindEvents = function() {
 
   $downloadBtn.on('click', function() {
     $downloadBtn.addClass('loading');
+    $message.html("Loading...");
 
     branchId = $branchSelect.val();
     memberStatus = $memberStatus.val();
@@ -60,6 +63,7 @@ var _bindEvents = function() {
       data: params,
       success: function(data) {
         console.log(data);
+        $message.html("Success!");
         $memberReportsSection.html(Mustache.render($memberReportsTemplate, data));
         
         $downloadBtn.removeClass('loading');
@@ -68,17 +72,19 @@ var _bindEvents = function() {
         window.open(tempUrl, '_blank');
 
         // Make sticky
-        $(".sticky").stickyTableHeaders();
+        // $(".sticky").stickyTableHeaders();
       },
       error: function(data) {
+        $message.html("Error...");
         toastr.error("Error in generating report for members");
         $downloadBtn.removeClass('loading');
       }
     });
   });
 
-  $searchBtn.on('click', function() {
-    $searchBtn.addClass('loading');  
+  $generateBtn.on('click', function() {
+    $generateBtn.addClass('loading');
+    $message.html("Loading...");
     
     var branchId        = $branchSelect.val();
     var memberStatus    = $memberStatus.val();
@@ -103,19 +109,21 @@ var _bindEvents = function() {
       data: params,
       success: function(data) {
         console.log(data);
+        $message.html("Success!");
         $memberReportsSection.html(Mustache.render($memberReportsTemplate, data));
 
         $memberReportsSection.find(".curr").each(function() {
           $(this).html(numberWithCommas($(this).html()));
         });
 
-        $searchBtn.removeClass('loading');
+        $generateBtn.removeClass('loading');
 
         // Make sticky
-        $(".sticky").stickyTableHeaders();
+        // $(".sticky").stickyTableHeaders();
       },
       error: function(data) {
-        $searchBtn.removeClass('loading');
+        $message.html("Error...");
+        $generateBtn.removeClass('loading');
       }
     });
   });

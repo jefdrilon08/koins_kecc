@@ -47,7 +47,7 @@ var _bindEvents = function() {
       data: params,
       success: function(data) {
         console.log(data);
-        $message.html("Success! Redirecting...");
+        $message.html("Success!");
         $memberQuarterlyReportsSection.html(Mustache.render($memberQuarterlyReportsTemplate, data));
         
         $downloadBtn.removeClass('loading');
@@ -60,6 +60,7 @@ var _bindEvents = function() {
       },
       error: function(data) {
         $downloadBtn.removeClass('loading');
+        $message.html("Error!");
       }
     });
   });
@@ -83,7 +84,7 @@ var _bindEvents = function() {
       data: params,
       success: function(data) {
         console.log(data);
-        $message.html("Success! Redirecting...");
+        $message.html("Success!");
         $memberQuarterlyReportsSection.html(Mustache.render($memberQuarterlyReportsTemplate, data));
 
         $memberQuarterlyReportsSection.find(".curr").each(function() {
@@ -97,6 +98,7 @@ var _bindEvents = function() {
       },
       error: function(data) {
         $searchBtn.removeClass('loading');
+        $message.html("Error!");
       }
     });
   });
