@@ -160,13 +160,16 @@ module Accounting
         end
 
         if beginning_balance.to_f.round(2) != 0 || running_balance.to_f.round(2) != 0 || mapped_entries.any?
+          dr_sum  = mapped_entries.inject(0){ |sum, hash| sum + hash[:dr_amount] }.to_f.round(2)
+          cr_sum  = mapped_entries.inject(0){ |sum, hash| sum + hash[:cr_amount] }.to_f.round(2)
+
           entries << {
             accounting_code_id: a,
             accounting_code_name: accounting_code_name,
-            dr_sum: dr_sum.to_f,
-            cr_sum: cr_sum.to_f,
-            beginning_balance: beginning_balance.to_f,
-            ending_balance: running_balance.to_f,
+            dr_sum: dr_sum,
+            cr_sum: cr_sum,
+            beginning_balance: beginning_balance.to_f.round(2),
+            ending_balance: running_balance.to_f.round(2),
             entries: mapped_entries
           }
         end
