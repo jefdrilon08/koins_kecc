@@ -98,21 +98,25 @@ module Trends
                                               year:               year
                                             ).order("month ASC")
 
+        current_month = Date.today.month
+
         12.times do |m|
           month = m + 1
 
           entry = monthly_accounting_code_summaries.select{ |o| o.month == month }.first
 
-          if entry.present?
-            if accounting_code.debit_entry?
-              d[:data] << (entry.dr_amount - entry.cr_amount).round(2)
-            elsif accounting_code.credit_entry?
-              d[:data] << (entry.cr_amount - entry.dr_amount).round(2)
+          if month <= current_month
+            if entry.present?
+              if accounting_code.debit_entry?
+                d[:data] << (entry.dr_amount - entry.cr_amount).round(2)
+              elsif accounting_code.credit_entry?
+                d[:data] << (entry.cr_amount - entry.dr_amount).round(2)
+              else
+                raise "Invalid category for accounting code #{accounting_code.id}"
+              end
             else
-              raise "Invalid category for accounting code #{accounting_code.id}"
+              d[:data] << 0.00
             end
-          else
-            d[:data] << 0.00
           end
         end
 

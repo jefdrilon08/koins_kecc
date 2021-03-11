@@ -6,7 +6,7 @@ module Api
 
       def fetch_yearly_data
         year            = params[:year].try(:to_i)
-        branches        = ReadOnlyBranch.where(id: params[:branch_ids])
+        branches        = ReadOnlyBranch.where(id: params[:branch_ids]).order("name ASC")
         accounting_code = ReadOnlyAccountingCode.find(params[:accounting_code_id])
 
         cmd = ::Trends::FetchYearlyData.new(
