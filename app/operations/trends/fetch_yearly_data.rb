@@ -3,12 +3,15 @@ module Trends
     attr_accessor :data,
                   :accounting_code,
                   :branches,
-                  :year
+                  :year,
+                  :current_month
 
     def initialize(year:, branches:, accounting_code:)
       @year             = year
       @branches         = branches
       @accounting_code  = accounting_code
+
+      @current_month = Date.today.month
 
       @data = {
         accounting_code_balances: [],
@@ -57,23 +60,25 @@ module Trends
         12.times do |m|
           month = m + 1
 
-          entry = ReadOnlyDataStore.member_counts.where(
-                    "meta ->> 'branch_id' = ? AND EXTRACT(MONTH from as_of) = ? AND EXTRACT(YEAR from as_of) = ?",
-                    b.id,
-                    month,
-                    year
-                  ).order("updated_at DESC").first
+          if month <= current_month
+            entry = ReadOnlyDataStore.member_counts.where(
+                      "meta ->> 'branch_id' = ? AND EXTRACT(MONTH from as_of) = ? AND EXTRACT(YEAR from as_of) = ?",
+                      b.id,
+                      month,
+                      year
+                    ).order("updated_at DESC").first
 
-          if entry.present?
-            d_pure_savers[:data]    << entry.data["counts"]["pure_savers"]["total"]
-            d_loaners[:data]        << entry.data["counts"]["loaners"]["total"]
-            d_active_members[:data] << entry.data["counts"]["active_members"]["total"]
-            d_total_members[:data]  << entry.data["counts"]["pure_savers"]["total"] + entry.data["counts"]["loaners"]["total"] + entry.data["counts"]["active_members"]["total"]
-          else
-            d_pure_savers[:data]    << 0
-            d_loaners[:data]        << 0
-            d_active_members[:data] << 0
-            d_total_members[:data]  << 0
+            if entry.present?
+              d_pure_savers[:data]    << entry.data["counts"]["pure_savers"]["total"]
+              d_loaners[:data]        << entry.data["counts"]["loaners"]["total"]
+              d_active_members[:data] << entry.data["counts"]["active_members"]["total"]
+              d_total_members[:data]  << entry.data["counts"]["pure_savers"]["total"] + entry.data["counts"]["loaners"]["total"] + entry.data["counts"]["active_members"]["total"]
+            else
+              d_pure_savers[:data]    << 0
+              d_loaners[:data]        << 0
+              d_active_members[:data] << 0
+              d_total_members[:data]  << 0
+            end
           end
         end
 
@@ -92,20 +97,18 @@ module Trends
           color: b.color || "#f0ffff"
         }
 
-        monthly_accounting_code_summaries = ReadOnlyMonthlyAccountingCodeSummary.where(
-                                              accounting_code_id: accounting_code.id,
-                                              branch_id:          b.id,
-                                              year:               year
-                                            ).order("month ASC")
-
-        current_month = Date.today.month
-
         12.times do |m|
           month = m + 1
 
-          entry = monthly_accounting_code_summaries.select{ |o| o.month == month }.first
-
           if month <= current_month
+            monthly_accounting_code_summaries = ReadOnlyMonthlyAccountingCodeSummary.where(
+                                                  accounting_code_id: accounting_code.id,
+                                                  branch_id:          b.id,
+                                                  year:               year
+                                                ).order("month ASC")
+
+            entry = monthly_accounting_code_summaries.select{ |o| o.month == month }.first
+
             if entry.present?
               if accounting_code.debit_entry?
                 d[:data] << (entry.dr_amount - entry.cr_amount).round(2)
