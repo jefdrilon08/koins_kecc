@@ -4991,12 +4991,12 @@ loan_products:
               -
                 num_installments: 50
                 ratio: 0.0140
-							-
-							  num_installments: 75
-								ratio: 0.021
-							-
-							  num_installments: 100
-								ratio: 0.028
+              -
+                num_installments: 75
+                ratio: 0.021
+              -
+                num_installments: 100
+                ratio: 0.028
 
             monthly:
               -
