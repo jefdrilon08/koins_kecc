@@ -326,6 +326,13 @@ export default class ApplicationFormComponent extends React.Component {
           75
         </option>
       );
+      
+      termItems.push(
+        <option value={100} key={"weekly-" + 100}>
+          100
+        </option>
+      );
+
     } else if(term == "monthly") {
       termItems.push(
         <option value={3} key={"monthly-" + 3}>
