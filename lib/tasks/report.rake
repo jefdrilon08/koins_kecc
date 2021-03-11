@@ -1,6 +1,7 @@
 namespace :report do 
   
   task :member_age => :environment do
+    require 'csv'
     s_date= ENV['s_date']
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
@@ -14,27 +15,36 @@ namespace :report do
                                          "MEMBER_COUNTS").last
 
     @data = []
-    @data_store_data = @data_store.data.with_indifferent_access
+    tmp = {}
+    tmp[:last_name] = []
+    @data_store_data = @data_store.data.with_indifferent_access  
       @data_store_data[:counts][:pure_savers][:members].each do |m|
+        
         mem = Member.find(m[:id])
+        sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
+        #tmp[:last_name] << m[:last_name]
         tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}|#{tin}"       
+        
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{tin}"       
         @data << j
       end
+
+      #raise @data.inspect
       @data_store_data[:counts][:loaners][:members].each do |m|
         mem = Member.find(m[:id])
-        tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}|#{tin}"
+        sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
+        #tin = mem.data["government_identification_numbers"]["tin_number"]
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{sc}"
         @data << j
       end
       @data_store_data[:counts][:active_members][:members].each do |m|
         mem = Member.find(m[:id])
-        tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.age}|#{mem.gender}|#{tin}"
+        sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
+        #tin = mem.data["government_identification_numbers"]["tin_number"]
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{sc}"
         @data << j
       end
-      
-      puts @data
+      puts @data          
   end
   task :watchlist => :environment do
     s_date= ENV['s_date']
