@@ -13,17 +13,16 @@ class LoansController < ApplicationController
     @centers  = @branches.first.centers
 
     if @q.present?
-      @members  = ReadOnlyMember.where(
-                    "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND members.branch_id IN (:b)",
+      @loans  = @loans
+                  .where(
+                    "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND loans.branch_id IN (:b)",
                     q: "#{@q.upcase}%",
                     b: @branches.pluck(:id)
                   )
-
-      @loans  = @loans.where(member_id: @members.pluck(:id))
     end
 
     if @branch_id.present?
-      @branch = Branch.find(@branch_id)
+      @branch = ReadOnlyBranch.find(@branch_id)
 
       @loans  = @loans.where(branch_id: @branch.id)
     end
