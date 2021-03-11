@@ -33,15 +33,15 @@ namespace :report do
       @data_store_data[:counts][:loaners][:members].each do |m|
         mem = Member.find(m[:id])
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
-        #tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{sc}"
+        tin = mem.data["government_identification_numbers"]["tin_number"]
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
       @data_store_data[:counts][:active_members][:members].each do |m|
         mem = Member.find(m[:id])
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
-        #tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{sc}"
+        tin = mem.data["government_identification_numbers"]["tin_number"]
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
       puts @data          
