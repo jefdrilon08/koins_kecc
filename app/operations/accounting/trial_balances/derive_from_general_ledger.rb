@@ -44,8 +44,8 @@ module Accounting
             raise "Invalid category for accounting_code #{accounting_code.id}"
           end
 
-          entry[:current_debit]   = gl_entry["dr_sum"].to_f.round(2)
-          entry[:current_credit]  = gl_entry["cr_sum"].to_f.round(2)
+          entry[:current_debit]   = gl_entry["entries"].inject(0){ |sum, o| sum + o["dr_amount"] }.to_f.round(2)
+          entry[:current_credit]  = gl_entry["entries"].inject(0){ |sum, o| sum + o["cr_amount"] }.to_f.round(2)
 
           entry[:ending_debit]   = (entry[:beginning_debit] + entry[:current_debit]).to_f.round(2)
           entry[:ending_credit]  = (entry[:beginning_credit] + entry[:current_credit]).to_f.round(2)
