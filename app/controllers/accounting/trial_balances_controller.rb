@@ -52,12 +52,6 @@ module Accounting
       ]
 
       @subheader_side_actions = [
-        {
-          id: "btn-new",
-          link: "#",
-          class: "fa fa-plus",
-          text: "New"
-        }
       ]
 
       @payload = {
