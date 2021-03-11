@@ -5,12 +5,12 @@
       .card-body
         = render partial: "index_filter"
         %hr
-        - if @trial_balances.any?
-          = render partial: "list", locals: { trial_balances: @trial_balances }
-          = paginate @trial_balances
+        - if @general_ledgers.any?
+          = render partial: "list", locals: { general_ledgers: @general_ledgers }
+          = paginate @general_ledgers
         - else
           %p
             No records found
 
-= render partial: "accounting/trial_balances/modals/new"
+= render partial: "accounting/general_ledgers/modals/new"
 = render partial: "templates/error_list"

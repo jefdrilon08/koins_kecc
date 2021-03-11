@@ -5,7 +5,7 @@ module Api
       before_action :authenticate_core_user!
       
       def delete
-        trial_balance = DataStore.trial_balances.done.find(params[:id])
+        trial_balance = DataStore.general_ledgers.done.find(params[:id])
         trial_balance.destroy!
 
         render json: { message: "ok" }

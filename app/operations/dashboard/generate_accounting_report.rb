@@ -13,43 +13,43 @@ module Dashboard
     end
 
     def execute!
-      generate_trial_balance!
+#      generate_trial_balance!
       generate_general_ledger!
     end
 
     private
 
-    def generate_trial_balance!
-      data_store_type = "TRIAL_BALANCE"
-
-      record  = DataStore.create!(
-                  status: "processing",
-                  meta: {
-                    branch_id: @branch.id,
-                    branch_name: @branch.name,
-                    start_date: @start_date,
-                    end_date: @end_date,
-                    data_store_type: data_store_type,
-                    accounting_fund_id: @accounting_fund.try(:id),
-                    accounting_fund_name: @accounting_fund.try(:name),
-                    user: {
-                      id: @core_user.id,
-                      first_name: @core_user.first_name,
-                      last_name: @core_user.last_name
-                    }
-                  },
-                  data: {
-                    status: "processing"
-                  }
-                )
-
-      args = {
-        id: record.id,
-        data_store_type: data_store_type
-      }
-
-      ProcessTrialBalance.perform_later(args)
-    end
+#    def generate_trial_balance!
+#      data_store_type = "TRIAL_BALANCE"
+#
+#      record  = DataStore.create!(
+#                  status: "processing",
+#                  meta: {
+#                    branch_id: @branch.id,
+#                    branch_name: @branch.name,
+#                    start_date: @start_date,
+#                    end_date: @end_date,
+#                    data_store_type: data_store_type,
+#                    accounting_fund_id: @accounting_fund.try(:id),
+#                    accounting_fund_name: @accounting_fund.try(:name),
+#                    user: {
+#                      id: @core_user.id,
+#                      first_name: @core_user.first_name,
+#                      last_name: @core_user.last_name
+#                    }
+#                  },
+#                  data: {
+#                    status: "processing"
+#                  }
+#                )
+#
+#      args = {
+#        id: record.id,
+#        data_store_type: data_store_type
+#      }
+#
+#      ProcessTrialBalance.perform_later(args)
+#    end
 
     def generate_general_ledger!
       data_store_type = "GENERAL_LEDGER"

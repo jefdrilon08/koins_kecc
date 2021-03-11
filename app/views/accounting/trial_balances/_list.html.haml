@@ -19,7 +19,7 @@
         %th.text-center
           Status
     %tbody
-      - trial_balances.each do |o|
+      - general_ledgers.each do |o|
         %tr
           %td.text-center
             = link_to "/accounting/trial_balances/#{o.id}" do
