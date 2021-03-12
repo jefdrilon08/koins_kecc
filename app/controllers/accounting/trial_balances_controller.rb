@@ -92,6 +92,12 @@ module Accounting
 
         @subheader_side_actions = [
           {
+            id: "btn-gl",
+            link: "/accounting/general_ledgers/#{@general_ledger.id}",
+            class: "fa fa-arrow-left",
+            text: "General Ledger"
+          },
+          {
             id: "btn-delete",
             link: "#",
             class: "fa fa-times",

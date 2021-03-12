@@ -88,6 +88,12 @@ module Accounting
 
         @subheader_side_actions = [
           {
+            id: "btn-tb",
+            link: "/accounting/trial_balances/#{@general_ledger.id}",
+            class: "fa fa-arrow-left",
+            text: "Trial Balance"
+          },
+          {
             id: "btn-delete",
             link: "#",
             class: "fa fa-times",
