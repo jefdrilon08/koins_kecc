@@ -7,7 +7,7 @@ module Branches
       @start_date   = @config[:start_date]
       @end_date     = @config[:end_date]
 
-      @payments = AccountTransaction.approved_loan_payments.where(
+      @payments = ReportingDbAccountTransaction.approved_loan_payments.where(
                     "DATE(transacted_at) >= ? AND DATE(transacted_at) <= ? AND subsidiary_type = ?",
                     @start_date,
                     @end_date,
@@ -16,7 +16,7 @@ module Branches
 
       loan_ids  = @payments.pluck(:subsidiary_id)
 
-      @loans  = Loan.active_or_paid.where(
+      @loans  = ReportingDbLoan.active_or_paid.where(
                   id: loan_ids,
                   branch: @branch.id
                 )
@@ -38,10 +38,10 @@ module Branches
 
     def execute!
       # Setup centers
-      @data[:centers] = Center.where(id: @loans.pluck(:center_id).uniq).order("name ASC").map{ |o| { id: o.id, name: o.name } }
+      @data[:centers] = ReportingDbCenter.where(id: @loans.pluck(:center_id).uniq).order("name ASC").map{ |o| { id: o.id, name: o.name } }
 
       # Setup loan_products
-      @data[:loan_products] = LoanProduct.where(id: @loans.pluck(:loan_product_id).uniq).order("priority ASC").map{ |o| { id: o.id, name: o.name } }
+      @data[:loan_products] = ReportingDbLoanProduct.where(id: @loans.pluck(:loan_product_id).uniq).order("priority ASC").map{ |o| { id: o.id, name: o.name } }
 
       # Setup records
       @loans.each do |loan|

@@ -26,7 +26,7 @@ module Turkey
         EOS
       end
 
-      ReadOnlyDataStore.connection.execute(<<-EOS).to_a
+      ReportingDbMemberAccount.connection.execute(<<-EOS).to_a
         SELECT
           ma.account_type,
           ma.account_subtype,
