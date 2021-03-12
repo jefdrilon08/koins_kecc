@@ -11,27 +11,31 @@ module Reports
       
       if @branch_id.present? && @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
         if insurance_status == "resigned"
-          @members      = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND branch_id = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @branch_id, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
+          @members = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND branch_id = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @branch_id, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         elsif status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @branch_id, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
+          @members = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND branch_id = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @branch_id, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         end
       elsif @insurance_status.present? && @status.present? && @start_date.present? && @end_date.present?
         if insurance_status == "resigned"
-          @members      = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
+          @members = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         elsif status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
+          @members = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         end
       elsif @branch_id.present? && @status.present? && @start_date.present? && @end_date.present?
         if status == "resigned"
-          @members      = Member.where("branch_id = ? AND insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND member_type IN (?)", @branch_id, @start_date, @end_date, ["Regular", "Kaagapay"]).order("last_name ASC")
+          @members = Member.where("branch_id = ? AND insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND member_type IN (?)", @branch_id, @start_date, @end_date, ["Regular", "Kaagapay"]).order("last_name ASC")
         elsif status == "active"
-          @members      = Member.where("branch_id = ? AND data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND member_type IN (?)", @branch_id, @start_date, @end_date, @status, ["inforce", "lapsed", "dormant"], ["Regular", "Kaagapay"]).order("last_name ASC")
+          @active_members = Member.where("branch_id = ? AND data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND member_type IN (?)", @branch_id, @start_date, @end_date, @status, ["inforce", "lapsed", "dormant"], ["Regular", "Kaagapay"]).order("last_name ASC")
+          @resigned_before = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @end_date, @end_date)
+          @members = @active_members + @resigned_before
         end
       elsif @status.present? && @start_date.present? && @end_date.present?
         if status == "resigned"
-          @members      = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND member_type IN (?)", @start_date, @end_date, ["Regular", "Kaagapay"]).order("last_name ASC")
+          @members = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND member_type IN (?)", @start_date, @end_date, ["Regular", "Kaagapay"]).order("last_name ASC")
         elsif status == "active"
-          @members      = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND member_type IN (?)", @start_date, @end_date, @status, ["inforce", "lapsed", "dormant"], ["Regular", "Kaagapay"]).order("last_name ASC")
+          @active_members = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND member_type IN (?)", @start_date, @end_date, @status, ["inforce", "lapsed", "dormant"], ["Regular", "Kaagapay"]).order("last_name ASC")
+          @resigned_before = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @end_date, @end_date)
+          @members = @active_members + @resigned_before
         end
       end
       
