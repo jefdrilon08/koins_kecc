@@ -44,6 +44,28 @@ module Accounting
             raise "Invalid category for accounting_code #{accounting_code.id}"
           end
 
+          if accounting_code.debit_entry?
+            net = (entry[:beginning_debit] - entry[:beginning_credit]).to_f.round(2)
+
+            if net < 0
+              entry[:beginning_credit] = (net * -1)
+              entry[:beginning_debit]  = 0.00
+            else
+              entry[:beginning_debit]  = net
+              entry[:beginning_credit] = 0.00
+            end
+          elsif accounting_code.credit_entry?
+            net = (entry[:beginning_credit] - entry[:beginning_debit]).to_f.round(2)
+
+            if net < 0
+              entry[:beginning_debit]  = (net * -1)
+              entry[:beginning_credit] = 0.00
+            else
+              entry[:beginning_credit] = net
+              entry[:beginning_debit]  = 0.00
+            end
+          end
+
           entry[:current_debit]   = gl_entry["entries"].inject(0){ |sum, o| sum + o["dr_amount"] }.to_f.round(2)
           entry[:current_credit]  = gl_entry["entries"].inject(0){ |sum, o| sum + o["cr_amount"] }.to_f.round(2)
 

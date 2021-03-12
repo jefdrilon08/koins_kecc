@@ -84,6 +84,8 @@ module Branches
       @data
     end
 
+    private
+
     def build_result!
       @result.each do |r|
         amorts  = []
@@ -280,7 +282,7 @@ module Branches
     end
 
     def query_result!
-      @result = ReadOnlyDataStore.connection.execute(<<-EOS).to_a
+      @result = ReportingDbLoan.connection.execute(<<-EOS).to_a
                   SELECT
                     loans.id,
                     loans.pn_number,
