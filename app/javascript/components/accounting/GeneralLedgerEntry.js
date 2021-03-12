@@ -2,8 +2,6 @@ import React from 'react';
 
 export default class GeneralLedgerComponent extends React.Component {
   constructor(props) {
-    console.log("GeneralLedgerComponent");
-    console.log(props);
     super(props);
   }
 

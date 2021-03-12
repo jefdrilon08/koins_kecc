@@ -55,6 +55,18 @@ export default class GeneralLedgerDisplayComponent extends React.Component {
     });
   }
 
+  handleAccountingCodeSelectChanged(o) {
+    var accountingCodeIds = [];
+
+    for(var i = 0; i < o.length; i++) {
+      accountingCodeIds.push(o[i].value);
+    }
+
+    this.setState({
+      accountingCodeIds: accountingCodeIds
+    });
+  }
+
   renderTable() {
     var context = this;
     var state   = context.state;
@@ -62,22 +74,23 @@ export default class GeneralLedgerDisplayComponent extends React.Component {
 
     if(!state.isLoading && state.data != false) {
       var generalLedgerEntries  = state.data.entries;
-      console.log("generalLedgerEntries:");
-      console.log(generalLedgerEntries);
+
+      if(state.accountingCodeIds.length > 0) {
+        generalLedgerEntries  = generalLedgerEntries.filter(function(o) {
+                                  return state.accountingCodeIds.includes(o.accounting_code_id);
+                                });   
+      }
 
       var generalLedgerComponents = [];
 
-      for(var i = 0; i < generalLedgerEntries.length; i++) {
-
+      generalLedgerEntries.forEach(function(o) {
         generalLedgerComponents.push(
-          <div>
-            <GeneralLedgerEntry
-              data={generalLedgerEntries[i]}
-              key={"glc-" + i}
-            />
-          </div>
+          <GeneralLedgerEntry
+            data={o}
+            key={"glc-" + o.accounting_code_id}
+          />
         );
-      }
+      });
 
       return  (
         <div>
@@ -96,8 +109,20 @@ export default class GeneralLedgerDisplayComponent extends React.Component {
         <SkCubeLoading/>
       );
     } else {
+      var accountingCodeOptions = state.data.entries.map(function(o) {
+                                    return {
+                                      value: o.accounting_code_id,
+                                      label: o.accounting_code_name
+                                    }
+                                  });
       return (
         <div>
+          <Select
+            options={accountingCodeOptions}
+            onChange={this.handleAccountingCodeSelectChanged.bind(this)}
+            isMulti
+          />
+          <hr/>
           {context.renderTable()}
         </div>
       );
