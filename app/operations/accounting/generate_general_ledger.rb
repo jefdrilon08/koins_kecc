@@ -25,7 +25,7 @@ module Accounting
     end
 
     def execute!
-      journal_entries_by_accounting_code  = ReadOnlyJournalEntry
+      journal_entries_by_accounting_code  = ReportingDbJournalEntry
                                               .eager_load(:accounting_code, :accounting_entry)
                                               .where(
                                                 "accounting_entries.date_posted >= ? AND accounting_entries.date_posted <= ? AND accounting_entries.branch_id = ?",
@@ -42,7 +42,7 @@ module Accounting
                                               .order("accounting_codes.code ASC, accounting_entries.date_posted ASC, accounting_entries.updated_at ASC")
                                               .group_by(&:accounting_code_id)
 
-      dr_accounting_codes = ReadOnlyAccountingCode.joins(
+      dr_accounting_codes = ReportingDbAccountingCode.joins(
                               journal_entries: :accounting_entry
                             )
                             .where(
@@ -61,7 +61,7 @@ module Accounting
                               .group("accounting_codes.id")
 
 
-      cr_accounting_codes = ReadOnlyAccountingCode.joins(
+      cr_accounting_codes = ReportingDbAccountingCode.joins(
                               journal_entries: :accounting_entry
                             )
                             .where(
@@ -83,16 +83,16 @@ module Accounting
 
       # Fetch accounting codes
       #accounting_codes  = dr_accounting_codes.map{ |o| o.accounting_code_id } | cr_accounting_codes.map{ |o| o.accounting_code_id }
-      accounting_codes  = ReadOnlyAccountingCode.all.order("code ASC").pluck(:id)
+      accounting_codes  = ReportingDbAccountingCode.all.order("code ASC").pluck(:id)
 
       if @accounting_code_ids.any?
-        accounting_codes  = ReadOnlyAccountingCode.where(id: @accounting_code_ids).order("code ASC").pluck(:id)
+        accounting_codes  = ReportingDbAccountingCode.where(id: @accounting_code_ids).order("code ASC").pluck(:id)
       end
 
       mapped_cr_accounting_codes  = cr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
       mapped_dr_accounting_codes  = dr_accounting_codes.map{ |o| { id: o.accounting_code_id, name: o.accounting_code_name, sum: o.sum } }
 
-      accounting_codes  = ReadOnlyAccountingCode.where(id: accounting_codes).order("code ASC")
+      accounting_codes  = ReportingDbAccountingCode.where(id: accounting_codes).order("code ASC")
 
       accounting_codes.each do |accounting_code|
         a = accounting_code.id

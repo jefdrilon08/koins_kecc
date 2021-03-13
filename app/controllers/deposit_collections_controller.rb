@@ -2,7 +2,7 @@ class DepositCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @deposit_collections = DepositCollection
+    @deposit_collections = ReadOnlyDepositCollection
       .includes(:branch)
       .where(branch_id: @branches.pluck(:id)) 
 
@@ -11,12 +11,12 @@ class DepositCollectionsController < ApplicationController
     end
 
     if params[:branch_id].present?
-      @branch   = Branch.find(params[:branch_id])
+      @branch   = ReadOnlyBranch.find(params[:branch_id])
       @deposit_collections = @deposit_collections.where(branch_id: @branch.id)
     end
 
     if params[:center_id].present?
-      @center = Center.find(params[:center_id])
+      @center = ReadOnlyCenter.find(params[:center_id])
     
       @deposit_collections = @deposit_collections.where(center_id: @center.id)
 
