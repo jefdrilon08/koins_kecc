@@ -18,6 +18,8 @@
                 Branch
               %th
                 Center
+              %th
+                Loan Amounts
           %tbody
             - @members.each do |m|
               %tr
@@ -34,4 +36,6 @@
                   #{m.branch.name}
                 %td
                   #{m.center.name}
+                %td
+                  #{m.loans.active.where("data ->> 'clip_number' != ?", "").sum(:principal)}
 

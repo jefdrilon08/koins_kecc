@@ -13,10 +13,11 @@ module Insurance
         INNER JOIN journal_entries AS je
           ON je.accounting_entry_id = ae.id
           AND je.accounting_code_id = '#{CLIP_ACCOUNTING_CODE_ID}'
+          AND je.amount > 0        
         WHERE m.status = 'active'
           AND l.status = 'active'
         GROUP BY m.id
-        HAVING SUM(l.principal) > #{REINSURANCE_THRESHOLD_AMOUNT}
+        HAVING SUM(l.principal) > 200000
       SQL
 
       Member.includes(:branch, :center).where(id: member_ids)
