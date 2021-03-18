@@ -48,12 +48,11 @@ module Loans
           if last_regular_payment_transacted_at.to_date <= a.to_date 
 
             if last_regular_payment_transacted_at.to_date > ksagip_payment.transacted_at.to_date
-             #pag walang past due
-             
+             #pag walang past due              
              new_restructure = { id: reg_loan.id,
                               pn_number: reg_loan.pn_number,
                               principal_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
-                              k_sagip_interest_balance: total_interest,
+                              k_sagip_interest_balance: 0.0,
                               interest_balance: 0.0,
                               total_balance: ksagip_payment.data.with_indifferent_access[:total_principal_paid],
                               transaction_type: "current",
