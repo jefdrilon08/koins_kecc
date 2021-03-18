@@ -109,6 +109,7 @@ import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
 import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js";
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
 import MemberSharesShow from "../models/MemberSharesShow.js";
+import MemberSharesForm from "../models/MemberSharesForm.js";
 import ExportsBillingPerCenter from "../models/ExportsBillingPerCenter.js";
 import MonthlyNewAndResignedIndex from "../models/MonthlyNewAndResignedIndex.js";
 import ExportTools from "../models/ExportTools.js";
@@ -253,6 +254,7 @@ const hooks = {
   "administration/surveys/show":                      [AdministrationSurveysShow],
   "administration/surveys/survey_question_form":      [SurveyQuestionUIComponent],
   "members/member_shares/show":                       [MemberSharesShow],
+  "members/member_shares/new":                        [MemberSharesForm],
   "pages/billing_per_center":                         [ExportsBillingPerCenter],
   "data_stores/monthly_new_and_resigned/index":       [MonthlyNewAndResignedIndex],
   "pages/export_tools":                               [ExportTools],

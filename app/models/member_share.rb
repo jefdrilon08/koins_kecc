@@ -9,4 +9,12 @@ class MemberShare < ApplicationRecord
   def to_s
     self.certificate_number
   end
+
+  def for_kmba?
+  	self.certificate_for == "KMBA"
+  end
+
+  def for_kcoop?
+  	self.certificate_for == "KCOOP" || self.certificate_for == nil
+  end
 end

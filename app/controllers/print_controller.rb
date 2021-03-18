@@ -68,6 +68,24 @@ class PrintController < ApplicationController
       @member_share_data  = data
 
       render "print/member_share", layout: "print"
+    elsif type == "member_share_for_mba"
+      member_share = MemberShare.find(params[:id])
+
+      data  = ::Print::BuildMemberShareForMba.new(
+                member_share: member_share
+              ).execute!
+
+      # Update printing information
+      member_share.update!(
+        data: {
+          printed: true,
+          date_printed: Date.today
+        }
+      )
+
+      @member_share_data  = data
+
+      render "print/member_share_for_mba", layout: "print"  
     elsif type == "billing"
       billing = Billing.find(params[:id])
 

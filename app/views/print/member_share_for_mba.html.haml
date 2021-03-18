@@ -1,0 +1,86 @@
+:css
+  .member-details {
+    margin: 85px 0px 0px 375px;
+    font-size: 20px;
+  }
+
+  .member-cert-number {
+    margin-top: 543px;
+    margin-left: 570px;
+    max-width: 900px;
+    font-size: 22px;
+  }
+
+  .member-name {
+    margin-top: 70px;
+    margin-left: 80px;
+    max-width: 900px;
+    font-size: 45px;
+  }
+
+  .member-branch-center {
+    margin-top: 35px;
+    margin-left: 305px;
+    max-width: 900px;
+    font-size: 25px;
+  }
+
+  .member-recognition-date {
+    margin-top: 358px;
+    margin-left: 415px;
+    max-width: 900px;
+    font-size: 25px;
+  }
+
+  .member-recognition-year {
+    margin-left: 155px;
+  }
+
+  .member-certificate {
+    font-family: Calibri;
+  }
+
+  .center{
+    margin-top: 20px;
+    width: 44%;
+    float: left;
+    text-align: right;
+    font-size: 23px;
+  }
+
+  .branch{
+    margin-top: 20px;
+    width: 42%;
+    float: right;
+    text-align: left;
+    font-size: 23px;
+  }
+
+.member-certificate
+  .member-cert-number
+    %p
+      %b
+        #{@member_share_data[:identification_number]}
+  .member-name
+    %center
+      %p
+        %b
+          #{@member_share_data[:member_full_name]}
+  .center
+    %b
+      #{@member_share_data[:center]}
+  .branch
+    %b
+      #{@member_share_data[:branch]}
+  / .member-branch-center
+  /   %p
+  /     %b
+  /       #{@member_share_data[:center]}&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;#{@member_share_data[:branch]}
+  .member-recognition-date
+    %p
+      %b
+        #{@member_share_data[:day]}
+        &emsp;&emsp;&emsp;&emsp;&nbsp;
+        #{@member_share_data[:month].try(:upcase)}
+        &emsp;&emsp;&emsp;&nbsp;
+        #{@member_share_data[:year]}

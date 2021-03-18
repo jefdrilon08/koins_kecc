@@ -39,6 +39,14 @@ module Members
         { text: "#{@member.full_name}", is_link: true, path: member_path(@member) },
         { text: "New" }
       ]
+
+      @subheader_side_actions = []
+
+      @payload = {
+        id: @member_share.id,
+        recognitionDate: @member.recognition_date,
+        identificationNumber: @member.identification_number
+      }
     end
 
     def create
@@ -82,6 +90,12 @@ module Members
         { text: "#{@member_share}", is_link: true, path: member_member_share_path(@member, @member_share) },
         { text: "Edit" }
       ]
+
+      @subheader_side_actions = []
+
+      @payload = {
+        id: @member_share.id
+      }
     end
 
     def flag_as_printed
@@ -144,6 +158,12 @@ module Members
       @subheader_side_actions << { text: "Edit", class: "fa fa-pencil-alt", link: edit_member_member_share_path(@member, @member_share) }
       @subheader_side_actions << { text: "Print", id: "btn-print", class: "fa fa-print", data: { id: @member_share.id } }
       @subheader_side_actions << { text: "Delete", class: "fa fa-times", link: member_member_share_path(@member, @member_share), data: { method: :delete, confirm: "Are you sure?" } }
+    
+      @payload = {
+        id: @member_share.id,
+        forMba: @member_share.for_kmba?,
+        forCoop: @member_share.for_kcoop?
+      }
     end
 
     def destroy

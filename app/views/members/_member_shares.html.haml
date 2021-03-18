@@ -12,9 +12,11 @@
         %th
           Certificate Number
         %th
-          Date of Issue
+          Date Of Issue
         %th
-          number of shares
+          Number Of Shares
+        %th
+          Shares For
         %th.text-center
           Is Void
     %tbody
@@ -28,6 +30,8 @@
               #{o.date_of_issue.strftime("%B %d, %Y")}
           %td
             #{o.number_of_shares}
+          %td
+            #{o.try(:certificate_for)}
           %td.text-center
             - if o.is_void
               .badge.badge-danger

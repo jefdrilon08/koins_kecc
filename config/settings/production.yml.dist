@@ -445,6 +445,11 @@ default_member_types: [
   "Kaagapay"
 ]
 
+organizations: [
+  "KCOOP",
+  "KMBA"
+]
+
 default_deposit_accounts:
   -
     account_type: "SAVINGS"

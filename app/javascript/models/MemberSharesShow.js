@@ -1,5 +1,9 @@
 import Mustache from "mustache/mustache";
 
+var memberSharesId;
+var forMba;
+var forCoop;
+
 var $btnPrint;
 var $modalPrint;
 var $message;
@@ -10,7 +14,7 @@ var _cacheDom = function() {
   $btnPrint   = $("#btn-print");
   $modalPrint = $("#modal-print");
 
-  $message  = $(".message");
+  $message   = $(".message");
 };
 
 var _bindEvents = function() {
@@ -18,7 +22,12 @@ var _bindEvents = function() {
     $modalPrint.modal("show");
 
     var id    = $(this).data("id");
-    var type  = "member_share";
+    
+    if (forCoop == true){
+      var type  = "member_share";
+    } else if(forMba == true){
+      var type  = "member_share_for_mba"
+    }
 
     $modalPrint.modal("hide");
     window.open("/print?type=" + type + "&id=" + id);
@@ -27,7 +36,9 @@ var _bindEvents = function() {
 
 var init  = function(options) {
   authenticityToken = options.authenticityToken;
-
+  memberSharesId    = options.id;
+  forMba            = options.forMba
+  forCoop           = options.forCoop
   _cacheDom();
   _bindEvents();
 };
