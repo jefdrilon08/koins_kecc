@@ -223,9 +223,6 @@ Rails.application.routes.draw do
   # Accounting
   get "/trial_balance", to: "accounting#trial_balance"
   get "/accounting/trial_balance", to: "accounting#trial_balance"
-  get "/accounting/general_ledger", to: "accounting#general_ledger"
-  get "/accounting/general_ledger_excel_url", to: "accounting#general_ledger_excel_url"
-  get "/accounting/general_ledger_excel", to: "accounting#general_ledger_excel", as: :general_ledger_excel_url
   get "/accounting/books/jvb", to: "accounting#jvb", as: :accounting_books_jvb
   get "/accounting/books/crb", to: "accounting#crb", as: :accounting_books_crb
   get "/accounting/books/cdb", to: "accounting#cdb", as: :accounting_books_cdb
@@ -394,6 +391,7 @@ Rails.application.routes.draw do
     get "/general_ledgers", to: "general_ledgers#index"
     get "/general_ledgers/:id", to: "general_ledgers#show"
     delete "/general_ledgers/:id", to: "general_ledgers#destroy"
+    get "/general_ledgers/:id/print", to: "general_ledgers#print"
   end
 
   def draw(routes_name)

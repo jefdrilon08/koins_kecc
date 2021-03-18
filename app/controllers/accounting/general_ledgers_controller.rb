@@ -2,6 +2,16 @@ module Accounting
   class GeneralLedgersController < ApplicationController
     before_action :authenticate_user!
 
+    def print
+      general_ledger  = DataStore.general_ledgers.find(params[:id])
+
+      excel = ::Accounting::GeneralLedgers::BuildExcel.new(
+                data: general_ledger.data
+              ).execute!
+
+      send_data excel.to_stream.read, type: "application/xlsx", filename: "general-ledger.xlsx"
+    end
+
     def index
       current_date  = Date.today
 
@@ -87,6 +97,12 @@ module Accounting
 
 
         @subheader_side_actions = [
+          {
+            id: "btn-print",
+            link: "/accounting/general_ledgers/#{@general_ledger.id}/print",
+            class: "fa fa-print",
+            text: "Print"
+          },
           {
             id: "btn-tb",
             link: "/accounting/trial_balances/#{@general_ledger.id}",
