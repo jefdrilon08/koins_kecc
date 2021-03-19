@@ -104,11 +104,11 @@
           = link_to accounting_trial_balances_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-balance-scale
             Trial Balances
-        - if microloans?  
-          %li.c-sidebar-nav-item
-            = link_to accounting_general_ledgers_path, class: "c-sidebar-nav-link" do
-              .c-sidebar-nav-icon.fa.fa-balance-scale
-              General Ledgers
+        / - if microloans?  
+        %li.c-sidebar-nav-item
+          = link_to accounting_general_ledgers_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-balance-scale
+            General Ledgers
         %li.c-sidebar-nav-item
           = link_to monthly_accounting_code_summaries_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-balance-scale

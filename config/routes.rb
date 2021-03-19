@@ -229,6 +229,9 @@ Rails.application.routes.draw do
   get "/accounting/books/misc", to: "accounting#misc", as: :accounting_books_misc
   get "/accounting/form", to: "accounting#form", as: :accounting_form
   get "/monthly_accounting_code_summaries", to: "monthly_accounting_code_summaries#index", as: :monthly_accounting_code_summaries
+  get "/accounting/general_ledger", to: "accounting#general_ledger"
+  get "/accounting/general_ledger_excel_url", to: "accounting#general_ledger_excel_url"
+  get "/accounting/general_ledger_excel", to: "accounting#general_ledger_excel", as: :general_ledger_excel_url
   
   #books
   get "/books/excel", to: "books#excel"
