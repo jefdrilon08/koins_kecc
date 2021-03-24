@@ -129,7 +129,7 @@ module Administration
 
       @subheader_side_actions = [
         {
-          link: edit_administration_announcement_path(@center),
+          link: edit_administration_centers_path(@center),
           class: "fa fa-pencil-alt",
           text: "Edit"
         }
