@@ -4,6 +4,13 @@ class InsuranceFundTransferCollectionsController < ApplicationController
   def index
     @insurance_fund_transfer_collections = InsuranceFundTransferCollection.select("*").where(branch_id: @branches.pluck(:id))
 
+    if params[:reference_number].present?
+      @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.where(
+                    "data ->> 'reference_number' LIKE ?",
+                     "%#{params[:reference_number]}%"
+                  )
+    end
+
     if params[:start_date].present? and params[:end_date].present?
       @insurance_fund_transfer_collections = @insurance_fund_transfer_collections.where("collection_date >= ?  and collection_date <= ?", params[:start_date], params[:end_date] )
     end

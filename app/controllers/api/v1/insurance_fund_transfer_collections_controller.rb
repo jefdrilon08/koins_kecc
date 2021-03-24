@@ -130,6 +130,24 @@ module Api
         end
       end
 
+      def update_reference_number
+        insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
+        data                               = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
+        reference_number                   = params[:reference_number]
+
+        if insurance_fund_transfer_collection.pending?
+          data[:reference_number]                 = reference_number
+
+          insurance_fund_transfer_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+
       def revert
         insurance_fund_transfer_collection   = InsuranceFundTransferCollection.find(params[:id])
         data                                 = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)

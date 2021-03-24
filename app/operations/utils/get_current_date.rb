@@ -7,10 +7,18 @@ module Utils
     end
 
     def execute!
-      if @branch.present? and @branch.current_date.present?
-        @branch.current_date.to_date
+      if Settings.activate_microloans
+        if @branch.present? and @branch.current_date.present?
+          @branch.current_date.to_date
+        else
+          Date.today
+        end
       else
-        Date.today
+        if Settings.current_date.present?
+          Settings.current_date
+        else
+          Date.today
+        end   
       end
 
 #      if @branch.present? and Settings.branch_config.present?

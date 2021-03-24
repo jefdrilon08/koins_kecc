@@ -8,11 +8,12 @@ module InsuranceFundTransferCollections
       @data                                = @insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
       @data_fund_transfers                 = @insurance_fund_transfer_collection.deposits
       
-      @date_approved                       = Date.today
-
-      if Settings.current_date.present?
-        @date_approved  = Settings.current_date.to_date
-      end
+      @brach                               = @insurance_fund_transfer_collection.branch
+      @date_approved                       = ::Utils::GetCurrentDate.new(
+                                              config: {
+                                                branch: @branch
+                                              }
+                                            ).execute! 
     end
 
     def execute!

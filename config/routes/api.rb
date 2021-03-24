@@ -292,6 +292,7 @@ namespace :api do
     post "/insurance_fund_transfer_collections/remove_member", to: "insurance_fund_transfer_collections#remove_member"
     post "/insurance_fund_transfer_collections/load_center", to: "insurance_fund_transfer_collections#load_center"
     post "/insurance_fund_transfer_collections/update_or_number", to: "insurance_fund_transfer_collections#update_or_number"
+    post "/insurance_fund_transfer_collections/update_reference_number", to: "insurance_fund_transfer_collections#update_reference_number"
     post "/insurance_fund_transfer_collections/finalize", to: "insurance_fund_transfer_collections#finalize"
     post "/insurance_fund_transfer_collections/revert", to: "insurance_fund_transfer_collections#revert"
 

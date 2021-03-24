@@ -19,12 +19,14 @@ module MemberAccounts
 
       @x_interest           = 0.000833333333333
 
-      @transactions         = AccountTransaction.savings.where(
-                                "subsidiary_id = ? AND DATE(transacted_at) >= ? AND DATE(transacted_at) <= ?",
-                                @member_account.id,
-                                @start_date,
-                                @end_date
-                              ).order("transacted_at ASC, created_at ASC")
+      @transactions        = trans_by_range(from: @start_date, to: @end_date)
+
+      # @transactions         = AccountTransaction.savings.where(
+      #                           "subsidiary_id = ? AND DATE(transacted_at) >= ? AND DATE(transacted_at) <= ?",
+      #                           @member_account.id,
+      #                           @start_date,
+      #                           @end_date
+      #                         ).order("transacted_at ASC, created_at ASC")
 
       @transacted_at_dates  = @transactions.pluck(:transacted_at)
     end
@@ -38,11 +40,13 @@ module MemberAccounts
         @end_of_month       = t_date.to_date.end_of_month
 
         if !@finish_date.map(&:to_date).any? @beginning_of_month
-          @latest_transaction = @transactions.where(
-                                  "DATE(transacted_at) >= ? AND DATE(transacted_at) <= ?",
-                                  @beginning_of_month,
-                                  @end_of_month
-                                ).order("transacted_at ASC, created_at ASC").last
+          @latest_transaction = @transactions.select{|o| o.transacted_at >=  @beginning_of_month and o.transacted_at <= @end_of_month}.sort_by(&:transacted_at).last
+
+          # @latest_transaction = @transactions.where(
+          #                         "DATE(transacted_at) >= ? AND DATE(transacted_at) <= ?",
+          #                         @beginning_of_month,
+          #                         @end_of_month
+          #                       ).order("transacted_at ASC, created_at ASC").last
 
           if @latest_transaction.equity_value_interests.count == 0
             
@@ -74,5 +78,18 @@ module MemberAccounts
         end
       end
     end
+
+    def trans_by_range(from: nil, to:)
+      AccountTransaction.find_by_sql(<<-SQL)
+        SELECT id, transaction_type, amount, data, transacted_at, created_at
+        FROM account_transactions
+        WHERE transaction_type
+          IN ('deposit', 'withdraw')
+          AND subsidiary_id = '#{@member_account.id}'
+          #{"AND transacted_at > '#{from}'" if from}
+          AND DATE(transacted_at) <= '#{to}'
+        ORDER BY transacted_at ASC, updated_at ASC, created_at ASC
+      SQL
+    end 
   end
 end

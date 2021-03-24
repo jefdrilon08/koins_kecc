@@ -1,21 +1,21 @@
 module DepositCollections
   class Approve
     def initialize(config:)
-      @config             = config
-      @deposit_collection = @config[:deposit_collection]
-      @user               = @config[:user]
+      @config                 = config
+      @deposit_collection     = @config[:deposit_collection]
+      @user                   = @config[:user]
 
-      @data = @deposit_collection.try(:data).try(:with_indifferent_access)
+      @data                   = @deposit_collection.try(:data).try(:with_indifferent_access)
       @data_deposits          = @deposit_collection.deposits
       @data_accounting_entry  = @deposit_collection.accounting_entry
 
-      @branch = @deposit_collection.branch
+      @branch                 = @deposit_collection.branch
 
-      @date_approved  = ::Utils::GetCurrentDate.new(
-                          config: {
-                            branch: @branch
-                          }
-                        ).execute!
+      @date_approved          = ::Utils::GetCurrentDate.new(
+                                  config: {
+                                    branch: @branch
+                                  }
+                                ).execute!
     end
 
     def execute!

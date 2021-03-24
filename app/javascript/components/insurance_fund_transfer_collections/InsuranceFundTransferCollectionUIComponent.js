@@ -136,6 +136,46 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
     });
   }
 
+  saveReferenceNumber() {
+    var context            = this;
+    var data               = context.state.data;
+    var newReferenceNumber = data.data.reference_number;
+
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/insurance_fund_transfer_collections/update_reference_number",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        reference_number: newReferenceNumber
+      },
+      success: function(response) {
+        context.setState({
+          isSaving: false
+        });
+      },
+      error: function(response) {
+        alert("Error in updating reference number");
+      }
+    });
+  }
+
+  modifyReferenceNumber(event) {
+    var context                 = this;
+    var newReferenceNumber      = event.target.value;
+    var data                    = context.state.data;
+
+    data.data.reference_number  = newReferenceNumber;
+
+    context.setState({
+      data: data
+    });
+  }
+
   renderOrNumber() {
     var orNumber  = this.state.data.data.or_number;
 
@@ -198,6 +238,37 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
     }
   }
 
+  renderReferenceNumber() {
+    var referenceNumber  = this.state.data.data.reference_number;
+
+    if(this.state.data.status == "pending") {
+      return  (
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={referenceNumber} 
+              onChange={this.modifyReferenceNumber.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveReferenceNumber.bind(this)}
+            >
+              <span className="fa fa-check"/>
+              Save
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return this.state.data.data.reference_number;
+    }
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -235,6 +306,14 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
                 </th>
                 <td className="text-right">
                   {this.renderParticular()}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Reference Number:
+                </th>
+                <td className="text-right">
+                  {this.renderReferenceNumber()}
                 </td>
               </tr>
             </tbody>

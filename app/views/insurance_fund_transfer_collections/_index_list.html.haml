@@ -3,6 +3,8 @@
     %tr
       - if microinsurance?
         %th
+          Partners Reference Number
+        %th
           Date Created
         %th
           Date Approved
@@ -23,6 +25,10 @@
     - @insurance_fund_transfer_collections.each do |o|
       %tr
         - if microinsurance?
+          %td
+            = link_to insurance_fund_transfer_collection_path(o) do
+              %strong
+                #{o.data.with_indifferent_access["reference_number"]}
           %td
             = link_to insurance_fund_transfer_collection_path(o) do
               %strong

@@ -17,11 +17,11 @@ module MemberAccountValidations
 
       @particular                   = build_particular
 
-      @current_date = ::Utils::GetCurrentDate.new(
-                        config: {
-                          branch: @branch
-                        }
-                      ).execute!
+      @current_date                 = ::Utils::GetCurrentDate.new(
+                                        config: {
+                                          branch: @branch
+                                        }
+                                      ).execute!
 
       @book                         = 'JVB'
       @accounting_fund_id           = ""

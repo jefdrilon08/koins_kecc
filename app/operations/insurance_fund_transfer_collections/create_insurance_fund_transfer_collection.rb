@@ -29,7 +29,8 @@ module InsuranceFundTransferCollections
         totals: [],
         total_collected: 0.00,
         particular: particular,
-        is_remote_deposit: User::REMOTE_ROLES.include?(@user.roles.last)
+        is_remote_deposit: User::REMOTE_ROLES.include?(@user.roles.last),
+        reference_number: "",
       }
     end
 

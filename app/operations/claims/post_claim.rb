@@ -7,7 +7,12 @@ module Claims
       @branch                    = Branch.where(id: Settings.try(:defaults).try(:default_branch).try(:id)).first
       @data                      = @claim.try(:data).try(:with_indifferent_access)
       @data_accounting_entry     = @data[:accounting_entry]
-      @c_working_date            = Date.today
+      @branch                    = @claim.branch
+      @c_working_date            = ::Utils::GetCurrentDate.new(
+                                    config: {
+                                      branch: @branch
+                                    }
+                                  ).execute!
     end
 
     def execute!

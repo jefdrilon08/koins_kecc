@@ -3,6 +3,11 @@
     .col-md-2
       .form-group
         %label
+          Reference Number
+        = text_field_tag :reference_number, params[:reference_number], class: 'form-control'
+    .col-md-2
+      .form-group
+        %label
           Start Date
         = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
     .col-md-2
@@ -10,7 +15,7 @@
         %label
           End Date
         = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
-    .col-md-3
+    .col-md-2
       .form-group
         %label
           Branch
@@ -20,7 +25,7 @@
         %label
           Status
         = select_tag :status, options_for_select(MembershipPaymentCollection::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
-    .col-md-3
+    .col-md-2
       .form-group
         %label
           Actions

@@ -5,14 +5,14 @@ module InsuranceWithdrawalCollections
       @insurance_withdrawal_collection  = @config[:insurance_withdrawal_collection]
       @user                             = @config[:user]
 
-      @data = @insurance_withdrawal_collection.try(:data).try(:with_indifferent_access)
-      @data_withdrawals       = @insurance_withdrawal_collection.withdrawals
-      
-      @date_approved  = Date.today
-
-      if Settings.current_date.present?
-        @date_approved  = Settings.current_date.to_date
-      end
+      @data                             = @insurance_withdrawal_collection.try(:data).try(:with_indifferent_access)
+      @data_withdrawals                 = @insurance_withdrawal_collection.withdrawals
+      @branch                           = @insurance_withdrawal_collection.branch
+      @date_approved                    = ::Utils::GetCurrentDate.new(
+                                            config: {
+                                              branch: @branch
+                                            }
+                                          ).execute!
     end
 
     def execute!

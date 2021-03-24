@@ -5,7 +5,12 @@ module Claims
 
       @claim             = @config[:claim]
       @user              = @config[:user]
-      @c_working_date    = Date.today
+      @branch            = @claim.branch
+      @c_working_date    = ::Utils::GetCurrentDate.new(
+                            config: {
+                              branch: @branch
+                            }
+                          ).execute!
     end
 
     def execute!
