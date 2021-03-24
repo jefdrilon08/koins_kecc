@@ -2,9 +2,12 @@
   .col
     .card
       .card-body
+        = render partial: "index_filter"
         - if @centers.any?
           = render partial: "index_list"
         - else
           %p
             No centers found
         = paginate @centers
+        
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }

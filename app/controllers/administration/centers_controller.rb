@@ -5,6 +5,13 @@ module Administration
     def index
       @centers  = Center.select("*").includes(:branch, :user).where(branch_id: @branches.pluck(:id))
 
+      if params[:name].present?
+        @centers = @centers.where(
+                    "lower(name) LIKE ?",
+                     "%#{params[:name].downcase}%"
+                  )
+      end
+
       @centers  = @centers.order("name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
 
       @subheader_items = [
