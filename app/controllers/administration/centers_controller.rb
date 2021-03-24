@@ -132,6 +132,12 @@ module Administration
           link: edit_administration_center_path(@center),
           class: "fa fa-pencil-alt",
           text: "Edit"
+        },
+         {
+          link: administration_center_path(@center),
+          class: "fa fa-times",
+          data: { method: :delete, confirm: "Are you sure?" },
+          text: "Delete"
         }
       ]
 
@@ -144,7 +150,7 @@ module Administration
       @center = Center.find(params[:id])
       @center.destroy!
       flash[:success] = "Successfully removed center"
-      redirect_to administration_centers_path
+      redirect_to administration_branch_path(@center.branch)
     end
 
     private
