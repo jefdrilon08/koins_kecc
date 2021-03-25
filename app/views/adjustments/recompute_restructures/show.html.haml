@@ -9,6 +9,7 @@
             %th
               %h2
                 #{Loan.find(@restucture_details.loan).member.full_name}
+                #{Loan.find(@restucture_details.loan).member.member_type}
               (#{Loan.find(@restucture_details.loan).loan_product.name} - #{Loan.find(@restucture_details.loan).pn_number} )
         %table.table.table-sm.table-bordered.table-hover
           %thead
@@ -105,7 +106,7 @@
                   %td
                     #{ld["loan_product"]["old_interest_receivable_amount"].to_f - ld["k_sagip_interest_balance"].to_f}
                     
-
+              
               - rd["insurance_details"].each do |idetails|
                 %tr
                   %td

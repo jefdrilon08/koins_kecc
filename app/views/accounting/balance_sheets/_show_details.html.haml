@@ -41,6 +41,27 @@
       Total Liabilities
     %th.text-right
       #{number_to_currency(@data[:total_liabilities], unit: '')}
+  %tr
+    %th{ colspan: 2 }
+      Equities
+  %tr
+    %th
+      Accounting Code
+    %th.text-right{ width: "25%" }
+      Amount
+  - @data[:equities].each do |o|
+    %tr
+      %td
+        #{o[:accounting_code][:code]} 
+        %span.text-muted
+          #{o[:accounting_code][:name]}
+      %td.text-right
+        #{number_to_currency(o[:amount], unit: "")}
+  %tr
+    %th
+      Total Equities
+    %th.text-right
+      #{number_to_currency(@data[:total_equities], unit: '')}
   - if @statutory_funds_beginning.present?
     %tr
       %th{ colspan: 2 }

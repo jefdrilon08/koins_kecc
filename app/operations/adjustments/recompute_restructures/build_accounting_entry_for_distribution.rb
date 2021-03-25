@@ -87,21 +87,25 @@ module Adjustments
 
         if @for_savings_distribution == nil
 
-          #para sa clip      
-          clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
-          clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
-          dif_clip = (clip_old_value - clip_new_value).round(2)
-          if dif_clip.to_f > 0
-            dif_clip_total = dif_clip
-            clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
-            journal_entries << {
+          #para sa clip 
+          #if @loan.member.member_type != "GK"
+            clip_new_value = @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:value].to_f
+            clip_old_value =  @clip_account.each{ |a| a[:accounting_entry] = "af83062d-628a-4fdd-acfd-bdebe2696513"  }.last[:old_value].to_f
+            dif_clip = (clip_old_value - clip_new_value).round(2)
+            
+            if dif_clip.to_f.abs > 0
+            
+              dif_clip_total = dif_clip
+              clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
+              journal_entries << {
                   accounting_code_id: clip_account_code.id,
                   code: clip_account_code.code,
                   name: clip_account_code.name,
-                  amount: (dif_clip).round(2)
+                  amount: (dif_clip).round(2).abs
               }
           
-          end
+            end
+          #end
 
           #para sa service fee 
           service_fee_new = @account_transaction_details.data.with_indifferent_access[:loans].last[:total_service_fee].to_f
@@ -157,16 +161,10 @@ module Adjustments
                   
                   
                   
-                  for_dif_loan = @account_transaction[:amount].to_f - (old_loan.to_f - new_loan.to_f)
-                   #raise @account_transaction[:amount].to_f.inspect
-                  #raise for_dif_loan.inspect
-                  
-                  #if for_dif_loan > 0
-                  #  total_amount = @account_transaction[:amount].to_f  - dif_clip_total.to_f.abs
-                  #else
-                    total_amount = old_loan - new_loan
-                    
-                  #end
+                  #for_dif_loan = @account_transaction[:amount].to_f - (old_loan.to_f - new_loan.to_f)
+                  total_amount = old_loan - new_loan
+                     
+                
                 end
               end
             
@@ -260,8 +258,8 @@ module Adjustments
               account_code_regular = AccountingCode.find("b7c23e58-e44e-46ae-a3ec-b5081d6eed32")
               account_code_gk = AccountingCode.find("f719c253-a9ba-4d81-ae52-dc8d8d0848f2")
               total_amount = @for_savings_distribution 
-              if @loan.member.member_type == "GK"
-                journal_entries << {
+              if @loan.member.member_type == "GK" 
+              journal_entries << {
                   accounting_code_id: account_code_gk.id,
                   code: account_code_gk.code,
                   name: account_code_gk.name,

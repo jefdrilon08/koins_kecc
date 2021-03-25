@@ -180,17 +180,34 @@ module Loans
           deduction_type  = b.meta["account_type"]
           if deduction_type == "INSURANCE"
             if b.meta["value"] != 0
-              computed_value =  b.meta["value"].to_i * (@loan.num_installments.to_i + 1.to_i)
-              new_computed_insurance = {
+              if @loan.member.member_type == "GK"
+                new_computed_insurance = {
+                  account_type: b.meta["account_type"],
+                  account_subtype: b.meta["account_subtype"],
+                  accounting_entry: b["accounting_code_id"],
+                  value: 0.0,
+                  old_value: 0.0
+
+                }
+
+                total_insurance = 0.0
+              else
+                computed_value =  b.meta["value"].to_i * (@loan.num_installments.to_i + 1.to_i)
+                new_computed_insurance = {
                   account_type: b.meta["account_type"],
                   account_subtype: b.meta["account_subtype"],
                   accounting_entry: b["accounting_code_id"],
                   value: computed_value,
                   old_value: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == b["accounting_code_id"]}.last["amount"]
 
-              } 
-              total_insurance = total_insurance + computed_value
+                }
+              
+                total_insurance = total_insurance + computed_value
+              end
+              
+          
 
+              
             else
               d = 0
               total_amount = 0
@@ -229,6 +246,18 @@ module Loans
                 end
               
               
+              if @loan.member.member_type == "GK"
+                new_computed_insurance = {
+                  account_type: b.meta["account_type"],
+                  account_subtype: b.meta["account_subtype"],
+                  accounting_entry: b["accounting_code_id"],
+                  value: second_clip,
+                  old_value: 0.0
+
+                }
+
+                
+              else
               new_computed_insurance = {
                   account_type: b.meta["account_type"],
                   account_subtype: b.meta["account_subtype"],
@@ -236,7 +265,8 @@ module Loans
                   value: second_clip,
                   old_value: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == b["accounting_code_id"]}.last["amount"]
 
-              } 
+              }
+              end
         
             end
            @jef[:insurance_details] << new_computed_insurance
@@ -250,8 +280,11 @@ module Loans
       #============== insurance ===========================
       
       sum_total_laonable = 0
+      if @loan.member.member_type == "GK"
+      @jef[:total_loanable_amount]  = (@jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
+      else
       @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
-      
+      end
 
       #raise @jef.inspect
       #@loan_data[:new_restructured] = @jef
