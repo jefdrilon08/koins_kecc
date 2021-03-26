@@ -1160,6 +1160,12 @@ namespace :adjust do
         member_data = member.data.with_indifferent_access
         member_data[:recognition_date] = recognition_date
         member.update!(data: member_data)
+
+        membership_payment = member.membership_payment_records.where(membership_type: "Insurance", membership_name: "K-MBA").order("date_paid ASC").last
+        
+        if membership_payment.present?
+          membership_payment.update!(date_paid: recognition_date)
+        end
       end
     end
     puts "Done!"

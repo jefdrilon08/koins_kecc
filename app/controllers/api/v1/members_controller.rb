@@ -601,6 +601,12 @@ module Api
             modifiable: nil
           )
 
+          membership_payment = member.membership_payment_records.where(membership_type: "Insurance", membership_name: "K-MBA").order("date_paid ASC").last
+
+          if membership_payment.present?
+            membership_payment.update!(date_paid: recognition_date)
+          end
+
           ActivityLog.create!(
             content: "#{current_user.full_name} modified member #{member.full_name}'s recognition_date from #{old_recognition_date} to #{recognition_date}",
             activity_type: "modification",
