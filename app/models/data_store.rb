@@ -76,6 +76,14 @@ class DataStore < ApplicationRecord
     end
   end
 
+  def year
+    if self.as_of.present?
+      return self.as_of.to_date.year
+    else
+      return "N/A"
+    end
+  end
+
   def pending?
     self.status == "pending"
   end
