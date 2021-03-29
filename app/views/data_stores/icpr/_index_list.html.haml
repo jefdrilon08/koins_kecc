@@ -19,10 +19,7 @@
           = link_to "/data_stores/icpr/#{o.id}" do
             .fa.fa-search
         %td.text-center
-          %strong
-            #{o.year}
-        %td
-          #{o.branch_name}
+          
         %td.text-center
           - if o.processing?
             .badge.badge-info

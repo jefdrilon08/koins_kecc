@@ -59,9 +59,22 @@
         #{number_to_currency(o[:amount], unit: "")}
   %tr
     %th
-      Total Equities
+      Total Income
     %th.text-right
       #{number_to_currency(@data[:total_equities], unit: '')}
+  - @data[:income].each do |o|
+    %tr
+      %td
+        #{o[:accounting_code][:code]} 
+        %span.text-muted
+          #{o[:accounting_code][:name]}
+      %td.text-right
+        #{number_to_currency(o[:amount], unit: "")}
+  %tr
+    %th
+      Total Income
+    %th.text-right
+      #{number_to_currency(@data[:total_incoe], unit: '')}
   - if @statutory_funds_beginning.present?
     %tr
       %th{ colspan: 2 }
