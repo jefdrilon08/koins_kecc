@@ -21,6 +21,8 @@ class ProcessCreateBilling < ApplicationJob
       logger.info("Exception occurred!")
       logger.info e
 
+      Rollbar.error(e, billing_id: args[:id], user_id: args[:user_id])
+
       billing.update!(
         status: "error",
         data: { e: e }
