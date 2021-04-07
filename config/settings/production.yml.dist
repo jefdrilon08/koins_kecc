@@ -554,27 +554,39 @@ time_deposit:
     -
       num_months: 3
       num_days: 90
-      interest_rate: 0.0042
-      premature_interest_rate: 0.001666667
-      premature_interest_rate_with_loans: 0.000833333
+      #interest_rate: 0.0042
+      #premature_interest_rate: 0.001666667
+      #premature_interest_rate_with_loans: 0.000833333
+      interest_rate: 0.0021
+      premature_interest_rate: 0.000833334
+      premature_interest_rate_with_loans: 0.000416667
     -
       num_months: 6
       num_days: 180
-      interest_rate: 0.0042
-      premature_interest_rate: 0.001666667
-      premature_interest_rate_with_loans: 0.000833333
+      #interest_rate: 0.0042
+      #premature_interest_rate: 0.001666667
+      #premature_interest_rate_with_loans: 0.000833333
+      interest_rate: 0.0021
+      premature_interest_rate: 0.000833334
+      premature_interest_rate_with_loans: 0.000416667
     -
       num_months: 9
       num_days: 270
-      interest_rate: 0.0042
-      premature_interest_rate: 0.001666667
-      premature_interest_rate_with_loans: 0.000833333
+      #interest_rate: 0.0042
+      #premature_interest_rate: 0.001666667
+      #premature_interest_rate_with_loans: 0.000833333
+      interest_rate: 0.0021
+      premature_interest_rate: 0.000833334
+      premature_interest_rate_with_loans: 0.000416667
     -
       num_months: 12
       num_days: 360
-      interest_rate: 0.0042
-      premature_interest_rate: 0.001666667
-      premature_interest_rate_with_loans: 0.000833333
+      #interest_rate: 0.0042
+      #premature_interest_rate: 0.001666667
+      #premature_interest_rate_with_loans: 0.000833333
+      interest_rate: 0.0021
+      premature_interest_rate: 0.000833334
+      premature_interest_rate_with_loans: 0.000416667
 
   deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
   withdraw_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
