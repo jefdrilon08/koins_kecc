@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache"; 
+import Mustache from "mustache/mustache";
 
 var authenticityToken;
 
@@ -6,23 +6,18 @@ var $modalNew;
 var $btnNew;
 var $btnConfirmNew;
 
+var $selectYear;
 var $selectBranch;
-var $inputStartDate;
-var $inputEndDate;
-var $inputEquityRate;
 
 var $message;
 var templateErrorList;
 
 var _cacheDom = function() {
-  $modalNew      = $("#modal-new");
-  $btnNew        = $("#btn-new");
-  $btnConfirmNew = $("#btn-confirm-new");
-
+  $modalNew         = $("#modal-new");
+  $btnNew           = $("#btn-new");
+  $btnConfirmNew    = $("#btn-confirm-new");
+  $selectYear       = $("#select-year");
   $selectBranch     = $("#select-branch");
-  $inputStartDate   = $("#input-start-date");
-  $inputEndDate     = $("#input-end-date");
-  $inputEquityRate  = $("#input-equity-rate");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -35,22 +30,16 @@ var _bindEvents = function() {
   });
 
   $btnConfirmNew.on("click", function() {
-    var branchId    = $selectBranch.val();
-    var startDate   = $inputStartDate.val();
-    var endDate     = $inputEndDate.val();
-    var equityRate  = $inputEquityRate.val();
+    var year      = $selectYear.val();
+    var branchId  = $selectBranch.val();
 
     $message.html("Loading...");
     $btnConfirmNew.prop("disabled", true);
+    $selectYear.prop("disabled", true);
     $selectBranch.prop("disabled", true);
-    $inputStartDate.prop("disabled", true);
-    $inputEndDate.prop("disabled", true);
-    $inputEquityRate.prop("disabled", true);
 
     var data  = {
-      start_date: startDate,
-      end_date: endDate,
-      equity_rate: equityRate,
+      year: year,
       branch_id: branchId,
       authenticity_token: authenticityToken
     }
@@ -60,17 +49,28 @@ var _bindEvents = function() {
       method: 'POST',
       data: data,
       success: function(response) {
-        $message.html("Success! Redirecting...");
         window.location.href="/data_stores/patronage_refund";
       },
       error: function(response) {
-        $message.html("Something went wrong...");
-        $btnConfirmNew.prop("disabled", false);
-        $selectBranch.prop("disabled", false);
+        errors = [];
 
-        $inputStartDate.prop("disabled", false);
-        $inputEndDate.prop("disabled", false);
-        $inputEquityRate.prop("disabled", false);
+        try {
+          errors = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          console.log(response);
+          errors.push("Something went wrong");
+        }
+
+        $message.html(
+          Mustache.render(
+            templateErrorList,
+            { errors: errors }
+          )
+        );
+
+        $btnConfirmNew.prop("disabled", false);
+        $selectYear.prop("disabled", false);
+        $selectBranch.prop("disabled", false);
       }
     });
   });

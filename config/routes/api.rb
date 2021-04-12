@@ -319,6 +319,7 @@ namespace :api do
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
       post "/patronage_refund/approve", to: "patronage_refund#approve"
+      post "/patronage_refund/set_rate", to: "patronage_refund#set_rate"
       post "/personal_funds/queue", to: "personal_funds#queue"
       get "/personal_funds/fetch", to: "personal_funds#fetch"
       get "/personal_funds/download_excel", to: "personal_funds#download_excel"
