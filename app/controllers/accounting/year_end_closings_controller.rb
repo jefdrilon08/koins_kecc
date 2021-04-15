@@ -9,8 +9,12 @@ module Accounting
                   )
 
       @records  = @records.order(
-                    "CAST(meta->>'closing_date' AS date) DESC"
+                    "created_at DESC"
                   ).page(params[:page]).per(20)
+
+      # @records  = @records.order(
+      #               "CAST(meta->>'closing_date' AS date) DESC"
+      #             ).page(params[:page]).per(20)
 
       @subheader_items = [
         {
