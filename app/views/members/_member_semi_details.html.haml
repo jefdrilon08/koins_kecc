@@ -114,20 +114,6 @@
     - if ["OJT"].exclude? current_user.roles.last
       %hr
       %h6
-        Access Token
-      %div
-        - if @member.access_token.present?
-          %code
-            #{@member.access_token}
-        - else
-          %small
-            No access token
-        #btn-generate-access-token.btn.btn-info.btn-block
-          .fa.fa-sync
-          Generate Access Token
-      %br
-      %hr
-      %h6
         Register My KOINS
       %br
       #btn-register.btn.btn-info.btn-block

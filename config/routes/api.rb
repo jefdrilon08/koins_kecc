@@ -8,6 +8,7 @@ namespace :api do
     get "/loans", to: "loans#index"
 
     # members
+    post "/members/update_password", to: "members#update_password"
     get "/members/co_makers", to: "members#co_makers"
     get "/members/loan_products", to: "members#loan_products"
 
@@ -20,6 +21,21 @@ namespace :api do
 
     # trends
     get "/trends/fetch_yearly_data", to: "trends#fetch_yearly_data"
+
+    # users
+    post "/users/login", to: "users#login"
+
+    namespace :members do
+      get "/insurances", to: "insurances#index"
+      get "/insurances/:id", to: "insurances#show"
+      get "/equities", to: "equities#index"
+      get "/equities/:id", to: "equities#show"
+      get "/savings", to: "savings#index"
+      get "/savings/:id", to: "savings#show"
+      get "/loans", to: "loans#index"
+      get "/loans/:id", to: "loans#show"
+      post "/settings/change_password", to: "settings#change_password"
+    end
   end
 
   namespace :v1 do

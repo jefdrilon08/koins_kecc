@@ -81,6 +81,10 @@ var $inputBeneficiaryLastName;
 var $inputBeneficiaryDateOfBirth;
 var $inputBeneficiaryRelationship;
 
+var $inputMykoinsPassword;
+var $inputMykoinsPasswordConfirmation;
+var $btnSaveMykoinsPassword;
+
 var $btnErase;
 var $modalErase;
 var $btnConfirmErase;
@@ -104,6 +108,7 @@ var _urlUploadSignature         = "/api/v1/members/upload_signature";
 var _urlDeleteSignature         = "/api/v1/members/delete_signature";
 var _urlRegister                = "/api/v1/members/register";
 var _urlEraseRecord             = "/api/v1/adjustments/accrued_interests/erase_record";
+var _urlUpdateMykoinsPassword   = "/api/v2/members/update_password";
 var _memberId;
 var _authenticityToken;
 var _loanId;
@@ -205,6 +210,10 @@ var _cacheDom = function() {
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 
+  $inputMykoinsPassword             = $("#input-mykoins-password");
+  $inputMykoinsPasswordConfirmation = $("#input-mykoins-password-confirmation");
+  $btnSaveMykoinsPassword           = $("#btn-save-mykoins-password");
+
   _changeTermOptions($selectModeOfPayment.val());
 }
 
@@ -231,6 +240,45 @@ var _changeTermOptions  = function(modeOfPayment) {
 }
 
 var _bindEvents = function() {
+  $btnSaveMykoinsPassword.on("click", function() {
+    var password              = $inputMykoinsPassword.val();
+    var password_confirmation = $inputMykoinsPasswordConfirmation.val();
+    var access_token          = $(this).data('access-token');
+
+    $inputMykoinsPassword.prop("disabled", true);
+    $inputMykoinsPasswordConfirmation.prop("disabled", true);
+    $btnSaveMykoinsPassword.prop("disabled", true);
+
+    $.ajax({
+      url: _urlUpdateMykoinsPassword,
+      method: 'POST',
+      headers: {
+        'X-KOINS-ACCESS-TOKEN': access_token
+      },
+      data: {
+        password: password,
+        password_confirmation: password_confirmation
+      },
+      success: function(response) {
+        $inputMykoinsPassword.prop("disabled", false);
+        $inputMykoinsPasswordConfirmation.prop("disabled", false);
+        $btnSaveMykoinsPassword.prop("disabled", false);
+
+        alert("Successfully changed password!");
+        $inputMykoinsPassword.val("");
+        $inputMykoinsPasswordConfirmation.val("");
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in updating password!");
+
+        $inputMykoinsPassword.prop("disabled", false);
+        $inputMykoinsPasswordConfirmation.prop("disabled", false);
+        $btnSaveMykoinsPassword.prop("disabled", false);
+      }
+    });
+  });
+
   $selectModeOfPayment.on("change", function() {
     _changeTermOptions($(this).val());
   });

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_17_021234) do
+ActiveRecord::Schema.define(version: 2021_04_16_093512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -922,6 +922,8 @@ ActiveRecord::Schema.define(version: 2021_03_17_021234) do
     t.date "previous_date_resigned"
     t.date "insurance_date_resigned"
     t.uuid "member_id"
+    t.string "encrypted_password"
+    t.string "username"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
@@ -1119,6 +1121,7 @@ ActiveRecord::Schema.define(version: 2021_03_17_021234) do
     t.string "roles"
     t.boolean "is_regular"
     t.date "incentivized_date"
+    t.string "access_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

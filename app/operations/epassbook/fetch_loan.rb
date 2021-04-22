@@ -8,6 +8,10 @@ module Epassbook
 
       @amortization_schedule_entries  = @loan.amortization_schedule_entries.order("due_date ASC")
 
+      @account_transactions = AccountTransaction.approved_loan_payments.where(
+                                subsidiary_id: @loan.id
+                              ).order("transacted_at ASC")
+
       @data = {
         member: {
           first_name: @member.first_name,
@@ -32,6 +36,14 @@ module Epassbook
     end
 
     def execute!
+      @account_transactions.each do |o|
+        @data[:loan][:payments] << {
+          id: o.id,
+          date_paid: o.transacted_at.strftime("%B %d, %Y"),
+          amount: number_to_currency(o.amount, unit: "")
+        }
+      end
+
       @amortization_schedule_entries.each do |o|
         @running_balance -= o.total_paid
 

@@ -9,6 +9,12 @@ class ApiController < ApplicationController
     end
   end
 
+  def authenticate_request!
+    if access_token.blank?
+      render json: { message: "unauthenticated" }, status: 400
+    end
+  end
+
   def authenticate_api_member!
     if access_token.blank?
       render json: { message: "unauthenticated" }, status: 400
