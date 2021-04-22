@@ -81,12 +81,12 @@ module MonthlyIncentives
       ds = if meta_or_data == :meta
              DataStore.send(scope)
                .where("meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS DATE) <= ?", branch.id, date)
-               .order("CAST(meta->>'as_of' AS DATE) ASC")
+               .order(Arel.sql("CAST(meta->>'as_of' AS DATE) ASC"))
                .last
            else
              DataStore.send(scope)
                .where("data->'branch'->>'id' = ? AND CAST(data->>'as_of' AS DATE) <= ?", branch.id, date)
-               .order("CAST(data->>'as_of' AS DATE) ASC")
+               .order(Arel.sql("CAST(data->>'as_of' AS DATE) ASC"))
                .last
            end
 
