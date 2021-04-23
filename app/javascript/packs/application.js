@@ -106,6 +106,7 @@ import AdministrationLoanProductsIndex from "../models/AdministrationLoanProduct
 import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
 import AdministrationClustersIndex from "../models/AdministrationClustersIndex.js";
 import AdministrationBranchesIndex from "../models/AdministrationBranchesIndex.js";
+import AdministrationBranchesShow from "../models/AdministrationBranchesShow.js";
 import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
 import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js";
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
@@ -250,6 +251,7 @@ const hooks = {
   "administration/areas/index":                       [AdministrationAreasIndex],
   "administration/clusters/index":                    [AdministrationClustersIndex],
   "administration/branches/index":                    [AdministrationBranchesIndex],
+  "administration/branches/show":                     [AdministrationBranchesShow],
   "administration/centers/show":                      [AdministrationCentersShow],
   "administration/surveys/index":                     [AdministrationSurveysIndex],
   "administration/surveys/show":                      [AdministrationSurveysShow],

@@ -4,6 +4,44 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!, except: [:process_members_file, :process_beneficiaries_file, :process_legal_dependents_file]
 
+      def register_member
+        password              = params[:password]
+        password_confirmation = params[:password_confirmation]
+        member                = Member.find_by_id(params[:id])
+
+        errors = []
+
+        if password.blank?
+          errors << "password required"
+        end
+
+        if password_confirmation.blank?
+          errors << "password confirmation required"
+        end
+
+        if password.present? and password_confirmation.present? and password != password_confirmation
+          errors << "passwords do not match"
+        end
+
+        if member.blank?
+          errors << "member not found"
+        elsif member.access_token.present?
+          errors << "token already present"
+        end
+
+        if errors.size > 0
+          render json: { errors: errors }, status: 400
+        else
+          member.update!(
+            access_token: "#{SecureRandom.hex(32)}",
+            password: password,
+            password_confirmation: password_confirmation
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def search
         q = params[:q]
 
