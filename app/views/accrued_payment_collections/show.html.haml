@@ -1,3 +1,4 @@
+= render partial: "accrued_payment_collections/modals/update_transaction"
 .row
   .col
     .card
@@ -6,7 +7,19 @@
           %thead
             %tr
               %th
-                NAME
+                Member
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
                 %th
                   #{hders[:name]}
+            %tbody
+              -@accrued_member.each_with_index do |am , y|
+                %tr
+                  %td
+                    = link_to member_path(am['member_id']), target: "_blank" do
+                      %strong
+                        #{am['name']}
+                    - am['loan_data'].each_with_index do |al , x|
+                      %td{:align=>"right"}
+                        -if al['amount'] != 'false'
+                          %button.btn.btn-sm.btn-danger.btn-update-transaction{ data: { id: x } }
+                            #{al['amount']}

@@ -5,11 +5,14 @@ module Api
     		collection_date   = params[:collection_date].try(:to_date)
         	branch_id       = params[:branch_id]
         	center_id       = params[:center_id]
+          member_id       = params[:member_id]
+
 
         	config  = {
           		collection_date: collection_date,
           		branch_id: branch_id,
           		center_id: center_id,
+              member_id: member_id,
           		user: current_user
         	}
 

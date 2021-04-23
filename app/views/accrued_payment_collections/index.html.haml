@@ -1,7 +1,30 @@
-.row
- .col
-  .card
-   .card-body  
-    #{@sample}
-
 = render partial: "accrued_payment_collections/modals/new_transaction"
+.row
+  .col
+    .card
+      .card-body
+        /= render partial: "adjustments/moratoriums/index_filter"
+        - if @accrued_interest.any?
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th
+                  Branch
+                %th
+                  Center
+                %th
+                  Date Initialized
+                %th.text-center
+                  Status
+                %th.text-center
+                  Actions
+              %tbody
+                - @accrued_interest.each do |o|
+                  %tr
+                    %td
+                      #{Branch.find(o.branch_id).name}
+                    %td
+                      #{Center.find(o.center_id).name}
+                    %td
+                    %td
+                      #{o.status}
