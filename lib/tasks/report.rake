@@ -194,7 +194,9 @@ namespace :report do
           pod_type = "54-02"
         end
         #mat_date
-        mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")      
+        #mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")      
+        mat_date = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).order(:due_date).last.due_date
+        mat_date = mat_date.to_date.strftime("%m/%d/%Y")
         date_rel = loan_data.date_released.to_date.strftime("%m/%d/%Y")
         int_rate = (loan_data.monthly_interest_rate*12)*100
 
