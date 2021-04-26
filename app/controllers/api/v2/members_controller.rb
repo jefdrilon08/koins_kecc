@@ -3,6 +3,22 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_api_member!
 
+      def update_password
+        password              = params[:password]
+        password_confirmation = params[:password_confirmation]
+
+        if password.present? and password_confirmation.present? and password == password_confirmation
+          @member.update!(
+            password: password,
+            password_confirmation: password_confirmation
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { errors: ["invalid password"] }, status: 403
+        end
+      end
+
       def loan_products
         loan_products = ReadOnlyLoanProduct.select("*")
                           .order(

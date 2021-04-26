@@ -6,6 +6,12 @@ class AppValidator
     }
   end
 
+  def build_full_messages!
+    @errors[:messages].each do |o|
+      @errors[:full_messages] << o[:message]
+    end
+  end
+
   def not_yet_implemented!
     @errors[:messages] << {
       key: "system",

@@ -1,0 +1,34 @@
+#modal-register.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Register Member 
+          %span#member-last-name
+          , 
+          %span#member-first-name
+      .modal-body
+        .modal-body-content
+          .alert.alert-info
+            Please provide password
+          .row
+            .col
+              .form-group
+                %label
+                  Password
+                = password_field_tag :password, "", id: "input-password", class: "form-control"
+          .row
+            .col
+              .form-group
+                %label
+                  Password Confirmation
+                = password_field_tag :password_confirmation, "", id: "input-password-confirmation", class: "form-control"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-register.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

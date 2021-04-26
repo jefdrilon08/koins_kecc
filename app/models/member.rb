@@ -3,6 +3,8 @@ class Member < ApplicationRecord
 
   belongs_to :member, optional: true
 
+  devise :database_authenticatable
+
   STATUSES = [
     "blacklisted",
     "whitelisted",
@@ -300,6 +302,8 @@ class Member < ApplicationRecord
     self.first_name   = self.first_name.try(:upcase)
     self.last_name    = self.last_name.try(:upcase)
     self.middle_name  = self.middle_name.try(:upcase)
+
+    self.username = self.identification_number
   end
 
   def equity_value

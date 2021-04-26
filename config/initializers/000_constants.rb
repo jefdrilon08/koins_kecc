@@ -21,3 +21,8 @@ MONTHS_FOR_SELECT = [
   ["November", 11],
   ["December", 12],
 ]
+
+USER_TYPES = [
+  "USER",
+  "MEMBER"
+]
