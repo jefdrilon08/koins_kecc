@@ -104,6 +104,7 @@ module Icpr
                           temp[:total_equity] = temp[:months].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
                           temp[:ave_equity]   = (temp[:total_equity] / 12).round(2)
 
+
                           temp
                         }
 
