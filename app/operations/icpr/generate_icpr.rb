@@ -2,6 +2,7 @@ module Icpr
   class GenerateIcpr
     attr_accessor :data, :result
 
+
     def initialize(config:)
       @config = config
       @year   = @config[:year]
