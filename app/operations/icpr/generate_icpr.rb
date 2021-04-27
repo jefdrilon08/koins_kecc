@@ -71,7 +71,7 @@ module Icpr
                               year: @year,
                               amount: 0.00
                             }
-
+                        #raise "jef".inspect
                             if previous_transaction_month.present? and temp[:previous_ending_balance].present? and temp[:previous_ending_balance] > 0.00
                               if temp[:latest_ending_balance].present? and temp[:latest_ending_balance] > 0.00 and m >= latest_transaction_month
                                 d[:amount] = temp[:latest_ending_balance] 
@@ -137,13 +137,17 @@ module Icpr
                   FROM
                     member_accounts
                   INNER JOIN members ON
+<<<<<<< HEAD
                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
+=======
+                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}' and member_accounts.member_id = 'd0198de0-a516-403e-b35b-1ff268de68c1'
+>>>>>>> f364c09ed0aeca2fa3e4ffb18a4ebfe18d8ed165
                   INNER JOIN member_accounts AS savings_accounts ON
                     savings_accounts.member_id = members.id AND savings_accounts.account_type = 'SAVINGS' AND savings_accounts.account_subtype = 'K-IMPOK'
                   INNER JOIN member_accounts AS cbu_accounts ON
                     cbu_accounts.member_id = members.id AND cbu_accounts.account_type = 'EQUITY' AND cbu_accounts.account_subtype = 'CBU'
                   INNER JOIN centers ON
-                    centers.id = member_accounts.center_id
+                    centers.id = member_accounts.center_id and centers.id = '0ac3c815-194b-4a1e-982d-a370beaa8e74'
                   LEFT JOIN account_transactions AS t1 ON
                     t1.subsidiary_id = member_accounts.id AND t1.status = 'approved' AND EXTRACT(year FROM t1.transacted_at) = '#{@year}'::int
                   LEFT JOIN account_transactions AS t2 ON
