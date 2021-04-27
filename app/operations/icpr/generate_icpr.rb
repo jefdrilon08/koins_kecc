@@ -138,11 +138,7 @@ module Icpr
                   FROM
                     member_accounts
                   INNER JOIN members ON
-<<<<<<< HEAD
                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
-=======
-                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}' and member_accounts.member_id = 'd0198de0-a516-403e-b35b-1ff268de68c1'
->>>>>>> f364c09ed0aeca2fa3e4ffb18a4ebfe18d8ed165
                   INNER JOIN member_accounts AS savings_accounts ON
                     savings_accounts.member_id = members.id AND savings_accounts.account_type = 'SAVINGS' AND savings_accounts.account_subtype = 'K-IMPOK'
                   INNER JOIN member_accounts AS cbu_accounts ON
