@@ -144,7 +144,7 @@ module Icpr
                   INNER JOIN member_accounts AS cbu_accounts ON
                     cbu_accounts.member_id = members.id AND cbu_accounts.account_type = 'EQUITY' AND cbu_accounts.account_subtype = 'CBU'
                   INNER JOIN centers ON
-                    centers.id = member_accounts.center_id and centers.id = '0ac3c815-194b-4a1e-982d-a370beaa8e74'
+                    centers.id = member_accounts.center_id
                   LEFT JOIN account_transactions AS t1 ON
                     t1.subsidiary_id = member_accounts.id AND t1.status = 'approved' AND EXTRACT(year FROM t1.transacted_at) = '#{@year}'::int
                   LEFT JOIN account_transactions AS t2 ON
