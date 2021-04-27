@@ -84,7 +84,15 @@ module Icpr
                               else
                                 d[:amount] = temp[:previous_ending_balance]
                               end
-                            elsif temp[:previous_ending_balance].blank? and temp[:latest_ending_balance].present?
+                            elsif temp[:previous_ending_balance].present? and temp[:latest_ending_balance].present?
+                              if m >= latest_transaction_month
+                                d[:amount] = temp[:latest_ending_balance]
+                              end
+                            elsif temp[:previous_ending_balance].present? and temp[:latest_ending_balance].present?  and temp[:latest_ending_balance] > 0.00
+                              if m >= latest_transaction_month
+                                d[:amount] = temp[:latest_ending_balance]
+                              end
+                            elsif temp[:previous_ending_balance].nil? and temp[:latest_ending_balance].present?  and temp[:latest_ending_balance] > 0.00
                               if m >= latest_transaction_month
                                 d[:amount] = temp[:latest_ending_balance]
                               end
@@ -103,6 +111,7 @@ module Icpr
     end
 
     def query!
+      #members.branch_id = '#{@branch.id}'
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                   SELECT DISTINCT ON(members.identification_number, member_accounts.id)
                     members.id AS member_id,
@@ -127,7 +136,7 @@ module Icpr
                   FROM
                     member_accounts
                   INNER JOIN members ON
-                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
+                   member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
                   INNER JOIN member_accounts AS savings_accounts ON
                     savings_accounts.member_id = members.id AND savings_accounts.account_type = 'SAVINGS' AND savings_accounts.account_subtype = 'K-IMPOK'
                   INNER JOIN member_accounts AS cbu_accounts ON
