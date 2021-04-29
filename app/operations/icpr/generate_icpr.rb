@@ -2,6 +2,7 @@ module Icpr
   class GenerateIcpr
     attr_accessor :data, :result
 
+
     def initialize(config:)
       @config = config
       @year   = @config[:year]
@@ -71,7 +72,7 @@ module Icpr
                               year: @year,
                               amount: 0.00
                             }
-
+                        #raise "jef".inspect
                             if previous_transaction_month.present? and temp[:previous_ending_balance].present? and temp[:previous_ending_balance] > 0.00
                               if temp[:latest_ending_balance].present? and temp[:latest_ending_balance] > 0.00 and m >= latest_transaction_month
                                 d[:amount] = temp[:latest_ending_balance] 
@@ -84,7 +85,15 @@ module Icpr
                               else
                                 d[:amount] = temp[:previous_ending_balance]
                               end
-                            elsif temp[:previous_ending_balance].blank? and temp[:latest_ending_balance].present?
+                            elsif temp[:previous_ending_balance].present? and temp[:latest_ending_balance].present?
+                              if m >= latest_transaction_month
+                                d[:amount] = temp[:latest_ending_balance]
+                              end
+                            elsif temp[:previous_ending_balance].present? and temp[:latest_ending_balance].present?  and temp[:latest_ending_balance] > 0.00
+                              if m >= latest_transaction_month
+                                d[:amount] = temp[:latest_ending_balance]
+                              end
+                            elsif temp[:previous_ending_balance].nil? and temp[:latest_ending_balance].present?  and temp[:latest_ending_balance] > 0.00
                               if m >= latest_transaction_month
                                 d[:amount] = temp[:latest_ending_balance]
                               end
@@ -96,6 +105,7 @@ module Icpr
                           temp[:total_equity] = temp[:months].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
                           temp[:ave_equity]   = (temp[:total_equity] / 12).round(2)
 
+
                           temp
                         }
 
@@ -103,6 +113,7 @@ module Icpr
     end
 
     def query!
+      #members.branch_id = '#{@branch.id}'
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                   SELECT DISTINCT ON(members.identification_number, member_accounts.id)
                     members.id AS member_id,
@@ -127,7 +138,7 @@ module Icpr
                   FROM
                     member_accounts
                   INNER JOIN members ON
-                    member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
+                   member_accounts.member_id = members.id AND member_accounts.account_type = 'EQUITY' AND member_accounts.account_subtype = 'Share Capital' AND members.status IN ('active', 'resigned') AND members.branch_id = '#{@branch.id}'
                   INNER JOIN member_accounts AS savings_accounts ON
                     savings_accounts.member_id = members.id AND savings_accounts.account_type = 'SAVINGS' AND savings_accounts.account_subtype = 'K-IMPOK'
                   INNER JOIN member_accounts AS cbu_accounts ON
