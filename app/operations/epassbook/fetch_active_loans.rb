@@ -70,8 +70,21 @@ module Epassbook
       last_payment_amount = last_payment.try(:amount) || 0.00
       last_payment_date   = last_payment.try(:transacted_at).try(:strftime, "%D") || ""
 
+      pending_loans = @pending_loans.map{ |o|
+        {
+          id: o.id,
+          principal: number_to_currency(o.principal, unit: ""),
+          interest: number_to_currency(o.interest, unit: ""),
+          total_dues: number_to_currency(o.total_dues, unit: ""),
+          total_balance: number_to_currency(o.total_balance, unit: ""),
+          total_paid: number_to_currency(o.total_paid, unit: ""),
+          loan_product: o.loan_product.to_s
+        }
+      }
+
       @data = {
         loans: @loans,
+        pending_loans: pending_loans,
         total_balance: number_to_currency(@total_balance, unit: ""),
         total_loan: number_to_currency(@total_loan, unit: ""),
         total_interest: number_to_currency(@total_interest, unit: ""),
