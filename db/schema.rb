@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "center_id"
     t.uuid "branch_id"
+    t.string "member_id"
     t.index ["branch_id"], name: "index_accrued_billings_on_branch_id"
     t.index ["center_id"], name: "index_accrued_billings_on_center_id"
   end

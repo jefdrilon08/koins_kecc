@@ -234,6 +234,8 @@ class PrintController < ApplicationController
       @withdrawal_request = data
 
       render "print/withdrawal_request", layout: "print"
+    elsif type == "sample"
+      
     else
       raise "Invalid type: #{type}"
     end
