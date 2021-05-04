@@ -62,8 +62,7 @@ module Accounting
                               amount: 0.00
                             }
                             loan_id= Loan.select("id, 
-                              date_approved as date_approved").where("extract(year from date_approved) = '#{@year}' 
-                              AND member_id = '#{o.fetch('member_id')}' AND status IN ('active','paid')"
+                              date_approved as date_approved").where("member_id = '#{o.fetch('member_id')}' AND status IN ('active','paid') and extract(year from date_approved) < '2020'" 
                               )
                                       temp_dates= {}
                                       temp_dates[:months]= []

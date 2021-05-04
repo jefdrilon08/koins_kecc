@@ -45,6 +45,7 @@ module Finance
       if @annual_interest_rate > 0.00
         @emi  = ((@periodic_interest * @principal) / (1 - (1 + @periodic_interest)**(@num_installments * -1))).round(0)
       else
+
         @emi  = 0
         @periodic_interest  = 0
       end
@@ -59,8 +60,9 @@ module Finance
       @total_principal  = 0.00
 
       if @emi == 0
-        periodic_payment  = @balance / @num_installments
 
+        periodic_payment  = @balance / @num_installments
+         
         @num_installments.times do |i|
           interest  = 0.00
           principal = periodic_payment
@@ -78,7 +80,9 @@ module Finance
             principal: principal,
             due: due
           }
+
         end
+
       else
         @num_installments.times do |i|
           interest  = (@balance * @periodic_interest).round(0)
@@ -107,23 +111,20 @@ module Finance
           }
         end
       end
-
+     
       if @total_principal > @principal
         diff = @total_principal - @principal
-
         @schedule.first[:principal] -= diff
         @schedule.first[:interest] += diff
-
         @total_principal -= diff
         @total_interest += diff
       elsif @total_principal < @principal
-        diff = @principal - @total_principal
-
+        diff = @principal - @total_principal.to_f.round(2)
         @schedule.first[:principal] += diff
         @schedule.first[:interest] -= diff
-
         @total_principal += diff
         @total_interest -= diff
+        
       end
 
       total_due         = @total_principal + @total_interest
@@ -169,7 +170,7 @@ module Finance
       ################################
 
       ####################################
-
+      
       return {
         schedule: @schedule,
         principal: @total_principal,
