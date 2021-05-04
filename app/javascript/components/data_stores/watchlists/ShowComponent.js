@@ -139,7 +139,13 @@ export default class ShowComponent extends React.Component {
             <td>
               {records[i].loan_product.name}
             </td>
-            <td className="text-right">
+	    <td className="text-right">
+              {numberWithCommas(records[i].principal_balance)}
+            </td>
+	    <td className="text-right">
+              {numberWithCommas(records[i].interest_balance)}
+            </td>
+	    <td className="text-right">
               {numberWithCommas(records[i].total_balance)}
             </td>
           </tr>
@@ -304,8 +310,15 @@ export default class ShowComponent extends React.Component {
                 <th>
                   Loan Product
                 </th>
-                <th className="text-right">
-                  Past Due Amount
+		<th className="text-right">
+                  Past Due Amount - Principal
+                </th>
+ 		<th className="text-right">
+                  Past Due Amount - Interest
+                </th>
+ 
+		<th className="text-right">
+                  Past Due Amount - Total
                 </th>
               </tr>
             </thead>
