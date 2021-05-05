@@ -44,10 +44,7 @@ module Claims
         content = Content.new(
                     type: "text/html",
                     value: "
-                            Magandang araw,
-                            <br />
-                            <br />
-                            May claims po na #{@status.downcase}. I-click lamang ang link sa ibaba.
+                            Claims #{@status.downcase}. I-click lamang ang link sa ibaba.
                             <br />
                             Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@member} - #{@status}</a>
                             "
