@@ -8,6 +8,7 @@ namespace :api do
     get "/loans", to: "loans#index"
 
     # members
+    post "/members/update_password", to: "members#update_password"
     get "/members/co_makers", to: "members#co_makers"
     get "/members/loan_products", to: "members#loan_products"
 
@@ -20,6 +21,21 @@ namespace :api do
 
     # trends
     get "/trends/fetch_yearly_data", to: "trends#fetch_yearly_data"
+
+    # users
+    post "/users/login", to: "users#login"
+
+    namespace :members do
+      get "/insurances", to: "insurances#index"
+      get "/insurances/:id", to: "insurances#show"
+      get "/equities", to: "equities#index"
+      get "/equities/:id", to: "equities#show"
+      get "/savings", to: "savings#index"
+      get "/savings/:id", to: "savings#show"
+      get "/loans", to: "loans#index"
+      get "/loans/:id", to: "loans#show"
+      post "/settings/change_password", to: "settings#change_password"
+    end
   end
 
   namespace :v1 do
@@ -110,6 +126,7 @@ namespace :api do
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
     post "/members/delete_signature", to: "members#delete_signature"
     post "/members/register", to: "members#register"
+    post "/members/register_member", to: "members#register_member"
     get "/members/process_members_file", to: "members#process_members_file"
     get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
@@ -319,6 +336,7 @@ namespace :api do
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
       post "/patronage_refund/approve", to: "patronage_refund#approve"
+      post "/patronage_refund/set_rate", to: "patronage_refund#set_rate"
       post "/personal_funds/queue", to: "personal_funds#queue"
       get "/personal_funds/fetch", to: "personal_funds#fetch"
       get "/personal_funds/download_excel", to: "personal_funds#download_excel"

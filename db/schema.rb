@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2021_04_05_051139) do
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "center_id"
     t.uuid "branch_id"
+    t.string "member_id"
     t.index ["branch_id"], name: "index_accrued_billings_on_branch_id"
     t.index ["center_id"], name: "index_accrued_billings_on_center_id"
   end
@@ -906,6 +907,8 @@ ActiveRecord::Schema.define(version: 2021_04_05_051139) do
     t.date "previous_date_resigned"
     t.date "insurance_date_resigned"
     t.uuid "member_id"
+    t.string "encrypted_password"
+    t.string "username"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
@@ -1100,6 +1103,7 @@ ActiveRecord::Schema.define(version: 2021_04_05_051139) do
     t.string "roles"
     t.boolean "is_regular"
     t.date "incentivized_date"
+    t.string "access_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

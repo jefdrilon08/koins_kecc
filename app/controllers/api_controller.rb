@@ -9,11 +9,17 @@ class ApiController < ApplicationController
     end
   end
 
+  def authenticate_request!
+    if access_token.blank?
+      render json: { message: "unauthenticated" }, status: 400
+    end
+  end
+
   def authenticate_api_member!
     if access_token.blank?
       render json: { message: "unauthenticated" }, status: 400
     else
-      @member = Member.where(access_token: access_token).first
+      @member = Member.find_by_access_token(access_token)
     end
   end
 

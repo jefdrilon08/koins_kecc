@@ -116,7 +116,7 @@ module Branches
 
     def compute_active_members!
       @data[:counts][:active_members][:members] = @result.select{ |o|
-                                                    o.fetch("count").to_i == 0 && ((o.fetch("amount").try(:to_f).try(:round, 2) || 0.00) == 0.00)
+                                                    o.fetch("count").to_i == 0 && ((o.fetch("amount").try(:to_f) || 0.00) == 0.00)
                                                   }.map{ |o|
                                                     {
                                                       id: o.fetch("id"),
@@ -208,7 +208,7 @@ module Branches
 
     def compute_pure_savers!
       @data[:counts][:pure_savers][:members]  = @result.select{ |o|
-                                                  o.fetch("count").to_i == 0 && o.fetch("amount").to_f.round(2) > 0
+                                                  o.fetch("count").to_i == 0 && o.fetch("amount").to_f > 0
                                                 }.map{ |o|
                                                   {
                                                     id: o.fetch("id"),

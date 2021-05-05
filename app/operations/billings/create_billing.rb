@@ -32,20 +32,20 @@ module Billings
       # Default: Checked By --> FM
       # Default: Posted By  --> BK
       # TODO: Fix this
-      branch_users  = UserBranch.where(branch_id: @branch.id)
+#      branch_users  = UserBranch.where(user_id:, @user.id, branch_id: @branch.id)
 
-      fm_user = nil
-      bk_user = nil
-
-      branch_users.each do |o|
-        if o.user.roles.include?("FM")
-          fm_user = o.user
-        end
-
-        if o.user.roles.include?("BK") || o.user.roles.include?("SBK")
-          bk_user = o.user
-        end
-      end
+#      fm_user = nil
+#      bk_user = nil
+#
+#      branch_users.each do |o|
+#        if o.user.roles.include?("FM")
+#          fm_user = o.user
+#        end
+#
+#        if o.user.roles.include?("BK") || o.user.roles.include?("SBK")
+#          bk_user = o.user
+#        end
+#      end
 
       @data = {
         or_number: "",
@@ -56,8 +56,10 @@ module Billings
         total_expected_collections: 0.00,
         total_collected: 0.00,
         prepared_by: "#{@user.try(:first_name)} #{@user.try(:last_name)}",
-        checked_by: "#{fm_user.try(:first_name)} #{fm_user.try(:last_name)}",
-        approved_by: "#{bk_user.try(:first_name)} #{bk_user.try(:last_name)}"
+#        checked_by: "#{fm_user.try(:first_name)} #{fm_user.try(:last_name)}",
+#        approved_by: "#{bk_user.try(:first_name)} #{bk_user.try(:last_name)}"
+        checked_by: "N/A",
+        approved_by: "N/A"
       }
     end
 

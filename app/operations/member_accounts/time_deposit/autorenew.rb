@@ -8,7 +8,10 @@ module MemberAccounts
         @user           = @config[:user]
 
         @member = @member_account.member
+      
+        
         @center = @member_account.center
+        
       end
 
       def execute!

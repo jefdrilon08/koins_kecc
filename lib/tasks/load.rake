@@ -609,4 +609,40 @@ namespace :load do
 
     puts "Done."
   end
+
+   task :tungko_adjustment_interest => :environment do
+    puts "Reading File #{ENV['FILENAME']} from #{ENV['ROOT']}"
+    params = {
+      root: ENV['ROOT'],
+      filename: ENV['FILENAME']
+      }
+      data= JSON.parse(File.read("#{params[:root]}/#{params[:filename]}"))
+      data.each_with_index do |(key, value), index|
+          puts "*processing index number: #{index}"
+           subsidiary_id  = key["subsidiary_id"]
+           amount         = key["amount"].round(2)
+          puts "*Inserting to subsidiary_id: '#{subsidiary_id}' and amount: #{amount}"
+          account_transaction = AccountTransaction.create!(subsidiary_id: subsidiary_id, 
+          subsidiary_type: "MemberAccount", 
+          amount: amount, 
+          transaction_type: "deposit" , 
+          transacted_at: "2019-12-31", 
+          status: "approved" , 
+          data: {is_withdraw_payment: false, 
+                 is_fund_transfer: false, 
+                 is_interest: true, 
+                 is_adjusment: false, 
+                 is_for_exit_age: false, 
+                 accounting_entry_reference_number: nil, 
+                 beginning_balance: 0.00, 
+                 ending_balance: amount})
+        account_transaction.save!
+        puts "*Done Creating Account Transaction."
+        puts "*rehashing subsidiary account #{subsidiary_id}."
+        ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(subsidiary_id)).execute!
+        puts "*Done Rehash."
+        puts "-----------------------------------------------------"
+        end
+    puts "DONE."
+  end
 end

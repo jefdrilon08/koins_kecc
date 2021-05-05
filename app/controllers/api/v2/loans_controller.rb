@@ -85,7 +85,7 @@ module Api
         validator.execute!
 
         if validator.errors[:full_messages].any?
-          render json: validator.errors, status: 401
+          render json: validator.errors, status: 403
         else
           loan = ::Loans::RemoteApply.new(config: config).execute!
 

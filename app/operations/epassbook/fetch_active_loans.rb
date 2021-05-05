@@ -3,8 +3,9 @@ module Epassbook
     include ActionView::Helpers::NumberHelper
 
     def initialize(member:)
-      @member       = member
-      @active_loans = @member.loans.where(status: "active")
+      @member         = member
+      @active_loans   = @member.loans.where(status: "active")
+      @pending_loans  = @member.loans.where(status: "pending")
 
       @loans          = []
       @total_balance  = 0.00
@@ -61,8 +62,29 @@ module Epassbook
         @next_payment_date = next_payment.due_date.strftime("%D")
       end
 
+      last_payment  = AccountTransaction.approved_loan_payments.where(
+                        subsidiary_id: @active_loans.pluck(:id),
+                        subsidiary_type: "Loan"
+                      ).order("transacted_at ASC").last
+
+      last_payment_amount = last_payment.try(:amount) || 0.00
+      last_payment_date   = last_payment.try(:transacted_at).try(:strftime, "%D") || ""
+
+      pending_loans = @pending_loans.map{ |o|
+        {
+          id: o.id,
+          principal: number_to_currency(o.principal, unit: ""),
+          interest: number_to_currency(o.interest, unit: ""),
+          total_dues: number_to_currency(o.total_dues, unit: ""),
+          total_balance: number_to_currency(o.total_balance, unit: ""),
+          total_paid: number_to_currency(o.total_paid, unit: ""),
+          loan_product: o.loan_product.to_s
+        }
+      }
+
       @data = {
         loans: @loans,
+        pending_loans: pending_loans,
         total_balance: number_to_currency(@total_balance, unit: ""),
         total_loan: number_to_currency(@total_loan, unit: ""),
         total_interest: number_to_currency(@total_interest, unit: ""),
@@ -72,7 +94,10 @@ module Epassbook
         next_payment_total_amount: number_to_currency(@next_payment_total_amount, unit: ""),
         beggining_balance: @total_amount,
         total_past_due: number_to_currency(@total_past_due,unit: ""),
-        next_payment_date: @next_payment_date
+        next_payment_date: @next_payment_date,
+        last_payment_amount: last_payment_amount,
+        last_payment_date: last_payment_date,
+        count_pending_loans: @pending_loans.count
       }
 
       @data

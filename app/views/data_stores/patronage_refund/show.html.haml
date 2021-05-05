@@ -1,3 +1,4 @@
+- @data = @record.data.with_indifferent_access
 = title @record.id
 .row
   .col
@@ -6,82 +7,11 @@
         - if @record.error?
           = render partial: "data_stores/error_page"
         - else
-          %table.display.table.table-bordered.table-hover.table-sm
-            %thead
-              %tr
-                %th
-                  no.
-                %th
-                  Member Name
-                %th
-                  Member_id
-                %th
-                  Center
-                %th
-                  Jan.
-                %th
-                  Feb.
-                %th
-                  March
-                %th
-                  Apr.
-                %th
-                  May
-                %th
-                  June
-                %th
-                  July
-                %th
-                  Aug.
-                %th
-                  Sept.
-                %th
-                  Oct.
-                %th
-                  Nov.
-                %th
-                  Dec.
-                %th
-                  Interest Paid
-                %th
-                  Total Average
-                %th
-                  Savings Distribute
-                %th
-                  CBU Distribute
-            %tbody
-              - @record.data.with_indifferent_access[:details].each_with_index do |record, i|
-                - record[:final_count].each_with_index do |final_count, i|
-                  %tr
-                    %td
-                      #{ i + 1}
-                    %td
-                      #{final_count[:member_name]}
-                    %td #{Member.find(final_count[:member_id]).identification_number}
-                    %td #{Member.joins(:center).find(final_count[:member_id]).center.name}
-
-                    - final_count[:details].each do |a|
-                      %td
-                        #{a[:sample]}
-                    %td
-                      #{final_count[:total_member_interest]}
-                    %td
-                      #{final_count[:member_interest_average]}
-                    %td
-                      #{final_count[:member_savings_total]}
-                    %td
-                      #{final_count[:member_cbu_total]}
-              %tr
-                %th{:colspan => "14"}
-                  %h5
-                    Total
-                %td
-                  #{@record.data.with_indifferent_access[:details].sum{ |x| x[:total_interest]}}
-                %td
-                  #{@record.data.with_indifferent_access[:details].sum{ |x| x[:grand_total]}}
-                %td
-                  #{@record.data.with_indifferent_access[:details].sum{ |x| x[:grand_total_savings]}}
-                %td
-                  #{@record.data.with_indifferent_access[:details].sum{ |x| x[:grand_total_cbu]}}
-
+          #react-root
+          - if @record.data["accounting_entry"].present?
+            = render partial: "accounting_entry_display", locals: { accounting_entry: @data["accounting_entry"].with_indifferent_access }
+          - else
+            %p
+              No Accounting Entry
+= render partial: "/data_stores/patronage_refund/modals/set_rate"
 = render partial: "/data_stores/patronage_refund/modals/approve"

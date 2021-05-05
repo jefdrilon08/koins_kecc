@@ -1,0 +1,26 @@
+.table-responsive
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th
+          ID Number
+        %th
+          Name
+        %th.text-center 
+          MyKOINS Registered
+    %tbody
+      - @members.each do |m|
+        %tr
+          %td
+            = link_to member_path(m) do
+              #{m.identification_number}
+          %td
+            = link_to member_path(m) do
+              #{m.full_name}
+          %td.text-center
+            - if m.access_token.present?
+              .badge.badge-success
+                Yes
+            - else
+              .badge.badge-danger
+                No

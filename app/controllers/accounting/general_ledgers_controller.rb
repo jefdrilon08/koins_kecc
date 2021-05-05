@@ -98,6 +98,13 @@ module Accounting
 
         @subheader_side_actions = [
           {
+            id: "btn-printpdf",
+            link: "/print?type=general_ledger&id=#{@general_ledger.id}",
+            class: "fa fa-print",
+            text: "PDF"
+          },
+ 
+          {
             id: "btn-print",
             link: "/accounting/general_ledgers/#{@general_ledger.id}/print",
             class: "fa fa-print",

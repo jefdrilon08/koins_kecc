@@ -1,10 +1,10 @@
 class Branch < ApplicationRecord
-
   validates :name, presence: true
   validates :short_name, presence: true
 
   belongs_to :cluster
   has_many :centers
+  has_many :members
   has_many :user_branches
 
   def to_s

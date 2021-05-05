@@ -35,6 +35,7 @@ import TrialBalanceComponent from "../components/accounting/TrialBalanceComponen
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
 import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
 import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
+import DataStoresPatronageRefundShowComponent from "../components/data_stores/patronage_refund/ShowComponent";
 import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
 import SurveyQuestionUIComponent from "../components/administration/surveys/survey_questions/SurveyQuestionUIComponent.js";
 import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
@@ -105,6 +106,7 @@ import AdministrationLoanProductsIndex from "../models/AdministrationLoanProduct
 import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
 import AdministrationClustersIndex from "../models/AdministrationClustersIndex.js";
 import AdministrationBranchesIndex from "../models/AdministrationBranchesIndex.js";
+import AdministrationBranchesShow from "../models/AdministrationBranchesShow.js";
 import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
 import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js";
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
@@ -220,7 +222,7 @@ const hooks = {
   "data_stores/icpr/index":                           [DataStoresIcprIndex],
   "data_stores/icpr/show":                            [DataStoresIcprShow, DataStoresIcprShowComponent],
   "data_stores/patronage_refund/index":               [PatronageRefundIndex],
-  "data_stores/patronage_refund/show":                [PatronageRefundShow],
+  "data_stores/patronage_refund/show":                [PatronageRefundShow,DataStoresPatronageRefundShowComponent],
   "accounting/balance_sheets/index":                  [BalanceSheetsIndex],
   "accounting/income_statements/index":               [IncomeStatementsIndex],
   "adjustments/subsidiary_adjustments/index":         [SubsidiaryAdjustmentsIndex],
@@ -249,6 +251,7 @@ const hooks = {
   "administration/areas/index":                       [AdministrationAreasIndex],
   "administration/clusters/index":                    [AdministrationClustersIndex],
   "administration/branches/index":                    [AdministrationBranchesIndex],
+  "administration/branches/show":                     [AdministrationBranchesShow],
   "administration/centers/show":                      [AdministrationCentersShow],
   "administration/surveys/index":                     [AdministrationSurveysIndex],
   "administration/surveys/show":                      [AdministrationSurveysShow],

@@ -1,5 +1,3 @@
-%h5.text-muted
-  Centers
 .table-responsive
   %table.table-bordered.table.table-sm
     %thead
@@ -15,7 +13,7 @@
           %center
             \# Members
     %tbody
-      - @branch.centers.includes([:user]).order("name ASC").each do |center|
+      - @centers.each do |center|
         %tr
           %td
             = link_to administration_center_path(center.id), target: '_blank' do

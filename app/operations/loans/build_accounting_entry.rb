@@ -372,7 +372,56 @@ module Loans
 
           else
             if @member.member_type == "GK"
-              if  s_deduction.use_for_special_loan_fund == "true"
+              #for special loan product  for GPF
+              if  s_deduction.use_for_special_loan_fund == "true" and s_deduction.special_loan_product == "true"
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+                temp_amount -= amount
+                clip_amount  = amount
+                service_fee  =  temp_amount - temp_amount.to_i
+
+                accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
+                amount_serv             = service_fee.to_f.round(2)
+                name_serv               = accounting_code_serv.name
+                code_serv               = accounting_code_serv.code
+                
+                journal_entries << {
+                  accounting_code_id: accounting_code_serv.id,
+                  code: code_serv,
+                  name: name_serv,
+                  amount: amount_serv
+                }
+                
+                temp_amount = temp_amount.to_i
+              #end of special product
+
+              elsif s_deduction.use_for_special_loan_fund == "true" 
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
@@ -405,7 +454,8 @@ module Loans
                 temp_amount -= amount
               end
             else
-              if  s_deduction.skip_for_special_loan_fund == "true"
+              #for special loan product
+              if  s_deduction.skip_for_special_loan_fund == "true" and s_deduction.special_loan_product == "true"
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
@@ -436,6 +486,56 @@ module Loans
                 }
 
                 temp_amount -= amount
+                clip_amount  = amount
+                service_fee  =  temp_amount - temp_amount.to_i
+
+                accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
+                amount_serv             = service_fee.to_f.round(2)
+                name_serv               = accounting_code_serv.name
+                code_serv               = accounting_code_serv.code
+                
+                journal_entries << {
+                  accounting_code_id: accounting_code_serv.id,
+                  code: code_serv,
+                  name: name_serv,
+                  amount: amount_serv
+                }
+                
+                temp_amount = temp_amount.to_i
+                @temp_amount= temp_amount
+                #end of special loan product
+
+              elsif  s_deduction.skip_for_special_loan_fund == "true" 
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+                temp_amount -= amount
+
               end
             end
           end
@@ -443,75 +543,101 @@ module Loans
           
     
 
-          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards" 
            
-           if @member.member_type != "GK"
+            if @member.member_type != "GK"
             
-            if @loan_data[:advance_insurance_available] == false
-              offset          = s_deduction.meta.offset
+              if @loan_data[:advance_insurance_available] == false
+                offset          = s_deduction.meta.offset
+                accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+                name            = accounting_code.name
+                code            = accounting_code.code
+                amount          = 0.00
+                val             = s_deduction.meta.value
+
+                multiplier  = @num_installments
+
+                loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
+
+                if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
+                  #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
+                      if @term == "weekly"
+                      elsif @term == "monthly"
+                        multiplier  = (multiplier * 4.3333333).to_i
+                      elsif @term == "semi-monthly"
+                        # weird unique rule for 12 semi-monthly
+                        if @num_installments ==  12
+                          multiplier  = 12.5 * 2
+                        elsif @num_installments == 6
+                          multiplier  = 15
+                        else
+                          multiplier  = multiplier * 2
+                        end #end semimonthly
+                      else
+                        raise "Invalid term #{@term}"
+                      end #end of term
+                      amount  = val * (multiplier + offset)
+
+                elsif loan_cycle == nil and @member.member_type == "Kaagapay"
+                      if @term == "weekly"
+                      elsif @term == "monthly"
+                        multiplier  = (multiplier * 4.3333333).to_i
+                      elsif @term == "semi-monthly"
+                        # weird unique rule for 12 semi-monthly
+                        if @num_installments ==  12
+                          multiplier  = 12.5 * 2
+                        elsif @num_installments == 6
+                          multiplier  = 15
+                        else
+                          multiplier  = multiplier * 2
+                        end #end semimonthly
+                      else
+                        raise "Invalid term #{@term}"
+                      end #end of term
+                      amount  = val * (multiplier + offset)
+                      
+                else
+                  amount  = val
+                end #loan cycle presents
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+
+                temp_amount -= amount
+              
+              end #end of advance insurance
+            end #end of gk
+          elsif s_deduction.special_loan == "true"  
+           #for special Loan bene w4
+            if @member.member_type != "GK"  
+              lf_amount = @temp_amount * 0.75
+              rf_amount = @temp_amount * 0.25
               accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
               name            = accounting_code.name
               code            = accounting_code.code
-              amount          = 0.00
-              val             = s_deduction.meta.value
 
-              multiplier  = @num_installments
-
-              loan_cycle  = @loan_cycles.select{ |c| c[:cycle] >= 1 and c[:loan_product_id] == @loan_product.id }.first
-
-              if (@loan_product.is_entry_point and @entry_point_loan_cycle_count >= 1) || loan_cycle.present?
-              #if @member.loans.paid.where(loan_product_id: @loan_product.id).count >= 1
-                    if @term == "weekly"
-                    elsif @term == "monthly"
-                      multiplier  = (multiplier * 4.3333333).to_i
-                    elsif @term == "semi-monthly"
-                      # weird unique rule for 12 semi-monthly
-                      if @num_installments ==  12
-                        multiplier  = 12.5 * 2
-                      elsif @num_installments == 6
-                        multiplier  = 15
-                      else
-                        multiplier  = multiplier * 2
-                      end #end semimonthly
-                    else
-                      raise "Invalid term #{@term}"
-                    end #end of term
-                    amount  = val * (multiplier + offset)
-
-              elsif loan_cycle == nil and @member.member_type == "Kaagapay"
-                    if @term == "weekly"
-                    elsif @term == "monthly"
-                      multiplier  = (multiplier * 4.3333333).to_i
-                    elsif @term == "semi-monthly"
-                      # weird unique rule for 12 semi-monthly
-                      if @num_installments ==  12
-                        multiplier  = 12.5 * 2
-                      elsif @num_installments == 6
-                        multiplier  = 15
-                      else
-                        multiplier  = multiplier * 2
-                      end #end semimonthly
-                    else
-                      raise "Invalid term #{@term}"
-                    end #end of term
-                    amount  = val * (multiplier + offset)
-                    
-              else
-                amount  = val
-              end #loan cycle presents
+              if s_deduction.meta[:account_subtype] == "Life Insurance Fund"
               journal_entries << {
-                accounting_code_id: accounting_code.id,
-                code: code,
-                name: name,
-                amount: amount
-              }
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: lf_amount
+                }
 
-              temp_amount -= amount
-            
-              end #end of advance insurance
+              elsif s_deduction.meta[:account_subtype] == "Retirement Fund"
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: rf_amount
+                }
+              end
+             temp_amount = 0.00
 
-            end #end of gk
-          
+            end
           else
             raise "Invalid deduction type algo #{s_deduction.meta.algo}"
           end
@@ -539,7 +665,7 @@ module Loans
       if @settings.amount_released_accounting_code_id.present?
         accounting_code = AccountingCode.find(@settings.amount_released_accounting_code_id)
       end
-
+      
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,

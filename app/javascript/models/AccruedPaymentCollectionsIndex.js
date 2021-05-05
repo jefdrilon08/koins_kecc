@@ -1,68 +1,258 @@
 import Mustache from "mustache/mustache";
-
+import 'select2';
+import 'select2-theme-bootstrap4/dist/select2-bootstrap.css';
 var $btnNewTransaction;
 var $btnConfirmNewTransaction;
 var $modalNewTransaction;
 
+var $modalDelete;
+var $modalProcess;
+var $modalBatchProcess;
 var $selectBranch;
 var $selectCenter;
-var $inputCollectionDate;
-
+var $selectMember;
+var $selectProcessCenter;
+var $selectLoans;
+var $inputDateInitialized;
+var $inputNumberOfDays;
+var $inputReason;
+var $btnDelete;
+var $btnProcess;
+var $btnBatchProcess;
+var $btnConfirmDelete;
+var $btnConfirmProcess;
+var $btnConfirmBatchProcess;
 var $message;
-
 var templateErrorList;
-
-var branches  = [];
-
-var urlBranches                        = "/api/v1/branches";
-var urlCreateAccruedPaymentCollection  = "/api/v1/accrued_payment_collections";
-
 var _authenticityToken;
 
+var _centers  = [];
+var _members  = [];
+var _loans    = [];
+var _loanIds  = [];
+
+var _branchId;
+var _centerId;
+var _memberId;
+var _moratoriumId;
+
+var _urlCreate        = "/api/v1/accrued_payment_collections";
+var _urlDelete        = "/api/v1/adjustments/moratoriums/delete";
+var _urlProcess       = "/api/v1/adjustments/moratoriums/process";
+var _urlBatchProcess  = "/api/v1/adjustments/moratoriums/batch_process";
+var _urlCenters       = "/api/v1/branches/fetch_centers";
+var _urlLoans         = "/api/v1/loans/fetch_by_member";
+
+var init  = function(options) {
+  _authenticityToken = options.authenticityToken;
+
+  _cacheDom();
+  _bindEvents();
+};
+
 var _cacheDom = function() {
-  $btnNewTransaction        = $("#btn-new-transaction");
+  $modalNewTransaction    = $("#modal-new-transaction");
+  $modalDelete            = $("#modal-delete");
+  $modalProcess           = $("#modal-process");
+  $modalBatchProcess      = $("#modal-batch-process");
+  $selectBranch           = $("#select-branch");
+  $selectCenter           = $("#select-center");
+  $selectMember           = $("#select-member");
+  $selectProcessCenter    = $("#select-process-center");
+  $selectLoans            = $("#select-loans");
+  $inputDateInitialized   = $("#input-date-initialized");
+  $inputNumberOfDays      = $("#input-number-of-days");
+  $inputReason            = $("#input-reason");
+  $btnNewTransaction      = $("#btn-new-transaction");
+  $btnDelete              = $(".btn-delete");
+  $btnProcess             = $(".btn-process");
+  $btnBatchProcess        = $("#btn-batch-process");
   $btnConfirmNewTransaction = $("#btn-confirm-new-transaction");
-  $modalNewTransaction      = $("#modal-new-transaction");
-
-  $selectBranch         = $("#select-branch");
-  $selectCenter         = $("#select-center");
-  $inputCollectionDate  = $("#input-collection-date");
-
-  $message  = $(".message");
+  $btnConfirmDelete       = $("#btn-confirm-delete");
+  $btnConfirmProcess      = $("#btn-confirm-process");
+  $btnConfirmBatchProcess = $("#btn-confirm-batch-process");
+  $message                = $(".message");
 
   templateErrorList = $("#template-error-list").html();
+
+  $selectLoans.select2({
+    allowClear: true,
+    width: "auto",
+    theme: "bootstrap"
+  });
+};
+
+var _loadCenterOptions  = function() {
+  $selectCenter.html("");
+  $selectMember.html("");
+
+  if(_centers.length > 0) {
+    _centerId = _centers[0].id;
+
+    for(var i = 0; i < _centers.length; i++) {
+      $selectCenter.append(new Option(_centers[i].name, _centers[i].id));
+    }
+  }
+
+  if(_members.length > 0) {
+    _memberId = _members[0].id;
+
+    for(var i = 0; i < _members.length; i++) {
+      $selectMember.append(new Option(_members[i].full_name, _members[i].id));
+    }
+
+    $selectMember.val(_memberId);
+
+    _fetchLoans();
+  }
+};
+
+var _fetchLoans = function() {
+  $.ajax({
+    method: 'GET',
+    url: _urlLoans,
+    data: {
+      member_id: _memberId
+    },
+    success: function(response) {
+      _loans  = response.loans;
+      console.log("Loans:");
+      console.log(_loans);
+
+      $selectLoans.val(null).trigger('change');
+      $selectLoans.empty();
+
+      _loans.forEach(function(o, i) {
+        $selectLoans.append(
+          new Option(
+            o.loan_product.name,
+            o.id,
+            false,
+            false
+          )
+        ).trigger('change');
+      });
+    },
+    error: function(response) {
+      console.log("Error in fetching loans.");
+      console.log(response);
+    }
+  });
 };
 
 var _bindEvents = function() {
+  $selectMember.on("change", function() {
+    _memberId = $(this).val();
+
+    _fetchLoans();
+  });
+
+  
+    var centerId = $selectProcessCenter.val();
+  
+  
+  $btnDelete.on("click", function() {
+    _moratoriumId = $(this).data("id");
+    $modalDelete.modal("show");
+  });
+
+  $btnConfirmDelete.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmDelete.prop("disabled", true);
+
+    $.ajax({
+      url: _urlDelete,
+      method: "POST",
+      data: {
+        id: _moratoriumId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in deleting record!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
+  $selectCenter.on("change", function() {
+    _centerId = $selectCenter.val();
+
+    _members  = _centers.find(c => c.id === _centerId).members;
+
+    $selectMember.html("");
+    for(var i = 0; i < _members.length; i++) {
+      $selectMember.append(new Option(_members[i].full_name, _members[i].id));
+    }
+
+    if(_members.length > 0) {
+      _memberId = _members[i].id;
+
+      _fetchLoans();
+    }
+  });
+
+  $selectBranch.on("change", function() {
+    $.ajax({
+      method: 'GET',
+      url: _urlCenters,
+      data: {
+        id: $selectBranch.val(),
+        with_members: true
+      },
+      success: function(response) {
+        _centers  = response.centers;
+
+        if(_centers.length > 0) {
+          _members  = _centers[0].members;
+        }
+
+        _loadCenterOptions();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching centers");
+      }
+    });
+  });
+
   $btnNewTransaction.on("click", function() {
     $modalNewTransaction.modal("show");
   });
 
   $btnConfirmNewTransaction.on("click", function() {
-    var collectionDate  = $inputCollectionDate.val();
-    var branchId        = $selectBranch.val();
-    var centerId        = $selectCenter.val();
+    _branchId           = $selectBranch.val();
+    _centerId           = $selectCenter.val();
+    _memberId           = $selectMember.val();
+    _loanIds            = $selectLoans.val();
+
 
     $btnConfirmNewTransaction.prop("disabled", true);
     $selectBranch.prop("disabled", true);
     $selectCenter.prop("disabled", true);
-    $inputCollectionDate.prop("disabled", true);
+    $selectMember.prop("disabled", true);
+   
+    $message.html("Loading...");
 
     $.ajax({
-      url: urlCreateAccruedPaymentCollection,
-      method: 'POST',
+      url: _urlCreate,
+      method: "POST",
       data: {
-        authenticity_token: _authenticityToken,
-        collection_date: collectionDate,
-        branch_id: branchId,
-        center_id: centerId
+        branch_id: _branchId,
+        center_id: _centerId,
+        member_id: _memberId,
+        authenticity_token: _authenticityToken
       },
-      success: function(response) {
+      success: function(resonse) {
         $message.html(
           "Success! Redirecting..."
         );
 
-        window.location.href="/accrued_payment_collections/" + response.id;
+        window.location.reload();
       },
       error: function(response) {
         var errors  = [];
@@ -70,7 +260,7 @@ var _bindEvents = function() {
         try {
           errors  = JSON.parse(response.responseText).full_messages;
         } catch(err) {
-          errors  = ["Something went wrong"]
+          errors = ["Something went wrong"];
         } finally {
           $message.html(
             Mustache.render(
@@ -82,46 +272,15 @@ var _bindEvents = function() {
           $btnConfirmNewTransaction.prop("disabled", false);
           $selectBranch.prop("disabled", false);
           $selectCenter.prop("disabled", false);
-          $inputCollectionDate.prop("disabled", false);
+          $selectMember.prop("disabled", false);
+          $selectLoans.prop("disabled", false);
+          $inputDateInitialized.prop("disabled", false);
+          $inputReason.prop("disabled", false);
+          $inputNumberOfDays.prop("disabled", false);
         }
       }
     });
   });
-
-  $selectBranch.on("change", function() {
-    var branchId  = $(this).val();
-
-    $selectCenter.html("");
-    
-    for(var i = 0; i < branches.length; i++) {
-      if(branches[i].id == branchId) {
-        for(var j = 0; j < branches[i].centers.length; j++) {
-          $selectCenter.append(
-            "<option value='" + branches[i].centers[j].id + "'>" + branches[i].centers[j].name + "</option>"
-          );
-        }
-      }
-    }
-  });
 };
 
-var init  = function(config) {
-  _authenticityToken  = config.authenticityToken;
-
-  $.ajax({
-    url: urlBranches,
-    method: 'GET',
-    success: function(response) {
-      branches  = response.branches;
-    },
-    error: function(response) {
-      console.log(response);
-      alert("Error in fetching branches");
-    }
-  });
-
-  _cacheDom();
-  _bindEvents();
-};
-
-export default { init: init }
+export default { init: init };
