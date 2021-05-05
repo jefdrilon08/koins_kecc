@@ -93,6 +93,7 @@ class ClaimsController < ApplicationController
 
   def new
     @claim = Claim.find(params[:id])
+    @control = "new"
 
     @payload = {
       id: @claim.id
@@ -121,6 +122,7 @@ class ClaimsController < ApplicationController
 
   def edit
     @claim = Claim.find(params[:id])
+    @control = "edit"
 
     @payload = {
       id: @claim.id

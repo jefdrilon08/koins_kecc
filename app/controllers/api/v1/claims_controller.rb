@@ -199,11 +199,12 @@ module Api
         claim         = Claim.find(params[:id])
         date_prepared = params[:date_prepared]
         prepared_by   = params[:prepared_by]
+        control       = params[:control]
         data          = params[:data]
     
         errors = []
         if claim.claim_type == "BLIP"
-          errors = ::Claims::ValidateBlip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!
+          errors = ::Claims::ValidateBlip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by, control: control).execute!
         elsif claim.claim_type == "CLIP"
           errors = ::Claims::ValidateClip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!
         elsif claim.claim_type == "HIIP"

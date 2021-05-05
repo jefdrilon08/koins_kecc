@@ -2,7 +2,7 @@ module Claims
   class ValidateBlip
 
     # def initialize(data:, gender:, date_prepared:, policy_number:, type_of_insurance_policy:, name_of_insured:, beneficiary:, classification_of_insured:, date_of_birth:, date_of_policy_issue:, face_amount:, date_of_death_tpd_accident:, arrears:, cause_of_death_tpd_accident:, equity_value:, retirement_fund:, prepared_by:, length_of_stay:, returned_contribution:, total_amount_payable:, order_of_child:, category_of_cause_of_death_tpd_accident:, date_reported:, date_paid:, age: )
-      def initialize(data:, date_prepared:, prepared_by:, claim:)
+      def initialize(data:, date_prepared:, prepared_by:, claim:, control:)
         @claim                                    = claim
         @data                                     = data
         @date_prepared                            = date_prepared
@@ -32,6 +32,7 @@ module Claims
         @claims_payment                           = @data[:claims_payment]
         @account_name                             = @data[:account_name]
         @account_number                           = @data[:account_number]
+        @control                                  = control
       
         @errors = []
     end
@@ -150,22 +151,26 @@ module Claims
     private
 
     def validate_blip_duplication!
-       count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
-        data->>'date_reported' = ? AND data->>'date_paid' = ? AND data->>'date_of_policy_issue' = ? AND 
-        data->>'type_of_insurance_policy' = ? AND data->>'classification_of_insured' = ? AND 
-        data->>'date_of_death_tpd_accident' = ? AND data->>'length_of_stay' = ? AND data->>'equity_value' = ? AND 
-        data->>'retirement_fund' = ? AND data->>'policy_number' = ? AND data->>'face_amount' = ? AND data->>'name_of_insured' = ? AND 
-        data->>'date_of_birth' = ? AND data->>'age' = ? AND data->>'gender' = ? AND data->>'beneficiary' = ? AND 
-        data->>'returned_contribution' = ? AND data->>'amount' = ? AND data->>'arrears' = ? AND 
-        data->>'category_of_cause_of_death_tpd_accident' = ? AND data->>'cause_of_death_tpd_accident' = ? AND 
-        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ?", 
-        @claim.member_id, "BLIP", @date_prepared, @date_reported, @date_paid, @date_of_policy_issue, 
-        @type_of_insurance_policy, @classification_of_insured, @date_of_death_tpd_accident, @length_of_stay, @equity_value, 
-        @retirement_fund, @policy_number, @face_amount, @name_of_insured, @date_of_birth, @age, @gender, @beneficiary, 
-        @returned_contribution, @amount, @arrears, @category_of_cause_of_death_tpd_accident, @cause_of_death_tpd_accident, @claims_payment, @account_name, @account_number).count
-        if count > 0
-          @errors << "Duplicate BLIP!"
-        end
+      if @control == "new"
+        @count = Claim.where("data->>'date_of_policy_issue' = ?
+                          AND data->>'type_of_insurance_policy' = ?
+                          AND data->>'classification_of_insured' = ?
+                          AND data->>'date_of_death_tpd_accident' = ?
+                          AND data->>'policy_number' = ?
+                          AND data->>'date_of_birth' = ?
+                          AND data->>'gender' = ?",  
+                          @date_of_policy_issue, 
+                          @type_of_insurance_policy,
+                          @classification_of_insured, 
+                          @date_of_death_tpd_accident, 
+                          @policy_number, 
+                          @date_of_birth, 
+                          @gender).count
+      end
+      
+      if @count > 0
+        @errors << "Duplicate BLIP!"
+      end
     end
   end
 end

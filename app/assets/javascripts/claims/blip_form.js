@@ -47,15 +47,19 @@ var blipForm = (function() {
     $claimsPayment              = $("#claims-payment");
     $accountName                = $("#account-name");
     $accountNumber              = $("#account-number");
+    $control                    = $("#control");
 
   }
 
   var _bindEvents = function() {
      $submitButton.on('click', function(){
+        $submitButton.addClass('loading');
+
         var data = {
           id: id,
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
+          control: $control.val(),
           data: {
             amount: $totalAmountPayable.val(),
             date_reported: $dateReported.val(),
@@ -94,6 +98,7 @@ var blipForm = (function() {
           data: data,
           success: function(responseContent) {
             $message.html("Success! Redirecting...");
+            $submitButton.removeClass('loading');
             window.location.href = "/claims/" + id;
           },
           error: function(responseContent) {
@@ -101,6 +106,8 @@ var blipForm = (function() {
             var  errors  = JSON.parse(responseContent.responseText).errors;
             console.log(errors);
             console.log(data);
+            $message.html("Error! " + errors);
+            $submitButton.removeClass('loading');
             $message.html(
                 Mustache.render(
                   $errorsTemplate,
