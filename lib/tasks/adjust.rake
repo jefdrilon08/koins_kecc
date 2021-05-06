@@ -1171,7 +1171,8 @@ namespace :adjust do
     puts "Done!"
   end
 
-  task :update_member_branch_id => :environment do
+  task :update_member_branch_and_center => :environment do
+    #header: identification_number, branch_id, center_name
     file_location = ENV['MEMBERS_CSV']
     puts file_location
 
@@ -1182,6 +1183,28 @@ namespace :adjust do
       member = Member.where(identification_number: identification_number).first
 
       if !member.nil?
+        if row['center_name'].present?
+          puts "Updating center: #{member.full_name}"
+
+          center_name = row['center_name'].try(:upcase)
+          center = Center.where("upper(name) = ? AND branch_id = ?", center_name, branch_id).first
+            
+          if center.nil?
+            new_center = Center.new
+
+            new_center.name = center_name.try(:upcase)
+            new_center.short_name = center_name.try(:upcase)
+            new_center.meeting_day = 1
+            new_center.user = User.where(first_name: "Aljon").first
+            new_center.branch = Branch.find(branch_id)
+            new_center.save!
+
+            member.update!(center: new_center)
+          else
+            member.update!(center: center)
+          end
+        end
+
         puts "Updating branch: #{member.full_name}"   
         member.update!(branch_id: branch_id)
       end
