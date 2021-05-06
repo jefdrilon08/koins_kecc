@@ -40,7 +40,7 @@
   .col
     .form-group
       %label.col.control-label
-        Date of Death
+        Date of Death/TPD/Accident
         = text_field_tag :date_of_death_tpd_accident, @claim.data["date_of_death_tpd_accident"], class: 'form-control', id: 'date-of-death-tpd-accident', type: 'date' 
   .col
     .form-group
@@ -147,6 +147,11 @@
       %label.col.control-label
         Account Number
         = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
+.row
+  .col
+    .form-group
+      %label
+        = hidden_field_tag :control, @control, class: 'form-control', id: 'control'
 .row
   .col
     .form-actions

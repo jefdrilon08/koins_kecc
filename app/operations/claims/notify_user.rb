@@ -40,10 +40,11 @@ module Claims
       ActiveRecord::Base.transaction do
         from    = Email.new(email: "kmbakoins2020@gmail.com")
         to      = Email.new(email: @email_address)
-        subject = "KMBA / CLAIMS / #{@claim_type} / #{@status.try(:upcase)} / #{@member} / #{@claim.branch.name.try(:upcase)}"
+        subject = "KMBA / Claims / #{@claim_type} / #{@status} / #{@member.try(:titleize)} / #{@claim.branch.name.try(:titleize)}"
         content = Content.new(
                     type: "text/html",
-                    value: "Claims #{@status.downcase}. Click the link below.
+                    value: "
+                            Claims #{@status.downcase}. I-click lamang ang link sa ibaba.
                             <br />
                             Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@member} - #{@status}</a>
                             "

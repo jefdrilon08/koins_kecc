@@ -7,11 +7,8 @@ module Accounting
                     "meta->>'branch_id' IN (?)",
                     @branches.pluck(:id)
                   )
-
-      @records  = @records.order(
-                    "created_at DESC"
-                  ).page(params[:page]).per(20)
-
+      @records  = @records.order("created_at DESC").page(params[:page]).per(20)
+      
       # @records  = @records.order(
       #               "CAST(meta->>'closing_date' AS date) DESC"
       #             ).page(params[:page]).per(20)

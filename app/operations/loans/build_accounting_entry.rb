@@ -502,6 +502,7 @@ module Loans
                 }
                 
                 temp_amount = temp_amount.to_i
+                @temp_amount= temp_amount
                 #end of special loan product
 
               elsif  s_deduction.skip_for_special_loan_fund == "true" 
@@ -542,7 +543,7 @@ module Loans
           
     
 
-          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards" 
            
             if @member.member_type != "GK"
             
@@ -609,7 +610,34 @@ module Loans
               
               end #end of advance insurance
             end #end of gk
-          
+          elsif s_deduction.special_loan == "true"  
+           #for special Loan bene w4
+            if @member.member_type != "GK"  
+              lf_amount = @temp_amount * 0.75
+              rf_amount = @temp_amount * 0.25
+              accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+              name            = accounting_code.name
+              code            = accounting_code.code
+
+              if s_deduction.meta[:account_subtype] == "Life Insurance Fund"
+              journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: lf_amount
+                }
+
+              elsif s_deduction.meta[:account_subtype] == "Retirement Fund"
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: rf_amount
+                }
+              end
+             temp_amount = 0.00
+
+            end
           else
             raise "Invalid deduction type algo #{s_deduction.meta.algo}"
           end
@@ -637,7 +665,7 @@ module Loans
       if @settings.amount_released_accounting_code_id.present?
         accounting_code = AccountingCode.find(@settings.amount_released_accounting_code_id)
       end
-
+      
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,

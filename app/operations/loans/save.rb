@@ -72,44 +72,101 @@ module Loans
           end
         end
       end
+      
+      if @settings.zero_interest != "true" # for loans has interest/Normal loans
+        params  = {
+          principal: @loan.principal,
+          annual_interest_rate: (@loan.monthly_interest_rate * 12),
+          num_installments: @loan_data[:num_installments],
+          term: @loan_data[:term]
+        }
 
-      params  = {
-        principal: @loan.principal,
-        annual_interest_rate: (@loan.monthly_interest_rate * 12),
-        num_installments: @loan_data[:num_installments],
-        term: @loan_data[:term]
-      }
 
-      result  = ::Finance::Amortize.new(
-                  params: params
-                ).execute!
+        result  = ::Finance::Amortize.new(
+                    params: params
+                  ).execute!
+        
+        @loan.principal_balance = @loan.principal
+        @loan.interest_balance  = result[:interest]
+        @loan.interest          = result[:interest]
+        @loan.principal_paid    = 0.00
+        @loan.interest_paid     = 0.00
 
-      @loan.principal_balance = @loan.principal
-      @loan.interest_balance  = result[:interest]
-      @loan.interest          = result[:interest]
-      @loan.principal_paid    = 0.00
-      @loan.interest_paid     = 0.00
+        if !@loan.new_record?
+          @loan.amortization_schedule_entries.delete_all
+        end
 
-      if !@loan.new_record?
-        @loan.amortization_schedule_entries.delete_all
-      end
+        result[:schedule].each do |o|
+          principal   = o[:principal].to_f.round(2)
+          interest    = o[:interest].to_f.round(2)
+          amount_due  = (principal + interest).round(2)
 
-      result[:schedule].each do |o|
-        principal   = o[:principal].to_f.round(2)
-        interest    = o[:interest].to_f.round(2)
-        amount_due  = (principal + interest).round(2)
+          amort = AmortizationScheduleEntry.new(
+                    principal: principal,
+                    interest: interest,
+                    principal_balance: principal,
+                    interest_balance: interest,
+                    principal_paid: 0.00,
+                    interest_paid: 0.00,
+                    amount_due: amount_due
+                  )
+          @loan.amortization_schedule_entries << amort
+        end
 
-        amort = AmortizationScheduleEntry.new(
-                  principal: principal,
-                  interest: interest,
-                  principal_balance: principal,
-                  interest_balance: interest,
-                  principal_paid: 0.00,
-                  interest_paid: 0.00,
-                  amount_due: amount_due
-                )
-        @loan.amortization_schedule_entries << amort
-      end
+      elsif  @settings.zero_interest == "true" #for loans has zero interest
+         params  = {
+          principal: @loan.principal,
+          annual_interest_rate: (@loan.monthly_interest_rate * 12),
+          num_installments: @loan_data[:num_installments],
+          term: @loan_data[:term]
+          }
+
+
+        result  = ::Finance::Amortize.new(
+                    params: params
+                  ).execute!
+        
+        @loan.principal_balance = @loan.principal
+        @loan.interest_balance  = result[:interest]
+        @loan.interest          = result[:interest]
+        @loan.principal_paid    = 0.00
+        @loan.interest_paid     = 0.00
+
+        if !@loan.new_record?
+          @loan.amortization_schedule_entries.delete_all
+        end
+          buffer_principal  = 0.00
+          result[:schedule].each do |o|
+            principal   = o[:principal].to_i.round(2)
+            interest    = o[:interest].to_f.round(2)
+            amount_due  = (principal + interest).round(2)
+
+            buffer_principal += principal
+
+            @loan.amortization_schedule_entries.build(
+            principal: principal,
+            interest: interest,
+            principal_balance: principal,
+            interest_balance: interest,
+            principal_paid: 0.00,
+            interest_paid: 0.00,
+            amount_due: amount_due
+            )
+          end
+          ### EQUALIZE ###
+          if buffer_principal > @loan.principal
+            diff = buffer_principal - @loan.principal
+            @loan.amortization_schedule_entries.last.principal  = @loan.amortization_schedule_entries.last.principal - diff
+            @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due - diff
+            @loan.amortization_schedule_entries.last.principal_balance = @loan.amortization_schedule_entries.last.principal
+          elsif buffer_principal < @loan.principal
+            diff = @loan.principal - buffer_principal
+            @loan.amortization_schedule_entries.last.principal = @loan.amortization_schedule_entries.last.principal + diff
+            @loan.amortization_schedule_entries.last.amount_due = @loan.amortization_schedule_entries.last.amount_due + diff
+            @loan.amortization_schedule_entries.last.principal_balance = @loan.amortization_schedule_entries.last.principal 
+          end
+      end #end of zero interest
+
 
       # Build accounting entry data
       particular  = "Release of Loan - #{@member.first_name} #{@member.middle_name} #{@member.last_name} cv# #{@loan.voucher_check_voucher_number} ck# #{@loan.voucher_bank_check_number} clip# #{@loan.clip_number}"
