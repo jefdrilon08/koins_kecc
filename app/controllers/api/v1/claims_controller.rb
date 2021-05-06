@@ -77,11 +77,11 @@ module Api
                                       ).execute!
 
             if current_user.email == "kmba.ao.asa@gmail.com"
-              @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com"])
-            elsif current_user.email == "diobertcalanza@yahoo.com"
+              @checking_users = User.where("email IN (?)", ["diobert.calanza@gmail.com"])
+            elsif current_user.email == "diobert.calanza@gmail.com"
               @checking_users = User.where("email IN (?)", ["kmba.ao.asa@gmail.com"])
             else
-              @checking_users = User.where("email IN (?)", ["diobertcalanza@yahoo.com", "kmba.ao.asa@gmail.com"])
+              @checking_users = User.where("email IN (?)", ["diobert.calanza@gmail.com", "kmba.ao.asa@gmail.com"])
             end
 
             @checking_users.each do |user|
