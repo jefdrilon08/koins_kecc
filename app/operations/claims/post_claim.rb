@@ -8,11 +8,13 @@ module Claims
       @data                      = @claim.try(:data).try(:with_indifferent_access)
       @data_accounting_entry     = @data[:accounting_entry]
       @branch                    = @claim.branch
-      @c_working_date            = ::Utils::GetCurrentDate.new(
-                                    config: {
-                                      branch: @branch
-                                    }
-                                  ).execute!
+      @c_working_date            = Date.today
+
+      # @c_working_date            = ::Utils::GetCurrentDate.new(
+      #                               config: {
+      #                                 branch: @branch
+      #                               }
+      #                             ).execute!
     end
 
     def execute!

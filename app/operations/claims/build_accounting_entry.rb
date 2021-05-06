@@ -12,12 +12,14 @@ module Claims
 
       @particular                   = build_particular
       @payee                        = build_payee
+      @current_date                 = Date.today
 
-      @current_date                 = ::Utils::GetCurrentDate.new(
-                                      config: {
-                                        branch: @branch
-                                      }
-                                    ).execute!
+      # @current_date                 = ::Utils::GetCurrentDate.new(
+      #                                 config: {
+      #                                   branch: @branch
+      #                                 }
+      #                               ).execute!
+
       if config[:data].present?
         @data                       = @config[:data].with_indifferent_access
       end
