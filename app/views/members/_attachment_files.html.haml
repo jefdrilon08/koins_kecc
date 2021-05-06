@@ -18,11 +18,12 @@
             - if attachment_file.file.attached?        
               - if attachment_file.file.image?
                 = image_tag rails_blob_path(attachment_file.file, disposition: "attachment", only_path: true), width: "1100", height: "1000"
-              %br
-              = link_to attachment_file.file.record_id, rails_blob_path(attachment_file.file, disposition: "attachment")
             - else
               %p
                 No image found
+    = link_to rails_blob_path(attachment_file.file, disposition: "attachment"), class: 'btn btn-success btn-sm' do
+      .fa.fa-download
+      Download File
     = link_to edit_member_attachment_file_path(@member, attachment_file), class: 'btn btn-warning btn-sm' do
       .fa.fa-pencil-alt
       Edit
