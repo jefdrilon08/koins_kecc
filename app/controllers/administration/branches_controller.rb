@@ -3,7 +3,7 @@ module Administration
     before_action :authenticate_user!
 
     def index
-      if current_use.is_mis?
+      if current_user.is_mis?
         sql = "
           SELECT 
             branches.*, 

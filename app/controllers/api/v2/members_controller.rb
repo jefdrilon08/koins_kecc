@@ -3,6 +3,19 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_api_member!
 
+      def upload_file
+        file_name = params[:file_name]
+        file      = params[:file]
+
+        AttachmentFile.create!(
+          member: @member,
+          file_name: file_name,
+          file: file
+        )
+
+        render json: { message: "ok" }
+      end
+
       def update_password
         password              = params[:password]
         password_confirmation = params[:password_confirmation]
