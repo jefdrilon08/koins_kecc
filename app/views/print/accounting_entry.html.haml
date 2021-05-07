@@ -205,7 +205,7 @@
         %th{width: 350} 
           #{@accounting_entry_data[:prepared_by]}
         -if Settings.activate_microinsurance == true
-          %th{width: 255} #{"EVELYN LAGMAY"}
+          %th{width: 350} #{@accounting_entry_data[:approved_by]}
         -else
           %th{width: 255}
         -if Settings.activate_microinsurance == true
