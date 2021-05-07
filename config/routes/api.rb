@@ -11,6 +11,8 @@ namespace :api do
     post "/members/update_password", to: "members#update_password"
     get "/members/co_makers", to: "members#co_makers"
     get "/members/loan_products", to: "members#loan_products"
+    get "/members/fetch_files", to: "members#fetch_files"
+    post "/members/upload_file", to: "members#upload_file"
 
     # dashboard
     post "/dashboard/generate_daily_report", to: "dashboard#generate_daily_report"
