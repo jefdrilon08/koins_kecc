@@ -6,7 +6,8 @@ module Reports
       @branch = branch
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("identification_number ASC")
+        #@members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("identification_number ASC")
+        @members  = Member.where("data->>'recognition_date' <= ? AND branch_id = ?", @end_date, @branch).order("identification_number ASC")
       elsif @start_date.present? && @end_date.present?
         @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ?", @start_date, @end_date).order("identification_number ASC")
       elsif @branch.present?
@@ -46,6 +47,7 @@ module Reports
             "Amount Collected (RF)",
             "Official Receipt (voucher check number)",
             "OR Date (date of release)",
+            "Recognition Date"
           ], style: header
 
           @members.each_with_index do |member, index|
@@ -99,13 +101,15 @@ module Reports
                 #total_life = (total_life_amount - liat.amount).abs
                 total_life = ((total_life_amount < 0 ? 0 : total_life_amount) - (liat.amount < 0 ? 0 : liat.amount))
               elsif liat.transaction_type == "deposit" || liat.transaction_type == "fund_transfer_deposit" || liat.transaction_type == "reverse_withdraw"
-                total_life = (total_life_amount + liat.amount).abs
+                if !liat.interest?
+                  total_life = (total_life_amount + liat.amount).abs
+                end
               end
 
-              if total_life < 0
-                total_life_amount = 0
-              else  
+              if total_life > 0
                 total_life_amount = total_life
+              else  
+                total_life_amount = 0
               end  
 
             
@@ -142,46 +146,52 @@ module Reports
                 #total_rf = (total_rf_amount - riat.amount).abs
                 total_rf = ((total_rf_amount < 0 ? 0 : total_rf_amount) - (riat.amount < 0 ? 0 : riat.amount))
               elsif riat.transaction_type == "deposit" || riat.transaction_type == "fund_transfer_deposit" || riat.transaction_type == "reverse_withdraw"
-                total_rf = (total_rf_amount + riat.amount).abs
+                if !riat.interest?
+                  total_rf = (total_rf_amount + riat.amount).abs
+                end
               end
 
-              if total_rf < 0
-                total_rf_amount = 0
-              else  
+              if total_rf > 0
                 total_rf_amount = total_rf
+              else  
+                total_rf_amount = 0
               end
             end
 
-            if index == 0
-              sheet.add_row [
-                  "",
-                  member.full_name_titleize,
-                  member.identification_number,
-                  member.identification_number,
-                  value,
-                  life_amount,
-                  rf_amount,
-                  "",
-                  total_life_amount,
-                  total_rf_amount,
-                  official_receipts.join(', '),
-                  official_receipt_dates.join(', '),
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
-              else
+            if total_life_amount > 0
+              if index == 0
                 sheet.add_row [
-                  "",
-                  member.full_name_titleize,
-                  member.identification_number,
-                  member.identification_number,
-                  value,
-                  life_amount,
-                  rf_amount,
-                  "",
-                  total_life_amount,
-                  total_rf_amount,
-                  official_receipts.join(', '),
-                  official_receipt_dates.join(', '),
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                    "",
+                    member.full_name_titleize,
+                    member.identification_number,
+                    member.identification_number,
+                    value,
+                    life_amount,
+                    rf_amount,
+                    "",
+                    total_life_amount,
+                    total_rf_amount,
+                    official_receipts.join(', '),
+                    official_receipt_dates.join(', '),
+                    recognition_date
+                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+              else
+                  sheet.add_row [
+                    "",
+                    member.full_name_titleize,
+                    member.identification_number,
+                    member.identification_number,
+                    value,
+                    life_amount,
+                    rf_amount,
+                    "",
+                    total_life_amount,
+                    total_rf_amount,
+                    official_receipts.join(', '),
+                    official_receipt_dates.join(', '),
+                    recognition_date
+                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+              end
             end
           end
         end

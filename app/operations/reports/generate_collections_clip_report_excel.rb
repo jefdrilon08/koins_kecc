@@ -7,7 +7,8 @@ module Reports
 
 
       if @branch.present? && @start_date.present? && @end_date.present?
-        @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("identification_number ASC")
+        #@members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("identification_number ASC")
+        @members  = Member.where("data->>'recognition_date' <= ? AND branch_id = ?", @end_date, @branch).order("identification_number ASC")
       elsif @start_date.present? && @end_date.present?
         @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ?", @start_date, @end_date).order("identification_number ASC")
       elsif @branch.present?
@@ -52,39 +53,43 @@ module Reports
 
            @members.each_with_index do |member, index|
             @active_loans = []
-            if index == 0
-              sheet.add_row [
-                  "",
-                  member.full_name_titleize,
-                  member.identification_number,
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
-              else
+            loans = member.loans.where("date_approved >= ? AND date_approved <= ?",@start_date, @end_date)
+            
+
+            if loans.count > 0
+              if index == 0
                 sheet.add_row [
-                  "",
-                  member.full_name_titleize,
-                  member.identification_number,
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                  "",
-                ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                    "",
+                    member.full_name_titleize,
+                    member.identification_number,
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                else
+                  sheet.add_row [
+                    "",
+                    member.full_name_titleize,
+                    member.identification_number,
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+              end
             end
 
-            loans = member.loans.where("date_approved >= ? AND date_approved <= ?",@start_date, @end_date)
             loans.each do |loan|
               accounting_entry = loan.accounting_entry
               if !accounting_entry.nil?
@@ -94,8 +99,9 @@ module Reports
                 end
               end
             end
+
             @active_loans.each_with_index do |loan, i| 
-              lde = loan.accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
+              lde = loan.accounting_entry.journal_entries.where("accounting_code_id = ? AND amount > 0","af83062d-628a-4fdd-acfd-bdebe2696513").first
                 if lde.present?
                     @insured_amount = lde.amount
                   if i == 0
