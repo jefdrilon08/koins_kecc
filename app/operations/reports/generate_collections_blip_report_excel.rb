@@ -15,6 +15,7 @@ module Reports
       else
          @members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ?", Date.today, Date.today).order("identification_number ASC") 
       end
+      
       @p        = Axlsx::Package.new
     end
 
@@ -52,148 +53,107 @@ module Reports
 
 
           @member_accounts = MemberAccount.where("account_subtype IN (?) AND member_id IN (?)", ["Life Insurance Fund", "Retirement Fund"], @members.pluck(:id))
-          @account_transactions = AccountTransaction.where("subsidiary_id IN (?)", @member_accounts.ids)
+          @account_transactions = AccountTransaction.where("subsidiary_id IN (?) AND transacted_at >= ? AND transacted_at <= ?", @member_accounts.ids, @start_date, @end_date)
 
+
+          # add code check kung may laman ung transaction ni member
           @members.each_with_index do |member, index|
+            official_receipt_dates = []
+            
+            total_life_amount = 0.0
+            life_amount = 0.0
+            total_rf_amount = 0.0
+            rf_amount = 0.0
+
+            lif_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Life Insurance Fund", member.id).first
+            life_insurance_account_transactions = @account_transactions.where("subsidiary_id = ?", lif_account.id)
+            
+            rf_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Retirement Fund", member.id).first
+            rf_insurance_account_transactions = @account_transactions.where("subsidiary_id = ?", rf_account.id)
+
             current_date = @end_date
             recognition_date = member.try(:recognition_date).try(:to_date)
             
-            if !recognition_date.nil?  
-              seconds_between = (current_date.to_time - recognition_date.to_time).abs
-              days_between = seconds_between / 60 / 60 / 24
-              number_of_months = (days_between / 30.44).floor
-              years = (days_between / 365.242199).floor
-              months = number_of_months - (years * 12)
-              if months < 3 && years < 1
-                value = 2000
-              elsif months >= 3 && years < 1 
-                value = 6000
-              elsif years >= 1 && years < 2
-                value = 10000
-              elsif years >= 2 && years < 3
-                value = 30000
-              elsif years >= 3
-                value = 50000
-              end
-            end  
-
-            official_receipt_dates = []
-            official_receipts = []
-
-            member_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Life Insurance Fund", member.id)
-            life_insurance_account_transactions = @account_transactions.where("subsidiary_id  = ?", member_account.ids)
-
-            total_life = 0
-            total_life_amount = 0
-            life = 0
-            life_amount = 0
+            if life_insurance_account_transactions.count > 0
             
-            life_insurance_account_transactions.where("transacted_at <= ?", @end_date).each do |liat|
-              if liat.transaction_type == "withdraw" || liat.transaction_type == "reversed" || liat.transaction_type == "fund_transfer_withdraw" || liat.transaction_type == "reverse_deposit"
-                #life = (life_amount - liat.amount).abs
-                life = ((life_amount < 0 ? 0 : life_amount) - (liat.amount < 0 ? 0 : liat.amount))
-              elsif liat.transaction_type == "deposit" || liat.transaction_type == "fund_transfer_deposit" || liat.transaction_type == "reverse_withdraw"
-                life = (life_amount + liat.amount).abs
-              end
-              life_amount = life
-            end
-
-            life_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ?", @start_date, @end_date).each do |liat|
-              if liat.transaction_type == "withdraw" || liat.transaction_type == "reversed" || liat.transaction_type == "fund_transfer_withdraw" || liat.transaction_type == "reverse_deposit"
-                #total_life = (total_life_amount - liat.amount).abs
-                total_life = ((total_life_amount < 0 ? 0 : total_life_amount) - (liat.amount < 0 ? 0 : liat.amount))
-              elsif liat.transaction_type == "deposit" || liat.transaction_type == "fund_transfer_deposit" || liat.transaction_type == "reverse_withdraw"
-                if !liat.interest?
-                  total_life = (total_life_amount + liat.amount).abs
+              if !recognition_date.nil?  
+                seconds_between = (current_date.to_time - recognition_date.to_time).abs
+                days_between = seconds_between / 60 / 60 / 24
+                number_of_months = (days_between / 30.44).floor
+                years = (days_between / 365.242199).floor
+                months = number_of_months - (years * 12)
+                if months < 3 && years < 1
+                  value = 2000
+                elsif months >= 3 && years < 1 
+                  value = 6000
+                elsif years >= 1 && years < 2
+                  value = 10000
+                elsif years >= 2 && years < 3
+                  value = 30000
+                elsif years >= 3
+                  value = 50000
                 end
-              end
-
-              if total_life > 0
-                total_life_amount = total_life
-              else  
-                total_life_amount = 0
               end  
 
-            
-              or_number = AccountingEntry.where(reference_number: liat.data.with_indifferent_access['accounting_entry_reference_number'], particular: liat.data.with_indifferent_access['accounting_entry_particular']).first.try(:data)
-              if or_number.nil? 
-                official_receipts << nil
-                official_receipt_dates << liat.transacted_at.strftime("%B %d, %Y")
-              else
-                official_receipts << or_number['or_number']
-                official_receipt_dates << liat.transacted_at.strftime("%B %d, %Y")
-              end
-            end
+              life_amount = life_insurance_account_transactions.order("transacted_at ASC").last.data.with_indifferent_access["ending_balance"].to_f
 
-            member_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Retirement Fund", member.id)
-            rf_insurance_account_transactions = @account_transactions.where("subsidiary_id  = ?", member_account.ids)
-            
-            total_rf = 0
-            total_rf_amount = 0
-            rf = 0
-            rf_amount = 0
-            
-            rf_insurance_account_transactions.where("transacted_at <= ?", @end_date).each do |riat|
-              if riat.transaction_type == "withdraw" || riat.transaction_type == "reversed" || riat.transaction_type == "fund_transfer_withdraw" || riat.transaction_type == "reverse_deposit"
-                #rf = (rf_amount - riat.amount).abs
-                rf = ((rf_amount < 0 ? 0 : rf_amount) - (riat.amount < 0 ? 0 : riat.amount))
-              elsif riat.transaction_type == "deposit" || riat.transaction_type == "fund_transfer_deposit" || riat.transaction_type == "reverse_withdraw"
-                rf = (rf_amount + riat.amount).abs
-              end
-              rf_amount = rf
-            end
+              total_life_amount = life_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ? AND transaction_type = ? AND data ->> 'is_interest' = ?", @start_date, @end_date, "deposit", "false").sum(:amount).to_f
 
+              life_minus = life_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", @start_date, @end_date, "withdraw").sum(:amount).to_f
 
-            rf_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ?", @start_date, @end_date).each do |riat|
-              if riat.transaction_type == "withdraw" || riat.transaction_type == "reversed" || riat.transaction_type == "fund_transfer_withdraw" || riat.transaction_type == "reverse_deposit"
-                #total_rf = (total_rf_amount - riat.amount).abs
-                total_rf = ((total_rf_amount < 0 ? 0 : total_rf_amount) - (riat.amount < 0 ? 0 : riat.amount))
-              elsif riat.transaction_type == "deposit" || riat.transaction_type == "fund_transfer_deposit" || riat.transaction_type == "reverse_withdraw"
-                if !riat.interest?
-                  total_rf = (total_rf_amount + riat.amount).abs
+              if life_minus > 0.0
+                total_life_amount = total_life_amount - life_minus
+              end  
+
+              official_receipt_dates = life_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ?", @start_date, @end_date).order("transacted_at ASC").pluck("date(transacted_at)")
+
+            
+              if rf_insurance_account_transactions.count > 0
+                rf_amount = rf_insurance_account_transactions.order("transacted_at ASC").last.data.with_indifferent_access["ending_balance"].to_f
+
+                total_rf_amount = rf_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ? AND transaction_type = ? AND data ->> 'is_interest' = ?", @start_date, @end_date, "deposit", "false").sum(:amount).to_f
+
+                rf_minus = rf_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", @start_date, @end_date, "withdraw").sum(:amount).to_f
+
+                if rf_minus > 0.0
+                  total_rf_amount = total_rf_amount - rf_minus
                 end
               end
 
-              if total_rf > 0
-                total_rf_amount = total_rf
-              else  
-                total_rf_amount = 0
-              end
-            end
-
-            if total_life_amount > 0
-              if index == 0
-                sheet.add_row [
-                    "",
-                    member.full_name_titleize,
-                    member.identification_number,
-                    member.identification_number,
-                    value,
-                    life_amount,
-                    rf_amount,
-                    "",
-                    total_life_amount,
-                    total_rf_amount,
-                    official_receipts.join(', '),
-                    official_receipt_dates.join(', '),
-                    recognition_date
-                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
-              else
+              if total_life_amount > 0.0
+                if index == 0
                   sheet.add_row [
-                    "",
-                    member.full_name_titleize,
-                    member.identification_number,
-                    member.identification_number,
-                    value,
-                    life_amount,
-                    rf_amount,
-                    "",
-                    total_life_amount,
-                    total_rf_amount,
-                    official_receipts.join(', '),
-                    official_receipt_dates.join(', '),
-                    recognition_date
-                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                      "",
+                      member.full_name_titleize,
+                      member.identification_number,
+                      member.identification_number,
+                      value,
+                      life_amount,
+                      rf_amount,
+                      "",
+                      total_life_amount,
+                      total_rf_amount,
+                      nil,
+                      official_receipt_dates.join(', '),
+                      recognition_date
+                    ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                else
+                    sheet.add_row [
+                      "",
+                      member.full_name_titleize,
+                      member.identification_number,
+                      member.identification_number,
+                      value,
+                      life_amount,
+                      rf_amount,
+                      "",
+                      total_life_amount,
+                      total_rf_amount,
+                      nil,
+                      official_receipt_dates.join(', '),
+                      recognition_date
+                    ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                end
               end
             end
           end
