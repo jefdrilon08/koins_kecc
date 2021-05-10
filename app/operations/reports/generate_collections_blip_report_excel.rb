@@ -50,6 +50,10 @@ module Reports
             "Recognition Date"
           ], style: header
 
+
+          @member_accounts = MemberAccount.where("account_subtype IN (?) AND member_id IN (?)", ["Life Insurance Fund", "Retirement Fund"], @members.pluck(:id))
+          @account_transactions = AccountTransaction.where("subsidiary_id IN (?)", @member_accounts.ids)
+
           @members.each_with_index do |member, index|
             current_date = @end_date
             recognition_date = member.try(:recognition_date).try(:to_date)
@@ -76,10 +80,8 @@ module Reports
             official_receipt_dates = []
             official_receipts = []
 
-
-            life_insurance_type = "Life Insurance Fund"
-            member_account = MemberAccount.where("account_subtype = ? AND member_id = ? ", life_insurance_type, member.id)
-            life_insurance_account_transactions = AccountTransaction.where("subsidiary_id  = ?", member_account.ids)
+            member_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Life Insurance Fund", member.id)
+            life_insurance_account_transactions = @account_transactions.where("subsidiary_id  = ?", member_account.ids)
 
             total_life = 0
             total_life_amount = 0
@@ -123,13 +125,14 @@ module Reports
               end
             end
 
-            rf_insurance_type = "Retirement Fund"
-            member_account = MemberAccount.where("account_subtype = ? AND member_id = ? ", rf_insurance_type, member.id)
-            rf_insurance_account_transactions = AccountTransaction.where("subsidiary_id  = ?", member_account.ids)
+            member_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Retirement Fund", member.id)
+            rf_insurance_account_transactions = @account_transactions.where("subsidiary_id  = ?", member_account.ids)
+            
             total_rf = 0
             total_rf_amount = 0
             rf = 0
             rf_amount = 0
+            
             rf_insurance_account_transactions.where("transacted_at <= ?", @end_date).each do |riat|
               if riat.transaction_type == "withdraw" || riat.transaction_type == "reversed" || riat.transaction_type == "fund_transfer_withdraw" || riat.transaction_type == "reverse_deposit"
                 #rf = (rf_amount - riat.amount).abs
