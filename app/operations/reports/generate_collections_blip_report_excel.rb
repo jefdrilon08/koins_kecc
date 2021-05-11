@@ -4,6 +4,7 @@ module Reports
       @start_date = start_date
       @end_date = end_date
       @branch = branch
+      @valid_members = []
 
       if @branch.present? && @start_date.present? && @end_date.present?
         #@members  = Member.where("data ->>'recognition_date' >= ? AND data->>'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch).order("identification_number ASC")
@@ -54,10 +55,24 @@ module Reports
 
           @member_accounts = MemberAccount.where("account_subtype IN (?) AND member_id IN (?)", ["Life Insurance Fund", "Retirement Fund"], @members.pluck(:id))
           @account_transactions = AccountTransaction.where("subsidiary_id IN (?) AND transacted_at >= ? AND transacted_at <= ?", @member_accounts.ids, @start_date, @end_date)
+          
+          @life_accounts = @member_accounts.where("account_subtype = ?", "Life Insurance Fund")
+          @rf_accounts = @member_accounts.where("account_subtype = ?", "Retirement Fund")
 
+          @rf_account_transactions = @account_transactions.where("subsidiary_id IN (?)", @rf_accounts.ids)
+          @life_account_transactions = @account_transactions.where("subsidiary_id IN (?)", @life_accounts.ids)
+
+          @life_accounts.each do |life|
+            if life.account_transactions.where("transacted_at >= ? AND transacted_at <= ?", @start_date, @end_date).count > 0
+              @valid_members << life.member
+            end
+          end
 
           # add code check kung may laman ung transaction ni member
-          @members.each_with_index do |member, index|
+          @valid_members.each do |member|
+            current_date = @end_date
+            recognition_date = member.try(:recognition_date).try(:to_date)
+            
             official_receipt_dates = []
             
             total_life_amount = 0.0
@@ -65,14 +80,11 @@ module Reports
             total_rf_amount = 0.0
             rf_amount = 0.0
 
-            lif_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Life Insurance Fund", member.id).first
-            life_insurance_account_transactions = @account_transactions.where("subsidiary_id = ?", lif_account.id)
+            lif_account = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
+            life_insurance_account_transactions = @life_account_transactions.where("subsidiary_id = ?", lif_account.id)
             
-            rf_account = @member_accounts.where("account_subtype = ? AND member_id = ? ", "Retirement Fund", member.id).first
-            rf_insurance_account_transactions = @account_transactions.where("subsidiary_id = ?", rf_account.id)
-
-            current_date = @end_date
-            recognition_date = member.try(:recognition_date).try(:to_date)
+            rf_account = member.member_accounts.where(account_subtype: "Retirement Fund").first
+            rf_insurance_account_transactions = @rf_account_transactions.where("subsidiary_id = ?", rf_account.id)
             
             if life_insurance_account_transactions.count > 0
             
@@ -95,7 +107,7 @@ module Reports
                 end
               end  
 
-              life_amount = life_insurance_account_transactions.order("transacted_at ASC").last.data.with_indifferent_access["ending_balance"].to_f
+              life_amount = life_insurance_account_transactions.order("transacted_at ASC, updated_at ASC").last.data.with_indifferent_access["ending_balance"].to_f
 
               total_life_amount = life_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ? AND transaction_type = ? AND data ->> 'is_interest' = ?", @start_date, @end_date, "deposit", "false").sum(:amount).to_f
 
@@ -109,7 +121,7 @@ module Reports
 
             
               if rf_insurance_account_transactions.count > 0
-                rf_amount = rf_insurance_account_transactions.order("transacted_at ASC").last.data.with_indifferent_access["ending_balance"].to_f
+                rf_amount = rf_insurance_account_transactions.order("transacted_at ASC, updated_at ASC").last.data.with_indifferent_access["ending_balance"].to_f
 
                 total_rf_amount = rf_insurance_account_transactions.where("transacted_at >= ? AND transacted_at <= ? AND transaction_type = ? AND data ->> 'is_interest' = ?", @start_date, @end_date, "deposit", "false").sum(:amount).to_f
 
@@ -121,39 +133,21 @@ module Reports
               end
 
               if total_life_amount > 0.0
-                if index == 0
-                  sheet.add_row [
-                      "",
-                      member.full_name_titleize,
-                      member.identification_number,
-                      member.identification_number,
-                      value,
-                      life_amount,
-                      rf_amount,
-                      "",
-                      total_life_amount,
-                      total_rf_amount,
-                      nil,
-                      official_receipt_dates.join(', '),
-                      recognition_date
-                    ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
-                else
-                    sheet.add_row [
-                      "",
-                      member.full_name_titleize,
-                      member.identification_number,
-                      member.identification_number,
-                      value,
-                      life_amount,
-                      rf_amount,
-                      "",
-                      total_life_amount,
-                      total_rf_amount,
-                      nil,
-                      official_receipt_dates.join(', '),
-                      recognition_date
-                    ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
-                end
+                sheet.add_row [
+                    "",
+                    member.full_name_titleize,
+                    member.identification_number,
+                    member.identification_number,
+                    value,
+                    life_amount,
+                    rf_amount,
+                    "",
+                    total_life_amount,
+                    total_rf_amount,
+                    nil,
+                    official_receipt_dates.join(', '),
+                    recognition_date
+                  ], style: [nil, nil, date_format_cell, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
               end
             end
           end

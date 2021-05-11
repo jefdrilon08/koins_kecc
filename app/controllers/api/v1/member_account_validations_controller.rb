@@ -226,7 +226,7 @@ module Api
           user: current_user
         }
 
-        if ["MIS", "BK"].include? current_user.roles.last
+        if ["MIS", "BK", "SBK"].include? current_user.roles.last
           errors =  MemberAccountValidations::ValidateMemberAccountValidationForApproval.new(
                       config: config
                     ).execute!
