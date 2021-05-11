@@ -1,14 +1,13 @@
 module OnlineApplications
-  class ValidateProcess < AppValidator
+  class ValidateReject < AppValidator
     attr_accessor :errors
 
-    def initialize(online_application:, branch:, center:, user:)
+    def initialize(online_application:, user:, reason:)
       super()
 
       @online_application = online_application
-      @branch             = branch
-      @center             = center
       @user               = user
+      @reason             = reason
     end
 
     def execute!
@@ -24,24 +23,17 @@ module OnlineApplications
         }
       end
 
-      if @branch.blank?
-        @errors[:messages] << {
-          key: "branch",
-          message: "branch not found"
-        }
-      end
-
-      if @center.blank?
-        @errors[:messages] << {
-          key: "center",
-          message: "center not found"
-        }
-      end
-
       if @user.blank?
         @errors[:messages] << {
           key: "user",
           message: "user required"
+        }
+      end
+
+      if @reason.blank?
+        @errors[:messages] << {
+          key: "reason",
+          message: "reason required"
         }
       end
 

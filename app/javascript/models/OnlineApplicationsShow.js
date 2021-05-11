@@ -49,6 +49,7 @@ var _bindEvents = function() {
       url: "/api/v1/online_applications/reject",
       method: 'POST',
       data: {
+        id: _id,
         reason: reason
       },
       success: function(response) {

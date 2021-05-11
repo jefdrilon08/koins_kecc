@@ -9,13 +9,14 @@ module Api
 
         validator = ::OnlineApplications::ValidateReject.new(
                       online_application: online_application,
+                      user: current_user,
                       reason: reason
                     )
 
         validator.execute!
 
         if validator.errors[:full_messages].size > 0
-          render json: { errors: validator.errors[:full_messages] }, status: 403
+          render json: { full_messages: validator.errors[:full_messages] }, status: 403
         else
           cmd = ::OnlineApplications::Reject.new(
                   online_application: online_application,
@@ -28,7 +29,7 @@ module Api
         end
       end
 
-      def process
+      def process_application
         online_application  = OnlineApplication.find(params[:id])
         branch              = ReadOnlyBranch.find_by_id(params[:branch_id])
         center              = ReadOnlyCenter.find_by_id(params[:center_id])
@@ -36,7 +37,8 @@ module Api
         validator = ::OnlineApplications::ValidateProcess.new(
                       online_application: online_application,
                       branch: branch,
-                      center: center
+                      center: center,
+                      user: current_user
                     )
 
         validator.execute!
