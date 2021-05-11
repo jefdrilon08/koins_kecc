@@ -1,5 +1,31 @@
 namespace :report do 
   
+  task :sharecap => :environment do
+    s_date= ENV['s_date']
+    #mat_date = ENV['mat_date']
+    br_name = ENV['SATO']
+    br_id= Branch.where(name: br_name).ids
+    @data = [] 
+
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "PERSONAL_FUNDS").last
+    @data_store_data = @data_store.data.with_indifferent_access
+    @data_store_data[:records].each.with_index do |r , i|
+      x = r[:member]
+      mem = Member.find(x[:id])
+      sc = r[:accounts][7][:balance]
+      sh = (sc/100).to_i
+      j = "#{x[:last_name]} , #{x[:first_name]}|#{mem.center.name}|#{sc}|#{sh}|#{mem.date_of_membership}"
+      @data << j
+    end
+      puts @data
+  end
+
   task :member_age => :environment do
     require 'csv'
     s_date= ENV['s_date']

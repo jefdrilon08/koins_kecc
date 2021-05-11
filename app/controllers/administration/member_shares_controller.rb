@@ -56,23 +56,9 @@ module Administration
       @data[:sfp] = []
 
       x = Member.joins(:member_accounts).where(
-            "members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital'" 
-          ).order(
+            "members.status = 'active' and member_accounts.account_type = 'EQUITY' and member_accounts.account_subtype = 'Share Capital' and members.branch_id IN (?)", @branches.pluck(:id)).order(
             "member_accounts.updated_at ASC"
-          ).limit(20)
-
-      if params[:start_date].present? and params[:end_date].present?
-        d = (params[:end_date].to_date + 1).to_s
-        x = x.where("member_accounts.updated_at >= ?  and member_accounts.updated_at <= ?", params[:start_date] , d)
-      end
-      if params[:branch_id].present?
-        b = Branch.find(params[:branch_id])
-        x = x.where(branch_id: b.id)
-      end
-      if params[:center_id].present?
-        x = x.where(center_id: params[:center_id])
-      end
-      x = x.where(branch_id: @branches.pluck(:id))
+          )
 
       x.each do |y|
        sfp = {}
