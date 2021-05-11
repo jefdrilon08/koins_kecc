@@ -946,6 +946,7 @@ loan_products:
     receivable_accounting_code_id: "eab8552e-4eed-41cd-a4d7-f91e120f03da"
     interest_receivable_accounting_code_id: "63e0514b-9c52-465b-9899-2d5d2d478695"
     default_amount: 7000.00
+    jef: 100
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"

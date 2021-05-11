@@ -207,6 +207,11 @@ Rails.application.routes.draw do
   # Accrued
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"
   get "/accrued_payment_collections/:id", to: "accrued_payment_collections#show"
+
+  #billing_for_full_paments
+  get "/billing_for_full_payments", to: "billing_for_full_payments#index"
+
+
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account

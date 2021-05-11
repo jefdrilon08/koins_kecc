@@ -213,6 +213,10 @@ namespace :api do
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
 
+
+    #billing_for_full_payments
+    post "/billing_for_full_payments/create", to: "billing_for_full_payments#create"
+
     #Accrued_Billing
     post "/accrued_payment_collections", to: "accrued_payment_collections#create"
 

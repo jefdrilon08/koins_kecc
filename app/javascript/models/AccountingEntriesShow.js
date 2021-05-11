@@ -120,6 +120,12 @@ var _bindEvents = function() {
       },
       success: function(response) {
         window.location.reload();
+        $message.html(
+          Mustache.render(
+            templateErrorList,
+            { errors: errors }
+          )
+        );
       },
       error: function(response) {
         console.log(response);
