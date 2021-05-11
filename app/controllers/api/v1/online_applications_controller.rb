@@ -20,7 +20,8 @@ module Api
         else
           cmd = ::OnlineApplications::Reject.new(
                   online_application: online_application,
-                  user: current_user
+                  user: current_user,
+                  reason: reason
                 )
 
           cmd.execute!

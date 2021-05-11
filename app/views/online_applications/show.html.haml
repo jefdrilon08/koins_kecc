@@ -14,11 +14,9 @@
           %h4.badge.badge-success
             PROCESSED
         - elsif @online_application.rejected?
-          %h4
-            REJECTED
-          .callout.callout-danger
-            %h5
-              Rejection Reason:
+          .alert.alert-danger
+            %h4
+              APPLICATION REJECTED:
             %p
               #{@online_application.data["reason_for_rejection"]}
 
