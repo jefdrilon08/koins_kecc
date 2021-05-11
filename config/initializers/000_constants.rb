@@ -26,3 +26,9 @@ USER_TYPES = [
   "USER",
   "MEMBER"
 ]
+
+VALID_FILE_TYPES = [
+  "application/pdf",
+  "image/png",
+  "image/jpeg"
+]

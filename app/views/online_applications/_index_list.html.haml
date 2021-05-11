@@ -1,0 +1,34 @@
+.table-responsive
+  %table.table.table-sm.table-hover
+    %thead
+      %tr
+        %th
+          Name
+        %th
+          Mobile Number
+        %th
+          Status
+        %th
+          Created At
+        %th
+          Updated At
+    %tbody
+      - @online_applications.each do |o|
+        %tr
+          %td
+            %strong
+              = link_to online_application_path(o.id) do
+                #{o.full_name}
+          %td
+            #{o.mobile_number}
+          %td
+            - if o.pending?
+              .badge.badge-danger
+                PENDING
+            - elsif o.processed?
+              .badge.badge-success
+                PROCESSED
+          %td
+            #{o.created_at.strftime("%B %d, %Y")}
+          %td
+            #{o.updated_at.strftime("%B %d, %Y")}

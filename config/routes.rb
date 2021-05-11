@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => SIDEKIQ_WEB_PATH
   end
 
+  # online applications
+  resources :online_applications, only: [:index, :show]
+
   # Trends
   get "/trends", to: "trends#index", as: :trends
 

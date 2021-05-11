@@ -1,0 +1,213 @@
+= title @online_application.full_name
+.row
+  .col
+    .card
+      .card-body
+        %h3
+          #{@online_application}
+        %hr
+
+        - if @online_application.pending?
+          %h4.badge.badge-danger
+            PENDING
+        %hr
+
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Reference Number
+                %td
+                  #{@online_application.reference_number}
+              %tr
+                %th
+                  First Name
+                %td
+                  #{@online_application.first_name}
+              %tr
+                %th
+                  Middle Name
+                %td
+                  #{@online_application.middle_name}
+              %tr
+                %th
+                  Last Name
+                %td
+                  #{@online_application.last_name}
+              %tr
+                %th
+                  Gender
+                %td
+                  #{@online_application.gender}
+              %tr
+                %th
+                  Age
+                %td
+                  #{@online_application.age}
+              %tr
+                %th
+                  Date of Birth
+                %td
+                  #{@online_application.date_of_birth.strftime("%B %d, %Y")}
+              %tr
+                %th
+                  Civil Status
+                %td
+                  #{@online_application.civil_status}
+              %tr
+                %th
+                  Home Number
+                %td
+                  #{@online_application.home_number}
+              %tr
+                %th
+                  Mobile Number
+                %td
+                  #{@online_application.mobile_number}
+              %tr
+                %th
+                  Place of Birth
+                %td
+                  #{@online_application.place_of_birth}
+              %tr
+                %th
+                  Religion
+                %td
+                  #{@online_application.religion}
+              %tr
+                %th
+                  Address
+                %td
+                  #{@online_application.data["address"]["street"]} #{@online_application.data["address"]["district"]} #{@online_application.data["address"]["city"]}
+              %tr
+                %th
+                  Mother's Name
+                %td
+                  #{@online_application.data["mothers_last_name"]}, #{@online_application.data["mothers_first_name"]} #{@online_application.data["mothers_middle_name"]}
+              %tr
+                %th
+                  Spouse
+                %td
+                  #{@online_application.data["spouse"]["lastName"]}, #{@online_application.data["spouse"]["firstName"]} #{@online_application.data["spouse"]["middleName"]}
+              %tr
+                %th
+                  SSS / GSIS
+                %td
+                  #{@online_application.data["government_identification_number"]["sss_number"]}
+              %tr
+                %th
+                  Pag-ibig Number
+                %td
+                  #{@online_application.data["government_identification_number"]["pag_ibig_number"]}
+              %tr
+                %th
+                  Philhealth Number
+                %td
+                  #{@online_application.data["government_identification_number"]["phil_health_number"]}
+              %tr
+                %th
+                  TIN Number
+                %td
+                  #{@online_application.data["government_identification_number"]["tin_number"]}
+         
+        %h4
+          Legal Dependents
+        %table.table.table-sm.table-bordered
+          %thead
+            %tr
+              %th
+                First Name
+              %th
+                Middle Name
+              %th
+                Last Name
+              %th
+                Date of Birth
+              %th
+                Education
+              %th
+                Course
+              %th
+                Relationship
+          %tbody
+            - @online_application.data["legal_dependents"].each do |o|
+              %tr
+                %td
+                  #{o["firstName"]}
+                %td
+                  #{o["middleName"]}
+                %td
+                  #{o["lastName"]}
+                %td
+                  #{o["dateOfBirth"]}
+                %td
+                  #{o["education"]}
+                %td
+                  #{o["course"]}
+                %td
+                  #{o["relationship"]}
+
+        %h4
+          Beneficiaries
+        %table.table.table-sm.table-bordered
+          %thead
+            %tr
+              %th
+                First Name
+              %th
+                Middle Name
+              %th
+                Last Name
+              %th
+                Date of Birth
+              %th
+                Relationship
+              %th
+                Primary
+          %tbody
+            - @online_application.data["beneficiaries"].each_with_index do |o, i|
+              %tr
+                %td
+                  #{o["firstName"]}
+                %td
+                  #{o["middleName"]}
+                %td
+                  #{o["lastName"]}
+                %td
+                  #{o["dateOfBirth"]}
+                %td
+                  #{o["relationship"]}
+                %td
+                  - if i == 0
+                    .badge.badge-success
+                      YES
+
+        %h4
+          Documents Provided
+        %table.table.table-sm.table-bordered
+          %thead
+            %tr
+              %th
+                Name
+              %th
+                File
+          %tbody
+            - @online_application.online_application_documents.each do |o|
+              %tr
+                %td
+                  #{o.file_name}
+                %td
+                  = link_to rails_blob_path(o.file, disposition: "attachment"), class: 'btn btn-success btn-sm' do
+                    .fa.fa-download
+                    Download File
+
+        %hr
+        - if @online_application.pending?
+          %button#btn-process.btn.btn-info.btn-block
+            .fa.fa-check
+            Process
+
+= render partial: "online_applications/modals/process"
+= render partial: "templates/error_list"
+= render partial: "templates/center_options"

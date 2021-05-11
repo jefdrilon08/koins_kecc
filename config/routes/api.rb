@@ -1,5 +1,6 @@
 namespace :api do
   namespace :v2 do
+    post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
     
     # loans
