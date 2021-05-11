@@ -1171,7 +1171,8 @@ namespace :adjust do
     puts "Done!"
   end
 
-  task :update_member_branch_id => :environment do
+  task :update_member_branch_and_center => :environment do
+    #header: identification_number, branch_id, center_name
     file_location = ENV['MEMBERS_CSV']
     puts file_location
 
@@ -1182,6 +1183,28 @@ namespace :adjust do
       member = Member.where(identification_number: identification_number).first
 
       if !member.nil?
+        if row['center_name'].present?
+          puts "Updating center: #{member.full_name}"
+
+          center_name = row['center_name'].try(:upcase)
+          center = Center.where("upper(name) = ? AND branch_id = ?", center_name, branch_id).first
+            
+          if center.nil?
+            new_center = Center.new
+
+            new_center.name = center_name.try(:upcase)
+            new_center.short_name = center_name.try(:upcase)
+            new_center.meeting_day = 1
+            new_center.user = User.where(first_name: "Aljon").first
+            new_center.branch = Branch.find(branch_id)
+            new_center.save!
+
+            member.update!(center: new_center)
+          else
+            member.update!(center: center)
+          end
+        end
+
         puts "Updating branch: #{member.full_name}"   
         member.update!(branch_id: branch_id)
       end
@@ -1470,7 +1493,7 @@ namespace :adjust do
     if ENV['BRANCH_ID'].present?
       branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      branches = Branch.all
+      branches = Branch.all.order("member_counter ASC")
     end 
 
     branches.all.each do |branch|
@@ -2442,16 +2465,31 @@ namespace :adjust do
       @branches = Branch.all  
     end
 
-    member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+    @branches.each do |branch|
+      puts "Inserting for #{branch.name}"
+      
+      ::MemberAccounts::ComputeEvInterest.new(
+                                  config: {
+                                    branch: branch, 
+                                    start_date: @start_date, 
+                                    end_date: @end_date
+                                  }
+                            ).execute!
 
-    size = member_accounts.count
+      puts "Done for #{branch.name}"
+    end  
 
-    member_accounts.each_with_index do |member_account, i|
-      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
-      printf("\r(#{i+1}/#{size}): Insreting for member account #{member_account.id}... #{progress}%%")
 
-      ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account, start_date: @start_date, end_date: @end_date).execute!
-    end 
+    # member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
+
+    # size = member_accounts.count
+
+    # member_accounts.each_with_index do |member_account, i|
+    #   progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+    #   printf("\r(#{i+1}/#{size}): Insreting for member account #{member_account.id}... #{progress}%%")
+
+    #   ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account, start_date: @start_date, end_date: @end_date).execute!
+    # end 
 
     puts "\nDone!"
   end

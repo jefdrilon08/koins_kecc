@@ -90,6 +90,6 @@ module MemberAccounts
           AND DATE(transacted_at) <= '#{to}'
         ORDER BY transacted_at ASC, updated_at ASC, created_at ASC
       SQL
-    end 
+    end                           
   end
 end

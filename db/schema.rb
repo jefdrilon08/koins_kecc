@@ -469,17 +469,6 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
   end
 
-  create_table "equity_value_interests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "member_account_id"
-    t.uuid "account_transaction_id"
-    t.date "month_of_year_date"
-    t.decimal "interest_amount"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["account_transaction_id"], name: "index_equity_value_interests_on_account_transaction_id"
-    t.index ["member_account_id"], name: "index_equity_value_interests_on_member_account_id"
-  end
-
   create_table "equity_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.date "collection_date"
     t.uuid "center_id"
@@ -553,6 +542,18 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
     t.datetime "updated_at", null: false
     t.index ["branch_id"], name: "index_insurance_withdrawal_collections_on_branch_id"
     t.index ["center_id"], name: "index_insurance_withdrawal_collections_on_center_id"
+  end
+
+  create_table "interests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_account_id"
+    t.uuid "account_transaction_id"
+    t.date "month_of_year_date"
+    t.decimal "interest_amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "type"
+    t.index ["account_transaction_id"], name: "index_interests_on_account_transaction_id"
+    t.index ["member_account_id"], name: "index_interests_on_member_account_id"
   end
 
   create_table "journal_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1173,8 +1174,6 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
   add_foreign_key "daily_branch_metrics", "clusters"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
-  add_foreign_key "equity_value_interests", "account_transactions"
-  add_foreign_key "equity_value_interests", "member_accounts"
   add_foreign_key "equity_withdrawal_collections", "branches"
   add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"
@@ -1184,6 +1183,8 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
   add_foreign_key "insurance_fund_transfer_collections", "centers"
   add_foreign_key "insurance_withdrawal_collections", "branches"
   add_foreign_key "insurance_withdrawal_collections", "centers"
+  add_foreign_key "interests", "account_transactions"
+  add_foreign_key "interests", "member_accounts"
   add_foreign_key "journal_entries", "accounting_codes"
   add_foreign_key "journal_entries", "accounting_entries"
   add_foreign_key "journal_entries", "accounting_funds"

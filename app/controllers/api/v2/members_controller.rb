@@ -3,6 +3,31 @@ module Api
     class MembersController < ApiController
       before_action :authenticate_api_member!
 
+      def fetch_files
+        files = @member.attachment_files.order("created_at ASC").map{ |o|
+                  {
+                    id: o.id,
+                    file_name: o.file_name,
+                    created_at: o.created_at.strftime("%D")
+                  }
+                }
+
+        render json: { files: files }
+      end
+
+      def upload_file
+        file_name = params[:file_name]
+        file      = params[:file]
+
+        AttachmentFile.create!(
+          member: @member,
+          file_name: file_name,
+          file: file
+        )
+
+        render json: { message: "ok" }
+      end
+
       def update_password
         password              = params[:password]
         password_confirmation = params[:password_confirmation]

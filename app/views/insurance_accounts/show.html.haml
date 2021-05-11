@@ -187,7 +187,7 @@
                     #{number_to_currency(o.data["equity_value"], unit: "")}
                   - if microinsurance?
                     %td.text-right.text-muted
-                      #{number_to_currency(o.equity_value_interests.first.try(:interest_amount), unit: "")}
+                      #{number_to_currency(o.interests.first.try(:interest_amount), unit: "")}
         - elsif @insurance_account.account_subtype == Settings.pl
           %table.table.table-hover.table-sm.table-bordered
             %thead
