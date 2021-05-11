@@ -8,8 +8,20 @@
         %hr
 
         - if @online_application.pending?
-          %h4.badge.badge-danger
+          %h4.badge.badge-warning
             PENDING
+        - elsif @online_application.processed?
+          %h4.badge.badge-success
+            PROCESSED
+        - elsif @online_application.rejected?
+          %h4
+            REJECTED
+          .callout.callout-danger
+            %h5
+              Rejection Reason:
+            %p
+              #{@online_application.data["reason_for_rejection"]}
+
         %hr
 
         .table-responsive
@@ -94,22 +106,22 @@
                 %th
                   SSS / GSIS
                 %td
-                  #{@online_application.data["government_identification_number"]["sss_number"]}
+                  #{@online_application.data["government_identification_numbers"]["sss_number"]}
               %tr
                 %th
                   Pag-ibig Number
                 %td
-                  #{@online_application.data["government_identification_number"]["pag_ibig_number"]}
+                  #{@online_application.data["government_identification_numbers"]["pag_ibig_number"]}
               %tr
                 %th
                   Philhealth Number
                 %td
-                  #{@online_application.data["government_identification_number"]["phil_health_number"]}
+                  #{@online_application.data["government_identification_numbers"]["phil_health_number"]}
               %tr
                 %th
                   TIN Number
                 %td
-                  #{@online_application.data["government_identification_number"]["tin_number"]}
+                  #{@online_application.data["government_identification_numbers"]["tin_number"]}
          
         %h4
           Legal Dependents
@@ -204,10 +216,17 @@
 
         %hr
         - if @online_application.pending?
-          %button#btn-process.btn.btn-info.btn-block
-            .fa.fa-check
-            Process
+          .row
+            .col-md-6.col-xs-12
+              %button#btn-process.btn.btn-info.btn-block
+                .fa.fa-check
+                Process
+            .col-md-6.col-xs-12
+              %button#btn-reject.btn.btn-danger.btn-block
+                .fa.fa-times
+                Reject
 
 = render partial: "online_applications/modals/process"
+= render partial: "online_applications/modals/reject"
 = render partial: "templates/error_list"
 = render partial: "templates/center_options"

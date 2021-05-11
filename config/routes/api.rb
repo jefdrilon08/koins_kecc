@@ -42,6 +42,10 @@ namespace :api do
   end
 
   namespace :v1 do
+    # Process Online Application
+    post "/online_applications/process", to: "online_applications#process"
+    post "/online_applications/reject", to: "online_applications#reject"
+
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"

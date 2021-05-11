@@ -79,6 +79,11 @@ module Public
           key: "mobile_number",
           message: "format for cellphone number should be +639xxxxxxxxx"
         }
+      elsif OnlineApplication.where(status: ["pending", "processed"], mobile_number: @mobile_number).count > 0
+        @errors[:messages] << {
+          key: "mobile_number",
+          message: "mobile number already present"
+        }
       end
 
       if @beneficiaries.size <= 0

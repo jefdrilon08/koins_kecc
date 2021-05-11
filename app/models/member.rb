@@ -41,6 +41,8 @@ class Member < ApplicationRecord
     "Non-Member"
   ]
 
+  belongs_to :online_application, optional: true
+
   belongs_to :center
   belongs_to :branch
 

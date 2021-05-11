@@ -1,7 +1,8 @@
 class OnlineApplication < ApplicationRecord
   STATUSES = [
     "pending",
-    "processed"
+    "processed",
+    "rejected"
   ]
 
   validates :status, presence: true, inclusion: { in: STATUSES }
@@ -14,7 +15,11 @@ class OnlineApplication < ApplicationRecord
 
   before_validation :load_defaults
 
-  has_many :online_application_documents
+  has_many :online_application_documents, dependent: :destroy
+
+  scope :pending, -> { where(status: "pending") }
+  scope :processed, -> { where(status: "processed") }
+  scope :rejected, -> { where(status: "rejected") }
 
   def load_defaults
     if self.status.blank?
@@ -24,6 +29,10 @@ class OnlineApplication < ApplicationRecord
     if self.reference_number.blank?
       self.reference_number = SecureRandom.hex(4).upcase
     end
+  end
+
+  def rejected?
+    self.status == "rejected"
   end
 
   def pending?
