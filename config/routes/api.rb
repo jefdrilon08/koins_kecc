@@ -3,6 +3,7 @@ namespace :api do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
     post "/check_status", to: "public#check_status"
+    get "/branches", to: "public#branches"
     
     # loans
     post "/loans/apply", to: "loans#apply"
@@ -46,6 +47,7 @@ namespace :api do
     # Process Online Application
     post "/online_applications/process", to: "online_applications#process_application"
     post "/online_applications/reject", to: "online_applications#reject"
+    post "/online_applications/verify", to: "online_applications#verify"
 
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"

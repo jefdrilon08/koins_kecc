@@ -4,9 +4,18 @@ class OnlineApplicationsController < ApplicationController
   def index
     @online_applications  = OnlineApplication
                               .select("*")
+                              .includes(:branch)
+
+    if current_user.current_roles.intersection(["MIS", "CM"]).length == 0
+      @online_applications  = @online_applications.where(
+                                "branch_id IN (?)",
+                                @branches.pluck(:id)
+                              )
+    end
 
     @q      = params[:q]
     @status = params[:status]
+    @branch = Branch.find_by_id(params[:branch_id])
 
     if @q.present?
       @online_applications  = @online_applications.where(
@@ -18,6 +27,12 @@ class OnlineApplicationsController < ApplicationController
     if @status.present?
       @online_applications  = @online_applications.where(
                                 status: @status
+                              )
+    end
+
+    if @branch.present?
+      @online_applications  = @online_applications.where(
+                                branch_id: @branch.id
                               )
     end
 

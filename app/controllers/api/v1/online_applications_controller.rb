@@ -3,6 +3,30 @@ module Api
     class OnlineApplicationsController < ApplicationController
       before_action :authenticate_user!
 
+      def verify
+        online_application  = OnlineApplication.find(params[:id])
+
+        validator = ::OnlineApplications::ValidateVerify.new(
+                      online_application: online_application,
+                      user: current_user
+                    )
+
+        validator.execute!
+
+        if validator.errors[:full_messages].size > 0
+          render json: { full_messages: validator.errors[:full_messages] }, status: 403
+        else
+          cmd = ::OnlineApplications::Verify.new(
+                  online_application: online_application,
+                  user: current_user
+                )
+
+          cmd.execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def reject
         online_application  = OnlineApplication.find(params[:id])
         reason              = params[:reason]

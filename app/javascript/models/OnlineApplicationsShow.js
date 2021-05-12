@@ -5,6 +5,9 @@ var _authenticityToken;
 
 var $modalProcess;
 var $modalReject;
+var $modalVerify;
+var $btnVerify;
+var $btnConfirmVerify;
 var $btnProcess;
 var $btnConfirmProcess;
 var $btnReject;
@@ -19,11 +22,14 @@ var _centers = [];
 
 var _cacheDom = function() {
   $modalProcess         = $("#modal-process");
+  $modalReject          = $("#modal-reject");
+  $modalVerify          = $("#modal-verify");
   $btnProcess           = $("#btn-process");
   $btnConfirmProcess    = $("#btn-confirm-process");
-  $modalReject          = $("#modal-reject");
   $btnReject            = $("#btn-reject");
   $btnConfirmReject     = $("#btn-confirm-reject");
+  $btnVerify            = $("#btn-verify");
+  $btnConfirmVerify     = $("#btn-confirm-verify");
   $inputReason          = $("#input-reason");
   $selectBranch         = $("#select-branch");
   $selectCenter         = $("#select-center");
@@ -33,6 +39,65 @@ var _cacheDom = function() {
 }
 
 var _bindEvents = function() {
+  $btnVerify.on("click", function() {
+    $modalVerify.modal("show");
+  });
+
+  $btnConfirmVerify.on("click", function() {
+    $.ajax({
+      url: "/api/v1/online_applications/verify",
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Reloading..."); 
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmVerify.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  if($selectBranch.val()) {
+    $.ajax({
+      url: "/api/v1/branches/fetch_centers",
+      data: {
+        id: $selectBranch.val()
+      },
+      success: function(response) {
+        $selectCenter.html(
+          Mustache.render(
+            templateCenterOptions,
+            response
+          )
+        )
+      },
+      error: function(response) {
+        alert("Cannot fetch centers");
+      }
+    });
+  }
+
   $btnReject.on("click", function() {
     $modalReject.modal("show");
   });

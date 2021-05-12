@@ -1,6 +1,17 @@
 module Api
   module V2
     class PublicController < ApiController
+      def branches
+        branches  = ReadOnlyBranch.all.map{ |o|
+                      {
+                        id: o.id,
+                        name: o.name
+                      }
+                    }
+
+        render json: { branches: branches }
+      end
+
       def check_status
         reference_number = params[:reference_number]
 
@@ -32,6 +43,7 @@ module Api
           place_of_birth:   payload[:place_of_birth],
           religion:         payload[:religion],
           data:             payload[:data],
+          branch_id:        payload[:branch_id],
           file_document:    params[:file_document]
         }
 

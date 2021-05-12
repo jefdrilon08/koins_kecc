@@ -14,11 +14,14 @@ class OnlineApplication < ApplicationRecord
   validates :gender, presence: true
   validates :civil_status, presence: true
 
+  belongs_to :branch, optional: true
+
   before_validation :load_defaults
 
   has_many :online_application_documents, dependent: :destroy
 
   scope :for_verification, -> { where(status: "for_verification") }
+  scope :verified, -> { where(status: "verified") }
   scope :processed, -> { where(status: "processed") }
   scope :rejected, -> { where(status: "rejected") }
 
@@ -30,6 +33,10 @@ class OnlineApplication < ApplicationRecord
     if self.reference_number.blank?
       self.reference_number = SecureRandom.hex(4).upcase
     end
+  end
+
+  def verified?
+    self.status == "verified"
   end
 
   def rejected?

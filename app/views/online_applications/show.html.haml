@@ -9,7 +9,10 @@
 
         - if @online_application.for_verification?
           %h4.badge.badge-warning
-            PENDING
+            FOR VERIFICATION
+        - elsif @online_application.verified?
+          %h4.badge.badge-info
+            VERIFIED
         - elsif @online_application.processed?
           %h4.badge.badge-success
             PROCESSED
@@ -45,6 +48,11 @@
                   Last Name
                 %td
                   #{@online_application.last_name}
+              %tr
+                %th
+                  Branch
+                %td
+                  #{@online_application.branch}
               %tr
                 %th
                   Gender
@@ -216,15 +224,22 @@
         - if @online_application.for_verification?
           .row
             .col-md-6.col-xs-12
-              %button#btn-process.btn.btn-info.btn-block
+              %button#btn-verify.btn.btn-success.btn-block
                 .fa.fa-check
-                Process
+                Verify
             .col-md-6.col-xs-12
               %button#btn-reject.btn.btn-danger.btn-block
                 .fa.fa-times
                 Reject
+        - elsif @online_application.verified?
+          .row
+            .col
+              %button#btn-process.btn.btn-info.btn-block
+                .fa.fa-check
+                Process
 
 = render partial: "online_applications/modals/process"
+= render partial: "online_applications/modals/verify"
 = render partial: "online_applications/modals/reject"
 = render partial: "templates/error_list"
 = render partial: "templates/center_options"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_141434) do
+ActiveRecord::Schema.define(version: 2021_05_12_152627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -1019,6 +1019,8 @@ ActiveRecord::Schema.define(version: 2021_05_12_141434) do
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "branch_id"
+    t.index ["branch_id"], name: "index_online_applications_on_branch_id"
     t.index ["reference_number"], name: "idx_online_applications_reference_number"
   end
 
@@ -1270,6 +1272,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_141434) do
   add_foreign_key "monthly_accounting_code_summaries", "branches"
   add_foreign_key "monthly_closing_collections", "branches"
   add_foreign_key "online_application_documents", "online_applications"
+  add_foreign_key "online_applications", "branches"
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "savings_insurance_transfer_collections", "branches"
   add_foreign_key "savings_insurance_transfer_collections", "centers"

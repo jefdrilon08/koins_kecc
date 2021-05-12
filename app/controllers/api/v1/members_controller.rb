@@ -763,7 +763,16 @@ module Api
       def generate_access_token
         member  = Member.where(id: params[:id]).first
 
-        if member.blank?
+        valid_user_roles = [
+          "MIS",
+          "SO",
+          "AM",
+          "CM"
+        ]
+
+        if current_user.current_roles.intersection(valid_user_roles).size == 0
+          render json: { errors: ["unauthorized action"] }, status: 400
+        elsif member.blank?
           render json: { errors: ["member not found"] }, status: 400
         else
           if member.access_token.present?

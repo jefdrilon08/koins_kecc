@@ -18,6 +18,10 @@ module Public
       @file_document    = @config[:file_document]
       @data             = @config[:data]
 
+      if @config[:branch_id].present?
+        @branch = ReadOnlyBranch.find_by_id(@config[:branch_id])
+      end
+
       @online_application = OnlineApplication.new(
                               first_name:     @first_name,
                               middle_name:    @middle_name,
@@ -29,6 +33,7 @@ module Public
                               mobile_number:  @mobile_number,
                               place_of_birth: @place_of_birth,
                               religion:       @religion,
+                              branch:         @branch,
                               data:           @data
                             )
     end

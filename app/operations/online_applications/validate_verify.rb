@@ -1,5 +1,5 @@
 module OnlineApplications
-  class ValidateReject < AppValidator
+  class ValidateVerify < AppValidator
     attr_accessor :errors
 
     VALID_USER_ROLES = [
@@ -9,12 +9,11 @@ module OnlineApplications
       "CM"
     ]
 
-    def initialize(online_application:, user:, reason:)
+    def initialize(online_application:, user:)
       super()
 
       @online_application = online_application
       @user               = user
-      @reason             = reason
     end
 
     def execute!
@@ -28,6 +27,11 @@ module OnlineApplications
           key: "online_application",
           message: "online application is already processed"
         }
+      elsif !@online_application.for_verification?
+        @errors[:messages] << {
+          key: "online_application",
+          message: "invalid status"
+        }
       end
 
       if @user.blank?
@@ -39,13 +43,6 @@ module OnlineApplications
         @errors[:messages] << {
           key: "user",
           message: "unauthorized to perform action"
-        }
-      end
-
-      if @reason.blank?
-        @errors[:messages] << {
-          key: "reason",
-          message: "reason required"
         }
       end
 
