@@ -42,7 +42,18 @@ module Public
 
       @online_application.save!
 
+      notify_user!
+
       @online_application
+    end
+
+    def notify_user!
+      ProcessSendOnlineApplicationReferenceNumber.perform_later({
+        mobile_number: @online_application.mobile_number,
+        first_name: @online_application.first_name,
+        last_name: @online_application.last_name,
+        reference_number: @online_application.reference_number
+      })
     end
   end
 end

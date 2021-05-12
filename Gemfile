@@ -16,6 +16,7 @@ gem 'awesome_print'
 gem 'whenever'
 gem 'mini_magick'
 gem 'aws-sdk-s3', require: false
+gem 'aws-sdk-sns'
 gem 'kaminari'
 gem 'activerecord-import'
 gem 'config'
