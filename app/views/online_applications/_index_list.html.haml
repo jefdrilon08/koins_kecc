@@ -3,6 +3,8 @@
     %thead
       %tr
         %th
+          Reference Number
+        %th
           Name
         %th
           Mobile Number
@@ -18,13 +20,17 @@
           %td
             %strong
               = link_to online_application_path(o.id) do
+                #{o.reference_number}
+          %td
+            %strong
+              = link_to online_application_path(o.id) do
                 #{o.full_name}
           %td
             #{o.mobile_number}
           %td
-            - if o.pending?
+            - if o.for_verification?
               .badge.badge-warning
-                PENDING
+                FOR VERIFICATION
             - elsif o.processed?
               .badge.badge-success
                 PROCESSED

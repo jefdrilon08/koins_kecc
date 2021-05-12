@@ -1,6 +1,7 @@
 class OnlineApplication < ApplicationRecord
   STATUSES = [
-    "pending",
+    "for_verification",
+    "verified",
     "processed",
     "rejected"
   ]
@@ -17,13 +18,13 @@ class OnlineApplication < ApplicationRecord
 
   has_many :online_application_documents, dependent: :destroy
 
-  scope :pending, -> { where(status: "pending") }
+  scope :for_verification, -> { where(status: "for_verification") }
   scope :processed, -> { where(status: "processed") }
   scope :rejected, -> { where(status: "rejected") }
 
   def load_defaults
     if self.status.blank?
-      self.status = "pending"
+      self.status = "for_verification"
     end
 
     if self.reference_number.blank?
@@ -35,8 +36,8 @@ class OnlineApplication < ApplicationRecord
     self.status == "rejected"
   end
 
-  def pending?
-    self.status == "pending"
+  def for_verification?
+    self.status == "for_verification"
   end
 
   def processed?

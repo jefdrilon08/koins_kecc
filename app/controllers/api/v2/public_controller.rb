@@ -1,6 +1,22 @@
 module Api
   module V2
     class PublicController < ApiController
+      def check_status
+        reference_number = params[:reference_number]
+
+        if reference_number.blank?
+          render json: { errors: ["reference_number required"] }, status: 403
+        else
+          online_application = OnlineApplication.find_by_reference_number(reference_number)
+
+          if online_application.blank?
+            render json: { errors: ["online application not found"] }, status: 403
+          else
+            render json: { status: online_application.status }
+          end
+        end
+      end
+
       def apply
         payload = JSON.parse(params[:payload]).with_indifferent_access
 

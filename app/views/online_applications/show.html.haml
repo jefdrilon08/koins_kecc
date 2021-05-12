@@ -7,7 +7,7 @@
           #{@online_application}
         %hr
 
-        - if @online_application.pending?
+        - if @online_application.for_verification?
           %h4.badge.badge-warning
             PENDING
         - elsif @online_application.processed?
@@ -213,7 +213,7 @@
                     Download File
 
         %hr
-        - if @online_application.pending?
+        - if @online_application.for_verification?
           .row
             .col-md-6.col-xs-12
               %button#btn-process.btn.btn-info.btn-block

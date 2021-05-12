@@ -39,7 +39,7 @@ class OnlineApplicationsController < ApplicationController
 
     @subheader_items  = [
       { is_link: true, path: online_applications_path, text: "Online Applications" },
-      { text: "#{@online_application.last_name}, #{@online_application.first_name} #{@online_application.first_name} (#{@online_application.reference_number})" }
+      { text: "#{@online_application.last_name}, #{@online_application.first_name} #{@online_application.middle_name} (#{@online_application.reference_number})" }
     ]
   end
 end
