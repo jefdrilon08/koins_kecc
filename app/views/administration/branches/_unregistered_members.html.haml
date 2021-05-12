@@ -6,8 +6,6 @@
           ID Number
         %th
           Name
-        %th
-          Actions
     %tbody
       - @unregistered_members.each do |m|
         %tr
@@ -17,7 +15,3 @@
           %td
             = link_to member_path(m) do
               #{m.full_name}
-          %td
-            .btn.btn-block.btn-success.btn-register{ data: { id: m.id, first_name: m.first_name, last_name: m.last_name } }
-              .fa.fa-check
-              Register
