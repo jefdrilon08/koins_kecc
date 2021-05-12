@@ -306,6 +306,11 @@ class Member < ApplicationRecord
     self.middle_name  = self.middle_name.try(:upcase)
 
     self.username = self.identification_number
+
+    if self.encypted_password.blank?
+      self.password               = "password"
+      self.password_confirmation  = "password"
+    end
   end
 
   def equity_value

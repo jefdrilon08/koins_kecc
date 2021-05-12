@@ -14,8 +14,22 @@ module Administration
           GROUP BY branches.id
           ORDER BY branches.name ASC
         "
-        @branches  = Branch.find_by_sql(sql)
+      else
+        ids = ReadOnlyUserBranch.where(active: true, user_id: current_user.id).pluck(:branch_id).map{ |o| "'#{o}'" }.join(',')
+        sql = "
+          SELECT 
+            branches.*, 
+            count(centers.*) AS center_count
+          FROM branches 
+          INNER JOIN centers
+          ON centers.branch_id = branches.id
+          WHERE branches.id IN (#{ids})
+          GROUP BY branches.id
+          ORDER BY branches.name ASC
+        "
       end
+
+      @branches  = Branch.find_by_sql(sql)
 
       @subheader_items = [
         {
