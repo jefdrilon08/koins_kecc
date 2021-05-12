@@ -45,7 +45,7 @@ module OnlineApplications
         }
       end
 
-      not_yet_implemented!
+      #not_yet_implemented!
 
       @errors[:messages].each do |o|
         @errors[:full_messages] << o[:message]

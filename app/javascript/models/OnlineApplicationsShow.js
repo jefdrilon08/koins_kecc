@@ -100,13 +100,13 @@ var _bindEvents = function() {
       },
       success: function(response) {
         $message.html("Success! Redirecting..."); 
-        window.location.href = "/members/" + response.member_id;
+        window.location.href = "/members/" + response.member_id + "/display";
       },
       error: function(response) {
         console.log(response);
         var errors  = [];
         try {
-          errors  = JSON.parse(response.responseText).full_messages;
+          errors  = JSON.parse(response.responseText).errors;
         } catch(err) {
           errors  = ["Something went wrong"];
           console.log(err);

@@ -16,7 +16,7 @@ module Api
           place_of_birth:   payload[:place_of_birth],
           religion:         payload[:religion],
           data:             payload[:data],
-          file_valid_id:    params[:file_valid_id]
+          file_document:    params[:file_document]
         }
 
         validator = ::Public::ValidateOnlineApplication.new(

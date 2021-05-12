@@ -34,7 +34,7 @@ module OnlineApplications
         beneficiaries:    []
       }
 
-      @member_data[:beneficiaries]  = @online_application.data["legal_dependents"].map{ |o|
+      @member_data[:legal_dependents]  = @online_application.data["legal_dependents"].map{ |o|
                                         {
                                           first_name:     o["firstName"],
                                           middle_name:    o["middleName"],

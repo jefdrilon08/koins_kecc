@@ -307,7 +307,7 @@ class Member < ApplicationRecord
 
     self.username = self.identification_number
 
-    if self.encypted_password.blank?
+    if self.encrypted_password.blank?
       self.password               = "password"
       self.password_confirmation  = "password"
     end

@@ -15,7 +15,7 @@ module Public
       @mobile_number    = @config[:mobile_number]
       @place_of_birth   = @config[:place_of_birth]
       @religion         = @config[:religion]
-      @file_valid_id    = @config[:file_valid_id]
+      @file_document    = @config[:file_document]
       @data             = @config[:data]
 
       @online_application = OnlineApplication.new(
@@ -36,8 +36,8 @@ module Public
     def execute!
       # files
       @online_application.online_application_documents.build(
-        file_name: "ID",
-        file: @file_valid_id
+        file_name: "OTHERFILE",
+        file: @file_document
       )
 
       @online_application.save!

@@ -19,24 +19,24 @@ module Public
       @religion         = @config[:religion]
       @legal_dependents = @config[:data][:legal_dependents] || []
       @beneficiaries    = @config[:data][:beneficiaries] || []
-      @file_valid_id    = @config[:file_valid_id]
+      @file_document    = @config[:file_document]
       @data             = @config[:data]
     end
 
     def execute!
-      if @file_valid_id.blank?
+      if @file_document.blank?
         @errors[:messages] << {
-          key: "file_valid_id",
-          message: "file valid id required"
+          key: "file_document",
+          message: "file required"
         }
-      elsif @file_valid_id.tempfile.size > 2e+6
+      elsif @file_document.tempfile.size > 2e+6
         @errors[:messages] << {
-          key: "file_valid_id",
-          message: "file valid id should be less than 2mb"
+          key: "file_document",
+          message: "file should be less than 2mb"
         }
-      elsif !VALID_FILE_TYPES.include?(@file_valid_id.content_type)
+      elsif !VALID_FILE_TYPES.include?(@file_document.content_type)
         @errors[:messages] << {
-          key: "file_valid_id",
+          key: "file_document",
           message: "invalid file type for valid id"
         }
       end
