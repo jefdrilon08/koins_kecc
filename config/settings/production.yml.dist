@@ -134,10 +134,6 @@ branch_config:
 ###############################
 # AUTHORIZATION               #
 ###############################
-authorization:
-  sync_maintaining_balance:
-    - "BK"
-    - "SBK"
 module_authorization_roles:
 	mykoins:
 		-	MIS
