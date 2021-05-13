@@ -1,4 +1,21 @@
 namespace :rehash do
+  task :loan_rehash_with_payment => :environment do
+    first_payment = "2021-01-18".to_date
+    a = AmortizationScheduleEntry.where("loan_id = ?" ,"573f02c2-b609-4ee3-ab13-41496121909c" ).order(:due_date)
+    a.each do |amort|
+      AmortizationScheduleEntry.find(amort.id).update(due_date: first_payment)
+      if amort.data.present?
+        mtrans = amort.data["payments"][0]["payment_id"]
+        at = AccountTransaction.find(mtrans)
+        at_data = at.data.with_indifferent_access
+        at_data[:amort_entries][0][:due_date] = first_payment
+        at.update(data: at_data)
+      end
+      first_payment = first_payment + 7.days
+    end
+  end
+
+
   task :loan_negative_amort => :environment do
     amort_id = ENV['ID']
   
