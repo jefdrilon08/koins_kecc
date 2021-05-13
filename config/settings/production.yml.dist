@@ -138,7 +138,11 @@ authorization:
   sync_maintaining_balance:
     - "BK"
     - "SBK"
-
+module_authorization_roles:
+	mykoins:
+		-	MIS
+		-	FM
+		-	CM
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
