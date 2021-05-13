@@ -134,11 +134,7 @@ branch_config:
 ###############################
 # AUTHORIZATION               #
 ###############################
-module_authorization_roles:
-	-mykoins:
-		-	MIS
-		-	FM
-		-	CM
+
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
