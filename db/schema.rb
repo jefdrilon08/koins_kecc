@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_152627) do
+ActiveRecord::Schema.define(version: 2021_05_13_034251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -274,6 +274,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_152627) do
     t.integer "member_counter"
     t.date "current_date"
     t.string "color"
+    t.boolean "is_main"
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 

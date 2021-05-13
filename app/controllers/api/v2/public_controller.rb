@@ -2,7 +2,7 @@ module Api
   module V2
     class PublicController < ApiController
       def branches
-        branches  = ReadOnlyBranch.all.map{ |o|
+        branches  = ReadOnlyBranch.where("is_main IS NULL").order("name ASC").map{ |o|
                       {
                         id: o.id,
                         name: o.name

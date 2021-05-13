@@ -1,6 +1,7 @@
 module Administration
   class BranchesController < ApplicationController
     before_action :authenticate_user!
+    before_action :authorize_access!, only: [:edit, :update, :new, :create]
 
     def index
       if current_user.is_mis?
@@ -172,6 +173,14 @@ module Administration
           text: "Edit Branch"
         }
       ]
+    end
+
+    def authorize_access!
+      valid_roles = Settings.try(:module_authorization_roles).try(:administration) || []
+
+      if current_user.current_roles.intersection(valid_roles).size == 0
+        redirect_to root_path
+      end
     end
 
     private
