@@ -17,7 +17,8 @@ module Api
 
           data  = ::Epassbook::FetchSavingsAccount.new(
                     member: @member,
-                    account: account
+                    account: account,
+                    year: params[:year]
                   ).execute!
 
           render json: data

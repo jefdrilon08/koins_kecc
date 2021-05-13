@@ -15,6 +15,8 @@ module_authorization_roles:
     - MIS
     - FM
     - CM
+  administration:
+    - MIS
 
 ###############################
 # BRANCH DATE CONFIG          #

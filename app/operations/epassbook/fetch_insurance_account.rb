@@ -2,9 +2,10 @@ module Epassbook
   class FetchInsuranceAccount
     include ActionView::Helpers::NumberHelper
 
-    def initialize(member:, account:)
+    def initialize(member:, account:, year: nil)
       @member   = member
       @account  = account
+      @year     = year
 
       @data = {
         transactions: [],
@@ -19,7 +20,7 @@ module Epassbook
         subsidiary_type: 'MemberAccount'
       ).where(
         "EXTRACT(year FROM transacted_at) = ?",
-        Date.today.year
+        @year.present? ? @year : Date.today.year
       ).order("transacted_at DESC, created_at DESC").each do |o|
         @data[:transactions] << {
           id: o.id,
@@ -30,6 +31,8 @@ module Epassbook
           transacted_at: o.transacted_at.strftime("%B %d, %Y")
         }
       end
+
+      @data[:balance] = @data[:transactions].try(:first).try(:fetch, :ending_balance) || number_to_currency(0, unit: '')
 
       @data
     end
