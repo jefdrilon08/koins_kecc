@@ -233,10 +233,14 @@
                 Reject
         - elsif @online_application.verified?
           .row
-            .col
+            .col-md-6.col-xs-12
               %button#btn-process.btn.btn-info.btn-block
                 .fa.fa-check
                 Process
+            .col-md-6.col-xs-12
+              %button#btn-reject.btn.btn-danger.btn-block
+                .fa.fa-times
+                Reject
 
 = render partial: "online_applications/modals/process"
 = render partial: "online_applications/modals/verify"
