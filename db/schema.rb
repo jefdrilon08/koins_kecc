@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_13_034251) do
+ActiveRecord::Schema.define(version: 2021_05_13_140917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -1021,6 +1021,7 @@ ActiveRecord::Schema.define(version: 2021_05_13_034251) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "branch_id"
+    t.boolean "agreed_to_dp_terms"
     t.index ["branch_id"], name: "index_online_applications_on_branch_id"
     t.index ["reference_number"], name: "idx_online_applications_reference_number"
   end

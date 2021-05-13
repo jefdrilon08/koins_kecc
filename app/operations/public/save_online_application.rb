@@ -5,36 +5,38 @@ module Public
     def initialize(config:)
       @config = config
 
-      @first_name       = @config[:first_name]
-      @middle_name      = @config[:middle_name]
-      @last_name        = @config[:last_name]
-      @gender           = @config[:gender]
-      @date_of_birth    = @config[:date_of_birth]
-      @civil_status     = @config[:civil_status]
-      @home_number      = @config[:home_number]
-      @mobile_number    = @config[:mobile_number]
-      @place_of_birth   = @config[:place_of_birth]
-      @religion         = @config[:religion]
-      @file_document    = @config[:file_document]
-      @data             = @config[:data]
+      @first_name         = @config[:first_name]
+      @middle_name        = @config[:middle_name]
+      @last_name          = @config[:last_name]
+      @gender             = @config[:gender]
+      @date_of_birth      = @config[:date_of_birth]
+      @civil_status       = @config[:civil_status]
+      @home_number        = @config[:home_number]
+      @mobile_number      = @config[:mobile_number]
+      @place_of_birth     = @config[:place_of_birth]
+      @religion           = @config[:religion]
+      @file_document      = @config[:file_document]
+      @data               = @config[:data]
+      @agreed_to_dp_terms = @config[:agreed_to_dp_terms]
 
       if @config[:branch_id].present?
         @branch = ReadOnlyBranch.find_by_id(@config[:branch_id])
       end
 
       @online_application = OnlineApplication.new(
-                              first_name:     @first_name,
-                              middle_name:    @middle_name,
-                              last_name:      @last_name,
-                              gender:         @gender,
-                              date_of_birth:  @date_of_birth,
-                              civil_status:   @civil_status,
-                              home_number:    @home_number,
-                              mobile_number:  @mobile_number,
-                              place_of_birth: @place_of_birth,
-                              religion:       @religion,
-                              branch:         @branch,
-                              data:           @data
+                              first_name:         @first_name,
+                              middle_name:        @middle_name,
+                              last_name:          @last_name,
+                              gender:             @gender,
+                              date_of_birth:      @date_of_birth,
+                              civil_status:       @civil_status,
+                              home_number:        @home_number,
+                              mobile_number:      @mobile_number,
+                              place_of_birth:     @place_of_birth,
+                              religion:           @religion,
+                              branch:             @branch,
+                              data:               @data,
+                              agreed_to_dp_terms: true
                             )
     end
 

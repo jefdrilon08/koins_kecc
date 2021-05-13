@@ -7,20 +7,21 @@ module Public
 
       @config = config
 
-      @first_name       = @config[:first_name]
-      @middle_name      = @config[:middle_name]
-      @last_name        = @config[:last_name]
-      @gender           = @config[:gender]
-      @date_of_birth    = @config[:date_of_birth]
-      @civil_status     = @config[:civil_status]
-      @home_number      = @config[:home_number]
-      @mobile_number    = @config[:mobile_number]
-      @place_of_birth   = @config[:place_of_birth]
-      @religion         = @config[:religion]
-      @legal_dependents = @config[:data][:legal_dependents] || []
-      @beneficiaries    = @config[:data][:beneficiaries] || []
-      @file_document    = @config[:file_document]
-      @data             = @config[:data]
+      @first_name         = @config[:first_name]
+      @middle_name        = @config[:middle_name]
+      @last_name          = @config[:last_name]
+      @gender             = @config[:gender]
+      @date_of_birth      = @config[:date_of_birth]
+      @civil_status       = @config[:civil_status]
+      @home_number        = @config[:home_number]
+      @mobile_number      = @config[:mobile_number]
+      @place_of_birth     = @config[:place_of_birth]
+      @religion           = @config[:religion]
+      @legal_dependents   = @config[:data][:legal_dependents] || []
+      @beneficiaries      = @config[:data][:beneficiaries] || []
+      @file_document      = @config[:file_document]
+      @agreed_to_dp_terms = @config[:agreed_to_dp_terms]
+      @data               = @config[:data]
     end
 
     def execute!
@@ -38,6 +39,13 @@ module Public
         @errors[:messages] << {
           key: "file_document",
           message: "invalid file type for valid id"
+        }
+      end
+
+      if @agreed_to_dp_terms.blank?
+        @errors[:messages] << {
+          key: "agreed_to_dp_terms",
+          message: "did not agree to data privacy terms"
         }
       end
 

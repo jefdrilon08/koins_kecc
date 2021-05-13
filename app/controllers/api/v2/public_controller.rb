@@ -32,19 +32,20 @@ module Api
         payload = JSON.parse(params[:payload]).with_indifferent_access
 
         config = {
-          first_name:       payload[:first_name],
-          middle_name:      payload[:middle_name],
-          last_name:        payload[:last_name],
-          gender:           payload[:gender],
-          date_of_birth:    payload[:date_of_birth],
-          civil_status:     payload[:civil_status],
-          home_number:      payload[:home_number],
-          mobile_number:    payload[:mobile_number],
-          place_of_birth:   payload[:place_of_birth],
-          religion:         payload[:religion],
-          data:             payload[:data],
-          branch_id:        payload[:branch_id],
-          file_document:    params[:file_document]
+          first_name:         payload[:first_name],
+          middle_name:        payload[:middle_name],
+          last_name:          payload[:last_name],
+          gender:             payload[:gender],
+          date_of_birth:      payload[:date_of_birth],
+          civil_status:       payload[:civil_status],
+          home_number:        payload[:home_number],
+          mobile_number:      payload[:mobile_number],
+          place_of_birth:     payload[:place_of_birth],
+          religion:           payload[:religion],
+          data:               payload[:data],
+          branch_id:          payload[:branch_id],
+          file_document:      params[:file_document],
+          agreed_to_dp_terms: payload[:agreed_to_dp_terms]
         }
 
         validator = ::Public::ValidateOnlineApplication.new(
