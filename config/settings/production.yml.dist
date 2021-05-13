@@ -145,6 +145,8 @@ module_authorization_roles:
     - "CM"
     - "FM"
     - "MIS"
+  administration:
+    - "MIS"
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
