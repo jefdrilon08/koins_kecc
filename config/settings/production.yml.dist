@@ -142,6 +142,7 @@ authorization:
 
 module_authorization_roles:
   mykoins:
+    - "ADMINISTRATOR"
     - "CM"
     - "FM"
     - "MIS"
