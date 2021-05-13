@@ -763,12 +763,7 @@ module Api
       def generate_access_token
         member  = Member.where(id: params[:id]).first
 
-        valid_user_roles = [
-          "MIS",
-          "SO",
-          "AM",
-          "CM"
-        ]
+        valid_user_roles = Settings.try(:module_authorization_roles).try(:mykoins) || []
 
         if current_user.current_roles.intersection(valid_user_roles).size == 0
           render json: { errors: ["unauthorized action"] }, status: 400
