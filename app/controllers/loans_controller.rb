@@ -5,10 +5,11 @@ class LoansController < ApplicationController
     @loans            = ReadOnlyLoan.includes(:center, :branch, :member, :loan_product)
                             .where("loans.branch_id IN (?)", @branches.pluck(:id))
 
-    @q                = params[:q]
-    @status           = params[:status] || "active"
-    @loan_product_id  = params[:loan_product_id]
-    @branch_id        = params[:branch_id]
+    @q                      = params[:q]
+    @status                 = params[:status] || "active"
+    @loan_product_id        = params[:loan_product_id]
+    @branch_id              = params[:branch_id]
+    @is_online_application  = params[:is_online_application]
 
     @centers  = @branches.first.centers
 
@@ -33,6 +34,10 @@ class LoansController < ApplicationController
 
     if @status.present?
       @loans  = @loans.where(status: @status)
+    end
+
+    if @is_online_application.present?
+      @loans  = @loans.where("loans.data->>'is_remote_application' IS NOT NULL")
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)

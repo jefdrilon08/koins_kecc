@@ -1,6 +1,6 @@
 = form_tag "", method: 'GET' do
   .row
-    .col-md-3
+    .col-md-2
       .form-group
         %label
           Query
@@ -25,6 +25,12 @@
         %label
           Status
         = select_tag :status, options_for_select(Loan::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
+    .col-md-1
+      .form-group
+        %label
+          Online
+        %br
+        = check_box_tag :is_online_application, "is_online_application", @is_online_application
     .col-md-1
       .form-group
         %label
