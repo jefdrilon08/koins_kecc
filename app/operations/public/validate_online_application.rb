@@ -158,13 +158,6 @@ module Public
               message: "legal dependent date of birth required"
             }
           end
-
-          if o[:education].blank?
-            @errors[:messages] << {
-              key: "legal_dependent_education",
-              message: "legal dependent education required"
-            }
-          end
         end
       end
 

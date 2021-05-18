@@ -3,6 +3,7 @@ namespace :api do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
     post "/check_status", to: "public#check_status"
+    post "/check_mobile_number", to: "public#check_mobile_number"
     get "/branches", to: "public#branches"
     
     # loans

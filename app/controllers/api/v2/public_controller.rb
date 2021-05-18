@@ -12,6 +12,18 @@ module Api
         render json: { branches: branches }
       end
 
+      def check_mobile_number
+        mobile_number = params[:mobile_number]
+
+        if mobile_number.blank?
+          render json: { errors: ["mobile_number required"] }, status: 403
+        elsif OnlineApplication.where.not(status: 'rejected').where(mobile_number: mobile_number).count > 0
+          render json: { errors: ["mobile_number already taken"] }, status: 403
+        else
+          render json: { message: "ok" }
+        end
+      end
+
       def check_status
         reference_number = params[:reference_number]
 
