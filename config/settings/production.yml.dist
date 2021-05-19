@@ -5955,6 +5955,11 @@ loan_products:
     receivable_accounting_code_id: "2b5e50e3-3af6-47e8-bae1-56aede2eda51"
     interest_receivable_accounting_code_id: "fb8799fe-f79e-422b-969c-33b3d5f6febf"
     default_amount: 5000.00
+    maintaining_balance:
+     account_type: "SAVINGS"
+     account_subtype: "K-IMPOK"
+     percentage: 0.0
+     threshold: 0.00
     deductions:
       -
         name: "Service Fee"
