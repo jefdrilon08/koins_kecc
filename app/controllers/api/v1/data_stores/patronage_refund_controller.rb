@@ -80,10 +80,10 @@ module Api
             user: current_user
           }
 
-          errors  = ::PatronageRefund::ValidateApprove.new(
+          errors  = ::Accounting::ValidateApprovedPatronage.new(
                       config: config
                     ).execute!
-          
+        
           if errors[:messages].any?
             render json: errors, status: 400
           else
@@ -94,7 +94,7 @@ module Api
               user_id: current_user.id
             }
 
-            ProcessApprovePatronageRefund.perform_later(args)
+            ProcessApprovedPatronageRefund.perform_later(args)
 
             render json: { message: "ok" }
           end

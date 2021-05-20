@@ -13,10 +13,10 @@ module DataStores
     end
     def execute!
       @data[:records].each_with_index do |o, i|
-        @data[:records][i][:patronage_interest_amount] = (@patronage_interest_rate * @data[:records][i][:ave_interest])
+        @data[:records][i][:patronage_interest_amount] = (@patronage_interest_rate * @data[:records][i][:ave_interest]).round(2)
         @data[:records][i][:savings_distribute]        = (@config[:savings_rate] * @data[:records][i][:patronage_interest_amount]).round(2)
         @data[:records][i][:cbu_distribute]            = (@config[:cbu_rate] * @data[:records][i][:patronage_interest_amount]).round(2)
-        @data[:records][i][:patronage_interest_amount] = @data[:records][i][:savings_distribute] + @data[:records][i][:cbu_distribute]
+        @data[:records][i][:patronage_interest_amount] = (@data[:records][i][:savings_distribute] + @data[:records][i][:cbu_distribute]).round(2)
       end
 
       @data[:patronage_interest_rate]  = @patronage_interest_rate
