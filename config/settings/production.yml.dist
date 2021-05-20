@@ -5976,7 +5976,7 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.015
+                ratio: 0.02
               -
                 num_installments: 25
                 ratio: 0.03
