@@ -75,6 +75,8 @@
               %strong
                 #{loan.pn_number}
           %td.text-muted
+            - if loan.is_remote?
+              .fa.fa-globe-asia
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
