@@ -38,6 +38,8 @@ class LoansController < ApplicationController
 
     if @is_online_application.present?
       @loans  = @loans.where("loans.data->>'is_remote_application' IS NOT NULL")
+    else
+      @loans  = @loans.where("loans.data->>'is_remote_application' IS NULL")
     end
 
     @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
