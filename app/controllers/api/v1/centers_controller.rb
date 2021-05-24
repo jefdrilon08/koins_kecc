@@ -62,12 +62,26 @@ module Api
       def centers
         centers = Center.where("branch_id IN (?)", @branches.pluck(:id))
 
+        if params[:branch_id].present?
+          centers = centers.where(branch_id: params[:branch_id])
+        end
+
+        if params[:user_id].present?
+          centers = centers.where(user_id: params[:user_id])
+        end
+
         data  = []
 
         centers.find_each(batch_size: 1000) do |o|
           members = []
+          
+          records = o.members
 
-          o.members.order("last_name ASC").each do |m|
+          if params[:is_unregistered].present?
+            records = o.members.where("access_token IS NULL")
+          end
+
+          records.order("last_name ASC").each do |m|
             members << {
               id: m.id,
               name: m.full_name

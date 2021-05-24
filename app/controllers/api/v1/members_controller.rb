@@ -715,10 +715,18 @@ module Api
       end
 
       def index
-        members = Member.all.order("last_name ASC")
+        members = Member.all.joins(:center).order("last_name ASC")
 
         if params[:center_id].present?
           members = members.where(center_id: params[:center_id])
+        end
+
+        if params[:user_id].present?
+          members = members.where("centers.user_id = ?", params[:user_id])
+        end
+
+        if params[:is_unregistered].present?
+          members = members.where("members.access_token IS NULL")
         end
 
         data  = []
@@ -727,6 +735,7 @@ module Api
           data << {
             id: o.id,
             name: o.full_name,
+            identification_number: o.identification_number,
             first_name: o.first_name,
             last_name: o.last_name,
             middle_name: o.middle_name

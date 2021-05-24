@@ -7,8 +7,12 @@ var $inputPassword;
 var $inputPasswordConfirmation;
 var $memberFirstName;
 var $memberLastName;
+var $selectOfficer;
+var $btnSearchUnregisteredMembers;
+var $contentUnregisteredMembers;
 var $message;
 var templateErrorList;
+var templateCenterMembers;
 
 var _authenticityToken;
 
@@ -16,19 +20,66 @@ var _id;
 var _memberFirstName;
 var _memberLastName;
 
+var _urlFetchCenters  = "/api/v1/centers/centers";
+
+var _data = [];
+
 var _cacheDom = function() {
-  $btnRegister                = $(".btn-register"); 
-  $btnConfirmRegister         = $("#btn-confirm-register");
-  $modalRegister              = $("#modal-register");
-  $inputPassword              = $("#input-password");
-  $inputPasswordConfirmation  = $("#input-password-confirmation");
-  $memberFirstName            = $("#member-first-name");
-  $memberLastName             = $("#member-last-name");
-  $message                    = $(".message");
-  templateErrorList           = $("#template-error-list").html();
+  $btnRegister                  = $(".btn-register"); 
+  $btnConfirmRegister           = $("#btn-confirm-register");
+  $modalRegister                = $("#modal-register");
+  $inputPassword                = $("#input-password");
+  $inputPasswordConfirmation    = $("#input-password-confirmation");
+  $memberFirstName              = $("#member-first-name");
+  $memberLastName               = $("#member-last-name");
+  $selectOfficer                = $("#select-officer");
+  $btnSearchUnregisteredMembers = $("#btn-search-unregistered-members");
+  $contentUnregisteredMembers   = $("#content-unregistered-members");
+  $message                      = $(".message");
+  templateErrorList             = $("#template-error-list").html();
+  templateCenterMembers         = $("#template-center-members").html();
 }
 
 var _bindEvents = function() {
+  $btnSearchUnregisteredMembers.on("click", function() {
+    $message.html("Loading...");
+    $contentUnregisteredMembers.html("");
+
+    var userId  = $selectOfficer.val();
+
+    $btnSearchUnregisteredMembers.prop("disabled", true);
+    $selectOfficer.prop("disabled", true);
+
+    $.ajax({
+      url: _urlFetchCenters + '?branch_id=' + _id + '&user_id=' + userId + '&is_unregistered=true',
+      method: 'GET',
+      success: function(response) {
+        _data = response.centers;
+        console.log(_data);
+
+        $btnSearchUnregisteredMembers.prop("disabled", false);
+        $selectOfficer.prop("disabled", false);
+
+        $message.html("");
+
+        if(_data.length > 0) {
+          $contentUnregisteredMembers.html(
+            Mustache.render(
+              templateCenterMembers,
+              { centers: _data }
+            )
+          );
+        } else {
+          $contentUnregisteredMembers.html("No data found.");
+        }
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching center data");
+      }
+    })
+  });
+
   $btnRegister.on("click", function() {
     $message.html("");
     $modalRegister.modal("show");
@@ -94,6 +145,7 @@ var _bindEvents = function() {
 
 var init  = function(options) {
   _authenticityToken  = options.authenticityToken;
+  _id                 = options.id;
 
   _cacheDom();
   _bindEvents();

@@ -30,6 +30,7 @@ namespace :api do
 
     # users
     post "/users/login", to: "users#login"
+    get "/users", to: "users#index"
 
     namespace :members do
       get "/insurances", to: "insurances#index"
