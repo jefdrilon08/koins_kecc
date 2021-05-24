@@ -45,7 +45,7 @@ module Api
 
       def apply
         loan_product      = LoanProduct.find_by_id(params[:loan_product_id])
-        pn_number         = SecureRandom.hex(8)
+        pn_number         = "CHANGE-ME-#{SecureRandom.hex(8)}"
         co_maker_one      = Member.find_by_id(params[:co_maker_id])
         project_type      = ProjectType.find_by_id(params[:project_type_id])
         co_maker_two      = params[:co_maker_two].try(:upcase)

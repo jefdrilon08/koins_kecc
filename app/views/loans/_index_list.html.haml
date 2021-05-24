@@ -28,6 +28,8 @@
           %td
             %small
               %strong
+                - if loan.is_remote?
+                  .fa.fa-globe-asia
                 #{loan.loan_product}
           %td
             %small

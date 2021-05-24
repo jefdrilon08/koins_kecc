@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_093512) do
+ActiveRecord::Schema.define(version: 2021_05_18_110947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -274,6 +274,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
     t.integer "member_counter"
     t.date "current_date"
     t.string "color"
+    t.boolean "is_main"
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 
@@ -926,9 +927,11 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
     t.uuid "member_id"
     t.string "encrypted_password"
     t.string "username"
+    t.uuid "online_application_id"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
+    t.index ["online_application_id"], name: "index_members_on_online_application_id"
     t.index ["status", "center_id"], name: "manual_idx_7"
   end
 
@@ -990,6 +993,38 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
     t.index ["branch_id", "closing_date"], name: "manual_idx_3", order: { closing_date: :desc }
     t.index ["branch_id"], name: "index_monthly_closing_collections_on_branch_id"
     t.index ["closing_date"], name: "manual_idx_2", order: :desc
+  end
+
+  create_table "online_application_documents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "file_name"
+    t.jsonb "data"
+    t.uuid "online_application_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["online_application_id"], name: "index_online_application_documents_on_online_application_id"
+  end
+
+  create_table "online_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.string "gender"
+    t.date "date_of_birth"
+    t.string "civil_status"
+    t.string "home_number"
+    t.string "mobile_number"
+    t.string "reference_number"
+    t.string "status"
+    t.string "place_of_birth"
+    t.string "religion"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "branch_id"
+    t.boolean "agreed_to_dp_terms"
+    t.index ["branch_id"], name: "index_online_applications_on_branch_id"
+    t.index ["mobile_number"], name: "idx_mobile_number_oa"
+    t.index ["reference_number"], name: "idx_online_applications_reference_number"
   end
 
   create_table "project_type_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1232,12 +1267,15 @@ ActiveRecord::Schema.define(version: 2021_04_16_093512) do
   add_foreign_key "members", "branches"
   add_foreign_key "members", "centers"
   add_foreign_key "members", "members"
+  add_foreign_key "members", "online_applications"
   add_foreign_key "membership_payment_collections", "branches"
   add_foreign_key "membership_payment_collections", "centers"
   add_foreign_key "membership_payment_records", "members"
   add_foreign_key "monthly_accounting_code_summaries", "accounting_codes"
   add_foreign_key "monthly_accounting_code_summaries", "branches"
   add_foreign_key "monthly_closing_collections", "branches"
+  add_foreign_key "online_application_documents", "online_applications"
+  add_foreign_key "online_applications", "branches"
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "savings_insurance_transfer_collections", "branches"
   add_foreign_key "savings_insurance_transfer_collections", "centers"

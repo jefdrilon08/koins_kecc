@@ -68,6 +68,9 @@ module Loans
       @loan.payment_type      = @loan_data[:payment_type]
       @loan.data              = @loan_data[:data]
 
+      # Flag loan as remote application
+      @loan.data[:is_remote_application] = true
+
       # Loan co-makers
       @loan.data[:co_maker_two] = @co_maker_two
       @loan.data[:co_maker_one] = {

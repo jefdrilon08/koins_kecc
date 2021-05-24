@@ -26,9 +26,11 @@
   %li.nav-item  
     %a.nav-link{"aria-controls" => "membership_payments", "aria-selected" => "false", "data-toggle" => "tab", :href => "#membership_payments", :role => "tab"}
       Membership Payments
-  %li.nav-item
-    %a.nav-link{"aria-controls" => "MyKOINS", "aria-selected" => "false", "data-toggle" => "tab", :href => "#mykoins", :role => "tab"}
-      My KOINS
+
+  - if current_user.current_roles.intersection(Settings.try(:module_authorization_roles).try(:mykoins) || []).any?
+    %li.nav-item
+      %a.nav-link{"aria-controls" => "MyKOINS", "aria-selected" => "false", "data-toggle" => "tab", :href => "#mykoins", :role => "tab"}
+        My KOINS
 
 .tab-content
   #home.tab-pane.active.show{:role => "tabpanel"}
@@ -49,5 +51,6 @@
     = render partial: "members/attachment_files"
   #membership_payments.tab-pane{:role => "tabpanel"}
     = render partial: "members/membership_payments", locals: { membership_payments: @membership_payments }
-  #mykoins.tab-pane{:role => "tabpanel"}
-    = render partial: "members/mykoins"
+  - if current_user.current_roles.intersection(Settings.try(:module_authorization_roles).try(:mykoins) || []).any?
+    #mykoins.tab-pane{:role => "tabpanel"}
+      = render partial: "members/mykoins"

@@ -41,6 +41,8 @@ class Member < ApplicationRecord
     "Non-Member"
   ]
 
+  belongs_to :online_application, optional: true
+
   belongs_to :center
   belongs_to :branch
 
@@ -304,6 +306,11 @@ class Member < ApplicationRecord
     self.middle_name  = self.middle_name.try(:upcase)
 
     self.username = self.identification_number
+
+    if self.encrypted_password.blank?
+      self.password               = "password"
+      self.password_confirmation  = "password"
+    end
   end
 
   def equity_value

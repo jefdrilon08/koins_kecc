@@ -1,5 +1,7 @@
 module Members
   class Save
+    attr_accessor :member
+
     def initialize(config:)
       super()
 

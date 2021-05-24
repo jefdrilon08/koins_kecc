@@ -73,7 +73,7 @@ class DataStoreController < ApplicationController
       # XXX: Flashes aren't being used yet
       #
       # flash[:notice] = "#{data_store_scope.humanize} ##{@record.id} not found."
-      redirect_to [:data_stores, data_store_scope]
+      redirect_to [:data_stores, data_store_scope.to_sym]
     end
   end
 
@@ -87,7 +87,7 @@ class DataStoreController < ApplicationController
       flash[:danger] = "#{data_store_scope.humanize} ##{@record.id} still processing."
     end
 
-    redirect_to [:data_stores, data_store_scope]
+    redirect_to [:data_stores, data_store_scope.to_sym]
   end
 
   private

@@ -1,6 +1,10 @@
 namespace :api do
   namespace :v2 do
+    post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
+    post "/check_status", to: "public#check_status"
+    post "/check_mobile_number", to: "public#check_mobile_number"
+    get "/branches", to: "public#branches"
     
     # loans
     post "/loans/apply", to: "loans#apply"
@@ -41,6 +45,11 @@ namespace :api do
   end
 
   namespace :v1 do
+    # Process Online Application
+    post "/online_applications/process", to: "online_applications#process_application"
+    post "/online_applications/reject", to: "online_applications#reject"
+    post "/online_applications/verify", to: "online_applications#verify"
+
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
@@ -214,6 +223,10 @@ namespace :api do
     post "/billings/update_particular", to: "billings#update_particular"
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
+
+
+    #billing_for_full_payments
+    post "/billing_for_full_payments/create", to: "billing_for_full_payments#create"
 
     #Accrued_Billing
     post "/accrued_payment_collections", to: "accrued_payment_collections#create"

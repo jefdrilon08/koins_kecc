@@ -1,6 +1,7 @@
 module Administration
   class BranchesController < ApplicationController
     before_action :authenticate_user!
+    before_action :authorize_access!, only: [:edit, :update, :new, :create]
 
     def index
       if current_user.is_mis?
@@ -14,8 +15,22 @@ module Administration
           GROUP BY branches.id
           ORDER BY branches.name ASC
         "
-        @branches  = Branch.find_by_sql(sql)
+      else
+        ids = ReadOnlyUserBranch.where(active: true, user_id: current_user.id).pluck(:branch_id).map{ |o| "'#{o}'" }.join(',')
+        sql = "
+          SELECT 
+            branches.*, 
+            count(centers.*) AS center_count
+          FROM branches 
+          INNER JOIN centers
+          ON centers.branch_id = branches.id
+          WHERE branches.id IN (#{ids})
+          GROUP BY branches.id
+          ORDER BY branches.name ASC
+        "
       end
+
+      @branches  = Branch.find_by_sql(sql)
 
       @subheader_items = [
         {
@@ -158,6 +173,14 @@ module Administration
           text: "Edit Branch"
         }
       ]
+    end
+
+    def authorize_access!
+      valid_roles = Settings.try(:module_authorization_roles).try(:administration) || []
+
+      if current_user.current_roles.intersection(valid_roles).size == 0
+        redirect_to root_path
+      end
     end
 
     private

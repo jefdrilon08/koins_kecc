@@ -169,6 +169,8 @@ import DailyBranchMetricsIndex from "../models/DailyBranchMetricsIndex.js";
 import Dashboard from "../models/Dashboard.js";
 import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCodeSummariesIndex.js";
 import TrendsIndex from "../models/TrendsIndex.js";
+import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
+import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -316,7 +318,9 @@ const hooks = {
   "accounting/general_ledgers/show":                  [GeneralLedgersShow, GeneralLedgerDisplayComponent],
   "daily_branch_metrics/index":                       [DailyBranchMetricsIndex],
   "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
-  "trends/index":                                     [TrendsIndex]
+  "trends/index":                                     [TrendsIndex],
+  "online_applications/show":                         [OnlineApplicationsShow],
+  "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -75,6 +75,8 @@
               %strong
                 #{loan.pn_number}
           %td.text-muted
+            - if loan.is_remote?
+              .fa.fa-globe-asia
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
@@ -124,7 +126,11 @@
                 
                 #{loan.data["accrued_interest"]["status"]}
               -else
-                Active
+                - if loan.data["accrued_interest"]["status"].present?
+                  #{loan.data["accrued_interest"]["status"]}
+                - else
+                  Active
+                
 
             - if current_user.roles.include?("SBK")
               %td
@@ -152,7 +158,12 @@
               #{loan.data["accrued_interest"]["status"]}
                 
             -else
-              Active
+            
+              - if loan.data["accrued_interest"]["status"].present?
+                #{loan.data["accrued_interest"]["status"]}
+              - else
+                Active
+            
 
           - if current_user.roles.include?("SBK")
             %td

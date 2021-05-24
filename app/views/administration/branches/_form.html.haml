@@ -17,6 +17,9 @@
         = f.input :current_date, as: :string, input_html: { class: 'form-control', type: 'date' }
     .col
       .form-group
+        = f.input :is_main
+    .col
+      .form-group
         = f.input :color, as: :string, input_html: { class: 'form-control', type: 'color' }
     
   %hr

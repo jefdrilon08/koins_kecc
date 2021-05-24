@@ -25,6 +25,10 @@
         = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-hand-holding-usd
           Loans
+      %li.c-sidebar-nav-item
+        = link_to online_applications_path, class: "c-sidebar-nav-link #{params[:controller] == "online_applications" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-globe-asia
+          Online Applications
     %li.c-sidebar-nav-title
       Transactions
     - if microloans?

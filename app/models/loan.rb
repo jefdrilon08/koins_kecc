@@ -53,6 +53,10 @@ class Loan < ApplicationRecord
     )
   end
 
+  def is_remote?
+    self.data.key?("is_remote_application")
+  end
+
   def loan_product_name
     self.loan_product.name
   end

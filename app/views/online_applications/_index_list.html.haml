@@ -1,0 +1,50 @@
+.table-responsive
+  %table.table.table-sm.table-hover
+    %thead
+      %tr
+        %th
+          Reference Number
+        %th
+          Name
+        %th
+          Branch
+        %th
+          Mobile Number
+        %th
+          Status
+        %th
+          Created At
+        %th
+          Updated At
+    %tbody
+      - @online_applications.each do |o|
+        %tr
+          %td
+            %strong
+              = link_to online_application_path(o.id) do
+                #{o.reference_number}
+          %td
+            %strong
+              = link_to online_application_path(o.id) do
+                #{o.full_name}
+          %td
+            #{o.branch}
+          %td
+            #{o.mobile_number}
+          %td
+            - if o.for_verification?
+              .badge.badge-warning
+                FOR VERIFICATION
+            - elsif o.verified?
+              .badge.badge-info
+                VERIFIED
+            - elsif o.processed?
+              .badge.badge-success
+                PROCESSED
+            - elsif o.rejected?
+              .badge.badge-danger
+                REJECTED
+          %td
+            #{o.created_at.strftime("%B %d, %Y")}
+          %td
+            #{o.updated_at.strftime("%B %d, %Y")}

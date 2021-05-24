@@ -2,9 +2,10 @@ module Epassbook
   class FetchEquityAccount
     include ActionView::Helpers::NumberHelper
 
-    def initialize(member:, account:)
+    def initialize(member:, account:, year: Date.today.year)
       @member   = member
       @account  = account
+      @year     = year
 
       @data = {
         transactions: [],
@@ -19,7 +20,7 @@ module Epassbook
         subsidiary_type: 'MemberAccount'
       ).where(
         "EXTRACT(year FROM transacted_at) = ?",
-        Date.today.year
+        @year
       ).order("transacted_at DESC, created_at DESC").each do |o|
         @data[:transactions] << {
           id: o.id,
