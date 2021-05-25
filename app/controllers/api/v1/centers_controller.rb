@@ -78,7 +78,7 @@ module Api
           records = o.members
 
           if params[:is_unregistered].present?
-            records = o.members.where("access_token IS NULL")
+            records = o.members.pending.where("access_token IS NULL")
           end
 
           records.order("last_name ASC").each do |m|
