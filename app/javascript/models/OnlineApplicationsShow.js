@@ -16,6 +16,7 @@ var $message;
 var templateErrorList;
 var templateCenterOptions;
 var $selectBranch;
+var $selectVerifyBranch;
 var $selectCenter;
 var $inputReason;
 var _centers = [];
@@ -32,6 +33,7 @@ var _cacheDom = function() {
   $btnConfirmVerify     = $("#btn-confirm-verify");
   $inputReason          = $("#input-reason");
   $selectBranch         = $("#select-branch");
+  $selectVerifyBranch   = $("#select-verify-branch");
   $selectCenter         = $("#select-center");
   $message              = $(".message");
   templateErrorList     = $("#template-error-list").html();
@@ -44,11 +46,17 @@ var _bindEvents = function() {
   });
 
   $btnConfirmVerify.on("click", function() {
+    var branchId  = $selectVerifyBranch.val();
+
+    $btnConfirmVerify.prop("disabled", true); 
+    $selectVerifyBranch.prop("disabled", true);
+
     $.ajax({
       url: "/api/v1/online_applications/verify",
       method: "POST",
       data: {
         id: _id,
+        branch_id: branchId,
         authenticity_token: _authenticityToken
       },
       success: function(response) {

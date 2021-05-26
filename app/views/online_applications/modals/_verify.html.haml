@@ -10,6 +10,12 @@
             %p
               Are you sure you want to verify this application?
           .message
+          .row
+            .col
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @online_application.branch_id), class: "form-control select-select2", id: "select-verify-branch"
       .modal-footer
         .controls
           %button#btn-confirm-verify.btn.btn-primary

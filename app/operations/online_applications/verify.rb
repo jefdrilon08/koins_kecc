@@ -1,11 +1,13 @@
 module OnlineApplications
   class Verify
     attr_accessor :online_application,  
+                  :branch,
                   :user
 
-    def initialize(online_application:, user:)
+    def initialize(online_application:, user:, branch:)
       @online_application = online_application
       @user               = user
+      @branch             = branch
     end
 
     def execute!
@@ -14,7 +16,8 @@ module OnlineApplications
         name: @user.to_s
       }
 
-      @online_application.status = "verified"
+      @online_application.branch  = @branch
+      @online_application.status  = "verified"
 
       @online_application.save!
     end
