@@ -248,11 +248,11 @@ module Loans
               
               if @loan.member.member_type == "GK"
                 new_computed_insurance = {
-                  account_type: b.meta["account_type"],
-                  account_subtype: b.meta["account_subtype"],
-                  accounting_entry: b["accounting_code_id"],
+                  account_type: "SAVINGS",
+                  account_subtype: "Golden K",
+                  accounting_entry: "22f6ac03-ab97-4472-ad41-9a894a672e30",
                   value: second_clip,
-                  old_value: 0.0
+                  old_value: @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == "22f6ac03-ab97-4472-ad41-9a894a672e30"}.last["amount"]
 
                 }
 
@@ -281,7 +281,8 @@ module Loans
       
       sum_total_laonable = 0
       if @loan.member.member_type == "GK"
-      @jef[:total_loanable_amount]  = (@jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
+      #@jef[:total_loanable_amount]  = (@jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
+      @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
       else
       @jef[:total_loanable_amount]  = ((@jef[:insurance_details].inject(0){|sum_total_laonable, x| sum_total_laonable + x[:value].to_f}) + @jef[:total_principal] + @jef[:total_interest] + @jef[:total_service_fee].to_f.abs).to_f.round
       end

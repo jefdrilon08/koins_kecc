@@ -96,7 +96,12 @@ module Adjustments
             if dif_clip.to_f.abs > 0
             
               dif_clip_total = dif_clip
-              clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
+              if @loan.member.member_type == "GK" 
+                clip_account_code = AccountingCode.find("22f6ac03-ab97-4472-ad41-9a894a672e30")
+              else
+                clip_account_code = AccountingCode.find("af83062d-628a-4fdd-acfd-bdebe2696513")
+              end
+
               journal_entries << {
                   accounting_code_id: clip_account_code.id,
                   code: clip_account_code.code,
@@ -197,6 +202,7 @@ module Adjustments
       def build_credit_journal_entries!
         journal_entries = []
         account_transaction_data = @account_transaction
+      
         for_misc = Loan.find(@account_transaction_details.loan).data["accounting_entry"]["debit_journal_entries"]
       
         @misc_details = 0
@@ -281,6 +287,7 @@ module Adjustments
           account_code_regular = AccountingCode.find("b7c23e58-e44e-46ae-a3ec-b5081d6eed32")
           account_code_gk = AccountingCode.find("f719c253-a9ba-4d81-ae52-dc8d8d0848f2")
           total_amount = account_transaction_data.amount.abs
+          
           if @loan.member.member_type == "GK"
             journal_entries << {
                   accounting_code_id: account_code_gk.id,
