@@ -4,7 +4,7 @@ module OnlineApplications
                   :branch,
                   :user
 
-    def initialize(online_application:, user:, branch:)
+    def initialize(online_application:, user:, branch: nil)
       @online_application = online_application
       @user               = user
       @branch             = branch

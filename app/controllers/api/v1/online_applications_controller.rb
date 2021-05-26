@@ -16,9 +16,16 @@ module Api
         if validator.errors[:full_messages].size > 0
           render json: { full_messages: validator.errors[:full_messages] }, status: 403
         else
+          branch = nil
+
+          if params[:branch_id].present?
+            branch = ReadOnlyBranch.find_by_id(params[:branch_id])
+          end
+
           cmd = ::OnlineApplications::Verify.new(
                   online_application: online_application,
-                  user: current_user
+                  user: current_user,
+                  branch: branch
                 )
 
           cmd.execute!
