@@ -1,20 +1,11 @@
 class Loan < ApplicationRecord
   STATUSES  = [
+    "for-validation",
+    "rejected",
     "pending",
     "active",
     "paid",
     "processing"
-  ]
-  LOAN_STATUSES = [
-    "pending",
-    "active",
-    "paid",
-    "writeoff",
-    "lay_low",
-    "inactive",
-    "deleted",
-    "for-transfer",
-    "transferred"
   ]
 
   belongs_to :center
@@ -33,6 +24,7 @@ class Loan < ApplicationRecord
   validates :principal_paid, presence: true, numericality: true
   validates :interest_paid, presence: true, numericality: true
 
+  scope :for_validation, -> { where(status: "for-validation") }
   scope :pending, -> { where(status: "pending") }
   scope :active, -> { where(status: "active") }
   scope :paid, -> { where(status: "paid") }
@@ -42,6 +34,10 @@ class Loan < ApplicationRecord
   has_many :amortization_schedule_entries, dependent: :destroy
 
   before_validation :load_defaults
+
+  def for_validation?
+    self.status == "for-validation"
+  end
 
   def accounting_entry
     entry = data.fetch("accounting_entry")
