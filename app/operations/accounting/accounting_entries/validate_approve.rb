@@ -14,6 +14,23 @@ module Accounting
       def execute!
         validate_balanced!
 
+        # For microinsurance
+        if Settings.activate_microinsurance
+          if @accounting_entry.accounting_fund_id.nil?
+            @errors[:messages] << {
+              key: "accounting_fund",
+              message: "Accounting Fund is required"
+            }  
+          end
+
+          if @accounting_entry.branch_id != Settings.defaults[:default_branch][:id]
+            @errors[:messages] << {
+              key: "branch",
+              message: "Wrong selected branch!"
+            }
+          end
+        end
+
         @errors[:messages].each do |o|
           @errors[:full_messages] << o[:message]
         end

@@ -166,7 +166,7 @@ module Branches
                   FROM members 
                   LEFT JOIN
                   (
-                    SELECT DISTINCT ON(member_accounts.id)
+                    SELECT
                       member_accounts.member_id,
                       member_accounts.id AS member_account_id,
                       member_accounts.account_subtype AS member_account_subtype,
