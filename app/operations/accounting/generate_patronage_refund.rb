@@ -207,7 +207,7 @@ module Accounting
                 centers.id AS center_id,
                 centers.name AS center_name
                 FROM members  
-                INNER JOIN centers ON centers.id = members.center_id AND members.branch_id = '#{@branch.id}' AND members.status IN ('active','resigned')  
+                INNER JOIN centers ON centers.id = members.center_id AND members.branch_id = '#{@branch.id}' AND members.status IN ('active','resigned','cleared','pending','transferred','archived')  
                 ORDER BY  members.identification_number
       EOS
 
