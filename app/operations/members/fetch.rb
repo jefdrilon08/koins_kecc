@@ -17,6 +17,13 @@ module Members
           district: "",
           city: ""
         },
+        new_address: {
+          street: "",
+          district: "",
+          city: "",
+          province: "",
+          zip_code: ""
+        },
         spouse: {
           first_name: "",
           middle_name: "",
