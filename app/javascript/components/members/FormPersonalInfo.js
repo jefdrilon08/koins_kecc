@@ -69,6 +69,50 @@ export default class FormPersonalInfo extends React.Component {
     this.props.updateData(data);
   }
 
+
+//=======================2nd address
+
+  handleNewAddressStreetChanged(event) {
+    var data                  = this.props.data;
+    data.data.new_address.street  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+  handleNewAddressDistrictChanged(event) {
+    var data                    = this.props.data;
+    data.data.new_address.district  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+  handleNewAddressCityChanged(event) {
+    var data                = this.props.data;
+    data.data.new_address.city  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+  
+  handleNewAddressProvinceChanged(event) {
+    var data                = this.props.data;
+    data.data.new_address.proprovince  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+  
+  handleNewAddressZipCodeChanged(event) {
+    var data                = this.props.data;
+    data.data.new_address.zip_code  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+
+//======================= end of 2nd address
+
+
+
+
   handleGenderChanged(event) {
     var data  = this.props.data;
 
@@ -257,6 +301,86 @@ export default class FormPersonalInfo extends React.Component {
             </div>
           </div>
         </div>
+
+
+        <h5>
+          Bagong Format Tirahan / Address Format
+            <small>(Please Fillup)</small>
+        </h5>
+        <div className="row">
+          <div className="col-md-4">
+            <div className="form-group">
+              <label>* Kalye / Street</label>
+              <input
+                value={this.props.data.data.new_address.street}
+                className="form-control"
+                onChange={this.handleNewAddressStreetChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              />
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form-group">
+              <label>* Barangay</label>
+              <input
+                value={this.props.data.data.new_address.district}
+                className="form-control"
+                onChange={this.handleNewAddressDistrictChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              />
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form-group">
+              <label>* Syudad / City</label>
+              <input
+                value={this.props.data.data.new_address.city}
+                className="form-control"
+                onChange={this.handleNewAddressCityChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              />
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form-group">
+              <label>* State / Province</label>
+              <input
+                value={this.props.data.data.new_address.province}
+                className="form-control"
+                onChange={this.handleNewAddressProvinceChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              />
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="form-group">
+              <label>* Zip Code</label>
+              <input
+                value={this.props.data.data.new_address.zip_code}
+                className="form-control"
+                onChange={this.handleNewAddressZipCodeChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              />
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div className="row">
           <div className="col-md-4">
             <div className="form-group">
