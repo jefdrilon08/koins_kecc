@@ -8,21 +8,6 @@ cutoff_time_start: "23:00"
 cutoff_time_end: "23:59"
 
 ###############################
-# AUTHORIZATION ROLES         #
-###############################
-module_authorization_roles:
-  online_loan_application_verification:
-    - MIS
-    - CM
-    - SO
-  mykoins:
-    - MIS
-    - FM
-    - CM
-  administration:
-    - MIS
-
-###############################
 # BRANCH DATE CONFIG          #
 ###############################
 
@@ -156,6 +141,10 @@ authorization:
     - "SBK"
 
 module_authorization_roles:
+  online_loan_application_verification:
+    - MIS
+    - CM
+    - SO
   mykoins:
     - "CM"
     - "FM"
