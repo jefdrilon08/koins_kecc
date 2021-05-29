@@ -73,6 +73,11 @@ module Api
         if validator.errors[:full_messages].any?
           render json: { errors: validator.errors }, status: 400
         else
+          ::Loans::Verify.new(
+            user: current_user,
+            loan: loan
+          ).execute!
+
           render json: { message: "ok" }
         end
       end

@@ -1,26 +1,24 @@
 module Loans
-  class Reject < AppValidator
+  class Verify
     attr_accessor :user,
                   :loan
 
-    def initialize(user: nil, loan: nil, reason: nil)
+    def initialize(user:, loan:)
       @user = user
       @loan = loan
     end
 
     def execute!
-      @loan.data["rejection"] = {
-        rejected_by: {
+      @loan.data["verification"] = {
+        verified_by: {
           id: @user.id,
           name: @user.full_name,
           first_name: @user.first_name,
           last_name: @user.last_name
-        },
-        rejected_at: Date.today
+        }
       }
 
-      @loan.pn_number = "REJECTED-#{@loan.pn_number}"
-      @loan.status    = "rejected"
+      @loan.status = "pending"
 
       @loan.save!
     end
