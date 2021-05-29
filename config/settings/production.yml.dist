@@ -13,6 +13,7 @@ cutoff_time_end: "23:59"
 module_authorization_roles:
   online_loan_application_verification:
     - MIS
+    - CM
     - SO
   mykoins:
     - MIS
