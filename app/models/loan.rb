@@ -1,6 +1,6 @@
 class Loan < ApplicationRecord
   STATUSES  = [
-    "for-validation",
+    "for-verification",
     "rejected",
     "pending",
     "active",
@@ -24,7 +24,7 @@ class Loan < ApplicationRecord
   validates :principal_paid, presence: true, numericality: true
   validates :interest_paid, presence: true, numericality: true
 
-  scope :for_validation, -> { where(status: "for-validation") }
+  scope :for_verification, -> { where(status: "for-verification") }
   scope :pending, -> { where(status: "pending") }
   scope :active, -> { where(status: "active") }
   scope :paid, -> { where(status: "paid") }
@@ -35,8 +35,8 @@ class Loan < ApplicationRecord
 
   before_validation :load_defaults
 
-  def for_validation?
-    self.status == "for-validation"
+  def for_verification?
+    self.status == "for-verification"
   end
 
   def accounting_entry
@@ -63,7 +63,10 @@ class Loan < ApplicationRecord
 
   def load_defaults
     if self.new_record?
-      self.status = "pending"
+      if self.status.blank?
+        self.status = "pending"
+      end
+
       self.payment_type = "cash"
     end
 

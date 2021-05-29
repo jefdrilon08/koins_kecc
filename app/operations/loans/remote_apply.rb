@@ -182,6 +182,9 @@ module Loans
 
       @loan.data[:accounting_entry] = accounting_entry_data
 
+      # Initial status of loan for remote application should be for-verification
+      @loan.status = "for-verification"
+
       @loan.save!
 
       @loan

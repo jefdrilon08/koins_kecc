@@ -3,9 +3,10 @@ module Epassbook
     include ActionView::Helpers::NumberHelper
 
     def initialize(member:)
-      @member         = member
-      @active_loans   = @member.loans.where(status: "active")
-      @pending_loans  = @member.loans.where(status: "pending")
+      @member               = member
+      @active_loans         = @member.loans.active
+      @pending_loans        = @member.loans.pending
+      @for_verification_loans = @member.loans.for_verification
 
       @loans          = []
       @total_balance  = 0.00
@@ -82,9 +83,22 @@ module Epassbook
         }
       }
 
+      for_verification_loans  = @for_verification_loans.map{ |o|
+        {
+          id: o.id,
+          principal: number_to_currency(o.principal, unit: ""),
+          interest: number_to_currency(o.interest, unit: ""),
+          total_dues: number_to_currency(o.total_dues, unit: ""),
+          total_balance: number_to_currency(o.total_balance, unit: ""),
+          total_paid: number_to_currency(o.total_paid, unit: ""),
+          loan_product: o.loan_product.to_s
+        }
+      }
+
       @data = {
         loans: @loans,
         pending_loans: pending_loans,
+        for_verification_loans: for_verification_loans,
         total_balance: number_to_currency(@total_balance, unit: ""),
         total_loan: number_to_currency(@total_loan, unit: ""),
         total_interest: number_to_currency(@total_interest, unit: ""),

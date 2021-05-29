@@ -1,4 +1,10 @@
 module ApplicationHelper
+  def fetch_valid_roles(module_name)
+    ::Users::FetchValidRoles.new(
+      module_name: module_name
+    ).execute!
+  end
+
   def loan_products_for_restructuring
     loan_product_ids = Settings.loan_products.select{ |o| o.for_restructuring == true }.pluck(:loan_product_id)    
 

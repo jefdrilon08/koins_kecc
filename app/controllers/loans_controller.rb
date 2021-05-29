@@ -148,6 +148,21 @@ class LoansController < ApplicationController
 
     @subheader_side_actions = []
 
+    if @loan.for_verification?
+      @subheader_side_actions << {
+        id: "btn-verify",
+        class: "fa fa-check",
+        link: "#",
+        text: "Verify"
+      }
+
+      @subheader_side_actions << {
+        id: "btn-reject",
+        class: "fa fa-times",
+        link: "#",
+        text: "Reject"
+      }
+    end
 
     if @loan.pending?
       @subheader_side_actions << {
