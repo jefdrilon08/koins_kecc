@@ -138,28 +138,32 @@ module_authorization_roles:
   online_loan_application_verification:
     - MIS
     - SO
+		-	FM
     - AM
     - CM
   online_application_verify:
     - MIS
-    - FM
-    - CM
+    - SO
   online_application_assign_branch:
     - MIS
     - CM
+		-	AM
   online_application_reject:
     - MIS
+		-	SO
     - FM
     - CM
+		-	AM
   online_application_process:
     - MIS
-    - SO
+    - FM
     - AM
     - CM
   mykoins:
     - MIS
     - FM
     - CM
+		-	AM
   administration:
     - MIS
 
