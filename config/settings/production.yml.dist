@@ -138,7 +138,7 @@ module_authorization_roles:
   online_loan_application_verification:
     - MIS
     - SO
-		-	FM
+    - FM
     - AM
     - CM
   online_application_verify:
@@ -147,13 +147,13 @@ module_authorization_roles:
   online_application_assign_branch:
     - MIS
     - CM
-		-	AM
+    - AM
   online_application_reject:
     - MIS
-		-	SO
+    - SO
     - FM
     - CM
-		-	AM
+    - AM
   online_application_process:
     - MIS
     - FM
@@ -163,7 +163,7 @@ module_authorization_roles:
     - MIS
     - FM
     - CM
-		-	AM
+    - AM
   administration:
     - MIS
 
