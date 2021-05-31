@@ -49,12 +49,23 @@ class OnlineApplicationsController < ApplicationController
     @online_application = OnlineApplication.find(params[:id])
 
     @payload = {
-      id: @online_application.id
+      id: @online_application.id,
+      data: @online_application.to_json
     }
 
     @subheader_items  = [
       { is_link: true, path: online_applications_path, text: "Online Applications" },
       { text: "#{@online_application.last_name}, #{@online_application.first_name} #{@online_application.middle_name} (#{@online_application.reference_number})" }
     ]
+
+    # For printing form
+    @subheader_side_actions = []
+
+    @subheader_side_actions << {
+      id: "btn-download-form",
+      class: "fa fa-download",
+      link: "#",
+      text: "Download Form"
+    }
   end
 end

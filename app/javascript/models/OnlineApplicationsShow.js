@@ -1,7 +1,14 @@
 import Mustache from "mustache/mustache";
 
+import "pdfmake/build/pdfmake"
+const pdfMake = window["pdfMake"];
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+import MembershipApplicationFormDocumentBuilder from './MembershipApplicationFormDocumentBuilder.js';
+
 var _id;
 var _authenticityToken;
+var _data;
 
 var $modalProcess;
 var $modalReject;
@@ -12,6 +19,7 @@ var $btnProcess;
 var $btnConfirmProcess;
 var $btnReject;
 var $btnConfirmReject;
+var $btnDownloadForm;
 var $message;
 var templateErrorList;
 var templateCenterOptions;
@@ -31,6 +39,7 @@ var _cacheDom = function() {
   $btnConfirmReject     = $("#btn-confirm-reject");
   $btnVerify            = $("#btn-verify");
   $btnConfirmVerify     = $("#btn-confirm-verify");
+  $btnDownloadForm      = $("#btn-download-form");
   $inputReason          = $("#input-reason");
   $selectBranch         = $("#select-branch");
   $selectVerifyBranch   = $("#select-verify-branch");
@@ -41,6 +50,12 @@ var _cacheDom = function() {
 }
 
 var _bindEvents = function() {
+  $btnDownloadForm.on("click", function() {
+    var docDefinition = MembershipApplicationFormDocumentBuilder.execute(JSON.parse(_data));
+
+    //pdfMake.createPdf(docDefinition).open();
+  });
+
   $btnVerify.on("click", function() {
     $modalVerify.modal("show");
   });
@@ -232,6 +247,7 @@ var _bindEvents = function() {
 var init = function(options) {
   _id                 = options.id;
   _authenticityToken  = options.authenticityToken;
+  _data               = options.data;
 
   _cacheDom();
   _bindEvents();

@@ -328,10 +328,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const authenticityToken = $("meta[name='csrf-token']").attr('content');
   const options = { authenticityToken, ...payload }
 
-  console.log("payload:");
-  console.log(payload);
-  console.log("route: " + route);
-
   const components = hooks[route];
   if (components) {
     components.forEach((component) => {
