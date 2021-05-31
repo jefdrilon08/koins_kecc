@@ -50,6 +50,7 @@ namespace :api do
     post "/online_applications/process", to: "online_applications#process_application"
     post "/online_applications/reject", to: "online_applications#reject"
     post "/online_applications/verify", to: "online_applications#verify"
+    post "/online_applications/assign_branch", to: "online_applications#assign_branch"
 
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"

@@ -2,13 +2,6 @@ module OnlineApplications
   class ValidateProcess < AppValidator
     attr_accessor :errors
 
-    VALID_USER_ROLES = [
-      "MIS",
-      "SO",
-      "AM",
-      "CM"
-    ]
-
     def initialize(online_application:, branch:, center:, user:)
       super()
 
@@ -16,6 +9,10 @@ module OnlineApplications
       @branch             = branch
       @center             = center
       @user               = user
+
+      @valid_roles  = ::Users::FetchValidRoles.new(
+                        module_name: "online_application_process"
+                      ).execute!
     end
 
     def execute!
@@ -50,7 +47,7 @@ module OnlineApplications
           key: "user",
           message: "user required"
         }
-      elsif @user.current_roles.intersection(VALID_USER_ROLES).size == 0
+      elsif @user.current_roles.intersection(@valid_roles).size == 0
         @errors[:messages] << {
           key: "user",
           message: "unauthorized to perform action"

@@ -1,5 +1,5 @@
 module OnlineApplications
-  class ValidateVerify < AppValidator
+  class ValidateAssignBranch < AppValidator
     attr_accessor :errors
 
     def initialize(online_application:, user:)
@@ -9,7 +9,7 @@ module OnlineApplications
       @user               = user
 
       @valid_roles  = ::Users::FetchValidRoles.new(
-                        module_name: "online_application_verify"
+                        module_name: "online_application_assign_branch"
                       ).execute!
     end
 

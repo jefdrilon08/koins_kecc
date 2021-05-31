@@ -3,6 +3,7 @@ import Mustache from "mustache/mustache";
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];
 import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import MembershipApplicationFormDocumentBuilder from './MembershipApplicationFormDocumentBuilder.js';
 
@@ -13,6 +14,7 @@ var _data;
 var $modalProcess;
 var $modalReject;
 var $modalVerify;
+var $modalAssignBranch;
 var $btnVerify;
 var $btnConfirmVerify;
 var $btnProcess;
@@ -20,40 +22,94 @@ var $btnConfirmProcess;
 var $btnReject;
 var $btnConfirmReject;
 var $btnDownloadForm;
+var $btnAssignBranch;
+var $btnConfirmAssignBranch;
 var $message;
 var templateErrorList;
 var templateCenterOptions;
 var $selectBranch;
 var $selectVerifyBranch;
+var $selectAssignBranch;
 var $selectCenter;
 var $inputReason;
 var _centers = [];
 
 var _cacheDom = function() {
-  $modalProcess         = $("#modal-process");
-  $modalReject          = $("#modal-reject");
-  $modalVerify          = $("#modal-verify");
-  $btnProcess           = $("#btn-process");
-  $btnConfirmProcess    = $("#btn-confirm-process");
-  $btnReject            = $("#btn-reject");
-  $btnConfirmReject     = $("#btn-confirm-reject");
-  $btnVerify            = $("#btn-verify");
-  $btnConfirmVerify     = $("#btn-confirm-verify");
-  $btnDownloadForm      = $("#btn-download-form");
-  $inputReason          = $("#input-reason");
-  $selectBranch         = $("#select-branch");
-  $selectVerifyBranch   = $("#select-verify-branch");
-  $selectCenter         = $("#select-center");
-  $message              = $(".message");
-  templateErrorList     = $("#template-error-list").html();
-  templateCenterOptions = $("#template-center-options").html();
+  $modalProcess           = $("#modal-process");
+  $modalReject            = $("#modal-reject");
+  $modalVerify            = $("#modal-verify");
+  $modalAssignBranch      = $("#modal-assign-branch");
+  $btnProcess             = $("#btn-process");
+  $btnConfirmProcess      = $("#btn-confirm-process");
+  $btnReject              = $("#btn-reject");
+  $btnConfirmReject       = $("#btn-confirm-reject");
+  $btnVerify              = $("#btn-verify");
+  $btnConfirmVerify       = $("#btn-confirm-verify");
+  $btnDownloadForm        = $("#btn-download-form");
+  $btnAssignBranch        = $("#btn-assign-branch");
+  $btnConfirmAssignBranch = $("#btn-confirm-assign-branch");
+  $inputReason            = $("#input-reason");
+  $selectBranch           = $("#select-branch");
+  $selectVerifyBranch     = $("#select-verify-branch");
+  $selectCenter           = $("#select-center");
+  $selectAssignBranch     = $("#select-assign-branch");
+  $message                = $(".message");
+  templateErrorList       = $("#template-error-list").html();
+  templateCenterOptions   = $("#template-center-options").html();
 }
 
 var _bindEvents = function() {
+  $btnAssignBranch.on("click", function() {
+    $modalAssignBranch.modal("show");
+  });
+
+  $btnConfirmAssignBranch.on("click", function() {
+    var branchId  = $selectAssignBranch.val();
+
+    $btnConfirmAssignBranch.prop("disabled", true);
+    $selectAssignBranch.prop("disabled", true);
+    $message.html("Loading...");
+
+    $.ajax({
+      url: "/api/v1/online_applications/assign_branch",
+      method: "POST",
+      data: {
+        id: _id,
+        branch_id: branchId,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmAssignBranch.prop("disabled", false);
+          $selectAssignBranch.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnDownloadForm.on("click", function() {
     var docDefinition = MembershipApplicationFormDocumentBuilder.execute(JSON.parse(_data));
 
-    //pdfMake.createPdf(docDefinition).open();
+    pdfMake.createPdf(docDefinition).open();
   });
 
   $btnVerify.on("click", function() {
@@ -61,17 +117,13 @@ var _bindEvents = function() {
   });
 
   $btnConfirmVerify.on("click", function() {
-    var branchId  = $selectVerifyBranch.val();
-
     $btnConfirmVerify.prop("disabled", true); 
-    $selectVerifyBranch.prop("disabled", true);
 
     $.ajax({
       url: "/api/v1/online_applications/verify",
       method: "POST",
       data: {
         id: _id,
-        branch_id: branchId,
         authenticity_token: _authenticityToken
       },
       success: function(response) {

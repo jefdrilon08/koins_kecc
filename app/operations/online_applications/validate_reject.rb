@@ -8,6 +8,10 @@ module OnlineApplications
       @online_application = online_application
       @user               = user
       @reason             = reason
+
+      @valid_roles  = ::Users::FetchValidRoles.new(
+                        module_name: "online_application_reject"
+                      ).execute!
     end
 
     def execute!
@@ -28,7 +32,7 @@ module OnlineApplications
           key: "user",
           message: "user required"
         }
-      elsif @user.current_roles.intersection(Settings.try(:module_authorization_roles).try(:mykoins) || []).size == 0
+      elsif @user.current_roles.intersection(@valid_roles).size == 0
         @errors[:messages] << {
           key: "user",
           message: "unauthorized to perform action"

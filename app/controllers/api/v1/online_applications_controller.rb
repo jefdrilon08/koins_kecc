@@ -3,6 +3,29 @@ module Api
     class OnlineApplicationsController < ApplicationController
       before_action :authenticate_user!
 
+      def assign_branch
+        online_application  = OnlineApplication.find(params[:id])
+
+        validator = ::OnlineApplications::ValidateAssignBranch.new(
+                      online_application: online_application,
+                      user: current_user
+                    )
+
+        validator.execute!
+
+        if validator.errors[:full_messages].size > 0
+          render json: { full_messages: validator.errors[:full_messages] }, status: 403
+        else
+          branch = ReadOnlyBranch.find(params[:branch_id])
+
+          online_application.update!(
+            branch: branch
+          )
+
+          render json: { message: "ok" }
+        end
+      end
+
       def verify
         online_application  = OnlineApplication.find(params[:id])
 

@@ -134,23 +134,35 @@ branch_config:
 ###############################
 # AUTHORIZATION               #
 ###############################
-
-authorization:
-  sync_maintaining_balance:
-    - "BK"
-    - "SBK"
-
 module_authorization_roles:
   online_loan_application_verification:
     - MIS
-    - CM
     - SO
+    - AM
+    - CM
+  online_application_verify:
+    - MIS
+    - FM
+    - CM
+  online_application_assign_branch:
+    - MIS
+    - CM
+  online_application_reject:
+    - MIS
+    - FM
+    - CM
+  online_application_process:
+    - MIS
+    - SO
+    - AM
+    - CM
   mykoins:
-    - "CM"
-    - "FM"
-    - "MIS"
+    - MIS
+    - FM
+    - CM
   administration:
-    - "MIS"
+    - MIS
+
 ###############################
 # SHARE CERTIFICATE           #
 ###############################

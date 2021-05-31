@@ -61,6 +61,19 @@ class OnlineApplicationsController < ApplicationController
     # For printing form
     @subheader_side_actions = []
 
+    valid_roles_assign_branch = ::Users::FetchValidRoles.new(
+                                  module_name: "online_application_assign_branch"
+                                ).execute!
+
+    if current_user.current_roles.intersection(valid_roles_assign_branch).size > 0
+      @subheader_side_actions << {
+        id: "btn-assign-branch",
+        class: "fa fa-check",
+        link: "#",
+        text: "Assign Branch"
+      }
+    end
+
     @subheader_side_actions << {
       id: "btn-download-form",
       class: "fa fa-download",
