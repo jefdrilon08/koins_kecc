@@ -2,12 +2,16 @@ class OnlineApplicationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @online_applications  = OnlineApplication
-                              .select("*")
-                              .includes(:branch)
+    valid_roles_list_all  = ::Users::FetchValidRoles.new(
+                              module_name: "online_application_list_all"
+                            ).execute!
 
-    if current_user.current_roles.intersection(["MIS", "CM"]).length == 0
-      @online_applications  = @online_applications.where(
+    if current_user.current_roles.intersection(valid_roles_list_all).length > 0
+      @online_applications  = OnlineApplication
+                                .select("*")
+                                .includes(:branch)
+    else
+      @online_applications  = OnlineApplication.where(
                                 "branch_id IN (?)",
                                 @branches.pluck(:id)
                               )
