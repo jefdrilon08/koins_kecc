@@ -138,9 +138,6 @@ module_authorization_roles:
   online_loan_application_verification:
     - MIS
     - SO
-    - FM
-    - AM
-    - CM
   online_application_verify:
     - MIS
     - SO
