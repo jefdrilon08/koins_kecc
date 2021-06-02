@@ -6,21 +6,24 @@ module MemberAccountValidations
       @status = status
       @branch = branch
 
-      if @status == "approved"
-        @member_account_validations = MemberAccountValidation.where("branch_id = ? AND status = ? AND date_approved >= ? AND date_approved <= ? ", @branch, @status, @start_date, @end_date)
-      elsif @status == "pending"
-        @member_account_validations = MemberAccountValidation.where("branch_id = ? AND status = ? AND date_prepared >= ? AND date_prepared <= ? ", @branch, @status, @start_date, @end_date)   
-      elsif @status == "for-approval"
-        @member_account_validations = MemberAccountValidation.where("branch_id = ? AND status = ? AND date_validated >= ? AND date_validated <= ? ", @branch, @status, @start_date, @end_date)        
-      elsif @status == "for-validation"
-        @member_account_validations = MemberAccountValidation.where("branch_id = ? AND status = ? AND date_checked >= ? AND date_checked <= ? ", @branch, @status, @start_date, @end_date)
+      if @branch.present?
+        @validations = MemberAccountValidation.where("branch_id = ?", @branch)
       else
-         @member_account_validations = MemberAccountValidation.all
+        @validations = MemberAccountValidation.all
+      end
+
+      if @status == "approved"
+        @member_account_validations = @validations.where("status = ? AND date_approved >= ? AND date_approved <= ? ", @status, @start_date, @end_date)
+      elsif @status == "pending"
+        @member_account_validations = @validations.where("status = ? AND date_prepared >= ? AND date_prepared <= ? ", @status, @start_date, @end_date)   
+      elsif @status == "for-approval"
+        @member_account_validations = @validations.where("status = ? AND date_validated >= ? AND date_validated <= ? ", @status, @start_date, @end_date)        
+      elsif @status == "for-validation"
+        @member_account_validations = validations.where("branch_id = ? AND status = ? AND date_checked >= ? AND date_checked <= ? ", @status, @start_date, @end_date)
+      else
+         @member_account_validations = @validations
       end
     
-    
-
-
       @p        = Axlsx::Package.new
 
       @total_life = 0
@@ -59,6 +62,7 @@ module MemberAccountValidations
             "Name of Member",
             "Member Age",
             "Recognition Date",
+            "Branch",
             "Center",
             "Resignation Date",
             "Status",
@@ -76,20 +80,20 @@ module MemberAccountValidations
 
           @member_account_validations.each do |iav|
             iav.member_account_validation_records.each_with_index do |iavr, index|
-              lif_account = iavr.member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").first
-              AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance]
+              life_amount = (iavr.lif_50_percent * 2) + iavr.advance_lif
 
               if index == 0
                 sheet.add_row [
                     iavr.member.full_name,
                     iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
+                    iavr.member.branch.name,
                     iavr.member.center.name,
                     iavr.resignation_date,
                     iavr.status,
                     iavr.member_classification,
                     iavr.transaction_number,
-                    AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i,
+                    life_amount,
                     iavr.rf,
                     iavr.lif_50_percent,
                     iavr.equity_interest,
@@ -97,18 +101,19 @@ module MemberAccountValidations
                     iavr.advance_rf,
                     iavr.interest,
                     iavr.total
-                  ], style: [nil, nil, nil, date_format_cell, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                  ], style: [nil, nil, date_format_cell, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
                 else
                   sheet.add_row [
                     iavr.member.full_name,
                     iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
+                    iavr.member.branch.name,
                     iavr.member.center.name,
                     iavr.resignation_date,
                     iavr.status,
                     iavr.member_classification,
                     iavr.transaction_number,
-                    AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i,
+                    life_amount,
                     iavr.rf,
                     iavr.lif_50_percent,
                     iavr.equity_interest,
@@ -116,10 +121,10 @@ module MemberAccountValidations
                     iavr.advance_rf,
                     iavr.interest,
                     iavr.total
-                  ], style: [nil, nil, nil, date_format_cell, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                  ], style: [nil, nil, date_format_cell, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
               end
 
-              @total_life = @total_life + AccountTransaction.where(subsidiary_id: lif_account.id, subsidiary_type: "MemberAccount").order("transacted_at ASC").last.data.with_indifferent_access[:beginning_balance].to_i
+              @total_life = @total_life + life_amount
               @total_rf = @total_rf + iavr.rf
               @total_50_percent_life = @total_50_percent_life + iavr.lif_50_percent
               @total_advance_life = @total_advance_life + iavr.advance_lif
@@ -140,6 +145,7 @@ module MemberAccountValidations
             "",
             "",
             "",
+            "",
             @total_life,
             @total_rf,
             @total_50_percent_life,
@@ -148,7 +154,7 @@ module MemberAccountValidations
             @total_advance_rf,
             @total_interest,
             @grand_total
-          ], style: [header, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
+          ], style: [header, nil, nil, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
 
         end
       end

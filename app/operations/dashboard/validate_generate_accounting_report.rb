@@ -36,7 +36,7 @@ module Dashboard
         }
       end
 
-      if @start_date.present? and @end_date.present? and @start_date >= @end_date
+      if @start_date.present? and @end_date.present? and @start_date > @end_date
         @errors[:messages] << {
           key: "start_date",
           message: "Invalid start_date"

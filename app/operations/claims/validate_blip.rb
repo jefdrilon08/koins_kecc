@@ -151,6 +151,8 @@ module Claims
     private
 
     def validate_blip_duplication!
+      @count = 0
+
       if @control == "new"
         @count = Claim.where("data->>'date_of_policy_issue' = ?
                           AND data->>'type_of_insurance_policy' = ?
