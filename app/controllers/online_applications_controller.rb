@@ -52,9 +52,13 @@ class OnlineApplicationsController < ApplicationController
   def show
     @online_application = OnlineApplication.find(params[:id])
 
+    data  = ::OnlineApplications::BuildMemberFormData.new(
+              online_application: @online_application
+            ).execute!
+
     @payload = {
       id: @online_application.id,
-      data: @online_application.to_json
+      data: data
     }
 
     @subheader_items  = [

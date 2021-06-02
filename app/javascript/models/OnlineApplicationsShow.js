@@ -107,7 +107,8 @@ var _bindEvents = function() {
   });
 
   $btnDownloadForm.on("click", function() {
-    var docDefinition = MembershipApplicationFormDocumentBuilder.execute(JSON.parse(_data));
+    console.log(_data);
+    var docDefinition = MembershipApplicationFormDocumentBuilder.execute(_data);
 
     pdfMake.createPdf(docDefinition).open();
   });

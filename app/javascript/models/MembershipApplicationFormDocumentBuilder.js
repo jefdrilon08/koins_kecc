@@ -1,7 +1,7 @@
-var _member;
+var _data;
 
 var fontSizeDefault   = 9;
-var fillColorDefault  = 'yellow';
+var fillColorDefault  = '#fff1c7';
 
 var styleDefault = {
   fontSize: 9
@@ -61,7 +61,7 @@ var _generateApplicationSignatory = function() {
       widths: ["100%"],
       body: [
         [
-          { text: context, style: styleSmall, alignment: 'justify', border: [true, true, true, false] }
+          { text: context, style: styleCellValue, alignment: 'justify', border: [true, true, true, false] }
         ],
         [
           { 
@@ -70,14 +70,14 @@ var _generateApplicationSignatory = function() {
               'Regular na pagpapasa at pagpapahayag ng aking Basic Credit Data alinsunod sa R.A. No. 9510 o “Credit Information System Act” s a Credit Information Corporation (CIC) pati ang mga pagbabago o pagtatama nito;',
               'Pagbabahagi ng aking Basic Credit Data sa iba pang institusyong nagpapautang at iba pang mga ahensiya na may kinalaman sa pagpapautang na pinahihintulutan ng R.A. No. 10173 at R.A. No. 9510.'
             ], 
-            style: styleSmall,
+            style: styleCellValue,
             border: [true, false, true, false]
           }
         ],
         [
           {
             text: 'Nauunawaan ko din ang polisiya ng K-Coop at handa akong sumunod sa mga alintuntunin nito gaya ng mga sumusunod:',
-            style: styleSmall,
+            style: styleCellValue,
             alignment: 'justify',
             border: [true, false, true, false]
           }
@@ -93,7 +93,7 @@ var _generateApplicationSignatory = function() {
               'Pagpapamiyembro sa K-MBAA',
               'Pagtupad sa obligasyon sa co-maker'
             ],
-            style: styleSmall,
+            style: styleCellValue,
             border: [true, false, true, false]
           }
         ],
@@ -111,8 +111,8 @@ var _generateApplicationSignatory = function() {
                 ]
               ]
             },
-            style: styleSmall,
-            border: [false, false, false, false]
+            style: styleCellValue,
+            border: [true, false, true, true]
           }
         ]
       ]
@@ -176,6 +176,9 @@ var _generateChildrenTable  = function() {
 }
 
 var buildHeader = function() {
+  var image = 'data:image/png;base64,' + _data.logo;
+  console.log(image);
+
   var header = {
     margin: 20,
     columns: [
@@ -183,8 +186,10 @@ var buildHeader = function() {
         width: '75%',
         columns: [
           {
-            width: '20%',
-            text: 'image'
+            image: image,
+            fit: [65, 65],
+            width: '25%',
+            alignment: 'center'
           },
           {
             wdith: '*',
@@ -211,7 +216,7 @@ var buildHeader = function() {
 
 var build = function() {
   var docDefinition = {
-    pageSize: 'LETTER',
+    pageSize: 'FOLIO',
     pageMargins: [20, 80, 20, 60],
     header: (currentPage, pageCount) => {
       if(currentPage == 1) {
@@ -649,10 +654,8 @@ var build = function() {
   return docDefinition;
 }
 
-var execute = function(member) {
-  console.log(member);
-
-  _member = member;
+var execute = function(data) {
+  _data = data;
 
   return build();
 }
