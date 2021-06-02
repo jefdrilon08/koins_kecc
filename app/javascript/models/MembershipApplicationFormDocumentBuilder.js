@@ -116,7 +116,8 @@ var _generateApplicationSignatory = function() {
           }
         ]
       ]
-    }
+    },
+    pageBreak: "after"
   }
 
   return obj;
@@ -301,6 +302,12 @@ var build = function() {
               { text: '', style: styleCellValue },
               { text: 'BRGY.', style: styleCellLabel },
               { text: '', style: styleCellValue }
+            ],
+            [
+              { text: 'APELYIDO', style: styleCellLabel },
+              { text: '', style: styleCellValue },
+              { text: 'LUNGSOD', style: styleCellLabel },
+              { text: '', style: styleCellValue }
             ]
           ]
         }
@@ -332,11 +339,11 @@ var build = function() {
       {
         table: {
           margin: [0, 0, 0, 0],
-          widths: ["25%", "25%", "25%", "25%"],
+          widths: ["25%", "35%", "15%", "25%"],
           body: [
             [
               { text: 'URI NG PANINIRAHAN', style: styleCellLabel },
-              { text: '', style: styleCellValue },
+              { text: 'Pag-aari ang lupa at bahay (may titulo)\nUmuupa (sharer or renter)\nNakikituloy (libre; mga magulang o extended family)\nNamana o na-award pero wala pang titulo\nNagbabayad ng rights sa lupa, pag-aari ang bahay', style: styleCellValue },
               { text: 'TAGAL NA SA TIRAHAN (BILANG NG TAON / BUWAN)', style: styleCellLabel },
               { text: '', style: styleCellValue }
             ],
@@ -481,7 +488,161 @@ var build = function() {
       {
         table: _generateChildrenTable()
       },
-      _generateApplicationSignatory()
+      _generateApplicationSignatory(),
+      {
+        table: {
+          margins: [0, 0, 0, 20],
+          widths: ["25%", "75%"],
+          body: [
+            [
+              { text: 'BACKGROUND SA PAHIRAMAN', style: styleCellCenteredLabel, colSpan: 2 },
+              {}
+            ],
+            [
+              { text: 'DAHILAN NG PAGSALI SA K-COOP', style: styleCellLabel },
+              { text: '', styleCellValue }
+            ],
+            [
+              { text: 'KARANASAN SA KOOPERATIBA / MFI', style: styleCellLabel },
+              { text: '', styleCellValue }
+            ]
+          ]
+        }
+      },
+      {
+        table: {
+          margins: [0, 0, 0, 20],
+          widths: ["45%", "45%", "10%"],
+          body: [
+            [
+              { text: 'PROGRESS OUT OF POVERTY INDEX (Panuto: bilugan ang inyong sagot)', style: styleCellCenteredLabel, colSpan: 3 },
+              {},
+              {}
+            ],
+            [
+              { text: 'PAHAYAG', style: styleCellCenteredLabel },
+              { text: 'SAGOT: (Bilugan ang isa)', style: styleCellCenteredLabel },
+              { text: 'PUNTOS', style: styleCellCenteredLabel }
+            ],
+            [
+              { text: '1. Ilan ang kasalukuyang nakatira sa bahay? (isama sa bilang ang OFW na hindi pa lumalagpas sa 5 taong nasa abroad)', style: styleCellValue },
+              { text: 'a. 8 o higit pa\u200B\t\u200B\tb. 7\u200B\t\u200B\tc. 6\u200B\t\u200B\td. 5\u200B\t\u200B\te. 4\u200B\t\u200B\tf. 3\u200B\t\u200B\tg. 1 o 2', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '2. Lahat po ba ng kasama sa bahay na may edad 6-17 ay pumapasok sa eskwelahan?', style: styleCellValue },
+              { text: 'a. Hindi\u200B\t\u200B\tb. Oo\u200B\t\u200B\tc. Walang edad 6 - 17', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '3. Ilan sa kasama sa bahay ang nagtrabaho kahit na isang oras lang sa nakalipas na linggo?\n(maaaring namasukan o para sa negosyo)', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. 1\u200B\t\u200B\tc. 2\u200B\t\u200B\td. 3 o higit pa', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '4. Sa kasalukuyang pinagkakakitaan ng kasama sa bahay, Ilan sa kanila ang helper, vendor, caretaker,messenger, garbage collector, sweeper, padyak, construction worker at iba pang kahalintulad nito.', style: styleCellValue },
+              { text: 'a. 3 o higit pa\u200B\t\u200B\tb. 2\u200B\t\u200B\tc. 1\u200B\t\u200B\td. Wala', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '5. Ano ang pinakamataas na antas na pag-aaral ang natapos ni nanay o madre de pamilya?', style: styleCellValue },
+              { text: 'a. Hindi nakapag aral o hindi nakatapos ng elementarya\nb. Walang female head\nc. Nakatapos ng elementary o hindi nakatapos ng high school\nd. Nakatapos ng high school\ne. Nakatungtong, nakatapos ng kolehiyo o higit pa', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '6. Sa anong materyales gawa ang inyong dingding?', style: styleCellValue },
+              { text: 'a. Mga pinaglumaang materyales o 2nd hand (maaaring lahat o may kaunting kahalong bagong materyales) o mga materyales na tulad ng karton, sako, plastic, styropor, tarpaulin at iba pang kahalintulad nito.\n\nb. Magkahalong materyales mula sa (A) at (C) ngunit mas marami ang sa (C)\n\nc. Mga materyales tulad ng galvanized iron, aluminium, tile, semento, brick, bato, kahoy, plywood or asbestos at iba pang kahalintulad nito', style: styleCellValue},
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '7. Mayroon bang sala set?', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. Meron', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '8. Mayroon bang gumaganang refrigerator/ freezer o washing machine?', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. Meron', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '9. Mayroon bang gumaganang TV o VHS/VCD/DVD player?', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. Mayroong isa sa mga nabanggit\u200B\t\u200B\tc. Parehong mayroon', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: '10. Ilang telepono o cellphone ang pag mamay-ari ng pamilya', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. 1\u200B\t\u200B\tc. 2\u200B\t\u200B\td. 3 o higit pa', style: styleCellValue },
+              { text: '', style: styleCellValue }
+            ],
+            [
+              { text: 'TOTAL', style: { fontSize: 7, bold: true }, alignment: 'right', colSpan: 2 },
+              {},
+              { text: '', style: styleCellValue }
+            ]
+          ]
+        }
+      },
+      {
+        text: '', style: styleSectionHeader, margin: [0, 8, 0, 8]
+      },
+      {
+        table: {
+          widths: ["33.33%", "33.33%", "33.33%"],
+          body: [
+            [
+              { text: 'NAGSAGAWA NG CI:', style: styleCellValue, border: [true, true, false, false] },
+              { text: 'PRINOSESO NI:', style: styleCellValue, border: [false, true, false, false] },
+              { text: 'SINANG-AYUNAN NI:', style: styleCellValue, border: [false, true, true, false] }
+            ],
+            [
+              { text: '_______________________________________', style: styleCellValue, alignment: 'center', border: [true, false, false, false] },
+              { text: '_______________________________________', style: styleCellValue, alignment: 'center', border: [false, false, false, false] },
+              { text: '_______________________________________', style: styleCellValue, alignment: 'center', border: [false, false, true, false] }
+            ],
+            [
+              { text: 'Socio-Economic Officer', style: styleCellValue, alignment: 'center', border: [true, false, false, false] },
+              { text: 'Socio-Economic Officer', style: styleCellValue, alignment: 'center', border: [false, false, false, false] },
+              { text: 'Satellite Officer Manager', style: styleCellValue, alignment: 'center', border: [false, false, true, false] }
+            ],
+            [
+              { text: 'Petsa: ______________', style: styleCellValue, border: [true, false, false, true] },
+              { text: 'Petsa: ______________', style: styleCellValue, border: [false, false, false, true] },
+              { text: 'Petsa: ______________', style: styleCellValue, border: [false, false, true, true] }
+            ]
+          ]
+        }
+      },
+      {
+        text: '', style: styleSectionHeader, margin: [0, 8, 0, 8]
+      },
+      {
+        table: {
+          widths: ["100%"],
+          body: [
+            [
+              { text: 'KASUNDUAN', style: { bold: true }, alignment: 'center', border: [true, true, true, false] }
+            ],
+            [
+              { text: 'Ako si _________________________________________, na miyembro ng K-Coop, sa Sentro ng ____________________________, at Satellite Area ng __________________________________, ay kusa at boluntaryong sumasang-ayon sa mga sumusunod:\n\n', style: { fontSize: 9 }, alignment: 'justify', border: [true, false, true, false] }
+            ],
+            [
+              {
+                ol: [
+                  { text: 'Bilang ambag sa kapital ng K-Coop, ako ay bibili upang magmay-ari ng di bababa sa apat (4) na bahagi ng kapital (share capital) nito, na aking babayaran sa sumusunod na paraan:\n\n\u200B\ta. Ang isang (1) bahagi, na nagkakahalaga ng isandaang piso (Php100.00), ay babayaran ko sa oras na sang-ayunan ng K-Coop\n\u200B\tb. Ang natitira pang tatlong (3) bahagi ay babayaran mula sa aking capital build-up (CBU) na binubuo ng sampung porsyento (10%) \u200B\t\u200B\t\u200B\tng aking taunang balik-tangkilik (patronage refund) at interes sa aking share capital.\n\n', style: { fontSize: 9 }, alignment: 'justify' },
+                  { text: 'Kung ako ay titiwalag o matatanggal bago ang ika-apat (4) na taon ng pagiging miyembro ko sa K-Coop, ang halaga ng isang share capital ko na isandaang piso (Php100.00) ay magsisilbi kong Closing Fee, sang-ayon na rin sa By-Laws ng K-Coop.\n\n', style: { fontSize: 9 }, alignment: 'justify' }
+                ],
+                border: [true, false, true, false]
+              }
+            ],
+            [
+              { text: '____________________________________', style: { fontSize: 9 }, alignment: 'right', border: [true, false, true, false] },
+            ],
+            [
+              { text: 'Lagda ng Miyembro/Petsa ng Paglagda', style: { fontSize: 9, bold: true }, alignment: 'right', border: [true, false, true, true] }
+            ]
+          ]
+        }
+      }
     ]
   }
 
