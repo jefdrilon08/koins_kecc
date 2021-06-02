@@ -46,7 +46,7 @@ module Loans
       post_accounting_entry!
 
       perform_deposits!
-
+     
       if @loan_cycles.blank?
         @loan_cycles  = [
           {
@@ -142,7 +142,86 @@ module Loans
           @member.update!(insurance_status: "inforce")
         elsif deduction_type == "deposit"
           if @member.member_type != "GK"
+            
+            if s_deduction.special_loan == "true" #for special loan Insurance
+              if @loan.data.with_indifferent_access[:advance_insurance_available] == false
+                offset          = s_deduction.meta.offset
+                accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+                name            = accounting_code.name
+                code            = accounting_code.code
+                amount          = 0.00
+                val             = s_deduction.meta.value
+
+                # Base value on accounting entry
+                entry = @loan.data["accounting_entry"]["credit_journal_entries"].select{ |o| o["accounting_code_id"] == accounting_code.id }.first
+
+                if entry.present?
+                  amount = entry["amount"].to_f.round(2)
+                end
+
+                 if amount > 0
+                  
+                  member_account  = MemberAccount.where(
+                                    member_id: @member.id,
+                                    account_type: s_deduction.meta.account_type,
+                                    account_subtype: s_deduction.meta.account_subtype
+                                  ).first
+
+                  account_transaction = AccountTransaction.new(
+                                          subsidiary_id: member_account.id,
+                                          subsidiary_type: "MemberAccount",
+                                          amount: amount,
+                                          transaction_type: @transaction_type,
+                                          transacted_at: @date_paid,
+                                          status: "approved",
+                                          data: {
+                                            is_withdraw_payment: false,
+                                            is_fund_transfer: false,
+                                            is_interest: false,
+                                            is_adjustment: false,
+                                            is_for_exit_age: false,
+                                            is_for_loan_payments: false,
+                                            accounting_entry_reference_number: nil,
+                                            beginning_balance: 0.00,
+                                            ending_balance: 0.00,
+                                            data: {}
+                                          }
+                                        )
+
+                  # Compute beginning and ending balance
+                  account_transaction.data[:beginning_balance]  = member_account.balance.round(2)
+                  account_transaction.data[:ending_balance]     = (member_account.balance + amount).round(2)
+
+                  # For equity amount computation
+                  if member_account.account_subtype == Settings.life
+                    if member_account.data.nil?
+                      # For New Loaner
+                      member_account.data = { equity_value: (amount / 2).round(2) }
+                      member_account.save!
+                      
+                      account_transaction.data[:equity_value] = (amount / 2).round(2)
+                    else
+                      # For Reloaner
+                      member_account_data = member_account.data.with_indifferent_access
+                      equity_value = member_account_data[:equity_value]
+                      member_account_data[:equity_value] = ((amount / 2) + equity_value).round(2)
+                      member_account.update!(data: member_account_data)
+
+                      account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
+                    end
+                  end
+                   # Update account balance
+                  new_balance = (member_account.balance + amount).round(2)
+                  member_account.update!(
+                    balance: new_balance
+                  )
+                  account_transaction.save!
+                end
+              end
+            end #end for special loan for insurance
+
             if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
+
               if @loan.data.with_indifferent_access[:advance_insurance_available] == false
                 offset          = s_deduction.meta.offset
                 accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
@@ -185,6 +264,7 @@ module Loans
                 #### DEPOSIT TRANSACTION ####
         
                 if amount > 0
+                  
                   member_account  = MemberAccount.where(
                                     member_id: @member.id,
                                     account_type: s_deduction.meta.account_type,

@@ -307,6 +307,7 @@ module Loans
                 amount: amount
               }
 
+
               #temp_amount -= amount
             end
           end
@@ -396,29 +397,47 @@ module Loans
                   raise "Invalid term: #{@term}"
                 end
 
+                if journal_entries.present?
+                  @service_f_original= journal_entries[0][:amount]
+                else
+                  @service_f_original= 0.00
+                end
+
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
                   code: code,
                   name: name,
                   amount: amount
                 }
+
+
                 temp_amount -= amount
                 clip_amount  = amount
-                service_fee  =  temp_amount - temp_amount.to_i
 
-                accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
-                amount_serv             = service_fee.to_f.round(2)
-                name_serv               = accounting_code_serv.name
-                code_serv               = accounting_code_serv.code
+                service_fee  =  temp_amount - temp_amount.to_i
                 
-                journal_entries << {
-                  accounting_code_id: accounting_code_serv.id,
-                  code: code_serv,
-                  name: name_serv,
-                  amount: amount_serv
-                }
+
+                if @loan_product.id == "e496b406-001e-4ba0-8999-76e79dd34501"
+                  service_fee_final = @service_f_original + service_fee
+                  journal_entries[0][:amount] = service_fee_final
                 
+                else
+
+                  accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
+                  amount_serv             = service_fee.to_f.round(2)
+                  name_serv               = accounting_code_serv.name
+                  code_serv               = accounting_code_serv.code
+                  
+                  journal_entries << {
+                    accounting_code_id: accounting_code_serv.id,
+                    code: code_serv,
+                    name: name_serv,
+                    amount: amount_serv
+                  }
+                end
+
                 temp_amount = temp_amount.to_i
+                @temp_amount= temp_amount
               #end of special product
 
               elsif s_deduction.use_for_special_loan_fund == "true" 
@@ -477,6 +496,13 @@ module Loans
                 else
                   raise "Invalid term: #{@term}"
                 end
+                
+                
+                if journal_entries.present?
+                  @service_f_original= journal_entries[0][:amount]
+                else
+                  @service_f_original= 0.00
+                end
 
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
@@ -487,22 +513,31 @@ module Loans
 
                 temp_amount -= amount
                 clip_amount  = amount
-                service_fee  =  temp_amount - temp_amount.to_i
 
-                accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
-                amount_serv             = service_fee.to_f.round(2)
-                name_serv               = accounting_code_serv.name
-                code_serv               = accounting_code_serv.code
+                service_fee  =  temp_amount - temp_amount.to_i
                 
-                journal_entries << {
-                  accounting_code_id: accounting_code_serv.id,
-                  code: code_serv,
-                  name: name_serv,
-                  amount: amount_serv
-                }
+
+                if @loan_product.id == "e496b406-001e-4ba0-8999-76e79dd34501"
+                  service_fee_final = @service_f_original + service_fee
+                  journal_entries[0][:amount] = service_fee_final
                 
+                else
+
+                  accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
+                  amount_serv             = service_fee.to_f.round(2)
+                  name_serv               = accounting_code_serv.name
+                  code_serv               = accounting_code_serv.code
+                  
+                  journal_entries << {
+                    accounting_code_id: accounting_code_serv.id,
+                    code: code_serv,
+                    name: name_serv,
+                    amount: amount_serv
+                  }
+                end
                 temp_amount = temp_amount.to_i
                 @temp_amount= temp_amount
+               
                 #end of special loan product
 
               elsif  s_deduction.skip_for_special_loan_fund == "true" 
