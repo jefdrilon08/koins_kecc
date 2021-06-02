@@ -212,7 +212,13 @@ var build = function() {
   var docDefinition = {
     pageSize: 'LETTER',
     pageMargins: [20, 80, 20, 60],
-    header: buildHeader(),
+    header: (currentPage, pageCount) => {
+      if(currentPage == 1) {
+        return buildHeader()
+      } else {
+        return ""
+      }
+    },
     content: [
       {
         text: 'APPLICATION FOR MEMBERSHIP', style: { bold: true, alignment: 'center' }
