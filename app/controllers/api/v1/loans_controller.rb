@@ -35,6 +35,53 @@ module Api
         render json: { loans: result }
       end
 
+      def reject
+        loan    = Loan.find_by_id(params[:id])
+        reason  = params[:reason]
+
+        validator = ::Loans::ValidateReject.new(
+                      user: current_user,
+                      loan: loan,
+                      reason: reason
+                    )
+
+        validator.execute!
+
+        if validator.errors[:full_messages].any?
+          render json: { errors: validator.errors }, status: 400
+        else
+          ::Loans::Reject.new(
+            user: current_user,
+            loan: loan,
+            reason: reason
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
+      def verify
+        loan  = Loan.find_by_id(params[:id])
+
+        validator = ::Loans::ValidateVerify.new(
+                      user: current_user,
+                      loan: loan
+                    )
+
+        validator.execute!
+
+        if validator.errors[:full_messages].any?
+          render json: { errors: validator.errors }, status: 400
+        else
+          ::Loans::Verify.new(
+            user: current_user,
+            loan: loan
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def restructure
         loan_product      = LoanProduct.where(id: params[:loan_product_id]).first
         co_maker          = params[:co_maker]

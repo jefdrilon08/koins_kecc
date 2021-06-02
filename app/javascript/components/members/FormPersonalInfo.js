@@ -69,6 +69,50 @@ export default class FormPersonalInfo extends React.Component {
     this.props.updateData(data);
   }
 
+
+//=======================2nd address
+
+  handleNewAddressStreetChanged(event) {
+    var data                  = this.props.data;
+    data.data.new_address.street  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+  handleNewAddressDistrictChanged(event) {
+    var data                    = this.props.data;
+    data.data.new_address.district  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+  handleNewAddressCityChanged(event) {
+    var data                = this.props.data;
+    data.data.new_address.city  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+  
+  handleNewAddressProvinceChanged(event) {
+    var data                = this.props.data;
+    data.data.new_address.proprovince  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+  
+  handleNewAddressZipCodeChanged(event) {
+    var data                = this.props.data;
+    data.data.new_address.zip_code  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+
+//======================= end of 2nd address
+
+
+
+
   handleGenderChanged(event) {
     var data  = this.props.data;
 
@@ -257,6 +301,17 @@ export default class FormPersonalInfo extends React.Component {
             </div>
           </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
         <div className="row">
           <div className="col-md-4">
             <div className="form-group">

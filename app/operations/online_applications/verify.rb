@@ -16,7 +16,10 @@ module OnlineApplications
         name: @user.to_s
       }
 
-      @online_application.branch  = @branch
+      if @branch.present?
+        @online_application.branch  = @branch
+      end
+
       @online_application.status  = "verified"
 
       @online_application.save!

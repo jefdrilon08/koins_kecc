@@ -50,6 +50,33 @@ module Members
           message: "Address district required"
         }
       end
+      
+      # Validate 2nd address
+#      if @member_data[:data][:new_address][:street].blank?
+#        @errors[:messages] << {
+#          key: "address_street",
+#          message: "Address street required"
+#        }
+#      end
+
+#      if @member_data[:data][:new_address][:district].blank?
+#        @errors[:messages] << {
+#          key: "address_district",
+#          message: "Address district required"
+#        }
+#      end
+#      if @member_data[:data][:new_address][:city].blank?
+#        @errors[:messages] << {
+#          key: "new_address_city",
+#          message: "Address city required"
+#        }
+#      end
+#      if @member_data[:data][:new_address][:zip_code].blank?
+#        @errors[:messages] << {
+#          key: "new_address_zip_code",
+#          message: "Address zip code required"
+#        }
+#      end
 
       # Validate date of birth
       if @member_data[:date_of_birth].blank?

@@ -1,7 +1,9 @@
 module Adjustments
   class RecomputeRestructuresController < ApplicationController
     def index
-      @restucture_details = RecomputeRestructure.where(branch: @branches.pluck(:id))
+      #@restucture_details = RecomputeRestructure.where(branch: @branches.pluck(:id))
+      @restucture_details = ReadOnlyRecomputeRestructure.where(branch: @branches.pluck(:id))  
+    
       @subheader_items = [
         {
           text: "Recompute Restructure"

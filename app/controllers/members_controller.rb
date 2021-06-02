@@ -188,14 +188,15 @@ class MembersController < ApplicationController
   end
 
   def show
-    @member           = Member.find(params[:id])
-    @data             = @member.data.with_indifferent_access
-    @address          = @data[:address]
-    @addressVal       = [@address[:street],@address[:district],@address[:city]]
-    @recognition_date = @data[:recognition_date]
-    @active_loans     = Loan.active.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @paid_loans       = Loan.paid.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @pending_loans    = Loan.pending.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
+    @member                 = Member.find(params[:id])
+    @data                   = @member.data.with_indifferent_access
+    @address                = @data[:address]
+    @addressVal             = [@address[:street],@address[:district],@address[:city]]
+    @recognition_date       = @data[:recognition_date]
+    @active_loans           = Loan.active.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
+    @paid_loans             = Loan.paid.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
+    @pending_loans          = Loan.pending.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
+    @for_verification_loans = Loan.for_verification.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
 
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)

@@ -46,6 +46,15 @@ var $modalDelayAmort;
 var $inputDelayAmort;
 var $inputReason;
 
+var $btnVerify;
+var $btnConfirmVerify;
+var $modalVerify;
+
+var $btnReject;
+var $btnConfirmReject;
+var $modalReject;
+var $inputRejectionReason;
+
 var reason        = "";
 var newDate       = "";
 var curretAmortId = "";
@@ -58,6 +67,8 @@ var _urlApprove             = "/api/v1/loans/approve";
 var _urlChangeBook          = "/api/v1/loans/change_book";
 var _urlDelayAmort          = "/api/v1/loans/delay_amort";
 var _urlNewAdjustment       = "/api/v1/loans/new_adjustment";
+var _urlVerify              = "/api/v1/loans/verify";
+var _urlReject              = "/api/v1/loans/reject";
 
 var _id;
 var _authenticityToken;
@@ -107,11 +118,109 @@ var _cacheDom = function() {
   $inputDelayAmort      = $("#input-delay-amort");
   $inputReason          = $("#input-reason");
 
+  $btnVerify        = $("#btn-verify");
+  $btnConfirmVerify = $("#btn-confirm-verify");
+  $modalVerify      = $("#modal-verify");
+
+  $btnReject            = $("#btn-reject");
+  $btnConfirmReject     = $("#btn-confirm-reject");
+  $modalReject          = $("#modal-reject");
+  $inputRejectionReason = $("#input-rejection-reason");
 
   templateErrorList = $("#template-error-list").html();
 };
 
 var _bindEvents = function() {
+  $btnReject.on("click", function() {
+    $modalReject.modal("show");
+  });
+
+  $btnConfirmReject.on("click", function() {
+    var reason  = $inputRejectionReason.val();
+
+    $btnConfirmReject.prop("disabled", true);
+    $inputRejectionReason.prop("disabled", true);
+
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlReject,
+      method: 'POST',
+      data: {
+        id: _id,
+        reason: reason,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmReject.prop("disabled", false);
+          $inputRejectionReason.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnVerify.on("click", function() {
+    $modalVerify.modal("show");
+  });
+
+  $btnConfirmVerify.on("click", function() {
+    $btnConfirmVerify.prop("disabled", true);
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlVerify,
+      method: 'POST',
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmVerify.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnNewAdjustment.on("click", function() {
     $modalNewAdjustment.modal("show");
   });

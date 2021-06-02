@@ -19,9 +19,9 @@ module Print
       end
 
       @data   = {
-        start_date: @config[:start_date].to_date.strftime("%m/%d/%Y"),
-        end_date: @config[:end_date].to_date.strftime("%m/%d/%Y"),
-        book: @book,
+        start_date:   @config[:start_date].try(:to_date).try(:strftime, "%m/%d/%Y"),
+        end_date:     @config[:end_date].try(:to_date).try(:strftime, "%m/%d/%Y"),
+        book:         @book,
         book_display: @book_display
       }
     end
