@@ -6297,6 +6297,7 @@ loan_products:
     interest_accounting_code_id:  "41a36eb6-2054-4826-b82b-ad4007964b71"
     amount_released_accounting_code_id: "b3b0d959-2eda-4e68-9421-203f3c133745"
     default_amount: 5000.00
+    special_loan_product: "true"
     deductions:
       -
         name: "Service Fee"
@@ -6305,6 +6306,7 @@ loan_products:
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
+        service_fee_special_loan: "true"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
