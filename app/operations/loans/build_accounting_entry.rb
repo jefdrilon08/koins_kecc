@@ -403,26 +403,36 @@ module Loans
                   @service_f_original= 0.00
                 end
 
+                
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
                   code: code,
                   name: name,
                   amount: amount
                 }
-
-
+                
                 temp_amount -= amount
                 clip_amount  = amount
+                service_fee  =  temp_amount - temp_amount.to_i #add offset amount to service fee
 
-                service_fee  =  temp_amount - temp_amount.to_i
-                
+                #for k-yakap
+                @service_fee_original= 0.00
+                if  @settings.special_loan_product == "true"
+                  j_entry_service_fee = journal_entries #get service fee from journal entry
+                  set= @settings.deductions #get loan settings deduction
 
-                if @loan_product.id == "e496b406-001e-4ba0-8999-76e79dd34501"
-                  service_fee_final = @service_f_original + service_fee
-                  journal_entries[0][:amount] = service_fee_final
-                
+                  set.each do |ss| #loop for settings deduction to get service fee
+                      j_entry_service_fee.each do |js| # loop for journal entry to get service fee
+                        if ss["accounting_code_id"] == js[:accounting_code_id] and ss["service_fee_special_loan"] == "true"
+                          @service_fee_original= js[:amount] #original service fee amount
+                          js[:amount] = (@service_fee_original + service_fee).round(2)
+                        end
+                      end
+                  end
+                #end for kyakap
+
+                #for bene-w4 
                 else
-
                   accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
                   amount_serv             = service_fee.to_f.round(2)
                   name_serv               = accounting_code_serv.name
@@ -435,10 +445,11 @@ module Loans
                     amount: amount_serv
                   }
                 end
-
+                
                 temp_amount = temp_amount.to_i
                 @temp_amount= temp_amount
-              #end of special product
+               
+                #end of special loan product
 
               elsif s_deduction.use_for_special_loan_fund == "true" 
                 if @term == "weekly"
@@ -496,13 +507,6 @@ module Loans
                 else
                   raise "Invalid term: #{@term}"
                 end
-                
-                
-                if journal_entries.present?
-                  @service_f_original= journal_entries[0][:amount]
-                else
-                  @service_f_original= 0.00
-                end
 
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
@@ -510,19 +514,29 @@ module Loans
                   name: name,
                   amount: amount
                 }
-
+                
                 temp_amount -= amount
                 clip_amount  = amount
+                service_fee  =  temp_amount - temp_amount.to_i #add offset amount to service fee
 
-                service_fee  =  temp_amount - temp_amount.to_i
-                
+                #for k-yakap
+                @service_fee_original= 0.00
+                if  @settings.special_loan_product == "true"
+                  j_entry_service_fee = journal_entries #get service fee from journal entry
+                  set= @settings.deductions #get loan settings deduction
 
-                if @loan_product.id == "e496b406-001e-4ba0-8999-76e79dd34501"
-                  service_fee_final = @service_f_original + service_fee
-                  journal_entries[0][:amount] = service_fee_final
-                
+                  set.each do |ss| #loop for settings deduction to get service fee
+                      j_entry_service_fee.each do |js| # loop for journal entry to get service fee
+                        if ss["accounting_code_id"] == js[:accounting_code_id] and ss["service_fee_special_loan"] == "true"
+                          @service_fee_original= js[:amount] #original service fee amount
+                          js[:amount] = (@service_fee_original + service_fee).round(2)
+                        end
+                      end
+                  end
+                #end for kyakap
+
+                #for bene-w4 
                 else
-
                   accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
                   amount_serv             = service_fee.to_f.round(2)
                   name_serv               = accounting_code_serv.name
@@ -535,6 +549,7 @@ module Loans
                     amount: amount_serv
                   }
                 end
+                
                 temp_amount = temp_amount.to_i
                 @temp_amount= temp_amount
                
