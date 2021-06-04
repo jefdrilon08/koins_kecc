@@ -363,7 +363,7 @@ var build = function() {
           body: [
             [
               { text: 'URI NG PANINIRAHAN', style: styleCellLabel },
-              { text: 'Pag-aari ang lupa at bahay (may titulo)\nUmuupa (sharer or renter)\nNakikituloy (libre; mga magulang o extended family)\nNamana o na-award pero wala pang titulo\nNagbabayad ng rights sa lupa, pag-aari ang bahay', style: styleCellValue },
+              { text: '[ ] Pag-aari ang lupa at bahay (may titulo)\nUmuupa (sharer or renter)\n[ ] Nakikituloy (libre; mga magulang o extended family)\n[ ] Namana o na-award pero wala pang titulo\n[ ] Nagbabayad ng rights sa lupa, pag-aari ang bahay', style: styleCellValue },
               { text: 'TAGAL NA SA TIRAHAN (BILANG NG TAON / BUWAN)', style: styleCellLabel },
               { text: '', style: styleCellValue }
             ],
