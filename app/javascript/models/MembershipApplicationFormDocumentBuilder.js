@@ -51,7 +51,7 @@ var styleCellCenteredLabel = {
 }
 
 var _generateApplicationSignatory = function() {
-  var context = 'Aking pinatotohanan na ang lahat ng impormasyong aking isinulat ay pawang katotohanan sa abot ng aking paniniwala at kaalaman. Anumang maling impormasyon, pagtatago o kasinungalingan ay magiging sapat na dahilan para ako ay matiwalag sa pagiging miyembro ng K-Coop.\n\n'
+  var context = 'Aking pinatotohanan na ang lahat ng impormasyong aking inilagay ay pawang katotohanan sa abot ng aking paniniwala at kaalaman. Anumang maling impormasyon, pagtatago o kasinungalingan ay magiging sapat na dahilan para ako ay matiwalag sa pagiging miyembro ng K-Coop.\n\n'
 
   context += 'Bilang miyembro ay kinikilala at pinapahintulutan ko ang mga sumusunod:\n';
 
@@ -155,7 +155,7 @@ var _generateChildrenTable  = function() {
     }
   ]);
 
-  for(var i = 0; i < 6; i++) {
+  for(var i = 0; i < 5; i++) {
     body.push([
       { text: '' + (i + 1), style: styleCellCenteredLabel },
       { text: '', style: styleCellValue },
@@ -288,30 +288,45 @@ var build = function() {
       {
         table: {
           margin: [0, 0, 0, 0],
-          widths: ["25%", "25%", "25%", "25%"],
+          widths: ["12.5%", "12.5%", "12.5%", "12.5%", "12.5%", "12.5%", "12.5%", "12.5%"],
           body: [
             [
-              { text: 'PERSONAL NA IMPORMASYON', style: styleCellCenteredLabel, colSpan: 2 },
+              { text: 'PERSONAL NA IMPORMASYON', style: styleCellCenteredLabel, colSpan: 4 },
               {},
-              { text: 'TIRAHAN / ADDRESS', style: styleCellCenteredLabel, colSpan: 2 },
+              {},
+              {},
+              { text: 'TIRAHAN / ADDRESS', style: styleCellCenteredLabel, colSpan: 4 },
+              {},
+              {},
               {}
             ],
             [
-              { text: 'PANGALAN', style: styleCellLabel },
-              { text: '', style: styleCellValue },
-              { text: 'KALYE', style: styleCellLabel },
-              { text: '', style: styleCellValue }
+              { text: 'PANGALAN', style: styleCellLabel, colSpan: 2 },
+              {},
+              { text: '', style: styleCellValue, colSpan: 2 },
+              {},
+              { text: 'KALYE', style: styleCellLabel, colSpan: 2 },
+              {},
+              { text: '', style: styleCellValue, colSpan: 2 }
             ],
             [
-              { text: 'GITNANG PANGALAN', style: styleCellLabel },
-              { text: '', style: styleCellValue },
-              { text: 'BRGY.', style: styleCellLabel },
-              { text: '', style: styleCellValue }
+              { text: 'GITNANG PANGALAN', style: styleCellLabel, colSpan: 2 },
+              {},
+              { text: '', style: styleCellValue, colSpan: 2 },
+              {},
+              { text: 'BRGY.', style: styleCellLabel, colSpan: 2 },
+              {},
+              { text: '', style: styleCellValue, colSpan: 2 },
+              {}
             ],
             [
-              { text: 'APELYIDO', style: styleCellLabel },
-              { text: '', style: styleCellValue },
+              { text: 'APELYIDO', style: styleCellLabel, colSpan: 2 },
+              {},
+              { text: '', style: styleCellValue, colSpan: 2 },
+              {},
               { text: 'LUNGSOD', style: styleCellLabel },
+              { text: '', style: styleCellValue },
+              { text: 'PROBINSYA', style: styleCellLabel },
               { text: '', style: styleCellValue }
             ]
           ]
@@ -362,15 +377,10 @@ var build = function() {
       {
         table: {
           margin: [0, 0, 0, 0],
-          widths: ["20%", "10%", "10%", "10%", "10%", "10%", "10%", "10%", "10%"],
+          widths: ["25%", "25%", "25%", "25%"],
           body: [
             [
               { text: 'KAPANGANAKAN', style: styleCellLabel },
-              { text: 'TAON', style: styleCellLabel },
-              { text: '', style: styleCellValue },
-              { text: 'BUWAN', style: styleCellLabel },
-              { text: '', style: styleCellValue },
-              { text: 'ARAW', style: styleCellLabel },
               { text: '', style: styleCellValue },
               { text: 'EDAD', style: styleCellLabel },
               { text: '', style: styleCellValue }
@@ -415,7 +425,7 @@ var build = function() {
               { text: 'BILANG NG ANAK', style: styleCellLabel },
               { text: '', style: styleCellValue },
               { text: 'ILAN ANG NAG-AARAL', style: styleCellLabel },
-              { text: '', style: styleCellValue }
+              { text: '____ Elementary\u200B\t____ High School\u200B\t____ College / Vocational', style: styleCellValue }
             ]
           ]
         }
@@ -517,7 +527,7 @@ var build = function() {
       {
         table: {
           margins: [0, 0, 0, 20],
-          widths: ["45%", "45%", "10%"],
+          widths: ["40%", "50%", "10%"],
           body: [
             [
               { text: 'PROGRESS OUT OF POVERTY INDEX (Panuto: bilugan ang inyong sagot)', style: styleCellCenteredLabel, colSpan: 3 },
@@ -566,12 +576,12 @@ var build = function() {
             ],
             [
               { text: '8. Mayroon bang gumaganang refrigerator/ freezer o washing machine?', style: styleCellValue },
-              { text: 'a. Wala\u200B\t\u200B\tb. Meron', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. Mayroong isa sa mga nabanggit\u200B\t\u200B\tc. Parehong mayroon', style: styleCellValue },
               { text: '', style: styleCellValue }
             ],
             [
               { text: '9. Mayroon bang gumaganang TV o VHS/VCD/DVD player?', style: styleCellValue },
-              { text: 'a. Wala\u200B\t\u200B\tb. Mayroong isa sa mga nabanggit\u200B\t\u200B\tc. Parehong mayroon', style: styleCellValue },
+              { text: 'a. Wala\u200B\t\u200B\tb. TV lamang\u200B\tc. Mayroong VHS/VCD/DVD player (mayroon o walang TV)', style: styleCellValue },
               { text: '', style: styleCellValue }
             ],
             [
@@ -633,7 +643,7 @@ var build = function() {
             [
               {
                 ol: [
-                  { text: 'Bilang ambag sa kapital ng K-Coop, ako ay bibili upang magmay-ari ng di bababa sa apat (4) na bahagi ng kapital (share capital) nito, na aking babayaran sa sumusunod na paraan:\n\n\u200B\ta. Ang isang (1) bahagi, na nagkakahalaga ng isandaang piso (Php100.00), ay babayaran ko sa oras na sang-ayunan ng K-Coop\n\u200B\tb. Ang natitira pang tatlong (3) bahagi ay babayaran mula sa aking capital build-up (CBU) na binubuo ng sampung porsyento (10%) \u200B\t\u200B\t\u200B\tng aking taunang balik-tangkilik (patronage refund) at interes sa aking share capital.\n\n', style: { fontSize: 9 }, alignment: 'justify' },
+                  { text: 'Bilang ambag sa kapital ng K-Coop, ako ay bibili upang magmay-ari ng di bababa sa apat (4) na bahagi ng kapital (share capital) nito, na aking babayaran sa sumusunod na paraan:\n\n\u200B\ta. Ang isang (1) bahagi, na nagkakahalaga ng isandaang piso (Php100.00), ay babayaran ko sa oras na sang-ayunan ng K-Coop ang aking aplikasyon bilang kasapi; at\n\n\u200B\tb. Ang natitira pang tatlong (3) bahagi ay babayaran mula sa aking capital build-up (CBU) na binubuo ng sampung porsyento (10%) \u200B\t\u200B\t\u200B\tng aking taunang balik-tangkilik (patronage refund) at interes sa aking share capital.\n\n', style: { fontSize: 9 }, alignment: 'justify' },
                   { text: 'Kung ako ay titiwalag o matatanggal bago ang ika-apat (4) na taon ng pagiging miyembro ko sa K-Coop, ang halaga ng isang share capital ko na isandaang piso (Php100.00) ay magsisilbi kong Closing Fee, sang-ayon na rin sa By-Laws ng K-Coop.\n\n', style: { fontSize: 9 }, alignment: 'justify' }
                 ],
                 border: [true, false, true, false]
