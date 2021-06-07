@@ -307,7 +307,7 @@ var build = function() {
               {},
               { text: 'KALYE', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 }
+              { text: _data.address_street, style: styleCellValue, colSpan: 2 }
             ],
             [
               { text: 'GITNANG PANGALAN', style: styleCellLabel, colSpan: 2 },
@@ -316,7 +316,7 @@ var build = function() {
               {},
               { text: 'BRGY.', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 },
+              { text: _data.address_district, style: styleCellValue, colSpan: 2 },
               {}
             ],
             [
@@ -325,9 +325,9 @@ var build = function() {
               { text: _data.last_name, style: styleCellValue, colSpan: 2 },
               {},
               { text: 'LUNGSOD', style: styleCellLabel },
-              { text: '', style: styleCellValue },
+              { text: _data.address_city, style: styleCellValue },
               { text: 'PROBINSYA', style: styleCellLabel },
-              { text: '', style: styleCellValue }
+              { text: _data.address_province, style: styleCellValue }
             ]
           ]
         }
