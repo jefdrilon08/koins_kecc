@@ -103,7 +103,7 @@ var blipForm = (function() {
           },
           error: function(responseContent) {
             console.log(responseContent);
-            var  errors  = JSON.parse(responseContent.responseText).errors;
+            var errors = JSON.parse(responseContent.responseText).errors;
             console.log(errors);
             console.log(data);
             $message.html("Error! " + errors);

@@ -206,7 +206,7 @@ module Api
         if claim.claim_type == "BLIP"
           errors = ::Claims::ValidateBlip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by, control: control).execute!
         elsif claim.claim_type == "CLIP"
-          errors = ::Claims::ValidateClip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!
+          errors = ::Claims::ValidateClip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by, control: control).execute!
         elsif claim.claim_type == "HIIP"
           errors = ::Claims::ValidateHiip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!
         elsif claim.claim_type == "K-KALINGA"

@@ -40,6 +40,7 @@ var clipForm = (function() {
     $claimsPaymentCreditor       = $("#claims-payment-creditor");
     $accountNameCreditor         = $("#account-name-creditor");
     $accountNumberCreditor       = $("#account-number-creditor");
+    $control                     = $("#control");
  }
 
   var _bindEvents = function() {
@@ -49,6 +50,7 @@ var clipForm = (function() {
           id: id,
           date_prepared: $datePrepared.val(),
           prepared_by: $preparedBy.val(),
+          control: $control.val(),
           data: {
             amount: $amountPayableToBeneficiary.val(),
             amount_of_loan: $amountOfLoan.val(),
@@ -90,8 +92,9 @@ var clipForm = (function() {
           },
           error: function(responseContent) {
             console.log(responseContent);
-            var  errors  = JSON.parse(responseContent.responseText).errors;
+            var errors = JSON.parse(responseContent.responseText).errors;
             console.log(errors);
+            $message.html("Error! " + errors);
             console.log(data);
             $message.html(
                 Mustache.render(

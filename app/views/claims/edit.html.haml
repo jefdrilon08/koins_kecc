@@ -8,7 +8,7 @@
             = render partial: "claims/form/blip_form", locals: { claim: @claim , control: @control}
             = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "CLIP"
-            = render partial: "claims/form/clip_form", locals: { claim: @claim }
+            = render partial: "claims/form/clip_form", locals: { claim: @claim, control: @control }
             = render partial: "shared/errors_template"
           - elsif @claim.claim_type == "HIIP"
             = render partial: "claims/form/hiip_form", locals: { claim: @claim }

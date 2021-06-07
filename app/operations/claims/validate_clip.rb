@@ -1,7 +1,7 @@
 module Claims
   class ValidateClip
 
-    def initialize(data:, date_prepared:, prepared_by:, claim:)
+    def initialize(data:, date_prepared:, prepared_by:, claim:, control:)
       @claim                                    = claim
       @data                                     = data
       @date_prepared                            = date_prepared
@@ -29,7 +29,8 @@ module Claims
       @claims_payment_creditor                  = @data[:claims_payment_creditor]
       @account_name_creditor                    = @data[:account_name_creditor]
       @account_number_creditor                  = @data[:account_number_creditor]
-      
+      @control                                  = control
+
       @errors = []
 
     end
@@ -143,25 +144,46 @@ module Claims
     private
 
     def validate_clip_duplication!
-      count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
-        data->>'amount' = ? AND data->>'gender' = ? AND data->>'policy_number' = ? AND 
-        data->>'creditors_name' = ? AND data->>'member_name' = ? AND data->>'beneficiary' = ? AND 
-        data->>'date_of_death' = ? AND data->>'date_of_birth' = ? AND data->>'cause_of_death' = ? AND 
-        data->>'effective_date_of_coverage' = ? AND data->>'expiration_date_of_coverage' = ? AND 
-        data->>'age' = ? AND data->>'terms' = ? AND data->>'amount_of_loan' = ? AND data->>'amount_payable_to_creditor' = ? AND 
-        data->>'type_of_loan' = ? AND
-        data->>'transaction_type' = ? AND 
-        data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ? AND
-        data ->> 'claims_payment_creditor' = ? AND data ->> 'account_name_creditor' = ? AND data ->> 'account_number_creditor' = ?", 
-        @claim.member_id, "CLIP", @date_prepared, @amount, @gender, @policy_number, 
-        @creditors_name, @member_name, @beneficiary, @date_of_death, @date_of_birth, 
-        @cause_of_death, @effective_date_of_coverage, @expiration_date_of_coverage, @age, @terms, 
-        @amount_of_loan, @amount_payable_to_creditor, @type_of_loan, @transaction_type,  @claims_payment, @account_name, @account_number,
-        @claims_payment_creditor, @account_name_creditor, @account_number_creditor).count
+      @count = 0
+
+      if @control == "new"
+        @count = Claim.where("member_id = ?
+                          AND data->>'creditors_name' = ?
+                          AND data->>'policy_number' = ?
+                          AND data->>'date_of_death' = ?
+                          AND data->>'type_of_loan' = ?
+                          AND data->>'effective_date_of_coverage' = ?",  
+                          @claim.member_id, 
+                          @creditors_name,
+                          @policy_number, 
+                          @date_of_death, 
+                          @type_of_loan, 
+                          @effective_date_of_coverage).count
+      end
+      
+      if @count > 0
+        @errors << "Duplicate BLIP!"
+      end
+
+      # count = Claim.where("member_id = ? AND claim_type = ? AND date_prepared = ? AND 
+      #   data->>'amount' = ? AND data->>'gender' = ? AND data->>'policy_number' = ? AND 
+      #   data->>'creditors_name' = ? AND data->>'member_name' = ? AND data->>'beneficiary' = ? AND 
+      #   data->>'date_of_death' = ? AND data->>'date_of_birth' = ? AND data->>'cause_of_death' = ? AND 
+      #   data->>'effective_date_of_coverage' = ? AND data->>'expiration_date_of_coverage' = ? AND 
+      #   data->>'age' = ? AND data->>'terms' = ? AND data->>'amount_of_loan' = ? AND data->>'amount_payable_to_creditor' = ? AND 
+      #   data->>'type_of_loan' = ? AND
+      #   data->>'transaction_type' = ? AND 
+      #   data ->> 'claims_payment' = ? AND data ->> 'account_name' = ? AND data ->> 'account_number' = ? AND
+      #   data ->> 'claims_payment_creditor' = ? AND data ->> 'account_name_creditor' = ? AND data ->> 'account_number_creditor' = ?", 
+      #   @claim.member_id, "CLIP", @date_prepared, @amount, @gender, @policy_number, 
+      #   @creditors_name, @member_name, @beneficiary, @date_of_death, @date_of_birth, 
+      #   @cause_of_death, @effective_date_of_coverage, @expiration_date_of_coverage, @age, @terms, 
+      #   @amount_of_loan, @amount_payable_to_creditor, @type_of_loan, @transaction_type,  @claims_payment, @account_name, @account_number,
+      #   @claims_payment_creditor, @account_name_creditor, @account_number_creditor).count
         
-        if count > 0
-          @errors << "Duplicate CLIP!"
-        end
+      # if count > 0
+      #   @errors << "Duplicate CLIP!"
+      # end
     end
   end
 end

@@ -140,6 +140,11 @@
         = text_field_tag :account_number_creditor, @claim.data["account_number_creditor"], class: 'form-control', id: 'account-number-creditor'    
 .row
   .col
+    .form-group
+      %label
+        = text_field_tag :control, @control, class: 'form-control', id: 'control'
+.row
+  .col
     .form-actions
     = button_tag type: 'submit', class: 'btn btn-primary', id: "submit-button" do
       .fa.fa-check

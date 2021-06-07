@@ -7,7 +7,7 @@
     .col-sm-2
       .form-group
         %label Status
-        = select_tag :loan_status, options_for_select(Loan::LOAN_STATUSES, @loan_status), prompt: "-- SELECT --", class: "form-control filter-select", id: "filter-loan-status"
+        = select_tag :loan_status, options_for_select(Loan::STATUSES, @loan_status), prompt: "-- SELECT --", class: "form-control filter-select", id: "filter-loan-status"
     .col-sm-2
       .form-group
         %label Start Date
