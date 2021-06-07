@@ -176,17 +176,17 @@ var _generateChildrenTable  = function() {
 }
 
 var buildHeader = function() {
-  var image = 'data:image/png;base64,' + _data.logo;
-  console.log(image);
+  var logo            = 'data:image/png;base64,' + _data.logo;
+  var profilePicture  = 'data:image/png;base64,' + _data.profile_picture;
 
   var header = {
     margin: 20,
     columns: [
       {
-        width: '75%',
+        width: '100%',
         columns: [
           {
-            image: image,
+            image: logo,
             fit: [65, 65],
             width: '25%',
             alignment: 'center'
@@ -201,12 +201,13 @@ var buildHeader = function() {
               { text: 'CDA Reg. No.: 9520-1016000000028521\n', style: styleEmphDefault },
               { text: 'CIN: 16201628521\n', style: styleEmphSecondary }
             ]
+          },
+          {
+            image: profilePicture,
+            fit: [65, 65],
+            alignment: 'right'
           }
         ]
-      },
-      {
-        width: '*',
-        text: 'Profile pic'
       }
     ]
   }
