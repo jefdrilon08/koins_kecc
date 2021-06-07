@@ -245,7 +245,7 @@ var build = function() {
                 text: 'MEMBER / ID NUMBER', style: styleCellLabel
               },
               {
-                text: '', style: styleCellValue
+                text: _data.identification_number, style: styleCellValue
               },
               {
                 text: 'DATE OF MEMBERSHIP', style: styleCellLabel
@@ -303,7 +303,7 @@ var build = function() {
             [
               { text: 'PANGALAN', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 },
+              { text: _data.first_name, style: styleCellValue, colSpan: 2 },
               {},
               { text: 'KALYE', style: styleCellLabel, colSpan: 2 },
               {},
@@ -312,7 +312,7 @@ var build = function() {
             [
               { text: 'GITNANG PANGALAN', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 },
+              { text: _data.middle_name, style: styleCellValue, colSpan: 2 },
               {},
               { text: 'BRGY.', style: styleCellLabel, colSpan: 2 },
               {},
@@ -322,7 +322,7 @@ var build = function() {
             [
               { text: 'APELYIDO', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 },
+              { text: _data.last_name, style: styleCellValue, colSpan: 2 },
               {},
               { text: 'LUNGSOD', style: styleCellLabel },
               { text: '', style: styleCellValue },
@@ -347,11 +347,11 @@ var build = function() {
             ],
             [
               { text: 'PANGALAN', style: styleCellLabel },
-              { text: '', style: styleCellValue },
+              { text: _data.mothers_first_name, style: styleCellValue },
               { text: 'GITNANG PANGALAN', style: styleCellLabel },
-              { text: '', style: styleCellValue },
+              { text: _data.mothers_middle_name, style: styleCellValue },
               { text: 'APELYIDO', style: styleCellLabel },
-              { text: '', style: styleCellValue }
+              { text: _data.mothers_last_name, style: styleCellValue }
             ]
           ]
         }
