@@ -16,6 +16,7 @@ module Public
       @place_of_birth     = @config[:place_of_birth]
       @religion           = @config[:religion]
       @file_document      = @config[:file_document]
+      @profile_picture    = @config[:profile_picture]
       @data               = @config[:data]
       @agreed_to_dp_terms = @config[:agreed_to_dp_terms]
 
@@ -41,6 +42,17 @@ module Public
     end
 
     def execute!
+
+      if @profile_picture.present?
+        decoded_data = Base64.decode64(@profile_picture.split(',')[1])
+
+        @online_application.profile_picture = { 
+          io: StringIO.new(decoded_data),
+          content_type: 'image/jpeg',
+          filename: 'image.jpg'
+        }
+      end
+
       # files
       @online_application.online_application_documents.build(
         file_name: "OTHERFILE",

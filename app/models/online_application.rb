@@ -19,6 +19,7 @@ class OnlineApplication < ApplicationRecord
   before_validation :load_defaults
 
   has_many :online_application_documents, dependent: :destroy
+  has_one_attached :profile_picture
 
   scope :for_verification, -> { where(status: "for_verification") }
   scope :verified, -> { where(status: "verified") }

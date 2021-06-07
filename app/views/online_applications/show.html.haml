@@ -25,6 +25,10 @@
 
         %hr
 
+        - if @online_application.profile_picture.attached?
+          %center
+            = image_tag @online_application.profile_picture
+
         .table-responsive
           %table.table.table-sm.table-bordered
             %tbody
