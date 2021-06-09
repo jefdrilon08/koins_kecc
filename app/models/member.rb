@@ -126,17 +126,22 @@ class Member < ApplicationRecord
 
   def life_number_of_lapsed
     ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first
-    recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
-    current_date = Date.today.to_date
+      
+    if ma.present?
+      recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
+      current_date = Date.today.to_date
 
-    current_balance   = ma.balance
-    num_days = (current_date - recognition_date).to_i
-    num_weeks  = (num_days / 7).to_i + 1
-    insured_amount  = num_weeks  * 15
-    amt_past_due    = (current_balance - insured_amount) * -1
-    num_weeks_past_due  = (amt_past_due / 15).to_i
+      current_balance   = ma.balance
+      num_days = (current_date - recognition_date).to_i
+      num_weeks  = (num_days / 7).to_i + 1
+      insured_amount  = num_weeks  * 15
+      amt_past_due    = (current_balance - insured_amount) * -1
+      num_weeks_past_due  = (amt_past_due / 15).to_i
 
-    return num_weeks_past_due
+      return num_weeks_past_due
+    else
+      return nil
+    end
   end
 
   def profile_picture_url
