@@ -57,6 +57,7 @@ module Api
           data:               payload[:data],
           branch_id:          payload[:branch_id],
           file_document:      params[:file_document],
+          profile_picture:    params[:profile_picture],
           agreed_to_dp_terms: payload[:agreed_to_dp_terms]
         }
 

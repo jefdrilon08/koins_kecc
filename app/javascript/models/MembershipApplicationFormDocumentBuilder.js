@@ -176,17 +176,17 @@ var _generateChildrenTable  = function() {
 }
 
 var buildHeader = function() {
-  var image = 'data:image/png;base64,' + _data.logo;
-  console.log(image);
+  var logo            = 'data:image/png;base64,' + _data.logo;
+  var profilePicture  = 'data:image/png;base64,' + _data.profile_picture;
 
   var header = {
     margin: 20,
     columns: [
       {
-        width: '75%',
+        width: '100%',
         columns: [
           {
-            image: image,
+            image: logo,
             fit: [65, 65],
             width: '25%',
             alignment: 'center'
@@ -201,12 +201,13 @@ var buildHeader = function() {
               { text: 'CDA Reg. No.: 9520-1016000000028521\n', style: styleEmphDefault },
               { text: 'CIN: 16201628521\n', style: styleEmphSecondary }
             ]
+          },
+          {
+            image: profilePicture,
+            fit: [65, 65],
+            alignment: 'right'
           }
         ]
-      },
-      {
-        width: '*',
-        text: 'Profile pic'
       }
     ]
   }
@@ -307,7 +308,7 @@ var build = function() {
               {},
               { text: 'KALYE', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 }
+              { text: _data.address_street, style: styleCellValue, colSpan: 2 }
             ],
             [
               { text: 'GITNANG PANGALAN', style: styleCellLabel, colSpan: 2 },
@@ -316,7 +317,7 @@ var build = function() {
               {},
               { text: 'BRGY.', style: styleCellLabel, colSpan: 2 },
               {},
-              { text: '', style: styleCellValue, colSpan: 2 },
+              { text: _data.address_district, style: styleCellValue, colSpan: 2 },
               {}
             ],
             [
@@ -325,9 +326,9 @@ var build = function() {
               { text: _data.last_name, style: styleCellValue, colSpan: 2 },
               {},
               { text: 'LUNGSOD', style: styleCellLabel },
-              { text: '', style: styleCellValue },
+              { text: _data.address_city, style: styleCellValue },
               { text: 'PROBINSYA', style: styleCellLabel },
-              { text: '', style: styleCellValue }
+              { text: _data.address_province, style: styleCellValue }
             ]
           ]
         }
