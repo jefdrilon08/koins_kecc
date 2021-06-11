@@ -22,6 +22,12 @@ class PrintController < ApplicationController
       
       render "print/accounting_entry", layout: "print"
     
+    elsif type == "accrued_billing"
+      accrued_billing = AccruedBilling.find(params[:id])
+      data = ::Print::BuildAccruedBilling.new(accrued_billing: accrued_billing ).execute!
+      @accrued_billing = data
+      render "print/accrued_billing", layout: "print"
+
     elsif type == "print_ledger"
       savings_account = MemberAccount.find(params[:id])
       data= ::Print::PrintSavingsLedger.new(member_account: savings_account ).execute!
