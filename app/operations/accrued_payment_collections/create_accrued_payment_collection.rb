@@ -75,10 +75,8 @@ module AccruedPaymentCollections
               amount:   'false'                   
             }
           end
-
         end
       end
-        
     end
 
   end

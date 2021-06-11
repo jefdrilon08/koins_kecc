@@ -1,0 +1,96 @@
+:css
+  @page { size: landscape; margin: 15px;}
+
+  table {
+    font-size: 0.8em;
+  }
+
+%small
+  %strong
+    #{Settings.company_name}
+    %br
+    #{Settings.company_address}
+    %br
+    VAT Registration Tin Number: #{Settings.company_tin_number}
+    %br
+    #{@accrued_billing[:center]} / #{@accrued_billing[:branch]}
+    %br
+    Accrued Billing: #{@accrued_billing[:collection_date].to_date.strftime("%B %d, %Y")}
+    %br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "15%" }
+        Member
+      - @accrued_billing[:data].data['headers'].each do |hd|
+        %th{ width: "8%" }
+          #{hd['name']}
+      %th
+        CP
+      %th
+        WP
+      %th
+        TOTAL
+  %tbody
+    - @accrued_billing[:data].data['member_data'].each do |md|
+      %tr
+        %td
+          #{md['name']}
+        - md['loan_data'].each do |ld|
+          %td{:align=>"right"}
+            - if ld['amount'] != 'false'
+              #{ld['amount']}
+        %td
+        %td
+        %td
+
+%br
+%b
+%label
+  Officers:
+.row
+  .col
+    ______________________________
+  .col
+    ______________________________
+  .col
+    ______________________________
+%br
+.row
+  .col
+    %strong
+      Prepared By:
+    %br
+    OAS
+    %br
+    __________________________
+  .col
+    %strong
+      Collected By:
+    %br
+    SO
+    %br
+    __________________________
+  .col
+    %strong
+      Checked By:
+    %br
+    SOM
+    %br
+    __________________________
+  .col
+    %strong
+      Encoded By:
+    %br
+    OAS
+    %br
+    __________________________
+  .col
+    %strong
+      Posted By:
+    %br
+    ACCO
+    %br
+    __________________________
+

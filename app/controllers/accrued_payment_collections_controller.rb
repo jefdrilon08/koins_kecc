@@ -14,7 +14,14 @@ class AccruedPaymentCollectionsController < ApplicationController
 	end
 
   def show
-        
+    @subheader_side_actions = [
+        {
+          id: "btn-printpdf",
+          link: "/print?type=accrued_billing&id=#{params[:id]}",
+          class: "fa fa-print",
+          text: "PDF"
+        }
+      ]        
     @accrued_interest_collection  = AccruedBilling.find(params[:id])
     @accrued_member = @accrued_interest_collection.data['member_data']
     
