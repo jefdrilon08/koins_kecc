@@ -212,7 +212,7 @@ var buildHeader = function() {
           },
           {
             image: profilePicture,
-            fit: [65, 65],
+            fit: [60, 60],
             alignment: 'right'
           }
         ]
