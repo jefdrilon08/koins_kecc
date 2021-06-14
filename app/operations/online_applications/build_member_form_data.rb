@@ -144,10 +144,10 @@ module OnlineApplications
       @data[:mobile_number]         = @online_application.mobile_number
       @data[:home_number]           = @online_application.home_number
 
-      @data[:sss_number]        = @online_application.data["government_identification_numbers"]["sss_number"]
-      @data[:pagibig_number]    = @online_application.data["government_identification_numbers"]["pagibig_number"]
-      @data[:philhealth_number] = @online_application.data["government_identification_numbers"]["philhealth_number"]
-      @data[:tin_number]        = @online_application.data["government_identification_numbers"]["tin_number"]
+      @data[:sss_number]          = @online_application.data["government_identification_numbers"]["sss_number"]
+      @data[:pag_ibig_number]     = @online_application.data["government_identification_numbers"]["pag_ibig_number"]
+      @data[:phil_health_number]  = @online_application.data["government_identification_numbers"]["phil_health_number"]
+      @data[:tin_number]          = @online_application.data["government_identification_numbers"]["tin_number"]
 
       @data[:spouse_first_name]     = @online_application.data["spouse"]["first_name"]
       @data[:spouse_last_name]      = @online_application.data["spouse"]["last_name"]

@@ -472,9 +472,9 @@ var build = function() {
               { text: 'SSS /GSIS #', style: styleCellLabel },
               { text: _data.sss_number, style: styleCellValue },
               { text: 'PAG-IBIG #', style: styleCellLabel },
-              { text: _data.pagibig_number, style: styleCellValue },
+              { text: _data.pag_ibig_number, style: styleCellValue },
               { text: 'PHILHEALTH #', style: styleCellLabel },
-              { text: _data.philhealth_number, style: styleCellValue },
+              { text: _data.phil_health_number, style: styleCellValue },
               { text: 'TIN #', style: styleCellLabel },
               { text: _data.tin_number, style: styleCellValue }
             ]
