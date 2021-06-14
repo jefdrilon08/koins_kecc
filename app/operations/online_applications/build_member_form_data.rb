@@ -72,7 +72,7 @@ module OnlineApplications
         course        = o["course"]
 
         @data[:children][i][:name]          = name
-        @data[:children][i][:date_of_birth] = name
+        @data[:children][i][:date_of_birth] = date_of_birth
         @data[:children][i][:age]           = age
         @data[:children][i][:education]     = education
         @data[:children][i][:course]        = course
