@@ -26,6 +26,32 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
     end
   end
 
+  def member_ids
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:member_id].present?
+          records << oo[:member_id]
+        end
+      end
+    end
+
+    records.uniq
+  end
+
+  def savings_insurance_transfers
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+
+    records
+  end
+
   def prepared_by
     temp  = self.data.with_indifferent_access
 

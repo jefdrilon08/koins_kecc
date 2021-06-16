@@ -8,7 +8,6 @@ module SavingsInsuranceTransferCollections
 
       @book         = "JVB"
       @prepared_by  = @user.full_name
-      @particular   = default_particular
 
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
@@ -18,7 +17,7 @@ module SavingsInsuranceTransferCollections
 
       @savings_subtype                    = @data[:savings_subtype]
       @savings_withdrawal_accounting_code = AccountingCode.find(
-                                              Settings.savings_accounting_codes.select{ |s|
+                                              Settings.savings_insurance_transfer_accounting_codes.select{ |s|
                                                 s.savings_type == @savings_subtype
                                               }.first.withdrawal_accounting_code_id
                                             )
@@ -31,6 +30,8 @@ module SavingsInsuranceTransferCollections
                                             )
 
       @total_amount = @data[:records].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
+      
+      @particular   = default_particular
 
       @accounting_entry_data  = {
         book: @book,
@@ -123,7 +124,23 @@ module SavingsInsuranceTransferCollections
     end
 
     def default_particular
-      "Savings to Insurance fund transfer #{@branch.name}"
+      if !@data[:records].nil?
+        ids = []
+        names = []
+        
+        @data[:records].each do |o|
+          ids << o[:member][:id]
+        end
+
+        Member.where("id IN (?)", ids.uniq).each do |member|
+         names << member.check_name
+        end
+
+        "TO RECORD WITHDRAWAL OF #{@branch.name} - #{@insurance_subtype.upcase} #{@current_date.strftime("%B %d, %Y")}, #{names.join(', ')} = #{@total_amount}"
+      else
+        "TO RECORD WITHDRAWAL OF #{@branch.name} - #{@insurance_subtype}"
+      end
+
     end
   end
 end
