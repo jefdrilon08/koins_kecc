@@ -168,10 +168,7 @@ module_authorization_roles:
   administration:
     - MIS
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 2f5df99dadb8147c807225cee7ca2756ffa5c7fd
 ##############################
 #      Unlock Member         #
 ##############################
@@ -180,12 +177,6 @@ unlock_member_modification:
   - BK
   - SBK
 
-
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 2f5df99dadb8147c807225cee7ca2756ffa5c7fd
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
