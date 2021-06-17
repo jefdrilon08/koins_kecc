@@ -73,9 +73,6 @@ export default class FormDisplay extends React.Component {
       }
     }
 
-    console.log("Update Current Center:");
-    console.log(currentCenter);
-
     this.setState({
       currentCenter: currentCenter,
       data: data

@@ -15,14 +15,11 @@ module Members
         address: {
           street: "",
           district: "",
-          city: ""
-        },
-        new_address: {
-          street: "",
-          district: "",
           city: "",
           province: "",
-          zip_code: ""
+          region: "",
+          old_district: "",
+          old_city: ""
         },
         spouse: {
           first_name: "",
@@ -86,6 +83,15 @@ module Members
         beneficiaries: @member.beneficiaries,
         legal_dependents: legal_dependents
       }
+
+      # Setup old values
+      if @member_data[:data]["address"]["old_district"].blank?
+        @member_data[:data]["address"]["old_district"]  = @member_data[:data]["address"]["district"]
+      end
+
+      if @member_data[:data]["address"]["old_city"].blank?
+        @member_data[:data]["address"]["old_city"]  = @member_data[:data]["address"]["city"]
+      end
 
       @member_data
     end

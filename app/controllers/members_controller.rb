@@ -191,7 +191,7 @@ class MembersController < ApplicationController
     @member                 = Member.find(params[:id])
     @data                   = @member.data.with_indifferent_access
     @address                = @data[:address]
-    @addressVal             = [@address[:street],@address[:district],@address[:city]]
+    @addressVal             = [@address[:street],@address[:district],@address[:city],@address[:province],@address[:region]]
     @recognition_date       = @data[:recognition_date]
     @active_loans           = Loan.active.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
     @paid_loans             = Loan.paid.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")

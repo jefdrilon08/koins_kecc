@@ -7,7 +7,9 @@ module Members
       @member = @config[:member]
       @user   = @config[:user]
 
-      @valid_roles = ["MIS", "BK", "SBK", "REMOTE-BK", "REMOTE-FM"]
+      @valid_roles  = ::Users::FetchValidRoles.new(
+                        module_name: "unlock_member_modification"
+                      )
     end
 
     def execute!

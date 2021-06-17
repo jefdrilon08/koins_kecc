@@ -505,8 +505,8 @@ module Api
                   ).execute!
 
           # Configure branches
-          branches  = Branch.where(
-                        id: UserBranch.active.where(
+          branches  = ReadOnlyBranch.where(
+                        id: ReadOnlyUserBranch.active.where(
                           user_id: current_user.id
                         ).pluck(:branch_id)
                       ).order("name ASC")

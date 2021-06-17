@@ -2,6 +2,7 @@ import React from "react";
 import Select from 'react-select';
 
 import {getReligionOptions} from '../utils/helpers';
+import AddressService from '../utils/AddressService';
 
 export default class FormPersonalInfo extends React.Component {
   constructor(props) {
@@ -48,9 +49,29 @@ export default class FormPersonalInfo extends React.Component {
     this.props.updateData(data);
   }
 
-  handleAddressStreetChanged(event) {
-    var data                  = this.props.data;
-    data.data.address.street  = event.target.value ? event.target.value.toUpperCase() : "";
+  handleAddressRegionChanged(event) {
+    var data                    = this.props.data;
+    data.data.address.region    = event.target.value ? event.target.value : "";
+    data.data.address.province  = "";
+    data.data.address.city      = "";
+    data.data.address.district  = "";
+
+    this.props.updateData(data);
+  }
+
+  handleAddressProvinceChanged(event) {
+    var data                    = this.props.data;
+    data.data.address.province  = event.target.value ? event.target.value : "";
+    data.data.address.city      = "";
+    data.data.address.district  = "";
+
+    this.props.updateData(data);
+  }
+
+  handleAddressCityChanged(event) {
+    var data                    = this.props.data;
+    data.data.address.city      = event.target.value ? event.target.value.toUpperCase() : "";
+    data.data.address.district  = "";
 
     this.props.updateData(data);
   }
@@ -62,9 +83,23 @@ export default class FormPersonalInfo extends React.Component {
     this.props.updateData(data);
   }
 
-  handleAddressCityChanged(event) {
-    var data                = this.props.data;
-    data.data.address.city  = event.target.value ? event.target.value.toUpperCase() : "";
+  handleAddressStreetChanged(event) {
+    var data                  = this.props.data;
+    data.data.address.street  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+  handleAddressOldDistrictChanged(event) {
+    var data                        = this.props.data;
+    data.data.address.old_district  = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
+  handleAddressOldCityChanged(event) {
+    var data                    = this.props.data;
+    data.data.address.old_city  = event.target.value ? event.target.value.toUpperCase() : "";
 
     this.props.updateData(data);
   }
@@ -109,9 +144,6 @@ export default class FormPersonalInfo extends React.Component {
 
 
 //======================= end of 2nd address
-
-
-
 
   handleGenderChanged(event) {
     var data  = this.props.data;
@@ -176,6 +208,87 @@ export default class FormPersonalInfo extends React.Component {
     this.props.updateData(data);
   }
 
+  renderRegions() {
+    var elements = [
+      <option value="" key="region-x">
+        -- SELECT --
+      </option>
+    ]
+
+    AddressService.getRegions().forEach(function(o, i) {
+      elements.push(
+        <option value={o} key={"region-" + i}>
+          {o}
+        </option>
+      )
+    });
+
+    return elements;
+  }
+
+  renderProvinces() {
+    var elements = [
+      <option value="" key="province-x">
+        -- SELECT --
+      </option>
+    ]
+
+    var region = this.props.data.data.address.region;
+
+    AddressService.getProvincesByRegion(region).forEach(function(o, i) {
+      elements.push(
+        <option value={o} key={"province-" + i}>
+          {o}
+        </option>
+      )
+    });
+
+    return elements;
+  }
+
+  renderCities() {
+    var elements = [
+      <option value="" key="city-x">
+        -- SELECT --
+      </option>
+    ]
+
+    var region    = this.props.data.data.address.region;
+    var province  = this.props.data.data.address.province;
+
+    AddressService.getCitiesByRegionAndProvince(region, province).forEach(function(o, i) {
+      elements.push(
+        <option value={o} key={"city-" + i}>
+          {o}
+        </option>
+      )
+    });
+
+    return elements;
+  }
+
+  renderDistricts() {
+    var elements = [
+      <option value="" key="district-x">
+        -- SELECT --
+      </option>
+    ]
+
+    var region    = this.props.data.data.address.region;
+    var province  = this.props.data.data.address.province;
+    var city      = this.props.data.data.address.city;
+
+    AddressService.getDistrictsByRegionAndProvinceAndCity(region, province, city).forEach(function(o, i) {
+      elements.push(
+        <option value={o} key={"district-" + i}>
+          {o}
+        </option>
+      )
+    });
+
+    return elements;
+  }
+
   render() {
     var housingType       = this.props.data.data.housing.type;
     var housingNumYears   = this.props.data.data.housing.num_years;
@@ -221,48 +334,44 @@ export default class FormPersonalInfo extends React.Component {
           </div>
         </div>
         <h5>Mothers Maiden Name</h5> 
-          <div className="row">
-            <div className="col-md-4">
-              <div className="form-group">
-                <label>Apelyido</label>
-                  <input
-                    value={this.props.data.data.mothers_last_name}
-                    className="form-control"
-                    onChange={this.handleMothersLastNameChanged.bind(this)}
-                    disabled={this.props.formDisabled}
-                  />
-              </div>
-              </div>
-          
-              <div className="col-md-4">
-              <div className="form-group">
-                <label>Pangalan</label>
-                  <input
-                    value={this.props.data.data.mothers_first_name}
-                    className="form-control"
-                    onChange={this.handleMothersFirstNameChanged.bind(this)}
-                    disabled={this.props.formDisabled}
-                  />
-              </div>
-              </div>
-              <div className="col-md-4">
-              <div className="form-group">
-                <label>Gitnang Pangalan</label>
+        <div className="row">
+          <div className="col-md-4">
+            <div className="form-group">
+              <label>Apelyido</label>
                 <input
-                  value={this.props.data.data.mothers_middle_name}
+                  value={this.props.data.data.mothers_last_name}
                   className="form-control"
-                  onChange={this.handleMothersMiddleNameChanged.bind(this)}
+                  onChange={this.handleMothersLastNameChanged.bind(this)}
                   disabled={this.props.formDisabled}
-                
                 />
-              </div>
-
             </div>
+            </div>
+        
+            <div className="col-md-4">
+            <div className="form-group">
+              <label>Pangalan</label>
+                <input
+                  value={this.props.data.data.mothers_first_name}
+                  className="form-control"
+                  onChange={this.handleMothersFirstNameChanged.bind(this)}
+                  disabled={this.props.formDisabled}
+                />
+            </div>
+            </div>
+            <div className="col-md-4">
+            <div className="form-group">
+              <label>Gitnang Pangalan</label>
+              <input
+                value={this.props.data.data.mothers_middle_name}
+                className="form-control"
+                onChange={this.handleMothersMiddleNameChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              
+              />
+            </div>
+
           </div>
-
-
-
-
+        </div>
         <h5>
           Tirahan / Address
         </h5>
@@ -280,37 +389,90 @@ export default class FormPersonalInfo extends React.Component {
           </div>
           <div className="col-md-4">
             <div className="form-group">
-              <label>* Barangay</label>
+              <label>* Barangay (OLD)</label>
               <input
-                value={this.props.data.data.address.district}
+                value={this.props.data.data.address.old_district}
                 className="form-control"
-                onChange={this.handleAddressDistrictChanged.bind(this)}
+                onChange={this.handleAddressOldDistrictChanged.bind(this)}
                 disabled={this.props.formDisabled}
               />
             </div>
           </div>
           <div className="col-md-4">
             <div className="form-group">
-              <label>* Syudad / City</label>
+              <label>* Syudad / City (OLD)</label>
               <input
-                value={this.props.data.data.address.city}
+                value={this.props.data.data.address.old_city}
                 className="form-control"
-                onChange={this.handleAddressCityChanged.bind(this)}
+                onChange={this.handleAddressOldCityChanged.bind(this)}
                 disabled={this.props.formDisabled}
               />
             </div>
           </div>
         </div>
 
-
-
-
-
-
-
-
-
-
+        <div className="row">
+          <div className="col-md-3">
+            <div className="form-group">
+              <label>
+                * Region
+              </label>
+              <select
+                className="form-control"
+                disabled={this.props.formDisabled}
+                value={this.props.data.data.address.region}
+                onChange={this.handleAddressRegionChanged.bind(this)}
+              >
+                {this.renderRegions()}
+              </select>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="form-group">
+              <label>
+                * Province
+              </label>
+              <select
+                className="form-control"
+                disabled={this.props.formDisabled}
+                value={this.props.data.data.address.province}
+                onChange={this.handleAddressProvinceChanged.bind(this)}
+              >
+                {this.renderProvinces()}
+              </select>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="form-group">
+              <label>
+                * Syudad / City
+              </label>
+              <select
+                className="form-control"
+                disabled={this.props.formDisabled}
+                value={this.props.data.data.address.city}
+                onChange={this.handleAddressCityChanged.bind(this)}
+              >
+                {this.renderCities()}
+              </select>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="form-group">
+              <label>
+                * Barangay
+              </label>
+              <select
+                className="form-control"
+                disabled={this.props.formDisabled}
+                value={this.props.data.data.address.district}
+                onChange={this.handleAddressDistrictChanged.bind(this)}
+              >
+                {this.renderDistricts()}
+              </select>
+            </div>
+          </div>
+        </div>
 
         <div className="row">
           <div className="col-md-4">

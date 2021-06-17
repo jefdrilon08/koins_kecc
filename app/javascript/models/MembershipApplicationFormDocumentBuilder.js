@@ -469,7 +469,7 @@ var build = function() {
           widths: ["12.5%", "12.5%", "12.5%", "12.5%", "12.5%", "12.5%", "12.5%", "12.5%"],
           body: [
             [
-              { text: 'SSS /GSIS #', style: styleCellLabel },
+              { text: 'SSS/GSIS #', style: styleCellLabel },
               { text: _data.sss_number, style: styleCellValue },
               { text: 'PAG-IBIG #', style: styleCellLabel },
               { text: _data.pag_ibig_number, style: styleCellValue },
@@ -528,11 +528,11 @@ var build = function() {
             ],
             [
               { text: 'DAHILAN NG PAGSALI SA K-COOP', style: styleCellLabel },
-              { text: _data.reason_for_joining, styleCellValue }
+              { text: _data.reason_for_joining, style: styleCellValue }
             ],
             [
               { text: 'KARANASAN SA KOOPERATIBA / MFI', style: styleCellLabel },
-              { text: _data.previous_mfi_experience, styleCellValue }
+              { text: _data.previous_mfi_experience, style: styleCellValue }
             ]
           ]
         }
