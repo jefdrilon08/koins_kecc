@@ -213,6 +213,8 @@ Rails.application.routes.draw do
 
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
+  get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
+  
 
 
   # Accounts
