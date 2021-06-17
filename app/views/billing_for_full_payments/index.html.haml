@@ -1,2 +1,36 @@
-jef
+.row
+  .col
+    .card
+      .card-body
+        %table.table.table-sm.table-bordered
+          %thead
+            %tr
+              %th #
+              %th Branch
+              %th Center
+              %th Collection Date
+              %th Status
+              %th Action
+          %tbody
+            - @full_payment_billing.each_with_index do |fyb, i|
+              %tr
+                %td
+                  #{ i + 1 }
+                %td
+                  #{Branch.find((fyb.meta['branch_id'])).name}
+                %td
+                  #{Center.find(fyb.meta['center_id']).name}
+                %td
+                  #{fyb.meta['collection_date']}
+                %td
+                  #{fyb.status}
+                %td
+                  = link_to billing_for_full_payment_path(fyb.id), class: 'btn btn-primary' do
+                    .fa.fa-search
+          
+
+
+
+
+
 = render partial: "billing_for_full_payments/models/process_billing"
