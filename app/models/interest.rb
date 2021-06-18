@@ -5,10 +5,10 @@ class Interest < ApplicationRecord
   validates :interest_amount, presence: true, numericality: true
 
   def equity_value_interest
-	self.type == "equity_value_interest"
+	self.interest_type == "ev_interest"
   end
 
   def rf_interest
-  	self.type == "retirement_fund_interest"
+  	self.interest_type == "rf_interest"
   end
 end

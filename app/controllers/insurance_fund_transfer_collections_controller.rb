@@ -144,26 +144,32 @@ class InsuranceFundTransferCollectionsController < ApplicationController
 
     # raise "Under maintenance"
     
-   config = {
-     file: file,
-     branch: branch,
-     paid_at: paid_at,
-     prepared_by: prepared_by
-   }
+    config = {
+      file: file,
+      branch: branch,
+      paid_at: paid_at,
+      prepared_by: prepared_by
+    }
 
+    @errors_arr = []
 
-   CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
-     insurance_fund_transfer_collection = row.to_hash
-     @errors = InsuranceFundTransferCollections::ValidateFundTransferFromCsvFile.new(insurance_fund_transfer_collection: insurance_fund_transfer_collection, config: config).execute!
-   end
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      insurance_fund_transfer_collection = row.to_hash
+      @errors = InsuranceFundTransferCollections::ValidateFundTransferFromCsvFile.new(insurance_fund_transfer_collection: insurance_fund_transfer_collection, config: config).execute!
+   
+      @errors_arr << @errors
+    end
 
-   if @errors[:messages].any?
-     redirect_to upload_fund_transfer_path
-     flash[:error] = @errors[:messages]
-   else
-     @insurance_fund_transfer_collection = InsuranceFundTransferCollections::LoadFundTransferFromCsvFile.new(config: config).execute!
-     flash[:success] = "Successfully upload fund transfer."
-     redirect_to insurance_fund_transfer_collection_path(@insurance_fund_transfer_collection)
-   end  
+    if @errors[:messages].any?
+      @errors_arr.each do |error|
+        flash[:error] = error[:messages]
+      end
+
+      redirect_to upload_fund_transfer_path
+    else
+      @insurance_fund_transfer_collection = InsuranceFundTransferCollections::LoadFundTransferFromCsvFile.new(config: config).execute!
+      flash[:success] = "Successfully upload fund transfer."
+      redirect_to insurance_fund_transfer_collection_path(@insurance_fund_transfer_collection)
+    end  
   end
 end

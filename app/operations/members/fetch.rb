@@ -85,13 +85,9 @@ module Members
       }
 
       # Setup old values
-      if @member_data[:data]["address"]["old_district"].blank?
-        @member_data[:data]["address"]["old_district"]  = @member_data[:data]["address"]["district"]
-      end
+      @member_data[:data].with_indifferent_access[:address]["old_district"]  = @member_data[:data][:address]["district"]
 
-      if @member_data[:data]["address"]["old_city"].blank?
-        @member_data[:data]["address"]["old_city"]  = @member_data[:data]["address"]["city"]
-      end
+      @member_data[:data].with_indifferent_access[:address]["old_city"]  = @member_data[:data][:address]["city"]
 
       @member_data
     end
