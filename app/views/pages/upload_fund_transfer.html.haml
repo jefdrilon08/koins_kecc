@@ -16,7 +16,14 @@
               %label
                 File
               = file_field_tag :file, class: "form-control"
+          %br
+          .row
+            .col-md-6
+              - if !flash[:error].nil?
+                - flash[:error].each do |err|
+                  %h4{:style => "color:red;"}
+                    #{err["message"]}
           %hr  
-            .row
+            .row11101
               .col-md-12
                 = submit_tag "Upload Fund Transfer", :class => "btn btn-primary"    

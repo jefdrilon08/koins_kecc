@@ -23,21 +23,22 @@ module MemberAccounts
 
       @result.to_a.map{ |o|
 
-        transaction_id            = o.fetch("transaction_id")
-        member_account_id         = o.fetch("member_account_id")
-        transacted_at             = o.fetch("transacted_at")
-        balance                   = o.fetch("balance")
+        transaction_id     = o.fetch("transaction_id")
+        member_account_id  = o.fetch("member_account_id")
+        transacted_at      = o.fetch("transacted_at")
+        balance            = o.fetch("balance")
         
-        interest = ((balance.to_f / 2) * @x_interest).round(2)
+        interest_amount    = ((balance.to_f / 2) * @x_interest).round(2)
               
-        equity_value_interest = EquityValueInterest.new(
-                                                        member_account_id: member_account_id,
-                                                        account_transaction_id: transaction_id,
-                                                        month_of_year_date: transacted_at.to_date,
-                                                        interest_amount: interest
-                                                        )
+        interest = Interest.new(
+                                            member_account_id: member_account_id,
+                                            account_transaction_id: transaction_id,
+                                            month_of_year_date: transacted_at.to_date,
+                                            interest_amount: interest_amount,
+                                            interest_type: 'ev_interest'
+                                            )
 
-        equity_value_interest.save!
+        interest.save!
       }
     end
 
