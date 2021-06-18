@@ -167,15 +167,10 @@ module_authorization_roles:
     - AM
   administration:
     - MIS
-
-
-##############################
-#      Unlock Member         #
-##############################
-unlock_member_modification:
-  - MIS
-  - BK
-  - SBK
+  unlock_member_modification:
+		-	MIS
+		-	BK
+		-	SBK
 
 ###############################
 # SHARE CERTIFICATE           #
