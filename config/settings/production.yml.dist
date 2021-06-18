@@ -168,6 +168,11 @@ module_authorization_roles:
   administration:
     - MIS
 
+  unlock_member_modification:
+		-	MIS
+		-	BK
+		-	SBK
+
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
