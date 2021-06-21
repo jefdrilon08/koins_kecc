@@ -46,11 +46,10 @@ module Api
         q = params[:q]
 
         members = Member
-                    .active
                     .where(
                       "UPPER(CONCAT(last_name, ' ', first_name)) LIKE :q OR UPPER(CONCAT(first_name, ' ', last_name)) LIKE :q", 
                       q: "%#{q.upcase}%"
-                    )
+                    ).order(:branch_id)
                     .limit(100)
         
         members = members.map{ |m|
@@ -59,7 +58,9 @@ module Api
                       first_name: m.first_name,
                       last_name: m.last_name,
                       middle_name: m.middle_name,
-                      identification_number: m.identification_number
+                      identification_number: m.identification_number,
+                      branch: Branch.find(m.branch_id).name,
+                      status: m.status
                     }
                   }
 
