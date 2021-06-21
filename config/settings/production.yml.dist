@@ -170,7 +170,7 @@ module_authorization_roles:
   
 
 
-	unlock_member_modification:
+  unlock_member_modification:
     - MIS
     - BK
     - SBK
