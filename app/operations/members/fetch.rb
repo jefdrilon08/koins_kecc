@@ -75,7 +75,7 @@ module Members
         place_of_birth: @member.place_of_birth || "",
         member_type: @member.member_type || "Regular",
         religion: @member.religion || "",
-        data: @member.new_record? ? data : @member.data,
+        data: @member.new_record? ? data : @member.data.with_indifferent_access,
         branch_id: @member.branch.try(:id) || "",
         branch_name: @member.branch.try(:name) || "",
         center_id: @member.center.try(:id) || "",
@@ -85,9 +85,9 @@ module Members
       }
 
       # Setup old values
-      @member_data[:data].with_indifferent_access[:address]["old_district"]  = @member_data[:data][:address]["district"]
+      @member_data[:data][:address]["old_district"]  = @member_data[:data][:address]["district"]
 
-      @member_data[:data].with_indifferent_access[:address]["old_city"]  = @member_data[:data][:address]["city"]
+      @member_data[:data][:address]["old_city"]  = @member_data[:data][:address]["city"]
 
       @member_data
     end
