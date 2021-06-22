@@ -65,7 +65,7 @@ class Member < ApplicationRecord
 
   # ActiveStorage
   #has_many_attached :attachment_files
-  has_one_attached :profile_picture
+  has_one_attached :profile_picture, dependent: false
   has_one_attached :signature_file
 
   validates :gender, presence: true
