@@ -543,9 +543,14 @@ export default class DashboardOAS extends React.Component {
     } else {
       var rows          = [];
       var totalPastDue  = 0.00;
+      var totalPrincipalBalance  = 0.00;
+      var totalInterestBalance  = 0.00;
 
       for(var i = 0; i < o.records.length; i++) {
-        totalPastDue += parseFloat(o.records[i].total_balance);
+	totalPastDue += parseFloat(o.records[i].total_balance);
+	totalPrincipalBalance += parseFloat(o.records[i].principal_balance);
+	totalInterestBalance += parseFloat(o.records[i].interest_balance);
+	      
         rows.push(
           <tr key={"watchlist-record-" + o.records[i].id}>
             <td className="text-center">
@@ -566,6 +571,12 @@ export default class DashboardOAS extends React.Component {
             </td>
             <td>
               {o.records[i].loan_product.name}
+	    </td>
+	    <td className="text-right">
+              {numberWithCommas(o.records[i].principal_balance)}
+            </td>
+            <td className="text-right">
+              {numberWithCommas(o.records[i].interest_balance)}
             </td>
             <td className="text-right">
               <strong>
@@ -584,8 +595,15 @@ export default class DashboardOAS extends React.Component {
             GRAND TOTAL ({o.records.length}) 
           </th>
           <th className="text-right">
+            {numberWithCommas(totalPrincipalBalance)}
+	  </th>
+	  <th className="text-right">
+            {numberWithCommas(totalInterestBalance)}
+          </th>
+ 	  <th className="text-right">
             {numberWithCommas(totalPastDue)}
           </th>
+ 
         </tr>
       );
 
@@ -617,7 +635,13 @@ export default class DashboardOAS extends React.Component {
                   <th>
                     Loan Product
                   </th>
-                  <th className="text-right">
+		  <th className="text-right">
+                    Past Due Amount - Principal
+                  </th>
+ 	          <th className="text-right">
+                    Past Due Amount - Interest
+                  </th>
+		  <th className="text-right">
                     Total Past Due
                   </th>
                 </tr>
