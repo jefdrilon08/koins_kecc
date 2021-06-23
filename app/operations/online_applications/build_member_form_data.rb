@@ -96,22 +96,7 @@ module OnlineApplications
     end
 
     def build_housing_type
-      test          = @online_application.data["housing"]["type"]
-      housing_type  = "[ ] Pag-aari ang lupa at bahay (may titulo)\n[ ] Umuupa (sharer or renter)\n[ ] Nakikituloy (libre; mga magulang o extended family)\n[ ] Namana o na-award pero wala pang titulo\n[ ] Nagbabayad ng rights sa lupa, pag-aari ang bahay"
-
-      if test == "Pag-aari ang lupa at bahay"
-        housing_type  = "[x] Pag-aari ang lupa at bahay (may titulo)\n[ ] Umuupa (sharer or renter)\n[ ] Nakikituloy (libre; mga magulang o extended family)\n[ ] Namana o na-award pero wala pang titulo\n[ ] Nagbabayad ng rights sa lupa, pag-aari ang bahay"
-      elsif test == "Umuupa"
-        housing_type  = "[ ] Pag-aari ang lupa at bahay (may titulo)\n[x] Umuupa (sharer or renter)\n[ ] Nakikituloy (libre; mga magulang o extended family)\n[ ] Namana o na-award pero wala pang titulo\n[ ] Nagbabayad ng rights sa lupa, pag-aari ang bahay"
-      elsif test == "Nakikituloy"
-        housing_type  = "[ ] Pag-aari ang lupa at bahay (may titulo)\n[ ] Umuupa (sharer or renter)\n[x] Nakikituloy (libre; mga magulang o extended family)\n[ ] Namana o na-award pero wala pang titulo\n[ ] Nagbabayad ng rights sa lupa, pag-aari ang bahay"
-      elsif test == "Namana o na-award pero wala pang titulo"
-        housing_type  = "[ ] Pag-aari ang lupa at bahay (may titulo)\n[ ] Umuupa (sharer or renter)\n[ ] Nakikituloy (libre; mga magulang o extended family)\n[x] Namana o na-award pero wala pang titulo\n[ ] Nagbabayad ng rights sa lupa, pag-aari ang bahay"
-      elsif test == "Nagbabayad ng Rights sa lupa, pag-aari ng bahay"
-        housing_type  = "[ ] Pag-aari ang lupa at bahay (may titulo)\n[ ] Umuupa (sharer or renter)\n[ ] Nakikituloy (libre; mga magulang o extended family)\n[ ] Namana o na-award pero wala pang titulo\n[x] Nagbabayad ng rights sa lupa, pag-aari ang bahay"
-      end
-
-      housing_type
+      @online_application.data["housing"]["type"]
     end
 
     def execute!
