@@ -7,6 +7,7 @@
       @user     = @config[:user]
       @officer  = @config[:officer]
       @center   = @config[:center]
+      @valid_roles = ["MIS" , "SBK"]
     end
 
     def execute!
@@ -22,7 +23,7 @@
           key: "user",
           message: "User not found"
         }
-      elsif !@user.roles.include?("MIS")
+      elsif (@user.roles & @valid_roles).size == 0
         @errors[:messages] << {
           key: "user",
           message: "User not authorized"

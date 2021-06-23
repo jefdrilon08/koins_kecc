@@ -97,7 +97,7 @@ module OnlineApplications
       @member.online_application  = @online_application
 
       if @online_application.profile_picture.attached?
-        @member.profile_picture = @online_application.profile_picture
+        @member.profile_picture.attach(@online_application.profile_picture.blob)
       end
 
       @member.save!
