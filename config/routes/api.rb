@@ -10,6 +10,7 @@ namespace :api do
     post "/loans/apply", to: "loans#apply"
     get "/loans/project_type_categories", to: "loans#project_type_categories"
     get "/loans", to: "loans#index"
+    post "/loans/quote", to: "loans#quote", to: "loans#quote"
 
     # members
     post "/members/update_password", to: "members#update_password"
