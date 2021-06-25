@@ -43,25 +43,25 @@ module Reports
             "Branch",
             "Center",
             "Name of Member",
-            "Claim Type"
+            "Claim Type",
             "Prepared by",
             "Status"
           ], style: header
 
           @claims.each_with_index do |claim|
-              sheet.add_row [
-                  claim.created_at.try(:strftime, "%b %d, %Y"),
-                  claim.created_at.strftime("%I:%M%P"),
-                  claim.date_prepared.try(:strftime, "%b %d, %Y"),
-                  claim.branch.cluster.name,
-                  claim.branch.name,
-                  claim.member.center.name,
-                  claim.member.full_name,
-                  claim.claim_type,
-                  claim.prepared_by,
-                  claim.status
-                ], style: [nil]             
-              end
+            sheet.add_row [
+                claim.created_at.try(:strftime, "%b %d, %Y"),
+                claim.created_at.strftime("%I:%M%P"),
+                claim.date_prepared.try(:strftime, "%b %d, %Y"),
+                claim.branch.cluster.name,
+                claim.branch.name,
+                claim.member.center.name,
+                claim.member.full_name,
+                claim.claim_type,
+                claim.prepared_by,
+                claim.status
+              ], style: [nil]             
+            end
           end
         end
       @p
