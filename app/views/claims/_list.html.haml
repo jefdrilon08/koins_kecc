@@ -48,7 +48,7 @@
                   #{claim.member.try(:full_name)}
         - if claim.status == "pending"
           %td
-            for checking
+            pending
         - elsif claim.status == "for-approval"
           %td
             for approval

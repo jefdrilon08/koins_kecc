@@ -1,0 +1,88 @@
+:css
+  #claims{
+    font-size: 1.1em;
+  }
+
+  #claim{
+    margin-left: 60px;
+  }
+
+  #count{
+    font-size: 1.5em;
+  }
+
+#count   
+  %h2.center
+    Claims Daily Report as of #{@date_today.strftime("%B %d, %Y")}
+  %table.table.table-bordered.table-sm
+    %tbody
+      %tr
+        %td{ width: "50%" }
+          %b
+            Pending Claims Count:
+        - if @pending_claims.count > 0
+          %td
+            #{@pending_claims.count}
+        - else
+          %td
+            0
+      %tr
+        %td
+          %b
+            For Approval Claims:
+        - if @for_approval_claims.count > 0
+          %td
+            #{@for_approval_claims.count}
+        - else
+          %td
+            0
+      %tr
+        %td
+          %b
+            For Posting Claims:
+        - if @for_posting_claims.count > 0
+          %td
+            #{@for_posting_claims.count}
+        - else
+          %td
+            0
+      %tr
+        %td
+          %b
+            Approved Claims:
+        - if @posted_claims.count > 0
+          %td
+            #{@posted_claims.count}
+        - else
+          %td
+            0
+#claims  
+  %table.table.table-bordered.table-sm
+    %tbody
+      %tr
+        %th
+        %th{ width: "18%" }
+          Date Prepared
+        %th{ width: "25%" }
+          Name of Member
+        %th{ width: "15%" }
+          Status
+        %th{ width: "40%" }
+          Note
+      - count = 1
+      - @claims.each do |claim|
+        %tr
+          %td
+            #{count}
+          %td
+            #{claim.date_prepared}
+          %td
+            #{claim.member.full_name}
+          %td
+            #{claim.status}
+          %td
+            #{claim.note}
+        - count = count + 1
+
+:javascript
+  window.print();

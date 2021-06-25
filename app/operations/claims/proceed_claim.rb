@@ -4,17 +4,27 @@ module Claims
       @config            = config
 
       @claim             = @config[:claim]
-      @claim_data        = @claim.data.with_indifferent_access
+      @user              = @config[:user]
+      @branch            = @claim.branch
+      @c_working_date    = Date.today
+
+      # @c_working_date    = ::Utils::GetCurrentDate.new(
+      #                       config: {
+      #                         branch: @branch
+      #                       }
+      #                     ).execute!
     end
 
     def execute!
-      @claim_data[:for_proceed] = true
-
       if @claim.declined_note.present?
         @claim_data[:declined_note] = nil
       end
-
-      @claim.update!(data: @claim_data)
+      
+      @claim.update!(
+        status: "for-approval",
+        date_checked: @c_working_date,
+        checked_by: @user.print_full_name.titleize
+      )
 
       @claim
     end

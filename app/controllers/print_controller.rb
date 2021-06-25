@@ -45,6 +45,16 @@ class PrintController < ApplicationController
       @claim = Claim.find(params[:cid])
 
       render "print/claims_voucher", layout: "print"
+    elsif type == "claims_daily_report"
+      @date_today = Date.today
+
+      @claims              = Claim.where("date_prepared >= ? AND date_prepared <= ?", @date_today, @date_today).order("status ASC")
+      @posted_claims       = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "approved", @date_today, @date_today)
+      @pending_claims      = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "pending", @date_today, @date_today)
+      @for_approval_claims = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "for-approval", @date_today, @date_today)
+      @for_posting_claims  = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "for-posting", @date_today, @date_today)
+
+      render "print/claims_daily_report", layout: "print"
     elsif type == "deposit_collection_accounting_entry"
       deposit_collection = DepositCollection.find(params[:id])
       accounting_entry   = deposit_collection.approved_accounting_entry
