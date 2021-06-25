@@ -24,4 +24,10 @@ class BillingForFullPaymentsController < ApplicationController
         }
       ]
   end
+
+  
+  def show
+    @billing_data_store = DataStore.find(params[:id])
+      
+  end
 end
