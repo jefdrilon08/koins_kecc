@@ -43,6 +43,25 @@ module Api
         render json: { project_type_categories: project_type_categories }
       end
 
+      def quote
+        loan_product          = LoanProduct.find_by_id(params[:loan_product_id])
+        amount                = params[:amount].try(:to_f).try(:round, 2)
+        term                  = params[:term]
+        num_installments      = params[:num_installments].try(:to_i)
+        annual_interest_rate  = loan_product.monthly_interest_rate * 12
+
+        result  = ::Finance::Amortize.new(
+                    params: {
+                      principal: amount,
+                      annual_interest_rate: annual_interest_rate,
+                      num_installments: num_installments,
+                      term: term
+                    }
+                  ).execute!
+
+        render json: result
+      end
+
       def apply
         loan_product      = LoanProduct.find_by_id(params[:loan_product_id])
         pn_number         = "CHANGE-ME-#{SecureRandom.hex(8)}"

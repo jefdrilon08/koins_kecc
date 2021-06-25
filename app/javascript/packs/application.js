@@ -171,6 +171,7 @@ import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCode
 import TrendsIndex from "../models/TrendsIndex.js";
 import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
 import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
+import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -320,7 +321,8 @@ const hooks = {
   "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
   "trends/index":                                     [TrendsIndex],
   "online_applications/show":                         [OnlineApplicationsShow],
-  "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex]
+  "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex],
+  "billing_for_full_payments/show":                   [BillingForFullPaymentsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

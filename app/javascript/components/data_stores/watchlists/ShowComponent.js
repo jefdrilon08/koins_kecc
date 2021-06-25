@@ -113,20 +113,24 @@ export default class ShowComponent extends React.Component {
     var records   = this.state.data.data.records;
 
     var totalPastDue  = 0.00;
-
+    var totalPrincipalBalance = 0.00;
+    var totalInterestBalance = 0.00;
+    var x = 0;
     for(var i = 0; i < records.length; i++) {
       if(records[i].total_balance > 0) {
         totalPastDue += parseFloat(records[i].total_balance);
-
+	totalPrincipalBalance += parseFloat(records[i].principal_balance);
+	totalInterestBalance += parseFloat(records[i].interest_balance);
+	x = x+1
         rows.push(
           <tr key={"member-row-" + records[i].member.id + "-" + i}>
             <td className="text-center">
-              {i+1}
+	     {x}
             </td>
             <td>
               <strong>
                 <a href={"/loans/" + records[i].id} target='_blank'>
-                  {records[i].member.last_name}, {records[i].member.first_name}
+                  {records[i].member.last_name}, {records[i].member.first_name} {records[i].member.middle_name}
                 </a>
               </strong>
             </td>
@@ -158,9 +162,11 @@ export default class ShowComponent extends React.Component {
         <th>
         </th>
         <th colSpan="4">
-          GRAND TOTAL ({records.length}) 
+          GRAND TOTAL ({x}) 
         </th>
-        <th className="text-right">
+        <th className="text-right">{numberWithCommas(totalPrincipalBalance)}</th>
+	<th className="text-right">{numberWithCommas(totalInterestBalance)}</th>
+	<th className="text-right">
           {numberWithCommas(totalPastDue)}
         </th>
       </tr>

@@ -2,8 +2,10 @@ module Loans
   class RemoteApply
     attr_accessor :loan
 
-    def initialize(config:)
+    def initialize(config:, persist: true)
       @config = config
+
+      @persist  = persist
 
       @member           = @config[:member]
       @loan_product     = @config[:loan_product]
@@ -185,7 +187,9 @@ module Loans
       # Initial status of loan for remote application should be for-verification
       @loan.status = "for-verification"
 
-      @loan.save!
+      if @persist
+        @loan.save!
+      end
 
       @loan
     end

@@ -13,15 +13,20 @@ class PrintController < ApplicationController
 
     if type == "accounting_entry"
       accounting_entry = AccountingEntry.find(params[:id])
-
       data  = ::Print::BuildAccountingEntry.new(
                 accounting_entry: accounting_entry
               ).execute!
-
       @accounting_entry_data  = data
-      
       render "print/accounting_entry", layout: "print"
     
+    elsif type == "print_entry"
+      data_store_entry = DataStore.find(params[:id])
+      data  = ::Print::BuildIcprAccountingEntry.new(
+                data_entry: data_store_entry
+              ).execute!
+      @data_store_entry  = data
+      render "print/print_entry", layout: "print"
+     
     elsif type == "accrued_billing"
       accrued_billing = AccruedBilling.find(params[:id])
       data = ::Print::BuildAccruedBilling.new(accrued_billing: accrued_billing ).execute!

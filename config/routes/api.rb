@@ -10,6 +10,7 @@ namespace :api do
     post "/loans/apply", to: "loans#apply"
     get "/loans/project_type_categories", to: "loans#project_type_categories"
     get "/loans", to: "loans#index"
+    post "/loans/quote", to: "loans#quote", to: "loans#quote"
 
     # members
     post "/members/update_password", to: "members#update_password"
@@ -231,6 +232,8 @@ namespace :api do
 
     #billing_for_full_payments
     post "/billing_for_full_payments/create", to: "billing_for_full_payments#create"
+    post "/billing_for_full_payments/update_amount", to: "billing_for_full_payments#update_amount"
+
 
     #Accrued_Billing
     post "/accrued_payment_collections", to: "accrued_payment_collections#create"
