@@ -3,6 +3,10 @@ import Mustache from "mustache/mustache";
 var $btnUpdate;
 var $btnConfirmUpdate;
 var $modalUpdate;
+var $modalPrint;
+var $printMessage;
+var $btnPrint;
+var loader;
 
 var $btnApprove;
 var $btnConfirmApprove;
@@ -25,6 +29,9 @@ var _cacheDom = function() {
   $btnUpdate        = $("#btn-update");
   $btnConfirmUpdate = $("#btn-confirm-update");
   $modalUpdate      = $("#modal-update");
+  $btnPrint         = $("#btn-print");
+  $printMessage       = $(".print-message");
+  $modalPrint         = $("#modal-print");
   
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
@@ -39,6 +46,7 @@ var _cacheDom = function() {
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
+  loader            = $("#template-loader").html();
 };
 
 var _bindEvents = function() {
@@ -104,6 +112,21 @@ var _bindEvents = function() {
     $modalApprove.modal("show");
   });
 
+  $btnPrint.on("click", function() {
+    var print_entry = $btnPrint.data('id');
+
+    $modalPrint.modal("show");
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrint.modal("hide");
+    window.open("/print?id=" + print_entry + "&type=print_entry");
+  });
+  
   $btnConfirmApprove.on("click", function() {
     $btnConfirmApprove.prop("disabled", true);
     $message.html("Loading...");

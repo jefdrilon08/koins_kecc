@@ -1,0 +1,230 @@
+:css
+  .print-text{
+    font-size: 1.5em;
+  }
+  .print-text.p{
+    font-family: Calibri;
+  }
+  .print-text-book.p {
+    font-family: Calibri;
+  }
+  .print-text-book{
+    font-size: 1.5em;
+  }
+  .print-text-sub.p {
+    font-family: Calibri;
+  }
+  .print-text-sub{
+    font-size: 1.1em;
+  }
+      
+  table.voucher td.amount{
+    text-align: right;
+  }
+
+  table.voucher th.amount{
+    text-align: right;
+    font-size: 1.5em;
+  }
+  table.voucher th{
+    text-align: right;
+    font-size: 1.5em;
+  }
+  table.voucher td.code{
+    text-align: center;
+    font-size: 1.5em;
+  }
+  table.voucher td{
+    text-align: left;
+    font-size: 1.5em;
+  }
+  table.voucher th.header{
+    font-size: 1.5em;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  table.signatories td.overline{
+    text-decoration: overline;
+    font-size: 1.5em;
+  }
+  table.signatories th
+    {
+    font-size: 1.5em;
+    }
+  hr {
+    border-color: black;
+  }
+  p.signatories{
+    font-size: 1.5em;
+  }
+  b.nothing{
+    font-size: 1.5em;
+  }
+
+%span.print-text
+  %center
+    %br
+    %br
+    %p
+      %b
+        #{@data_store_entry[:company_name]} - #{@data_store_entry[:branch]}
+      %br  
+      %b
+        #{@data_store_entry[:company_address]}
+  - if @data_store_entry[:book] == "CRB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH VOUCHER
+  - elsif @data_store_entry[:book] == "JVB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            JOURNAL VOUCHER
+  - elsif @data_store_entry[:book] == "CDB"
+    %span.print-text-book
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH DISBURSEMENT
+    %br
+%left
+  %br
+  %span.print-text-sub
+    %table{:border => "0"}
+      // Remove
+      - if Settings.activate_microloans == true
+        %tr
+          %th{:width => "17%"} System ID:
+          %th{:width => "20%"}
+      %tr
+        // Remove
+        - if Settings.activate_microloans == true  
+          %th{:width => "17%"} Reference No:
+          %th{:width => "20%"} #{@data_store_entry[:reference_number]}
+        - if Settings.activate_microinsurance == true
+          %th{:width => "18%"} Ref. No:
+        - if Settings.activate_microloans == true
+          %th{:width => "18%"} Doc. No:  
+        - if Settings.activate_microinsurance == true
+          %th{:width => "25%"} #{@data_store_entry[:sub_reference_number]}
+          -if @data_store_entry[:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@data_store_entry[:or_number]}
+          - else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@data_store_entry[:check_number]}
+        - else
+          %th{:width => "20%"} 
+          -if @data_store_entry[:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@data_store_entry[:or_number]}
+          - else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@data_store_entry[:check_number]}
+      - if Settings.activate_microloans == true  
+        %tr
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@data_store_entry[:date_posted]}
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@data_store_entry[:date_posted]}
+      - if Settings.activate_microinsurance == true  
+        %tr
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@data_store_entry[:date_posted]}  
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@data_store_entry[:date_posted]}
+        -if Settings.activate_microinsurance == true
+          -if @data_store_entry[:book] == "CRB"
+            %th{:width => "17%"} AR Number:
+            %th{:width => "20%"} #{@data_store_entry[:ar_number]}
+      - if @data_store_entry[:payee].present?
+        %tr
+          %th{:width => "17%"} Payee:
+          %th{:width => "20%"} #{@data_store_entry[:payee]}
+    %hr
+  %center
+    %table.voucher{"border:" => "", :none => ""}
+      %tr
+        %th.header{width: 250} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
+        %th.header{width: 650} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
+        %th.header{width: 50} 
+        %th.header{width: 180} &emsp;Debit(PHP)&emsp;
+        %th.header{width: 190} &emsp;Credit(PHP)&emsp;
+
+      - @data_store_entry[:debit_journal_entries].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td.amount
+            #{o[:amount]}
+          %td 
+      - @data_store_entry[:credit_journal_entries].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td
+          %td.amount
+            #{o[:amount]}
+      %tr
+        %th
+        %th
+        %th 
+        %th.amount ___________
+        %th.amount ___________
+      %tr
+        %th
+        %th
+        %th Total 
+        %th.amount
+          #{@data_store_entry[:total_debit]}
+        %th.amount
+          #{@data_store_entry[:total_credit]}
+%center
+  %p
+    __________________________________________________________
+    %br 
+    %b.nothing
+      *** Nothing Follows ***      
+%left  
+  %hr
+  %p.signatories
+    %b
+      Particular:
+    #{@data_store_entry[:particular]}
+  %br
+  %br
+  %center
+    %table.signatories{"border:" => "", :none => ""}
+      %tr
+        -if Settings.activate_microinsurance == true
+          %th
+        -else
+          %th{width: 350} #{@data_store_entry[:prepared_by]}
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{@data_store_entry[:approved_by]}
+        -else
+          %th{width: 255}
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{"SILVIDA ANTIQUERA"}
+        -else
+          %th{width: 350} #{@data_store_entry[:approved_by]}
+      %tr
+        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  %br
+  %br
+  %center
+    %p.signatories
+      ______________________________________________
+      %br
+      Received By:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date:
+
+:javascript
+  window.print();

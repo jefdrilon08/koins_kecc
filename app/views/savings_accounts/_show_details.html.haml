@@ -9,6 +9,9 @@
       %th
         %center
           Type
+      %th
+        %center
+          Adjusment
       %th.text-right
         Beginning Balance
       %th.text-right
@@ -39,6 +42,19 @@
                 D
             - elsif o.withdraw?
               W
+        %td
+          %center
+            - if o.data["is_adjustment"].present?
+              - if o.deposit?
+                %center
+                  .badge.badge-success
+                    .fa.fa-plus
+                    ADD
+              - else
+                %center
+                  .badge.badge-danger
+                    .fa.fa-minus
+                    DEDUCT
         %td.text-right.text-muted
           #{number_to_currency(o.data["beginning_balance"], unit: "")}
         %td.text-right

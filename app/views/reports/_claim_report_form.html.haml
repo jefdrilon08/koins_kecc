@@ -3,7 +3,7 @@
     .col-md-3
       .form-group
         %label Type of Claims
-        = select_tag :claim_type, options_for_select(["BLIP", "CLIP", "HIIP", "CALAMITY ASSISTANCE", "K-KALINGA", "K-BENTE", "KUYA JUN SCHOLARSHIP PROGRAM"]), class: 'form-control select-select2', id: "type-of-claims"
+        = select_tag :claim_type, options_for_select(["BLIP", "CLIP", "HIIP", "CALAMITY ASSISTANCE", "K-KALINGA", "K-BENTE", "KUYA JUN SCHOLARSHIP PROGRAM"]), prompt: "-- SELECT --", class: 'form-control select-select2', id: "type-of-claims"
     .col-sm-3
       .form-group
         %label Branch

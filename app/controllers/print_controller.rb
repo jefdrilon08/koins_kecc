@@ -13,15 +13,20 @@ class PrintController < ApplicationController
 
     if type == "accounting_entry"
       accounting_entry = AccountingEntry.find(params[:id])
-
       data  = ::Print::BuildAccountingEntry.new(
                 accounting_entry: accounting_entry
               ).execute!
-
       @accounting_entry_data  = data
-      
       render "print/accounting_entry", layout: "print"
     
+    elsif type == "print_entry"
+      data_store_entry = DataStore.find(params[:id])
+      data  = ::Print::BuildIcprAccountingEntry.new(
+                data_entry: data_store_entry
+              ).execute!
+      @data_store_entry  = data
+      render "print/print_entry", layout: "print"
+     
     elsif type == "accrued_billing"
       accrued_billing = AccruedBilling.find(params[:id])
       data = ::Print::BuildAccruedBilling.new(accrued_billing: accrued_billing ).execute!
@@ -45,6 +50,16 @@ class PrintController < ApplicationController
       @claim = Claim.find(params[:cid])
 
       render "print/claims_voucher", layout: "print"
+    elsif type == "claims_daily_report"
+      @date_today = Date.today
+
+      @claims              = Claim.where("date_prepared >= ? AND date_prepared <= ?", @date_today, @date_today).order("status ASC")
+      @posted_claims       = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "approved", @date_today, @date_today)
+      @pending_claims      = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "pending", @date_today, @date_today)
+      @for_approval_claims = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "for-approval", @date_today, @date_today)
+      @for_posting_claims  = Claim.where("status = ? AND date_prepared >= ? AND date_prepared <= ?", "for-posting", @date_today, @date_today)
+
+      render "print/claims_daily_report", layout: "print"
     elsif type == "deposit_collection_accounting_entry"
       deposit_collection = DepositCollection.find(params[:id])
       accounting_entry   = deposit_collection.approved_accounting_entry

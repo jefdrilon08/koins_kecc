@@ -45,10 +45,13 @@ module DataStores
 
       @subheader_side_actions = [
         {
-          id: "btn-new",
+          id: "btn-print",
           link: "#",
-          class: "fa fa-plus",
-          text: "New"
+          class: "fa fa-print",
+          text: "Print Entry",
+          data: {
+            id: "#{@record.id}"
+          }
         }
       ]
 
