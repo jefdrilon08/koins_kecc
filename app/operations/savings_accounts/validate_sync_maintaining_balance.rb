@@ -8,7 +8,7 @@ module SavingsAccounts
       @maintaining_balance  = @config[:maintaining_balance].try(:to_f)
       @user                 = @config[:user]
 
-      @valid_roles    = Settings.try(:authorization).try(:sync_maintaining_balance) || []
+      @valid_roles    = Settings.try(:module_authorization_roles).try(:unlock_member_modification) || []
       @current_roles  = @user.current_roles
     end
 
