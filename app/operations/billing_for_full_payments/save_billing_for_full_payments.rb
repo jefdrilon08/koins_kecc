@@ -10,18 +10,22 @@ module BillingForFullPayments
       @data_store_type = "BILLING FOR FULL PAYMENT"
 
 
-      @meta = {
-        collection_date: @due_date,
-        branch_id: @branch_id,
-        center_id: @center_id,
-        data_store_tpe: @data_store_type
-      
-      }
 
 
 
     end
     def execute!
+      @meta = {
+        collection_date: @due_date,
+        branch_id: @branch_id,
+        center_id: @center_id,
+        data_store_tpe: @data_store_type,
+        header: []
+      
+      }
+
+
+
           config = {
             branch: @branch_id,
             center: @center_id,
@@ -31,18 +35,30 @@ module BillingForFullPayments
           @record = ::BillingForFullPayments::CreateBillingForFullPayments.new(
                                                                                 config: config
                                                                               ).execute!
-
-
+      
+          
           @data_store.meta = @meta
+          @get_billing_header = get_billing_header
+          @get_billing_header << "WP"
+          @data_store.meta["header"] << @get_billing_header
           @data_store.data = @record
           @data_store.status = "pending"
 
-          @data_store.save!
-
-          
-
-
-          
+          @data_store.save! 
     end
+    
+
+    def get_billing_header
+      @billing_header = []
+      Settings.loan_products.each do |a|
+        if  a[:for_unearned_interest] == true
+          @billing_header << a[:loan_product_id]
+        end
+      end
+      @billing_header
+
+      #raise @billing_header.inspect
+
+   end
   end
 end

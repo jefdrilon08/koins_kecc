@@ -49,11 +49,12 @@ var _branchId;
 var _centerId;
 var _memberId;
 var _moratoriumId;
-var _loanId;
-var _loanProductId;
-var _dataStoreId;
-var _loanAmount;
 
+var _memberId;
+var _memberAccountId;
+var _dataStoreId;  
+var _recordType;
+var _loanAmount;
 
 var _urlCreate        = "/api/v1/billing_for_full_payments/update_amount";
 var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
@@ -336,17 +337,19 @@ var _bindEvents = function() {
 
   $btnNew.on("click", function() {
   
-    var dataStoreId = $(this).data('data-store-id')     
-    var loanId = $(this).data('loan-id')
     var amount = $(this).data('amount')
-    var loanProductId = $(this).data('loan-product-id')
-
+    var memberId = $(this).data('member-id') 
+    var memberAccountId = $(this).data('member-account-id')
+    var dataStoreId = $(this).data('data-store-id')     
+    var recordType = $(this).data('record-type')
     $inputStartDate.val(amount)
 
-     _loanId          = loanId
-     _loanProductId   = loanProductId
-     _dataStoreId     = dataStoreId 
-
+    
+    
+     _memberId          = memberId 
+     _memberAccountId   = memberAccountId
+     _dataStoreId       = dataStoreId
+     _recordType        = recordType
    
 
 
@@ -357,6 +360,7 @@ var _bindEvents = function() {
     
      _loanAmount = $inputStartDate.val()
     
+  
 
     _branchId           = $selectBranch.val();
     _centerId           = $selectCenter.val();
@@ -383,10 +387,11 @@ var _bindEvents = function() {
       url: _urlCreate,
       method: "POST",
       data: {
-            loan_id:          _loanId,
-            loan_product_id:  _loanProductId,
-            data_store_id:    _dataStoreId,
-            loan_amount:      _loanAmount
+            member_id:          _memberId,
+            member_account_id:  _memberAccountId,
+            data_store_id:      _dataStoreId,
+            record_type:        _recordType,
+            loan_amount:        _loanAmount
       },
       success: function(resonse) {
         $message.html(
