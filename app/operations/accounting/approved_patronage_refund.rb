@@ -76,7 +76,7 @@ module Accounting
       
       @data[:records].each do |o|
         member_id                   = o[:id]
-        savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "K-IMPOK").ids.shift
+        savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Personal Savings Account").ids.shift
         savings_account_balance     = MemberAccount.find(savings_account_id).balance.round(2)
         savings_distribute          = o[:savings_distribute].to_f.round(2)
         savings_account_new_balance = (savings_account_balance + savings_distribute).round(2)

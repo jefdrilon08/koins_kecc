@@ -124,16 +124,18 @@ module Members
         }
       end
 
-
-      if @member_data[:id].empty?
-        @member = Member.joins(:branch).where("last_name = ? and first_name = ? and date_of_birth = ?" , @member_data[:last_name],@member_data[:first_name], @member_data[:date_of_birth]).last
-        if @member.present?
-          @errors[:messages] << {
-            key: "member_account",
-            message: "#{@member_data[:first_name]} #{@member_data[:last_name]} has account already in #{@member.branch.name}"
-          }
+      if Settings.activate_microloans
+        if @member_data[:id].empty?
+          @member = Member.joins(:branch).where("last_name = ? and first_name = ? and date_of_birth = ?" , @member_data[:last_name],@member_data[:first_name], @member_data[:date_of_birth]).last
+          if @member.present?
+            @errors[:messages] << {
+              key: "member_account",
+              message: "#{@member_data[:first_name]} #{@member_data[:last_name]} has account already in #{@member.branch.name}"
+            }
+          end
         end
       end
+      
       #not_yet_implemented!
 
       @errors[:messages].each do |m|
