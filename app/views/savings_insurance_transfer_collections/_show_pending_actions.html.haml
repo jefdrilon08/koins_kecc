@@ -16,3 +16,16 @@
       %button#btn-add.btn.btn-info.btn-block
         .fa.fa-plus
         Add
+.row
+  .col-md-10
+    .form-group
+      %label
+        Particular
+      = text_area_tag :particular, @particular, id: 'input-particular', class: 'form-control'
+  .col-md-2
+    .form-group
+      %label
+        Actions
+      %button#btn-update-particular.btn.btn-info.btn-block
+        .fa.fa-plus
+        Save Particular

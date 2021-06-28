@@ -52,6 +52,7 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
     end
 
     @accounting_entry_hash                  = @savings_insurance_transfer_collection.data.with_indifferent_access[:accounting_entry]
+    @particular                             = @accounting_entry_hash[:particular]
 
     @members  = Member.active.where(
                   center_id: @savings_insurance_transfer_collection.center.id

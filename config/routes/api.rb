@@ -58,6 +58,7 @@ namespace :api do
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
     post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
     post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
+    post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
