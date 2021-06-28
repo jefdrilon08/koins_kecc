@@ -137,7 +137,10 @@ module Members
         render :edit
       end
     end
-
+    def void
+      @member_share = MemberShare.find(params[:id])
+      puts "heloo"
+    end
     def show
       @member_share = MemberShare.find(params[:id])
 
@@ -165,7 +168,6 @@ module Members
         forCoop: @member_share.for_kcoop?
       }
     end
-
     def destroy
       @member_share       = MemberShare.find(params[:id])
       certificate_number  = @member_share.certificate_number

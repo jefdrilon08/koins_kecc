@@ -16,6 +16,7 @@ namespace :administration do
   get "/member_shares/printed", to: "member_shares#printed"
   get "/member_shares/no_certificates", to: "member_shares#no_certificates"
   get "/member_shares/print", to: "member_shares#print"
+  post "/member_shares/void", to: "member_shares#void"
 
   resources :project_type_categories
 
