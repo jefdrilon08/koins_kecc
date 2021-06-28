@@ -221,7 +221,8 @@
     %table{:border => "0"}
       %tr
         %td{style: "width:42%; height: 25px;"}
-          Prepared by: 
+          %b
+            Prepared by: 
           %br
           %i DATE: #{@claim.date_prepared.strftime("%b %d, %Y")}
           %br
@@ -230,23 +231,13 @@
             #{@claim.prepared_by}
           %br
           Account Officer
-        %td{style: "width:42%; height: 25px;"}
-          Checked by:
+      %tr
+        %td
           %br
-          - if !@claim.date_checked.nil?
-            %i DATE: #{@claim.try(:date_checked).strftime("%b %d, %Y")}
-          %br
-          %br
-          - if @claim.checked_by.nil? 
-            %u
-              Adrian San Andres / Diobert Calanza
-          - else
-            %u
-              #{@claim.checked_by}
-          %br
-          Account Officer
+      %tr
         %td{style: "width:40%; height: 25px;"}
-          Approved by:
+          %b
+            Approved by:
           %br
           - if !@claim.date_approved.nil?
             %i DATE: #{@claim.try(:date_approved).strftime("%b %d, %Y")}
