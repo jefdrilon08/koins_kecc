@@ -24,13 +24,13 @@ module Icpr
     def execute!
       post_accounting_entry!
       insert_funds!
-
-      # Rehash accounts
-      ::MemberAccounts::BulkRehash.new(
-        config: {
-          branch: @branch
-        }
-      ).execute!
+      rehash_savings!
+      # # Rehash accounts
+      # ::MemberAccounts::BulkRehash.new(
+      #   config: {
+      #     branch: @branch
+      #   }
+      # ).execute!
 
       @data_store.update!(data: @data)
 
@@ -138,10 +138,22 @@ module Icpr
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
       end
-
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
-
       ActiveRecord::Base.connection.execute(query)
+    end
+
+    def rehash_savings!
+      @data[:records].each do |o|
+        member_id                   = o[:id]
+        personal_savings_account    = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Personal Savings Account").ids.shift
+        cbu_account                 = o[:cbu_account_id]
+        
+        ::MemberAccounts::Rehash.new(
+          member_account: MemberAccount.find(personal_savings_account), account_transactions: nil).execute!
+
+        ::MemberAccounts::Rehash.new(
+          member_account: MemberAccount.find(cbu_account), account_transactions: nil).execute!
+      end
     end
   end
 end
