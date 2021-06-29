@@ -552,7 +552,7 @@ namespace :adjust do
 
   task :bulk_rehash => :environment do
     branch  = Branch.find(ENV['BRANCH_ID'])
-    account_subtype  = Branch.find(ENV['ACCOUNT_SUBTYPE'])
+    account_subtype  = ENV['ACCOUNT_SUBTYPE']
 
     ::MemberAccounts::BulkRehash.new(
       config: {
