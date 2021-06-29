@@ -3,11 +3,14 @@ import Mustache from "mustache/mustache";
 var $btnUpdate;
 var $btnConfirmUpdate;
 var $modalUpdate;
+var $modalPrint;
+var $printMessage;
 
 var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
-
+var $btnPrint;
+var loader;
 var $btnSetRate;
 var $btnConfirmSetRate;
 var $modalSetRate;
@@ -25,10 +28,13 @@ var _cacheDom = function() {
   $btnUpdate        = $("#btn-update");
   $btnConfirmUpdate = $("#btn-confirm-update");
   $modalUpdate      = $("#modal-update");
-  
+  $btnPrint         = $("#btn-print");
+  $printMessage       = $(".print-message");
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $modalApprove       = $("#modal-approve");
+  $modalPrint         = $("#modal-print");
 
   $btnSetRate               = $("#btn-set-rate");
   $btnConfirmSetRate        = $("#btn-confirm-set-rate");
@@ -39,6 +45,7 @@ var _cacheDom = function() {
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
+  loader            = $("#template-loader").html();
 };
 
 var _bindEvents = function() {
@@ -102,6 +109,21 @@ var _bindEvents = function() {
   $btnApprove.on("click", function() {
     $message.html("");
     $modalApprove.modal("show");
+  });
+
+  $btnPrint.on("click", function() {
+    var print_entry = $btnPrint.data('id');
+
+    $modalPrint.modal("show");
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrint.modal("hide");
+    window.open("/print?id=" + print_entry + "&type=print_entry");
   });
 
   $btnConfirmApprove.on("click", function() {

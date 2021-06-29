@@ -417,7 +417,11 @@ class ReportsController < ApplicationController
       filename  = "scholarship_report.xlsx"
       excel.serialize "#{Rails.root}/tmp/#{filename}"
       send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    
+    else
+      excel = Reports::GenerateClaimsExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
+      filename  = "claims_report.xlsx"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     end
   end
 

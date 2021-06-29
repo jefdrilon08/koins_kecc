@@ -9,6 +9,8 @@ var $selectCenter;
 var $selectMember;
 var $typeOfClaim;
 
+var $btnDailyReport;
+
 var $message;
 var templateErrorList;
 
@@ -26,6 +28,8 @@ var _cacheDom = function() {
   $btnNewTransaction        = $("#btn-new-transaction");
   $btnConfirm               = $("#btn-confirm");
   $modalNewTransaction      = $("#modal-new-transaction");
+
+  $btnDailyReport               = $("#btn-daily-report");
 
   $selectBranch          = $("#select-branch");
   $selectCenter          = $("#select-center");
@@ -119,6 +123,10 @@ var _bindEvents = function() {
         }
       }
     }
+  });
+
+  $btnDailyReport.on("click", function() {
+    window.open("/print?type=claims_daily_report");
   });
 };
 

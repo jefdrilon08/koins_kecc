@@ -42,16 +42,7 @@ module DataStores
           text: "#{@record.id}"
         }
       end
-
-      @subheader_side_actions = [
-        {
-          id: "btn-new",
-          link: "#",
-          class: "fa fa-plus",
-          text: "New"
-        }
-      ]
-
+      @subheader_side_actions = []
       if @record.done? and @record.data["status"] == "pending"
         @subheader_side_actions << {
           id: "btn-approve",
@@ -76,6 +67,26 @@ module DataStores
             confirm: "Are you sure?"
           },
           text: "Delete"
+        }
+
+        @subheader_side_actions << {
+          id: "btn-print",
+          link: "#",
+          class: "fa fa-print",
+          text: "Print Entry",
+          data: {
+            id: "#{@record.id}"
+          }
+        }
+      else
+        @subheader_side_actions << {
+          id: "btn-print",
+          link: "#",
+          class: "fa fa-print",
+          text: "Print Entry",
+          data: {
+            id: "#{@record.id}"
+          }
         }
       end
 

@@ -43,7 +43,7 @@ class AdjustmentRecord < ApplicationRecord
     temp_meta             = self.meta.with_indifferent_access
     subsidiary_member_ids = self.subsidiary_members.pluck(:id)
 
-    Member.active.where(branch_id: temp_meta[:branch][:id]).order("last_name ASC").map{ |o|
+    Member.active_and_resigned.where(branch_id: temp_meta[:branch][:id]).order("last_name ASC").map{ |o|
       {
         id: o.id,
         first_name: o.first_name,

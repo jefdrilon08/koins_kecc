@@ -58,6 +58,7 @@ namespace :api do
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
     post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
     post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
+    post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
@@ -232,6 +233,8 @@ namespace :api do
 
     #billing_for_full_payments
     post "/billing_for_full_payments/create", to: "billing_for_full_payments#create"
+    post "/billing_for_full_payments/update_amount", to: "billing_for_full_payments#update_amount"
+
 
     #Accrued_Billing
     post "/accrued_payment_collections", to: "accrued_payment_collections#create"

@@ -24,7 +24,7 @@ module Api
         end
       end
 
-      def check
+      def proceed
         claim = Claim.find(params[:id])
 
         config = {
@@ -42,51 +42,11 @@ module Api
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
-            claim  = Claims::CheckClaim.new(
-                                        config: config
-                                      ).execute!
-
-            ::Claims::NotifyUser.new(claim: claim, user: @approving_user).execute!
-
-            render json: { message: "Successfully checked claim" }
-          end
-        else
-          errors << "Unauthorized to perform this transaction"
-
-          render json: { message: "Unauthorized", errors: errors }, status: 401
-        end
-      end
-
-      def proceed
-        claim = Claim.find(params[:id])
-
-        config = {
-          claim: claim
-        }
-
-        if ["MIS", "AO"].include? current_user.roles.last
-          errors  = Claims::ValidateClaimForProceeding.new(
-                      config: config
-                    ).execute!
-
-          if errors[:messages].any?
-            render json: { errors: errors }, status: 400
-          else
             claim  = Claims::ProceedClaim.new(
                                         config: config
                                       ).execute!
 
-            if current_user.email == "kmba.ao.asa@gmail.com"
-              @checking_users = User.where("email IN (?)", ["diobert.calanza@gmail.com"])
-            elsif current_user.email == "diobert.calanza@gmail.com"
-              @checking_users = User.where("email IN (?)", ["kmba.ao.asa@gmail.com"])
-            else
-              @checking_users = User.where("email IN (?)", ["diobert.calanza@gmail.com", "kmba.ao.asa@gmail.com"])
-            end
-
-            @checking_users.each do |user|
-              ::Claims::NotifyUser.new(claim: claim, user: user).execute!
-            end
+            ::Claims::NotifyUser.new(claim: claim, user: @approving_user).execute!
 
             render json: { message: "Successfully proceed claim" }
           end

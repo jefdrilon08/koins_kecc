@@ -84,6 +84,31 @@ module Api
         end
       end
 
+      def update_particular
+        savings_insurance_transfer_collection = SavingsInsuranceTransferCollection.where(id: params[:id]).first
+        particular                            = params[:particular]
+
+        config  = {
+          savings_insurance_transfer_collection: savings_insurance_transfer_collection,
+          particular: particular,
+          user: current_user
+        }
+
+        errors  = ::SavingsInsuranceTransferCollections::ValidateUpdateParticular.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].any?
+          render json: { errors: errors }, status: 400
+        else
+          ::SavingsInsuranceTransferCollections::UpdateParticular.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def save
         branch            = Branch.where(id: params[:branch_id]).first
         center            = Center.where(id: params[:center_id]).first

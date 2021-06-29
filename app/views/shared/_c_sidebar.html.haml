@@ -313,6 +313,10 @@
         = link_to claims_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-users
           Claims Register
+      %li.c-sidebar-nav-item
+        = link_to "/reports/claims", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Claims Report
 
         %li.c-sidebar-nav-title
           Other Reports
@@ -364,10 +368,6 @@
           = link_to "/reports/personal_documents", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Personal Documents
-        %li.c-sidebar-nav-item
-          = link_to "/reports/claims", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Claims
         %li.c-sidebar-nav-item
           = link_to "/reports/hiip_report", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line

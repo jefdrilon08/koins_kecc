@@ -169,7 +169,7 @@ class ClaimsController < ApplicationController
     if params[:status].present?
       @status = params[:status]
 
-      if @status == "for checking"
+      if @status == "pending"
         @status = "pending"
       elsif @status == "for approval"
         @status = "for-approval"
@@ -198,6 +198,12 @@ class ClaimsController < ApplicationController
     ]
 
     @subheader_side_actions = [
+      {
+        id: "btn-daily-report",
+        class: "fa fa-print",
+        link: "#",
+        text: "Daily Report"
+      },
       {
         id: "btn-new-transaction",
         link: "#",
@@ -253,6 +259,13 @@ class ClaimsController < ApplicationController
 
     @subheader_side_actions = []
 
+    @subheader_side_actions << {
+      id: "btn-daily-report",
+      class: "fa fa-print",
+      link: "#",
+      text: "Daily Report"
+    }
+
     if @claim.pending? && !@claim.proceed_checking?
       if ["AO"].include? current_user.roles.last
         if current_user.first_name.upcase == @claim.prepared_by.split(" ").first.upcase
@@ -260,37 +273,37 @@ class ClaimsController < ApplicationController
               id: "btn-proceed",
               link: "#",
               class: "fa fa-check",
-              text: "Proceed for Checking"
+              text: "Proceed for Approval"
             }
         end
       end
     end
 
-    if @claim.pending? && @claim.proceed_checking?
-      if ["AO"].include? current_user.roles.last
-        if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name
-          @subheader_side_actions << {
-            id: "btn-declined",
-            link: "#",
-            class: "fa fa-check",
-            text: "Decline"
-          }
-        end
-      end
-    end
+    # if @claim.pending? && @claim.proceed_checking?
+    #   if ["AO"].include? current_user.roles.last
+    #     if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name
+    #       @subheader_side_actions << {
+    #         id: "btn-declined",
+    #         link: "#",
+    #         class: "fa fa-check",
+    #         text: "Decline"
+    #       }
+    #     end
+    #   end
+    # end
 
-    if @claim.pending? && @claim.proceed_checking?
-      if ["AO"].include? current_user.roles.last
-        if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name 
-          @subheader_side_actions << {
-            id: "btn-check",
-            link: "#",
-            class: "fa fa-check",
-            text: "Check"
-          }
-        end
-      end
-    end
+    # if @claim.pending? && @claim.proceed_checking?
+    #   if ["AO"].include? current_user.roles.last
+    #     if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name 
+    #       @subheader_side_actions << {
+    #         id: "btn-check",
+    #         link: "#",
+    #         class: "fa fa-check",
+    #         text: "Check"
+    #       }
+    #     end
+    #   end
+    # end
 
     if @claim.for_approval?
       if ["MIS"].include? current_user.roles.last
@@ -305,7 +318,7 @@ class ClaimsController < ApplicationController
       end
 
       if ["MIS", "AO"].include? current_user.roles.last
-        if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name
+        if ["Aljon", "Jake", "Richard"].include? current_user.first_name
           @subheader_side_actions << {
             id: "btn-pending",
             link: "#",
@@ -316,7 +329,7 @@ class ClaimsController < ApplicationController
       end
     end
 
-    if @claim.pending? && !@claim.proceed_checking?
+    if @claim.pending?
       if ["AO"].include? current_user.roles.last
         if @claim.note.nil?  
           @subheader_side_actions << {
