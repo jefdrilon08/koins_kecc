@@ -79,6 +79,18 @@ module Loans
                               }
                             }
 
+      @data[:amount_released] = @loan.principal
+
+      cib_id = Settings.branch_accounting_codes.select{ |o| o.branch_id == @branch.id }.first.try(:cash_in_bank_accounting_code_id)
+
+      @accounting_entry[:credit_journal_entries].each do |o|
+        if o[:accounting_code_id] != cib_id
+          @data[:amount_released] -= o[:amount].to_f.round(2)
+        end
+      end
+
+      @data[:amount_released] = number_to_currency(@data[:amount_released], unit: 'Php')
+
       # branched processes
       compute_maintaining_balance!
       attach_profile_pictures!

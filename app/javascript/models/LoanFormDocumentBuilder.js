@@ -120,7 +120,7 @@ var buildLoanDetailsBody = function() {
   body.push([
     { text: "3. Kabuuang halaga na natanggap", style: styleCellLabel, border: [false, false, false, false] },
     { text: " ", border: [false, false, false, false] },
-    { text: _data.total_due, style: styleCellValue, border: [false, false, false, false], alignment: 'right' },
+    { text: _data.amount_released, style: styleCellValue, border: [false, false, false, false], alignment: 'right' },
     { text: "", border: [false, false, false, false] }
   ]);
 
