@@ -1,5 +1,7 @@
 module Loans
   class BuildFormData
+    include ActionView::Helpers::NumberHelper
+
     attr_accessor :loan
 
     def initialize(loan:)
@@ -38,8 +40,8 @@ module Loans
         @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
 
-      if @member.try(:member).present? and @member.member.profile_picture.attached?
-        @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open(@member.member.profile_picture.url).read)
+      if @loan.try(:member).present? and @loan.member.profile_picture.attached?
+        @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open(@loan.member.profile_picture.url).read)
       else
         @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
@@ -47,25 +49,33 @@ module Loans
 
     def execute!
       @data[:pn_number]       = @loan.pn_number
+      @data[:branch]          = @branch.name
+      @data[:center]          = @center.name
+      @data[:id_number]       = @member.identification_number
       @data[:first_name]      = @member.first_name
       @data[:middle_name]     = @member.middle_name
       @data[:last_name]       = @member.last_name
       @data[:full_name]       = @member.full_name
       @data[:address]         = @member.full_address_upcase
+      @data[:spouse]          = @member.spouse.upcase
       @data[:project_type]    = @loan.project_type.try(:name)
-      @data[:principal]       = @loan.principal
-      @data[:interest]        = @loan.interest
+      @data[:principal]       = number_to_currency(@loan.principal, unit: 'Php')
+      @data[:interest]        = number_to_currency(@loan.interest, unit: 'Php')
+      @data[:co_maker_one]    = @loan.co_maker_one
+      @data[:co_maker_two]    = @loan.co_maker_two
       @data[:loan_product]    = @loan_product.name
       @data[:interest_rate]   = @loan_product.monthly_interest_rate * 100
-      @data[:total_due]       = (@loan.principal + @loan.interest).round(2)
+      @data[:total_due]       = number_to_currency((@loan.principal + @loan.interest).round(2), unit: 'Php')
       @data[:term]            = "#{@loan.num_installments} #{@loan.term}"
       @data[:mode_of_payment] = @loan.term
-      @data[:weekly_payments] = @loan.amortization_schedule_entries.first.amount_due
+      @data[:weekly_payments] = number_to_currency(@loan.amortization_schedule_entries.first.amount_due, unit: 'Php')
+      @data[:co_maker_spouse] = @loan.try(:member).try(:spouse)
+      @data[:logo]            = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/logo_titled.png").read)
 
       @data[:deductions]  = @accounting_entry[:credit_journal_entries].select{ |o| o[:amount] > 0 }.map{ |o|
                               {
-                                nmae: o[:name],
-                                amount: o[:amount]
+                                name: o[:name],
+                                amount: number_to_currency(o[:amount], unit: 'Php')
                               }
                             }
 

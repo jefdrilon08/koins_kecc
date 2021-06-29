@@ -1,6 +1,8 @@
 class Loan < ApplicationRecord
   STATUSES  = [
     "for-verification",
+    "verified",
+    "in-process",
     "rejected",
     "pending",
     "for-release",

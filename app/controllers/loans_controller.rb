@@ -164,6 +164,15 @@ class LoansController < ApplicationController
       }
     end
 
+    if ["for-verification", "verified", "in-process", "pending"].include?(@loan.status)
+      @subheader_side_actions << {
+        id: "btn-download-form",
+        class: "fa fa-download",
+        link: "#",
+        text: "Download Form"
+      }
+    end
+
     if @loan.pending?
       @subheader_side_actions << {
         id: "btn-approve",
@@ -191,7 +200,8 @@ class LoansController < ApplicationController
 
     @payload = {
       id: @loan.id,
-      memberId: @loan.member_id
+      memberId: @loan.member_id,
+      data: ::Loans::BuildFormData.new(loan: @loan).execute!
     }
   end
 

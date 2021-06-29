@@ -1,5 +1,14 @@
 import Mustache from "mustache/mustache";
 
+import "pdfmake/build/pdfmake"
+const pdfMake = window["pdfMake"];
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+import LoanFormDocumentBuilder from './LoanFormDocumentBuilder.js';
+
+var _data;
+
 var $message;
 
 var $btnNewAdjustment;
@@ -13,6 +22,8 @@ var $selectTerm;
 var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
+
+var $btnDownloadForm;
 
 var $btnReage;
 var $btnConfirmReage;
@@ -88,6 +99,8 @@ var _cacheDom = function() {
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $modalApprove       = $("#modal-approve");
 
+  $btnDownloadForm  = $("#btn-download-form");
+
   $btnReage         = $("#btn-reage");
   $btnConfirmReage  = $("#btn-confirm-reage");
   $modalReage       = $("#modal-reage");
@@ -131,6 +144,13 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+  $btnDownloadForm.on("click", function() {
+    console.log(_data);
+    var docDefinition = LoanFormDocumentBuilder.execute(_data);
+
+    pdfMake.createPdf(docDefinition).open();
+  });
+
   $btnReject.on("click", function() {
     $modalReject.modal("show");
   });
@@ -619,6 +639,7 @@ var _bindEvents = function() {
 var init  = function(config) {
   _id                 = config.id;
   _authenticityToken  = config.authenticityToken;
+  _data               = config.data;
 
   _cacheDom();
   _bindEvents();
