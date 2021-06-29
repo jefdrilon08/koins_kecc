@@ -137,10 +137,6 @@ module Members
         render :edit
       end
     end
-    def void
-      @member_share = MemberShare.find(params[:id])
-      puts "heloo"
-    end
     def show
       @member_share = MemberShare.find(params[:id])
 
@@ -160,7 +156,7 @@ module Members
 
       @subheader_side_actions << { text: "Edit", class: "fa fa-pencil-alt", link: edit_member_member_share_path(@member, @member_share) }
       @subheader_side_actions << { text: "Print", id: "btn-print", class: "fa fa-print", data: { id: @member_share.id } }
-      @subheader_side_actions << { text: "Delete", class: "fa fa-times", link: member_member_share_path(@member, @member_share), data: { method: :delete, confirm: "Are you sure?" } }
+      @subheader_side_actions << { text: "Void", class: "fa fa-times", link: member_member_share_path(@member, @member_share), data: { method: :delete, confirm: "Are you sure?" } }
     
       @payload = {
         id: @member_share.id,
@@ -171,11 +167,11 @@ module Members
     def destroy
       @member_share       = MemberShare.find(params[:id])
       certificate_number  = @member_share.certificate_number
-
-      @member_share.destroy!
+      @member_share.update(is_void: true)
+      #@member_share.destroy!
 
       ActivityLog.create!(
-        content: "#{current_user.full_name} deleted member_share #{certificate_number} of #{@member.full_name}",
+        content: "#{current_user.full_name} void member_share #{certificate_number} of #{@member.full_name}",
         activity_type: "delete",
         data: {
           user_id: current_user.id,
