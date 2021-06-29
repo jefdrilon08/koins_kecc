@@ -1,8 +1,11 @@
 class Loan < ApplicationRecord
   STATUSES  = [
     "for-verification",
+    "verified",
+    "in-process",
     "rejected",
     "pending",
+    "for-release",
     "active",
     "paid",
     "processing"
@@ -25,6 +28,7 @@ class Loan < ApplicationRecord
   validates :interest_paid, presence: true, numericality: true
 
   scope :for_verification, -> { where(status: "for-verification") }
+  scope :for_release, -> { where(status: "for-release") }
   scope :pending, -> { where(status: "pending") }
   scope :active, -> { where(status: "active") }
   scope :paid, -> { where(status: "paid") }
