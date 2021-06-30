@@ -3,8 +3,26 @@
     .card
       .card-body
         %table.table.table-sm.table-bordered
-          - @billing_data_store.data.each_with_index do |bds, i|
-            %tbody
+          %thead
+            %tr
+              %th
+                no.
+              %th
+                Member
+              - @billing_data_store.meta["header"].last.each_with_index do |bdsh, i|
+                - if bdsh == "WP"
+                  %th
+                    WP
+                - else
+                  %th
+                    #{LoanProduct.find(bdsh).name}
+                  
+            
+            
+            
+            
+          %tbody
+            - @billing_data_store.data.each_with_index do |bds, i|
               %tr
                 %td
                   #{ i + 1}
@@ -12,18 +30,22 @@
                   #{Member.find(bds["member_id"]).full_name}
                 
                 - bds["balance"].each do |b|
-
-                  %td
-                    %a.undo{ data: { 
+                  - if b["enabled"] == true
+                    %td
+                      %a.undo{ data: { 
                                       amount: "#{b["amount"]}",
-                                      loan_id: "#{b["loan_id"]}",
+                                      member_id: "#{bds["member_id"]}",
+                                      member_account_id: "#{b["member_account_id"]}",
                                       data_store_id: "#{@billing_data_store.id}",
-                                      loan_product_id: "#{b["loan_product_id"]}"
+                                      record_type: "#{b["record_type"]}"
                                     }, 
                                     :href => "#" 
                             }
 
-                      #{b["amount"]}  
+                        #{b["amount"]}
+                  - else
+                    %td
+                      
 
 
 = render partial: "/billing_for_full_payments/models/update_payment"
