@@ -12,7 +12,11 @@ module Loans
         loan_product: @loan_product.name,
         payments: [],
         deductions: [],
-        amount_released: @loan.principal
+        amount_released: @loan.principal,
+        interest_rate: @loan_product.monthly_interest_rate * 100,
+        weekly_payment: @loan.amortization_schedule_entries.first.amount_due,
+        mode_of_payment: @loan.term,
+        term: "#{@loan.num_installments} #{@loan.term}"
       }
     end
 

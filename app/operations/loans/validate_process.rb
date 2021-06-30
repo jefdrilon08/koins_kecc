@@ -11,7 +11,7 @@ module Loans
       @loan = loan
 
       @valid_roles  = ::Users::FetchValidRoles.new(
-                        module_name: "online_loan_application_process"
+                        module_name: "online_loan_application_in_process"
                       ).execute!
     end
 
@@ -33,7 +33,7 @@ module Loans
           key: "loan",
           message: "loan required"
         }
-      elsif !@loan.for_verification?
+      elsif !@loan.in_process?
         @errors[:messages] << {
           key: "loan",
           message: "invalid loan status"
