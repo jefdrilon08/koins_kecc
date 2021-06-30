@@ -72,25 +72,25 @@ module Loans
       @data[:co_maker_spouse] = @loan.try(:member).try(:spouse)
       @data[:logo]            = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/logo_titled.png").read)
 
+      cib_id = Settings.branch_accounting_codes.select{ |o| o.branch_id == @branch.id }.first.try(:cash_in_bank_accounting_code_id)
+
+      @data[:amount_released] = @loan.principal
+
       if @accounting_entry[:credit_journal_entries].present? and @accounting_entry[:credit_journal_entries].any?
-        @data[:deductions]  = @accounting_entry[:credit_journal_entries].select{ |o| o[:amount].to_f > 0 }.map{ |o|
+        @data[:deductions]  = @accounting_entry[:credit_journal_entries].select{ |o| o[:amount].to_f > 0 and o[:accounting_code_id] != cib_id }.map{ |o|
                                 {
                                   name: o[:name],
                                   amount: number_to_currency(o[:amount], unit: 'Php')
                                 }
                               }
+
+        @accounting_entry[:credit_journal_entries].each do |o|
+          if o[:accounting_code_id] != cib_id
+            @data[:amount_released] -= o[:amount].to_f.round(2)
+          end
+        end
       else
         @data[:deductions]  = []
-      end
-
-      @data[:amount_released] = @loan.principal
-
-      cib_id = Settings.branch_accounting_codes.select{ |o| o.branch_id == @branch.id }.first.try(:cash_in_bank_accounting_code_id)
-
-      @accounting_entry[:credit_journal_entries].each do |o|
-        if o[:accounting_code_id] != cib_id
-          @data[:amount_released] -= o[:amount].to_f.round(2)
-        end
       end
 
       @data[:amount_released] = number_to_currency(@data[:amount_released], unit: 'Php')

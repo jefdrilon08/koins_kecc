@@ -3,6 +3,8 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_api_member!
 
+      include ActionView::Helpers::NumberHelper
+
       def index
         loans = Loan.select("id, principal, interest, loan_product_id").where(member_id: @member.id)
 
@@ -108,6 +110,11 @@ module Api
         else
           loan = ::Loans::RemoteApply.new(config: config, persist: false).execute!
 
+          cib_id  = Settings.branch_accounting_codes.select{ |o| 
+                      o.branch_id == @member.branch_id 
+                    }.first.try(:cash_in_bank_accounting_code_id)
+
+
           payments  = loan.amortization_schedule_entries.map{ |o|
                         {
                           principal: o.principal,
@@ -115,6 +122,15 @@ module Api
                           amount_due: o.amount_due
                         }
                       }
+
+          deductions  = loan.data[:accounting_entry][:credit_journal_entries].select{ |o|
+                          o[:amount].to_f > 0 and o[:accounting_code_id] != cib_id
+                        }.map{ |o|
+                          {
+                            name: o[:name],
+                            amount: number_to_currency(o[:amount], unit: '')
+                          }
+                        }
 
           render json: { 
             loan: loan,
