@@ -76,10 +76,10 @@ module Loans
       # Loan co-makers
       @loan.data[:co_maker_two] = @co_maker_two
       @loan.data[:co_maker_one] = {
-        id: @co_maker_one.id,
-        first_name: @co_maker_one.first_name,
-        middle_name: @co_maker_one.middle_name,
-        last_name: @co_maker_one.last_name
+        id: @co_maker_one.try(:id),
+        first_name: @co_maker_one.try(:first_name),
+        middle_name: @co_maker_one.try(:middle_name),
+        last_name: @co_maker_one.try(:last_name)
       }
 
       # CLIP information

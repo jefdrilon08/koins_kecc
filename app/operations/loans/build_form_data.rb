@@ -72,7 +72,13 @@ module Loans
       @data[:co_maker_spouse] = @loan.try(:member).try(:spouse)
       @data[:logo]            = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/logo_titled.png").read)
 
+      loan_product_settings = Settings.loan_products.select{ |o| o.loan_product_id == @loan_product.id }.first
+
       cib_id = Settings.branch_accounting_codes.select{ |o| o.branch_id == @branch.id }.first.try(:cash_in_bank_accounting_code_id)
+
+      if loan_product_settings.present? and loan_product_settings.amount_released_accounting_code_id.present?
+        cib_id = loan_product_settings.amount_released_accounting_code_id
+      end
 
       @data[:amount_released] = @loan.principal
 

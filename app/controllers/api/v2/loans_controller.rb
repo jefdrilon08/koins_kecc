@@ -66,7 +66,7 @@ module Api
 
       def review
         loan_product      = LoanProduct.find_by_id(params[:loan_product_id])
-        pn_number         = "CHANGE-ME-#{SecureRandom.hex(8)}"
+        pn_number         = "#{SecureRandom.hex(8)}"
         co_maker_one      = Member.find_by_id(params[:co_maker_id])
         project_type      = ProjectType.find_by_id(params[:project_type_id])
         co_maker_two      = params[:co_maker_two].try(:upcase)
@@ -110,33 +110,13 @@ module Api
         else
           loan = ::Loans::RemoteApply.new(config: config, persist: false).execute!
 
-          cib_id  = Settings.branch_accounting_codes.select{ |o| 
-                      o.branch_id == @member.branch_id 
-                    }.first.try(:cash_in_bank_accounting_code_id)
+          data  = ::Loans::BuildRemoteReview.new(
+                    member: @member,
+                    loan: loan,
+                    loan_product: loan_product
+                  ).execute!
 
-
-          payments  = loan.amortization_schedule_entries.map{ |o|
-                        {
-                          principal: o.principal,
-                          interest: o.interest,
-                          amount_due: o.amount_due
-                        }
-                      }
-
-          deductions  = loan.data[:accounting_entry][:credit_journal_entries].select{ |o|
-                          o[:amount].to_f > 0 and o[:accounting_code_id] != cib_id
-                        }.map{ |o|
-                          {
-                            name: o[:name],
-                            amount: number_to_currency(o[:amount], unit: '')
-                          }
-                        }
-
-          render json: { 
-            loan: loan,
-            loan_product: loan.loan_product.try(:name),
-            payments: payments
-          }
+          render json: data
         end
       end
 
