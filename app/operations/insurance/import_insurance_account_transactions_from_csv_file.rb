@@ -39,7 +39,7 @@ module Insurance
 
           insurance_account_transaction.update!(
             subsidiary_id: insurance_account_transaction.subsidiary_id,
-            subsidiary_type: row['subsidiary_type']
+            subsidiary_type: row['subsidiary_type'],
             amount: row['amount'],
             transaction_type: row['transaction_type'],
             transacted_at: row['transacted_at'],
