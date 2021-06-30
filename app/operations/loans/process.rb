@@ -1,5 +1,5 @@
 module Loans
-  class Verify
+  class Process
     attr_accessor :user,
                   :loan
 
@@ -9,8 +9,8 @@ module Loans
     end
 
     def execute!
-      @loan.data["verification"] = {
-        verified_by: {
+      @loan.data["processing"] = {
+        processed_by: {
           id: @user.id,
           name: @user.full_name,
           first_name: @user.first_name,
@@ -18,7 +18,7 @@ module Loans
         }
       }
 
-      @loan.status = "in-process"
+      @loan.status = "pending"
 
       @loan.save!
     end

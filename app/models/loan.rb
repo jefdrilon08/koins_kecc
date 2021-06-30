@@ -1,8 +1,11 @@
 class Loan < ApplicationRecord
   STATUSES  = [
     "for-verification",
+    "verified",
+    "in-process",
     "rejected",
     "pending",
+    "for-release",
     "active",
     "paid",
     "processing"
@@ -25,6 +28,9 @@ class Loan < ApplicationRecord
   validates :interest_paid, presence: true, numericality: true
 
   scope :for_verification, -> { where(status: "for-verification") }
+  scope :in_process, -> { where(status: "in-process") }
+  scope :for_release, -> { where(status: "for-release") }
+  scope :verified, -> { where(status: "verified") }
   scope :pending, -> { where(status: "pending") }
   scope :active, -> { where(status: "active") }
   scope :paid, -> { where(status: "paid") }
@@ -34,6 +40,14 @@ class Loan < ApplicationRecord
   has_many :amortization_schedule_entries, dependent: :destroy
 
   before_validation :load_defaults
+
+  def in_process?
+    self.status == "in-process"
+  end
+
+  def verified?
+    self.status == "verified"
+  end
 
   def for_verification?
     self.status == "for-verification"

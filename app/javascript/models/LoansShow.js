@@ -1,5 +1,14 @@
 import Mustache from "mustache/mustache";
 
+import "pdfmake/build/pdfmake"
+const pdfMake = window["pdfMake"];
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+import LoanFormDocumentBuilder from './LoanFormDocumentBuilder.js';
+
+var _data;
+
 var $message;
 
 var $btnNewAdjustment;
@@ -13,6 +22,8 @@ var $selectTerm;
 var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
+
+var $btnDownloadForm;
 
 var $btnReage;
 var $btnConfirmReage;
@@ -50,6 +61,10 @@ var $btnVerify;
 var $btnConfirmVerify;
 var $modalVerify;
 
+var $btnProcess;
+var $btnConfirmProcess;
+var $modalProcess;
+
 var $btnReject;
 var $btnConfirmReject;
 var $modalReject;
@@ -68,6 +83,7 @@ var _urlChangeBook          = "/api/v1/loans/change_book";
 var _urlDelayAmort          = "/api/v1/loans/delay_amort";
 var _urlNewAdjustment       = "/api/v1/loans/new_adjustment";
 var _urlVerify              = "/api/v1/loans/verify";
+var _urlProcess             = "/api/v1/loans/process";
 var _urlReject              = "/api/v1/loans/reject";
 
 var _id;
@@ -87,6 +103,8 @@ var _cacheDom = function() {
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $modalApprove       = $("#modal-approve");
+
+  $btnDownloadForm  = $("#btn-download-form");
 
   $btnReage         = $("#btn-reage");
   $btnConfirmReage  = $("#btn-confirm-reage");
@@ -122,6 +140,10 @@ var _cacheDom = function() {
   $btnConfirmVerify = $("#btn-confirm-verify");
   $modalVerify      = $("#modal-verify");
 
+  $btnProcess        = $("#btn-process");
+  $btnConfirmProcess = $("#btn-confirm-process");
+  $modalProcess      = $("#modal-process");
+
   $btnReject            = $("#btn-reject");
   $btnConfirmReject     = $("#btn-confirm-reject");
   $modalReject          = $("#modal-reject");
@@ -131,6 +153,12 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+  $btnDownloadForm.on("click", function() {
+    var docDefinition = LoanFormDocumentBuilder.execute(_data);
+
+    pdfMake.createPdf(docDefinition).open();
+  });
+
   $btnReject.on("click", function() {
     $modalReject.modal("show");
   });
@@ -174,6 +202,48 @@ var _bindEvents = function() {
 
           $btnConfirmReject.prop("disabled", false);
           $inputRejectionReason.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnProcess.on("click", function() {
+    $modalProcess.modal("show");
+  });
+
+  $btnConfirmProcess.on("click", function() {
+    $btnConfirmProcess.prop("disabled", true);
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlProcess,
+      method: 'POST',
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmProcess.prop("disabled", false);
         }
       }
     });
@@ -619,6 +689,7 @@ var _bindEvents = function() {
 var init  = function(config) {
   _id                 = config.id;
   _authenticityToken  = config.authenticityToken;
+  _data               = config.data;
 
   _cacheDom();
   _bindEvents();

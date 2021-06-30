@@ -552,11 +552,13 @@ namespace :adjust do
 
   task :bulk_rehash => :environment do
     branch  = Branch.find(ENV['BRANCH_ID'])
+    account_subtype  = ENV['ACCOUNT_SUBTYPE']
 
     ::MemberAccounts::BulkRehash.new(
       config: {
         branch: branch
-      }
+      },
+      account_subtype: account_subtype
     ).execute!
 
     puts "Done for #{branch.id}"

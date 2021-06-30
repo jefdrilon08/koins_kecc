@@ -28,22 +28,25 @@ module Api
       end
 
       def update_amount
-          loan_id         = params[:loan_id]
-          loan_product_id = params[:loan_product_id]
-          data_store_id   = params[:data_store_id]
-          loan_amount     = params[:loan_amount]
-          
+            member_id =          params[:member_id]
+            member_account_id =  params[:member_account_id]
+            data_store_id =      params[:data_store_id]
+            record_type =        params[:record_type]
+            loan_amount =        params[:loan_amount]
           config = {
-            loan_id:          loan_id,
-            loan_product_id:  loan_product_id,
-            data_store_id:    data_store_id,
-            loan_amount:      loan_amount,
+            member_id:          member_id,
+            member_account_id:  member_account_id,
+            data_store_id:      data_store_id,
+            record_type:       record_type,
+            loan_amount:        loan_amount
            }
           
-          record = ::BillingForFullPayments::UpdateBillingAmount.new(
+          
+          errors = ::BillingForFullPayments::ValidatePayment.new(
                                                                       config: config
                                                                     ).execute!
-
+          
+          #record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
            
       end
 

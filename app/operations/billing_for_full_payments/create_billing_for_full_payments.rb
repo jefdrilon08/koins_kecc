@@ -37,7 +37,7 @@ module BillingForFullPayments
                     member: temp[:member_last_name],
                     record_type: "LOAN PAYMENT",
                     enabled: true,
-                    loan_id: loan.last.id,
+                    member_account_id: loan.last.id,
                     loan_product_id: loan.last.loan_product.id,
                     principal_balance: loan.last.principal_balance,
                     interest_balance: for_interest_paid,
@@ -49,7 +49,7 @@ module BillingForFullPayments
               d = {
                     record_type: "LOAN PAYMENT",
                     enabled: false,
-                    loan_id: nil,
+                    member_account_id: nil,
                     loan_product_id: gbh,
                     principal_balance: 0.0,
                     interest_balance: 0.0,

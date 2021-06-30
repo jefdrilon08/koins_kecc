@@ -24,13 +24,13 @@ module Icpr
     def execute!
       post_accounting_entry!
       insert_funds!
-
-      # Rehash accounts
-      ::MemberAccounts::BulkRehash.new(
-        config: {
-          branch: @branch
-        }
-      ).execute!
+      rehash_savings!
+      # # Rehash accounts
+      # ::MemberAccounts::BulkRehash.new(
+      #   config: {
+      #     branch: @branch
+      #   }
+      # ).execute!
 
       @data_store.update!(data: @data)
 
@@ -75,8 +75,9 @@ module Icpr
       values  = []
 
       @data[:records].each do |o|
-        savings_account_id          = o[:savings_account_id]
-        savings_account_balance     = o[:savings_account_balance].to_f.round(2)
+        member_id                   = o[:id]
+        savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Personal Savings Account").ids.shift
+        savings_account_balance     = MemberAccount.find(savings_account_id).balance.round(2)
         savings_distribute          = o[:savings_distribute].to_f.round(2)
         savings_account_new_balance = (savings_account_balance + savings_distribute).round(2)
        
@@ -107,7 +108,7 @@ module Icpr
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
 
         cbu_account_id              = o[:cbu_account_id]
-        cbu_account_balance         = o[:cbu_account_balance].to_f.round(2)
+        cbu_account_balance         = MemberAccount.find(cbu_account_id).balance.round(2)
         cbu_distribute              = o[:cbu_distribute].to_f.round(2)
         cbu_account_new_balance     = (cbu_account_balance + cbu_distribute).round(2)
 
@@ -137,10 +138,22 @@ module Icpr
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
       end
-
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
-
       ActiveRecord::Base.connection.execute(query)
+    end
+
+    def rehash_savings!
+      @data[:records].each do |o|
+        member_id                   = o[:id]
+        personal_savings_account    = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Personal Savings Account").ids.shift
+        cbu_account                 = o[:cbu_account_id]
+        
+        ::MemberAccounts::Rehash.new(
+          member_account: MemberAccount.find(personal_savings_account), account_transactions: nil).execute!
+
+        ::MemberAccounts::Rehash.new(
+          member_account: MemberAccount.find(cbu_account), account_transactions: nil).execute!
+      end
     end
   end
 end

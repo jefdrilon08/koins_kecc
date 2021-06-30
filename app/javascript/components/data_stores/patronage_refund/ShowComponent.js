@@ -62,7 +62,7 @@ export default class ShowComponent extends React.Component {
               return  <tr key={o.id}>
                         <td className="text-center">{i + 1}</td>
                         <td>
-                          <a href={"/member_accounts/" + o.member_id} target="_blank">
+                          <a href={"/members/" + o.id + "/display"} target="_blank">
                             <strong>
                               {o.last_name}, {o.first_name} {o.middle_name}
                             </strong>
