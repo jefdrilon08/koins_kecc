@@ -72,12 +72,16 @@ module Loans
       @data[:co_maker_spouse] = @loan.try(:member).try(:spouse)
       @data[:logo]            = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/logo_titled.png").read)
 
-      @data[:deductions]  = @accounting_entry[:credit_journal_entries].select{ |o| o[:amount].to_f > 0 }.map{ |o|
-                              {
-                                name: o[:name],
-                                amount: number_to_currency(o[:amount], unit: 'Php')
+      if @accounting_entry[:credit_journal_entries].present? and @accounting_entry[:credit_journal_entries].any?
+        @data[:deductions]  = @accounting_entry[:credit_journal_entries].select{ |o| o[:amount].to_f > 0 }.map{ |o|
+                                {
+                                  name: o[:name],
+                                  amount: number_to_currency(o[:amount], unit: 'Php')
+                                }
                               }
-                            }
+      else
+        @data[:deductions]  = []
+      end
 
       @data[:amount_released] = @loan.principal
 

@@ -31,19 +31,19 @@ module Loans
         }
       end
 
-      if @co_maker_one.blank?
-        @errors[:messages] << {
-          key: "co_maker_one",
-          message: "co_maker_one required"
-        }
-      end
-
-      if @co_maker_two.blank?
-        @errors[:messages] << {
-          key: "co_maker_two",
-          message: "co_maker_two required"
-        }
-      end
+#      if @co_maker_one.blank?
+#        @errors[:messages] << {
+#          key: "co_maker_one",
+#          message: "co_maker_one required"
+#        }
+#      end
+#
+#      if @co_maker_two.blank?
+#        @errors[:messages] << {
+#          key: "co_maker_two",
+#          message: "co_maker_two required"
+#        }
+#      end
 
       if @loan_product.blank?
         @errors[:messages] << {

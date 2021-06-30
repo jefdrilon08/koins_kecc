@@ -62,6 +62,68 @@ module Api
         render json: result
       end
 
+      def review
+        loan_product      = LoanProduct.find_by_id(params[:loan_product_id])
+        pn_number         = "CHANGE-ME-#{SecureRandom.hex(8)}"
+        co_maker_one      = Member.find_by_id(params[:co_maker_id])
+        project_type      = ProjectType.find_by_id(params[:project_type_id])
+        co_maker_two      = params[:co_maker_two].try(:upcase)
+        amount            = params[:amount].try(:to_f).try(:round, 2)
+        term              = params[:term]
+        num_installments  = params[:num_installments].try(:to_i)
+
+        # CLIP related information
+        clip_first_name     = params[:clip_first_name]
+        clip_middle_name    = params[:clip_middle_name]
+        clip_last_name      = params[:clip_last_name]
+        clip_date_of_birth  = params[:clip_date_of_birth].try(:to_date)
+        clip_relationship   = params[:clip_relationship]
+        
+        # Project type
+        project_type = ProjectType.find_by_id(params[:project_type_id])
+
+        config = {
+          loan_product: loan_product,
+          pn_number: pn_number,
+          co_maker_one: co_maker_one,
+          co_maker_two: co_maker_two,
+          amount: amount,
+          term: term,
+          num_installments: num_installments,
+          project_type: project_type,
+          member: @member,
+          clip_first_name: clip_first_name,
+          clip_middle_name: clip_middle_name,
+          clip_date_of_birth: clip_date_of_birth,
+          clip_relationship: clip_relationship,
+          project_type: project_type
+        }
+
+        validator = ::Loans::ValidateRemoteApply.new(config: config)
+        
+        validator.execute!
+
+        if validator.errors[:full_messages].any?
+          render json: validator.errors, status: 403
+        else
+          loan = ::Loans::RemoteApply.new(config: config, persist: false).execute!
+
+          payments  = loan.amortization_schedule_entries.map{ |o|
+                        {
+                          principal: o.principal,
+                          interest: o.interest,
+                          amount_due: o.amount_due
+                        }
+                      }
+
+          render json: { 
+            loan: loan,
+            loan_product: loan.loan_product.try(:name),
+            payments: payments
+          }
+        end
+      end
+
       def apply
         loan_product      = LoanProduct.find_by_id(params[:loan_product_id])
         pn_number         = "CHANGE-ME-#{SecureRandom.hex(8)}"

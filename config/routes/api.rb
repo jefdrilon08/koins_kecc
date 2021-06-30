@@ -11,6 +11,7 @@ namespace :api do
     get "/loans/project_type_categories", to: "loans#project_type_categories"
     get "/loans", to: "loans#index"
     post "/loans/quote", to: "loans#quote", to: "loans#quote"
+    post "/loans/review", to: "loans#review", to: "loans#review"
 
     # members
     post "/members/update_password", to: "members#update_password"
@@ -179,6 +180,8 @@ namespace :api do
     post "/accounting_entries/modify_date_posted", to: "accounting_entries#modify_date_posted"
 
     # Loans
+    get "/loans/fetch", to: "loans#fetch"
+    get "/loans/fetch_by_member", to: "loans#fetch_by_member"
     post "/loans/change_book", to: "loans#change_book"
     post "/loans/approve", to: "loans#approve"
     post "/loans/reage", to: "loans#reage"
@@ -192,11 +195,10 @@ namespace :api do
     post "/loans/delete_adjustment", to: "loans#delete_adjustment"
     post "/loans/approve_adjustment", to: "loans#approve_adjustment"
     post "/loans/restructure", to: "loans#restructure"
-    get "/loans/fetch", to: "loans#fetch"
-    get "/loans/fetch_by_member", to: "loans#fetch_by_member"
     post "/loans/recompute_restructure", to: "loans#recompute_restructure"
     post "/loans/verify", to: "loans#verify"
     post "/loans/reject", to: "loans#reject"
+    post "/loans/process", to: "loans#process_loan"
 
     # Branches
     get "/branches", to: "branches#index"

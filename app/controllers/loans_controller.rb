@@ -164,6 +164,15 @@ class LoansController < ApplicationController
       }
     end
 
+    if @loan.in_process?
+      @subheader_side_actions << {
+        id: "btn-process",
+        class: "fa fa-check",
+        link: "#",
+        text: "Process"
+      }
+    end
+
     if ["for-verification", "verified", "in-process", "pending"].include?(@loan.status)
       @subheader_side_actions << {
         id: "btn-download-form",
