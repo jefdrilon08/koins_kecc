@@ -108,7 +108,7 @@ module Icpr
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
 
         cbu_account_id              = o[:cbu_account_id]
-        cbu_account_balance         = o[:cbu_account_balance].to_f.round(2)
+        cbu_account_balance         = MemberAccount.find(cbu_account_id).balance.round(2)
         cbu_distribute              = o[:cbu_distribute].to_f.round(2)
         cbu_account_new_balance     = (cbu_account_balance + cbu_distribute).round(2)
 
