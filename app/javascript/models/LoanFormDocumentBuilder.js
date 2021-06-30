@@ -138,6 +138,13 @@ var buildLoanDetailsBody = function() {
     { text: " ", border: [false, false, false, false] }
   ])
 
+  body.push([
+    { text: "5. Maintaining Balance", style: styleCellLabel, border: [false, false, false, false] },
+    { text: _data.maintaining_balance, style: styleCellValue, border: [false, false, false, false], alignment: 'right' },
+    { text: " ", border: [false, false, false, false] },
+    { text: "", border: [ false, false, false, false] }
+  ]);
+
   return body;
 }
 
@@ -164,7 +171,7 @@ var build = function() {
           widths: ["50%", "50%"],
           body: [
             [
-              { text: "PN Number: " + _data.pn_number, style: styleCellValue, border: [false, false, false, false] },
+              { text: "PN Number: " + _data.pn_number, style: { bold: true, fontSize: 11 }, border: [false, false, false, false] },
               { text: "Petsa: ____________", style: styleCellValue, alignment: 'right', border: [false, false, false, false] }
             ]
           ]
@@ -185,7 +192,7 @@ var build = function() {
       {
         table: {
           margin: [0, 0, 0, 0],
-          widths: ["30%", "40%", "15%", "15%"],
+          widths: ["20%", "20%", "30%", "30%"],
           body: buildLoanDetailsBody()
         }
       },
@@ -285,7 +292,7 @@ var build = function() {
                       { text: _data.interest, style: styleCellValue },
                       { text: '), sa pamamagitan ng paghulog linggo-linggo na di bababa sa (', style: styleCellLabel },
                       { text: _data.weekly_payments, style: styleCellValue },
-                      { text: '), simula sa (Date of First Payment) hanggang sa (Maturity Date)', style: styleCellLabel }
+                      { text: '), simula sa (______________) hanggang sa (______________)', style: styleCellLabel }
                     ],
                   },
                   {
@@ -305,7 +312,7 @@ var build = function() {
                   },
                   {
                     text: [
-                      { text: 'Ako ay pumapayag na mag-iwan at hindi ma-withdraw ang savings ko sa halagang (_____%) ng kasalukuyang utang ko sa ', style: styleCellLabel },
+                      { text: 'Ako ay pumapayag na mag-iwan at hindi ma-withdraw ang savings ko sa halagang (' + _data.loan_product_maintaining_balance_percentage + '%) ng kasalukuyang utang ko sa ', style: styleCellLabel },
                       { text: 'Kasagana-ka Coop.', style: styleCellValue }
                     ],
                     style: { fontSize: fontSizeDefault }
@@ -391,7 +398,7 @@ var build = function() {
                       { text: ' ', style: styleCellValue, alignment: 'center' },
                       { text: '\n', style: styleCellLabel, alignment: 'center' },
                       { text: '\n', style: styleCellLabel, alignment: 'center' },
-                      { text: '\n\n\n' + _data.co_maker_spouse, style: styleCellLabel, decoration: 'underline', alignment: 'center' },
+                      { text: '\n\n\n_______________________', style: styleCellLabel, decoration: 'underline', alignment: 'center' },
                       { text: '\nPangalan at Lagda', style: styleCellLabel, alignment: 'center' },
                       { text: '\n(Asawa ng Kasamahan sa Sentro)', style: styleCellLabel, alignment: 'center' }
                     ]

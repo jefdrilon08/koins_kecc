@@ -148,6 +148,15 @@ class LoansController < ApplicationController
 
     @subheader_side_actions = []
 
+    if @loan.application_form.attached?
+      @subheader_side_actions << {
+        id: "btn-download-application-form",
+        class: "fa fa-download",
+        link: "#",
+        text: "Download Uploaded Application Form"
+      }
+    end
+
     if @loan.for_verification?
       @subheader_side_actions << {
         id: "btn-verify",
