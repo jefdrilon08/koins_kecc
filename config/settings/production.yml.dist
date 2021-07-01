@@ -175,8 +175,8 @@ module_authorization_roles:
     - BK
     - SBK
     - OAS
-  
-	online_application_process:
+
+  online_application_process:
     - MIS
     - FM
     - CM
