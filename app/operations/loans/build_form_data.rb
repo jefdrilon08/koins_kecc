@@ -30,7 +30,7 @@ module Loans
         end
       end
 
-      @data[:maintaining_balance] = maintaining_balance.to_f.round(2)
+      @data[:maintaining_balance] = number_to_currency(maintaining_balance.to_f.round(2), unit: 'Php')
     end
 
     def attach_profile_pictures!
@@ -40,8 +40,12 @@ module Loans
         @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
 
-      if @loan.try(:member).present? and @loan.member.profile_picture.attached?
-        @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open(@loan.member.profile_picture.url).read)
+      if @loan.data["co_maker_one"]["id"].present?
+        @co_maker_object = Member.find(@loan.data["co_maker_one"]["id"])
+      end
+
+      if @co_maker_object.present? and @co_maker_object.profile_picture.attached?
+        @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open(@co_maker_object.profile_picture.url).read)
       else
         @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
@@ -64,15 +68,18 @@ module Loans
       @data[:co_maker_one]    = @loan.co_maker_one
       @data[:co_maker_two]    = @loan.co_maker_two
       @data[:loan_product]    = @loan_product.name
+      @data[:category]        = @loan_product.loan_product_category.try(:to_s)
       @data[:interest_rate]   = @loan_product.monthly_interest_rate * 100
       @data[:total_due]       = number_to_currency((@loan.principal + @loan.interest).round(2), unit: 'Php')
-      @data[:term]            = "#{@loan.num_installments} #{@loan.term}"
+      @data[:term]            = "#{@loan.num_installments} #{@loan.term_interval}"
       @data[:mode_of_payment] = @loan.term
       @data[:weekly_payments] = number_to_currency(@loan.amortization_schedule_entries.first.amount_due, unit: 'Php')
       @data[:co_maker_spouse] = @loan.try(:member).try(:spouse)
       @data[:logo]            = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/logo_titled.png").read)
 
       loan_product_settings = Settings.loan_products.select{ |o| o.loan_product_id == @loan_product.id }.first
+
+      @data[:loan_product_maintaining_balance_percentage] = loan_product_settings.maintaining_balance.percentage * 100
 
       cib_id = Settings.branch_accounting_codes.select{ |o| o.branch_id == @branch.id }.first.try(:cash_in_bank_accounting_code_id)
 
