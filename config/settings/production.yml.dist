@@ -176,7 +176,7 @@ module_authorization_roles:
     - SBK
     - OAS
 
-  online_application_process:
+  online_loan_application_in_process:
     - MIS
     - FM
     - CM
