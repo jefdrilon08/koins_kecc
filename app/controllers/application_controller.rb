@@ -2,6 +2,14 @@ class ApplicationController < ActionController::Base
   before_action :load_defaults
   layout :layout_by_resource
 
+  def authenticate_admin!
+    if user_signed_in? and !current_user.is_mis?
+      redirect_to root_path
+    elsif !user_signed_in?
+      redirect_to root_path
+    end
+  end
+
   before_action do
     if params[:rmp]
       Rack::MiniProfiler.authorize_request

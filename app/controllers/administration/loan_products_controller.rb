@@ -1,6 +1,7 @@
 module Administration
   class LoanProductsController < ApplicationController
     before_action :authenticate_user!
+    before_action :authenticate_admin!, except: [:index]
 
     def download
       data      = ::LoanProducts::GenerateHashList.new.execute!
@@ -19,7 +20,7 @@ module Administration
     end
 
     def index
-      @loan_products  = LoanProduct.select("*").order("priority ASC, name ASC")
+      @loan_products  = LoanProduct.includes([:loan_product_category]).select("*").order("priority ASC, name ASC")
 
       @subheader_items = [
         {
@@ -58,6 +59,14 @@ module Administration
           text: "#{@loan_product.name}"
         }
       ]
+
+      @subheader_side_actions = []
+
+      @subheader_side_actions << {
+        link: edit_administration_loan_product_path(@loan_product),
+        class: "fa fa-pencil-alt",
+        text: "Edit"
+      }
 
       @payload = {
         id: @loan_product.id
@@ -120,6 +129,8 @@ module Administration
     end
 
     def edit
+      @loan_product = LoanProduct.find(params[:id])
+
       @subheader_items = [
         {
           text: "Administration"
@@ -135,8 +146,6 @@ module Administration
       ]
 
       @subheader_side_actions = []
-
-      @loan_product = LoanProduct.find(params[:id])
     end
 
     def update

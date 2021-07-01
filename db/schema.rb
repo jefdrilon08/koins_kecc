@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_11_073624) do
+ActiveRecord::Schema.define(version: 2021_06_30_081804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -677,6 +677,13 @@ ActiveRecord::Schema.define(version: 2021_06_11_073624) do
     t.index ["member_id"], name: "index_legal_dependents_on_member_id"
   end
 
+  create_table "loan_product_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "loan_products", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.decimal "max_loan_amount"
@@ -689,6 +696,8 @@ ActiveRecord::Schema.define(version: 2021_06_11_073624) do
     t.datetime "updated_at", null: false
     t.json "data"
     t.integer "priority"
+    t.uuid "loan_product_category_id"
+    t.index ["loan_product_category_id"], name: "index_loan_products_on_loan_product_category_id"
     t.index ["priority"], name: "manual_idx_6"
   end
 
@@ -1234,6 +1243,7 @@ ActiveRecord::Schema.define(version: 2021_06_11_073624) do
   add_foreign_key "kjsp_claims", "centers"
   add_foreign_key "kjsp_claims", "members"
   add_foreign_key "legal_dependents", "members"
+  add_foreign_key "loan_products", "loan_product_categories"
   add_foreign_key "loan_repayment_rates", "branches"
   add_foreign_key "loan_repayment_rates", "centers"
   add_foreign_key "loan_repayment_rates", "loans"

@@ -10,6 +10,7 @@ namespace :administration do
   resources :centers
   resources :announcements
   resources :loan_products, except: [:destroy]
+  resources :loan_product_categories
   
   resources :member_shares, only: [:index]
   get "/member_shares/not_printed", to: "member_shares#not_printed"

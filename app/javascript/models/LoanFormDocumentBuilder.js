@@ -163,7 +163,7 @@ var build = function() {
     },
     content: [
       {
-        text: 'LOAN APPLICATION FORM\n(Livelihood & Enterprise Development)', style: { bold: true, alignment: 'center' }
+        text: 'LOAN APPLICATION FORM\n(' + _data.category + ')', style: { bold: true, alignment: 'center' }
       },
       {
         table: {

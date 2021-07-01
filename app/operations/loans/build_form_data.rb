@@ -68,6 +68,7 @@ module Loans
       @data[:co_maker_one]    = @loan.co_maker_one
       @data[:co_maker_two]    = @loan.co_maker_two
       @data[:loan_product]    = @loan_product.name
+      @data[:category]        = @loan_product.loan_product_category.try(:to_s)
       @data[:interest_rate]   = @loan_product.monthly_interest_rate * 100
       @data[:total_due]       = number_to_currency((@loan.principal + @loan.interest).round(2), unit: 'Php')
       @data[:term]            = "#{@loan.num_installments} #{@loan.term_interval}"
