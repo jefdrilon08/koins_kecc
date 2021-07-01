@@ -7,21 +7,30 @@ module Insurance
     end
 
     def execute!
-      check_if_insurance_type_present!
+      check_if_account_type_present!
+      check_if_account_subtype_present!
       check_if_status_present!
       check_if_member_id_present!
       check_if_uuid_present!
-      check_if_member_uuid_present!
       @errors
     end
 
     private
 
-    def check_if_insurance_type_present!
-      if @insurance_account['insurance_type'].nil?
+    def check_if_account_type_present!
+      if @insurance_account['account_type'].nil?
         @errors[:messages] << {
-          key: "insurance_type",
-          message: "Insurance Type can't be blank."
+          key: "account_type",
+          message: "Account Type Type can't be blank."
+        }
+      end      
+    end
+
+    def check_if_account_subtype_present!
+      if @insurance_account['account_subtype'].nil?
+        @errors[:messages] << {
+          key: "account_subtype",
+          message: "Account Subtype Type can't be blank."
         }
       end      
     end
@@ -50,15 +59,6 @@ module Insurance
           key: "uuid",
           message: "UUID can't be blank."
         }
-      end
-    end
-
-    def check_if_member_uuid_present!
-      if @insurance_account['member_uuid'].nil?
-        @errors[:messages] << {
-          key: "member_uuid",
-          message: "Member UUID can't be blank."
-        } 
       end
     end
   end
