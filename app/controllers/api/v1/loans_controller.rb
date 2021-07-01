@@ -60,6 +60,28 @@ module Api
         end
       end
 
+      def for_release
+        loan  = Loan.find_by_id(params[:id])
+
+        validator = ::Loans::ValidateForRelease.new(
+                      user: current_user,
+                      loan: loan
+                    )
+
+        validator.execute!
+
+        if validator.errors[:full_messages].any?
+          render json: { errors: validator.errors }, status: 400
+        else
+          ::Loans::ForRelease.new(
+            user: current_user,
+            loan: loan
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def process_loan
         loan  = Loan.find_by_id(params[:id])
 

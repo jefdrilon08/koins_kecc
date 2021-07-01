@@ -173,12 +173,21 @@ class LoansController < ApplicationController
       }
     end
 
-    if @loan.in_process?
+    if @loan.verified?
       @subheader_side_actions << {
         id: "btn-process",
         class: "fa fa-check",
         link: "#",
         text: "Process"
+      }
+    end
+
+    if @loan.in_process?
+      @subheader_side_actions << {
+        id: "btn-for-release",
+        class: "fa fa-check",
+        link: "#",
+        text: "For Release"
       }
     end
 

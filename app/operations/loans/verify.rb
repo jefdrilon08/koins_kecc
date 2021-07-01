@@ -18,7 +18,7 @@ module Loans
         }
       }
 
-      @loan.status = "in-process"
+      @loan.status = "verified"
 
       @loan.save!
     end

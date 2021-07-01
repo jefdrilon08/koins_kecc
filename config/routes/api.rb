@@ -197,8 +197,9 @@ namespace :api do
     post "/loans/restructure", to: "loans#restructure"
     post "/loans/recompute_restructure", to: "loans#recompute_restructure"
     post "/loans/verify", to: "loans#verify"
-    post "/loans/reject", to: "loans#reject"
+    post "/loans/for_release", to: "loans#for_release"
     post "/loans/process", to: "loans#process_loan"
+    post "/loans/reject", to: "loans#reject"
 
     # Branches
     get "/branches", to: "branches#index"

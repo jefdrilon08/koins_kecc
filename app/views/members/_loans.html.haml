@@ -50,9 +50,9 @@
 %hr
 
 %h6
-  Online Applications
+  For Verification
   %small.text-muted
-    For Verification
+    Online
 - if @for_verification_loans.any?
   %table.table.table-bordered.table-hover.table-sm
     %thead
@@ -94,6 +94,102 @@
 - else
   %p
     No loans for verification found.
+
+%hr
+
+%h6
+  Verified
+  %small.text-muted
+    Online
+- if @verified_loans.any?
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-center
+          Cycle 
+        %th.text-right
+          Total Due
+        %th.text-right
+          Total Paid
+        %th.text-right
+          Total Balance
+    %tbody
+      - @verified_loans.each do |loan|
+        %tr
+          %td
+            = link_to loan_path(loan) do
+              %strong
+                #{loan.pn_number}
+          %td.text-muted
+            - if loan.is_remote?
+              .fa.fa-globe-asia
+            #{loan.loan_product}
+          %td.text-center
+            #{loan.cycle}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_paid, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_balance, unit: "")}
+- else
+  %p
+    No verified loans found.
+
+%hr
+
+%h6
+  In Process
+  %small.text-muted
+    Online
+- if @in_process_loans.any?
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-center
+          Cycle 
+        %th.text-right
+          Total Due
+        %th.text-right
+          Total Paid
+        %th.text-right
+          Total Balance
+    %tbody
+      - @in_process_loans.each do |loan|
+        %tr
+          %td
+            = link_to loan_path(loan) do
+              %strong
+                #{loan.pn_number}
+          %td.text-muted
+            - if loan.is_remote?
+              .fa.fa-globe-asia
+            #{loan.loan_product}
+          %td.text-center
+            #{loan.cycle}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_paid, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_balance, unit: "")}
+- else
+  %p
+    No loans in process found.
 
 %hr
 %h6
