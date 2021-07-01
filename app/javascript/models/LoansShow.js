@@ -65,6 +65,10 @@ var $btnProcess;
 var $btnConfirmProcess;
 var $modalProcess;
 
+var $btnForRelease;
+var $btnConfirmForRelease;
+var $modalForRelease;
+
 var $btnReject;
 var $btnConfirmReject;
 var $modalReject;
@@ -84,6 +88,7 @@ var _urlDelayAmort          = "/api/v1/loans/delay_amort";
 var _urlNewAdjustment       = "/api/v1/loans/new_adjustment";
 var _urlVerify              = "/api/v1/loans/verify";
 var _urlProcess             = "/api/v1/loans/process";
+var _urlForRelease          = "/api/v1/loans/for_release";
 var _urlReject              = "/api/v1/loans/reject";
 
 var _id;
@@ -144,6 +149,10 @@ var _cacheDom = function() {
   $btnConfirmProcess = $("#btn-confirm-process");
   $modalProcess      = $("#modal-process");
 
+  $btnForRelease        = $("#btn-for-release");
+  $btnConfirmForRelease = $("#btn-confirm-for-release");
+  $modalForRelease      = $("#modal-for-release");
+
   $btnReject            = $("#btn-reject");
   $btnConfirmReject     = $("#btn-confirm-reject");
   $modalReject          = $("#modal-reject");
@@ -202,6 +211,48 @@ var _bindEvents = function() {
 
           $btnConfirmReject.prop("disabled", false);
           $inputRejectionReason.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnForRelease.on("click", function() {
+    $modalForRelease.modal("show");
+  });
+
+  $btnConfirmForRelease.on("click", function() {
+    $btnConfirmForRelease.prop("disabled", true);
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlForRelease,
+      method: 'POST',
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmForRelease.prop("disabled", false);
         }
       }
     });

@@ -197,6 +197,8 @@ class MembersController < ApplicationController
     @paid_loans             = Loan.paid.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
     @pending_loans          = Loan.pending.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
     @for_verification_loans = Loan.for_verification.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
+    @verified_loans         = Loan.verified.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
+    @in_process_loans       = Loan.in_process.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
 
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
