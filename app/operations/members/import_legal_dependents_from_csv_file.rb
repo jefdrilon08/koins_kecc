@@ -24,38 +24,29 @@ module Members
               legal_dependent.id = uuid
             end
 
+            dependent_data = JSON.parse(row['data'])
+            
+            member_identification_number = row['member_identification_number']
+            member_uuid = row['member_uuid']
+
             legal_dependent.first_name = row['first_name'].try(:upcase)
             legal_dependent.middle_name = row['middle_name'].try(:upcase)
             legal_dependent.last_name = row['last_name'].try(:upcase)
             legal_dependent.date_of_birth = row['date_of_birth']
             legal_dependent.relationship = row['relationship']
-            legal_dependent.data = {
-                                    is_deceased: row['is_deceased'],
-                                    is_tpd: row['is_tpd'],
-                                    course: row['course'],
-                                    educational_attainment: row['educational_attainment']
-                                    }
-
-            member_identification_number = row['member_identification_number']
-            member_uuid = row['member_uuid']
-            member = Member.where(id: member_uuid).first
-            member_id = member.id
-            legal_dependent.member_id = member_id
+            legal_dependent.data = dependent_data
+            legal_dependent.member_id = member_uuid
 
             legal_dependent.save!
           else
-            dependent_data = dependent_record.data.with_indifferent_access
-
-            dependent_data[:is_deceased] = row['is_deceased']
-            dependent_data[:is_tpd] = row['is_tpd']
-            dependent_data[:course] = row['course']
-            dependent_data[:educational_attainment] = row['educational_attainment']
+            dependent_data = JSON.parse(row['data'])
 
             dependent_record.update!( 
                                       first_name: row['first_name'],
                                       middle_name: row['middle_name'],
                                       last_name: row['last_name'],
                                       date_of_birth: row['date_of_birth'],
+                                      member_id: row['member_uuid'],
                                       relationship: row['relationship'],
                                       data: dependent_data
                                     )

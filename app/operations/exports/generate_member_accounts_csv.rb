@@ -7,50 +7,43 @@ module Exports
 		def execute!
 	       CSV.generate do |csv|
                         csv << [ 
-                            :insurance_type,
-                            :balance,
-                            :member_id,
-                            :account_number,
-                            :status,
-                            :branch,   
-                            :center,
                             :uuid,
-                            :member_uuid,
-                            :equity_value,
+                            :member_id,
+                            :account_type,
+                            :account_subtype,
+                            :balance,
+                            :center_id,
+                            :branch_id,   
+                            :status,
+                            :maintaining_balance,
+                            :created_at,
+                            :updated_at,
+                            :data
                         ]
 
                 @member_accounts.find_in_batches(batch_size: 1000) do |group|
                     group.each do |ma|
-                        if ma.member.identification_number.present?
-                            if ma.account_subtype == "Retirement Fund"
-                                code = "RF"
-                            elsif ma.account_subtype == "Life Insurance Fund"
-                                code = "LIF"
-                            elsif ma.account_subtype == "Credit Life Insurance Plan"
-                                code = "CLIP"
-                            elsif ma.account_subtype == "Hospital Income Insurance Plan"
-                                code = "HIIP"
-                            elsif ma.account_subtype == "Policy Loan"
-                                code = "PL"
-                            end
+                        if ma.status == "active"
 
                             if ma.data.nil?
-                                ev = nil
+                                ma_data = nil
                             else
-                                ev = ma.data.with_indifferent_access[:equity_value]
+                                ma_data = ma.data.with_indifferent_access.to_json
                             end
 
                             csv << [
-                            code,
-                            ma.balance,
-                            ma.member.identification_number,
-                            nil,
-                            ma.status,
-                            ma.branch,
-                            ma.center,
-                            ma.id,
-                            ma.member.id,
-                            ev
+                                ma.id,
+                                ma.member_id,
+                                ma.account_type,
+                                ma.account_subtype,
+                                ma.balance,
+                                ma.center_id,
+                                ma.branch_id,
+                                ma.status,
+                                ma.maintaining_balance,
+                                ma.created_at,
+                                ma.updated_at,
+                                ma_data
                             ]
                         end
                     end

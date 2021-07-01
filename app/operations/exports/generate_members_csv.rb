@@ -7,71 +7,51 @@ module Exports
 		def execute!
 	       CSV.generate do |csv|
                         csv << [ 
-                            :identification_number,
-                            :member_type,
-                            :status,
-                            :insurance_status,
-                            :first_name, 
-                            :middle_name, 
-                            :last_name,
-                            :recognition_date,
-                            :center, 
-                            :branch, 
-                            :gender,
-                            :date_of_birth,
-                            :place_of_birth,
-                            :civil_status,
-                            :number_of_children,
-                            :spouse_first_name,
-                            :spouse_last_name,
-                            :spouse_middle_name,
-                            :spouse_date_of_birth,
-                            :address_street,
-                            :address_barangay,
-                            :address_city,
-                            :sss_number,
-                            :tin_number,
-                            :pag_ibig_number,
-                            :phil_health_number,
-                            :cellphone_number,
                             :uuid,
-                            :meta_id, 
-                            :date_resigned,
-                            :resignation_type,
-                            :resignation_code,
-                            :resignation_reason,
-                            :insurance_date_resigned,
-                            :is_reinstate,
-                            :old_previous_mii_member_since,
-                            :is_balik_kasapi,
                             :center_id,
                             :branch_id,
-                            :insurance_date_resigned_data,
-                            :insurance_resignation_reason_data,
+                            :first_name,
+                            :middle_name,
+                            :last_name,
+                            :gender,
+                            :date_of_birth,
+                            :civil_status,
+                            :home_number,
+                            :mobile_number,
+                            :processed_by,
+                            :approved_by,
+                            :identification_number,
+                            :place_of_birth,
+                            :status,
+                            :member_type,
+                            :religion,    
+                            :insurance_status,
+                            :data,
+                            :date_resigned,
+                            :meta_data,
+                            :created_at,
+                            :updated_at,
+                            :access_token,
+                            :signature_data,
+                            :modifiable,
+                            :previous_date_resigned,
+                            :insurance_date_resigned,
+                            :member_id,
+                            :encrypted_password,
+                            :username,
+                            :online_application_id,
+                            :center,
+                            :branch,
+                            :recognition_date,
                             :lapse,
-                            # :life_amount,
-                            # :rf_amount
+                            # m.lif_amount,
+                            # m.rf_amount
                             
                         ]
                 @members.find_in_batches(batch_size: 1000) do |group|
                     group.each do |m|
                         if m.identification_number.present?
-                            if m.fetch_government_id("tin_number").present?
-                                tin = m.fetch_government_id("tin_number").split("-").join("")
-                            elsif m.fetch_government_id("sss_number").present?
-                                sss = m.fetch_government_id("sss_number").split("-").join("")
-                            elsif m.fetch_government_id("pag_ibig_number").present?
-                                pag_ibig = m.fetch_government_id("pag_ibig_number").split("-").join("")
-                            elsif m.fetch_government_id("phil_health_number").present?
-                                phil_health = m.fetch_government_id("phil_health_number").split("-").join("")
-                            end
-
-                            if m.meta
-                                meta_id = m.meta
-                            else
-                                meta_id = ""
-                            end
-
+                
                             recognition_date = m.data.with_indifferent_access[:recognition_date]
                             if recognition_date.nil?
                                 recognition_date = nil
@@ -79,74 +59,50 @@ module Exports
                             else
                                 lapse = m.life_number_of_lapsed
                             end
-
-                            
-                            if m.insurance_date_resigned.nil?
-                                insurance_date_resigned = nil
+                
+                            if m.meta.present?
+                                meta_data = m.meta.with_indifferent_access.to_json
                             else
-                                insurance_date_resigned = m.insurance_date_resigned                        
-                            end    
-
-                            if !m.data.with_indifferent_access[:resignation].nil?
-                                resignation_type = m.data.with_indifferent_access[:resignation][:type]
-                                resignation_code = m.data.with_indifferent_access[:resignation][:code]
-                                resignation_reason = m.data.with_indifferent_access[:resignation][:reason]
-                            else
-                                resignation_type = nil
-                                resignation_code = nil
-                                resignation_reason = nil
-                            end
-
-                            if !m.data.with_indifferent_access[:insurance_resignation].nil?
-                                insurance_date_resigned_data = m.data.with_indifferent_access[:insurance_resignation][:date_resigned]
-                                insurance_resignation_reason_data = m.data.with_indifferent_access[:insurance_resignation][:resignation_reason]
-                            else
-                                insurance_date_resigned_data = nil
-                                insurance_resignation_reason_data = nil
+                                meta_data = nil
                             end
 
                             csv << [
-                                m.identification_number,
-                                m.member_type,
-                                m.status,
-                                m.insurance_status,    
+                                m.id,
+                                m.center.id,
+                                m.branch.id,
                                 m.first_name,
                                 m.middle_name,
                                 m.last_name,
-                                recognition_date,
-                                m.center,
-                                m.branch,
                                 m.gender,
                                 m.date_of_birth,
-                                m.place_of_birth,
                                 m.civil_status,
-                                m.data[:number_children],
-                                m.data.with_indifferent_access[:spouse][:first_name],
-                                m.data.with_indifferent_access[:spouse][:last_name],
-                                m.data.with_indifferent_access[:spouse][:middle_name],
-                                m.data.with_indifferent_access[:spouse][:date_of_birth],
-                                m.data.with_indifferent_access[:address][:street],
-                                m.data.with_indifferent_access[:address][:district],
-                                m.data.with_indifferent_access[:address][:city],
-                                sss,
-                                tin,
-                                pag_ibig,
-                                phil_health,
+                                m.home_number,
                                 m.mobile_number,
-                                m.id,
-                                meta_id,
+                                m.processed_by,
+                                m.approved_by,
+                                m.identification_number,
+                                m.place_of_birth,
+                                m.status,
+                                m.member_type,
+                                m.religion,    
+                                m.insurance_status,
+                                m.data.with_indifferent_access.to_json,
                                 m.date_resigned,
-                                resignation_type,
-                                resignation_code,
-                                resignation_reason,
-                                insurance_date_resigned,
-                                "",
-                                "",
-                                "",
-                                m.center.id,
-                                m.branch.id,
-                                insurance_date_resigned_data,
-                                insurance_resignation_reason_data,
+                                meta_data,
+                                m.created_at,
+                                m.updated_at,
+                                m.access_token,
+                                m.signature_data,
+                                m.modifiable,
+                                m.previous_date_resigned,
+                                m.insurance_date_resigned,
+                                m.member_id,
+                                m.encrypted_password,
+                                m.username,
+                                m.online_application_id,
+                                m.center,
+                                m.branch,
+                                recognition_date,
                                 lapse,
                                 # m.lif_amount,
                                 # m.rf_amount
