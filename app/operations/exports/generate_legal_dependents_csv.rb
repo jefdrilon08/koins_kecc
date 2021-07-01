@@ -12,7 +12,7 @@ module Exports
           :middle_name, 
           :last_name, 
           :date_of_birth,
-          :member_uuid
+          :member_uuid,
           :relationship,
           :data,
           :created_at,
