@@ -3,6 +3,8 @@
     %tr
       %th
         Name
+      %th
+        Category
       %th.text-right
         Min Loan Amount
       %th.text-right
@@ -27,6 +29,8 @@
             %br
             %small
               #{o.id}
+        %td
+          #{o.loan_product_category}
         %td.text-right
           #{number_to_currency(o.min_loan_amount, unit: "")}
         %td.text-right

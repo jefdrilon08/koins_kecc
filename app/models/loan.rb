@@ -37,9 +37,28 @@ class Loan < ApplicationRecord
   scope :active_or_paid, -> { where(status: ["active", "paid"]) }
   scope :active_or_pending, -> { where(status: ["active", "pending"]) }
 
+  has_one_attached :application_form
+
   has_many :amortization_schedule_entries, dependent: :destroy
 
   before_validation :load_defaults
+
+  def term_interval
+    case self.term
+    when "yearly"
+      return "years"
+    when "quarterly"
+      return "quarters"
+    when "monthly"
+      return "months"
+    when "semi-monthly"
+      return "semi-months"
+    when "weekly"
+      return "weeks"
+    when "daily"
+      return "days"
+    end
+  end
 
   def in_process?
     self.status == "in-process"

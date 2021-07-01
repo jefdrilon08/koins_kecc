@@ -4,6 +4,8 @@ class LoanProduct < ApplicationRecord
   validates :min_loan_amount, presence: true, numericality: true
   validates :monthly_interest_rate, presence: true, numericality: true
 
+  belongs_to :loan_product_category, optional: true
+
   scope :entry_point, -> { where(is_entry_point: true) }
   scope :non_entry_point, -> { where.not(is_entry_point: true) }
 

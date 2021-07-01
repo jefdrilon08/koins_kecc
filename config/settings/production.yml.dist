@@ -175,6 +175,11 @@ module_authorization_roles:
     - BK
     - SBK
     - OAS
+
+  online_loan_application_in_process:
+    - MIS
+    - FM
+    - CM
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
