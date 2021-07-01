@@ -12,7 +12,7 @@ module Exports
                       :middle_name, 
                       :last_name, 
                       :date_of_birth,
-                      :member_uuid
+                      :member_uuid,
                       :relationship,
                       :data,
                       :created_at,
@@ -28,11 +28,11 @@ module Exports
                         ld.middle_name,
                         ld.last_name,
                         ld.date_of_birth,
-                        ld.member.id
+                        ld.member.id,
                         ld.relationship,
-                        ld.data.with_indifferent_access.to_json,,
+                        ld.data.with_indifferent_access.to_json,
                         ld.created_at,
-                        ld.updated_at
+                        ld.updated_at,
                         ld.member.identification_number
                         ]
                     end
