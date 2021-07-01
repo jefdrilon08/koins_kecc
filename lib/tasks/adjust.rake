@@ -1805,6 +1805,8 @@ namespace :adjust do
       insurance_account_transaction = AccountTransaction.where(id: uuid).first
 
       if insurance_account_transaction.nil?
+        puts "Creating new insurance account transaction record #{uuid}..."
+
         insurance_account_transaction = AccountTransaction.new
 
         insurance_account_transaction_data = JSON.parse(row['data'])
@@ -1820,8 +1822,12 @@ namespace :adjust do
         insurance_account_transaction.created_at = row['created_at']
         insurance_account_transaction.updated_at = row['updated_at']
 
+        puts "Done creating!"
+
         insurance_account_ids << row['subsidiary_id']
       else
+        puts "Updating existing insurance account transaction record #{uuid}..."
+
         insurance_account_transaction_data = JSON.parse(row['data'])
 
         insurance_account_transaction.update!(
@@ -1835,6 +1841,8 @@ namespace :adjust do
           created_at: row['created_at'],
           updated_at: row['updated_at']
         )
+
+        puts "Done updating!"
 
         insurance_account_ids << insurance_account_transaction.subsidiary_id
       end

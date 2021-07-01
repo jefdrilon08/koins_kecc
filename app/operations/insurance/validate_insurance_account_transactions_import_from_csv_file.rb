@@ -15,19 +15,19 @@ module Insurance
     private
 
     def check_if_insurance_account_uuid_present!
-      if @insurance_account_transaction['insurance_account_uuid'].nil?
+      if @insurance_account_transaction['subsidiary_id'].nil?
         @errors[:messages] << {
-          key: "insurance_account_uuid",
-          message: "Insurance Account UUID can't be blank."
+          key: "subsidiary_id",
+          message: "Subsidiary ID can't be blank."
         }
       end
     end 
 
     def check_if_uuid_present!
-      if @insurance_account_transaction['uuid'].nil?
+      if @insurance_account_transaction['id'].nil?
         @errors[:messages] << {
-          key: "uuid",
-          message: "UUID can't be blank."
+          key: "id",
+          message: "ID can't be blank."
         }
       end
     end

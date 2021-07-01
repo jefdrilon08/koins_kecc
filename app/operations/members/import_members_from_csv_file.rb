@@ -189,7 +189,7 @@ module Members
                 center.branch = branch
                 center.save!
                 member.center = center
-            else  
+            else 
               member.center = center
             end
 
