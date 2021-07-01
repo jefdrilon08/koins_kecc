@@ -28,7 +28,7 @@ module Exports
               ld.middle_name,
               ld.last_name,
               ld.date_of_birth,
-              ld.member.id
+              ld.member.id,
               ld.relationship,
               ld.data.with_indifferent_access.to_json,
               ld.created_at,
