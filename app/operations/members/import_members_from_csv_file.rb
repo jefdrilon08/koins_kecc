@@ -171,10 +171,28 @@ module Members
             end
  
             branch = Branch.find(row['branch_id'])
+            member.branch = branch
+
             center = Center.where(id: row['center_id']).first
 
-            member.center = center
-            member.branch = branch
+            if center.nil?
+                center = Center.new
+              
+                if !row['center_id'].nil?
+                  center.id = row['center_id']               
+                end
+
+                center.name = row['center'].try(:upcase)
+                center.short_name = row['center'].try(:upcase)
+                center.meeting_day = 1
+                center.user = @user
+                center.branch = branch
+                center.save!
+                member.center = center
+            else  
+              member.center = center
+            end
+
 
             if row['meta_data'].present?
               meta_data = JSON.parse(row['meta_data'])

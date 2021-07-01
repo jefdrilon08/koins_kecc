@@ -2,9 +2,10 @@
   %li.nav-item
     %a.nav-link.active.show{"aria-controls" => "profile", "aria-selected" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"} 
       Profile
-  %li.nav-item
-    %a.nav-link{"aria-controls" => "loans", "aria-selected" => "false", "data-toggle" => "tab", :href => "#loans", :role => "tab"} 
-      Loans
+  - if Settings.activate_microloans  
+    %li.nav-item
+      %a.nav-link{"aria-controls" => "loans", "aria-selected" => "false", "data-toggle" => "tab", :href => "#loans", :role => "tab"} 
+        Loans
   %li.nav-item
     %a.nav-link{"aria-controls" => "savings_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#savings_accounts", :role => "tab"} 
       Savings
@@ -35,8 +36,9 @@
 .tab-content
   #home.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "profile_details"
-  #loans.tab-pane{:role => "tabpanel"}
-    = render partial: "loans"
+  - if Settings.activate_microloans  
+    #loans.tab-pane{:role => "tabpanel"}
+      = render partial: "loans"
   #savings_accounts.tab-pane{:role => "tabpanel"}
     = render partial: "savings_accounts"
   #insurance_accounts.tab-pane{:role => "tabpanel"}
