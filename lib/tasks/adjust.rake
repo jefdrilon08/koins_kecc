@@ -1863,12 +1863,13 @@ namespace :adjust do
     # ).execute!
 
     # Rehash accounts
-    puts "Rehashing ..."
-    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+    # puts "Rehashing ..."
+    # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
 
-    MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
-      ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
-    end
+    # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
+    #   ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
+    # end
+    
     puts "Done!"
   end
 
