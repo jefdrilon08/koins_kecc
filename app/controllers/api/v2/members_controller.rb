@@ -45,15 +45,21 @@ module Api
       end
 
       def loan_products
-        loan_products = ReadOnlyLoanProduct.select("*")
-                          .order(
-                            "priority ASC, name ASC"
-                          ).map{ |o|
-                            {
-                              id: o.id,
-                              name: o.name
-                            }
+        num_existing_loans  = Loan.active.paid.where(member_id: @member.id).count
+        loan_products       = ReadOnlyLoanProduct.select("*")
+
+        if num_existing_loans > 0
+          loan_products = loan_products.where(is_entry_point: true)
+        end
+
+        loan_products = loan_products.order(
+                          "priority ASC, name ASC"
+                        ).map{ |o|
+                          {
+                            id: o.id,
+                            name: o.name
                           }
+                        }
 
         render json: { loan_products: loan_products }
       end
