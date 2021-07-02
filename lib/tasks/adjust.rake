@@ -1851,17 +1851,16 @@ namespace :adjust do
 
     insurance_account_ids = insurance_account_ids.uniq
 
-    # insurance_account_id = insurance_account_ids.first
-    # branch = MemberAccount.where(id: insurance_account_id).first.member.branch
+    insurance_account_id = insurance_account_ids.first
+    branch = MemberAccount.where(id: insurance_account_id).first.member.branch
 
-    # # Rehash accounts
-    # puts "Rehashing ..."
-    # ::MemberAccounts::BulkRehash.new(
-    #   config: {
-    #       branch: branch
-    #     },
-    #   account_type: "INSURANCE"
-    # ).execute!
+    # Rehash accounts
+    puts "Rehashing ..."
+    ::MemberAccounts::BulkRehash.new(
+      config: {
+          branch: branch
+        }
+    ).execute!
 
     # Rehash accounts
     # puts "Rehashing ..."

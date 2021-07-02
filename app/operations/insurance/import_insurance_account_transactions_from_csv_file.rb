@@ -55,6 +55,17 @@ module Insurance
         end
       end
 
+      branch_ids = MemberAccount.where("id IN (?)", insurance_account_ids).pluck(:branch_id).uniq
+
+      # Rehash accounts
+      Branch.where("id IN (?)", branch_ids).each do |branch|
+        ::MemberAccounts::BulkRehash.new(
+          config: {
+              branch: branch
+            }
+        ).execute!
+      end
+
       # insurance_account_ids = insurance_account_ids.uniq
 
       # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
