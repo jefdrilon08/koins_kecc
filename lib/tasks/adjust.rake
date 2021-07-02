@@ -1850,27 +1850,25 @@ namespace :adjust do
 
     insurance_account_ids = insurance_account_ids.uniq
 
-    # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+    # insurance_account_id = insurance_account_ids.first
+    # branch = MemberAccount.where(id: insurance_account_id).first.member.branch
 
-    # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
-    #   puts "Rehashing member_account #{acc.id}..."
-
-    #   ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
-    # end
-
-    # this
-    insurance_account_id = insurance_account_ids.first
-    branch = MemberAccount.where(id: insurance_account_id).first.member.branch
+    # # Rehash accounts
+    # puts "Rehashing ..."
+    # ::MemberAccounts::BulkRehash.new(
+    #   config: {
+    #       branch: branch
+    #     },
+    #   account_type: "INSURANCE"
+    # ).execute!
 
     # Rehash accounts
     puts "Rehashing ..."
-    ::MemberAccounts::BulkRehash.new(
-      config: {
-        branch: branch
-      }
-    ).execute!
-    # this
+    account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
 
+    MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
+      ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
+    end
     puts "Done!"
   end
 
