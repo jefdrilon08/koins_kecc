@@ -114,12 +114,28 @@ export default class ApplicationFormCLIPBeneficiary extends React.Component {
               <label>
                 Relationship
               </label>
-              <input
+              <select
                 className="form-control"
                 value={clip_beneficiary.relationship}
                 onChange={this.handleRelationship.bind(this)}
                 disabled={this.props.disabled}
-              />
+              >
+                <option value="">
+                  -- SELECT --
+                </option>
+                <option value="ANAK">
+                  ANAK
+                </option>
+                <option value="ASAWA">
+                  ASAWA
+                </option>
+                <option value="MAGULANG">
+                  MAGULANG
+                </option>
+                <option value="KAPATID">
+                  KAPATID
+                </option>
+              </select>
             </div>
           </div>
         </div>
