@@ -51,45 +51,49 @@ class LoansController < ApplicationController
   end
 
   def form
-    if params[:id].present?
-      loan  = Loan.find(params[:id])
-    end
-
-    if loan.present? and loan.is_restructured
+    if ::Users::FetchValidRoles.new(module_name: :form_edit_loan).execute!.empty?
       redirect_to member_path(@member)
-    end
+    else
+      if params[:id].present?
+        loan  = Loan.find(params[:id])
+      end
 
-    @member = Member.where(id: params[:member_id]).first
-    @branch = @member.branch
+      if loan.present? and loan.is_restructured
+        redirect_to member_path(@member)
+      end
 
-    if @member.blank?
-      redirect_to members_path
-    end
+      @member = Member.where(id: params[:member_id]).first
+      @branch = @member.branch
 
-    # subheader items
-    @subheader_items = [
-      {
-        is_link: true,
-        path: loans_path,
-        text: "Loans"
-      },
-      {
-        is_link: true,
-        path: member_path(@member),
-        text: "#{@member.full_name}"
-      },
-      {
-        text: "Loan Application"
+      if @member.blank?
+        redirect_to members_path
+      end
+
+      # subheader items
+      @subheader_items = [
+        {
+          is_link: true,
+          path: loans_path,
+          text: "Loans"
+        },
+        {
+          is_link: true,
+          path: member_path(@member),
+          text: "#{@member.full_name}"
+        },
+        {
+          text: "Loan Application"
+        }
+      ]
+
+      @subheader_side_actions = []
+
+      @payload = {
+        id: params[:id],
+        memberId: @member.id,
+        banks: @banks
       }
-    ]
-
-    @subheader_side_actions = []
-
-    @payload = {
-      id: params[:id],
-      memberId: @member.id,
-      banks: @banks
-    }
+    end
   end
 
   def adjustment
@@ -198,6 +202,16 @@ class LoansController < ApplicationController
         link: "#",
         text: "Download Form"
       }
+
+      if !@loan.is_restructured
+        if ::Users::FetchValidRoles.new(module_name: :form_edit_loan).execute!.any?
+          @subheader_side_actions << {
+            class: "fa fa-pencil-alt",
+            link: loan_application_form_path(id: @loan.id, member_id: @loan.member_id),
+            text: "Edit"
+          }
+        end
+      end
     end
 
     if @loan.pending?
@@ -207,14 +221,6 @@ class LoansController < ApplicationController
         link: "#",
         text: "Approve"
       }
-
-      if !@loan.is_restructured
-        @subheader_side_actions << {
-          class: "fa fa-pencil-alt",
-          link: loan_application_form_path(id: @loan.id, member_id: @loan.member_id),
-          text: "Edit"
-        }
-      end
 
       @subheader_side_actions << {
         id: "btn-delete",
