@@ -33,6 +33,8 @@ module Insurance
           insurance_account_transaction.created_at = row['created_at']
           insurance_account_transaction.updated_at = row['updated_at']
 
+          insurance_account_transaction.save!
+
           insurance_account_ids << row['subsidiary_id']
         else
           insurance_account_transaction_data = JSON.parse(row['data'])

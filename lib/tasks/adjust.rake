@@ -1822,8 +1822,9 @@ namespace :adjust do
         insurance_account_transaction.created_at = row['created_at']
         insurance_account_transaction.updated_at = row['updated_at']
 
+        insurance_account_transaction.save!
         puts "Done creating!"
-
+        
         insurance_account_ids << row['subsidiary_id']
       else
         puts "Updating existing insurance account transaction record #{uuid}..."
