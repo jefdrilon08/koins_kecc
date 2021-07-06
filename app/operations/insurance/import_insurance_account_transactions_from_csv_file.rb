@@ -33,6 +33,8 @@ module Insurance
           insurance_account_transaction.created_at = row['created_at']
           insurance_account_transaction.updated_at = row['updated_at']
 
+          insurance_account_transaction.save!
+
           insurance_account_ids << row['subsidiary_id']
         else
           insurance_account_transaction_data = JSON.parse(row['data'])
@@ -53,13 +55,24 @@ module Insurance
         end
       end
 
-      insurance_account_ids = insurance_account_ids.uniq
+      branch_ids = MemberAccount.where("id IN (?)", insurance_account_ids).pluck(:branch_id).uniq
 
-      account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
-
-      MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
-        ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
+      # Rehash accounts
+      Branch.where("id IN (?)", branch_ids).each do |branch|
+        ::MemberAccounts::BulkRehash.new(
+          config: {
+              branch: branch
+            }
+        ).execute!
       end
+
+      # insurance_account_ids = insurance_account_ids.uniq
+
+      # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+
+      # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
+      #   ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
+      # end
     end
   end
 end

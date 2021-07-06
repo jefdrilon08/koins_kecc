@@ -1805,6 +1805,8 @@ namespace :adjust do
       insurance_account_transaction = AccountTransaction.where(id: uuid).first
 
       if insurance_account_transaction.nil?
+        puts "Creating new insurance account transaction record #{uuid}..."
+
         insurance_account_transaction = AccountTransaction.new
 
         insurance_account_transaction_data = JSON.parse(row['data'])
@@ -1820,8 +1822,13 @@ namespace :adjust do
         insurance_account_transaction.created_at = row['created_at']
         insurance_account_transaction.updated_at = row['updated_at']
 
+        insurance_account_transaction.save!
+        puts "Done creating!"
+        
         insurance_account_ids << row['subsidiary_id']
       else
+        puts "Updating existing insurance account transaction record #{uuid}..."
+
         insurance_account_transaction_data = JSON.parse(row['data'])
 
         insurance_account_transaction.update!(
@@ -1836,21 +1843,14 @@ namespace :adjust do
           updated_at: row['updated_at']
         )
 
+        puts "Done updating!"
+
         insurance_account_ids << insurance_account_transaction.subsidiary_id
       end
     end
 
     insurance_account_ids = insurance_account_ids.uniq
 
-    # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
-
-    # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |acc|
-    #   puts "Rehashing member_account #{acc.id}..."
-
-    #   ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
-    # end
-
-    # this
     insurance_account_id = insurance_account_ids.first
     branch = MemberAccount.where(id: insurance_account_id).first.member.branch
 
@@ -1858,11 +1858,18 @@ namespace :adjust do
     puts "Rehashing ..."
     ::MemberAccounts::BulkRehash.new(
       config: {
-        branch: branch
-      }
+          branch: branch
+        }
     ).execute!
-    # this
 
+    # Rehash accounts
+    # puts "Rehashing ..."
+    # account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND status = ?", insurance_account_ids, "approved")
+
+    # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
+    #   ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
+    # end
+    
     puts "Done!"
   end
 

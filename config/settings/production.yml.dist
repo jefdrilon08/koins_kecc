@@ -180,6 +180,10 @@ module_authorization_roles:
     - MIS
     - FM
     - CM
+  online_loan_application_for_release:
+    - MIS
+    - FM
+    - CM
 ###############################
 # SHARE CERTIFICATE           #
 ###############################

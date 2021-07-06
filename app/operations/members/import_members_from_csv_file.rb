@@ -189,10 +189,9 @@ module Members
                 center.branch = branch
                 center.save!
                 member.center = center
-            else  
+            else 
               member.center = center
             end
-
 
             if row['meta_data'].present?
               meta_data = JSON.parse(row['meta_data'])
@@ -243,6 +242,23 @@ module Members
 
             center_id = row['center_id']
             center = Center.where(id: center_id).first
+
+            if center.nil?
+              center = Center.new
+            
+              if !row['center_id'].nil?
+                center.id = row['center_id']               
+              end
+
+              center.name = row['center'].try(:upcase)
+              center.short_name = row['center'].try(:upcase)
+              center.meeting_day = 1
+              center.user = @user
+              center.branch = branch
+              center.save!
+
+              center = Center.where(id: row['center_id']).first
+            end
 
             if row['meta_data'].present?
               meta_data = JSON.parse(row['meta_data'])
