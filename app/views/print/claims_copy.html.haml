@@ -39,7 +39,7 @@
         Branch: #{@member.branch}
       %br
       %b
-        As of: #{Time.now.strftime("%B %d, %Y")}
+        Date of Death: #{@date_of_death.strftime("%B %d, %Y")}
   .body
     %table{:border => "2"}
       %tr
@@ -76,6 +76,7 @@
         %td{:width => "12%", :align => "center"}
         %td{:width => "12%", :align => "center"}
         %td{:width => "12%", :align => "center"}
+          #{@date_of_death}
       %tr
         %td{:width => "20%", :align => "center", :height => "50%", :colspan => "7"}
           &nbsp;
