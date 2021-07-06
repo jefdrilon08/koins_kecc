@@ -125,6 +125,11 @@ class LoansController < ApplicationController
                             @loan.id
                           ).order("created_at DESC")
 
+
+    if @loan.has_co_maker_one?
+      @co_maker = ReadOnlyMember.find(@loan.data["co_maker_one"]["id"])
+    end
+
     # subheader items
     @subheader_items = [
       {
@@ -152,12 +157,12 @@ class LoansController < ApplicationController
 
     @subheader_side_actions = []
 
-    if @loan.application_form.attached?
+    if !["active", "paid"].include?(@loan.status)
       @subheader_side_actions << {
-        id: "btn-download-application-form",
-        class: "fa fa-download",
+        id: "btn-upload-application-form",
+        class: "fa fa-upload",
         link: "#",
-        text: "Download Uploaded Application Form"
+        text: "Upload Application Form"
       }
     end
 

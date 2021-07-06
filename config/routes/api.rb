@@ -200,6 +200,7 @@ namespace :api do
     post "/loans/for_release", to: "loans#for_release"
     post "/loans/process", to: "loans#process_loan"
     post "/loans/reject", to: "loans#reject"
+    post "/loans/upload_application_form", to: "loans#upload_application_form"
 
     # Branches
     get "/branches", to: "branches#index"

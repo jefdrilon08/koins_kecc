@@ -149,7 +149,8 @@ var buildLoanDetailsBody = function() {
 }
 
 var build = function() {
-  var coMakerProfilePicture = 'data:image/png;base64,' + _data.comaker_profile_picture;
+  var coMakerProfilePicture         = 'data:image/png;base64,' + _data.comaker_profile_picture;
+  var coMakerRelativeProfilePicture = 'data:image/png;base64,' + _data.comaker_relative_profile_picture;
 
   var docDefinition = {
     pageSize: 'LEGAL',
@@ -404,9 +405,18 @@ var build = function() {
                     ]
                   },
                   {
-                    image: coMakerProfilePicture,
-                    fit: [60, 60],
-                    alignment: 'right'
+                    columns: [
+                      {
+                        image: coMakerProfilePicture,
+                        fit: [60, 60],
+                        alignment: 'right'
+                      },
+                      {
+                        image: coMakerRelativeProfilePicture,
+                        fit: [60, 60],
+                        alignment: 'right'
+                      }
+                    ]
                   }
                 ],
                 border: [true, false, true, true]
