@@ -105,10 +105,14 @@
       
 .row
   .col-md-4.col-xs-12
-
     %h4
       Details
     = render partial: "specifications"
+    - if @loan.application_form.attached?
+      = link_to rails_blob_path(@loan.application_form, disposition: "attachment"), class: "btn btn-primary btn-block" do
+        .fa.fa-download
+        Download Application Form
+
     %hr
     %h4
       Voucher Information

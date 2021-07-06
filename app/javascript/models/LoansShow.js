@@ -23,6 +23,11 @@ var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
 
+var $btnUploadApplicationForm;
+var $btnConfirmUploadApplicationForm;
+var $modalUploadApplicationForm;
+var $inputFileApplicationForm;
+
 var $btnDownloadForm;
 
 var $btnReage;
@@ -78,18 +83,19 @@ var reason        = "";
 var newDate       = "";
 var curretAmortId = "";
 
-var _urlReage               = "/api/v1/loans/reage";
-var _urlDelete              = "/api/v1/loans/delete";
-var _urlFirstDateOfPayment  = "/api/v1/loans/update_first_date_of_payment";
-var _urlDateReleased        = "/api/v1/loans/update_date_released";
-var _urlApprove             = "/api/v1/loans/approve";
-var _urlChangeBook          = "/api/v1/loans/change_book";
-var _urlDelayAmort          = "/api/v1/loans/delay_amort";
-var _urlNewAdjustment       = "/api/v1/loans/new_adjustment";
-var _urlVerify              = "/api/v1/loans/verify";
-var _urlProcess             = "/api/v1/loans/process";
-var _urlForRelease          = "/api/v1/loans/for_release";
-var _urlReject              = "/api/v1/loans/reject";
+var _urlReage                 = "/api/v1/loans/reage";
+var _urlDelete                = "/api/v1/loans/delete";
+var _urlFirstDateOfPayment    = "/api/v1/loans/update_first_date_of_payment";
+var _urlDateReleased          = "/api/v1/loans/update_date_released";
+var _urlApprove               = "/api/v1/loans/approve";
+var _urlChangeBook            = "/api/v1/loans/change_book";
+var _urlDelayAmort            = "/api/v1/loans/delay_amort";
+var _urlNewAdjustment         = "/api/v1/loans/new_adjustment";
+var _urlVerify                = "/api/v1/loans/verify";
+var _urlProcess               = "/api/v1/loans/process";
+var _urlForRelease            = "/api/v1/loans/for_release";
+var _urlReject                = "/api/v1/loans/reject";
+var _urlUploadApplicationForm = "/api/v1/loans/upload_application_form";
 
 var _id;
 var _authenticityToken;
@@ -108,6 +114,11 @@ var _cacheDom = function() {
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $modalApprove       = $("#modal-approve");
+
+  $btnUploadApplicationForm         = $("#btn-upload-application-form");
+  $btnConfirmUploadApplicationForm  = $("#btn-confirm-upload-application-form");
+  $modalUploadApplicationForm       = $("#modal-upload-application-form");
+  $inputFileApplicationForm         = $("#input-file-application-form");
 
   $btnDownloadForm  = $("#btn-download-form");
 
@@ -162,6 +173,76 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+  $btnUploadApplicationForm.on("click", function() {
+    $modalUploadApplicationForm.modal("show");
+  });
+
+  $btnConfirmUploadApplicationForm.on("click", function() {
+    $message.html("");
+    $btnConfirmUploadApplicationForm.prop("disabled", true);
+    $inputFileApplicationForm.prop("disabled", true);
+
+    var errors = [];
+
+    if($inputFileApplicationForm[0].files.length == 0) {
+      errors.push("File required");
+
+      $message.html("File required");
+
+      $btnConfirmUploadApplicationForm.prop("disabled", false);
+      $inputFileApplicationForm.prop("disabled", false);
+    }
+
+    if(errors.length == 0) {
+      var formData  = new FormData();
+      var files     = [];
+
+      files.push({
+        name: "application_form",
+        file: $inputFileApplicationForm[0].files[0]
+      });
+
+      for(var i = 0; i < files.length; i++) {
+        formData.append("files[]", files[i].file);
+        formData.append("file_types[]", files[i].name);
+        formData.append("id", _id);
+
+        $.ajax({
+          url: _urlUploadApplicationForm,
+          method: 'POST',
+          contentType: false,
+          processData: false,
+          data: formData,
+          success: function(response) {
+            $message.html("Success! Reloading...");
+            window.location.reload();
+          },
+          error: function(response) {
+            console.log(response);
+            var errors  = [];
+            try {
+              errors  = JSON.parse(response.responseText).errors.full_messages;
+            } catch(err) {
+              errors  = ["Something went wrong"];
+              console.log(err);
+            } finally {
+              console.log(errors);
+              $message.html(
+                Mustache.render(
+                  templateErrorList,
+                  { errors: errors }
+                )
+              );
+
+              $btnConfirmUploadApplicationForm.prop("disabled", false);
+              $inputFileApplicationForm.prop("disabled", false);
+            }
+          }
+        })
+      }
+    }
+  });
+
   $btnDownloadForm.on("click", function() {
     var docDefinition = LoanFormDocumentBuilder.execute(_data);
 

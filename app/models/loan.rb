@@ -38,6 +38,7 @@ class Loan < ApplicationRecord
   scope :active_or_pending, -> { where(status: ["active", "pending"]) }
 
   has_one_attached :application_form
+  has_one_attached :co_maker_relative_profile_picture
 
   has_many :amortization_schedule_entries, dependent: :destroy
 
@@ -110,6 +111,12 @@ class Loan < ApplicationRecord
     if self.date_approved.present? and self.date_released.blank?
       self.date_released = self.date_approved
     end
+  end
+
+  def has_co_maker_one?
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:co_maker_one].present? and temp_data[:co_maker_one][:id].present?
   end
 
   def co_maker_one

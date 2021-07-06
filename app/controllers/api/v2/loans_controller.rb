@@ -121,24 +121,28 @@ module Api
       end
 
       def apply
-        loan_product      = LoanProduct.find_by_id(params[:loan_product_id])
+        payload = JSON.parse(params[:payload]).with_indifferent_access
+
+        loan_product      = LoanProduct.find_by_id(payload[:loan_product_id])
         pn_number         = "#{SecureRandom.hex(4).upcase}"
-        co_maker_one      = Member.find_by_id(params[:co_maker_id])
-        project_type      = ProjectType.find_by_id(params[:project_type_id])
-        co_maker_two      = params[:co_maker_two].try(:upcase)
-        amount            = params[:amount].try(:to_f).try(:round, 2)
-        term              = params[:term]
-        num_installments  = params[:num_installments].try(:to_i)
+        co_maker_one      = Member.find_by_id(payload[:co_maker_id])
+        project_type      = ProjectType.find_by_id(payload[:project_type_id])
+        co_maker_two      = payload[:co_maker_two].try(:upcase)
+        amount            = payload[:amount].try(:to_f).try(:round, 2)
+        term              = payload[:term]
+        num_installments  = payload[:num_installments].try(:to_i)
 
         # CLIP related information
-        clip_first_name     = params[:clip_first_name]
-        clip_middle_name    = params[:clip_middle_name]
-        clip_last_name      = params[:clip_last_name]
-        clip_date_of_birth  = params[:clip_date_of_birth].try(:to_date)
-        clip_relationship   = params[:clip_relationship]
+        clip_first_name     = payload[:clip_first_name]
+        clip_middle_name    = payload[:clip_middle_name]
+        clip_last_name      = payload[:clip_last_name]
+        clip_date_of_birth  = payload[:clip_date_of_birth].try(:to_date)
+        clip_relationship   = payload[:clip_relationship]
         
         # Project type
-        project_type = ProjectType.find_by_id(params[:project_type_id])
+        project_type = ProjectType.find_by_id(payload[:project_type_id])
+
+        co_maker_profile_picture  = params[:co_maker_profile_picture]
 
         config = {
           loan_product: loan_product,
@@ -154,7 +158,8 @@ module Api
           clip_middle_name: clip_middle_name,
           clip_date_of_birth: clip_date_of_birth,
           clip_relationship: clip_relationship,
-          project_type: project_type
+          project_type: project_type,
+          co_maker_profile_picture: co_maker_profile_picture
         }
 
         validator = ::Loans::ValidateRemoteApply.new(config: config)

@@ -23,12 +23,24 @@
     %th
       Co-maker (Kasama sa sentro): 
     %td.text-right
-      #{@loan.co_maker_one}
+      - if @loan.has_co_maker_one?
+        = link_to member_path(@loan.data["co_maker_one"]["id"]) do
+          #{@loan.co_maker_one}
+  - if @co_maker.present? and @co_maker.profile_picture.attached?
+    %tr
+      %th
+      %td.text-right
+        = image_tag @co_maker.profile_picture, width: 100
   %tr
     %th
       Co-maker (Kamag-anak):
     %td.text-right
       #{@loan.co_maker_two}
+  - if @loan.co_maker_relative_profile_picture.attached?
+    %tr
+      %th
+      %td.text-right
+        = image_tag @loan.co_maker_relative_profile_picture, width: 100
   %tr
     %th
       Status:

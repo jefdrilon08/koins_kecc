@@ -63,7 +63,7 @@ module Loans
         loans = Loan.select(
                   "id, status, member_id"
                 ).where(
-                  status: ["pending", "active", "processing", "for-verification", "in-process"], 
+                  status: ["pending", "active", "processing", "for-verification", "verified", "in-process"], 
                   member_id: @member.id,
                   loan_product_id: @loan_product.id
                 )

@@ -35,6 +35,29 @@ module Api
         render json: { loans: result }
       end
 
+      def upload_application_form
+        loan  = Loan.find_by_id(params[:id])
+        files = params[:files]
+
+        config = {
+          user: current_user,
+          files: files,
+          loan: loan
+        }
+
+        errors  = ::Loans::ValidateUploadApplicationForm.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: { errors: errors }, status: 400
+        else
+          loan.update!(application_form: config[:files][0])
+
+          render json: { message: "ok" }
+        end
+      end
+
       def reject
         loan    = Loan.find_by_id(params[:id])
         reason  = params[:reason]

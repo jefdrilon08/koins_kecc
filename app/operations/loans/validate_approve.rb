@@ -31,6 +31,13 @@ module Loans
         validate_accounting_entry!
         validate_parameters!
         validate_amortization!
+
+        if !@loan.restructured? and !@loan.application_form.attached?
+          @errors[:messages] << {
+            key: "application_form",
+            message: "Application form not attached"
+          }
+        end
       end
 
       #not_yet_implemented!
