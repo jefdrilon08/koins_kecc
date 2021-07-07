@@ -407,14 +407,28 @@ var build = function() {
                   {
                     columns: [
                       {
-                        image: coMakerProfilePicture,
-                        fit: [60, 60],
-                        alignment: 'right'
+                        stack: [
+                          {
+                            image: coMakerProfilePicture,
+                            fit: [60, 60],
+                            alignment: 'center'
+                          },
+                          {
+                            text: 'Kasamahan sa Sentro', style: styleCellValue, alignment: 'center'
+                          }
+                        ]
                       },
                       {
-                        image: coMakerRelativeProfilePicture,
-                        fit: [60, 60],
-                        alignment: 'right'
+                        stack: [
+                          {
+                            image: coMakerRelativeProfilePicture,
+                            fit: [60, 60],
+                            alignment: 'center'
+                          },
+                          {
+                            text: 'Kamag-anak', style: styleCellValue, alignment: 'center'
+                          }
+                        ]
                       }
                     ]
                   }

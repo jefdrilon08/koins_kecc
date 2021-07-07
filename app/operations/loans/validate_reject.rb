@@ -35,7 +35,7 @@ module Loans
           key: "loan",
           message: "loan required"
         }
-      elsif !@loan.for_verification?
+      elsif !["for-verification", "verified"].include?(@loan.status)
         @errors[:messages] << {
           key: "loan",
           message: "invalid loan status"
