@@ -60,6 +60,11 @@ var $fileProfilePicture;
 var $fileSignature;
 var templateErrorList;
 
+var $btnClaimsCopy;   
+var $modalClaimsCopy; 
+var $btnConfirmClaimsCopy;
+var $inputDateOfDeath;
+
 var $btnRestructure;
 var $btnConfirmRestructure;
 var $modalRestructure;
@@ -174,6 +179,11 @@ var _cacheDom = function() {
   $btnConfirmDeleteSignature        = $("#btn-confirm-delete-signature");
   $inputDateResigned                = $("#input-date-resigned");
   $inputReason                      = $("#input-reason");
+
+  $btnClaimsCopy                    = $("#btn-claims-copy");
+  $modalClaimsCopy                  = $("#modal-claims-copy");
+  $btnConfirmClaimsCopy             = $("#btn-confirm-claims-copy");
+  $inputDateOfDeath                 = $("#input-date-of-death");
 
   $btnRestructure               = $("#btn-restructure");
   $btnConfirmRestructure        = $("#btn-confirm-restructure");
@@ -1164,6 +1174,20 @@ var _bindEvents = function() {
         }
       });
 
+    });
+  });
+
+  $btnClaimsCopy.on("click", function() {
+    $modalClaimsCopy.modal("show");
+
+    $btnConfirmClaimsCopy.on("click", function() {
+      $btnConfirmClaimsCopy.prop("disabled", true);
+      var dateOfDeath = $inputDateOfDeath.val();
+      var memberId = _memberId
+
+      window.open("/print?member_id=" + memberId+ "&date_of_death=" + dateOfDeath + "&type=claims_copy");
+      $modalClaimsCopy.modal("hide");
+      window.location.reload();
     });
   });
 }

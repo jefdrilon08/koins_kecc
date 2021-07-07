@@ -14,7 +14,7 @@ module Pages
         member_center = {}
         member_center[:center]    = center.to_s
         member_center[:members]   = []
-        @members = Member.active_and_resigned.where(center_id: center.id).order("last_name ASC")
+        @members = ReadOnlyMember.active_and_resigned.where(center_id: center.id).order("last_name ASC")
           @members.each_with_index do |member, i|
             recognition_date  = member.data['recognition_date']
             current_date = Date.today
@@ -23,7 +23,7 @@ module Pages
             if recognition_date.present? and member.lif_amount != 0
               #rf compute
               @rf_default = 5
-              @rf_account  = MemberAccount.where(account_subtype: "Retirement Fund", member_id: member.id).sum(:balance)
+              @rf_account  = ReadOnlyMemberAccount.where(account_subtype: "Retirement Fund", member_id: member.id).sum(:balance)
               @rf_coverage = (recognition_date.to_date + (@rf_account.to_i / @rf_default.to_i).weeks).strftime("%Y-%m-%d")
               @rf_num_days   = current_date.to_date - recognition_date.to_date
               @rf_num_weeks  = (@rf_num_days.to_i / 7) + 1
@@ -41,7 +41,7 @@ module Pages
 
               #compute LIF
               @lif_default = 15
-              @lif_account = MemberAccount.where(account_subtype: "Life Insurance Fund", member_id: member.id).sum(:balance)
+              @lif_account = ReadOnlyMemberAccount.where(account_subtype: "Life Insurance Fund", member_id: member.id).sum(:balance)
               @lif_coverage = (recognition_date.to_date + (@lif_account.to_i / @lif_default.to_i).weeks).strftime("%Y-%m-%d")
               @lif_num_days   = current_date.to_date - recognition_date.to_date
               @lif_num_weeks  = (@lif_num_days.to_i / 7) + 1

@@ -7,9 +7,9 @@ module Reports
       @branch     = branch
       if !@start_date.nil? &&  !@end_date.nil? && !@branch.nil?
         if Settings.activate_microinsurance
-          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular")
+          @members  = ReadOnlyMember.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type = ?", @start_date, @end_date, ["inforce", "lapsed"], @branch, "Regular")
         else  
-          @members  = Member.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type IN (?)", @start_date, @end_date, ["inforce", "lapsed"], @branch, ["Regular", "Kaagapay"]).order("center_id ASC")
+          @members  = ReadOnlyMember.active.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?) AND branch_id = ? AND member_type IN (?)", @start_date, @end_date, ["inforce", "lapsed"], @branch, ["Regular", "Kaagapay"]).order("center_id ASC")
         end
       end
 

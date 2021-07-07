@@ -12,7 +12,7 @@ module Insurance
         if @loan_status == "paid"
           #@entry_level_loans  = Loan.where("maturity_date >= ? AND maturity_date <= ? AND status = ?", @start_date, @end_date, @loan_status).insured
           #Loan.where("extract(month from maturity_date) = ? AND extract(year from maturity_date) = ? AND extract(month from maturity_date) = ? AND extract(year from maturity_date) = ? AND status = ?", @start_date.month, @start_date.year, @end_date.month, @end_date.year, @loan_status).each do |loan|
-          Loan.where("status = ? AND original_maturity_date >= ? AND original_maturity_date <= ? AND branch_id = ?", @loan_status, @start_date, @end_date, @branch_id).each do |loan|
+          ReadOnlyLoan.where("status = ? AND original_maturity_date >= ? AND original_maturity_date <= ? AND branch_id = ?", @loan_status, @start_date, @end_date, @branch_id).each do |loan|
             accounting_entry = loan.accounting_entry
             if !accounting_entry.nil?
               clip = accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
@@ -24,7 +24,7 @@ module Insurance
 
           @entry_level_loans  = @loans
         elsif @loan_status == "active"
-          Loan.where("date_approved >= ? AND date_approved <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, "active", @branch_id).each do |loan|
+          ReadOnlyLoan.where("date_approved >= ? AND date_approved <= ? AND status = ? AND branch_id = ?", @start_date, @end_date, "active", @branch_id).each do |loan|
             accounting_entry = loan.accounting_entry
             if !accounting_entry.nil?
              clip = accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first
@@ -40,7 +40,7 @@ module Insurance
         end
       else
         # @entry_level_loans  = Loan.joins(:member).insured.order("members.last_name ASC")
-        Loan.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, @branch_id).each do |loan|
+        ReadOnlyLoan.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, @branch_id).each do |loan|
           accounting_entry = loan.accounting_entry
           if !accounting_entry.nil?
             clip = accounting_entry.journal_entries.where(accounting_code_id: 'af83062d-628a-4fdd-acfd-bdebe2696513').first

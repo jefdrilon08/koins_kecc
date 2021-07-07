@@ -59,13 +59,13 @@ class ExportsController < ApplicationController
     @branch_id = params[:branch]
 
     if !@start_date.nil? && !@end_date.nil? && !@branch_id.nil?
-      @member_accounts = MemberAccount.insurance.where("Date(member_accounts.updated_at) >= ? AND Date(member_accounts.updated_at) <= ? AND member_accounts.branch_id = ?", @start_date, @end_date, @branch_id)
+      @member_accounts = ReadOnlyMemberAccount.insurance.where("Date(member_accounts.updated_at) >= ? AND Date(member_accounts.updated_at) <= ? AND member_accounts.branch_id = ?", @start_date, @end_date, @branch_id)
       send_data Exports::GenerateMemberAccountsCsv.new(member_accounts: @member_accounts).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=insurance accounts  #{@start_date}_#{@end_date}.csv"
     elsif !@branch_id.nil?
-      @member_accounts = MemberAccount.insurance.where(branch_id: @branch_id)
+      @member_accounts = ReadOnlyMemberAccount.insurance.where(branch_id: @branch_id)
       send_data Exports::GenerateMemberAccountsCsv.new(member_accounts: @member_accounts).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=insurance accounts.csv"
     else
-      @insurance_accounts = MemberAccount.insurance.all
+      @insurance_accounts = ReadOnlyMemberAccount.insurance.all
       send_data Exports::GenerateMemberAccountsCsv.new(member_accounts: @member_accounts).execute!, :type => 'text/csv; charset=utf-8; header=present', :disposition => "attachment; filename=insurance accounts.csv"
     end
   end
@@ -76,15 +76,15 @@ class ExportsController < ApplicationController
     @branch_id = params[:branch]
     
     if !@start_date.nil? && !@end_date.nil? && !@branch_id.nil?
-      @member_accounts = MemberAccount.insurance.where(branch_id: @branch_id)
-      @account_transactions = AccountTransaction.where("Date(account_transactions.updated_at) >= ? AND Date(account_transactions.updated_at) <= ? AND subsidiary_id IN (?)", @start_date, @end_date, @member_accounts.pluck(:id))
+      @member_accounts = ReadOnlyMemberAccount.insurance.where(branch_id: @branch_id)
+      @account_transactions = ReadOnlyAccountTransaction.where("Date(account_transactions.updated_at) >= ? AND Date(account_transactions.updated_at) <= ? AND subsidiary_id IN (?)", @start_date, @end_date, @member_accounts.pluck(:id))
       send_data Exports::GenerateAccountTransactionsCsv.new(account_transactions: @account_transactions).execute!, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=insurance account transactions #{@start_date}_#{@end_date}.csv"
     elsif !@branch_id.nil?
-      @member_accounts = MemberAccount.insurance.where(branch_id: @branch_id)
-      @account_transactions = AccountTransaction.where(subsidiary_id: @member_accounts.pluck(:id))
+      @member_accounts = ReadOnlyMemberAccount.insurance.where(branch_id: @branch_id)
+      @account_transactions = ReadOnlyAccountTransaction.where(subsidiary_id: @member_accounts.pluck(:id))
       send_data Exports::GenerateAccountTransactionsCsv.new(account_transactions: @account_transactions).execute!, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=insurance account transactions #{@start_date}_#{@end_date}.csv"
     else
-      @account_transactions = AccountTransaction.insurance.all
+      @account_transactions = ReadOnlyAccountTransaction.insurance.all
       send_data Exports::GenerateAccountTransactionsCsv.new(account_transactions: @account_transactions).execute!, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=insurance account transactions.csv"
     end   
   end

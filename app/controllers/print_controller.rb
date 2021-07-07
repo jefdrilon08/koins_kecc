@@ -71,6 +71,30 @@ class PrintController < ApplicationController
       @accounting_entry_data  = data
 
       render "print/accounting_entry", layout: "print"
+
+    elsif type == "claims_copy"
+      @member = Member.find(params[:member_id])
+      @date_of_death = Date.today
+
+      if params[:date_of_death].present?
+        @date_of_death = params[:date_of_death].try(:to_date)
+      end
+
+      @lif_insurance_account = @member.member_accounts.where(account_subtype:"Life Insurance Fund").first
+      @rf_insurance_account  = @member.member_accounts.where(account_subtype:"Retirement Fund").first
+
+      config = {
+                member: @member,
+                lif_insurance_account: @lif_insurance_account,
+                rf_insurance_account: @rf_insurance_account,
+                date_of_death: @date_of_death
+              }
+
+      @payment_meta = Insurance::GenerateInsuranceAccountDetailsForLifAndRf.new(
+                      config: config
+                    ).execute!
+
+      render "print/claims_copy", layout: "print"
     elsif type == "member_share"
       member_share = MemberShare.find(params[:id])
 

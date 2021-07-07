@@ -66,10 +66,10 @@ module Reports
               end
             end
 
-            new_members = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, branch.id)            
+            new_members = ReadOnlyMember.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date.to_date, branch.id)            
             membership_fee = new_members.count * 100
 
-            deposit_collections = DepositCollection.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id)
+            deposit_collections = ReadOlyDepositCollection.approved.where("date_approved >= ? AND date_approved <= ? AND branch_id = ?", @start_date, @end_date, branch.id)
             
             total_deposit_lif = 0.00
             total_deposit_rf = 0.00
