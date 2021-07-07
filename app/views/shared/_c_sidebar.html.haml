@@ -309,14 +309,15 @@
           = link_to seriatim_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-users
             Seriatim
-      %li.c-sidebar-nav-item
-        = link_to claims_path, class: "c-sidebar-nav-link" do
-          .c-sidebar-nav-icon.fa.fa-users
-          Claims Register
-      %li.c-sidebar-nav-item
-        = link_to "/reports/claims", class: "c-sidebar-nav-link" do
-          .c-sidebar-nav-icon.fa.fa-chart-line
-          Claims Report
+      - if microinsurance?
+        %li.c-sidebar-nav-item
+          = link_to claims_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-users
+            Claims Register
+        %li.c-sidebar-nav-item
+          = link_to "/reports/claims", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Claims Report
 
         %li.c-sidebar-nav-title
           Other Reports

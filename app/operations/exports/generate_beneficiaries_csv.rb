@@ -18,10 +18,11 @@ module Exports
                 :is_deceased,
                 :uuid,
                 :member_uuid
-                
                 ]
-        @beneficiaries.each do |b|
-          if b.member.identification_number.present?
+
+        @beneficiaries.find_in_batches(batch_size: 1000) do |group|
+          group.each do |b|
+            if b.member.identification_number.present?
               if b.is_primary.nil?
                 is_pri = "false"
               else
@@ -41,6 +42,7 @@ module Exports
                 b.id,
                 b.member.id
               ]
+            end
           end
         end
       end

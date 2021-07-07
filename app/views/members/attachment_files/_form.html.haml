@@ -9,7 +9,8 @@
 
 = simple_form_for [@member, @attachment_file] do |f|
   .form-group
-    = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: AttachmentFile::NAMES
+    / = f.input :file_name, input_html: { class: 'form-control' }, as: :select, collection: AttachmentFile::NAMES
+    = f.input :file_name, input_html: { class: 'form-control' }
   .form-group
     = f.input :file, as: :file, input_html: { class: 'form-control' }
   %hr

@@ -1186,6 +1186,8 @@ var _bindEvents = function() {
       var memberId = _memberId
 
       window.open("/print?member_id=" + memberId+ "&date_of_death=" + dateOfDeath + "&type=claims_copy");
+      $modalClaimsCopy.modal("hide");
+      window.location.reload();
     });
   });
 }

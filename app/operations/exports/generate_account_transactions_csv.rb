@@ -23,7 +23,7 @@ module Exports
 
                 @account_transactions.find_in_batches(batch_size: 1000) do |group|
                     group.each do |at|
-                        member_account = MemberAccount.where(id: at.subsidiary_id)
+                        member_account = ReadOnlyMemberAccount.where(id: at.subsidiary_id)
 
                         at_data = at.data.with_indifferent_access.to_json
 

@@ -12,7 +12,7 @@ module Insurance
 
 
     def execute!
-      @account_transactions =  AccountTransaction.where("subsidiary_id = ?", @insurance_account.id).order("transacted_at ASC")
+      @account_transactions =  ReadOnlyAccountTransaction.where("subsidiary_id = ?", @insurance_account.id).order("transacted_at ASC")
       @latest_payment   = @account_transactions.last
       @current_balance  = @latest_payment ? @latest_payment.data['ending_balance'].to_i : 0.00
 

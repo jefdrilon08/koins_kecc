@@ -9,6 +9,11 @@ class AttachmentFile < ApplicationRecord
   ]
 
   belongs_to :member
+  before_save :capitalized_file_name
+
+  def capitalized_file_name
+    self.file_name.upcase!
+  end
 
   has_one_attached :file
 
