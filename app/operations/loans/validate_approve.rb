@@ -5,6 +5,10 @@ module Loans
 
       @loan = config[:loan]
       @user = config[:user]
+
+      @valid_roles  = ::Users::FetchValidRoles.new(
+                        module_name: "approve_loan"
+                      ).execute!
     end
 
     def execute!
@@ -24,6 +28,11 @@ module Loans
         @errors[:messages] << {
           key: "user",
           message: "User not found"
+        }
+      elsif @user.current_loans.intersection(@valid_roles).size == 0
+        @errors[:messages] << {
+          key: "user",
+          message: "unauthorized"
         }
       end
 

@@ -157,7 +157,7 @@ class LoansController < ApplicationController
 
     @subheader_side_actions = []
 
-    if !["active", "paid"].include?(@loan.status)
+    if @loan.pending?
       @subheader_side_actions << {
         id: "btn-upload-application-form",
         class: "fa fa-upload",
@@ -173,7 +173,9 @@ class LoansController < ApplicationController
         link: "#",
         text: "Verify"
       }
+    end
 
+    if ["for-verification", "verified"].include?(@loan.status)
       @subheader_side_actions << {
         id: "btn-reject",
         class: "fa fa-times",
