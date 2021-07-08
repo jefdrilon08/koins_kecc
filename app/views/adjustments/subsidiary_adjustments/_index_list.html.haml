@@ -12,7 +12,7 @@
       %th.text-center
         Actions
   %tbody
-    - @adjustment_records.each do |o|
+    - @adjustment_records.order(created_at: :desc).each do |o|
       %tr
         %td
           #{o.created_at.strftime("%B %d, %Y")}
