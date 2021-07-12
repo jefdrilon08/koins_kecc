@@ -222,16 +222,22 @@
             #{@claim.prepared_by}
           %br
           Account Officer
-      %tr
-        %td
+        %td{style: "width:42%; height: 25px;"}
+          %b
+            Checked by: 
           %br
-      %tr
+          %i DATE: #{@claim.date_checked.try(:strftime, "%b %d, %Y") || ""}
+          %br
+          %br
+          %u
+            #{@claim.checked_by}
+          %br
+          Account Officer
         %td{style: "width:40%; height: 25px;"}
           %b
             Approved by:
           %br
-          - if !@claim.date_approved.nil?
-            %i DATE: #{@claim.try(:date_approved).strftime("%b %d, %Y")}
+          %i DATE: #{@claim.date_approved.try(:strftime, "%b %d, %Y") || ""}
           %br
           %br
           %u

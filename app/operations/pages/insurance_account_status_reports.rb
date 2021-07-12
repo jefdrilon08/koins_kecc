@@ -1,7 +1,8 @@
 module Pages
   class InsuranceAccountStatusReports
-    def initialize(branch:)
+    def initialize(branch:, insurance_status:)
       @branch     = branch       
+      @insurance_status = insurance_status
       @centers    = Center.where(branch_id: @branch).order("name ASC")        
     end
 
@@ -15,6 +16,12 @@ module Pages
         member_center[:center]    = center.to_s
         member_center[:members]   = []
         @members = ReadOnlyMember.active_and_resigned.where(center_id: center.id).order("last_name ASC")
+          
+        if @insurance_status.present?
+          @members = @members.where(insurance_status: @insurance_status)
+        end
+
+        if @members.count > 0
           @members.each_with_index do |member, i|
             recognition_date  = member.data['recognition_date']
             current_date = Date.today
@@ -61,6 +68,7 @@ module Pages
               member_record[:name]                   = member.full_name_titleize
               member_record[:recognition_date]       = member.data['recognition_date']
               member_record[:status]                 = member.status
+              member_record[:insurance_status]       = member.insurance_status
               member_record[:length_of_stay]         = member.length_of_stay
               member_record[:identification_number]  = member.identification_number
               member_record[:rf_account]             = @rf_account
@@ -76,8 +84,11 @@ module Pages
               member_center[:members] << member_record 
             end
           end
+
           @data[:centers] << member_center
+        end
       end
+      
       @data
     end
   end
