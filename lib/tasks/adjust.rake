@@ -556,9 +556,9 @@ namespace :adjust do
 
     ::MemberAccounts::BulkRehash.new(
       config: {
-        branch: branch
-      },
-      account_subtype: account_subtype
+        branch: branch,
+        account_subtype: account_subtype
+      }
     ).execute!
 
     puts "Done for #{branch.id}"
