@@ -11,6 +11,7 @@ namespace :administration do
   resources :announcements
   resources :loan_products, except: [:destroy]
   resources :loan_product_categories
+  resources :membership_arrangements
   
   resources :member_shares, only: [:index]
   get "/member_shares/not_printed", to: "member_shares#not_printed"
