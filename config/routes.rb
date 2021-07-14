@@ -435,6 +435,7 @@ Rails.application.routes.draw do
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
   get "/reports/monthly_collection", to: "reports#monthly_collection", as: :monthly_collection
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
+  get "/reports/insurance_quarterly_reports", to: "reports#insurance_quarterly_reports", as: :insurance_quarterly_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
   get "/reports/member_counts", to: "reports#member_counts", as: :member_counts
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel

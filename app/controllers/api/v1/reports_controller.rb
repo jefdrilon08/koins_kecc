@@ -49,6 +49,18 @@ module Api
         render json: data
       end
 
+      def insurance_quarterly_reports
+        start_date    = params[:start_date]
+        end_date      = params[:end_date]
+
+        data = Reports::MemberQuarterlyReports.new(
+                  start_date: start_date,
+                  end_date: end_date
+                ).execute!
+
+        render json: data
+      end
+
       def member_counts
         start_date    = params[:start_date]
         end_date      = params[:end_date]

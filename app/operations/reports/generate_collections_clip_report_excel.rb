@@ -118,7 +118,7 @@ module Reports
                       loan.date_released,
                       loan.data['voucher']['bank_check_number'],
                       loan.data['voucher']['date_requested'],
-                    ], style: [nil, nil, nil, nil, currency_cell_right, currency_cell_right, nil, currency_cell_right, nil, nil, nil, date_format_cell,]
+                    ], style: [ nil, nil, nil, nil, currency_cell_right, currency_cell_right, nil, currency_cell_right, nil, nil, nil, date_format_cell ]
                   else
                     sheet.add_row [
                       "",
@@ -133,7 +133,7 @@ module Reports
                       loan.date_released,
                       loan.data['voucher']['bank_check_number'],
                       loan.data['voucher']['date_requested'],
-                    ], style: [nil, nil, nil, nil, currency_cell_right, currency_cell_right, nil, currency_cell_right, nil, nil, nil, date_format_cell,]
+                    ], style: [ nil, nil, nil, nil, currency_cell_right, currency_cell_right, nil, currency_cell_right, nil, nil, nil, date_format_cell ]
                   end
                 end
               end

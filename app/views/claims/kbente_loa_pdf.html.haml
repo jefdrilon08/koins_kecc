@@ -180,6 +180,18 @@
           %i DATE: #{@claim.date_checked.try(:strftime, "%b %d, %Y") || ""}
           %br
           %br
+          - if @claim.checked_by.nil? 
+            - if @claim.prepared_by == "Richard Monteron"
+              %u
+                Jake Villanueva
+            - elsif @claim.prepared_by == "Jake Villanueva"
+              %u
+                Richard Monteron
+            - else
+              ""
+          - else
+            %u
+              #{@claim.checked_by}
           %u
             #{@claim.checked_by}
           %br

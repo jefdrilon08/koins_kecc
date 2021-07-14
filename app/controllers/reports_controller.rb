@@ -71,6 +71,13 @@ class ReportsController < ApplicationController
     ]
   end
 
+  def insurance_quarterly_reports
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Insurance Quarterly Reports" }
+    ]
+  end
+
   def member_counts
     @subheader_items = [
       { text: "Other Reports" },
