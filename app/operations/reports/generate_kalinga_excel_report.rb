@@ -41,7 +41,7 @@ module Reports
             "Cluster",
             "Branch",
             "Name of Member",
-            "Age"
+            "Age",
             "Policy Number",
             "Date Approved",
             "Gender",
