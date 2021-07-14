@@ -1,5 +1,46 @@
 namespace :report do 
-  
+  task :bank_loan => :environment do
+  s_date= ENV['s_date']
+    #mat_date = ENV['mat_date']
+    br_name = ENV['SATO']
+    rep_type = ENV['MIDAS']
+    br_id= Branch.where(name: br_name).ids
+    @data = [] 
+
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "MANUAL_AGING").last
+   @data_store_data = @data_store.data.with_indifferent_access
+
+   @data_store_data[:records].each.with_index do |l|
+     if l[:loan_product][:name] == 'K - KALAMIDAD'
+       loan = Loan.find(l[:id])        
+        mem = Member.find(l[:member][:id])
+        strt = mem.data['address']['street'] 
+        dist = mem.data['address']['district'] 
+        ct = mem.data['address']['city']
+        rr = (l[:principal_rr])*100
+        x = Loan.find(l[:id])
+        if x.project_type_id.present?   
+          lp = ProjectType.find(x.project_type_id).name
+        else
+          a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true'").last.project_type_id
+          if a.present?
+            lp = ProjectType.find(a).name
+          end
+        end
+       dta = "#{l[:member][:last_name]}, #{l[:member][:first_name]} #{l[:member][:middle_name]}|#{strt} #{dist} #{ct}|#{mem.gender}|#{l[:pn_number]}|#{l[:principal]}|#{l[:overall_principal_balance]}|#{rr}|#{l[:date_released]}|#{l[:maturity_date]}|#{loan.term}|#{loan.num_installments}|#{lp}|#{l[:loan_product][:name]}|#{loan.cycle}"
+       @data << dta
+     end
+     
+   end
+   puts @data
+  end
+
   task :sharecap => :environment do
     s_date= ENV['s_date']
     #mat_date = ENV['mat_date']
