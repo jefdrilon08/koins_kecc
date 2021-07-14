@@ -28,7 +28,7 @@ namespace :report do
         if x.project_type_id.present?   
           lp = ProjectType.find(x.project_type_id).name
         else
-          a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true'").last.project_type_id
+          a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true' and project_type_id IS NOT NULL").last.project_type_id
           if a.present?
             lp = ProjectType.find(a).name
           end
