@@ -1361,6 +1361,34 @@ namespace :adjust do
     puts "Done!"
   end
 
+  task :destroy_resigned_members_attachment_files => :environment do
+    puts "Destroying files ..."
+
+    if ENV['BRANCH_ID'].present?
+      branches = Branch.where(id: ENV['BRANCH_ID'])
+    end
+
+    branches = Branch.all
+
+    branches.each do |branch|
+      puts "Deleting files for #{branch.name}"
+      
+      members = Member.where(branch_id: branch.id, insurance_status: "resigned")
+
+      members.each do |member|
+        member.attachment_files.each do |af|
+          if af.file.present?
+            puts "Destroying file of #{member.id} : #{member,full_name}"
+            af.file.purge
+            af.destroy!  
+          end
+        end
+      end
+    end
+
+    puts "Done!"
+  end
+
   task :update_insurance_status_extended_grace_period => :environment do
     current_date = Date.today
     

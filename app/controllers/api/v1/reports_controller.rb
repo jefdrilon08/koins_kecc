@@ -53,11 +53,16 @@ module Api
         start_date    = params[:start_date]
         end_date      = params[:end_date]
 
-        data = Reports::MemberQuarterlyReports.new(
+        data = Reports::InsuranceQuarterlyReports.new(
                   start_date: start_date,
                   end_date: end_date
                 ).execute!
 
+        data[:download_url] = insurance_quarterly_reports_path(
+                                start_date: start_date,
+                                download: true,
+                                end_date: end_date
+                              )
         render json: data
       end
 
