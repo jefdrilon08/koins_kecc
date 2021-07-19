@@ -29,7 +29,7 @@ module Loans
           key: "user",
           message: "User not found"
         }
-      elsif @user.current_loans.intersection(@valid_roles).size == 0
+      elsif @user.current_roles.intersection(@valid_roles).size == 0
         @errors[:messages] << {
           key: "user",
           message: "unauthorized"
@@ -41,7 +41,7 @@ module Loans
         validate_parameters!
         validate_amortization!
 
-        if !@loan.restructured? and !@loan.application_form.attached?
+        if !@loan.restructured? and !@loan.application_form.attached? and @loan.is_remote?
           @errors[:messages] << {
             key: "application_form",
             message: "Application form not attached"
