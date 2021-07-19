@@ -1378,7 +1378,6 @@ namespace :adjust do
       members.each do |member|
         member.attachment_files.each do |af|
           if af.file.present?
-            puts "Destroying file of #{member.id} : #{member,full_name}"
             af.file.purge
             af.destroy!  
           end
