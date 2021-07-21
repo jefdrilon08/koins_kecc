@@ -109,21 +109,23 @@ class InsuranceAccountsController < ApplicationController
   end
 
   def claims_copy_pdf
-    @insurance_account = ReadOnlyMemberAccount.find(params[:insurance_account_id])
+    @insurance_account = MemberAccount.find(params[:insurance_account_id])
     @member = @insurance_account.member
     @lif = "Life Insurance Fund"
-    @lif_insurance_account = ReadOnlyMemberAccount.where(account_subtype: @lif, member_id: @member.id).first
+    @lif_insurance_account = MemberAccount.where(account_subtype: @lif, member_id: @member.id).first
     @rf = "Retirement Fund"
-    @rf_insurance_account = ReadOnlyMemberAccount.where(account_subtype: @rf, member_id: @member.id).first
+    @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member.id).first
     @date_of_death = Date.today
 
+    config = {
+                member: @member,
+                lif_insurance_account: @lif_insurance_account,
+                rf_insurance_account: @rf_insurance_account,
+                date_of_death: @date_of_death
+              }
+
     @payment_meta = Insurance::GenerateInsuranceAccountDetailsForLifAndRf.new(
-                      config = {
-                        member: @member,
-                        lif_insurance_account: @lif_insurance_account,
-                        rf_insurance_account: @rf_insurance_account,
-                        date_of_death: @date_of_death
-                      }
+                      config: config
                     ).execute!
   end
 
