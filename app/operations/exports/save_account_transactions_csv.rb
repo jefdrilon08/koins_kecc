@@ -10,8 +10,6 @@ module Exports
         raise "Invalid parameters"
       end
 
-
-
       @member_accounts      = MemberAccount.insurance
       @account_transactions = AccountTransaction.where(
                                 "Date(account_transactions.updated_at) >= ? AND Date(account_transactions.updated_at) <= ? AND subsidiary_id IN (?)", 
@@ -22,9 +20,9 @@ module Exports
     end
 
     def execute!
-      query!
+      # query!
 
-      @account_transactions = @result
+      # @account_transactions = @result
 
       cmd = Exports::GenerateAccountTransactionsCsv.new(
               account_transactions: @account_transactions
@@ -70,8 +68,6 @@ module Exports
                   WHERE
                     account_transactions.transacted_at BETWEEN '#{@start_date}' AND '#{@end_date}' 
                     AND member_accounts.account_type = 'INSURANCE' 
-                    AND member_accounts.account_subtype = 'Life Insurance Fund' 
-                    AND members.branch_id = '#{@branch.id}'
                     AND members.insurance_status IN ('inforce', 'lapsed', 'dormant')
                   GROUP BY
                     transaction_id,
