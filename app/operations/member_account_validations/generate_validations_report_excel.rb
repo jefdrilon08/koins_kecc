@@ -62,6 +62,7 @@ module MemberAccountValidations
             "Name of Member",
             "Member Age",
             "Recognition Date",
+            "Member Type",
             "Length of Stay",
             "Gender",
             "Branch",
@@ -89,7 +90,8 @@ module MemberAccountValidations
                     iavr.member.full_name,
                     iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
-                    iavr.member.length_of_stay,
+                    iavr.member.member_type,
+                    iavr.length_of_stay_from_date_resigned,
                     iavr.member.gender,
                     iavr.member.branch.name,
                     iavr.member.center.name,
@@ -105,13 +107,14 @@ module MemberAccountValidations
                     iavr.advance_rf,
                     iavr.interest,
                     iavr.total
-                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
                 else
                   sheet.add_row [
                     iavr.member.full_name,
                     iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
-                    iavr.member.length_of_stay,
+                    iavr.member.member_type,
+                    iavr.length_of_stay_from_date_resigned,
                     iavr.member.gender,
                     iavr.member.branch.name,
                     iavr.member.center.name,
@@ -127,7 +130,7 @@ module MemberAccountValidations
                     iavr.advance_rf,
                     iavr.interest,
                     iavr.total
-                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
               end
 
               @total_life = @total_life + life_amount
@@ -162,7 +165,7 @@ module MemberAccountValidations
             @total_advance_rf,
             @total_interest,
             @grand_total
-          ], style: [header, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
+          ], style: [header, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
 
         end
       end
