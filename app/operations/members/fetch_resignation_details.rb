@@ -100,10 +100,9 @@ module Members
           }
 
             #for 4yrs 
-            f_eq= AccountTransaction.where(subsidiary_id: member_account.id).order("transacted_at DESC").last
-            date_closing = f_eq.transacted_at + @number_of_years.years
+            mm_rec=MembershipPaymentRecord.where("member_id = ? and membership_name = ? and status = ? ", "#{@member.id}","K-KOOP","paid").last
+            date_closing = mm_rec.date_paid + @number_of_years.years
             dt = DateTime.now.to_date
-            
             if dt >= date_closing 
               @closing_fee = 0
             else
