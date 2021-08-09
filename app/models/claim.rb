@@ -23,7 +23,11 @@ class Claim < ApplicationRecord
 
   before_validation :load_defaults
 
-  
+  def transaction_fee
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:transaction_fee]
+  end
 
   def book
     temp_data = self.data.with_indifferent_access

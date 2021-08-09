@@ -318,6 +318,10 @@
           = link_to "/reports/claims", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Claims Report
+        %li.c-sidebar-nav-item
+          = link_to "#", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-list
+            Supplies Inventory
 
       %li.c-sidebar-nav-title
         Other Reports
@@ -453,6 +457,10 @@
           = link_to upload_insurance_withdrawal_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-upload
             Upload Insurance Withdrawal
+      %li.c-sidebar-nav-item
+        = link_to upload_clip_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-upload
+          Upload CLIP
       %li.c-sidebar-nav-item
         = link_to import_members_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-file-import

@@ -28,7 +28,7 @@ var urlApproveTransaction     = "/api/v1/claims/approve";
 var urlPostTransaction        = "/api/v1/claims/post";
 var urlCheckTransaction       = "/api/v1/claims/check";
 var urlProceedTransaction     = "/api/v1/claims/proceed";
-var urlDeclinedTransaction     = "/api/v1/claims/declined";
+var urlDeclinedTransaction    = "/api/v1/claims/declined";
 var urlPendingTransaction     = "/api/v1/claims/pending";
 var urlModifyClaimsTemplate   = "/api/v1/claims/modify_claims_template";
 var urlModifyBook             = "/api/v1/claims/modify_book";
@@ -37,6 +37,7 @@ var urlSaveCheckNumber        = "/api/v1/claims/save_check_number";
 var urlSaveCheckVoucherNumber = "/api/v1/claims/save_check_voucher_number";
 var urlSavePayee              = "/api/v1/claims/save_payee";
 var urlSaveNote               = "/api/v1/claims/save_note";
+var urlAddTransactionFee      = "/api/v1/claims/add_transaction_fee";
 
 var $modalApprove;
 var $modalCheck;
@@ -80,6 +81,9 @@ var $btnConfirmClaimsTemplate;
 
 var $inputTextParticular;
 var $btnConfirmParticular;
+
+var $btnConfirmTransactionFee;
+var $inputTextTransactionFee;
 
 var $inputTextPayee;
 var $btnConfirmPayee;
@@ -427,6 +431,51 @@ var _bindEvents = function() {
 
           $inputTextParticular.prop("disabled", false);
           $btnConfirmParticular.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnConfirmTransactionFee.on("click", function() {
+    var transaction_fee  = $inputTextTransactionFee.val();
+
+    $message.html("Loading...");
+
+    $inputTextTransactionFee.prop("disabled", true);
+    $btnConfirmTransactionFee.prop("disabled", true);
+
+    $.ajax({
+      url: urlAddTransactionFee,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        transaction_fee: transaction_fee,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputTextTransactionFee.prop("disabled", false);
+          $btnConfirmTransactionFee.prop("disabled", false);
         }
       }
     });
@@ -783,6 +832,8 @@ var _cacheDom = function() {
 
   $inputTextParticular          = $("#input-text-particular");
   $btnConfirmParticular         = $("#btn-confirm-particular");
+  $btnConfirmTransactionFee     = $("#btn-confirm-transaction-fee");
+  $inputTextTransactionFee      = $("#input-text-transaction-fee");
 
   $inputTextPayee               = $("#input-text-payee");
   $btnConfirmPayee              = $("#btn-confirm-payee");

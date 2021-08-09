@@ -1,9 +1,10 @@
 module Claims
-  class ModifyClaimsTemplate
+  class AddTransactionFee
     def initialize(config:)
       @config = config
 
       @template           = @config[:template]
+      @transaction_fee    = @config[:transaction_fee]
       @claim              = @config[:claim]
       @user               = @config[:user]
       @data               = @claim.data.with_indifferent_access
@@ -11,12 +12,7 @@ module Claims
 
     def execute!
       @data[:claims_template]  = @template
-
-      if @template == ""
-        if !@data[:transaction_fee].nil?
-          @data[:transaction_fee] = nil
-        end
-      end
+      @data[:transaction_fee]  = @transaction_fee
 
       config  = {
         claim: @claim,

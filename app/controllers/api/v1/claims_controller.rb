@@ -394,6 +394,31 @@ module Api
         end
       end
 
+      def add_transaction_fee
+        claim     = Claim.where(id: params[:id]).first
+        transaction_fee  = params[:transaction_fee].to_f
+
+        config  = {
+          transaction_fee: transaction_fee,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateAddTransactionFee.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::AddTransactionFee.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
       def post
         # new code
         claim = Claim.find(params[:id])

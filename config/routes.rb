@@ -47,6 +47,8 @@ Rails.application.routes.draw do
   get "/upload_deposit", to: "pages#upload_deposit"
   get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
+
+  get "/upload_clip", to: "pages#upload_clip"
   
   # Adjustments
   namespace :adjustments do
@@ -186,6 +188,7 @@ Rails.application.routes.draw do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
     collection { post :import_insurance_accounts }
     collection { post :import_insurance_account_transactions }
+    collection { post :upload_clip }
   end
 
   # Loans

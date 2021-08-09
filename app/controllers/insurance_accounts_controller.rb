@@ -351,4 +351,23 @@ class InsuranceAccountsController < ApplicationController
       redirect_to members_path
     end
   end
+
+  def upload_clip
+    file = params[:file]
+    user = current_user
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      clip = row.to_hash
+      @errors = Insurance::ValidateClipFromCsvFile.new(clip: clip).execute!
+    end
+
+    if @errors[:messages].any?
+      redirect_to upload_clip_path
+      flash[:error] = @errors[:messages]
+    else
+      Insurance::LoadClipFromCsvFile.new(file: file, user: user).execute!
+      flash[:success] = "Successfully upload deposit."
+      redirect_to members_path
+    end
+  end
 end

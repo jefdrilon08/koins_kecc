@@ -197,6 +197,12 @@ class PagesController < ApplicationController
     ]
   end
 
+  def upload_clip
+    @subheader_items = [
+      { text: "Upload CLIP" }
+    ]
+  end
+
   def import_members
     @subheader_items = [
       { text: "Import Members" }
