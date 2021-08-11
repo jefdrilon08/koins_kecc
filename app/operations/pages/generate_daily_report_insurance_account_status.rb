@@ -15,9 +15,11 @@ module Pages
           count_cell = wb.styles.add_style  b: true, alignment: { horizontal: :right }, format_code: "0", font_name: "Calibri"
           currency_cell = wb.styles.add_style num_fmt: 3, alignment: { horizontal: :right }, format_code: "#,##0.00", font_name: "Calibri"
           currency_cell_right = wb.styles.add_style num_fmt: 3, alignment: { horizontal: :right }, format_code: "#,##0.00", font_name: "Calibri"
+          currency_cell_left = wb.styles.add_style num_fmt: 3, alignment: { horizontal: :left }, format_code: "#,##0.00", font_name: "Calibri"
           currency_cell_right_bold = wb.styles.add_style num_fmt: 3, alignment: { horizontal: :right }, format_code: "#,##0.00", font_name: "Calibri", b: true
           percent_cell = wb.styles.add_style num_fmt: 9, alignment: { horizontal: :left }, font_name: "Calibri"
           left_aligned_cell = wb.styles.add_style alignment: { horizontal: :left }, font_name: "Calibri"
+          right_aligned_cell = wb.styles.add_style alignment: { horizontal: :right }, font_name: "Calibri"
           underline_cell = wb.styles.add_style u: true, font_name: "Calibri"
           header_cells = wb.styles.add_style b: true, alignment: { horizontal: :center }, font_name: "Calibri"
           date_format_cell = wb.styles.add_style format_code: "mm-dd-yyyy", font_name: "Calibri", alignment: { horizontal: :right }
@@ -32,16 +34,16 @@ module Pages
           "Center", 
           "Length of Membership", 
           "Certificate Number", 
-          "RF",
-          "Coverage Date", 
-          "Number of Weeks Past Due", 
-          "Amount Past Due", 
-          "Status", 
           "LIF",
           "Coverage Date", 
           "Number of Weeks Past Due", 
           "Amount Past Due", 
           "Status",
+          "RF",
+          "Coverage Date", 
+          "Number of Weeks Past Due", 
+          "Amount Past Due", 
+          "Status", 
           "Date of Birth",
           "Age",
           "Member Type"
@@ -78,13 +80,24 @@ module Pages
                   lif_insured_amount    = lif_num_weeks  * lif_default
                   lif_amt_past_due      = (lif_account - lif_insured_amount).to_i * -1
                   lif_num_weeks_past_due  = (lif_amt_past_due / lif_default)
+                  lif_less_balance = lif_insured_amount - lif_account
                   
                   if lif_account.to_i > lif_insured_amount.to_i
-                    lif_status = "advanced"
+                    status = "inforce"
                   elsif lif_account.to_i < lif_insured_amount.to_i
-                    lif_status  = "past due"
+                    if lif_less_balance > 97
+                      if lif_less_balance > 780
+                        status = "dormant"
+                      else
+                        status  = "lapsed"
+                      end
+                    elsif (lif_insured_amount - lif_account) > 780
+                      status = "dormant"
+                    elsif lif_less_balance < 97
+                      status = "inforce"
+                    end
                   else
-                    lif_status = "normal"
+                    status = "normal"
                   end
 
                   #compute RF
@@ -99,61 +112,60 @@ module Pages
                   rf_amt_past_due      = (rf_account - rf_insured_amount).to_i * -1
                   rf_num_weeks_past_due  = (rf_amt_past_due / rf_default)
 
-                  if rf_account.to_i > rf_insured_amount.to_i
-                    rf_status = "advanced"
-                  elsif rf_account.to_i < rf_insured_amount.to_i
-                    rf_status  = "past due"
-                  else
-                    rf_status = "normal"
-                  end
+                  # if rf_account.to_i > rf_insured_amount.to_i
+                  #   rf_status = "inforce"
+                  # elsif rf_account.to_i < rf_insured_amount.to_i
+                  #   rf_status  = "past due"
+                  # else
+                  #   rf_status = "normal"
+                  # end
 
                   if index == 0
-
                     sheet.add_row [
                       member.full_name,
-                      member.data['recognition_date'],
+                      member.data['recognition_date'].try(:to_date).strftime("%b %d, %Y"),
                       member.status,
                       member.insurance_status,
                       member.center.name,
                       member.length_of_stay,
                       member.identification_number,
-                      rf_account,
-                      rf_coverage,
-                      rf_num_weeks_past_due,
-                      rf_amt_past_due,
-                      rf_status,
                       lif_account,
-                      lif_coverage,
+                      lif_coverage.try(:to_date).strftime("%b %d, %Y"),
                       lif_num_weeks_past_due,
                       lif_amt_past_due,
-                      lif_status,
-                      member.try(:date_of_birth).try(:to_date),
+                      status,
+                      rf_account,
+                      rf_coverage.try(:to_date).strftime("%b %d, %Y"),
+                      rf_num_weeks_past_due,
+                      rf_amt_past_due,
+                      status,
+                      member.try(:date_of_birth).try(:to_date).strftime("%b %d, %Y"),
                       member.age,
                       member.member_type
-                      ]
+                      ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
                   else
                     sheet.add_row [
                       member.full_name,
-                      member.data['recognition_date'],
+                      member.data['recognition_date'].try(:to_date).strftime("%b %d, %Y"),
                       member.status,
                       member.insurance_status,
                       member.center.name,
                       member.length_of_stay,
                       member.identification_number,
-                      rf_account,
-                      rf_coverage,
-                      rf_num_weeks_past_due,
-                      rf_amt_past_due,
-                      rf_status,
                       lif_account,
-                      lif_coverage,
+                      lif_coverage.try(:to_date).strftime("%b %d, %Y"),
                       lif_num_weeks_past_due,
                       lif_amt_past_due,
-                      lif_status,
-                      member.try(:date_of_birth).try(:to_date),
+                      status,
+                      rf_account,
+                      rf_coverage.try(:to_date).strftime("%b %d, %Y"),
+                      rf_num_weeks_past_due,
+                      rf_amt_past_due,
+                      status,
+                      member.try(:date_of_birth).try(:to_date).strftime("%b %d, %Y"),
                       member.age,
                       member.member_type
-                    ]
+                    ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
                   end  
                 end
               end
