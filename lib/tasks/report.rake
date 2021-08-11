@@ -19,7 +19,7 @@ namespace :report do
    @data_store_data = @data_store.data.with_indifferent_access
 
    @data_store_data[:records].each.with_index do |l|
-     if l[:loan_product][:name] == loan_type and l[:date_released] >= d_rel and l[:principal] >= prin_amt
+     if l[:loan_product][:name] == loan_type and l[:date_released] >= d_rel
        loan = Loan.find(l[:id])        
         mem = Member.find(l[:member][:id])
         dob = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
