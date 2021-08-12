@@ -1,13 +1,13 @@
 import React from "react";
 
-export default class FormReferral extends React.Component {
+export default class FormRecruit extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  handleReferChanged(event) {
+  handleRecruitChanged(event) {
     var data               = this.props.data;
-    data.data.referred_by  = event.target.value ? event.target.value.toUpperCase() : "";
+    data.data.recruited_by  = event.target.value ? event.target.value.toUpperCase() : "";
 
     this.props.updateData(data);
   }
@@ -22,12 +22,12 @@ export default class FormReferral extends React.Component {
           <div className="col">
             <div className="form-group">
               <label>
-                Pangalan ng nag refer
+                Pangalan ng nag recruit
               </label>
               <input
-                value={this.props.data.data.referred_by}
+                value={this.props.data.data.recruited_by}
                 className="form-control"
-                onChange={this.handleReferChanged.bind(this)}
+                onChange={this.handleRecruitChanged.bind(this)}
                 disabled={this.props.formDisabled}
               />
             </div>
