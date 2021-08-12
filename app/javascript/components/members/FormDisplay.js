@@ -14,6 +14,7 @@ import FormContactNumbers from './FormContactNumbers';
 import FormGovernmentIdentificationNumbers from './FormGovernmentIdentificationNumbers';
 import FormSpouse from './FormSpouse';
 import FormExperience from './FormExperience';
+import FormReferral from './FormReferral';
 import FormBankAccounts from './FormBankAccounts';
 import FormLegalDependents from './FormLegalDependents';
 import FormBeneficiaries from './FormBeneficiaries';
@@ -412,6 +413,19 @@ export default class FormDisplay extends React.Component {
                 </div>
                 <div className="card-body">
                   <FormExperience
+                    data={state.data}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Referral
+                </div>
+                <div className="card-body">
+                  <FormReferral
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}
