@@ -1,4 +1,68 @@
 namespace :report do 
+  task :bank_loan_sbc => :environment do
+    s_date= ENV['s_date']
+    #mat_date = ENV['mat_date']
+    br_name = ENV['SATO']
+    loan_type = ENV['LTYPE']
+    d_rel = ENV['r_date']
+    br_id = Branch.where(name: br_name).ids
+    prin_amt = ENV['prin_amt']
+    @data = [] 
+
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "MANUAL_AGING").last
+   @data_store_data = @data_store.data.with_indifferent_access
+
+   @data_store_data[:records].each.with_index do |l|
+     if l[:loan_product][:name] == loan_type and l[:date_released] >= d_rel
+       loan = Loan.find(l[:id])        
+        mem = Member.find(l[:member][:id])
+        dob = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
+        strt = mem.data['address']['street'] 
+        dist = mem.data['address']['district'] 
+        ct = mem.data['address']['city']
+        rr = (l[:principal_rr])*100
+        installment = loan.num_installments
+        if installment == 15
+          month = 3
+        elsif installment == 25
+          month = 6
+        elsif installment == 50
+          month = 12
+        end
+        m_rate = loan.monthly_interest_rate*12
+        x = Loan.find(l[:id])
+        if x.project_type_id.present?   
+          lp_id = ProjectType.find(x.project_type_id).project_type_category_id
+        else
+          a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true' and project_type_id IS NOT NULL").last                  
+          if a.present?
+            lp_id =ProjectType.find(a.project_type_id).project_type_category_id
+          end
+        end
+        if lp_id == 'fc366127-8504-4429-a0bf-11b365ae0e72' or lp_id =='68b0a0c3-9786-4ca3-96e3-31dddf1bb6e6'
+          lp = 'Agriculture'
+        elsif lp_id == '5c0d4569-3d8d-43c0-9d4c-fadd11ef773a'
+          lp = 'Manufacturing'
+        elsif lp_id == '39ffb693-7ec7-4956-ad6a-1ea44c052c15'
+          lp = 'Trading'
+        elsif lp_id == 'c140c10f-eed0-4a77-af8f-65a2f2a6600e' or lp_id == '671aa2f6-3cb6-45dc-b3e4-0f566648421b' or lp_id == 'fd131b36-c215-4c82-9e4e-3816d19b9004'
+          lp = 'Services'
+        end
+        dta = "#{l[:member][:first_name]}|#{l[:member][:middle_name]}|#{l[:member][:last_name]}|#{mem.gender}|#{dob}|#{"Acquire equipment/ fixed assets"}|#{lp}|#{ct}||#{l[:principal]}|#{month}|#{m_rate}|#{l[:date_released]}"
+       @data << dta
+     end
+     
+   end
+   puts @data
+  end
+
+
   task :bank_loan => :environment do
   s_date= ENV['s_date']
     #mat_date = ENV['mat_date']
