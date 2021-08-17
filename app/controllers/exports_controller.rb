@@ -79,6 +79,39 @@ class ExportsController < ApplicationController
       @member_accounts = ReadOnlyMemberAccount.insurance.where(branch_id: @branch_id)
       @account_transactions = ReadOnlyAccountTransaction.where("Date(account_transactions.updated_at) >= ? AND Date(account_transactions.updated_at) <= ? AND subsidiary_id IN (?)", @start_date, @end_date, @member_accounts.pluck(:id))
       send_data Exports::GenerateAccountTransactionsCsv.new(account_transactions: @account_transactions).execute!, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=insurance account transactions #{@start_date}_#{@end_date}.csv"
+
+      # #NEW QUERY
+      # @result  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+      #   SELECT DISTINCT ON(account_transactions.id)
+      #     account_transactions.id AS at_id,
+      #     account_transactions.subsidiary_id AS subsidiary_id,
+      #     account_transactions.subsidiary_type AS subsidiary_type,
+      #     COALESCE(account_transactions.amount, '0.00')::float AS amount,
+      #     account_transactions.transaction_type AS transaction_type,
+      #     account_transactions.transacted_at AS transacted_at,
+      #     account_transactions.status AS status,
+      #     account_transactions.data AS at_data,
+      #     account_transactions.created_at AS created_at,
+      #     account_transactions.updated_at AS updated_at
+      #   FROM
+      #     account_transactions
+      #   LEFT JOIN
+      #     member_accounts ON member_accounts.id = account_transactions.subsidiary_id
+      #   LEFT JOIN
+      #     members ON members.id = member_accounts.member_id
+      #   WHERE
+      #     account_transactions.updated_at BETWEEN '#{@start_date}' AND '#{@end_date}' 
+      #     AND member_accounts.account_type = 'INSURANCE' 
+      #     AND member_accounts.branch_id = '#{@branch_id}'
+      #     AND members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned')
+      #   GROUP BY
+      #     at_id
+      #   ORDER BY
+      #     account_transactions.id, account_transactions.transacted_at DESC
+      #   EOS
+      #
+      # @account_transactions = @result
+      # send_data Exports::GenerateAccountTransactionsCsvFromSql.new(account_transactions: @account_transactions).execute!, type: 'text/csv; charset=utf-8; header=present', disposition: "attachment; filename=insurance account transactions #{@start_date}_#{@end_date}.csv"
     elsif !@branch_id.nil?
       @member_accounts = ReadOnlyMemberAccount.insurance.where(branch_id: @branch_id)
       @account_transactions = ReadOnlyAccountTransaction.where(subsidiary_id: @member_accounts.pluck(:id))

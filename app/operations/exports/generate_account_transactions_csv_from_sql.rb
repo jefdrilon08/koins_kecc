@@ -22,9 +22,9 @@ module Exports
                 ]
 
                 @account_transactions.each do |at|
-                    member_account = MemberAccount.where(id: at.fetch("at_id"))
+                    member_account = MemberAccount.where(id: at.fetch("subsidiary_id")).first
 
-                    at_data = at.fetch("at_data").to_json
+                    at_data = JSON.parse(at.fetch("at_data")).to_json
 
                     if member_account.present?
                         csv << [
