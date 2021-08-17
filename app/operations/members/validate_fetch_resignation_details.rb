@@ -2,7 +2,7 @@ module Members
   class ValidateFetchResignationDetails < AppValidator
     def initialize(config:)
       super()
-
+      
       @config = config
 
       @member = @config[:member]
@@ -10,6 +10,22 @@ module Members
     end
 
     def execute!
+      a = []
+      Loan.where(member_id: @member.id).each do |g|
+        if g.data.with_indifferent_access[:accrued_interest].present?
+          a << g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest].to_f - g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest_balance].to_f
+        end
+      end
+
+      if a.sum > 0
+        
+        @errors[:messages] << {
+          key: "member",
+          message: "Member have a total #{a.sum} accrued interest to pay"
+          
+        }
+      end
+      
       if @member.blank?
         @errors[:messages] << {
           key: "member",
@@ -22,6 +38,7 @@ module Members
         }
       else
         active_loans  = Loan.active.where(member_id: @member.id)
+        
 
         if active_loans.any?
           active_loans.each do |o|
@@ -31,6 +48,10 @@ module Members
             }
           end
         end
+
+
+
+
       end
 
       if @user.blank?
