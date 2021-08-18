@@ -255,6 +255,32 @@
                   %center
                     %small
                       #{number_to_currency(o.amount, unit: "")}
+        - elsif @insurance_account.account_subtype == Settings.ev
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date Posted
+                %th.text-right
+                  Amount
+            %tbody
+              - @account_transactions.each do |o|  
+                %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      %small
+                        #{number_to_currency(o.amount, unit: "")}
         - else
           #react-root
           %table.table.table-hover.table-sm.table-bordered

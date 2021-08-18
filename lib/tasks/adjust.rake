@@ -737,6 +737,57 @@ namespace :adjust do
     puts "\nDone."
   end
 
+  task :transfer_equity_value => :environment do
+    members = Member.all
+
+    if ENV['BRANCH_ID'].present?
+      members = members.where(branch_id: ENV['BRANCH_ID'])
+    end
+
+    if ENV['MEMBER_ID'].present?
+      members = members.where(id: ENV['MEMBER_ID'])
+    end
+
+    size  = members.count
+
+    members.each_with_index do |member, i|
+      progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
+      printf("\r(#{i+1}/#{size}): Transfering EV for member #{member.id}... #{progress}%%")
+
+      life_account = member.member_accounts.where(account_subtype:"Life Insurance Fund").first
+      ev_account   = member.member_accounts.where(account_subtype:"Equity Value").first
+      
+      if ev_account.present?
+        ev_amount = life_account.balance / 2
+        ev_account.update!(balance: ev_amount)
+
+        @account_transaction  = AccountTransaction.new(
+                                  subsidiary_id: ev_account.id,
+                                  subsidiary_type: "MemberAccount",
+                                  amount: ev_amount,
+                                  transaction_type: "deposit",
+                                  transacted_at: Date.today,
+                                  status: "approved",
+                                  data: {
+                                    is_withdraw_payment: false,
+                                    is_fund_transfer: false,
+                                    is_interest: false,
+                                    is_adjustment: false,
+                                    is_for_exit_age: false,
+                                    is_for_loan_payments: false,
+                                    accounting_entry_reference_number: nil,
+                                    beginning_balance: 0.00,
+                                    ending_balance: ev_amount
+                                  }
+                                )
+
+        @account_transaction.save!
+      end
+    end
+
+    puts "\nDone."
+  end
+
   task :update_maintaining_balance => :environment do
     members = Member.active
 
