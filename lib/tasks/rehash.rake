@@ -145,4 +145,130 @@ namespace :rehash do
     puts ""
     puts "Done."
   end
+
+  task :cbu_accounts => :environment do
+    branch_id = ENV['BRANCH_ID']
+    member_id = Member.where(branch_id: branch_id).ids
+        member_id.each do |mem_id|
+          cbu_ids   = MemberAccount.where("member_id = ? AND account_type = ? and account_subtype = ?",mem_id, "EQUITY","CBU")
+            
+          count = cbu_ids.count
+            if count > 1 
+                cbu_1 = cbu_ids[0].id
+                cbu_2 = cbu_ids[1].id
+                acc_t1 = AccountTransaction.where(subsidiary_id: cbu_1,status: "approved").ids
+                acc_t2 = AccountTransaction.where(subsidiary_id: cbu_2,status: "approved").ids
+                counter_1= acc_t1.count
+                counter_2= acc_t2.count
+                
+                if counter_2 > counter_1
+                  
+                  acc_t1.each do |ac1|
+                    
+                    AccountTransaction.find(ac1).update(subsidiary_id: cbu_2)
+                   
+                  end
+
+                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(cbu_2), account_transactions: nil ).execute!
+                    balance_2 = MemberAccount.find(cbu_2)
+                    puts "DONE REHASHING 1st CBU ACCOUNT #{cbu_2} - #{balance_2.balance}"
+                    
+                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(cbu_1), account_transactions: nil ).execute!
+                    balance_1 = MemberAccount.find(cbu_1)
+                    puts "DONE REHASHING 2nd CBU ACCOUNT #{cbu_1} - #{balance_1.balance}"
+
+                      memb_acc= MemberAccount.find(cbu_1)
+
+                      if memb_acc.balance == 0.0
+                        MemberAccount.find(memb_acc.id).delete
+                      puts "Delete 2nd cbu account" 
+                      end
+                 
+
+                elsif counter_2 < counter_1
+
+                  acc_t2.each do |ac2|
+                    
+                    AccountTransaction.find(ac2).update(subsidiary_id: cbu_1)
+                    
+                  end
+
+                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(cbu_1), account_transactions: nil ).execute!
+                    balance_1 = MemberAccount.find(cbu_1)
+                    puts "DONE REHASHING 2nd CBU ACCOUNT #{cbu_1} - #{balance_1.balance}"
+                    
+                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(cbu_2), account_transactions: nil ).execute!
+                    balance_2 = MemberAccount.find(cbu_2)
+                    puts "DONE REHASHING 1st CBU ACCOUNT #{cbu_2} - #{balance_2.balance}"
+
+                      memb_acc= MemberAccount.find(cbu_2)
+                      if memb_acc.balance == 0.0
+                        MemberAccount.find(memb_acc.id).delete
+                      puts "Delete 2nd cbu account" 
+                      end
+
+                elsif  counter_1 == 1 and counter_2 == 1
+                    acc_t2.each do |ac2|
+                    
+                    AccountTransaction.find(ac2).update(subsidiary_id: cbu_1)
+                   
+                    end
+
+                     ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(cbu_1), account_transactions: nil ).execute!
+                    balance_1 = MemberAccount.find(cbu_1)
+                    puts "DONE REHASHING 2nd CBU ACCOUNT #{cbu_1} - #{balance_1.balance}"
+                    
+                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find("4bc48249-01d1-4211-9c2c-0ae970195a60"), account_transactions: nil ).execute!
+                    balance_2 = MemberAccount.find(cbu_2)
+                    puts "DONE REHASHING 1st CBU ACCOUNT #{cbu_2} - #{balance_2.balance}"
+
+                      memb_acc= MemberAccount.find(cbu_2)
+                      if memb_acc.balance == 0.0
+                        MemberAccount.find(memb_acc.id).delete
+                      puts "Delete 2nd cbu account" 
+                      end
+               
+                
+                end
+
+            end
+               
+        end
+  end
+
+  task :cbu_diff => :environment do
+   
+     member_id = Member.where(branch_id: "505008be-d28c-4ebd-9dfb-bc076bccb638").ids
+     @balance_total = []
+        member_id.each do |mem_id|
+          cbu_ids   = MemberAccount.where("member_id = ? AND account_type = ? and account_subtype = ?",mem_id, "EQUITY","CBU")
+          cbu_ids.each do |cbo|
+            balance= MemberAccount.find(cbo.id).balance
+            @balance_total << balance
+          end
+        end
+        puts "#{@balance_total.sum}"
+
+  end
+
+  task :download_cbu_accounts_excel => :environment do
+     require 'csv'
+      member_id = Member.where(branch_id: "505008be-d28c-4ebd-9dfb-bc076bccb638").ids
+      CSV.open("#{Rails.root}/tmp/cbu_account.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "LAST_NAME" ,"FIRST_NAME", "MEMBER STATUS","CBU ID" , "BALANCE" ] ) do |csv|
+        member_id.each do |mem_id|
+            cbu_ids   = MemberAccount.where("member_id = ? AND account_type = ? and account_subtype = ?",mem_id, "EQUITY","CBU")
+            cbu_ids.each do |cbo|
+            cbuid= cbo.id
+            balance= MemberAccount.find(cbo.id).balance
+            id_n= Member.find(mem_id).id
+            last_n= Member.find(mem_id).last_name
+            first_n = Member.find(mem_id).first_name
+            status = Member.find(mem_id).status
+            csv << [id_n,last_n,first_n,status,cbuid,balance]
+          end
+        end
+      end
+      puts "DONE"
+  end
+
 end

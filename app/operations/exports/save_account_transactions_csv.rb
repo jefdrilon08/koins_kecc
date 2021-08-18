@@ -63,7 +63,8 @@ module Exports
                   LEFT JOIN
                     members ON members.id = member_accounts.member_id
                   WHERE
-                    account_transactions.updated_at BETWEEN '#{@start_date}' AND '#{@end_date}' 
+                    account_transactions.updated_at >= '#{@start_date}' 
+                    AND account_transactions.updated_at <= '#{@end_date}'
                     AND member_accounts.account_type = 'INSURANCE' 
                     AND members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned')
                   GROUP BY
