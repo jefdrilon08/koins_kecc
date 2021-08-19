@@ -209,8 +209,43 @@ module Loans
 
                       account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
                     end
+
+                    # For Equity Value deposit transaction
+                    ev_account = @member.member_accounts.where(account_subtype:"Equity Value").first
+                    
+                    if ev_account.present?
+                      ev_balance = ev_account.balance
+
+                      ev_account_transaction  = AccountTransaction.new(
+                                                subsidiary_id: ev_account.id,
+                                                subsidiary_type: "MemberAccount",
+                                                amount: (amount / 2).round(2),
+                                                transaction_type: "deposit",
+                                                transacted_at: @date_paid,
+                                                status: "approved",
+                                                data: {
+                                                  is_withdraw_payment: false,
+                                                  is_fund_transfer: false,
+                                                  is_interest: false,
+                                                  is_adjustment: false,
+                                                  is_for_exit_age: false,
+                                                  is_for_loan_payments: false,
+                                                  accounting_entry_reference_number: nil,
+                                                  beginning_balance: ev_balance.to_f,
+                                                  ending_balance: (ev_balance.to_f + (amount /2)).round(2)
+                                                }
+                                              )
+
+                      new_ev_balance = (ev_balance.to_f + (amount / 2)).round(2)
+                      ev_account.update(
+                        balance: new_ev_balance
+                      )
+
+                      ev_account_transaction.save!
+                    end
                   end
-                   # Update account balance
+
+                  # Update account balance
                   new_balance = (member_account.balance + amount).round(2)
                   member_account.update!(
                     balance: new_balance
@@ -312,6 +347,40 @@ module Loans
                       member_account.update!(data: member_account_data)
 
                       account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
+                    end
+
+                    # For Equity Value deposit transaction
+                    ev_account = @member.member_accounts.where(account_subtype:"Equity Value").first
+                    
+                    if ev_account.present?
+                      ev_balance = ev_account.balance
+
+                      ev_account_transaction  = AccountTransaction.new(
+                                                subsidiary_id: ev_account.id,
+                                                subsidiary_type: "MemberAccount",
+                                                amount: (amount / 2).round(2),
+                                                transaction_type: "deposit",
+                                                transacted_at: @date_paid,
+                                                status: "approved",
+                                                data: {
+                                                  is_withdraw_payment: false,
+                                                  is_fund_transfer: false,
+                                                  is_interest: false,
+                                                  is_adjustment: false,
+                                                  is_for_exit_age: false,
+                                                  is_for_loan_payments: false,
+                                                  accounting_entry_reference_number: nil,
+                                                  beginning_balance: ev_balance.to_f,
+                                                  ending_balance: (ev_balance.to_f + (amount /2)).round(2)
+                                                }
+                                              )
+
+                      new_ev_balance = (ev_balance.to_f + (amount / 2)).round(2)
+                      ev_account.update(
+                        balance: new_ev_balance
+                      )
+
+                      ev_account_transaction.save!
                     end
                   elsif member_account.account_subtype == Settings.clip || member_account.account_subtype == Settings.hiip
                     account_transaction.data[:data] = {
