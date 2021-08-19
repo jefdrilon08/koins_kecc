@@ -49,7 +49,7 @@ module MemberAccountValidations
 
         @member_account.update!(data: @member_account_data)
 
-        # For Equity Value deposit transaction
+        # For Equity Value withdraw transaction
         member     = @member_account.member
         ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
         
@@ -59,7 +59,7 @@ module MemberAccountValidations
           account_transaction  = AccountTransaction.new(
                                     subsidiary_id: ev_account.id,
                                     subsidiary_type: "MemberAccount",
-                                    amount: (@amount / 2).round(2),
+                                    amount: ev_balance.to_f,
                                     transaction_type: "withdraw",
                                     transacted_at: @date_paid,
                                     status: "approved",
@@ -72,11 +72,11 @@ module MemberAccountValidations
                                       is_for_loan_payments: false,
                                       accounting_entry_reference_number: nil,
                                       beginning_balance: ev_balance.to_f,
-                                      ending_balance: (ev_balance.to_f - (@amount /2)).round(2)
+                                      ending_balance: (ev_balance.to_f - ev_balance.to_f).round(2)
                                     }
                                   )
 
-          new_balance = (ev_balance.to_f - (@amount / 2)).round(2)
+          new_balance = (ev_balance.to_f - ev_balance.to_f).round(2)
           ev_account.update(
             balance: new_balance
           )
