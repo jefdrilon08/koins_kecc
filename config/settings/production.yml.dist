@@ -598,12 +598,16 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Policy Loan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Equity Value"
 
 # Mba new insurance accounts
 hiip: "Hospital Income Insurance Plan"
 clip: "Credit Life Insurance Plan"
 life: "Life Insurance Fund"
 pl: "Policy Loan"
+ev: "Equity Value"
 
 default_equity_withdrawal_accounts:
   -

@@ -75,6 +75,26 @@
     - if @member_share_data[:number_of_shares] == "3"
       %label
         tatlong (3)
+    - if @member_share_data[:number_of_shares] == "4"
+      %label
+        apat (4)
+    - if @member_share_data[:number_of_shares] == "5"
+      %label
+        limang (5)
+    - if @member_share_data[:number_of_shares] == "6"
+      %label
+        anim (6)
+    - if @member_share_data[:number_of_shares] == "7"
+      %label
+        pitong (7)
+    - if @member_share_data[:number_of_shares] == "8"
+      %label
+        walong (8)
+    - if @member_share_data[:number_of_shares] == "9"
+      %label
+        siyam (9)
+
+
 
 
   - x = "#{@member_share_data[:date_of_issue_year]}-#{@member_share_data[:date_of_issue_month]}-#{@member_share_data[:date_of_issue_day].to_i}"
