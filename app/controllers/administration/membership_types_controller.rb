@@ -1,5 +1,5 @@
 module Administration
-  class MembershipTypesController < ApplicationController
+  class Membership TypesController < ApplicationController
     before_action :authenticate_user!
 
     def index
@@ -64,7 +64,7 @@ module Administration
           {
             is_link: true,
             path: administration_membership_types_path,
-            text: "MembershipTypes"
+            text: "Membership Types"
           },
           {
             text: "New"
@@ -85,7 +85,7 @@ module Administration
         {
           is_link: true,
           path: administration_membership_types_path,
-          text: "MembershipTypes"
+          text: "Membership Types"
         },
         {
           text: "Edit #{@membership_type.name}"
@@ -106,7 +106,7 @@ module Administration
           {
             is_link: true,
             path: administration_membership_types_path,
-            text: "MembershipTypes"
+            text: "Membership Types"
           },
           {
             text: "Edit #{@membership_type.name}"
@@ -127,7 +127,7 @@ module Administration
         {
           is_link: true,
           path: administration_membership_types_path,
-          text: "MembershipTypes"
+          text: "Membership Types"
         },
         {
           text: "#{@membership_type.name}"
