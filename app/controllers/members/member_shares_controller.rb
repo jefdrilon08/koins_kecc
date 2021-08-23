@@ -10,7 +10,7 @@ module Members
       share_bal = MemberAccount.where(member_id: @member.id , account_type: 'EQUITY' , account_subtype: "Share Capital").sum(:balance)
       add_share = (share_bal / 100).to_i
       number_of_shares = add_share - actv_share
-
+      @no_of_share = number_of_shares
       Settings.default_member_accounts.each do |s|
         if s.account_type == "EQUITY" and s.account_subtype == "Share Capital"
           settings  = s
