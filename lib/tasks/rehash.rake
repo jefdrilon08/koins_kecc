@@ -218,7 +218,7 @@ namespace :rehash do
                     balance_1 = MemberAccount.find(cbu_1)
                     puts "DONE REHASHING 2nd CBU ACCOUNT #{cbu_1} - #{balance_1.balance}"
                     
-                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find("4bc48249-01d1-4211-9c2c-0ae970195a60"), account_transactions: nil ).execute!
+                    ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(cbu_2), account_transactions: nil ).execute!
                     balance_2 = MemberAccount.find(cbu_2)
                     puts "DONE REHASHING 1st CBU ACCOUNT #{cbu_2} - #{balance_2.balance}"
 

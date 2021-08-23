@@ -263,9 +263,16 @@
                   %th
                 %th
                   %center
-                    Date Posted
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
+                  Beginning Balance
                 %th.text-right
                   Amount
+                %th.text-right
+                  Ending Balance
             %tbody
               - @account_transactions.each do |o|  
                 %tr
@@ -279,8 +286,30 @@
                         #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
                   %td
                     %center
-                      %small
-                        #{number_to_currency(o.amount, unit: "")}
+                      - if o.deposit?
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Interest
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        - if o.withdraw_ev?
+                          .badge.badge-danger
+                            .fa.fa-upload
+                            Withdraw EV
+                        - else
+                          .badge.badge-danger
+                            .fa.fa-upload
+                            Withdraw
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["beginning_balance"], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["ending_balance"], unit: "")}
         - else
           #react-root
           %table.table.table-hover.table-sm.table-bordered
