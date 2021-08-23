@@ -135,6 +135,18 @@ export default class ApplicationFormCLIPBeneficiary extends React.Component {
                 <option value="KAPATID">
                   KAPATID
                 </option>
+                <option value="LIVE IN / KINAKASAMA">
+                  LIVE IN / KINAKASAMA
+                </option>
+                <option value="APO">
+                  APO
+                </option>
+                <option value="TIYUHIN">
+                  TIYUHIN
+                </option>
+                <option value="PAMANGKIN">
+                  PAMANGKIN
+                </option>
               </select>
             </div>
           </div>

@@ -117,13 +117,15 @@ class InsuranceAccountsController < ApplicationController
     @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member.id).first
     @date_of_death = Date.today
 
+    config = {
+                member: @member,
+                lif_insurance_account: @lif_insurance_account,
+                rf_insurance_account: @rf_insurance_account,
+                date_of_death: @date_of_death
+              }
+
     @payment_meta = Insurance::GenerateInsuranceAccountDetailsForLifAndRf.new(
-                      config = {
-                        member: @member,
-                        lif_insurance_account: @lif_insurance_account,
-                        rf_insurance_account: @rf_insurance_account,
-                        date_of_death: @date_of_death
-                      }
+                      config: config
                     ).execute!
   end
 
@@ -346,6 +348,25 @@ class InsuranceAccountsController < ApplicationController
           }
         )
 
+      redirect_to members_path
+    end
+  end
+
+  def upload_clip
+    file = params[:file]
+    user = current_user
+
+    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+      clip = row.to_hash
+      @errors = Insurance::ValidateClipFromCsvFile.new(clip: clip).execute!
+    end
+
+    if @errors[:messages].any?
+      redirect_to upload_clip_path
+      flash[:error] = @errors[:messages]
+    else
+      Insurance::LoadClipFromCsvFile.new(file: file, user: user).execute!
+      flash[:success] = "Successfully upload deposit."
       redirect_to members_path
     end
   end

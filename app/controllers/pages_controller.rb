@@ -197,6 +197,12 @@ class PagesController < ApplicationController
     ]
   end
 
+  def upload_clip
+    @subheader_items = [
+      { text: "Upload CLIP" }
+    ]
+  end
+
   def import_members
     @subheader_items = [
       { text: "Import Members" }
@@ -295,8 +301,11 @@ class PagesController < ApplicationController
 
   def daily_report_insurance_account_status_excel
     branch = params[:branch]
+    insurance_status = params[:insurance_status]
+
     excel = Pages::GenerateDailyReportInsuranceAccountStatus.new(
-                                                branch: branch
+                                                  branch: branch,
+                                                  insurance_status: insurance_status
                                                 ).execute!
 
     filename  = "insurance_account_status.xlsx"

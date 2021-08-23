@@ -143,6 +143,7 @@ import ReportsCollectionsCLIP from "../models/ReportsCollectionsCLIP.js";
 import ReportsCollectionsBLIP from "../models/ReportsCollectionsBLIP.js";
 import ReportsMemberDependents from "../models/ReportsMemberDependents.js";
 import ReportsMemberQuarterlyReports from "../models/ReportsMemberQuarterlyReports.js";
+import ReportsInsuranceQuarterlyReports from "../models/ReportsInsuranceQuarterlyReports.js";
 import ReportsMemberCounts from "../models/ReportsMemberCounts.js";
 import ReportsCIC from "../models/ReportsCIC.js";
 import ReportsMonthlyCollection from "../models/ReportsMonthlyCollection.js";
@@ -300,6 +301,7 @@ const hooks = {
   "reports/collections_blip":                         [ReportsCollectionsBLIP],
   "reports/member_dependents":                        [ReportsMemberDependents],
   "reports/member_quarterly_reports":                 [ReportsMemberQuarterlyReports],
+  "reports/insurance_quarterly_reports":              [ReportsInsuranceQuarterlyReports],
   "reports/member_counts":                            [ReportsMemberCounts],
   "reports/cic":                                      [ReportsCIC],
   "reports/monthly_collection":                       [ReportsMonthlyCollection],

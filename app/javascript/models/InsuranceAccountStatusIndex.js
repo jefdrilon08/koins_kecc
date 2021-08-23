@@ -2,6 +2,7 @@ import Mustache from "mustache/mustache";
 
 var $downloadBtn;
 var $branchSelect;
+var $insuranceStatusSelect;
 var $generateBtn;
 
 var insuranceAccountStatusReportUrl  = "/api/v1/pages/insurance_account_status_reports";
@@ -15,6 +16,7 @@ var _cacheDom = function() {
   $insuranceAccountStatusReportTemplate = $("#insurance-account-status-report-template").html();
   $insuranceAccountStatusReportSection   = $("#insurance-account-status-report-section");
   $branchSelect = $("#branch-select");
+  $insuranceStatusSelect = $("#insurance-status-select");
 }
 
 var encodeQueryData = function(data) {
@@ -30,6 +32,7 @@ var _bindEvents = function() {
   $downloadBtn.on('click', function() {
     var data = {
       branch: $branchSelect.val(),
+      insurance_status: $insuranceStatusSelect.val(),
     };
 
     window.location = "/pages/daily_report_insurance_account_status_excel?" + encodeQueryData(data);
@@ -37,11 +40,13 @@ var _bindEvents = function() {
 
   $generateBtn.on('click', function() {
     $generateBtn.addClass('loading');
-
     branch = $branchSelect.val();
+
     var params = {
-      branch: branch
+      branch: branch,
+      insurance_status: $insuranceStatusSelect.val(),
     };
+
     $.ajax({
       url: insuranceAccountStatusReportUrl,
       method: 'GET',
@@ -55,13 +60,10 @@ var _bindEvents = function() {
           $(this).html(numberWithCommas($(this).html()));
         });
 
-        $searchBtn.removeClass('loading');
-
-        // Make sticky
-        $(".sticky").stickyTableHeaders();
+        $generateBtn.removeClass('loading');
       },
       error: function(data) {
-        $searchBtn.removeClass('loading');
+        $generateBtn.removeClass('loading');
       }
     });
   });

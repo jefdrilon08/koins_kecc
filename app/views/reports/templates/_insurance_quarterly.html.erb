@@ -1,0 +1,25 @@
+<script id="insurance-quarterly-reports-template" type="x-tmpl-mustache">
+  <table class='ui small teal table sticky'>
+    <thead>
+      <tr>
+        <th width='auto'>Branch</th>
+        <th width='auto'>CLIP Count</th>
+        <th width='auto'>CLIP Amount</th>
+        <th width='auto'>HIIP Count</th>
+        <th width='auto'>HIIP Amount</th>
+        <th width='auto'>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#insurance}}
+        <tr>  
+          <td></td>
+          <td>{{clip_transactions_count}}</td>
+          <td>{{clip_total_amount}}</td>
+          <td>{{hiip_transactions_count}}</td>
+          <td>{{hiip_total_amount}}</td>
+        </tr>
+      {{/insurance}}
+    </tbody>
+  </table>
+</script>

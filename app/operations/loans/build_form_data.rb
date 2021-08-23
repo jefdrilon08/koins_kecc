@@ -40,7 +40,7 @@ module Loans
         @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
 
-      if @loan.data["co_maker_one"]["id"].present?
+      if @loan.data["co_maker_one"].present? and @loan.data["co_maker_one"]["id"].present?
         @co_maker_object = Member.find(@loan.data["co_maker_one"]["id"])
       end
 

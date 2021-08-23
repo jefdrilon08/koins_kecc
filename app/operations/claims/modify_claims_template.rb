@@ -12,6 +12,12 @@ module Claims
     def execute!
       @data[:claims_template]  = @template
 
+      if @template == ""
+        if !@data[:transaction_fee].nil?
+          @data[:transaction_fee] = nil
+        end
+      end
+
       config  = {
         claim: @claim,
         branch: @claim.branch,

@@ -3,7 +3,7 @@ module Adjustments
     before_action :authenticate_user!
 
     def index
-      @adjustment_records = AdjustmentRecord.subsidiary
+      @adjustment_records = AdjustmentRecord.where("meta #>> '{branch, id}' IN (?)", @branches.pluck(:id))
     
       if params[:start_date].present? and params[:end_date].present?
         @adjustment_records = @adjustment_records.where("date_approved >= ? AND date_approved <= ?", params[:start_date], params[:end_date])

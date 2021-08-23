@@ -24,7 +24,40 @@ module Api
         end
       end
 
-      def proceed
+      # def proceed
+      #   claim = Claim.find(params[:id])
+
+      #   config = {
+      #     claim: claim,
+      #     user: current_user
+      #   }
+
+      #   if ["MIS", "AO"].include? current_user.roles.last
+      #     errors  = Claims::ValidateClaimForChecking.new(
+      #                 config: config
+      #               ).execute!
+
+      #     @approving_user = User.where(first_name: "Silvida", last_name: "Antiquera").first
+
+      #     if errors[:messages].any?
+      #       render json: { errors: errors }, status: 400
+      #     else
+      #       claim  = Claims::ProceedClaim.new(
+      #                                   config: config
+      #                                 ).execute!
+
+      #       ::Claims::NotifyUser.new(claim: claim, user: @approving_user).execute!
+
+      #       render json: { message: "Successfully proceed claim" }
+      #     end
+      #   else
+      #     errors << "Unauthorized to perform this transaction"
+
+      #     render json: { message: "Unauthorized", errors: errors }, status: 401
+      #   end
+      # end
+
+      def check
         claim = Claim.find(params[:id])
 
         config = {
@@ -42,7 +75,7 @@ module Api
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
-            claim  = Claims::ProceedClaim.new(
+            claim  = Claims::CheckClaim.new(
                                         config: config
                                       ).execute!
 
@@ -354,6 +387,31 @@ module Api
           render json: errors, status: 400
         else
           ::Claims::ModifyClaimsTemplate.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+
+      def add_transaction_fee
+        claim     = Claim.where(id: params[:id]).first
+        transaction_fee  = params[:transaction_fee].to_f
+
+        config  = {
+          transaction_fee: transaction_fee,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateAddTransactionFee.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::AddTransactionFee.new(
             config: config
           ).execute!
 

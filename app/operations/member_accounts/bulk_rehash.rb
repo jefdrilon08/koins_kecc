@@ -5,6 +5,7 @@ module MemberAccounts
     def initialize(config:)
       @config = config
       @branch = @config[:branch]
+      @account_subtype = @config[:account_subtype]
     end
 
     def execute!
@@ -97,7 +98,7 @@ module MemberAccounts
                   INNER JOIN
                     account_transactions ON account_transactions.subsidiary_id = member_accounts.id AND account_transactions.status = 'approved'
                   WHERE
-                    member_accounts.branch_id = '#{@branch.id}'
+                    member_accounts.branch_id = '#{@branch.id}' and member_accounts.account_subtype =  '#{@account_subtype}' 
                   ORDER BY
                     member_accounts.id, member_accounts.account_type, member_accounts.account_subtype, account_transactions.transacted_at ASC, account_transactions.updated_at ASC
                 EOS

@@ -47,6 +47,8 @@ Rails.application.routes.draw do
   get "/upload_deposit", to: "pages#upload_deposit"
   get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
+
+  get "/upload_clip", to: "pages#upload_clip"
   
   # Adjustments
   namespace :adjustments do
@@ -186,6 +188,7 @@ Rails.application.routes.draw do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
     collection { post :import_insurance_accounts }
     collection { post :import_insurance_account_transactions }
+    collection { post :upload_clip }
   end
 
   # Loans
@@ -435,6 +438,7 @@ Rails.application.routes.draw do
   get '/insurance_accounts/:id/insurance_account_pdf', to: 'insurance_accounts#insurance_account_pdf', as: :insurance_account_pdf
   get "/reports/monthly_collection", to: "reports#monthly_collection", as: :monthly_collection
   get "/reports/monthly_collection_reports", to: "reports#monthly_collection_reports", as: :monthly_collection_reports
+  get "/reports/insurance_quarterly_reports", to: "reports#insurance_quarterly_reports", as: :insurance_quarterly_reports
   get "/reports/member_quarterly_reports", to: "reports#member_quarterly_reports", as: :member_quarterly_reports
   get "/reports/member_counts", to: "reports#member_counts", as: :member_counts
   get "/exports/members_per_branch_excel", to: "exports#members_per_branch_excel", as: :export_members_per_branch_excel

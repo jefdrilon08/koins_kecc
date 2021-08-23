@@ -3,7 +3,7 @@ module InsuranceWithdrawalCollections
     def initialize(insurance_withdrawal_collection:, config:)
       super()
       @config                              = config
-      @insurance_withdrawal_collection               = insurance_withdrawal_collection
+      @insurance_withdrawal_collection     = insurance_withdrawal_collection
       @paid_at                             = @config[:paid_at]
       @branch                              = @config[:branch]
     end

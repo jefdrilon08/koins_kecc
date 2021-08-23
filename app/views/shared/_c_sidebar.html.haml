@@ -318,61 +318,69 @@
           = link_to "/reports/claims", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Claims Report
+        %li.c-sidebar-nav-item
+          = link_to "#", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-list
+            Supplies Inventory
 
-        %li.c-sidebar-nav-title
-          Other Reports
-        %li.c-sidebar-nav-item
-          = link_to "/reports/monthly_remittance", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Monthly Remittance
-        %li.c-sidebar-nav-item
-          = link_to "/reports/insured_loans", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Insured Loans
-        %li.c-sidebar-nav-item
-          = link_to "/reports/member_reports", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Member Reports
-        %li.c-sidebar-nav-item
-          = link_to "/reports/collections_clip", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            CLIP Reports
-        %li.c-sidebar-nav-item
-          = link_to "/reports/collections_blip", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            BLIP Reports
-        %li.c-sidebar-nav-item
-          = link_to "/reports/member_dependents", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Member Dependents
-        %li.c-sidebar-nav-item
-          = link_to "/reports/member_quarterly_reports", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Member Quarterly
-        %li.c-sidebar-nav-item
-          = link_to "/reports/member_counts", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Member Counts
-        %li.c-sidebar-nav-item
-          = link_to "/reports/cic", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            CIC Report
-        %li.c-sidebar-nav-item
-          = link_to "/reports/monthly_collection", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Monthly Collection
-        %li.c-sidebar-nav-item
-          = link_to "/reports/summary_of_certificates_and_policies", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Cert and Policies
-        %li.c-sidebar-nav-item
-          = link_to "/reports/personal_documents", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Personal Documents
-        %li.c-sidebar-nav-item
-          = link_to "/reports/hiip_report", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            HIIP Report
+      %li.c-sidebar-nav-title
+        Other Reports
+      %li.c-sidebar-nav-item
+        = link_to "/reports/monthly_remittance", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Monthly Remittance
+      %li.c-sidebar-nav-item
+        = link_to "/reports/insured_loans", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Insured Loans
+      %li.c-sidebar-nav-item
+        = link_to "/reports/member_reports", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Member Reports
+      %li.c-sidebar-nav-item
+        = link_to "/reports/collections_clip", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          CLIP Reports
+      %li.c-sidebar-nav-item
+        = link_to "/reports/collections_blip", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          BLIP Reports
+      %li.c-sidebar-nav-item
+        = link_to "/reports/member_dependents", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Member Dependents
+      %li.c-sidebar-nav-item
+        = link_to "/reports/member_quarterly_reports", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Member Quarterly
+      %li.c-sidebar-nav-item
+        = link_to "/reports/member_counts", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Member Counts
+      %li.c-sidebar-nav-item
+        = link_to "/reports/cic", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          CIC Report
+      %li.c-sidebar-nav-item
+        = link_to "/reports/monthly_collection", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Monthly Collection
+      %li.c-sidebar-nav-item
+        = link_to "/reports/summary_of_certificates_and_policies", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Cert and Policies
+      %li.c-sidebar-nav-item
+        = link_to "/reports/personal_documents", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Personal Documents
+      %li.c-sidebar-nav-item
+        = link_to "/reports/hiip_report", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          HIIP Report
+      %li.c-sidebar-nav-item
+        = link_to "/reports/insurance_quarterly_reports", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Insurance Quarterly
       %li.c-sidebar-nav-title
         Administration
       - if is_not_remote
@@ -453,6 +461,10 @@
           = link_to upload_insurance_withdrawal_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-upload
             Upload Insurance Withdrawal
+      %li.c-sidebar-nav-item
+        = link_to upload_clip_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-upload
+          Upload CLIP
       %li.c-sidebar-nav-item
         = link_to import_members_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-file-import

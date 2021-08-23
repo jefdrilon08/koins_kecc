@@ -19,7 +19,7 @@ module Insurance
     end
 
     def build_lif_data!
-      @life_account_transaction = @account_transactions.where(subsidiary_id: @lif_insurance_account.id).order("transacted_at ASC")
+      @life_account_transaction = @account_transactions.where(subsidiary_id: @lif_insurance_account.id).order("created_at ASC")
       @life_latest_payment      = @life_account_transaction.last
       @life_current_balance     = @life_latest_payment.data.with_indifferent_access[:ending_balance].to_f
             
@@ -45,7 +45,7 @@ module Insurance
     end
 
     def build_rf_data!
-      @rf_account_transaction   = @account_transactions.where(subsidiary_id: @rf_insurance_account.id).order("transacted_at ASC")
+      @rf_account_transaction   = @account_transactions.where(subsidiary_id: @rf_insurance_account.id).order("created_at ASC")
       @rf_latest_payment        = @rf_account_transaction.last
       @rf_current_balance       = @rf_latest_payment.data.with_indifferent_access[:ending_balance].to_f
 

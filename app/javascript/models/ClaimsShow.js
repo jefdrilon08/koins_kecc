@@ -2,7 +2,7 @@ import Mustache from "mustache/mustache";
 
 var $btnConfirmApprove;
 var $btnConfirmPost;
-//var $btnConfirmCheck;
+var $btnConfirmCheck;
 var $btnConfirmProceed;
 var $btnConfirmDeclined;
 var $btnConfirmPending;
@@ -11,7 +11,7 @@ var $btnSaveNote;
 
 var $btnApprove;
 var $btnPost;
-//var $btnCheck;
+var $btnCheck;
 var $btnProceed;
 var $btnDeclined;
 var $btnPending;
@@ -26,9 +26,9 @@ var $errors;
 var $errorsTemplate;
 var urlApproveTransaction     = "/api/v1/claims/approve";
 var urlPostTransaction        = "/api/v1/claims/post";
-// var urlCheckTransaction       = "/api/v1/claims/check";
+var urlCheckTransaction       = "/api/v1/claims/check";
 var urlProceedTransaction     = "/api/v1/claims/proceed";
-var urlDeclinedTransaction     = "/api/v1/claims/declined";
+var urlDeclinedTransaction    = "/api/v1/claims/declined";
 var urlPendingTransaction     = "/api/v1/claims/pending";
 var urlModifyClaimsTemplate   = "/api/v1/claims/modify_claims_template";
 var urlModifyBook             = "/api/v1/claims/modify_book";
@@ -37,9 +37,10 @@ var urlSaveCheckNumber        = "/api/v1/claims/save_check_number";
 var urlSaveCheckVoucherNumber = "/api/v1/claims/save_check_voucher_number";
 var urlSavePayee              = "/api/v1/claims/save_payee";
 var urlSaveNote               = "/api/v1/claims/save_note";
+var urlAddTransactionFee      = "/api/v1/claims/add_transaction_fee";
 
 var $modalApprove;
-//var $modalCheck;
+var $modalCheck;
 var $modalProceed;
 var $modalDeclined;
 var $modalPost;
@@ -50,13 +51,13 @@ var $modalNote;
 var $errors;
 var $errorsTemplate;
 var $modalErrorsApproval;
-//var $modalErrorsChecking;
+var $modalErrorsChecking;
 var $modalErrorsProceeding;
 var $modalErrorsDeclining;
 var $modalErrorsPosting;
 var $modalErrorsPending;
 var $modalSuccessApproval;
-//var $modalSuccessChecking;
+var $modalSuccessChecking;
 var $modalSuccessProceeding;
 var $modalSuccessDeclining;
 var $modalSuccessPosting;
@@ -81,6 +82,9 @@ var $btnConfirmClaimsTemplate;
 var $inputTextParticular;
 var $btnConfirmParticular;
 
+var $btnConfirmTransactionFee;
+var $inputTextTransactionFee;
+
 var $inputTextPayee;
 var $btnConfirmPayee;
 
@@ -101,43 +105,43 @@ var loader;
 var _bindEvents = function() {
 
   // Check
-  // $btnConfirmCheck.on("click", function() {
-  //   $btnConfirmCheck.prop("disabled", true);
+  $btnConfirmCheck.on("click", function() {
+    $btnConfirmCheck.prop("disabled", true);
 
-  //   $.ajax({
-  //     url: urlCheckTransaction,
-  //     method: 'POST',
-  //     dataType: 'json',
-  //     data: {
-  //       id: claimId,
-  //       authenticity_token: authenticityToken
-  //     },
-  //     success: function(response) {
-  //       $message.html("Success! Redirecting...");
-  //       window.location.reload();
-  //     },
-  //     error: function(response) {
-  //       console.log(response);
-  //       var errors  = [];
-  //       try {
-  //         errors  = JSON.parse(response.responseText).full_messages;
-  //       } catch(err) {
-  //         errors  = ["Something went wrong"];
-  //         console.log(err);
-  //       } finally {
-  //         console.log(errors);
-  //         $message.html(
-  //           Mustache.render(
-  //             templateErrorList,
-  //             { errors: errors }
-  //           )
-  //         );
+    $.ajax({
+      url: urlCheckTransaction,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: claimId,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
 
-  //         $btnConfirmCheck.prop("disabled", false);
-  //       }
-  //     }
-  //   });
-  // });
+          $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
 
   // Proceed
   $btnConfirmProceed.on("click", function() {
@@ -432,6 +436,51 @@ var _bindEvents = function() {
     });
   });
 
+  $btnConfirmTransactionFee.on("click", function() {
+    var transaction_fee  = $inputTextTransactionFee.val();
+
+    $message.html("Loading...");
+
+    $inputTextTransactionFee.prop("disabled", true);
+    $btnConfirmTransactionFee.prop("disabled", true);
+
+    $.ajax({
+      url: urlAddTransactionFee,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        transaction_fee: transaction_fee,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputTextTransactionFee.prop("disabled", false);
+          $btnConfirmTransactionFee.prop("disabled", false);
+        }
+      }
+    });
+  });
+
   $btnConfirmPayee.on("click", function() {
     var payee  = $inputTextPayee.val();
 
@@ -659,10 +708,10 @@ var _bindEvents = function() {
   });
 
   // check
-  // $btnCheck.on("click", function() {
-  //   $modalCheck.modal("show");
-  //   $message.html("");
-  // });
+  $btnCheck.on("click", function() {
+    $modalCheck.modal("show");
+    $message.html("");
+  });
 
   // proceed
   $btnProceed.on("click", function() {
@@ -724,7 +773,7 @@ var _bindEvents = function() {
 var _cacheDom = function() {
   $confirmationModal            = $("#confirmation-modal"); 
   $btnApprove                   = $("#btn-approve");
-  //$btnCheck                     = $("#btn-check");
+  $btnCheck                     = $("#btn-check");
   $btnProceed                   = $("#btn-proceed");
   $btnDeclined                  = $("#btn-declined");
   $btnPost                      = $("#btn-post");
@@ -733,7 +782,7 @@ var _cacheDom = function() {
   $btnNote                      = $("#btn-note");
 
   $btnConfirmApprove            = $("#btn-confirm-approval");
-  //$btnConfirmCheck              = $("#btn-confirm-check");
+  $btnConfirmCheck              = $("#btn-confirm-check");
   $btnConfirmProceed            = $("#btn-confirm-proceed");
   $btnConfirmDeclined           = $("#btn-confirm-declined");
   $btnConfirmPost               = $("#btn-confirm-posting");
@@ -748,7 +797,7 @@ var _cacheDom = function() {
   $errorsTemplate               = $("#errors-template");
   
   // Validate
-  //$modalCheck                   = $("#modal-check-confirmation");
+  $modalCheck                   = $("#modal-check-confirmation");
   $modalProceed                 = $("#modal-proceed-confirmation");
   $modalDeclined                = $("#modal-declined-confirmation");
   $modalApprove                 = $("#modal-approve-confirmation");
@@ -759,14 +808,14 @@ var _cacheDom = function() {
 
   
   $modalErrorsApproval          = $(".modal-approve").find(".errors");
-  //$modalErrorsChecking          = $(".modal-check").find(".errors");
+  $modalErrorsChecking          = $(".modal-check").find(".errors");
   $modalErrorsProceeding        = $(".modal-proceed").find(".errors");
   $modalErrorsDeclining         = $(".modal-declined").find(".errors");
   $modalErrorsPosting           = $(".modal-post").find(".errors");
   $modalErrorsPending           = $(".modal-pending").find(".errors");
 
   $modalSuccessApproval         = $(".modal-approve").find(".success");
-  //$modalSuccessChecking         = $(".modal-check").find(".success");
+  $modalSuccessChecking         = $(".modal-check").find(".success");
   $modalSuccessProceeding       = $(".modal-proceed").find(".success");
   $modalSuccessDeclining       = $(".modal-declined").find(".success");
   $modalSuccessPosting          = $(".modal-post").find(".success");
@@ -783,6 +832,8 @@ var _cacheDom = function() {
 
   $inputTextParticular          = $("#input-text-particular");
   $btnConfirmParticular         = $("#btn-confirm-particular");
+  $btnConfirmTransactionFee     = $("#btn-confirm-transaction-fee");
+  $inputTextTransactionFee      = $("#input-text-transaction-fee");
 
   $inputTextPayee               = $("#input-text-payee");
   $btnConfirmPayee              = $("#btn-confirm-payee");

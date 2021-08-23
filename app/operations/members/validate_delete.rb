@@ -8,6 +8,10 @@ module Members
       @user   = @config[:user]
 
       @valid_roles  = ["MIS", "BK", "SBK", "REMOTE-BK", "REMOTE-FM", "OAS"]
+
+      if Settings.activate_microinsurance
+        @valid_roles << "AO"
+      end
     end
 
     def execute!

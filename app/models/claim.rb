@@ -3,17 +3,17 @@ class Claim < ApplicationRecord
 	INSURED_CLASSIFICATION = ["Member", "Legal Dependent (Spouse)", "Legal Dependent (Child)", "Legal Dependent (Parent)"]
 	CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT = ["Cardiovascular", "Respiratory", "Hematological", "Gastro Intestinal", "Gynecological", "Neurological", "Suicide", "Motor Vehicular Accident", "Others"]
   YEAR_LEVEL = ["GRADE 7", "GRADE 8", "GRADE 9", "GRADE 10", "GRADE 11", "GRADE 12", "1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
-  TYPES_OF_LOAN = ["K-BAHAY W1","K-BAHAY W2","K-BAHAY W3","K-BENEPISYO W1","K-BENEPISYO W2",
-                  "K-BENEPISYO W3","K-EDUKASYON","K-EDUKASYON W2","K-EDUKASYON W3","K-KABUHAYAN",
-                  "K-KALAMIDAD","K-KALUSUGAN W1","K-KALUSUGAN W2","K-KALUSUGAN W3","K-KALUSUGAN W4",
-                  "K-SAGIP",
-                  "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7","K-KASAL","K-KASANGKAPAN","K-MAGGAGAWA", "K (BUSINESS DISRUPTION LOAN)",
-                  "K-NHA W1","K-NHA W12","K-Noche Buena","K-PWD","K-Toda","K-TRABAHO", "PROJECT LOAN", "MULTI-PURPOSE LOAN", "EMERGENCY LOAN", "UTILITY LOAN", "EDUCATIONAL LOAN",
-                  "REGULAR LOAN", "RECOVERY LOAN"
+  TYPES_OF_LOAN = ["K-BAHAY W1", "K-BAHAY W2", "K-BAHAY W3",
+                   "K-BENEPISYO W1", "K-BENEPISYO W2", "K-BENEPISYO W3",
+                   "K-EDUKASYON", "K-EDUKASYON W2", "K-EDUKASYON W3",
+                   "K-KALUSUGAN W1", "K-KALUSUGAN W2","K-KALUSUGAN W3","K-KALUSUGAN W4", "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7",
+                   "K-KABUHAYAN", "K-KALAMIDAD", "K-SAGIP", "K-KASAL", "K-KASANGKAPAN", "K-MAGGAGAWA", "K (BUSINESS DISRUPTION LOAN)",
+                   "K-NHA W1", "K-NHA W12", "K-Noche Buena", "K-PWD", "K-Toda", "K-TRABAHO", "K-ALALAY W2",
+                   "PROJECT LOAN", "MULTI-PURPOSE LOAN", "EMERGENCY LOAN", "UTILITY LOAN", "EDUCATIONAL LOAN","REGULAR LOAN", "RECOVERY LOAN"
                 ]
   CREDITORS_NAME = ["KCOOP", "JVOMFI", "CAPS-R", "KEEPFAI"]
   GENDER = ["MALE","FEMALE"]
-  CREDITORS_NAME_FULL = ["KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE", "CEBU ARCHDIOCESAN PROGRAM FOR SELF RELIANCE INC.-CAPS-R", "KASAGANA-KA EMPLOYEE-EMPLOYER'S PROVIDENT FUND ASSOCIATION INC."]
+  CREDITORS_NAME_FULL = ["KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE", "CEBU ARCHDIOCESAN PROGRAM FOR SELF RELIANCE INC.-CAPS-R", "CAPS-R INC (A MICROFINANCE NGO)", "KASAGANA-KA EMPLOYEE-EMPLOYER'S PROVIDENT FUND ASSOCIATION INC."]
 
   belongs_to :branch
 	belongs_to :center
@@ -23,7 +23,11 @@ class Claim < ApplicationRecord
 
   before_validation :load_defaults
 
-  
+  def transaction_fee
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:transaction_fee]
+  end
 
   def book
     temp_data = self.data.with_indifferent_access

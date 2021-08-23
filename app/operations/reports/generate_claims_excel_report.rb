@@ -43,9 +43,11 @@ module Reports
             "Branch",
             "Center",
             "Name of Member",
+            "Age",
             "Claim Type",
             "Prepared by",
-            "Status"
+            "Status",
+            "Amount"
           ], style: header
 
           @claims.each_with_index do |claim|
@@ -57,9 +59,11 @@ module Reports
                 claim.branch.name,
                 claim.member.center.name,
                 claim.member.full_name,
+                claim.member.age,
                 claim.claim_type,
                 claim.prepared_by,
-                claim.status
+                claim.status,
+                claim.data.with_indifferent_access[:amount]
               ], style: [nil]             
             end
           end

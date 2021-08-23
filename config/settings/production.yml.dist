@@ -167,15 +167,11 @@ module_authorization_roles:
     - AM
   administration:
     - MIS
-  
-
-
   unlock_member_modification:
     - MIS
     - BK
     - SBK
     - OAS
-
   online_loan_application_in_process:
     - MIS
     - FM
@@ -184,6 +180,16 @@ module_authorization_roles:
     - MIS
     - FM
     - CM
+  approve_loan:
+    - MIS
+    - BK
+    - SBK
+  upload_loan_application_form:
+    - MIS
+    - OAS
+  form_edit_loan:
+    - MIS
+    - OAS
 ###############################
 # SHARE CERTIFICATE           #
 ###############################
@@ -592,12 +598,16 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Policy Loan"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Equity Value"
 
 # Mba new insurance accounts
 hiip: "Hospital Income Insurance Plan"
 clip: "Credit Life Insurance Plan"
 life: "Life Insurance Fund"
 pl: "Policy Loan"
+ev: "Equity Value"
 
 default_equity_withdrawal_accounts:
   -
@@ -5752,6 +5762,11 @@ loan_products:
     interest_receivable_accounting_code_id: "6650f204-eec4-4db3-85c4-c72fc12c5edc"
     amount_released_accounting_code_id: "41e05b2a-df2e-4b56-8dae-30df5dccdb5a"
     default_amount: 1000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.0
+      threshold: 0.00
     deductions:
       -
         name: "MBA-CLIP"
@@ -5883,6 +5898,11 @@ loan_products:
     interest_receivable_accounting_code_id: "13f79540-2b42-43b0-8f8d-2fb9278badaa"
     amount_released_accounting_code_id: "41e05b2a-df2e-4b56-8dae-30df5dccdb5a"
     default_amount: 1000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.0
+      threshold: 0.00
     deductions:
       -
         name: "MBA-CLIP"
@@ -6335,6 +6355,11 @@ loan_products:
     amount_released_accounting_code_id: "b3b0d959-2eda-4e68-9421-203f3c133745"
     default_amount: 5000.00
     special_loan_product: "true"
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.0
+      threshold: 0.00
     deductions:
       -
         name: "Service Fee"
