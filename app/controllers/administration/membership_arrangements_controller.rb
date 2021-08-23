@@ -19,7 +19,7 @@ module Administration
           text: "Administration"
         },
         {
-          text: "MembershipArrangements"
+          text: "Membership Arrangements"
         }
       ]
 
