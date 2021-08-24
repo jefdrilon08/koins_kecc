@@ -32,7 +32,12 @@ export default class FormDisplay extends React.Component {
       branches: [],
       centers: [],
       membershipArrangements: props.membershipArrangements || [],
+      membershipTypes: props.membershipTypes || [],
       authError: false,
+      currentMembershipType: {
+        value: "",
+        label: ""
+      },
       currentBranch: {
         value: "",
         label: ""
@@ -93,6 +98,17 @@ export default class FormDisplay extends React.Component {
     this.setState({
       data: data,
       currentMembershipArrangement: o
+    });
+  }
+
+  updateCurrentMembershipType(o) {
+    var data  = this.state.data;
+    data.membership_type_id   = o.value;
+    data.membership_type_name = o.label;
+
+    this.setState({
+      data: data,
+      currentMembershipType: o
     });
   }
 
@@ -239,6 +255,14 @@ export default class FormDisplay extends React.Component {
           currentCenter: {
             value: response.center_id,
             label: response.center_name
+          },
+          currentMembershipArrangement: {
+            value: response.membership_arrangement_id,
+            label: response.membership_arrangement_name
+          },
+          currentMembershipType: {
+            value: response.membership_type_id,
+            label: response.membership_type_name
           }
         });
       },
@@ -302,9 +326,11 @@ export default class FormDisplay extends React.Component {
     var currentBranch                 = state.currentBranch;
     var currentMemberType             = state.currentMemberType;
     var currentMembershipArrangement  = state.currentMembershipArrangement;
+    var currentMembershipType         = state.currentMembershipType;
 
     var memberTypes             = this.props.memberTypes;
     var membershipArrangements  = this.props.membershipArrangements;
+    var membershipTypes         = this.props.membershipTypes;
 
     if(state.isLoading) {
       return  (
@@ -330,16 +356,19 @@ export default class FormDisplay extends React.Component {
                 currentCenter={currentCenter}
                 currentMemberType={currentMemberType}
                 currentMembershipArrangement={currentMembershipArrangement}
+                currentMembershipType={currentMembershipType}
                 branches={state.branches}
                 centers={state.centers}
                 memberTypes={memberTypes}
                 membershipArrangements={membershipArrangements}
+                membershipTypes={membershipTypes}
                 updateData={this.updateData.bind(this)}
                 formDisabled={state.formDisabled}
                 updateCurrentBranch={this.updateCurrentBranch.bind(this)}
                 updateCurrentCenter={this.updateCurrentCenter.bind(this)}
                 updateCurrentMemberType={this.updateCurrentMemberType.bind(this)}
                 updateCurrentMembershipArrangement={this.updateCurrentMembershipArrangement.bind(this)}
+                updateCurrentMembershipType={this.updateCurrentMembershipType.bind(this)}
               />
 
               <div className="card">

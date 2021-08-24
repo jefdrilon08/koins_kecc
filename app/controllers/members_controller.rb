@@ -94,7 +94,8 @@ class MembersController < ApplicationController
     @payload = {
       "id": params[:id],
       "memberTypes": Settings.default_member_types,
-      "membershipArrangements": MembershipArrangement.all.map{ |o| { id: o.id, name: o.name } }
+      "membershipArrangements": MembershipArrangement.all.map{ |o| { id: o.id, name: o.name } },
+      "membershipTypes": MembershipType.all.map{ |o| { id: o.id, name: o.name } }
     }
   end
 

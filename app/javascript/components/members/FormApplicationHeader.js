@@ -6,9 +6,15 @@ export default class FormApplicationHeader extends React.Component {
     super(props);
   }
 
+  handleMembershipTypeChanged(o) {
+    if(o) {
+      this.props.updateCurrentMembershipType(o);
+    }
+  }
+
   handleMembershipArrangementChanged(o) {
     if(o) {
-      this.props.updateCurrentMembershipArrangement(o)
+      this.props.updateCurrentMembershipArrangement(o);
     }
   }
 
@@ -33,6 +39,7 @@ export default class FormApplicationHeader extends React.Component {
     var centerOptions                 = [];
     var memberTypeOptions             = [];
     var membershipArrangementOptions  = [];
+    var membershipTypeOptions         = [];
 
     for(var i = 0; i < this.props.memberTypes.length; i++) {
       memberTypeOptions.push(
@@ -49,7 +56,12 @@ export default class FormApplicationHeader extends React.Component {
       });
     }
 
-    console.log(membershipArrangementOptions);
+    for(var i = 0; i < this.props.membershipTypes.length; i++) {
+      membershipTypeOptions.push({
+        value: this.props.membershipTypes[i].id,
+        label: this.props.membershipTypes[i].name
+      });
+    }
 
     for(var i = 0; i < this.props.branches.length; i++) {
       if(this.props.branches[i].id == this.props.currentBranch.value) {
@@ -101,14 +113,12 @@ export default class FormApplicationHeader extends React.Component {
             <div className="col-md-3 col-xs-12">
               <div className="form-group">
                 <label>Member Type</label>
-                <select 
-                  value={this.props.currentMemberType} 
-                  onChange={this.handleMemberTypeChanged.bind(this)}
+                <Select
+                  value={this.props.currentMembershipType}
+                  options={membershipTypeOptions}
+                  onChange={this.handleMembershipTypeChanged.bind(this)}
                   disabled={this.props.formDisabled}
-                  className={"form-control"}
-                >
-                  {memberTypeOptions}
-                </select>
+                />
                 <br/>
               </div>
             </div>

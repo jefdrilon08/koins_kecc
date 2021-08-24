@@ -65,11 +65,13 @@
         Member Type
         .value.text-muted
           %b
-            - if @member.modifiable
-              = link_to "#", id: "btn-change-member-type" do
-                #{@member.member_type.upcase}
-            - else
-              #{@member.member_type.upcase}
+            #{@member.membership_type || "N/A"}
+
+      %li.list-group-item
+        Arrangement
+        .value.text-muted
+          %b
+            #{@member.membership_arrangement}
 
       %li.list-group-item
         Recognition Date
@@ -92,13 +94,6 @@
           .value.text-muted
             %b
               #{@member.length_of_stay}
-      / %li.list-group-item
-      /   Insurance Active
-      /   .value.text-muted
-      /     %b
-      /       %label.switch
-      /         %input{:type => "checkbox"}/
-      /         %span.slider.round
     - if @member.modifiable
       = link_to member_form_path(id: @member.id), class: 'btn btn-secondary btn-block', style: "margin-top: 10px;" do
         %i.fa.fa-edit

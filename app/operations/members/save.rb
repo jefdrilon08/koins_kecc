@@ -13,6 +13,7 @@ module Members
       @branch                 = Branch.find(@member_data[:branch_id])
       @center                 = Center.find(@member_data[:center_id])
       @membership_arrangement = MembershipArrangement.find(@member_data[:membership_arrangement_id])
+      @membership_type        = MembershipType.find(@member_data[:membership_type_id])
 
       @member = Member.new
 
@@ -124,6 +125,7 @@ module Members
       @member.branch                  = @branch
       @member.center                  = @center
       @member.membership_arrangement  = @membership_arrangement
+      @member.membership_type         = @membership_type
       @member.modifiable              = nil
 
       @member.save!

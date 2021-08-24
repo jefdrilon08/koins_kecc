@@ -319,6 +319,11 @@ class Member < ApplicationRecord
       self.password               = "password"
       self.password_confirmation  = "password"
     end
+
+    # Patch for membership_type --> member_type
+    if self.membership_type.present?
+      self.member_type = self.membership_type.name
+    end
   end
 
   def equity_value

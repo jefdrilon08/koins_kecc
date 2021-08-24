@@ -65,6 +65,7 @@ module Members
       branch                  = @member.branch
       center                  = @member.center
       membership_arrangement  = @member.membership_arrangement
+      membership_type         = @member.membership_type
 
       @member_data  = {
         id: @member.id || "",
@@ -86,6 +87,8 @@ module Members
         center_name: center.try(:name) || "",
         membership_arrangement_id: membership_arrangement.try(:id) || "",
         membership_arrangement_name: membership_arrangement.try(:name) || "",
+        membership_type_id: membership_type.try(:id) || "",
+        membership_type_name: membership_type.try(:name) || "",
         beneficiaries: @member.beneficiaries,
         legal_dependents: legal_dependents
       }
