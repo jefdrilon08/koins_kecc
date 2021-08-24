@@ -13,7 +13,9 @@ module Members
       a = []
       Loan.where(member_id: @member.id).each do |g|
         if g.data.with_indifferent_access[:accrued_interest].present?
-          a << g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest].to_f - g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest_balance].to_f
+          if g.data.with_indifferent_access[:accrued_interest]["status"] != "remove"
+            a << g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest].to_f - g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest_balance].to_f
+          end
         end
       end
 
@@ -21,7 +23,7 @@ module Members
         
         @errors[:messages] << {
           key: "member",
-          message: "Member have a total #{a.sum} accrued interest to pay"
+          message: "Member have a total #{a.sum.round(2)} accrued interest to pay"
           
         }
       end
