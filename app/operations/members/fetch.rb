@@ -85,6 +85,7 @@ module Members
         center_id: center.try(:id) || "",
         center_name: center.try(:name) || "",
         membership_arrangement_id: membership_arrangement.try(:id) || "",
+        membership_arrangement_name: membership_arrangement.try(:name) || "",
         beneficiaries: @member.beneficiaries,
         legal_dependents: legal_dependents
       }

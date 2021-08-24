@@ -7,8 +7,9 @@ module Members
       @member_data  = @config[:member_data]
       @user         = @config[:user]
 
-      @branch = Branch.where(id: @member_data[:branch_id]).first
-      @center = Center.where(id: @member_data[:center_id]).first
+      @branch                 = Branch.where(id: @member_data[:branch_id]).first
+      @center                 = Center.where(id: @member_data[:center_id]).first
+      @membership_arrangement = MembershipArrangement.where(id: @member_data[:membership_arrangement_id]).first
     end
 
     def execute!
@@ -109,7 +110,6 @@ module Members
         }
       end
 
-      # Validate branch and center
       if @branch.blank?
         @errors[:messages] << {
           key: "branch_id",
@@ -121,6 +121,13 @@ module Members
         @errors[:messages] << {
           key: "center_id",
           message: "Center not found"
+        }
+      end
+
+      if @membership_arrangement.blank?
+        @errors[:messages] << {
+          key: "membership_arrangement_id",
+          message: "Membership arrangement not found"
         }
       end
 

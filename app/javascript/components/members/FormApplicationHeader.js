@@ -49,6 +49,8 @@ export default class FormApplicationHeader extends React.Component {
       });
     }
 
+    console.log(membershipArrangementOptions);
+
     for(var i = 0; i < this.props.branches.length; i++) {
       if(this.props.branches[i].id == this.props.currentBranch.value) {
         for(var j = 0; j < this.props.branches[i].centers.length; j++) {
