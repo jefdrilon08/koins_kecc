@@ -31,12 +31,17 @@ export default class FormDisplay extends React.Component {
       authenticityToken: props.authenticityToken,
       branches: [],
       centers: [],
+      membershipArrangements: props.membershipArrangements || [],
       authError: false,
       currentBranch: {
         value: "",
         label: ""
       },
       currentCenter: {
+        value: "",
+        label: ""
+      },
+      currentMembershipArrangement: {
         value: "",
         label: ""
       },
@@ -80,6 +85,17 @@ export default class FormDisplay extends React.Component {
     });
   }
 
+  updateCurrentMembershipArrangement(o) {
+    var data  = this.state.data;
+    data.membership_arrangement_id    = o.value;
+    data.membership_arrangement_name  = o.label;
+
+    this.setState({
+      data: data,
+      currentMembershipArrangement: o
+    });
+  }
+
   updateCurrentBranch(o) {
     var centers = [];
     for(var i = 0; i < this.state.branches.length; i++) {
@@ -89,9 +105,6 @@ export default class FormDisplay extends React.Component {
         }
       }
     }
-
-    console.log("Updating current branch to:");
-    console.log(o);
 
     var data  = false;
     if(this.state.data) {
@@ -285,11 +298,13 @@ export default class FormDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
-    var currentCenter     = state.currentCenter;
-    var currentBranch     = state.currentBranch;
-    var currentMemberType = state.currentMemberType;
+    var currentCenter                 = state.currentCenter;
+    var currentBranch                 = state.currentBranch;
+    var currentMemberType             = state.currentMemberType;
+    var currentMembershipArrangement  = state.currentMembershipArrangement;
 
-    var memberTypes = this.props.memberTypes;
+    var memberTypes             = this.props.memberTypes;
+    var membershipArrangements  = this.props.membershipArrangements;
 
     if(state.isLoading) {
       return  (
@@ -314,14 +329,17 @@ export default class FormDisplay extends React.Component {
                 currentBranch={currentBranch}
                 currentCenter={currentCenter}
                 currentMemberType={currentMemberType}
+                currentMembershipArrangement={currentMembershipArrangement}
                 branches={state.branches}
                 centers={state.centers}
                 memberTypes={memberTypes}
+                membershipArrangements={membershipArrangements}
                 updateData={this.updateData.bind(this)}
                 formDisabled={state.formDisabled}
                 updateCurrentBranch={this.updateCurrentBranch.bind(this)}
                 updateCurrentCenter={this.updateCurrentCenter.bind(this)}
                 updateCurrentMemberType={this.updateCurrentMemberType.bind(this)}
+                updateCurrentMembershipArrangement={this.updateCurrentMembershipArrangement.bind(this)}
               />
 
               <div className="card">

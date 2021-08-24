@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_23_140327) do
+ActiveRecord::Schema.define(version: 2021_08_23_152000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -937,9 +937,13 @@ ActiveRecord::Schema.define(version: 2021_08_23_140327) do
     t.string "encrypted_password"
     t.string "username"
     t.uuid "online_application_id"
+    t.uuid "membership_arrangement_id"
+    t.uuid "membership_type_id"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
+    t.index ["membership_arrangement_id"], name: "index_members_on_membership_arrangement_id"
+    t.index ["membership_type_id"], name: "index_members_on_membership_type_id"
     t.index ["online_application_id"], name: "index_members_on_online_application_id"
     t.index ["status", "center_id"], name: "manual_idx_7"
   end
@@ -1291,6 +1295,8 @@ ActiveRecord::Schema.define(version: 2021_08_23_140327) do
   add_foreign_key "members", "branches"
   add_foreign_key "members", "centers"
   add_foreign_key "members", "members"
+  add_foreign_key "members", "membership_arrangements"
+  add_foreign_key "members", "membership_types"
   add_foreign_key "members", "online_applications"
   add_foreign_key "membership_payment_collections", "branches"
   add_foreign_key "membership_payment_collections", "centers"

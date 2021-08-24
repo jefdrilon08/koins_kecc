@@ -1,5 +1,5 @@
 module Administration
-  class Membership TypesController < ApplicationController
+  class MembershipTypesController < ApplicationController
     before_action :authenticate_user!
 
     def index

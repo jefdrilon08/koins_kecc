@@ -62,6 +62,10 @@ module Members
                             }
                           }
 
+      branch                  = @member.branch
+      center                  = @member.center
+      membership_arrangement  = @member.membership_arrangement
+
       @member_data  = {
         id: @member.id || "",
         first_name: @member.first_name || "",
@@ -76,10 +80,11 @@ module Members
         member_type: @member.member_type || "Regular",
         religion: @member.religion || "",
         data: @member.new_record? ? data : @member.data.with_indifferent_access,
-        branch_id: @member.branch.try(:id) || "",
-        branch_name: @member.branch.try(:name) || "",
-        center_id: @member.center.try(:id) || "",
-        center_name: @member.center.try(:name) || "",
+        branch_id: branch.try(:id) || "",
+        branch_name: branch.try(:name) || "",
+        center_id: center.try(:id) || "",
+        center_name: center.try(:name) || "",
+        membership_arrangement_id: membership_arrangement.try(:id) || "",
         beneficiaries: @member.beneficiaries,
         legal_dependents: legal_dependents
       }

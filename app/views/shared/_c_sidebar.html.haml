@@ -420,6 +420,10 @@
         = link_to administration_membership_arrangements_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-list
           Membership Arrangements
+      %li.c-sidebar-nav-item
+        = link_to administration_membership_types_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-list
+          Membership Types
       - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to administration_surveys_path, class: "c-sidebar-nav-link" do
