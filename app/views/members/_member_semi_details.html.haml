@@ -62,16 +62,22 @@
             #{@member.insurance_status.upcase} 
 
       %li.list-group-item
-        Member Type
+        Membership Type
         .value.text-muted
           %b
             #{@member.membership_type || "N/A"}
 
       %li.list-group-item
+        Member Type (Old)
+        .value.text-muted
+          %b
+            #{@member.member_type}
+
+      %li.list-group-item
         Arrangement
         .value.text-muted
           %b
-            #{@member.membership_arrangement}
+            #{@member.membership_arrangement || "N/A"}
 
       %li.list-group-item
         Recognition Date
