@@ -4,8 +4,8 @@ namespace :generate do
   end
 
   task :members_file => :environment do
-    start_date  = ENV["START_DATE"] || Date.today
-    end_date    = ENV["END_DATE"] || Date.today
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
 
     cmd = ::Exports::SaveMembersCsv.new(
             start_date: start_date,
@@ -33,8 +33,8 @@ namespace :generate do
   end
 
   task :beneficiaries_file => :environment do
-    start_date  = ENV["START_DATE"] || Date.today
-    end_date    = ENV["END_DATE"] || Date.today
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
 
     cmd = ::Exports::SaveBeneficiariesCsv.new(
             start_date: start_date,
@@ -62,8 +62,8 @@ namespace :generate do
   end
 
   task :legal_dependents_file => :environment do
-    start_date  = ENV["START_DATE"] || Date.today
-    end_date    = ENV["END_DATE"] || Date.today
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
 
     cmd = ::Exports::SaveLegalDependentsCsv.new(
             start_date: start_date,
@@ -91,8 +91,8 @@ namespace :generate do
   end
 
   task :member_accounts_file => :environment do
-    start_date  = ENV["START_DATE"] || Date.today
-    end_date    = ENV["END_DATE"] || Date.today
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
 
     cmd = ::Exports::SaveMemberAccountsCsv.new(
             start_date: start_date,
@@ -120,8 +120,8 @@ namespace :generate do
   end
 
   task :account_transactions_file => :environment do
-    start_date  = ENV["START_DATE"] || Date.today
-    end_date    = ENV["END_DATE"] || Date.today
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
 
     cmd = ::Exports::SaveAccountTransactionsCsv.new(
             start_date: start_date,
