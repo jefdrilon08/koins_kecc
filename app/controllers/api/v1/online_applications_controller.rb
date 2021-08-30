@@ -108,16 +108,27 @@ module Api
         if validator.errors[:full_messages].size > 0
           render json: { errors: validator.errors[:full_messages] }, status: 403
         else
-          cmd = ::OnlineApplications::Process.new(
-                  online_application: online_application,
-                  branch: branch,
-                  center: center,
-                  user: current_user
-                )
+          online_application.update!(status: "processing")
 
-          cmd.execute!
+          ProcessOnlineApplication.perform_later({
+            id: online_application.id,
+            branch_id: branch.id,
+            center_id: center.id,
+            user_id: current_user.id
+          })
 
-          render json: { message: "ok", member_id: cmd.member.id }
+          render json: { message: "ok" }
+
+#          cmd = ::OnlineApplications::Process.new(
+#                  online_application: online_application,
+#                  branch: branch,
+#                  center: center,
+#                  user: current_user
+#                )
+#
+#          cmd.execute!
+#
+#          render json: { message: "ok", member_id: cmd.member.id }
         end
       end
     end

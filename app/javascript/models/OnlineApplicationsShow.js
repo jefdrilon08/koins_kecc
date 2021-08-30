@@ -254,7 +254,7 @@ var _bindEvents = function() {
       },
       success: function(response) {
         $message.html("Success! Redirecting..."); 
-        window.location.href = "/members/" + response.member_id + "/display";
+        window.location.href = "/online_applications";
       },
       error: function(response) {
         console.log(response);

@@ -3,7 +3,8 @@ class OnlineApplication < ApplicationRecord
     "for_verification",
     "verified",
     "processed",
-    "rejected"
+    "rejected",
+    "processing"
   ]
 
   validates :status, presence: true, inclusion: { in: STATUSES }
@@ -27,6 +28,7 @@ class OnlineApplication < ApplicationRecord
   scope :verified, -> { where(status: "verified") }
   scope :processed, -> { where(status: "processed") }
   scope :rejected, -> { where(status: "rejected") }
+  scope :processing, -> { where(status: "processing") }
 
   def load_defaults
     if self.status.blank?
@@ -36,6 +38,10 @@ class OnlineApplication < ApplicationRecord
     if self.reference_number.blank?
       self.reference_number = SecureRandom.hex(4).upcase
     end
+  end
+
+  def processing?
+    self.status == "processing"
   end
 
   def verified?

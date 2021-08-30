@@ -35,6 +35,9 @@
             - if o.for_verification?
               .badge.badge-warning
                 FOR VERIFICATION
+            - elsif o.processing?
+              .badge.badge-secondary
+                PROCESSING
             - elsif o.verified?
               .badge.badge-info
                 VERIFIED
