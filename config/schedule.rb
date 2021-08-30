@@ -36,11 +36,11 @@ every :day, at: '9pm' do
   rake "generate:account_transactions_file"
 end
 
-every :day, at: '10pm' do
+every :day, at: '4am' do
   rake "adjust:update_insurance_status"
 end
 
-every :day, at: '11:00pm' do
+every :day, at: '4:45am' do
   rake "adjust:process_insurance_member_counts"
   rake "adjust:process_personal_funds"
   rake "adjust:process_claims_counts"

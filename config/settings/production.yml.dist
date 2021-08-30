@@ -5593,6 +5593,11 @@ loan_products:
     receivable_accounting_code_id: "5dc4178d-6b2d-404a-9908-950ebc59b361"
     interest_receivable_accounting_code_id: "99a05d29-843b-400e-ab63-4d01ad46d901"
     default_amount: 5000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.2
+      threshold: 0.00
     deductions:
       -
         name: "Service Fee"
@@ -6350,8 +6355,8 @@ loan_products:
           offset: 1
   -
     loan_product_id: "d1fe60f9-380f-4f2a-9b44-23747b9d7d1e"                         # K - YAKAP  
-    receivable_accounting_code_id: "e496b406-001e-4ba0-8999-76e79dd34501"
-    interest_accounting_code_id:  "41a36eb6-2054-4826-b82b-ad4007964b71"
+    receivable_accounting_code_id: "a1e2631d-d1b8-4ef3-9a88-b34a1e4d2e7c"
+    interest_receivable_accounting_code_id:  "41a36eb6-2054-4826-b82b-ad4007964b71"
     amount_released_accounting_code_id: "b3b0d959-2eda-4e68-9421-203f3c133745"
     default_amount: 5000.00
     special_loan_product: "true"
@@ -6667,6 +6672,6 @@ loan_product_accounting_codes:
     interest_receivable_accounting_code_id: "82b02486-5228-47ca-bb59-218092a6dbd1"
   -
     loan_product_id: "d1fe60f9-380f-4f2a-9b44-23747b9d7d1e"                         # K - YAKAP 
-    receivable_accounting_code_id: "e496b406-001e-4ba0-8999-76e79dd34501"
-    interest_accounting_code_id:  "41a36eb6-2054-4826-b82b-ad4007964b71"
+    receivable_accounting_code_id: "a1e2631d-d1b8-4ef3-9a88-b34a1e4d2e7c"
+    interest_receivable_accounting_code_id:  "41a36eb6-2054-4826-b82b-ad4007964b71"
 ###############################

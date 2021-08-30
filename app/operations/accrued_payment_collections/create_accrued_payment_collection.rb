@@ -64,6 +64,7 @@ module AccruedPaymentCollections
           if x.present?
             ld[:loan_data] << { 
               name:     hd.name,
+              enabled:  true,
               loan_id:  x.id,
               amount:   amt
 
@@ -71,11 +72,28 @@ module AccruedPaymentCollections
           else
             ld[:loan_data] << { 
               name:     hd.name,
-              loan_id:  'false',
-              amount:   'false'                   
+              enabled:  false,
+              loan_id:  '',
+              amount:   ''                   
             }
           end
         end
+          ld[:loan_data] << { 
+              name:     "Withdraw Payment",
+              enabled:  true,
+              loan_id:  '',
+              amount:   0.0
+
+            }
+
+            ld[:loan_data] << { 
+              name:     "Cash Payment",
+              enabled:  true,
+              loan_id:  '',
+              amount:   0.0
+
+            }
+
       end
     end
 
