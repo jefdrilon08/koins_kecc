@@ -28,6 +28,15 @@ class BillingForFullPaymentsController < ApplicationController
   
   def show
     @billing_data_store = DataStore.find(params[:id])
-      
+    @member_list = Member.where(center_id: @billing_data_store.meta["center_id"], status: "active")
+    @billing_header = []
+      Settings.loan_products.each do |a|
+        if  a[:for_unearned_interest] == true
+          @billing_header << a[:loan_product_id]
+        end
+    end
+    @billing_header
+    
+
   end
 end

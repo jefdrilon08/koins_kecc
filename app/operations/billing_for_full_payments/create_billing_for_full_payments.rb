@@ -18,12 +18,12 @@ module BillingForFullPayments
           temp = {
             member_id: o.fetch("member_id"),
             member_last_name:  o.fetch("member_last_name"),
-            loan_id: o.fetch("loan_id"),
             center: {
               id: o.fetch("center_id"),
               name: o.fetch("center_name")
             },
-            balance: []
+            balance: [],
+            status: "pending"
 
           }
 
@@ -32,24 +32,26 @@ module BillingForFullPayments
             loan = Loan.where(member_id: temp[:member_id] , status: "active", loan_product_id: gbh )
             
             if loan.present?
-              for_interest_paid = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and is_paid is null", loan.last.id, @due_date).sum(:interest_balance)
               d = {
                     member: temp[:member_last_name],
                     record_type: "LOAN PAYMENT",
-                    enabled: true,
-                    member_account_id: loan.last.id,
-                    loan_product_id: loan.last.loan_product.id,
-                    principal_balance: loan.last.principal_balance,
-                    interest_balance: for_interest_paid,
-                    amount:  loan.last.principal_balance + for_interest_paid
-                   }
+                    enabled: false,
+                    member_account_id: nil,
+                    loan_id: loan.last.id,
+                    loan_product_id: gbh,
+                    principal_balance: 0.0,
+                    interest_balance: 0.0,
+                    amount: 0.0
+                  }
               temp[:balance] << d
               
             else
               d = {
+                    member: temp[:member_last_name],
                     record_type: "LOAN PAYMENT",
                     enabled: false,
                     member_account_id: nil,
+                    loan_id: nil,
                     loan_product_id: gbh,
                     principal_balance: 0.0,
                     interest_balance: 0.0,

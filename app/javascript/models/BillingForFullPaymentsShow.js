@@ -26,6 +26,8 @@ var $btnConfirmNew;
 var $btnConfirmDelete;
 var $btnConfirmProcess;
 var $btnConfirmBatchProcess;
+var $btnAdd;
+
 var $message;
 var templateErrorList;
 var _authenticityToken;
@@ -63,6 +65,7 @@ var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
 var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
+var _urlAddMember     = "/api/v1/billing_for_full_payments/add_member";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -78,9 +81,7 @@ var _cacheDom = function() {
   $modalBatchProcess            = $("#modal-batch-process");
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
-  $selectMember                 = $("#select-member");
   $selectProcessCenter          = $("#select-process-center");
-  $selectLoans                  = $("#select-loans");
   $inputNumberOfDays            = $(".amount_details");
   $inputStartDate               = $("#bookId");
   $inputEndDate                 = $("#input-end-date");
@@ -100,10 +101,15 @@ var _cacheDom = function() {
   $inputBatchNumberOfDays       = $("#input-batch-number-of-moratorium-days");
   $selectBatchBranch       = $("#select-batch-branch");
   $inputDateInitializedCutOff = $("#input-date-initialized-cut-off");
-  $batchStartDate             = $("#batch-input-start-date")
-  $batchEndDate             = $("#batch-input-end-date")
-  $batchAccruedType         = $("#select-batch-accrued-type")
-  $inputCollectionDate      = $("#collection-date")
+  $batchStartDate             = $("#batch-input-start-date");
+  $batchEndDate             = $("#batch-input-end-date");
+  $batchAccruedType         = $("#select-batch-accrued-type");
+  $inputCollectionDate      = $("#collection-date");
+  $btnAdd                   = $("#btn-add");
+  $selectMember             = $("#select-member");
+  $selectLoans                  = $("#select-loans");
+
+
   templateErrorList = $("#template-error-list").html();
 
   $selectLoans.select2({
@@ -138,38 +144,6 @@ var _loadCenterOptions  = function() {
   }
 };
 
-var _fetchLoans = function() {
-  $.ajax({
-    method: 'GET',
-    url: _urlLoans,
-    data: {
-      member_id: _memberId
-    },
-    success: function(response) {
-      _loans  = response.loans;
-      console.log("Loans:");
-      console.log(_loans);
-
-      $selectLoans.val(null).trigger('change');
-      $selectLoans.empty();
-
-      _loans.forEach(function(o, i) {
-        $selectLoans.append(
-          new Option(
-            o.loan_product.name,
-            o.id,
-            false,
-            false
-          )
-        ).trigger('change');
-      });
-    },
-    error: function(response) {
-      console.log("Error in fetching loans.");
-      console.log(response);
-    }
-  });
-};
 
 var _bindEvents = function() {
   $selectMember.on("change", function() {
@@ -178,37 +152,24 @@ var _bindEvents = function() {
     _fetchLoans();
   });
 
-  $btnBatchProcess.on("click", function() {
-  
-    $modalBatchProcess.modal("show");
-  });
 
-  $btnConfirmBatchProcess.on("click", function() {
-  
-   var batchnumberOfDays    = $inputBatchNumberOfDays.val();
-   var selectBatchBranch    = $selectBatchBranch.val();
-   var inputDateInitializedCutOff =  $inputDateInitializedCutOff.val()
+
+  $btnAdd.on("click", function(){
     
-  var batchStartDate = $batchStartDate.val()       
-  var batchEndDate = $batchEndDate.val()  
-  var batchAccruedType = $batchAccruedType.val()
+    var member_id = $selectMember.val();
+    var member_loan_id = $selectLoans.val();
+    var dataStoreId = $(this).data('data-store-id')     
 
-  
-    $message.html("Loading...");
-    $btnConfirmBatchProcess.prop("disabled", true);
-
-
+    //alert(dataStoreId)
     $.ajax({
-      url: _urlBatchProcess,
+
+      url: _urlAddMember,
       method: "POST",
       data: {
-        branch_id:  selectBatchBranch,
-        batchnumberOfDays: batchnumberOfDays,
-        inputDateInitializedCutOff: inputDateInitializedCutOff,
-        batchStartDate: batchStartDate,
-        batchEndDate: batchEndDate,  
-        batchAccruedType: batchAccruedType
-    
+        member_id:          member_id,
+        member_loan_id:     member_loan_id,
+        data_store_id:      dataStoreId,
+        authenticity_token: _authenticityToken
       },
       success: function(response) {
         $message.html("Success!");
@@ -229,7 +190,7 @@ var _bindEvents = function() {
             )
           );
 
-          $btnConfirmBatchProcess.prop("disabled", false);
+          $btnConfirmProcess.prop("disabled", false);
         }
       }
     });
@@ -301,36 +262,6 @@ var _bindEvents = function() {
         alert("Error in deleting record!");
         $message.html("");
         $btnConfirmDelete.prop("disabled", false);
-      }
-    });
-  });
-
-  $selectCenter.on("change", function() {
-    _centerId = $selectCenter.val();
-
-
-  });
-
-  $selectBranch.on("change", function() {
-    $.ajax({
-      method: 'GET',
-      url: _urlCenters,
-      data: {
-        id: $selectBranch.val(),
-        with_members: true
-      },
-      success: function(response) {
-        _centers  = response.centers;
-
-        if(_centers.length > 0) {
-          _members  = _centers[0].members;
-        }
-
-        _loadCenterOptions();
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Error in fetching centers");
       }
     });
   });
