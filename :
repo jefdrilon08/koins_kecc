@@ -20,7 +20,7 @@
               .form-group
                 %label
                   Membership Arrangement
-                = select_tag :membership_arrangement, options_from_collection_for_select(@membership_arrangements, :id, :name), class: "form-control select-select2", id: "select-assign-membership-arrangement", prompt: "-- SELECT --"
+                = select_tag :membership_arrangement, options_from_collection_for_select(@membership_arrangements, :id, :name), class: "form-control select-select2", id: "select-assign-membership-arrangement"
           .message
       .modal-footer
         .controls

@@ -50,7 +50,9 @@ class OnlineApplicationsController < ApplicationController
   end
 
   def show
-    @online_application = OnlineApplication.find(params[:id])
+    @online_application       = OnlineApplication.find(params[:id])
+    @membership_types         = MembershipType.all
+    @membership_arrangements  = MembershipArrangement.all
 
     data  = ::OnlineApplications::BuildMemberFormData.new(
               online_application: @online_application

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_23_152000) do
+ActiveRecord::Schema.define(version: 2021_08_29_100850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -1049,7 +1049,11 @@ ActiveRecord::Schema.define(version: 2021_08_23_152000) do
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "branch_id"
     t.boolean "agreed_to_dp_terms"
+    t.uuid "membership_type_id"
+    t.uuid "membership_arrangement_id"
     t.index ["branch_id"], name: "index_online_applications_on_branch_id"
+    t.index ["membership_arrangement_id"], name: "index_online_applications_on_membership_arrangement_id"
+    t.index ["membership_type_id"], name: "index_online_applications_on_membership_type_id"
     t.index ["mobile_number"], name: "idx_mobile_number_oa"
     t.index ["reference_number"], name: "idx_online_applications_reference_number"
   end
@@ -1306,6 +1310,8 @@ ActiveRecord::Schema.define(version: 2021_08_23_152000) do
   add_foreign_key "monthly_closing_collections", "branches"
   add_foreign_key "online_application_documents", "online_applications"
   add_foreign_key "online_applications", "branches"
+  add_foreign_key "online_applications", "membership_arrangements"
+  add_foreign_key "online_applications", "membership_types"
   add_foreign_key "project_types", "project_type_categories"
   add_foreign_key "savings_insurance_transfer_collections", "branches"
   add_foreign_key "savings_insurance_transfer_collections", "centers"

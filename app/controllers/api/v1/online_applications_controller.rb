@@ -29,9 +29,14 @@ module Api
       def verify
         online_application  = OnlineApplication.find(params[:id])
 
+        membership_type         = MembershipType.find_by_id(params[:membership_type_id])
+        membership_arrangement  = MembershipArrangement.find_by_id(params[:membership_arrangement_id])
+
         validator = ::OnlineApplications::ValidateVerify.new(
                       online_application: online_application,
-                      user: current_user
+                      user: current_user,
+                      membership_type: membership_type,
+                      membership_arrangement: membership_arrangement
                     )
 
         validator.execute!
@@ -48,7 +53,9 @@ module Api
           cmd = ::OnlineApplications::Verify.new(
                   online_application: online_application,
                   user: current_user,
-                  branch: branch
+                  branch: branch,
+                  membership_type: membership_type,
+                  membership_arrangement: membership_arrangement
                 )
 
           cmd.execute!

@@ -15,6 +15,8 @@ class OnlineApplication < ApplicationRecord
   validates :civil_status, presence: true
 
   belongs_to :branch, optional: true
+  belongs_to :membership_type, optional: true
+  belongs_to :membership_arrangement, optional: true
 
   before_validation :load_defaults
 
