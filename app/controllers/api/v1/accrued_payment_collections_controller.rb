@@ -5,7 +5,7 @@ module Api
     		collection_date   = params[:collection_date].try(:to_date)
         	branch_id       = params[:branch_id]
         	center_id       = params[:center_id]
-          member_id       = params[:member_id]
+                member_id       = params[:member_id]
 
 
         	config  = {
@@ -28,6 +28,19 @@ module Api
                                           ).execute!
           render json: { message: "ok", id: accrued_payment_collection.id }
     	end
+
+        def update_transaction
+          data_store_id       = params[:data_store_id]
+          member_id           = params[:member_id]
+          member_account_id   = params[:member_account_id]
+          loan_amount         = params[:loan_amount].to_f
+          billing = AccruedBilling.find(data_store_id)
+          billing_data = billing.data.with_indifferent_access
+          billing_data[:member_data][member_id][:loan_data][member_account_id][:amount] = loan_amount
+          billing.update(data: billing_data)
+           
+        end
+
     end
   end
 end

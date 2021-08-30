@@ -6,6 +6,7 @@
           %thead
             %tr
               %th
+              %th
                 Member
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
                 %th
@@ -18,14 +19,23 @@
               -@accrued_member.each_with_index do |am , y|
                 %tr
                   %td
+                    #{y + 1}
+                  %td
                     = link_to member_path(am['member_id']), target: "_blank" do
                       %strong
                         #{am['name']}
                     - am['loan_data'].each_with_index do |al , x|
                       %td{:align=>"right"}
-                        -if al['amount'] != 'false'
-                          //%button.btn.btn-sm.btn-danger.btn-update-transaction{ data: { id: x } }
-                          #{al['amount']}
-                  %td
-                  %td
+                        -if al['enabled'] == true
+                          %a.undo{ data: { 
+                            amount: "#{al["amount"]}",
+                            collection_id: "#{@accrued_interest_collection.id}",
+                            member_data_id: "#{y}",
+                            loan_data_id: "#{x}"
+                                    }, 
+                                    :href => "#" 
+                            }
+                            #{al["amount"]}
 
+
+= render partial: "/accrued_payment_collections/modals/update_transaction"

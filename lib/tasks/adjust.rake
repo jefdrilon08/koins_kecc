@@ -1224,6 +1224,29 @@ namespace :adjust do
     puts "Done!"
   end
 
+  task :upload_members_associate_identification_number => :environment do
+    #csv_format_header (identification_number,associate_identification_number)
+
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      associate_identification_number = row['associate_identification_number']
+
+      member = Member.where(identification_number: identification_number).first
+
+      if !member.nil?
+        puts "Uploading associate id number for #{member.full_name}"   
+        member_data = member.data.with_indifferent_access
+        member_data[:associate_identification_number] = associate_identification_number
+        member.update!(data: member_data)
+      end
+    end
+
+    puts "Done!"
+  end
+
   task :update_member_branch_and_center => :environment do
     #header: identification_number, branch_id, center_name
     file_location = ENV['MEMBERS_CSV']
