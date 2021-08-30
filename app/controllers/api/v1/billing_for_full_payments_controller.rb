@@ -42,11 +42,9 @@ module Api
            }
           
           
-          errors = ::BillingForFullPayments::ValidatePayment.new(
-                                                                      config: config
-                                                                    ).execute!
+          #errors = ::BillingForFullPayments::ValidatePayment.new(config: config).execute!
           
-          #record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
+          record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
            
       end
 

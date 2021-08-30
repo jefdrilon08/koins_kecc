@@ -164,6 +164,7 @@ import MembersSearch from "../models/MembersSearch.js";
 import AdjustmentsAccruedInterestsIndex from "../models/AdjustmentsAccruedInterestsIndex.js";
 import AdjustmentsAccruedInterestsShow from "../models/AdjustmentsAccruedInterestsShow.js";
 import AccruedPaymentCollectionsIndex  from "../models/AccruedPaymentCollectionsIndex.js";
+import AccruedPaymentCollectionsShow  from "../models/AccruedPaymentCollectionsShow.js";
 import AdjustmentsRecomputeRestructuresIndex from "../models/AdjustmentsRecomputeRestructuresIndex.js";
 import AdjustmentsRecomputeRestructuresShow from "../models/AdjustmentsRecomputeRestructuresShow.js";
 import DailyBranchMetricsIndex from "../models/DailyBranchMetricsIndex.js";
@@ -324,7 +325,8 @@ const hooks = {
   "trends/index":                                     [TrendsIndex],
   "online_applications/show":                         [OnlineApplicationsShow],
   "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex],
-  "billing_for_full_payments/show":                   [BillingForFullPaymentsShow]
+  "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
+  "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
