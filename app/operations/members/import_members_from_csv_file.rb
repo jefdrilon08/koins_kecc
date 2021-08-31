@@ -230,7 +230,7 @@ module Members
             member.member_id = row['member_id']
             member.encrypted_password = row['encrypted_password']
             member.username = row['username']
-            member.online_application_id = row['online_application_id']
+            # member.online_application_id = row['online_application_id']
 
             member.save!
           end
@@ -299,8 +299,7 @@ module Members
               insurance_date_resigned: row['insurance_date_resigned'],
               member_id: row['member_id'],
               encrypted_password: row['encrypted_password'],
-              username: row['username'],
-              online_application_id: row['online_application_id']
+              username: row['username']
               )
           end
         end       
