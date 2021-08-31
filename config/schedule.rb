@@ -28,13 +28,13 @@
 set :output, {:error => "log/cron_error_log.log", :standard => "log/cron_log.log"}
 env :PATH, ENV['PATH']
 
-every :day, at: '9pm' do
-  rake "generate:members_file"
-  rake "generate:beneficiaries_file"
-  rake "generate:legal_dependents_file"
-  rake "generate:member_accounts_file"
-  rake "generate:account_transactions_file"
-end
+# every :day, at: '9pm' do
+#   rake "generate:members_file"
+#   rake "generate:beneficiaries_file"
+#   rake "generate:legal_dependents_file"
+#   rake "generate:member_accounts_file"
+#   rake "generate:account_transactions_file"
+# end
 
 every :day, at: '4am' do
   rake "adjust:update_insurance_status"

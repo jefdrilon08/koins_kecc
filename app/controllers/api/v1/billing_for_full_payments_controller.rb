@@ -48,6 +48,23 @@ module Api
            
       end
 
+      def add_member
+        data_store_id   = params[:data_store_id]
+        member_id       = params[:member_id]
+        member_loan_id  = params[:member_loan_id]
+        config = {
+        data_store_id:  data_store_id,
+        member_id:      member_id,
+        member_loan_id: member_loan_id
+
+        } 
+        
+        add_record = ::BillingForFullPayments::AddMember.new(config: config).execute!
+
+
+
+      end
+
     end
   end
 end

@@ -1,0 +1,19 @@
+.row
+  .col-md-4.col-xs-12
+    .form-group
+      %label
+        Member
+      = select_tag :member, options_for_select(@member_list.map{ |o| ["#{o["last_name"]}, #{o["first_name"]} ", o["id"] ] }), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+  .col-md-4.col-xs-12
+    .form-group
+      %label
+        Loan Product
+      = select_tag :account, options_for_select(@billing_header.map{ |b| ["#{LoanProduct.find(b).name}", b] }), class: "form-control select-select2", id: "select-loans", prompt: "-- SELECT --"
+  .col-md-2.col-xs-12
+    .form-group
+      %label
+        Actions
+      %button#btn-add.btn.btn-block.btn-success{ data: { data_store_id: "#{@billing_data_store.id}"  } }
+      
+        .fa.fa-plus
+        Add
