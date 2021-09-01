@@ -20,8 +20,9 @@ module Reports
       
       if @start_date.present? && @end_date.present?
         @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed", "dormant"])
-        @new_members                = Member.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ?", @start_date, @end_date)
-        @resigned_members           = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND insurance_status = ?", @start_date, @end_date, "resigned")
+
+        @new_members                = Member.active.where("data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?)", @start_date, @end_date, ["inforce", "lapsed", "dormant"])
+        @resigned_members           = Member.insurance_resigned.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ?", @start_date, @end_date)
 
         @new_jan                    = @new_members.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ?", @jan.beginning_of_month, @jan.end_of_month)
         @new_feb                    = @new_members.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ?", @feb.beginning_of_month, @feb.end_of_month)
