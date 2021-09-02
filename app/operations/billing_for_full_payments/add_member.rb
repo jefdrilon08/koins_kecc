@@ -15,6 +15,9 @@ module BillingForFullPayments
       a_data =  @data_store_details.data
       g = a_data.select{ |o| o["member_id"] == @member_id  }.first
       k = g["balance"].select{ |t| t["loan_product_id"] == @member_loan_id  }.last
+
+
+
       loan = Loan.where(loan_product_id: @member_loan_id, member_id: @member_id, status: "active")
       for_interest_paid = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and is_paid is null", loan.last.id, @data_store_details.meta["collection_date"]).sum(:interest_balance)
 
