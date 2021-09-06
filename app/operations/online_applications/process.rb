@@ -16,22 +16,23 @@ module OnlineApplications
 
     def execute!
       @member_data = {
-        branch_id:        @branch.id,
-        center_id:        @center.id,
-        first_name:       @online_application.first_name,
-        middle_name:      @online_application.middle_name,
-        last_name:        @online_application.last_name,
-        gender:           @online_application.gender,
-        date_of_birth:    @online_application.date_of_birth,
-        civil_status:     @online_application.civil_status,
-        home_number:      @online_application.home_number,
-        mobile_number:    @online_application.mobile_number,
-        place_of_birth:   @online_application.place_of_birth,
-        member_type:      "Regular",
-        religion:         @online_application.religion,
-        data:             @online_application.data,
-        legal_depedents:  [],
-        beneficiaries:    []
+        branch_id:                  @branch.id,
+        center_id:                  @center.id,
+        first_name:                 @online_application.first_name,
+        middle_name:                @online_application.middle_name,
+        last_name:                  @online_application.last_name,
+        gender:                     @online_application.gender,
+        date_of_birth:              @online_application.date_of_birth,
+        civil_status:               @online_application.civil_status,
+        home_number:                @online_application.home_number,
+        mobile_number:              @online_application.mobile_number,
+        place_of_birth:             @online_application.place_of_birth,
+        membership_type_id:         @online_application.membership_type_id,
+        membership_arrangement_id:  @online_application.membership_arrangement_id,
+        religion:                   @online_application.religion,
+        data:                       @online_application.data,
+        legal_depedents:            [],
+        beneficiaries:              []
       }
 
       @member_data[:legal_dependents]  = @online_application.data["legal_dependents"].map{ |o|

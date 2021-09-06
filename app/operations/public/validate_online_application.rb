@@ -30,10 +30,10 @@ module Public
           key: "file_document",
           message: "file required"
         }
-      elsif @file_document.tempfile.size > 2e+6
+      elsif @file_document.tempfile.size > 8e+6
         @errors[:messages] << {
           key: "file_document",
-          message: "file should be less than 2mb"
+          message: "file should be less than 8mb"
         }
       elsif !VALID_FILE_TYPES.include?(@file_document.content_type)
         @errors[:messages] << {

@@ -36,7 +36,11 @@
                 %th{ width: "25%" }
                   Reference Number
                 %td
-                  #{@online_application.reference_number}
+                  - if @online_application.processed?
+                    = link_to member_path(ReadOnlyMember.find_by_online_application_id(@online_application.id).try(:id)) do
+                      #{@online_application.reference_number}
+                  - else
+                    #{@online_application.reference_number}
               %tr
                 %th
                   First Name
@@ -52,6 +56,16 @@
                   Last Name
                 %td
                   #{@online_application.last_name}
+              %tr
+                %th
+                  Membership Type
+                %td
+                  #{@online_application.membership_type}
+              %tr
+                %th
+                  Membership Arrangement
+                %td
+                  #{@online_application.membership_arrangement}
               %tr
                 %th
                   Branch

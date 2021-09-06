@@ -50,43 +50,50 @@ class OnlineApplicationsController < ApplicationController
   end
 
   def show
-    @online_application = OnlineApplication.find(params[:id])
+    @online_application       = OnlineApplication.find(params[:id])
 
-    data  = ::OnlineApplications::BuildMemberFormData.new(
-              online_application: @online_application
-            ).execute!
+    if @online_application.processing?
+      redirect_to online_applications_path(message: "online application still processing")
+    else
+      @membership_types         = MembershipType.all
+      @membership_arrangements  = MembershipArrangement.all
 
-    @payload = {
-      id: @online_application.id,
-      data: data
-    }
+      data  = ::OnlineApplications::BuildMemberFormData.new(
+                online_application: @online_application
+              ).execute!
 
-    @subheader_items  = [
-      { is_link: true, path: online_applications_path, text: "Online Applications" },
-      { text: "#{@online_application.last_name}, #{@online_application.first_name} #{@online_application.middle_name} (#{@online_application.reference_number})" }
-    ]
+      @payload = {
+        id: @online_application.id,
+        data: data
+      }
 
-    # For printing form
-    @subheader_side_actions = []
+      @subheader_items  = [
+        { is_link: true, path: online_applications_path, text: "Online Applications" },
+        { text: "#{@online_application.last_name}, #{@online_application.first_name} #{@online_application.middle_name} (#{@online_application.reference_number})" }
+      ]
 
-    valid_roles_assign_branch = ::Users::FetchValidRoles.new(
-                                  module_name: "online_application_assign_branch"
-                                ).execute!
+      # For printing form
+      @subheader_side_actions = []
 
-    if current_user.current_roles.intersection(valid_roles_assign_branch).size > 0
+      valid_roles_assign_branch = ::Users::FetchValidRoles.new(
+                                    module_name: "online_application_assign_branch"
+                                  ).execute!
+
+      if current_user.current_roles.intersection(valid_roles_assign_branch).size > 0
+        @subheader_side_actions << {
+          id: "btn-assign-branch",
+          class: "fa fa-check",
+          link: "#",
+          text: "Assign Branch"
+        }
+      end
+
       @subheader_side_actions << {
-        id: "btn-assign-branch",
-        class: "fa fa-check",
+        id: "btn-download-form",
+        class: "fa fa-download",
         link: "#",
-        text: "Assign Branch"
+        text: "Download Form"
       }
     end
-
-    @subheader_side_actions << {
-      id: "btn-download-form",
-      class: "fa fa-download",
-      link: "#",
-      text: "Download Form"
-    }
   end
 end

@@ -147,10 +147,11 @@ module OnlineApplications
       @data[:logo]  = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/logo_titled.png").read)
 
       if @online_application.profile_picture.attached?
-        #@data[:profile_picture] = Base64.strict_encode64(URI.open("#{ENV['BASE_URL']}#{rails_blob_path(@online_application.profile_picture, disposition: "attachment", only_path: true)}").read)
-        #@data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
-        @data[:profile_picture] = Base64.strict_encode64(URI.open(@online_application.profile_picture.url).read)
-        #@data[:profile_picture] = @online_application.profile_picture
+        begin
+          @data[:profile_picture] = Base64.strict_encode64(URI.open(@online_application.profile_picture.url).read)
+        rescue Exception => e
+          @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+        end
       else
         @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end

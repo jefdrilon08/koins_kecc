@@ -6,10 +6,19 @@ export default class FormApplicationHeader extends React.Component {
     super(props);
   }
 
-  handleBranchChanged(o) {
-    var temp  = "";
-    var data  = this.props.data;
+  handleMembershipTypeChanged(o) {
+    if(o) {
+      this.props.updateCurrentMembershipType(o);
+    }
+  }
 
+  handleMembershipArrangementChanged(o) {
+    if(o) {
+      this.props.updateCurrentMembershipArrangement(o);
+    }
+  }
+
+  handleBranchChanged(o) {
     if(o) {
       this.props.updateCurrentBranch(o);
     }
@@ -26,10 +35,11 @@ export default class FormApplicationHeader extends React.Component {
   }
 
   render() {
-    var branchOptions = [];
-    var centerOptions = [];
-
-    var memberTypeOptions = [];
+    var branchOptions                 = [];
+    var centerOptions                 = [];
+    var memberTypeOptions             = [];
+    var membershipArrangementOptions  = [];
+    var membershipTypeOptions         = [];
 
     for(var i = 0; i < this.props.memberTypes.length; i++) {
       memberTypeOptions.push(
@@ -37,6 +47,20 @@ export default class FormApplicationHeader extends React.Component {
           {this.props.memberTypes[i]}
         </option>
       );
+    }
+
+    for(var i = 0; i < this.props.membershipArrangements.length; i++) {
+      membershipArrangementOptions.push({
+        value: this.props.membershipArrangements[i].id,
+        label: this.props.membershipArrangements[i].name
+      });
+    }
+
+    for(var i = 0; i < this.props.membershipTypes.length; i++) {
+      membershipTypeOptions.push({
+        value: this.props.membershipTypes[i].id,
+        label: this.props.membershipTypes[i].name
+      });
     }
 
     for(var i = 0; i < this.props.branches.length; i++) {
@@ -62,7 +86,7 @@ export default class FormApplicationHeader extends React.Component {
         </div>
         <div className="card-body">
           <div className="row">
-            <div className="col-md-4 col-xs-12">
+            <div className="col-md-3 col-xs-12">
               <div className="form-group">
                 <label>Branch</label>
                 <Select
@@ -74,7 +98,7 @@ export default class FormApplicationHeader extends React.Component {
                 <br/>
               </div>
             </div>
-            <div className="col-md-4 col-xs-12">
+            <div className="col-md-3 col-xs-12">
               <div className="form-group">
                 <label>Center</label>
                 <Select
@@ -86,18 +110,29 @@ export default class FormApplicationHeader extends React.Component {
                 <br/>
               </div>
             </div>
-            <div className="col-md-4 col-xs-12">
+            <div className="col-md-3 col-xs-12">
               <div className="form-group">
                 <label>Member Type</label>
-                <select 
-                  value={this.props.currentMemberType} 
-                  onChange={this.handleMemberTypeChanged.bind(this)}
+                <Select
+                  value={this.props.currentMembershipType}
+                  options={membershipTypeOptions}
+                  onChange={this.handleMembershipTypeChanged.bind(this)}
                   disabled={this.props.formDisabled}
-                  className={"form-control"}
-                >
-                  {memberTypeOptions}
-                </select>
+                />
                 <br/>
+              </div>
+            </div>
+            <div className="col-md-3 col-xs-12">
+              <div className="form-group">
+                <label>
+                  Arrangement
+                </label>
+                <Select
+                  value={this.props.currentMembershipArrangement}
+                  options={membershipArrangementOptions}
+                  onChange={this.handleMembershipArrangementChanged.bind(this)}
+                  disabled={this.props.formDisabled}
+                />
               </div>
             </div>
           </div>
