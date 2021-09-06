@@ -946,6 +946,7 @@ ActiveRecord::Schema.define(version: 2021_08_29_100850) do
     t.index ["membership_type_id"], name: "index_members_on_membership_type_id"
     t.index ["online_application_id"], name: "index_members_on_online_application_id"
     t.index ["status", "center_id"], name: "manual_idx_7"
+<<<<<<< HEAD
   end
 
   create_table "membership_arrangements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -953,6 +954,8 @@ ActiveRecord::Schema.define(version: 2021_08_29_100850) do
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+=======
+>>>>>>> 2bc32015365f03c35b9952c92fd2fab4ad9c685a
   end
 
   create_table "membership_payment_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -28,6 +28,7 @@ namespace :report do
         ct = mem.data['address']['city']
         rr = (l[:principal_rr])*100
         installment = loan.num_installments
+        mobile_no = mem.mobile_number
         if installment == 15
           month = 3
         elsif installment == 25
@@ -54,7 +55,7 @@ namespace :report do
         elsif lp_id == 'c140c10f-eed0-4a77-af8f-65a2f2a6600e' or lp_id == '671aa2f6-3cb6-45dc-b3e4-0f566648421b' or lp_id == 'fd131b36-c215-4c82-9e4e-3816d19b9004'
           lp = 'Services'
         end
-        dta = "#{l[:member][:first_name]}|#{l[:member][:middle_name]}|#{l[:member][:last_name]}|#{mem.gender}|#{dob}|#{"Acquire equipment/ fixed assets"}|#{lp}|#{ct}||#{l[:principal]}|#{month}|#{m_rate}|#{l[:date_released]}"
+        dta = "#{l[:member][:first_name]}|#{l[:member][:middle_name]}|#{l[:member][:last_name]}|#{mem.gender}|#{dob}|#{"Acquire equipment/ fixed assets"}|#{lp}|#{ct}||#{l[:principal]}|#{month}|#{m_rate}|#{l[:date_released]}|#{mobile_no}"
        @data << dta
      end
      
