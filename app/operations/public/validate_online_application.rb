@@ -79,7 +79,7 @@ module Public
 
       if @mobile_number.blank?
         @errors[:messages] << {
-          key: "mobile_number"
+          key: "mobile_number",
           message: "mobile number required"
         }
       elsif not @mobile_number =~ /\+639[0-9]{9}/
