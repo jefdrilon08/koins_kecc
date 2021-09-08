@@ -45,15 +45,19 @@ module Api
       end
 
       def loan_products
-        num_existing_loans  = Loan.active.paid.where(member_id: @member.id).count
+        active_loans        = ReadOnlyLoan.active.where(member_id: @member.id)
+        num_existing_loans  = active_loans.where(member_id: @member.id).count
+        num_paid_loans      = ReadOnlyLoan.paid.where(member_id: @member.id).count
         loan_products       = ReadOnlyLoanProduct.select("*")
 
-        if num_existing_loans > 0
-          loan_products = loan_products.where(is_entry_point: true)
+        if num_existing_loans == 0 && num_paid_loans == 0
+          loan_products = loan_products.entry_point
+        else
+          loan_products = loan_products.where.not(id: active_loans.pluck(:loan_product_id))
         end
 
         loan_products = loan_products.order(
-                          "priority ASC, name ASC"
+                          "priority ASC, name ASC, is_entry_point ASC"
                         ).map{ |o|
                           {
                             id: o.id,

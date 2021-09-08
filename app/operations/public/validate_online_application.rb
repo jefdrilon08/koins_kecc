@@ -161,6 +161,14 @@ module Public
         end
       end
 
+      # require mother's maiden name
+      if @data[:mothers_middle_name].blank?
+        @errors[:messages] << {
+          key: "mothers_middle_name",
+          message: "Mother's middle name required"
+        }
+      end
+
       #not_yet_implemented!
 
       @errors[:messages].each do |o|
