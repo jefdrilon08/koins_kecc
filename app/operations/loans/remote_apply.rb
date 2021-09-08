@@ -24,7 +24,8 @@ module Loans
       @clip_date_of_birth = @config[:clip_date_of_birth]
       @clip_relationship  = @config[:clip_relationship]
 
-      @co_maker_profile_picture = @config[:co_maker_profile_picture]
+      @co_maker_profile_picture       = @config[:co_maker_profile_picture]
+      @co_maker_three_profile_picture = @config[:co_maker_three_profile_picture]
 
       @center = @member.center
       @branch = @member.branch
@@ -196,6 +197,16 @@ module Loans
           io: StringIO.new(decoded_data),
           content_type: 'image/jpeg',
           filename: 'co_maker.jpg'
+        }
+      end
+
+      if @co_maker_three_profile_picture.present?
+        decoded_data  = Base64.decode64(@co_maker_three_profile_picture.split(',')[1])
+
+        @loan.co_maker_non_relative_profile_picture = {
+          io: StringIO.new(decoded_data),
+          content_type: 'image/jpeg',
+          filename: 'co_maker_non_relative.jpg'
         }
       end
 

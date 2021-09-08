@@ -39,6 +39,7 @@ class Loan < ApplicationRecord
 
   has_one_attached :application_form
   has_one_attached :co_maker_relative_profile_picture
+  has_one_attached :co_maker_non_relative_profile_picture
 
   has_many :amortization_schedule_entries, dependent: :destroy
 
@@ -131,6 +132,12 @@ class Loan < ApplicationRecord
     temp_data = self.data.with_indifferent_access
 
     temp_data[:co_maker_two]
+  end
+
+  def co_maker_three
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:co_maker_three]
   end
 
   def total_balance
