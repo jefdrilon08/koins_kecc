@@ -43,6 +43,16 @@
         = image_tag @loan.co_maker_relative_profile_picture, width: 100
   %tr
     %th
+      Co-maker (Hindi kamag-anak / kapitbahay)
+    %td.text-right
+      #{@loan.co_maker_three}
+  - if @loan.co_maker_non_relative_profile_picture.attached?
+    %tr
+      %th
+      %td.text-right
+        = image_tag @loan.co_maker_non_relative_profile_picture, width: 100
+  %tr
+    %th
       Status:
     %td.text-right
       - if @loan.active?

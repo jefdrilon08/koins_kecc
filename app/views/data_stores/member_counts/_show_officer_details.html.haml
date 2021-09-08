@@ -26,6 +26,19 @@
         #{o[:counts][:active_members][:others]}
       %td.text-center
         #{o[:counts][:active_members][:total]}
+        
+    - if o[:counts][:inactive_members].present?
+      %tr
+        %th
+          Inactive Members
+        %td.text-center
+          #{o[:counts][:inactive_members][:male]}
+        %td.text-center
+          #{o[:counts][:inactive_members][:female]}
+        %td.text-center
+          #{o[:counts][:inactive_members][:others]}
+        %td.text-center
+          #{o[:counts][:inactive_members][:total]}
     %tr
       %th
         Pure Savers
@@ -52,10 +65,10 @@
       %th
         TOTAL ACTIVE MEMBERS
       %th.text-center
-        #{o[:counts][:active_members][:male].to_i + o[:counts][:pure_savers][:male].to_i + o[:counts][:loaners][:male].to_i}
+        #{o[:counts][:active_members][:male].to_i + o[:counts][:pure_savers][:male].to_i + o[:counts][:loaners][:male].to_i + o[:counts][:inactive_members][:male]}
       %th.text-center
-        #{o[:counts][:active_members][:female].to_i + o[:counts][:pure_savers][:female].to_i + o[:counts][:loaners][:female].to_i}
+        #{o[:counts][:active_members][:female].to_i + o[:counts][:pure_savers][:female].to_i + o[:counts][:loaners][:female].to_i + o[:counts][:inactive_members][:female]}
       %th.text-center
-        #{o[:counts][:active_members][:others].to_i + o[:counts][:pure_savers][:others].to_i + o[:counts][:loaners][:others].to_i}
+        #{o[:counts][:active_members][:others].to_i + o[:counts][:pure_savers][:others].to_i + o[:counts][:loaners][:others].to_i + o[:counts][:inactive_members][:others]}
       %th.text-center
-        #{o[:counts][:active_members][:total].to_i + o[:counts][:pure_savers][:total].to_i + o[:counts][:loaners][:total].to_i}
+        #{o[:counts][:active_members][:total].to_i + o[:counts][:pure_savers][:total].to_i + o[:counts][:loaners][:total].to_i + o[:counts][:inactive_members][:total]}

@@ -236,24 +236,11 @@ namespace :rehash do
         end
   end
 
-  task :cbu_diff => :environment do
-   
-     member_id = Member.where(branch_id: "505008be-d28c-4ebd-9dfb-bc076bccb638").ids
-     @balance_total = []
-        member_id.each do |mem_id|
-          cbu_ids   = MemberAccount.where("member_id = ? AND account_type = ? and account_subtype = ?",mem_id, "EQUITY","CBU")
-          cbu_ids.each do |cbo|
-            balance= MemberAccount.find(cbo.id).balance
-            @balance_total << balance
-          end
-        end
-        puts "#{@balance_total.sum}"
-
-  end
 
   task :download_cbu_accounts_excel => :environment do
      require 'csv'
-      member_id = Member.where(branch_id: "505008be-d28c-4ebd-9dfb-bc076bccb638").ids
+      branch_id = ENV['BRANCH_ID']
+      member_id = Member.where(branch_id: branch_id).ids
       CSV.open("#{Rails.root}/tmp/cbu_account.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "LAST_NAME" ,"FIRST_NAME", "MEMBER STATUS","CBU ID" , "BALANCE" ] ) do |csv|
         member_id.each do |mem_id|
             cbu_ids   = MemberAccount.where("member_id = ? AND account_type = ? and account_subtype = ?",mem_id, "EQUITY","CBU")
@@ -268,6 +255,7 @@ namespace :rehash do
           end
         end
       end
+      
       puts "DONE"
   end
 
