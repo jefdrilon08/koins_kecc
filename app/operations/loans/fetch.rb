@@ -45,6 +45,7 @@ module Loans
                       particular: build_default_loan_particular!
                     },
                     co_makers: [],
+                    co_maker_three: "",
                     co_maker_two: "",
                     co_maker_one: {
                       id: "",

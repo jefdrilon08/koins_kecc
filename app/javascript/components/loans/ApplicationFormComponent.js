@@ -173,10 +173,18 @@ export default class ApplicationFormComponent extends React.Component {
     this.updateData(data);
   }
 
-  handleCoMakerTwo(event) {
+  handleCoMakerThree(event) {
     var data  = this.state.data;
 
-    data.data.co_maker_two  = event.target.value.toUpperCase();
+    data.data.co_maker_three = event.target.value.toUpperCase();
+
+    this.updateData(data);
+  }
+
+  handleCoMakerTwo(event) {
+    var data = this.state.data;
+
+    data.data.co_maker_two = event.target.value.toUpperCase();
 
     this.updateData(data);
   }
@@ -437,7 +445,7 @@ export default class ApplicationFormComponent extends React.Component {
           <div className="card">
             <div className="card-body">
               <div className="row">
-                <div className="col">
+                <div className="col-md-4 col-xs-12">
                   <div className="form-group">
                     <label>
                       Pangalan ng Co-maker (Kamag-anak)
@@ -450,7 +458,20 @@ export default class ApplicationFormComponent extends React.Component {
                     />
                   </div>
                 </div>
-                <div className="col">
+                <div className="col-md-4 col-xs-12">
+                  <div className="form-group">
+                    <label>
+                      Pangalan ng Co-maker (Hindi kamag-anak / kapitbahay)
+                    </label>
+                    <input
+                      className="form-control"
+                      value={data.data.co_maker_three}
+                      onChange={this.handleCoMakerThree.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4 col-xs-12">
                   <div className="form-group">
                     <label>
                       Pangalan ng Co-maker (Kasama sa sentro)
