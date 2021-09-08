@@ -182,18 +182,44 @@
                 #{@daily_branch_metric.data["active_members"]["others"]}
               %td.text-right
                 #{@daily_branch_metric.data["active_members"]["total"]}
+          - if @daily_branch_metric.data["inactive_members"].present?
+            %tr
+              %td
+                %b
+                  Inactive Members
+              %td.text-right
+                #{@daily_branch_metric.data["inactive_members"]["male"]}
+              %td.text-right
+                #{@daily_branch_metric.data["inactive_members"]["female"]}
+              %td.text-right
+                #{@daily_branch_metric.data["inactive_members"]["others"]}
+              %td.text-right
+                #{@daily_branch_metric.data["inactive_members"]["total"]}
             %tr
               %td
                 %b
                   Total
               %td.text-right
-                #{@daily_branch_metric.data["loaners"]["male"] + @daily_branch_metric.data["pure_savers"]["male"] + @daily_branch_metric.data["active_members"]["male"]}
+                #{@daily_branch_metric.data["loaners"]["male"] + @daily_branch_metric.data["pure_savers"]["male"] + @daily_branch_metric.data["active_members"]["male"] + @daily_branch_metric.data["inactive_members"]["male"]}
               %td.text-right
-                #{@daily_branch_metric.data["loaners"]["female"] + @daily_branch_metric.data["pure_savers"]["female"] + @daily_branch_metric.data["active_members"]["female"]}
+                #{@daily_branch_metric.data["loaners"]["female"] + @daily_branch_metric.data["pure_savers"]["female"] + @daily_branch_metric.data["active_members"]["female"] + @daily_branch_metric.data["inactive_members"]["female"]}
               %td.text-right
-                #{@daily_branch_metric.data["loaners"]["others"] + @daily_branch_metric.data["pure_savers"]["others"] + @daily_branch_metric.data["active_members"]["others"]}
+                #{@daily_branch_metric.data["loaners"]["others"] + @daily_branch_metric.data["pure_savers"]["others"] + @daily_branch_metric.data["active_members"]["others"] + @daily_branch_metric.data["inactive_members"]["others"]}
               %td.text-right
-                #{@daily_branch_metric.data["loaners"]["total"] + @daily_branch_metric.data["pure_savers"]["total"] + @daily_branch_metric.data["active_members"]["total"]}
+                #{@daily_branch_metric.data["loaners"]["total"] + @daily_branch_metric.data["pure_savers"]["total"] + @daily_branch_metric.data["active_members"]["total"] + @daily_branch_metric.data["inactive_members"]["total"]}
+          - else
+            %tr
+              %td
+                %b
+                  Total
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["male"] + @daily_branch_metric.data["pure_savers"]["male"] + @daily_branch_metric.data["active_members"]["male"] }
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["female"] + @daily_branch_metric.data["pure_savers"]["female"] + @daily_branch_metric.data["active_members"]["female"] }
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["others"] + @daily_branch_metric.data["pure_savers"]["others"] + @daily_branch_metric.data["active_members"]["others"] }
+              %td.text-right
+                #{@daily_branch_metric.data["loaners"]["total"] + @daily_branch_metric.data["pure_savers"]["total"] + @daily_branch_metric.data["active_members"]["total"] }
 
         %hr
         = link_to daily_branch_metric_path(@daily_branch_metric.id), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger' do

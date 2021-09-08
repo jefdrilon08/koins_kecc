@@ -54,6 +54,9 @@ module Branches
           },
           active_members: {
             male: 0, female: 0, others: 0, total: 0
+          },
+          inactive_members: {
+            male: 0, female: 0, others: 0, total: 0
           }
         }
       else
@@ -77,6 +80,7 @@ module Branches
       end
 
       if mc.present?
+
         build_mc!(mc)
       end
 
@@ -161,10 +165,11 @@ module Branches
     end
 
     def build_mc!(mc)
+      
       counts = mc.data["counts"]
 
       @data = @daily_branch_metric.data.with_indifferent_access
-
+      
       @daily_branch_metric.data["member_counts_as_of"] = @as_of
 
       @data[:pure_savers][:male]   = counts["pure_savers"]["male"]
@@ -181,6 +186,14 @@ module Branches
       @data[:active_members][:female] = counts["active_members"]["female"]
       @data[:active_members][:others] = counts["active_members"]["others"]
       @data[:active_members][:total]  = counts["active_members"]["total"]
+
+      @data[:inactive_members][:male]   = counts["inactive_members"]["male"]
+      @data[:inactive_members][:female] = counts["inactive_members"]["female"]
+      @data[:inactive_members][:others] = counts["inactive_members"]["others"]
+      @data[:inactive_members][:total]  = counts["inactive_members"]["total"]
+      
+
+
 
       @daily_branch_metric.data = @data
     end
