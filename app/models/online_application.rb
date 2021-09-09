@@ -40,6 +40,14 @@ class OnlineApplication < ApplicationRecord
     end
   end
 
+  def city
+    self.data["address"]["city"]
+  end
+
+  def province
+    self.data["address"]["province"]
+  end
+
   def processing?
     self.status == "processing"
   end
