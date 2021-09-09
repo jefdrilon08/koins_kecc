@@ -15,6 +15,20 @@ class ReportsController < ApplicationController
 
   end
 
+  def government_identification_numbers
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Government Identification Numbers" }
+    ]
+    
+      @branches = Branch.all
+      branch_id              = params[:branch_id]
+      if branch_id.present? 
+        @government_identification_numbers = ::Reports::GenerateGovernmentIdentificationNumbers.new(branch_id: branch_id).execute!
+      end
+
+  end
+
   def monthly_remittance
     @subheader_items = [
       { text: "Other Reports" },
