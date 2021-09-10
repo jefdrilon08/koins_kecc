@@ -2,6 +2,7 @@ module Reports
   class GenerateGovernmentIdentificationNumbers
     def initialize(branch_id:)
       @branch_id = branch_id
+    
       @data =  { 
                   records: [] 
                }
@@ -11,6 +12,7 @@ module Reports
       query!
       @data[:records] = @result.map{ |o|
                                   temp = {
+                                    id_number: o.fetch("id_number"),
                                     member_id: o.fetch("member_id"),
                                     last_name: o.fetch("last_name"),
                                     first_name: o.fetch("first_name"),
@@ -35,6 +37,7 @@ module Reports
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                   Select 
                     m.id AS member_id,
+                    m.identification_number AS id_number,
                     m.last_name as last_name,
                     m.first_name as first_name,
                     m.middle_name,
@@ -48,7 +51,7 @@ module Reports
                   inner join
                     centers c on c.id = m.center_id
                   where 
-                    m.branch_id = '#{@branch_id}'
+                    m.branch_id = '#{@branch_id}' and m.status = 'active'
                   ORDER BY
                     m.last_name
                 EOS

@@ -24,6 +24,7 @@ class ReportsController < ApplicationController
       @branches = Branch.all
       branch_id              = params[:branch_id]
       if branch_id.present? 
+    
         @government_identification_numbers = ::Reports::GenerateGovernmentIdentificationNumbers.new(branch_id: branch_id).execute!
       end
 
