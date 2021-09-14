@@ -89,7 +89,7 @@ class OnlineApplicationsController < ApplicationController
           id: "btn-assign-branch",
           class: "fa fa-check",
           link: "#",
-          text: "Assign Branch"
+          text: "Assign Satellite Office"
         }
       end
 

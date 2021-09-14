@@ -30,6 +30,7 @@ import WithdrawalCollectionUIComponent from "../components/withdrawal_collection
 import InsuranceFundTransferCollectionUIComponent from "../components/insurance_fund_transfer_collections/InsuranceFundTransferCollectionUIComponent";
 import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
+import InsuranceMonthlyClosingCollectionsShowUI from "../components/insurance_monthly_closing_collections/ShowUI";
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
@@ -82,6 +83,8 @@ import InsuranceWithdrawalCollectionsIndex from "../models/InsuranceWithdrawalCo
 import InsuranceWithdrawalCollectionsShow from "../models/InsuranceWithdrawalCollectionsShow.js";
 import MonthlyClosingCollectionsIndex from "../models/MonthlyClosingCollectionsIndex.js";
 import MonthlyClosingCollectionsShow from "../models/MonthlyClosingCollectionsShow.js";
+import InsuranceMonthlyClosingCollectionsIndex from "../models/InsuranceMonthlyClosingCollectionsIndex.js";
+import InsuranceMonthlyClosingCollectionsShow from "../models/InsuranceMonthlyClosingCollectionsShow.js";
 import YearEndClosingsIndex from "../models/YearEndClosingsIndex.js";
 import YearEndClosingsShow from "../models/YearEndClosingsShow.js";
 import DataStoresIcprIndex from "../models/DataStoresIcprIndex.js";
@@ -90,7 +93,8 @@ import PatronageRefundIndex from "../models/PatronageRefundIndex.js";
 import PatronageRefundShow from "../models/PatronageRefundShow.js";
 import BalanceSheetsIndex from "../models/BalanceSheetsIndex.js";
 import IncomeStatementsIndex from "../models/IncomeStatementsIndex.js";
-import SubsidiaryAdjustmentsIndex from "../models/SubsidiaryAdjustmentsIndex.js"; import SubsidiaryAdjustmentsShow from "../models/SubsidiaryAdjustmentsShow.js";
+import SubsidiaryAdjustmentsIndex from "../models/SubsidiaryAdjustmentsIndex.js"; 
+import SubsidiaryAdjustmentsShow from "../models/SubsidiaryAdjustmentsShow.js";
 import BatchMoratoriumAdjustmentsIndex from "../models/BatchMoratoriumAdjustmentsIndex.js";
 import BatchMoratoriumAdjustmentsShow from "../models/BatchMoratoriumAdjustmentsShow.js";
 import MemberAccountValidationsIndex from "../models/MemberAccountValidationsIndex.js";
@@ -219,6 +223,8 @@ const hooks = {
   "insurance_withdrawal_collections/show":            [InsuranceWithdrawalCollectionsShow, InsuranceWithdrawalCollectionUIComponent],
   "monthly_closing_collections/index":                [MonthlyClosingCollectionsIndex],
   "monthly_closing_collections/show":                 [MonthlyClosingCollectionsShow, MonthlyClosingCollectionsShowUI],
+  "insurance_monthly_closing_collections/index":      [InsuranceMonthlyClosingCollectionsIndex],
+  "insurance_monthly_closing_collections/show":       [InsuranceMonthlyClosingCollectionsShow, InsuranceMonthlyClosingCollectionsShowUI],
   "insurance_accounts/show":                          [InsuranceStatusComponent],
   "accounting/trial_balance":                         [TrialBalanceComponent],
   "accounting/general_ledger":                        [GeneralLedgerComponent],

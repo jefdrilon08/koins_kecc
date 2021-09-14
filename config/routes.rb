@@ -304,6 +304,9 @@ Rails.application.routes.draw do
   # Monthly Closing Collections
   resources :monthly_closing_collections, only: [:index, :show, :destroy]
 
+  # Insurance Monthly Closing Collections
+  resources :insurance_monthly_closing_collections, only: [:index, :show, :destroy]
+
   # Printing
   get "/print", to: "print#print"
   get "/download_file", to: "pages#download_file"

@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 2021_09_09_070300) do
 
   # These are extensions that must be enabled in order to support this database
@@ -530,6 +531,19 @@ ActiveRecord::Schema.define(version: 2021_09_09_070300) do
     t.datetime "updated_at", null: false
     t.index ["branch_id"], name: "index_insurance_fund_transfer_collections_on_branch_id"
     t.index ["center_id"], name: "index_insurance_fund_transfer_collections_on_center_id"
+  end
+
+  create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id"
+    t.date "closing_date"
+    t.date "closed_at"
+    t.jsonb "data"
+    t.jsonb "meta"
+    t.string "status"
+    t.string "account_subtype"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["branch_id"], name: "index_insurance_monthly_closing_collections_on_branch_id"
   end
 
   create_table "insurance_withdrawal_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -1249,6 +1263,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_070300) do
   add_foreign_key "hiip_claims", "members"
   add_foreign_key "insurance_fund_transfer_collections", "branches"
   add_foreign_key "insurance_fund_transfer_collections", "centers"
+  add_foreign_key "insurance_monthly_closing_collections", "branches"
   add_foreign_key "insurance_withdrawal_collections", "branches"
   add_foreign_key "insurance_withdrawal_collections", "centers"
   add_foreign_key "interests", "account_transactions"

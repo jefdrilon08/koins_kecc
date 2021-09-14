@@ -1,0 +1,16 @@
+= title @insurance_monthly_closing_collection.id
+.row
+  .col
+    .card
+      .card-body
+        - if @insurance_monthly_closing_collection.error?
+          = render partial: "error_page"
+        - else
+          - if debug?
+            %pre
+              #{JSON.pretty_generate(JSON.parse(@insurance_monthly_closing_collection.data.to_json))}
+          #react-root
+
+= render partial: "insurance_monthly_closing_collections/modals/update"
+= render partial: "insurance_monthly_closing_collections/modals/approve"
+= render partial: "templates/error_list"

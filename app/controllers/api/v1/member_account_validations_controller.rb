@@ -89,6 +89,7 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
+          # member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidationNewCode.new(
           member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
                                                   config: config
                                                 ).execute!
@@ -174,7 +175,8 @@ module Api
         member_account_validation_record.files.purge
         member_account_validation_record.destroy!
 
-        data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+        # data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
+        data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new( 
                                     config: {
                                       branch: member_account_validation.branch,
                                       member_account_validation: member_account_validation,
