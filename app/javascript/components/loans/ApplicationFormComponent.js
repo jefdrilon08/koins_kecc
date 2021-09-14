@@ -24,6 +24,7 @@ export default class ApplicationFormComponent extends React.Component {
       projectTypes: [],
       currentProjectTypeCategoryId: "",
       data: false,
+      coMakerProfilePicture: false,
       errors: false
     };
   }
@@ -159,8 +160,6 @@ export default class ApplicationFormComponent extends React.Component {
     var data  = this.state.data;
 
     data.data.clip_number = event.target.value;
-
-    //data.data.voucher.particular  = data.data.voucher.particular.replace(/clip#/g, "clip# " + data.data.clip_number);
 
     this.updateData(data);
   }
@@ -403,6 +402,7 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.setState({ data: data });
   }
+
   handleAdvanceInsuranceChanged(event) {
     const target  = event.target;
     const value   = target.type === 'checkbox' ? target.checked : target.value;
@@ -411,6 +411,17 @@ export default class ApplicationFormComponent extends React.Component {
     data.data.advance_insurance_available  = value || false;
 
     this.setState({ data: data });
+  }
+
+  renderCoMakerProfilePicture() {
+    if(this.state.coMakerProfilePicture) {
+    } else {
+      return (
+        <div>
+          No profile picture selected
+        </div>
+      )
+    }
   }
 
   render() {
@@ -450,6 +461,19 @@ export default class ApplicationFormComponent extends React.Component {
                       onChange={this.handleCoMakerTwo.bind(this)}
                       disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_two }
                     />
+                    <hr/>
+                    <label>
+                      Profile Picture (Kamag-anak)
+                    </label>
+                    <br/>
+                    <input
+                      type="file"
+                      className="form-control"
+                      accepts="image/*"
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_two }
+                    />
+                    <br/>
+                    {this.renderCoMakerProfilePicture()}
                   </div>
                 </div>
                 <div className="col-md-4 col-xs-12">

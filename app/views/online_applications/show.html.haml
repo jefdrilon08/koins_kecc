@@ -118,6 +118,21 @@
                   #{@online_application.religion}
               %tr
                 %th
+                  Spouse
+                %td
+                  #{@online_application.spouse}
+              %tr
+                %th
+                  Spouse Occupation
+                %td
+                  #{@online_application.spouse_occupation}
+              %tr
+                %th
+                  Spouse Date of Birth
+                %td
+                  #{@online_application.spouse_date_of_birth}
+              %tr
+                %th
                   Address
                 %td
                   #{@online_application.data["address"]["street"]} #{@online_application.data["address"]["district"]} #{@online_application.data["address"]["city"]}
