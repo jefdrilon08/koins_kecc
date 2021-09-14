@@ -25,6 +25,7 @@ module DataStores
     def show
       super
       
+
       @subheader_items = [
         {
           is_link: true,
@@ -44,7 +45,15 @@ module DataStores
       end
 
       @subheader_side_actions = []
-
+        @subheader_side_actions << {
+            id: "btn-print-pdf",
+            link: "#",
+            class: "fa fa-download",
+            text: "Print PDF",
+            data: {
+              id: "#{@record.id}"
+            }
+          }
       if @record.done? and @record.data["status"] == "pending"
         @subheader_side_actions << {
           id: "btn-approve",

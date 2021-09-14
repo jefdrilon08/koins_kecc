@@ -6557,7 +6557,7 @@ loan_products:
       -
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        amount: 0.00
+        amount: 1500
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 1500
