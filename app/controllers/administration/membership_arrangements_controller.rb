@@ -149,7 +149,8 @@ module Administration
       ]
 
       @payload = {
-        id: @membership_arrangement.id
+        id: @membership_arrangement.id,
+        data: @membership_arrangement.data || {}
       }
     end
 

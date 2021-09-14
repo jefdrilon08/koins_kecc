@@ -1,0 +1,7 @@
+%center
+  %h1
+    There was an error when processing this monthly closing collection.
+  %h2.text-muted
+    #{@insurance_monthly_closing_collection.id}
+%pre
+  #{JSON.pretty_generate(JSON.parse(@insurance_monthly_closing_collection.data.to_json))}

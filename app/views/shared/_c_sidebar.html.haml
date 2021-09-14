@@ -81,6 +81,10 @@
           .c-sidebar-nav-icon.fa.fa-money-check
           Monthly Closing Collections
       %li.c-sidebar-nav-item
+        = link_to insurance_monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_monthly_closing_collections" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Insurance Monthly Closing
+      %li.c-sidebar-nav-item
         = link_to equity_withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_withdrawal_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Equity Withdrawals
@@ -168,7 +172,7 @@
         %li.c-sidebar-nav-item
           = link_to "/data_stores/icpr", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-calculator
-            ICPR
+            Interest On Share Capital
         %li.c-sidebar-nav-item
           = link_to "/data_stores/patronage_refund", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-calculator

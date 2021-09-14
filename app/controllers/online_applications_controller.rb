@@ -62,6 +62,11 @@ class OnlineApplicationsController < ApplicationController
                 online_application: @online_application
               ).execute!
 
+      @centers = []
+
+      if @online_application.branch_id.present?
+      end
+
       @payload = {
         id: @online_application.id,
         data: data
