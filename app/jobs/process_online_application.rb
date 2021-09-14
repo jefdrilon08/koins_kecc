@@ -8,13 +8,12 @@ class ProcessOnlineApplication < ApplicationJob
 
       cmd = ::OnlineApplications::Process.new(
               online_application: online_application,
-              branch: branch,
-              center: center,
               user: user
             )
 
       cmd.execute!
     rescue Exception => e
+      online_application.update!(status: "error")
       logger.error(e.message)
       logger.error(e.backtrace.join("\r\n"))
       Rollbar.error(e)
