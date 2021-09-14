@@ -2,12 +2,10 @@ module OnlineApplications
   class ValidateProcess < AppValidator
     attr_accessor :errors
 
-    def initialize(online_application:, branch:, center:, user:)
+    def initialize(online_application:, user:)
       super()
 
       @online_application = online_application
-      @branch             = branch
-      @center             = center
       @user               = user
 
       @valid_roles  = ::Users::FetchValidRoles.new(
@@ -28,18 +26,20 @@ module OnlineApplications
         }
       end
 
-      if @branch.blank?
-        @errors[:messages] << {
-          key: "branch",
-          message: "branch not found"
-        }
-      end
+      if @online_application.present?
+        if @online_application.branch_id.blank?
+          @errors[:messages] << {
+            key: "online_application",
+            message: "branch required"
+          }
+        end
 
-      if @center.blank?
-        @errors[:messages] << {
-          key: "center",
-          message: "center not found"
-        }
+        if @online_application.center_id.blank?
+          @errors[:messages] << {
+            key: "online_application",
+            message: "center required"
+          }
+        end
       end
 
       if @user.blank?
