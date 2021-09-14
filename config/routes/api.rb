@@ -10,6 +10,7 @@ namespace :api do
     post "/loans/apply", to: "loans#apply"
     get "/loans/project_type_categories", to: "loans#project_type_categories"
     get "/loans", to: "loans#index"
+    get "/loans/settings", to: "loans#settings"
     post "/loans/quote", to: "loans#quote", to: "loans#quote"
     post "/loans/review", to: "loans#review", to: "loans#review"
 
@@ -444,6 +445,9 @@ namespace :api do
       post "/loan_products/delete", to: "loan_products#delete"
       post "/loan_products/modify_prerequisite", to: "loan_products#modify_prerequisite"
       post "/loan_products/modify_maintaining_balance", to: "loan_products#modify_maintaining_balance"
+
+      # Membership Arrangement
+      post "/membership_arrangements/update_data", to: "membership_arrangements#update_data"
     end
     
     get 'reports/member_reports', to: 'reports#member_reports'
