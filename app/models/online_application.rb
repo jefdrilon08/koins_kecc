@@ -16,6 +16,7 @@ class OnlineApplication < ApplicationRecord
   validates :civil_status, presence: true
 
   belongs_to :branch, optional: true
+  belongs_to :center, optional: true
   belongs_to :membership_type, optional: true
   belongs_to :membership_arrangement, optional: true
 
@@ -38,6 +39,14 @@ class OnlineApplication < ApplicationRecord
     if self.reference_number.blank?
       self.reference_number = SecureRandom.hex(4).upcase
     end
+  end
+
+  def city
+    self.data["address"]["city"]
+  end
+
+  def province
+    self.data["address"]["province"]
   end
 
   def processing?
