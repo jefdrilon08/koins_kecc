@@ -383,6 +383,19 @@ member_resignation_types:
         name: 'Paggawa o pagkasangkot sa nakapipinsala o nakasasama sa interes at kapakanan ng kooperatiba'
 
 ###############################
+# INSURANCE INTEREST          #
+###############################
+insurance_interest_member_accounts:
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Retirement Fund"
+    annual_interest_rate: 0.01
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Equity Value"
+    annual_interest_rate: 0.01
+
+###############################
 # INTEREST AND TAX            #
 ###############################
 interest_member_accounts:
