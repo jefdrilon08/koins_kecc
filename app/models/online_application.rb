@@ -41,6 +41,18 @@ class OnlineApplication < ApplicationRecord
     end
   end
 
+  def spouse
+    "#{self.data["spouse"]["last_name"]}, #{self.data["spouse"]["first_name"]} #{self.data["spouse"]["middle_name"]}"
+  end
+
+  def spouse_occupation
+    "#{self.data["spouse"]["occupation"]}"
+  end
+
+  def spouse_date_of_birth
+    "#{self.data["spouse"]["date_of_birth"]}"
+  end
+
   def city
     self.data["address"]["city"]
   end

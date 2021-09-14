@@ -9,17 +9,6 @@
           .alert.alert-info
             %p
               Are you sure you want to process this application?
-          .row
-            .col-md-6.col-xs-12
-              .form-group
-                %label
-                  Branch
-                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @online_application.branch_id), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
-            .col-md-6.col-xs-12
-              .form-group
-                %label
-                  Center
-                = select_tag :center_id, options_for_select([]), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
           .message
       .modal-footer
         .controls

@@ -31,12 +31,14 @@ module Api
 
         membership_type         = MembershipType.find_by_id(params[:membership_type_id])
         membership_arrangement  = MembershipArrangement.find_by_id(params[:membership_arrangement_id])
+        center                  = Center.find_by_id(params[:center_id])
 
         validator = ::OnlineApplications::ValidateVerify.new(
                       online_application: online_application,
                       user: current_user,
                       membership_type: membership_type,
-                      membership_arrangement: membership_arrangement
+                      membership_arrangement: membership_arrangement,
+                      center: center
                     )
 
         validator.execute!
@@ -93,13 +95,9 @@ module Api
 
       def process_application
         online_application  = OnlineApplication.find(params[:id])
-        branch              = ReadOnlyBranch.find_by_id(params[:branch_id])
-        center              = ReadOnlyCenter.find_by_id(params[:center_id])
 
         validator = ::OnlineApplications::ValidateProcess.new(
                       online_application: online_application,
-                      branch: branch,
-                      center: center,
                       user: current_user
                     )
 
@@ -112,23 +110,10 @@ module Api
 
           ProcessOnlineApplication.perform_later({
             id: online_application.id,
-            branch_id: branch.id,
-            center_id: center.id,
             user_id: current_user.id
           })
 
           render json: { message: "ok" }
-
-#          cmd = ::OnlineApplications::Process.new(
-#                  online_application: online_application,
-#                  branch: branch,
-#                  center: center,
-#                  user: current_user
-#                )
-#
-#          cmd.execute!
-#
-#          render json: { message: "ok", member_id: cmd.member.id }
         end
       end
     end

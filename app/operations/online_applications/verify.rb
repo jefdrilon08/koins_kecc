@@ -4,14 +4,16 @@ module OnlineApplications
                   :membership_type,
                   :membership_arrangement,
                   :branch,
+                  :center,
                   :user
 
-    def initialize(online_application:, user:, branch: nil, membership_type: nil, membership_arrangement: nil)
+    def initialize(online_application:, user:, branch: nil, center: nil, membership_type: nil, membership_arrangement: nil)
       @online_application     = online_application
       @membership_type        = membership_type
       @membership_arrangement = membership_arrangement
       @user                   = user
       @branch                 = branch
+      @center                 = center
     end
 
     def execute!
@@ -22,6 +24,10 @@ module OnlineApplications
 
       if @branch.present?
         @online_application.branch  = @branch
+      end
+
+      if @center.present?
+        @online_application.center  = @center
       end
 
       @online_application.membership_type         = @membership_type

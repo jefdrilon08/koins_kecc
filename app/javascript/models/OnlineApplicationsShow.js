@@ -30,6 +30,7 @@ var templateCenterOptions;
 var $selectBranch;
 var $selectVerifyBranch;
 var $selectAssignBranch;
+var $selectAssignCenter;
 var $selectAssignMembershipArrangement;
 var $selectAssignMembershipType;
 var $selectCenter;
@@ -55,6 +56,7 @@ var _cacheDom = function() {
   $selectVerifyBranch                 = $("#select-verify-branch");
   $selectCenter                       = $("#select-center");
   $selectAssignBranch                 = $("#select-assign-branch");
+  $selectAssignCenter                 = $("#select-assign-center");
   $selectAssignMembershipArrangement  = $("#select-assign-membership-arrangement");
   $selectAssignMembershipType         = $("#select-assign-membership-type");
   $message                            = $(".message");
@@ -124,6 +126,7 @@ var _bindEvents = function() {
   $btnConfirmVerify.on("click", function() {
     var membershipTypeId        = $selectAssignMembershipType.val();
     var membershipArrangementId = $selectAssignMembershipArrangement.val();
+    var centerId                = $selectAssignCenter.val();
 
     $selectAssignMembershipType.prop("disabled", true);
     $selectAssignMembershipArrangement.prop("disabled", true);
@@ -136,6 +139,7 @@ var _bindEvents = function() {
         id: _id,
         membership_type_id: membershipTypeId,
         membership_arrangement_id: membershipArrangementId,
+        center_id: centerId,
         authenticity_token: _authenticityToken
       },
       success: function(response) {

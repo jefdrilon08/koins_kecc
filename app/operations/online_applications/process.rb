@@ -7,10 +7,10 @@ module OnlineApplications
                   :center,
                   :user
 
-    def initialize(online_application:, branch:, center:, user:)
+    def initialize(online_application:, user:)
       @online_application = online_application
-      @branch             = branch
-      @center             = center
+      @branch             = online_application.branch
+      @center             = online_application.center
       @user               = user
     end
 

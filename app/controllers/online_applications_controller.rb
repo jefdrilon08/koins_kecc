@@ -65,6 +65,7 @@ class OnlineApplicationsController < ApplicationController
       @centers = []
 
       if @online_application.branch_id.present?
+        @centers  = ReadOnlyCenter.where(branch_id: @online_application.branch_id).order("name ASC")
       end
 
       @payload = {

@@ -2,12 +2,13 @@ module OnlineApplications
   class ValidateVerify < AppValidator
     attr_accessor :errors
 
-    def initialize(online_application:, user:, membership_type: nil, membership_arrangement: nil)
+    def initialize(online_application:, user:, membership_type: nil, membership_arrangement: nil, center: nil)
       super()
 
       @online_application     = online_application
       @membership_type        = membership_type
       @membership_arrangement = membership_arrangement
+      @center                 = center
       @user                   = user
 
       @valid_roles  = ::Users::FetchValidRoles.new(
@@ -47,6 +48,23 @@ module OnlineApplications
             message: "membership_arrangement required"
           }
         end
+      end
+
+      if @center.blank?
+        @errors[:messages] << {
+          key: "online_application",
+          message: "center not found"
+        }
+      elsif @online_application.branch_id.blank?
+        @errors[:messages] << {
+          key: "online_application",
+          message: "online_application has no branch"
+        }
+      elsif @center.branch_id != @online_application.branch_id
+        @errors[:messages] << {
+          key: "online_application",
+          message: "online_application has inavlid branch for center #{@center.name}"
+        }
       end
 
       if @user.blank?
