@@ -284,12 +284,6 @@ export default class ApplicationFormComponent extends React.Component {
     );
 
     for(var i = 0; i < loanProducts.length; i++) {
-      if(loanProducts[i].id == data.loan_product_id) {
-        console.log("Got loan product id: " + data.loan_product_id);
-      } else {
-        console.log("LP ID: " + data.loan_product_id + " i: " + loanProducts[i].id);
-      }
-
       loanProductsDisplay.push(
         <option value={loanProducts[i].id} key={"loan-product-" + loanProducts[i].id}>
           {loanProducts[i].name}
@@ -434,7 +428,7 @@ export default class ApplicationFormComponent extends React.Component {
       var businessPermitAvailable = this.state.data.data.business_permit_available || false;
       var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
 
-
+      console.log(this.props.settings)
 
       return  (
         <div>
@@ -454,7 +448,7 @@ export default class ApplicationFormComponent extends React.Component {
                       className="form-control"
                       value={data.data.co_maker_two}
                       onChange={this.handleCoMakerTwo.bind(this)}
-                      disabled={this.state.isSaving || this.state.isActive}
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_two }
                     />
                   </div>
                 </div>
@@ -467,7 +461,7 @@ export default class ApplicationFormComponent extends React.Component {
                       className="form-control"
                       value={data.data.co_maker_three}
                       onChange={this.handleCoMakerThree.bind(this)}
-                      disabled={this.state.isSaving || this.state.isActive}
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_three }
                     />
                   </div>
                 </div>
@@ -480,7 +474,7 @@ export default class ApplicationFormComponent extends React.Component {
                       value={coMakerOne}
                       options={this.state.coMakers}
                       onChange={this.handleCoMakerOne.bind(this)}
-                      disabled={this.state.isSaving || this.state.isActive}
+                      isDisabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_one }
                     />
                   </div>
                 </div>
