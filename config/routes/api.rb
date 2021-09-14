@@ -438,6 +438,9 @@ namespace :api do
       post "/loan_products/delete", to: "loan_products#delete"
       post "/loan_products/modify_prerequisite", to: "loan_products#modify_prerequisite"
       post "/loan_products/modify_maintaining_balance", to: "loan_products#modify_maintaining_balance"
+
+      # Membership Arrangement
+      post "/membership_arrangements/update_data", to: "membership_arrangements#update_data"
     end
     
     get 'reports/member_reports', to: 'reports#member_reports'
