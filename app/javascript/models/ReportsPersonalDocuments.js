@@ -2,12 +2,15 @@ var $downloadBtn;
 var $startDate;       
 var $endDate;         
 var $branchSelect;
+var $insuranceStatusSelect;
 
 var _cacheDom = function() {
-  $downloadBtn       = $("#download-btn");
-  $startDate         = $("#start-date");
-  $endDate           = $("#end-date");
-  $branchSelect      = $("#branch-select")
+  $downloadBtn            = $("#download-btn");
+  $startDate              = $("#start-date");
+  $endDate                = $("#end-date");
+  $branchSelect           = $("#branch-select");
+  $insuranceStatusSelect  = $("#insurance-status-select");
+
 };
 
 var encodeQueryData = function(data) {
@@ -25,6 +28,7 @@ var _bindEvents = function() {
       end_date: $endDate.val(),
       start_date: $startDate.val(),
       branch: $branchSelect.val(),
+      insurance_status: $insuranceStatusSelect.val(),
     };
 
     window.location = "/reports/personal_document_reports?" + encodeQueryData(data);

@@ -59,8 +59,15 @@ module Api
 
         } 
         
-        add_record = ::BillingForFullPayments::AddMember.new(config: config).execute!
+        errors = ::BillingForFullPayments::ValidateAddMember.new(config: config).execute!
+      
+        if errors[:messages].any?
+          
+          render json: errors, status: 400
+        else
 
+        add_record = ::BillingForFullPayments::AddMember.new(config: config).execute!
+        end
 
 
       end

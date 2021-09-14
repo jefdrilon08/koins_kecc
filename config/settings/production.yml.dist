@@ -5749,6 +5749,30 @@ loan_products:
                 num_installments: 24
                 ratio: 0.0140
       -
+        name: "Deposit to life insurance fund"
+        accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Life Insurance Fund"
+          value: 15.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to retirement fund"
+        accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Retirement Fund"
+          value: 5.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
         name: "Deposit to credit life insurance plan"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -6519,6 +6543,203 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+  -
+    loan_product_id: "c18f7606-8af0-41f2-a5b2-06d6439777d1"                         # K-KABUHAYAN W2
+    receivable_accounting_code_id: "6fec2c5d-b23d-4245-831d-9dbd2ccc2683"
+    interest_receivable_accounting_code_id: "94d22914-e8d7-44ad-a6e6-de6420e73486"
+    default_amount: 5000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.2
+      threshold: 0.00
+    deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 1500
+        deduction_type: "member_type_deduction_ratio"
+        business_permit_available: true
+        business_permit_amount: 1500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.015
+              -
+                num_installments: 25
+                ratio: 0.03
+              -
+                num_installments: 35
+                ratio: 0.045
+              -
+                num_installments: 50
+                ratio: 0.06
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Deposit to life insurance fund"
+        accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Life Insurance Fund"
+          value: 15.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+      -
+        name: "Deposit to retirement fund"
+        accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Retirement Fund"
+          value: 5.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+          
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
           
 
 loan_product_accounting_codes:
@@ -6674,4 +6895,8 @@ loan_product_accounting_codes:
     loan_product_id: "d1fe60f9-380f-4f2a-9b44-23747b9d7d1e"                         # K - YAKAP 
     receivable_accounting_code_id: "a1e2631d-d1b8-4ef3-9a88-b34a1e4d2e7c"
     interest_receivable_accounting_code_id:  "41a36eb6-2054-4826-b82b-ad4007964b71"
+  -    
+    loan_product_id: "c18f7606-8af0-41f2-a5b2-06d6439777d1"                         # K-KABUHAYAN W2
+    receivable_accounting_code_id: "6fec2c5d-b23d-4245-831d-9dbd2ccc2683"
+    interest_receivable_accounting_code_id: "94d22914-e8d7-44ad-a6e6-de6420e73486"
 ###############################

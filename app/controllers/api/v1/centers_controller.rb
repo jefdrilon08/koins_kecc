@@ -35,7 +35,7 @@ module Api
                       ).pluck(:branch_id)
                     ).order("name ASC")
 
-        centers = Center.where("branch_id IN (?)", branches.id)
+        centers = Center.where("branch_id IN (?)", branches.id).order("name ASC")
 
         data  = []
 
@@ -60,7 +60,7 @@ module Api
       end
 
       def centers
-        centers = Center.where("branch_id IN (?)", @branches.pluck(:id))
+        centers = Center.where("branch_id IN (?)", @branches.pluck(:id)).order("name ASC")
 
         if params[:branch_id].present?
           centers = centers.where(branch_id: params[:branch_id])
@@ -72,7 +72,7 @@ module Api
 
         data  = []
 
-        centers.find_each(batch_size: 1000) do |o|
+        centers.order("name ASC").find_each(batch_size: 1000) do |o|
           members = []
           
           records = o.members

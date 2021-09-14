@@ -1,0 +1,139 @@
+:css
+  @page { size: portrait; margin: 25px;}
+
+  table {
+    font-size: 0.9em;
+  }
+
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  #{@icpr[:branch_name]}
+  %br
+  #{@icpr[:type]} #{@icpr[:year]}
+  %br
+  %br
+
+- if @icpr[:type] == "PATRONAGE REFUND"
+  - if current_user.roles.include?("MIS" || "SBK") 
+    %table.table.table-bordered.table-sm
+      %thead
+        %tr
+          %th{ width: "25%" }
+            Member Name
+          %th.text-center
+            Identification Number
+          %th.text-center
+            Center
+          %th.text-center
+            Patronage Refund Amount
+          %th.text-center
+            Savings Amount Distributed
+          %th.text-center
+            CBU Amount Distributed
+      %tbody
+        - @icpr[:record].each do |rec|
+          %tr
+            %td
+              #{rec[:last_name]}, #{rec[:first_name]} #{rec[:middle_name]}
+            %td
+              #{rec[:identification_number]}
+            %td
+              #{rec[:center_name]}
+            %td.text-right
+              #{number_to_currency(rec[:patronage_interest_amount].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}
+  - else
+    %table.table.table-bordered.table-sm
+      %thead
+        %tr
+          %th.text-center
+            Identification Number
+          %th.text-center
+            Center
+          %th.text-center
+            Patronage Refund Amount
+          %th.text-center
+            Savings Amount Distributed
+          %th.text-center
+            CBU Amount Distributed
+      %tbody
+        - @icpr[:record].each do |rec|
+          %tr
+            %td
+              #{rec[:identification_number]}
+            %td
+              #{rec[:center_name]}
+            %td.text-right
+              #{number_to_currency(rec[:patronage_interest_amount].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}
+
+- elsif @icpr[:type] == "INTEREST ON SHARE CAPITAL"
+  - if current_user.roles.include?("MIS" || "SBK")
+    %table.table.table-bordered.table-sm
+      %thead
+        %tr
+          %th{ width: "25%" }
+            Member Name
+          %th.text-center
+            Identification Number
+          %th.text-center
+            Center
+          %th.text-center
+            Interest on Share Capital Amount
+          %th.text-center
+            Savings Amount Distributed
+          %th.text-center
+            CBU Amount Distributed
+      %tbody
+        - @icpr[:record].each do |rec|
+          %tr
+            %td
+              #{rec[:last_name]}, #{rec[:first_name]} #{rec[:middle_name]}
+            %td
+              #{rec[:identification_number]}
+            %td
+              #{rec[:center_name]}
+            %td.text-right
+              #{number_to_currency(rec[:equity_interest_amount].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}
+  - else
+    %table.table.table-bordered.table-sm
+      %thead
+        %tr
+          %th{ width: "25%" }
+            Identification Number
+          %th.text-center
+            Center
+          %th.text-center
+            Interest on Share Capital Amount
+          %th.text-center
+            Savings Amount Distributed
+          %th.text-center
+            CBU Amount Distributed
+      %tbody
+        - @icpr[:record].each do |rec|
+          %tr
+            %td
+              #{rec[:identification_number]}
+            %td
+              #{rec[:center_name]}
+            %td.text-right
+              #{number_to_currency(rec[:equity_interest_amount].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
+            %td.text-right
+              #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}

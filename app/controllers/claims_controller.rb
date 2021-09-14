@@ -169,7 +169,7 @@ class ClaimsController < ApplicationController
     if params[:status].present?
       @status = params[:status]
 
-      if @status == "pending"
+      if @status == "for checking"
         @status = "pending"
       elsif @status == "for approval"
         @status = "for-approval"

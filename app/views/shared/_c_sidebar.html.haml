@@ -172,7 +172,7 @@
         %li.c-sidebar-nav-item
           = link_to "/data_stores/icpr", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-calculator
-            ICPR
+            Interest On Share Capital
         %li.c-sidebar-nav-item
           = link_to "/data_stores/patronage_refund", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-calculator
@@ -374,6 +374,10 @@
           .c-sidebar-nav-icon.fa.fa-chart-line
           Cert and Policies
       %li.c-sidebar-nav-item
+        = link_to "/reports/government_identification_numbers", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Government Identification Numbers
+      %li.c-sidebar-nav-item
         = link_to "/reports/personal_documents", class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-chart-line
           Personal Documents
@@ -420,6 +424,14 @@
         = link_to administration_centers_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-list
           Centers
+      %li.c-sidebar-nav-item
+        = link_to administration_membership_arrangements_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-list
+          Membership Arrangements
+      %li.c-sidebar-nav-item
+        = link_to administration_membership_types_path, class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-list
+          Membership Types
       - if is_not_remote
         %li.c-sidebar-nav-item
           = link_to administration_surveys_path, class: "c-sidebar-nav-link" do

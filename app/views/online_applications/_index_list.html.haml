@@ -9,6 +9,10 @@
         %th
           Branch
         %th
+          City
+        %th
+          Province
+        %th
           Mobile Number
         %th
           Status
@@ -30,11 +34,18 @@
           %td
             #{o.branch}
           %td
+            #{o.city}
+          %td
+            #{o.province}
+          %td
             #{o.mobile_number}
           %td
             - if o.for_verification?
               .badge.badge-warning
                 FOR VERIFICATION
+            - elsif o.processing?
+              .badge.badge-secondary
+                PROCESSING
             - elsif o.verified?
               .badge.badge-info
                 VERIFIED

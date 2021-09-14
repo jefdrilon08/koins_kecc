@@ -30,10 +30,10 @@ module Public
           key: "file_document",
           message: "file required"
         }
-      elsif @file_document.tempfile.size > 2e+6
+      elsif @file_document.tempfile.size > 8e+6
         @errors[:messages] << {
           key: "file_document",
-          message: "file should be less than 2mb"
+          message: "file should be less than 8mb"
         }
       elsif !VALID_FILE_TYPES.include?(@file_document.content_type)
         @errors[:messages] << {
@@ -159,6 +159,14 @@ module Public
             }
           end
         end
+      end
+
+      # require mother's maiden name
+      if @data[:mothers_middle_name].blank?
+        @errors[:messages] << {
+          key: "mothers_middle_name",
+          message: "Mother's middle name required"
+        }
       end
 
       #not_yet_implemented!

@@ -30,32 +30,36 @@ var templateCenterOptions;
 var $selectBranch;
 var $selectVerifyBranch;
 var $selectAssignBranch;
+var $selectAssignMembershipArrangement;
+var $selectAssignMembershipType;
 var $selectCenter;
 var $inputReason;
 var _centers = [];
 
 var _cacheDom = function() {
-  $modalProcess           = $("#modal-process");
-  $modalReject            = $("#modal-reject");
-  $modalVerify            = $("#modal-verify");
-  $modalAssignBranch      = $("#modal-assign-branch");
-  $btnProcess             = $("#btn-process");
-  $btnConfirmProcess      = $("#btn-confirm-process");
-  $btnReject              = $("#btn-reject");
-  $btnConfirmReject       = $("#btn-confirm-reject");
-  $btnVerify              = $("#btn-verify");
-  $btnConfirmVerify       = $("#btn-confirm-verify");
-  $btnDownloadForm        = $("#btn-download-form");
-  $btnAssignBranch        = $("#btn-assign-branch");
-  $btnConfirmAssignBranch = $("#btn-confirm-assign-branch");
-  $inputReason            = $("#input-reason");
-  $selectBranch           = $("#select-branch");
-  $selectVerifyBranch     = $("#select-verify-branch");
-  $selectCenter           = $("#select-center");
-  $selectAssignBranch     = $("#select-assign-branch");
-  $message                = $(".message");
-  templateErrorList       = $("#template-error-list").html();
-  templateCenterOptions   = $("#template-center-options").html();
+  $modalProcess                       = $("#modal-process");
+  $modalReject                        = $("#modal-reject");
+  $modalVerify                        = $("#modal-verify");
+  $modalAssignBranch                  = $("#modal-assign-branch");
+  $btnProcess                         = $("#btn-process");
+  $btnConfirmProcess                  = $("#btn-confirm-process");
+  $btnReject                          = $("#btn-reject");
+  $btnConfirmReject                   = $("#btn-confirm-reject");
+  $btnVerify                          = $("#btn-verify");
+  $btnConfirmVerify                   = $("#btn-confirm-verify");
+  $btnDownloadForm                    = $("#btn-download-form");
+  $btnAssignBranch                    = $("#btn-assign-branch");
+  $btnConfirmAssignBranch             = $("#btn-confirm-assign-branch");
+  $inputReason                        = $("#input-reason");
+  $selectBranch                       = $("#select-branch");
+  $selectVerifyBranch                 = $("#select-verify-branch");
+  $selectCenter                       = $("#select-center");
+  $selectAssignBranch                 = $("#select-assign-branch");
+  $selectAssignMembershipArrangement  = $("#select-assign-membership-arrangement");
+  $selectAssignMembershipType         = $("#select-assign-membership-type");
+  $message                            = $(".message");
+  templateErrorList                   = $("#template-error-list").html();
+  templateCenterOptions               = $("#template-center-options").html();
 }
 
 var _bindEvents = function() {
@@ -64,7 +68,7 @@ var _bindEvents = function() {
   });
 
   $btnConfirmAssignBranch.on("click", function() {
-    var branchId  = $selectAssignBranch.val();
+    var branchId                = $selectAssignBranch.val();
 
     $btnConfirmAssignBranch.prop("disabled", true);
     $selectAssignBranch.prop("disabled", true);
@@ -118,6 +122,11 @@ var _bindEvents = function() {
   });
 
   $btnConfirmVerify.on("click", function() {
+    var membershipTypeId        = $selectAssignMembershipType.val();
+    var membershipArrangementId = $selectAssignMembershipArrangement.val();
+
+    $selectAssignMembershipType.prop("disabled", true);
+    $selectAssignMembershipArrangement.prop("disabled", true);
     $btnConfirmVerify.prop("disabled", true); 
 
     $.ajax({
@@ -125,6 +134,8 @@ var _bindEvents = function() {
       method: "POST",
       data: {
         id: _id,
+        membership_type_id: membershipTypeId,
+        membership_arrangement_id: membershipArrangementId,
         authenticity_token: _authenticityToken
       },
       success: function(response) {
@@ -149,6 +160,8 @@ var _bindEvents = function() {
           );
 
           $btnConfirmVerify.prop("disabled", false);
+          $selectAssignMembershipType.prop("disabled", false);
+          $selectAssignMembershipArrangement.prop("disabled", false);
         }
       }
     });
@@ -241,7 +254,7 @@ var _bindEvents = function() {
       },
       success: function(response) {
         $message.html("Success! Redirecting..."); 
-        window.location.href = "/members/" + response.member_id + "/display";
+        window.location.href = "/online_applications";
       },
       error: function(response) {
         console.log(response);

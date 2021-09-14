@@ -7,6 +7,7 @@ var $modalPrint;
 var $printMessage;
 var $btnPrint;
 var loader;
+var $btnPrintPdf;
 
 var $btnApprove;
 var $btnConfirmApprove;
@@ -32,6 +33,7 @@ var _cacheDom = function() {
   $btnPrint         = $("#btn-print");
   $printMessage       = $(".print-message");
   $modalPrint         = $("#modal-print");
+  $btnPrintPdf      =  $("#btn-print-pdf");
   
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
@@ -53,6 +55,22 @@ var _bindEvents = function() {
   $btnSetRate.on("click", function() {
     $message.html("");
     $modalSetRate.modal("show");
+  });
+
+
+  $btnPrintPdf.on("click", function() {
+    var print_icpr = $btnPrintPdf.data('id');
+
+    $modalPrint.modal("show");
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrint.modal("hide");
+    window.open("/print?id=" + print_icpr + "&type=print_pr");
   });
 
   $btnConfirmSetRate.on("click", function() {

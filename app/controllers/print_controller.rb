@@ -18,7 +18,18 @@ class PrintController < ApplicationController
               ).execute!
       @accounting_entry_data  = data
       render "print/accounting_entry", layout: "print"
-    
+
+    elsif type == "print_pr" 
+
+      icpr = DataStore.find(params[:id])
+      
+      data  = ::Print::BuildPrintIcpr.new(
+                icpr: icpr
+              ).execute!
+      
+      @icpr  = data
+      render "print/print_icpr", layout: "print"
+
     elsif type == "print_entry"
       data_store_entry = DataStore.find(params[:id])
       data  = ::Print::BuildIcprAccountingEntry.new(

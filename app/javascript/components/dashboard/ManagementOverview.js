@@ -78,6 +78,8 @@ export default class ManagementOverview extends React.Component {
     var tPureSavers       = 0;
     var tActiveLoaners    = 0;
     var tActiveMembers    = 0;
+    var tInactiveMembers  = 0;
+    var inactive_members  = 0;
 
     for(var i = 0; i < areas.length; i++) {
       rows.push(
@@ -88,6 +90,7 @@ export default class ManagementOverview extends React.Component {
         </tr>
       );
      
+
       var clusters    = areas[i].clusters;
 
       var aPrincipal        = 0.00;
@@ -100,6 +103,7 @@ export default class ManagementOverview extends React.Component {
       var aPureSavers       = 0;
       var aActiveLoaners    = 0;
       var aActiveMembers    = 0;
+      var aInactiveMembers   = 0;
 
       for(var j = 0; j < clusters.length; j++) {
         rows.push(
@@ -122,6 +126,7 @@ export default class ManagementOverview extends React.Component {
         var cPureSavers       = 0;
         var cActiveLoaners    = 0;
         var cActiveMembers    = 0;
+        var cInactiveMembers  = 0;
 
         for(var k = 0; k < branches.length; k++) {
           if(k == 0) {
@@ -154,13 +159,18 @@ export default class ManagementOverview extends React.Component {
                 <th className="text-center">
                   Admitted Members
                 </th>
+                <th className="text-center">
+                  Inactive Members
+                </th>
                 <th>
                   As Of
                 </th>
               </tr>
             );
           }
-
+          
+          
+          
           cPrincipal        += branches[k].data.principal;
           cPrincipalPaid    += branches[k].data.principal_paid;
           cPortfolio        += branches[k].data.portfolio;
@@ -172,6 +182,8 @@ export default class ManagementOverview extends React.Component {
           cActiveLoaners    += branches[k].data.loaners.total;
           cActiveMembers    += branches[k].data.active_members.total;
 
+          
+
           aPrincipal        += branches[k].data.principal;
           aPrincipalPaid    += branches[k].data.principal_paid;
           aPortfolio        += branches[k].data.portfolio;
@@ -182,6 +194,7 @@ export default class ManagementOverview extends React.Component {
           aPureSavers       += branches[k].data.pure_savers.total;
           aActiveLoaners    += branches[k].data.loaners.total;
           aActiveMembers    += branches[k].data.active_members.total;
+          
 
           tPrincipal        += branches[k].data.principal;
           tPrincipalPaid    += branches[k].data.principal_paid;
@@ -193,7 +206,11 @@ export default class ManagementOverview extends React.Component {
           tPureSavers       += branches[k].data.pure_savers.total;
           tActiveLoaners    += branches[k].data.loaners.total;
           tActiveMembers    += branches[k].data.active_members.total;
-
+        
+          cInactiveMembers  += branches[k].data.inactive_members.total;
+          aInactiveMembers  += branches[k].data.inactive_members.total;
+          tInactiveMembers  += branches[k].data.inactive_members.total;
+            
           rows.push(
             <tr key={"branch-" + branches[k].id}>
               <td>
@@ -224,6 +241,9 @@ export default class ManagementOverview extends React.Component {
               </td>
               <td className="text-center">
                 {branches[k].data.active_members.total}
+              </td>
+              <td className="text-center">
+                {branches[k].data.inactive_members.total}
               </td>
               <td>
                 {branches[k].data.as_of}
@@ -297,6 +317,11 @@ export default class ManagementOverview extends React.Component {
                 {cActiveMembers}
               </strong>
             </td>
+            <td className="text-center">
+            <strong>
+                {cInactiveMembers}
+              </strong>
+            </td>
             <td>
             </td>
           </tr>
@@ -368,7 +393,12 @@ export default class ManagementOverview extends React.Component {
               {aActiveMembers}
             </strong>
           </td>
-          <td>
+           <td className="text-center">
+            <strong>
+              {aInactiveMembers}
+            </strong>
+          </td>
+           <td>
           </td>
         </tr>
       );
@@ -437,6 +467,11 @@ export default class ManagementOverview extends React.Component {
         <td className="text-center">
           <strong>
             {tActiveMembers}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tInactiveMembers}
           </strong>
         </td>
         <td>

@@ -66,7 +66,8 @@ module Dashboard
         num_days_par: 0,
         pure_savers:    { male: 0, female: 0, others: 0, total: 0 },
         loaners:        { male: 0, female: 0, others: 0, total: 0 },
-        active_members: { male: 0, female: 0, others: 0, total: 0 }
+        active_members: { male: 0, female: 0, others: 0, total: 0 },
+        inactive_members:{ male: 0, female: 0, others: 0, total: 0 }
       }
 
       if metric.present?
@@ -111,6 +112,21 @@ module Dashboard
         d[:active_members][:female] = metric.data["active_members"]["female"]
         d[:active_members][:others] = metric.data["active_members"]["others"]
         d[:active_members][:total]  = metric.data["active_members"]["total"]
+
+        if metric.data["inactive_members"].present?
+            
+            d[:inactive_members][:male]   = metric.data["inactive_members"]["male"]
+            d[:inactive_members][:female] = metric.data["inactive_members"]["female"]
+            d[:inactive_members][:others] = metric.data["inactive_members"]["others"]
+            d[:inactive_members][:total]  = metric.data["inactive_members"]["total"]
+        else
+            d[:inactive_members][:male]   = 0
+            d[:inactive_members][:female] = 0
+            d[:inactive_members][:others] = 0
+            d[:inactive_members][:total]  = 0
+           
+        end
+        
       end
 
       {

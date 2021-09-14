@@ -10,8 +10,10 @@ module Members
       @member_data  = @config[:member_data]
       @user         = @config[:user]
 
-      @branch = Branch.find(@member_data[:branch_id])
-      @center = Center.find(@member_data[:center_id])
+      @branch                 = Branch.find(@member_data[:branch_id])
+      @center                 = Center.find(@member_data[:center_id])
+      @membership_arrangement = MembershipArrangement.find_by_id(@member_data[:membership_arrangement_id])
+      @membership_type        = MembershipType.find_by_id(@member_data[:membership_type_id])
 
       @member = Member.new
 
@@ -119,11 +121,12 @@ module Members
 
       ld_to_remove_ids  = @member.legal_dependents.where.not(id: ld_remaining_uuids).pluck(:id)
       b_to_remove_ids   = @member.beneficiaries.where.not(id: b_remaining_uuids).pluck(:id)
-      #raise ld_to_remove_ids.inspect
 
-      @member.branch      = @branch
-      @member.center      = @center
-      @member.modifiable  = nil
+      @member.branch                  = @branch
+      @member.center                  = @center
+      @member.membership_arrangement  = @membership_arrangement
+      @member.membership_type         = @membership_type
+      @member.modifiable              = nil
 
       @member.save!
       @member = Member.find(@member.id)

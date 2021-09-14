@@ -2,11 +2,13 @@ module OnlineApplications
   class ValidateVerify < AppValidator
     attr_accessor :errors
 
-    def initialize(online_application:, user:)
+    def initialize(online_application:, user:, membership_type: nil, membership_arrangement: nil)
       super()
 
-      @online_application = online_application
-      @user               = user
+      @online_application     = online_application
+      @membership_type        = membership_type
+      @membership_arrangement = membership_arrangement
+      @user                   = user
 
       @valid_roles  = ::Users::FetchValidRoles.new(
                         module_name: "online_application_verify"
@@ -29,6 +31,22 @@ module OnlineApplications
           key: "online_application",
           message: "invalid status"
         }
+      end
+
+      if @online_application.present?
+        if @membership_type.blank?
+          @errors[:messages] << {
+            key: "online_application",
+            message: "membership_type required"
+          }
+        end
+
+        if @membership_arrangement.blank?
+          @errors[:messages] << {
+            key: "online_application",
+            message: "membership_arrangement required"
+          }
+        end
       end
 
       if @user.blank?

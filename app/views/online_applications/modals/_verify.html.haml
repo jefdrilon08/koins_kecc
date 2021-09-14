@@ -9,6 +9,18 @@
           .alert.alert-info
             %p
               Are you sure you want to verify this application?
+          .row
+            .col
+              .form-group
+                %label
+                  Membership Type
+                = select_tag :membership_type, options_from_collection_for_select(@membership_types, :id, :name), class: "form-control select-select2", id: "select-assign-membership-type", prompt: "-- SELECT --"
+          .row
+            .col
+              .form-group
+                %label
+                  Membership Arrangement
+                = select_tag :membership_arrangement, options_from_collection_for_select(@membership_arrangements, :id, :name), class: "form-control select-select2", id: "select-assign-membership-arrangement", prompt: "-- SELECT --"
           .message
       .modal-footer
         .controls

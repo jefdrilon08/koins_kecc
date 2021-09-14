@@ -29,9 +29,14 @@ module Api
       def verify
         online_application  = OnlineApplication.find(params[:id])
 
+        membership_type         = MembershipType.find_by_id(params[:membership_type_id])
+        membership_arrangement  = MembershipArrangement.find_by_id(params[:membership_arrangement_id])
+
         validator = ::OnlineApplications::ValidateVerify.new(
                       online_application: online_application,
-                      user: current_user
+                      user: current_user,
+                      membership_type: membership_type,
+                      membership_arrangement: membership_arrangement
                     )
 
         validator.execute!
@@ -48,7 +53,9 @@ module Api
           cmd = ::OnlineApplications::Verify.new(
                   online_application: online_application,
                   user: current_user,
-                  branch: branch
+                  branch: branch,
+                  membership_type: membership_type,
+                  membership_arrangement: membership_arrangement
                 )
 
           cmd.execute!
@@ -101,16 +108,27 @@ module Api
         if validator.errors[:full_messages].size > 0
           render json: { errors: validator.errors[:full_messages] }, status: 403
         else
-          cmd = ::OnlineApplications::Process.new(
-                  online_application: online_application,
-                  branch: branch,
-                  center: center,
-                  user: current_user
-                )
+          online_application.update!(status: "processing")
 
-          cmd.execute!
+          ProcessOnlineApplication.perform_later({
+            id: online_application.id,
+            branch_id: branch.id,
+            center_id: center.id,
+            user_id: current_user.id
+          })
 
-          render json: { message: "ok", member_id: cmd.member.id }
+          render json: { message: "ok" }
+
+#          cmd = ::OnlineApplications::Process.new(
+#                  online_application: online_application,
+#                  branch: branch,
+#                  center: center,
+#                  user: current_user
+#                )
+#
+#          cmd.execute!
+#
+#          render json: { message: "ok", member_id: cmd.member.id }
         end
       end
     end

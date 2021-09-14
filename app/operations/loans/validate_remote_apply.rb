@@ -11,6 +11,7 @@ module Loans
       @loan_product     = @config[:loan_product]
       @co_maker_one     = @config[:co_maker_one]
       @co_maker_two     = @config[:co_maker_two]
+      @co_maker_three   = @config[:co_maker_three]
       @amount           = @config[:amount]
       @term             = @config[:term]
       @num_installments = @config[:num_installments]
@@ -30,20 +31,6 @@ module Loans
           message: "num_installments required"
         }
       end
-
-      if @co_maker_one.blank?
-        @errors[:messages] << {
-          key: "co_maker_one",
-          message: "co_maker_one required"
-        }
-      end
-#
-#      if @co_maker_two.blank?
-#        @errors[:messages] << {
-#          key: "co_maker_two",
-#          message: "co_maker_two required"
-#        }
-#      end
 
       if @loan_product.blank?
         @errors[:messages] << {

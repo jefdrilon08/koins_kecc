@@ -53,6 +53,7 @@ import AccountingEntryPrecisionComponent from "../components/monitoring/Accounti
 import FormResignationComponent from "../components/members/FormResignationComponent.js";
 import EquityWithdrawalCollectionUIComponent from "../components/equity_withdrawal_collections/EquityWithdrawalCollectionUIComponent.js";
 import GeneralLedgerDisplayComponent from "../components/accounting/GeneralLedgerDisplayComponent.js";
+import MembershipArrangementShow from "../components/MembershipArrangementShow.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -332,7 +333,8 @@ const hooks = {
   "online_applications/show":                         [OnlineApplicationsShow],
   "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex],
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
-  "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow]
+  "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
+  "administration/membership_arrangements/show":      [MembershipArrangementShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
