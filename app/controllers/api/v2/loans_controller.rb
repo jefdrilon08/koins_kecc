@@ -28,6 +28,24 @@ module Api
         render json: { loans: data }
       end
 
+      def settings
+        payload = {
+          use_co_maker_one: false,
+          use_co_maker_two: false,
+          use_co_maker_three: false
+        }
+
+        membership_arrangement  = @member.membership_arrangement
+        data                    = membership_arrangement.data.with_indifferent_access
+
+        # Setup use of co maker
+        payload[:use_co_maker_one]    = (data.key?(:use_co_maker_one) and data[:use_co_maker_one] == "true")
+        payload[:use_co_maker_two]    = (data.key?(:use_co_maker_two) and data[:use_co_maker_two] == "true")
+        payload[:use_co_maker_three]  = (data.key?(:use_co_maker_three) and data[:use_co_maker_three] == "true")
+
+        render json: payload
+      end
+
       def project_type_categories
         project_type_categories = ReadOnlyProjectTypeCategory.all.map{ |o|
           {
