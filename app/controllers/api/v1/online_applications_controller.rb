@@ -56,6 +56,7 @@ module Api
                   online_application: online_application,
                   user: current_user,
                   branch: branch,
+                  center: center,
                   membership_type: membership_type,
                   membership_arrangement: membership_arrangement
                 )
