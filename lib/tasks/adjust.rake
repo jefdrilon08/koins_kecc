@@ -2558,4 +2558,81 @@ namespace :adjust do
 
     puts "Done!"
   end
+
+  task :insert_insurance_interest_beginning_balance => :environment do
+    # HEADER: identification_number,, ev_interest
+
+    file_location = ENV['INTEREST_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(identification_number: row['identification_number']).first
+
+      rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+      ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+      
+      if !member.nil?
+        if ev_account.present?
+          ev_balance  = ev_account.balance.to_f
+          ev_interest = row['ev_interest'].to_f
+          ev_new_balance = ev_interest + ev_balance
+
+          ev_account_transaction  = AccountTransaction.new(
+                                    subsidiary_id: ev_account.id,
+                                    subsidiary_type: "MemberAccount",
+                                    amount: ev_interest,
+                                    transaction_type: "deposit",
+                                    transacted_at: Date.today,
+                                    status: "approved",
+                                    data: {
+                                      is_withdraw_payment: false,
+                                      is_fund_transfer: false,
+                                      is_interest: true,
+                                      is_adjustment: false,
+                                      is_for_exit_age: false,
+                                      is_for_loan_payments: false,
+                                      accounting_entry_reference_number: nil,
+                                      beginning_balance: ev_balance,
+                                      ending_balance: ev_new_balance
+                                    }
+                                  )
+
+          ev_account_transaction.save!
+
+          ev_account.update!(balance: ev_new_balance)
+        elsif rf_account.present?
+          rf_balance     = rf_account.balance.to_f
+          rf_interest    = row['rf_interest'].to_f
+          rf_new_balance = rf_interest + rf_balance
+
+          rf_account_transaction  = AccountTransaction.new(
+                                    subsidiary_id: rf_account.id,
+                                    subsidiary_type: "MemberAccount",
+                                    amount: rf_interest,
+                                    transaction_type: "deposit",
+                                    transacted_at: Date.today,
+                                    status: "approved",
+                                    data: {
+                                      is_withdraw_payment: false,
+                                      is_fund_transfer: false,
+                                      is_interest: true,
+                                      is_adjustment: false,
+                                      is_for_exit_age: false,
+                                      is_for_loan_payments: false,
+                                      accounting_entry_reference_number: nil,
+                                      beginning_balance: rf_balance,
+                                      ending_balance: rf_new_balance
+                                    }
+                                  )
+
+          rf_account_transaction.save!
+
+          ev_account.update!(balance: rf_new_balance)
+
+        end
+      end
+    end
+
+    puts "\nDone."
+  end
 end
