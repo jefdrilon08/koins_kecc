@@ -8,8 +8,6 @@ function MembershipArrangementShow(props) {
   function handleUseCoMakerOneChanged(event) {
     data.use_co_maker_one = event.target.checked;
 
-    console.log(data);
-
     setData(data);
   }
 
@@ -21,7 +19,7 @@ function MembershipArrangementShow(props) {
       <div className="row">
         <div className="col-md-4 col-xs-12">
           <Toggle
-            checked={data.use_co_maker_one}
+            defaultChecked={data.use_co_maker_one}
             onChange={handleUseCoMakerOneChanged}
             className="btn"
           />
