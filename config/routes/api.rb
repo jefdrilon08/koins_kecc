@@ -251,6 +251,12 @@ namespace :api do
     post "/monthly_closing_collections/update", to: "monthly_closing_collections#update"
     post "/monthly_closing_collections/approve", to: "monthly_closing_collections#approve"
 
+    # Insurance Monthly Closing Collection
+    get "/insurance_monthly_closing_collections/fetch", to: "insurance_monthly_closing_collections#fetch"
+    post "/insurance_monthly_closing_collections", to: "insurance_monthly_closing_collections#create"
+    post "/insurance_monthly_closing_collections/update", to: "insurance_monthly_closing_collections#update"
+    post "/insurance_monthly_closing_collections/approve", to: "insurance_monthly_closing_collections#approve"
+
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"
     post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"
