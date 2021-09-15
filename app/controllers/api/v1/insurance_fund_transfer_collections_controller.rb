@@ -84,6 +84,7 @@ module Api
                     {
                       id: o.id,
                       name: o.full_name,
+                      identification_number: o.identification_number,
                       center: {
                         id: o.center.id,
                         name: o.center.name

@@ -127,12 +127,14 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
         centerName = center.name;
       }
 
+      var identificationNumber = this.props.data.data.records[i].member.identification_number;
+
       components.push(
         <td key={"c-member-" + member.id}>
           {btnDelete}
           <strong>
             <a href={"/members/" + member.id + "/display"} target="_blank">
-              {this.props.data.data.records[i].member.full_name} ({centerName})
+              {this.props.data.data.records[i].member.full_name} ({centerName} || {identificationNumber})
             </a>
           </strong>
         </td>
