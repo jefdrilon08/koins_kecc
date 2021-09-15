@@ -4,7 +4,8 @@ class OnlineApplication < ApplicationRecord
     "verified",
     "processed",
     "rejected",
-    "processing"
+    "processing",
+    "error"
   ]
 
   validates :status, presence: true, inclusion: { in: STATUSES }
@@ -30,6 +31,7 @@ class OnlineApplication < ApplicationRecord
   scope :processed, -> { where(status: "processed") }
   scope :rejected, -> { where(status: "rejected") }
   scope :processing, -> { where(status: "processing") }
+  scope :error, -> { where(status: "error") }
 
   def load_defaults
     if self.status.blank?
@@ -41,12 +43,28 @@ class OnlineApplication < ApplicationRecord
     end
   end
 
+  def spouse
+    "#{self.data["spouse"]["last_name"]}, #{self.data["spouse"]["first_name"]} #{self.data["spouse"]["middle_name"]}"
+  end
+
+  def spouse_occupation
+    "#{self.data["spouse"]["occupation"]}"
+  end
+
+  def spouse_date_of_birth
+    "#{self.data["spouse"]["date_of_birth"]}"
+  end
+
   def city
     self.data["address"]["city"]
   end
 
   def province
     self.data["address"]["province"]
+  end
+
+  def error?
+    self.status == "error"
   end
 
   def processing?

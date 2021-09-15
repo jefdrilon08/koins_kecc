@@ -13,6 +13,12 @@
             .col
               .form-group
                 %label
+                  Center
+                = select_tag :center, options_from_collection_for_select(@centers, :id, :name), class: "form-control select-select2", id: "select-assign-center", prompt: "-- SELECT --"
+          .row
+            .col
+              .form-group
+                %label
                   Membership Type
                 = select_tag :membership_type, options_from_collection_for_select(@membership_types, :id, :name), class: "form-control select-select2", id: "select-assign-membership-type", prompt: "-- SELECT --"
           .row
