@@ -2560,7 +2560,7 @@ namespace :adjust do
   end
 
   task :insert_insurance_interest_beginning_balance => :environment do
-    # HEADER: identification_number,, ev_interest
+    # HEADER: identification_number, rf_interest, ev_interest
 
     file_location = ENV['INTEREST_CSV']
     puts file_location
@@ -2573,6 +2573,8 @@ namespace :adjust do
       
       if !member.nil?
         if ev_account.present?
+          puts "Inseting EV Interest for #{member.full_name} - #{member.id}"
+          
           ev_balance  = ev_account.balance.to_f
           ev_interest = row['ev_interest'].to_f
           ev_new_balance = ev_interest + ev_balance
@@ -2600,7 +2602,11 @@ namespace :adjust do
           ev_account_transaction.save!
 
           ev_account.update!(balance: ev_new_balance)
-        elsif rf_account.present?
+        end
+
+        if rf_account.present?
+          puts "Inseting RF Interest for #{member.full_name} - #{member.id}"
+
           rf_balance     = rf_account.balance.to_f
           rf_interest    = row['rf_interest'].to_f
           rf_new_balance = rf_interest + rf_balance
@@ -2627,8 +2633,7 @@ namespace :adjust do
 
           rf_account_transaction.save!
 
-          ev_account.update!(balance: rf_new_balance)
-
+          rf_account.update!(balance: rf_new_balance)
         end
       end
     end
