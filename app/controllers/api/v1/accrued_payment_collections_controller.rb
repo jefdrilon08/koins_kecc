@@ -43,14 +43,38 @@ module Api
           update_transaction = ::AccruedPaymentCollections::UpdateTransaction.new(
                                             config: config
                                           ).execute!
+       end
+        
+        def approve_transaction
+          data_store_id = params[:id]
+          config        = {data_store_id: data_store_id}
 
-          #billing = AccruedBilling.find(data_store_id)
-          #billing_data = billing.data.with_indifferent_access
-          #billing_data[:member_data][member_id][:loan_data][member_account_id][:amount] = loan_amount
-          #billing.update(data: billing_data)
-           
+          approve_transaction = ::AccruedPaymentCollections::ApproveTransaction.new(
+                                            config: config
+                                          ).execute!
+
         end
 
+        def process_zero
+          data_store_id = params[:id]
+          config        = {data_store_id: data_store_id}
+
+          approve_transaction = ::AccruedPaymentCollections::ProcessZero.new(
+                                            config: config
+                                          ).execute!
+
+        end
+
+        def delete
+          data_store_id = params[:id]
+          config        = {data_store_id: data_store_id}
+
+          delete_transaction = ::AccruedPaymentCollections::Delete.new(
+                                            config: config
+                                          ).execute!
+        end
+ 
+    
     end
   end
 end

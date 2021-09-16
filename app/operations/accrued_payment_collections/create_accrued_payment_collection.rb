@@ -33,7 +33,7 @@ module AccruedPaymentCollections
     def process_accrued_data!
       @header = []
       @record = []
-      dta = Loan.where("center_id = ? and loans.data ->> 'accrued_interest' IS NOT NULL" , @center)   
+      dta = Loan.joins(:member).where("members.center_id = ? and loans.data ->> 'accrued_interest' IS NOT NULL" , @center)   
       dta.pluck(:loan_product_id).uniq.each do |dt|
         @header << LoanProduct.find(dt)
       end
@@ -43,7 +43,7 @@ module AccruedPaymentCollections
           id:   hd.id
       }
       end
-      
+    
       dta.pluck(:member_id).uniq.each do |rec|
          
           @accrued_billing.data['member_data'] << {  
@@ -61,7 +61,7 @@ module AccruedPaymentCollections
             x = Loan.find(l)
             amt = x.data['accrued_interest']['total_accrued_interest'] - x.data['accrued_interest']['total_accrued_interest_balance']
           end
-          if x.present?
+          if x.present? and x.data['accrued_interest']['status'] != 'remove'
             ld[:loan_data] << { 
               name:     hd.name,
               enabled:  true,
@@ -78,10 +78,11 @@ module AccruedPaymentCollections
             }
           end
         end
+          mem_acc = MemberAccount.where(member_id: ld[:member_id] , account_type: 'SAVINGS' , account_subtype: 'K-IMPOK').last.id
           ld[:loan_data] << { 
               name:     "Withdraw Payment",
               enabled:  true,
-              loan_id:  '',
+              mem_acc:  mem_acc,
               amount:   0.0
 
             }

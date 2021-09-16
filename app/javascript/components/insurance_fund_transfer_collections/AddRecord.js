@@ -110,7 +110,7 @@ export default class AddRecord extends React.Component {
     for(var i = 0; i < members.length; i++) {
       records.push(
         <option key={"member-" + i} value={members[i].id}>
-          {members[i].name} ({members[i].center.name})
+          {members[i].name} ({members[i].center.name} || {members[i].identification_number})
         </option>
       );
     }
