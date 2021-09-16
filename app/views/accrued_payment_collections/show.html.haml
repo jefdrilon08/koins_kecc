@@ -26,16 +26,20 @@
                         #{am['name']}
                     - am['loan_data'].each_with_index do |al , x|
                       %td{:align=>"right"}
-                        -if al['enabled'] == true
-                          %a.undo{ data: { 
-                            amount: "#{al["amount"]}",
-                            collection_id: "#{@accrued_interest_collection.id}",
-                            member_data_id: "#{y}",
-                            loan_data_id: "#{x}"
+                        -if @accrued_interest_collection.status == 'pending'
+                          -if al['enabled'] == true
+                            %a.undo{ data: { 
+                              amount: "#{al["amount"]}",
+                              collection_id: "#{@accrued_interest_collection.id}",
+                              member_data_id: "#{y}",
+                              loan_data_id: "#{x}"
                                     }, 
                                     :href => "#" 
-                            }
-                            #{al["amount"]} 
-
-
+                              }
+                              #{al["amount"]} 
+                        -else
+                          #{al["amount"]}
+= render partial: "/accrued_payment_collections/modals/delete"
+= render partial: "/accrued_payment_collections/modals/approve_transaction"
 = render partial: "/accrued_payment_collections/modals/update_transaction"
+= render partial: "/accrued_payment_collections/modals/zero_out"

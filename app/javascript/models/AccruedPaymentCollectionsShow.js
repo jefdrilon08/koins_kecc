@@ -4,8 +4,10 @@ import 'select2-theme-bootstrap4/dist/select2-bootstrap.css';
 
 var $modalNew;
 var $modalDelete;
+var $modalApproveTransaction;
 var $modalProcess;
 var $modalBatchProcess;
+var $modalZeroOut;
 var $selectBranch;
 var $selectCenter;
 var $selectMember;
@@ -30,7 +32,10 @@ var $message;
 var templateErrorList;
 var _authenticityToken;
 
-
+var $btnApprove;
+var $btnZero;
+var $btnConfirmZero;
+var _id;
 
 var $inputBatchNumberOfDays;
 var $selectBatchBranch;
@@ -57,9 +62,10 @@ var _recordType;
 var _loanAmount;
 
 var _urlCreate        = "/api/v1/accrued_payment_collections/update_transaction";
-var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
+var _urlDelete        = "/api/v1/accrued_payment_collections/delete";
 var _urlProcess       =  "#" // "/api/v1/adjustments/moratoriums/process";
-var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
+var _urlProcess       = "/api/v1/accrued_payment_collections/approve_transaction";
+var _urlProcessZero   = "/api/v1/accrued_payment_collections/process_zero";
 var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
@@ -73,9 +79,11 @@ var init  = function(options) {
 
 var _cacheDom = function() {
   $modalNew                     = $("#modal-new");
+  $modalApproveTransaction	= $("#modal-approve-transaction");
   $modalDelete                  = $("#modal-delete");
   $modalProcess                 = $("#modal-update-transaction"); //para sa modal
   $modalBatchProcess            = $("#modal-batch-process");
+  $modalZeroOut			= $("#modal-zero-out");	
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
   $selectMember                 = $("#select-member");
@@ -88,7 +96,7 @@ var _cacheDom = function() {
   $selectAccruedType            = $("#select-accrued-type");
   $inputReason                  = $("#input-reason");
   $btnNew                       = $(".undo");
-  $btnDelete                    = $(".btn-delete");
+  $btnDelete                    = $("#btn-delete");
   $btnProcess                   = $(".btn-process");
   $btnBatchProcess              = $("#btn-batch-process");
   $btnConfirmNew                = $("#btn-confirm-approve");
@@ -96,6 +104,10 @@ var _cacheDom = function() {
   $btnConfirmProcess            = $("#btn-confirm-process");
   $btnConfirmBatchProcess       = $("#btn-confirm-batch-process");
   $message                      = $(".message");
+
+  $btnApprove			= $("#btn-approve");
+  $btnZero			= $("#btn-zero");
+  $btnConfirmZero		= $("#btn-confirm-zero");
 
   $inputBatchNumberOfDays       = $("#input-batch-number-of-moratorium-days");
   $selectBatchBranch       = $("#select-batch-branch");
@@ -241,7 +253,57 @@ var _bindEvents = function() {
     $modalProcess.modal("show");
   });
 
-  $btnConfirmProcess.on("click", function() {
+  $btnZero.on("click", function() {
+     _id = $(this).data("id");
+	  //alert(_id);
+     $modalZeroOut.modal("show");
+  });
+  $btnConfirmZero.on("click", function() {
+    $message.html("Loading..."); 
+    $btnConfirmZero.prop("disabled", true);
+
+    $.ajax({
+      url: _urlProcessZero,
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmZero.prop("disabled", false);
+        }
+      }
+    });
+
+  });
+ 
+   
+   $btnApprove.on("click", function() {
+     _id = $(this).data("id");
+	  //alert(_id);
+    $modalApproveTransaction.modal("show");
+  });
+
+
+  $btnConfirmProcess.on("click", function() {	  	  
     $message.html("Loading...");
     $btnConfirmProcess.prop("disabled", true);
 
@@ -249,7 +311,7 @@ var _bindEvents = function() {
       url: _urlProcess,
       method: "POST",
       data: {
-        id: _moratoriumId,
+        id: _id,
         authenticity_token: _authenticityToken
       },
       success: function(response) {
@@ -278,7 +340,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
-    _moratoriumId = $(this).data("id");
+    _id = $(this).data("id");
     $modalDelete.modal("show");
   });
 
@@ -290,11 +352,13 @@ var _bindEvents = function() {
       url: _urlDelete,
       method: "POST",
       data: {
-        id: _moratoriumId
+        id: _id
       },
       success: function(response) {
         $message.html("Success!");
-        window.location.reload();
+	      //window.location.reload();
+	      window.location.href="/accrued_payment_collections"
+
       },
       error: function(response) {
         console.log(response);
@@ -350,7 +414,7 @@ var _bindEvents = function() {
 	  _memberAccountId   = memberAccountId
 	  _dataStoreId       = dataStoreId
 	  //_recordType        = recordType
-  
+	  //alert(_dataStoreId);
     $modalProcess.modal("show");
   });
 
