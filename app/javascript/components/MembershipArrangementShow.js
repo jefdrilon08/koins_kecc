@@ -91,13 +91,13 @@ function MembershipArrangementShow(props) {
             <thead>
               <tr>
                 <th>
-                  Co Maker One
+                  Co-maker 1 (Kasama sa sentro)
                 </th>
                 <th>
-                  Co Maker Two
+                  Co-maker 2 (Kamag-anak)
                 </th>
                 <th>
-                  Co Maker Three
+                  Co-maker 3 (Hindi kamag-anak / Kapit-bahay)
                 </th>
               </tr>
             </thead>
