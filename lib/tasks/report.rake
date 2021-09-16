@@ -218,7 +218,7 @@ namespace :report do
     @data_store_data = @data_store.data.with_indifferent_access
     @data_store_data[:counts][:loaners][:members].each do |m|
       ctr = m[:center][:name]
-      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ctr}"
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name] }|#{ctr}"
       @data << j
     end
   
