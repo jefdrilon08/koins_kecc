@@ -76,7 +76,7 @@ module Api
               {
                 id:      b.id,
                 name:    b.name,
-                centers: b.centers.map { |c| { id: c.id, name: c.name } },
+                centers: b.centers.order("name ASC").map { |c| { id: c.id, name: c.name } },
               }
             end
 

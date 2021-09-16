@@ -383,6 +383,19 @@ member_resignation_types:
         name: 'Paggawa o pagkasangkot sa nakapipinsala o nakasasama sa interes at kapakanan ng kooperatiba'
 
 ###############################
+# INSURANCE INTEREST          #
+###############################
+insurance_interest_member_accounts:
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Retirement Fund"
+    annual_interest_rate: 0.01
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Equity Value"
+    annual_interest_rate: 0.01
+
+###############################
 # INTEREST AND TAX            #
 ###############################
 interest_member_accounts:
@@ -6557,7 +6570,7 @@ loan_products:
       -
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        amount: 0.00
+        amount: 1500
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 1500

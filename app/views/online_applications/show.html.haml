@@ -68,9 +68,14 @@
                   #{@online_application.membership_arrangement}
               %tr
                 %th
-                  Branch
+                  Satellite Office
                 %td
                   #{@online_application.branch}
+              %tr
+                %th
+                  Center
+                %td
+                  #{@online_application.center}
               %tr
                 %th
                   Gender
@@ -113,6 +118,21 @@
                   #{@online_application.religion}
               %tr
                 %th
+                  Spouse
+                %td
+                  #{@online_application.spouse}
+              %tr
+                %th
+                  Spouse Occupation
+                %td
+                  #{@online_application.spouse_occupation}
+              %tr
+                %th
+                  Spouse Date of Birth
+                %td
+                  #{@online_application.spouse_date_of_birth}
+              %tr
+                %th
                   Address
                 %td
                   #{@online_application.data["address"]["street"]} #{@online_application.data["address"]["district"]} #{@online_application.data["address"]["city"]}
@@ -121,11 +141,6 @@
                   Mother's Name
                 %td
                   #{@online_application.data["mothers_last_name"]}, #{@online_application.data["mothers_first_name"]} #{@online_application.data["mothers_middle_name"]}
-              %tr
-                %th
-                  Spouse
-                %td
-                  #{@online_application.data["spouse"]["firstName"]} #{@online_application.data["spouse"]["middleName"]} #{@online_application.data["spouse"]["lastName"]}
               %tr
                 %th
                   SSS / GSIS

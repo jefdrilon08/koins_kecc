@@ -18,6 +18,7 @@ module MemberAccountValidations
       @lif_member_account   = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").first
       @rf_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").first
       @pl_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Policy Loan").first
+      @equity_value_account = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Equity Value").first     
       
       @data                 = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
                                 member: @member, 
@@ -26,7 +27,8 @@ module MemberAccountValidations
                                 resignation_date: @resignation_date
                               ).execute!
 
-      @equity_value         = @lif_member_account.data.with_indifferent_access[:equity_value] 
+      #@equity_value         = @lif_member_account.data.with_indifferent_access[:equity_value] 
+      @equity_value         = @equity_value_account.try(:balance).to_f
 
       if !@pl_member_account.nil?
         @policy_loan = @pl_member_account.try(:balance).to_f

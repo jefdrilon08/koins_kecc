@@ -88,10 +88,26 @@ class LoansController < ApplicationController
 
       @subheader_side_actions = []
 
+      membership_arrangement = @member.membership_arrangement
+
+      if membership_arrangement.present?
+        data = membership_arrangement.data.with_indifferent_access
+
+        # Setup use of co maker
+        use_co_maker_one    = (data.key?(:use_co_maker_one) and data[:use_co_maker_one] == "true")
+        use_co_maker_two    = (data.key?(:use_co_maker_two) and data[:use_co_maker_two] == "true")
+        use_co_maker_three  = (data.key?(:use_co_maker_three) and data[:use_co_maker_three] == "true")
+      end
+
       @payload = {
         id: params[:id],
         memberId: @member.id,
-        banks: @banks
+        banks: @banks,
+        settings: {
+          use_co_maker_one: use_co_maker_one,
+          use_co_maker_two: use_co_maker_two,
+          use_co_maker_three: use_co_maker_three
+        }
       }
     end
   end

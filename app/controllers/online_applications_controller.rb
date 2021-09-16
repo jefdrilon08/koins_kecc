@@ -62,6 +62,12 @@ class OnlineApplicationsController < ApplicationController
                 online_application: @online_application
               ).execute!
 
+      @centers = []
+
+      if @online_application.branch_id.present?
+        @centers  = ReadOnlyCenter.where(branch_id: @online_application.branch_id).order("name ASC")
+      end
+
       @payload = {
         id: @online_application.id,
         data: data
@@ -84,7 +90,7 @@ class OnlineApplicationsController < ApplicationController
           id: "btn-assign-branch",
           class: "fa fa-check",
           link: "#",
-          text: "Assign Branch"
+          text: "Assign Satellite Office"
         }
       end
 

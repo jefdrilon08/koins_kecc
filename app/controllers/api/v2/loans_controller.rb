@@ -28,6 +28,24 @@ module Api
         render json: { loans: data }
       end
 
+      def settings
+        payload = {
+          use_co_maker_one: false,
+          use_co_maker_two: false,
+          use_co_maker_three: false
+        }
+
+        membership_arrangement  = @member.membership_arrangement
+        data                    = membership_arrangement.data.with_indifferent_access
+
+        # Setup use of co maker
+        payload[:use_co_maker_one]    = (data.key?(:use_co_maker_one) and data[:use_co_maker_one] == "true")
+        payload[:use_co_maker_two]    = (data.key?(:use_co_maker_two) and data[:use_co_maker_two] == "true")
+        payload[:use_co_maker_three]  = (data.key?(:use_co_maker_three) and data[:use_co_maker_three] == "true")
+
+        render json: payload
+      end
+
       def project_type_categories
         project_type_categories = ReadOnlyProjectTypeCategory.all.map{ |o|
           {
@@ -70,6 +88,7 @@ module Api
         co_maker_one      = Member.find_by_id(params[:co_maker_id])
         project_type      = ProjectType.find_by_id(params[:project_type_id])
         co_maker_two      = params[:co_maker_two].try(:upcase)
+        co_maker_three    = params[:co_maker_three].try(:upcase)
         amount            = params[:amount].try(:to_f).try(:round, 2)
         term              = params[:term]
         num_installments  = params[:num_installments].try(:to_i)
@@ -85,20 +104,21 @@ module Api
         project_type = ProjectType.find_by_id(params[:project_type_id])
 
         config = {
-          loan_product: loan_product,
-          pn_number: pn_number,
-          co_maker_one: co_maker_one,
-          co_maker_two: co_maker_two,
-          amount: amount,
-          term: term,
-          num_installments: num_installments,
-          project_type: project_type,
-          member: @member,
-          clip_first_name: clip_first_name,
-          clip_middle_name: clip_middle_name,
+          loan_product:       loan_product,
+          pn_number:          pn_number,
+          co_maker_one:       co_maker_one,
+          co_maker_two:       co_maker_two,
+          co_maker_three:     co_maker_three,
+          amount:             amount,
+          term:               term,
+          num_installments:   num_installments,
+          project_type:       project_type,
+          member:             @member,
+          clip_first_name:    clip_first_name,
+          clip_middle_name:   clip_middle_name,
           clip_date_of_birth: clip_date_of_birth,
-          clip_relationship: clip_relationship,
-          project_type: project_type
+          clip_relationship:  clip_relationship,
+          project_type:       project_type
         }
 
         validator = ::Loans::ValidateRemoteApply.new(config: config)
@@ -128,6 +148,7 @@ module Api
         co_maker_one      = Member.find_by_id(payload[:co_maker_id])
         project_type      = ProjectType.find_by_id(payload[:project_type_id])
         co_maker_two      = payload[:co_maker_two].try(:upcase)
+        co_maker_three    = payload[:co_maker_three].try(:upcase)
         amount            = payload[:amount].try(:to_f).try(:round, 2)
         term              = payload[:term]
         num_installments  = payload[:num_installments].try(:to_i)
@@ -142,24 +163,27 @@ module Api
         # Project type
         project_type = ProjectType.find_by_id(payload[:project_type_id])
 
-        co_maker_profile_picture  = params[:co_maker_profile_picture]
+        co_maker_profile_picture        = params[:co_maker_profile_picture]
+        co_maker_three_profile_picture  = params[:co_maker_three_profile_picture]
 
         config = {
-          loan_product: loan_product,
-          pn_number: pn_number,
-          co_maker_one: co_maker_one,
-          co_maker_two: co_maker_two,
-          amount: amount,
-          term: term,
-          num_installments: num_installments,
-          project_type: project_type,
-          member: @member,
-          clip_first_name: clip_first_name,
-          clip_middle_name: clip_middle_name,
-          clip_date_of_birth: clip_date_of_birth,
-          clip_relationship: clip_relationship,
-          project_type: project_type,
-          co_maker_profile_picture: co_maker_profile_picture
+          loan_product:                   loan_product,
+          pn_number:                      pn_number,
+          co_maker_one:                   co_maker_one,
+          co_maker_two:                   co_maker_two,
+          co_maker_three:                 co_maker_three,
+          amount:                         amount,
+          term:                           term,
+          num_installments:               num_installments,
+          project_type:                   project_type,
+          member:                         @member,
+          clip_first_name:                clip_first_name,
+          clip_middle_name:               clip_middle_name,
+          clip_date_of_birth:             clip_date_of_birth,
+          clip_relationship:              clip_relationship,
+          project_type:                   project_type,
+          co_maker_profile_picture:       co_maker_profile_picture,
+          co_maker_three_profile_picture: co_maker_three_profile_picture
         }
 
         validator = ::Loans::ValidateRemoteApply.new(config: config)

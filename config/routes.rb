@@ -304,6 +304,9 @@ Rails.application.routes.draw do
   # Monthly Closing Collections
   resources :monthly_closing_collections, only: [:index, :show, :destroy]
 
+  # Insurance Monthly Closing Collections
+  resources :insurance_monthly_closing_collections, only: [:index, :show, :destroy]
+
   # Printing
   get "/print", to: "print#print"
   get "/download_file", to: "pages#download_file"
@@ -467,6 +470,7 @@ Rails.application.routes.draw do
   get "/reports/claim_generate_report", to: "reports#claim_generate_report", as: :claim_generate_report
   get "/reports/hiip_report", to: "reports#hiip_report", as: :hiip_report
   get "/reports/hiip_report_excel", to: "reports#hiip_report_excel", as: :hiip_report_excel
+  get "/reports/government_identification_numbers", to: "reports#government_identification_numbers", as: :government_identification_numbers
 
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"

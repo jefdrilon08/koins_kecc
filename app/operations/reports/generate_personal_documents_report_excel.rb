@@ -1,12 +1,19 @@
 module Reports
   class GeneratePersonalDocumentsReportExcel
-    def initialize(start_date:, end_date:, branch:)
-      @end_date   = end_date
-      @start_date = start_date
-      @branch     = branch
+    def initialize(start_date:, end_date:, branch:, insurance_status:)
+      @end_date         = end_date
+      @start_date       = start_date
+      @branch           = branch
+      @insurance_status = insurance_status
+
       if !@start_date.nil? &&  !@end_date.nil? && !@branch.nil?
-        @members  = ReadOnlyMember.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch)
+        @members  = ReadOnlyMember.active_and_resigned.where("data ->> 'recognition_date' >= ? AND data ->> 'recognition_date' <= ? AND branch_id = ?", @start_date, @end_date, @branch)
       end
+
+      if @insurance_status.present?
+        @members = @members.where(insurance_status: @insurance_status)
+      end
+ 
 
       @p        = Axlsx::Package.new
     end
@@ -35,6 +42,7 @@ module Reports
             "MIDDLE NAME",
             "LAST NAME",
             "STATUS",
+            "INSURANCE STATUS",
             "RECOGNITION DATE",
             "DOB",
             "AGE",
@@ -55,6 +63,7 @@ module Reports
             member_row << member.middle_name.try(:upcase)
             member_row << member.last_name.try(:upcase)
             member_row << member.status
+            member_row << member.insurance_status
             member_row << member.data['recognition_date']
             member_row << member.try(:date_of_birth).try(:to_date)
             member_row << member.age
@@ -71,9 +80,9 @@ module Reports
             end
 
             if member.status == "resigned"
-              sheet.add_row member_row, style: [ black_white, black_white, black_white, black_white,  black_white, black_white_date, black_white_date, black_white, black_white, black_white, black_white ]
+              sheet.add_row member_row, style: [ black_white, black_white, black_white, black_white, black_white, black_white, black_white_date, black_white_date, black_white, black_white, black_white, black_white ]
             elsif member.status == "active"
-              sheet.add_row member_row, style: [ nil, nil, nil, nil, nil, date_format_cell, date_format_cell, nil, nil, nil, nil, nil, nil, nil]
+              sheet.add_row member_row, style: [ nil, nil, nil, nil, nil, nil, date_format_cell, date_format_cell, nil, nil, nil, nil, nil, nil, nil]
             end
             
             
@@ -84,7 +93,7 @@ module Reports
                 bc_name = file_name.split('_')[1]
                 bc_remarks = file_name.split('_')[2]
 
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, bc, bc_name, bc_remarks ]
+                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, bc, bc_name, bc_remarks ]
               end
             end
 
@@ -95,7 +104,7 @@ module Reports
                 id_name = file_name.split('_')[1]
                 id_remarks = file_name.split('_')[2]
 
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, id, id_name, id_remarks ]
+                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, id, id_name, id_remarks ]
               end
             end
 
@@ -106,7 +115,7 @@ module Reports
                 mc_name = file_name.split('_')[1]
                 mc_remarks = file_name.split('_')[2]
 
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, mc, mc_name, mc_remarks]
+                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, mc, mc_name, mc_remarks]
               end
             end
 
@@ -117,13 +126,13 @@ module Reports
                 coha_name = file_name.split('_')[1]
                 coha_remarks = file_name.split('_')[2]
 
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, coha, coha_name, coha_remarks]
+                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, coha, coha_name, coha_remarks]
               end
             end
 
             if member.attachment_files.where("upper(file_name) LIKE ?", "%OTHER%").count > 0
               member.attachment_files.where("upper(file_name) LIKE ?", "%OTHER%").each do |other|
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, other.try(:file_name)]
+                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, other.try(:file_name)]
               end
             end
 

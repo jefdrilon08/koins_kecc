@@ -55,6 +55,12 @@ module Loans
       else
         @data[:comaker_relative_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
+
+      if @loan.co_maker_non_relative_profile_picture.attached?
+        @data[:comaker_non_relative_profile_picture] = Base64.strict_encode64(URI.open(@loan.co_maker_non_relative_profile_picture.url).read)
+      else
+        @data[:comaker_non_relative_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+      end
     end
 
     def execute!

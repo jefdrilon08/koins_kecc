@@ -24,6 +24,7 @@ export default class ApplicationFormComponent extends React.Component {
       projectTypes: [],
       currentProjectTypeCategoryId: "",
       data: false,
+      coMakerProfilePicture: false,
       errors: false
     };
   }
@@ -160,8 +161,6 @@ export default class ApplicationFormComponent extends React.Component {
 
     data.data.clip_number = event.target.value;
 
-    //data.data.voucher.particular  = data.data.voucher.particular.replace(/clip#/g, "clip# " + data.data.clip_number);
-
     this.updateData(data);
   }
 
@@ -173,10 +172,18 @@ export default class ApplicationFormComponent extends React.Component {
     this.updateData(data);
   }
 
-  handleCoMakerTwo(event) {
+  handleCoMakerThree(event) {
     var data  = this.state.data;
 
-    data.data.co_maker_two  = event.target.value.toUpperCase();
+    data.data.co_maker_three = event.target.value.toUpperCase();
+
+    this.updateData(data);
+  }
+
+  handleCoMakerTwo(event) {
+    var data = this.state.data;
+
+    data.data.co_maker_two = event.target.value.toUpperCase();
 
     this.updateData(data);
   }
@@ -276,12 +283,6 @@ export default class ApplicationFormComponent extends React.Component {
     );
 
     for(var i = 0; i < loanProducts.length; i++) {
-      if(loanProducts[i].id == data.loan_product_id) {
-        console.log("Got loan product id: " + data.loan_product_id);
-      } else {
-        console.log("LP ID: " + data.loan_product_id + " i: " + loanProducts[i].id);
-      }
-
       loanProductsDisplay.push(
         <option value={loanProducts[i].id} key={"loan-product-" + loanProducts[i].id}>
           {loanProducts[i].name}
@@ -401,6 +402,7 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.setState({ data: data });
   }
+
   handleAdvanceInsuranceChanged(event) {
     const target  = event.target;
     const value   = target.type === 'checkbox' ? target.checked : target.value;
@@ -409,6 +411,17 @@ export default class ApplicationFormComponent extends React.Component {
     data.data.advance_insurance_available  = value || false;
 
     this.setState({ data: data });
+  }
+
+  renderCoMakerProfilePicture() {
+    if(this.state.coMakerProfilePicture) {
+    } else {
+      return (
+        <div>
+          No profile picture selected
+        </div>
+      )
+    }
   }
 
   render() {
@@ -426,7 +439,7 @@ export default class ApplicationFormComponent extends React.Component {
       var businessPermitAvailable = this.state.data.data.business_permit_available || false;
       var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
 
-
+      console.log(this.props.settings)
 
       return  (
         <div>
@@ -437,7 +450,7 @@ export default class ApplicationFormComponent extends React.Component {
           <div className="card">
             <div className="card-body">
               <div className="row">
-                <div className="col">
+                <div className="col-md-4 col-xs-12">
                   <div className="form-group">
                     <label>
                       Pangalan ng Co-maker (Kamag-anak)
@@ -446,11 +459,37 @@ export default class ApplicationFormComponent extends React.Component {
                       className="form-control"
                       value={data.data.co_maker_two}
                       onChange={this.handleCoMakerTwo.bind(this)}
-                      disabled={this.state.isSaving || this.state.isActive}
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_two }
+                    />
+                    <hr/>
+                    <label>
+                      Profile Picture (Kamag-anak)
+                    </label>
+                    <br/>
+                    <input
+                      type="file"
+                      className="form-control"
+                      accepts="image/*"
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_two }
+                    />
+                    <br/>
+                    {this.renderCoMakerProfilePicture()}
+                  </div>
+                </div>
+                <div className="col-md-4 col-xs-12">
+                  <div className="form-group">
+                    <label>
+                      Pangalan ng Co-maker (Hindi kamag-anak / kapitbahay)
+                    </label>
+                    <input
+                      className="form-control"
+                      value={data.data.co_maker_three}
+                      onChange={this.handleCoMakerThree.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_three }
                     />
                   </div>
                 </div>
-                <div className="col">
+                <div className="col-md-4 col-xs-12">
                   <div className="form-group">
                     <label>
                       Pangalan ng Co-maker (Kasama sa sentro)
@@ -459,7 +498,7 @@ export default class ApplicationFormComponent extends React.Component {
                       value={coMakerOne}
                       options={this.state.coMakers}
                       onChange={this.handleCoMakerOne.bind(this)}
-                      disabled={this.state.isSaving || this.state.isActive}
+                      isDisabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_one }
                     />
                   </div>
                 </div>

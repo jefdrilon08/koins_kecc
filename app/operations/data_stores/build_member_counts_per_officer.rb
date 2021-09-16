@@ -2,13 +2,13 @@ module DataStores
   class BuildMemberCountsPerOfficer
     def initialize(mc_data:)
       @mc_data  = mc_data
-
+      
       @data = {
         officers: []
       }
 
       @officers = []
-
+    
       @mc_data[:counts][:loaners][:members].each do |m|
         @officers << m[:officer]
       end
@@ -19,6 +19,13 @@ module DataStores
 
       @mc_data[:counts][:active_members][:members].each do |m|
         @officers << m[:officer]
+      end
+      if @mc_data[:counts][:inactive_members].present?
+        
+        @mc_data[:counts][:inactive_members][:members].each do |m|
+          @officers << m[:officer]
+        end
+      
       end
 
       @officers = @officers.uniq
@@ -32,6 +39,13 @@ module DataStores
           last_name: officer[:last_name],
           counts: {
             active_members: {
+              female: 0,
+              male: 0,
+              others: 0,
+              total: 0,
+              members: []
+            },
+            inactive_members:{
               female: 0,
               male: 0,
               others: 0,
@@ -54,7 +68,17 @@ module DataStores
             }
           }
         }
+        if @mc_data[:counts][:inactive_members].present?
+          # inActive members
+          inactive_members  = @mc_data[:counts][:inactive_members][:members].select{ |m|
+                              m[:officer][:id] == officer[:id]
+                            }
 
+          officer_data[:counts][:inactive_members][:members] = inactive_members
+          officer_data[:counts][:inactive_members][:female]  = inactive_members.select{ |o| o[:gender] == "Female" }.size
+          officer_data[:counts][:inactive_members][:male]    = inactive_members.select{ |o| o[:gender] == "Male" }.size
+          officer_data[:counts][:inactive_members][:total]   = inactive_members.size
+        end
         # Active members
         active_members  = @mc_data[:counts][:active_members][:members].select{ |m|
                             m[:officer][:id] == officer[:id]

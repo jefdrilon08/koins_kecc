@@ -776,6 +776,16 @@ export default class DashboardOAS extends React.Component {
         </p>
       );
     } else {
+      var inactive_male= 0;
+      var inactive_female= 0;
+      var inactive_others= 0;
+      var inactive_total= 0;
+     if(o.data.counts.inactive_members != null){
+        inactive_male += o.data.counts.inactive_members.male;
+        inactive_female += o.data.counts.inactive_members.female;
+        inactive_others += o.data.counts.inactive_members.others;
+        inactive_total += o.data.counts.inactive_members.total;
+     }
       return  (
         <div>
           <h5>
@@ -856,21 +866,40 @@ export default class DashboardOAS extends React.Component {
                     {o.data.counts.active_members.total}
                   </td>
                 </tr>
+               
+                <tr>
+                  <th>
+                   Inctive Members
+                  </th>
+                  <td className="text-center">
+                    {inactive_male}
+                  </td>
+                  <td className="text-center">
+                    {inactive_female}
+                  </td>
+                  <td className="text-center">
+                    {inactive_others}
+                  </td>
+                  <td className="text-center">
+                    {inactive_total}
+                  </td>
+                </tr>
+                
                 <tr>
                   <th>
                     GRAND TOTAL
                   </th>
                   <th className="text-center">
-                    {o.data.counts.active_members.male + o.data.counts.loaners.male + o.data.counts.pure_savers.male}
+                    {o.data.counts.active_members.male + o.data.counts.loaners.male + o.data.counts.pure_savers.male + inactive_male}
                   </th>
                   <th className="text-center">
-                    {o.data.counts.active_members.female + o.data.counts.loaners.female + o.data.counts.pure_savers.female}
+                    {o.data.counts.active_members.female + o.data.counts.loaners.female + o.data.counts.pure_savers.female + inactive_female}
                   </th>
                   <th className="text-center">
-                    {o.data.counts.active_members.others + o.data.counts.loaners.others + o.data.counts.pure_savers.others}
+                    {o.data.counts.active_members.others + o.data.counts.loaners.others + o.data.counts.pure_savers.others + inactive_others}
                   </th>
                   <th className="text-center">
-                    {o.data.counts.active_members.total + o.data.counts.loaners.total + o.data.counts.pure_savers.total}
+                    {o.data.counts.active_members.total + o.data.counts.loaners.total + o.data.counts.pure_savers.total + inactive_total}
                   </th>
                 </tr>
               </tbody>

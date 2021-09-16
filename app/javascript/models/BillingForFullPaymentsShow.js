@@ -149,7 +149,7 @@ var _bindEvents = function() {
   $selectMember.on("change", function() {
     _memberId = $(this).val();
 
-    _fetchLoans();
+    //_fetchLoans();
   });
 
 
@@ -176,22 +176,10 @@ var _bindEvents = function() {
         window.location.reload();
       },
       error: function(response) {
+        
         var errors  = [];
-
-        try {
-          errors  = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors = ["Something went wrong"];
-        } finally {
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
-
-          $btnConfirmProcess.prop("disabled", false);
-        }
+        alert(JSON.parse(response.responseText).full_messages)
+      
       }
     });
   });

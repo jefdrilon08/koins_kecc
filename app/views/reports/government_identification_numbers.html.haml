@@ -1,0 +1,23 @@
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "government_identification_numbers_filter"
+        .table-responsive
+          %table.table.table-sm.table-hover
+            %thead
+              %tr
+                %th Id Number
+                %th Name
+                %th Center
+                %th Tin Number
+        
+            %tbody
+              - if @government_identification_numbers.present?
+                - @government_identification_numbers[:records].each do |gin|
+                  - if gin[:tin_number].to_s.gsub!('"','').present?
+                    %tr
+                      %td #{ gin[:id_number] }
+                      %td #{ gin[:last_name]}, #{gin[:first_name]}, #{gin[:middle_name] }
+                      %td #{ gin[:center_name]} 
+                      %td #{ gin[:tin_number] }

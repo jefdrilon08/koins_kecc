@@ -59,24 +59,60 @@
       #{@data[:counts][:active_members][:others]}
     %td.text-center
       #{@data[:counts][:active_members][:total]}
-  %tr
-    %th
-      TOTAL ACTIVE MEMBERS
-    - if microinsurance?
+
+  - if @data[:counts][:inactive_members].present?
+    %tr
+      %th
+        Inactive Members
+      %td.text-center
+        #{@data[:counts][:inactive_members][:male]}
+      %td.text-center
+        #{@data[:counts][:inactive_members][:female]}
+      %td.text-center
+        #{@data[:counts][:inactive_members][:others]}
+      %td.text-center
+        #{@data[:counts][:inactive_members][:total]}
+
+  - if @data[:counts][:inactive_members].present?
+    %tr
+      %th
+        TOTAL ACTIVE MEMBERS
+      - if microinsurance?
+        %th.text-center
+          #{@data[:counts][:active_members][:inforce].to_i}
+        %th.text-center
+          #{@data[:counts][:active_members][:lapsed].to_i}
+        %th.text-center
+          #{@data[:counts][:active_members][:pending].to_i}      
       %th.text-center
-        #{@data[:counts][:active_members][:inforce].to_i}
+        #{@data[:counts][:active_members][:male].to_i + @data[:counts][:pure_savers][:male].to_i + @data[:counts][:loaners][:male].to_i + @data[:counts][:inactive_members][:male].to_i}
       %th.text-center
-        #{@data[:counts][:active_members][:lapsed].to_i}
+        #{@data[:counts][:active_members][:female].to_i + @data[:counts][:pure_savers][:female].to_i + @data[:counts][:loaners][:female].to_i + @data[:counts][:inactive_members][:female].to_i}
       %th.text-center
-        #{@data[:counts][:active_members][:pending].to_i}  
-    %th.text-center
-      #{@data[:counts][:active_members][:male].to_i + @data[:counts][:pure_savers][:male].to_i + @data[:counts][:loaners][:male].to_i}
-    %th.text-center
-      #{@data[:counts][:active_members][:female].to_i + @data[:counts][:pure_savers][:female].to_i + @data[:counts][:loaners][:female].to_i}
-    %th.text-center
-      #{@data[:counts][:active_members][:others].to_i + @data[:counts][:pure_savers][:others].to_i + @data[:counts][:loaners][:others].to_i}
-    %th.text-center
-      #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
+        #{@data[:counts][:active_members][:others].to_i + @data[:counts][:pure_savers][:others].to_i + @data[:counts][:loaners][:others].to_i + @data[:counts][:inactive_members][:others].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i + @data[:counts][:inactive_members][:total].to_i}
+  - else
+    %tr
+      %th
+        TOTAL ACTIVE MEMBERS
+      - if microinsurance?
+        %th.text-center
+          #{@data[:counts][:active_members][:inforce].to_i}
+        %th.text-center
+          #{@data[:counts][:active_members][:lapsed].to_i}
+        %th.text-center
+          #{@data[:counts][:active_members][:pending].to_i}  
+      %th.text-center
+        #{@data[:counts][:active_members][:male].to_i + @data[:counts][:pure_savers][:male].to_i + @data[:counts][:loaners][:male].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:female].to_i + @data[:counts][:pure_savers][:female].to_i + @data[:counts][:loaners][:female].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:others].to_i + @data[:counts][:pure_savers][:others].to_i + @data[:counts][:loaners][:others].to_i}
+      %th.text-center
+        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
+    
+  
 %hr
 %h5
   Member Counts
@@ -169,20 +205,68 @@
       #{$kaagapay}
     %td.text-center
       #{@data[:counts][:active_members][:total]}
-  %tr
-    %th
-      TOTAL COUNTS PER MEMBER TYPE
-      - if @data[:member_type_counts].present?
-        - @data[:member_type_counts].each do |o|
-          %th.text-center
-            #{o[:count]}
-    %th.text-center
-      #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
+  
+  - if @data[:counts][:inactive_members].present?
+    %tr
+      %th
+        Inactive Members
+      - if microinsurance? 
+        %td.text-center
+          #{@data[:counts][:inactive_members][:inforce]}
+        %td.text-center
+          #{@data[:counts][:inactive_members][:lapsed]}
+        %td.text-center
+          #{@data[:counts][:inactive_members][:pending]}   
+      -$regular   = 0
+      -$kaagapay  = 0
+      -$gk        = 0
+      - @data[:counts][:inactive_members][:members].each do |member_type|
+        - if member_type[:member_type] == "Regular"
+          - $regular += 1 
+        - elsif member_type[:member_type] == "GK"
+          - $gk  +=1
+        - else 
+          - $kaagapay +=1 
+      %td.text-center
+        #{$regular}
+      %td.text-center
+        #{$gk}
+      %td.text-center
+        #{$kaagapay}
+      %td.text-center
+        #{@data[:counts][:inactive_members][:total]}
+
+
+  - if @data[:counts][:inactive_members].present?
+    %tr
+      %th
+        TOTAL COUNTS PER MEMBER TYPE
+        - if @data[:member_type_counts].present?
+          - @data[:member_type_counts].each do |o|
+            %th.text-center
+              #{o[:count]}
+      %th.text-center
+        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i + @data[:counts][:inactive_members][:total].to_i }
+  - else
+    %tr
+      %th
+        TOTAL COUNTS PER MEMBER TYPE
+        - if @data[:member_type_counts].present?
+          - @data[:member_type_counts].each do |o|
+            %th.text-center
+              #{o[:count]}
+      %th.text-center
+        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
 
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
     %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
       Admitted Members (#{@data[:counts][:active_members][:total]})
+
+  - if @data[:counts][:inactive_members].present?
+    %li.nav-item
+      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#inactive-members", :role => "tab"}
+        Inactive Member (#{@data[:counts][:inactive_members][:total]})
   - if microloans?  
     %li.nav-item
       %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
@@ -197,3 +281,6 @@
     = render partial: "data_stores/member_counts/members_with_savings", locals: { members: @data[:counts][:pure_savers][:members] }
   #loaners.tab-pane{:role => "tabpanel"}
     = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:loaners][:members] }
+  - if @data[:counts][:inactive_members].present?
+    #inactive-members.tab-pane{:role => "tabpanel"}
+      = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:inactive_members][:members] }
