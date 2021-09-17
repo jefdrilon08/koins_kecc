@@ -2567,11 +2567,11 @@ namespace :adjust do
 
     CSV.foreach(file_location, headers: true) do |row|
       member = Member.where(identification_number: row['identification_number']).first
-
-      rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
-      ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
       
       if !member.nil?
+        rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+        ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+        
         if ev_account.present?
           puts "Inseting EV Interest for #{member.full_name} - #{member.id}"
           

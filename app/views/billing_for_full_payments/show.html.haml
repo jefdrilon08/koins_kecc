@@ -13,12 +13,12 @@
               %th
                 Member
               - @billing_data_store.meta["header"].last.each_with_index do |bdsh, i|
-                - if bdsh == "WP"
+                - if bdsh["loan_product"] == "WP"
                   %th
                     WP
                 - else
                   %th
-                    #{LoanProduct.find(bdsh).name}
+                    #{LoanProduct.find(bdsh["loan_product"]).name}
                   
             
             
@@ -55,4 +55,5 @@
                       
 
 
+= render partial: "accounting_entry_display", locals: { accounting_entry: @record }
 = render partial: "/billing_for_full_payments/models/update_payment"

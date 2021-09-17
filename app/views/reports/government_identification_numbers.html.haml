@@ -11,6 +11,7 @@
                 %th Name
                 %th Center
                 %th Tin Number
+                %th Share Capital
         
             %tbody
               - if @government_identification_numbers.present?
@@ -21,3 +22,4 @@
                       %td #{ gin[:last_name]}, #{gin[:first_name]}, #{gin[:middle_name] }
                       %td #{ gin[:center_name]} 
                       %td #{ gin[:tin_number] }
+                      %td #{ gin[:share_capital_balance] }

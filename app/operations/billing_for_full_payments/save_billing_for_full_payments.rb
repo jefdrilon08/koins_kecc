@@ -19,7 +19,7 @@ module BillingForFullPayments
         collection_date: @due_date,
         branch_id: @branch_id,
         center_id: @center_id,
-        data_store_tpe: @data_store_type,
+        data_store_type: @data_store_type,
         header: []
       
       }
@@ -39,7 +39,11 @@ module BillingForFullPayments
           
           @data_store.meta = @meta
           @get_billing_header = get_billing_header
-          @get_billing_header << "WP"
+          @get_billing_header << {
+                                  loan_product:  "WP",
+                                  receivable_amount: 0.0,
+                                  interest_receivable_amount: 0.0
+                                  }
           @data_store.meta["header"] << @get_billing_header
           @data_store.data = @record
           @data_store.status = "pending"
@@ -52,7 +56,15 @@ module BillingForFullPayments
       @billing_header = []
       Settings.loan_products.each do |a|
         if  a[:for_unearned_interest] == true
-          @billing_header << a[:loan_product_id]
+          header_entry = {
+            loan_product: a[:loan_product_id],
+            receivable_accounting_code_id: a[:receivable_accounting_code_id],
+            interest_receivable_accounting_code_id: a[:interest_receivable_accounting_code_id],
+            receivable_amount: 0.0,
+            interest_receivable_amount: 0.0
+
+          }
+          @billing_header << header_entry
         end
       end
       @billing_header

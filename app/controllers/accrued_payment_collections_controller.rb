@@ -9,21 +9,50 @@ class AccruedPaymentCollectionsController < ApplicationController
       	{ id: "btn-new-transaction", link: "#", class: "fa fa-plus", text: "New Transaction" }
       ]
 
-    @accrued_interest = AccruedBilling.where(branch_id: @branches.pluck(:id))
+      @accrued_interest = AccruedBilling.where(branch_id: @branches.pluck(:id)).order("status DESC , collection_date DESC")
 
 	end
 
-  def show
-    @subheader_side_actions = [
-        {
+  def show 
+    @accrued_interest_collection  = AccruedBilling.find(params[:id])
+    @accrued_member = @accrued_interest_collection.data['member_data']
+    @subheader_items = [
+      { is_link: true, path: accrued_payment_collections_path, text: "Accrued Payment Collections"},
+      { text: "#{@accrued_interest_collection.id}" }
+
+    ]    
+    @subheader_side_actions = []
+      if @accrued_interest_collection.status == 'pending'
+        @subheader_side_actions << {
+          id: "btn-delete",
+          link: "#",
+          class: "fa fa-times",
+          data: {id: @accrued_interest_collection.id},
+          text: "Delete"
+        }
+
+        @subheader_side_actions << {
+          id: "btn-zero",
+          link: "#",
+          class: "fa fa-times",
+          data: {id: @accrued_interest_collection.id},
+          text: "Zero Out"
+        }
+
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          data: {id: @accrued_interest_collection.id},
+          text: "Approve"
+        }
+      end
+      @subheader_side_actions << {
           id: "btn-printpdf",
           link: "/print?type=accrued_billing&id=#{params[:id]}",
           class: "fa fa-print",
-          text: "PDF"
+          text: "Print"
         }
-      ]        
-    @accrued_interest_collection  = AccruedBilling.find(params[:id])
-    @accrued_member = @accrued_interest_collection.data['member_data']
-    
+
   end
 end
