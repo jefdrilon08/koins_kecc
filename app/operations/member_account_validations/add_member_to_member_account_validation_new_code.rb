@@ -126,8 +126,7 @@ module MemberAccountValidations
       build_member_account_validation_record!
 
       # Update accounting_entry
-      # @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
-      @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+      @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
                                     config: {
                                       branch: @member_account_validation.branch,
                                       member_account_validation: @member_account_validation,
