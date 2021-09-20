@@ -3,7 +3,7 @@ class BillingForFullPaymentsController < ApplicationController
     
       @full_payment_billing =  DataStore.where(
                                                 "meta ->> 'branch_id' IN (?) AND
-                                                 meta ->> 'data_store_tpe' = ?",
+                                                 meta ->> 'data_store_type' = ?",
                                                  @branches.pluck(:id),
                                                 "BILLING FOR FULL PAYMENT"
                                                  
@@ -37,6 +37,10 @@ class BillingForFullPaymentsController < ApplicationController
     end
     @billing_header
     
-
+    @record = ::BillingForFullPayments::BuildAccountingEntry.new(
+                                                                                full_payment_billing: @billing_data_store,
+                                                                                current_user: current_user
+                                                                              ).execute!
+ 
   end
 end
