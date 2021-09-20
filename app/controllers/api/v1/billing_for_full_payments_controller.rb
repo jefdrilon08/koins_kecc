@@ -72,6 +72,19 @@ module Api
 
       end
 
+      def remove_payment_member
+        config = {
+          loanProductId: params[:loanProductId],
+          memberId: params[:memberId],
+          dataStoreId: params[:dataStoreId],
+          loanId: params[:loanId]
+        }
+
+        remove_record = ::BillingForFullPayments::RemoveMemberPayment.new(config: config).execute!
+      end
+
+
+
     end
   end
 end

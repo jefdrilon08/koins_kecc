@@ -34,9 +34,10 @@
                     #{Member.find(bds["member_id"]).full_name}
                 
                   - bds["balance"].each do |b|
-                    - if b["enabled"] == true
-                      %td
-                        %a.undo{ data: { 
+                    - if b["record_type"] == "WP"
+                      - if b["enabled"] == true
+                        %td
+                          %a.undo{ data: { 
                                       amount: "#{b["amount"]}",
                                       member_id: "#{bds["member_id"]}",
                                       member_account_id: "#{b["member_account_id"]}",
@@ -46,9 +47,24 @@
                                     :href => "#" 
                             }
 
-                          #{b["amount"]}
+                            #{b["amount"]}
+                      - else
+                        %td
                     - else
                       %td
+                        %a.remove_amount{ data: {
+                                                  member_id: "#{bds["member_id"]}",
+                                                  loan_id: "#{b["loan_id"]}",
+                                                  loan_product_id: "#{b["loan_product_id"]}",
+                                                  member_account_id: "#{b["member_account_id"]}",
+                                                  data_store_id: "#{@billing_data_store.id}",
+                                                  record_type: "#{b["record_type"]}"
+                                          
+
+                                          },
+                                          :href => "#"
+                                        }
+                          #{b["amount"]}
             %tr
               %th{colspan: 2}
                 Total
@@ -57,3 +73,4 @@
 
 = render partial: "accounting_entry_display", locals: { accounting_entry: @record }
 = render partial: "/billing_for_full_payments/models/update_payment"
+= render partial: "/billing_for_full_payments/models/remove_payment"
