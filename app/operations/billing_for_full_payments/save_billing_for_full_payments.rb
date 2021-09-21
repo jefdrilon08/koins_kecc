@@ -42,7 +42,8 @@ module BillingForFullPayments
           @get_billing_header << {
                                   loan_product:  "WP",
                                   receivable_amount: 0.0,
-                                  interest_receivable_amount: 0.0
+                                  interest_receivable_amount: 0.0,
+                                  amount: 0.0
                                   }
           @data_store.meta["header"] << @get_billing_header
           @data_store.data = @record

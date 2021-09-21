@@ -52,7 +52,8 @@
                         %td
                     - else
                       %td
-                        %a.remove_amount{ data: {
+                        - if b["amount"] > 0
+                          %a.remove_amount{ data: {
                                                   member_id: "#{bds["member_id"]}",
                                                   loan_id: "#{b["loan_id"]}",
                                                   loan_product_id: "#{b["loan_product_id"]}",
@@ -64,7 +65,7 @@
                                           },
                                           :href => "#"
                                         }
-                          #{b["amount"]}
+                            #{b["amount"]}
             %tr
               %th{colspan: 2}
                 Total
