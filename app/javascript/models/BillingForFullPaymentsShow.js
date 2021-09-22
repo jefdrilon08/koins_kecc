@@ -27,6 +27,10 @@ var $btnConfirmDelete;
 var $btnConfirmProcess;
 var $btnConfirmBatchProcess;
 var $btnAdd;
+var $btnRemove;
+var $modalRemovePayment;
+var $btnConfirmRemove;
+
 
 var $message;
 var templateErrorList;
@@ -57,6 +61,9 @@ var _memberAccountId;
 var _dataStoreId;  
 var _recordType;
 var _loanAmount;
+var _loanProductId;
+var _loanId;
+
 
 var _urlCreate        = "/api/v1/billing_for_full_payments/update_amount";
 var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
@@ -66,6 +73,7 @@ var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 var _urlAddMember     = "/api/v1/billing_for_full_payments/add_member";
+var _urlRemovePayment     = "/api/v1/billing_for_full_payments/remove_payment_member";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -89,6 +97,7 @@ var _cacheDom = function() {
   $selectAccruedType            = $("#select-accrued-type");
   $inputReason                  = $("#input-reason");
   $btnNew                       = $(".undo");
+  $btnRemove                    = $(".remove_amount");
   $btnDelete                    = $(".btn-delete");
   $btnProcess                   = $(".btn-process");
   $btnBatchProcess              = $("#btn-batch-process");
@@ -107,8 +116,9 @@ var _cacheDom = function() {
   $inputCollectionDate      = $("#collection-date");
   $btnAdd                   = $("#btn-add");
   $selectMember             = $("#select-member");
-  $selectLoans                  = $("#select-loans");
-
+  $selectLoans              = $("#select-loans");
+  $modalRemovePayment       = $("#modal-remove-payment");
+  $btnConfirmRemove         = $("#btn-confirm-remove");
 
   templateErrorList = $("#template-error-list").html();
 
@@ -253,6 +263,74 @@ var _bindEvents = function() {
       }
     });
   });
+
+
+  $btnConfirmRemove.on("click", function() {
+  
+    
+    
+    var loanProductId   = _loanProductId
+    var memberId        = _memberId
+    var memberAccountId = _memberAccountId
+    var dataStoreId     = _dataStoreId   
+    var loanId          = _loanId
+    
+    
+    $.ajax({
+      url: _urlRemovePayment,
+      method: "POST",
+      data: {
+        id: _moratoriumId,
+        loanProductId:    loanProductId,
+        memberId:         memberId,
+        memberAccountId:  memberAccountId,
+        dataStoreId:      dataStoreId,
+        loanId:          loanId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in deleting record!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+  
+
+
+
+  $btnRemove.on("click", function(){
+  
+    var amount = $(this).data('amount')
+    var loanProductId = $(this).data('loan-id')
+    var memberId = $(this).data('member-id') 
+    var memberAccountId = $(this).data('member-account-id')
+    var dataStoreId = $(this).data('data-store-id')     
+    var recordType = $(this).data('record-type')
+    var loanId = $(this).data('loan-product-id')
+    $inputStartDate.val(amount)
+
+    
+    
+
+
+     _memberId          = memberId 
+     _memberAccountId   = memberAccountId
+     _dataStoreId       = dataStoreId
+     _recordType        = recordType
+     _loanProductId     = loanProductId
+     _loanId            = loanId
+    
+  
+
+    $modalRemovePayment.modal("show");
+
+  });
+
 
   $btnNew.on("click", function() {
   

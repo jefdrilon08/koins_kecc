@@ -42,10 +42,12 @@ module Api
            }
           
           
-          #errors = ::BillingForFullPayments::ValidatePayment.new(config: config).execute!
-          
-          record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
-           
+          errors = ::BillingForFullPayments::ValidateWithdrawPayment.new(data_store_id: data_store_id, member_id: member_id, loan_amount: loan_amount).execute!
+          if errors[:messages].any? 
+            render json: errors, status: 404
+          else
+            record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
+          end
       end
 
       def add_member
@@ -71,6 +73,19 @@ module Api
 
 
       end
+
+      def remove_payment_member
+        config = {
+          loanProductId: params[:loanProductId],
+          memberId: params[:memberId],
+          dataStoreId: params[:dataStoreId],
+          loanId: params[:loanId]
+        }
+
+        remove_record = ::BillingForFullPayments::RemoveMemberPayment.new(config: config).execute!
+      end
+
+
 
     end
   end
