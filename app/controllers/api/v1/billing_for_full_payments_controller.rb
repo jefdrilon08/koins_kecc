@@ -85,8 +85,34 @@ module Api
         remove_record = ::BillingForFullPayments::RemoveMemberPayment.new(config: config).execute!
       end
 
+      def add_particular
+        data_store_id   = params[:dataStoreid]
+        txt_particular  = params[:txtParticular]
 
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["data"]["particular"] = txt_particular
+        data_store_details.save!
+      end
 
+      def add_or
+        data_store_id   = params[:dataStoreid]
+        txt_or  = params[:txtOr]
+
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["data"]["OR"] = txt_or
+        data_store_details.save!
+      
+      end
+      
+      def add_ar
+        data_store_id   = params[:dataStoreid]
+        txt_ar  = params[:txtAr]
+        
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["data"]["AR"] = txt_ar
+        data_store_details.save!
+        
+      end
     end
   end
 end

@@ -2,6 +2,13 @@
   .col
     .card
       .card-body
+        %h5
+          Billing for fullpayment in
+          #{Branch.find(@billing_data_store.meta["branch_id"]).name } / 
+          #{Center.find(@billing_data_store.meta["center_id"]).name } - 
+          #{@billing_data_store.meta["collection_date"]}
+        
+
         = render partial: "form_add"
 
 

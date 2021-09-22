@@ -31,6 +31,13 @@ var $btnRemove;
 var $modalRemovePayment;
 var $btnConfirmRemove;
 
+var $btnAddParticular;
+var $inputParticular;
+var $btnAddOr;
+var $inputOrNumber;
+var $btnAddAr;
+var $inputArNumber;
+
 
 var $message;
 var templateErrorList;
@@ -74,6 +81,9 @@ var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 var _urlAddMember     = "/api/v1/billing_for_full_payments/add_member";
 var _urlRemovePayment     = "/api/v1/billing_for_full_payments/remove_payment_member";
+var _urlAddParticular     = "/api/v1/billing_for_full_payments/add_particular";
+var _urlAddOr     = "/api/v1/billing_for_full_payments/add_or";
+var _urlAddAr     = "/api/v1/billing_for_full_payments/add_ar";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -120,6 +130,17 @@ var _cacheDom = function() {
   $modalRemovePayment       = $("#modal-remove-payment");
   $btnConfirmRemove         = $("#btn-confirm-remove");
 
+
+
+  $btnAddParticular         = $("#btn-add-particular");
+  $inputParticular          = $("#particular");
+
+  $btnAddOr         = $("#btn-add-or");
+  $inputOrNumber          = $("#or_number");
+  
+  $btnAddAr         = $("#btn-add-ar");
+  $inputArNumber          = $("#ar_number");
+
   templateErrorList = $("#template-error-list").html();
 
   $selectLoans.select2({
@@ -162,6 +183,82 @@ var _bindEvents = function() {
     //_fetchLoans();
   });
 
+  $btnAddAr.on("click", function() { //add or
+  
+    
+    var dataStoreId = $(this).data('data-store-id')     
+    var txtAr = $inputArNumber.val()
+    
+    $.ajax({
+      url: _urlAddAr,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId,
+        txtAr: txtAr
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+  $btnAddOr.on("click", function() { //add or
+  
+    
+    var dataStoreId = $(this).data('data-store-id')     
+    var txtOr = $inputOrNumber.val()
+  
+    $.ajax({
+      url: _urlAddOr,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId,
+        txtOr: txtOr
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
+
+  $btnAddParticular.on("click", function() { //add particular
+  
+
+    var dataStoreId = $(this).data('data-store-id')     
+    var txtParticular = $inputParticular.val()
+    $.ajax({
+      url: _urlAddParticular,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId,
+        txtParticular: txtParticular
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
 
 
   $btnAdd.on("click", function(){
@@ -193,6 +290,13 @@ var _bindEvents = function() {
       }
     });
   });
+
+
+//  $btnAddParticular.on("click", function() {
+//    alert( $inputParticular.val())
+  
+//  });
+
 
   $btnProcess.on("click", function() {
     alert("jef")

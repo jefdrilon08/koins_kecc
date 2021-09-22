@@ -7,7 +7,9 @@ module BillingForFullPayments
       @billing_header = @full_payment_billing.meta["header"]
       @book         = "JVB"
       @prepared_by  = @user.full_name
-      @particular   = default_particular
+      @particular   = @full_payment_billing.meta["data"]["particular"]
+      @or_number   = @full_payment_billing.meta["data"]["OR"]
+      @ar_number   = @full_payment_billing.meta["data"]["AR"]
       @branch = Branch.find(@full_payment_billing.meta["branch_id"]) 
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
@@ -29,13 +31,8 @@ module BillingForFullPayments
         branch_name: @branch.name,
         status: "display",
         data: {
-          or_number: "",
-          ar_number: "",
-          check_number: "",
-          check_voucher_number: "",
-          date_of_check: "",
-          sub_reference_number: "",
-          payee: ""
+          or_number: @or_number ,
+          ar_number: @ar_number,
         }
       }
       
