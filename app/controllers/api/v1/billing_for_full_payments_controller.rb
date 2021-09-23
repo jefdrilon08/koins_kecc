@@ -113,6 +113,29 @@ module Api
         data_store_details.save!
         
       end
+      def approved
+        data_store_id   = params[:dataStoreid]
+        config = {
+            data_store_id: data_store_id
+
+        }
+        errors = ::BillingForFullPayments::ValidateApprovedBilling.new(config: config).execute!
+                
+        if errors[:messages].any? 
+          render json: errors, status: 404
+        else
+
+          approved_record = ::BillingForFullPayments::ApprovedBillingForFullPayment.new(data_store_id: data_store_id).execute!
+        end
+        
+      end
+      def checked
+        data_store_id = params[:dataStoreid]
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["is_checked"] = true
+        data_store_details.save!
+
+      end
     end
   end
 end

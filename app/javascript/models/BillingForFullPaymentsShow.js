@@ -52,6 +52,15 @@ var $batchStartDate;
 var $batchEndDate;
 var $batchAccruedType;
 
+var $btnApproved;
+var $modalApproved;
+var $btnConfirmApproved;
+
+var $btnChecked;
+var $modalCheck;
+var $btnConfirmCheck;
+
+
 
 var _centers  = [];
 var _members  = [];
@@ -84,6 +93,8 @@ var _urlRemovePayment     = "/api/v1/billing_for_full_payments/remove_payment_me
 var _urlAddParticular     = "/api/v1/billing_for_full_payments/add_particular";
 var _urlAddOr     = "/api/v1/billing_for_full_payments/add_or";
 var _urlAddAr     = "/api/v1/billing_for_full_payments/add_ar";
+var _urlApproved     = "/api/v1/billing_for_full_payments/approved";
+var _urlChecked     = "/api/v1/billing_for_full_payments/checked";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -141,6 +152,15 @@ var _cacheDom = function() {
   $btnAddAr         = $("#btn-add-ar");
   $inputArNumber          = $("#ar_number");
 
+  $btnApproved      = $("#btn-approved")
+  $modalApproved    = $("#modal-approve")
+  $btnConfirmApproved = $("#btn-confirm-approved")
+
+
+  $btnChecked = $("#btn-checked");
+  $modalCheck = $("#modal-check");
+  $btnConfirmCheck = $("#btn-confirm-check");
+
   templateErrorList = $("#template-error-list").html();
 
   $selectLoans.select2({
@@ -182,6 +202,89 @@ var _bindEvents = function() {
 
     //_fetchLoans();
   });
+  
+
+
+  $btnChecked.on("click", function() {
+    
+    _dataStoreId = $(this).data("data-store-id");
+  
+    $modalCheck.modal("show");
+  });
+
+
+  $btnConfirmCheck.on("click", function() { //add or
+  
+    
+    var dataStoreId = _dataStoreId    
+  
+    
+    $.ajax({
+      url: _urlChecked,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
+
+  $btnApproved.on("click", function() {
+    
+    _dataStoreId = $(this).data("data-store-id");
+  
+    $modalApproved.modal("show");
+  });
+
+
+  $btnConfirmApproved.on("click", function() { //add or
+  
+    //var dataStoreId = $(this).data('data-store-id')     
+    
+    
+    $.ajax({
+      url: _urlApproved,
+      method: "POST",
+      data: {
+        dataStoreid: _dataStoreId
+      },
+      success: function(response) {
+        $message.html("Processing!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmProcess.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+
 
   $btnAddAr.on("click", function() { //add or
   
@@ -341,6 +444,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
+    alert("jef")
     _moratoriumId = $(this).data("id");
     $modalDelete.modal("show");
   });

@@ -9,7 +9,10 @@
           #{@billing_data_store.meta["collection_date"]}
         
 
-        = render partial: "form_add"
+        - if @billing_data_store["status"] == "pending"
+          = render partial: "form_add"
+        - else
+          = render partial: "approved_form"
 
 
         %table.table.table-sm.table-bordered
@@ -44,7 +47,8 @@
                     - if b["record_type"] == "WP"
                       - if b["enabled"] == true
                         %td
-                          %a.undo{ data: { 
+                          - if @billing_data_store["status"] == "pending"
+                            %a.undo{ data: { 
                                       amount: "#{b["amount"]}",
                                       member_id: "#{bds["member_id"]}",
                                       member_account_id: "#{b["member_account_id"]}",
@@ -52,15 +56,18 @@
                                       record_type: "#{b["record_type"]}"
                                     }, 
                                     :href => "#" 
-                            }
+                              }
 
+                              #{b["amount"]}
+                          - else
                             #{b["amount"]}
                       - else
                         %td
                     - else
                       %td
                         - if b["amount"] > 0
-                          %a.remove_amount{ data: {
+                          - if @billing_data_store["status"] == "pending"
+                            %a.remove_amount{ data: {
                                                   member_id: "#{bds["member_id"]}",
                                                   loan_id: "#{b["loan_id"]}",
                                                   loan_product_id: "#{b["loan_product_id"]}",
@@ -72,6 +79,8 @@
                                           },
                                           :href => "#"
                                         }
+                              #{b["amount"]}
+                          - else
                             #{b["amount"]}
             %tr
               %th{colspan: 2}
@@ -82,3 +91,5 @@
 = render partial: "accounting_entry_display", locals: { accounting_entry: @record }
 = render partial: "/billing_for_full_payments/models/update_payment"
 = render partial: "/billing_for_full_payments/models/remove_payment"
+= render partial: "/billing_for_full_payments/models/check"
+= render partial: "/billing_for_full_payments/models/approve"

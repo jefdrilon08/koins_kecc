@@ -21,6 +21,7 @@ module BillingForFullPayments
         branch_id: @branch_id,
         center_id: @center_id,
         data_store_type: @data_store_type,
+        is_checked: false,
         header: [],
         data: {
                 OR: "",
