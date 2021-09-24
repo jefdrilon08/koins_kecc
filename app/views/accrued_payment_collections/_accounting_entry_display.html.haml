@@ -3,13 +3,12 @@
     .row
       .col-md-6
         %strong
-          - if @billing_data_store.meta["data"]["accounting_entry_id"].present?
+          - if accounting_entry[:status] == "approved"
             #{accounting_entry[:book]}
-            #{AccountingEntry.find(@billing_data_store.meta["data"]["accounting_entry_id"]).reference_number} - 
-            #{AccountingEntry.find(@billing_data_store.meta["data"]["accounting_entry_id"]).status}
+            #{accounting_entry[:reference_number]} - 
+            #{accounting_entry[:approved_by]}
           - else
-            Pending
-           
+            PENDING
           
         
       .col-md-6
@@ -49,7 +48,7 @@
           %strong
             OR Number: 
           .text-muted
-            #{@billing_data_store.meta["data"]["OR"]}
+            #{accounting_entry[:data]['or_number']}
         - if accounting_entry[:book] == "CDB"
           .row
             - if accounting_entry[:data]["check_number"].present?
@@ -89,5 +88,4 @@
             %strong
               Approved By:
           %br
-            - if @billing_data_store.meta["data"]["accounting_entry_id"].present?
-              #{AccountingEntry.find(@billing_data_store.meta["data"]["accounting_entry_id"]).approved_by}
+          #{accounting_entry[:approved_by]}

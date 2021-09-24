@@ -89,10 +89,15 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else
-          # member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidationNewCode.new(
-          member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
+          if Settings.activate_microinsurance
+            member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidationNewCode.new(
                                                   config: config
                                                 ).execute!
+          else
+            member_account_validation_record = MemberAccountValidations::AddMemberToMemberAccountValidation.new(
+                                                  config: config
+                                                ).execute!
+          end
 
           member_account_validation_record.save!
           render json: member_account_validation_record
@@ -175,8 +180,8 @@ module Api
         member_account_validation_record.files.purge
         member_account_validation_record.destroy!
 
-        # data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
-        data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new( 
+        if Settings.activate_microinsurance
+          data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
                                     config: {
                                       branch: member_account_validation.branch,
                                       member_account_validation: member_account_validation,
@@ -184,6 +189,18 @@ module Api
                                       user: current_user
                                     }
                                   ).execute!
+        ### >> Delete pag okay na ung sa KCOOP
+        else
+          data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new( 
+                                    config: {
+                                      branch: member_account_validation.branch,
+                                      member_account_validation: member_account_validation,
+                                      is_remote: User::REMOTE_ROLES.include?(current_user.roles.last),
+                                      user: current_user
+                                    }
+                                  ).execute!
+        end
+        ### >>
 
         member_account_validation.data = data
         member_account_validation.save!

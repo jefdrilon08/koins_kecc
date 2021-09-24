@@ -240,6 +240,12 @@ namespace :api do
     post "/billing_for_full_payments/create", to: "billing_for_full_payments#create"
     post "/billing_for_full_payments/update_amount", to: "billing_for_full_payments#update_amount"
     post "/billing_for_full_payments/add_member", to: "billing_for_full_payments#add_member"
+    post "/billing_for_full_payments/remove_payment_member", to: "billing_for_full_payments#remove_payment_member"
+    post "/billing_for_full_payments/add_particular", to: "billing_for_full_payments#add_particular"
+    post "/billing_for_full_payments/add_or", to: "billing_for_full_payments#add_or"
+    post "/billing_for_full_payments/add_ar", to: "billing_for_full_payments#add_ar"
+    post "/billing_for_full_payments/approved", to: "billing_for_full_payments#approved"
+    post "/billing_for_full_payments/checked", to: "billing_for_full_payments#checked"
 
 
     #Accrued_Billing

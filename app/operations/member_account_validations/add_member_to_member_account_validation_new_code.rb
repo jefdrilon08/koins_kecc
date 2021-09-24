@@ -71,6 +71,9 @@ module MemberAccountValidations
       elsif @lif_num_weeks_past_due > 0 && @rf_num_weeks_past_due > 0
         @rf_amount    = @rf_current_balance
         @lif_amount   = @lif_current_balance
+      else
+        @rf_amount    = @rf_current_balance
+        @lif_amount   = @lif_current_balance
       end  
 
       # Check if member is 3 years above in KMBA

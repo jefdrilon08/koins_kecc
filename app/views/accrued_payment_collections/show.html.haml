@@ -11,10 +11,6 @@
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
                 %th
                   #{hders[:name]}
-              %th
-                WP
-              %th
-                CP
             %tbody
               -@accrued_member.each_with_index do |am , y|
                 %tr
@@ -39,6 +35,16 @@
                               #{al["amount"]} 
                         -else
                           #{al["amount"]}
+          %thead
+            %tr
+              %th
+              %th
+                Total
+              -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
+                %th
+                  #{hders[:interest_receivable_amount]}
+ 
+= render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
 = render partial: "/accrued_payment_collections/modals/delete"
 = render partial: "/accrued_payment_collections/modals/approve_transaction"
 = render partial: "/accrued_payment_collections/modals/update_transaction"

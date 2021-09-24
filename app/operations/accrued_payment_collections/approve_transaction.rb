@@ -3,6 +3,10 @@ module AccruedPaymentCollections
     def initialize(config:)
       @config             = config
       @data_store_id      = @config[:data_store_id]
+      @user               = @config[:user]
+      @billing            = AccruedBilling.find(@data_store_id)
+      @data               = @billing.data.with_indifferent_access
+      @accounting_entry   = @data[:accounting_entry]
       @date_approved      = ::Utils::GetCurrentDate.new(
                             config: {
                               branch: @branch }).execute!
@@ -72,9 +76,45 @@ module AccruedPaymentCollections
             
         end
       end
+       # Approve accounting entry
+        approved_entry  = post_accounting_entry!
+        entry_update  = @billing
+        e_data = entry_update.data.with_indifferent_access
+          e_data['accounting_entry']['status'] = "approved"
+          e_data['accounting_entry']['approved_by'] = approved_entry.approved_by
+
+          e_data['accounting_entry']['date_posted'] = approved_entry.date_posted
+          e_data['accounting_entry'][:reference_number]  = approved_entry.reference_number
+        entry_update.update(data: e_data)
+        #@billing.data = @data
+
+      
       billing.update(status: 'approved' ,   date_approved: @date_approved)
     end
 
+    def post_accounting_entry!
+        # Create new accounting entry
+        config  = {
+          accounting_entry_data: @accounting_entry,
+          user: @user
+        }
 
+        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                              config: config
+                            ).execute!
+
+        # Post to books
+        config  = {
+          accounting_entry: accounting_entry,
+          user: @user
+        }
+
+        accounting_entry  = ::Accounting::AccountingEntries::Approve.new(
+                              config: config
+                            ).execute!
+
+        accounting_entry
+      end
+ 
   end
 end

@@ -7,7 +7,12 @@ module InsuranceMonthlyClosingCollections
       @closing_date                         = @insurance_monthly_closing_collection.closing_date
       @data                                 = @insurance_monthly_closing_collection.data.with_indifferent_access
       @user                                 = @config[:user]
-      @current_date                         = Date.today
+      @current_date                         = ::Utils::GetCurrentDate.new(
+                                                config: {
+                                                  branch: @branch
+                                                }
+                                              ).execute!
+
 
       # Change this
       @particular = "Interest deposit"

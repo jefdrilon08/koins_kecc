@@ -3,22 +3,31 @@ module AccruedPaymentCollections
     def initialize(config:)
       @config           = config
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
+      
       @user             = @config[:user]
-      @branch           = @config[:branch_id]
+      @branch_id        = @config[:branch_id]
+      @branch           = @config[:branch]
       @center           = @config[:center_id]
       @member           = @config[:member_id]
+      @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
+
 
 
       @accrued_billing  = AccruedBilling.new(
-                                          collection_date: @collection_date,
-                                          branch_id: @branch,
+                                          collection_date: @current_date,
+                                          branch_id: @branch_id,
                                           center_id: @center,
                                           member_id: @member,
                                           status: 'pending',
                                           data: {
                                             member_data:[],
                                             headers:[],
-                                            records:[]
+                                            records:[],
+                                            accounting_entry: {},
                                           }
                                         )
 
@@ -26,6 +35,7 @@ module AccruedPaymentCollections
 
     def execute!
       process_accrued_data!
+      process_accounting_entry!
       @accrued_billing.save!
       @accrued_billing
     end
@@ -38,11 +48,21 @@ module AccruedPaymentCollections
         @header << LoanProduct.find(dt)
       end
       @header.uniq.each do |hd|
+        st = Settings.loan_products.select{|l| l[:loan_product_id] == hd.id}.first
         @accrued_billing.data['headers'] << {
           name: hd.name,
-          id:   hd.id
+          id:   hd.id,
+          interest_receivable_accounting_code_id: st[:interest_receivable_accounting_code_id],
+          interest_receivable_amount: 0.0
       }
       end
+      @accrued_billing.data['headers'] << {
+          name: "Withdraw Payment",
+          id:   "",
+          interest_receivable_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32",
+          interest_receivable_amount: 0.0
+      }
+
     
       dta.pluck(:member_id).uniq.each do |rec|
          
@@ -66,6 +86,7 @@ module AccruedPaymentCollections
               name:     hd.name,
               enabled:  true,
               loan_id:  x.id,
+              loan_product_id: x.loan_product_id,
               amount:   amt
 
             }
@@ -74,7 +95,8 @@ module AccruedPaymentCollections
               name:     hd.name,
               enabled:  false,
               loan_id:  '',
-              amount:   ''                   
+              loan_product_id: '',
+              amount:   0.0                   
             }
           end
         end
@@ -87,15 +109,40 @@ module AccruedPaymentCollections
 
             }
 
-            ld[:loan_data] << { 
-              name:     "Cash Payment",
-              enabled:  true,
-              loan_id:  '',
-              amount:   0.0
-
-            }
-
       end
+    end
+
+
+    def process_accounting_entry!
+      particular = 'To record accrued payment'
+      acc_b = @accrued_billing
+      @accounting_entry_data= {
+          book: "CRB",
+          reference_number: "",
+          date_prepared: @current_date.strftime("%B %d, %Y"),
+          company_name: Settings.company_name,
+          company_address: Settings.company_address,
+          branch: @branch.to_s.upcase,
+          prepared_by: @user.to_s,
+          particular: particular,
+          debit_journal_entries: [],
+          credit_journal_entries: [],
+          journal_entries: [],
+          branch_id: @branch.id,
+          branch_name: @branch.name,
+          status: "display",
+          data: {
+            or_number: "",
+            ar_number: "",
+            check_number: "",
+            check_voucher_number: "",
+            date_of_check: "",
+            sub_reference_number: "",
+            payee: ""
+          }
+        }
+        acc_b.data['accounting_entry'] = @accounting_entry_data
+        acc_b.save!
     end
 
   end
