@@ -254,6 +254,12 @@ namespace :api do
     post "/accrued_payment_collections/approve_transaction", to: "accrued_payment_collections#approve_transaction"
     post "/accrued_payment_collections/process_zero", to: "accrued_payment_collections#process_zero"
     post "/accrued_payment_collections/delete", to: "accrued_payment_collections#delete"
+    post "/accrued_payment_collections/add_particular", to: "accrued_payment_collections#add_particular"
+    post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
+    post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
+
+
+
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"

@@ -1,0 +1,24 @@
+%table.table.table-sm.table-bordered
+  %tr
+    %th Particular
+    %td 
+      = text_field_tag :particular, "#{@accrued_interest_collection.data['accounting_entry']['particular']}", class: "form-control", id: "particular"
+    %td
+      %button#btn-add-particular.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
+        Save 
+  %tr
+    %th OR
+    %td
+      = text_field_tag :particular, "#{@accrued_interest_collection.data['accounting_entry']['data']['or_number']}", class: "form-control", id: "or_number"
+    %td
+      %button#btn-add-or.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
+        Save 
+  %tr
+    %th AR
+    %td 
+      = text_field_tag :ar_number, "#{@accrued_interest_collection.data['accounting_entry']['data']['ar_number']}", class: "form-control", id: "ar_number"
+    %td
+      %button#btn-add-ar.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
+        Save 
+ 
+ 

@@ -75,6 +75,35 @@ module Api
                                             config: config
                                           ).execute!
         end
+
+        def add_particular
+          data_store_id     = params[:id]
+          txtParticular    =  params[:txtParticular]
+
+          ab = AccruedBilling.find(data_store_id)
+          ab.data['accounting_entry']['particular'] = txtParticular
+          ab.save!
+        end
+
+        def add_or
+          data_store_id     = params[:id]
+          txtOr    =  params[:txtOr]
+
+          ab = AccruedBilling.find(data_store_id)
+          ab.data['accounting_entry']['data']['or_number'] = txtOr
+          ab.save!
+ 
+        end
+
+        def add_ar
+          data_store_id = params[:id]
+          txtAr    =  params[:txtAr]
+
+          ab = AccruedBilling.find(data_store_id)
+          ab.data['accounting_entry']['data']['ar_number'] = txtAr
+          ab.save!
+ 
+        end
  
     
     end

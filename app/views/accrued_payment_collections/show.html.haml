@@ -2,6 +2,14 @@
   .col
     .card
       .card-body
+        %h5
+          Accrued Payment Collections for
+          #{Branch.find(@accrued_interest_collection.branch_id).name} /
+          #{Center.find(@accrued_interest_collection.center_id).name} - 
+          #{@accrued_interest_collection["collection_date"]}
+          - if @accrued_interest_collection["status"] == "pending"
+            = render partial: "form_add"
+
         %table.table.table-sm.table-bordered.table-hover
           %thead
             %tr
@@ -41,8 +49,9 @@
               %th
                 Total
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
-                %th
-                  #{hders[:interest_receivable_amount]}
+                %td{:align=>"right"}
+                  %strong
+                    #{hders[:interest_receivable_amount]}
  
 = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
 = render partial: "/accrued_payment_collections/modals/delete"

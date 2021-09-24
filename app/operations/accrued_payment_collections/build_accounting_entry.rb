@@ -15,9 +15,9 @@ module AccruedPaymentCollections
       end
       
     def execute!
+      build_header_amount!
       @data         = @accrued_billing.data.with_indifferent_access
 
-      build_header_amount!
       @accounting_entry_data = @accrued_billing.data['accounting_entry']
       #raise @accounting_entry_data.inspect
       @accounting_entry_data[:debit_journal_entries]    = build_debit_journal_entries!
@@ -50,7 +50,7 @@ module AccruedPaymentCollections
 
     private
     def build_credit_journal_entries!
-      ab = @accrued_billing
+      #ab = @accrued_billing
       journal_entries = []
       hders = @accrued_billing.data['headers']
       hders.each do |hd|
@@ -104,14 +104,16 @@ module AccruedPaymentCollections
     def build_header_amount!
       ab = @accrued_billing
       hders = ab.data['headers']
-      hders.each do |hd|
+      hders.each_with_index do |hd , i|
         j = ab.data['member_data'].sum{ |b| b["loan_data"] }
         u = j.select{ |y| y["name"] == hd["name"] }
         v = u.sum{ |p| p["amount"] }
         hd['interest_receivable_amount'] = v
-        
+        ac = ab
+        ac.data['headers'][i]['interest_receivable_amount'] = v
+        ac.save!
       end
-      ab.save!
+    
     
     end
 
