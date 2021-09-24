@@ -4,15 +4,17 @@ module Api
     	def create
     		collection_date = params[:collection_date].try(:to_date)
         	branch_id       = params[:branch_id]
+                branch          = Branch.find(branch_id)
         	center_id       = params[:center_id]
                 member_id       = params[:member_id]
 
 
         	config  = {
           		collection_date: collection_date,
+                        branch:    branch,
           		branch_id: branch_id,
           		center_id: center_id,
-              member_id: member_id,
+                        member_id: member_id,
           		user: current_user
         	}
 
@@ -47,8 +49,8 @@ module Api
         
         def approve_transaction
           data_store_id = params[:id]
-          config        = {data_store_id: data_store_id}
-
+          config        = {data_store_id: data_store_id,
+                          user: current_user}
           approve_transaction = ::AccruedPaymentCollections::ApproveTransaction.new(
                                             config: config
                                           ).execute!

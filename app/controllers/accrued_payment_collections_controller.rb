@@ -15,7 +15,16 @@ class AccruedPaymentCollectionsController < ApplicationController
 
   def show 
     @accrued_interest_collection  = AccruedBilling.find(params[:id])
+    record = ::AccruedPaymentCollections::BuildAccountingEntry.new(
+                                        accrued_billing:@accrued_interest_collection,
+                                        current_user: current_user
+                                        ).execute!
+ 
+
+    @data = @accrued_interest_collection.data.with_indifferent_access
+    @accounting_entry = @data[:accounting_entry]
     @accrued_member = @accrued_interest_collection.data['member_data']
+
     @subheader_items = [
       { is_link: true, path: accrued_payment_collections_path, text: "Accrued Payment Collections"},
       { text: "#{@accrued_interest_collection.id}" }
@@ -30,22 +39,24 @@ class AccruedPaymentCollectionsController < ApplicationController
           data: {id: @accrued_interest_collection.id},
           text: "Delete"
         }
-
-        @subheader_side_actions << {
-          id: "btn-zero",
-          link: "#",
-          class: "fa fa-times",
-          data: {id: @accrued_interest_collection.id},
-          text: "Zero Out"
-        }
-
-        @subheader_side_actions << {
-          id: "btn-approve",
-          link: "#",
-          class: "fa fa-check",
-          data: {id: @accrued_interest_collection.id},
-          text: "Approve"
-        }
+       if helpers.oas_mis_user
+          @subheader_side_actions << {
+            id: "btn-zero",
+            link: "#",
+            class: "fa fa-times",
+            data: {id: @accrued_interest_collection.id},
+            text: "Zero Out"
+          }
+        end
+        if helpers.sbk_bk_mis_user
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            data: {id: @accrued_interest_collection.id},
+            text: "Approve"
+          }
+        end
       end
       @subheader_side_actions << {
           id: "btn-printpdf",
