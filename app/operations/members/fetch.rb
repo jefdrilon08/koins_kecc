@@ -66,6 +66,8 @@ module Members
       center                  = @member.center
       membership_arrangement  = @member.membership_arrangement
       membership_type         = @member.membership_type
+      referrer                = @member.referrer
+      coordinator             = Referrer.where(id: @member.coordinator_id).first
 
       @member_data  = {
         id: @member.id || "",
@@ -90,7 +92,11 @@ module Members
         membership_type_id: membership_type.try(:id) || "",
         membership_type_name: membership_type.try(:name) || "",
         beneficiaries: @member.beneficiaries,
-        legal_dependents: legal_dependents
+        legal_dependents: legal_dependents,
+        referrer_id: referrer.try(:id) || "",
+        referrer_name: referrer.try(:full_name) || "",
+        coordinator_id: coordinator.try(:id) || "",
+        coordinator_name: coordinator.try(:full_name) || "",
       }
 
       # Setup old values

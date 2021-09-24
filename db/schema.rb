@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_09_070300) do
+ActiveRecord::Schema.define(version: 2021_09_22_011558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -935,12 +935,15 @@ ActiveRecord::Schema.define(version: 2021_09_09_070300) do
     t.uuid "online_application_id"
     t.uuid "membership_arrangement_id"
     t.uuid "membership_type_id"
+    t.uuid "referrer_id"
+    t.uuid "coordinator_id"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
     t.index ["membership_arrangement_id"], name: "index_members_on_membership_arrangement_id"
     t.index ["membership_type_id"], name: "index_members_on_membership_type_id"
     t.index ["online_application_id"], name: "index_members_on_online_application_id"
+    t.index ["referrer_id"], name: "index_members_on_referrer_id"
   end
 
   create_table "membership_arrangements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1079,6 +1082,19 @@ ActiveRecord::Schema.define(version: 2021_09_09_070300) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "member"
     t.string "loan"
+  end
+
+  create_table "referrers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.string "status"
+    t.string "contact_number"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.date "date_registered"
+    t.string "category"
   end
 
   create_table "savings_insurance_transfer_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1298,6 +1314,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_070300) do
   add_foreign_key "members", "membership_arrangements"
   add_foreign_key "members", "membership_types"
   add_foreign_key "members", "online_applications"
+  add_foreign_key "members", "referrers"
   add_foreign_key "membership_payment_collections", "branches"
   add_foreign_key "membership_payment_collections", "centers"
   add_foreign_key "membership_payment_records", "members"

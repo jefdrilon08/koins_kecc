@@ -95,7 +95,9 @@ class MembersController < ApplicationController
       "id": params[:id],
       "memberTypes": Settings.default_member_types,
       "membershipArrangements": MembershipArrangement.all.map{ |o| { id: o.id, name: o.name } },
-      "membershipTypes": MembershipType.all.map{ |o| { id: o.id, name: o.name } }
+      "membershipTypes": MembershipType.all.map{ |o| { id: o.id, name: o.name } },
+      "referrers": Referrer.where(category: "REFERRER", status: "active").map{ |o| { id: o.id, name: o.full_name } },
+      "coordinators": Referrer.where(category: "INSURANCE COORDINATOR", status: "active").map{ |o| { id: o.id, name: o.full_name } }
     }
   end
 

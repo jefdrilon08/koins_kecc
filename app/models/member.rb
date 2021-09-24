@@ -47,6 +47,7 @@ class Member < ApplicationRecord
   belongs_to :branch
   belongs_to :membership_arrangement, optional: true
   belongs_to :membership_type, optional: true
+  belongs_to :referrer, optional: true
 
   has_many :loans
   has_many :legal_dependents, dependent: :delete_all
