@@ -19,8 +19,6 @@
           %thead
             %tr
               %th
-                no.
-              %th
                 Member
               - @billing_data_store.meta["header"].last.each_with_index do |bdsh, i|
                 - if bdsh["loan_product"] == "WP"
@@ -35,11 +33,10 @@
             
             
           %tbody
-            - @billing_data_store.data.each_with_index do |bds, i|
+            - @billing_data_store.data.each do |bds|
               - if bds["status"] == "active"
                 %tr
-                  %td
-                    #{ i + 1}
+                  
                   %td
                     #{Member.find(bds["member_id"]).full_name}
                 

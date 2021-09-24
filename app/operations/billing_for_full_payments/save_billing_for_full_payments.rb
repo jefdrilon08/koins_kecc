@@ -26,7 +26,8 @@ module BillingForFullPayments
         data: {
                 OR: "",
                 AR: "",
-                particular: @particular
+                particular: @particular,
+                accounting_entry_id: nil
         }
       }
 

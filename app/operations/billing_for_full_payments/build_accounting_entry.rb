@@ -5,7 +5,7 @@ module BillingForFullPayments
       @user =  current_user
       @full_payment_billing = full_payment_billing
       @billing_header = @full_payment_billing.meta["header"]
-      @book         = "JVB"
+      @book         = "CRB"
       @prepared_by  = @user.full_name
       @particular   = @full_payment_billing.meta["data"]["particular"]
       @or_number   = @full_payment_billing.meta["data"]["OR"]
@@ -98,14 +98,6 @@ module BillingForFullPayments
          
 
         end
-          if bh["loan_product"] == "WP"
-            journal_entries << {
-              accounting_code_id: accounting_code_wp.id,
-              code: accounting_code_wp.code,
-              name: accounting_code_wp.name,
-              amount: bh["amount"]
-            }
-          end
         
       end
 
@@ -114,13 +106,16 @@ module BillingForFullPayments
     end
     def build_credit_journal_entries! #debit
       journal_entries = []
+      accounting_code_wp = AccountingCode.find("b7c23e58-e44e-46ae-a3ec-b5081d6eed32")
       branch_accounting_code_id = Settings.branch_accounting_codes.select{ |o| o["branch_id"] == @branch.id }.first["cash_in_bank_accounting_code_id"]
       accounting_code = AccountingCode.find(branch_accounting_code_id)
       total_principal = @full_payment_billing.meta["header"][0].map{ |o| o["receivable_amount"] }.sum
       total_interest = @full_payment_billing.meta["header"][0].map{ |o| o["interest_receivable_amount"] }.sum
       total_wp = @full_payment_billing.meta["header"][0].select{ |o| o["loan_product"] == "WP" }.last["amount"]
       
-      gtotal_amount = total_principal.to_f + total_interest.to_f + total_wp.to_f
+
+
+      gtotal_amount = (total_principal.to_f + total_interest.to_f)  - total_wp.to_f
       if gtotal_amount > 0
         journal_entries << {
           accounting_code_id: accounting_code.id,
@@ -130,6 +125,14 @@ module BillingForFullPayments
         }
       end
 
+          
+            journal_entries << {
+              accounting_code_id: accounting_code_wp.id,
+              code: accounting_code_wp.code,
+              name: accounting_code_wp.name,
+              amount: total_wp
+            }
+        
       journal_entries
         
       

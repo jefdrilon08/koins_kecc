@@ -115,6 +115,7 @@ module Api
       end
       def approved
         data_store_id   = params[:dataStoreid]
+        @billing_data_store = DataStore.find(data_store_id)
         config = {
             data_store_id: data_store_id
 
@@ -126,7 +127,35 @@ module Api
         else
 
           approved_record = ::BillingForFullPayments::ApprovedBillingForFullPayment.new(data_store_id: data_store_id).execute!
+        #end
+
+          @record = ::BillingForFullPayments::BuildAccountingEntry.new(
+                                                                    full_payment_billing: @billing_data_store,
+                                                                    current_user: current_user
+                                                                  ).execute!
+          
+      
+          configA  = {
+            accounting_entry_data: @record,
+            user: current_user
+          }
+          accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: configA
+                          ).execute!
+
+      
+          configB  = {
+            accounting_entry: accounting_entry,
+            user: current_user
+          }
+          @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: configB
+                          ).execute!
+
+           @billing_data_store.meta["data"]["accounting_entry_id"] = @accounting_entry["id"]
+           @billing_data_store.save!
         end
+          
         
       end
       def checked

@@ -68,6 +68,8 @@ class BillingForFullPaymentsController < ApplicationController
     end
     @billing_header
     
+    
+
     @record = ::BillingForFullPayments::BuildAccountingEntry.new(
                                                                                 full_payment_billing: @billing_data_store,
                                                                                 current_user: current_user
