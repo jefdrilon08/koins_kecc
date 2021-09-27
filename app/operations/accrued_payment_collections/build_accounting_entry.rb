@@ -107,14 +107,43 @@ module AccruedPaymentCollections
       hders.each_with_index do |hd , i|
         j = ab.data['member_data'].sum{ |b| b["loan_data"] }
         u = j.select{ |y| y["name"] == hd["name"] }
-        v = u.sum{ |p| p["amount"] }
+        v = (u.sum{ |p| p["amount"] }).to_f.round(2)
         hd['interest_receivable_amount'] = v
         ac = ab
         ac.data['headers'][i]['interest_receivable_amount'] = v
         ac.save!
       end
     
-    
+      mem_tot = ab.data['member_data']
+      mem_tot.each do |mt|
+        tt = 0
+        tmcp = 0
+        xx = ab.data['member_data'].select{|r| r['member_id'] == mt['member_id']}.last
+        xx['loan_data'].each_with_index do |yy|
+          if yy['name'] != "Withdraw Payment"
+            tt += yy['amount'].round(2)
+            tmcp +=  yy['amount'].round(2)
+          elsif yy['name'] == "Withdraw Payment"
+            tt -= yy['amount'].round(2)
+          end
+        end
+        mt[:total_cp] = tt.round(2)
+        mt[:total_payment] = tmcp.round(2)
+      end
+
+      cp_total = 0.0
+      t_total = 0.0 
+      cp = ab.data['headers'] 
+      cp.each do |cps|
+        if cps['name'] != "Withdraw Payment"
+          cp_total += cps['interest_receivable_amount']
+          t_total  += cps['interest_receivable_amount']
+        elsif cps['name'] == "Withdraw Payment"
+          cp_total -= cps['interest_receivable_amount']
+        end
+      end
+      ab.data['total_cash_payment'] = cp_total.round(2)
+      ab.data['total_payment'] = t_total.round(2)
     end
 
   end

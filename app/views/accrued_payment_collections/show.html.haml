@@ -19,6 +19,10 @@
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
                 %th
                   #{hders[:name]}
+              %th{:align=>"right"}
+                Cash Payment
+              %th
+                TOTAL
             %tbody
               -@accrued_member.each_with_index do |am , y|
                 %tr
@@ -40,18 +44,28 @@
                                     }, 
                                     :href => "#" 
                               }
-                              #{al["amount"]} 
+                              #{number_to_currency(al["amount"] , unit: '')} 
                         -else
-                          #{al["amount"]}
+                          #{number_to_currency(al["amount"] , unit: '')}
+                    %td.text-right
+                      #{number_to_currency(am["total_cp"], unit: '')}
+                    %td.text-right
+                      #{number_to_currency(am["total_payment"] , unit: '')}
           %thead
             %tr
               %th
               %th
                 Total
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
-                %td{:align=>"right"}
+                %td.text-right
                   %strong
-                    #{hders[:interest_receivable_amount]}
+                    #{number_to_currency(hders[:interest_receivable_amount] , unit: '')}
+              %td.text-right
+                %strong
+                  #{number_to_currency(@accrued_interest_collection.data['total_cash_payment'] , unit: '')}
+              %td.text-right
+                %strong
+                  #{number_to_currency(@accrued_interest_collection.data['total_payment'], unit: '')}
  
 = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
 = render partial: "/accrued_payment_collections/modals/delete"

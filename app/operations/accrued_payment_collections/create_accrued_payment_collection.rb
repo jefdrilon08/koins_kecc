@@ -24,6 +24,8 @@ module AccruedPaymentCollections
                                           member_id: @member,
                                           status: 'pending',
                                           data: {
+                                            total_cash_payment: 0.0,
+                                            total_payment: 0.0,
                                             member_data:[],
                                             headers:[],
                                             records:[],
@@ -69,6 +71,8 @@ module AccruedPaymentCollections
           @accrued_billing.data['member_data'] << {  
             member_id: rec,
             name:      Member.find(rec).full_name,
+            total_cp: 0.0,
+            total_payment: 0.0,
             loan_data: []
           }
       end
@@ -87,7 +91,7 @@ module AccruedPaymentCollections
               enabled:  true,
               loan_id:  x.id,
               loan_product_id: x.loan_product_id,
-              amount:   amt
+              amount:   amt.to_f.round(2)
 
             }
           else
