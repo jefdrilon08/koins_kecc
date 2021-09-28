@@ -223,6 +223,7 @@ class ClaimsController < ApplicationController
 
   def show
     @claim            = Claim.find(params[:id])
+    @member           = @claim.member
     @data             = @claim.data.try(:with_indifferent_access) || {}
 
     if !@data.nil?
