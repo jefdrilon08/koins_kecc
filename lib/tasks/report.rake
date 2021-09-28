@@ -1,4 +1,28 @@
 namespace :report do 
+  task :loan_project_type => :environment do
+    s_date= ENV['s_date']
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    @data = [] 
+    if br_id.present?
+      loan_data = Loan.where("status = 'active' and branch_id=? and project_type_id IS NOT NULL" , br_id).pluck(:project_type_id).uniq
+    else
+      loan_data = Loan.where("status = 'active' and project_type_id IS NOT NULL").pluck(:project_type_id).uniq
+    end
+    loan_data.each do |l|
+      pt = ProjectType.find(l).name
+      if br_id.present?
+        l_count = Loan.where("status = 'active' and branch_id=? and project_type_id=?" ,br_id,l).count
+      else
+        l_count = Loan.where("status = 'active' and project_type_id=?",l).count
+      end
+      dta = "#{pt}|#{l_count}"
+      #dta = "#{l[:member][:last_name]}, #{l[:member][:first_name]} #{l[:member][:middle_name]}|#{l[:loan_product][:name]}|#{loan_pt}" 
+      @data << dta
+    end
+    puts @data
+  end
+
   task :bank_loan_sbc => :environment do
     s_date= ENV['s_date']
     #mat_date = ENV['mat_date']
