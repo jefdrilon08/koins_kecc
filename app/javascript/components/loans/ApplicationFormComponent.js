@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import moment from 'moment';
 import Select from 'react-select';
+import Resizer from 'react-image-file-resizer';
 
 import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';
@@ -25,6 +26,7 @@ export default class ApplicationFormComponent extends React.Component {
       currentProjectTypeCategoryId: "",
       data: false,
       coMakerProfilePicture: false,
+      coMakerThreeProfilePicture: false,
       errors: false
     };
   }
@@ -106,7 +108,9 @@ export default class ApplicationFormComponent extends React.Component {
           data: response.loan,
           projectTypeCategories: response.project_type_categories,
           projectTypes: projectTypes,
-          currentProjectTypeCategoryId: currentProjectTypeCategoryId
+          currentProjectTypeCategoryId: currentProjectTypeCategoryId,
+          coMakerProfilePicture: response.loan.co_maker_relative_profile_picture_url,
+          coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url
         });
       },
       error: function(response) {
@@ -225,20 +229,33 @@ export default class ApplicationFormComponent extends React.Component {
   }
 
   handleSave() {
-    var context = this;
-    var state   = context.state;
+    const context = this;
+    const state   = context.state;
 
     this.setState({
       isSaving: true
     });
 
+    const formData = new FormData();
+
+    if(state.coMakerProfilePicture) {
+      formData.append('co_maker_profile_picture', state.coMakerProfilePicture);
+    }
+
+    if(state.coMakerThreeProfilePicture) {
+      formData.append('co_maker_three_profile_picture', state.coMakerThreeProfilePicture);
+    }
+
+    formData.append('payload', JSON.stringify(state.data));
+    formData.append('authenticity_token', context.props.authenticityToken);
+
     $.ajax({
       url: "/api/v1/loans/save",
       method: "POST",
-      data: {
-        data: JSON.stringify(state.data),
-        authenticity_token: context.props.authenticityToken
-      },
+      data: formData,
+      contentType: false,
+      processData: false,
+      cache: false,
       success: function(response) {
         window.location.href="/loans/" + response.id;
       },
@@ -413,14 +430,103 @@ export default class ApplicationFormComponent extends React.Component {
     this.setState({ data: data });
   }
 
+  handleCoMakerThreeProfilePictureSelected(event) {
+    const context         = this;
+    const fileInput       = event.target.files[0];
+    const fileType        = fileInput['type'];
+    const validFileTypes  = ['image/gif', 'image/jpeg', 'image/png'];
+
+    if(fileType && validFileTypes.includes(fileType)) {
+      try {
+        Resizer.imageFileResizer(
+          fileInput,
+          300,
+          300,
+          "JPEG",
+          100,
+          0,
+          (uri) => {
+            console.log(uri);
+            context.setState({
+              coMakerThreeProfilePicture: uri
+            })
+          },
+          "base64",
+          200,
+          200
+        )
+      } catch(err) {
+        console.log(err);
+        alert("Error resizing image file for co-maker");
+      }
+    } else {
+      alert("Invalid image file!");
+    }
+  }
+
+  handleCoMakerProfilePictureSelected(event) {
+    const context         = this;
+    const fileInput       = event.target.files[0];
+    const fileType        = fileInput['type'];
+    const validFileTypes  = ['image/gif', 'image/jpeg', 'image/png'];
+
+    if(fileType && validFileTypes.includes(fileType)) {
+      try {
+        Resizer.imageFileResizer(
+          fileInput,
+          300,
+          300,
+          "JPEG",
+          100,
+          0,
+          (uri) => {
+            console.log(uri);
+            context.setState({
+              coMakerProfilePicture: uri
+            })
+          },
+          "base64",
+          200,
+          200
+        )
+      } catch(err) {
+        console.log(err);
+        alert("Error resizing image file for co-maker");
+      }
+    } else {
+      alert("Invalid image file!");
+    }
+  }
+
   renderCoMakerProfilePicture() {
     if(this.state.coMakerProfilePicture) {
+      return (
+        <img
+          src={this.state.coMakerProfilePicture}
+        />
+      );
     } else {
       return (
         <div>
           No profile picture selected
         </div>
-      )
+      );
+    }
+  }
+
+  renderCoMakerThreeProfilePicture() {
+    if(this.state.coMakerThreeProfilePicture) {
+      return (
+        <img
+          src={this.state.coMakerThreeProfilePicture}
+        />
+      );
+    } else {
+      return (
+        <div>
+          No profile picture selected
+        </div>
+      );
     }
   }
 
@@ -471,6 +577,8 @@ export default class ApplicationFormComponent extends React.Component {
                       className="form-control"
                       accepts="image/*"
                       disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_two }
+                      capture="user"
+                      onChange={this.handleCoMakerProfilePictureSelected.bind(this)}
                     />
                     <br/>
                     {this.renderCoMakerProfilePicture()}
@@ -487,6 +595,21 @@ export default class ApplicationFormComponent extends React.Component {
                       onChange={this.handleCoMakerThree.bind(this)}
                       disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_three }
                     />
+                    <hr/>
+                    <label>
+                      Profile Picture (Hindi Kamag-anak / kapitbahay)
+                    </label>
+                    <br/>
+                    <input
+                      type="file"
+                      className="form-control"
+                      accepts="image/*"
+                      disabled={this.state.isSaving || this.state.isActive || !this.props.settings.use_co_maker_three }
+                      capture="user"
+                      onChange={this.handleCoMakerThreeProfilePictureSelected.bind(this)}
+                    />
+                    <br/>
+                    {this.renderCoMakerThreeProfilePicture()}
                   </div>
                 </div>
                 <div className="col-md-4 col-xs-12">

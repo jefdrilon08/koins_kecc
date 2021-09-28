@@ -9,6 +9,9 @@ module Loans
       @branch       = Branch.where(id: @loan_data[:branch_id]).first
       @center       = Center.where(id: @loan_data[:center_id]).first
 
+      @co_maker_profile_picture       = @config[:co_maker_profile_picture]
+      @co_maker_three_profile_picture = @config[:co_maker_three_profile_picture]
+
       @persist  = persist
 
       @loan = Loan.new
@@ -192,10 +195,37 @@ module Loans
       @loan.data[:accounting_entry] = accounting_entry_data
 
       if @persist
+        if @co_maker_profile_picture.present? and !valid_url?(@co_maker_profile_picture)
+          decoded_data  = Base64.decode64(@co_maker_profile_picture.split(',')[1])
+
+          @loan.co_maker_relative_profile_picture = {
+            io: StringIO.new(decoded_data),
+            content_type: 'image/jpeg',
+            filename: 'co_maker.jpg'
+          }
+        end
+
+        if @co_maker_three_profile_picture.present? and !valid_url?(@co_maker_three_profile_picture)
+          decoded_data  = Base64.decode64(@co_maker_three_profile_picture.split(',')[1])
+
+          @loan.co_maker_non_relative_profile_picture = {
+            io: StringIO.new(decoded_data),
+            content_type: 'image/jpeg',
+            filename: 'co_maker_non_relative.jpg'
+          }
+        end
+
         @loan.save!
       end
 
       @loan
+    end
+
+    # Convert to base64 if profile pictures are URLs
+    def valid_url?(url)
+      return false if url.include?("<script")
+      url_regexp = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix
+      url =~ url_regexp ? true : false
     end
   end
 end

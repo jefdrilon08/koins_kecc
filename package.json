@@ -40,6 +40,7 @@
     "react-collapsible": "^2.8.1",
     "react-datepicker": "^1.6.0",
     "react-dom": "^16.13.1",
+    "react-image-file-resizer": "^0.4.7",
     "react-modal": "^3.6.1",
     "react-select": "^2.1.0",
     "react-table": "^6.8.6",

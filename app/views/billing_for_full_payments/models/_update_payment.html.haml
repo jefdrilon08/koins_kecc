@@ -3,14 +3,31 @@
     .modal-content
       .modal-header
         %h3.modal-title
-          Member:
-          Transaction:
-          Loan Product:
+          %table
+            %tbody
+              %tr
+                %th 
+                  %h4 Member: 
+                %td 
+                  
+                  %h4#memberName{:name => "memberName"}
+            
+              %tr
+                %th 
+                  %h4 Transaction:
+                %td 
+                  %h4 Withdraw Payment
       .modal-body
         .modal-body-content
           .callout.callout-info
-            %p
-              %input#bookId{:name => "bookId", :type => "text", :value => ""}
+            %table
+              %tbody
+                %tr
+                  %th
+                    %h4 Amount:
+                  %td        
+                    %h4
+                      %input#bookId{:name => "bookId", :type => "text", :value => ""}
           .message
       .modal-footer
         .controls

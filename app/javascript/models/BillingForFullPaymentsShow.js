@@ -60,7 +60,10 @@ var $btnChecked;
 var $modalCheck;
 var $btnConfirmCheck;
 
-
+var $labelMemberName;
+var $labeMemberLoanName;
+var $labelMemberLoanProduct
+var $labelMemberLoanAmount
 
 var _centers  = [];
 var _members  = [];
@@ -160,6 +163,12 @@ var _cacheDom = function() {
   $btnChecked = $("#btn-checked");
   $modalCheck = $("#modal-check");
   $btnConfirmCheck = $("#btn-confirm-check");
+
+
+  $labelMemberName = $("#memberName");
+  $labeMemberLoanName = $("#memberLoanName");
+  $labelMemberLoanProduct = $("#memberLoanProduct");
+  $labelMemberLoanAmount = $("#memberLoanAmount")
 
   templateErrorList = $("#template-error-list").html();
 
@@ -402,7 +411,7 @@ var _bindEvents = function() {
 
 
   $btnProcess.on("click", function() {
-    alert("jef")
+  
     _moratoriumId = $(this).data("id");
     $modalProcess.modal("show");
   });
@@ -520,8 +529,14 @@ var _bindEvents = function() {
     var dataStoreId = $(this).data('data-store-id')     
     var recordType = $(this).data('record-type')
     var loanId = $(this).data('loan-product-id')
+    var loanProductName = $(this).data('loan-product-name')
+    var memberAccountName = $(this).data('member-account-name')    
+    $labeMemberLoanName.text(memberAccountName)
+    $labelMemberLoanProduct.text(loanProductName)
+    $labelMemberLoanAmount.text(amount)
+    
     $inputStartDate.val(amount)
-
+    
     
     
 
@@ -544,11 +559,12 @@ var _bindEvents = function() {
   
     var amount = $(this).data('amount')
     var memberId = $(this).data('member-id') 
+    var memberName = $(this).data('member-account-name') 
     var memberAccountId = $(this).data('member-account-id')
     var dataStoreId = $(this).data('data-store-id')     
     var recordType = $(this).data('record-type')
     $inputStartDate.val(amount)
-
+    $labelMemberName.text(memberName)
     
     
      _memberId          = memberId 

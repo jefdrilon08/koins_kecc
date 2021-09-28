@@ -40,6 +40,11 @@
         = link_to billing_for_full_payments_path, class: "c-sidebar-nav-link #{params[:controller] == "billing_for_full_payments_path" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
           Billings for full payment
+      %li.c-sidebar-nav-item
+        = link_to accrued_payment_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "accrued_payment_collections_path" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-money-check
+          Accrued Interest Billing
+ 
     - if is_not_remote
       %li.c-sidebar-nav-item
         = link_to membership_payment_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "membership_payment_collections" ? 'active' : ''}" do

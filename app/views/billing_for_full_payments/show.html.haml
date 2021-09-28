@@ -49,6 +49,7 @@
                                       amount: "#{b["amount"]}",
                                       member_id: "#{bds["member_id"]}",
                                       member_account_id: "#{b["member_account_id"]}",
+                                      member_account_name: "#{Member.find(bds["member_id"]).full_name}",
                                       data_store_id: "#{@billing_data_store.id}",
                                       record_type: "#{b["record_type"]}"
                                     }, 
@@ -65,12 +66,15 @@
                         - if b["amount"] > 0
                           - if @billing_data_store["status"] == "pending"
                             %a.remove_amount{ data: {
+                                                  amount: "#{b["amount"]}",
                                                   member_id: "#{bds["member_id"]}",
                                                   loan_id: "#{b["loan_id"]}",
                                                   loan_product_id: "#{b["loan_product_id"]}",
                                                   member_account_id: "#{b["member_account_id"]}",
                                                   data_store_id: "#{@billing_data_store.id}",
-                                                  record_type: "#{b["record_type"]}"
+                                                  record_type: "#{b["record_type"]}",
+                                                  loan_product_name: "#{LoanProduct.find(b["loan_product_id"]).name}",
+                                                  member_account_name: "#{Member.find(bds["member_id"]).full_name}"
                                           
 
                                           },

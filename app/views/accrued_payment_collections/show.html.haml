@@ -2,6 +2,14 @@
   .col
     .card
       .card-body
+        %h5
+          Accrued Payment Collections for
+          #{Branch.find(@accrued_interest_collection.branch_id).name} /
+          #{Center.find(@accrued_interest_collection.center_id).name} - 
+          #{@accrued_interest_collection["collection_date"]}
+          - if @accrued_interest_collection["status"] == "pending"
+            = render partial: "form_add"
+
         %table.table.table-sm.table-bordered.table-hover
           %thead
             %tr
@@ -11,6 +19,10 @@
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
                 %th
                   #{hders[:name]}
+              %th{:align=>"right"}
+                Cash Payment
+              %th
+                TOTAL
             %tbody
               -@accrued_member.each_with_index do |am , y|
                 %tr
@@ -32,17 +44,28 @@
                                     }, 
                                     :href => "#" 
                               }
-                              #{al["amount"]} 
+                              #{number_to_currency(al["amount"] , unit: '')} 
                         -else
-                          #{al["amount"]}
+                          #{number_to_currency(al["amount"] , unit: '')}
+                    %td.text-right
+                      #{number_to_currency(am["total_cp"], unit: '')}
+                    %td.text-right
+                      #{number_to_currency(am["total_payment"] , unit: '')}
           %thead
             %tr
               %th
               %th
                 Total
               -@accrued_interest_collection.data.with_indifferent_access[:headers].each_with_index do |hders, i|
-                %th
-                  #{hders[:interest_receivable_amount]}
+                %td.text-right
+                  %strong
+                    #{number_to_currency(hders[:interest_receivable_amount] , unit: '')}
+              %td.text-right
+                %strong
+                  #{number_to_currency(@accrued_interest_collection.data['total_cash_payment'] , unit: '')}
+              %td.text-right
+                %strong
+                  #{number_to_currency(@accrued_interest_collection.data['total_payment'], unit: '')}
  
 = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
 = render partial: "/accrued_payment_collections/modals/delete"
