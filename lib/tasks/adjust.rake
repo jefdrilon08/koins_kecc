@@ -2642,4 +2642,57 @@ namespace :adjust do
 
     puts "\nDone."
   end
+
+  task :delete_wrong_insurance_interest => :environment do
+    puts "Deleting wrong interest ..."
+
+    members = Member.where(insurance_status: "resigned")
+
+    members.each do |member|
+      put "Deleting interest for #{member.full_name}"
+
+      rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+      ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+
+      if ev_account.present?
+        if ev_account.balance > 0.0
+          ev_interest_transactions = ev_account.account_transactions.where("data->>'is_interest' = ?", "true")
+          ev_interest_transactions.destroy_all
+
+          ::MemberAccounts::Rehash.new(member_account: ev_account, account_transactions: nil).execute!
+
+          if ev_account.balance < 0.0
+            at = ev_account.account_transactions.order("transacted_at ASC").last
+
+            at_data = at.data.with_indifferent_access
+            beginning_balance = at_data[:beginning_balance].to_f
+            at.update!(amount: beginning_balance)
+
+            ::MemberAccounts::Rehash.new(member_account: ev_account, account_transactions: nil).execute!
+          end
+        end
+      end
+
+      if rf_account.present?
+        if rf_account.balance > 0.0
+          rf_interest_transactions = rf_account.account_transactions.where("data->>'is_interest' = ?", "true")
+          rf_interest_transactions.destroy_all
+
+          ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+
+          if rf_account.balance < 0.0
+            at = rf_account.account_transactions.order("transacted_at ASC").last
+
+            at_data = at.data.with_indifferent_access
+            beginning_balance = at_data[:beginning_balance].to_f
+            at.update!(amount: beginning_balance)
+
+            ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+          end
+        end
+      end
+    end
+
+    puts "\nDone."
+  end
 end
