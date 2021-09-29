@@ -2649,7 +2649,7 @@ namespace :adjust do
     members = Member.where(insurance_status: "resigned")
 
     members.each do |member|
-      put "Deleting interest for #{member.full_name}"
+      puts "Deleting interest for #{member.full_name}"
 
       rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
       ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
