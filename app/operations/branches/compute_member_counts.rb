@@ -69,6 +69,14 @@ module Branches
             others: 0,
             total: 0,
             members: []
+          
+          },
+          inactive_members: {
+            male: 0,
+            female: 0,
+            others: 0,
+            total: 0,
+            members: []
           },
           active_members: {
             inforce: 0,
