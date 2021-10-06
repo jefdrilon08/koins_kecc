@@ -32,17 +32,18 @@
         TOTAL
   %tbody
     - @accrued_billing[:data].data['member_data'].each do |md|
-      %tr
-        %td
-          #{md['name']}
-        - md['loan_data'].each do |ld|
+      -if md['is_active'] == true
+        %tr
+          %td
+            #{md['name']}
+          - md['loan_data'].each do |ld|
+            %td{:align=>"right"}
+              - if ld['enabled'] == true
+                #{number_to_currency(ld['amount'], unit: '')}
           %td{:align=>"right"}
-            - if ld['amount'] != 'false'
-              #{number_to_currency(ld['amount'], unit: '')}
-        %td{:align=>"right"}
-          #{number_to_currency(md['total_cp'], unit: '')}
-        %td{:align=>"right"}
-          #{number_to_currency(md['total_payment'], unit: '')}
+            #{number_to_currency(md['total_cp'], unit: '')}
+          %td{:align=>"right"}
+            #{number_to_currency(md['total_payment'], unit: '')}
   %thead
     %tr
       %th

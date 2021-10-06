@@ -20,5 +20,13 @@
     %td
       %button#btn-add-ar.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
         Save 
- 
+  %tr
+    %th Book
+    %td
+      .form-group
+        = select_tag :book_type, options_for_select(["CRB" , "JVB"]), class: "form-control select-select2", id: "book_type" , prompt: "#{@accrued_interest_collection.data['accounting_entry']['book']}"
+
+    %td
+      %button#btn-add-book.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
+        Save 
  

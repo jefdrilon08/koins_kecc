@@ -257,6 +257,8 @@ namespace :api do
     post "/accrued_payment_collections/add_particular", to: "accrued_payment_collections#add_particular"
     post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
+    post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+
 
 
 
