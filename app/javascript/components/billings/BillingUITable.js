@@ -178,7 +178,7 @@ export default class BillingUITable extends React.Component {
       var record      = this.props.data.data.records[i];
       var member      = record.member;
       var grandTotal  = 0.00;
-
+      
       if(this.props.data.status == "pending") {
         components.push(
           <td key={"c-member-attnd-" + member.id}>
@@ -232,7 +232,7 @@ export default class BillingUITable extends React.Component {
         var paymentRecord = this.props.data.data.records[i].records[j];
 
         if(paymentRecord.record_type == "LOAN_PAYMENT" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
+          if(this.props.data.status == "pending"  && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
               <td key={"loan-payment-" + paymentRecord.loan_id} className="text-right">
                 <strong>
@@ -256,7 +256,7 @@ export default class BillingUITable extends React.Component {
           // Add grand total
           grandTotal += parseFloat(paymentRecord.amount);
         } else if(paymentRecord.record_type == "SAVINGS" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
+          if(this.props.data.status == "pending" && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false )  {
             components.push(
               <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
                 <strong>
@@ -280,7 +280,7 @@ export default class BillingUITable extends React.Component {
           // Add grand total
           grandTotal += parseFloat(paymentRecord.amount);
         } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
+          if(this.props.data.status == "pending" && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
               <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
                 <strong>
@@ -304,7 +304,7 @@ export default class BillingUITable extends React.Component {
           // Add grand total
           grandTotal += parseFloat(paymentRecord.amount);
         } else if(paymentRecord.record_type == "WP" && paymentRecord.enabled == true) {
-          if(this.props.data.status == "pending") {
+          if(this.props.data.status == "pending"  && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
               <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
                 <strong>

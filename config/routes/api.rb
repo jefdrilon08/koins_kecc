@@ -229,6 +229,7 @@ namespace :api do
     post "/billings/approve", to: "billings#approve"
     post "/billings/zero_out", to: "billings#zero_out"
     post "/billings/check", to: "billings#check"
+    post "/billings/uncheck", to: "billings#uncheck"
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
