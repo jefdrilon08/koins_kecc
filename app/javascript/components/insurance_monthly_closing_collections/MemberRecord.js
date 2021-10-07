@@ -50,7 +50,7 @@ export default class MemberRecord extends React.Component {
       <tr key={"interest-row-" + memberAccount.id}>
         <td colSpan="2">
           <strong>
-            Interest Earned
+            Increase Earned
           </strong>
         </td>
         <td className="text-right">
@@ -60,7 +60,7 @@ export default class MemberRecord extends React.Component {
         </td>
         <td>
           <strong>
-            Annual Interest Rate:
+            Annual Increase Rate:
           </strong>
         </td>
         <td className="text-muted">
