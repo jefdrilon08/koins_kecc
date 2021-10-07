@@ -38,6 +38,7 @@ module AccruedPaymentCollections
     def execute!
       process_accrued_data!
       process_accounting_entry!
+      acc_status!
       @accrued_billing.save!
       @accrued_billing
     end
@@ -55,7 +56,8 @@ module AccruedPaymentCollections
           name: hd.name,
           id:   hd.id,
           interest_receivable_accounting_code_id: st[:interest_receivable_accounting_code_id],
-          interest_receivable_amount: 0.0
+          interest_receivable_amount: 0.0,
+          is_active: ''
       }
       end
       @accrued_billing.data['headers'] << {
@@ -66,11 +68,11 @@ module AccruedPaymentCollections
       }
 
     
-      dta.pluck(:member_id).uniq.each do |rec|
-         
+      dta.order(:last_name).pluck(:member_id).uniq.each do |rec|
           @accrued_billing.data['member_data'] << {  
             member_id: rec,
             name:      Member.find(rec).full_name,
+            is_active: '',
             total_cp: 0.0,
             total_payment: 0.0,
             loan_data: []
@@ -85,7 +87,8 @@ module AccruedPaymentCollections
             x = Loan.find(l)
             amt = x.data['accrued_interest']['total_accrued_interest'] - x.data['accrued_interest']['total_accrued_interest_balance']
           end
-          if x.present? and x.data['accrued_interest']['status'] != 'remove'
+          if x.present? and x.data['accrued_interest']['status'] != 'remove' and x.data['accrued_interest']['status'] != 'paid'
+
             ld[:loan_data] << { 
               name:     hd.name,
               enabled:  true,
@@ -114,8 +117,38 @@ module AccruedPaymentCollections
             }
 
       end
+   end
+    
+    def acc_status!
+      ab  = @accrued_billing
+      mem_tot = ab.data['member_data']
+      mem_tot.each do |mt|
+        tt = 0
+        mem_data = ab.data['member_data'].select{|r| r['member_id'] == mt['member_id']}.last
+        mem_data['loan_data'].each do |md|
+          tt += md['amount']
+        end
+        if tt == 0.0
+          mt[:is_active] = false
+        else
+          mt[:is_active] = true
+        end
+      end
+        
+      hders = ab.data['headers']
+      hders.each_with_index do |hd , i|
+        j = ab.data['member_data'].sum{ |b| b["loan_data"] }
+        if j != 0
+          u = j.select{ |y| y["name"] == hd["name"] }
+          v = (u.sum{ |p| p["amount"] }).to_f.round(2)
+          if v == 0.0 and hd["name"] != "Withdraw Payment"
+            hd[:is_active] = false
+          else 
+            hd[:is_active] = true
+          end
+        end
+      end
     end
-
 
     def process_accounting_entry!
       particular = 'To record accrued payment'

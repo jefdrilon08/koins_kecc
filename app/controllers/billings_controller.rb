@@ -44,7 +44,6 @@ class BillingsController < ApplicationController
       redirect_to billings_path
     else
       @data     = @billing.data.with_indifferent_access
-
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
                           branch: @billing.branch
@@ -65,20 +64,30 @@ class BillingsController < ApplicationController
 
       if @billing.pending?
         if helpers.sbk_bk_mis_user
-          @subheader_side_actions << {
-            id: "btn-check",
-            link: "#",
-            class: "fa fa-check",
-            text: "Check"
-          }
+          
+          if @data["is_checked"] == true
+            @subheader_side_actions << {
+              id: "btn-uncheck",
+              link: "#",
+              class: "fa fa-check",
+              text: "Uncheck"
+            }
+            @subheader_side_actions << {
+              id: "btn-approve",
+              link: "#",
+              class: "fa fa-check",
+              text: "Approve"
+            }
+          else
+            @subheader_side_actions << {
+              id: "btn-check",
+              link: "#",
+              class: "fa fa-check",
+              text: "Check"
+            }
+          end
 
 
-          @subheader_side_actions << {
-            id: "btn-approve",
-            link: "#",
-            class: "fa fa-check",
-            text: "Approve"
-          }
         end
 
         if helpers.oas_mis_user

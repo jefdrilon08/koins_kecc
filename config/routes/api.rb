@@ -229,6 +229,7 @@ namespace :api do
     post "/billings/approve", to: "billings#approve"
     post "/billings/zero_out", to: "billings#zero_out"
     post "/billings/check", to: "billings#check"
+    post "/billings/uncheck", to: "billings#uncheck"
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
@@ -257,6 +258,8 @@ namespace :api do
     post "/accrued_payment_collections/add_particular", to: "accrued_payment_collections#add_particular"
     post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
+    post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+
 
 
 

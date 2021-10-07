@@ -162,6 +162,19 @@ module Api
         end
       end
 
+      def uncheck
+        billing = Billing.where(id: params[:id]).first
+        config  = {
+          billing: billing,
+          user: current_user
+        }
+          billing = ::Billings::Uncheck.new(
+                      config: config
+                    ).execute!
+        
+          render json: { message: "ok" }
+      end
+
       def zero_out
         billing = Billing.where(id: params[:id]).first
 

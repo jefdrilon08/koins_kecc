@@ -7,9 +7,11 @@
       .modal-body
         .modal-body-content
           .callout.callout-info
-            %h6
-              NAME:
-            %h6
+            %h4
+              NAME: 
+            %h4#memberName{:name => "memberName"}
+
+            %h4
             %p
               %input#bookId{:name => "bookId", :type => "text", :value => ""}
           .message
