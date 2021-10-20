@@ -40,7 +40,7 @@ module InsuranceMonthlyClosingCollections
         member          = member_account.member
 
         config  = {
-          date_paid: @closing_date,
+          date_paid: @current_date,
           deposit: r,
           member: member,
           user: @user,
