@@ -2,7 +2,66 @@ module Api
   module V1
     class LoansController < ApiController
       before_action :authenticate_user!
+      
 
+      def reverse_approve_loan_reason
+        loan = Loan.find( params[:id])
+
+        loan_details =  ::Loans::ApproveLoanReverse.new(
+            user: current_user,
+            loan: loan
+          ).execute!
+
+        
+          ActivityLog.create!(
+            content: "#{current_user.full_name} approved reverse loan with JVB refference number #{loan.data.with_indifferent_access[:reverse_loan_details].last[:refference_number]} ",
+            activity_type: "approval",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id
+            }
+          )
+
+        render json: { message: "ok", id: loan.id }
+      end
+
+
+      def reverse_loan
+             
+        loan = Loan.find( params[:id])
+
+        loan_details =  ::Loans::ReverseLoan.new(
+            user: current_user,
+            loan: loan
+          ).execute!
+          
+          ActivityLog.create!(
+            content: "#{current_user.full_name}  reverse loan  ",
+            activity_type: "reverse",
+            data: {
+              user_id: current_user.id,
+              loan_id: loan.id
+            }
+          )
+
+        
+
+        render json: { message: "ok", id: loan.id }
+      end
+      
+      def reverse_loan_reason
+        loan = Loan.find(params[:id])
+
+        reason_details =  params[:reason_details].inspect
+        config = {
+          loan: loan,
+          reason_details: reason_details
+        }        
+      
+        result = ::Loans::AddReverseReason.new(config: config).execute!
+
+      end
+      
       def fetch_by_member
         active_loans  = Loan.active.includes(:loan_product).where(member_id: params[:member_id])
 

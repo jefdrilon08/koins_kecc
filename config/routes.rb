@@ -207,6 +207,9 @@ Rails.application.routes.draw do
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
+  
+  get "/loans/:id/reverse_form",        to: "loans#reverse_form",       as: :reverse_form
+  #get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
 
   get '/loans/:id/amortization_pdf', to: 'loans#amortization_pdf', as: :amortization_pdf
   

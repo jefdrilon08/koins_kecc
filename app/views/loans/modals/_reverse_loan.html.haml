@@ -1,0 +1,19 @@
+#modal-reverse-loan.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Reverese Loan
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Do you want to reverse this loan?
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-reverse-loan.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
