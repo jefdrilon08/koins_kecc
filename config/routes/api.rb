@@ -202,7 +202,9 @@ namespace :api do
     post "/loans/process", to: "loans#process_loan"
     post "/loans/reject", to: "loans#reject"
     post "/loans/upload_application_form", to: "loans#upload_application_form"
-
+    post "/loans/reverse_loan", to: "loans#reverse_loan"
+    post "/loans/reverse_loan_reason", to: "loans#reverse_loan_reason"
+    post "/loans/reverse_approve_loan_reason", to: "loans#reverse_approve_loan_reason"
     # Branches
     get "/branches", to: "branches#index"
     get "/branches/list_centers", to: "branches#list_centers"

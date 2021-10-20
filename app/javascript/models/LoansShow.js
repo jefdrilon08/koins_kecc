@@ -79,9 +79,23 @@ var $btnConfirmReject;
 var $modalReject;
 var $inputRejectionReason;
 
+
+
+
 var reason        = "";
 var newDate       = "";
 var curretAmortId = "";
+
+
+var $btnReverseLoan;
+var $btnConfirmReverseLoan;
+var $modalReverseLoan;
+
+
+
+var $btnApproveReverseLoan;
+//var $btnConfirmReverseLoan;
+//var $modalReverseLoan;
 
 var _urlReage                 = "/api/v1/loans/reage";
 var _urlDelete                = "/api/v1/loans/delete";
@@ -95,6 +109,7 @@ var _urlVerify                = "/api/v1/loans/verify";
 var _urlProcess               = "/api/v1/loans/process";
 var _urlForRelease            = "/api/v1/loans/for_release";
 var _urlReject                = "/api/v1/loans/reject";
+var _urlReverse               = "/api/v1/loans/reverse_loan";
 var _urlUploadApplicationForm = "/api/v1/loans/upload_application_form";
 
 var _id;
@@ -169,10 +184,68 @@ var _cacheDom = function() {
   $modalReject          = $("#modal-reject");
   $inputRejectionReason = $("#input-rejection-reason");
 
+
+  $btnReverseLoan         = $("#btn-reverse-loan")
+  $btnConfirmReverseLoan  = $("#btn-confirm-reverse-loan");
+  $modalReverseLoan       = $("#modal-reverse-loan");
+
+
+  $btnApproveReverseLoan  = $("#btn-approve-reverse-loan");
+
+
   templateErrorList = $("#template-error-list").html();
 };
 
 var _bindEvents = function() {
+  
+  $btnApproveReverseLoan.on("click", function() {
+    alert("jef")
+  });
+
+
+  $btnReverseLoan.on("click", function() {
+    $modalReverseLoan.modal("show");
+  });
+  $btnConfirmReverseLoan.on("click", function() {
+    
+    $.ajax({
+      url: _urlReverse,
+      method: 'POST',
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.href = "/loans/" + _id +  "/reverse_form/";
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmReject.prop("disabled", false);
+          $inputRejectionReason.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  
+
+  
   $btnUploadApplicationForm.on("click", function() {
     $modalUploadApplicationForm.modal("show");
   });

@@ -112,6 +112,51 @@ class LoansController < ApplicationController
     end
   end
 
+  def reverse_form
+  
+    @loan = Loan.find( params[:id])
+    @subheader_items = [
+      {
+        is_link: true,
+        path: loans_path,
+        text: "Loans"
+      },
+      {
+        is_link: true,
+        path: member_path(@loan.member_id),
+        text: "#{@loan.member.full_name}"
+      },
+      {
+        text: "#{@loan.pn_number} - #{@loan.cycle.present? ? "Cycle #{@loan.cycle}" : "NO LOAN CYCLE PRESENT"}"
+      }
+    ]
+    @subheader_side_actions = []
+
+    if @loan.data.with_indifferent_access[:reverse_loan_details].last[:status] == "pending"        
+      @subheader_side_actions << {
+        id: "btn-approve-reverse-loan",
+        class: "fa fa-undo",
+        link: "#",
+        text: "Approve"
+      
+
+      }
+      @subheader_side_actions << {
+        id: "btn-delete-reverse-loan",
+        class: "fa fa-undo",
+        link: "#",
+        text: "Delete"
+      
+
+      }
+    end
+    
+    @record = ::Loans::BuildAccountingEntryForReverse.new(loan: @loan, current_user: current_user).execute!
+
+  
+  end
+
+
   def adjustment
     @loan               = Loan.find(params[:loan_id])
     @adjustment_record  = AdjustmentRecord.reamortization.find(params[:adjustment_record_id])
@@ -146,6 +191,10 @@ class LoansController < ApplicationController
       @co_maker = ReadOnlyMember.find(@loan.data["co_maker_one"]["id"])
     end
 
+
+
+
+
     # subheader items
     @subheader_items = [
       {
@@ -172,6 +221,19 @@ class LoansController < ApplicationController
     }
 
     @subheader_side_actions = []
+
+    if @loan.active? && @loan.interest_paid == 0.0
+    
+      @subheader_side_actions << {
+        id: "btn-reverse-loan",
+        class: "fa fa-undo",
+        link: "#",
+        text: "Reverse Loan"
+      
+
+      }
+    end
+
 
     if @loan.pending?
       @subheader_side_actions << {
