@@ -26,7 +26,7 @@
             %tbody
               - x = 0
               -@accrued_member.each_with_index do |am , y|
-                -if am['is_active'] == true
+                -if am['is_active'] != false
                   %tr
                     %td
                       #{x += 1}    
