@@ -276,8 +276,10 @@ module Branches
           latest_transaction_date:    latest_transaction_date,
           first_date_of_payment:      first_date_of_payment
         }
-
+      
         @data[:records] << temp_r
+        #sort by last_name
+        @data[:records] = @data[:records].sort_by { |hash|hash[:member][:last_name]}
       end
     end
 
