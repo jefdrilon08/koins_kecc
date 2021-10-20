@@ -64,7 +64,8 @@
             %td
               #{l[:user_id]}
             %td
-              #{l[:status]}
+              = link_to reverse_form_path(@loan.id), target: '_blank' do
+                #{l[:status]}
             %td
               #{l[:date_reversed]}
             %td
