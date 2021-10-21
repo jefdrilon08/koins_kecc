@@ -12,6 +12,11 @@ var $btnCheck;
 var $btnConfirmCheck;
 var $modalCheck;
 
+var $btnUncheck;
+var $btnConfirmUncheck;
+var $modalUncheck;
+
+
 var $btnPrint;
 var $btnPrintWp;
 var $modalPrint;
@@ -26,6 +31,7 @@ var templateErrorList;
 
 var _urlApprove = "/api/v1/billings/approve";
 var _urlCheck   = "/api/v1/billings/check";
+var _urlUncheck   = "/api/v1/billings/uncheck";
 var _urlZeroOut = "/api/v1/billings/zero_out";
 var _urlPrint   = "/api/v1/print/generate_file";
 var _urlDownload= "/billings/excel";
@@ -38,6 +44,10 @@ var _cacheDom = function() {
   $btnCheck         = $("#btn-check");
   $btnConfirmCheck  = $("#btn-confirm-check");
   $modalCheck       = $("#modal-check");
+  
+  $btnUncheck         = $("#btn-uncheck");
+  $btnConfirmUncheck  = $("#btn-confirm-uncheck");
+  $modalUncheck       = $("#modal-uncheck");
 
   $btnPrint   = $("#btn-print");
   $btnPrintWp = $("#btn-print-wp");
@@ -96,6 +106,53 @@ var _bindEvents = function() {
       }
     });
   });
+
+  $btnUncheck.on("click", function() {
+    
+    $modalUncheck.modal("show");
+    $message.html("");
+  });
+  
+
+
+  $btnConfirmUncheck.on("click", function() {
+    $btnConfirmUncheck.prop("disabled", true);
+
+    $.ajax({
+      url: _urlUncheck,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: id,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
+
 
   $btnCheck.on("click", function() {
     $modalCheck.modal("show");

@@ -71,6 +71,9 @@ module MemberAccountValidations
       elsif @lif_num_weeks_past_due > 0 && @rf_num_weeks_past_due > 0
         @rf_amount    = @rf_current_balance
         @lif_amount   = @lif_current_balance
+      else
+        @rf_amount    = @rf_current_balance
+        @lif_amount   = @lif_current_balance
       end  
 
       # Check if member is 3 years above in KMBA
@@ -126,8 +129,7 @@ module MemberAccountValidations
       build_member_account_validation_record!
 
       # Update accounting_entry
-      # @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
-      @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
+      @d[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntryNewCode.new(
                                     config: {
                                       branch: @member_account_validation.branch,
                                       member_account_validation: @member_account_validation,

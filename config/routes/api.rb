@@ -202,7 +202,9 @@ namespace :api do
     post "/loans/process", to: "loans#process_loan"
     post "/loans/reject", to: "loans#reject"
     post "/loans/upload_application_form", to: "loans#upload_application_form"
-
+    post "/loans/reverse_loan", to: "loans#reverse_loan"
+    post "/loans/reverse_loan_reason", to: "loans#reverse_loan_reason"
+    post "/loans/reverse_approve_loan_reason", to: "loans#reverse_approve_loan_reason"
     # Branches
     get "/branches", to: "branches#index"
     get "/branches/list_centers", to: "branches#list_centers"
@@ -229,6 +231,7 @@ namespace :api do
     post "/billings/approve", to: "billings#approve"
     post "/billings/zero_out", to: "billings#zero_out"
     post "/billings/check", to: "billings#check"
+    post "/billings/uncheck", to: "billings#uncheck"
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
@@ -240,6 +243,12 @@ namespace :api do
     post "/billing_for_full_payments/create", to: "billing_for_full_payments#create"
     post "/billing_for_full_payments/update_amount", to: "billing_for_full_payments#update_amount"
     post "/billing_for_full_payments/add_member", to: "billing_for_full_payments#add_member"
+    post "/billing_for_full_payments/remove_payment_member", to: "billing_for_full_payments#remove_payment_member"
+    post "/billing_for_full_payments/add_particular", to: "billing_for_full_payments#add_particular"
+    post "/billing_for_full_payments/add_or", to: "billing_for_full_payments#add_or"
+    post "/billing_for_full_payments/add_ar", to: "billing_for_full_payments#add_ar"
+    post "/billing_for_full_payments/approved", to: "billing_for_full_payments#approved"
+    post "/billing_for_full_payments/checked", to: "billing_for_full_payments#checked"
 
 
     #Accrued_Billing
@@ -248,6 +257,14 @@ namespace :api do
     post "/accrued_payment_collections/approve_transaction", to: "accrued_payment_collections#approve_transaction"
     post "/accrued_payment_collections/process_zero", to: "accrued_payment_collections#process_zero"
     post "/accrued_payment_collections/delete", to: "accrued_payment_collections#delete"
+    post "/accrued_payment_collections/add_particular", to: "accrued_payment_collections#add_particular"
+    post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
+    post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
+    post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+
+
+
+
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"

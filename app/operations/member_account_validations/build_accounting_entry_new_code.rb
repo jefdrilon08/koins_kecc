@@ -120,18 +120,19 @@ module MemberAccountValidations
       amount = rf_amount + equity_amount
 
       # TODO: Make this configurable
-      if @is_remote
-        dr_accounting_code = AccountingCode.find('1f305ae6-2b7b-4c72-89cf-470c1ca91781')
+      if !@is_remote
+      #   # Inc/Dec in Reserve for Agg Trust Liability RF
+      #   dr_accounting_code = AccountingCode.find('1f305ae6-2b7b-4c72-89cf-470c1ca91781')
       
-        if amount > 0
-          journal_entries << {
-            accounting_code_id: dr_accounting_code.id,
-            code: dr_accounting_code.code,
-            name: dr_accounting_code.name,
-            amount: rf_amount
-          }
-        end
-      else
+      #   if amount > 0
+      #     journal_entries << {
+      #       accounting_code_id: dr_accounting_code.id,
+      #       code: dr_accounting_code.code,
+      #       name: dr_accounting_code.name,
+      #       amount: rf_amount
+      #     }
+      #   end
+      # else
         # RECEIVABLE FROM MBA
         dr_accounting_code = AccountingCode.find('5db5e14d-0fcb-45a7-b468-c4cefe1ad041')
         
@@ -152,11 +153,12 @@ module MemberAccountValidations
       journal_entries = []
 
       # TODO: Config accounting code for total_lif_accounting_code
-      # For Payable to MBA Life
       if @is_remote
         total_lif_amount          = @member_account_validation.member_account_validation_records.sum(:lif_50_percent)
         equity_interest           = @member_account_validation.member_account_validation_records.sum(:equity_interest)
         amount                    = total_lif_amount + equity_interest
+        
+        # Benefits/ Claims Expense Equity Value
         total_lif_accounting_code = AccountingCode.find('da7a9fa2-6b75-48a3-83f9-4c40347ab405')
       else
         # Old code
@@ -166,6 +168,7 @@ module MemberAccountValidations
         
         amount                    = @lif_member_accounts.sum(:balance)
 
+        # Payable to MBA Life
         total_lif_accounting_code = AccountingCode.find('07e4ccfd-8fdf-4210-a068-1b66f9b6521f')
       end
 
@@ -183,6 +186,8 @@ module MemberAccountValidations
       journal_entries = []
 
       amount          = @member_account_validation.member_account_validation_records.sum(:advance_lif)
+
+      # Member's Contribution BLIP
       accounting_code = AccountingCode.find('87286b3b-7ca8-4ba4-a377-292a34c5e011')
 
       if amount > 0
@@ -202,12 +207,13 @@ module MemberAccountValidations
 
       # RF + Interest
       ### OLD CODE ###
-      # rf_and_interest_amount          = @member_account_validation.member_account_validation_records.sum(:rf) + @member_account_validation.member_account_validation_records.sum(:advance_rf) + @member_account_validation.member_account_validation_records.sum(:interest)
-      rf_and_interest_amount          = @member_account_validation.member_account_validation_records.sum(:rf) + @member_account_validation.member_account_validation_records.sum(:advance_rf)
 
       if @is_remote
+        rf_and_interest_amount          = @member_account_validation.member_account_validation_records.sum(:rf) + @member_account_validation.member_account_validation_records.sum(:advance_rf) + @member_account_validation.member_account_validation_records.sum(:interest)
+        # Agg. Reserve for Trust Liability
         rf_and_interest_accounting_code = AccountingCode.find('01d46c5f-12a1-428d-ad4f-5ad7bc798b6b')
       else
+        rf_and_interest_amount          = @member_account_validation.member_account_validation_records.sum(:rf) + @member_account_validation.member_account_validation_records.sum(:advance_rf)
         rf_and_interest_accounting_code = AccountingCode.find('714153eb-0a0b-4127-9e62-2643f10a6d96')
       end
 
@@ -230,6 +236,8 @@ module MemberAccountValidations
       amount    = @member_account_validation.member_account_validation_records.sum(:equity_interest)
 
       # TODO: Make this configurable
+
+      # Inc/Dec on Liability on Individual Equity Value
       dr_accounting_code = AccountingCode.find('aa11e0c4-c894-45f8-8be2-1715e23e223f')
 
       if amount > 0
@@ -264,9 +272,9 @@ module MemberAccountValidations
           journal_entries << o
         end
       
-        compute_equity_interest.each do |o|
-          journal_entries << o
-        end
+        # compute_equity_interest.each do |o|
+        #   journal_entries << o
+        # end
       end
       
       journal_entries
@@ -345,6 +353,7 @@ module MemberAccountValidations
       journal_entries = []
 
       if @is_remote
+        # Agg. Reserve for Trust Liability
         cr_accounting_code  = AccountingCode.find('01d46c5f-12a1-428d-ad4f-5ad7bc798b6b')
       else
         cr_accounting_code  = AccountingCode.find('714153eb-0a0b-4127-9e62-2643f10a6d96')

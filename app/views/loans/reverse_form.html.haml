@@ -1,0 +1,27 @@
+.row
+  .col
+    .card
+      .card-body
+        %table.table.table-sm.table-bordered
+        
+          - @loan.data["reverse_loan_details"].each do |loan|
+            - if loan["status"] == "pending" && loan["type"] == "reverse"
+              %tr
+                %th Reason
+                %td 
+                  = text_field_tag :reverse_reason, "#{loan["reason"].to_s.gsub!('"','')}", class: "form-control", id: "reverse-reason"
+                %td
+                  %button#btn-add-particular.btn.btn-block.btn-info{ data: { loan_id: "#{@loan.id}"  } }
+                    Save 
+            - else
+              %tr
+                %th Reason
+                %td
+                  #{loan["reason"].to_s.gsub!('"','')}
+            
+= render partial: "accounting_entry_for_reverse", locals: { accounting_entry: @record }
+
+
+
+= render partial: "loans/modals/reverse_approve_loan"
+

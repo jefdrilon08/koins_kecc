@@ -1,0 +1,38 @@
+#modal-remove-payment.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          %table
+            %tbody
+              %tr
+                %th 
+                  %h4 Member: 
+                %td 
+                  %h4#memberLoanName{:name => "memberLoanName"}
+              %tr
+                %th 
+                  %h4 Loan Product:
+                %td 
+                  %h4#memberLoanProduct{:name => "memberLoanProduct"}
+              %tr
+                %th 
+                  %h4 Amount:
+                %td 
+                  %h4#memberLoanAmount{:name => "memberLoanAmount"}
+          
+
+      .modal-body
+        .modal-body-content
+          .callout.callout-info
+            %p
+              Are you sure to Remove Amount?
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-remove.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

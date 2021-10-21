@@ -105,6 +105,14 @@ module Loans
         data: data
       }
 
+      if @loan.co_maker_relative_profile_picture.attached?
+        @data[:co_maker_relative_profile_picture_url] = @loan.co_maker_relative_profile_picture.url 
+      end
+
+      if @loan.co_maker_non_relative_profile_picture.attached?
+        @data[:co_maker_non_relative_profile_picture_url] = @loan.co_maker_non_relative_profile_picture.url
+      end
+
       @data
     end
 

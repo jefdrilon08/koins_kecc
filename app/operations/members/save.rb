@@ -15,6 +15,9 @@ module Members
       @membership_arrangement = MembershipArrangement.find_by_id(@member_data[:membership_arrangement_id])
       @membership_type        = MembershipType.find_by_id(@member_data[:membership_type_id])
 
+      @referrer               = Referrer.find_by_id(@member_data[:referrer_id])
+      @coordinator            = Referrer.find_by_id(@member_data[:coordinator_id])
+
       @member = Member.new
 
       if @member_data[:id].present?
@@ -127,6 +130,12 @@ module Members
       @member.membership_arrangement  = @membership_arrangement
       @member.membership_type         = @membership_type
       @member.modifiable              = nil
+
+      @member.referrer                = @referrer
+
+      if @coordinator.present?
+        @member.coordinator_id          = @coordinator.id
+      end
 
       @member.save!
       @member = Member.find(@member.id)

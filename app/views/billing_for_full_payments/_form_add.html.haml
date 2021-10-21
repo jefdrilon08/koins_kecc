@@ -1,19 +1,36 @@
-.row
-  .col-md-4.col-xs-12
-    .form-group
-      %label
-        Member
+%table.table.table-sm.table-bordered
+  %tr
+    %th Particular
+    %td 
+      = text_field_tag :particular, "#{@billing_data_store.meta["data"]["particular"]}", class: "form-control", id: "particular"
+    %td
+      %button#btn-add-particular.btn.btn-block.btn-info{ data: { data_store_id: "#{@billing_data_store.id}"  } }
+        Save 
+  %tr
+    %th OR
+    %td 
+      = text_field_tag :or_number, "#{@billing_data_store.meta["data"]["OR"]}", class: "form-control", id: "or_number"
+    %td
+      %button#btn-add-or.btn.btn-block.btn-info{ data: { data_store_id: "#{@billing_data_store.id}"  } }
+        Save 
+              
+  %tr
+    %th AR
+    %td 
+      = text_field_tag :ar_number, "#{@billing_data_store.meta["data"]["AR"]}", class: "form-control", id: "ar_number"
+    %td
+      %button#btn-add-ar.btn.btn-block.btn-info{ data: { data_store_id: "#{@billing_data_store.id}"  } }
+        Save 
+              
+  %tr
+    %th
+      Member
       = select_tag :member, options_for_select(@member_list.map{ |o| ["#{o["last_name"]}, #{o["first_name"]} ", o["id"] ] }), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
-  .col-md-4.col-xs-12
-    .form-group
-      %label
-        Loan Product
+    %td
+      Loan Product
       = select_tag :account, options_for_select(@billing_header.map{ |b| ["#{LoanProduct.find(b).name}", b] }), class: "form-control select-select2", id: "select-loans", prompt: "-- SELECT --"
-  .col-md-2.col-xs-12
-    .form-group
-      %label
-        Actions
-      %button#btn-add.btn.btn-block.btn-success{ data: { data_store_id: "#{@billing_data_store.id}"  } }
-      
-        .fa.fa-plus
+    
+    %th 
+      Action
+      %button#btn-add.btn.btn-block.btn-info{ data: { data_store_id: "#{@billing_data_store.id}"  } }
         Add

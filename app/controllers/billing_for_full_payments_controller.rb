@@ -3,7 +3,7 @@ class BillingForFullPaymentsController < ApplicationController
     
       @full_payment_billing =  DataStore.where(
                                                 "meta ->> 'branch_id' IN (?) AND
-                                                 meta ->> 'data_store_tpe' = ?",
+                                                 meta ->> 'data_store_type' = ?",
                                                  @branches.pluck(:id),
                                                 "BILLING FOR FULL PAYMENT"
                                                  
@@ -29,6 +29,37 @@ class BillingForFullPaymentsController < ApplicationController
   def show
     @billing_data_store = DataStore.find(params[:id])
     @member_list = Member.where(center_id: @billing_data_store.meta["center_id"], status: "active")
+      @subheader_items = [
+        {
+          text: "Billing for Full Payment Loan"
+        }
+      ]
+
+      if @billing_data_store.pending?
+        @subheader_side_actions = [
+          {
+            id: "btn-checked",
+            link: "#",
+            class: "fa fa-check",
+            text: "Check",
+            data: { data_store_id: params[:id] }
+          },
+          {
+            id: "btn-approved",
+            link: "#",
+            class: "fa fa-check",
+            text: "Approved",
+            data: { data_store_id: params[:id] }
+          },
+          {
+            id: "btn-delete",
+            link: "#",
+            class: "fa fa-times",
+            data: { method: :delete, confirm: "Are you sure?" },
+            text: "Delete"
+          }
+        ]
+      end
     @billing_header = []
       Settings.loan_products.each do |a|
         if  a[:for_unearned_interest] == true
@@ -37,6 +68,24 @@ class BillingForFullPaymentsController < ApplicationController
     end
     @billing_header
     
+    
+
+    @record = ::BillingForFullPayments::BuildAccountingEntry.new(
+                                                                                full_payment_billing: @billing_data_store,
+                                                                                current_user: current_user
+                                                                              ).execute!
+ 
+  end
+  def destroy
+    
+    @billing_for_fullpayment = DataStore.find( params[:id])
+    if @billing_for_fullpayment.pending?
+      @billing_for_fullpayment.destroy!
+      redirect_to billing_for_full_payments_path
+    end
+
+
+
 
   end
 end

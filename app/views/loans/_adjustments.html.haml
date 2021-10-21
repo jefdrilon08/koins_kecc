@@ -1,11 +1,3 @@
-.row
-  .col
-    #btn-new-adjustment.btn.btn-primary
-      .fa.fa-plus
-      New Adjustment
-
-%hr
-
 - if @adjustment_records.any?
   %table.table.table-bordered.table-sm
     %thead
@@ -53,4 +45,32 @@
               .fa.fa-search
 - else
   %p
-    No adjustment records found for this loan
+    - if @loan.data.with_indifferent_access[:reverse_loan_details].present?
+      %table.table.table-bordered.table-sm
+        %tr
+          %th Reason
+          %th Accounting Refference number
+          %th Approved by
+          %th Status
+          %th Date Generate
+          %th Date Approve
+        - @loan.data.with_indifferent_access[:reverse_loan_details].each do |l|
+          %tr
+            %td
+              = link_to reverse_form_path(@loan.id), target: '_blank' do
+                #{l[:reason].to_s.gsub!('"','')}
+            %td
+              #{l[:refference_number] }
+            %td
+              #{l[:user_id]}
+            %td
+              = link_to reverse_form_path(@loan.id), target: '_blank' do
+                #{l[:status]}
+            %td
+              #{l[:date_reversed]}
+            %td
+              #{l[:date_approved]}
+    - else
+
+
+      No adjustment records found for this loan

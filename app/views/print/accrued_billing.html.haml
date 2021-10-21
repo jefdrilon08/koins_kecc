@@ -21,28 +21,44 @@
 %table.table.table-bordered.table-sm
   %thead
     %tr
-      %th{ width: "15%" }
+      %th{width: "15%"}
         Member
       - @accrued_billing[:data].data['headers'].each do |hd|
-        %th{ width: "8%" }
+        %th{ width: "10%" }
           #{hd['name']}
-      %th
-        CP
-      %th
-        WP
-      %th
+      %th{ width: "10%" }
+        Cash Payment
+      %th{ width: "10%" }
         TOTAL
   %tbody
     - @accrued_billing[:data].data['member_data'].each do |md|
-      %tr
-        %td
-          #{md['name']}
-        - md['loan_data'].each do |ld|
+      -if md['is_active'] == true
+        %tr
+          %td
+            #{md['name']}
+          - md['loan_data'].each do |ld|
+            %td{:align=>"right"}
+              - if ld['enabled'] == true
+                #{number_to_currency(ld['amount'], unit: '')}
           %td{:align=>"right"}
-            - if ld['amount'] != 'false'
-              #{ld['amount']}
-        %td
-
+            #{number_to_currency(md['total_cp'], unit: '')}
+          %td{:align=>"right"}
+            #{number_to_currency(md['total_payment'], unit: '')}
+  %thead
+    %tr
+      %th
+        TOTAL
+      - @accrued_billing[:data].data['headers'].each do |hders|
+        %td.text-right
+          %strong
+            #{hders['interest_receivable_amount']}
+      %td.text-right
+        %strong
+          #{number_to_currency(@accrued_billing[:data].data['total_cash_payment'] , unit: '')}
+      %td.text-right
+        %strong
+          #{number_to_currency(@accrued_billing[:data].data['total_payment'] , unit: '')}
+ 
 %br
 %b
 %label

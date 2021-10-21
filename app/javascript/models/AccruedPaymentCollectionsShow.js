@@ -37,12 +37,24 @@ var $btnZero;
 var $btnConfirmZero;
 var _id;
 
+var $btnAddParticular;
+var $inputParticular;
+var $btnAddOr;
+var $inputOrNumber;
+var $btnAddAr;
+var $inputArNumber;
+var $btnAddBook;
+var $inputBookType;
+
 var $inputBatchNumberOfDays;
 var $selectBatchBranch;
 var $inputDateInitializedCutOff;
 var $batchStartDate;
 var $batchEndDate;
 var $batchAccruedType;
+
+var $labelMemberName;
+var $labeMemberLoanName;
 
 
 var _centers  = [];
@@ -69,6 +81,12 @@ var _urlProcessZero   = "/api/v1/accrued_payment_collections/process_zero";
 var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
+var _urlAddParticular = "/api/v1/accrued_payment_collections/add_particular";
+var _urlAddOr     = "/api/v1/accrued_payment_collections/add_or";
+var _urlAddAr     = "/api/v1/accrued_payment_collections/add_ar";
+var _urlAddBookType     = "/api/v1/accrued_payment_collections/add_book_type";
+
+
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -108,6 +126,21 @@ var _cacheDom = function() {
   $btnApprove			= $("#btn-approve");
   $btnZero			= $("#btn-zero");
   $btnConfirmZero		= $("#btn-confirm-zero");
+
+  $btnAddParticular         = $("#btn-add-particular");
+  $inputParticular          = $("#particular");
+  $btnAddOr         = $("#btn-add-or");
+  $inputOrNumber     = $("#or_number");
+  
+  $btnAddAr         = $("#btn-add-ar");
+  $inputArNumber          = $("#ar_number");
+  $btnAddBook         = $("#btn-add-book");
+  $inputBookType          = $("#book_type");
+
+
+  $labelMemberName = $("#memberName");
+  $labeMemberLoanName = $("#memberLoanName");
+ 
 
   $inputBatchNumberOfDays       = $("#input-batch-number-of-moratorium-days");
   $selectBatchBranch       = $("#select-batch-branch");
@@ -247,11 +280,160 @@ var _bindEvents = function() {
     });
   });
 
+  $btnAddParticular.on("click", function() {
+    var txtParticular = $inputParticular.val()
+    _id = $(this).data("id");	  
+    $.ajax({	    
+      url: _urlAddParticular,
+      method: "POST",
+      data: {
+	id: _id,
+	txtParticular: txtParticular,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnAddParticular.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnAddBook.on("click", function() {
+   var txtBookType = $inputBookType.val()	  
+   _id = $(this).data("id");	  
+    $.ajax({	    
+      url: _urlAddBookType,
+      method: "POST",
+      data: {
+	id: _id,
+	txtBookType:  txtBookType,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnAddBook.prop("disabled", false);
+        }
+      }
+    });
+ 
+  });
+
   $btnProcess.on("click", function() {
     alert("jef")
     _moratoriumId = $(this).data("id");
     $modalProcess.modal("show");
   });
+  
+  $btnAddOr.on("click", function() {
+    var txtOr = $inputOrNumber.val()
+    _id = $(this).data("id");	  
+    $.ajax({	    
+      url: _urlAddOr,
+      method: "POST",
+      data: {
+	id: _id,
+	txtOr: txtOr,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnAddOr.prop("disabled", false);
+        }
+      }
+    });
+ 
+  });
+  
+  $btnAddAr.on("click", function() {
+    var txtAr = $inputArNumber.val()
+    _id = $(this).data("id");	  
+    $.ajax({	    
+      url: _urlAddAr,
+      method: "POST",
+      data: {
+	id: _id,
+	txtAr: txtAr,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnAddAr.prop("disabled", false);
+        }
+      }
+    });
+ 
+  });
+
+
 
   $btnZero.on("click", function() {
      _id = $(this).data("id");
@@ -403,11 +585,14 @@ var _bindEvents = function() {
   
 	  var amount = $(this).data('amount')
 	  var memberId = $(this).data('member-data-id') 
+	  var memberName = $(this).data('member-account-name')
 	  var memberAccountId = $(this).data('loan-data-id')
 	  var dataStoreId = $(this).data('collection-id')     
 	  //var recordType = $(this).data('record-type')
 	  $inputStartDate.val(amount)
-
+	  $labelMemberName.text(memberName)
+    
+	  //alert (amount);
     
     
 	  _memberId          = memberId 

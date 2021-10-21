@@ -2,6 +2,7 @@ module BillingForFullPayments
   class UpdateBillingAmount
 
     def initialize(config:)
+    
       @config             = config
       @member_id          = @config[:member_id]
       @member_account_id  = @config[:member_account_id]
@@ -11,26 +12,29 @@ module BillingForFullPayments
     end
 
     def execute!
-      
+         
         data_store = DataStore.find(@data_store_id)
-        data_store_details = data_store["data"].select{ |b| b["member_id"] ==  @member_id }.first["balance"].select{ |bb| bb["member_account_id"] == @member_account_id }.first
+        data_store_details = data_store["data"].select{ |b| b["member_id"] ==  @member_id }.first["balance"]
+        wp_amount = data_store_details.select{ |r| r["record_type"] == "WP"  }
 
-        config = {
-                    new_amount: @loan_amount,
-                    member_details: data_store_details["amount"]
-                  
-                  }
+        
+        wp_amount.first["amount"] = @loan_amount.to_f
+        wp_header =  data_store.meta["header"][0].select{ |h| h["loan_product"] == "WP"  }
+      
+        get_balance_details = data_store.data.sum{ |b| b["balance"] }
+        get_balance_wp = get_balance_details.select{ |b| b["record_type"] == "WP" }
+
+        
+        #get_balance_wp.sum{ |a| a["amount"] }
+
+        data_store.meta["header"][0].select{ |w| w["loan_product"] == "WP"}.first["amount"] = get_balance_wp.sum{ |a| a["amount"] }
+        
+
+        
 
 
-        @validate = ::BillingForFullPayments::ValidatePayment.new(config: config).execute!
-
-        if @validate == nil
-
-          data_store_details["amount"] = @loan_amount
-          data_store.save!
-        else
-          return @validate
-        end
+        data_store.save!
+    
       
         
     end

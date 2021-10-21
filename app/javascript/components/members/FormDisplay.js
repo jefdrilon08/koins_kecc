@@ -18,6 +18,7 @@ import FormRecruit from './FormRecruit';
 import FormBankAccounts from './FormBankAccounts';
 import FormLegalDependents from './FormLegalDependents';
 import FormBeneficiaries from './FormBeneficiaries';
+import FormReferrals from './FormReferrals';
 
 export default class FormDisplay extends React.Component {
   constructor(props) {
@@ -33,6 +34,8 @@ export default class FormDisplay extends React.Component {
       centers: [],
       membershipArrangements: props.membershipArrangements || [],
       membershipTypes: props.membershipTypes || [],
+      referrers: props.referrers || [],
+      coordinators: props.coordinators || [],
       authError: false,
       currentMembershipType: {
         value: "",
@@ -47,6 +50,14 @@ export default class FormDisplay extends React.Component {
         label: ""
       },
       currentMembershipArrangement: {
+        value: "",
+        label: ""
+      },
+      currentReferrer: {
+        value: "",
+        label: ""
+      },
+       currentCoordinator: {
         value: "",
         label: ""
       },
@@ -109,6 +120,28 @@ export default class FormDisplay extends React.Component {
     this.setState({
       data: data,
       currentMembershipType: o
+    });
+  }
+
+  updateCurrentReferrer(o) {
+    var data  = this.state.data;
+    data.referrer_id   = o.value;
+    data.referrer_name = o.label;
+
+    this.setState({
+      data: data,
+      currentReferrer: o
+    });
+  }
+
+  updateCurrentCoordinator(o) {
+    var data  = this.state.data;
+    data.coordinator_id   = o.value;
+    data.coordinator_name = o.label;
+
+    this.setState({
+      data: data,
+      currentCoordinator: o
     });
   }
 
@@ -263,6 +296,14 @@ export default class FormDisplay extends React.Component {
           currentMembershipType: {
             value: response.membership_type_id,
             label: response.membership_type_name
+          },
+          currentReferrer: {
+            value: response.referrer_id,
+            label: response.referrer_name
+          },
+          currentCoordinator: {
+            value: response.coordinator_id,
+            label: response.coordinator_name
           }
         });
       },
@@ -328,9 +369,14 @@ export default class FormDisplay extends React.Component {
     var currentMembershipArrangement  = state.currentMembershipArrangement;
     var currentMembershipType         = state.currentMembershipType;
 
+    var currentReferrer               = state.currentReferrer;
+    var currentCoordinator            = state.currentCoordinator;
+
     var memberTypes             = this.props.memberTypes;
     var membershipArrangements  = this.props.membershipArrangements;
     var membershipTypes         = this.props.membershipTypes;
+    var referrers               = this.props.referrers;
+    var coordinators            = this.props.coordinators;
 
     if(state.isLoading) {
       return  (
@@ -369,7 +415,7 @@ export default class FormDisplay extends React.Component {
                 updateCurrentMemberType={this.updateCurrentMemberType.bind(this)}
                 updateCurrentMembershipArrangement={this.updateCurrentMembershipArrangement.bind(this)}
                 updateCurrentMembershipType={this.updateCurrentMembershipType.bind(this)}
-              />
+              />    
 
               <div className="card">
                 <div className="card-header">
@@ -463,6 +509,25 @@ export default class FormDisplay extends React.Component {
                     data={state.data}
                     updateData={this.updateData.bind(this)}
                     formDisabled={state.formDisabled}
+                  />
+                </div>
+              </div>
+
+              <div className="card">
+                <div className="card-header">
+                  Referrals
+                </div>
+                <div className="card-body">
+                  <FormReferrals
+                    data={state.data}
+                    currentReferrer={currentReferrer}
+                    currentCoordinator={currentCoordinator}
+                    referrers={referrers}
+                    coordinators={coordinators}
+                    updateData={this.updateData.bind(this)}
+                    formDisabled={state.formDisabled}
+                    updateCurrentReferrer={this.updateCurrentReferrer.bind(this)}
+                    updateCurrentCoordinator={this.updateCurrentCoordinator.bind(this)}
                   />
                 </div>
               </div>

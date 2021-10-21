@@ -27,8 +27,8 @@ module MemberAccountValidations
                                 resignation_date: @resignation_date
                               ).execute!
 
-      #@equity_value         = @lif_member_account.data.with_indifferent_access[:equity_value] 
-      @equity_value         = @equity_value_account.try(:balance).to_f
+      @equity_value         = @lif_member_account.data.with_indifferent_access[:equity_value] 
+      # @equity_value         = @equity_value_account.try(:balance).to_f
 
       if !@pl_member_account.nil?
         @policy_loan = @pl_member_account.try(:balance).to_f
@@ -70,6 +70,9 @@ module MemberAccountValidations
         @rf_amount    = @rf_current_balance
         @lif_amount   = @lif_current_balance
       elsif @lif_num_weeks_past_due > 0 && @rf_num_weeks_past_due > 0
+        @rf_amount    = @rf_current_balance
+        @lif_amount   = @lif_current_balance
+      else  
         @rf_amount    = @rf_current_balance
         @lif_amount   = @lif_current_balance
       end  

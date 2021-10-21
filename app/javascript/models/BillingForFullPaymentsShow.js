@@ -27,6 +27,17 @@ var $btnConfirmDelete;
 var $btnConfirmProcess;
 var $btnConfirmBatchProcess;
 var $btnAdd;
+var $btnRemove;
+var $modalRemovePayment;
+var $btnConfirmRemove;
+
+var $btnAddParticular;
+var $inputParticular;
+var $btnAddOr;
+var $inputOrNumber;
+var $btnAddAr;
+var $inputArNumber;
+
 
 var $message;
 var templateErrorList;
@@ -41,6 +52,18 @@ var $batchStartDate;
 var $batchEndDate;
 var $batchAccruedType;
 
+var $btnApproved;
+var $modalApproved;
+var $btnConfirmApproved;
+
+var $btnChecked;
+var $modalCheck;
+var $btnConfirmCheck;
+
+var $labelMemberName;
+var $labeMemberLoanName;
+var $labelMemberLoanProduct
+var $labelMemberLoanAmount
 
 var _centers  = [];
 var _members  = [];
@@ -57,6 +80,9 @@ var _memberAccountId;
 var _dataStoreId;  
 var _recordType;
 var _loanAmount;
+var _loanProductId;
+var _loanId;
+
 
 var _urlCreate        = "/api/v1/billing_for_full_payments/update_amount";
 var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
@@ -66,6 +92,12 @@ var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 var _urlAddMember     = "/api/v1/billing_for_full_payments/add_member";
+var _urlRemovePayment     = "/api/v1/billing_for_full_payments/remove_payment_member";
+var _urlAddParticular     = "/api/v1/billing_for_full_payments/add_particular";
+var _urlAddOr     = "/api/v1/billing_for_full_payments/add_or";
+var _urlAddAr     = "/api/v1/billing_for_full_payments/add_ar";
+var _urlApproved     = "/api/v1/billing_for_full_payments/approved";
+var _urlChecked     = "/api/v1/billing_for_full_payments/checked";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -89,6 +121,7 @@ var _cacheDom = function() {
   $selectAccruedType            = $("#select-accrued-type");
   $inputReason                  = $("#input-reason");
   $btnNew                       = $(".undo");
+  $btnRemove                    = $(".remove_amount");
   $btnDelete                    = $(".btn-delete");
   $btnProcess                   = $(".btn-process");
   $btnBatchProcess              = $("#btn-batch-process");
@@ -107,8 +140,35 @@ var _cacheDom = function() {
   $inputCollectionDate      = $("#collection-date");
   $btnAdd                   = $("#btn-add");
   $selectMember             = $("#select-member");
-  $selectLoans                  = $("#select-loans");
+  $selectLoans              = $("#select-loans");
+  $modalRemovePayment       = $("#modal-remove-payment");
+  $btnConfirmRemove         = $("#btn-confirm-remove");
 
+
+
+  $btnAddParticular         = $("#btn-add-particular");
+  $inputParticular          = $("#particular");
+
+  $btnAddOr         = $("#btn-add-or");
+  $inputOrNumber          = $("#or_number");
+  
+  $btnAddAr         = $("#btn-add-ar");
+  $inputArNumber          = $("#ar_number");
+
+  $btnApproved      = $("#btn-approved")
+  $modalApproved    = $("#modal-approve")
+  $btnConfirmApproved = $("#btn-confirm-approved")
+
+
+  $btnChecked = $("#btn-checked");
+  $modalCheck = $("#modal-check");
+  $btnConfirmCheck = $("#btn-confirm-check");
+
+
+  $labelMemberName = $("#memberName");
+  $labeMemberLoanName = $("#memberLoanName");
+  $labelMemberLoanProduct = $("#memberLoanProduct");
+  $labelMemberLoanAmount = $("#memberLoanAmount")
 
   templateErrorList = $("#template-error-list").html();
 
@@ -151,7 +211,166 @@ var _bindEvents = function() {
 
     //_fetchLoans();
   });
+  
 
+
+  $btnChecked.on("click", function() {
+    
+    _dataStoreId = $(this).data("data-store-id");
+  
+    $modalCheck.modal("show");
+  });
+
+
+  $btnConfirmCheck.on("click", function() { //add or
+  
+    
+    var dataStoreId = _dataStoreId    
+  
+    
+    $.ajax({
+      url: _urlChecked,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
+
+  $btnApproved.on("click", function() {
+    
+    _dataStoreId = $(this).data("data-store-id");
+  
+    $modalApproved.modal("show");
+  });
+
+
+  $btnConfirmApproved.on("click", function() { //add or
+  
+    //var dataStoreId = $(this).data('data-store-id')     
+    
+    
+    $.ajax({
+      url: _urlApproved,
+      method: "POST",
+      data: {
+        dataStoreid: _dataStoreId
+      },
+      success: function(response) {
+        $message.html("Processing!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmProcess.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+
+
+  $btnAddAr.on("click", function() { //add or
+  
+    
+    var dataStoreId = $(this).data('data-store-id')     
+    var txtAr = $inputArNumber.val()
+    
+    $.ajax({
+      url: _urlAddAr,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId,
+        txtAr: txtAr
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+  $btnAddOr.on("click", function() { //add or
+  
+    
+    var dataStoreId = $(this).data('data-store-id')     
+    var txtOr = $inputOrNumber.val()
+  
+    $.ajax({
+      url: _urlAddOr,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId,
+        txtOr: txtOr
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+
+
+  $btnAddParticular.on("click", function() { //add particular
+  
+
+    var dataStoreId = $(this).data('data-store-id')     
+    var txtParticular = $inputParticular.val()
+    $.ajax({
+      url: _urlAddParticular,
+      method: "POST",
+      data: {
+        dataStoreid: dataStoreId,
+        txtParticular: txtParticular
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in adding particular!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
 
 
   $btnAdd.on("click", function(){
@@ -184,8 +403,15 @@ var _bindEvents = function() {
     });
   });
 
+
+//  $btnAddParticular.on("click", function() {
+//    alert( $inputParticular.val())
+  
+//  });
+
+
   $btnProcess.on("click", function() {
-    alert("jef")
+  
     _moratoriumId = $(this).data("id");
     $modalProcess.modal("show");
   });
@@ -227,6 +453,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
+    alert("jef")
     _moratoriumId = $(this).data("id");
     $modalDelete.modal("show");
   });
@@ -254,15 +481,90 @@ var _bindEvents = function() {
     });
   });
 
-  $btnNew.on("click", function() {
+
+  $btnConfirmRemove.on("click", function() {
+  
+    
+    
+    var loanProductId   = _loanProductId
+    var memberId        = _memberId
+    var memberAccountId = _memberAccountId
+    var dataStoreId     = _dataStoreId   
+    var loanId          = _loanId
+    
+    
+    $.ajax({
+      url: _urlRemovePayment,
+      method: "POST",
+      data: {
+        id: _moratoriumId,
+        loanProductId:    loanProductId,
+        memberId:         memberId,
+        memberAccountId:  memberAccountId,
+        dataStoreId:      dataStoreId,
+        loanId:          loanId
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in deleting record!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+  });
+  
+
+
+
+  $btnRemove.on("click", function(){
   
     var amount = $(this).data('amount')
+    var loanProductId = $(this).data('loan-id')
     var memberId = $(this).data('member-id') 
     var memberAccountId = $(this).data('member-account-id')
     var dataStoreId = $(this).data('data-store-id')     
     var recordType = $(this).data('record-type')
+    var loanId = $(this).data('loan-product-id')
+    var loanProductName = $(this).data('loan-product-name')
+    var memberAccountName = $(this).data('member-account-name')    
+    $labeMemberLoanName.text(memberAccountName)
+    $labelMemberLoanProduct.text(loanProductName)
+    $labelMemberLoanAmount.text(amount)
+    
     $inputStartDate.val(amount)
+    
+    
+    
 
+
+     _memberId          = memberId 
+     _memberAccountId   = memberAccountId
+     _dataStoreId       = dataStoreId
+     _recordType        = recordType
+     _loanProductId     = loanProductId
+     _loanId            = loanId
+    
+  
+
+    $modalRemovePayment.modal("show");
+
+  });
+
+
+  $btnNew.on("click", function() {
+  
+    var amount = $(this).data('amount')
+    var memberId = $(this).data('member-id') 
+    var memberName = $(this).data('member-account-name') 
+    var memberAccountId = $(this).data('member-account-id')
+    var dataStoreId = $(this).data('data-store-id')     
+    var recordType = $(this).data('record-type')
+    $inputStartDate.val(amount)
+    $labelMemberName.text(memberName)
     
     
      _memberId          = memberId 

@@ -207,6 +207,9 @@ Rails.application.routes.draw do
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
+  
+  get "/loans/:id/reverse_form",        to: "loans#reverse_form",       as: :reverse_form
+  #get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
 
   get '/loans/:id/amortization_pdf', to: 'loans#amortization_pdf', as: :amortization_pdf
   
@@ -217,7 +220,7 @@ Rails.application.routes.draw do
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
-  
+  resources :billing_for_full_payments 
 
 
   # Accounts

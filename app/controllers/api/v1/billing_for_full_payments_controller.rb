@@ -42,10 +42,12 @@ module Api
            }
           
           
-          #errors = ::BillingForFullPayments::ValidatePayment.new(config: config).execute!
-          
-          record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
-           
+          errors = ::BillingForFullPayments::ValidateWithdrawPayment.new(data_store_id: data_store_id, member_id: member_id, loan_amount: loan_amount).execute!
+          if errors[:messages].any? 
+            render json: errors, status: 404
+          else
+            record = ::BillingForFullPayments::UpdateBillingAmount.new(config: config).execute!
+          end
       end
 
       def add_member
@@ -72,6 +74,97 @@ module Api
 
       end
 
+      def remove_payment_member
+        config = {
+          loanProductId: params[:loanProductId],
+          memberId: params[:memberId],
+          dataStoreId: params[:dataStoreId],
+          loanId: params[:loanId]
+        }
+
+        remove_record = ::BillingForFullPayments::RemoveMemberPayment.new(config: config).execute!
+      end
+
+      def add_particular
+        data_store_id   = params[:dataStoreid]
+        txt_particular  = params[:txtParticular]
+
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["data"]["particular"] = txt_particular
+        data_store_details.save!
+      end
+
+      def add_or
+        data_store_id   = params[:dataStoreid]
+        txt_or  = params[:txtOr]
+
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["data"]["OR"] = txt_or
+        data_store_details.save!
+      
+      end
+      
+      def add_ar
+        data_store_id   = params[:dataStoreid]
+        txt_ar  = params[:txtAr]
+        
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["data"]["AR"] = txt_ar
+        data_store_details.save!
+        
+      end
+      def approved
+        data_store_id   = params[:dataStoreid]
+        @billing_data_store = DataStore.find(data_store_id)
+        config = {
+            data_store_id: data_store_id
+
+        }
+        errors = ::BillingForFullPayments::ValidateApprovedBilling.new(config: config).execute!
+                
+        if errors[:messages].any? 
+          render json: errors, status: 404
+        else
+
+          approved_record = ::BillingForFullPayments::ApprovedBillingForFullPayment.new(data_store_id: data_store_id).execute!
+        #end
+
+          @record = ::BillingForFullPayments::BuildAccountingEntry.new(
+                                                                    full_payment_billing: @billing_data_store,
+                                                                    current_user: current_user
+                                                                  ).execute!
+          
+      
+          configA  = {
+            accounting_entry_data: @record,
+            user: current_user
+          }
+          accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: configA
+                          ).execute!
+
+      
+          configB  = {
+            accounting_entry: accounting_entry,
+            user: current_user
+          }
+          @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: configB
+                          ).execute!
+
+           @billing_data_store.meta["data"]["accounting_entry_id"] = @accounting_entry["id"]
+           @billing_data_store.save!
+        end
+          
+        
+      end
+      def checked
+        data_store_id = params[:dataStoreid]
+        data_store_details = DataStore.find(data_store_id)
+        data_store_details.meta["is_checked"] = true
+        data_store_details.save!
+
+      end
     end
   end
 end

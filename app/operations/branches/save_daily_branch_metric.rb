@@ -71,6 +71,8 @@ module Branches
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
         .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' = ? AND DATE(meta->>'as_of') <= ? AND status = ?", %w[REPAYMENT_RATES MEMBER_COUNTS], @branch.id, @as_of, "done")
         .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC, updated_at DESC"))
+      
+    
 
       rr = data_stores.find { |ds| ds.meta["branch_id"] == @branch.id && ds.meta["data_store_type"] == "REPAYMENT_RATES" }
       mc = data_stores.find { |ds| ds.meta["branch_id"] == @branch.id && ds.meta["data_store_type"] == "MEMBER_COUNTS" }
@@ -167,7 +169,8 @@ module Branches
     def build_mc!(mc)
       
       counts = mc.data["counts"]
-
+      
+      
       @data = @daily_branch_metric.data.with_indifferent_access
       
       @daily_branch_metric.data["member_counts_as_of"] = @as_of
@@ -187,11 +190,13 @@ module Branches
       @data[:active_members][:others] = counts["active_members"]["others"]
       @data[:active_members][:total]  = counts["active_members"]["total"]
 
-      @data[:inactive_members][:male]   = counts["inactive_members"]["male"]
-      @data[:inactive_members][:female] = counts["inactive_members"]["female"]
-      @data[:inactive_members][:others] = counts["inactive_members"]["others"]
-      @data[:inactive_members][:total]  = counts["inactive_members"]["total"]
       
+      if counts["inactive_members"].present?
+        @data[:inactive_members][:male]   = counts["inactive_members"]["male"]
+        @data[:inactive_members][:female] = counts["inactive_members"]["female"]
+        @data[:inactive_members][:others] = counts["inactive_members"]["others"]
+        @data[:inactive_members][:total]  = counts["inactive_members"]["total"]
+      end
 
 
 
