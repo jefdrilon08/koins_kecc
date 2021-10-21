@@ -10,6 +10,8 @@ module Loans
       @new_date = @config[:new_date].try(:to_date)
 
       @loan         = @amort.loan
+      @loan_last_amort = AmortizationScheduleEntry.where("loan_id = ? and is_paid is not null", @loan.id).order(:due_date).last
+      
       @member       = @loan.member
     end
 
@@ -20,13 +22,22 @@ module Loans
           message: "New date required"
         }
       end
-
-      if @new_date.present? and @new_date <= @amort.due_date
-        @errors[:messages] << {
-          key: "new_date",
-          message: "Invalid date"
-        }
+      
+      if @loan_last_amort.present?
+        if @new_date.present? and @new_date <= @loan_last_amort.due_date
+          @errors[:messages] << {
+            key: "new_date",
+            message: "Invalid date"
+          }
+          
+        end
       end
+      #if @new_date.present? and @new_date <= @amort.due_date
+      #  @errors[:messages] << {
+      #    key: "new_date",
+      #    message: "Invalid date"
+      #  }
+      #end
 
       if @reason.blank?
         @errors[:messages] << {
