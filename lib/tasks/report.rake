@@ -1,4 +1,20 @@
 namespace :report do 
+  task :city => :environment do
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    @data = []
+    x = Member.where("status != 'archived' and branch_id = ? and data -> 'address' ->> 'region' IS NULL", br_id).ids
+    x.each do |y|
+      mem   = Member.find(y)
+      addr  = mem.data['address']
+      mfl   = addr['city'].to_s
+      mfl   = mfl[0]
+      dta    = "#{mem.full_name}|#{mem.center.name}|#{mem.date_of_membership}|#{mem.status}|#{addr['city']}|#{addr['district']}|#{y}"
+      @data << dta
+    end
+    puts @data
+  end
+
   task :loan_project_type => :environment do
     s_date= ENV['s_date']
     br_name = ENV['SATO']
