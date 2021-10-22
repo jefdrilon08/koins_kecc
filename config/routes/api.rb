@@ -202,7 +202,9 @@ namespace :api do
     post "/loans/process", to: "loans#process_loan"
     post "/loans/reject", to: "loans#reject"
     post "/loans/upload_application_form", to: "loans#upload_application_form"
-
+    post "/loans/reverse_loan", to: "loans#reverse_loan"
+    post "/loans/reverse_loan_reason", to: "loans#reverse_loan_reason"
+    post "/loans/reverse_approve_loan_reason", to: "loans#reverse_approve_loan_reason"
     # Branches
     get "/branches", to: "branches#index"
     get "/branches/list_centers", to: "branches#list_centers"
@@ -229,6 +231,7 @@ namespace :api do
     post "/billings/approve", to: "billings#approve"
     post "/billings/zero_out", to: "billings#zero_out"
     post "/billings/check", to: "billings#check"
+    post "/billings/uncheck", to: "billings#uncheck"
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
@@ -257,6 +260,8 @@ namespace :api do
     post "/accrued_payment_collections/add_particular", to: "accrued_payment_collections#add_particular"
     post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
+    post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+
 
 
 

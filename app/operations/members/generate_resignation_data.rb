@@ -19,6 +19,7 @@ module Members
     end
 
     def execute!
+
       Settings.member_resignation_types.each do |setting|
         record  = {
           name: setting.name,
@@ -33,12 +34,13 @@ module Members
             name: p.name,
             records: []
           }
-
+          
           record_particular[:records] = build_records!(setting.name, p.code)
-
           record[:particulars] << record_particular
         end
 
+
+       
         @data[:records] << record
       end
 
@@ -48,12 +50,13 @@ module Members
     private
 
     def build_records!(type, code)
-      sql     = "SELECT * FROM members m WHERE m.branch_id = '#{@branch.id}' AND EXISTS (SELECT 1 FROM json_array_elements(m.data->'resignation_records') elem WHERE DATE(elem ->> 'date_resigned') >= '#{@start_date}' AND DATE(elem ->> 'date_resigned') <= '#{@end_date}' AND elem -> 'member_resignation_type' ->> 'name' = '#{type}' AND elem -> 'member_resignation_type' -> 'particular' ->> 'code' = '#{code}')"
+      sql     = "SELECT * FROM members m WHERE m.branch_id = '#{@branch.id}' and m.date_resigned >= '#{@start_date}'  and m.date_resigned <= '#{@end_date}' AND EXISTS (SELECT 1 FROM json_array_elements(m.data->'resignation_records') elem WHERE DATE(elem ->> 'date_resigned') >= '#{@start_date}' AND DATE(elem ->> 'date_resigned') <= '#{@end_date}' AND elem -> 'member_resignation_type' ->> 'name' = '#{type}' AND elem -> 'member_resignation_type' -> 'particular' ->> 'code' = '#{code}')"
 
       results = ActiveRecord::Base.connection.execute(sql)
-
+      
       results.to_a.map{ |o|
         {
+
           id: o["id"],
           identification_number: o["identification_number"],
           first_name: o["first_name"],
@@ -62,6 +65,7 @@ module Members
           data: JSON.parse(o["data"])
         }
       }
+
     end
   end
 end

@@ -43,7 +43,8 @@ var $btnAddOr;
 var $inputOrNumber;
 var $btnAddAr;
 var $inputArNumber;
-
+var $btnAddBook;
+var $inputBookType;
 
 var $inputBatchNumberOfDays;
 var $selectBatchBranch;
@@ -51,6 +52,9 @@ var $inputDateInitializedCutOff;
 var $batchStartDate;
 var $batchEndDate;
 var $batchAccruedType;
+
+var $labelMemberName;
+var $labeMemberLoanName;
 
 
 var _centers  = [];
@@ -80,6 +84,8 @@ var _urlLoans         = "/api/v1/loans/fetch_by_member";
 var _urlAddParticular = "/api/v1/accrued_payment_collections/add_particular";
 var _urlAddOr     = "/api/v1/accrued_payment_collections/add_or";
 var _urlAddAr     = "/api/v1/accrued_payment_collections/add_ar";
+var _urlAddBookType     = "/api/v1/accrued_payment_collections/add_book_type";
+
 
 
 var init  = function(options) {
@@ -128,8 +134,13 @@ var _cacheDom = function() {
   
   $btnAddAr         = $("#btn-add-ar");
   $inputArNumber          = $("#ar_number");
+  $btnAddBook         = $("#btn-add-book");
+  $inputBookType          = $("#book_type");
 
 
+  $labelMemberName = $("#memberName");
+  $labeMemberLoanName = $("#memberLoanName");
+ 
 
   $inputBatchNumberOfDays       = $("#input-batch-number-of-moratorium-days");
   $selectBatchBranch       = $("#select-batch-branch");
@@ -303,6 +314,43 @@ var _bindEvents = function() {
         }
       }
     });
+  });
+
+  $btnAddBook.on("click", function() {
+   var txtBookType = $inputBookType.val()	  
+   _id = $(this).data("id");	  
+    $.ajax({	    
+      url: _urlAddBookType,
+      method: "POST",
+      data: {
+	id: _id,
+	txtBookType:  txtBookType,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnAddBook.prop("disabled", false);
+        }
+      }
+    });
+ 
   });
 
   $btnProcess.on("click", function() {
@@ -537,11 +585,14 @@ var _bindEvents = function() {
   
 	  var amount = $(this).data('amount')
 	  var memberId = $(this).data('member-data-id') 
+	  var memberName = $(this).data('member-account-name')
 	  var memberAccountId = $(this).data('loan-data-id')
 	  var dataStoreId = $(this).data('collection-id')     
 	  //var recordType = $(this).data('record-type')
 	  $inputStartDate.val(amount)
-
+	  $labelMemberName.text(memberName)
+    
+	  //alert (amount);
     
     
 	  _memberId          = memberId 

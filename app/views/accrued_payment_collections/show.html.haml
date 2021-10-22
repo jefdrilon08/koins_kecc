@@ -24,33 +24,35 @@
               %th
                 TOTAL
             %tbody
+              - x = 0
               -@accrued_member.each_with_index do |am , y|
-                %tr
-                  %td
-                    #{y + 1}
-                  %td
-                    = link_to member_path(am['member_id']), target: "_blank" do
-                      %strong
-                        #{am['name']}
-                    - am['loan_data'].each_with_index do |al , x|
-                      %td{:align=>"right"}
-                        -if @accrued_interest_collection.status == 'pending'
-                          -if al['enabled'] == true
-                            %a.undo{ data: { 
-                              amount: "#{al["amount"]}",
-                              collection_id: "#{@accrued_interest_collection.id}",
-                              member_data_id: "#{y}",
-                              loan_data_id: "#{x}"
+                -if am['is_active'] != false
+                  %tr
+                    %td
+                      #{x += 1}    
+                    %td
+                      = link_to member_path(am['member_id']), target: "_blank" do
+                        %strong
+                          #{am['name']}
+                      - am['loan_data'].each_with_index do |al , x|
+                        %td{:align=>"right"}
+                          -if @accrued_interest_collection.status == 'pending'
+                            -if al['enabled'] == true
+                              %a.undo{ data: { 
+                                amount: "#{al["amount"]}",
+                                collection_id: "#{@accrued_interest_collection.id}",
+                                member_data_id: "#{y}",
+                                loan_data_id: "#{x}"
                                     }, 
                                     :href => "#" 
-                              }
-                              #{number_to_currency(al["amount"] , unit: '')} 
-                        -else
-                          #{number_to_currency(al["amount"] , unit: '')}
-                    %td.text-right
-                      #{number_to_currency(am["total_cp"], unit: '')}
-                    %td.text-right
-                      #{number_to_currency(am["total_payment"] , unit: '')}
+                                }
+                                #{number_to_currency(al["amount"] , unit: '')} 
+                          -else
+                            #{number_to_currency(al["amount"] , unit: '')}
+                      %td.text-right
+                        #{number_to_currency(am["total_cp"], unit: '')}
+                      %td.text-right
+                        #{number_to_currency(am["total_payment"] , unit: '')}
           %thead
             %tr
               %th

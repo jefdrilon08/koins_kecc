@@ -9,13 +9,11 @@ module AccruedPaymentCollections
       @accounting_entry   = @data[:accounting_entry]
       @date_approved      = ::Utils::GetCurrentDate.new(
                             config: {
-                              branch: @branch }).execute!
+                              branch: Branch.find(@billing.branch_id) }).execute!
     end
 
     def execute!
       billing = AccruedBilling.find(@data_store_id)
-      #raise @date_approved.inspect
-      
       billing.data['member_data'].each do |md|
         md['loan_data'].each do |ld|
           

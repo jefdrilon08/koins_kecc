@@ -207,6 +207,9 @@ Rails.application.routes.draw do
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
+  
+  get "/loans/:id/reverse_form",        to: "loans#reverse_form",       as: :reverse_form
+  #get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
 
   get '/loans/:id/amortization_pdf', to: 'loans#amortization_pdf', as: :amortization_pdf
   
@@ -473,7 +476,8 @@ Rails.application.routes.draw do
   get "/reports/government_identification_numbers", to: "reports#government_identification_numbers", as: :government_identification_numbers
   get "/reports/insurance_interest", to: "reports#insurance_interest", as: :insurance_interest
   get '/reports/download_excel_insurance_interest', to: 'reports#download_excel_insurance_interest', as: :download_excel_insurance_interest
-
+  get "/reports/address_update", to: "reports#address_update", as: :address_update
+  
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

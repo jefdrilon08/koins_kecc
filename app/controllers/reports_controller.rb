@@ -14,6 +14,19 @@ class ReportsController < ApplicationController
       @branches = Branch.all
 
   end
+  
+  def address_update
+    @siubheader_items = [
+      { text: "Other Reports" },
+      { text: "Address For Update" }
+    ]
+      @branches = Branch.all
+      branch_id              = params[:branch_id]
+      if branch_id.present?
+        @address_to_update =  ::Reports::GenerateAddressUpdate.new(branch_id: branch_id).execute!
+      end
+  end
+
 
   def government_identification_numbers
     @subheader_items = [

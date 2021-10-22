@@ -42,10 +42,16 @@ module Api
                                 member_account_id: member_account_id,
                                 loan_amount: loan_amount                     
                                 }
-          update_transaction = ::AccruedPaymentCollections::UpdateTransaction.new(
+          errors = ::AccruedPaymentCollections::ValidateWithdrawPayment.new(data_store_id: data_store_id, member_id: member_id, loan_amount: loan_amount, member_account_id: member_account_id).execute!
+          if errors[:messages].any? 
+            render json: errors, status: 404
+          else
+            update_transaction = ::AccruedPaymentCollections::UpdateTransaction.new(
                                             config: config
                                           ).execute!
-       end
+          end
+  
+        end
         
         def approve_transaction
           data_store_id = params[:id]
@@ -105,7 +111,16 @@ module Api
  
         end
  
-    
+        def add_book_type
+          data_store_id = params[:id]
+          txtBt    =  params[:txtBookType]
+
+          ab = AccruedBilling.find(data_store_id)
+          ab.data['accounting_entry']['book'] = txtBt
+          ab.save!
+ 
+        end
+ 
     end
   end
 end
