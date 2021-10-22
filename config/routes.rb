@@ -474,6 +474,8 @@ Rails.application.routes.draw do
   get "/reports/hiip_report", to: "reports#hiip_report", as: :hiip_report
   get "/reports/hiip_report_excel", to: "reports#hiip_report_excel", as: :hiip_report_excel
   get "/reports/government_identification_numbers", to: "reports#government_identification_numbers", as: :government_identification_numbers
+  get "/reports/address_update", to: "reports#address_update", as: :address_update
+
 
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
