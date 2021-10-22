@@ -549,7 +549,7 @@ default_deposit_accounts:
     account_subtype: "Retirement Fund"
   -
     account_type: "INSURANCE"
-    account_subtype: "Policy Loan"
+    account_subtype: "Equity Value"
 
 default_withdrawal_accounts:
   -
@@ -570,6 +570,9 @@ default_withdrawal_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "Equity Value"
   -
     account_type: "EQUITY"
     account_subtype: "CBU"
@@ -621,6 +624,7 @@ clip: "Credit Life Insurance Plan"
 life: "Life Insurance Fund"
 pl: "Policy Loan"
 ev: "Equity Value"
+rf: "Retirement Fund"
 
 default_equity_withdrawal_accounts:
   -

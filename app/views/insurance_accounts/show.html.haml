@@ -163,7 +163,7 @@
                         - if o.interest?
                           .badge.badge-info
                             .fa.fa-plus
-                            Interest
+                            Inc in LIFE
                         - else
                           .badge.badge-success
                             .fa.fa-download
@@ -219,7 +219,7 @@
                         - if o.interest?
                           .badge.badge-info
                             .fa.fa-plus
-                            Interest
+                            Inc in PL
                         - else
                           .badge.badge-success
                             .fa.fa-download
@@ -290,7 +290,7 @@
                         - if o.interest?
                           .badge.badge-info
                             .fa.fa-plus
-                            Interest
+                            Inc in EV
                         - else
                           .badge.badge-success
                             .fa.fa-download
@@ -304,6 +304,56 @@
                           .badge.badge-danger
                             .fa.fa-upload
                             Withdraw
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["beginning_balance"], unit: "")}
+                  %td.text-right
+                    #{number_to_currency(o.amount, unit: "")}
+                  %td.text-right.text-muted
+                    #{number_to_currency(o.data["ending_balance"], unit: "")}
+        - elsif @insurance_account.account_subtype == Settings.rf
+          %table.table.table-hover.table-sm.table-bordered
+            %thead
+              %tr
+                - if current_user.roles.include?("MIS")
+                  %th
+                %th
+                  %center
+                    Date
+                %th
+                  %center
+                    Type
+                %th.text-right
+                  Beginning Balance
+                %th.text-right
+                  Amount
+                %th.text-right
+                  Ending Balance
+            %tbody
+              - @account_transactions.each do |o|
+                %tr
+                  - if current_user.roles.include?("MIS")
+                    %td
+                      %small
+                        #{o.id}
+                  %td
+                    %center
+                      %small
+                        #{o.transacted_at.strftime("%B %d, %Y %H:%M")}
+                  %td
+                    %center
+                      - if o.deposit?
+                        - if o.interest?
+                          .badge.badge-info
+                            .fa.fa-plus
+                            Inc in RF
+                        - else
+                          .badge.badge-success
+                            .fa.fa-download
+                            Deposit
+                      - elsif o.withdraw?
+                        .badge.badge-danger
+                          .fa.fa-upload
+                          Withdraw
                   %td.text-right.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
                   %td.text-right
@@ -346,7 +396,7 @@
                         - if o.interest?
                           .badge.badge-info
                             .fa.fa-plus
-                            Interest
+                            Inc
                         - else
                           .badge.badge-success
                             .fa.fa-download

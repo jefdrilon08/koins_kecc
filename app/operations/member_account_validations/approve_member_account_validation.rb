@@ -32,7 +32,7 @@ module MemberAccountValidations
       create_rf_member_deposits!
 
       # COMMMENT OUT
-      create_equity_interest_deposits!
+      # create_equity_interest_deposits!
 
       if Settings.activate_microloans
         withdraw_lif_and_rf_deposit_to_savings!

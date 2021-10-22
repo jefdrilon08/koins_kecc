@@ -2563,6 +2563,13 @@ namespace :adjust do
     # HEADER: identification_number, rf_interest, ev_interest
 
     file_location = ENV['INTEREST_CSV']
+
+    if ENV['CURRENT_DATE'].present?
+      current_date = ENV['CURRENT_DATE'].to_date
+    else
+      current_date = Date.today
+    end
+
     puts file_location
 
     CSV.foreach(file_location, headers: true) do |row|
@@ -2585,7 +2592,7 @@ namespace :adjust do
                                       subsidiary_type: "MemberAccount",
                                       amount: ev_interest,
                                       transaction_type: "deposit",
-                                      transacted_at: Date.today,
+                                      transacted_at: current_date,
                                       status: "approved",
                                       data: {
                                         is_withdraw_payment: false,
@@ -2617,7 +2624,7 @@ namespace :adjust do
                                       subsidiary_type: "MemberAccount",
                                       amount: rf_interest,
                                       transaction_type: "deposit",
-                                      transacted_at: Date.today,
+                                      transacted_at: current_date,
                                       status: "approved",
                                       data: {
                                         is_withdraw_payment: false,
