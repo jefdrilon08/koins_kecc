@@ -44,8 +44,8 @@ module Exports
                             :branch,
                             :recognition_date,
                             :lapse,
-                            # m.lif_amount,
-                            # m.rf_amount
+                            # :lif_amount,
+                            # :rf_amount
                             
                         ]
                 @members.find_in_batches(batch_size: 1000) do |group|

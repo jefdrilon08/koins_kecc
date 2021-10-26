@@ -540,16 +540,12 @@ default_deposit_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "Personal Savings Account"
-
   -
     account_type: "INSURANCE"
     account_subtype: "Life Insurance Fund"
   -
     account_type: "INSURANCE"
     account_subtype: "Retirement Fund"
-  -
-    account_type: "INSURANCE"
-    account_subtype: "Equity Value"
 
 default_withdrawal_accounts:
   -
