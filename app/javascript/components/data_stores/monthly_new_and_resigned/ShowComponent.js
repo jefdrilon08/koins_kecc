@@ -183,7 +183,8 @@ export default class ShowComponent extends React.Component {
       rows.push(
         <tr key={"new_members-item-" + i}>
           <td>
-            {new_members[i].last_name + ", " + new_members[i].first_name + " " + new_members[i].middle_name}
+            <a href={"/members/" + new_members[i].id+"/display"} target='_blank'>
+            {new_members[i].last_name + ", " + new_members[i].first_name + " " + new_members[i].middle_name} </a>
           </td>
           <td>
             {new_members[i].membership_date}
@@ -208,7 +209,8 @@ export default class ShowComponent extends React.Component {
       rows.push(
         <tr key={"resigned_members-item-" + x}>
           <td>
-            {resigned_members[x].last_name + ", " + resigned_members[x].first_name + " " + resigned_members[x].middle_name}
+            <a href={"/members/" + resigned_members[x].id} target='_blank'>
+            {resigned_members[x].last_name + ", " + resigned_members[x].first_name + " " + resigned_members[x].middle_name}</a>
           </td>
           <td>
             {resigned_members[x].date_resigned}
