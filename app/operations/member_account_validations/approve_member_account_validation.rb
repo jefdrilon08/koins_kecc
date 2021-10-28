@@ -29,7 +29,7 @@ module MemberAccountValidations
       @data[:accounting_entry][:status]           = @accounting_entry.status
       @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
        
-      create_rf_member_deposits!
+      # create_rf_member_deposits!
 
       # COMMMENT OUT
       # create_equity_interest_deposits!

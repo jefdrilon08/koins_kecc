@@ -1,8 +1,9 @@
 module MemberAccountValidations
   class GenerateMemberAccountDetailsForLifAndRfForValidation
-    def initialize(lif_member_account:, rf_member_account:, member:, resignation_date:)
+    def initialize(lif_member_account:, rf_member_account:, member:, resignation_date:, rf_interest_amount:)
       @lif_member_account     = lif_member_account
       @rf_member_account      = rf_member_account
+      @rf_interest_amount     = rf_interest_amount
       @member                 = member
       @data                   = {}
       @start_date             = @member.data.with_indifferent_access[:recognition_date].try(:to_date)
@@ -49,12 +50,9 @@ module MemberAccountValidations
     def build_rf_data!
       @rf_current_balance             = @rf_member_account.balance
 
-      ################ DELETE PAG OKAY NA UNG BEG INTEREST NG KCOOP
-      # @rf_interest_trans              = @rf_member_account.account_transactions.where("data->>'is_interest' = ?", "true")
-      # if @rf_interest_trans.count > 0
-      #   @rf_current_balance           = @rf_current_balance - @rf_interest_trans.sum(:amount) 
-      # end
-      ###############
+      if @rf_interest_amount > 0.0
+        @rf_current_balance = @rf_current_balance - @rf_interest_amount
+      end
 
       @rf_default_periodic_payment    = 5 
       @rf_num_days                    = (@current_date - @start_date).to_i

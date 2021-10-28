@@ -8,6 +8,7 @@ module MemberAccountValidations
       @member_classification                = @config[:member_classification]
       @member_account_validation            = @config[:member_account_validation]
       @equity_interest_implementation_date  = "2019-01-01".to_date
+      @interest_starting_date               = "2021-09-15".to_date
       @lif_50_percent                       = 0.00
       @advance_lif                          = 0.00
       @advance_rf                           = 0.00
@@ -20,11 +21,18 @@ module MemberAccountValidations
       @pl_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Policy Loan").first
       @ev_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Equity Value").first     
       
+      # For RF Interest
+      @interest_amount = @rf_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @interest_starting_date).sum(:amount).to_f
+
+      # For equity interest
+      @equity_interest_amount = @ev_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @interest_starting_date).sum(:amount).to_f
+
       @data                 = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
                                 member: @member, 
                                 lif_member_account: @lif_member_account, 
                                 rf_member_account: @rf_member_account, 
-                                resignation_date: @resignation_date
+                                resignation_date: @resignation_date,
+                                rf_interest_amount: @interest_amount
                               ).execute!
 
       @equity_value         = @ev_member_account.try(:balance).to_f
@@ -84,12 +92,6 @@ module MemberAccountValidations
                       ).execute!
 
       @recognition_date = @member.data.with_indifferent_access[:recognition_date].try(:to_date)
-
-      # For RF Interest
-      @interest_amount = @rf_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ?", "approved", "true").sum(:amount).to_f
-
-      # For equity interest
-      @equity_interest_amount = @ev_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ?", "approved", "true").sum(:amount).to_f
       
       if !@recognition_date.nil?  
         @seconds_between  = (@current_date.to_time - @recognition_date.to_time).abs
@@ -106,13 +108,13 @@ module MemberAccountValidations
         end
       end
 
-      if @interest_amount > 0.00
-        if @advance_rf > 0.00
-          @advance_rf = @advance_rf - @interest_amount
-        elsif @advance_rf <= 0.00 && @rf_amount > 0.00
-          @rf_amount = @rf_amount - @interest_amount
-        end
-      end
+      # if @interest_amount > 0.00
+      #   if @advance_rf > 0.00
+      #     @advance_rf = @advance_rf - @interest_amount
+      #   elsif @advance_rf <= 0.00 && @rf_amount > 0.00
+      #     @rf_amount = @rf_amount - @interest_amount
+      #   end
+      # end
 
       @total = (@lif_50_percent + @rf_amount + @advance_lif + @advance_rf + @interest_amount + @equity_interest_amount).round(2)
 
