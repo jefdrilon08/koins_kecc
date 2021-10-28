@@ -54,6 +54,7 @@ import FormResignationComponent from "../components/members/FormResignationCompo
 import EquityWithdrawalCollectionUIComponent from "../components/equity_withdrawal_collections/EquityWithdrawalCollectionUIComponent.js";
 import GeneralLedgerDisplayComponent from "../components/accounting/GeneralLedgerDisplayComponent.js";
 import MembershipArrangementShow from "../components/MembershipArrangementShow.js";
+import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and_resigned/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -273,7 +274,8 @@ const hooks = {
   "members/member_shares/show":                       [MemberSharesShow],
   "members/member_shares/new":                        [MemberSharesForm],
   "pages/billing_per_center":                         [ExportsBillingPerCenter],
-  "data_stores/monthly_new_and_resigned/index":       [MonthlyNewAndResignedIndex],
+  "data_stores/monthly_new_and_resigned/index":       [MonthlyNewAndResignedIndex], 
+  "data_stores/monthly_new_and_resigned/show":        [MonthlyNewAndResignedShow], 
   "pages/export_tools":                               [ExportTools],
   "data_stores/repayment_rates/index":                [RepaymentRatesIndex],
   "data_stores/repayment_rates/show":                 [RepaymentRatesShowComponent],

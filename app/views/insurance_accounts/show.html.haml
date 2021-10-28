@@ -311,6 +311,7 @@
                   %td.text-right.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
         - elsif @insurance_account.account_subtype == Settings.rf
+          #react-root
           %table.table.table-hover.table-sm.table-bordered
             %thead
               %tr
