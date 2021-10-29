@@ -217,6 +217,9 @@ Rails.application.routes.draw do
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"
   get "/accrued_payment_collections/:id", to: "accrued_payment_collections#show"
 
+  #MIDAS
+  get "/midas", to: "midas#index"
+
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment

@@ -180,6 +180,7 @@ import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
 import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
 import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 import LoansReverseForm from "../models/LoansReverseForm.js";
+import MidasIndex from "../models/MidasIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -336,7 +337,8 @@ const hooks = {
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
-  "loans/reverse_form":                               [LoansReverseForm]
+  "loans/reverse_form":                               [LoansReverseForm],
+  "midas/index":                 		      [MidasIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
