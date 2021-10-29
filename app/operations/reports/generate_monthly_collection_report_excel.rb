@@ -42,32 +42,32 @@ module Reports
         end
       end
 
-      trial_balance_data  = ::Accounting::GenerateTrialBalance.new(config: { start_date: @start_date.to_date, end_date: @end_date.to_date, branch: @branch }).execute!
+      # trial_balance_data  = ::Accounting::FetchTrialBalance.new(config: { start_date: @start_date.to_date, end_date: @end_date.to_date, branch: @branch, accounting_fund: "" }).execute!
 
-      trial_balance_data[:accounting_codes].each_with_index do |d, i|
-        if d[:name] == "Payable to MBA - RF"
-          @dr_ret_fee = trial_balance_data[:current_entries][i][:dr_amount]
-          @cr_ret_fee = trial_balance_data[:current_entries][i][:cr_amount]
-          # @ret_fee = @cr_ret_fee - @dr_ret_fee
-          # if @ret_fee == 0
-            @ret_fee = @cr_ret_fee
-          # end
-        elsif d[:name] == "Payable to MBA-LIF"
-          @dr_life = trial_balance_data[:current_entries][i][:dr_amount]
-          @cr_life = trial_balance_data[:current_entries][i][:cr_amount]
-          # @life = @cr_life - @dr_life
-          # if @life == 0
-            @life = @cr_life
-          # end
-        elsif d[:name] == "Payable to MBA Mem. Fee "
-          @dr_mem_fee = trial_balance_data[:current_entries][i][:dr_amount]
-          @cr_mem_fee = trial_balance_data[:current_entries][i][:cr_amount]  
-          @mem_fee = @cr_mem_fee - @dr_mem_fee
-          if @mem_fee == 0
-            @mem_fee = @cr_mem_fee
-          end
-        end
-      end
+      # trial_balance_data[:accounting_codes].each_with_index do |d, i|
+      #   if d[:name] == "Payable to MBA - RF"
+      #     @dr_ret_fee = trial_balance_data[:current_entries][i][:dr_amount]
+      #     @cr_ret_fee = trial_balance_data[:current_entries][i][:cr_amount]
+      #     # @ret_fee = @cr_ret_fee - @dr_ret_fee
+      #     # if @ret_fee == 0
+      #       @ret_fee = @cr_ret_fee
+      #     # end
+      #   elsif d[:name] == "Payable to MBA-LIF"
+      #     @dr_life = trial_balance_data[:current_entries][i][:dr_amount]
+      #     @cr_life = trial_balance_data[:current_entries][i][:cr_amount]
+      #     # @life = @cr_life - @dr_life
+      #     # if @life == 0
+      #       @life = @cr_life
+      #     # end
+      #   elsif d[:name] == "Payable to MBA Mem. Fee "
+      #     @dr_mem_fee = trial_balance_data[:current_entries][i][:dr_amount]
+      #     @cr_mem_fee = trial_balance_data[:current_entries][i][:cr_amount]  
+      #     @mem_fee = @cr_mem_fee - @dr_mem_fee
+      #     if @mem_fee == 0
+      #       @mem_fee = @cr_mem_fee
+      #     end
+      #   end
+      # end
 
       @collection_fee = ((@ret_fee + @life) * 0.05)
 

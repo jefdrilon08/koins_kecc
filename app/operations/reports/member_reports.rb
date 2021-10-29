@@ -20,6 +20,8 @@ module Reports
           @members = Member.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
         elsif status == "active"
           @members = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")
+        else
+          @members = Member.where("data ->>'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND member_type IN (?)", @start_date, @end_date, @status, @insurance_status, ["Regular", "Kaagapay"]).order("last_name ASC")     
         end
       elsif @branch_id.present? && @status.present? && @start_date.present? && @end_date.present?
         if status == "resigned"

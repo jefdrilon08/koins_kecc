@@ -37,6 +37,9 @@ module DataStores
       @subheader_side_actions = [
         { text: "Delete", class: "fa fa-times", link: "/data_stores/monthly_new_and_resigned/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
+       @payload = {
+        id: @record.id
+      }
     end
   end
 end
