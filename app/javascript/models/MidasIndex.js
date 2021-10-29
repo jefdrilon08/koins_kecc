@@ -10,6 +10,7 @@ var $btnGenMidas;
 var $selectBranch;
 var $reportDate;
 var $inputAsOf;
+var $midasType;
 
 var $message;
 var templateErrorList;
@@ -28,11 +29,20 @@ var _cacheDom = function() {
 
   $selectBranch = $("#select-branch");
   $reportDate	= $("#report-date");	
-  $inputAsOf      = $("#input-as-of");
+  $inputAsOf    = $("#input-as-of");
+  $midasType	= $("#midas-type");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 }
+var encodeQueryData = function(data) {
+  var ret = []
+  for(var d in data) {
+    ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+  }
+
+  return ret.join("&");
+};
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
@@ -40,18 +50,18 @@ var _bindEvents = function() {
     $message.html("");
   });
 
-  $btnGenMidas.on("click", function() {
-	  var branchId  = $selectBranch.val();
-	  var reportDate = $reportDate.val();
-	  //alert(_urlGenerate)
-    $.ajax({
-     url: _urlGenerate,
-     method: "POST",
-     data: {
-	branchId: branchId,
-	reportDate: reportDate
-     },
-    });
+   $btnGenMidas.on("click", function() {
+	var branchId   = $selectBranch.val();
+	var reportDate = $reportDate.val();
+	var midasType  = $midasType.val();
+	
+	var data = {
+		branchId: branchId,
+		reportDate: reportDate,
+		midasType: midasType
+	}	
+	window.location = "/midas/midas_excel?" + encodeQueryData(data);
+
   });
 
 
