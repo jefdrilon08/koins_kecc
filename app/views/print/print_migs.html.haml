@@ -1,0 +1,45 @@
+:css
+  @page { size: portrait; margin: 25px;}
+
+  table {
+    font-size: 0.9em;
+  }
+
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  Master List of Members In Good Standing
+  %br
+  Year #{@migs[:migs_as_of]}
+  %br
+  #{@migs[:branch_name]}
+  %br
+  %br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "10%" }
+      
+      %th{ width: "25%" }
+        Member Name
+      %th.text-center
+        Identification Number
+      %th.text-center
+        Center
+  %tbody
+    - @migs[:records].each_with_index do |rec,inx|
+      %tr
+        %td
+          #{inx + 1 } 
+        %td
+          #{rec[:last_name]}, #{rec[:first_name]} #{rec[:middle_name]}
+        %td
+          #{rec[:identification_number]}
+        %td
+          #{rec[:center_name]}
+          

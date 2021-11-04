@@ -55,6 +55,7 @@ import EquityWithdrawalCollectionUIComponent from "../components/equity_withdraw
 import GeneralLedgerDisplayComponent from "../components/accounting/GeneralLedgerDisplayComponent.js";
 import MembershipArrangementShow from "../components/MembershipArrangementShow.js";
 import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and_resigned/ShowComponent.js";
+import MembersInGoodStandingShowComponent from "../components/data_stores/members_in_good_standing/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -183,6 +184,8 @@ import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.j
 import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 import LoansReverseForm from "../models/LoansReverseForm.js";
 import MidasIndex from "../models/MidasIndex.js";
+import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
+import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -342,7 +345,9 @@ const hooks = {
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
   "loans/reverse_form":                               [LoansReverseForm],
-  "midas/index":                 		      [MidasIndex]
+  "midas/index":                 		      [MidasIndex],
+  "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
+  "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

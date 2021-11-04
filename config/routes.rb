@@ -324,6 +324,10 @@ Rails.application.routes.draw do
     get "/icpr/:id", to: "icpr#show"
     delete "/icpr/:id", to: "icpr#destroy"
 
+    get "/members_in_good_standing", to: "members_in_good_standing#index"
+    get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
+    delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
+
 
     get "/patronage_refund", to: "patronage_refund#index"
     get "/patronage_refund/:id", to: "patronage_refund#show"
