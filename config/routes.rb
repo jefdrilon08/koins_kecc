@@ -219,6 +219,7 @@ Rails.application.routes.draw do
 
   #MIDAS
   get "/midas", to: "midas#index"
+  get "/midas/midas_excel", to: "midas#midas_excel", as: :midas_excel
 
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"

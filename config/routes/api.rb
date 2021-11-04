@@ -263,7 +263,7 @@ namespace :api do
     post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
 
     #midas
-    post "/midas/generate", to: "midas#generate"
+    get "/midas/generate", to: "midas#generate"
  
 
     # Monthly Closing Collection
