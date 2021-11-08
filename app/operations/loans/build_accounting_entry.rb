@@ -595,7 +595,8 @@ module Loans
 
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards" 
            
-            if @member.member_type != "GK-Kaagapay" && @member.member_type != "GK"
+            #if @member.member_type != "GK-Kaagapay" && @member.member_type != "GK"
+            if  @member.member_type != "GK"
             
               if @loan_data[:advance_insurance_available] == false
                 offset          = s_deduction.meta.offset
