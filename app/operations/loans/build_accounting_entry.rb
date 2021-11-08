@@ -372,7 +372,7 @@ module Loans
             end
 
           else
-            if @member.member_type == "GK"
+            if @member.member_type == "GK" || @member.member_type == "GK-Kaagapay"
               #for special loan product  for GPF
               if  s_deduction.use_for_special_loan_fund == "true" and s_deduction.special_loan_product == "true"
                 if @term == "weekly"
@@ -595,7 +595,7 @@ module Loans
 
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards" 
            
-            if @member.member_type != "GK"
+            if @member.member_type != "GK-Kaagapay" && @member.member_type != "GK"
             
               if @loan_data[:advance_insurance_available] == false
                 offset          = s_deduction.meta.offset

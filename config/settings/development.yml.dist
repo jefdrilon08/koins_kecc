@@ -1080,7 +1080,7 @@ loan_products:
         skip_for_special_loan_fund: "false"
         use_for_special_loan_fund: "true"
         meta:
-          member_type: "GK"
+          member_type: "GK - Kaagapay"
           term_map:
             weekly:
               -
