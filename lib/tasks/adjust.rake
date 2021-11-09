@@ -2741,4 +2741,49 @@ namespace :adjust do
 
     puts "\nDone."
   end
+
+  task :delete_wrong_ev_and_rf_interest => :environment do
+    puts "Deleting wrong interest ..."
+
+    file_location = ENV['FILE']
+
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(identification_number: row['identification_number']).first
+
+      if !member.nil?
+        puts "Deleting interest for #{member.full_name}"
+
+        rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+        ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+
+        if ev_account.present?
+          ev_interest_transaction = ev_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at = ?", "true", "2021-09-15".to_date).first
+          ev_trans_data = ev_interest_transaction.data.with_indifferent_access
+          ev_interest_transaction_beg_balance = ev_trans_data[:beginning_balance].to_f
+          ev_interest_transaction.destroy!
+          last_ev_trans = ev_account.account_transactions.order("transacted_at ASC").last
+          last_ev_trans.update!(amount: ev_interest_transaction_beg_balance)
+
+          ::MemberAccounts::Rehash.new(member_account: ev_account, account_transactions: nil).execute!
+        end
+
+        if rf_account.present?
+          rf_interest_transaction = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at = ?", "true", "2021-09-15".to_date).first
+          rf_interest_transaction.destroy!
+          ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+          
+          rrf_interest_transaction = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ?", "true", "2021-09-16".to_date).first
+          rrf_trans_data = rrf_interest_transaction.data.with_indifferent_access
+          rrf_interest_transaction_end_balance = rrf_trans_data[:ending_balance].to_f
+          last_rf_trans = rf_account.account_transactions.where("data->>'is_interest' = ?", "false").order("transacted_at ASC").last
+          last_rf_trans.update!(amount: rrf_interest_transaction_end_balance)
+          ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+        end
+      end
+    end
+
+    puts "\nDone."
+  end
 end
