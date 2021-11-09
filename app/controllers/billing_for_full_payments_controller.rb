@@ -35,7 +35,7 @@ class BillingForFullPaymentsController < ApplicationController
         }
       ]
 
-      if @billing_data_store.pending?
+      if @billing_data_store.pending? 
         @subheader_side_actions = [
           {
             id: "btn-checked",

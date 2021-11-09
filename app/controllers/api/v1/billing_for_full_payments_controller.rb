@@ -125,38 +125,19 @@ module Api
         if errors[:messages].any? 
           render json: errors, status: 404
         else
-
-          approved_record = ::BillingForFullPayments::ApprovedBillingForFullPayment.new(data_store_id: data_store_id).execute!
-        #end
-
-          @record = ::BillingForFullPayments::BuildAccountingEntry.new(
-                                                                    full_payment_billing: @billing_data_store,
-                                                                    current_user: current_user
-                                                                  ).execute!
-          
-      
-          configA  = {
-            accounting_entry_data: @record,
-            user: current_user
-          }
-          accounting_entry  = ::Accounting::AccountingEntries::Save.new(
-                            config: configA
-                          ).execute!
-
-      
-          configB  = {
-            accounting_entry: accounting_entry,
-            user: current_user
-          }
-          @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
-                            config: configB
-                          ).execute!
-
-           @billing_data_store.meta["data"]["accounting_entry_id"] = @accounting_entry["id"]
-           @billing_data_store.save!
-        end
-          
+          @billing_data_store.update(status: "processing")
         
+
+          ProcessApproveBillingForFullPayment.perform_later({
+              data_store_id: data_store_id,
+              full_payment_billing: @billing_data_store,
+              user_id: current_user.id
+          })
+
+        
+          
+          render json: { message: "ok" }
+        end 
       end
       def checked
         data_store_id = params[:dataStoreid]
