@@ -218,8 +218,8 @@ Rails.application.routes.draw do
   get "/accrued_payment_collections/:id", to: "accrued_payment_collections#show"
 
   #MIDAS
-  get "/midas", to: "midas#index"
-  get "/midas/midas_excel", to: "midas#midas_excel", as: :midas_excel
+  get "/excel_reports", to: "excel_reports#index"
+  get "/excel_reports/excel_report", to: "excel_reports#excel_report", as: :excel_report
 
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"

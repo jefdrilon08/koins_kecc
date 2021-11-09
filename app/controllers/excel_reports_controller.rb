@@ -1,4 +1,4 @@
-class MidasController < ApplicationController
+class ExcelReportsController < ApplicationController
   def index
     @subheader_items = [
         {
@@ -7,7 +7,7 @@ class MidasController < ApplicationController
       ]
   end
 
-  def midas_excel
+  def excel_report
         branch_id     = params[:branchId]
         report_date   = params[:reportDate] 
         midas_type    = params[:midasType]
@@ -18,14 +18,13 @@ class MidasController < ApplicationController
         else
         end
         
-        if midas_type == 'PODs'
-          excel = Midas::GenerateReport.new(
-                        config: config
-          ).execute!
-        else
-          
-        end
-
+        case midas_type
+          when 'MIDAS - PODs'
+            excel = ExcelReports::GenerateReportPods.new(config: config).execute!
+          when 'MIDAS - BARis'
+            excel = ExcelReports::GenerateReportBaris.new(config: config).execute!
+          else
+        end        
         excel.serialize "#{Rails.root}/tmp/#{filename}"
 
         send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

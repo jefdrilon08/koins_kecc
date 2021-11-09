@@ -345,7 +345,7 @@ const hooks = {
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
   "loans/reverse_form":                               [LoansReverseForm],
-  "midas/index":                 		      [MidasIndex],
+  "excel_reports/index":                 	      [MidasIndex],
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
   "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent]
 }
