@@ -64,6 +64,7 @@ module Loans
           clip_account = AccountTransaction.where("subsidiary_id = ? and data-> 'data' ->> 'id' = ?", member_account.id, @loan.id).last
           if clip_account.present?
             AccountTransaction.find(clip_account.id).destroy!
+            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(member_account.id)).execute!
           end
         else
           if is == "Life Insurance Fund"
