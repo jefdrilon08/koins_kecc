@@ -1,5 +1,5 @@
-module Midas
-  class GenerateReport
+module ExcelReports
+  class GenerateReportPods
     def initialize(config:)
       @config       = config
       branch_id     = @config[:branch_id]
@@ -165,7 +165,7 @@ module Midas
                 #m_payment
                 m_payment = AmortizationScheduleEntry.where(loan_id: l['id']).order(:due_date).first.amount_due * 4
                 #no_outstanding_payment
-                last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and transaction_type = 'loan_payment'" , l['id'] , @rd).order(:transacted_at).last
+                last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and transaction_type = 'loan_payment' and amount > 0" , l['id'] , @rd).order(:transacted_at).last
                 if last_at.nil?
                   last_date = @rd
                   last_payment = 0

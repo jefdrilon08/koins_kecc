@@ -21,9 +21,8 @@
                 = date_field_tag :report_date, "now", class: "form-control", id: "report-date"
               %td
                 .form-group
-                  = select_tag :midas_type, options_for_select(["PODs" , "BARis"]), class: "form-control select-select2", id: "midas-type"
+                  = select_tag :midas_type, options_for_select(["MIDAS - PODs" , "MIDAS - BARis"]), class: "form-control select-select2", id: "midas-type"
               %td
                 %button#btn-gen-midas.btn.btn-success.btn-info{ data: { id: ""  } }
-                  .fa.fa-download
-                    GENERATE EXCEL FILE
+                  GENERATE EXCEL FILE
               

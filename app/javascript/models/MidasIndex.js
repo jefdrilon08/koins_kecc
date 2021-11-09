@@ -60,7 +60,7 @@ var _bindEvents = function() {
 		reportDate: reportDate,
 		midasType: midasType
 	}	
-	window.location = "/midas/midas_excel?" + encodeQueryData(data);
+	window.location = "/excel_reports/excel_report?" + encodeQueryData(data);
 
   });
 
