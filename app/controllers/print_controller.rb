@@ -18,6 +18,14 @@ class PrintController < ApplicationController
               ).execute!
       @accounting_entry_data  = data
       render "print/accounting_entry", layout: "print"
+      
+    elsif type == "print_migs"
+      migs = DataStore.find(params[:id])
+      data = ::Print::BuildPrintMigs.new(
+              migs: migs
+              ).execute!
+      @migs = data
+      render "print/print_migs", layout: "print"
 
     elsif type == "print_pr" 
 

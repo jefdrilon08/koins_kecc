@@ -79,12 +79,14 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
     @subheader_side_actions = []
 
     if @savings_insurance_transfer_collection.pending?
-      @subheader_side_actions << {
-        id: "btn-approve",
-        link: "#",
-        class: "fa fa-check",
-        text: "Approve"
-      }
+      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
 
       @subheader_side_actions << {
         link: savings_insurance_transfer_collection_path(@savings_insurance_transfer_collection.id),

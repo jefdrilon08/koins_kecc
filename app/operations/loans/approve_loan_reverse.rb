@@ -12,6 +12,8 @@ module Loans
                         ).execute!
     end
     def execute!
+    raise remove_subsidiary!.inspect
+
     reverse_status = @loan_data[:reverse_loan_details].select{ |ld| ld[:status] == "pending" }.last
     reverse_status[:status] = "approve"
     reverse_status[:date_approved] = @date_approved
@@ -47,5 +49,16 @@ module Loans
     @loan
      
     end
+
+    private
+
+    def remove_subsidiary!
+      payable_to_mba_clip = @loan_data[:accounting_entry][:credit_journal_entries].select{ |o| o[:accounting_code_id] == "af83062d-628a-4fdd-acfd-bdebe2696513" }.first
+      if payable_to_mba_clip.present?
+    
+
+      end
+    end
+
   end
 end

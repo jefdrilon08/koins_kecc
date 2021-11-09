@@ -41,16 +41,8 @@ module Loans
     def execute!
       @accounting_entry_data[:debit_journal_entries] = build_debit_journal_entries!
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
+    
       @accounting_entry_data[:credit_journal_entries].each do |j|
-        @accounting_entry_data[:journal_entries] << {
-          id: "",
-          post_type: "DR",
-          accounting_code_id: j[:accounting_code_id],
-          accounting_code_name: j[:name],
-          amount: j[:amount]
-        }
-      end
-      @accounting_entry_data[:debit_journal_entries].each do |j|
         @accounting_entry_data[:journal_entries] << {
           id: "",
           post_type: "CR",
@@ -59,9 +51,22 @@ module Loans
           amount: j[:amount]
         }
       end
+
+
+      #raise @accounting_entry_data[:journal_entries].inspect
+
+      @accounting_entry_data[:debit_journal_entries].each do |j|
+        @accounting_entry_data[:journal_entries] << {
+          id: "",
+          post_type: "DR",
+          accounting_code_id: j[:accounting_code_id],
+          accounting_code_name: j[:name],
+          amount: j[:amount]
+        }
+      end
       
       @accounting_entry_data
-
+    
     end
 
 
@@ -70,13 +75,14 @@ module Loans
     def build_debit_journal_entries! #debit
       journal_entries = []
       @for_debit.each do |fd|
-        
-        journal_entries << {
-          accounting_code_id: fd[:accounting_code_id],
-          code: fd[:code],
-          name: fd[:name],
-          amount: fd[:amount]
-        }
+        if fd[:amount] > 0 
+          journal_entries << {
+            accounting_code_id: fd[:accounting_code_id],
+            code: fd[:code],
+            name: fd[:name],
+            amount: fd[:amount]
+          }
+        end
       end
       
       journal_entries
@@ -85,13 +91,14 @@ module Loans
     def build_credit_journal_entries! #debi
       journal_entries = []
       @for_credit.each do |fc|
-        
-        journal_entries << {
-          accounting_code_id: fc[:accounting_code_id],
-          code: fc[:code],
-          name: fc[:name],
-          amount: fc[:amount]
-        }
+        if fc[:amount] > 0
+          journal_entries << {
+            accounting_code_id: fc[:accounting_code_id],
+            code: fc[:code],
+            name: fc[:name],
+            amount: fc[:amount]
+          }
+        end
       end
       
       journal_entries

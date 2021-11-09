@@ -427,6 +427,8 @@ namespace :api do
       post "/year_end_closings/approve", to: "year_end_closings#approve"
       post "/balance_sheets/queue", to: "balance_sheets#queue"
       post "/income_statements/queue", to: "income_statements#queue"
+      post "/members_in_good_standing/queue", to: "members_in_good_standing#queue"
+      get "/members_in_good_standing/fetch", to: "members_in_good_standing#fetch"
     end
 
     namespace :epassbook do

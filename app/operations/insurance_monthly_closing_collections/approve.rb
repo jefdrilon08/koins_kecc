@@ -7,11 +7,16 @@ module InsuranceMonthlyClosingCollections
       @closing_date                         = @insurance_monthly_closing_collection.closing_date
       @data                                 = @insurance_monthly_closing_collection.data.with_indifferent_access
       @user                                 = @config[:user]
-      @current_date                         = ::Utils::GetCurrentDate.new(
-                                                config: {
-                                                  branch: @branch
-                                                }
-                                              ).execute!
+      
+      if Settings.activate_microinsurance
+        @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: @branch
+                          }
+                        ).execute!
+      else
+        @current_date = @closing_date
+      end
 
 
       # Change this
