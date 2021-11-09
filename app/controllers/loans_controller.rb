@@ -225,7 +225,7 @@ class LoansController < ApplicationController
     @subheader_side_actions = []
 
     if @loan.active? && @loan.interest_paid == 0.0
-      if helpers.sbk_bk_mis_user
+      if helpers.bk_mis_user
         @subheader_side_actions << {
           id: "btn-reverse-loan",
           class: "fa fa-undo",
