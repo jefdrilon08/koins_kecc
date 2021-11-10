@@ -221,6 +221,9 @@ Rails.application.routes.draw do
   get "/excel_reports", to: "excel_reports#index"
   get "/excel_reports/excel_report", to: "excel_reports#excel_report", as: :excel_report
 
+  #excel_for_banks
+  get "/excel_for_bank", to: "excel_for_bank#index"
+
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
