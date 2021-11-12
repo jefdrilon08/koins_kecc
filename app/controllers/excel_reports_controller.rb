@@ -2,7 +2,7 @@ class ExcelReportsController < ApplicationController
   def index
     @subheader_items = [
         {
-          text: "MIDAS REPORT"
+          text: "EXCEL REPORTS"
         }
       ]
   end

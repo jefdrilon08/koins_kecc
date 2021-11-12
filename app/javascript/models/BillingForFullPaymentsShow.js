@@ -37,6 +37,7 @@ var $btnAddOr;
 var $inputOrNumber;
 var $btnAddAr;
 var $inputArNumber;
+var $selectBook;
 
 
 var $message;
@@ -62,8 +63,10 @@ var $btnConfirmCheck;
 
 var $labelMemberName;
 var $labeMemberLoanName;
-var $labelMemberLoanProduct
-var $labelMemberLoanAmount
+var $labelMemberLoanProduct;
+var $labelMemberLoanAmount;
+ 
+var $btnSelectBook;
 
 var _centers  = [];
 var _members  = [];
@@ -98,6 +101,7 @@ var _urlAddOr     = "/api/v1/billing_for_full_payments/add_or";
 var _urlAddAr     = "/api/v1/billing_for_full_payments/add_ar";
 var _urlApproved     = "/api/v1/billing_for_full_payments/approved";
 var _urlChecked     = "/api/v1/billing_for_full_payments/checked";
+var _urlUpdateBook     = "/api/v1/billing_for_full_payments/update_book";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -169,6 +173,10 @@ var _cacheDom = function() {
   $labeMemberLoanName = $("#memberLoanName");
   $labelMemberLoanProduct = $("#memberLoanProduct");
   $labelMemberLoanAmount = $("#memberLoanAmount")
+  
+  $selectBook = $("#book_type");
+  $btnSelectBook  = $("#btn-add-book");
+
 
   templateErrorList = $("#template-error-list").html();
 
@@ -211,7 +219,34 @@ var _bindEvents = function() {
 
     //_fetchLoans();
   });
+ 
   
+  $btnSelectBook.on("click", function(){
+    _dataStoreId = $(this).data("id");
+    var new_book = $selectBook.val()
+    $.ajax({
+      url: _urlUpdateBook,
+      method: "POST",
+      data: {
+        dataStoreid: _dataStoreId,
+        selectBook: new_book
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in changing book!");
+        $message.html("");
+        $btnConfirmDelete.prop("disabled", false);
+      }
+    });
+    //_urlUpdateBook
+    //alert($selectBook.val())
+
+  });
+
 
 
   $btnChecked.on("click", function() {

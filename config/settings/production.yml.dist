@@ -1072,6 +1072,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "ID Fee"
@@ -1280,7 +1285,7 @@ loan_products:
         meta:
           membership_name: "K-MBA"
 
-
+  
   -
     loan_product_id: "584b2b6d-0499-4564-8c9b-57e2407b08b0"                         # K-BAHAY W1
     receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
@@ -1291,6 +1296,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -1466,6 +1476,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -1642,6 +1657,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -1866,6 +1886,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: []
 
   -
@@ -1879,6 +1904,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: []
 
   -
@@ -1892,6 +1922,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Deposit to hospital income insurance plan"
@@ -1916,6 +1951,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -2091,6 +2131,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -2267,6 +2312,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -2444,6 +2494,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
 #      -
 #        name: "Service Fee"
@@ -2620,6 +2675,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -2798,6 +2858,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: []
 
   -
@@ -2810,6 +2875,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: []
 
   -
@@ -2823,6 +2893,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: []
 
   -
@@ -2836,6 +2911,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: []
 
   -
@@ -2849,6 +2929,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: 
       -
         name: "MBA-CLIP"
@@ -2993,6 +3078,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "MBA-CLIP"
@@ -3137,6 +3227,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions: 
       -
         name: "MBA-CLIP"
@@ -3270,6 +3365,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "SE"
     deductions:
       -
         name: "MBA-CLIP"
@@ -3392,6 +3492,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "MBA-CLIP"
@@ -3515,6 +3620,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "ID Fee"
@@ -3732,6 +3842,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "ID Fee"
@@ -3899,6 +4014,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "MBA-CLIP"
@@ -4021,6 +4141,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "ID Fee"
@@ -4188,6 +4313,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "ID Fee"
@@ -4355,6 +4485,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "SE"
     deductions:
       -
         name: "Service Fee"
@@ -4532,6 +4667,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 7001.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "Service Fee"
@@ -4742,6 +4882,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 10001.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "MBA-CLIP"
@@ -4863,6 +5008,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "SE"
     deductions:
       #-
       #  name: "Service Fee"
@@ -5036,6 +5186,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 10001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "SE"
     deductions:
       #-
       #  name: "Service Fee"
@@ -5215,6 +5370,11 @@ loan_products:
       account_subtype: "Personal Savings Account"
       percentage: 0.5
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "Service Fee"
@@ -5411,6 +5571,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -5612,6 +5777,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
 #      -
 #        name: "Service Fee"
@@ -5810,6 +5980,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "MBA-CLIP"
@@ -5946,6 +6121,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "MBA-CLIP"
@@ -6081,6 +6261,11 @@ loan_products:
      account_subtype: "K-IMPOK"
      percentage: 0.0
      threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "Service Fee"
@@ -6254,6 +6439,11 @@ loan_products:
      account_subtype: "K-IMPOK"
      percentage: 0.0
      threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "MBA-CLIP"
@@ -6403,6 +6593,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.0
       threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "Service Fee"
@@ -6567,6 +6762,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
     deductions:
       -
         name: "Service Fee"
@@ -6766,6 +6966,11 @@ loan_products:
       account_subtype: "K-IMPOK"
       percentage: 0.2
       threshold: 10001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
     deductions:
       -
         name: "MBA-CLIP"
