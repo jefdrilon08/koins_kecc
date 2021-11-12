@@ -249,6 +249,7 @@ namespace :api do
     post "/billing_for_full_payments/add_ar", to: "billing_for_full_payments#add_ar"
     post "/billing_for_full_payments/approved", to: "billing_for_full_payments#approved"
     post "/billing_for_full_payments/checked", to: "billing_for_full_payments#checked"
+    post "/billing_for_full_payments/update_book", to: "billing_for_full_payments#update_book"
 
 
     #Accrued_Billing

@@ -24,6 +24,7 @@ module BillingForFullPayments
         is_checked: false,
         header: [],
         data: {
+                book: "CRB",
                 OR: "",
                 AR: "",
                 particular: @particular,

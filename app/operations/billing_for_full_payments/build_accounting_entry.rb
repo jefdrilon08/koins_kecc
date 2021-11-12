@@ -5,7 +5,7 @@ module BillingForFullPayments
       @user =  current_user
       @full_payment_billing = full_payment_billing
       @billing_header = @full_payment_billing.meta["header"]
-      @book         = "CRB"
+      @book         = @full_payment_billing.meta["data"]["book"]
       @prepared_by  = @user.full_name
       @particular   = @full_payment_billing.meta["data"]["particular"]
       @or_number   = @full_payment_billing.meta["data"]["OR"]
