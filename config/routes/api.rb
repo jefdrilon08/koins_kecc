@@ -430,6 +430,8 @@ namespace :api do
       post "/income_statements/queue", to: "income_statements#queue"
       post "/members_in_good_standing/queue", to: "members_in_good_standing#queue"
       get "/members_in_good_standing/fetch", to: "members_in_good_standing#fetch"
+      post "/for_writeoff/queue", to: "for_writeoff#queue"
+      get "/for_writeoff/fetch", to: "for_writeoff#fetch"
     end
 
     namespace :epassbook do

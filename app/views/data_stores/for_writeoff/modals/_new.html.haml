@@ -1,0 +1,35 @@
+#modal-new.modal.fade{:tabindex => "-1"}
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          New Data Store
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+          NOTE! GERALD POGI ONLY!
+          .row
+            .col
+              .form-group
+                %label
+                  Maturity Year
+                = select_tag :years, options_for_select(((Date.today.year - 5)..Date.today.year).to_a, Date.today.year - 1), id: "select-year", class: "form-control"
+            .col
+              .form-group
+                %label
+                  Number of Years
+                = select_tag :number_years, options_for_select(1..10), id: "select-number-year", class: "form-control"
+            .col
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch, options_from_collection_for_select(@branches, :id, :name), id: "select-branch", class: "form-control"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

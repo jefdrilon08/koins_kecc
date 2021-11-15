@@ -1,0 +1,41 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Year
+      %th
+        Branch
+      %th.text-center
+        Processing Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/for_writeoff/#{o.id}" do
+            .fa.fa-search
+        %td.text-center
+          %strong
+          #{o.meta.with_indifferent_access[:year]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:branch_name]} 
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.badge-success
+              Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}

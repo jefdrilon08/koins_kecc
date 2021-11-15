@@ -56,6 +56,7 @@ import GeneralLedgerDisplayComponent from "../components/accounting/GeneralLedge
 import MembershipArrangementShow from "../components/MembershipArrangementShow.js";
 import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and_resigned/ShowComponent.js";
 import MembersInGoodStandingShowComponent from "../components/data_stores/members_in_good_standing/ShowComponent.js";
+import ForWriteoffShowComponent from "../components/data_stores/for_writeoff/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -186,6 +187,7 @@ import LoansReverseForm from "../models/LoansReverseForm.js";
 import MidasIndex from "../models/MidasIndex.js";
 import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
 import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
+import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -347,7 +349,9 @@ const hooks = {
   "loans/reverse_form":                               [LoansReverseForm],
   "excel_reports/index":                 	      [MidasIndex],
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
-  "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent]
+  "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent],
+  "data_stores/for_writeoff/index": [ForWriteoffIndex],
+  "data_stores/for_writeoff/show": [ForWriteoffShowComponent]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

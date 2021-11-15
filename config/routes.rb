@@ -331,6 +331,9 @@ Rails.application.routes.draw do
     get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
     delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
 
+     get "/for_writeoff", to: "for_writeoff#index"
+    get "/for_writeoff/:id", to: "for_writeoff#show"
+
 
     get "/patronage_refund", to: "patronage_refund#index"
     get "/patronage_refund/:id", to: "patronage_refund#show"

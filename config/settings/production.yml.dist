@@ -1508,7 +1508,7 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
