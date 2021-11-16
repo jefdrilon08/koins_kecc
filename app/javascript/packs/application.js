@@ -188,6 +188,7 @@ import MidasIndex from "../models/MidasIndex.js";
 import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
 import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
 import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
+import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js"
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -351,7 +352,8 @@ const hooks = {
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
   "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent],
   "data_stores/for_writeoff/index": [ForWriteoffIndex],
-  "data_stores/for_writeoff/show": [ForWriteoffShowComponent]
+  "data_stores/for_writeoff/show": [ForWriteoffShowComponent],
+  "transfer_member_records/index": [TransferMemberRecordsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

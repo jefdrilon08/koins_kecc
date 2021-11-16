@@ -231,7 +231,9 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
-
+  #Transfer_member
+  get "/transfer_member_records", to: "transfer_member_records#index"
+  
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account

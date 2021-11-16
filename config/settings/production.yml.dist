@@ -3238,6 +3238,8 @@ loan_products:
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
         deduction_type: "member_type_deduction_ratio"
+        special_loan_product: "true"
+        accounting_code_for_special_loan: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "false"
         meta:
@@ -3348,12 +3350,17 @@ loan_products:
         term: "weekly"
         min_num_installments: 5
         max_num_installments: 15
-        monthly_interest_rate: 0.1275
+        monthly_interest_rate: 0.065
       -
         term: "weekly"
         min_num_installments: 16
         max_num_installments: 25
-        monthly_interest_rate: 0.0775
+        monthly_interest_rate: 0.04
+      -
+        term: "weekly"
+        min_num_installments: 26
+        max_num_installments: 35
+        monthly_interest_rate: 0.03
 
   -
     loan_product_id: "52a44657-62fb-441e-b844-b77d59f5c4ca"                         # K-KASAL
