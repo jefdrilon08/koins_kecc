@@ -114,6 +114,25 @@ class MembersController < ApplicationController
 
   end
 
+  def form_make_payments
+    @member = Member.find(params[:id]) 
+
+    @subheader_items = [
+      { is_link: true, path: members_path, text: "Members" },
+      { is_link: true, path: member_path(@member), text: "#{@member.full_name}" },
+      { text: "Make payment Form" }
+    ]
+
+    @subheader_side_actions = [
+    ]
+
+    @payload = {
+      id: @member.id,
+      memberResignationTypes: helpers.member_resignation_types
+    }
+  end
+
+
 
   def survey_answer
     @member         = Member.find(params[:id])
