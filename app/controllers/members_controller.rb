@@ -116,11 +116,16 @@ class MembersController < ApplicationController
 
   def form_make_payments
     @member = Member.find(params[:id]) 
+    config = {
+                member_id: @member.id
+      
+              }
+    @data = ::Members::BuildMakePayments.new(config: config).execute!
 
     @subheader_items = [
       { is_link: true, path: members_path, text: "Members" },
       { is_link: true, path: member_path(@member), text: "#{@member.full_name}" },
-      { text: "Make payment Form" }
+      { text: "Make Payment Form" }
     ]
 
     @subheader_side_actions = [
