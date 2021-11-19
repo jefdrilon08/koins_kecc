@@ -2563,6 +2563,13 @@ namespace :adjust do
     # HEADER: identification_number, rf_interest, ev_interest
 
     file_location = ENV['INTEREST_CSV']
+
+    if ENV['CURRENT_DATE'].present?
+      current_date = ENV['CURRENT_DATE'].to_date
+    else
+      current_date = Date.today
+    end
+
     puts file_location
 
     CSV.foreach(file_location, headers: true) do |row|
@@ -2585,7 +2592,7 @@ namespace :adjust do
                                       subsidiary_type: "MemberAccount",
                                       amount: ev_interest,
                                       transaction_type: "deposit",
-                                      transacted_at: Date.today,
+                                      transacted_at: current_date,
                                       status: "approved",
                                       data: {
                                         is_withdraw_payment: false,
@@ -2617,7 +2624,7 @@ namespace :adjust do
                                       subsidiary_type: "MemberAccount",
                                       amount: rf_interest,
                                       transaction_type: "deposit",
-                                      transacted_at: Date.today,
+                                      transacted_at: current_date,
                                       status: "approved",
                                       data: {
                                         is_withdraw_payment: false,
@@ -2689,6 +2696,90 @@ namespace :adjust do
 
             ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
           end
+        end
+      end
+    end
+
+    puts "\nDone."
+  end
+
+  task :delete_insurance_interest => :environment do
+    puts "Deleting wrong interest ..."
+
+    file_location = ENV['FILE']
+
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(identification_number: row['identification_number']).first
+
+      if !member.nil?
+        puts "Deleting interest for #{member.full_name}"
+
+        rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+        ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+
+        if ev_account.present?
+          if ev_account.balance > 0.0
+            ev_interest_transactions = ev_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ?", "true", "2021-10-22".to_date)
+            ev_interest_transactions.destroy_all
+
+            ::MemberAccounts::Rehash.new(member_account: ev_account, account_transactions: nil).execute!
+          end
+        end
+
+        if rf_account.present?
+          if rf_account.balance > 0.0
+            rf_interest_transactions = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ?", "true", "2021-10-22".to_date)
+            rf_interest_transactions.destroy_all
+
+            ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+          end
+        end
+      end
+    end
+
+    puts "\nDone."
+  end
+
+  task :delete_wrong_ev_and_rf_interest => :environment do
+    puts "Deleting wrong interest ..."
+
+    file_location = ENV['FILE']
+
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(identification_number: row['identification_number']).first
+
+      if !member.nil?
+        puts "Deleting interest for #{member.full_name}"
+
+        rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+        ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+
+        if ev_account.present?
+          ev_interest_transaction = ev_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ? AND transacted_at <= ?", "true", "2021-09-15".to_date, "2021-09-16".to_date).first
+          ev_trans_data = ev_interest_transaction.data.with_indifferent_access
+          ev_interest_transaction_beg_balance = ev_trans_data[:beginning_balance].to_f
+          ev_interest_transaction.destroy!
+          last_ev_trans = ev_account.account_transactions.order("transacted_at ASC").last
+          last_ev_trans.update!(amount: ev_interest_transaction_beg_balance)
+
+          ::MemberAccounts::Rehash.new(member_account: ev_account, account_transactions: nil).execute!
+        end
+
+        if rf_account.present?
+          rf_interest_transaction = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ? AND transacted_at <= ?", "true", "2021-09-15".to_date, "2021-09-16".to_date).first
+          rf_interest_transaction.destroy!
+          ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+          
+          rrf_interest_transaction = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ?", "true", "2021-09-17".to_date).first
+          rrf_trans_data = rrf_interest_transaction.data.with_indifferent_access
+          rrf_interest_transaction_end_balance = rrf_trans_data[:ending_balance].to_f
+          last_rf_trans = rf_account.account_transactions.where("data->>'is_interest' = ?", "false").order("transacted_at ASC").last
+          last_rf_trans.update!(amount: rrf_interest_transaction_end_balance)
+          ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
         end
       end
     end

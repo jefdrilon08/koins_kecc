@@ -249,6 +249,7 @@ namespace :api do
     post "/billing_for_full_payments/add_ar", to: "billing_for_full_payments#add_ar"
     post "/billing_for_full_payments/approved", to: "billing_for_full_payments#approved"
     post "/billing_for_full_payments/checked", to: "billing_for_full_payments#checked"
+    post "/billing_for_full_payments/update_book", to: "billing_for_full_payments#update_book"
 
 
     #Accrued_Billing
@@ -262,9 +263,9 @@ namespace :api do
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
     post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
 
-
-
-
+    #midas
+    get "/excel_reports/generate", to: "excel_reports#generate"
+ 
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
@@ -418,6 +419,7 @@ namespace :api do
       post "/insurance_member_counts/queue", to: "insurance_member_counts#queue"
       post "/claims_counts/queue", to: "claims_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
+      get "/monthly_new_and_resigned/fetch", to: "monthly_new_and_resigned#fetch"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
       post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"
       get "/x_weeks_to_pay/fetch", to: "x_weeks_to_pay#fetch"
@@ -426,6 +428,10 @@ namespace :api do
       post "/year_end_closings/approve", to: "year_end_closings#approve"
       post "/balance_sheets/queue", to: "balance_sheets#queue"
       post "/income_statements/queue", to: "income_statements#queue"
+      post "/members_in_good_standing/queue", to: "members_in_good_standing#queue"
+      get "/members_in_good_standing/fetch", to: "members_in_good_standing#fetch"
+      post "/for_writeoff/queue", to: "for_writeoff#queue"
+      get "/for_writeoff/fetch", to: "for_writeoff#fetch"
     end
 
     namespace :epassbook do

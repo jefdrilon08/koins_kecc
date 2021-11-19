@@ -18,19 +18,33 @@ module InsuranceWithdrawalCollections
         }
       end
 
-#      if @data.present? and @data[:or_number].blank?
-#        @errors[:messages] << {
-#          key: "or_number",
-#          message: "no or number found"
-#        }
-#      end
+      if @data[:records].present? 
+        @data[:records].each do |record|
+          member = Member.find(record[:member][:id])
 
-      # if @data.present? and @data[:accounting_entry][:particular].blank?
-      #   @errors[:messages] << {
-      #     key: "particular",
-      #     message: "no particular found"
-      #   }
-      # end
+          @life_account = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
+          @life_balance = @life_account.balance
+          @ev_amount = 0.0
+          @life_amount = 0.0
+
+          record[:records].each do |rec|
+            if rec[:record_type] == "INSURANCE" and rec[:account_subtype] == "Equity Value"
+              @ev_amount = @ev_amount + rec[:amount].to_f
+            end
+
+            if rec[:record_type] == "INSURANCE" and rec[:account_subtype] == "Life Insurance Fund"
+              @life_amount = @life_amount + rec[:amount].to_f
+            end
+          end
+
+          if @life_amount > 0.0 and @ev_amount <= 0.0
+            @errors[:messages] << {
+              key: "records",
+              message: "Equity Value can't be zero for #{member.full_name}. \n NOTE: If for adjustment, enter half of LIFE amount. \n If for zero out of member accounts. Enter all EV amount"
+            }
+          end
+        end
+      end
 
       if @data.present? and @data[:records].size == 0
         @errors[:messages] << {

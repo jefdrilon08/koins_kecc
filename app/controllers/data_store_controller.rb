@@ -125,6 +125,8 @@ class DataStoreController < ApplicationController
       "soa_loans"                    => { order: "end_date DESC",   meta: %w[branch_name start_date end_date], data: %w[] },
       "watchlists"                   => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "x_weeks_to_pay"               => { order: "as_of DESC",      meta: %w[branch_name as_of x], data: %w[date_until] },
+      "members_in_good_standing"     => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
+      "for_writeoff"                 => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
     }
   end
 

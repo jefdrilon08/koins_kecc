@@ -29,6 +29,7 @@ module Billings
           message: "this record has not been checked yet"
         }
       elsif @data[:records].present? 
+        
         @data[:records].each do |record|
           member = Member.find(record[:member][:id])
           record[:records].each do |rec|
@@ -54,17 +55,21 @@ module Billings
             # end
           end
         end
+      
+    
       elsif @data.present? and @data[:or_number].blank? and @data[:accounting_entry][:book].present? and @data[:accounting_entry][:book] == "CRB"
         @errors[:messages] << {
           key: "or_number",
           message: "no or number found"
         }
       elsif @data.present? and @data[:accounting_entry][:particular].blank?
+      
         @errors[:messages] << {
           key: "particular",
           message: "no particular found"
         }
       elsif @data.present? and @data[:or_number].present?
+      
         if Billing.where("branch_id = ? AND data->>'or_number' = ? AND id <> ?", @billing.branch_id, @data[:or_number], @billing.id).count > 0
           @errors[:messages] << {
             key: "or_number",
@@ -72,6 +77,8 @@ module Billings
           }
         end
       end
+
+  
 
       validate_accounting_entry!
 

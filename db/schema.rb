@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_22_011558) do
+ActiveRecord::Schema.define(version: 2021_11_15_072401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -766,6 +766,19 @@ ActiveRecord::Schema.define(version: 2021_09_22_011558) do
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
   end
 
+  create_table "make_payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "member_id", null: false
+    t.date "transaction_date"
+    t.date "date_approve"
+    t.string "approved_by"
+    t.string "created_by"
+    t.json "data"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["member_id"], name: "index_make_payments_on_member_id"
+  end
+
   create_table "member_account_daily_statements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id", null: false
     t.uuid "member_account_id", null: false
@@ -1174,6 +1187,16 @@ ActiveRecord::Schema.define(version: 2021_09_22_011558) do
     t.index ["center_id"], name: "index_time_deposit_collections_on_center_id"
   end
 
+  create_table "transfer_member_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "branch_id"
+    t.date "transfer_date"
+    t.string "status"
+    t.date "date_approved"
+    t.json "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "user_branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.uuid "branch_id"
@@ -1306,6 +1329,7 @@ ActiveRecord::Schema.define(version: 2021_09_22_011558) do
   add_foreign_key "loans", "loan_products"
   add_foreign_key "loans", "members"
   add_foreign_key "loans", "project_types"
+  add_foreign_key "make_payments", "members"
   add_foreign_key "member_account_daily_statements", "branches"
   add_foreign_key "member_account_daily_statements", "member_accounts"
   add_foreign_key "member_account_daily_statements", "members"

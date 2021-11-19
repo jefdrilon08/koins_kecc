@@ -1,0 +1,28 @@
+.row
+  .col
+    .card
+      .card-body
+        %table.table.table-sm.table-hover
+          %thead
+            %tr
+              %th
+                SATO
+              %th
+                Date Of Report
+              %th
+                Report Type
+              %th
+                Action
+            %tr
+              %td
+                .form-group
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
+              %td
+                = date_field_tag :report_date, "now", class: "form-control", id: "report-date"
+              %td
+                .form-group
+                  = select_tag :midas_type, options_for_select(["MIDAS - PODs" , "MIDAS - BARis"]), class: "form-control select-select2", id: "midas-type"
+              %td
+                %button#btn-gen-midas.btn.btn-success.btn-info{ data: { id: ""  } }
+                  GENERATE EXCEL FILE
+              

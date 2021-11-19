@@ -102,6 +102,7 @@ Rails.application.routes.draw do
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
+  get "/members/:id/form_make_payments", to: "members#form_make_payments", as: :form_make_payments
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
@@ -181,6 +182,7 @@ Rails.application.routes.draw do
     resources :kbente_claims, controller: 'members/kbente_claims'
     resources :kjsp_claims, controller: 'members/kjsp_claims'
     resources :calamity_claims, controller: 'members/calamity_claims'
+    resources :form_make_payments, controller: 'members/form_make_payments'
   end
   
   # Insurance Accounts
@@ -217,12 +219,21 @@ Rails.application.routes.draw do
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"
   get "/accrued_payment_collections/:id", to: "accrued_payment_collections#show"
 
+  #MIDAS
+  get "/excel_reports", to: "excel_reports#index"
+  get "/excel_reports/excel_report", to: "excel_reports#excel_report", as: :excel_report
+
+  #excel_for_banks
+  get "/excel_for_bank", to: "excel_for_bank#index"
+
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
-
+  #Transfer_member
+  get "/transfer_member_records", to: "transfer_member_records#index"
+  
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
@@ -319,6 +330,13 @@ Rails.application.routes.draw do
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"
     delete "/icpr/:id", to: "icpr#destroy"
+
+    get "/members_in_good_standing", to: "members_in_good_standing#index"
+    get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
+    delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
+
+     get "/for_writeoff", to: "for_writeoff#index"
+    get "/for_writeoff/:id", to: "for_writeoff#show"
 
 
     get "/patronage_refund", to: "patronage_refund#index"
@@ -474,7 +492,10 @@ Rails.application.routes.draw do
   get "/reports/hiip_report", to: "reports#hiip_report", as: :hiip_report
   get "/reports/hiip_report_excel", to: "reports#hiip_report_excel", as: :hiip_report_excel
   get "/reports/government_identification_numbers", to: "reports#government_identification_numbers", as: :government_identification_numbers
-
+  get "/reports/insurance_interest", to: "reports#insurance_interest", as: :insurance_interest
+  get '/reports/download_excel_insurance_interest', to: 'reports#download_excel_insurance_interest', as: :download_excel_insurance_interest
+  get "/reports/address_update", to: "reports#address_update", as: :address_update
+  
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end

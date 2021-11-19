@@ -14,6 +14,19 @@ class ReportsController < ApplicationController
       @branches = Branch.all
 
   end
+  
+  def address_update
+    @siubheader_items = [
+      { text: "Other Reports" },
+      { text: "Address For Update" }
+    ]
+      @branches = Branch.all
+      branch_id              = params[:branch_id]
+      if branch_id.present?
+        @address_to_update =  ::Reports::GenerateAddressUpdate.new(branch_id: branch_id).execute!
+      end
+  end
+
 
   def government_identification_numbers
     @subheader_items = [
@@ -154,6 +167,26 @@ class ReportsController < ApplicationController
     end
 
     excel = Reports::GenerateMonthlyRemittanceExcel.new(start_date: @start_date, end_date: @end_date, branch: @branch).execute!
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
+  def download_excel_insurance_interest 
+    if params[:start_date].present? and params[:end_date].present?
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+    end
+
+    if params[:branch_id].present?
+      @branch = Branch.find(params[:branch_id])
+    else
+      @branch = nil
+    end
+
+    filename = "insurance_interest.xlsx"
+
+    excel = Reports::GenerateInsuranceInterestExcel.new(start_date: @start_date, end_date: @end_date, branch: @branch).execute!
     excel.serialize "#{Rails.root}/tmp/#{filename}"
 
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -386,7 +419,6 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
-
   def hiip_report_excel
     start_date = params[:start_date]
     end_date = params[:end_date]
@@ -448,4 +480,10 @@ class ReportsController < ApplicationController
     end
   end
 
+  def insurance_interest
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Insurance Interest" }
+    ]
+  end
 end

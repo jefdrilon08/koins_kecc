@@ -54,6 +54,9 @@ import FormResignationComponent from "../components/members/FormResignationCompo
 import EquityWithdrawalCollectionUIComponent from "../components/equity_withdrawal_collections/EquityWithdrawalCollectionUIComponent.js";
 import GeneralLedgerDisplayComponent from "../components/accounting/GeneralLedgerDisplayComponent.js";
 import MembershipArrangementShow from "../components/MembershipArrangementShow.js";
+import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and_resigned/ShowComponent.js";
+import MembersInGoodStandingShowComponent from "../components/data_stores/members_in_good_standing/ShowComponent.js";
+import ForWriteoffShowComponent from "../components/data_stores/for_writeoff/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -141,6 +144,7 @@ import MonthlyIncentivesIndex from "../models/MonthlyIncentivesIndex.js";
 import XWeeksToPayIndex from "../models/XWeeksToPayIndex.js";
 import BranchResignationsIndex from "../models/BranchResignationsIndex.js";
 import ReportsMonthlyRemittance from "../models/ReportsMonthlyRemittance.js";
+import ReportsInsuranceInterest from "../models/ReportsInsuranceInterest.js";
 import ReportsInsuredLoans from "../models/ReportsInsuredLoans.js";
 import ReportsHiipReport from "../models/ReportsHiipReport.js";
 import ReportsMemberReports from "../models/ReportsMemberReports.js";
@@ -180,6 +184,11 @@ import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
 import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
 import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 import LoansReverseForm from "../models/LoansReverseForm.js";
+import MidasIndex from "../models/MidasIndex.js";
+import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
+import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
+import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
+import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js"
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -272,7 +281,8 @@ const hooks = {
   "members/member_shares/show":                       [MemberSharesShow],
   "members/member_shares/new":                        [MemberSharesForm],
   "pages/billing_per_center":                         [ExportsBillingPerCenter],
-  "data_stores/monthly_new_and_resigned/index":       [MonthlyNewAndResignedIndex],
+  "data_stores/monthly_new_and_resigned/index":       [MonthlyNewAndResignedIndex], 
+  "data_stores/monthly_new_and_resigned/show":        [MonthlyNewAndResignedShow], 
   "pages/export_tools":                               [ExportTools],
   "data_stores/repayment_rates/index":                [RepaymentRatesIndex],
   "data_stores/repayment_rates/show":                 [RepaymentRatesShowComponent],
@@ -303,6 +313,7 @@ const hooks = {
   "data_stores/branch_resignations/index":            [BranchResignationsIndex],
   "data_stores/branch_resignations/show":             [BranchResignationsShowComponent],
   "reports/monthly_remittance":                       [ReportsMonthlyRemittance],
+  "reports/insurance_interest":                       [ReportsInsuranceInterest],
   "reports/insured_loans":                            [ReportsInsuredLoans],
   "reports/hiip_report":                              [ReportsHiipReport],
   "reports/member_reports":                           [ReportsMemberReports],
@@ -336,7 +347,13 @@ const hooks = {
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
-  "loans/reverse_form":                               [LoansReverseForm]
+  "loans/reverse_form":                               [LoansReverseForm],
+  "excel_reports/index":                 	      [MidasIndex],
+  "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
+  "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent],
+  "data_stores/for_writeoff/index": [ForWriteoffIndex],
+  "data_stores/for_writeoff/show": [ForWriteoffShowComponent],
+  "transfer_member_records/index": [TransferMemberRecordsIndex]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

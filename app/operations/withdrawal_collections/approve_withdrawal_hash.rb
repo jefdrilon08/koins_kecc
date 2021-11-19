@@ -54,40 +54,40 @@ module WithdrawalCollections
           end
         end
 
-        # For Equity Value deposit transaction
-        member     = @member_account.member
-        ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+        # # For Equity Value deposit transaction
+        # member     = @member_account.member
+        # ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
         
-        if ev_account.present?
-          ev_balance = ev_account.balance
+        # if ev_account.present?
+        #   ev_balance = ev_account.balance
 
-          account_transaction  = AccountTransaction.new(
-                                    subsidiary_id: ev_account.id,
-                                    subsidiary_type: "MemberAccount",
-                                    amount: (@amount / 2).round(2),
-                                    transaction_type: "withdraw",
-                                    transacted_at: @date_paid,
-                                    status: "approved",
-                                    data: {
-                                      is_withdraw_payment: false,
-                                      is_fund_transfer: false,
-                                      is_interest: false,
-                                      is_adjustment: false,
-                                      is_for_exit_age: false,
-                                      is_for_loan_payments: false,
-                                      accounting_entry_reference_number: nil,
-                                      beginning_balance: ev_balance.to_f,
-                                      ending_balance: (ev_balance.to_f - (@amount /2)).round(2)
-                                    }
-                                  )
+        #   account_transaction  = AccountTransaction.new(
+        #                             subsidiary_id: ev_account.id,
+        #                             subsidiary_type: "MemberAccount",
+        #                             amount: (@amount / 2).round(2),
+        #                             transaction_type: "withdraw",
+        #                             transacted_at: @date_paid,
+        #                             status: "approved",
+        #                             data: {
+        #                               is_withdraw_payment: false,
+        #                               is_fund_transfer: false,
+        #                               is_interest: false,
+        #                               is_adjustment: false,
+        #                               is_for_exit_age: false,
+        #                               is_for_loan_payments: false,
+        #                               accounting_entry_reference_number: nil,
+        #                               beginning_balance: ev_balance.to_f,
+        #                               ending_balance: (ev_balance.to_f - (@amount /2)).round(2)
+        #                             }
+        #                           )
 
-          new_balance = (ev_balance.to_f - (@amount / 2)).round(2)
-          ev_account.update(
-            balance: new_balance
-          )
+        #   new_balance = (ev_balance.to_f - (@amount / 2)).round(2)
+        #   ev_account.update(
+        #     balance: new_balance
+        #   )
 
-          account_transaction.save!
-        end
+        #   account_transaction.save!
+        # end
       end
 
       # Update account balance

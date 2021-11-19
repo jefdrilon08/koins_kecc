@@ -51,6 +51,8 @@ class DataStore < ApplicationRecord
   scope :time_deposit_autorenewal, -> { where("meta->>'data_store_type' = ?", "TIME_DEPOSIT_AUTORENEWAL") }
   scope :branch_resignations, -> { where("meta->>'data_store_type' = ?", "BRANCH_RESIGNATIONS") }
   scope :general_ledgers, -> { where("meta->>'data_store_type' = ?", "GENERAL_LEDGER") }
+  scope :members_in_good_standing, -> {where("meta->> 'data_store_type' = ?", "MEMBERS_IN_GOOD_STANDING")}
+  scope :for_writeoff, ->{where("meta->>'data_store_type' = ? ", "FOR_WRITEOFF")}
 
   # For attaching json dumps
   has_one_attached :data_json_dump

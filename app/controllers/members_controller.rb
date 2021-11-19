@@ -114,6 +114,31 @@ class MembersController < ApplicationController
 
   end
 
+  def form_make_payments
+    @member = Member.find(params[:id]) 
+    config = {
+                member_id: @member.id
+      
+              }
+    @data = ::Members::BuildMakePayments.new(config: config).execute!
+    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(make_payment_data: @data, current_user: current_user   ).execute!
+
+    @subheader_items = [
+      { is_link: true, path: members_path, text: "Members" },
+      { is_link: true, path: member_path(@member), text: "#{@member.full_name}" },
+      { text: "Make Payment Form" }
+    ]
+
+    @subheader_side_actions = [
+    ]
+
+    @payload = {
+      id: @member.id,
+      memberResignationTypes: helpers.member_resignation_types
+    }
+  end
+
+
 
   def survey_answer
     @member         = Member.find(params[:id])

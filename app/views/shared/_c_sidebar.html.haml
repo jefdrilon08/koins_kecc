@@ -130,6 +130,10 @@
           = link_to monthly_accounting_code_summaries_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-balance-scale
             Monthly AC Summaries
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/for_writeoff", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-pen-alt
+            Members For Writeoff
 
         %li.c-sidebar-nav-title
           Journal Entries
@@ -216,6 +220,14 @@
           = link_to members_search_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-eraser
             Member Checker
+        %li.c-sidebar-nav-item
+          = link_to address_update_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-eraser
+            Update Member Address
+        %li.c-sidebar-nav-item
+          = link_to transfer_member_records_path, class: "c-sidebar-nav-link #{params[:controller] == "accrued_payment_collections_path" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-people-arrows
+            Transfer Member
         %li.c-sidebar-nav-title
           Branch Reports
         %li.c-sidebar-nav-item
@@ -286,6 +298,10 @@
           = link_to "/daily_branch_metrics", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Daily Branch Metrics
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/members_in_good_standing", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            Members in Good Standing
       %li.c-sidebar-nav-title
         Microinsurance
       %li.c-sidebar-nav-item
@@ -394,6 +410,10 @@
         = link_to "/reports/insurance_quarterly_reports", class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-chart-line
           Insurance Quarterly
+      %li.c-sidebar-nav-item
+        = link_to "/reports/insurance_interest", class: "c-sidebar-nav-link" do
+          .c-sidebar-nav-icon.fa.fa-chart-line
+          Insurance Interest
       %li.c-sidebar-nav-title
         Administration
       - if is_not_remote

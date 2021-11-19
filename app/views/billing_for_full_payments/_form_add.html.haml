@@ -21,6 +21,15 @@
     %td
       %button#btn-add-ar.btn.btn-block.btn-info{ data: { data_store_id: "#{@billing_data_store.id}"  } }
         Save 
+  %tr
+    %th Book
+    %td
+      .form-group
+        = select_tag :book_type, options_for_select(["CRB" , "JVB"], "#{@billing_data_store.meta["data"]["book"]}"), class: "form-control select-select2", id: "book_type" , prompt: "-- SELECT --"
+
+    %td
+      %button#btn-add-book.btn.btn-block.btn-info{ data: { id: "#{@billing_data_store.id}"  } }
+        Save 
               
   %tr
     %th

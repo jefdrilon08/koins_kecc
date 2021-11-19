@@ -111,7 +111,7 @@ module AccruedPaymentCollections
                               config: config
                             ).execute!
 
-        accounting_entry
+        @accounting_entry = accounting_entry
       end
  
   end
