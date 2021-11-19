@@ -12,6 +12,22 @@
             %tr
               %th Branch/Center
               %td #{Member.find(@data[:member_id]).branch.name} / #{Member.find(@data[:member_id]).center.name}
+            %tr
+              %th Particular
+              %td 
+                = text_area_tag :particular, "", class: "form-control", id: "particular"
+            %tr
+              %th OR
+              %td 
+                = text_field_tag :or_number, "", class: "form-control", id: "or_number" 
+            %tr
+              %th AR
+              %td 
+                = text_field_tag :ar_number, "", class: "form-control", id: "ar_number" 
+            %tr
+              %th Book
+              %td 
+                = select_tag :book_type, options_for_select(["CRB" , "JVB"], ""), class: "form-control select-select2", id: "book_type" , prompt: "-- SELECT --"
 
         %table.table.table-sm.table-bordered.table-hover
           %thead
@@ -29,3 +45,5 @@
                 %td #{Loan.find(loan[:loan_id]).loan_product.name}
                 %td #{loan[:total_principal_balance]}
                 %td #{loan[:total_interest_balance]}
+
+= render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
