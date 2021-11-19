@@ -8,7 +8,14 @@ module Members
       @loan = Loan.where(member_id: @member_id, status: "active")
       @data = {
           member_id: @member_id,
-          records: []
+          meta: {
+                  book: "CRB",
+                  or_number: "",
+                  ar_number: "",
+                  particular: ""
+                },
+          records: [],
+          status:  "pending"
 
       }
     end
