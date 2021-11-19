@@ -121,6 +121,7 @@ class MembersController < ApplicationController
       
               }
     @data = ::Members::BuildMakePayments.new(config: config).execute!
+    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(make_payment_data: @data, current_user: current_user   ).execute!
 
     @subheader_items = [
       { is_link: true, path: members_path, text: "Members" },

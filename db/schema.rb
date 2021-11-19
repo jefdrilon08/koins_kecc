@@ -1197,15 +1197,6 @@ ActiveRecord::Schema.define(version: 2021_11_15_072401) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "transfer_members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.date "transfer_date"
-    t.string "status"
-    t.json "data"
-    t.date "date_approved"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "user_branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.uuid "branch_id"
