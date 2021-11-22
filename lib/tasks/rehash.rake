@@ -259,4 +259,103 @@ namespace :rehash do
       puts "DONE"
   end
 
+  task :double_billing => :environment do
+    billing_id =ENV['BILLING_ID']
+    billing_data = Billing.find(billing_id)
+    billing_dd= billing_data.data.with_indifferent_access[:records]
+    @date_approved = billing_data.date_approved
+    @data={}
+    @data[:records] = {
+      loan_records: [],
+      savings_records: [],
+      wp_records: [],
+      insurance_records:[] }
+
+      billing_dd.each do |bd|
+        bd[:records].map{ |o|
+            if o.fetch("amount").to_f > 0.0 and o.fetch("record_type") == "LOAN_PAYMENT"
+              @data[:records][:loan_records] << {
+              loan_id: o.fetch("loan_id"),
+              amount: o.fetch("amount")
+             }
+            end
+          }
+        bd[:records].map{ |o|
+              if o.fetch("amount").to_f > 0.0 and o.fetch("record_type") == "SAVINGS"
+               @data[:records][:savings_records] << {
+                savings_id: o.fetch("member_account_id"),
+                amount: o.fetch("amount"),
+                savings_type: o.fetch("account_subtype")
+               }
+              end
+              }
+
+        bd[:records].map{ |o|
+                if o.fetch("amount").to_f > 0.0 and o.fetch("record_type") == "WP"
+                @data[:records][:wp_records] << {
+                wp_account: o.fetch("member_account_id"),
+                amount: o.fetch("amount")
+                }
+                end
+            
+        }
+        
+
+        bd[:records].map{ |o|
+                if o.fetch("amount").to_f > 0.0 and o.fetch("record_type") == "INSURANCE"
+                @data[:records][:insurance_records] << {
+                insurance_id: o.fetch("member_account_id"),
+                amount: o.fetch("amount"),
+                insurance_type: o.fetch("account_subtype")
+                }
+                end
+            
+        }
+       end
+
+      
+       #loans
+        @data[:records][:loan_records].each do |bl|
+          act= AccountTransaction.where(subsidiary_id: bl[:loan_id], transaction_type: "loan_payment",transacted_at: @date_approved ).order('created_at ASC')
+            if act.count > 1
+              id_last= act.last.id
+              AccountTransaction.find(id_last).delete
+              puts "rehashing loan #{bl[:loan_id]}"
+              ::Loans::FixAmort.new(loan: Loan.find(bl[:loan_id])).execute!
+            end
+        end
+        #savings
+        @data[:records][:savings_records].each do |sv|
+          act_sav = AccountTransaction.where(subsidiary_id: sv[:savings_id], subsidiary_type: "MemberAccount",transacted_at: @date_approved,status: "approved", transaction_type: "deposit")
+          if act_sav.count > 1
+            id_first= act_sav.first.id
+            AccountTransaction.find(id_first).delete
+            puts "rehashing member account #{sv[:savings_id]}"
+            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(sv[:savings_id]), account_transactions: nil ).execute!
+          end
+        end
+        #insurance
+        @data[:records][:insurance_records].each do |ins|
+          act_ins= AccountTransaction.where(subsidiary_id: ins[:insurance_id],subsidiary_type: "MemberAccount",transacted_at: @date_approved,status: "approved")
+          if act_ins.count > 1 
+            id_first= act_ins.first.id
+            AccountTransaction.find(id_first).delete
+            puts "rehashing insurance account #{ins[:insurance_id]}"
+            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(ins[:insurance_id]), account_transactions: nil ).execute!
+          end
+        end
+        #wp_records
+        @data[:records][:wp_records].each do |wp|
+          act_sav = AccountTransaction.where(subsidiary_id: wp[:wp_account], subsidiary_type: "MemberAccount",transacted_at: @date_approved,status: "approved", transaction_type: "withdraw")
+          if act_sav.count > 1
+            id_first= act_sav.first.id
+            AccountTransaction.find(id_first).delete
+            puts "rehashing member account #{ wp[:wp_account] }"
+            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find( wp[:wp_account]), account_transactions: nil ).execute!
+          end
+        end
+
+
+  end
+
 end
