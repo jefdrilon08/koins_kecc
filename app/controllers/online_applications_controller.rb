@@ -23,7 +23,7 @@ class OnlineApplicationsController < ApplicationController
 
     if @q.present?
       @online_applications  = @online_applications.where(
-                                "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+                                "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(middle_name) LIKE :q",
                                 q: "%#{@q.upcase}%"
                               )
     end
