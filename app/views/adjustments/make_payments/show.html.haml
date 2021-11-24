@@ -1,0 +1,50 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          Member Details 
+        %table.table.table-sm.table-bordered.table-hover
+          %tbody
+            %tr
+              %th Member:
+              %td #{Member.find(@make_payment_details.member_id).full_name}
+            %tr
+              %th Branch/Center
+              %td #{Member.find(@make_payment_details.member_id).branch.name} / #{Member.find(@make_payment_details.member_id).center.name}
+            %tr
+              %th Particular
+              %td 
+                #{@make_payment_details.meta["particular"]}
+            %tr
+              %th OR
+              %td 
+                #{@make_payment_details.meta["or_number"]}
+            %tr
+              %th AR
+              %td  
+                #{@make_payment_details.meta["ar_number"]}
+            %tr
+              %th Book
+              %td 
+                
+                #{@make_payment_details.meta["book"]}
+        
+        %table.table.table-sm.table-bordered.table-hover
+          %thead
+            %tr
+              %th PN Number
+              %th Loan Product
+              %th Total Principal Balance
+              %th Total Interest Balance
+          %tbody
+            - @make_payment_details[:data].each do |loan|
+              %tr
+                %td
+                  = link_to loan_path(Loan.find(loan["loan_id"])) do
+                    #{Loan.find(loan["loan_id"]).pn_number}
+                %td #{Loan.find(loan["loan_id"]).loan_product.name}
+                %td #{loan["total_principal_balance"]}
+                %td #{loan["total_interest_balance"]}
+
+= render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }

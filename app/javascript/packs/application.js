@@ -188,7 +188,8 @@ import MidasIndex from "../models/MidasIndex.js";
 import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
 import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
 import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
-import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js"
+import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js";
+import MembersMakePayments from "../models//MembersMakePayment.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -202,6 +203,7 @@ const hooks = {
   "members/index":                                    [MembersIndex],
   "members/search":                                   [MembersSearch],
   "members/show":                                     [MembersShow],
+  "members/form_make_payments":                       [MembersMakePayments],
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],

@@ -67,6 +67,9 @@ Rails.application.routes.draw do
 
     get "/recompute_restructures", to: "recompute_restructures#index", as: :recompute_restructures
     get "/recompute_restructures/:id", to: "recompute_restructures#show", as: :recompute_restructure
+    
+    get "/make_payments", to: "make_payments#index", as: :make_payments
+    get "/make_payments/:id", to: "make_payments#show", as: :make_payment
   end
   
   # EXPORTS
@@ -230,6 +233,8 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
+
+  
 
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_15_072401) do
+ActiveRecord::Schema.define(version: 2021_11_24_060848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -776,6 +776,8 @@ ActiveRecord::Schema.define(version: 2021_11_15_072401) do
     t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "make_payment_type"
+    t.json "meta"
     t.index ["member_id"], name: "index_make_payments_on_member_id"
   end
 
