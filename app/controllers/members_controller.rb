@@ -129,9 +129,22 @@ class MembersController < ApplicationController
       { text: "Make Payment Form" }
     ]
 
+  
     @subheader_side_actions = [
+      {
+        id: "btn-save",
+        link: "#",
+        class: "fa fa-check",
+        text: "Save",
+      
+        data: { member_id: @member.id }
+      },
+      { 
+        is_link: true, 
+        path: member_path(@member), 
+        class: "fa fa-times",
+        text: "Cancel" }
     ]
-
     @payload = {
       id: @member.id,
       memberResignationTypes: helpers.member_resignation_types

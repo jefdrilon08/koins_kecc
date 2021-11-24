@@ -3,6 +3,20 @@ module Api
     class MembersController < ApiController
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!, except: [:process_members_file, :process_beneficiaries_file, :process_legal_dependents_file]
+      def save_make_payment
+        
+        member_id =  params[:member_id]
+        config = {
+                    member_id: member_id,
+                    book: params[:book],
+                    particular: params[:particular],
+                    or_number: params[:or_number],
+                    ar_number: params[:ar_number],
+                    user: current_user
+        }
+        @data = ::Members::SaveMakePayment.new(config: config).execute!
+        render json: { message: "ok" }
+      end
 
       def register_member
         password              = params[:password]

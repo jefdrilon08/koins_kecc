@@ -147,7 +147,10 @@ namespace :api do
     get "/members/process_members_file", to: "members#process_members_file"
     get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
+    post "/members/register_member", to: "members#register_member"
+    post "/members/save_make_payment", to: "members#save_make_payment"
 
+    #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
@@ -211,6 +214,8 @@ namespace :api do
     get "/branches/fetch_centers", to: "branches#fetch_centers"
     get "/branches/:id/stats", to: "branches#stats"
     get "/branches/fetch_centers_for_restructure", to: "branches#fetch_centers_for_restructure"
+
+
 
     # Clusters
     get "/clusters", to: "clusters#index"
