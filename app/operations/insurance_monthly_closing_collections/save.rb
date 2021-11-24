@@ -9,6 +9,7 @@ module InsuranceMonthlyClosingCollections
       
       @insurance_monthly_closing_collection = @config[:insurance_monthly_closing_collection]
       @account_subtype                      = @insurance_monthly_closing_collection.account_subtype
+      @meta                                 = @insurance_monthly_closing_collection.meta.with_indifferent_access 
 
       @meta = {
         prepared_by: {
@@ -84,6 +85,24 @@ module InsuranceMonthlyClosingCollections
           @data[:records] << result
           @data[:total_interest] += result[:interest].to_f.round(2)
         end
+      end
+
+      if Settings.activate_microinsurance
+        # Build accounting entry
+        default_branch_id = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.find(default_branch_id)
+
+        @data[:accounting_entry]  = ::InsuranceMonthlyClosingCollections::BuildAccountingEntry.new(
+                                      config: {
+                                        data: @data,
+                                        meta: @meta,
+                                        branch: @branch,
+                                        settings: @account_settings,
+                                        user: @user,
+                                        collection_date: @closing_date,
+                                        closing_date: @closing_date
+                                      }
+                                    ).execute!
       end
 
       # Attach meta
