@@ -26,7 +26,7 @@ module InsuranceMonthlyClosingCollections
         branch_id: @branch.id,
         branch_name: @branch.name,
         status: "display",
-        accounting_fund_id: @accounting_fund.id
+        accounting_fund_id: @accounting_fund.id,
         data: {
           or_number: "",
           ar_number: ""
