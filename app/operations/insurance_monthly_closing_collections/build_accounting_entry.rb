@@ -9,7 +9,7 @@ module InsuranceMonthlyClosingCollections
       @user                       = @config[:user]
       @collection_date            = @config[:collection_date].try(:to_date) || Date.today
       @closing_date               = @config[:closing_date]
-      @meta                       = @config[:meta]
+      @default_branch             = @config[:default_branch]
       @accounting_fund            = AccountingFund.first
 
       @accounting_entry_data  = {
@@ -17,16 +17,16 @@ module InsuranceMonthlyClosingCollections
         date_prepared: @collection_date.strftime("%B %d, %Y"),
         company_name: Settings.company_name,
         company_address: Settings.company_address,
-        branch: @branch.to_s.upcase,
+        branch: @default_branch.to_s.upcase,
         prepared_by: @user.full_name,
         particular: default_particular,
         debit_journal_entries: [],
         credit_journal_entries: [],
         journal_entries: [],
-        branch_id: @branch.id,
-        branch_name: @branch.name,
+        branch_id: @default_branch.id,
+        branch_name: @default_branch.name,
         status: "display",
-        accounting_fund_id: @accounting_fund.id
+        accounting_fund_id: @accounting_fund.id,
         data: {
           or_number: "",
           ar_number: ""
@@ -65,7 +65,7 @@ module InsuranceMonthlyClosingCollections
     private
 
     def default_particular
-      "Insurance monthly closing for branch #{@meta[:branch][:name]}. Closing date: #{@closing_date.to_date}"
+      "Insurance monthly closing for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
     end
 
     def build_debit_journal_entries!
