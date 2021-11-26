@@ -11,13 +11,22 @@ var $selectYear;
 var $selectBranch;
 
 var $selectBook;
-var  $inputPaticular
-var  $inputOrNumber
-var  $inputArNumber
+var  $inputPaticular;
+var  $inputOrNumber;
+var  $inputArNumber;
 
+var  $btnApprove;
+var  $modalApprove;
+var  $btnConfirmApprove;
+
+var  $btnDestroy;
+var  $modalDelete;
+var  $btnConfirmDelete;
 
 var $message;
 var templateErrorList;
+var _id;
+
 
 var _cacheDom = function() {
   $modalNew         = $("#modal-new");
@@ -32,11 +41,104 @@ var _cacheDom = function() {
   $inputOrNumber    = $("#or_number");
   $inputArNumber    = $("#ar_number");
 
+
+
+  $btnApprove       = $("#btn-approve");
+  $modalApprove       = $("#modal-approve");
+  $btnConfirmApprove  = $("#btn-confirm-approve");
+  $btnDestroy       = $("#btn-destroy");
+  $modalDelete       = $("#modal-delete");
+  $btnConfirmDelete  = $("#btn-confirm-delete");
+
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 }
 
 var _bindEvents = function() {
+  
+  $btnDestroy.on("click", function() {
+    $message.html("");
+    $modalDelete.modal("show");
+    _id = $(this).data("make-payment-id")
+  });
+
+  $btnConfirmDelete.on("click", function() {
+    
+    var data = {
+                  make_payment_id: _id
+
+                }
+    $.ajax({
+      url: "/api/v1/adjustments/make_payments/destroy",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success!");
+        window.location.href="/adjustments/make_payments";
+      },
+      error: function(response) {
+        errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          console.log(response);
+          errors.push("Something went wrong");
+        }
+
+        $message.html(
+          Mustache.render(
+            templateErrorList,
+            { errors: errors }
+          )
+        );
+
+      }
+    });
+  });
+
+
+  $btnApprove.on("click", function() {
+    $message.html("");
+    $modalApprove.modal("show");
+    _id = $(this).data("make-payment-id")
+    
+  });
+
+   $btnConfirmApprove.on("click", function() {
+    
+    var data = {
+                  make_payment_id: _id
+
+                }
+    $.ajax({
+      url: "/api/v1/adjustments/make_payments/approve",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success!");
+        window.location.href="/adjustments/make_payments/" + response.id;
+      },
+      error: function(response) {
+        errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          console.log(response);
+          errors.push("Something went wrong");
+        }
+
+        $message.html(
+          Mustache.render(
+            templateErrorList,
+            { errors: errors }
+          )
+        );
+
+      }
+    });
+  });
   $btnNew.on("click", function() {
 
     var data = {
@@ -52,7 +154,7 @@ var _bindEvents = function() {
       method: 'POST',
       data: data,
       success: function(response) {
-        window.location.href="/data_stores/members_in_good_standing";
+        window.location.href="/adjustments/make_payments/" + response.id;
       },
       error: function(response) {
         errors = [];

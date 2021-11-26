@@ -3,7 +3,12 @@
     .row
       .col-md-6
         %strong
-          Pending
+          - if @make_payment_details.status == "approve"
+            #{ @accounting_entry_details.book}
+            #{ @accounting_entry_details.reference_number} -
+            #{ @accounting_entry_details.approved_by}
+          - else
+            Pending
       .col-md-6
         .text-right
           .text-muted
@@ -80,5 +85,5 @@
             %strong
               Approved By:
           %br
-            - if @make_payment_details.status = "approved"
-              #{@make_payment_details.approved_by}
+            - if @make_payment_details.status == "approve"
+              #{ @accounting_entry_details.approved_by}

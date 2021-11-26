@@ -15,7 +15,8 @@ module Api
                     user: current_user
         }
         @data = ::Members::SaveMakePayment.new(config: config).execute!
-        render json: { message: "ok" }
+        #raise @data.id.inspect
+        render json: { id: @data.id }
       end
 
       def register_member
