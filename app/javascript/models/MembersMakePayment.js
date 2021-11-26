@@ -116,8 +116,8 @@ var _bindEvents = function() {
       method: 'POST',
       data: data,
       success: function(response) {
-        $message.html("Success!");
-        window.location.href="/adjustments/make_payments/" + response.id;
+        $message.html("Success! Redirecting");
+        window.location.href="/adjustments/make_payments/";
       },
       error: function(response) {
         errors = [];
