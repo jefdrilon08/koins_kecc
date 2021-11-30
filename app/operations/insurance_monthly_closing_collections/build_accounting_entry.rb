@@ -66,9 +66,9 @@ module InsuranceMonthlyClosingCollections
 
     def default_particular
       if @settings.account_subtype == "Retirement Fund"
-        "Increase in RF for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
+        "Increase in RF for #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
       elsif @settings.account_subtype == "Equity Value"
-        "Increase in EV for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
+        "Increase in EV for #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
       end
     end
 
