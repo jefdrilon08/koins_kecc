@@ -105,7 +105,7 @@ Rails.application.routes.draw do
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
-  get "/members/:id/form_make_payments", to: "members#form_make_payments", as: :form_make_payments
+  get "/members/:id/form_make_payments/:type", to: "members#form_make_payments", as: :form_make_payments
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form

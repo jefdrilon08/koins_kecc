@@ -115,13 +115,21 @@ class MembersController < ApplicationController
   end
 
   def form_make_payments
+    
     @member = Member.find(params[:id]) 
     config = {
-                member_id: @member.id
+                member_id: @member.id,
+                make_payment_type: params[:type]
       
               }
     @data = ::Members::BuildMakePayments.new(config: config).execute!
-    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(make_payment_data: @data, current_user: current_user   ).execute!
+
+    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(
+                                    make_payment_data: @data, 
+                                    current_user: current_user,
+                                    make_payment_type: params[:type]
+
+                                    ).execute!
 
     @subheader_items = [
       { is_link: true, path: members_path, text: "Members" },
@@ -137,7 +145,7 @@ class MembersController < ApplicationController
         class: "fa fa-check",
         text: "Save",
       
-        data: { member_id: @member.id }
+        data: { member_id: @member.id, make_payment_type: params[:type] }
       },
       { 
         is_link: true, 

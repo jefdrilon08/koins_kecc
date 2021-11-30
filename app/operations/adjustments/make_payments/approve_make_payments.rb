@@ -2,6 +2,7 @@ module Adjustments
   module MakePayments
     class ApproveMakePayments
       def initialize(config:)
+      
         @config = config
         @make_payment_details = @config[:make_payment]
         @make_payment_details_data = MakePayment.find(@make_payment_details.id)
