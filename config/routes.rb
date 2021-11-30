@@ -105,7 +105,7 @@ Rails.application.routes.draw do
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
-  get "/members/:id/form_make_payments", to: "members#form_make_payments", as: :form_make_payments
+  get "/members/:id/form_make_payments/:type", to: "members#form_make_payments", as: :form_make_payments
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
@@ -340,9 +340,9 @@ Rails.application.routes.draw do
     get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
     delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
 
-     get "/for_writeoff", to: "for_writeoff#index"
-    get "/for_writeoff/:id", to: "for_writeoff#show"
-
+    get "/for_writeoff/excel", to: "for_writeoff#excel"
+    get "/for_writeoff/for_writeoff_excel", to: "for_writeoff#for_writeoff_excel", as: :for_writeoff_download_excel
+    resources :for_writeoff,only: [:index,:show,:destroy]
 
     get "/patronage_refund", to: "patronage_refund#index"
     get "/patronage_refund/:id", to: "patronage_refund#show"
@@ -420,7 +420,7 @@ Rails.application.routes.draw do
     get "/branch_resignations/:id", to: "branch_resignations#show"
     delete "/branch_resignations/:id", to: "branch_resignations#destroy"
   end
-
+  
   # daily_branch_metrics
   resources :daily_branch_metrics, only: [:index, :show, :destroy]
 

@@ -1,4 +1,4 @@
-#modal-change-member-type.modal.fade{:tabindex => "-1"}
+#modal-make-payment-type.modal.fade{:tabindex => "-1"}
   .modal-dialog
     .modal-content
       .modal-header
@@ -6,18 +6,16 @@
           Make Payment Type
       .modal-body
         .modal-body-content
-          .bs-callout.bs-callout-info
-            Change this make type
           .row
             .col
               .form-group
                 %label
                   Select Make Payment Type
-                = select_tag :member_type, options_for_select(Settings.default_member_types || [], @member.member_type), class: "form-control select-select2", id: "select-member-type"
+                = select_tag :make_payment_type, options_for_select(["CLIP", "GPF", "Members Benefit"]), class: "form-control select-select2", id: "select-make-payment-type"
           .message
       .modal-footer
         .controls
-          %button#btn-confirm-change-member-type.btn.btn-primary
+          %button#btn-confirm-make-payment-type.btn.btn-primary
             .fa.fa-check
             Confirm
           %button.btn{"data-dismiss" => "modal", :type => "button"}

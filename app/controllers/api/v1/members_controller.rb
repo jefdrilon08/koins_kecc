@@ -12,7 +12,8 @@ module Api
                     particular: params[:particular],
                     or_number: params[:or_number],
                     ar_number: params[:ar_number],
-                    user: current_user
+                    user: current_user,
+                    make_payment_type: params[:make_payment_type]
         }
         @data = ::Members::SaveMakePayment.new(config: config).execute!
         #raise @data.id.inspect

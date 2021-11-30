@@ -12,6 +12,7 @@ module Members
       @ar_number  = @config[:ar_number]
       @user       = @config[:user]
       @branch = Branch.find(Member.find(@member_id).branch_id)
+      @make_payment_type = @config[:make_payment_type]
       @date_approved  = ::Utils::GetCurrentDate.new(
                           config: {
                             branch: @branch
@@ -19,9 +20,9 @@ module Members
                         ).execute!
 
       
-      
       config = {
-                member_id: @member_id
+                member_id: @member_id,
+                make_payment_type: @make_payment_type
               }
     
       

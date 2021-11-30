@@ -1,11 +1,11 @@
 module Members
   class BuildAccountingEntryForMakePayments
     
-    def initialize(make_payment_data:, current_user:)
+    def initialize(make_payment_data:, current_user:, make_payment_type:)
     
       @user =  current_user
       @make_payment_data = make_payment_data
-      
+      @make_payment_type = make_payment_type      
       
       member_type_details = Member.find(@make_payment_data[:member_id]).member_type
       if  member_type_details == "GK"
@@ -105,11 +105,20 @@ module Members
       journal_entries = []
       member_type_details = Member.find(@make_payment_data[:member_id]).member_type
       total_principal_amount = @make_payment_data[:records].sum{ |m| m[:total_principal_balance]}
-        if  member_type_details == "GK"
-          accounting_code = AccountingCode.find("22f6ac03-ab97-4472-ad41-9a894a672e30")
-        else
-          accounting_code = AccountingCode.find(Settings.branch_accounting_codes.select{ |b| b[:branch_id] == @branch.id  }.last.cash_in_bank_accounting_code_id)
-        end
+        #if  member_type_details == "GK"
+        #  accounting_code = AccountingCode.find("22f6ac03-ab97-4472-ad41-9a894a672e30")
+        #else
+          if @make_payment_type == "CLIP"
+            accounting_code = AccountingCode.find(Settings.branch_accounting_codes.select{ |b| b[:branch_id] == @branch.id  }.last.cash_in_bank_accounting_code_id)
+          elsif @make_payment_type == "GPF"
+            accounting_code = AccountingCode.find("22f6ac03-ab97-4472-ad41-9a894a672e30")
+          else
+            accounting_code = AccountingCode.find("1ce652e2-2347-4666-be64-fc78fd801656")
+            
+
+          end
+        #end
+          
 
         journal_entries << {
           accounting_code_id: accounting_code.id,

@@ -5,11 +5,10 @@ var authenticityToken;
 var $modalNew;
 var $btnNew;
 var $btnConfirmNew;
-
+var errors;
 var $selectYear;
 var $selectBranch;
 var $selectNumberYear;
-
 var $message;
 var templateErrorList;
 
@@ -20,7 +19,6 @@ var _cacheDom = function() {
   $selectYear       = $("#select-year");
   $selectBranch     = $("#select-branch");
   $selectNumberYear = $("#select-number-year");
-
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 }
@@ -34,18 +32,18 @@ var _bindEvents = function() {
   $btnConfirmNew.on("click", function() {
     var year      = $selectYear.val();
     var branchId  = $selectBranch.val();
-    var selectYear = $selectNumberYear.val();
+    var numberyear = $selectNumberYear.val();
 
     $message.html("Loading...");
     $btnConfirmNew.prop("disabled", true);
     $selectYear.prop("disabled", true);
-    $selectBranch.prop("disabled", true);
     $selectNumberYear.prop("disabled", true);
+    $selectBranch.prop("disabled", true);
 
     var data  = {
       year: year,
       branch_id: branchId,
-      select_number_year: selectYear,
+      number_year: numberyear,
       authenticity_token: authenticityToken
     }
 
@@ -62,8 +60,8 @@ var _bindEvents = function() {
         try {
           errors = JSON.parse(response.responseText).full_messages;
         } catch(err) {
-          console.log(response);
           errors.push("Something went wrong");
+          console.log(response);
         }
 
         $message.html(
@@ -74,8 +72,8 @@ var _bindEvents = function() {
         );
 
         $btnConfirmNew.prop("disabled", false);
-        $selectYear.prop("disabled", false);
         $selectBranch.prop("disabled", false);
+        $selectYear.prop("disabled", false);
       }
     });
   });

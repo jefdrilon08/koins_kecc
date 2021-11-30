@@ -188,6 +188,7 @@ import MidasIndex from "../models/MidasIndex.js";
 import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
 import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
 import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
+import ForWriteoffShow from "../models/ForWriteoffShow.js";
 import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js";
 import MembersMakePayments from "../models//MembersMakePayment.js";
 
@@ -354,7 +355,7 @@ const hooks = {
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
   "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent],
   "data_stores/for_writeoff/index":                   [ForWriteoffIndex],
-  "data_stores/for_writeoff/show":                    [ForWriteoffShowComponent],
+  "data_stores/for_writeoff/show":                    [ForWriteoffShow,ForWriteoffShowComponent],
   "transfer_member_records/index":                    [TransferMemberRecordsIndex],
   "adjustments/make_payments/show":                   [MembersMakePayments]
 }

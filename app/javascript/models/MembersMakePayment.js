@@ -140,13 +140,13 @@ var _bindEvents = function() {
     });
   });
   $btnNew.on("click", function() {
-
     var data = {
       member_id:  $(this).data("member-id"),
       book:       $selectBook.val(),
       particular: $inputPaticular.val(),
       or_number:  $inputOrNumber.val(),
-      ar_number:  $inputArNumber.val()
+      ar_number:  $inputArNumber.val(),
+      make_payment_type: $(this).data("make-payment-type")
       
     }
     $.ajax({
