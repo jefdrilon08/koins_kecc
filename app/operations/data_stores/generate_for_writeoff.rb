@@ -4,17 +4,17 @@ module DataStores
           def initialize(config:)
             @config         = config
             @year           = @config[:year]
-            @number_of_year = @config[:number_of_year]
+            @number_of_years = @config[:number_years]
             @branch         = @config[:branch]
-            @current_year   = Date.today.year
+           
            
             @data = {
-              year: @current_year,
+              year: @year,
               branch: {
                 id: @branch.id,
                 name: @branch.name
               },
-              records: [],
+              records: []
             }
           end
 
@@ -31,24 +31,33 @@ module DataStores
                         member_status: o.fetch("member_status"),
                         loan_id: o.fetch("loan_id"),
                         loan_product: LoanProduct.find(o.fetch("loan_product")).name,
-                        total_balance: (o.fetch("principal_balance").try(:to_f) + o.fetch("interest_balance").try(:to_f)).try(:round, 2),
+                        principal_balance: o.fetch("principal_balance").try(:round, 2), 
+                        interest_balance: o.fetch("interest_balance").try(:round, 2),
                         maturity_date: o.fetch("maturity_date"),
                         loan_status: o.fetch("loan_status"),
                         rsa_id: o.fetch("kimpok_id"),
                         rsa_balance: o.fetch("kimpok").try(:round, 2),
                         psa_id: o.fetch("psa_id"),
                         psa_balance: o.fetch("psa_balance").try(:round, 2),
+                        gk_id: o.fetch("gk_id"),
+                        gk_balance: o.fetch("gk_balance"),
+                        rf_id: o.fetch("rf_id"),
+                        rf_balance: o.fetch("rf_balance"),
+                        lf_id: o.fetch("lf_id"),
+                        lf_balance: o.fetch("lf_balance"),
                         cbu_id: o.fetch("cbu_id"),
                         cbu_balance: o.fetch("cbu").try(:round, 2),
                         equity_id: o.fetch("share_cap_id"),
                         equity_balance: o.fetch("share_cap").try(:round, 2),
-                        center_id: o.fetch("center_id"),
-                        center_name: o.fetch("center_name")
+                        center: {
+                           id: o.fetch("center_id"), 
+                           name: o.fetch("center_name")
+                        }
                         }
                     temp
             }
 
-            @data[:records]
+            @data[:records] = @data[:records].sort_by { |hash|  hash[:maturity_date]}
             @data
 
           end
@@ -75,6 +84,12 @@ module DataStores
                     cbu_account.balance as cbu,
                     equity_accounts.id as share_cap_id,
                     equity_accounts.balance as share_cap,
+                    gk_account.id as gk_id,
+                    gk_account.balance as gk_balance,
+                    rf_accounts.id as rf_id,
+                    rf_accounts.balance as rf_balance,
+                    lf_accounts.id as lf_id,
+                    lf_accounts.balance as lf_balance,
                     centers.id as center_id, 
                     centers.name as center_name 
                     from loans as loans 
@@ -83,11 +98,13 @@ module DataStores
                     inner join member_accounts as savings_account on savings_account.member_id = members.id and savings_account.account_subtype = 'K-IMPOK'
                     inner join member_accounts as cbu_account on cbu_account.member_id = members.id and cbu_account.account_type = 'EQUITY' and cbu_account.account_subtype='CBU'
                     inner join member_accounts as equity_accounts on equity_accounts.member_id = members.id and equity_accounts.account_type = 'EQUITY' and equity_accounts.account_subtype='Share Capital'
+                    inner join member_accounts as gk_account on gk_account.member_id = members.id and gk_account.account_type= 'SAVINGS' and gk_account.account_subtype='Golden K'
+                    inner join member_accounts as rf_accounts on rf_accounts.member_id = members.id and rf_accounts.account_type= 'INSURANCE' and rf_accounts.account_subtype = 'Retirement Fund'
+                    inner join member_accounts as lf_accounts on lf_accounts.member_id = members.id and lf_accounts.account_type= 'INSURANCE' and lf_accounts.account_subtype = 'Life Insurance Fund'
                     inner join centers on centers.id = members.center_id 
-                    where Extract('year' from loans.maturity_date) = #{@year} and 
-                    #{@number_of_year} = (#{@current_year} - Extract('year' from loans.maturity_date)) and
+                    where Extract('year' from loans.maturity_date) <= (#{@year.to_i - @number_of_years.to_i} ) and
                     loans.status= 'active' and 
-                    members.branch_id= '#{@branch.id}'"
+                    members.branch_id= '#{@branch.id}' order by maturity_date"
             @result = ActiveRecord::Base.connection.execute(sql).to_a
           end
   end

@@ -3,7 +3,7 @@ module DataStores
     def initialize(config:)
       @config     = config
       @year       = @config[:year]
-      @number_of_years = @config[:number_of_years]
+      @number_years = @config[:number_of_years]
       @branch     = @config[:branch]
       @user       = @config[:user]
       @data_store = DataStore.find(@config[:id])
@@ -14,8 +14,8 @@ module DataStores
       data_result = ::DataStores::GenerateForWriteoff.new(
                       config: {
                         year: @year,
-                        number_of_year: @number_of_years,
-                        branch: @branch
+                        branch: @branch,
+                        number_years: @number_years
                       }
                     ).execute!
 

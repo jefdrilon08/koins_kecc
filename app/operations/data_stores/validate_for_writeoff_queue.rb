@@ -5,8 +5,9 @@ module DataStores
 
       @config = config
       @year   = @config[:year]
+      @number_year = @config[:number_year]
       @record = @config[:record]
-      @select_number_year = @config[:select_number_year]
+     
     end
 
     def execute!
@@ -18,14 +19,17 @@ module DataStores
         }
       end
 
-       if @select_number_year.blank?
+      if @number_year.blank?
         @errors[:messages] << {
-          key: "year",
-          message: "number year required"
+          key: "number_year",
+          message: "number of years required"
         }
       end
 
-      if @record.present? and (@record.approved? or @record.error?)
+
+
+      if @record.present?
+       
         @errors[:messages] << {
           key: "record",
           message: "record already existing"
