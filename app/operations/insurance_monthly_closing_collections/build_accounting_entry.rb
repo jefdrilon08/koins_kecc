@@ -10,7 +10,7 @@ module InsuranceMonthlyClosingCollections
       @collection_date            = @config[:collection_date].try(:to_date) || Date.today
       @closing_date               = @config[:closing_date]
       @default_branch             = @config[:default_branch]
-      @accounting_fund            = AccountingFund.first
+      @accounting_fund            = AccountingFund.where(name: "Mutual Benefit Fund").first
 
       @accounting_entry_data  = {
         book: @config[:book] || "JVB",
@@ -65,7 +65,11 @@ module InsuranceMonthlyClosingCollections
     private
 
     def default_particular
-      "Insurance monthly closing for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
+      if @settings.account_subtype == "Retirement Fund"
+        "Increase in RF for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
+      elsif @settings.account_subtype == "Equity Value"
+        "Increase in EV for branch #{@branch.to_s}. Closing date: #{@closing_date.to_date}"
+      end
     end
 
     def build_debit_journal_entries!
