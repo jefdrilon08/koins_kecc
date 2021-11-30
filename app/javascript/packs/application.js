@@ -350,12 +350,13 @@ const hooks = {
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
   "loans/reverse_form":                               [LoansReverseForm],
-  "excel_reports/index":                 	      [MidasIndex],
+  "excel_reports/index":                 	            [MidasIndex],
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
   "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent],
-  "data_stores/for_writeoff/index": [ForWriteoffIndex],
-  "data_stores/for_writeoff/show": [ForWriteoffShowComponent],
-  "transfer_member_records/index": [TransferMemberRecordsIndex]
+  "data_stores/for_writeoff/index":                   [ForWriteoffIndex],
+  "data_stores/for_writeoff/show":                    [ForWriteoffShowComponent],
+  "transfer_member_records/index":                    [TransferMemberRecordsIndex],
+  "adjustments/make_payments/show":                   [MembersMakePayments]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
