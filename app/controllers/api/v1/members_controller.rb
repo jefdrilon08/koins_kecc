@@ -4,7 +4,7 @@ module Api
       skip_before_action :verify_authenticity_token
       before_action :authenticate_user!, except: [:process_members_file, :process_beneficiaries_file, :process_legal_dependents_file]
       def save_make_payment
-        
+        errors = []
         member_id =  params[:member_id]
         config = {
                     member_id: member_id,
@@ -15,9 +15,17 @@ module Api
                     user: current_user,
                     make_payment_type: params[:make_payment_type]
         }
-        @data = ::Members::SaveMakePayment.new(config: config).execute!
-        #raise @data.id.inspect
-        render json: { id: @data.id }
+
+        if params[:particular].blank?
+          errors << "password required"
+        end
+        if errors.size > 0
+          render json: { errors: errors }, status: 400
+        else
+          @data = ::Members::SaveMakePayment.new(config: config).execute!
+          #raise @data.id.inspect
+          render json: { id: @data.id }
+        end
       end
 
       def register_member

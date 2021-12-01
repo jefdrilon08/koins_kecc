@@ -157,22 +157,7 @@ var _bindEvents = function() {
         window.location.href="/adjustments/make_payments/" + response.id;
       },
       error: function(response) {
-        errors = [];
-
-        try {
-          errors = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          console.log(response);
-          errors.push("Something went wrong");
-        }
-
-        $message.html(
-          Mustache.render(
-            templateErrorList,
-            { errors: errors }
-          )
-        );
-
+        alert("Particular are required")
       }
     });
   });
