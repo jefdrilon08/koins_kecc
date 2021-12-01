@@ -31,16 +31,16 @@ module InsuranceMonthlyClosingCollections
       if Settings.activate_microinsurance 
         if @data_accounting_entry.present?
           post_accounting_entry!
+
+          # Update accounting entry with reference number
+          @data[:accounting_entry][:id]               = @accounting_entry.id
+          @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
+          @data[:accounting_entry][:status]           = @accounting_entry.status
+          @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
         end
       end
 
       @data[:approved_by] = @user.full_name
-
-      # Update accounting entry with reference number
-      @data[:accounting_entry][:id]               = @accounting_entry.id
-      @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
-      @data[:accounting_entry][:status]           = @accounting_entry.status
-      @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
 
       @insurance_monthly_closing_collection.update!(
         status: "approved",
