@@ -2786,4 +2786,38 @@ namespace :adjust do
 
     puts "\nDone."
   end
+
+  task :rehash_ev_and_rf_member_accounts => :environment do
+    puts "Rehashing ..."
+
+    if ENV['BRANCH_ID'].present?
+      @rf_accounts = MemberAccount.where(account_subtype: "Retirement Fund", branch_id: ENV['BRANCH_ID'])
+      @ev_accounts = MemberAccount.where(account_subtype: "Equity Value", branch_id: ENV['BRANCH_ID'])
+    else  
+      @rf_accounts = MemberAccount.where(account_subtype: "Retirement Fund")
+      @ev_accounts = MemberAccount.where(account_subtype: "Equity value")
+    end
+
+    if !@rf_accounts.nil?  
+      puts "Rehashing RF accounts ..."
+      @rf_accounts.each do |rf_account|
+        puts "#{rf_account.id} ..."
+        ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
+      end
+    end
+    puts "Done rf accounts!\n\n"
+
+    if !@ev_accounts.nil?  
+      puts "Rehashing EV accounts ..."
+      @ev_accounts.each do |ev_account|
+        puts "#{ev_account.id} ..."
+
+        ::MemberAccounts::Rehash.new(member_account: ev_account, account_transactions: nil).execute!
+      end
+
+      puts "Done ev accounts!\n"
+    end
+
+    puts "\nDone."
+  end
 end
