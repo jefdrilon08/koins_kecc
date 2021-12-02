@@ -1,0 +1,18 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col
+      .form-group
+        %label
+          Make Payment Type
+        = select_tag :make_payment_type, options_for_select(["CLIP", "GPF", "Members Benefit"]), class: "form-control select-select2", id: "select-make-payment-type", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label
+          Status
+        = select_tag :status, options_for_select(["Pending", "Processing", "Approve"]), class: "form-control select-select2", id: "status", prompt: "-- SELECT --"
+    .col
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .fa.fa-search

@@ -1,7 +1,21 @@
 module Adjustments
   class MakePaymentsController < ApplicationController
     def index
-      @make_payment = MakePayment.all
+      make_payment_type = params[:make_payment_type]
+      if params[:make_payment_type].present? || params[:status].present?
+        status_downcase = params[:status].downcase
+        @make_payment = MakePayment.joins(:member).where("members.branch_id = ? and make_payments.make_payment_type = ? OR make_payments.status = ?", @branches.pluck(:id), make_payment_type, status_downcase)
+      else
+        @make_payment = MakePayment.joins(:member).where("members.branch_id = ?", @branches.pluck(:id))
+      end
+      @subheader_items = [
+        {
+    
+          text: "Make Payment"
+      
+    
+        }
+      ]
     end
     def show
       @make_payment_details = MakePayment.find(params[:id])
