@@ -5,7 +5,10 @@ module Api
 
       def assign_branch
         online_application  = OnlineApplication.find(params[:id])
-
+        data_online_application = online_application.data.with_indifferent_access
+    
+        approve_process = {  assign_branch_by: { name: current_user.full_name, date_assign: Date.today } }
+        
         validator = ::OnlineApplications::ValidateAssignBranch.new(
                       online_application: online_application,
                       user: current_user
@@ -17,9 +20,11 @@ module Api
           render json: { full_messages: validator.errors[:full_messages] }, status: 403
         else
           branch = ReadOnlyBranch.find(params[:branch_id])
-
+          data_online_application["approve_process"] = []
+          data_online_application["approve_process"] << approve_process
           online_application.update!(
-            branch: branch
+            branch: branch,
+            data: data_online_application
           )
 
           render json: { message: "ok" }
@@ -28,6 +33,8 @@ module Api
 
       def verify
         online_application  = OnlineApplication.find(params[:id])
+        data_online_application = online_application.data.with_indifferent_access
+        approve_process = {  verify_by: { name: current_user.full_name, date_assign: Date.today } }
 
         membership_type         = MembershipType.find_by_id(params[:membership_type_id])
         membership_arrangement  = MembershipArrangement.find_by_id(params[:membership_arrangement_id])
@@ -62,6 +69,10 @@ module Api
                 )
 
           cmd.execute!
+          data_online_application["approve_process"] << approve_process
+          online_application.update!(
+            data: data_online_application
+          )
 
           render json: { message: "ok" }
         end
@@ -96,6 +107,7 @@ module Api
 
       def process_application
         online_application  = OnlineApplication.find(params[:id])
+        data_online_application = online_application.data.with_indifferent_access
 
         validator = ::OnlineApplications::ValidateProcess.new(
                       online_application: online_application,
@@ -107,6 +119,8 @@ module Api
         if validator.errors[:full_messages].size > 0
           render json: { errors: validator.errors[:full_messages] }, status: 403
         else
+          approve_process = {  process_by: { name: current_user.full_name, date_assign: Date.today } }
+          data_online_application["approve_process"] << approve_process
           online_application.update!(status: "processing")
 
           ProcessOnlineApplication.perform_later({

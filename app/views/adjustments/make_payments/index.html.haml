@@ -19,7 +19,8 @@
                 %td
                   #{ i + 1  }
                 %td
-                  #{ Member.find(mp.member_id).full_name }
+                  = link_to member_path(mp.member_id), target: '_blank' do
+                    #{ Member.find(mp.member_id).full_name }
                 %td
                   #{ Member.find(mp.member_id).branch.name }
                 %td
