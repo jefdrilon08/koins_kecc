@@ -58,11 +58,20 @@ module Api
             branch = ReadOnlyBranch.find_by_id(params[:branch_id])
           end
           
+
           approve_process = {  type: "verify_by",  name: current_user.full_name, date_assign: Date.today  }
-          data_online_application["approve_process"] << approve_process
-          online_application.update!(
-            data: data_online_application
-          )
+          if data_online_application["approve_process"].present?
+            data_online_application["approve_process"] << approve_process
+            online_application.update!(
+              data: data_online_application
+            )
+          else
+            data_online_application["approve_process"] = []
+            data_online_application["approve_process"] << approve_process
+            online_application.update!(
+              data: data_online_application
+            )
+          end
 
           cmd = ::OnlineApplications::Verify.new(
                   online_application: online_application,
@@ -121,8 +130,15 @@ module Api
           render json: { errors: validator.errors[:full_messages] }, status: 403
         else
           approve_process = {  type: "process_by",  name: current_user.full_name, date_assign: Date.today  }
-          data_online_application["approve_process"] << approve_process
-          online_application.update!(status: "processing", data: data_online_application)
+          if data_online_application["approve_process"].present?
+          
+            data_online_application["approve_process"] << approve_process
+            online_application.update!(status: "processing", data: data_online_application)
+          else
+            data_online_application["approve_process"] = []
+            data_online_application["approve_process"] << approve_process
+            online_application.update!(status: "processing", data: data_online_application)
+          end
 
           ProcessOnlineApplication.perform_later({
             id: online_application.id,
