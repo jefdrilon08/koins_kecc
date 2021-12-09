@@ -81,4 +81,8 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
   def member_ids
     self.data.with_indifferent_access[:records].map{ |o| o[:member][:id] }
   end
+
+  def clip
+    self.data.with_indifferent_access[:insurance_subtype] == "Credit Life Insurance Plan"
+  end
 end

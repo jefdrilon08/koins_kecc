@@ -86,19 +86,59 @@ module SavingsInsuranceTransferCollections
         created_at        = Time.now.to_s(:db)
         updated_at        = Time.now.to_s(:db)
 
-        data  = {
-          is_withdraw_payment: false,
-          is_fund_transfer: false,
-          is_interest: false,
-          is_adjustment: false,
-          is_for_exit_age: false,
-          is_for_loan_payments: false,
-          is_time_deposit: false,
-          accounting_entry_reference_number: @accounting_entry.reference_number,
-          beginning_balance: insurance_account_balance,
-          ending_balance: insurance_account_new_balance,
-          lock_in_period: nil
-        }
+        if @savings_insurance_transfer_collection.clip
+          data  = {
+            is_withdraw_payment: false,
+            is_fund_transfer: false,
+            is_interest: false,
+            is_adjustment: false,
+            is_for_exit_age: false,
+            is_for_loan_payments: false,
+            is_time_deposit: false,
+            accounting_entry_reference_number: @accounting_entry.reference_number,
+            beginning_balance: insurance_account_balance,
+            ending_balance: insurance_account_new_balance,
+            data: 
+              {
+                id: nil,
+                principal: o[:clip_data][:principal].try(:to_f).try(:round, 2),
+                interest: nil,
+                first_date_of_payment: nil,
+                maturity_date: o[:clip_data][:maturity_date],
+                original_maturity_date: nil,
+                accounting_entry_id: nil,
+                journal_entry_id: nil,
+                amount: amount,
+                loan_product_id: o[:clip_data][:loan_product_id],
+                loan_product_name: o[:clip_data][:loan_product_name],
+                member_id: o[:member][:id],
+                date_approved: o[:clip_data][:effective_date],
+                date_released: o[:clip_data][:effective_date],
+                reference_number: nil,
+                book: nil,
+                member_account_id: subsidiary_id,
+                term: o[:clip_data][:term],
+                num_installments: o[:clip_data][:num_installments],
+                account_transaction_id: nil,
+                status: nil,
+                beneficiary: o[:clip_data][:beneficiary]
+              }
+          }
+        else
+          data  = {
+            is_withdraw_payment: false,
+            is_fund_transfer: false,
+            is_interest: false,
+            is_adjustment: false,
+            is_for_exit_age: false,
+            is_for_loan_payments: false,
+            is_time_deposit: false,
+            accounting_entry_reference_number: @accounting_entry.reference_number,
+            beginning_balance: insurance_account_balance,
+            ending_balance: insurance_account_new_balance,
+            lock_in_period: nil
+          }
+        end
 
         values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
 
