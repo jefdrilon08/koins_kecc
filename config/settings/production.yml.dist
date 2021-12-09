@@ -5786,7 +5786,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.2
+      percentage: 0.0
       threshold: 0.00
     midas:
       contract_type: 22

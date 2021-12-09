@@ -2,6 +2,7 @@
   .col
     .card
       .card-body
+        = render partial: "index_filter"
         %table.table.table-sm.table-bordered
           %thead
             %tr
@@ -9,6 +10,7 @@
               %th Name
               %th Sato
               %th Center
+              %th Type
               %th Status
 
           %tbody
@@ -17,11 +19,14 @@
                 %td
                   #{ i + 1  }
                 %td
-                  #{ Member.find(mp.member_id).full_name }
+                  = link_to member_path(mp.member_id), target: '_blank' do
+                    #{ Member.find(mp.member_id).full_name }
                 %td
                   #{ Member.find(mp.member_id).branch.name }
                 %td
                   #{ Member.find(mp.member_id).center.name}
+                %td
+                  #{ mp.make_payment_type}
                 %td
                   #{ mp.status}
                 %td
