@@ -785,6 +785,10 @@ insurance_accounting_codes:
     insurance_type: "Hospital Income Insurance Plan"
     deposit_accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
     withdrawal_accounting_code_id: ""
+  -
+    insurance_type: "Credit Life Insurance Plan"
+    deposit_accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+    withdrawal_accounting_code_id: ""
 
 
 savings_insurance_transfer_accounting_codes:
@@ -5782,7 +5786,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.2
+      percentage: 0.0
       threshold: 0.00
     midas:
       contract_type: 22

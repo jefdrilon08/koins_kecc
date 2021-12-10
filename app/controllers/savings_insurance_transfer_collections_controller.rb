@@ -60,6 +60,26 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
                   id: @savings_insurance_transfer_collection.member_ids
                 ).order("last_name ASC")
 
+    if @savings_insurance_transfer_collection.clip
+      @clip_data = @savings_insurance_transfer_collection.data.with_indifferent_access[:clip_data]
+      
+      if @clip_data.present?
+        @loan_product_id = @clip_data[:loan_product_id]
+        @principal = @clip_data[:principal]
+        @term = @clip_data[:term]
+        @num_installments = @clip_data[:num_installments]
+        @maturity_date = @clip_data[:maturity_date]
+        @effective_date = @clip_data[:effective_date]
+        @clip_number = @clip_data[:clip_number]
+        @beneficiary = @clip_data[:beneficiary]
+      end
+
+      @members  = Member.active.where(center_id: @savings_insurance_transfer_collection.center.id)
+    end
+
+    
+
+
     @records  = @savings_insurance_transfer_collection.data.with_indifferent_access["records"]
 
     @subheader_items = [

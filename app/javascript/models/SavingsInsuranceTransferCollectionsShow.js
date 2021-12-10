@@ -12,6 +12,15 @@ var $btnUpdateParticular;
 var $message;
 var templateErrorList;
 
+var $inputLoanProductId;
+var $inputPrincipal;
+var $inputTerm;
+var $inputNumInstallments;
+var $inputMaturityDate;
+var $inputEffectiveDate;
+var $inputClipNumber;
+var $inputBeneficiary;
+
 var _id;
 var _options;
 var _authenticityToken;
@@ -33,6 +42,14 @@ var _cacheDom = function() {
   $inputParticular      = $("#input-particular");
   $message              = $(".message");
   templateErrorList     = $("#template-error-list").html();
+  $inputLoanProductId   = $("#input-loan-product-id");
+  $inputPrincipal       = $("#input-principal");
+  $inputTerm            = $("#input-term");
+  $inputNumInstallments = $("#input-num-installments");
+  $inputMaturityDate    = $("#input-maturity-date");
+  $inputEffectiveDate   = $("#input-effective-date");
+  $inputClipNumber      = $("#input-clip-number");
+  $inputBeneficiary     = $("#input-beneficiary");
 };
 
 var _bindEvents = function() {
@@ -127,15 +144,41 @@ var _bindEvents = function() {
     var amount    = $inputAmount.val();
     var memberId  = $selectMember.val();
 
+    var loanProductId        = $inputLoanProductId.val();
+    var principal            = $inputPrincipal.val();
+    var term                 = $inputTerm.val();
+    var numInstallments      = $inputNumInstallments.val();
+    var maturityDate         = $inputMaturityDate.val();
+    var effectiveDate        = $inputEffectiveDate.val();
+    var clipNumber           = $inputClipNumber.val();
+    var beneficiary          = $inputBeneficiary.val();
+
     $btnAdd.prop("disabled", true);
     $inputAmount.prop("disabled", true);
     $selectMember.prop("disabled", true);
+  
+    $inputLoanProductId.prop("disabled", true);
+    $inputPrincipal.prop("disabled", true);
+    $inputTerm.prop("disabled", true);
+    $inputNumInstallments.prop("disabled", true);
+    $inputMaturityDate.prop("disabled", true);
+    $inputEffectiveDate.prop("disabled", true);
+    $inputClipNumber.prop("disabled", true);
+    $inputBeneficiary.prop("disabled", true);
 
     var data  = {
       id: _id,
       authenticity_token: _authenticityToken,
       amount: amount,
-      member_id: memberId
+      member_id: memberId,
+      loan_product_id: loanProductId,
+      principal: principal,
+      term: term,
+      num_installments: numInstallments,
+      maturity_date: maturityDate,
+      effective_date: effectiveDate,
+      clip_number: clipNumber,
+      beneficiary: beneficiary
     };
 
     $message.html("Loading...");
@@ -166,6 +209,15 @@ var _bindEvents = function() {
           $btnAdd.prop("disabled", false);
           $inputAmount.prop("disabled", false);
           $selectMember.prop("disabled", false);
+          
+          $inputLoanProductId.prop("disabled", false);
+          $inputPrincipal.prop("disabled", false);
+          $inputTerm.prop("disabled", false);
+          $inputNumInstallments.prop("disabled", false);
+          $inputMaturityDate.prop("disabled", false);
+          $inputEffectiveDate.prop("disabled", false);
+          $inputClipNumber.prop("disabled", false);
+          $inputBeneficiary.prop("disabled", false);
         }
       }
     });

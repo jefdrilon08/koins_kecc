@@ -62,12 +62,38 @@ module Api
         member                                = Member.where(id: params[:member_id]).first
         amount                                = params[:amount].try(:to_f).try(:round, 2)
 
-        config  = {
-          savings_insurance_transfer_collection: savings_insurance_transfer_collection,
-          member: member,
-          amount: amount,
-          user: current_user
-        }
+        if savings_insurance_transfer_collection.clip
+          loan_product_id = params[:loan_product_id]
+          principal = params[:principal]
+          term = params[:term]
+          num_installments = params[:num_installments]
+          maturity_date = params[:maturity_date]
+          effective_date = params[:effective_date]
+          clip_number = params[:clip_number]
+          beneficiary = params[:beneficiary]
+
+          config  = {
+            savings_insurance_transfer_collection: savings_insurance_transfer_collection,
+            loan_product_id: loan_product_id,
+            principal: principal,
+            term: term,
+            num_installments: num_installments,
+            maturity_date: maturity_date,
+            effective_date: effective_date,
+            clip_number: clip_number,
+            beneficiary: beneficiary,
+            member: member,
+            amount: amount,
+            user: current_user
+          }
+        else
+          config  = {
+            savings_insurance_transfer_collection: savings_insurance_transfer_collection,
+            member: member,
+            amount: amount,
+            user: current_user
+          }
+        end
 
         errors  = ::SavingsInsuranceTransferCollections::ValidateAddMember.new(
                     config: config

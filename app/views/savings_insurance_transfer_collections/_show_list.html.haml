@@ -3,6 +3,11 @@
     %tr
       %th
         Name
+      - if @savings_insurance_transfer_collection.clip
+        %th
+          Loan Product
+        %th
+          Principal
       %th.text-right
         Amount
       - if @savings_insurance_transfer_collection.pending?
@@ -14,6 +19,11 @@
         %td
           = link_to member_path(o[:member][:id]), target: '_blank' do
             #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+        - if @savings_insurance_transfer_collection.clip
+          %td
+            #{o[:clip_data][:loan_product_name]}
+          %td
+            #{number_to_currency(o[:clip_data][:principal], unit: '')}  
         %td.text-right
           #{number_to_currency(o[:amount], unit: '')}
         - if @savings_insurance_transfer_collection.pending?
@@ -23,6 +33,9 @@
     %tr
       %th
         Total
+      - if @savings_insurance_transfer_collection.clip
+        %th
+        %th
       %th.text-right
         #{number_to_currency(@savings_insurance_transfer_collection.total_amount, unit: '')}
       - if @savings_insurance_transfer_collection.pending?

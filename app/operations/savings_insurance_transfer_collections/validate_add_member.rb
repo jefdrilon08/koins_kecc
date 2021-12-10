@@ -8,6 +8,15 @@ module SavingsInsuranceTransferCollections
       @member                                 = @config[:member]
       @amount                                 = @config[:amount]
 
+      if @savings_insurance_transfer_collection.clip
+        @loan_product_id                        = @config[:loan_product_id]
+        @principal                              = @config[:principal]
+        @term                                   = @config[:term]
+        @num_installments                       = @config[:num_installments]
+        @maturity_date                          = @config[:maturity_date]
+        @effective_date                          = @config[:effective_date]
+      end
+
       @data = @savings_insurance_transfer_collection.try(:data).try(:with_indifferent_access)
 
       if @data.present?
@@ -45,11 +54,13 @@ module SavingsInsuranceTransferCollections
         }
       end
 
-      if @member.present? and @savings_insurance_transfer_collection.member_ids.include?(@member.id)
-        @errors[:messages] << {
-          key: "message",
-          message: "Member already included"
-        }
+      if !@savings_insurance_transfer_collection.clip
+        if @member.present? and @savings_insurance_transfer_collection.member_ids.include?(@member.id)
+          @errors[:messages] << {
+            key: "message",
+            message: "Member already included"
+          }
+        end
       end
 
       if @member.present?
@@ -77,6 +88,50 @@ module SavingsInsuranceTransferCollections
           key: "savings_account",
           message: "Not enough balance for savings #{@savings_subtype} (Maintaining balance: #{@savings_account.maintaining_balance}) for member #{@member.full_name}"
         }
+      end
+
+      if @savings_insurance_transfer_collection.clip
+        if !@loan_product_id.present?
+          @errors[:messages] << {
+            key: "loan_product",
+            message: "Loan Product is required"
+          }
+        end
+
+        if !@principal.present?
+          @errors[:messages] << {
+            key: "principal",
+            message: "Principal is required"
+          }
+        end
+
+        if !@term.present?
+          @errors[:messages] << {
+            key: "term",
+            message: "Term is required"
+          }
+        end
+
+        if !@num_installments.present?
+          @errors[:messages] << {
+            key: "num_installments",
+            message: "Num Installments is required"
+          }
+        end
+
+        if !@maturity_date.present?
+          @errors[:messages] << {
+            key: "maturity_date",
+            message: "Maturity Date is required"
+          }
+        end
+
+        if !@effective_date.present?
+          @errors[:messages] << {
+            key: "effective_date",
+            message: "Effectivity Date is required"
+          }
+        end
       end
 
       #not_yet_implemented!

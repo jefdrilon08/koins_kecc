@@ -29,6 +29,30 @@ class MemberAccount < ApplicationRecord
     AccountTransaction.where(subsidiary_id: self.id)
   end
 
+  def clip
+    self.account_subtype == "Credit Life Insurance Plan"
+  end
+
+  def hiip
+    self.account_subtype == "Hospital Income Insurance Plan"
+  end
+
+  def clip_active_balance
+    AccountTransaction.where("subsidiary_id = ? AND data->'data'->>'maturity_date' >= ?", self.id, Date.today).sum(:amount)
+  end
+
+  def hiip_active_balance
+    active_amount = 0.00
+
+    AccountTransaction.where("subsidiary_id = ?", self.id).each do |t|
+      if (Date.today - t.transacted_at.to_date).to_i < 365
+        active_amount = active_amount + t.amount
+      end
+    end
+
+    return active_amount
+  end
+
   def savings?
     self.account_type == "SAVINGS"
   end
