@@ -125,7 +125,7 @@ namespace :generate do
     
     if ENV["BRANCH_ID"].present?
       branches = Branch.where(id: ENV["BRANCH_ID"])
-    end  
+    else
       branches    = Branch.all
     end
 
