@@ -1,10 +1,11 @@
 module Exports
   class SaveAccountTransactionsCsv
-    attr_accessor :start_date, :end_date, :file_repository, :csv_object, :account_transactions
+    attr_accessor :start_date, :end_date, :file_repository, :csv_object, :account_transactions, :branch
 
-    def initialize(start_date:, end_date:)
+    def initialize(start_date:, end_date:, branch:)
       @start_date = start_date.try(:to_date) 
       @end_date   = end_date.try(:to_date)
+      @branch     = branch
 
       if @start_date.blank? or @end_date.blank?
         raise "Invalid parameters"
@@ -65,7 +66,8 @@ module Exports
                   WHERE
                     account_transactions.updated_at >= '#{@start_date}' 
                     AND account_transactions.updated_at <= '#{@end_date}'
-                    AND member_accounts.account_type = 'INSURANCE' 
+                    AND member_accounts.account_type = 'INSURANCE'
+                    AND member_accounts.branch_id = '#{@branch.id}' 
                     AND members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned')
                   GROUP BY
                     at_id
