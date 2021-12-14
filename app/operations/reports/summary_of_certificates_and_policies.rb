@@ -7,15 +7,15 @@ module Reports
       @members = []
 
       if @as_of.present? && @branch_id.present?
-        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status = ? AND branch_id = ?", @as_of, "active", "inforce", @branch_id)
+        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND branch_id = ?", @as_of, "active", ["inforce", "dormant", "lapsed"], @branch_id)
       elsif @as_of.present?
         # @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status != ?", @as_of, "GK", "active", "dormant")
-        @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status NOT IN (?)", @as_of, "GK", "active", ["pending", "dormant"])
+        @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status IN (?)", @as_of, "GK", "active", ["inforce", "lapsed", "dormant"])
         @resigned = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @as_of, @as_of)
         @active_members = @active_members  + @resigned
       elsif @branch_id.present?
         # @active_members = Member.where("insurance_status !=? AND branch_id = ?", "dormant", @branch_id)
-        @active_members = Member.where("insurance_status NOT IN (?) AND branch_id = ?", ["pending","dormant"], @branch_id)
+        @active_members = Member.where("insurance_status IN (?) AND branch_id = ?", ["inforce", "dormant", "lapsed"], @branch_id)
       end
 
       @active_members.each do |m|
