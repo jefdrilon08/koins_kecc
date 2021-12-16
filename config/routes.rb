@@ -234,8 +234,10 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
+  # billing for writeoff
+  get "/billing_for_writeoff", to: "billing_for_writeoff#index"
+  get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"
   
-
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"
   
@@ -419,6 +421,8 @@ Rails.application.routes.draw do
     get "/branch_resignations", to: "branch_resignations#index"
     get "/branch_resignations/:id", to: "branch_resignations#show"
     delete "/branch_resignations/:id", to: "branch_resignations#destroy"
+    
+    get "/member_id_generators", to: "member_id_generators#index"
   end
   
   # daily_branch_metrics

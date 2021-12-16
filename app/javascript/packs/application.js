@@ -190,7 +190,9 @@ import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
 import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
 import ForWriteoffShow from "../models/ForWriteoffShow.js";
 import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js";
-import MembersMakePayments from "../models//MembersMakePayment.js";
+import MembersMakePayments from "../models/MembersMakePayment.js";
+import BillingForWriteoffIndex from "../models/BillingForWriteoffIndex.js";
+import BillingForWriteoffShow from "../models/BillingForWriteoffShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -357,7 +359,9 @@ const hooks = {
   "data_stores/for_writeoff/index":                   [ForWriteoffIndex],
   "data_stores/for_writeoff/show":                    [ForWriteoffShow,ForWriteoffShowComponent],
   "transfer_member_records/index":                    [TransferMemberRecordsIndex],
-  "adjustments/make_payments/show":                   [MembersMakePayments]
+  "adjustments/make_payments/show":                   [MembersMakePayments],
+  "billing_for_writeoff/index":                       [BillingForWriteoffIndex],
+  "billing_for_writeoff/show":                        [BillingForWriteoffShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

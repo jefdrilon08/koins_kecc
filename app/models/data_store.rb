@@ -53,6 +53,7 @@ class DataStore < ApplicationRecord
   scope :general_ledgers, -> { where("meta->>'data_store_type' = ?", "GENERAL_LEDGER") }
   scope :members_in_good_standing, -> {where("meta->> 'data_store_type' = ?", "MEMBERS_IN_GOOD_STANDING")}
   scope :for_writeoff, ->{where("meta->>'data_store_type' = ? ", "FOR_WRITEOFF")}
+  scope :billing_for_writeoff, ->{where("meta->>'data_store_type' = ?","BILLING_FOR_WRITEOFF")}
 
   # For attaching json dumps
   has_one_attached :data_json_dump

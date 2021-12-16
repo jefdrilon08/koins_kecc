@@ -49,6 +49,11 @@ namespace :api do
   end
 
   namespace :v1 do
+    #billing_for_writeoff
+    post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
+    post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
+    post "/billing_for_writeoff/approve",     to: "billing_for_writeoff#approve"
+
     # Process Online Application
     post "/online_applications/process", to: "online_applications#process_application"
     post "/online_applications/reject", to: "online_applications#reject"
@@ -229,6 +234,8 @@ namespace :api do
     get "/centers", to: "centers#index"
     get "/centers/centers", to: "centers#centers"
 
+
+
     # Billing
     post "/billings", to: "billings#create"
     post "/billings/update", to: "billings#update"
@@ -273,7 +280,9 @@ namespace :api do
 
     #midas
     get "/excel_reports/generate", to: "excel_reports#generate"
- 
+    
+    #transfer_member_records
+    post "/transfer_member_records/create", to: "transfer_member_records#create"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
