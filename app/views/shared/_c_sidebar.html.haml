@@ -232,6 +232,10 @@
           = link_to transfer_member_records_path, class: "c-sidebar-nav-link #{params[:controller] == "accrued_payment_collections_path" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-people-arrows
             Transfer Member
+        %li.c-sidebar-nav-item
+          = link_to billing_for_writeoff_path, class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-clipboard-list
+            Billing For Writeoff
         %li.c-sidebar-nav-title
           Branch Reports
         %li.c-sidebar-nav-item

@@ -64,6 +64,9 @@
       - elsif @loan.paid?
         .badge.badge-success
           Paid
+      -elsif @loan.writeoff?
+        .badge.badge-warning
+          Writeoff
   %tr
     %th
       Loan Product:

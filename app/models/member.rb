@@ -19,7 +19,8 @@ class Member < ApplicationRecord
     "for-transfer",
     "transferred",
     "cleared",
-    "dependent"
+    "dependent",
+    "writeoff"
   ]
 
   INSURANCE_STATUS = [
@@ -180,6 +181,10 @@ class Member < ApplicationRecord
   
   def pending?
     self.status == "pending"
+  end
+
+  def writeoff?
+    self.status == "writeoff"
   end
 
   def pending_dormant?

@@ -8,7 +8,8 @@ class Loan < ApplicationRecord
     "for-release",
     "active",
     "paid",
-    "processing"
+    "processing",
+    "writeoff"
   ]
 
   belongs_to :center
@@ -36,6 +37,7 @@ class Loan < ApplicationRecord
   scope :paid, -> { where(status: "paid") }
   scope :active_or_paid, -> { where(status: ["active", "paid"]) }
   scope :active_or_pending, -> { where(status: ["active", "pending"]) }
+  scope :writeoff, -> {where(status: "writeoff")}
 
   has_one_attached :application_form
   has_one_attached :co_maker_relative_profile_picture
@@ -257,7 +259,11 @@ class Loan < ApplicationRecord
     self.status == "paid"
   end
 
-  def active?
+  def active? 
     self.status == "active"
+  end
+
+  def writeoff?
+    self.status == "writeoff"
   end
 end
