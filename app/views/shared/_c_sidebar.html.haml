@@ -130,10 +130,7 @@
           = link_to monthly_accounting_code_summaries_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-balance-scale
             Monthly AC Summaries
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/for_writeoff", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-pen-alt
-            Members For Writeoff
+        
 
         %li.c-sidebar-nav-title
           Journal Entries
@@ -232,10 +229,18 @@
           = link_to transfer_member_records_path, class: "c-sidebar-nav-link #{params[:controller] == "accrued_payment_collections_path" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-people-arrows
             Transfer Member
+       
+        %li.c-sidebar-nav-title
+          Writeoff
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/for_writeoff", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-clipboard-list
+            List Of Members For Writeoff
         %li.c-sidebar-nav-item
           = link_to billing_for_writeoff_path, class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-clipboard-list
-            Billing For Writeoff
+            Collection For Writeoff
+
         %li.c-sidebar-nav-title
           Branch Reports
         %li.c-sidebar-nav-item

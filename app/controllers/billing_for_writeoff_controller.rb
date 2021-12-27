@@ -6,7 +6,7 @@ class BillingForWriteoffController < DataStoreController
     # end
      @subheader_items = [
         {
-          text: "Billing For Writeoff"
+          text: "Collection For Writeoff"
         }
       ]
 
@@ -54,7 +54,7 @@ class BillingForWriteoffController < DataStoreController
         {
           is_link: true,
           path: "/billing_for_writeoff",
-          text: "Billing For Writeoff / #{@data_store.meta["branch_name"]}"
+          text: "Collection For Writeoff - #{@data_store.meta["branch_name"]}"
         }
       ]
 
@@ -70,9 +70,13 @@ class BillingForWriteoffController < DataStoreController
             }
         end
          @subheader_side_actions << {
-          link: billing_for_writeoff_path(@data_store.id),
+          id: "",
+          link: "/billing_for_writeoff/#{@data_store.id}",
           class: "fa fa-times",
-          data: { method: :delete, confirm: "Are you sure?" },
+          data: {
+            method: :delete,
+            confirm: "Are you sure?"
+          },
           text: "Delete"
         }
       end
@@ -85,5 +89,13 @@ class BillingForWriteoffController < DataStoreController
   end
 
   def destroy
+    billing_for_writeoff = DataStore.find(params[:id])
+    if billing_for_writeoff.pending?
+       billing_for_writeoff.destroy!
+       redirect_to billing_for_writeoff_path
+    else
+        redirect_to billing_for_writeoff_path(billing_for_writeoff)
+    end
+
   end
 end
