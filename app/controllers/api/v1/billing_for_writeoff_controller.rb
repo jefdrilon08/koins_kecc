@@ -16,14 +16,14 @@ module Api
         billing_for_writeoff= DataStore.billing_for_writeoff.where(id: params[:id]).first
         member = Member.find(params[:member_id])
         loan_product_id = params[:loan_product_id]
-        amount = params[:amount].to_f.round(2)
+        amount = Loan.where(status: "active", loan_product_id: loan_product_id,member_id: params[:member_id]).pluck(:principal_balance).first
 
 
         config = {
           billing_for_writeoff: billing_for_writeoff,
           member: member,
           loan_product_id: loan_product_id,
-          amount: amount
+          amount: amount.to_f.round(2)
           }
 
         errors = ::BillingForWriteoff::ValidateAddMember.new(config: config).execute!
@@ -61,7 +61,9 @@ module Api
       def update
       end
 
-      def modify_transaction_record
+      def delete_member
+
+        
       end
 
       def create

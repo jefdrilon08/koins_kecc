@@ -28,6 +28,21 @@ module BillingForWriteoff
           }
         end
 
+        if @member.present?
+          billing_record = @billing_for_writeoff.data.with_indifferent_access[:record]
+          billing_record.each do |b|
+            if  b[:member]["id"] == @member.id  and b[:loan]["loan_product_id"] == @loan_product_id
+                @errors[:messages] << {
+                key: "member_record",
+                message: "duplicate member and loan record"
+                }
+            end
+          end
+        end
+
+
+
+
         if @loan_product_id.present? and @loan_id.empty?
           @errors[:messages] << {
             key: "member loan product",
@@ -41,7 +56,7 @@ module BillingForWriteoff
                 message: "amount cannot be zero"
               }
 
-            elsif  @amount.present? and @amount > loan.principal_balance
+            elsif  @amount.present? and @amount > loan.principal_balance.to_f.round(2)
               @errors[:messages] << {
                 key: "check_amount",
                 message: "amount is greather than loan principal balance #{loan.principal_balance}"

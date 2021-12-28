@@ -62,19 +62,18 @@ var _bindEvents = function() {
   $btnAdd.on("click", function() {
     var memberId        = $selectMember.val();
     var loanProductId   = $selectLoan.val();
-    var amount          = $inputAmount.val();
+  
 
     var data  = {
       id: _id,
       member_id: memberId,
       loan_product_id: loanProductId,
-      amount: amount,
       authenticity_token: _authenticityToken
     };
 
     $selectMember.prop("disabled", true);
     $selectLoan.prop("disabled", true);
-    $inputAmount.prop("disabled", true);
+ 
 
     $.ajax({
       url: "/api/v1/billing_for_writeoff/add_member",
@@ -104,7 +103,7 @@ var _bindEvents = function() {
 
           $selectMember.prop("disabled", false);
           $selectLoan.prop("disabled", false);
-          $inputAmount.prop("disabled", false);
+         
         }
       }
     });
