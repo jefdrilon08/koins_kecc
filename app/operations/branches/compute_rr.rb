@@ -208,11 +208,13 @@ module Branches
             num_days_par = 1
           end
         elsif latest_transaction_date.blank?
-          num_days_par  = (@as_of - first_date_of_payment).to_i
-
-          if num_days_par == 0
-            num_days_par = 1
-          end
+          l_id = r.fetch("id")
+          first_amort = AmortizationScheduleEntry.where(loan_id: l_id).order(:due_date).first.due_date
+          #num_days_par  = (@as_of - first_date_of_payment).to_i
+          num_days_par  = (@as_of - first_amort).to_i
+          #if num_days_par == 0
+            #num_days_par = 1
+          #end
         elsif par > 0 and latest_transaction_date.present?
           num_days_par  = (@as_of - first_date_of_payment).to_i
 
