@@ -23,5 +23,5 @@
           #{number_to_currency(o[:amount], unit: '')}
         - if @data_store.pending?
           %td.text-center
-            .btn.btn-danger.btn-delete-member.btn-sm{ data: { member_name: "#{o[:member][:last_name]}, #{o[:member][:first_name]}"} }
+            .btn.btn-danger.btn-delete-member.btn-sm{ data: { member_id:o[:member][:id], member_name: "#{o[:member][:last_name]}, #{o[:member][:first_name]}",loan_product_name: o[:loan][:loan_name], loan_id: o[:loan][:loan_id] }}
               .fa.fa-times 

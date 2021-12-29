@@ -11,6 +11,10 @@ var $btnDelete;
 var $btnConfirmDelete;
 var $modalDelete;
 
+var $btnDeleteMember;
+var $btnConfirmDeleteMember;
+var $modalDeleteMember;
+
 var $selectMember;
 var $selectAccount;
 var $selectAdjustment;
@@ -19,6 +23,7 @@ var $btnAdd;
 
 
 var $displayMember;
+var $displayLoanProductName;
 var $displayAccountSubtype;
 var $displayPostType;
 var $displayAccountingCode;
@@ -28,7 +33,9 @@ var $message;
 var templateErrorList;
 
 var currentMember           = "";
-var currentMemberAccountId  = "";
+var currentLoanProduct      = "";
+var currentLoanProductId    = "";
+var currentMemberId         = "";
 var currentAccountSubtype   = "";
 var currentAccountingCodeId = "";
 var currentPostType         = "";
@@ -42,6 +49,9 @@ var _cacheDom = function() {
   $modalApprove       = $("#modal-approve");
   $inputAmount        = $("#input-amount");
 
+  $btnDeleteMember        = $(".btn-delete-member");
+  $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
+  $modalDeleteMember      = $("#modal-delete-member");
 
   $selectMember     = $("#select-member");
   $selectLoan       = $("#select-loan")
@@ -51,7 +61,7 @@ var _cacheDom = function() {
 
 
   $displayMember          = $(".display-member");
-
+  $displayLoanProductName = $(".display-loan-product-name");
   $message  = $(".message");
 
   templateErrorList = $("#template-error-list").html();
@@ -154,6 +164,65 @@ $btnApprove.on("click", function() {
       }
     });
   });
+
+ $btnDeleteMember.on("click", function() {
+    $message.html("");
+
+    currentMember           = $(this).data("member-name");
+    currentMemberId         = $(this).data("member-id");
+    currentLoanProduct      = $(this).data("loan-product-name");
+    currentLoanProductId    = $(this).data("loan-id");
+
+    $displayMember.html(currentMember);
+    $displayLoanProductName.html(currentLoanProduct);
+
+    $modalDeleteMember.modal("show");
+  });
+
+  $btnConfirmDeleteMember.on("click", function() {
+    $message.html("Loading...");
+    $btnConfirmDeleteMember.prop("disabled", true);
+
+    var data  = {
+      id: _id,
+      member_id: currentMemberId,
+      loan_product_id: currentLoanProductId,
+      authenticity_token: _authenticityToken
+    };
+
+    $.ajax({
+      url: "/api/v1/billing_for_writeoff/delete_member",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+        
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"]
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmDeleteMember.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+
   
   
 };

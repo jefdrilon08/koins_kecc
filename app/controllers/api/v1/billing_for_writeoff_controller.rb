@@ -62,7 +62,26 @@ module Api
       end
 
       def delete_member
+        data_store      = DataStore.find(params[:id])
+        member_id       = params[:member_id]
+        loan_product_id = params[:loan_product_id]
 
+        config = {
+          data_store: data_store,
+          member_id: member_id,
+          loan_id: loan_product_id
+        }
+
+        errors = ::BillingForWriteoff::ValidateDeleteMember.new(config: config).execute!
+         if errors[:messages].any?
+            render json: errors, status: 400
+          else
+            ::BillingForWriteoff::DeleteMember.new(
+              config: config
+            ).execute!
+
+            render json: { message: "ok" }
+          end
         
       end
 

@@ -53,6 +53,7 @@ namespace :api do
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
     post "/billing_for_writeoff/approve",     to: "billing_for_writeoff#approve"
+    post "/billing_for_writeoff/delete_member", to: "billing_for_writeoff#delete_member"
 
     # Process Online Application
     post "/online_applications/process", to: "online_applications#process_application"
