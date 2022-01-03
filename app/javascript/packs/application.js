@@ -193,6 +193,8 @@ import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js"
 import MembersMakePayments from "../models/MembersMakePayment.js";
 import BillingForWriteoffIndex from "../models/BillingForWriteoffIndex.js";
 import BillingForWriteoffShow from "../models/BillingForWriteoffShow.js";
+import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
+import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -361,7 +363,9 @@ const hooks = {
   "transfer_member_records/index":                    [TransferMemberRecordsIndex],
   "adjustments/make_payments/show":                   [MembersMakePayments],
   "billing_for_writeoff/index":                       [BillingForWriteoffIndex],
-  "billing_for_writeoff/show":                        [BillingForWriteoffShow]
+  "billing_for_writeoff/show":                        [BillingForWriteoffShow],
+  "data_stores/member_id_generators/index":       [MemberIdGeneratorsIndex],
+  "data_stores/member_id_generators/show":       [MemberIdGeneratorsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

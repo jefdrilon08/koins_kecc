@@ -1,0 +1,13 @@
+%table.table.table-sm.table-bordered 
+  %tr
+    %th
+      Center
+      = select_tag :center_id, options_from_collection_for_select(@center, :id, :name, @center.try(:id)), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+    %th
+      Member
+      = select_tag :member, options_for_select(["CRB", "CDB"]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+    
+    %th 
+      Action
+      %button#btn-add.btn.btn-block.btn-info{ data: { data_store_id: "#"  } }
+        Add

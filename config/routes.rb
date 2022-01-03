@@ -426,6 +426,7 @@ Rails.application.routes.draw do
     delete "/branch_resignations/:id", to: "branch_resignations#destroy"
     
     get "/member_id_generators", to: "member_id_generators#index"
+    get "/member_id_generators/:id", to: "member_id_generators#show"
   end
   
   # daily_branch_metrics
