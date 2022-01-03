@@ -101,7 +101,8 @@ module Loans
       if @loan.active? and @loan.principal_balance <= 0.00 and @loan.interest_balance <= 0.00
         @loan.update!(
           date_completed: @account_transaction.transacted_at,
-          status: "paid"
+          status: "paid",
+          max_active_date: @account_transaction.transacted_at
         )
       end
     end

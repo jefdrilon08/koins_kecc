@@ -121,7 +121,8 @@ module Billings
       if @loan.principal_balance == 0.00 and @loan.interest_balance == 0.00
         @loan.update!(
           date_completed: @date_paid,
-          status: "paid"
+          status: "paid",
+          max_active_date: @date_paid
         )
       end
 
