@@ -86,6 +86,24 @@ module InsuranceMonthlyClosingCollections
         end
       end
 
+      if Settings.activate_microinsurance
+        # Build accounting entry
+        default_branch_id = Settings.try(:defaults).try(:default_branch).try(:id)
+        @default_branch = Branch.find(default_branch_id)
+
+        @data[:accounting_entry]  = ::InsuranceMonthlyClosingCollections::BuildAccountingEntry.new(
+                                      config: {
+                                        data: @data,
+                                        branch: @branch,
+                                        default_branch: @default_branch,
+                                        settings: @account_settings,
+                                        user: @user,
+                                        collection_date: @closing_date,
+                                        closing_date: @closing_date
+                                      }
+                                    ).execute!
+      end
+
       # Attach meta
       @insurance_monthly_closing_collection.meta  = @meta
 

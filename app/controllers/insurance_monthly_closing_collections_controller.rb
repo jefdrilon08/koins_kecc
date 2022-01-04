@@ -2,7 +2,7 @@ class InsuranceMonthlyClosingCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @insurance_monthly_closing_collections = InsuranceMonthlyClosingCollection.includes(:branch).where(branch_id: @branches.pluck(:id)).order(closing_date: :desc)
+    @insurance_monthly_closing_collections = InsuranceMonthlyClosingCollection.includes(:branch).where(branch_id: @branches.pluck(:id)).order(closing_date: :desc, branch_id: :desc)
 
     if params[:branch_id].present?
       @branch = Branch.find(params[:branch_id])

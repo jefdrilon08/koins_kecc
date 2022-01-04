@@ -188,7 +188,13 @@ import MidasIndex from "../models/MidasIndex.js";
 import MembersInGoodStandingIndex from "../models/MembersInGoodStandingIndex.js";
 import MembersInGoodStandingShow from "../models/MembersInGoodStandingShow.js";
 import ForWriteoffIndex from "../models/ForWriteoffIndex.js";
-import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js"
+import ForWriteoffShow from "../models/ForWriteoffShow.js";
+import TransferMemberRecordsIndex from "../models/TransferMemberRecordsIndex.js";
+import MembersMakePayments from "../models/MembersMakePayment.js";
+import BillingForWriteoffIndex from "../models/BillingForWriteoffIndex.js";
+import BillingForWriteoffShow from "../models/BillingForWriteoffShow.js";
+import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
+import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -202,6 +208,7 @@ const hooks = {
   "members/index":                                    [MembersIndex],
   "members/search":                                   [MembersSearch],
   "members/show":                                     [MembersShow],
+  "members/form_make_payments":                       [MembersMakePayments],
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
@@ -348,12 +355,17 @@ const hooks = {
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
   "loans/reverse_form":                               [LoansReverseForm],
-  "excel_reports/index":                 	      [MidasIndex],
+  "excel_reports/index":                 	            [MidasIndex],
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
   "data_stores/members_in_good_standing/show":        [MembersInGoodStandingShow,MembersInGoodStandingShowComponent],
-  "data_stores/for_writeoff/index": [ForWriteoffIndex],
-  "data_stores/for_writeoff/show": [ForWriteoffShowComponent],
-  "transfer_member_records/index": [TransferMemberRecordsIndex]
+  "data_stores/for_writeoff/index":                   [ForWriteoffIndex],
+  "data_stores/for_writeoff/show":                    [ForWriteoffShow,ForWriteoffShowComponent],
+  "transfer_member_records/index":                    [TransferMemberRecordsIndex],
+  "adjustments/make_payments/show":                   [MembersMakePayments],
+  "billing_for_writeoff/index":                       [BillingForWriteoffIndex],
+  "billing_for_writeoff/show":                        [BillingForWriteoffShow],
+  "data_stores/member_id_generators/index":       [MemberIdGeneratorsIndex],
+  "data_stores/member_id_generators/show":       [MemberIdGeneratorsShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

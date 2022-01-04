@@ -6,16 +6,27 @@
         %h3
           #{@online_application}
         %hr
+          - if @online_application.data["approve_process"].present?
+            - @online_application.data["approve_process"].each do |opp|
+              - if opp["type"] == "assign_branch_by"
+                .c-callout.c-callout-info
+                  %p This has already been assigned to #{@online_application.branch.name} SATO by #{opp["name"]} on #{opp["date_assign"]}
+              - elsif opp["type"] == "verify_by"
+                .c-callout.c-callout-info
+                  %p This has already been verified by #{opp["name"]} on #{opp["date_assign"]}
+              - else
+                .c-callout.c-callout-success
+                  %p This has already been process by #{opp["name"]} on #{opp["date_assign"]}
 
         - if @online_application.for_verification?
           %h4.badge.badge-warning
-            FOR VERIFICATION
+            Status: FOR VERIFICATION
         - elsif @online_application.verified?
           %h4.badge.badge-info
-            VERIFIED
+            Status: VERIFIED
         - elsif @online_application.processed?
           %h4.badge.badge-success
-            PROCESSED
+            Statu: PROCESSED
         - elsif @online_application.rejected?
           .alert.alert-danger
             %h4
@@ -274,6 +285,8 @@
               %button#btn-reject.btn.btn-danger.btn-block
                 .fa.fa-times
                 Reject
+        %h4
+      
 
 = render partial: "online_applications/modals/process"
 = render partial: "online_applications/modals/verify"

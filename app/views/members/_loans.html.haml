@@ -360,6 +360,54 @@
   %p
     No paid loans found.
 
+
+
+%hr
+%h6
+  Write-off  Loans
+- if @writeoff_loans .any?
+  %table.table.table-bordered.table-hover.table-sm
+    %thead
+      %tr
+        %th
+          PN Number
+        %th
+          Loan Product
+        %th.text-center
+          Cycle 
+        %th.text-right
+          Total Due
+        %th.text-right
+          Total Paid
+        %th.text-right
+          Total Balance
+    %tbody
+      - @writeoff_loans .each do |loan|
+        %tr
+          %td
+            = link_to loan_path(loan) do
+              %strong
+                #{loan.pn_number}
+          %td.text-muted
+            #{loan.loan_product}
+          %td.text-center
+            #{loan.cycle}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_dues, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_paid, unit: "")}
+          %td.text-right
+            %strong
+              #{number_to_currency(loan.total_balance, unit: "")}
+- else
+  %p
+    No Write-off loans found.
+
+
+
+
 %hr
 %h6
   Loan Cycles

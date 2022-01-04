@@ -1,5 +1,5 @@
 #modal-new.modal.fade{:tabindex => "-1"}
-  .modal-dialog.modal-sm
+  .modal-dialog.modal-lg
     .modal-content
       .modal-header
         %h3.modal-title
@@ -12,8 +12,13 @@
             .col
               .form-group
                 %label
-                  Branch
+                  Select Branch:
                 = select_tag :branch, options_from_collection_for_select(@branches, :id, :name), id: "select-branch", class: "form-control"
+            .col
+              .form-group
+                %label
+                  Transfer to: 
+                = select_tag :branch_to_transfer, options_from_collection_for_select(@branches, :id, :name), id: "select-branch-to-transfer", class: "form-control"
           .message
       .modal-footer
         .controls

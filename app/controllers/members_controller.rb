@@ -115,13 +115,21 @@ class MembersController < ApplicationController
   end
 
   def form_make_payments
+    
     @member = Member.find(params[:id]) 
     config = {
-                member_id: @member.id
+                member_id: @member.id,
+                make_payment_type: params[:type]
       
               }
     @data = ::Members::BuildMakePayments.new(config: config).execute!
-    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(make_payment_data: @data, current_user: current_user   ).execute!
+
+    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(
+                                    make_payment_data: @data, 
+                                    current_user: current_user,
+                                    make_payment_type: params[:type]
+
+                                    ).execute!
 
     @subheader_items = [
       { is_link: true, path: members_path, text: "Members" },
@@ -129,9 +137,22 @@ class MembersController < ApplicationController
       { text: "Make Payment Form" }
     ]
 
+  
     @subheader_side_actions = [
+      {
+        id: "btn-save",
+        link: "#",
+        class: "fa fa-check",
+        text: "Save",
+      
+        data: { member_id: @member.id, make_payment_type: params[:type] }
+      },
+      { 
+        is_link: true, 
+        path: member_path(@member), 
+        class: "fa fa-times",
+        text: "Cancel" }
     ]
-
     @payload = {
       id: @member.id,
       memberResignationTypes: helpers.member_resignation_types
@@ -228,7 +249,7 @@ class MembersController < ApplicationController
     @for_verification_loans = Loan.for_verification.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
     @verified_loans         = Loan.verified.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
     @in_process_loans       = Loan.in_process.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
-
+    @writeoff_loans         = Loan.writeoff.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
     @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
     @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
     @equity_accounts    = MemberAccount.equities.where(member_id: @member.id)

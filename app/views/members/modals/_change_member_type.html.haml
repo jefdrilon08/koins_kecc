@@ -3,16 +3,16 @@
     .modal-content
       .modal-header
         %h3.modal-title
-          Change Member Type
+          Make Payment Type
       .modal-body
         .modal-body-content
           .bs-callout.bs-callout-info
-            Change this member's member type
+            Change this make type
           .row
             .col
               .form-group
                 %label
-                  Select Member Type
+                  Select Make Payment Type
                 = select_tag :member_type, options_for_select(Settings.default_member_types || [], @member.member_type), class: "form-control select-select2", id: "select-member-type"
           .message
       .modal-footer

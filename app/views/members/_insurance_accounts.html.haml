@@ -12,6 +12,15 @@
           = link_to insurance_account_path(o.id) do
             %strong
               #{o.account_subtype}
-        %td.text-right
-          %strong
-            #{number_to_currency(o.balance, unit: "")}
+        - if o.clip
+          %td.text-right
+            %strong
+              #{number_to_currency(o.clip_active_balance, unit: "")}
+        - elsif o.hiip
+          %td.text-right
+            %strong
+              #{number_to_currency(o.hiip_active_balance, unit: "")}
+        - else
+          %td.text-right
+            %strong
+              #{number_to_currency(o.balance, unit: "")}

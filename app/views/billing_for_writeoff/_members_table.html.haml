@@ -1,0 +1,27 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "30%" }
+        Member
+      %th
+        Loan
+      %th.text-center
+        Amount
+      - if @data_store.pending?
+        %th.text-center
+          Actions
+  %tbody
+    - @data[:record].each_with_index do |o, i|
+      %tr
+        %td
+          %strong
+            = link_to member_path(o[:member][:id]), target: '_blank' do
+              #{o[:member][:last_name]}, #{o[:member][:first_name]}
+        %td
+          #{o[:loan][:loan_name]}
+        %td.text-right
+          #{number_to_currency(o[:amount], unit: '')}
+        - if @data_store.pending?
+          %td.text-center
+            .btn.btn-danger.btn-delete-member.btn-sm{ data: { member_id:o[:member][:id], member_name: "#{o[:member][:last_name]}, #{o[:member][:first_name]}",loan_product_name: o[:loan][:loan_name], loan_id: o[:loan][:loan_id] }}
+              .fa.fa-times 

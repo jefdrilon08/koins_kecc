@@ -1,0 +1,24 @@
+= title @data_store.id
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @data_store.pending?
+              = render partial: "form_add"
+            .message
+            - if @data[:record].any?
+              = render partial: "members_table"
+            - else
+              %p
+                No records found.
+            %hr
+
+            %h4
+              Accounting Entry
+            = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
+
+
+= render partial: "/billing_for_writeoff/modals/approve"
+= render partial: "/billing_for_writeoff/modals/delete_member"

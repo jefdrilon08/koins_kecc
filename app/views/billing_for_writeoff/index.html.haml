@@ -1,0 +1,13 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @records.any?
+          = render partial: "index_list"
+          = paginate @records
+        - else
+          %p
+            No records
+
+= render partial: "billing_for_writeoff/modals/new"

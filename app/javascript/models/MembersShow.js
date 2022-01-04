@@ -90,6 +90,12 @@ var $inputMykoinsPassword;
 var $inputMykoinsPasswordConfirmation;
 var $btnSaveMykoinsPassword;
 
+
+var $btnMakePayment;  
+var $modalMakePayment;
+var $btnConfirmMakePayment;
+var $selectMakePaymentType;
+
 var $btnErase;
 var $modalErase;
 var $btnConfirmErase;
@@ -223,6 +229,11 @@ var _cacheDom = function() {
   $inputMykoinsPassword             = $("#input-mykoins-password");
   $inputMykoinsPasswordConfirmation = $("#input-mykoins-password-confirmation");
   $btnSaveMykoinsPassword           = $("#btn-save-mykoins-password");
+  
+  $btnMakePayment   = $("#btn-make-payment");
+  $modalMakePayment   = $("#modal-make-payment-type");
+  $btnConfirmMakePayment  = $("#btn-confirm-make-payment-type")
+  $selectMakePaymentType  = $("#select-make-payment-type")
 
   _changeTermOptions($selectModeOfPayment.val());
 }
@@ -250,6 +261,47 @@ var _changeTermOptions  = function(modeOfPayment) {
 }
 
 var _bindEvents = function() {
+
+  $btnConfirmMakePayment.on("click", function(){
+    //alert(_memberId);
+    var make_payment_type = $selectMakePaymentType.val()
+    var data  = {
+      id: _memberId,
+      authenticity_token: _authenticityToken
+    }
+    $.ajax({
+      success: function() {
+        $message.html("Success! Redirecting...");
+        window.location.href = "/members/" + _memberId + "/form_make_payments/" + make_payment_type;
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+        } finally {
+          console.log("errors:");
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmRegister.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+
+  $btnMakePayment.on("click", function(){
+    $modalMakePayment.modal("show");
+  });
+
   $btnSaveMykoinsPassword.on("click", function() {
     var password              = $inputMykoinsPassword.val();
     var password_confirmation = $inputMykoinsPasswordConfirmation.val();

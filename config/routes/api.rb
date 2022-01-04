@@ -49,6 +49,12 @@ namespace :api do
   end
 
   namespace :v1 do
+    #billing_for_writeoff
+    post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
+    post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
+    post "/billing_for_writeoff/approve",     to: "billing_for_writeoff#approve"
+    post "/billing_for_writeoff/delete_member", to: "billing_for_writeoff#delete_member"
+
     # Process Online Application
     post "/online_applications/process", to: "online_applications#process_application"
     post "/online_applications/reject", to: "online_applications#reject"
@@ -94,6 +100,9 @@ namespace :api do
       post "/recompute_restructures/create", to: "recompute_restructures#create"
       post "/recompute_restructures/approve", to: "recompute_restructures#approve"
       post "/recompute_restructures/destroy", to: "recompute_restructures#destroy"
+      
+      post "/make_payments/approve", to: "make_payments#approve"
+      post "/make_payments/destroy", to: "make_payments#destroy"
     end
 
 		post "/administration/member_shares/print", to: "member_shares#print"
@@ -147,7 +156,10 @@ namespace :api do
     get "/members/process_members_file", to: "members#process_members_file"
     get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
+    post "/members/register_member", to: "members#register_member"
+    post "/members/save_make_payment", to: "members#save_make_payment"
 
+    #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
@@ -212,6 +224,8 @@ namespace :api do
     get "/branches/:id/stats", to: "branches#stats"
     get "/branches/fetch_centers_for_restructure", to: "branches#fetch_centers_for_restructure"
 
+
+
     # Clusters
     get "/clusters", to: "clusters#index"
     # Accounting Funds
@@ -220,6 +234,8 @@ namespace :api do
     # Centers
     get "/centers", to: "centers#index"
     get "/centers/centers", to: "centers#centers"
+
+
 
     # Billing
     post "/billings", to: "billings#create"
@@ -265,7 +281,9 @@ namespace :api do
 
     #midas
     get "/excel_reports/generate", to: "excel_reports#generate"
- 
+    
+    #transfer_member_records
+    post "/transfer_member_records/create", to: "transfer_member_records#create"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
@@ -390,6 +408,7 @@ namespace :api do
       get "/icpr/fetch", to: "icpr#fetch"
       post "/icpr/approve", to: "icpr#approve"
       post "/icpr/set_rate", to: "icpr#set_rate"
+      post "/member_id_generetors/create", to: "member_id_generetors#create"
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
       post "/patronage_refund/approve", to: "patronage_refund#approve"

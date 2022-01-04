@@ -1,0 +1,23 @@
+#modal-make-payment-type.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Make Payment Type
+      .modal-body
+        .modal-body-content
+          .row
+            .col
+              .form-group
+                %label
+                  Select Make Payment Type
+                = select_tag :make_payment_type, options_for_select(["CLIP", "GPF", "Members Benefit"]), class: "form-control select-select2", id: "select-make-payment-type"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-make-payment-type.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

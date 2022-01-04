@@ -122,13 +122,21 @@ namespace :generate do
   task :account_transactions_file => :environment do
     start_date  = ENV["START_DATE"] || Date.yesterday
     end_date    = ENV["END_DATE"] || Date.tomorrow
+    
+    if ENV["BRANCH_ID"].present?
+      branches = Branch.where(id: ENV["BRANCH_ID"])
+    else
+      branches    = Branch.all
+    end
 
-    cmd = ::Exports::SaveAccountTransactionsCsv.new(
+    branches.each do |branch|
+      cmd = ::Exports::SaveAccountTransactionsCsv.new(
             start_date: start_date,
-            end_date: end_date
+            end_date: end_date,
+            branch: branch
           )
 
-    # if cmd.account_transactions.any?
+      # if cmd.account_transactions.any?
       cmd.execute!
 
       file_repository = cmd.file_repository
@@ -145,6 +153,7 @@ namespace :generate do
         puts "api_url: #{api_url}"
         puts "actual_url: #{actual_url}"
       end
-    # end
+      # end
+    end  
   end
 end

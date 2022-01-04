@@ -7,6 +7,8 @@ module InsuranceMonthlyClosingCollections
       @closing_date                         = @insurance_monthly_closing_collection.closing_date
       @data                                 = @insurance_monthly_closing_collection.data.with_indifferent_access
       @user                                 = @config[:user]
+
+      @data_accounting_entry                = @data[:accounting_entry]
       
       if Settings.activate_microinsurance
         @current_date = ::Utils::GetCurrentDate.new(
@@ -26,6 +28,18 @@ module InsuranceMonthlyClosingCollections
     def execute!
       perform_deposits!
 
+      if Settings.activate_microinsurance 
+        if @data_accounting_entry.present?
+          post_accounting_entry!
+
+          # Update accounting entry with reference number
+          @data[:accounting_entry][:id]               = @accounting_entry.id
+          @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
+          @data[:accounting_entry][:status]           = @accounting_entry.status
+          @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
+        end
+      end
+
       @data[:approved_by] = @user.full_name
 
       @insurance_monthly_closing_collection.update!(
@@ -38,6 +52,30 @@ module InsuranceMonthlyClosingCollections
     end
 
     private
+
+    def post_accounting_entry!
+      # Create new accounting entry
+      config  = {
+        accounting_entry_data: @data_accounting_entry,
+        user: @user
+      }
+
+      accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: config
+                          ).execute!
+
+      # Post to books
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
+      @accounting_entry
+    end
 
     def perform_deposits!
       @data[:records].each do |r|

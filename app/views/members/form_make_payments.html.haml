@@ -27,7 +27,7 @@
             %tr
               %th Book
               %td 
-                = select_tag :book_type, options_for_select(["CRB" , "JVB"], ""), class: "form-control select-select2", id: "book_type" , prompt: "-- SELECT --"
+                = select_tag :book_type, options_for_select(["CRB" , "JVB"], "#{@data[:meta][:book]}"), class: "form-control select-select2", id: "book_type" , prompt: "-- SELECT --"
 
         %table.table.table-sm.table-bordered.table-hover
           %thead

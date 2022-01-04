@@ -8,7 +8,7 @@ module Reports
         @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed", "dormant"])
         @resigned_before            = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @end_date, @end_date)
             
-        @gk_members                 = Member.where("member_type = ?", "GK")
+        @gk_members                 = Member.where("status = ? AND member_type = ?", "active", "GK")
         
         # inforce
         @active_inforce_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")

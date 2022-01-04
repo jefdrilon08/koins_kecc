@@ -3,6 +3,7 @@ class ApiController < ApplicationController
 
   def authenticate_app_request!
     if request.headers["X-KOINS-APP-AUTH-SECRET"].blank?
+
       render json: { message: "unauthenticated", full_messages: ["unauthenticated"] }, status: 400
     elsif request.headers["X-KOINS-APP-AUTH-SECRET"] != app_auth_secret
       render json: { message: "invalid auth token", full_messages: ["invalid auth token"] }, status: 400

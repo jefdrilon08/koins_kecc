@@ -4,8 +4,23 @@ module Members
     #def initialize
       @config = config
       @member_id = @config[:member_id]
+      @make_payment_type = @config[:make_payment_type]
+      @member = Member.find(@member_id)
       #@member_id = "066b697f-df51-42b9-a250-ec0dbac6722f"
-      @loan = Loan.where(member_id: @member_id, status: "active")
+
+      if @member.member_type == "GK" 
+        
+        @loan = Loan.joins(:loan_product).where("loans.member_id = ? and status = ?", @member_id, "active")
+      else
+        if @make_payment_type == "CLIP"
+          @loan = Loan.joins(:loan_product).where("loans.member_id = ? and loan_products.insured is true and status = ?", @member_id, "active")
+        else
+          @loan = Loan.joins(:loan_product).where("loans.member_id = ? and loan_products.insured is false and loans.status = ?", @member_id, "active")
+        end
+      end
+
+     
+
       @data = {
           member_id: @member_id,
           meta: {
@@ -22,7 +37,7 @@ module Members
     def execute!
       
       @loan.each do |l|
-          
+         
           tmp = {
               loan_id: l.id,
               record: [],

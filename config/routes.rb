@@ -67,6 +67,9 @@ Rails.application.routes.draw do
 
     get "/recompute_restructures", to: "recompute_restructures#index", as: :recompute_restructures
     get "/recompute_restructures/:id", to: "recompute_restructures#show", as: :recompute_restructure
+    
+    get "/make_payments", to: "make_payments#index", as: :make_payments
+    get "/make_payments/:id", to: "make_payments#show", as: :make_payment
   end
   
   # EXPORTS
@@ -102,7 +105,7 @@ Rails.application.routes.draw do
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
-  get "/members/:id/form_make_payments", to: "members#form_make_payments", as: :form_make_payments
+  get "/members/:id/form_make_payments/:type", to: "members#form_make_payments", as: :form_make_payments
 
   # app/controllers/members_controller.rb
   get "/members/form", to: "members#form", as: :member_form
@@ -231,6 +234,13 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
+  # billing for writeoff
+  
+  get "/billing_for_writeoff", to: "billing_for_writeoff#index"
+  get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"
+  delete "/billing_for_writeoff/:id", to: "billing_for_writeoff#destroy"
+
+  
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"
   
@@ -335,9 +345,9 @@ Rails.application.routes.draw do
     get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
     delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
 
-     get "/for_writeoff", to: "for_writeoff#index"
-    get "/for_writeoff/:id", to: "for_writeoff#show"
-
+    get "/for_writeoff/excel", to: "for_writeoff#excel"
+    get "/for_writeoff/for_writeoff_excel", to: "for_writeoff#for_writeoff_excel", as: :for_writeoff_download_excel
+    resources :for_writeoff,only: [:index,:show,:destroy]
 
     get "/patronage_refund", to: "patronage_refund#index"
     get "/patronage_refund/:id", to: "patronage_refund#show"
@@ -414,8 +424,11 @@ Rails.application.routes.draw do
     get "/branch_resignations", to: "branch_resignations#index"
     get "/branch_resignations/:id", to: "branch_resignations#show"
     delete "/branch_resignations/:id", to: "branch_resignations#destroy"
+    
+    get "/member_id_generators", to: "member_id_generators#index"
+    get "/member_id_generators/:id", to: "member_id_generators#show"
   end
-
+  
   # daily_branch_metrics
   resources :daily_branch_metrics, only: [:index, :show, :destroy]
 
