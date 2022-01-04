@@ -148,9 +148,12 @@ module Administration
         }
       ]
 
+      loan_products = ::LoanProducts::FetchList.new.execute!
+
       @payload = {
         id: @membership_arrangement.id,
-        data: @membership_arrangement.data || {}
+        data: @membership_arrangement.data || {},
+        loan_products: loan_products
       }
     end
 

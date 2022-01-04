@@ -127,6 +127,8 @@ GEM
     crass (1.0.6)
     dead_end (1.1.7)
     deep_merge (1.2.1)
+    derailed (0.1.0)
+      derailed_benchmarks
     derailed_benchmarks (2.1.1)
       benchmark-ips (~> 2)
       dead_end
@@ -454,6 +456,7 @@ DEPENDENCIES
   chromedriver-helper
   cocoon
   config
+  derailed
   derailed_benchmarks
   devise
   dotenv-rails

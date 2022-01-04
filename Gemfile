@@ -56,6 +56,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'factory_bot_rails'
   gem 'derailed_benchmarks'
+  gem 'derailed'
 end
 
 group :development do
