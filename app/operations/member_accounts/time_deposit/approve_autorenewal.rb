@@ -63,10 +63,10 @@ module MemberAccounts
 
         # Compute beginning and ending balance
         data[:beginning_balance] = @member_account.balance.round(2)
-        data[:ending_balance]    = (data[:beginning_balance] + @interest_amount).round(2)
+        data[:ending_balance]    = (data[:beginning_balance] + @interest_amount.to_i).round(2)
 
         # Update account balance
-        new_balance = (@member_account.balance + @interest_amount).round(2)
+        new_balance = (@member_account.balance + @interest_amount.to_i).round(2)
         @member_account.update!(
           balance: new_balance
         )
