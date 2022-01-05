@@ -1,3 +1,50 @@
+export function buildLoanProductConfigObject() {
+  var configObject = {
+    loan_product_id: "",
+    receivable_accounting_code_id: "",
+    interest_receivable_accounting_code_id: "",
+    default_amount: 5000.00,
+    maintaining_balances: [
+      {
+        account_type: "SAVINGS",
+        account_subtype: "K-IMPOK",
+        percentage: 0.0,
+        threshold: 0.00
+      }
+    ],
+    midas: {
+      contract_type: 22,
+      contract_phase: "AC",
+      transaction_type: "NA"
+    },
+    deductions: [
+      {
+        name: "",
+        accounting_code_id: "",
+        amount: 0.00,
+        deduction_type: "",
+        business_permit_available: false,
+        business_permit_amount: 0.00,
+        skip_for_special_loan_fund: false,
+        use_for_special_loan_fund: false,
+        advance_insurance_value: false,
+        meta: {
+          meta_type: "",
+          term_map: [],
+          account_type: "",
+          account_subtype: "",
+          value: 0.00,
+          algo: "",
+          offset: 0,
+          membership_name: ""
+        }
+      }
+    ]
+  }
+
+  return configObject;
+}
+
 export function buildBillingTableData(o) {
   var data  = [];
 

@@ -6,7 +6,7 @@ module Api
 
         def update_data
           membership_arrangement  = MembershipArrangement.find_by_id(params[:id])
-          data                    = params[:data]
+          data                    = JSON.parse(params[:data])
           user                    = current_user
 
           errors  = ::Administration::MembershipArrangements::ValidateUpdateData.new(

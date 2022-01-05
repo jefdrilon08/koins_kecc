@@ -11,8 +11,8 @@ namespace :api do
     get "/loans/project_type_categories", to: "loans#project_type_categories"
     get "/loans", to: "loans#index"
     get "/loans/settings", to: "loans#settings"
-    post "/loans/quote", to: "loans#quote", to: "loans#quote"
-    post "/loans/review", to: "loans#review", to: "loans#review"
+    post "/loans/quote", to: "loans#quote"
+    post "/loans/review", to: "loans#review"
 
     # members
     post "/members/update_password", to: "members#update_password"
