@@ -8,9 +8,15 @@ var $btnConfirmNew;
 
 var $selectBranch;
 var $selectCenter;
+var $selectMember;
 
 var $message;
 var templateErrorList;
+
+var _members;
+var _members_list;
+var _memberId;
+var _urlCenters = "/api/v1/data_stores/member_id_generetors/fetch_members";
 
 var _cacheDom = function() {
   $modalNew         = $("#modal-new");
@@ -18,60 +24,55 @@ var _cacheDom = function() {
   $btnConfirmNew    = $("#btn-confirm-new");
   $selectBranch     = $("#select-branch");
   $selectCenter     = $("#select-center");
-
+  $selectMember     = $("#select-member");
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 }
 
-var _bindEvents = function() {
+var _loadMemberOptions  = function() {
+  $selectMember.html("");
+  if (_members_list.length > 0) {
+    _memberId = _members_list[0].id;
+    
+    for(var i = 0; i < _members_list.length; i++) {
   
-  $selectCenter.on("change", function() {
-    alert("jef")
-
-  });
-
-
-  $btnConfirmNew.on("click", function() {
-    var branchId  = $selectBranch.val();
-    $message.html("Loading...");
-    $btnConfirmNew.prop("disabled", true);
-    $selectBranch.prop("disabled", true);
-
-    var data  = {
-      branch_id: branchId,
-      authenticity_token: authenticityToken
+      $selectMember.append(new Option(_members_list[i].name, _members_list[i].id));
     }
+    $selectMember.val(_memberId);
+  }
 
+
+}
+
+
+var _bindEvents = function() {
+  $selectCenter.on("change", function() {
+  
     $.ajax({
-      url: "/api/v1/data_stores/member_id_generetors/create",
-      method: 'POST',
-      data: data,
-      success: function(response) {
-        
-        window.location.href="/data_stores/member_id_generators/" + response.id;
+      method: 'GET',
+      url: _urlCenters,
+      data: {
+        id: $selectCenter.val(),
+        with_members: true
       },
-      error: function(response) {
-        errors = [];
-
-        try {
-          errors = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          console.log(response);
-          errors.push("Something went wrong");
+      success: function(response) {
+        _members_list  = response.members;
+        
+        if(_members_list.length > 0) {
+          _members  = _members_list[0].name;
+          
         }
 
-        $message.html(
-          Mustache.render(
-            templateErrorList,
-            { errors: errors }
-          )
-        );
-
-        $btnConfirmNew.prop("disabled", false);
-        $selectBranch.prop("disabled", false);
+        _loadMemberOptions();
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching centers");
       }
     });
+
   });
+
 }
 
 var init  = function(config) {
