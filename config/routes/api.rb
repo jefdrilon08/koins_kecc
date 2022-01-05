@@ -234,8 +234,7 @@ namespace :api do
     # Centers
     get "/centers", to: "centers#index"
     get "/centers/centers", to: "centers#centers"
-
-
+    get "/centers/process_centers_file", to: "centers#process_centers_file"
 
     # Billing
     post "/billings", to: "billings#create"

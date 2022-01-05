@@ -1,7 +1,7 @@
 module Api
   module V1
     class CentersController < ApiController
-      before_action :authenticate_user!
+      before_action :authenticate_user!, except: [:process_centers_file]
 
       def assign_officer
         officer = User.where(id: params[:officer_id]).first
@@ -96,6 +96,16 @@ module Api
         end
 
         render json: { centers: data }
+      end
+
+      def process_centers_file
+        actual_url  = params[:actual_url]
+
+        ProcessCentersFile.perform_later({
+          actual_url: actual_url
+        })
+
+        render json: { message: "ok" }
       end
     end
   end

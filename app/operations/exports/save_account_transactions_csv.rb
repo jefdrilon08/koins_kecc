@@ -7,7 +7,7 @@ module Exports
       @end_date   = end_date.try(:to_date)
       @branch     = branch
 
-      if @start_date.blank? or @end_date.blank?
+      if @start_date.blank? or @end_date.blank? or @branch.blank?
         raise "Invalid parameters"
       end
 
