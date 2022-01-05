@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.2'
+ruby '3.1.0'
 
 gem 'rails', '~> 6.0'
-gem 'pg', '>= 0.18', '< 2.0'
+#gem 'pg', '>= 0.18', '< 2.0'
+gem 'pg'
 gem 'puma'
 gem 'sass-rails', '~> 5.0'
 gem 'bootsnap', '>= 1.1.0', require: false
@@ -41,11 +42,11 @@ gem 'uglifier'
 gem 'sprockets'
 
 # Webpacker
-gem 'webpacker'
+gem 'webpacker', '~> 6.0.0.rc.6'
 
 # For ruby 2.7.1
 # Note for Ubuntu: Make synmlink to ln -s /bin/mkdir /usr/bin/mkdir
-gem 'nokogiri', "1.11.0.rc2"
+gem 'nokogiri'
 
 group :production do
   gem 'puma_worker_killer'

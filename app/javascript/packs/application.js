@@ -1,14 +1,13 @@
 require("@rails/ujs").start();
 
+import JQuery from 'jquery';
+window.$ = window.JQuery = JQuery;
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import 'bootstrap';
-import jquery from 'jquery';
-import $ from 'jquery';
-
-window.$ = window.jquery = jquery;
 
 import "@fortawesome/fontawesome-free/js/all";
 
