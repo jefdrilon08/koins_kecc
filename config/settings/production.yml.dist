@@ -628,7 +628,7 @@ default_equity_withdrawal_accounts:
     account_subtype: "Life Insurance Fund"
 
 #Time Deposit Config
-time_deposit_autorenewal_user_id: "72eb76bc-3f42-40f9-a9e8-7f71ee656508"
+time_deposit_autorenewal_user_id: "18f54bcb-e05d-4e63-83bb-b4da3936ee0c"
 time_deposit:
   account_subtype: "Time Deposit"
   lock_in_periods:
