@@ -26,7 +26,7 @@ module DataStores
 
           def execute!
             query!
-            @data[:records] = @result.map{|o|
+            data_records = @result.map{|o|
                                  temp= {
                                     id:          o.fetch("member_id"),
                                     first_name:  o.fetch("first_name"),
@@ -37,27 +37,29 @@ module DataStores
                                     officer: JSON.parse(o.fetch("officer"))
                                  }
                                  temp
-                            }
-            @data[:records]= @data[:records].sort_by { |hash|hash[:last_name]}
-             @data
+                           }
+            data_r = data_records.uniq{|hash| hash.values_at(:id)}
+            @data[:records]= data_r
+            @data
 
           end
-
           def query!
-            sql = "SELECT  DISTINCT ON (arr->'member'->>'identification_number') 
+            sql = "SELECT   
             arr->'member'->>'id' as member_id ,
             arr->'member'->>'first_name' as first_name, 
             arr->'member'->>'last_name' as last_name, 
             arr->'member'->>'middle_name' as middle_name,
             arr->'member'->>'identification_number' as identification_number , 
+            arr->'id' as loan_id,
+            arr->'loan_product'->>'name' as loan_product,
             arr->'total_balance' as total_loan_balance, 
-            arr->'num_days_par' as num_day_par,
+            arr->>'num_days_par' as num_day_par,
+            arr->>'total_rr' as total_rr,
             arr->'center' as center , arr-> 'officer' as officer 
             from data_stores,json_array_elements(data->'records') 
-            arr(records) where data_stores.id='#{@repayment_rates.id}' 
-            and CAST(records->>'total_balance' as TEXT) = '0.0' 
-            and CAST(records->>'num_days_par' as TEXT) = '0' ORDER BY identification_number,last_name ASC"
+            arr(records) where data_stores.id='2dc44eea-7251-4c11-b281-4c87568ef524'  and arr->>'total_balance' = '0.0'
+             ORDER BY identification_number,last_name ASC "
             @result = ActiveRecord::Base.connection.execute(sql).to_a
-          end
+          end     
   end
 end
