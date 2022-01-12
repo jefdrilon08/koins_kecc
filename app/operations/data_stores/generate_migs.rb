@@ -57,7 +57,7 @@ module DataStores
             arr->>'total_rr' as total_rr,
             arr->'center' as center , arr-> 'officer' as officer 
             from data_stores,json_array_elements(data->'records') 
-            arr(records) where data_stores.id='2dc44eea-7251-4c11-b281-4c87568ef524'  and arr->>'total_balance' = '0.0'
+            arr(records) where data_stores.id='#{@repayment_rates.id}'  and arr->>'total_balance' = '0.0'
              ORDER BY identification_number,last_name ASC "
             @result = ActiveRecord::Base.connection.execute(sql).to_a
           end     
