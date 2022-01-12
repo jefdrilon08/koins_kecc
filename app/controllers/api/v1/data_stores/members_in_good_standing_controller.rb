@@ -15,7 +15,6 @@ module Api
             records = record.data.with_indifferent_access[:records]
            
             record.data["officers"] = records.select{ |o|
-            
                                         o[:officer].present? 
                                       }.map{ |o| o[:officer] }.uniq
 

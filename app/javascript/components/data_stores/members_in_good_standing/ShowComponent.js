@@ -179,6 +179,9 @@ renderMembersData(){
     for(var i = 0; i < member_data.length; i++) {
       rows.push(
         <tr key={"member_data-item-" + i}>
+        <td>
+            {[i+1]}
+          </td>
           <td>
             <a href={"/members/" + member_data[i].id+"/display"} target='_blank'>
             {member_data[i].last_name + ", " + member_data[i].first_name + " " + member_data[i].middle_name} </a>
@@ -199,6 +202,11 @@ renderMembersData(){
 }
  renderHeader() {
     var headers = [];
+    headers.push(
+      <th key="index">
+        
+      </th>
+    );
     headers.push(
       <th key="member-header">
         Member
