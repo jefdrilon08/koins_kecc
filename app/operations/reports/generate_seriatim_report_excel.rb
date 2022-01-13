@@ -60,6 +60,7 @@ module Reports
             "Member's contribution due & uncollected",
             "Total accumulated contributions (LIFE)",
             "Interest on equity value, if any",
+            "Interest on RF, if any",
             "RF",
             "Total Equity Value",
             "Rerserves",
@@ -104,34 +105,66 @@ module Reports
               end
             end  
 
-            lif_member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
-            lif_account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", lif_member_accounts.id)
+            # lif_member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", member.id).first
+            # lif_account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", lif_member_accounts.id)
 
-            life = 0
-            life_amount = 0
-            lif_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
-              if at.transaction_type == "withdraw"
-                life = ((life_amount < 0 ? 0 : life_amount) - (at.amount < 0 ? 0 : at.amount))
-              elsif at.transaction_type == "deposit"
-                life = (life_amount + at.amount).abs
-              end
-              life_amount = life
-            end
+            # life_amount = 0
+
+            # lif_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
+            #   if at.transaction_type == "withdraw"
+            #     life = ((life_amount < 0 ? 0 : life_amount) - (at.amount < 0 ? 0 : at.amount))
+            #   elsif at.transaction_type == "deposit"
+            #     life = (life_amount + at.amount).abs
+            #   end
+            #   life_amount = life
+            # end
 
             rf_member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Retirement Fund", member.id).first
             rf_account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", rf_member_accounts.id)
 
-            rf = 0
-            rf_amount = 0
+            rf_amount = 0.0
+            rf_interest = 0.0
             rf_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
               if at.transaction_type == "withdraw"
-                rf = ((rf_amount < 0 ? 0 : rf_amount) - (at.amount < 0 ? 0 : at.amount))
+                rf_amount = ((rf_amount < 0 ? 0 : rf_amount) - (at.amount < 0 ? 0 : at.amount))
               elsif at.transaction_type == "deposit"
-                rf = (rf_amount + at.amount).abs
+                rf_amount = (rf_amount + at.amount).abs
               end
-              rf_amount = rf
+
+              if at.transaction_type == "deposit"
+                if at.data.with_indifferent_access[:is_interest] == true 
+                  if at.transacted_at >= "2021-09-15".to_date
+                    rf_interest = (rf_interest + at.amount).abs
+                  end          
+                end
+              end
             end
-                
+
+            rf_amount = rf_amount - rf_interest
+
+            ev_member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Equity Value", member.id).first
+            ev_account_transactions = AccountTransaction.where("amount > 0 AND subsidiary_id IN (?)", ev_member_accounts.id)
+
+            ev_interest = 0.0
+            ev_amount = 0.0
+            ev_account_transactions.where("transacted_at <= ?", @as_of).order("transacted_at ASC").each do |at|
+              if at.transaction_type == "withdraw"
+                ev_amount = ((ev_amount < 0 ? 0 : ev_amount) - (at.amount < 0 ? 0 : at.amount))
+              elsif at.transaction_type == "deposit"
+                ev_amount = (ev_amount + at.amount).abs
+              end
+
+              if at.transaction_type == "deposit"
+                if at.data.with_indifferent_access[:is_interest] == true 
+                  if at.transacted_at >= "2021-09-15".to_date
+                    ev_interest = (ev_interest + at.amount).abs
+                  end          
+                end
+              end
+            end
+
+            ev_amount = ev_amount - ev_interest
+
             if index == 0
               sheet.add_row [
                   member.identification_number,
@@ -144,12 +177,13 @@ module Reports
                   "weekly",
                   20,
                   "",
-                  life_amount,
-                  "",
+                  ev_amount*2,
+                  ev_interest,
+                  rf_interest,
                   rf_amount,
-                  life_amount/2,
+                  ev_amount,
                   "",
-                ], style: [nil, nil,nil,nil, date_format_cell,date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                ], style: [nil, nil,nil,nil, date_format_cell,date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, nil]
               else
                 sheet.add_row [
                   member.identification_number,
@@ -162,12 +196,13 @@ module Reports
                   "weekly",
                   20,
                   "",
-                  life_amount,
-                  "",
+                  ev_amount*2,
+                  ev_interest,
+                  rf_interest,
                   rf_amount,
-                  life_amount/2,
+                  ev_amount,
                   "",
-                ], style: [nil, nil,nil,nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, nil]
+                ], style: [nil, nil,nil,nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, nil]
             end
 
           loans = member.loans.where("status = ? AND date_approved <= ?","active", @as_of)
@@ -209,6 +244,7 @@ module Reports
                   "",
                   "",
                   "",
+                  "",
                   loan.pn_number,
                   loan.date_approved,
                   loan.principal,
@@ -219,7 +255,7 @@ module Reports
                   "",
                   loan.maturity_date,
                   loan.num_installments,
-                ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
+                ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
               else
                 sheet.add_row [
                   "",
@@ -237,6 +273,7 @@ module Reports
                   "",
                   "",
                   "",
+                  "",
                   loan.pn_number,
                   loan.date_approved,
                   loan.principal,
@@ -247,7 +284,7 @@ module Reports
                   "",
                   loan.maturity_date,
                   loan.num_installments,
-                ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
+                ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
               end
             end
           end
