@@ -133,7 +133,7 @@ module Reports
 
               if at.transaction_type == "deposit"
                 if at.data.with_indifferent_access[:is_interest] == true 
-                  if at.transacted_at >= "2021-09-15".to_date
+                  if at.transacted_at >= "2021-09-01".to_date
                     rf_interest = (rf_interest + at.amount).abs
                   end          
                 end
@@ -156,7 +156,7 @@ module Reports
 
               if at.transaction_type == "deposit"
                 if at.data.with_indifferent_access[:is_interest] == true 
-                  if at.transacted_at >= "2021-09-15".to_date
+                  if at.transacted_at >= "2021-09-01".to_date
                     ev_interest = (ev_interest + at.amount).abs
                   end          
                 end
