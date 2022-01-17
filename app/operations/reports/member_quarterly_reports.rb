@@ -31,7 +31,7 @@ module Reports
         @all_resigned_members       = Member.insurance_resigned.where("insurance_date_resigned <= ?", @end_date)
         @active_resigned_insurance  = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "resigned")
         
-        @pending                    = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "pending")
+        @pending                    = Member.active.where("created_at <= ? AND insurance_status = ? AND member_type = ?", @end_date, "pending", "Regular")
         @new_members                = Member.active.where("data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?)", @start_date, @end_date, ["inforce", "lapsed", "dormant"])
         
         @male_members               = @all_active_members.select{|o| o[:gender] == "Male"}
