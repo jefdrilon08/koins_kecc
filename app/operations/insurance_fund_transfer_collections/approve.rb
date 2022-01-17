@@ -9,11 +9,16 @@ module InsuranceFundTransferCollections
       @data_fund_transfers                 = @insurance_fund_transfer_collection.deposits
       
       @brach                               = @insurance_fund_transfer_collection.branch
-      @date_approved                       = ::Utils::GetCurrentDate.new(
+
+      if Settings.activate_microinsurance
+        @date_approved                     = @insurance_fund_transfer_collection.collection_date
+      else
+        @date_approved                     = ::Utils::GetCurrentDate.new(
                                               config: {
                                                 branch: @branch
                                               }
-                                            ).execute! 
+                                            ).execute!
+      end 
     end
 
     def execute!
