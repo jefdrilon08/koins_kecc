@@ -11,11 +11,15 @@ module DepositCollections
 
       @branch                 = @deposit_collection.branch
 
-      @date_approved          = ::Utils::GetCurrentDate.new(
+      if Settings.activate_microinsurance
+        @date_approved        = @deposit_collection.collection_date
+      else
+        @date_approved        = ::Utils::GetCurrentDate.new(
                                   config: {
                                     branch: @branch
                                   }
                                 ).execute!
+      end
     end
 
     def execute!

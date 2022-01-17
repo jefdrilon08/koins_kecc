@@ -26,38 +26,54 @@ module DataStores
 
           def execute!
             query!
-            @data[:records] = @result.map{|o|
-                                 temp= {
-                                    id:          o.fetch("member_id"),
-                                    first_name:  o.fetch("first_name"),
-                                    last_name:   o.fetch("last_name"),
-                                    middle_name: o.fetch("middle_name"),
-                                    identification_number: o.fetch("identification_number"),
-                                    center: JSON.parse(o.fetch("center")),
-                                    officer: JSON.parse(o.fetch("officer"))
-                                 }
-                                 temp
-                            }
-            @data[:records]= @data[:records].sort_by { |hash|hash[:last_name]}
-             @data
+            
+              @result.select{|o|
+                  if o.fetch("total_loan_balance").to_f == 0.0
+                  member = Member.find(o.fetch("member_id"))
+                  first_name = member.first_name
+                  middle_name = member.middle_name
+                  last_name = member.last_name
+                  identification_num = member.identification_number
+                  center = Center.find(member.center_id)
+                  center_data = {
+                    id: center.id,
+                    name: center.name
+                  }
+
+                  officer = User.find(center.user_id)
+                  officer_data= {
+                    id: officer.id,
+                    first_name: officer.first_name,
+                    last_name: officer.last_name
+                  }
+
+                  temp={
+                    id: member.id,
+                    first_name: first_name,
+                    middle_name: middle_name,
+                    last_name: last_name,
+                    identification_number: identification_num,
+                    center: center_data,
+                    officer: officer_data
+                  }
+
+                  data[:records] << temp
+                  end
+              }
+
+              @data[:records]= @data[:records].sort_by { |hash| [hash[:center][:name], hash[:last_name]]}
+            @data
 
           end
-
           def query!
-            sql = "SELECT  DISTINCT ON (arr->'member'->>'identification_number') 
-            arr->'member'->>'id' as member_id ,
-            arr->'member'->>'first_name' as first_name, 
-            arr->'member'->>'last_name' as last_name, 
-            arr->'member'->>'middle_name' as middle_name,
-            arr->'member'->>'identification_number' as identification_number , 
-            arr->'total_balance' as total_loan_balance, 
-            arr->'num_days_par' as num_day_par,
-            arr->'center' as center , arr-> 'officer' as officer 
+            sql = "SELECT   
+            arr->'member'->>'id' as member_id,
+            sum((arr->>'total_balance')::float ) as total_loan_balance
             from data_stores,json_array_elements(data->'records') 
-            arr(records) where data_stores.id='#{@repayment_rates.id}' 
-            and CAST(records->>'total_balance' as TEXT) = '0.0' 
-            and CAST(records->>'num_days_par' as TEXT) = '0' ORDER BY identification_number,last_name ASC"
+            arr(records) where data_stores.id='#{@repayment_rates.id}'  
+            group by member_id
+            ORDER BY member_id"
             @result = ActiveRecord::Base.connection.execute(sql).to_a
-          end
+          end     
   end
 end

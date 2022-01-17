@@ -121,7 +121,7 @@ module Claims
           if @claim_data[:classification_of_insured] == "Legal Dependent (Spouse)"
             particular = "Death benefit of #{@claim_data[:name_of_insured]}, spouse of #{@claim.member.full_name} from #{branch.name}"
           elsif @claim_data[:classification_of_insured] == "Legal Dependent (Child)"
-            particular = "Death benefit of #{@claim_data[:name_of_insured]}, mother of #{@claim.member.full_name} from #{branch.name}"
+            particular = "Death benefit of #{@claim_data[:name_of_insured]}, son of #{@claim.member.full_name} from #{branch.name}"
           elsif @claim_data[:classification_of_insured] == "Legal Dependent (Parent)"
             particular = "Death benefit of #{@claim_data[:name_of_insured]}, parent of #{@claim.member.full_name} from #{branch.name}"
           end

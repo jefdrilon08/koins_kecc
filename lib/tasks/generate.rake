@@ -156,4 +156,40 @@ namespace :generate do
       # end
     end  
   end
+
+  task :centers_file => :environment do
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
+    
+    if ENV["BRANCH_ID"].present?
+      branches = Branch.where(id: ENV["BRANCH_ID"])
+    else
+      branches    = Branch.all
+    end
+
+    branches.each do |branch|
+      cmd = ::Exports::SaveCentersCsv.new(
+            start_date: start_date,
+            end_date: end_date,
+            branch: branch
+          )
+
+      cmd.execute!
+
+      file_repository = cmd.file_repository
+      actual_url      = file_repository.actual_url
+
+      api_url = "#{ENV['INSURANCE_KOINS_URL']}/api/v1/centers/process_centers_file"
+
+      response = HTTParty.get(api_url, { query: { actual_url: actual_url } })
+
+      if response.code.to_s == "200"
+        puts "Successfully called CENTER API"
+      else
+        puts "ERROR in calling CENTER API"
+        puts "api_url: #{api_url}"
+        puts "actual_url: #{actual_url}"
+      end
+    end  
+  end
 end

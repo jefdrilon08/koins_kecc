@@ -12,6 +12,20 @@ module Api
           @record = ::DataStores::SaveMemberIdGenerators.new(config: config).execute!
           render json: { message: "ok", id: @record.id }
         end
+        
+        def fetch_members
+          
+          @member = Member.where(center_id: params[:id], status: "active").map{ |m|
+                                                                {
+                                                                  id: m.id,
+                                                                  name: m.full_name
+                                                                }
+                                                              
+
+                                                              }
+         render json: { members: @member }
+        end
+
       end
     end
   end

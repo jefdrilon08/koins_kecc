@@ -45,6 +45,17 @@ module DataStores
         }
       end
       @subheader_side_actions = []
+          @subheader_side_actions << {
+          id: "btn-print-pdf",
+          link: "#",
+          class: "fa fa-print",
+          text: "Print",
+          data: {
+           id: "#{@record.id}"
+          },
+
+        }
+
         @subheader_side_actions << {
           id: "",
           link: "/data_stores/members_in_good_standing/#{@record.id}",
@@ -55,18 +66,16 @@ module DataStores
           },
           text: "Delete"
         }
-        @subheader_side_actions << {
-          id: "btn-print-pdf",
-          link: "#",
-          class: "fa fa-print",
-          text: "Print",
-          data: {
-            id: "#{@record.id}"
-          }
-        }
       @payload = {
         id: @record.id
       }
+    end
+
+    def destroy
+
+      data_store = DataStore.find(params[:id])
+      data_store.delete
+      redirect_to data_stores_members_in_good_standing_path
     end
 
 

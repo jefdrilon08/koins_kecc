@@ -7,13 +7,13 @@
       .modal-body
         .modal-body-content
           .bs-callout.bs-callout-info
-          NOTE! GERALD POGI ONLY!
+            Generate Members In Good Standing
           .row
             .col
               .form-group
                 %label
                   Year
-                = select_tag :years, options_for_select(((Date.today.year - 3)..Date.today.year).to_a, Date.today.year - 1), id: "select-year", class: "form-control"
+                = select_tag :years, options_for_select(((Date.today.year - 3)..Date.today.year).to_a, Date.today.year), id: "select-year", class: "form-control"
             .col
               .form-group
                 %label

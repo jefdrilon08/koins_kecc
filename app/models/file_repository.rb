@@ -6,7 +6,8 @@ class FileRepository < ApplicationRecord
     "BENEFICIARIES",
     "LEGAL_DEPENDENTS",
     "MEMBER_ACCOUNTS",
-    "ACCOUNT_TRANSACTIONS"
+    "ACCOUNT_TRANSACTIONS",
+    "CENTERS"
   ]
 
   validates :file_type, presence: true, inclusion: FILE_TYPES
@@ -18,7 +19,7 @@ class FileRepository < ApplicationRecord
   end
 
   def actual_url
-    if file_type == "ACCOUNT_TRANSACTIONS" || file_type == "MEMBERS" || file_type == "LEGAL_DEPENDENTS" || file_type == "BENEFICIARIES" || file_type == "MEMBER_ACCOUNTS"
+    if file_type == "ACCOUNT_TRANSACTIONS" || file_type == "MEMBERS" || file_type == "LEGAL_DEPENDENTS" || file_type == "BENEFICIARIES" || file_type == "MEMBER_ACCOUNTS" || file_type == "CENTERS"
       return "#{ENV['BASE_URL']}/#{file_url}"
     else
       raise "Invalid file type #{file_type}"

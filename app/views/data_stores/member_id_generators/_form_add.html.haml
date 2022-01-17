@@ -2,10 +2,14 @@
   %tr
     %th
       Center
-      = select_tag :center_id, options_from_collection_for_select(@center, :id, :name, @center.try(:id)), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+      = select_tag :center_id, options_from_collection_for_select(@center, :id, :name, @center.try(:id)), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT --"
     %th
       Member
-      = select_tag :member, options_for_select(["CRB", "CDB"]), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+      = select_tag :member, options_from_collection_for_select([], :id, :name), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+    
+    %th
+      Type
+      = select_tag :id_type, options_for_select(["OLD" , "NEW"]), class: "form-control select-select2", id: "id type" , prompt: "-- SELECT --"
     
     %th 
       Action
