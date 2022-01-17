@@ -71,6 +71,31 @@ function MembershipArrangementLoanProductConfig(props) {
                       className="form-control"
                     />
                   </div>
+                  
+                  <h5>
+                    Maintaining Balance Configuration
+                  </h5>
+                  {
+                    obj.maintaining_balances.map((mbObj, mbIndex) => {
+                      return (
+                        <div className="card" key={"mb-" + mbIndex}> 
+                          <div className="card-body">
+                            <div className="form-group">
+                              <label>
+                              </label>
+                            </div>
+                          </div>
+                          <hr/>
+                          <button
+                            className="btn btn-danger btn-block"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )
+                    })
+                  }
+
                   <hr/>
                   <button
                     className="btn btn-danger"
