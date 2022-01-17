@@ -235,7 +235,7 @@ module Members
           end
         else
         # existing record particular to kcoop
-          if !["cleared", "transferred", "for-transfer"].include?(row['status'])
+          # if !["cleared", "transferred", "for-transfer"].include?(row['status'])
             branch_id = row['branch_id']
             branch = Branch.find(branch_id)
 
@@ -300,7 +300,7 @@ module Members
               encrypted_password: row['encrypted_password'],
               username: row['username']
               )
-          end
+          # end
         end       
       end
     end
