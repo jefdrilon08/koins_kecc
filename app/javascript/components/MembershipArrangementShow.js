@@ -46,6 +46,12 @@ function MembershipArrangementShow(props) {
     setData({...data});
   }
 
+  function removeMaintainingBalance(index, mbIndex) {
+    data.loan_products[index].maintaining_balances.splice(mbIndex, 1);
+
+    setData({...data});
+  }
+
   function updateDefaultAmount(index, amount) {
     data.loan_products[index].default_amount = amount;
 
@@ -66,6 +72,41 @@ function MembershipArrangementShow(props) {
 
   function updateInterestReceivableAccountingCode(index, id) {
     data.loan_products[index].interest_receivable_accounting_code_id = id;
+
+    setData({...data});
+  }
+
+  function updateMaintainingBalanceAccountType(index, mbIndex, val) {
+    data.loan_products[index].maintaining_balances[mbIndex].account_type = val;
+
+    setData({...data});
+  }
+
+  function updateMaintainingBalanceAccountSubtype(index, mbIndex, val) {
+    data.loan_products[index].maintaining_balances[mbIndex].account_subtype = val;
+
+    setData({...data});
+  }
+
+  function updateMaintainingBalancePercentage(index, mbIndex, val) {
+    data.loan_products[index].maintaining_balances[mbIndex].percentage = val;
+
+    setData({...data});
+  }
+
+  function updateMaintainingBalanceThreshold(index, mbIndex, val) {
+    data.loan_products[index].maintaining_balances[mbIndex].threshold = val;
+
+    setData({...data});
+  }
+
+  function addMaintainingBalance(index) {
+    data.loan_products[index].maintaining_balances.push({
+      account_type: "SAVINGS",
+      account_subtype: "K-IMPOK",
+      percentage: 0.0,
+      threshold: 0.00
+    })
 
     setData({...data});
   }
@@ -165,10 +206,16 @@ function MembershipArrangementShow(props) {
         loanProductOptions={loan_products}
         accountingCodeOptions={accounting_codes}
         removeLoanProductConfig={removeLoanProductConfig}
+        removeMaintainingBalance={removeMaintainingBalance}
         updateLoanProductId={updateLoanProductId}
         updateReceivableAccountingCode={updateReceivableAccountingCode}
         updateInterestReceivableAccountingCode={updateInterestReceivableAccountingCode}
         updateDefaultAmount={updateDefaultAmount}
+        updateMaintainingBalanceAccountType={updateMaintainingBalanceAccountType}
+        updateMaintainingBalanceAccountSubtype={updateMaintainingBalanceAccountSubtype}
+        updateMaintainingBalancePercentage={updateMaintainingBalancePercentage}
+        updateMaintainingBalanceThreshold={updateMaintainingBalanceThreshold}
+        addMaintainingBalance={addMaintainingBalance}
         isLoading={isLoading}
       />
       <hr/>

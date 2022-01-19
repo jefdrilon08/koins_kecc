@@ -73,7 +73,7 @@ function MembershipArrangementLoanProductConfig(props) {
                   </div>
                   
                   <h5>
-                    Maintaining Balance Configuration
+                    Maintaining Balances
                   </h5>
                   {
                     obj.maintaining_balances.map((mbObj, mbIndex) => {
@@ -82,21 +82,67 @@ function MembershipArrangementLoanProductConfig(props) {
                           <div className="card-body">
                             <div className="form-group">
                               <label>
+                                Account Type
                               </label>
+                              <select 
+                                className="form-control"
+                                value={mbObj.account_type}
+                                onChange={(event) =>  props.updateMaintainingBalanceAccountType(index, mbIndex, event.target.value)}
+                              >
+                                <option value="SAVINGS">SAVINGS</option>
+                                <option value="INSURANCE">INSURANCE</option>
+                              </select>
                             </div>
+                            <div className="form-group">
+                              <label>
+                                Account Subtype
+                              </label>
+                              <input
+                                className="form-control"
+                                value={mbObj.account_subtype}
+                                onChange={(event) => props.updateMaintainingBalanceAccountSubtype(index, mbIndex, event.target.value)}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Percentage
+                              </label>
+                              <input
+                                className="form-control"
+                                value={mbObj.percentage}
+                                onChange={(event) => props.updateMaintainingBalancePercentage(index, mbIndex, event.target.value)}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Threshold
+                              </label>
+                              <input
+                                className="form-control"
+                                value={mbObj.threshold}
+                                onChange={(event) => props.updateMaintainingBalanceThreshold(index, mbIndex, event.target.value)}
+                              />
+                            </div>
+                            <button
+                              className="btn btn-danger btn-block"
+                              onClick={() => props.removeMaintainingBalance(index, mbIndex)}
+                            >
+                              Remove
+                            </button>
                           </div>
-                          <hr/>
-                          <button
-                            className="btn btn-danger btn-block"
-                          >
-                            Remove
-                          </button>
                         </div>
                       )
                     })
                   }
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => props.addMaintainingBalance(index)}
+                  >
+                    Add Maintaining Balance Config
+                  </button>
 
                   <hr/>
+
                   <button
                     className="btn btn-danger"
                     onClick={() => props.removeLoanProductConfig(index)}
