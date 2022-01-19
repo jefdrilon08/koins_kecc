@@ -11,6 +11,7 @@ function MembershipArrangementShow(props) {
   const [accounting_codes]        = useState(props.accounting_codes);
   const [loan_products]           = useState(props.loan_products);
   const [isLoading, setIsLoading] = useState(false);
+  const [membership_types]        = useState(props.membership_types);
 
   function handleSave() {
     setIsLoading(true);
@@ -52,6 +53,48 @@ function MembershipArrangementShow(props) {
     setData({...data});
   }
 
+  function removeDeduction(index, dIndex) {
+    data.loan_products[index].deductions.splice(dIndex, 1);
+
+    setData({...data});
+  }
+
+  function updateDeductionAccountingCodeId(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].accounting_code_id = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionAmount(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].amount = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionType(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].deduction_type = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionSkipForSpecialLoanFund(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].skip_for_special_loan_fund = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionUseForSpecialLoanFund(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].use_for_special_loan_fund = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionAdvanceInsuranceValue(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].advance_insurance_value = val;
+
+    setData({...data});
+  }
+
   function updateMidasContractType(index, val) {
     data.loan_products[index].midas.contract_type = val;
 
@@ -82,20 +125,20 @@ function MembershipArrangementShow(props) {
     setData({...data});
   }
 
-  function updateLoanProductId(index, id) {
-    data.loan_products[index].id = id;
+  function updateLoanProductId(index, obj) {
+    console.log(obj);
+    data.loan_products[index].loan_product_id = obj.value;
+    setData({...data});
+  }
+
+  function updateReceivableAccountingCode(index, obj) {
+    data.loan_products[index].receivable_accounting_code_id = obj.value;
 
     setData({...data});
   }
 
-  function updateReceivableAccountingCode(index, id) {
-    data.loan_products[index].receivable_accounting_code_id = id;
-
-    setData({...data});
-  }
-
-  function updateInterestReceivableAccountingCode(index, id) {
-    data.loan_products[index].interest_receivable_accounting_code_id = id;
+  function updateInterestReceivableAccountingCode(index, obj) {
+    data.loan_products[index].interest_receivable_accounting_code_id = obj.value;
 
     setData({...data});
   }
@@ -124,12 +167,98 @@ function MembershipArrangementShow(props) {
     setData({...data});
   }
 
+  function updateDeductionName(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].name = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionBusinessPermitAvailable(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].business_permit_available = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionBusinessPermitAmount(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].business_permit_amount = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaMemberType(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.member_type = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaAccountType(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.account_type = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaAccountSubtype(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.account_subtype = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaValue(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.value = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaAlgo(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.algo = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaOffset(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.offset = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaMembershipName(index, dIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.membership_name = val;
+
+    setData({...data});
+  }
+
   function addMaintainingBalance(index) {
     data.loan_products[index].maintaining_balances.push({
       account_type: "SAVINGS",
       account_subtype: "K-IMPOK",
       percentage: 0.0,
       threshold: 0.00
+    })
+
+    setData({...data});
+  }
+
+  function addDeduction(index) {
+    data.loan_products[index].deductions.push({
+      name: "",
+      accounting_code_id: "",
+      amount: 0.00,
+      deduction_type: "",
+      business_permit_available: false,
+      business_permit_amount: 0.00,
+      skip_for_special_loan_fund: false,
+      use_for_special_loan_fund: false,
+      advance_insurance_value: false,
+      meta: {
+        meta_type: "",
+        term_map: [],
+        account_type: "",
+        account_subtype: "",
+        value: 0.00,
+        algo: "",
+        offset: 0,
+        membership_name: ""
+      }
     })
 
     setData({...data});
@@ -227,10 +356,12 @@ function MembershipArrangementShow(props) {
       <hr/>
       <MembershipArrangementLoanProductConfig
         loan_products={data.loan_products}
+        memberTypeOptions={membership_types}
         loanProductOptions={loan_products}
         accountingCodeOptions={accounting_codes}
         removeLoanProductConfig={removeLoanProductConfig}
         removeMaintainingBalance={removeMaintainingBalance}
+        removeDeduction={removeDeduction}
         updateLoanProductId={updateLoanProductId}
         updateReceivableAccountingCode={updateReceivableAccountingCode}
         updateInterestReceivableAccountingCode={updateInterestReceivableAccountingCode}
@@ -243,7 +374,24 @@ function MembershipArrangementShow(props) {
         updateMidasContractPhase={updateMidasContractPhase}
         updateMidasTransactionType={updateMidasTransactionType}
         updateMidasLoanPurpose={updateMidasLoanPurpose}
+        updateDeductionName={updateDeductionName}
+        updateDeductionAccountingCodeId={updateDeductionAccountingCodeId}
+        updateDeductionType={updateDeductionType}
+        updateDeductionAmount={updateDeductionAmount}
+        updateDeductionBusinessPermitAvailable={updateDeductionBusinessPermitAvailable}
+        updateDeductionBusinessPermitAmount={updateDeductionBusinessPermitAmount}
+        updateDeductionSkipForSpecialLoanFund={updateDeductionSkipForSpecialLoanFund}
+        updateDeductionUseForSpecialLoanFund={updateDeductionUseForSpecialLoanFund}
+        updateDeductionAdvanceInsuranceValue={updateDeductionAdvanceInsuranceValue}
+        updateDeductionMetaMemberType={updateDeductionMetaMemberType}
+        updateDeductionMetaAccountType={updateDeductionMetaAccountType}
+        updateDeductionMetaAccountSubtype={updateDeductionMetaAccountSubtype}
+        updateDeductionMetaValue={updateDeductionMetaValue}
+        updateDeductionMetaAlgo={updateDeductionMetaAlgo}
+        updateDeductionMetaOffset={updateDeductionMetaOffset}
+        updateDeductionMetaMembershipName={updateDeductionMetaMembershipName}
         addMaintainingBalance={addMaintainingBalance}
+        addDeduction={addDeduction}
         isLoading={isLoading}
       />
       <hr/>

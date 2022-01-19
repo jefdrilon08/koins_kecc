@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 
 function MembershipArrangementLoanProductConfig(props) { 
+  let optionsMemberTypes = props.memberTypeOptions.map((o) => {
+    return {
+      value: o.id,
+      label: o.name
+    }
+  });
+
   let optionsLoanProducts = props.loanProductOptions.map((o) => {
     return {
       value: o.id,
@@ -15,6 +22,25 @@ function MembershipArrangementLoanProductConfig(props) {
       label: o.name
     }
   });
+
+  let optionsDeductionTypes = [
+    {
+      value: "straight_one_time",
+      label: "Straight One Time"
+    },
+    {
+      value: "member_type_deduction_ratio",
+      label: "Member Type Deduction Ratio"
+    },
+    {
+      value: "deposit",
+      label: "Deposit"
+    },
+    {
+      value: "membership_fee",
+      label: "Membership Fee"
+    }
+  ]
 
   if(props.loan_products) { 
     return (
@@ -33,8 +59,8 @@ function MembershipArrangementLoanProductConfig(props) {
                     </label>
                     <Select
                       options={optionsLoanProducts}
-                      value={obj.id}
-                      onSelect={(event) => props.updateLoanProductId(index, event.target.value)}
+                      value={optionsLoanProducts.filter((o) => { return o.value == obj.loan_product_id })}
+                      onChange={(obj) => props.updateLoanProductId(index, obj)}
                       isDisabled={props.isLoading}
                     />
                   </div>
@@ -44,8 +70,8 @@ function MembershipArrangementLoanProductConfig(props) {
                     </label>
                     <Select
                       options={optionsAccountingCodes}
-                      value={obj.id}
-                      onSelect={(event) => props.updateReceivableAccountingCode(index, event.target.value)}
+                      value={optionsAccountingCodes.filter((o) => { return o.value == obj.receivable_accounting_code_id})}
+                      onChange={(obj) => props.updateReceivableAccountingCode(index, obj)}
                       isDisabled={props.isLoading}
                     />
                   </div>
@@ -55,8 +81,8 @@ function MembershipArrangementLoanProductConfig(props) {
                     </label>
                     <Select
                       options={optionsAccountingCodes}
-                      value={obj.id}
-                      onSelect={(event) => props.updateInterestReceivableAccountingCode(index, event.target.value)}
+                      value={optionsAccountingCodes.filter((o) => { return o.value == obj.interest_receivable_accounting_code_id})}
+                      onChange={(obj) => props.updateInterestReceivableAccountingCode(index, obj)}
                       isDisabled={props.isLoading}
                     />
                   </div>
@@ -78,7 +104,7 @@ function MembershipArrangementLoanProductConfig(props) {
                   {
                     obj.maintaining_balances.map((mbObj, mbIndex) => {
                       return (
-                        <div className="card" key={"mb-" + mbIndex}> 
+                        <div className="card" key={"loan-product-" + index + "-mb-" + mbIndex}> 
                           <div className="card-body">
                             <div className="form-group">
                               <label>
@@ -101,6 +127,7 @@ function MembershipArrangementLoanProductConfig(props) {
                                 className="form-control"
                                 value={mbObj.account_subtype}
                                 onChange={(event) => props.updateMaintainingBalanceAccountSubtype(index, mbIndex, event.target.value)}
+                                disabled={props.isLoading}
                               />
                             </div>
                             <div className="form-group">
@@ -111,6 +138,7 @@ function MembershipArrangementLoanProductConfig(props) {
                                 className="form-control"
                                 value={mbObj.percentage}
                                 onChange={(event) => props.updateMaintainingBalancePercentage(index, mbIndex, event.target.value)}
+                                disabled={props.isLoading}
                               />
                             </div>
                             <div className="form-group">
@@ -121,11 +149,13 @@ function MembershipArrangementLoanProductConfig(props) {
                                 className="form-control"
                                 value={mbObj.threshold}
                                 onChange={(event) => props.updateMaintainingBalanceThreshold(index, mbIndex, event.target.value)}
+                                disabled={props.isLoading}
                               />
                             </div>
                             <button
                               className="btn btn-danger btn-block"
                               onClick={() => props.removeMaintainingBalance(index, mbIndex)}
+                              disabled={props.isLoading}
                             >
                               Remove
                             </button>
@@ -137,6 +167,7 @@ function MembershipArrangementLoanProductConfig(props) {
                   <button
                     className="btn btn-primary btn-sm"
                     onClick={() => props.addMaintainingBalance(index)}
+                    disabled={props.isLoading}
                   >
                     Add Maintaining Balance Config
                   </button>
@@ -159,6 +190,7 @@ function MembershipArrangementLoanProductConfig(props) {
                           className="form-control"
                           value={obj.midas.contract_type}
                           onChange={(event) => props.updateMidasContractType(index, event.target.value)}
+                          disabled={props.isLoading}
                         />
                       </div>
                       <div className="form-group">
@@ -169,6 +201,7 @@ function MembershipArrangementLoanProductConfig(props) {
                           className="form-control"
                           value={obj.midas.contract_phase}
                           onChange={(event) => props.updateMidasContractPhase(index, event.target.value)}
+                          disabled={props.isLoading}
                         />
                       </div>
                       <div className="form-group">
@@ -179,6 +212,7 @@ function MembershipArrangementLoanProductConfig(props) {
                           className="form-control"
                           value={obj.midas.transaction_type}
                           onChange={(event) => props.updateMidasTransactionType(index, event.target.value)}
+                          disabled={props.isLoading}
                         />
                       </div>
                       <div className="form-group">
@@ -189,10 +223,227 @@ function MembershipArrangementLoanProductConfig(props) {
                           className="form-control"
                           value={obj.midas.loan_purpose}
                           onChange={(event) => props.updateMidasLoanPurpose(index, event.target.value)}
+                          disabled={props.isLoading}
                         />
                       </div>
                     </div>
                   </div>
+
+                  <hr/>
+
+                  <h5>
+                    Deductions
+                  </h5>
+
+                  {
+                    obj.deductions.map((dObj, dIndex) => {
+                      return (
+                        <div className="card" key={"loan-product-" + index + "-d-obj-" + dIndex}>
+                          <div className="card-body">
+                            <div className="form-group">
+                              <label>
+                                Name
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.name}
+                                onChange={(event) => props.updateDeductionName(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Accounting Code
+                              </label>
+                              <Select
+                                options={optionsAccountingCodes}
+                                value={optionsAccountingCodes.filter((o) => { return o.value == dObj.accounting_code_id })}
+                                onChange={(o) => props.updateDeductionAccountingCodeId(index, dIndex, o.value)}
+                                isDisabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Deduction Type
+                              </label>
+                              <Select
+                                options={optionsDeductionTypes}
+                                value={optionsDeductionTypes.filter((o) => { return o.value == dObj.deduction_type })}
+                                onChange={(o) => props.updateDeductionType(index, dIndex, o.value)}
+                                isDisabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Amount
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.amount}
+                                onChange={(event) => props.updateDeductionAmount(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Business Permit Available
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.business_permit_available}
+                                onChange={(event) => props.updateDeductionBusinessPermitAvailable(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Business Permit Amount
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.business_permit_amount}
+                                onChange={(event) => props.updateDeductionBusinessPermitAmount(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Skip For Special Loan Fund
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.skip_for_special_loan_fund}
+                                onChange={(event) => props.updateDeductionSkipForSpecialLoanFund(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Use for Special Loan Fund
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.use_for_special_loan_fund}
+                                onChange={(event) => props.updateDeductionUseForSpecialLoanFund(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Advance Insurance Value
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.advance_insurance_value}
+                                onChange={(event) => props.updateDeductionAdvanceInsuranceValue(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <hr/>
+
+                            <h6>
+                              Meta Configuration
+                            </h6>
+                            <div className="form-group">
+                              <label>
+                                Member Type 
+                              </label>
+                              <Select
+                                options={optionsMemberTypes}
+                                value={optionsMemberTypes.filter((o) => { return o.value == dObj.meta.member_type })}
+                                onChange={(o) => props.updateDeductionMetaMemberType(index, dIndex, o.value)}
+                                isDisabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Account Type
+                              </label>
+                              <select
+                                className="form-control"
+                                value={dObj.meta.account_type}
+                                onChange={(event) => props.updateDeductionMetaAccountType(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              >
+                                <option value="SAVINGS">SAVINGS</option>
+                                <option value="INSURANCE">INSURANCE</option>
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Account Subtype
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.meta.account_subtype}
+                                onChange={(event) => props.updateDeductionMetaAccountSubtype(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Value
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.meta.value}
+                                onChange={(event) => props.updateDeductionMetaValue(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Algo
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.meta.algo}
+                                onChange={(event) => props.updateDeductionMetaAlgo(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Offset
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.meta.offset}
+                                onChange={(event) => props.updateDeductionMetaOffset(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>
+                                Membership Name
+                              </label>
+                              <input
+                                className="form-control"
+                                value={dObj.meta.membership_name}
+                                onChange={(event) => props.updateDeductionMetaMembershipName(index, dIndex, event.target.value)}
+                                disabled={props.isLoading}
+                              />
+                            </div>
+
+                            <hr/>
+                            <button
+                              className="btn btn-danger btn-block"
+                              onClick={() => props.removeDeduction(index, dIndex)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => props.addDeduction(index)}
+                  >
+                    Add Deduction
+                  </button>
 
                   <hr/>
 
