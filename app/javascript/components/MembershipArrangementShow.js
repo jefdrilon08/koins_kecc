@@ -13,8 +13,6 @@ function MembershipArrangementShow(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [membership_types]        = useState(props.membership_types);
 
-  console.log(data);
-
   function handleSave() {
     setIsLoading(true);
 
