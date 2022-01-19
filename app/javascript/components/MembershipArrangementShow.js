@@ -13,6 +13,8 @@ function MembershipArrangementShow(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [membership_types]        = useState(props.membership_types);
 
+  console.log(data);
+
   function handleSave() {
     setIsLoading(true);
 
@@ -227,6 +229,24 @@ function MembershipArrangementShow(props) {
     setData({...data});
   }
 
+  function updateDeductionMetaTermMapWeeklyRatio(index, dIndex, tmIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.term_map.weekly[tmIndex].ratio = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaTermMapMonthlyRatio(index, dIndex, tmIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.term_map.monthly[tmIndex].ratio = val;
+
+    setData({...data});
+  }
+
+  function updateDeductionMetaTermMapSemiMonthlyRatio(index, dIndex, tmIndex, val) {
+    data.loan_products[index].deductions[dIndex].meta.term_map.semi_monthly[tmIndex].ratio = val;
+
+    setData({...data});
+  }
+
   function addMaintainingBalance(index) {
     data.loan_products[index].maintaining_balances.push({
       account_type: "SAVINGS",
@@ -390,6 +410,9 @@ function MembershipArrangementShow(props) {
         updateDeductionMetaAlgo={updateDeductionMetaAlgo}
         updateDeductionMetaOffset={updateDeductionMetaOffset}
         updateDeductionMetaMembershipName={updateDeductionMetaMembershipName}
+        updateDeductionMetaTermMapWeeklyRatio={updateDeductionMetaTermMapWeeklyRatio}
+        updateDeductionMetaTermMapMonthlyRatio={updateDeductionMetaTermMapMonthlyRatio}
+        updateDeductionMetaTermMapSemiMonthlyRatio={updateDeductionMetaTermMapSemiMonthlyRatio}
         addMaintainingBalance={addMaintainingBalance}
         addDeduction={addDeduction}
         isLoading={isLoading}

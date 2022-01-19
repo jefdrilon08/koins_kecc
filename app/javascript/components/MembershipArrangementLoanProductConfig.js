@@ -425,6 +425,136 @@ function MembershipArrangementLoanProductConfig(props) {
                               />
                             </div>
 
+                            <h5>
+                              Term Map
+                            </h5>
+
+                            <h6>
+                              Weekly
+                            </h6>
+
+                            {
+                              dObj.meta.term_map.weekly.map((tmWeeklyObj, tmIndex) => {
+                                return (
+                                  <div className="card" key={"tm-weekly-" + tmIndex}>
+                                    <div className="card-body">
+                                      <div className="row">
+                                        <div className="col-md-6 col-xs-12">
+                                          <div className="form-group">
+                                            <label>
+                                              Num Installments
+                                            </label>
+                                            <input
+                                              className="form-control"
+                                              value={tmWeeklyObj.num_installments}
+                                              disabled={true}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6 col-xs-12">
+                                          <div className="form-group">
+                                            <label>
+                                              Ratio
+                                            </label>
+                                            <input
+                                              className="form-control"
+                                              value={tmWeeklyObj.ratio}
+                                              disabled={props.isLoading}
+                                              onChange={(event) => props.updateDeductionMetaTermMapWeeklyRatio(index, dIndex, tmIndex, event.target.value)}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              })
+                            }
+
+                            <h6>
+                              Monthly
+                            </h6>
+
+                            {
+                              dObj.meta.term_map.monthly.map((tmMonthlyObj, tmIndex) => {
+                                return (
+                                  <div className="card" key={"tm-weekly-" + tmIndex}>
+                                    <div className="card-body">
+                                      <div className="row">
+                                        <div className="col-md-6 col-xs-12">
+                                          <div className="form-group">
+                                            <label>
+                                              Num Installments
+                                            </label>
+                                            <input
+                                              className="form-control"
+                                              value={tmMonthlyObj.num_installments}
+                                              disabled={true}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6 col-xs-12">
+                                          <div className="form-group">
+                                            <label>
+                                              Ratio
+                                            </label>
+                                            <input
+                                              className="form-control"
+                                              value={tmMonthlyObj.ratio}
+                                              disabled={props.isLoading}
+                                              onChange={(event) => props.updateDeductionMetaTermMapMonthlyRatio(index, dIndex, tmIndex, event.target.value)}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              })
+                            }
+
+                            <h6>
+                              Semi-monthly
+                            </h6>
+
+                            {
+                              dObj.meta.term_map.semi_monthly.map((tmSemiMonthlyObj, tmIndex) => {
+                                return (
+                                  <div className="card" key={"tm-weekly-" + tmIndex}>
+                                    <div className="card-body">
+                                      <div className="row">
+                                        <div className="col-md-6 col-xs-12">
+                                          <div className="form-group">
+                                            <label>
+                                              Num Installments
+                                            </label>
+                                            <input
+                                              className="form-control"
+                                              value={tmSemiMonthlyObj.num_installments}
+                                              disabled={true}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="col-md-6 col-xs-12">
+                                          <div className="form-group">
+                                            <label>
+                                              Ratio
+                                            </label>
+                                            <input
+                                              className="form-control"
+                                              value={tmSemiMonthlyObj.ratio}
+                                              disabled={props.isLoading}
+                                              onChange={(event) => props.updateDeductionMetaTermMapSemiMonthlyRatio(index, dIndex, tmIndex, event.target.value)}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )
+                              })
+                            }
+
                             <hr/>
                             <button
                               className="btn btn-danger btn-block"
