@@ -15,7 +15,8 @@ export function buildLoanProductConfigObject() {
     midas: {
       contract_type: 22,
       contract_phase: "AC",
-      transaction_type: "NA"
+      transaction_type: "NA",
+      loan_purpose: "ET"
     },
     deductions: [
       {

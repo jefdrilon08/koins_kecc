@@ -143,6 +143,59 @@ function MembershipArrangementLoanProductConfig(props) {
 
                   <hr/>
 
+                  <h5>
+                    Midas Configuration
+                  </h5>
+
+                  <div
+                    className="card"
+                  >
+                    <div className="card-body">
+                      <div className="form-group">
+                        <label>
+                          Contract Type
+                        </label>
+                        <input
+                          className="form-control"
+                          value={obj.midas.contract_type}
+                          onChange={(event) => props.updateMidasContractType(index, event.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>
+                          Contract Phase
+                        </label>
+                        <input
+                          className="form-control"
+                          value={obj.midas.contract_phase}
+                          onChange={(event) => props.updateMidasContractPhase(index, event.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>
+                          Transaction Type
+                        </label>
+                        <input
+                          className="form-control"
+                          value={obj.midas.transaction_type}
+                          onChange={(event) => props.updateMidasTransactionType(index, event.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>
+                          Loan Purpose
+                        </label>
+                        <input
+                          className="form-control"
+                          value={obj.midas.loan_purpose}
+                          onChange={(event) => props.updateMidasLoanPurpose(index, event.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr/>
+
                   <button
                     className="btn btn-danger"
                     onClick={() => props.removeLoanProductConfig(index)}

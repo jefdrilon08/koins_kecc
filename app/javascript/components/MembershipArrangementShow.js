@@ -52,6 +52,30 @@ function MembershipArrangementShow(props) {
     setData({...data});
   }
 
+  function updateMidasContractType(index, val) {
+    data.loan_products[index].midas.contract_type = val;
+
+    setData({...data});
+  }
+
+  function updateMidasContractPhase(index, val) {
+    data.loan_products[index].midas.contract_phase = val;
+
+    setData({...data});
+  }
+
+  function updateMidasTransactionType(index, val) {
+    data.loan_products[index].midas.transaction_type = val;
+
+    setData({...data});
+  }
+
+  function updateMidasLoanPurpose(index, val) {
+    data.loan_products[index].midas.loan_purpose = val;
+
+    setData({...data});
+  }
+
   function updateDefaultAmount(index, amount) {
     data.loan_products[index].default_amount = amount;
 
@@ -215,6 +239,10 @@ function MembershipArrangementShow(props) {
         updateMaintainingBalanceAccountSubtype={updateMaintainingBalanceAccountSubtype}
         updateMaintainingBalancePercentage={updateMaintainingBalancePercentage}
         updateMaintainingBalanceThreshold={updateMaintainingBalanceThreshold}
+        updateMidasContractType={updateMidasContractType}
+        updateMidasContractPhase={updateMidasContractPhase}
+        updateMidasTransactionType={updateMidasTransactionType}
+        updateMidasLoanPurpose={updateMidasLoanPurpose}
         addMaintainingBalance={addMaintainingBalance}
         isLoading={isLoading}
       />
