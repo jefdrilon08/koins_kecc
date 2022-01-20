@@ -20,7 +20,9 @@ export default class ApplicationFormComponent extends React.Component {
       isActive: false,
       coMakers: [],
       loanProducts: [],
+      loanProductTypes: [],
       currentLoanProductId: "",
+      currentLoanProductTypeId: "",
       projectTypeCategories: [],
       projectTypes: [],
       currentProjectTypeCategoryId: "",
@@ -81,6 +83,25 @@ export default class ApplicationFormComponent extends React.Component {
       }
     });
 
+    // Fetch loan_product_types
+    $.ajax({
+      url: "/api/loan_product_types",
+      data: {
+        loan_product_id: context.state.currentLoanProductId
+      },
+      method: 'GET',
+      success: function(response) {
+        console.log("Got Loan Product Types");
+        console.log(response);
+        
+        var data = context.state.data;
+
+        context.setState({
+          loanProductTypes: response.loan_product_types
+        });
+      }
+    })
+
     $.ajax({
       url: "/api/v1/loans/fetch",
       data: data,
@@ -110,8 +131,7 @@ export default class ApplicationFormComponent extends React.Component {
           projectTypes: projectTypes,
           currentProjectTypeCategoryId: currentProjectTypeCategoryId,
           coMakerProfilePicture: response.loan.co_maker_relative_profile_picture_url,
-          coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url
-        });
+          coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url });
       },
       error: function(response) {
         console.log(response);
@@ -280,10 +300,43 @@ export default class ApplicationFormComponent extends React.Component {
     window.location.href="/members/" + this.props.memberId + "/display";
   }
 
-  handleLoanProduct(event) {
+  handleLoanProductType(event) {
     var data  = this.state.data;
 
+    data.loan_product_type_id = event.target.value;
+
+    this.updateData(data);
+  }
+
+  handleLoanProduct(event) {
+    var data    = this.state.data;
+    var context = this;
+
     data.loan_product_id  = event.target.value;
+
+    // Fetch loan_product_types
+    $.ajax({
+      url: "/api/loan_product_types",
+      data: {
+        loan_product_id: data.loan_product_id
+      },
+      method: 'GET',
+      success: function(response) {
+        console.log("Got Loan Product Types");
+        console.log(response);
+        
+        var data = context.state.data;
+
+        if(response.loan_product_types.length > 0) {
+          data.loan_product_type_id = response.loan_product_types[0].id;
+        }
+
+        context.setState({
+          loanProductTypes: response.loan_product_types,
+          data: data
+        });
+      }
+    })
 
     this.updateData(data);
   }
@@ -308,6 +361,28 @@ export default class ApplicationFormComponent extends React.Component {
     }
 
     return loanProductsDisplay;
+  }
+
+  renderLoanProductTypes() {
+    var data              = this.state.data;
+    var loanProductTypes  = this.state.loanProductTypes || [];
+    var display           = [];
+
+    display.push(
+      <option value="" key="empty-loan-product-type">
+        -- SELECT --
+      </option>
+    )
+
+    for(var i = 0; i < loanProductTypes.length; i++) {
+      display.push(
+        <option value={loanProductTypes[i].id} key={"loan-product-type-" + loanProductTypes[i].id}>
+          {loanProductTypes[i].name}
+        </option>
+      )
+    }
+
+    return display;
   }
 
   renderNumInstallmentOptions() {
@@ -716,6 +791,21 @@ export default class ApplicationFormComponent extends React.Component {
                       disabled={this.state.isSaving || this.state.isActive}
                     >
                       {this.renderLoanProducts()}
+                    </select>
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label>
+                      Loan Product Type
+                    </label>
+                    <select
+                      className="form-control"
+                      value={data.loan_product_type_id || "-1"}
+                      onChange={this.handleLoanProductType.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    >
+                      {this.renderLoanProductTypes()}
                     </select>
                   </div>
                 </div>

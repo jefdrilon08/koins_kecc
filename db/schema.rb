@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_012341) do
+ActiveRecord::Schema.define(version: 2022_01_20_015142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -767,9 +767,11 @@ ActiveRecord::Schema.define(version: 2022_01_20_012341) do
     t.uuid "user_id"
     t.date "original_maturity_date"
     t.boolean "is_restructured"
+    t.uuid "loan_product_type_id"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
+    t.index ["loan_product_type_id"], name: "index_loans_on_loan_product_type_id"
     t.index ["member_id"], name: "index_loans_on_member_id"
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
   end
@@ -1337,6 +1339,7 @@ ActiveRecord::Schema.define(version: 2022_01_20_012341) do
   add_foreign_key "loan_repayment_rates", "loans"
   add_foreign_key "loans", "branches"
   add_foreign_key "loans", "centers"
+  add_foreign_key "loans", "loan_product_types"
   add_foreign_key "loans", "loan_products"
   add_foreign_key "loans", "members"
   add_foreign_key "loans", "project_types"

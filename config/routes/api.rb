@@ -1,4 +1,6 @@
 namespace :api do
+  get "/loan_product_types", to: "loan_product_types#index"
+
   namespace :v2 do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
