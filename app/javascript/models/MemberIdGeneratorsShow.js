@@ -9,7 +9,17 @@ var $btnConfirmNew;
 var $selectBranch;
 var $selectCenter;
 var $selectMember;
+var $selectIdType;
 
+
+
+var $btnAdd;
+var $modalContactPerson;
+var $inputContactName;
+var $inputContactNumber;
+var $btnConfirmContactPerson;
+
+var $labelMemberName
 var $message;
 var templateErrorList;
 
@@ -17,16 +27,26 @@ var _members;
 var _members_list;
 var _memberId;
 var _urlCenters = "/api/v1/data_stores/member_id_generetors/fetch_members";
+var _urlAddMember = "/api/v1/data_stores/member_id_generetors/add_member";
+var _urlContactPerson = "/api/v1/data_stores/member_id_generetors/contact_person";
 
 var _cacheDom = function() {
-  $modalNew         = $("#modal-new");
-  $btnNew           = $("#btn-new");
-  $btnConfirmNew    = $("#btn-confirm-new");
-  $selectBranch     = $("#select-branch");
-  $selectCenter     = $("#select-center");
-  $selectMember     = $("#select-member");
-  $message          = $(".message");
-  templateErrorList = $("#template-error-list").html();
+  $modalNew                 = $("#modal-new");
+  $btnNew                   = $("#btn-new");
+  $btnConfirmNew            = $("#btn-confirm-new");
+  $selectBranch             = $("#select-branch");
+  $selectCenter             = $("#select-center");
+  $selectIdType             = $("#select-id-type");
+  $selectMember             = $("#select-member");
+  $btnAdd                   = $("#btn-add");
+  $message                  = $(".message");
+  $modalContactPerson       = $("#modal-contact-person");
+  $inputContactName         = $("#contact-name");
+  $inputContactNumber       = $("#contact-number");
+  $btnConfirmContactPerson  = $("#btn-confirm-contact-person");
+  $labelMemberName          = $("#member-name");
+
+  templateErrorList   = $("#template-error-list").html();
 }
 
 var _loadMemberOptions  = function() {
@@ -46,6 +66,52 @@ var _loadMemberOptions  = function() {
 
 
 var _bindEvents = function() {
+
+  $btnConfirmContactPerson.on("click", function(){
+    //alert($inputContactNumber.val())
+    //$selectMember.val()
+    alert($selectMember.val())
+    //alert($(this).data("id"))
+  });
+
+  $btnAdd.on("click", function(){
+  
+     
+    var config = {member_id: $selectMember.val()}
+    
+  
+    //$inputContactName.val("jef")
+    // var data_store = $(this).data("id")
+    $.ajax({
+      method: 'POST',
+      url: _urlContactPerson,
+      data: {
+        member_id: $selectMember.val()
+      },
+      success: function(response) {
+        $labelMemberName.text(response.member_name) 
+        if (response.id != null){
+          $inputContactName.val(response.id.name)
+          $inputContactNumber.val(response.id.cNumber)
+        }else{
+          $inputContactName.val("")
+          $inputContactNumber.val("")
+
+        }
+        
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching centers");
+      }
+    });
+/*
+    //$selectCenter.val()
+    //$selectMember.val()
+    */
+    $modalContactPerson.modal("show");
+  }) 
+
   $selectCenter.on("change", function() {
   
     $.ajax({

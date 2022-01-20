@@ -20,9 +20,10 @@ module DataStores
       ]
     end
     def show
-      data_store = DataStore.find(params[:id])
-      branch = Branch.find(data_store.meta["branch_id"]) 
-      @center = Center.where(branch_id: branch.id)
+      @data_store = DataStore.find(params[:id])
+      branch = Branch.find(@data_store.meta["branch_id"]) 
+      brach_active_center = Member.where(branch_id: branch.id, status: "active").pluck(:center_id).uniq
+      @center = Center.find(brach_active_center)
       
     
       @subheader_items = [

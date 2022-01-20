@@ -29,13 +29,14 @@
     "jquery-mousewheel": "^3.1.13",
     "moment": "^2.22.2",
     "mustache": "^3.0.0",
-    "node-notifier": "^5.3.0",
+    "node-notifier": "^10.0.0",
     "node-sass": "^4.14.1",
     "pdfmake": "^0.1.71",
     "perfect-scrollbar": "^1.5.0",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react_ujs": "^2.6.1",
     "react-accessible-accordion": "^3.3.3",
     "react-collapsible": "^2.8.1",
     "react-datepicker": "^1.6.0",
@@ -45,7 +46,6 @@
     "react-select": "^2.1.0",
     "react-table": "^6.8.6",
     "react-toggle": "^4.0.2",
-    "react_ujs": "^2.6.1",
     "regenerator-runtime": "^0.13.5",
     "sass-loader": "^8.0.2",
     "select2": "^4.0.13",
@@ -55,9 +55,9 @@
     "yarn": "^1.22.10"
   },
   "devDependencies": {
-    "webpack-build-notifier": "^0.1.30",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.11.0",
+    "webpack-build-notifier": "^2.3.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.2",
     "webpack-notifier": "^1.7.0"
   },
   "engines": {
