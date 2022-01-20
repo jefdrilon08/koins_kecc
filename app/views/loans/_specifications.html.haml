@@ -74,6 +74,11 @@
       #{@loan.loan_product}
   %tr
     %th
+      Loan Product Type:
+    %td.text-right
+      #{@loan.loan_product_type}
+  %tr
+    %th
       Monthly I.R.:
     %td.text-right
       #{number_to_currency((@loan.monthly_interest_rate * 100).round(2), unit: "")} %
