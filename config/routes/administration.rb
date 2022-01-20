@@ -9,7 +9,9 @@ namespace :administration do
   resources :branches
   resources :centers
   resources :announcements
-  resources :loan_products, except: [:destroy]
+  resources :loan_products, except: [:destroy] do
+    resources :loan_product_types
+  end
   resources :loan_product_categories
   resources :membership_arrangements
   resources :membership_types
