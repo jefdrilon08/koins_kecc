@@ -7,15 +7,19 @@ module Reports
       @members = []
 
       if @as_of.present? && @branch_id.present?
-        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND branch_id = ?", @as_of, "active", ["inforce", "dormant", "lapsed"], @branch_id)
+        @active_members = Member.where("data ->>'recognition_date' <= ? AND status = ? AND insurance_status IN (?) AND branch_id = ?", @as_of, "active", ["inforce", "lapsed"], @branch_id)
       elsif @as_of.present?
         # @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status != ?", @as_of, "GK", "active", "dormant")
-        @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status IN (?)", @as_of, "GK", "active", ["inforce", "lapsed", "dormant"])
+        @active_members = Member.where("data ->>'recognition_date' <= ? AND member_type != ? AND status = ? AND insurance_status IN (?)", @as_of, "GK", "active", ["inforce", "lapsed"])
         @resigned = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @as_of, @as_of)
-        @active_members = @active_members  + @resigned
+        
+        @resigned_before_inforce    = ::Members::FetchInsuranceMembers.new(config: {members: @resigned, as_of: @as_of, insurance_status: "inforce"}).execute!
+        @resigned_before_lapsed     = ::Members::FetchInsuranceMembers.new(config: {members: @resigned, as_of: @as_of, insurance_status: "lapsed"}).execute!
+
+        @active_members = @active_members  + @resigned_before_inforce + @resigned_before_lapsed
       elsif @branch_id.present?
         # @active_members = Member.where("insurance_status !=? AND branch_id = ?", "dormant", @branch_id)
-        @active_members = Member.where("insurance_status IN (?) AND branch_id = ?", ["inforce", "dormant", "lapsed"], @branch_id)
+        @active_members = Member.where("insurance_status IN (?) AND branch_id = ?", ["inforce", "lapsed"], @branch_id)
       end
 
       @active_members.each do |m|
