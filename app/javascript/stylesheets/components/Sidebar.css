@@ -2,7 +2,7 @@
   background: rgba(0, 0, 0, 0.2);
   display: grid;
   grid-gap: 1px;
-  // grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   padding: 1px;
   > nav {
     background: #2f353a;
@@ -60,7 +60,6 @@
   }
 }
 
-// override bootstrap coreui width
 .sidebar {
   flex: 0 0 300px !important;
   margin-left: -300px !important;
