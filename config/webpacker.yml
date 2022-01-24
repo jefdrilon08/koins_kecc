@@ -10,7 +10,7 @@ default: &default
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
-  resolved_paths: ["react"]
+  resolved_paths: ["app/assets"]
 
 
 
