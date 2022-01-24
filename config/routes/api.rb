@@ -283,6 +283,9 @@ namespace :api do
     
     #transfer_member_records
     post "/transfer_member_records/create", to: "transfer_member_records#create"
+    post "/transfer_member_records/add_member", to: "transfer_member_records#add_member"
+    post "/transfer_member_records/delete_member", to: "transfer_member_records#delete_member"
+    post "/transfer_member_records/approve", to: "transfer_member_records#approve"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"

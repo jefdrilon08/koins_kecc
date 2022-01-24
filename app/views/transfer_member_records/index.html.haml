@@ -1,9 +1,14 @@
-= render partial: "transfer_member_records/modal/new"
+= title
 .row
   .col
     .card
       .card-body
+        - if @records.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No records
 
-
+= render partial: "transfer_member_records/modal/new"
         
         
