@@ -10,7 +10,7 @@ default: &default
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
-  resolved_paths: ["app/assets"]
+  resolved_paths: ["react"]
 
 
 
@@ -83,10 +83,9 @@ test:
 
 production:
   <<: *default
-  compile: true
 
   # Production depends on precompilation of packs prior to booting for performance.
-  compile: false
+  compile: true
 
   # Extract and emit a css file
   extract_css: true
