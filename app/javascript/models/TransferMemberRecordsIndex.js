@@ -5,9 +5,9 @@ var authenticityToken;
 var $modalNew;
 var $btnNew;
 var $btnConfirmNew;
-
+var errors;
 var $selectBranch;
-
+var $selectBranchToTransfer;
 var $message;
 var templateErrorList;
 
@@ -16,7 +16,7 @@ var _cacheDom = function() {
   $btnNew           = $("#btn-new");
   $btnConfirmNew    = $("#btn-confirm-new");
   $selectBranch     = $("#select-branch");
-
+  $selectBranchToTransfer = $("#select-branch-to-transfer");
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 }
@@ -28,22 +28,23 @@ var _bindEvents = function() {
   });
 
   $btnConfirmNew.on("click", function() {
-    var year      = $selectYear.val();
+    var selectBranchToTransferId = $selectBranchToTransfer.val();
     var branchId  = $selectBranch.val();
 
     $message.html("Loading...");
     $btnConfirmNew.prop("disabled", true);
-    $selectYear.prop("disabled", true);
+    $selectBranchToTransfer.prop("disabled", true);
     $selectBranch.prop("disabled", true);
 
     var data  = {
-      year: year,
+      
       branch_id: branchId,
+      branch_id_to_transfer: selectBranchToTransferId,
       authenticity_token: authenticityToken
     }
 
     $.ajax({
-      url: "#",
+      url: "/api/v1/transfer_member_records/create",
       method: 'POST',
       data: data,
       success: function(response) {

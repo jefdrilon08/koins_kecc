@@ -243,6 +243,8 @@ Rails.application.routes.draw do
   
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"
+  get "/transfer_member_records/:id", to: "transfer_member_records#show"
+  delete "/transfer_member_records/:id", to: "transfer_member_records#destroy"
   
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"

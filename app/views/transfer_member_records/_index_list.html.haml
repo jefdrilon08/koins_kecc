@@ -1,0 +1,51 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Year
+      %th.text-center
+        From Branch
+      %th.text-center
+        To Branch
+      %th.text-center
+        Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/transfer_member_records/#{o.id}" do
+            .fa.fa-search
+        %td.text-center
+          %strong
+          #{o[:transfer_date].year}
+        %td.text-center
+          #{Branch.find(o[:branch_id]).name} 
+        %td.text-center
+          #{Branch.find(o[:branch_id_to_transfer]).name} 
+        %td.text-center
+          - if o[:status] == "processing"
+            .badge.badge-info
+              Processing
+          - elsif o[:status] == "done"
+            .badge.badge-success
+              Done
+          - elsif o[:status] == "pending"
+            .badge.badge-danger
+              pending
+          - elsif o[:status] == "approved"
+            .badge.badge-success
+              approved
+          - elsif o[:status] == "error"
+            .badge.badge-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}
