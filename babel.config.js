@@ -34,7 +34,8 @@ module.exports = function(api) {
           modules: false,
           exclude: ['transform-typeof-symbol']
         }
-      ]
+      ],
+      ['@babel/preset-react']
     ].filter(Boolean),
     plugins: [
       'babel-plugin-macros',
@@ -48,27 +49,23 @@ module.exports = function(api) {
         }
       ],
       [
+        "@babel/plugin-proposal-private-methods",
+        {
+          loose: true
+        }
+      ],
+      [
         '@babel/plugin-proposal-object-rest-spread',
         {
           useBuiltIns: true
         }
       ],
       [
-        '@babel/plugin-proposal-private-methods',
-        {
-          loose: true
-        }
-      ],
-      [
-        '@babel/plugin-proposal-private-property-in-object',
-        {
-          loose: true
-        }
-      ],
-      [
         '@babel/plugin-transform-runtime',
         {
-          helpers: false
+          helpers: false,
+          regenerator: true,
+          corejs: false
         }
       ],
       [
