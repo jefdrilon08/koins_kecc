@@ -69,7 +69,7 @@ module MemberAccounts
                     AND member_accounts.account_type = 'INSURANCE' 
                     AND member_accounts.account_subtype = 'Life Insurance Fund' 
                     AND members.branch_id = '#{@branch.id}'
-                    AND members.insurance_status IN ('inforce', 'lapsed', 'dormant')
+                    AND members.insurance_status IN ('inforce', 'lapsed')
                   GROUP BY
                     transaction_id,
                     member_account_id,
