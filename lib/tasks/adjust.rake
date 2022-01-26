@@ -1693,7 +1693,11 @@ namespace :adjust do
                       end
 
                       if amt_past_due >= 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
-                        new_status = "dormant"
+                        if amt_past_due >= 780 && amt_past_due <= 2340
+                          new_status = "dormant"
+                        elsif amt_past_due > 2340 
+                          new_status = "inactive"
+                        end
                       end
 
                       if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
