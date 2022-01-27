@@ -2573,7 +2573,7 @@ namespace :adjust do
         member_accounts.each do |ma|
           ma.account_transactions.destroy_all
           ma.destroy!
-          put "Done deleting member accounts and account transactions ..."
+          puts "Done deleting member accounts and account transactions ..."
         end
 
         member.destroy!
