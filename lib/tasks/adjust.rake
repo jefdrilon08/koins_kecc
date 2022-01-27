@@ -1693,11 +1693,7 @@ namespace :adjust do
                       end
 
                       if amt_past_due >= 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
-                        if amt_past_due >= 780 && amt_past_due <= 2340
-                          new_status = "dormant"
-                        elsif amt_past_due > 2340 
-                          new_status = "inactive"
-                        end
+                        new_status = "dormant"
                       end
 
                       if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
@@ -2556,6 +2552,30 @@ namespace :adjust do
       if member.present?
         puts "Deleting #{row['uuid']}..."
         puts "#{member.full_name}"
+        member.destroy!
+      end
+    end
+
+    puts "Done!"
+  end
+
+  task :delete_member_by_identification_number => :environment do
+    file_location = ENV['FILE_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(identification_number: row['identification_number']).first
+
+      if member.present?
+        puts "Deleting #{member.full_name} ..."
+        member_accounts = member.member_accounts
+
+        member_accounts.each do |ma|
+          ma.account_transactions.destroy_all
+          ma.destroy!
+          put "Done deleting member accounts and account transactions ..."
+        end
+
         member.destroy!
       end
     end

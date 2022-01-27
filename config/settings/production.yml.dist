@@ -1067,7 +1067,7 @@ branch_accounting_codes:
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-    ue_to_accounting_code_id: "c0ea3863-5e9d-4081-ab4a-952588d166cf"
+    due_to_accounting_code_id: "c0ea3863-5e9d-4081-ab4a-952588d166cf"
     due_from_accounting_code_id: "8673558f-4266-4034-a844-05dce2d590d5"
 
 #south1
