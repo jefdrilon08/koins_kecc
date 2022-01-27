@@ -20,12 +20,11 @@
     %th.text-center
      Amount
     -dd[:member_accounts].each do |md|
-     -if md[:account_subtype] != "Equity Value"
-      %tr
-       %td.text-center
-        #{md[:account_subtype]}
-       %td.text-right
-        #{number_to_currency(md[:balance], unit: '')}
+     %tr
+      %td.text-center
+       #{md[:account_subtype]}
+      %td.text-right
+       #{number_to_currency(md[:balance], unit: '')}
    %tr
     -if @records[:status] == "pending"
      %td.text-center{:colspan => "2"}
