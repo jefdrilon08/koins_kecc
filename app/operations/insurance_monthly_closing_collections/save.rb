@@ -52,7 +52,7 @@ module InsuranceMonthlyClosingCollections
       @member_accounts  = MemberAccount.joins(:member).where(
                             "members.branch_id = ? AND members.insurance_status IN (?) AND account_subtype = ? AND members.id NOT IN (?)",
                             @branch.id,
-                            ["inforce", "lapsed", "dormant"],
+                            ["inforce", "lapsed"],
                             @account_settings.account_subtype,
                             validated_members_ids
                           )

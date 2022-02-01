@@ -2559,6 +2559,30 @@ namespace :adjust do
     puts "Done!"
   end
 
+  task :delete_member_by_identification_number => :environment do
+    file_location = ENV['FILE_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member = Member.where(identification_number: row['identification_number']).first
+
+      if member.present?
+        puts "Deleting #{member.full_name} ..."
+        member_accounts = member.member_accounts
+
+        member_accounts.each do |ma|
+          ma.account_transactions.destroy_all
+          ma.destroy!
+          puts "Done deleting member accounts and account transactions ..."
+        end
+
+        member.destroy!
+      end
+    end
+
+    puts "Done!"
+  end
+
   task :insert_insurance_interest_beginning_balance => :environment do
     # HEADER: identification_number, rf_interest, ev_interest
 

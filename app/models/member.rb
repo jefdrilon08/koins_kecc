@@ -31,7 +31,8 @@ class Member < ApplicationRecord
     "pending", 
     "cleared", 
     "archived", 
-    "dependent"
+    "dependent",
+    "inactive"
   ]
 
   MEMBER_TYPES = [

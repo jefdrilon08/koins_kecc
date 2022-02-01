@@ -58,7 +58,7 @@ module Reports
             member_accounts.id, account_transactions.transacted_at DESC
           ) tt ON tt.member_id = members.id
         WHERE 
-          members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned')
+          members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned', 'inactive')
           AND members.branch_id::text = '#{@branch}'
           AND members.data->>'recognition_date' <= '#{@end_date}'
         GROUP BY

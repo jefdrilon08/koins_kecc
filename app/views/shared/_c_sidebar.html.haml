@@ -240,6 +240,10 @@
           = link_to billing_for_writeoff_path, class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-clipboard-list
             Collection For Writeoff
+        %li.c-sidebar-nav-item
+          = link_to "#", class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-clipboard-list
+            Payment For Writeoff
 
         %li.c-sidebar-nav-title
           Branch Reports

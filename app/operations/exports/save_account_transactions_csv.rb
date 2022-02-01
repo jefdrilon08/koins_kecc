@@ -68,7 +68,7 @@ module Exports
                     AND account_transactions.updated_at <= '#{@end_date}'
                     AND member_accounts.account_type = 'INSURANCE'
                     AND member_accounts.branch_id = '#{@branch.id}' 
-                    AND members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned')
+                    AND members.insurance_status IN ('inforce', 'lapsed', 'dormant', 'resigned', 'inactive')
                   GROUP BY
                     at_id
                   ORDER BY
