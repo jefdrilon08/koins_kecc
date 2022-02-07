@@ -1,8 +1,8 @@
 module Api
   module V1
     class BranchesController < ApiController
-      before_action :authenticate_user!, except: [:list_centers]
-      before_action :authenticate_app_request!, only: [:list_centers]
+      before_action :authenticate_user!, except: [:list_centers, :index]
+      before_action :authenticate_app_request!, only: [:list_centers, :index]
 
       def list_centers
         if params[:id].blank?

@@ -1,5 +1,7 @@
 namespace :api do
+  # Standard API
   get "/loan_product_types", to: "loan_product_types#index"
+  post "/status_check", to: "public#status_check"
 
   namespace :v2 do
     post "/apply", to: "public#apply"
