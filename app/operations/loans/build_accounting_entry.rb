@@ -19,7 +19,6 @@ module Loans
 
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
-
       # Setup loan cycle
       @member_data  = @loan.member.data.with_indifferent_access
       @loan_cycles  = @member_data[:loan_cycles] || []
@@ -222,8 +221,25 @@ module Loans
       # Deductions
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
+        if deduction_type == "share_capital_fee"
+            total_member_shares = (MemberAccount.where(member_id: @member.id, account_subtype: "Share Capital").last.balance.to_i / s_deduction.amount.to_i).to_i
+            if total_member_shares <= s_deduction.max_share.to_i
+            end
+            accounting_code = AccountingCode.find("370f5e4f-e4c8-454e-90b2-17919cc5ef92")
+            amount          = s_deduction.amount
+            name            = accounting_code.name
+            code            = accounting_code.code
 
-        if deduction_type == "straight_one_time"
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
+            temp_amount -= amount
+            
+        elsif deduction_type == "straight_one_time"
           #if @member.loans.active_or_paid.count == 0
           if @loan_cycles.size == 0
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)

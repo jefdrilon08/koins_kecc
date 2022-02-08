@@ -40,9 +40,8 @@ module Api
 
           }
 
-          @record = ::DataStores::AddMemberIdGenerators.new(config: @config).execute!
 
-          
+          raise "jef".inspect         
         end
         
         def contact_person
@@ -51,6 +50,28 @@ module Api
           render json: { message: "ok", id: @member_data, member_name: @member.full_name  }
           
 
+        end
+
+        def add_contact_person
+          data_store_id = params[:data][:data_store]
+          member_id     = params[:data][:member_id]
+          id_type   = params[:data][:id_type]
+          contact_person   = params[:data][:contact_person]
+          contact_person_number   = params[:data][:contact_person_number]
+          @config = {
+            data_store_id:  data_store_id,
+            member_id:      member_id,
+            id_type:    id_type,
+            contact_person: contact_person,
+            contact_person_number: contact_person_number
+          }
+          @record = ::DataStores::AddMemberIdGenerators.new(config: @config).execute!
+          
+        end
+
+        def delete_id_form
+          @data_store = DataStore.find(params[:data][:data_store]).destroy!
+          render json: { message: "ok"  }
         end
 
       end

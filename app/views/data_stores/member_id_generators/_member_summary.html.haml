@@ -1,0 +1,18 @@
+%table.display.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th #
+      %th Status
+      %th Name
+      %th ID#
+      %th Center
+    - @data_store.data.each_with_index do |ds, i|
+      %tr
+        %td #{ i + 1}
+        %td #{ds["id_type"]}
+        %td #{ds["first_name"].titlecase} #{ds["last_name"].titlecase}
+        %td #{ds["member_id_number"]}
+        %td #{ds["center"]}
+        %td.text-center
+          .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: @data_store.id, member_id: "#{ds["id"]}" } }
+            .fa.fa-minus
