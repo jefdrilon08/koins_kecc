@@ -11,6 +11,7 @@ var $selectCenter;
 var $selectMember;
 var $selectIdType;
 
+var $btnDelete;
 
 
 var $btnAdd;
@@ -29,6 +30,7 @@ var _memberId;
 var _urlCenters = "/api/v1/data_stores/member_id_generetors/fetch_members";
 var _urlAddMember = "/api/v1/data_stores/member_id_generetors/add_member";
 var _urlContactPerson = "/api/v1/data_stores/member_id_generetors/contact_person";
+var _urlAddContactPerson = "/api/v1/data_stores/member_id_generetors/add_contact_person";
 
 var _cacheDom = function() {
   $modalNew                 = $("#modal-new");
@@ -70,8 +72,30 @@ var _bindEvents = function() {
   $btnConfirmContactPerson.on("click", function(){
     //alert($inputContactNumber.val())
     //$selectMember.val()
-    alert($selectMember.val())
+    //alert("jef")
     //alert($(this).data("id"))
+    var data = {
+      data_store: $(this).data("id"),
+      member_id: $selectMember.val(),
+      id_type: $selectIdType.val(),
+      contact_person: $inputContactName.val(),
+      contact_person_number: $inputContactNumber.val()
+    }
+    $.ajax({
+      method: 'POST',
+      url: _urlAddContactPerson,
+      data: {
+        data: data
+      },
+      success: function(response) {
+        window.location.reload();
+        
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in fetching centers");
+      }
+    });
   });
 
   $btnAdd.on("click", function(){

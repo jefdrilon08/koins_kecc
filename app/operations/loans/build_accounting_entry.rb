@@ -19,7 +19,6 @@ module Loans
 
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
-
       # Setup loan cycle
       @member_data  = @loan.member.data.with_indifferent_access
       @loan_cycles  = @member_data[:loan_cycles] || []
@@ -222,8 +221,42 @@ module Loans
       # Deductions
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
+        if deduction_type == "share_capital_fee"
+            #raise @loan.data["share_capital_available"].inspect
+            total_member_shares = MemberShare.where("member_id = ? and  certificate_for = ? and is_void is null",@member.id, "KCOOP").sum(:number_of_shares)
+            @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
 
-        if deduction_type == "straight_one_time"
+            partial_number_of_share =  total_member_shares +  @share_capital_deposit.last["number_of_share"]
+            
+            if s_deduction.max_share < partial_number_of_share
+              share_avail =  s_deduction.max_share  - total_member_shares
+              @need_total_share_to_avail = share_avail
+            else
+              @need_total_share_to_avail = @share_capital_deposit.last["number_of_share"].to_f
+            end
+            #raise partial_number_of_share.inspect
+            if total_member_shares <= s_deduction.max_share.to_i
+              @total_share_paid =  @need_total_share_to_avail.to_f * s_deduction.amount.to_f
+              
+            end
+            accounting_code = AccountingCode.find("370f5e4f-e4c8-454e-90b2-17919cc5ef92")
+            amount          = @total_share_paid
+            name            = accounting_code.name
+            code            = accounting_code.code
+
+            if @loan.data["share_capital_available"] == true
+              journal_entries << {
+                accounting_code_id: accounting_code.id,
+                code: code,
+                name: name,
+                amount: amount
+              }
+            
+
+              temp_amount -= amount
+            end
+            
+        elsif deduction_type == "straight_one_time"
           #if @member.loans.active_or_paid.count == 0
           if @loan_cycles.size == 0
             accounting_code = AccountingCode.find(s_deduction.accounting_code_id)

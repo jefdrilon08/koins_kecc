@@ -3,5 +3,18 @@
     .card
       .card-body
         = render partial: "form_add"
+        %ul.nav.nav-tabs{:role => "tablist"} 
+          %li.nav-item
+            %a.nav-link.active.show{"aria-controls" => "profile", "aria-selected" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"}
+              Summary
+          %li.nav-item
+            %a.nav-link{"aria-controls" => "savings_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#savings_accounts", :role => "tab"} 
+              Details
+        .tab-content
+          #home.tab-pane.active.show{:role => "tabpanel"}
+            = render partial: "member_summary"
+          #savings_accounts.tab-pane{:role => "tabpanel"}
+            = render partial: "member_details"
+
 jef show
 = render partial: "data_stores/member_id_generators/modals/contact_person"

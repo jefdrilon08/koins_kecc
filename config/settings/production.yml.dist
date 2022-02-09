@@ -770,6 +770,50 @@ defaults:
           max_amount: 10000000
           deposit_amount: 145
 
+  share_capital_deposits:
+    -
+      max_number_of_share: 50
+      regular_share_deposits:
+        -
+          min_amount: 1
+          max_amount: 10000
+          number_of_share: 1
+        -
+          min_amount: 10001
+          max_amount: 20000
+          number_of_share: 2
+        -
+          min_amount: 20001
+          max_amount: 30000
+          number_of_share: 3
+        -
+          min_amount: 30001
+          max_amount: 40000
+          number_of_share: 4
+        -
+          min_amount: 40001
+          max_amount: 50000
+          number_of_share: 5
+        -
+          min_amount: 50001
+          max_amount: 60000
+          number_of_share: 6
+        -
+          min_amount: 60001
+          max_amount: 70000
+          number_of_share: 7
+        -
+          min_amount: 70001
+          max_amount: 80000
+          number_of_share: 8
+        -
+          min_amount: 80001
+          max_amount: 90000
+          number_of_share: 9
+        -
+          min_amount: 90001
+          max_amount: 100000
+          number_of_share: 10
 ################################
 
 insurance_accounting_codes:
@@ -1350,6 +1394,13 @@ loan_products:
         deduction_type: "membership_fee"
         meta:
           membership_name: "K-MBA"
+      -
+        name: "Share Capital Fee"
+        accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+        amount: 100.00
+        max_share: 50
+        deduction_type: "share_capital_fee"
+        meta:
 
   
   -
