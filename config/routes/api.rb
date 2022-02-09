@@ -147,6 +147,7 @@ namespace :api do
     post "/members/change_member_type", to: "members#change_member_type"
     post "/members/change_recognition_date", to: "members#change_recognition_date"
     post "/members/resign", to: "members#resign"
+    post "/members/reinstate", to: "members#reinstate"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"

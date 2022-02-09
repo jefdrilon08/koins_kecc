@@ -156,6 +156,15 @@
           .fa.fa-sync
           Generate Missing Accounts
         .message
+      -if !@member.is_reinstated?
+        - if @member.insurance_active?
+          %hr
+            %h6
+              Reinstatement
+            %div
+              #btn-reinstatement.btn.btn-danger.btn-block
+                .fa.fa-times
+                Reinstate
       %hr
       %h6
         BLIP Form

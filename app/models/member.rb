@@ -28,10 +28,7 @@ class Member < ApplicationRecord
     "lapsed", 
     "resigned", 
     "dormant", 
-    "pending", 
-    "cleared", 
-    "archived", 
-    "dependent",
+    "pending",
     "inactive"
   ]
 
@@ -193,7 +190,7 @@ class Member < ApplicationRecord
   end
 
   def insurance_active?
-    self.insurance_status == "dormant" or self.insurance_status == "inforce" or self.insurance_status == "lapsed"
+    self.insurance_status == "dormant" or self.insurance_status == "inforce" or self.insurance_status == "lapsed" or self.insurance_status == "inactive"
   end
 
   def active?
@@ -239,6 +236,14 @@ class Member < ApplicationRecord
         ""
       end
     end
+  end
+
+  def is_reinstated?
+    if self.data.with_indifferent_access[:reinstatement].present?
+      self.data.with_indifferent_access[:reinstatement][:is_reinstated] == true
+    else
+      false
+    end 
   end
 
   def resignation_records

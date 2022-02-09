@@ -168,6 +168,7 @@ module MemberAccountValidations
                             data: {
                               is_void: false,
                               member_type: @member.member_type,
+                              insurance_status: @member.insurance_status,
                             }
    			)
    		@member_account_validation.member_account_validation_records << member_account_validation_record

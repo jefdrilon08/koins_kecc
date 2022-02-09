@@ -1,3 +1,5 @@
+import Mustache from "mustache/mustache";
+
 var $btnApprove;
 var $btnReverse;
 var $btnValidate;

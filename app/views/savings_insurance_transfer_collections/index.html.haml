@@ -3,6 +3,7 @@
   .col
     .card
       .card-body
+        = render partial: "index_filter"
         - if @savings_insurance_transfer_collections.any?
           = render partial: "index_list"
         - else

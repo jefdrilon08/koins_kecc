@@ -34,6 +34,7 @@ module MemberAccountValidations
       @total_interest = 0
       @total_equity_interest = 0
       @grand_total = 0
+      @total_inactive_amount = 0
     end
 
     def execute!
@@ -63,6 +64,7 @@ module MemberAccountValidations
             "Member Age",
             "Recognition Date",
             "Member Type",
+            "Insurance Status",
             "Length of Stay",
             "Gender",
             "Branch",
@@ -78,12 +80,25 @@ module MemberAccountValidations
             "Advance LIFE",
             "Advance RF",
             "Interest",
-            "Total"
+            "Total",
+            "Total Inactive Amount"
           ], style: header
 
           @member_account_validations.each do |iav|
             iav.member_account_validation_records.each_with_index do |iavr, index|
               life_amount = (iavr.lif_50_percent * 2) + iavr.advance_lif
+
+              if iavr.data.with_indifferent_access[:insurance_status].present?
+                insurance_status = iavr.data.with_indifferent_access[:insurance_status]
+              else
+                insurance_status = nil
+              end
+
+              if insurance_status == "inactive"
+                inactive_amount = iavr.total.to_f
+              else
+                inactive_amount = nil 
+              end
 
               if index == 0
                 sheet.add_row [
@@ -91,6 +106,7 @@ module MemberAccountValidations
                     iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
                     iavr.member.member_type,
+                    insurance_status,
                     iavr.length_of_stay_from_date_resigned,
                     iavr.member.gender,
                     iavr.member.branch.name,
@@ -106,14 +122,16 @@ module MemberAccountValidations
                     iavr.advance_lif,
                     iavr.advance_rf,
                     iavr.interest,
-                    iavr.total
-                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                    iavr.total,
+                    inactive_amount
+                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
                 else
                   sheet.add_row [
                     iavr.member.full_name,
                     iavr.member.age,
                     iavr.member.data.with_indifferent_access[:recognition_date],
                     iavr.member.member_type,
+                    insurance_status,
                     iavr.length_of_stay_from_date_resigned,
                     iavr.member.gender,
                     iavr.member.branch.name,
@@ -129,8 +147,9 @@ module MemberAccountValidations
                     iavr.advance_lif,
                     iavr.advance_rf,
                     iavr.interest,
-                    iavr.total
-                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
+                    iavr.total,
+                    inactive_amount
+                  ], style: [nil, nil, date_format_cell, nil, nil, nil, nil, nil, nil, date_format_cell, nil, nil, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right]
               end
 
               @total_life = @total_life + life_amount
@@ -142,11 +161,17 @@ module MemberAccountValidations
               @total_equity_interest = @total_equity_interest + iavr.equity_interest
               @grand_total = @grand_total + iavr.total
 
+              if !inactive_amount.nil?
+                @total_inactive_amount = @total_inactive_amount + inactive_amount
+              end
+
             end  
           end
 
           sheet.add_row [ 
             "TOTAL",
+            "",
+            "",
             "",
             "",
             "",
@@ -164,8 +189,9 @@ module MemberAccountValidations
             @total_advance_life,
             @total_advance_rf,
             @total_interest,
-            @grand_total
-          ], style: [header, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
+            @grand_total,
+            @total_inactive_amount
+          ], style: [header, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
 
         end
       end

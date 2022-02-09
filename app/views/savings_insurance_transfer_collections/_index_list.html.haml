@@ -7,6 +7,8 @@
       %th
         Date Approved
       %th
+        Center / Branch
+      %th
         Status
       %th
         Savings Type
@@ -24,6 +26,8 @@
           #{o.collection_date.strftime("%B %d, %Y")}
         %td
           #{o.date_approved.try(:strftime, "%B %d, %Y")}
+        %td
+          #{o.center.name} / #{o.branch}  
         %td
           - if o.pending?
             .badge.badge-danger
