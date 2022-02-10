@@ -429,6 +429,15 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.setState({ data: data });
   }
+  handleShareCapitalChanged(event) {
+    const target  = event.target;
+    const value   = target.type === 'checkbox' ? target.checked : target.value;
+
+    var data  = this.state.data;
+    data.data.share_capital_available  = value || false;
+
+    this.setState({ data: data });
+  }
 
   handleCoMakerThreeProfilePictureSelected(event) {
     const context         = this;
@@ -544,6 +553,7 @@ export default class ApplicationFormComponent extends React.Component {
 
       var businessPermitAvailable = this.state.data.data.business_permit_available || false;
       var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
+      var shareCapitalAvailable = this.state.data.data.share_capital_available || false;
 
       console.log(this.props.settings)
 
@@ -819,6 +829,18 @@ export default class ApplicationFormComponent extends React.Component {
               />
               <label>
                 Off Insurance
+              </label>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <input 
+                type="checkbox" 
+                checked={shareCapitalAvailable}
+                onChange={this.handleShareCapitalChanged.bind(this)}
+              />
+              <label>
+                On Sharecapital
               </label>
             </div>
           </div>

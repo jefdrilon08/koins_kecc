@@ -51,11 +51,15 @@ var $selectLoanProduct;
 var $selectSurvey;
 var $selectMemberType;
 var $message;
-var $btnResignFromInsurance;   
-var $modalResignFromInsurance; 
+var $btnResignFromInsurance;
+var $modalResignFromInsurance;
 var $btnConfirmInsuranceResign;
+var $btnReinstatement;
+var $modalReinstatement;
+var $btnConfirmReinstatement;
 var $inputDateResigned;
 var $inputReason;
+var $inputReinstatementDate;
 var $fileProfilePicture;
 var $fileSignature;
 var templateErrorList;
@@ -113,6 +117,7 @@ var _urlGenerateMissingAccounts = "/api/v1/members/generate_missing_accounts";
 var _urlChangeMemberType        = "/api/v1/members/change_member_type";
 var _urlChangeRecognitionDate   = "/api/v1/members/change_recognition_date";
 var _urlResignFromInsurance     = "/api/v1/members/resign";
+var _urlReinstatement           = "/api/v1/members/reinstate";
 var _urlUploadProfilePicture    = "/api/v1/members/upload_profile_picture";
 var _urlDeleteProfilePicture    = "/api/v1/members/delete_profile_picture";
 var _urlUploadSignature         = "/api/v1/members/upload_signature";
@@ -180,11 +185,15 @@ var _cacheDom = function() {
   $btnResignFromInsurance           = $("#btn-resign-from-insurance");
   $modalResignFromInsurance         = $("#modal-resign-from-insurance");
   $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
+  $btnReinstatement                 = $("#btn-reinstatement");
+  $modalReinstatement               = $("#modal-reinstatement");
+  $btnConfirmReinstatement          = $("#btn-confirm-reinstatement")
   $btnUploadProfilePicture          = $("#btn-upload-profile-picture");
   $btnConfirmUploadProfilePicture   = $("#btn-confirm-upload-profile-picture");
   $btnConfirmDeleteSignature        = $("#btn-confirm-delete-signature");
   $inputDateResigned                = $("#input-date-resigned");
   $inputReason                      = $("#input-reason");
+  $inputReinstatementDate           = $("#input-reinstatement-date");
 
   $btnClaimsCopy                    = $("#btn-claims-copy");
   $modalClaimsCopy                  = $("#modal-claims-copy");
@@ -1223,6 +1232,34 @@ var _bindEvents = function() {
         error: function(response) {
           $message.html("Error in generating access_token");
           $btnConfirmInsuranceResign.prop("disabled", false);
+        }
+      });
+
+    });
+  });
+
+  $btnReinstatement.on("click", function() {
+    $modalReinstatement.modal("show");
+
+    $btnConfirmReinstatement.on("click", function() {
+      $btnConfirmReinstatement.prop("disabled", true);
+      //alert("hello");
+        $.ajax({
+        url: _urlReinstatement,
+        method: 'POST',
+        dataType: 'json',
+        data: { 
+          member_id: _memberId,
+          reinstatement_date: $inputReinstatementDate.val(),
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Successfully reinstate member");
+          window.location.reload();
+        },
+        error: function(response) {
+          $message.html("Error in generating access_token");
+          $btnConfirmReinstatement.prop("disabled", false);
         }
       });
 

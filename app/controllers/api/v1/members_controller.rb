@@ -793,6 +793,26 @@ module Api
         end
       end
 
+      def reinstate
+        member             = Member.where(id: params[:member_id]).first
+        reinstatement_date = params[:reinstatement_date]
+        errors             = ::Members::ValidateReinstatement.new(
+                              member: member,
+                              reinstatement_date: reinstatement_date
+                            ).execute!
+
+        if errors.size == 0
+          ::Members::Reinstate.new(
+            member: member,
+            reinstatement_date: reinstatement_date,
+            reinstate_by: current_user.full_name
+          ).execute!
+
+          render json: { id: member.id }
+        else
+          render json: { errors: errors }, status: 402
+        end
+      end
 
       def generate_access_token
         member  = Member.where(id: params[:id]).first

@@ -24,7 +24,7 @@
                 %input#contact-number{:name => "contact-number", :type => "text"  }
       .modal-footer
         .controls
-          %button#btn-confirm-contact-person.btn.btn-primary{ "data" => {id: 'drilon'} }
+          %button#btn-confirm-contact-person.btn.btn-primary{ "data" => {id: @data_store.id} }
             .fa.fa-check  
             Confirm record
           %button.btn{"data-dismiss" => "modal", :type => "button"}
