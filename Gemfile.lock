@@ -149,6 +149,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.5.0)
+    digest (3.1.0)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -226,6 +227,7 @@ GEM
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     io-like (0.3.1)
+    io-wait (0.2.1)
     jmespath (1.4.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -263,6 +265,21 @@ GEM
     msgpack (1.4.2)
     multi_xml (0.6.0)
     nenv (0.3.0)
+    net-imap (0.2.3)
+      digest
+      net-protocol
+      strscan
+    net-pop (0.1.1)
+      digest
+      net-protocol
+      timeout
+    net-protocol (0.1.2)
+      io-wait
+      timeout
+    net-smtp (0.3.1)
+      digest
+      net-protocol
+      timeout
     newrelic_rpm (8.2.0)
     nio4r (2.5.8)
     nokogiri (1.12.5)
@@ -402,9 +419,11 @@ GEM
       unicode-display_width (>= 1.5, < 3.0)
       unicode_utils (~> 1.4)
     strings-ansi (0.2.0)
+    strscan (3.0.1)
     temple (0.8.2)
     thor (1.2.1)
     tilt (2.0.10)
+    timeout (0.2.0)
     tty-color (0.6.0)
     tty-screen (0.8.1)
     tty-table (0.12.0)
@@ -472,6 +491,9 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   memory_profiler
   mini_magick
+  net-imap
+  net-pop
+  net-smtp
   newrelic_rpm
   nokogiri
   numbers_and_words
