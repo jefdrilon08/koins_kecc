@@ -1,0 +1,33 @@
+-@data_records[:records].each do |dd|
+ %table.table.table-bordered.table-sm.table-hover
+  %tbody
+   %tr
+    %th.text-center{:colspan => "2"}
+     Members Data
+   %tr
+    %td.text-center{:colspan => "2"}
+     %strong
+      =link_to member_path(dd[:member][:id]), target: '_blank' do
+       #{dd[:member][:last_name]}, #{dd[:member][:first_name]}
+   %tr
+    %td.text-center{:colspan => "2"}
+     %strong
+      Transfer to #{@to_branch.name} - #{dd[:transfer_to_center][:name].upcase} Center
+    
+   %tr
+    %th.text-center
+     Member Accounts
+    %th.text-center
+     Amount
+    -dd[:member_accounts].each do |md|
+     %tr
+      %td.text-center
+       #{md[:account_subtype]}
+      %td.text-right
+       #{number_to_currency(md[:balance], unit: '')}
+   %tr
+    -if @records[:status] == "pending"
+     %td.text-center{:colspan => "2"}
+      .btn.btn-danger.btn-delete-member.btn-sm.btn-block{:type => "button", data: {member_id: dd[:member][:id],member_name: [dd[:member][:last_name], ", ", dd[:member][:first_name]]}} DELETE
+    %br
+     

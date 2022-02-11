@@ -46,7 +46,7 @@ module Members
 
           }  
         
-        loan_amort = AmortizationScheduleEntry.where("loan_id = ? and is_paid is null", l.id)
+        loan_amort = AmortizationScheduleEntry.where("loan_id = ? and is_paid is null", l.id).order(:due_date)
         a =  loan_amort.map{ |amort| {due_date: amort.due_date.strftime('%F'), amount: amort.principal_balance.to_f, interest_amount: amort.interest_balance.to_f}  }.to_a
         @g = a.group_by {|v| Date.parse(v[:due_date][0,7] + '-01') }.sort
         @range = @range = Date.new(loan_amort.first.due_date.strftime('%Y').to_i,loan_amort.first.due_date.strftime('%m').to_i)..Date.new(loan_amort.last.due_date.strftime('%Y').to_i,loan_amort.last.due_date.strftime('%m').to_i)

@@ -9,9 +9,9 @@
     
     %th
       Type
-      = select_tag :id_type, options_for_select(["OLD" , "NEW"]), class: "form-control select-select2", id: "id type" , prompt: "-- SELECT --"
+      = select_tag :id_type, options_for_select(["OLD" , "NEW"]), class: "form-control select-select2", id: "select-id-type" , prompt: "-- SELECT --"
     
     %th 
       Action
-      %button#btn-add.btn.btn-block.btn-info{ data: { data_store_id: "#"  } }
+      %button#btn-add.btn.btn-block.btn-info{ data: { id: @data_store.id  } }
         Add

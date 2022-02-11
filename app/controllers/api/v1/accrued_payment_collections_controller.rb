@@ -114,11 +114,12 @@ module Api
         def add_book_type
           data_store_id = params[:id]
           txtBt    =  params[:txtBookType]
-
           ab = AccruedBilling.find(data_store_id)
-          ab.data['accounting_entry']['book'] = txtBt
-          ab.save!
- 
+          if txtBt == ""
+          else
+            ab.data['accounting_entry']['book'] = txtBt
+            ab.save!
+          end
         end
  
     end

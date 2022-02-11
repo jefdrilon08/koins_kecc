@@ -1,0 +1,53 @@
+- @data_store.data.each_with_index do |ds, i|
+  
+  .row
+    .col-md-2
+      %table.display.table.table-bordered.table-hover.table-sm
+        %thead
+          %tr 
+            %th Name:
+          %tr
+            %th Status:
+          %tr 
+            %th Center:
+          %tr
+            %th Address:
+          %tr
+            %th Birthdate:
+          %tr
+            %th Civil Status:
+          %tr
+            %th Contact Person:
+          %tr
+            %th Contact Number:
+          
+    .col-md-10
+      .form-group
+        %table.display.table.table-bordered.table-hover.table-sm
+          %thead
+            %tr
+              %th #{ds["first_name"].titlecase} #{ds["last_name"].titlecase}
+            %tr
+              %td #{ds["id_type"]}
+            %tr
+              %td #{ds["center"]}
+            %tr
+              %td #{ds["address"]}
+            %tr
+              %td #{ds["birtdate"]}
+            %tr
+              %td #{ds["civil_status"]}
+            %tr
+              %td #{ds["contact_person"]}
+            %tr
+              %td #{ds["contact_person_number"]}
+    -# .col-md-3
+      %div
+        - if Member.find(ds["id"]).has_signature?
+          %center
+            %hr
+              = image_tag "#{Member.find(ds["id"]).signature_url}"
+        - else
+          %p
+            No signature
+    

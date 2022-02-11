@@ -243,6 +243,8 @@ Rails.application.routes.draw do
   
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"
+  get "/transfer_member_records/:id", to: "transfer_member_records#show"
+  delete "/transfer_member_records/:id", to: "transfer_member_records#destroy"
   
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
@@ -427,6 +429,7 @@ Rails.application.routes.draw do
     
     get "/member_id_generators", to: "member_id_generators#index"
     get "/member_id_generators/:id", to: "member_id_generators#show"
+    delete "/member_id_generators/:id", to: "member_id_generators#destroy"
   end
   
   # daily_branch_metrics

@@ -1,0 +1,26 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Branch
+      %th.text-center
+        Refference
+      %th.text-center
+        Status
+  %thead
+    - @data_store.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/member_id_generators/#{o.id}" do
+            .fa.fa-search
+        %td
+          %strong
+            = Branch.find(o.meta["branch_id"]).name
+        %td
+          %strong
+            = o.meta["refference_number"]
+        %td
+          %strong
+            = o.status.upcase
+

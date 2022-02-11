@@ -151,6 +151,7 @@ namespace :api do
     post "/members/change_member_type", to: "members#change_member_type"
     post "/members/change_recognition_date", to: "members#change_recognition_date"
     post "/members/resign", to: "members#resign"
+    post "/members/reinstate", to: "members#reinstate"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
@@ -287,6 +288,9 @@ namespace :api do
     
     #transfer_member_records
     post "/transfer_member_records/create", to: "transfer_member_records#create"
+    post "/transfer_member_records/add_member", to: "transfer_member_records#add_member"
+    post "/transfer_member_records/delete_member", to: "transfer_member_records#delete_member"
+    post "/transfer_member_records/approve", to: "transfer_member_records#approve"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
@@ -413,6 +417,9 @@ namespace :api do
       post "/icpr/set_rate", to: "icpr#set_rate"
       post "/member_id_generetors/create", to: "member_id_generetors#create"
       get "/member_id_generetors/fetch_members", to: "member_id_generetors#fetch_members"
+      post "/member_id_generetors/contact_person", to: "member_id_generetors#contact_person"
+      post "/member_id_generetors/add_contact_person", to: "member_id_generetors#add_contact_person"
+      post "/member_id_generetors/add_member", to: "member_id_generetors#add_member"
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
       post "/patronage_refund/approve", to: "patronage_refund#approve"

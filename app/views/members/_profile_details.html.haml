@@ -94,18 +94,19 @@
       %th KDCI Member Since:
       %td
     %tr
-      %th Reinstatement Date:
-      %td
-    %tr
       %th Is Reinstated:
-      %td YES
-    %tr
-      %th Is Reinstate:
-      %td NO
+      - if @member.is_reinstated?  
+        %td YES
+      - else
+        %td NO
+    - if @member.is_reinstated?
+      %tr
+        %th Reinstatement Date:
+        %td #{@member.data.with_indifferent_access[:reinstatement][:reinstatement_date].try(:to_date).strftime("%B %d, %Y").try(:upcase)}
+      %tr
+        %th Old Recognition Date:
+        %td #{@member.data.with_indifferent_access[:reinstatement][:old_recognition_date].try(:to_date).strftime("%B %d, %Y").try(:upcase)}
 
-    %tr
-      %th Old Recognition Date:
-      %td
     %tr
       %th Certificate No.:
       %td

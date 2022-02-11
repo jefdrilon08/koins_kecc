@@ -86,8 +86,10 @@ module Pages
                     status = "inforce"
                   elsif lif_account.to_i < lif_insured_amount.to_i
                     if lif_less_balance > 97
-                      if lif_less_balance > 780
+                      if lif_less_balance > 780 && lif_less_balance <= 2340
                         status = "dormant"
+                      elsif lif_less_balance > 2340
+                        status = "inactive"
                       else
                         status  = "lapsed"
                       end

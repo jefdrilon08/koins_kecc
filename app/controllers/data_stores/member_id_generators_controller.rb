@@ -1,6 +1,12 @@
 module DataStores
   class MemberIdGeneratorsController < DataStoreController
     def index
+      @data_store = DataStore.where(
+                                    "meta ->> 'branch_id' IN (?) AND  
+                                     meta ->> 'data_store_type' = ?", 
+                                     @branches.pluck(:id),
+                                     "GENERATED_ID"
+                                    )
       @subheader_items = [
         {
           text: "Data Stores"
@@ -20,9 +26,11 @@ module DataStores
       ]
     end
     def show
-      data_store = DataStore.find(params[:id])
-      branch = Branch.find(data_store.meta["branch_id"]) 
-      @center = Center.where(branch_id: branch.id)
+      @data_store = DataStore.find(params[:id])
+      
+      branch = Branch.find(@data_store.meta["branch_id"]) 
+      brach_active_center = Member.where(branch_id: branch.id, status: "active").pluck(:center_id).uniq
+      @center = Center.find(brach_active_center)
       
     
       @subheader_items = [
@@ -39,7 +47,7 @@ module DataStores
           id: "btn-check",
           link: "#",
           class: "fa fa-plus",
-          text: "check"
+          text: "Check"
         }
       ]
     end

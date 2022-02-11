@@ -1,0 +1,26 @@
+
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            - if @records[:status] == "pending"
+              = render partial: "add_form"
+            .message
+            - if @data_records[:records].any?
+              = render partial: "members_table"
+            - else
+              %p
+                No records found.
+            %hr
+            %h5
+              Accounting Entry From #{@from_branch.name}
+            = render partial: "accounting_entry_display_from", locals: { accounting_entry: @accounting_entry_from }
+            %hr
+            %h5
+              Accounting Entry To #{@to_branch.name}
+            = render partial: "accounting_entry_display_to", locals: { accounting_entry: @accounting_entry_to }
+
+= render partial: "/transfer_member_records/modal/approve"
+= render partial: "/transfer_member_records/modal/delete_member"

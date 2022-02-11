@@ -5,6 +5,7 @@ var authenticityToken;
 var $modalNew;
 var $btnNew;
 var $btnConfirmNew;
+var $btnDelete;
 
 var $selectBranch;
 
@@ -17,11 +18,18 @@ var _cacheDom = function() {
   $btnConfirmNew    = $("#btn-confirm-new");
   $selectBranch     = $("#select-branch");
 
+  $btnDelete        = $("#btn-delete");
+
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 }
 
 var _bindEvents = function() {
+  $btnDelete.on("click", function(){
+    alert("jef")
+  });
+
+
   $btnNew.on("click", function() {
     //alert("jef")
     $modalNew.modal("show");
