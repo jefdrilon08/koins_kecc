@@ -1,4 +1,8 @@
 namespace :api do
+  # Standard API
+  get "/loan_product_types", to: "loan_product_types#index"
+  post "/status_check", to: "public#status_check"
+
   namespace :v2 do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
@@ -11,8 +15,8 @@ namespace :api do
     get "/loans/project_type_categories", to: "loans#project_type_categories"
     get "/loans", to: "loans#index"
     get "/loans/settings", to: "loans#settings"
-    post "/loans/quote", to: "loans#quote", to: "loans#quote"
-    post "/loans/review", to: "loans#review", to: "loans#review"
+    post "/loans/quote", to: "loans#quote"
+    post "/loans/review", to: "loans#review"
 
     # members
     post "/members/update_password", to: "members#update_password"

@@ -2,7 +2,6 @@ import React from 'react';
 import $ from 'jquery';
 
 import ReactTable from 'react-table';
-import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';

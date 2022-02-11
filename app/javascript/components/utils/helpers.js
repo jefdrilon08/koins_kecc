@@ -1,3 +1,106 @@
+export function buildLoanProductConfigObject() {
+  var configObject = {
+    loan_product_id: "",
+    receivable_accounting_code_id: "",
+    interest_receivable_accounting_code_id: "",
+    default_amount: 5000.00,
+    maintaining_balances: [
+      {
+        account_type: "SAVINGS",
+        account_subtype: "K-IMPOK",
+        percentage: 0.0,
+        threshold: 0.00
+      }
+    ],
+    midas: {
+      contract_type: 22,
+      contract_phase: "AC",
+      transaction_type: "NA",
+      loan_purpose: "ET"
+    },
+    deductions: [
+      {
+        name: "",
+        accounting_code_id: "",
+        amount: 0.00,
+        deduction_type: "",
+        business_permit_available: false,
+        business_permit_amount: 0.00,
+        skip_for_special_loan_fund: false,
+        use_for_special_loan_fund: false,
+        advance_insurance_value: false,
+        meta: {
+          member_type: "Regular",
+          account_type: "",
+          account_subtype: "",
+          value: 0.00,
+          algo: "",
+          offset: 0,
+          membership_name: "",
+          term_map: {
+            weekly: [
+              {
+                num_installments: 15,
+                ratio: 0.0035
+              },
+              {
+                num_installments: 25,
+                ratio: 0.007
+              },
+              {
+                num_installments: 35,
+                ratio: 0.0105
+              },
+              {
+                num_installments: 50,
+                ratio: 0.0140
+              }
+            ],
+            monthly: [
+              {
+                num_installments: 3,
+                ratio: 0.0035
+              },
+              {
+                num_installments: 6,
+                ratio: 0.007
+              },
+              {
+                num_installments: 9,
+                ratio: 0.0105
+              },
+              {
+                num_installments: 12,
+                ratio: 0.0140
+              }
+            ],
+            semi_monthly: [
+              {
+                num_installments: 6,
+                ratio: 0.0035
+              },
+              {
+                num_installments: 12,
+                ratio: 0.007
+              },
+              {
+                num_installments: 18,
+                ratio: 0.0105
+              },
+              {
+                num_installments: 24,
+                ratio: 0.0140
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+
+  return configObject;
+}
+
 export function buildBillingTableData(o) {
   var data  = [];
 

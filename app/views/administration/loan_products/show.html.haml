@@ -80,6 +80,34 @@
                     .fa.fa-pencil-alt
                     Modify
 
+
+        %h3
+          Loan Product Types
+        %hr
+        = link_to new_administration_loan_product_loan_product_type_path(@loan_product.id) do
+          .fa.fa-plus
+          Add Loan Product Type
+
+        %table.table.table-bordered.table-sm
+          %thead
+            %tr
+              %th
+                Name
+              %th
+                Actions
+          %tbody
+            - @loan_product.loan_product_types.each do |o|
+              %tr
+                %td
+                  #{o.name}
+                %td
+                  = link_to edit_administration_loan_product_loan_product_type_path(@loan_product, o) do
+                    .fa.fa-pencil-alt
+                    Edit
+                  = link_to administration_loan_product_loan_product_type_path(@loan_product, o), method: :delete, data: { confirm: "Are you sure?" } do
+                    .fa.fa-times
+                    Delete
+
 = render partial: "administration/loan_products/modals/delete"
 = render partial: "administration/loan_products/modals/prerequisite"
 = render partial: "administration/loan_products/modals/maintaining_balance"
