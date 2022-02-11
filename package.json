@@ -59,5 +59,8 @@
   "devDependencies": {
     "@webpack-cli/serve": "^1.6.0",
     "webpack-dev-server": "^4.7.2"
+  },
+  "scripts": {
+    "build": "cp config/settings/production.yml.dist config/settings/production.yml"
   }
 }
