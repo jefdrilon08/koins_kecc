@@ -9,6 +9,8 @@ module Loans
       @branch       = Branch.where(id: @loan_data[:branch_id]).first
       @center       = Center.where(id: @loan_data[:center_id]).first
 
+      @loan_product_type = LoanProductType.find_by_id(@loan_data[:loan_product_type_id])
+
       @co_maker_profile_picture       = @config[:co_maker_profile_picture]
       @co_maker_three_profile_picture = @config[:co_maker_three_profile_picture]
 
@@ -68,6 +70,7 @@ module Loans
       @loan.branch                = @branch
       @loan.center                = @center
       @loan.loan_product          = @loan_product
+      @loan.loan_product_type     = @loan_product_type
       @loan.monthly_interest_rate = @loan_product.monthly_interest_rate
 
       if @settings.use_term_interest.present?

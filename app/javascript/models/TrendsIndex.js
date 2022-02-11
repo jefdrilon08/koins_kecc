@@ -1,6 +1,6 @@
 import Mustache from "mustache/mustache";
 import "select2/dist/js/select2.min";
-import "chart.js/dist/Chart.min.js";
+import "chart.js/dist/chart.min.js";
 
 var $btnSync;
 var $selectYear;
