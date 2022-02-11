@@ -4,7 +4,6 @@ import $ from 'jquery';
 import ReactTable from 'react-table';
 import DatePicker from 'react-datepicker';
 import Select from 'react-select';
-import 'react-table/react-table.css';
 
 import SkCubeLoading from '../SkCubeLoading';
 import GeneralLedgerEntry from './GeneralLedgerEntry';

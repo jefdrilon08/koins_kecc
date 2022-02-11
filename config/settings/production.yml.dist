@@ -814,6 +814,18 @@ defaults:
           min_amount: 90001
           max_amount: 100000
           number_of_share: 10
+        -
+          min_amount: 100001
+          max_amount: 150000
+          number_of_share: 15
+        -
+          min_amount: 151000
+          max_amount: 200000
+          number_of_share: 20
+        -
+          min_amount: 201000
+          max_amount: 300000
+          number_of_share: 25
 ################################
 
 insurance_accounting_codes:
