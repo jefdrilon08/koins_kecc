@@ -11,7 +11,7 @@ class Referrer < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :contact_number, presence: true, uniqueness: true
+  validates :contact_number, presence: true
   validates :status, presence: true
   validates :date_registered, presence: true
   validates :category, presence: true

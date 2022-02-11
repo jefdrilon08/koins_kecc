@@ -1,5 +1,5 @@
-var $center       = $("#select-center");
-var $btnDownload  = $("#download-btn");
+var $center;
+var $btnDownload;
 
 var urlExportBillingPerCenter = "/exports/billing_per_center";
 
@@ -13,6 +13,8 @@ var encodeQueryData = function(data) {
 };
 
 var init  = function() {
+  $center       = $("#select-center");
+  $btnDownload  = $("#download-btn");
 
   $btnDownload.on('click', function() {
     var params    = {

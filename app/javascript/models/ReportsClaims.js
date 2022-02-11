@@ -1,8 +1,8 @@
-var $downloadBtn       = $("#download-btn");
-var $startDate         = $("#start-date");
-var $endDate           = $("#end-date");
-var $branchSelect      = $("#branch-select");
-var $typeOfClaim       = $("#type-of-claims");
+var $downloadBtn;
+var $startDate;
+var $endDate;
+var $branchSelect;
+var $typeOfClaim;
 
 var _cacheDom = function() {
   $downloadBtn       = $("#download-btn");

@@ -148,9 +148,28 @@ module Administration
         }
       ]
 
+      loan_products     = ::LoanProducts::FetchList.new.execute!
+
+      accounting_codes  = AccountingCode.select("*").order("name ASC").map{ |o|
+                            {
+                              id: o.id,
+                              name: o.name
+                            }
+                          }
+
+      membership_types  = MembershipType.select("*").order("name DESC").map{ |o|
+                            {
+                              id: o.id,
+                              name: o.name
+                            }
+                          }
+
       @payload = {
         id: @membership_arrangement.id,
-        data: @membership_arrangement.data || {}
+        data: @membership_arrangement.data || {},
+        loan_products: loan_products,
+        accounting_codes: accounting_codes,
+        membership_types: membership_types
       }
     end
 

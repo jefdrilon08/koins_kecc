@@ -4,8 +4,6 @@ import Modal from 'react-modal';
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
 
-import 'react-table/react-table.css';
-
 import {numberWithCommas} from '../utils/helpers';
 import {customStyles} from '../utils/consts';
 

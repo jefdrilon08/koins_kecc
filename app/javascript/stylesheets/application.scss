@@ -3,15 +3,11 @@
 @import "select2/dist/css/select2";
 @import "datatables.net-bs4/css/dataTables.bootstrap4";
 @import "datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4";
-@import "chart.js/dist/Chart.min.css";
 
-// Manual imports
 @import "./login";
-//@import "./coreui";
-@import "~@coreui/coreui/scss/coreui";
+@import "@coreui/coreui/scss/coreui";
 
 @import "./sk-cube-grid";
-@import "./components/Sidebar";
 @import "./member";
 
 .c-sidebar {
@@ -27,7 +23,7 @@
 }
 
 td {
-  white-space: normal !important; // To consider whitespace.
+  white-space: normal !important;
 }
 
 .pagination a, .pagination span.current, .pagination span.gap {

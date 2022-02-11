@@ -27,7 +27,7 @@ namespace :test do
 
     # Map the payload according to the data
     payload = {
-      memberNumber:       member.identification_number,
+      memberNumber:       "12345",
       amountPaid:         account_transaction.amount,
       branch:             branch.name,
       datePlacedPayment:  account_transaction.transacted_at.strftime("%m/%d/%Y"),
@@ -45,6 +45,6 @@ namespace :test do
                 :headers => { 'Content-Type' => 'application/json' }
               )
 
-    print(result)
+    puts(result)
   end
 end
