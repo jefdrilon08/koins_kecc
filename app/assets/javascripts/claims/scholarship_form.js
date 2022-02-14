@@ -1,3 +1,5 @@
+//= require jquery
+
 var scholarshipForm = (function() {
 
   var authenticityToken       = $("meta[name='csrf-token']").attr('content');
