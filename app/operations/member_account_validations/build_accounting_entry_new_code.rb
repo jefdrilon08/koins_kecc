@@ -9,6 +9,8 @@ module MemberAccountValidations
       @member_account_validation    = @config[:member_account_validation]
       @is_remote                    = @config[:is_remote]
       @branch                       = @member_account_validation.branch
+
+      @inactive_members             = @member_account_validation.member_account_validation_records.where("data->>'insurance_status' = ?", "inactive")
       
       if Settings.activate_microinsurance
         branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
@@ -154,8 +156,8 @@ module MemberAccountValidations
 
       # TODO: Config accounting code for total_lif_accounting_code
       if @is_remote
-        total_lif_amount          = @member_account_validation.member_account_validation_records.sum(:lif_50_percent)
-        equity_interest           = @member_account_validation.member_account_validation_records.sum(:equity_interest)
+        total_lif_amount          = @member_account_validation.member_account_validation_records.where("data->>'insurance_status' != ?", "inactive").sum(:lif_50_percent)
+        equity_interest           = @member_account_validation.member_account_validation_records.where("data->>'insurance_status' != ?", "inactive").sum(:equity_interest)
         amount                    = total_lif_amount + equity_interest
         
         # Benefits/ Claims Expense Equity Value
@@ -172,12 +174,14 @@ module MemberAccountValidations
         total_lif_accounting_code = AccountingCode.find('07e4ccfd-8fdf-4210-a068-1b66f9b6521f')
       end
 
-      journal_entries << {
-        accounting_code_id: total_lif_accounting_code.id,
-        code: total_lif_accounting_code.code,
-        name: total_lif_accounting_code.name,
-        amount: amount
-      }
+      if amount > 0
+        journal_entries << {
+          accounting_code_id: total_lif_accounting_code.id,
+          code: total_lif_accounting_code.code,
+          name: total_lif_accounting_code.name,
+          amount: amount
+        }
+      end
 
       journal_entries
     end
@@ -209,7 +213,7 @@ module MemberAccountValidations
       ### OLD CODE ###
 
       if @is_remote
-        rf_and_interest_amount          = @member_account_validation.member_account_validation_records.sum(:rf) + @member_account_validation.member_account_validation_records.sum(:advance_rf) + @member_account_validation.member_account_validation_records.sum(:interest)
+        rf_and_interest_amount          = @member_account_validation.member_account_validation_records.where("data->>'insurance_status' != ?", "inactive").sum(:rf) + @member_account_validation.member_account_validation_records.where("data->>'insurance_status' != ?", "inactive").sum(:advance_rf) + @member_account_validation.member_account_validation_records.where("data->>'insurance_status' != ?", "inactive").sum(:interest)
         # Agg. Reserve for Trust Liability
         rf_and_interest_accounting_code = AccountingCode.find('01d46c5f-12a1-428d-ad4f-5ad7bc798b6b')
       else
@@ -223,6 +227,29 @@ module MemberAccountValidations
           code: rf_and_interest_accounting_code.code,
           name: rf_and_interest_accounting_code.name,
           amount: rf_and_interest_amount
+        }
+      end  
+
+      journal_entries
+    end
+
+    def compute_total_amount_for_inactive
+      journal_entries = []
+
+        rf_and_interest_amount    = @inactive_members.sum(:rf) + @inactive_members.sum(:advance_rf) + @inactive_members.sum(:interest)
+        total_lif_amount          = @inactive_members.sum(:lif_50_percent)
+        equity_interest           = @inactive_members.sum(:equity_interest)
+        amount                    = total_lif_amount + equity_interest + rf_and_interest_amount
+        
+        # Restricted Fund_Equity Value & RF (inactive accounts)
+        accounting_code = AccountingCode.find('c2f80584-a24a-437b-b161-80f4b0a12d9c')
+
+      if amount > 0
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: accounting_code.code,
+          name: accounting_code.name,
+          amount: amount
         }
       end  
 
@@ -255,6 +282,7 @@ module MemberAccountValidations
     def build_debit_entries
       journal_entries = []
 
+      # KCOOP Only
       compute_rf_and_equity_interest.each do |o|
         journal_entries << o
       end
@@ -268,13 +296,17 @@ module MemberAccountValidations
       end
 
       if @is_remote
+        if @inactive_members.count > 0
+          # Restricted Fund_Equity Value & RF (inactive accounts)
+          # 20478a8c-c086-4b66-aeff-6ece5599a147
+          compute_total_amount_for_inactive.each do |o|
+            journal_entries << o
+          end
+        end
+
         compute_lif_advanced.each do |o|
           journal_entries << o
         end
-      
-        # compute_equity_interest.each do |o|
-        #   journal_entries << o
-        # end
       end
       
       journal_entries
