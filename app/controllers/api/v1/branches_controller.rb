@@ -55,17 +55,33 @@ module Api
       end
 
       def index
-        branches = current_user
-          .branches
-          .where(user_branches: { active: true })
-          .map do |b|
-            {
-              id:      b.id,
-              name:    b.name
-            }
-          end
+        if params[:b].present?
+          branches = current_user
+            .branches
+            .where(user_branches: { active: true })
+            .map do |b|
+              {
+                id:      b.id,
+                name:    b.name
+              }
+            end
 
-        render json: { branches: branches }
+          render json: { branches: branches }
+        else
+          branches = current_user
+            .branches
+            .includes(:centers)
+            .where(user_branches: { active: true })
+            .map do |b|
+              {
+                id:      b.id,
+                name:    b.name,
+                centers: b.centers.order("name ASC").map { |c| { id: c.id, name: c.name } },
+              }
+            end
+
+          render json: { branches: branches }
+        end
       end
 
       def fetch_centers
