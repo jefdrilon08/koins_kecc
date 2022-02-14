@@ -2,14 +2,10 @@ import React from 'react';
 import $ from 'jquery';
 
 import ReactTable from 'react-table';
-import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 
 import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';
-import moment from 'moment';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingEntryPreview from './AccountingEntryPreview';
 import Modal from 'react-modal';
@@ -56,7 +52,7 @@ export default class AccountingEntryFormComponent extends React.Component {
         branch_id: "",
         branch_name: "",
         reference_number: "",
-        date_prepared: moment(),
+        date_prepared: (new Date()),
         status: "pending",
         accounting_fund_id: props.accountingFundId,
         data: {
@@ -101,9 +97,6 @@ export default class AccountingEntryFormComponent extends React.Component {
           accountingFunds: response.accounting_funds,
           data: data
         });
-
-        console.log(accountingFunds);
-
       },
       error: function(response) {
         console.log(response);
@@ -129,8 +122,6 @@ export default class AccountingEntryFormComponent extends React.Component {
       success: function(response) {
         console.log("Fetched accounting entry:");
         console.log(response);
-
-        response.date_prepared = moment(response.date_prepared);
 
         context.setState({
           data: response,
@@ -264,7 +255,7 @@ export default class AccountingEntryFormComponent extends React.Component {
           book: accounting_entry_data.book,
           branch_id: accounting_entry_data.branch_id,
           branch_name: accounting_entry_data.branch_name,
-          date_prepared: accounting_entry_data.date_prepared.format("YYYY-MM-DD"),
+          date_prepared: accounting_entry_data.date_prepared,
           data: accounting_entry_data.data,
           journal_entries: accounting_entry_data.journal_entries,
           particular: accounting_entry_data.particular,
@@ -647,10 +638,10 @@ export default class AccountingEntryFormComponent extends React.Component {
         </div>
       );
     } else if(accountingEntryData.book == "CDB") {
-      var dateOfCheck = moment();
+      var dateOfCheck = new Date();
 
       if(accountingEntryData && accountingEntryData.data.date_of_check) {
-        dateOfCheck = moment(accountingEntryData.data.date_of_check);
+        dateOfCheck = accountingEntryData.data.date_of_check;
       }
 
       return  (
@@ -691,10 +682,11 @@ export default class AccountingEntryFormComponent extends React.Component {
             <div className="col-md-4">
               <div className="form-group">
                 <label>Date of Check</label>
-                <DatePicker
+                <input
                   className="form-control"
-                  selected={dateOfCheck}
+                  value={dateOfCheck}
                   onChange={this.handleDateOfCheckChanged.bind(this)}
+                  type="date"
                   disabled={state.isLoading}
                 />
               </div>
@@ -939,9 +931,10 @@ export default class AccountingEntryFormComponent extends React.Component {
             <div className="form-group">
               <label>Date Prepared</label>
               <br/>
-              <DatePicker
+              <input
                 className="form-control"
-                selected={data.date_prepared}
+                value={data.date_prepared}
+                type="date"
                 onChange={context.handleDatePreparedChanged.bind(this)}
               />
             </div>
@@ -1075,7 +1068,7 @@ export default class AccountingEntryFormComponent extends React.Component {
         <AccountingEntryPreview
           book={data.book}
           particular={data.particular}
-          datePrepared={data.date_prepared.format("YYYY-MM-DD")}
+          datePrepared={data.date_prepared}
           branch={data.branch_name}
           balanced={this.state.balanced}
           status={this.state.data.status}
