@@ -40,9 +40,8 @@ gem 'net-smtp', require: false
 gem 'net-pop', require: false
 gem 'net-imap', require: false
 
-
-
-
+# TODO: Remove eventually
+gem 'jquery-rails'
 
 gem 'uglifier'
 gem 'sprockets'
