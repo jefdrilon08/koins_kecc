@@ -222,7 +222,7 @@ export default class AccountingEntryFormComponent extends React.Component {
     var data  = this.state.data;
 
     if(o) {
-      data.data.date_of_check = o.format("YYYY-MM-DD");
+      data.data.date_of_check = o.target.value;
 
       this.setState({
         data: data
