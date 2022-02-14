@@ -24,11 +24,6 @@ class ApplicationController < ActionController::Base
       @branches = ReadOnlyBranch.where(
                     id: ReadOnlyUserBranch.where(active: true, user_id: current_user.id).pluck(:branch_id)
                   ).order(Arel.sql("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC"))
-
-#      @branches = ReadOnlyBranch
-#        .joins(user_branches: :user)
-#        .where(user_branches: { active: true, user_id: @current_user.id })
-#        .order(Arel.sql("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC"))
     end
   end
 

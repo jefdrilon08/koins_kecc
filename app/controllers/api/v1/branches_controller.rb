@@ -2,7 +2,7 @@ module Api
   module V1
     class BranchesController < ApiController
       before_action :authenticate_user!, except: [:list_centers, :index]
-      before_action :authenticate_app_request!, only: [:list_centers, :index]
+      before_action :authenticate_app_request!, only: [:list_centers]
 
       def list_centers
         if params[:id].blank?
@@ -55,33 +55,17 @@ module Api
       end
 
       def index
-        if params[:b].present?
-          branches = current_user
-            .branches
-            .where(user_branches: { active: true })
-            .map do |b|
-              {
-                id:      b.id,
-                name:    b.name
-              }
-            end
+        branches = current_user
+          .branches
+          .where(user_branches: { active: true })
+          .map do |b|
+            {
+              id:      b.id,
+              name:    b.name
+            }
+          end
 
-          render json: { branches: branches }
-        else
-          branches = current_user
-            .branches
-            .includes(:centers)
-            .where(user_branches: { active: true })
-            .map do |b|
-              {
-                id:      b.id,
-                name:    b.name,
-                centers: b.centers.order("name ASC").map { |c| { id: c.id, name: c.name } },
-              }
-            end
-
-          render json: { branches: branches }
-        end
+        render json: { branches: branches }
       end
 
       def fetch_centers

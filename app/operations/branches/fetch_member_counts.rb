@@ -338,7 +338,7 @@ module Branches
 
     def query!
       @result = ReadOnlyDataStore.connection.execute(<<-EOS).to_a
-                  SELECT
+                  SELECT DISTINCT ON (members.id)
                     members.id,
                     members.identification_number,
                     members.first_name,

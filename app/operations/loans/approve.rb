@@ -2,7 +2,7 @@ module Loans
   class Approve
     def initialize(config:)
       super()
-
+    
       @loan = config[:loan]
       @user = config[:user]
 
@@ -113,8 +113,51 @@ module Loans
           @date_paid = @loan.date_released
         end 
 
+        if deduction_type == "share_capital_fee"
+        
+            total_member_shares = MemberShare.where("member_id = ? and  certificate_for = ? and is_void is null",@member.id, "KCOOP").sum(:number_of_shares)
+            @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
 
-        if deduction_type == "membership_fee"
+            share_capital_account = MemberAccount.where(member_id: @member.id, account_subtype: "Share Capital").last
+
+            partial_number_of_share =  total_member_shares +  @share_capital_deposit.last["number_of_share"]
+            
+            if s_deduction.max_share < partial_number_of_share
+              share_avail =  s_deduction.max_share  - total_member_shares
+              @need_total_share_to_avail = share_avail
+            else
+              @need_total_share_to_avail = @share_capital_deposit.last["number_of_share"].to_f
+            end
+            #raise partial_number_of_share.inspect
+            if total_member_shares <= s_deduction.max_share.to_i
+              @total_share_paid =  @need_total_share_to_avail.to_f * s_deduction.amount.to_f
+              
+            end
+            acc_data = { 
+                          is_withdraw_payment: false, 
+                          is_fund_transfer: false, 
+                          is_interest: false, 
+                          is_adjustment: false, 
+                          is_for_exit_age: false, 
+                          is_for_loan_payments: false, 
+                          accounting_entry_reference_number: nil, 
+                          beginning_balance: "0.0", 
+                          ending_balance: "0.0"  
+                        }
+
+            save_account_transaction = AccountTransaction.create!(
+                                                                  subsidiary_id: share_capital_account.id, 
+                                                                  subsidiary_type: "MemberAccount",
+                                                                  amount: @total_share_paid,
+                                                                  transaction_type: "deposit",
+                                                                  transacted_at: @date_paid,
+                                                                  status: "approved",
+                                                                  data: acc_data
+                                                                  )
+            save_account_transaction.save!
+            ::MemberAccounts::Rehash.new(member_account: share_capital_account).execute!
+        
+        elsif deduction_type == "membership_fee"
           membership_payment_record = MembershipPaymentRecord.paid.where(
                                         membership_type: s_deduction.membership_type,
                                         member_id: @loan.member.id
