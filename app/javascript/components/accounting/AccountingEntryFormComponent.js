@@ -372,7 +372,7 @@ export default class AccountingEntryFormComponent extends React.Component {
   handleDatePreparedChanged(o) {
     var data  = this.state.data;
 
-    data.date_prepared  = o
+    data.date_prepared = o.target.value;
 
     this.setState({
       data: data
