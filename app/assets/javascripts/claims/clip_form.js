@@ -1,3 +1,5 @@
+//= require jquery
+
 var clipForm = (function() {
 
   var $amountOfLoan;

@@ -1,3 +1,5 @@
+//= require jquery
+
 var approvedClaim = (function() {
 
   var urlClaims               = "/api/v1/claims/approved";

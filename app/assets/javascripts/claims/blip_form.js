@@ -1,3 +1,5 @@
+//= require jquery
+
 var blipForm = (function() {
 
   var $typeOfInsurancePolicy;

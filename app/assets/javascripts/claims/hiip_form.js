@@ -1,4 +1,4 @@
-
+//= require jquery
 
 var hiipForm = (function() {
 
