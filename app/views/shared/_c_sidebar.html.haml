@@ -16,11 +16,11 @@
       = link_to members_path, class: "c-sidebar-nav-link #{params[:controller] == "members" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-users
         Members
-    %li.c-sidebar-nav-item
-      = link_to trends_path, class: "c-sidebar-nav-link #{params[:controller] == "trends" ? 'active' : ''}" do
-        .c-sidebar-nav-icon.fa.fa-check
-        Trends
     - if microloans?
+      %li.c-sidebar-nav-item
+        = link_to trends_path, class: "c-sidebar-nav-link #{params[:controller] == "trends" ? 'active' : ''}" do
+          .c-sidebar-nav-icon.fa.fa-check
+          Trends
       %li.c-sidebar-nav-item
         = link_to loans_path, class: "c-sidebar-nav-link #{params[:controller] == "loans" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-hand-holding-usd
@@ -81,10 +81,11 @@
         .c-sidebar-nav-icon.fa.fa-money-check
         Insurance Withdrawals
     - if is_not_remote
-      %li.c-sidebar-nav-item
-        = link_to monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "monthly_closing_collections" ? 'active' : ''}" do
-          .c-sidebar-nav-icon.fa.fa-money-check
-          Monthly Closing Collections
+      - if microloans?  
+        %li.c-sidebar-nav-item
+          = link_to monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "monthly_closing_collections" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-money-check
+            Monthly Closing Collections
       %li.c-sidebar-nav-item
         = link_to insurance_monthly_closing_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_monthly_closing_collections" ? 'active' : ''}" do
           .c-sidebar-nav-icon.fa.fa-money-check
@@ -95,21 +96,21 @@
           Equity Withdrawals
 
     - if is_not_ojt
-      %li.c-sidebar-nav-title
-        Accounts
       - if microloans?
-        %li.c-sidebar-nav-item
-          = link_to savings_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_accounts" ? 'active' : ''}" do
-            .c-sidebar-nav-icon.fa.fa-piggy-bank
-            Savings
-        %li.c-sidebar-nav-item
-          = link_to insurance_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_accounts" ? 'active' : ''}" do
-            .c-sidebar-nav-icon.fa.fa-piggy-bank
-            Insurance
-        %li.c-sidebar-nav-item
-          = link_to equity_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_accounts" ? 'active' : ''}" do
-            .c-sidebar-nav-icon.fa.fa-piggy-bank
-            Equity
+        %li.c-sidebar-nav-title
+          Accounts
+          %li.c-sidebar-nav-item
+            = link_to savings_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "savings_accounts" ? 'active' : ''}" do
+              .c-sidebar-nav-icon.fa.fa-piggy-bank
+              Savings
+          %li.c-sidebar-nav-item
+            = link_to insurance_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "insurance_accounts" ? 'active' : ''}" do
+              .c-sidebar-nav-icon.fa.fa-piggy-bank
+              Insurance
+          %li.c-sidebar-nav-item
+            = link_to equity_accounts_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_accounts" ? 'active' : ''}" do
+              .c-sidebar-nav-icon.fa.fa-piggy-bank
+              Equity
       - if is_not_remote
         %li.c-sidebar-nav-title
           Accounting
@@ -175,14 +176,15 @@
           = link_to accounting_year_end_closings_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-calculator
             Year End Closing
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/icpr", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-calculator
-            Interest On Share Capital
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/patronage_refund", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-calculator
-            Patronage Refund
+        - if microloans?  
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/icpr", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-calculator
+              Interest On Share Capital
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/patronage_refund", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-calculator
+              Patronage Refund
         %li.c-sidebar-nav-item
           = link_to accounting_balance_sheets_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-calculator
@@ -197,22 +199,23 @@
           = link_to adjustments_subsidiary_adjustments_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-eraser
             Subsidiary
-        %li.c-sidebar-nav-item
-          = link_to adjustments_batch_moratorium_adjustments_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-eraser
-            Batch Moratorium
-        %li.c-sidebar-nav-item
-          = link_to adjustments_moratoriums_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-eraser
-            Moratoriums
-        %li.c-sidebar-nav-item
-          = link_to adjustments_accrued_interests_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-eraser
-            Accrued Interest
-        %li.c-sidebar-nav-item
-          = link_to adjustments_recompute_restructures_path, class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-eraser
-            Recompute Restructure
+        - if microloans?  
+          %li.c-sidebar-nav-item
+            = link_to adjustments_batch_moratorium_adjustments_path, class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-eraser
+              Batch Moratorium
+          %li.c-sidebar-nav-item
+            = link_to adjustments_moratoriums_path, class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-eraser
+              Moratoriums
+          %li.c-sidebar-nav-item
+            = link_to adjustments_accrued_interests_path, class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-eraser
+              Accrued Interest
+          %li.c-sidebar-nav-item
+            = link_to adjustments_recompute_restructures_path, class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-eraser
+              Recompute Restructure
         %li.c-sidebar-nav-item
           = link_to adjustments_make_payments_path, class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-eraser
@@ -229,40 +232,41 @@
           = link_to transfer_member_records_path, class: "c-sidebar-nav-link #{params[:controller] == "accrued_payment_collections_path" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-people-arrows
             Transfer Member
-       
-        %li.c-sidebar-nav-title
-          Writeoff
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/for_writeoff", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-clipboard-list
-            List Of Members For Writeoff
-        %li.c-sidebar-nav-item
-          = link_to billing_for_writeoff_path, class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
-            .c-sidebar-nav-icon.fa.fa-clipboard-list
-            Collection For Writeoff
-        %li.c-sidebar-nav-item
-          = link_to "#", class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
-            .c-sidebar-nav-icon.fa.fa-clipboard-list
-            Payment For Writeoff
+        - if microloans?
+          %li.c-sidebar-nav-title
+            Writeoff
+            %li.c-sidebar-nav-item
+              = link_to "/data_stores/for_writeoff", class: "c-sidebar-nav-link" do
+                .c-sidebar-nav-icon.fa.fa-clipboard-list
+                List Of Members For Writeoff
+            %li.c-sidebar-nav-item
+              = link_to billing_for_writeoff_path, class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
+                .c-sidebar-nav-icon.fa.fa-clipboard-list
+                Collection For Writeoff
+            %li.c-sidebar-nav-item
+              = link_to "#", class: "c-sidebar-nav-link #{params[:controller] == "billing_for_writeoff_path" ? 'active' : ''}" do
+                .c-sidebar-nav-icon.fa.fa-clipboard-list
+                Payment For Writeoff
 
         %li.c-sidebar-nav-title
           Branch Reports
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/repayment_rates", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Repayment Rates
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/manual_aging", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Manual Aging
+        - if microloans?  
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/repayment_rates", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Repayment Rates
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/manual_aging", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Manual Aging
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/branch_loans_stats", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Loan Stats
         %li.c-sidebar-nav-item
           = link_to "/data_stores/personal_funds", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Personal Funds
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/branch_loans_stats", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Loan Stats
         %li.c-sidebar-nav-item
           = link_to "/data_stores/member_counts", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
@@ -279,59 +283,61 @@
           = link_to "/data_stores/accounting_entries_summaries", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Voucher Summary
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/soa_expenses", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            SOA Expenses
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/soa_loans", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            SOA Loans
+        - if microloans? 
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/watchlists", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Watchlists
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/soa_expenses", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              SOA Expenses
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/soa_loans", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              SOA Loans
         %li.c-sidebar-nav-item
           = link_to "/data_stores/soa_funds", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             SOA Funds
         %li.c-sidebar-nav-item
-          = link_to "/data_stores/watchlists", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Watchlists
-        %li.c-sidebar-nav-item
           = link_to "/data_stores/monthly_new_and_resigned", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-chart-line
             Monthly New/Resigned
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/monthly_incentives", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Monthly Incentives
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/x_weeks_to_pay", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            X Weeks to Pay
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/branch_resignations", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Branch Resignations
-        %li.c-sidebar-nav-item
-          = link_to "/daily_branch_metrics", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Daily Branch Metrics
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/members_in_good_standing", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            Members in Good Standing
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/member_id_generators", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            ID Form
+        - if microloans?  
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/monthly_incentives", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Monthly Incentives
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/x_weeks_to_pay", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              X Weeks to Pay
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/branch_resignations", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Branch Resignations
+          %li.c-sidebar-nav-item
+            = link_to "/daily_branch_metrics", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Daily Branch Metrics
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/members_in_good_standing", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              Members in Good Standing
+          %li.c-sidebar-nav-item
+            = link_to "/data_stores/member_id_generators", class: "c-sidebar-nav-link" do
+              .c-sidebar-nav-icon.fa.fa-chart-line
+              ID Form
       %li.c-sidebar-nav-title
         Microinsurance
       %li.c-sidebar-nav-item
         = link_to member_account_validations_path, class: "c-sidebar-nav-link" do
-          .c-sidebar-nav-icon.fa.fa-users
+          .c-sidebar-nav-icon.fa.fa-check
           Validations
       %li.c-sidebar-nav-item
         = link_to validations_path, class: "c-sidebar-nav-link" do
-          .c-sidebar-nav-icon.fa.fa-users
+          .c-sidebar-nav-icon.fa.fa-file
           Validations Report
       %li.c-sidebar-nav-item
         = link_to insurance_exit_age_members_path, class: "c-sidebar-nav-link" do
@@ -362,12 +368,16 @@
             Claims Register
         %li.c-sidebar-nav-item
           = link_to "/reports/claims", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
+            .c-sidebar-nav-icon.fa.fa-file
             Claims Report
         %li.c-sidebar-nav-item
           = link_to "#", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-list
             Supplies Inventory
+        %li.c-sidebar-nav-item
+          = link_to "#", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-balance-scale
+            Balancing of Accounts    
 
       %li.c-sidebar-nav-title
         Other Reports
