@@ -18,6 +18,10 @@ var $btnAdd;
 var $displayMember;
 var $displayAccountingCode;
 
+var $btnSaveParticular;
+var $particularTo;
+var $particularFrom;
+
 var $message;
 var templateErrorList;
 
@@ -37,7 +41,11 @@ var _cacheDom = function() {
   $modalDeleteMember      = $("#modal-delete-member");
   $selectCenter     = $("#select-center");
   $selectMember     = $("#select-member");
+
   $btnAdd           = $("#btn-add");
+  $btnSaveParticular = $("#btn-save-particular");
+  $particularTo      = $("#particular-to");
+  $particularFrom    = $("#particular-from");
 
   $displayMember          = $(".display-member");
   $message  = $(".message");
@@ -95,7 +103,54 @@ var _bindEvents = function() {
       }
     });
   });
+$btnSaveParticular.on("click", function() {
+    var particular_to        = $particularTo.val();
+    var particlar_from        = $particularFrom.val();
+    
+    var data  = {
+      id: _id,
+      particular_to: particular_to,
+      particlar_from: particlar_from,
+      authenticity_token: _authenticityToken
+    };
+    console.log(data);
+    $particularTo.prop("disabled", true);
+    $particularFrom.prop("disabled",true);
+ 
 
+    $.ajax({
+      url: "/api/v1/transfer_member_records/add_particular",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+        
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"]
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $particularTo.prop("disabled", true);
+          $particularFrom.prop("disabled",true);
+          $btnSaveParticular.prop("disabled", true);
+        }
+      }
+    });
+  });
 $btnApprove.on("click", function() {
     $message.html("");
     $modalApprove.modal("show");

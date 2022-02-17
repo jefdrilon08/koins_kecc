@@ -9,10 +9,28 @@
       %label
         Transfer to #{@to_branch.name} Center
       = select_tag :center, options_for_select(@center.map{ |o| ["#{o[:name]}", o[:id]] }), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT CENTER --"
-  .col-md-2.col-xs-12
+  .col-md-2.col-xs-6
     .form-group
       %label
         Actions
       #btn-add.btn.btn-block.btn-success
         .fa.fa-plus
-        Add
+        ADD 
+.row
+  .col-md-12.col-xs-6
+    .form-group
+      %label
+        Accounting Entry From - #{@from_branch.name} Particular 
+      %input.form-control{:value => @particular_from,id: "particular-from"}/
+.row
+  .col-md-12.col-xs-6
+    .form-group
+      %label
+        Accounting Entry to - #{@to_branch.name} Particular
+      %input.form-control{:value => @particular_to,id: "particular-to"}/
+.row
+  .col-md-12.col-xs-6
+    .form-group
+      #btn-save-particular.btn.btn-block.btn-success
+        .fa.fa-plus
+        Save Particular
