@@ -10,8 +10,14 @@ class PrintController < ApplicationController
       messages: {},
       full_messages: []
     }
+    if type == "print_monthly_incentives"
+      monthly_incentive = params[:id]
+      data = ::Print::BuildMonthlyIncentive.new(config: monthly_incentive).execute!
+      @monthly_incentive = data
+      render "print/monthly_incentive",layout: "print"
 
-    if type == "accounting_entry"
+
+    elsif type == "accounting_entry"
       accounting_entry = AccountingEntry.find(params[:id])
       data  = ::Print::BuildAccountingEntry.new(
                 accounting_entry: accounting_entry

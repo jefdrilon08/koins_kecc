@@ -13,15 +13,14 @@ class ProcessMonthlyIncentive < ApplicationJob
       record.update!(status: "processing")
 
       config  = {
+        id: record.id,
         branch: branch,
         year: year,
         month: month
       }
-
-      data_result = ::Turkey::ComputeMonthlyIncentive.new(
-                      branch: branch,
-                      year: year,
-                      month: month
+      
+      data_result = ::DataStores::GenerateMonthlyIncentive.new(
+                      config: config
                     ).execute!
 
       record.update!(

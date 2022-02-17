@@ -47,6 +47,7 @@ module Api
                             data_store_type: data_store_type
                           },
                           data: {
+                            records:[],
                             status: "processing"
                           }
                         )
