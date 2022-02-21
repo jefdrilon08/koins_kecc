@@ -203,10 +203,19 @@
         = link_to "/data_stores/member_counts", class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-chart-line
           Member Counts
+      - if microloans? 
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/soa_expenses", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            SOA Expenses
+        %li.c-sidebar-nav-item
+          = link_to "/data_stores/soa_loans", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-chart-line
+            SOA Loans
       %li.c-sidebar-nav-item
-        = link_to "/data_stores/accounting_entries_summaries", class: "c-sidebar-nav-link" do
+        = link_to "/data_stores/soa_funds", class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-chart-line
-          Voucher Summary
+          SOA Funds
       - if microloans? 
         %li.c-sidebar-nav-item
           = link_to "/data_stores/watchlists", class: "c-sidebar-nav-link" do
@@ -271,19 +280,10 @@
         = link_to accounting_books_jvb_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-book
           General Journal
-      - if microloans? 
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/soa_expenses", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            SOA Expenses
-        %li.c-sidebar-nav-item
-          = link_to "/data_stores/soa_loans", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-chart-line
-            SOA Loans
       %li.c-sidebar-nav-item
-        = link_to "/data_stores/soa_funds", class: "c-sidebar-nav-link" do
+        = link_to "/data_stores/accounting_entries_summaries", class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-chart-line
-          SOA Funds
+          Voucher Summary
       %li.c-sidebar-nav-item
         = link_to monthly_accounting_code_summaries_path, class: "c-sidebar-nav-link" do
           .c-sidebar-nav-icon.fa.fa-balance-scale
