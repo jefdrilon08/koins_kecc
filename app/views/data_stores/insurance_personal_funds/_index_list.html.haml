@@ -9,21 +9,22 @@
       %th.text-center
         Status
       %th.text-center
+        Member Status    
+      %th.text-center
         Started
       %th.text-center
         Last Updated
   %thead
-    - @records.each do |o|
+    - @records.order("as_of, status DESC").each do |o|
       %tr
         %td.text-center
+          = link_to "/data_stores/insurance_personal_funds/#{o.id}" do
+            .fa.fa-search
+        %td.text-center
           %strong
-            = link_to "/data_stores/insurance_member_counts/#{o.id}" do
-              .fa.fa-search
+            = o.as_of.try(:to_date).try(:strftime, "%b %d, %Y")
         %td
-          %strong
-            #{o.as_of.try(:to_date).try(:strftime, "%b %d, %Y")}
-        %td
-          #{o.meta["branch_name"]}
+          = o.meta["branch_name"]
         %td.text-center
           - if o.processing?
             .badge.badge-info
@@ -34,6 +35,9 @@
           - elsif o.error?
             .badge.badge-danger
               Error
+        %td.text-center
+          %small
+            #{o.meta.with_indifferent_access[:member_status]}
         %td.text-center
           %small
             #{o.created_at.localtime}

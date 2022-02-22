@@ -470,6 +470,11 @@ namespace :api do
       get "/members_in_good_standing/fetch", to: "members_in_good_standing#fetch"
       post "/for_writeoff/queue", to: "for_writeoff#queue"
       get "/for_writeoff/fetch", to: "for_writeoff#fetch"
+
+      post "/insurance_personal_funds/queue", to: "insurance_personal_funds#queue"
+      post "/insurance_personal_funds/queue_bulk", to: "insurance_personal_funds#queue_bulk"
+      get "/insurance_personal_funds/fetch", to: "insurance_personal_funds#fetch"
+      get "/insurance_personal_funds/download_excel", to: "insurance_personal_funds#download_excel"
     end
 
     namespace :epassbook do

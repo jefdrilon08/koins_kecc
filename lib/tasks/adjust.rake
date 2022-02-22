@@ -2251,6 +2251,56 @@ namespace :adjust do
     end
   end
 
+  task :process_insurance_personal_funds => :environment do
+    @data_store_type  = "INSURANCE_PERSONAL_FUNDS"
+    @as_of            = Date.today
+    @branches         = Branch.all
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    @member_statuses = ["active", "inactive"]
+
+    @branches.each do |branch|
+
+      puts "Processing #{branch.name}"
+
+      @member_statuses.each do |member_status|
+        @record = DataStore.personal_funds.where(
+                "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ? AND meta->>'member_status' = ?",
+                branch.id,
+                @as_of,
+                member_status
+              ).first
+
+        if @record.blank?
+          @record = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      as_of: @as_of,
+                      member_status: member_status,
+                      data_store_type: @data_store_type,
+                      progress: 0
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+          args  = {
+            id: @record.id,
+            data_store_type: @data_store_type
+          }
+
+          ProcessInsurancePersonalFunds.perform_later(args)
+        end
+      end
+      puts "Done!"
+    end
+  end
+
   task :insert_equity_value_to_life_transactions => :environment do
     puts "Inserting ..."
     
