@@ -95,6 +95,18 @@ class Member < ApplicationRecord
 
   before_validation :load_defaults
 
+  def user_object
+    {
+      username: username,
+      first_name: first_name,
+      middle_name: middle_name,
+      last_name: last_name,
+      identification_number: identification_number,
+      branch: branch.name,
+      center: center.name
+    }
+  end
+
   def is_returning?
     self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].any?))
   end
@@ -407,6 +419,13 @@ class Member < ApplicationRecord
         "Invalid date of birth: #{self.data['spouse']['date_of_birth']}"
       end
     end
+  end
+
+  def generate_jwt
+    JWT.encode({
+      id: id,
+      exp: 60.days.from_now.to_i
+    }, Rails.application.secrets.secret_key_base)
   end
 
   def full_name_middle_initial

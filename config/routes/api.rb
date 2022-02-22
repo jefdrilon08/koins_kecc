@@ -3,6 +3,12 @@ namespace :api do
   get "/loan_product_types", to: "loan_product_types#index"
   post "/status_check", to: "public#status_check"
 
+  # Users
+  post "/users/login", to: "users#login"
+
+  # Members
+  post "/members/login", to: "members#login"
+
   namespace :v2 do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
