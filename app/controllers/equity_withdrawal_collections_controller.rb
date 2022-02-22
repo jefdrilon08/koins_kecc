@@ -102,7 +102,7 @@ class EquityWithdrawalCollectionsController < ApplicationController
     }
 
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       equity_withdrawal_collection = row.to_hash
       @errors = EquityWithdrawalCollections::ValidateEquityWithdrawalFromCsvFile.new(equity_withdrawal_collection: equity_withdrawal_collection, config: config).execute!
     end

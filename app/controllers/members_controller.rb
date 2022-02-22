@@ -341,7 +341,7 @@ class MembersController < ApplicationController
       start_date = nil
     end
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       config = {  
         member: row.to_hash
       }
@@ -427,7 +427,7 @@ class MembersController < ApplicationController
       start_date = nil
     end
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       config = {  
         legal_dependent: row.to_hash
       }
@@ -512,7 +512,7 @@ class MembersController < ApplicationController
       start_date = nil
     end
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       config = {  
         beneficiary: row.to_hash
       }
