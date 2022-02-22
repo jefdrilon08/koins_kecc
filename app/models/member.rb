@@ -95,6 +95,18 @@ class Member < ApplicationRecord
 
   before_validation :load_defaults
 
+  def user_object
+    {
+      username: username,
+      first_name: first_name,
+      middle_name: middle_name,
+      last_name: last_name,
+      identification_number: identification_number,
+      branch: branch.name,
+      center: center.name
+    }
+  end
+
   def is_returning?
     self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].any?))
   end
