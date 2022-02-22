@@ -1,0 +1,59 @@
+module Turkey
+  class ComputeInsurancePersonalFunds
+    attr_reader :branch, :as_of, :accounts, :member_status
+
+    def initialize(branch:, as_of: Date.today, member_status:)
+      @branch = branch
+      @as_of = as_of
+      @member_status = member_status
+
+      if @member_status == "inactive"
+        @insurance_statuses = ['inactive'].map{ |o| "'#{o}'" }.join(",")
+      else
+        @insurance_statuses = ['inforce', 'lapsed', 'dormant'].map{ |o| "'#{o}'" }.join(",")
+      end
+
+      @accounts = Settings.default_member_accounts.map{ |o|
+                    [o[:account_subtype].parameterize.underscore, o[:account_subtype]]
+                  }.to_h
+
+      @account_subtypes = @accounts.map{ |o| "'#{o[1]}'" }.join(",")
+    end
+
+    def run
+      ReadOnlyDataStore.connection.execute(<<-EOS).to_a
+        SELECT DISTINCT ON (m.last_name, m.first_name, m.id, ma.account_subtype)
+          at.data ->> 'ending_balance' AS ending_balance,
+          at.transacted_at,
+          at.id AS account_transaction_id,
+          ma.id AS member_account_id,
+          ma.account_type,
+          ma.account_subtype,
+          m.identification_number AS member_identification_number,
+          m.last_name,
+          m.first_name,
+          m.middle_name,
+          m.status AS member_status,
+          m.insurance_status AS insurance_status,
+          m.id AS member_id,
+          c.id AS center_id,
+          c.name AS center_name,
+          u.id AS officer_id,
+          u.first_name AS officer_first_name,
+          u.last_name AS officer_last_name,
+          u.identification_number AS officer_identification_number
+        FROM account_transactions at
+          INNER JOIN member_accounts ma ON ma.id = at.subsidiary_id AND ma.account_subtype IN (#{@account_subtypes})
+          INNER JOIN members m ON m.id = ma.member_id
+          INNER JOIN centers c ON c.id = m.center_id
+          INNER JOIN users u ON u.id = c.user_id
+        WHERE DATE(at.transacted_at) <= DATE('#{as_of}')
+          AND m.branch_id = '#{branch.id}'
+          AND m.insurance_status IN (#{@insurance_statuses})
+          AND at.transaction_type IN ('deposit', 'withdraw')
+          AND at.status IN ('approved')
+        ORDER BY m.last_name, m.first_name, m.id, ma.account_subtype ASC, at.transacted_at DESC, at.updated_at DESC
+      EOS
+    end
+  end
+end

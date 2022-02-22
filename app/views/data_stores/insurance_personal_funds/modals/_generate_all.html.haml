@@ -1,0 +1,25 @@
+#modal-generate-all.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Generate PF
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Generate data stores
+          .row
+            .col
+              .form-group
+                %label
+                  As of Date
+                = text_field_tag :as_of, Date.today, type: :date, id: "input-as-of-generate-all", class: 'form-control'
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-generate-all.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
