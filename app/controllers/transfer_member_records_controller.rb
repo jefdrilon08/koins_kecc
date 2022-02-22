@@ -41,7 +41,9 @@ class TransferMemberRecordsController < ApplicationController
       @data_records = @records.data.with_indifferent_access
       @accounting_entry_from = @data_records[:accounting_entry_from]
       @accounting_entry_to = @data_records[:accounting_entry_to]
-     
+      
+      @particular_from = @accounting_entry_from[:particular] || "To Record Transfer Member/s From #{@from_branch.name} to #{@to_branch.name}"
+      @particular_to = @accounting_entry_to[:particular] || "To Received Transfer Member/s From #{@from_branch.name}"
       if @records[:status] == "pending"
         @members = Member.active_and_resigned.where(branch_id: @records[:branch_id]).order("last_name ASC").map{ |o|
             {

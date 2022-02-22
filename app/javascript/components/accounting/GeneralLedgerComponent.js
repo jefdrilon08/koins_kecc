@@ -2,23 +2,19 @@ import React from 'react';
 import $ from 'jquery';
 
 import ReactTable from 'react-table';
-import DatePicker from 'react-datepicker';
 import Select from 'react-select';
 
 import SkCubeLoading from '../SkCubeLoading';
 import GeneralLedgerEntry from './GeneralLedgerEntry';
+
 import ErrorDisplay from '../ErrorDisplay';
-
-import moment from 'moment';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 import AccountingCodeMultiSelect from './AccountingCodeMultiSelect';
 
 export default class GeneralLedgerComponent extends React.Component {
   constructor(props) {
     super(props);
-    
+
     var date      = new Date();
     var y         = date.getFullYear();
     var m         = date.getMonth();
@@ -27,8 +23,8 @@ export default class GeneralLedgerComponent extends React.Component {
 
     this.state  = {
       isLoading: false,
-      start_date: moment(firstDay),
-      end_date: moment(lastDay),
+      start_date: (new Date(firstDay)),
+      end_date: (new Date(lastDay)),
       currentBranchId: "",
       branches: [],
       accountingCodeIds: [],
@@ -81,8 +77,8 @@ export default class GeneralLedgerComponent extends React.Component {
 
   fetch() {
     var context           = this;
-    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
-    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var start_date        = context.state.start_date;
+    var end_date          = context.state.end_date;
     var branchId          = context.state.currentBranchId;
     var accountingCodeIds = context.state.accountingCodeIds;
 
@@ -122,8 +118,8 @@ export default class GeneralLedgerComponent extends React.Component {
   }
    DownloadExcel() {
     var context           = this;
-    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
-    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var start_date        = context.state.start_date;
+    var end_date          = context.state.end_date;
     var branchId          = context.state.currentBranchId;
     var accountingCodeIds = context.state.accountingCodeIds;
 
@@ -166,13 +162,13 @@ export default class GeneralLedgerComponent extends React.Component {
 
   handleStartDateChanged(o) {
     this.setState({
-      start_date: o
+      start_date: o.target.value
     });
   }
 
   handleEndDateChanged(o) {
     this.setState({
-      end_date: o
+      end_date: o.target.value
     });
   }
 
@@ -200,8 +196,8 @@ handleDownloadClicked() {
   handlePrintClicked() {
     var context = this;
 
-    var start_date        = moment(context.state.start_date).format('YYYY-MM-DD');
-    var end_date          = moment(context.state.end_date).format('YYYY-MM-DD');
+    var start_date        = context.state.start_date;
+    var end_date          = context.state.end_date;
     var branchId          = context.state.currentBranchId;
     var accountingCodeIds = context.state.accountingCodeIds;
 
@@ -255,8 +251,8 @@ handleDownloadClicked() {
     var context = this;
     var state   = context.state;
 
-    var startDate = state.start_date.format('YYYY-MM-DD');
-    var endDate   = state.end_date.format('YYYY-MM-DD');
+    var startDate = state.start_date;
+    var endDate   = state.end_date;
 
     if(state.isLoading) {
       return  (
@@ -336,9 +332,10 @@ handleDownloadClicked() {
           <div className="col-md-2">
             <div className="form-group">
               <label>Start Date</label>
-              <DatePicker
+              <input
                 className="form-control"
-                selected={state.start_date}
+                value={state.start_date}
+                type="date"
                 onChange={context.handleStartDateChanged.bind(this)}
                 disabled={state.isLoading}
               />
@@ -347,9 +344,10 @@ handleDownloadClicked() {
           <div className="col-md-2">
             <div className="form-group">
               <label>End Date</label>
-              <DatePicker
+              <input
                 className="form-control"
-                selected={state.end_date}
+                value={state.end_date}
+                type="date"
                 onChange={context.handleEndDateChanged.bind(this)}
                 disabled={state.isLoading}
               />

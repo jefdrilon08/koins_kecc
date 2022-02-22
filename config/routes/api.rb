@@ -3,6 +3,12 @@ namespace :api do
   get "/loan_product_types", to: "loan_product_types#index"
   post "/status_check", to: "public#status_check"
 
+  # Users
+  post "/users/login", to: "users#login"
+
+  # Members
+  post "/members/login", to: "members#login"
+
   namespace :v2 do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
@@ -71,6 +77,7 @@ namespace :api do
     post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
     post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
     post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
+
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
@@ -291,6 +298,7 @@ namespace :api do
     post "/transfer_member_records/add_member", to: "transfer_member_records#add_member"
     post "/transfer_member_records/delete_member", to: "transfer_member_records#delete_member"
     post "/transfer_member_records/approve", to: "transfer_member_records#approve"
+    post "/transfer_member_records/add_particular", to: "transfer_member_records#add_particular"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"

@@ -409,6 +409,13 @@ class Member < ApplicationRecord
     end
   end
 
+  def generate_jwt
+    JWT.encode({
+      id: id,
+      exp: 60.days.from_now.to_i
+    }, Rails.application.secrets.secret_key_base)
+  end
+
   def full_name_middle_initial
     if self.middle_name == ""
       "#{last_name.titleize}, #{first_name.titleize}"
