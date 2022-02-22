@@ -17,12 +17,12 @@ module MonthlyIncentives
       month_prev = as_of - 1.month
       as_of_prev = Date.new(month_prev.year, month_prev.month, -1)
 
-      repayment_rate_prev   = find_data_stores :repayment_rates,          as_of_prev, :meta
-      repayment_rate        = find_data_stores :repayment_rates,          as_of,      :meta
-      new_and_resigned      = find_data_stores :monthly_new_and_resigned, as_of,      :meta
-      new_and_resigned_prev = find_data_stores :monthly_new_and_resigned, as_of_prev, :meta
-      member_counts         = find_data_stores :member_counts,            as_of,      :data
-      member_counts_prev    = find_data_stores :member_counts,            as_of_prev, :data
+      repayment_rate_prev   = DataStore.repayment_rates.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{as_of_prev}",@branch.id).last
+      repayment_rate        = DataStore.repayment_rates.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{@as_of}",@branch.id).last
+      new_and_resigned      = DataStore.monthly_new_and_resigned.where("meta->>'branch_id' = ? and meta->>'as_of' = ?","#{@branch.id}", "#{@as_of}").last
+      new_and_resigned_prev = DataStore.monthly_new_and_resigned.where("meta->>'branch_id' = ? and meta->>'as_of' = ?","#{@branch.id}", "#{as_of_prev}").last
+      member_counts         = DataStore.member_counts.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{@as_of}",@branch.id).last
+      member_counts_prev    = DataStore.member_counts.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{as_of_prev}",@branch.id).last
 
       if repayment_rate_prev.blank?
         @errors[:messages] << {
@@ -73,30 +73,6 @@ module MonthlyIncentives
       end
 
       @errors
-    end
-
-    private
-
-    def find_data_stores(scope, date, meta_or_data)
-      ds = if meta_or_data == :meta
-             DataStore.send(scope)
-               .where("meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS DATE) <= ?", branch.id, date)
-               .order(Arel.sql("CAST(meta->>'as_of' AS DATE) ASC"))
-               .last
-           else
-             DataStore.send(scope)
-               .where("data->'branch'->>'id' = ? AND CAST(data->>'as_of' AS DATE) <= ?", branch.id, date)
-               .order(Arel.sql("CAST(data->>'as_of' AS DATE) ASC"))
-               .last
-           end
-
-      ds_date = ds.try!(:meta).dig("as_of").try!(:to_date)
-
-      if ds_date.year == date.year && ds_date.month == date.month
-        return ds
-      else
-        return nil
-      end
     end
   end
 end

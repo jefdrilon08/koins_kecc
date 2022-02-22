@@ -26,7 +26,7 @@ module Api
         center = Center.find(params[:center_id])
         member =Member.find(params[:member_id])
         active_loans= Loan.where(member_id: member.id,status: "active").count
-        member_accounts = MemberAccount.where("member_id = ? and balance > ?",member.id, 0.0)
+        member_accounts = MemberAccount.where("member_id = ? and balance > ? and account_subtype != ?",member.id, 0.0,"Credit Life Insurance Plan")
         transfer_member_records = TransferMemberRecord.find(params[:id])
 
         config={
@@ -69,6 +69,22 @@ module Api
             ProcessApproveTransferMemberRecords.perform_later(args)
             render json: { message: "ok" }
           end
+      end
+
+      def add_particular
+        transfer_member_record = TransferMemberRecord.find(params[:id])
+        particular_to = params[:particular_to]
+        particular_from = params[:particlar_from]
+
+        config = {
+          transfer_member_record: transfer_member_record,
+          particular_to: particular_to,
+          particular_from: particular_from
+        } 
+
+        ::TransferMemberRecords::SaveParticular.new(config: config).execute!
+        render json: {message: "ok"}
+        
       end
 
       def delete_member

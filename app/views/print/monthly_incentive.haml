@@ -1,0 +1,264 @@
+:css
+  @page { size: portrait; margin: 30px;}
+
+  table {
+    font-size: 1.1em;
+  }
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  SO and SOM Monthly Incentive
+  %br
+  %br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th.text-center
+        Cluster
+      %td.text-center 
+        #{@monthly_incentive[:cluster_name]}
+      %th.text-center
+        Satellite Office
+      %td.text-center 
+        #{@monthly_incentive[:branch_name].upcase}
+      %th.text-center
+        Incentive Date
+      %td.text-center
+        #{@monthly_incentive[:incentive_date].to_date.beginning_of_month.strftime("%B %d, %Y")} - #{@monthly_incentive[:incentive_date]}
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+        Satellite Officer
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:officer_name]}
+    %tr
+      %th
+        Status
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:status]}
+    %tr
+      %th
+        Disbursement
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:disburment],unit: "")}
+    %tr
+      %th
+        Outreach
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:outreach]}
+    %tr
+      %th
+        Repayment Rate
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:repayment_rate]}%
+    %tr
+      %th
+        Beginning Number of Loaners
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:beg_loaners]}
+    %tr
+      %th
+        New Members
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:new_members]}
+    %tr
+      %th
+        Number of Drop out
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:resigned_members]}
+    %tr
+      %th
+        Drop out Percentage
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:drop_out]}%
+    %tr
+      %th
+        Par Amount
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:par_amount].round(2),unit: "")}
+    %tr
+      %th
+        Par Rate
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:par_rate].round(2)}%
+    %tr
+      %th
+        Par Rate (Previous Month)
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{dr[:prev_par_rate].round(2)}%
+    %tr
+      %th
+        Portfolio
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:portfolio].round(2),unit: "")}
+    %tr
+      %th
+        Incentive
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:incentive].round(2),unit: "")}
+    %tr
+      %th
+        Verbal Warning Demerits (Php 100/VW)
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:vwd],unit: "")}
+    %tr
+      %th
+        Written Warning Demerits (Php 200/WW)
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:wwd],unit: "")}
+
+    %tr
+      %th
+        Drop out Demerits (Php 20/CB)
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:drop_out_dem],unit: "")}
+    %tr
+      %th
+        Total Demerits
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:total_demerits],unit: "")}
+    %tr
+      %th
+        Final Incentive = (Incentive - Total Demerits)
+      - @monthly_incentive[:records].each_with_index do |dr,i|
+        - if dr[:status] == "Regular"
+          %td.text-center
+            #{number_to_currency(dr[:final_incentive],unit: "")}
+
+%br
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Inihanda ng SOM
+      %th.some{:style=> "vertical-align: baseline; text-align: center; padding-top: 20px"}
+        #{@monthly_incentive[:som_user]}
+        %p.small
+          Pangalan/Lagda/Petsa
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Ikinumpara ni Accounting Officer
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        #{@monthly_incentive[:accounting_user]}
+        %p.small
+          Pangalan/Lagda/Petsa
+%br
+  %h4
+    Para sa CM at SM
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th.text-center
+        Total SO Incentive
+      %th.text-center
+        #{number_to_currency(@monthly_incentive[:total_so_incentive], unit: "")}
+      %th.text-center
+        Total Number of Regular SO
+      %th.text-center
+        #{@monthly_incentive[:total_regular_so]}
+    %tr
+      %th.text-center
+        Average SO Incentive
+      %th.text-center
+        #{number_to_currency(@monthly_incentive[:average_so_incentive],unit: "")}
+      %th.text-center
+        SOM Incentive
+      %th.text-center
+        #{number_to_currency(@monthly_incentive[:som_incentive],unit: "")}
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Sinuri at Inirekomenta ng Cluster Manager
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        %p
+        %p.small
+          Pangalan/Lagda/Petsa
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Pinagtibay ng Sector Manager
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        %p
+        %p.small
+          Pangalan/Lagda/Petsa
+%br
+  %h4
+    Para sa Headoffice
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Sinuri ng MIS Staff/Officer
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        %p
+        %p.small
+          Pangalan/Lagda/Petsa
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Pinagtibay ng AGM
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        %p
+        %p.small
+          Pangalan/Lagda/Petsa
+    %tr
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Nirecomenda ng MIS Manager
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        %p
+        %p.small
+          Pangalan/Lagda/Petsa
+      %th.some{:style=> "vertical-align: middle; text-align: center;"}
+        Pinagtibay ng GM
+      %th.some{:style=> "vertical-align: baseline; text-align: center;padding-top: 20px"}
+        %p
+        %p.small
+          Pangalan/Lagda/Petsa
+
+
+   
+
+
+
+
+
+
