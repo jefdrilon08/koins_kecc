@@ -167,7 +167,7 @@ class DepositCollectionsController < ApplicationController
     }
 
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       deposit_collection = row.to_hash
       @errors = DepositCollections::ValidateDepositFromCsvFile.new(deposit_collection: deposit_collection, config: config).execute!
     end

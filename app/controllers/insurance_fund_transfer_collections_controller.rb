@@ -153,7 +153,7 @@ class InsuranceFundTransferCollectionsController < ApplicationController
 
     @errors_arr = []
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       insurance_fund_transfer_collection = row.to_hash
       @errors = InsuranceFundTransferCollections::ValidateFundTransferFromCsvFile.new(insurance_fund_transfer_collection: insurance_fund_transfer_collection, config: config).execute!
    
