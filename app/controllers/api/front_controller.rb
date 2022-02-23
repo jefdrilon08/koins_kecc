@@ -1,5 +1,5 @@
 module Api
-  class ApiController < ActionController::API
+  class FrontController < ActionController::API
     def authenticate_member!
       token = request.headers["X-KOINS-PWA-TOKEN"]
 
@@ -10,7 +10,7 @@ module Api
           decoded = JWT.decode(token, Rails.application.secrets.secret_key_base)
           id      = decoded.first["id"]
 
-          @member = Member.find_by_id(id)
+          @member = ReadOnlyMember.find_by_id(id)
 
           if @member.blank?
             render json: { errors: { user: 'user not found' } }, status: :unprocessable_entity

@@ -12,6 +12,7 @@ namespace :api do
   get "/members/total_active_loan_balance", to: "members#total_active_loan_balance"
   get "/members/insurance_fund", to: "members#insurance_fund"
   get "/members/total_equities", to: "members#total_equities"
+  get "/members/total_funds", to: "members#total_funds"
 
   namespace :v2 do
     post "/apply", to: "public#apply"

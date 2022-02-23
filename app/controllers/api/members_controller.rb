@@ -1,5 +1,5 @@
 module Api
-  class MembersController < ::Api::ApiController
+  class MembersController < ::Api::FrontController
     before_action :authenticate_member!, except: [:login]
 
     def login
