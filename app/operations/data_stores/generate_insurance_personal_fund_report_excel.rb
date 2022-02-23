@@ -34,7 +34,8 @@
             "Retirement Fund",
             "Life Insurance Fund",
             "Hospital Income Plan",
-            "Credit Life Insurance Plan"
+            "Credit Life Insurance Plan",
+            "Equity Value"
           ], 
           style: label_cell
 
@@ -43,6 +44,7 @@
           @lif_total = 0.00
           @hiip_total = 0.00
           @clip_total = 0.00
+          @ev_total = 0.00
 
           @records.each_with_index do |record, i|
             
@@ -55,11 +57,13 @@
             row << record[:accounts].select{ |acc| acc[:account_subtype] == "Life Insurance Fund" }.first[:balance].to_f.round(2)
             row << record[:accounts].select{ |acc| acc[:account_subtype] == "Hospital Income Insurance Plan" }.first[:balance].to_f.round(2)
             row << record[:accounts].select{ |acc| acc[:account_subtype] == "Credit Life Insurance Plan" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Equity Value" }.first[:balance].to_f.round(2)
 
             @rf_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Retirement Fund" }.first[:balance].to_f.round(2)
             @lif_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Life Insurance Fund" }.first[:balance].to_f.round(2)
             @hiip_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Hospital Income Insurance Plan" }.first[:balance].to_f.round(2)
             @clip_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Credit Life Insurance Plan" }.first[:balance].to_f.round(2)
+            @ev_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Equity Value" }.first[:balance].to_f.round(2)
 
             @count += 1
             sheet.add_row row      
@@ -75,8 +79,9 @@
             @lif_total,
             @hiip_total,
             @clip_total
+            @ev_total
             ],
-          style: [label_cell, count_cell, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
+          style: [label_cell, count_cell, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
            
           sheet.add_row []
         end
