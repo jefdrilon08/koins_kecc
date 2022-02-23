@@ -8,6 +8,10 @@ namespace :api do
 
   # Members
   post "/members/login", to: "members#login"
+  get "/members/active_loans", to: "members#active_loans"
+  get "/members/total_active_loan_balance", to: "members#total_active_loan_balance"
+  get "/members/insurance_fund", to: "members#insurance_fund"
+  get "/members/total_equities", to: "members#total_equities"
 
   namespace :v2 do
     post "/apply", to: "public#apply"
