@@ -1873,12 +1873,29 @@ namespace :adjust do
     CSV.foreach(file_location, headers: true) do |row|
       identification_number = row['identification_number']
       member = Member.where(identification_number: identification_number).first
-      dob = row['dob']
+      dob = row['dob'].to_date
       
       puts "Updating #{identification_number}...#{member.full_name}"   
       
       if !member.nil?
         member.update!(date_of_birth: dob)
+      end
+    end
+  end
+
+  task :update_member_mobile_number => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      mobile_number = row['mobile_number']
+      
+      puts "Updating #{identification_number}...#{member.full_name}"   
+      
+      if !member.nil?
+        member.update!(mobile_number: mobile_number)
       end
     end
   end
