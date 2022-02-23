@@ -78,7 +78,7 @@
             @rf_total,
             @lif_total,
             @hiip_total,
-            @clip_total
+            @clip_total,
             @ev_total
             ],
           style: [label_cell, count_cell, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold]
