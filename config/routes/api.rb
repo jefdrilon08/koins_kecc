@@ -13,6 +13,10 @@ namespace :api do
   get "/members/insurance_fund", to: "members#insurance_fund"
   get "/members/total_equities", to: "members#total_equities"
   get "/members/total_funds", to: "members#total_funds"
+  
+  namespace :members do
+    get "/loans/:id", to: "loans#show"
+  end
 
   namespace :v2 do
     post "/apply", to: "public#apply"

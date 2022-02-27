@@ -10,8 +10,7 @@ module Members
       @loans  = []
 
       @current_date = Date.today
-
-      @data = {}
+@data = {}
     end
 
     def execute!
@@ -52,6 +51,7 @@ module Members
 
     def build_loan(loan)
       obj = {
+        id:                     loan.id,
         pn_number:              loan.pn_number,
         principal:              loan.principal,
         interest:               loan.interest.to_f,
