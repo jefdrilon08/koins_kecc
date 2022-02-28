@@ -29,7 +29,9 @@ module Members
                             }
                           }
 
-      @data[:last_id] = @data[:payments].try(:last).try(:id)
+      if @data[:payments].last
+        @data[:last_id] = @data[:payments].last[:id]
+      end
 
       @data
     end

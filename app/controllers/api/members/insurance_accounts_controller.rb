@@ -71,8 +71,13 @@ module Api
                           }
                         }
 
+            last_id = nil
 
-            render json: { payments: payments, last_id: payments.try(:last).try(:id) }
+            if payments.last
+              last_id = payments.last[:id]
+            end
+
+            render json: { payments: payments, last_id: last_id }
           end
         end
       end
