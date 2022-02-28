@@ -15,10 +15,18 @@ namespace :api do
   get "/members/total_funds", to: "members#total_funds"
   
   namespace :members do
+    # Loans
     get "/loans/:id", to: "loans#show"
+
+    # Insurance
     get "/insurance_accounts", to: "insurance_accounts#index"
     get "/insurance_accounts/:id", to: "insurance_accounts#show"
     get "/insurance_accounts/:id/more_payments/:last_id", to: "insurance_accounts#more_payments"
+   
+    # Savings
+    get "/savings_accounts", to: "savings_accounts#index"
+    get "/savings_accounts/:id", to: "savings_accounts#show"
+    get "/savings_accounts/:id/more_payments/:last_id", to: "savings_accounts#more_payments"
   end
 
   namespace :v2 do
