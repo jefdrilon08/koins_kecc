@@ -86,9 +86,9 @@ module Members
 
       if obj[:next_payment_date].present? and obj[:next_payment_date] < @current_date
         obj[:next_payment_date] = @current_date
-        obj[:is_overdue] = true
+        obj[:is_overdue] = "yes"
       else
-        obj[:is_overdue] = false
+        obj[:is_overdue] = "no"
       end
 
       # Format dates

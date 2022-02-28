@@ -4,7 +4,8 @@ module Members
                   :data
 
     def initialize(loan:)
-      @loan = loan
+      @loan         = loan
+      @current_date = Date.today
 
       @data = {
       }
@@ -28,16 +29,30 @@ module Members
       @data[:max_active_date]       = @loan.max_active_date.try(:to_date).strftime("%b %d, %Y")
       @data[:loan_product_type]     = @loan.loan_product_type.try(:name)
 
+      # Next date of payment
+      unpaid_records            = @loan.amortization_schedule_entries.unpaid.order("due_date DESC")
+      @data[:next_payment_date] = unpaid_records.where("due_date <= ?", @current_date).first.try(:due_date).try(:to_date).try(:strftime, "%b %d, %Y")
+
+      if @data[:next_payment_date].present? and @data[:next_payment_date].to_date < @current_date
+        @data[:is_overdue] = "yes"
+      else
+        @data[:is_overdue] = "no"
+      end
+
+      ###########################
+
       running_balance = @loan.total_dues
 
       @data[:amortization_schedule] = @loan.amortization_schedule_entries.order("due_date ASC").map{ |amort|
         running_balance = (running_balance - amort.total_paid)
 
         {
-          id:               amort.id,          
+          id:               amort.id,
+          due_date:         amort.due_date.strftime("%b %d, %Y"),
           amount_due:       amort.amount_due,
-          total_paid:       amort.total_paid,
-          running_balance:  running_balance,
+          total_paid:       amort.total_paid.to_f,
+          running_balance:  running_balance.to_f,
+          is_paid:          amort.is_paid ? "yes" : "no"
         }
       }
 
