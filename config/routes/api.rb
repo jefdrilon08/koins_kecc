@@ -16,6 +16,8 @@ namespace :api do
   
   namespace :members do
     get "/loans/:id", to: "loans#show"
+    get "/insurance_accounts", to: "insurance_accounts#index"
+    get "/insurance_accounts/:id", to: "insurance_accounts#show"
   end
 
   namespace :v2 do
