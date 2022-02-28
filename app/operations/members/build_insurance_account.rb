@@ -23,7 +23,7 @@ module Members
       @data[:payments]  = account_transactions.map{ |o|
                             {
                               id: o.id,
-                              amount: o.amount,
+                              amount: o.amount.to_f,
                               transaction_type: o.transaction_type,
                               transacted_at: o.transacted_at.strftime("%b %d, %Y")
                             }

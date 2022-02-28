@@ -18,6 +18,7 @@ namespace :api do
     get "/loans/:id", to: "loans#show"
     get "/insurance_accounts", to: "insurance_accounts#index"
     get "/insurance_accounts/:id", to: "insurance_accounts#show"
+    get "/insurance_accounts/:id/more_payments/:last_id", to: "#insurance_accounts#more_payments"
   end
 
   namespace :v2 do
