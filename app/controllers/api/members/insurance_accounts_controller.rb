@@ -27,7 +27,7 @@ module Api
         else
           insurance_account = MemberAccount.find_by_id_and_member_id_and_account_type(id, @member.id, "INSURANCE")
 
-          if insurance account.blank?
+          if insurance_account.blank?
             render json: { errors: ["insurance account not found"] }, status: :unprocessable_entity
           else
             cmd = ::Members::BuildInsuranceAccount.new(insurance_account: insurance_account)
