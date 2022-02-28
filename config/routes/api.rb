@@ -27,6 +27,11 @@ namespace :api do
     get "/savings_accounts", to: "savings_accounts#index"
     get "/savings_accounts/:id", to: "savings_accounts#show"
     get "/savings_accounts/:id/more_payments/:last_id", to: "savings_accounts#more_payments"
+   
+    # Equities
+    get "/equities_accounts", to: "equities_accounts#index"
+    get "/equities_accounts/:id", to: "equities_accounts#show"
+    get "/equities_accounts/:id/more_payments/:last_id", to: "equities_accounts#more_payments"
   end
 
   namespace :v2 do
