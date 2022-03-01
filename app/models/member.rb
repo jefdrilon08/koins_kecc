@@ -101,6 +101,7 @@ class Member < ApplicationRecord
       first_name: first_name,
       middle_name: middle_name,
       last_name: last_name,
+      full_name: full_name,
       identification_number: identification_number,
       branch: branch.name,
       center: center.name

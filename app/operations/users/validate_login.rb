@@ -21,7 +21,7 @@ module Users
       end
 
       if @username.present? and @password.present?
-        user = User.find_by_username(@username)
+        @user = User.find_by_username(@username)
 
         if user.blank?
           @errors['username'] = 'User not found'

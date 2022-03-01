@@ -101,6 +101,15 @@ class User < ApplicationRecord
     }, Rails.application.secret_key_base)
   end
 
+  def user_object
+    {
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      roles: roles
+    }
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
