@@ -15,8 +15,8 @@ module Api
             )
 
       cmd.execute!
-      
-      if cmd.errors.length > 0
+
+      if not cmd.errors.blank?
         render json: { errors: cmd.errors }, status: :unprocessable_entity
       else
         @member.update!(
