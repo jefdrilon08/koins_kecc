@@ -4,6 +4,7 @@ module Api
       token = request.headers["X-KOINS-PWA-TOKEN"]
 
       if token.blank?
+       
         render json: { errors: { user: 'token required' } }, status: :unprocessable_entity
       else
         begin
@@ -16,6 +17,7 @@ module Api
             render json: { errors: { user: 'user not found' } }, status: :unprocessable_entity
           end
         rescue Exception => e
+          raise e.inspect
           render json: { errors: { user: 'invalid token' } }, status: :unprocessable_entity
         end
       end
