@@ -524,5 +524,3 @@ class Member < ApplicationRecord
     }
   end
 end
-
-           
