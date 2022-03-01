@@ -269,7 +269,11 @@ function MembershipArrangementShow(props) {
       advance_insurance_value: false,
       meta: {
         meta_type: "",
-        term_map: [],
+        term_map: {
+          weekly: [],
+          monthly: [],
+          semi_monthly: []
+        },
         account_type: "",
         account_subtype: "",
         value: 0.00,
