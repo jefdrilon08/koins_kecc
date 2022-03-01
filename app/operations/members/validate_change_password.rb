@@ -39,7 +39,7 @@ module Members
         @errors[:password_confirmation] = "Password confirmation required"
       end
 
-      if @password.present? and @password_confirmation.present?
+      if @password.present? and @password_confirmation.present? and @password != @password_confirmation
         @errors[:password] = "Passwords are not the same"
 
         @errors[:password_confirmation] = "Passwords are not the same"
