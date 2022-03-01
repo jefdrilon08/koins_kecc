@@ -429,6 +429,7 @@ class Member < ApplicationRecord
   end
 
   def generate_jwt
+    logger.info("Using Rails.application.secret_key_base")
     JWT.encode({
       id: id,
       exp: 60.days.from_now.to_i
