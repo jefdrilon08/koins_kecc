@@ -17,8 +17,9 @@ module Api
             render json: { errors: { user: 'user not found' } }, status: :unprocessable_entity
           end
         rescue Exception => e
+          logger.info("Exception occured")
           logger.info(e)
-          render json: { errors: { user: 'invalid token' } }, status: :unprocessable_entity
+          render json: { errors: { user: 'invalid token', e: e } }, status: :unprocessable_entity
         end
       end
     end
