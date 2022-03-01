@@ -3,25 +3,21 @@ module Api
     before_action :authenticate_member!, except: [:login]
 
     def change_password
+      old_password          = params[:old_password]
       password              = params[:password]
       password_confirmation = params[:password_confirmation]
 
-      errors  = []
+      cmd = ::Members::ValidateChangePassword.new(
+              member: @member,
+              old_password: old_password,
+              password: password,
+              password_confirmation: password_confirmation
+            )
 
-      if password.blank?
-        errors << "password required"
-      end
+      cmd.execute!
 
-      if password_confirmation.blank?
-        errors << "password confirmation required"
-      end
-
-      if password.present? and password_confirmation.present? and password != password_confirmation
-        errors << "passwords do not match"
-      end
-
-      if errors.length > 0
-        render json: { errors: errors }, status: 403
+      if not cmd.errors.blank?
+        render json: { errors: cmd.errors }, status: :unprocessable_entity
       else
         @member.update!(
           password: password,
