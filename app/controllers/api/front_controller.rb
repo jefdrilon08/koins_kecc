@@ -8,7 +8,7 @@ module Api
         render json: { errors: { user: 'token required' } }, status: :unprocessable_entity
       else
         begin
-          decoded = JWT.decode(token, Rails.application.secrets.secret_key_base)
+          decoded = JWT.decode(token, Rails.application.secret_key_base)
           id      = decoded.first["id"]
 
           @member = ReadOnlyMember.find_by_id(id)
