@@ -116,7 +116,7 @@ class InsuranceWithdrawalCollectionsController < ApplicationController
     }
 
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       insurance_withdrawal_collection = row.to_hash
       @errors = InsuranceWithdrawalCollections::ValidateInsuranceWithdrawalFromCsvFile.new(insurance_withdrawal_collection: insurance_withdrawal_collection, config: config).execute!
     end

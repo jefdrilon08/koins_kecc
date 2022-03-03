@@ -95,6 +95,19 @@ class Member < ApplicationRecord
 
   before_validation :load_defaults
 
+  def user_object
+    {
+      username: username,
+      first_name: first_name,
+      middle_name: middle_name,
+      last_name: last_name,
+      full_name: full_name,
+      identification_number: identification_number,
+      branch: branch.name,
+      center: center.name
+    }
+  end
+
   def is_returning?
     self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].any?))
   end
@@ -353,39 +366,46 @@ class Member < ApplicationRecord
   def length_of_stay
     if self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now
-      seconds_between = (now.to_time - self.data.with_indifferent_access[:recognition_date].to_time).abs 
-      days_between = seconds_between / 60 / 60 / 24
-      number_of_days = days_between.floor
-      number_of_months = (days_between / 30.44).floor
-      years = (days_between / 365.242199).floor
-      months = number_of_months - (years * 12)
-      if years < 1
-        if months > 1
-          "#{months} MONTHS"
-        elsif months == 1
-          "#{months} MONTH"
-        elsif months < 1
-          if number_of_days == 1 
-            "#{number_of_days} DAY"
-          elsif number_of_days > 1
-            "#{number_of_days} DAYS"
-          elsif number_of_days < 1
-            nil          
-          end
-        end    
+      
+      if (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i < 0
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
+        "#{number_of_days} DAYS"
       else
-        if years == 1 && months == 0 
-          "#{years} YEAR"
-        elsif years == 1 && months == 1
-          "#{years} YEAR, #{months} MONTH"
-        elsif years == 1 && months > 1
-          "#{years} YEAR, #{months} MONTHS"
-        elsif years > 1 && months > 1
-          "#{years} YEARS, #{months} MONTHS"
-        elsif years > 1 && months == 1
-          "#{years} YEARS, #{months} MONTH"
-        elsif years > 1 && months < 1
-          "#{years} YEARS"    
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:recognition_date].to_time).abs 
+        days_between = seconds_between / 60 / 60 / 24
+        number_of_days = days_between.floor
+        number_of_months = (days_between / 30.44).floor
+        years = (days_between / 365.242199).floor
+        months = number_of_months - (years * 12)
+        
+        if years < 1
+          if months > 1
+            "#{months} MONTHS"
+          elsif months == 1
+            "#{months} MONTH"
+          elsif months < 1
+            if number_of_days == 1 
+              "#{number_of_days} DAY"
+            elsif number_of_days > 1
+              "#{number_of_days} DAYS"
+            elsif number_of_days < 1
+              nil          
+            end
+          end    
+        else
+          if years == 1 && months == 0 
+            "#{years} YEAR"
+          elsif years == 1 && months == 1
+            "#{years} YEAR, #{months} MONTH"
+          elsif years == 1 && months > 1
+            "#{years} YEAR, #{months} MONTHS"
+          elsif years > 1 && months > 1
+            "#{years} YEARS, #{months} MONTHS"
+          elsif years > 1 && months == 1
+            "#{years} YEARS, #{months} MONTH"
+          elsif years > 1 && months < 1
+            "#{years} YEARS"    
+          end
         end
       end
     end
@@ -407,6 +427,14 @@ class Member < ApplicationRecord
         "Invalid date of birth: #{self.data['spouse']['date_of_birth']}"
       end
     end
+  end
+
+  def generate_jwt
+    logger.info("Using Rails.application.secret_key_base")
+    JWT.encode({
+      id: id,
+      exp: 60.days.from_now.to_i
+    }, Rails.application.secret_key_base)
   end
 
   def full_name_middle_initial
@@ -497,5 +525,3 @@ class Member < ApplicationRecord
     }
   end
 end
-
-           

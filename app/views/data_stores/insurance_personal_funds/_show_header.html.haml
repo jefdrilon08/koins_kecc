@@ -1,0 +1,21 @@
+%ol.breadcrumb
+  %li.breadcrumb-item
+    .fa.fa-database
+    Data Stores
+  %li.breadcrumb-item
+    = link_to "/data_stores/insurance_personal_funds" do
+      .fa.fa-database
+      Insurance Personal Funds
+  %li.breadcrumb-item
+    .fa.fa-file
+    - if @record.data.with_indifferent_access[:branch].present?
+      #{@record.data.with_indifferent_access[:branch][:name]} - #{@record.data.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y") - @record.meta.with_indifferent_access[:member_status]}
+  %li.breadcrumb-menu.d-md-down-none
+    .btn-group
+      = link_to "#", class: 'btn', id: 'btn-update' do
+        .fa.fa-sync
+        Update
+      = link_to "/data_stores/insurance_personal_funds/#{@record.id}", method: :delete, class: 'btn', data: { confirm: "Are you sure?" } do
+        .fa.fa-times
+        Delete
+

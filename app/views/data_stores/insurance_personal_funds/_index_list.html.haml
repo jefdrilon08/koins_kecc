@@ -1,0 +1,46 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Date
+      %th
+        Branch
+      %th.text-center
+        Status
+      %th.text-center
+        Member Status    
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.order("as_of, status DESC").each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/insurance_personal_funds/#{o.id}" do
+            .fa.fa-search
+        %td.text-center
+          %strong
+            = o.as_of.try(:to_date).try(:strftime, "%b %d, %Y")
+        %td
+          = o.meta["branch_name"]
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.badge-success
+              Done
+          - elsif o.error?
+            .badge.badge-danger
+              Error
+        %td.text-center
+          %small
+            #{o.meta.with_indifferent_access[:member_status]}
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}

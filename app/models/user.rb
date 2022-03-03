@@ -94,6 +94,22 @@ class User < ApplicationRecord
     @login || self.username || self.email
   end
 
+  def generate_jwt
+    JWT.encode({
+      id: id,
+      exp: 60.days.from_now.to_i
+    }, Rails.application.secret_key_base)
+  end
+
+  def user_object
+    {
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      roles: roles
+    }
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)

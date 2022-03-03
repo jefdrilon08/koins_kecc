@@ -269,7 +269,62 @@ function MembershipArrangementShow(props) {
       advance_insurance_value: false,
       meta: {
         meta_type: "",
-        term_map: [],
+        term_map: {
+          weekly: [
+            {
+              num_installments: 15,
+              ratio: 0.0035
+            },
+            {
+              num_installments: 25,
+              ratio: 0.007
+            },
+            {
+              num_installments: 35,
+              ratio: 0.0105
+            },
+            {
+              num_installments: 50,
+              ratio: 0.0140
+            }
+          ],
+          monthly: [
+            {
+              num_installments: 3,
+              ratio: 0.0035
+            },
+            {
+              num_installments: 6,
+              ratio: 0.007
+            },
+            {
+              num_installments: 9,
+              ratio: 0.0105
+            },
+            {
+              num_installments: 12,
+              ratio: 0.0140
+            }
+          ],
+          semi_monthly: [
+            {
+              num_installments: 6,
+              ratio: 0.0035
+            },
+            {
+              num_installments: 12,
+              ratio: 0.007
+            },
+            {
+              num_installments: 18,
+              ratio: 0.0105
+            },
+            {
+              num_installments: 24,
+              ratio: 0.0140
+            }
+          ]
+        },
         account_type: "",
         account_subtype: "",
         value: 0.00,
@@ -278,6 +333,8 @@ function MembershipArrangementShow(props) {
         membership_name: ""
       }
     })
+
+    console.log(data);
 
     setData({...data});
   }

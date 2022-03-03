@@ -2,6 +2,40 @@ namespace :api do
   # Standard API
   get "/loan_product_types", to: "loan_product_types#index"
   post "/status_check", to: "public#status_check"
+  get "/public/branches", to: "public#branches"
+  get "/public/centers", to: "public#centers"
+
+  # Users
+  post "/users/login", to: "users#login"
+
+  # Members
+  post "/members/login", to: "members#login"
+  post "/members/change_password", to: "members#change_password"
+  get "/members/active_loans", to: "members#active_loans"
+  get "/members/total_active_loan_balance", to: "members#total_active_loan_balance"
+  get "/members/insurance_fund", to: "members#insurance_fund"
+  get "/members/total_equities", to: "members#total_equities"
+  get "/members/total_funds", to: "members#total_funds"
+  
+  namespace :members do
+    # Loans
+    get "/loans/:id", to: "loans#show"
+
+    # Insurance
+    get "/insurance_accounts", to: "insurance_accounts#index"
+    get "/insurance_accounts/:id", to: "insurance_accounts#show"
+    get "/insurance_accounts/:id/more_payments/:last_id", to: "insurance_accounts#more_payments"
+   
+    # Savings
+    get "/savings_accounts", to: "savings_accounts#index"
+    get "/savings_accounts/:id", to: "savings_accounts#show"
+    get "/savings_accounts/:id/more_payments/:last_id", to: "savings_accounts#more_payments"
+   
+    # Equities
+    get "/equities_accounts", to: "equities_accounts#index"
+    get "/equities_accounts/:id", to: "equities_accounts#show"
+    get "/equities_accounts/:id/more_payments/:last_id", to: "equities_accounts#more_payments"
+  end
 
   namespace :v2 do
     post "/apply", to: "public#apply"
@@ -71,6 +105,7 @@ namespace :api do
     post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
     post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
     post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
+
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
@@ -291,6 +326,7 @@ namespace :api do
     post "/transfer_member_records/add_member", to: "transfer_member_records#add_member"
     post "/transfer_member_records/delete_member", to: "transfer_member_records#delete_member"
     post "/transfer_member_records/approve", to: "transfer_member_records#approve"
+    post "/transfer_member_records/add_particular", to: "transfer_member_records#add_particular"
 
     # Monthly Closing Collection
     get "/monthly_closing_collections/fetch", to: "monthly_closing_collections#fetch"
@@ -462,6 +498,11 @@ namespace :api do
       get "/members_in_good_standing/fetch", to: "members_in_good_standing#fetch"
       post "/for_writeoff/queue", to: "for_writeoff#queue"
       get "/for_writeoff/fetch", to: "for_writeoff#fetch"
+
+      post "/insurance_personal_funds/queue", to: "insurance_personal_funds#queue"
+      post "/insurance_personal_funds/queue_bulk", to: "insurance_personal_funds#queue_bulk"
+      get "/insurance_personal_funds/fetch", to: "insurance_personal_funds#fetch"
+      get "/insurance_personal_funds/download_excel", to: "insurance_personal_funds#download_excel"
     end
 
     namespace :epassbook do

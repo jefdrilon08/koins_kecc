@@ -1,4 +1,3 @@
-- @data = @record.data.with_indifferent_access
 = title @record.id
 .row
   .col
@@ -8,7 +7,4 @@
           = render partial: "data_stores/error_page"
         - else
           = render partial: "data_stores/monthly_incentives/show_details"
-        - if debug?
-          %pre
-            %code
-              #{JSON.pretty_generate(JSON.parse(@record.to_json))}
+        

@@ -22,10 +22,10 @@
             .fa.fa-search
         %td.text-center
           %strong
-            #{o.start_date.to_date.strftime("%b %d, %Y")}
+            #{o.start_date.try(:to_date).try(:strftime, "%b %d, %Y")}
         %td.text-center
           %strong
-            #{o.end_date.to_date.strftime("%b %d, %Y")}
+            #{o.end_date.try(:to_date).try(:strftime, "%b %d, %Y")}
         %td
           #{o.meta["branch_name"]}
         %td.text-center

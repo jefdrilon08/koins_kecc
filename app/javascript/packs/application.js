@@ -41,6 +41,7 @@ import SurveyQuestionUIComponent from "../components/administration/surveys/surv
 import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
 import ManualAgingShowComponent from "../components/data_stores/manual_aging/ShowComponent.js";
 import PersonalFundsShowComponent from "../components/data_stores/personal_funds/ShowComponent.js";
+import InsurancePersonalFundsShowComponent from "../components/data_stores/insurance_personal_funds/ShowComponent.js";
 import SOAExpensesShowComponent from "../components/data_stores/soa_expenses/ShowComponent.js";
 import SOALoansShowComponent from "../components/data_stores/soa_loans/ShowComponent.js";
 import SOAFundsShowComponent from "../components/data_stores/soa_funds/ShowComponent.js";
@@ -126,6 +127,8 @@ import RepaymentRatesIndex from "../models/RepaymentRatesIndex.js";
 import ManualAgingIndex from "../models/ManualAgingIndex.js";
 import PersonalFundsIndex from "../models/PersonalFundsIndex.js";
 import PersonalFundsShow from "../models/PersonalFundsShow.js";
+import InsurancePersonalFundsIndex from "../models/InsurancePersonalFundsIndex.js";
+import InsurancePersonalFundsShow from "../models/InsurancePersonalFundsShow.js";
 import BranchLoansStatsIndex from "../models/BranchLoansStatsIndex.js";
 import BranchLoansStatsShow from "../models/BranchLoansStatsShow.js";
 import MemberCountsIndex from "../models/MemberCountsIndex.js";
@@ -195,6 +198,7 @@ import BillingForWriteoffIndex from "../models/BillingForWriteoffIndex.js";
 import BillingForWriteoffShow from "../models/BillingForWriteoffShow.js";
 import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
 import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
+import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -297,6 +301,8 @@ const hooks = {
   "data_stores/manual_aging/show":                    [ManualAgingShowComponent],
   "data_stores/personal_funds/index":                 [PersonalFundsIndex],
   "data_stores/personal_funds/show":                  [PersonalFundsShowComponent, PersonalFundsShow],
+  "data_stores/insurance_personal_funds/index":       [InsurancePersonalFundsIndex],
+  "data_stores/insurance_personal_funds/show":        [InsurancePersonalFundsShowComponent, InsurancePersonalFundsShow],
   "data_stores/branch_loans_stats/index":             [BranchLoansStatsIndex],
   "data_stores/branch_loans_stats/show":              [BranchLoansStatsShow],
   "data_stores/member_counts/index":                  [MemberCountsIndex],
@@ -366,7 +372,8 @@ const hooks = {
   "billing_for_writeoff/index":                       [BillingForWriteoffIndex],
   "billing_for_writeoff/show":                        [BillingForWriteoffShow],
   "data_stores/member_id_generators/index":       [MemberIdGeneratorsIndex],
-  "data_stores/member_id_generators/show":       [MemberIdGeneratorsShow]
+  "data_stores/member_id_generators/show":       [MemberIdGeneratorsShow],
+  "data_stores/monthly_incentives/show":         [MonthlyIncentivesShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

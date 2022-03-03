@@ -175,7 +175,7 @@ class InsuranceAccountsController < ApplicationController
       start_date = nil
     end
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       config = {
         insurance_account: row.to_hash
       }
@@ -258,7 +258,7 @@ class InsuranceAccountsController < ApplicationController
       start_date = nil
     end
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       config = {
         insurance_account_transaction: row.to_hash
       }
@@ -356,7 +356,7 @@ class InsuranceAccountsController < ApplicationController
     file = params[:file]
     user = current_user
 
-    CSV.foreach(file.path, {:headers => true, :encoding => 'windows-1251:utf-8'}) do |row|
+    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
       clip = row.to_hash
       @errors = Insurance::ValidateClipFromCsvFile.new(clip: clip).execute!
     end

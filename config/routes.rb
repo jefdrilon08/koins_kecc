@@ -430,6 +430,10 @@ Rails.application.routes.draw do
     get "/member_id_generators", to: "member_id_generators#index"
     get "/member_id_generators/:id", to: "member_id_generators#show"
     delete "/member_id_generators/:id", to: "member_id_generators#destroy"
+
+    get "/insurance_personal_funds", to: "insurance_personal_funds#index"
+    get "/insurance_personal_funds/:id", to: "insurance_personal_funds#show"
+    delete "/insurance_personal_funds/:id", to: "insurance_personal_funds#destroy"
   end
   
   # daily_branch_metrics

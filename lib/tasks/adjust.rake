@@ -1873,12 +1873,29 @@ namespace :adjust do
     CSV.foreach(file_location, headers: true) do |row|
       identification_number = row['identification_number']
       member = Member.where(identification_number: identification_number).first
-      dob = row['dob']
+      dob = row['dob'].to_date
       
       puts "Updating #{identification_number}...#{member.full_name}"   
       
       if !member.nil?
         member.update!(date_of_birth: dob)
+      end
+    end
+  end
+
+  task :update_member_mobile_number => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      mobile_number = row['mobile_number']
+      
+      puts "Updating #{identification_number}...#{member.full_name}"   
+      
+      if !member.nil?
+        member.update!(mobile_number: mobile_number)
       end
     end
   end
@@ -2246,6 +2263,56 @@ namespace :adjust do
         }
 
         ProcessClaimsCounts.perform_later(args)
+      end
+      puts "Done!"
+    end
+  end
+
+  task :process_insurance_personal_funds => :environment do
+    @data_store_type  = "INSURANCE_PERSONAL_FUNDS"
+    @as_of            = Date.today
+    @branches         = Branch.all
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    @member_statuses = ["active", "inactive"]
+
+    @branches.each do |branch|
+
+      puts "Processing #{branch.name}"
+
+      @member_statuses.each do |member_status|
+        @record = DataStore.personal_funds.where(
+                "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ? AND meta->>'member_status' = ?",
+                branch.id,
+                @as_of,
+                member_status
+              ).first
+
+        if @record.blank?
+          @record = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      as_of: @as_of,
+                      member_status: member_status,
+                      data_store_type: @data_store_type,
+                      progress: 0
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+          args  = {
+            id: @record.id,
+            data_store_type: @data_store_type
+          }
+
+          ProcessInsurancePersonalFunds.perform_later(args)
+        end
       end
       puts "Done!"
     end
