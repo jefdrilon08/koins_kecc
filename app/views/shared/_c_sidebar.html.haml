@@ -419,25 +419,18 @@
           = link_to equity_withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "equity_withdrawal_collections" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-money-check
             Equity Withdrawals
-      - if is_not_remote
-        - if microinsurance?
-          %li.c-sidebar-nav-item
-            = link_to claims_path, class: "c-sidebar-nav-link" do
-              .c-sidebar-nav-icon.fa.fa-users
-              Claims Register
-          %li.c-sidebar-nav-item
-            = link_to "/reports/claims", class: "c-sidebar-nav-link" do
-              .c-sidebar-nav-icon.fa.fa-file
-              Claims Report
       - if microinsurance?
         %li.c-sidebar-nav-item
           = link_to commission_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "commission_collections" ? 'active' : ''}" do
             .c-sidebar-nav-icon.fa.fa-money-check
-            Commission
+            Commission (Not working)
+          = link_to claims_path, class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-users
+            Claims Register
         %li.c-sidebar-nav-item
-          = link_to "#", class: "c-sidebar-nav-link" do
-            .c-sidebar-nav-icon.fa.fa-list
-            Supplies Inventory
+          = link_to "/reports/claims", class: "c-sidebar-nav-link" do
+            .c-sidebar-nav-icon.fa.fa-file
+            Claims Report
     %li.c-sidebar-nav-title
       MICROINSURANCE REPORTS
       - if microinsurance?  

@@ -14,7 +14,7 @@ module Api
       if cmd.errors.any?
         render json: { errors: cmd.errors }, status: :unprocessable_entity
       else
-        render json: { token: cmd.token }
+        render json: { token: cmd.token, user: cmd.user.user_object }
       end
     end
   end

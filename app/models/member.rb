@@ -101,6 +101,7 @@ class Member < ApplicationRecord
       first_name: first_name,
       middle_name: middle_name,
       last_name: last_name,
+      full_name: full_name,
       identification_number: identification_number,
       branch: branch.name,
       center: center.name
@@ -429,10 +430,11 @@ class Member < ApplicationRecord
   end
 
   def generate_jwt
+    logger.info("Using Rails.application.secret_key_base")
     JWT.encode({
       id: id,
       exp: 60.days.from_now.to_i
-    }, Rails.application.secrets.secret_key_base)
+    }, Rails.application.secret_key_base)
   end
 
   def full_name_middle_initial
@@ -523,5 +525,3 @@ class Member < ApplicationRecord
     }
   end
 end
-
-           

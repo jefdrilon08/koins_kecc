@@ -242,7 +242,7 @@ module MemberAccountValidations
         amount                    = total_lif_amount + equity_interest + rf_and_interest_amount
         
         # Restricted Fund_Equity Value & RF (inactive accounts)
-        accounting_code = AccountingCode.find('c2f80584-a24a-437b-b161-80f4b0a12d9c')
+        accounting_code = AccountingCode.find('20478a8c-c086-4b66-aeff-6ece5599a147')
 
       if amount > 0
         journal_entries << {

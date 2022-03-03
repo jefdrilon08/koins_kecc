@@ -98,7 +98,16 @@ class User < ApplicationRecord
     JWT.encode({
       id: id,
       exp: 60.days.from_now.to_i
-    }, Rails.application.secrets.secret_key_base)
+    }, Rails.application.secret_key_base)
+  end
+
+  def user_object
+    {
+      username: username,
+      first_name: first_name,
+      last_name: last_name,
+      roles: roles
+    }
   end
 
   def self.find_first_by_auth_conditions(warden_conditions)

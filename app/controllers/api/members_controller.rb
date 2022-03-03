@@ -2,6 +2,32 @@ module Api
   class MembersController < ::Api::FrontController
     before_action :authenticate_member!, except: [:login]
 
+    def change_password
+      old_password          = params[:old_password]
+      password              = params[:password]
+      password_confirmation = params[:password_confirmation]
+
+      cmd = ::Members::ValidateChangePassword.new(
+              member: @member,
+              old_password: old_password,
+              password: password,
+              password_confirmation: password_confirmation
+            )
+
+      cmd.execute!
+
+      if not cmd.errors.blank?
+        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      else
+        @member.update!(
+          password: password,
+          password_confirmation: password_confirmation
+        )
+
+        render json: { message: "ok" }
+      end
+    end
+
     def login
       username  = params[:username]
       password  = params[:password]

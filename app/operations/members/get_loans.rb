@@ -10,8 +10,7 @@ module Members
       @loans  = []
 
       @current_date = Date.today
-
-      @data = {}
+@data = {}
     end
 
     def execute!
@@ -52,6 +51,7 @@ module Members
 
     def build_loan(loan)
       obj = {
+        id:                     loan.id,
         pn_number:              loan.pn_number,
         principal:              loan.principal,
         interest:               loan.interest.to_f,
@@ -86,9 +86,9 @@ module Members
 
       if obj[:next_payment_date].present? and obj[:next_payment_date] < @current_date
         obj[:next_payment_date] = @current_date
-        obj[:is_overdue] = true
+        obj[:is_overdue] = "yes"
       else
-        obj[:is_overdue] = false
+        obj[:is_overdue] = "no"
       end
 
       # Format dates
