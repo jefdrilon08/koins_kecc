@@ -1,0 +1,15 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @commission_collections.any?
+          = render partial: "index_list"
+          = paginate @commission_collections
+        - else
+          %p
+            No records found
+
+= render partial: "commission_collections/modals/new"
+= render partial: "templates/error_list"

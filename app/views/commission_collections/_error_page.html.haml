@@ -1,0 +1,7 @@
+%center
+  %h1
+    There was an error when processing this commission collection.
+  %h2.text-muted
+    #{@commission_collection.id}
+%pre
+  #{JSON.pretty_generate(JSON.parse(@commission_collection.data.to_json))}

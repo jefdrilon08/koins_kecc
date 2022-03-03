@@ -317,6 +317,12 @@ namespace :api do
     post "/insurance_monthly_closing_collections/update", to: "insurance_monthly_closing_collections#update"
     post "/insurance_monthly_closing_collections/approve", to: "insurance_monthly_closing_collections#approve"
 
+    # Commission Collection
+    get "/commission_collections/fetch", to: "commission_collections#fetch"
+    post "/commission_collections", to: "commission_collections#create"
+    post "/commission_collections/update", to: "commission_collections#update"
+    post "/commission_collections/approve", to: "commission_collections#approve"
+
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"
     post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"

@@ -1,0 +1,16 @@
+= title @commission_collection.id
+.row
+  .col
+    .card
+      .card-body
+        - if @commission_collection.error?
+          = render partial: "error_page"
+        - else
+          - if debug?
+            %pre
+              #{JSON.pretty_generate(JSON.parse(@commission_collection.data.to_json))}
+          #react-root
+
+= render partial: "commission_collections/modals/update"
+= render partial: "commission_collections/modals/approve"
+= render partial: "templates/error_list"

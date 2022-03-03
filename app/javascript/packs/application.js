@@ -30,6 +30,7 @@ import InsuranceFundTransferCollectionUIComponent from "../components/insurance_
 import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
 import InsuranceMonthlyClosingCollectionsShowUI from "../components/insurance_monthly_closing_collections/ShowUI";
+import CommissionCollectionsShowUI from "../components/commission_collections/ShowUI";
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
@@ -88,6 +89,8 @@ import MonthlyClosingCollectionsIndex from "../models/MonthlyClosingCollectionsI
 import MonthlyClosingCollectionsShow from "../models/MonthlyClosingCollectionsShow.js";
 import InsuranceMonthlyClosingCollectionsIndex from "../models/InsuranceMonthlyClosingCollectionsIndex.js";
 import InsuranceMonthlyClosingCollectionsShow from "../models/InsuranceMonthlyClosingCollectionsShow.js";
+import CommissionCollectionsIndex from "../models/CommissionCollectionsIndex.js";
+import CommissionCollectionsShow from "../models/CommissionCollectionsShow.js";
 import YearEndClosingsIndex from "../models/YearEndClosingsIndex.js";
 import YearEndClosingsShow from "../models/YearEndClosingsShow.js";
 import DataStoresIcprIndex from "../models/DataStoresIcprIndex.js";
@@ -246,6 +249,8 @@ const hooks = {
   "monthly_closing_collections/show":                 [MonthlyClosingCollectionsShow, MonthlyClosingCollectionsShowUI],
   "insurance_monthly_closing_collections/index":      [InsuranceMonthlyClosingCollectionsIndex],
   "insurance_monthly_closing_collections/show":       [InsuranceMonthlyClosingCollectionsShow, InsuranceMonthlyClosingCollectionsShowUI],
+  "commission_collections/index":                     [CommissionCollectionsIndex],
+  "commission_collections/show":                      [CommissionCollectionsShow, CommissionCollectionsShowUI],
   "insurance_accounts/show":                          [InsuranceStatusComponent],
   "accounting/trial_balance":                         [TrialBalanceComponent],
   "accounting/general_ledger":                        [GeneralLedgerComponent],
@@ -371,9 +376,9 @@ const hooks = {
   "adjustments/make_payments/show":                   [MembersMakePayments],
   "billing_for_writeoff/index":                       [BillingForWriteoffIndex],
   "billing_for_writeoff/show":                        [BillingForWriteoffShow],
-  "data_stores/member_id_generators/index":       [MemberIdGeneratorsIndex],
-  "data_stores/member_id_generators/show":       [MemberIdGeneratorsShow],
-  "data_stores/monthly_incentives/show":         [MonthlyIncentivesShow]
+  "data_stores/member_id_generators/index":           [MemberIdGeneratorsIndex],
+  "data_stores/member_id_generators/show":            [MemberIdGeneratorsShow],
+  "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow]
 }
 
 document.addEventListener("DOMContentLoaded", () => {

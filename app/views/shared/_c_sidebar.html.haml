@@ -431,6 +431,10 @@
               Claims Report
       - if microinsurance?
         %li.c-sidebar-nav-item
+          = link_to commission_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "commission_collections" ? 'active' : ''}" do
+            .c-sidebar-nav-icon.fa.fa-money-check
+            Commission
+        %li.c-sidebar-nav-item
           = link_to "#", class: "c-sidebar-nav-link" do
             .c-sidebar-nav-icon.fa.fa-list
             Supplies Inventory
