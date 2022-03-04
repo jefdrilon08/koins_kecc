@@ -35,10 +35,10 @@ module CommissionCollections
         records: []
       }
 
-      @commision = 0.0
-      @total = 0.0
-      @total_life = 0.0
-      @total_rf   = 0.0
+      @commision = 0.00
+      @total = 0.00
+      @total_life = 0.00
+      @total_rf   = 0.00
     end
 
     def execute!
@@ -53,7 +53,7 @@ module CommissionCollections
             if life_first_transction.present?
               life_first_payment = life_first_transction.amount.to_f
             else
-              life_first_payment = 0.0
+              life_first_payment = 0.00
             end
 
             rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
@@ -62,7 +62,7 @@ module CommissionCollections
             if rf_first_transction.present?
               rf_first_payment = rf_first_transction.amount.to_f
             else
-              rf_first_payment = 0.0
+              rf_first_payment = 0.00
             end
 
             @total_life = @total_life + life_first_payment
