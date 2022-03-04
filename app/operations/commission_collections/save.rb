@@ -119,10 +119,14 @@ module CommissionCollections
 
           total = total_life + total_rf
           
-          if total > 5000.0
-            commission = total * 0.05
+          if total > 0.00
+            if total > 5000.0
+              commission = total * 0.05
+            else
+              commission = total * 0.03
+            end
           else
-            commission = total * 0.03
+            commission = 0.00
           end
 
           @data[:records] << { 
