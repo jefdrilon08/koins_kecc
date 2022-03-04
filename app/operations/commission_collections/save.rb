@@ -11,10 +11,10 @@ module CommissionCollections
 
       if @category == "referrer"
         @referrers = Referrer.where(category: "REFERRER")
-        @members = Member.where("referrer_id IN (?)", @referrers.pluck(:id))
+        @members = Member.where("referrer_id IN (?) AND data->>'recognition_date' >= ?", @referrers.pluck(:id), @start_date.to_date)
       elsif @category == "insurance coordinator"
         @coors = Referrer.where(category: "INSURANCE COORDINATOR")
-        @members = Member.where("referrer_id IN (?)", @coors.pluck(:id))
+        @members = Member.where("coordinator_id IN (?)", @coors.pluck(:id))
       end
 
       @member_accounts = MemberAccount.where("account_subtype IN (?) AND member_id IN (?)", ["Life Insurance Fund", "Retirement Fund"], @members.pluck(:id))
@@ -35,9 +35,10 @@ module CommissionCollections
         records: []
       }
 
-      # Progress
-      @counter        = 0
-      @progress       = 0.00
+      @commision = 0.0
+      @total = 0.0
+      @total_life = 0.0
+      @total_rf   = 0.0
     end
 
     def execute!
@@ -45,15 +46,12 @@ module CommissionCollections
       if @category == "referrer"
         @referrers.each do |r|
 
-          @total_life = 0.0
-          @total_rf   = 0.0
-
-          @members.each do |member|
+          @members.where("referrer_id = ?", r.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
             life_first_transction = @account_transactions.where(subsidiary_id: life.id).order("transacted_at ASC").last
 
             if life_first_transction.present?
-              life_first_payment = life_first_transction.amount
+              life_first_payment = life_first_transction.amount.to_f
             else
               life_first_payment = 0.0
             end
@@ -62,7 +60,7 @@ module CommissionCollections
             rf_first_transction =  @account_transactions.where(subsidiary_id: rf.id).order("transacted_at ASC").last
           
             if rf_first_transction.present?
-              rf_first_payment = rf_first_transction.amount
+              rf_first_payment = rf_first_transction.amount.to_f
             else
               rf_first_payment = 0.0
             end
@@ -71,18 +69,15 @@ module CommissionCollections
             @total_rf   = @total_rf + rf_first_payment
           end
 
+          @total = @total_life + @total_rf
+          @commission = @total * 0.03
+
           @data[:records] << { 
                                 referrer: r.full_name,
-                                total_life_rf: @total_life + @total_rf
+                                category: @category,
+                                total_life_rf: @total,
+                                commission: @commission
                               }
-
-          # result  = ::MemberAccounts::ComputeInsuranceInterest.new(
-          #             member_account: a,
-          #             closing_date: @closing_date,
-          #             account_settings: @account_settings
-          #           ).execute!
-
-          # members = r.members
 
           # if result[:interest] > 0
           #   @data[:records] << result
@@ -91,8 +86,31 @@ module CommissionCollections
         end
       elsif @category == "insurance coordinator"
         @coors.each do |c|
-          @members = Member.where(coordinator_id: c.id)
+          @members.where("coordinator_id = ?", c.d).each do |member|
+            life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
+            rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
 
+            life_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).sum(:amount).to_f
+            rf_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).sum(:amount).to_f
+
+            @total_life = @total_life + life_amount
+            @total_rf = @total_rf + rf_amount
+          end
+
+          @total = @total_life + @total_rf
+          
+          if @total > 5000.0
+            @commission = @total * 0.05
+          else
+            @commission = @total * 0.03
+          end
+
+          @data[:records] << { 
+                                referrer: c.full_name,
+                                category: @category,
+                                total_life_rf: @total,
+                                commission: @commission
+                              }
         end
       end
 
@@ -123,8 +141,6 @@ module CommissionCollections
 
       @commission_collection.status  = "pending"
       @commission_collection.save!
-
-      @progress = 100
 
       #ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
 
