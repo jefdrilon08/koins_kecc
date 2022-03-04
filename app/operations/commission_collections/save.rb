@@ -45,19 +45,19 @@ module CommissionCollections
         @referrers.each do |r|
           @members.where("referrer_id = ?", r.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
-            life_first_transction = @account_transactions.where("subsidiary_id = ? AND transaction_type =?", life.id, "deposit").order("transacted_at ASC").last
+            life_first_transaction = @account_transactions.where("subsidiary_id = ? AND transaction_type =?", life.id, "deposit").order("transacted_at ASC").last
 
-            if life_first_transction.present?
-              life_first_payment = life_first_transction.amount.to_f
+            if life_first_transaction.present?
+              life_first_payment = life_first_transaction.amount.to_f
             else
               life_first_payment = 0.00
             end
 
             rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
-            rf_first_transction =  @account_transactions.where("subsidiary_id = ? AND transaction_type =?", rf.id, "deposit").order("transacted_at ASC").last
+            rf_first_transaction =  @account_transactions.where("subsidiary_id = ? AND transaction_type =?", rf.id, "deposit").order("transacted_at ASC").last
           
-            if rf_first_transction.present?
-              rf_first_payment = rf_first_transction.amount.to_f
+            if rf_first_transaction.present?
+              rf_first_payment = rf_first_transaction.amount.to_f
             else
               rf_first_payment = 0.00
             end
@@ -120,9 +120,9 @@ module CommissionCollections
           total = total_life + total_rf
           
           if total > 5000.0
-            commission = @total * 0.05
+            commission = total * 0.05
           else
-            commission = @total * 0.03
+            commission = total * 0.03
           end
 
           @data[:records] << { 
