@@ -18,7 +18,7 @@ module CommissionCollections
       end
 
       @member_accounts = MemberAccount.where("account_subtype IN (?) AND member_id IN (?)", ["Life Insurance Fund", "Retirement Fund"], @members.pluck(:id))
-      @account_transactions = AccountTransaction.where("Date(account_transactions.updated_at) >= ? AND Date(account_transactions.updated_at) <= ? AND subsidiary_id IN (?)", @start_date, @end_date, @member_accounts.pluck(:id))
+      @account_transactions = AccountTransaction.where("Date(account_transactions.updated_at) >= ? AND Date(account_transactions.updated_at) <= ? AND subsidiary_id IN (?) AND data->>'is_interest' = ?", @start_date, @end_date, @member_accounts.pluck(:id), "false")
       
       @meta = {
         prepared_by: {
@@ -45,7 +45,7 @@ module CommissionCollections
         @referrers.each do |r|
           @members.where("referrer_id = ?", r.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
-            life_first_transction = @account_transactions.where(subsidiary_id: life.id).order("transacted_at ASC").last
+            life_first_transction = @account_transactions.where("subsidiary_id = ? AND transaction_type =?", life.id, "deposit").order("transacted_at ASC").last
 
             if life_first_transction.present?
               life_first_payment = life_first_transction.amount.to_f
@@ -54,7 +54,7 @@ module CommissionCollections
             end
 
             rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
-            rf_first_transction =  @account_transactions.where(subsidiary_id: rf.id).order("transacted_at ASC").last
+            rf_first_transction =  @account_transactions.where("subsidiary_id = ? AND transaction_type =?", rf.id, "deposit").order("transacted_at ASC").last
           
             if rf_first_transction.present?
               rf_first_payment = rf_first_transction.amount.to_f
@@ -86,14 +86,32 @@ module CommissionCollections
       elsif @category == "insurance coordinator"
         total_life = 0.00
         total_rf = 0.00
+        life_amount = 0.00
+        rf_amount = 0.00
 
         @coors.each do |c|
           @members.where("coordinator_id = ?", c.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
             rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
 
-            life_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).sum(:amount).to_f
-            rf_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).sum(:amount).to_f
+            @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).each do |lt|
+              if lt.transaction_type == "withdraw"
+                life_amount = ((life_amount < 0 ? 0 : life_amount) - (lt.amount < 0 ? 0 : lt.amount))
+              elsif lt.transaction_type == "deposit"
+                life_amount = (life_amount + lt.amount).abs
+              end
+            end
+
+            @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).each do |rt|
+              if rt.transaction_type == "withdraw"
+                rf_amount = ((rf_amount < 0 ? 0 : rf_amount) - (rt.amount < 0 ? 0 : rt.amount))
+              elsif rt.transaction_type == "deposit"
+                rf_amount = (rf_amount + rt.amount).abs
+              end
+            end
+
+            # life_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).sum(:amount).to_f
+            # rf_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).sum(:amount).to_f
 
             total_life += life_amount
             total_rf += rf_amount
@@ -101,7 +119,7 @@ module CommissionCollections
 
           total = total_life + total_rf
           
-          if @total > 5000.0
+          if total > 5000.0
             commission = @total * 0.05
           else
             commission = @total * 0.03
