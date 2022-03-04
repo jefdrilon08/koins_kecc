@@ -15,7 +15,7 @@ class ProcessCommissionCollection < ApplicationJob
                                       commission_collection: commission_collection,
                                       user: user,
                                       category: category,
-                                      start_date: end_date,
+                                      start_date: start_date,
                                       end_date: end_date
                                     }
                                   ).execute!
