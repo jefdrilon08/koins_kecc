@@ -34,18 +34,15 @@ module CommissionCollections
         totals: [],
         records: []
       }
-
-      @commision = 0.00
-      @total = 0.00
-      @total_life = 0.00
-      @total_rf   = 0.00
     end
 
     def execute!
       # Build data
       if @category == "referrer"
-        @referrers.each do |r|
+        total_life = 0.00
+        total_rf = 0.00
 
+        @referrers.each do |r|
           @members.where("referrer_id = ?", r.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
             life_first_transction = @account_transactions.where(subsidiary_id: life.id).order("transacted_at ASC").last
@@ -65,18 +62,20 @@ module CommissionCollections
               rf_first_payment = 0.00
             end
 
-            @total_life = @total_life + life_first_payment
-            @total_rf   = @total_rf + rf_first_payment
+            total_life += life_first_payment
+            total_rf   += rf_first_payment
           end
 
-          @total = @total_life + @total_rf
-          @commission = @total * 0.03
+          total = total_life + total_rf
+          commission = total * 0.03
 
           @data[:records] << { 
                                 referrer: r.full_name,
                                 category: @category,
-                                total_life_rf: @total,
-                                commission: @commission
+                                total_life_rf: total,
+                                commission: commission,
+                                start_date: @start_date,
+                                end_date: @end_date
                               }
 
           # if result[:interest] > 0
@@ -85,6 +84,9 @@ module CommissionCollections
           # end
         end
       elsif @category == "insurance coordinator"
+        total_life = 0.00
+        total_rf = 0.00
+
         @coors.each do |c|
           @members.where("coordinator_id = ?", c.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
@@ -93,23 +95,26 @@ module CommissionCollections
             life_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).sum(:amount).to_f
             rf_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).sum(:amount).to_f
 
-            @total_life = @total_life + life_amount
-            @total_rf = @total_rf + rf_amount
+            total_life += life_amount
+            total_rf += rf_amount
           end
 
-          @total = @total_life + @total_rf
+          total = total_life + total_rf
           
           if @total > 5000.0
-            @commission = @total * 0.05
+            commission = @total * 0.05
           else
-            @commission = @total * 0.03
+            commission = @total * 0.03
           end
 
           @data[:records] << { 
                                 referrer: c.full_name,
                                 category: @category,
-                                total_life_rf: @total,
-                                commission: @commission
+                                total_life_rf: total,
+                                commission: commission,
+                                start_date: @start_date,
+                                end_date: @end_date
+
                               }
         end
       end
