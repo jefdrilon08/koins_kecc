@@ -86,7 +86,7 @@ module CommissionCollections
         end
       elsif @category == "insurance coordinator"
         @coors.each do |c|
-          @members.where("coordinator_id = ?", c.d).each do |member|
+          @members.where("coordinator_id = ?", c.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
             rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
 

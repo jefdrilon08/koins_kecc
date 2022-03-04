@@ -33,9 +33,9 @@ var _bindEvents = function() {
   });
 
   $btnConfirmNew.on("click", function() {
-    var category    = $selectCategory.val();
-    var endDate     = $inputStartDate.val();
-    var startDate   = $inputEndDate.val();
+    var category  = $selectCategory.val();
+    var startDate = $inputStartDate.val();
+    var endDate   = $inputEndDate.val();
 
     $selectCategory.prop("disabled", true);
     $inputStartDate.prop("disabled", true);
