@@ -1,6 +1,6 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login]
+    before_action :authenticate_member!, except: [:login, :apply_online]
 
     def change_password
       old_password          = params[:old_password]
@@ -25,6 +25,54 @@ module Api
         )
 
         render json: { message: "ok" }
+      end
+    end
+
+    def apply_online
+      payload = JSON.parse(params[:payload]).with_indifferent_access
+
+      validator = ::Members::ValidateApplyOnline.new(
+                    first_name:       payload[:first_name],
+                    middle_name:      payload[:middle_name],
+                    last_name:        payload[:last_name],
+                    gender:           payload[:gender],
+                    date_of_birth:    payload[:date_of_birth],
+                    email:            payload[:email],
+                    mobile_number:    payload[:mobile_number],
+                    address_region:   payload[:address_region],
+                    address_province: payload[:address_province],
+                    address_street:   payload[:address_street],
+                    address_city:     payload[:address_city],
+                    file_document:    params[:file_document],
+                    profile_picture:  params[:profile_picture],
+                    agree_to_terms:   payload[:agree_to_terms]
+                  )
+
+      validator.execute!
+
+      if validator.errors.any?
+        render json: { errors: validator.errors }, status: :unprocessable_entity
+      else
+        cmd = ::Members::ApplyOnline.new(
+                first_name:       payload[:first_name],
+                middle_name:      payload[:middle_name],
+                last_name:        payload[:last_name],
+                gender:           payload[:gender],
+                date_of_birth:    payload[:date_of_birth],
+                email:            payload[:email],
+                mobile_number:    payload[:mobile_number],
+                address_region:   payload[:address_region],
+                address_province: payload[:address_province],
+                address_street:   payload[:address_street],
+                address_city:     payload[:address_city],
+                file_document:    params[:file_document],
+                profile_picture:  params[:profile_picture],
+                agree_to_terms:   payload[:agree_to_terms]
+              )
+
+        cmd.execute!
+
+        render json: { reference_number: cmd.reference_number }
       end
     end
 
