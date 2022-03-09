@@ -40,7 +40,10 @@ class CommissionCollectionsController < ApplicationController
 
   def show
     @commission_collection = CommissionCollection.find(params[:id])
-    @commission_collection_data = @commission_collection.data.with_indifferent_access
+    
+    if @commission_collection.data.present?
+      @commission_collection_data = @commission_collection.data.with_indifferent_access
+    end
 
     if !@commission_collection_data.nil?
       @accounting_entry_data = @commission_collection_data[:accounting_entry]

@@ -88,7 +88,7 @@ module CommissionCollections
 
         @coors.each do |c|
           @members.where("coordinator_id = ?", c.id).each do |member|
-            # life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
+            life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
             # @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).each do |lt|
             #   if lt.transaction_type == "withdraw"
             #     life_amount = ((life_amount < 0 ? 0 : life_amount) - (lt.amount < 0 ? 0 : lt.amount))
@@ -97,7 +97,7 @@ module CommissionCollections
             #   end
             # end
 
-            # rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
+            rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
             # @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).each do |rt|
             #   if rt.transaction_type == "withdraw"
             #     rf_amount = ((rf_amount < 0 ? 0 : rf_amount) - (rt.amount < 0 ? 0 : rt.amount))
