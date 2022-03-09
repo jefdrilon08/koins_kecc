@@ -114,7 +114,8 @@ module Loans
         end 
 
         if deduction_type == "share_capital_fee"
-        
+                  
+          if @loan.data["share_capital_available"] == true
             total_member_shares = MemberShare.where("member_id = ? and  certificate_for = ? and is_void is null",@member.id, "KCOOP").sum(:number_of_shares)
             @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
 
@@ -156,7 +157,7 @@ module Loans
                                                                   )
             save_account_transaction.save!
             ::MemberAccounts::Rehash.new(member_account: share_capital_account).execute!
-        
+          end
         elsif deduction_type == "membership_fee"
           membership_payment_record = MembershipPaymentRecord.paid.where(
                                         membership_type: s_deduction.membership_type,
