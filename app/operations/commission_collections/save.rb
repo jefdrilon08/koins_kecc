@@ -85,6 +85,7 @@ module CommissionCollections
         total_rf = 0.00
         life_amount = 0.00
         rf_amount = 0.00
+        total = 0.00
 
         @coors.each do |c|
           @members.where("coordinator_id = ?", c.id).each do |member|
@@ -130,15 +131,17 @@ module CommissionCollections
             commission = 0.00
           end
 
-          @data[:records] << { 
-                                referrer: c.full_name,
-                                category: @category,
-                                total_life_rf: total,
-                                commission: commission,
-                                start_date: @start_date,
-                                end_date: @end_date
+          if commission > 0.0
+            @data[:records] << { 
+                                  referrer: c.full_name,
+                                  category: @category,
+                                  total_life_rf: total,
+                                  commission: commission,
+                                  start_date: @start_date,
+                                  end_date: @end_date
 
-                              }
+                                }
+          end
 
           @data[:total_commission] += commission
         end
