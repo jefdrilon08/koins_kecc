@@ -81,13 +81,10 @@ module CommissionCollections
           @data[:total_commission] += commission
         end
       elsif @category == "insurance coordinator"
-        total_life = 0.00
-        total_rf = 0.00
-        life_amount = 0.00
-        rf_amount = 0.00
-        total = 0.00
-
         @coors.each do |c|
+          total_life = 0.00
+          total_rf = 0.00
+
           @members.where("coordinator_id = ?", c.id).each do |member|
             life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
             # @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).each do |lt|
@@ -115,8 +112,8 @@ module CommissionCollections
             rf_amount_withdraw = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", rf.id, @start_date, @end_date, "withdraw").sum(:amount).to_f
             rf_amount = (rf_amount_deposit - rf_amount_withdraw).to_f
 
-            total_life += life_amount
-            total_rf += rf_amount
+            total_life = total_life + life_amount
+            total_rf = total_rf + rf_amount
           end
 
           total = total_life + total_rf
