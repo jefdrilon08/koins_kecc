@@ -78,10 +78,7 @@ module CommissionCollections
                                 end_date: @end_date
                               }
 
-          # if result[:interest] > 0
-          #   @data[:records] << result
-          #   @data[:total_interest] += result[:interest].to_f.round(2)
-          # end
+          @data[:total_commission] += commission
         end
       elsif @category == "insurance coordinator"
         total_life = 0.00
@@ -91,26 +88,31 @@ module CommissionCollections
 
         @coors.each do |c|
           @members.where("coordinator_id = ?", c.id).each do |member|
-            life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
-            @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).each do |lt|
-              if lt.transaction_type == "withdraw"
-                life_amount = ((life_amount < 0 ? 0 : life_amount) - (lt.amount < 0 ? 0 : lt.amount))
-              elsif lt.transaction_type == "deposit"
-                life_amount = (life_amount + lt.amount).abs
-              end
-            end
+            # life = member.member_accounts.where(account_subtype: "Life Insurance Fund").first
+            # @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).each do |lt|
+            #   if lt.transaction_type == "withdraw"
+            #     life_amount = ((life_amount < 0 ? 0 : life_amount) - (lt.amount < 0 ? 0 : lt.amount))
+            #   elsif lt.transaction_type == "deposit"
+            #     life_amount = (life_amount + lt.amount).abs
+            #   end
+            # end
 
-            rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
-            @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).each do |rt|
-              if rt.transaction_type == "withdraw"
-                rf_amount = ((rf_amount < 0 ? 0 : rf_amount) - (rt.amount < 0 ? 0 : rt.amount))
-              elsif rt.transaction_type == "deposit"
-                rf_amount = (rf_amount + rt.amount).abs
-              end
-            end
+            # rf = member.member_accounts.where(account_subtype: "Retirement Fund").first
+            # @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).each do |rt|
+            #   if rt.transaction_type == "withdraw"
+            #     rf_amount = ((rf_amount < 0 ? 0 : rf_amount) - (rt.amount < 0 ? 0 : rt.amount))
+            #   elsif rt.transaction_type == "deposit"
+            #     rf_amount = (rf_amount + rt.amount).abs
+            #   end
+            # end
 
-            # life_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", life.id, @start_date, @end_date).sum(:amount).to_f
-            # rf_amount = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ?", rf.id, @start_date, @end_date).sum(:amount).to_f
+            life_amount_deposit = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", life.id, @start_date, @end_date, "deposit").sum(:amount).to_f
+            life_amount_withdraw = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", life.id, @start_date, @end_date, "withdraw").sum(:amount).to_f
+            life_amount = (life_amount_deposit - life_amount_withdraw).to_f
+
+            rf_amount_deposit = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", rf.id, @start_date, @end_date, "deposit").sum(:amount).to_f
+            rf_amount_withdraw = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", rf.id, @start_date, @end_date, "withdraw").sum(:amount).to_f
+            rf_amount = (rf_amount_deposit - rf_amount_withdraw).to_f
 
             total_life += life_amount
             total_rf += rf_amount
@@ -137,26 +139,28 @@ module CommissionCollections
                                 end_date: @end_date
 
                               }
+
+          @data[:total_commission] += commission
         end
       end
 
-      # if Settings.activate_microinsurance
-      #   # Build accounting entry
-      #   default_branch_id = Settings.try(:defaults).try(:default_branch).try(:id)
-      #   @default_branch = Branch.find(default_branch_id)
+      if Settings.activate_microinsurance
+        # Build accounting entry
+        default_branch_id = Settings.try(:defaults).try(:default_branch).try(:id)
+        @default_branch = Branch.find(default_branch_id)
 
-      #   @data[:accounting_entry]  = ::InsuranceMonthlyClosingCollections::BuildAccountingEntry.new(
-      #                                 config: {
-      #                                   data: @data,
-      #                                   branch: @branch,
-      #                                   default_branch: @default_branch,
-      #                                   settings: @account_settings,
-      #                                   user: @user,
-      #                                   collection_date: @closing_date,
-      #                                   closing_date: @closing_date
-      #                                 }
-      #                               ).execute!
-      # end
+        @data[:accounting_entry]  = ::CommissionCollections::BuildAccountingEntry.new(
+                                      config: {
+                                        data: @data,
+                                        default_branch: @default_branch,
+                                        user: @user,
+                                        start_date: @start_date,
+                                        end_date: @end_date,
+                                        date_prepared: @commission_collection.date_prepared,
+                                        category: @category
+                                      }
+                                    ).execute!
+      end
 
       # Attach meta
       @commission_collection.meta  = @meta

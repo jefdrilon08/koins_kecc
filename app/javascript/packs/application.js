@@ -30,7 +30,6 @@ import InsuranceFundTransferCollectionUIComponent from "../components/insurance_
 import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
 import InsuranceMonthlyClosingCollectionsShowUI from "../components/insurance_monthly_closing_collections/ShowUI";
-import CommissionCollectionsShowUI from "../components/commission_collections/ShowUI";
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
@@ -250,7 +249,7 @@ const hooks = {
   "insurance_monthly_closing_collections/index":      [InsuranceMonthlyClosingCollectionsIndex],
   "insurance_monthly_closing_collections/show":       [InsuranceMonthlyClosingCollectionsShow, InsuranceMonthlyClosingCollectionsShowUI],
   "commission_collections/index":                     [CommissionCollectionsIndex],
-  "commission_collections/show":                      [CommissionCollectionsShow, CommissionCollectionsShowUI],
+  "commission_collections/show":                      [CommissionCollectionsShow],
   "insurance_accounts/show":                          [InsuranceStatusComponent],
   "accounting/trial_balance":                         [TrialBalanceComponent],
   "accounting/general_ledger":                        [GeneralLedgerComponent],
