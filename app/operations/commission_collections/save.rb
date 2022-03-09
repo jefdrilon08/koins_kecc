@@ -81,8 +81,6 @@ module CommissionCollections
           @data[:total_commission] += commission
         end
       elsif @category == "insurance coordinator"
-        total_life = 0.00
-        total_rf = 0.00
         life_amount = 0.00
         rf_amount = 0.00
 
@@ -113,12 +111,9 @@ module CommissionCollections
             rf_amount_deposit = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", rf.id, @start_date, @end_date, "deposit").sum(:amount).to_f
             rf_amount_withdraw = @account_transactions.where("subsidiary_id = ? AND transacted_at >= ? AND transacted_at <= ? AND transaction_type = ?", rf.id, @start_date, @end_date, "withdraw").sum(:amount).to_f
             rf_amount = (rf_amount_deposit - rf_amount_withdraw).to_f
-
-            total_life = life_amount
-            total_rf = rf_amount
           end
 
-          total = total_life + total_rf
+          total = life_amount + rf_amount
           
           if !total.nil?
             if total > 5000.0
