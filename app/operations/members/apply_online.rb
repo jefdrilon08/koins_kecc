@@ -41,14 +41,15 @@ module Members
 
     def execute!
       @online_application = OnlineApplication.new(
-                              first_name:         @first_name,
-                              middle_name:        @middle_name,
-                              last_name:          @last_name,
+                              first_name:         @first_name.upcase,
+                              middle_name:        @middle_name.upcase,
+                              last_name:          @last_name.upcase,
                               gender:             @gender,
                               date_of_birth:      @date_of_birth,
                               email:              @email,
                               mobile_number:      @mobile_number,
-                              agree_to_dp_terms:  true
+                              reference_number:   @reference_number,
+                              agreed_to_dp_terms: true
                             )
 
       # Form data with default values except for address

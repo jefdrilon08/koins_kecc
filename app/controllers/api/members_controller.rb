@@ -51,7 +51,7 @@ module Api
 
       validator.execute!
 
-      if validator.errors.any?
+      if validator.num_errors > 0
         render json: { errors: validator.errors }, status: :unprocessable_entity
       else
         cmd = ::Members::ApplyOnline.new(
