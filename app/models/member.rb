@@ -70,6 +70,9 @@ class Member < ApplicationRecord
   has_one_attached :profile_picture, dependent: false
   has_one_attached :signature_file
 
+  # Validate email only if present
+  validates :email, presence: true, uniqueness: true, if: -> { member.try(:email).present? }
+
   validates :gender, presence: true
   validates :date_of_birth, presence: true
 

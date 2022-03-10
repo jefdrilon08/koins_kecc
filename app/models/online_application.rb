@@ -33,6 +33,9 @@ class OnlineApplication < ApplicationRecord
   scope :processing, -> { where(status: "processing") }
   scope :error, -> { where(status: "error") }
 
+  # Validate email only if present
+  validates :email, presence: true, uniqueness: true, if: -> { member.try(:email).present? }
+
   def load_defaults
     if self.status.blank?
       self.status = "for_verification"

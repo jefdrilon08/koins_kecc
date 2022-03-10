@@ -13,6 +13,7 @@ module Members
           address_region:,
           address_province:,
           address_city:,
+          address_district:,
           address_street:,
           file_document:,
           profile_picture:,
@@ -29,6 +30,7 @@ module Members
       @address_region   = address_region
       @address_province = address_province
       @address_city     = address_city
+      @address_district = address_district
       @address_street   = address_street
       @file_document    = file_document
       @profile_picture  = profile_picture
@@ -45,6 +47,7 @@ module Members
         address_region:   "",
         address_province: "",
         address_city:     "",
+        address_district: "",
         address_street:   "",
         agree_to_terms:   ""
       }
@@ -75,6 +78,10 @@ module Members
         @errors[:mobile_number] = "mobile number required"
       elsif @mobile_number.size != 13
         @errors[:mobile_number] = "invalid mobile number (format: xxxxxxxxx)"
+      elsif not @mobile_number =~ /\+639[0-9]{9}/
+        @errors[:mobile_number] = "invalid format"
+      elsif OnlineApplication.where(status: ["for_verification", "verified", "processed"], mobile_number: @mobile_number).count > 0
+        @errors[:mobile_number] = "already taken"
       end
 
       if @address_region.blank?
@@ -91,6 +98,10 @@ module Members
 
       if @address_street.blank?
         @errors[:address_street] = "street required"
+      end
+
+      if @address_district.blank?
+        @errors[:address_district] = "district required"
       end
 
       if @file_document.blank?
