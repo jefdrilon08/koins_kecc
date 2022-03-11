@@ -70,6 +70,9 @@ class Member < ApplicationRecord
   has_one_attached :profile_picture, dependent: false
   has_one_attached :signature_file
 
+  # Validate email only if present
+  validates :email, presence: false, uniqueness: true, if: Proc.new { |member| member.email.blank? }
+
   validates :gender, presence: true
   validates :date_of_birth, presence: true
 
@@ -78,7 +81,7 @@ class Member < ApplicationRecord
   validates :last_name, presence: true
 
   #validates :identification_number, presence: true, uniqueness: true, if: :active?
-  validates :civil_status, presence: true
+  #validates :civil_status, presence: true
   #validates :home_number, presence: true
   #validates :mobile_number, presence: true
 
