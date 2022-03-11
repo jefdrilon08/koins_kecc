@@ -71,7 +71,7 @@ class Member < ApplicationRecord
   has_one_attached :signature_file
 
   # Validate email only if present
-  validates :email, presence: false, uniqueness: true, if: Proc.new { |member| member.email.blank? }
+  #validates :email, presence: false, uniqueness: true, if: Proc.new { |member| member.email.blank? }
 
   validates :gender, presence: true
   validates :date_of_birth, presence: true
