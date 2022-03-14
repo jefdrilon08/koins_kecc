@@ -9,6 +9,7 @@ namespace :api do
   post "/users/login", to: "users#login"
 
   # Members
+  get "/members", to: "members#index"
   post "/members/login", to: "members#login"
   post "/members/change_password", to: "members#change_password"
   get "/members/active_loans", to: "members#active_loans"
@@ -17,6 +18,9 @@ namespace :api do
   get "/members/total_equities", to: "members#total_equities"
   get "/members/total_funds", to: "members#total_funds"
   post "/members/apply_online", to: "members#apply_online"
+
+  # Messages
+  post "/messages", to: "messages#create"
   
   namespace :members do
     # Loans
