@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_28_034955) do
+ActiveRecord::Schema.define(version: 2022_03_10_135441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -992,6 +992,7 @@ ActiveRecord::Schema.define(version: 2022_02_28_034955) do
     t.uuid "membership_type_id"
     t.uuid "referrer_id"
     t.uuid "coordinator_id"
+    t.string "email"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"
@@ -1106,6 +1107,7 @@ ActiveRecord::Schema.define(version: 2022_02_28_034955) do
     t.uuid "membership_type_id"
     t.uuid "membership_arrangement_id"
     t.uuid "center_id"
+    t.string "email"
     t.index ["branch_id"], name: "index_online_applications_on_branch_id"
     t.index ["center_id"], name: "index_online_applications_on_center_id"
     t.index ["membership_arrangement_id"], name: "index_online_applications_on_membership_arrangement_id"

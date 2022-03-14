@@ -14,7 +14,7 @@ class OnlineApplication < ApplicationRecord
   validates :last_name, presence: true
   validates :date_of_birth, presence: true
   validates :gender, presence: true
-  validates :civil_status, presence: true
+  #validates :civil_status, presence: true
 
   belongs_to :branch, optional: true
   belongs_to :center, optional: true
@@ -32,6 +32,9 @@ class OnlineApplication < ApplicationRecord
   scope :rejected, -> { where(status: "rejected") }
   scope :processing, -> { where(status: "processing") }
   scope :error, -> { where(status: "error") }
+
+  # Validate email only if present
+  validates :email, presence: false, uniqueness: true, if: Proc.new { |online_application| online_application.email.blank? }
 
   def load_defaults
     if self.status.blank?
