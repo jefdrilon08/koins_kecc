@@ -2,7 +2,7 @@ class CommissionCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @commission_collections = CommissionCollection.all.order(date_prepared: :desc)
+    @commission_collections = CommissionCollection.all.order(end_date: :desc)
 
     if params[:start_date].present? and params[:end_date].present? and params[:start_date] <= params[:end_date]
       @commission_collections  = @commission_collections.where(

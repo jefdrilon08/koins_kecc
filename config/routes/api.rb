@@ -345,6 +345,12 @@ namespace :api do
     post "/commission_collections", to: "commission_collections#create"
     post "/commission_collections/update", to: "commission_collections#update"
     post "/commission_collections/approve", to: "commission_collections#approve"
+    post "/commission_collections/modify_template", to: "commission_collections#modify_template"
+    post "/commission_collections/modify_book", to: "commission_collections#modify_book"
+    post "/commission_collections/modify_particular", to: "commission_collections#modify_particular"
+    post "/commission_collections/save_payee", to: "commission_collections#save_payee"
+    post "/commission_collections/save_check_number", to: "commission_collections#save_check_number"
+    post "/commission_collections/save_check_voucher_number", to: "commission_collections#save_check_voucher_number"
 
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"

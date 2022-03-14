@@ -3,10 +3,10 @@ module CommissionCollections
     def initialize(config:)
       @config = config
 
-      @start_date = @config[:start_date]
-      @end_date   = @config[:end_date]
-      @category   = @config[:category]
-      @user       = @config[:user]
+      @start_date            = @config[:start_date]
+      @end_date              = @config[:end_date]
+      @category              = @config[:category]
+      @user                  = @config[:user]
       @commission_collection = @config[:commission_collection]
 
       if @category == "referrer"
@@ -118,8 +118,8 @@ module CommissionCollections
 
           total = total_life + total_rf
           
-          if !total.nil?
-            if total > 5000.0
+          if total > 0.00  
+            if @members.count > 5000
               commission = total * 0.05
             else
               commission = total * 0.03
@@ -128,7 +128,7 @@ module CommissionCollections
             commission = 0.00
           end
 
-          if commission > 0.0
+          if commission > 0.00
             @data[:records] << { 
                                   referrer: c.full_name,
                                   category: @category,

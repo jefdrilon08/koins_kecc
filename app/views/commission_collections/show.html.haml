@@ -46,6 +46,9 @@
             No records found.
         - if !@commission_collection_data.nil?
           = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
+          - if !@commission_collection.approved?
+            - if ["MIS"].include? current_user.roles.last
+              = render partial: "commission_collections/accounting_entry_settings"
 
 = render partial: "commission_collections/modals/update"
 = render partial: "commission_collections/modals/approve"

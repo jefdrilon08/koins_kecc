@@ -91,6 +91,18 @@ module ApplicationHelper
     return names
   end
 
+  def templates
+    names = []
+
+    if Settings.templates.present?
+      Settings.templates.each do |o|
+        names << o.name
+      end
+    end
+
+    return names
+  end
+
   def member_resignation_types
     Settings.member_resignation_types.map{ |o|
       {
