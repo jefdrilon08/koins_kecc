@@ -1,5 +1,5 @@
 module Api
-  class MeessagesController < ::Api::FrontController
+  class MessagesController < ::Api::FrontController
     before_action :authenticate_user_or_member!
 
     def index
@@ -20,6 +20,10 @@ module Api
       if validator.errors.any?
         render json: { errors: validator.errors }, status: :unprocessable_entity
       else
+        if @user.present? and member_id.present?
+          @member = ReadOnlyMember.find(member_id)
+        end
+
         cmd = ::Messages::Create.new(
                 topic: topic,
                 content: content,

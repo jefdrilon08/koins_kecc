@@ -14,8 +14,6 @@ module Messages
     end
 
     def execute!
-      @member = ReadOnlyMember.find(@member_id)
-
       @message  = Message.new(
                     topic: @topic,
                     content: @content,

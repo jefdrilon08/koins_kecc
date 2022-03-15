@@ -1,7 +1,8 @@
 module Messages
   class ValidateCreate
     attr_accessor :topic,
-                  :content
+                  :content,
+                  :errors
 
     def initialize(topic:, content:)
       @topic    = topic
