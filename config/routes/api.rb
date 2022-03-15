@@ -22,7 +22,8 @@ namespace :api do
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
-  get "/messages/:id", to: "messages#id"
+  get "/messages/:id", to: "messages#show"
+  post "/messages/:id/reply", to: "messages#reply"
   
   namespace :members do
     # Loans

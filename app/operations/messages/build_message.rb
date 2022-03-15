@@ -12,14 +12,12 @@ module Messages
         id: @message.id,
         topic: @message.topic,
         content: @message.content,
-        date: @message.updated_at,
-        member: {
-          id: @member.id,
-          first_name: @member.name,
-          middle_name: @member.middle_name,
-          last_name: @member.last_name,
-          identification_number: @member.identification_number
-        },
+        updated_at: @message.updated_at,
+        member_id: @member.id,
+        first_name: @member.first_name,
+        middle_name: @member.middle_name,
+        last_name: @member.last_name,
+        identification_number: @member.identification_number,
         replies: []
       }
     end

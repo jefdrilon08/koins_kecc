@@ -27,6 +27,35 @@ module Api
       end
     end
 
+    def reply
+      message = Message.find_by_id(params[:id])
+      reply   = params[:reply]
+
+      validator = ::Messages::ValidateReply.new(
+                    message: message,
+                    reply: reply
+                  )
+
+      validator.execute!
+
+      if validator.errors.any?
+        render json: { errors: validator.errors }, status: :unprocessable_entity
+      else
+        cmd = ::Messages::Reply.new(
+                message: message,
+                reply: reply,
+                user: @user,
+                member: @member
+              )
+
+        cmd.execute!
+
+        reply_message = cmd.reply_message
+
+        render json: { message: repply_message }
+      end
+    end
+
     def show
       message = Message.find_by_id(params[:id])
 
@@ -36,7 +65,7 @@ module Api
 
       cmd.execute!
 
-      render json: cmd.data
+      render json: { message: cmd.data }
     end
 
     def create
