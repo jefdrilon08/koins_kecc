@@ -59,6 +59,12 @@ class CommissionCollection < ApplicationRecord
     end
   end
 
+  def transaction_fee
+    temp_data = self.data.with_indifferent_access
+
+    temp_data[:transaction_fee]
+  end
+
   def processing?
     self.status == "processing"
   end

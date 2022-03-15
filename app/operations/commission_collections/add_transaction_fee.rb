@@ -1,9 +1,9 @@
 module CommissionCollections
-  class ModifyTemplate
+  class AddTransactionFee
     def initialize(config:)
       @config = config
 
-      @template              = @config[:template]
+      @transaction_fee       = @config[:transaction_fee]
       @commission_collection = @config[:commission_collection]
       @start_date            = @commission_collection.start_date
       @end_date              = @commission_collection.end_date
@@ -18,7 +18,7 @@ module CommissionCollections
     end
 
     def execute!
-      @data[:template]  = @template
+      @data[:transaction_fee]  = @transaction_fee
 
       config  = {
         commission_collection: @commission_collection,

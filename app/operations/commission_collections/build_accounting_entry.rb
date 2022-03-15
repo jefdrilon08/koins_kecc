@@ -88,8 +88,7 @@ module CommissionCollections
       journal_entries = []
 
       # Membership Enrollment and Marketing Expense
-      # accounting_code = AccountingCode.find("29b15cac-0f8e-4870-8d60-7f774bfa8c38")
-      accounting_code = AccountingCode.find("9e26384f-7a27-4e89-b5d0-1017cfdccf0b")
+      accounting_code = AccountingCode.find("29b15cac-0f8e-4870-8d60-7f774bfa8c38")
       amount          = 0.00
 
       @data[:records].each do |r|
@@ -104,6 +103,26 @@ module CommissionCollections
         name: accounting_code.name,
         amount: amount
       }
+
+      if !@data.nil?
+        if @data[:transaction_fee].present?
+          transaction_fee = @data[:transaction_fee]
+
+          if transaction_fee > 0.00
+            # Bank and other charges
+            dr_accounting_code  = AccountingCode.find("7669d18f-015f-4886-ab68-888a92f6c2d2")
+
+            amount = transaction_fee
+
+            journal_entries << {
+              accounting_code_id: dr_accounting_code.id,
+              code: dr_accounting_code.code,
+              name: dr_accounting_code.name,
+              amount: amount
+            }
+          end
+        end
+      end
 
       journal_entries
     end
@@ -140,6 +159,26 @@ module CommissionCollections
         name: accounting_code.name,
         amount: amount
       }
+
+      if !@data.nil?
+        if @data[:transaction_fee].present?
+          transaction_fee = @data[:transaction_fee]
+          
+          if transaction_fee > 0.00
+            # Cash in Bank - Union Bank Gen. Fund
+            cr_accounting_code  = AccountingCode.find("9e26384f-7a27-4e89-b5d0-1017cfdccf0b")
+
+            amount = transaction_fee
+
+            journal_entries << {
+              accounting_code_id: cr_accounting_code.id,
+              code: cr_accounting_code.code,
+              name: cr_accounting_code.name,
+              amount: amount
+            }
+          end
+        end
+      end
 
       journal_entries
     end

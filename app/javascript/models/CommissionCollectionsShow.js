@@ -18,6 +18,7 @@ var urlModifyParticular       = "/api/v1/commission_collections/modify_particula
 var urlSaveCheckNumber        = "/api/v1/commission_collections/save_check_number";
 var urlSaveCheckVoucherNumber = "/api/v1/commission_collections/save_check_voucher_number";
 var urlSavePayee              = "/api/v1/commission_collections/save_payee";
+var urlAddTransactionFee      = "/api/v1/commission_collections/add_transaction_fee";
 
 var $selectTemplate;
 var $btnConfirmTemplate;
@@ -33,6 +34,9 @@ var $inputTextParticular;
 var $inputTextPayee;
 var $inputTextCheckNumber;
 var $inputTextCheckVoucherNumber;
+
+var $btnConfirmTransactionFee;
+var $inputTextTransactionFee;
 
 var $message;
 
@@ -59,6 +63,9 @@ var _cacheDom = function() {
 
   $inputTextCheckVoucherNumber  = $("#input-text-check-voucher-number");
   $btnConfirmCheckVoucherNumber = $("#btn-confirm-check-voucher-number");
+
+  $btnConfirmTransactionFee     = $("#btn-confirm-transaction-fee");
+  $inputTextTransactionFee      = $("#input-text-transaction-fee");
 
   $selectBook                   = $("#select-book");
   $btnConfirmBook               = $("#btn-confirm-book");
@@ -148,6 +155,51 @@ var _bindEvents = function() {
           );
 
           $btnConfirmUpdate.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnConfirmTransactionFee.on("click", function() {
+    var transaction_fee  = $inputTextTransactionFee.val();
+
+    $message.html("Loading...");
+
+    $inputTextTransactionFee.prop("disabled", true);
+    $btnConfirmTransactionFee.prop("disabled", true);
+
+    $.ajax({
+      url: urlAddTransactionFee,
+      method: 'POST',
+      data: { 
+        id: id,
+        transaction_fee: transaction_fee,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputTextTransactionFee.prop("disabled", false);
+          $btnConfirmTransactionFee.prop("disabled", false);
         }
       }
     });

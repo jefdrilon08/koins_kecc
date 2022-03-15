@@ -4,7 +4,22 @@
       .card-body
         #settings
           .row
-            .col-md-6.col-xs-12
+            .col-md-3.col-xs-12
+              %h5
+                Trasaction Fee
+              .card
+                .card-body
+                  %p
+                    Amount
+                  .row
+                    .col-md-6.col-xs-12
+                      = text_field_tag :transaction_fee, @commission_collection.transaction_fee, class: "form-control select-select2", id: "input-text-transaction-fee"
+                    .col-md-6.col-xs-12
+                      #btn-confirm-transaction-fee.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Add Transaction Fee
+                  .message
+            .col-md-5.col-xs-12
               %h5
                 Modify Accounting Code
               .card
@@ -19,7 +34,7 @@
                         .fa.fa-sync
                         Use Template
                   .message
-            .col-md-6.col-xs-12
+            .col-md-4.col-xs-12
               %h5
                 Modify Book
               .card

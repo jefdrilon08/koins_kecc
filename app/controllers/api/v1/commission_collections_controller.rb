@@ -128,6 +128,31 @@ module Api
         render json: { id: commission_collection.id }
       end
 
+      def add_transaction_fee
+        commission_collection = CommissionCollection.where(id: params[:id]).first
+        transaction_fee       = params[:transaction_fee].to_f
+
+        config  = {
+          transaction_fee: transaction_fee,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        errors  = ::CommissionCollections::ValidateAddTransactionFee.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::CommissionCollections::AddTransactionFee.new(
+            config: config
+          ).execute!
+
+          render json: { id: commission_collection.id }
+        end
+      end
+
       def modify_particular
         commission_collection  = CommissionCollection.where(id: params[:id]).first
         particular   = params[:particular]

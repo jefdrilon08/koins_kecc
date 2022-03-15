@@ -352,6 +352,7 @@ namespace :api do
     post "/commission_collections/save_payee", to: "commission_collections#save_payee"
     post "/commission_collections/save_check_number", to: "commission_collections#save_check_number"
     post "/commission_collections/save_check_voucher_number", to: "commission_collections#save_check_voucher_number"
+    post "/commission_collections/add_transaction_fee", to: "commission_collections#add_transaction_fee"
 
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"
