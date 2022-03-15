@@ -2,7 +2,8 @@ class Message < ApplicationRecord
   STATUSES = [
     "unread",
     "read",
-    "deleted"
+    "deleted",
+    "close"
   ]
 
   belongs_to :member

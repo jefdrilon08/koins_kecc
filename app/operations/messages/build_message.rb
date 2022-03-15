@@ -1,0 +1,31 @@
+module Messages
+  class BuildMessage
+    attr_accessor :message,
+                  :member,
+                  :data
+
+    def initialize(message:)
+      @message  = message
+      @member   = @message.member
+
+      @data = {
+        id: @message.id,
+        topic: @message.topic,
+        content: @message.content,
+        date: @message.updated_at,
+        member: {
+          id: @member.id,
+          first_name: @member.name,
+          middle_name: @member.middle_name,
+          last_name: @member.last_name,
+          identification_number: @member.identification_number
+        },
+        replies: []
+      }
+    end
+
+    def execute!
+      @data
+    end
+  end
+end

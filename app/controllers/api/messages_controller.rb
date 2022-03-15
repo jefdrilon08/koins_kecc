@@ -3,6 +3,23 @@ module Api
     before_action :authenticate_user_or_member!
 
     def index
+      if @member.present?
+      elsif @user.present?
+      else
+        render json: { message: "Invalid" }, status: :unprocessable_entity
+      end
+    end
+
+    def show
+      message = Message.find_by_id(params[:id])
+
+      cmd = ::Messages::BuildMessage.new(
+              message: message
+            )
+
+      cmd.execute!
+
+      render json: cmd.data
     end
 
     def create
