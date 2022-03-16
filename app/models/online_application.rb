@@ -34,7 +34,7 @@ class OnlineApplication < ApplicationRecord
   scope :error, -> { where(status: "error") }
 
   # Validate email only if present
-  validates :email, presence: false, uniqueness: true, if: Proc.new { |online_application| online_application.email.blank? }
+  #validates :email, presence: false, uniqueness: true, if: Proc.new { |online_application| online_application.email.blank? }
 
   def load_defaults
     if self.status.blank?
