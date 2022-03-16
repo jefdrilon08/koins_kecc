@@ -6,7 +6,8 @@ class ProcessApproveMakePayments < ApplicationJob
       ActiveRecord::Base.transaction do
         config = { 
                 make_payment: args[:make_payment_details], 
-                user: args[:user]
+                user: args[:user],
+                current_date: args[:current_date]
               } 
         @data = ::Adjustments::MakePayments::ApproveMakePayments.new(config: config).execute!
       end
