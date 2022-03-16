@@ -47,7 +47,7 @@ module InsuranceMonthlyClosingCollections
         raise "account_settings not found"
       end
 
-      validated_members_ids = MemberAccountValidationRecord.all.pluck(:member_id)
+      validated_members_ids = MemberAccountValidationRecord.where("data->>'is_void' = ?", "false").pluck(:member_id)
 
       @member_accounts  = MemberAccount.joins(:member).where(
                             "members.branch_id = ? AND members.insurance_status IN (?) AND account_subtype = ? AND members.id NOT IN (?)",
