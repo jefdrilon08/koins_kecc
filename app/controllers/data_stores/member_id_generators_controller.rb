@@ -51,5 +51,12 @@ module DataStores
         }
       ]
     end
+    def for_member_id_excel
+      download_excel = ::Reports::DownloadForMemberIdGeneratorExcel.new(report_id: params[:id]).execute!
+      filename = DataStore.find(params[:id]).meta["refference_number"] 
+      download_excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+    end
   end
 end
