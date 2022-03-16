@@ -3971,6 +3971,13 @@ loan_products:
         deduction_type: "membership_fee"
         meta:
           membership_name: "K-MBA"
+      -
+        name: "Share Capital Fee"
+        accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+        amount: 100.00
+        max_share: 50
+        deduction_type: "share_capital_fee"
+        meta:
 
   -
     loan_product_id: "1d383a11-1dae-40ac-8932-b55fc0d36515"                         # K-NHA W1
@@ -4442,6 +4449,13 @@ loan_products:
         deduction_type: "membership_fee"
         meta:
           membership_name: "K-MBA"
+      -
+        name: "Share Capital Fee"
+        accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+        amount: 100.00
+        max_share: 50
+        deduction_type: "share_capital_fee"
+        meta:
 
   -
     loan_product_id: "feef6e81-1644-4615-b795-965834517c8f"                         # K-TODA
