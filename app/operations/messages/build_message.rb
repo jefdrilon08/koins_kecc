@@ -17,8 +17,8 @@ module Messages
         first_name: @member.first_name,
         middle_name: @member.middle_name,
         last_name: @member.last_name,
-        identification_number: @member.identification_number,
-        replies: []
+        user_id: @member.user_id,
+        identification_number: @member.identification_number
       }
     end
 

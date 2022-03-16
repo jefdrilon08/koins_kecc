@@ -6,7 +6,9 @@ module Api
       if @member.present?
       elsif @user.present?
         messages  = Message.joins(:member).select(
-                      "messages.id AS id, messages.topic, messages.status, members.first_name, members.last_name, members.middle_name, messages.updated_at"
+                      "messages.id AS id, messages.topic, messages.status, members.first_name, members.last_name, members.middle_name, messages.updated_at, messages.message_id"
+                    ).where(
+                      "messages.messages_id IS NULL"
                     ).order("updated_at DESC")
 
         messages  = messages.map{ |o|
@@ -27,8 +29,28 @@ module Api
       end
     end
 
+    def replies
+      message = Message.find(params[:id])
+
+      replies = Message.where(
+                  message_id: message.id
+                ).order(
+                  "updated_at ASC"
+                ).map{ |o|
+                  cmd = ::Messages::BuildMessage.new(
+                          message: o
+                        )
+
+                  cmd.execute!
+
+                  cmd.data
+                }
+
+      render json: { replies: replies }
+    end
+
     def reply
-      message = Message.find_by_id(params[:id])
+      message = Message.find(params[:id])
       reply   = params[:reply]
 
       validator = ::Messages::ValidateReply.new(
@@ -44,15 +66,20 @@ module Api
         cmd = ::Messages::Reply.new(
                 message: message,
                 reply: reply,
-                user: @user,
-                member: @member
+                user: @user
               )
 
         cmd.execute!
 
         reply_message = cmd.reply_message
 
-        render json: { message: repply_message }
+        cmd = ::Messages::BuildMessage.new(
+                message: reply_message
+              )
+
+        cmd.execute!
+
+        render json: { message: cmd.data }
       end
     end
 
