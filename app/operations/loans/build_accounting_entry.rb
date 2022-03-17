@@ -246,7 +246,7 @@ module Loans
             name            = accounting_code.name
             code            = accounting_code.code
 
-            if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
+            if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false || @loan.cycle > 1
               journal_entries << {
                 accounting_code_id: accounting_code.id,
                 code: code,

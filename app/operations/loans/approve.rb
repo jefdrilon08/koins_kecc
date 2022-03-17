@@ -116,7 +116,7 @@ module Loans
         if deduction_type == "share_capital_fee"
                   
           #if @loan.data["share_capital_available"] == true
-          if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
+          if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false || @loan.cycle > 1
             total_member_shares = MemberShare.where("member_id = ? and  certificate_for = ? and is_void is null",@member.id, "KCOOP").sum(:number_of_shares)
             @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
 
