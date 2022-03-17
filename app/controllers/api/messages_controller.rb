@@ -8,7 +8,7 @@ module Api
         messages  = Message.joins(:member).select(
                       "messages.id AS id, messages.topic, messages.status, members.first_name, members.last_name, members.middle_name, messages.updated_at, messages.message_id"
                     ).where(
-                      "messages.messages_id IS NULL"
+                      "messages.message_id IS NULL"
                     ).order("updated_at DESC")
 
         messages  = messages.map{ |o|
