@@ -3,30 +3,44 @@ module Api
     before_action :authenticate_user_or_member!
 
     def index
+      messages  = Message.joins([:member, :user]).select(
+                    "messages.id AS id, messages.topic, messages.user_id, users.first_name AS user_first_name, users.last_name AS user_last_name, messages.content, messages.status, messages.member_id, members.first_name, members.last_name, members.middle_name, messages.updated_at, messages.message_id"
+                  ).where(
+                    "messages.message_id IS NULL"
+                  )
+
       if @member.present?
+        messages  = messages.where(member_id: @member.id)
       elsif @user.present?
-        messages  = Message.joins(:member).select(
-                      "messages.id AS id, messages.topic, messages.status, members.first_name, members.last_name, members.middle_name, messages.updated_at, messages.message_id"
-                    ).where(
-                      "messages.message_id IS NULL"
-                    ).order("updated_at DESC")
-
-        messages  = messages.map{ |o|
-                      {
-                        id: o.id,
-                        topic: o.topic,
-                        first_name: o.first_name,
-                        middle_name: o.middle_name,
-                        last_name: o.last_name,
-                        status: o.status,
-                        updated_at: o.updated_at.strftime("%b %d, %Y %H:%m")
-                      }
-                    }
-
-        render json: { messages: messages }
-      else
-        render json: { message: "Invalid" }, status: :unprocessable_entity
+        messages  = messages
       end
+
+      messages  = messages.order("updated_at DESC")
+
+      messages  = messages.map{ |o|
+                    if o.user_id.blank?
+                      user_first_name = o.first_name
+                      user_last_name  = o.last_name
+                    else
+                      user_first_name = o.user_first_name
+                      user_last_name  = o.user_last_name
+                    end
+
+                    {
+                      id: o.id,
+                      topic: o.topic,
+                      first_name: o.first_name,
+                      middle_name: o.middle_name,
+                      last_name: o.last_name,
+                      status: o.status,
+                      content: o.content,
+                      user_first_name: user_first_name,
+                      user_last_name: user_last_name,
+                      updated_at: o.updated_at.strftime("%b %d, %Y %H:%m")
+                    }
+                  }
+
+      render json: { messages: messages }
     end
 
     def replies
