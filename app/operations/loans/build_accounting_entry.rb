@@ -245,17 +245,18 @@ module Loans
             amount          = @total_share_paid
             name            = accounting_code.name
             code            = accounting_code.code
-
-            if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false || @loan.cycle > 1
-              journal_entries << {
-                accounting_code_id: accounting_code.id,
-                code: code,
-                name: name,
-                amount: amount
-              }
+            if @loan.cycle > 1
+              if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
             
 
-              temp_amount -= amount
+                temp_amount -= amount
+              end
             end
             
         elsif deduction_type == "straight_one_time"
