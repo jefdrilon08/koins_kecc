@@ -3,7 +3,7 @@ module Api
     before_action :authenticate_user_or_member!
 
     def index
-      messages  = Message.joins([:member, :user]).select(
+      messages  = Message.joins(:member).joins("LEFT OUTER JOIN users ON users.id = messages.user_id").select(
                     "messages.id AS id, messages.topic, messages.user_id, users.first_name AS user_first_name, users.last_name AS user_last_name, messages.content, messages.status, messages.member_id, members.first_name, members.last_name, members.middle_name, messages.updated_at, messages.message_id"
                   ).where(
                     "messages.message_id IS NULL"
