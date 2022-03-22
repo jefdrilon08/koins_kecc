@@ -1,6 +1,35 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index]
+    before_action :authenticate_user!, only: [:index]
+
+    def index
+      branches  = ReadOnlyBranch.select("branches.id, branches.name").where(
+                    id: ReadOnlyUserBranch.where(
+                          active: true,
+                          user_id: @user.id
+                        ).pluck(:branch_id)
+                  ).order(
+                    "name ASC"
+                  )
+
+      q = params[:q]
+
+      members = Member.joins(:branch).select(
+                  "members.id, members.first_name, members.middle_name, members.last_name, branches.name AS branch_name, status"
+                ).where(
+                  "branches.id IN (?) AND status = ?",
+                  branches.pluck(:id),
+                  "active"
+                ).where(
+                  "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+                  q: "%#{q.upcase}%"
+                ).order(
+                  "members.last_name ASC"
+                ).limit(50)
+
+      render json: { members: members }
+    end
 
     def change_password
       old_password          = params[:old_password]
