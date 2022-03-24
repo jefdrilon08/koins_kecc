@@ -1,11 +1,22 @@
 module Api
   class AnnouncementsController < ::Api::FrontController
-    before_action :authenticate_user!
+    before_action :authenticate_user!, except: [:index, :show]
+    before_action :authenticate_user_or_member!, only: [:index, :show]
 
     def index
       announcements = Announcement.select("id, title, announced_at, is_published");
 
-      render json: { announcements: announcements }
+      data  = announcements.map{ |o|
+                {
+                  id: o.id,
+                  title: o.title,
+                  announced_at: o.announced_at.strftime("%b %d, %Y"),
+                  is_published: o.is_published,
+                  file_banner: o.file_banner.url
+                }
+              }
+
+      render json: { announcements: data }
     end
 
     def show
