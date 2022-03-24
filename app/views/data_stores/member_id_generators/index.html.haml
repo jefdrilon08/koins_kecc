@@ -1,8 +1,16 @@
-.row
-  .col
-    .card
-      .card-body
-        = render partial: "index_list"
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-4
+      .form-group
+        %label
+          ACTION
+      
+          .fa.fa-download
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "index_list"
 
 
 

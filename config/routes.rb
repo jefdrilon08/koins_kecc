@@ -433,6 +433,8 @@ Rails.application.routes.draw do
     get "/member_id_generators", to: "member_id_generators#index"
     get "/member_id_generators/:id", to: "member_id_generators#show"
     delete "/member_id_generators/:id", to: "member_id_generators#destroy"
+    get "/member_id_generators/:id/for_member_id_excel", to: "member_id_generators#for_member_id_excel", as: :for_member_id_download_excel
+
 
     get "/insurance_personal_funds", to: "insurance_personal_funds#index"
     get "/insurance_personal_funds/:id", to: "insurance_personal_funds#show"

@@ -36,7 +36,6 @@ module Api
             user_id: current_user.id
           }
 
-          # ProcessApproveInsuranceMonthlyClosingCollection.perform_later(args)
           ProcessApproveCommissionCollection.perform_later(args)
 
           render json: { id: commission_collection.id }
@@ -109,6 +108,135 @@ module Api
 
           render json: { id: commission_collection.id }
         end
+      end
+
+      def modify_book
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        book                   = params[:book]
+
+        config  = {
+          book: book,
+          user: current_user,
+          commission_collection: commission_collection,
+        }
+
+  
+        ::CommissionCollections::ModifyBook.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def add_transaction_fee
+        commission_collection = CommissionCollection.where(id: params[:id]).first
+        transaction_fee       = params[:transaction_fee].to_f
+
+        config  = {
+          transaction_fee: transaction_fee,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        errors  = ::CommissionCollections::ValidateAddTransactionFee.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::CommissionCollections::AddTransactionFee.new(
+            config: config
+          ).execute!
+
+          render json: { id: commission_collection.id }
+        end
+      end
+
+      def modify_particular
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        particular   = params[:particular]
+
+        config  = {
+          particular: particular,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::ModifyParticular.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def save_payee
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        payee   = params[:payee]
+
+        config  = {
+          payee: payee,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::SavePayee.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def save_check_number
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        check_number   = params[:check_number]
+
+        config  = {
+          check_number: check_number,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::SaveCheckNumber.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def save_check_voucher_number
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        check_voucher_number   = params[:check_voucher_number]
+
+        config  = {
+          check_voucher_number: check_voucher_number,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::SaveCheckVoucherNumber.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def modify_template
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        template  = params[:template]
+
+        config  = {
+          template: template,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+      
+        ::CommissionCollections::ModifyTemplate.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
       end
     end
   end

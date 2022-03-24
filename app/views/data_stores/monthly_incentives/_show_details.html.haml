@@ -76,7 +76,7 @@
         Dropout Percentage
       - @data_records.each do |drp|
         %th.text-right
-          #{drp[:drop_out_rate].round(2)}%
+          #{drp[:drop_out_rate].round(2) || 0.0}% 
     %tr
       %th
         Present Month Repayment Rate

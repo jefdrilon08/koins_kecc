@@ -97,19 +97,6 @@ module TransferMemberRecords
                 }
               end
             end
-          elsif mem[:account_type] == "INSURANCE"
-            @insurance_accounting_codes.each do |ins|
-              if ins[:insurance_type] == mem[:account_subtype] 
-                ins_accounting_code = ins[:deposit_accounting_code_id]
-                accnt_code = AccountingCode.find(ins_accounting_code)
-                journal_entries << {
-                    accounting_code_id: accnt_code.id,
-                    code: accnt_code.code,
-                    name: accnt_code.name,
-                    amount: mem[:balance].to_f
-                }
-              end
-            end
           end
         end
       end

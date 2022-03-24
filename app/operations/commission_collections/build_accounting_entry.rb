@@ -10,10 +10,11 @@ module CommissionCollections
       @end_date                   = @config[:end_date]
       @default_branch             = @config[:default_branch]
       @category                   = @config[:category]
-      @accounting_fund            = AccountingFund.where(name: "Mutual Benefit Fund").first
+      @payee                      = build_payee
+      @accounting_fund            = AccountingFund.where(name: "General Fund").first
 
       @accounting_entry_data  = {
-        book: @config[:book] || "JVB",
+        book: @config[:book] || "CDB",
         date_prepared: @date_prepared.strftime("%B %d, %Y"),
         company_name: Settings.company_name,
         company_address: Settings.company_address,
@@ -29,7 +30,10 @@ module CommissionCollections
         accounting_fund_id: @accounting_fund.id,
         data: {
           or_number: "",
-          ar_number: ""
+          ar_number: "",
+          check_number: "",
+          check_voucher_number: "",
+          payee: @payee
         }
       }
     end
@@ -64,18 +68,27 @@ module CommissionCollections
 
     private
 
-    def default_particular
-      if @category == "referrer"
-        "Referrer commision!"
-      elsif @category == "insurance coordinator"
-        "Insurance coordinator commision!"
+    def build_payee
+      payee = ""
+
+      if @category == "insurance coordinator"
+        payee = "Various Insurance Coordinators"
+      else
+        payee = "Various Referrers"
       end
+
+      payee
+    end
+
+    def default_particular
+      "To record membership enrollment expense for the period of #{@start_date.to_date.try(:strftime, "%B %d, %Y")} to #{@end_date.to_date.try(:strftime, "%B %d, %Y")}"
     end
 
     def build_debit_journal_entries!
       journal_entries = []
 
-      accounting_code = AccountingCode.find("c2f80584-a24a-437b-b161-80f4b0a12d9c")
+      # Membership Enrollment and Marketing Expense
+      accounting_code = AccountingCode.find("29b15cac-0f8e-4870-8d60-7f774bfa8c38")
       amount          = 0.00
 
       @data[:records].each do |r|
@@ -90,6 +103,26 @@ module CommissionCollections
         name: accounting_code.name,
         amount: amount
       }
+
+      if !@data.nil?
+        if @data[:transaction_fee].present?
+          transaction_fee = @data[:transaction_fee]
+
+          if transaction_fee > 0.00
+            # Bank and other charges
+            dr_accounting_code  = AccountingCode.find("7669d18f-015f-4886-ab68-888a92f6c2d2")
+
+            amount = transaction_fee
+
+            journal_entries << {
+              accounting_code_id: dr_accounting_code.id,
+              code: dr_accounting_code.code,
+              name: dr_accounting_code.name,
+              amount: amount
+            }
+          end
+        end
+      end
 
       journal_entries
     end
@@ -97,7 +130,21 @@ module CommissionCollections
     def build_credit_journal_entries!
       journal_entries = []
 
-      accounting_code = AccountingCode.find("e6b9136c-a0a5-456f-bc59-0370f9b9594a")
+      # Cash in Bank - Union Bank Gen. Fund
+      accounting_code = AccountingCode.find("9e26384f-7a27-4e89-b5d0-1017cfdccf0b")
+
+      if !@data.nil?
+        if @data[:template].present?
+          Settings.templates.each do |template|
+            if template.name == @data[:template]
+              template.accounting_codes.each do |a|
+                accounting_code = AccountingCode.find(a.cr_accounting_code_id)
+              end
+            end
+          end
+        end
+      end
+
       amount          = 0.00
 
       @data[:records].each do |r|
@@ -112,6 +159,26 @@ module CommissionCollections
         name: accounting_code.name,
         amount: amount
       }
+
+      if !@data.nil?
+        if @data[:transaction_fee].present?
+          transaction_fee = @data[:transaction_fee]
+          
+          if transaction_fee > 0.00
+            # Cash in Bank - Union Bank Gen. Fund
+            cr_accounting_code  = AccountingCode.find("9e26384f-7a27-4e89-b5d0-1017cfdccf0b")
+
+            amount = transaction_fee
+
+            journal_entries << {
+              accounting_code_id: cr_accounting_code.id,
+              code: cr_accounting_code.code,
+              name: cr_accounting_code.name,
+              amount: amount
+            }
+          end
+        end
+      end
 
       journal_entries
     end

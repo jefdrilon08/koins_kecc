@@ -930,7 +930,7 @@ export default class ApplicationFormComponent extends React.Component {
                 onChange={this.handleShareCapitalChanged.bind(this)}
               />
               <label>
-                On Sharecapital
+                Off Sharecapital
               </label>
             </div>
           </div>

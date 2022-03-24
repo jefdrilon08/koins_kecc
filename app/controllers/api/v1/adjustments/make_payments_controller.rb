@@ -2,8 +2,14 @@ module Api
   module V1
     module Adjustments
       class MakePaymentsController < ApplicationController
+        skip_before_action :verify_authenticity_token
         def approve
           @make_payment_details = MakePayment.find(params[:make_payment_id])
+          @current_date = ::Utils::GetCurrentDate.new(
+                        config: {
+                          branch: @make_payment_details.member.branch
+                        }
+                      ).execute!
           #config = {
           #            make_payment: @make_payment_details,
           #            user: current_user
@@ -17,7 +23,8 @@ module Api
             
             ProcessApproveMakePayments.perform_later({
               make_payment_details: @make_payment_details,
-              user: current_user
+              user: current_user,
+              current_date: @current_date
 
             })
 
