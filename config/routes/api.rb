@@ -25,6 +25,14 @@ namespace :api do
   get "/messages/:id", to: "messages#show"
   post "/messages/:id/reply", to: "messages#reply"
   get "/messages/:id/replies", to: "messages#replies"
+
+  # Branches
+  get "/branches", to: "branches#index"
+
+  # Announcements
+  get "/announcements", to: "announcements#index"
+  post "/announcements", to: "announcements#create"
+  get "/announcements/:id", to: "announcements#show"
   
   namespace :members do
     # Loans

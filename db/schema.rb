@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_14_141125) do
+ActiveRecord::Schema.define(version: 2022_03_23_130257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -215,6 +215,12 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "user_id"
+    t.string "status"
+    t.boolean "is_published"
+    t.uuid "branch_id"
+    t.date "announced_at"
+    t.date "published_at"
+    t.index ["branch_id"], name: "index_announcements_on_branch_id"
   end
 
   create_table "areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -545,7 +551,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.index ["center_id"], name: "index_insurance_fund_transfer_collections_on_center_id"
   end
 
-  create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "branch_id"
     t.date "closing_date"
     t.date "closed_at"
@@ -789,7 +795,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
   end
 
-  create_table "make_payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "make_payments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id", null: false
     t.date "transaction_date"
     t.date "date_approve"
@@ -1003,7 +1009,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.index ["status", "center_id"], name: "manual_idx_7"
   end
 
-  create_table "membership_arrangements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "membership_arrangements", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
@@ -1039,7 +1045,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
   end
 
-  create_table "membership_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "membership_types", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
@@ -1159,7 +1165,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.string "loan"
   end
 
-  create_table "referrers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "referrers", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
@@ -1229,7 +1235,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
     t.index ["center_id"], name: "index_time_deposit_collections_on_center_id"
   end
 
-  create_table "transfer_member_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "transfer_member_records", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "branch_id"
     t.date "transfer_date"
     t.string "status"
@@ -1316,6 +1322,7 @@ ActiveRecord::Schema.define(version: 2022_03_14_141125) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "amortization_schedule_entries", "loans"
+  add_foreign_key "announcements", "branches"
   add_foreign_key "attachment_files", "members"
   add_foreign_key "beneficiaries", "members"
   add_foreign_key "billings", "branches"
