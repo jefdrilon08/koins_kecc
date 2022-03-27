@@ -1,5 +1,7 @@
 module Stats
   class ComputePureSavers
+    attr_accessor :data
+
     def initialize(config:)
       @config = config
 

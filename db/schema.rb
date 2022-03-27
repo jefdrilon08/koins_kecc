@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_23_130257) do
+ActiveRecord::Schema.define(version: 2022_03_27_051059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -487,6 +487,23 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.date "date_approved"
     t.index ["branch_id"], name: "index_deposit_collections_on_branch_id"
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
+  end
+
+  create_table "dw_branch_member_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.string "status"
+    t.date "as_of"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "count_male"
+    t.integer "count_female"
+    t.integer "total"
+    t.index ["area_id"], name: "index_dw_branch_member_counts_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_member_counts_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_member_counts_on_cluster_id"
   end
 
   create_table "equity_withdrawal_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -1344,6 +1361,9 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
   add_foreign_key "daily_branch_metrics", "clusters"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "dw_branch_member_counts", "areas"
+  add_foreign_key "dw_branch_member_counts", "branches"
+  add_foreign_key "dw_branch_member_counts", "clusters"
   add_foreign_key "equity_withdrawal_collections", "branches"
   add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"
