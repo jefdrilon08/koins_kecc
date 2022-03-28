@@ -551,7 +551,7 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.index ["center_id"], name: "index_insurance_fund_transfer_collections_on_center_id"
   end
 
-  create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "branch_id"
     t.date "closing_date"
     t.date "closed_at"
@@ -795,7 +795,7 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.index ["project_type_id"], name: "index_loans_on_project_type_id"
   end
 
-  create_table "make_payments", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "make_payments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id", null: false
     t.date "transaction_date"
     t.date "date_approve"
@@ -1009,7 +1009,7 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.index ["status", "center_id"], name: "manual_idx_7"
   end
 
-  create_table "membership_arrangements", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "membership_arrangements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
@@ -1045,7 +1045,7 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.index ["member_id"], name: "index_membership_payment_records_on_member_id"
   end
 
-  create_table "membership_types", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "membership_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.jsonb "data"
     t.datetime "created_at", precision: 6, null: false
@@ -1165,7 +1165,7 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.string "loan"
   end
 
-  create_table "referrers", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "referrers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
@@ -1235,7 +1235,7 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.index ["center_id"], name: "index_time_deposit_collections_on_center_id"
   end
 
-  create_table "transfer_member_records", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "transfer_member_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "branch_id"
     t.date "transfer_date"
     t.string "status"
