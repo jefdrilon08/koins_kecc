@@ -869,7 +869,7 @@ export default class DashboardOAS extends React.Component {
                
                 <tr>
                   <th>
-                   Inctive Members
+                   Inactive Members
                   </th>
                   <td className="text-center">
                     {inactive_male}
