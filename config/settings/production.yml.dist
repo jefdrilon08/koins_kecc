@@ -5715,6 +5715,13 @@ loan_products:
           value: 5.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
+      -
+        name: "Share Capital Fee"
+        accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+        amount: 100.00
+        max_share: 50
+        deduction_type: "share_capital_fee"
+        meta:
   -
     loan_product_id: "e5df6de5-9ee8-4771-a98e-f2a2386bd154"                         # K - CIL
     receivable_accounting_code_id: "e0fe6229-e0fa-4170-965a-4996600cc072"
@@ -7108,6 +7115,13 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
+      -
+        name: "Share Capital Fee"
+        accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
+        amount: 100.00
+        max_share: 50
+        deduction_type: "share_capital_fee"
+        meta:
 
   -
     loan_product_id: "73dfd935-f2a5-4ff2-b3e0-5fa252c85d74"                         # K-EDUKASYON W4
