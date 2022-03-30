@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_23_130257) do
+ActiveRecord::Schema.define(version: 2022_03_29_160736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -489,7 +489,188 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
     t.index ["center_id"], name: "index_deposit_collections_on_center_id"
   end
 
-  create_table "equity_withdrawal_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "dw_branch_active_loan_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.string "status"
+    t.date "as_of"
+    t.jsonb "data"
+    t.integer "total"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "month"
+    t.integer "year"
+    t.index ["area_id"], name: "index_dw_branch_active_loan_counts_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_active_loan_counts_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_active_loan_counts_on_cluster_id"
+  end
+
+  create_table "dw_branch_loan_past_dues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "area_id", null: false
+    t.uuid "cluster_id", null: false
+    t.decimal "amount"
+    t.jsonb "data"
+    t.string "record_type"
+    t.string "status"
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_dw_branch_loan_past_dues_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_loan_past_dues_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_loan_past_dues_on_cluster_id"
+  end
+
+  create_table "dw_branch_loan_product_active_loan_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.string "status"
+    t.date "as_of"
+    t.jsonb "data"
+    t.integer "total"
+    t.uuid "loan_product_id", null: false
+    t.uuid "loan_product_category_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "month"
+    t.integer "year"
+    t.index ["area_id"], name: "dw_a_lp_alc_index"
+    t.index ["branch_id"], name: "dw_b_lp_alc_index"
+    t.index ["cluster_id"], name: "dw_c_lp_alc_index"
+    t.index ["loan_product_category_id"], name: "dw_lpc_alc_index"
+    t.index ["loan_product_id"], name: "dw_lp_alc_index"
+  end
+
+  create_table "dw_branch_loan_product_outstanding_loan_amounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.string "status"
+    t.jsonb "data"
+    t.decimal "amount"
+    t.uuid "loan_product_category_id", null: false
+    t.uuid "loan_product_id", null: false
+    t.date "as_of"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "dw_b_lp_a_ola_index"
+    t.index ["branch_id"], name: "dw_b_lp_ola_index"
+    t.index ["cluster_id"], name: "dw_b_lp_c_ola_index"
+    t.index ["loan_product_category_id"], name: "dw_b_lp_lpc_ola_index"
+    t.index ["loan_product_id"], name: "dw_b_lp_lp_ola_index"
+  end
+
+  create_table "dw_branch_member_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.string "status"
+    t.date "as_of"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "count_male"
+    t.integer "count_female"
+    t.integer "total"
+    t.string "record_type"
+    t.integer "count_others"
+    t.integer "month"
+    t.integer "year"
+    t.index ["area_id"], name: "index_dw_branch_member_counts_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_member_counts_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_member_counts_on_cluster_id"
+  end
+
+  create_table "dw_branch_monthly_loan_amount_collections", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "area_id", null: false
+    t.uuid "cluster_id", null: false
+    t.decimal "amount"
+    t.jsonb "data"
+    t.string "status"
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_dw_branch_monthly_loan_amount_collections_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_monthly_loan_amount_collections_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_monthly_loan_amount_collections_on_cluster_id"
+  end
+
+  create_table "dw_branch_monthly_loan_amount_dues", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "area_id", null: false
+    t.uuid "cluster_id", null: false
+    t.decimal "amount"
+    t.jsonb "data"
+    t.string "status"
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_dw_branch_monthly_loan_amount_dues_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_monthly_loan_amount_dues_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_monthly_loan_amount_dues_on_cluster_id"
+  end
+
+  create_table "dw_branch_monthly_loan_product_disbursed_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "area_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "loan_product_id", null: false
+    t.uuid "loan_product_category_id", null: false
+    t.integer "month"
+    t.integer "year"
+    t.string "status"
+    t.integer "total"
+    t.jsonb "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.decimal "amount"
+    t.index ["area_id"], name: "dw_a_m_lpdc_index"
+    t.index ["branch_id"], name: "dw_b_m_lpdc_index"
+    t.index ["cluster_id"], name: "dw_c_m_lpdc_index"
+    t.index ["loan_product_category_id"], name: "dw_lpc_m_lpdc_index"
+    t.index ["loan_product_id"], name: "dw_lp_m_lpdc_index"
+  end
+
+  create_table "dw_branch_new_member_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.string "status"
+    t.jsonb "data"
+    t.integer "count_male"
+    t.integer "count_female"
+    t.integer "total"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_dw_branch_new_member_counts_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_new_member_counts_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_new_member_counts_on_cluster_id"
+  end
+
+  create_table "dw_branch_par_amounts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "area_id", null: false
+    t.uuid "cluster_id", null: false
+    t.decimal "amount"
+    t.jsonb "data"
+    t.string "record_type"
+    t.string "status"
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_dw_branch_par_amounts_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_par_amounts_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_par_amounts_on_cluster_id"
+  end
+
+  create_table "equity_withdrawal_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.date "collection_date"
     t.uuid "center_id"
     t.uuid "branch_id"
@@ -1344,6 +1525,42 @@ ActiveRecord::Schema.define(version: 2022_03_23_130257) do
   add_foreign_key "daily_branch_metrics", "clusters"
   add_foreign_key "deposit_collections", "branches"
   add_foreign_key "deposit_collections", "centers"
+  add_foreign_key "dw_branch_active_loan_counts", "areas"
+  add_foreign_key "dw_branch_active_loan_counts", "branches"
+  add_foreign_key "dw_branch_active_loan_counts", "clusters"
+  add_foreign_key "dw_branch_loan_past_dues", "areas"
+  add_foreign_key "dw_branch_loan_past_dues", "branches"
+  add_foreign_key "dw_branch_loan_past_dues", "clusters"
+  add_foreign_key "dw_branch_loan_product_active_loan_counts", "areas"
+  add_foreign_key "dw_branch_loan_product_active_loan_counts", "branches"
+  add_foreign_key "dw_branch_loan_product_active_loan_counts", "clusters"
+  add_foreign_key "dw_branch_loan_product_active_loan_counts", "loan_product_categories"
+  add_foreign_key "dw_branch_loan_product_active_loan_counts", "loan_products"
+  add_foreign_key "dw_branch_loan_product_outstanding_loan_amounts", "areas"
+  add_foreign_key "dw_branch_loan_product_outstanding_loan_amounts", "branches"
+  add_foreign_key "dw_branch_loan_product_outstanding_loan_amounts", "clusters"
+  add_foreign_key "dw_branch_loan_product_outstanding_loan_amounts", "loan_product_categories"
+  add_foreign_key "dw_branch_loan_product_outstanding_loan_amounts", "loan_products"
+  add_foreign_key "dw_branch_member_counts", "areas"
+  add_foreign_key "dw_branch_member_counts", "branches"
+  add_foreign_key "dw_branch_member_counts", "clusters"
+  add_foreign_key "dw_branch_monthly_loan_amount_collections", "areas"
+  add_foreign_key "dw_branch_monthly_loan_amount_collections", "branches"
+  add_foreign_key "dw_branch_monthly_loan_amount_collections", "clusters"
+  add_foreign_key "dw_branch_monthly_loan_amount_dues", "areas"
+  add_foreign_key "dw_branch_monthly_loan_amount_dues", "branches"
+  add_foreign_key "dw_branch_monthly_loan_amount_dues", "clusters"
+  add_foreign_key "dw_branch_monthly_loan_product_disbursed_counts", "areas"
+  add_foreign_key "dw_branch_monthly_loan_product_disbursed_counts", "branches"
+  add_foreign_key "dw_branch_monthly_loan_product_disbursed_counts", "clusters"
+  add_foreign_key "dw_branch_monthly_loan_product_disbursed_counts", "loan_product_categories"
+  add_foreign_key "dw_branch_monthly_loan_product_disbursed_counts", "loan_products"
+  add_foreign_key "dw_branch_new_member_counts", "areas"
+  add_foreign_key "dw_branch_new_member_counts", "branches"
+  add_foreign_key "dw_branch_new_member_counts", "clusters"
+  add_foreign_key "dw_branch_par_amounts", "areas"
+  add_foreign_key "dw_branch_par_amounts", "branches"
+  add_foreign_key "dw_branch_par_amounts", "clusters"
   add_foreign_key "equity_withdrawal_collections", "branches"
   add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"

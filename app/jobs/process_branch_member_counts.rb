@@ -18,6 +18,11 @@ class ProcessBranchMemberCounts < ApplicationJob
                       config: config
                     ).execute!
 
+      # Save DwBranchMemberCounts
+      ::DataWarehouse::SaveDwBranchMemberCountsFromDataStore.new(
+        data_store: data_store
+      ).execute!
+
       # Create daily_branch_metric
       ::Branches::SaveDailyBranchMetric.new(
         branch: branch,

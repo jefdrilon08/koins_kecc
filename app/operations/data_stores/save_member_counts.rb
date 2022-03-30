@@ -1,5 +1,7 @@
 module DataStores
   class SaveMemberCounts
+    attr_accessor :data_store
+
     def initialize(config:)
       @config   = config
       @branch   = @config[:branch]

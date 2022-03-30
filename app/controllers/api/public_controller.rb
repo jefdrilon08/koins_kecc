@@ -1,7 +1,43 @@
 module Api
   class PublicController < ActionController::API
+    def areas
+      areas = Area.select("id, name")
+
+      areas = areas.order("name ASC").map{ |o|
+                {
+                  id: o.id,
+                  name: o.name
+                }
+              }
+
+      render json: { areas: areas }
+    end
+
+    def clusters
+      clusters = Cluster.select("id, name, area_id")
+
+      if params[:area_id].present?
+        clusters = clusters.where(area_id: params[:area_id])
+      end
+
+      clusters  = clusters.order("name ASC").map{ |o|
+                    {
+                      id: o.id,
+                      name: o.name
+                    }
+                  }
+
+      render json: { clusters: clusters }
+    end
+
     def branches
-      branches  = Branch.select("id, name").order("name ASC").map{ |o|
+      branches = ReadOnlyBranch.select("id, name, cluster_id")
+
+      if params[:cluster_id].present?
+        branches = branches.where(cluster_id: params[:cluster_id])
+      end
+
+      branches  = branches.order("name ASC").map{ |o|
                     {
                       id: o.id,
                       name: o.name
