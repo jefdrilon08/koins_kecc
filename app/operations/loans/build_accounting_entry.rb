@@ -245,7 +245,7 @@ module Loans
             amount          = @total_share_paid
             name            = accounting_code.name
             code            = accounting_code.code
-            if @member_data[:entry_point_loan_cycle].to_i
+            if @member_data[:entry_point_loan_cycle].to_i > 1
               if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
