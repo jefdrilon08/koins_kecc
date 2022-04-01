@@ -5720,6 +5720,7 @@ loan_products:
         accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
         amount: 100.00
         max_share: 50
+        skip_sc: true
         deduction_type: "share_capital_fee"
         meta:
   -
