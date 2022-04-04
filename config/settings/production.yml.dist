@@ -38,7 +38,7 @@ branch_config:
     id: "26df15a2-80de-4830-aae4-2f0645c059a3"  #BOCAUE
     #current_date: "2020-09-30"
 #north 1
-	  -
+  -
     id: "c9616310-3076-4e8a-ba6b-722888c423d5"  #NORZAGARAY
     current_date: "2020-09-30"
   -
