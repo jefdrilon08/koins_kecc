@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_29_160736) do
+ActiveRecord::Schema.define(version: 2022_04_05_032133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -643,11 +643,11 @@ ActiveRecord::Schema.define(version: 2022_03_29_160736) do
     t.uuid "area_id", null: false
     t.string "status"
     t.jsonb "data"
-    t.integer "count_male"
-    t.integer "count_female"
     t.integer "total"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "month"
+    t.integer "year"
     t.index ["area_id"], name: "index_dw_branch_new_member_counts_on_area_id"
     t.index ["branch_id"], name: "index_dw_branch_new_member_counts_on_branch_id"
     t.index ["cluster_id"], name: "index_dw_branch_new_member_counts_on_cluster_id"
@@ -668,6 +668,20 @@ ActiveRecord::Schema.define(version: 2022_03_29_160736) do
     t.index ["area_id"], name: "index_dw_branch_par_amounts_on_area_id"
     t.index ["branch_id"], name: "index_dw_branch_par_amounts_on_branch_id"
     t.index ["cluster_id"], name: "index_dw_branch_par_amounts_on_cluster_id"
+  end
+
+  create_table "dw_branch_resigned_member_counts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id", null: false
+    t.uuid "cluster_id", null: false
+    t.uuid "area_id", null: false
+    t.integer "total"
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_dw_branch_resigned_member_counts_on_area_id"
+    t.index ["branch_id"], name: "index_dw_branch_resigned_member_counts_on_branch_id"
+    t.index ["cluster_id"], name: "index_dw_branch_resigned_member_counts_on_cluster_id"
   end
 
   create_table "equity_withdrawal_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -1561,6 +1575,9 @@ ActiveRecord::Schema.define(version: 2022_03_29_160736) do
   add_foreign_key "dw_branch_par_amounts", "areas"
   add_foreign_key "dw_branch_par_amounts", "branches"
   add_foreign_key "dw_branch_par_amounts", "clusters"
+  add_foreign_key "dw_branch_resigned_member_counts", "areas"
+  add_foreign_key "dw_branch_resigned_member_counts", "branches"
+  add_foreign_key "dw_branch_resigned_member_counts", "clusters"
   add_foreign_key "equity_withdrawal_collections", "branches"
   add_foreign_key "equity_withdrawal_collections", "centers"
   add_foreign_key "hiip_claims", "branches"
