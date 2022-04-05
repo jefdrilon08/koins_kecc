@@ -28,7 +28,8 @@ module ExecReports
         count_resigned_female:    0,
         count_resigned_male:      0,
         count_resigned_others:    0,
-        total_resigned:           0
+        total_resigned:           0,
+        total_new:                0
       }
     end
 
@@ -41,6 +42,9 @@ module ExecReports
 
       # Count Loaners
       build_count_loaners!
+
+      # Count New
+      build_count_new_members!
 
       # Count Resigned
       build_count_resigned!
@@ -106,6 +110,37 @@ module ExecReports
     end
 
     private
+
+    def build_count_new_members!
+      dw_branch_new_member_counts = DwBranchNewMemberCount.where(
+        month: @month,
+        year: @year
+      ).order("updated_at DESC")
+
+      if dw_branch_new_member_counts.count > 0
+        if @branch.present?
+          dw_branch_new_member_count = dw_branch_new_member_counts.where(
+            branch_id: @branch.id
+          ).first
+
+          if dw_branch_new_member_count.present?
+            @data[:total_new] = dw_branch_new_member_count.total
+          end
+        elsif @cluster.present?
+          dw_branch_new_member_counts = dw_branch_new_member_counts.where(
+            cluster_id: @cluster.id
+          )
+
+          @data[:total_new] = dw_branch_new_member_counts.sum(:total)
+        elsif @area.present?
+          dw_branch_new_member_counts = dw_branch_new_member_counts.where(
+            area_id: @area.id
+          )
+
+          @data[:total_new] = dw_branch_new_member_counts.sum(:total)
+        end
+      end
+    end
 
     def build_count_resigned!
       dw_branch_member_counts = DwBranchMemberCount.where(
