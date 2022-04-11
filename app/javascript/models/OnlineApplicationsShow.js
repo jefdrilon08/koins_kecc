@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];

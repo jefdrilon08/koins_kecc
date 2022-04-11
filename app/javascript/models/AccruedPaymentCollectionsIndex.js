@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 import 'select2';
 import 'select2-theme-bootstrap4/dist/select2-bootstrap.css';
 var $btnNewTransaction;

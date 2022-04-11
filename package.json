@@ -2,33 +2,29 @@
   "name": "app",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.16.7",
-    "@babel/preset-react": "^7.16.7",
     "@coreui/coreui": "^3.2.0",
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@hotwired/stimulus": "^3.0.1",
+    "@hotwired/turbo-rails": "^7.1.1",
     "@popperjs/core": "^2.11.2",
     "@rails/ujs": "^7.0.0",
     "@rails/webpacker": "^6.0.0-rc.6",
-    "babel-plugin-macros": "^3.1.0",
+    "autoprefixer": "^10.4.4",
     "bootstrap": "^4.3.1",
     "chart.js": "^3.7.0",
-    "css-loader": "^6.5.1",
     "datatables.net-bs4": "^1.11.3",
     "datatables.net-fixedheader-bs4": "^3.2.1",
-    "expose-loader": "^3.1.0",
+    "esbuild": "^0.14.34",
     "jquery": "^3.6.0",
-    "mini-css-extract-plugin": "^2.4.5",
     "moment": "^2.29.1",
     "mustache": "^4.2.0",
     "pdfmake": "^0.2.4",
     "perfect-scrollbar": "^1.5.3",
     "popper.js": "^1.16.1",
-    "postcss": "^8.4.5",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "postcss-import": "^14.0.2",
-    "postcss-loader": "^6.2.1",
-    "postcss-preset-env": "^7.2.0",
-    "prop-types": "^15.8.1",
+    "postcss": "^8.4.12",
+    "postcss-cli": "^9.1.0",
+    "postcss-import": "^14.1.0",
+    "postcss-nesting": "^10.1.4",
     "react": "^17.0.2",
     "react-accessible-accordion": "^4.0.0",
     "react-collapsible": "^2.8.4",
@@ -39,28 +35,16 @@
     "react-select": "^5.2.1",
     "react-table": "^7.7.0",
     "react-toggle": "^4.1.2",
-    "sass": "^1.45.2",
-    "sass-loader": "^12.4.0",
     "select2": "^4.1.0-rc.0",
-    "select2-theme-bootstrap4": "^1.0.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.53.0",
-    "webpack-cli": "^4.8.0"
+    "select2-theme-bootstrap4": "^1.0.0"
   },
   "version": "0.1.0",
-  "babel": {
-    "presets": [
-      "./node_modules/@rails/webpacker/package/babel/preset.js"
-    ]
-  },
   "browserslist": [
     "defaults"
   ],
-  "devDependencies": {
-    "@webpack-cli/serve": "^1.6.0",
-    "webpack-dev-server": "^4.7.2"
-  },
+  "devDependencies": {},
   "scripts": {
-    "build": "cp config/settings/production.yml.dist config/settings/production.yml"
+    "build:css": "postcss ./app/assets/stylesheets/application.postcss.css -o ./app/assets/builds/application.css --no-source-map --load-path=node_modules",
+    "build": "esbuild app/javascript/packs/*.* --bundle --loader:.js=jsx --sourcemap --outdir=app/assets/builds"
   }
 }

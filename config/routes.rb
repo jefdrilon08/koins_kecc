@@ -1,6 +1,8 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
+  root to: "pages#index"
+
   devise_for :users, skip: [:sessions]
 
   as :user do
@@ -79,8 +81,6 @@ Rails.application.routes.draw do
   get "/exports/member_accounts", to: "exports#member_accounts", as: :export_member_accounts
   get "/exports/account_transactions", to: "exports#account_transactions", as: :export_account_transactions
   get "/exports/billing_per_center", to: "exports#billing_per_center", as: :export_billing_per_center
-
-  root to: "pages#index"
   
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members

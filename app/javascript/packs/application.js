@@ -13,8 +13,6 @@ import "@fortawesome/fontawesome-free/js/all";
 
 import '@coreui/coreui';
 
-import "../stylesheets/application.scss";
-
 // React Components
 import DashboardMainUI from "../components/dashboard/MainUI";
 import MembersFormDisplay from "../components/members/FormDisplay";

@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 import 'select2';
 import 'select2-theme-bootstrap4/dist/select2-bootstrap.css';
 
@@ -417,7 +417,6 @@ var _bindEvents = function() {
     $inputBeneficiaryRelationship.prop("disabled", true);
 
     var data = {
-      active_loan_ids: activeLoanIds,
       loan_product_id: loanProductId,
       co_maker: coMaker,
       co_maker_id: coMakerId,
