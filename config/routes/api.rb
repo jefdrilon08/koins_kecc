@@ -4,6 +4,8 @@ namespace :api do
   post "/status_check", to: "public#status_check"
   get "/public/branches", to: "public#branches"
   get "/public/centers", to: "public#centers"
+  get "/public/clusters", to: "public#clusters"
+  get "/public/areas", to: "public#areas"
 
   # Users
   post "/users/login", to: "users#login"
@@ -33,6 +35,9 @@ namespace :api do
   get "/announcements", to: "announcements#index"
   post "/announcements", to: "announcements#create"
   get "/announcements/:id", to: "announcements#show"
+
+  # Exec Reports
+  get "/exec_reports/psr_query", to: "exec_reports#psr_query"
   
   namespace :members do
     # Loans

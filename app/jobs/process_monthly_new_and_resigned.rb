@@ -29,6 +29,15 @@ class ProcessMonthlyNewAndResigned < ApplicationJob
         data: data_result,
         status: "done"
       )
+
+      # Save DwBranchNewMemberCount
+      ::DataWarehouse::SaveDwBranchNewAndResignedMemberCountFromMonthlyNewAndResigned.new(
+        branch: branch,
+        year: year,
+        month: month,
+        data: data_result
+      ).execute!
+
     rescue Exception => e
       record.update!(
         status: "error",

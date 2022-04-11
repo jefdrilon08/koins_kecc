@@ -22,8 +22,23 @@ class ProcessRepaymentRates < ApplicationJob
       # Create daily_branch_metric
       ::Branches::SaveDailyBranchMetric.new(
         branch: branch,
-        as_of: as_of
+        as_of:  as_of
       ).execute!
+
+      # Create DwBranchActiveLoanCount
+      ::DataWarehouse::SaveDwBranchActiveLoanCount.new(
+        branch: branch,
+        as_of:  as_of
+      ).execute!
+
+      # Create DwBranchLoanProductActiveLoanCount per Loan Product
+      LoanProduct.all.each do |loan_product|
+        ::DataWarehouse::SaveDwBranchLoanProductActiveLoanCount.new(
+          branch:       branch,
+          as_of:        as_of,
+          loan_product: loan_product
+        ).execute!
+      end
 
     rescue Exception => e
       record.update!(
