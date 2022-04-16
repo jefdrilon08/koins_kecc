@@ -61,7 +61,7 @@
   transition: all 0.4s ease;
 }
 
-.sidebar .nav-links li:hover{
+.sidebar .nav-links li:hover,li.active{
   background: $secondary-color;
 }
 

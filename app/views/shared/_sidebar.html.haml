@@ -5,7 +5,7 @@
       %span.logo-name
         KOINS
   %ul.nav-links
-    %li
+    %li{ class: "#{params[:controller] == 'pages' and params[:action] == 'index' ? 'active' : ''}" }
       = link_to root_path, class: "" do
         %i.bi.bi-speedometer
         %span.link-name
