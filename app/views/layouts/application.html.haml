@@ -16,13 +16,11 @@
     - else
       = favicon_link_tag "logo_thumb.png"
 
-  %body.c-app
-    = render partial: "shared/c_sidebar"
-    .c-wrapper
-      = render partial: "shared/header"
-      .c-body
-        %main.c-main
-          .container-fluid
-            = yield
+  %body
+    = render partial: "shared/sidebar"
+    %section.main-section
+      = render partial: "shared/top_navigation"
+      .container-fluid.main-wrapper
+        = yield
     = render partial: "templates/error_list"
     = render partial: "templates/loader"

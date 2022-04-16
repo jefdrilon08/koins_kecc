@@ -1,22 +1,12 @@
-.sidebar
-  %nav.sidebar-nav.open
-    %ul.nav
-      = render partial: "shared/sidebar_dashboard"
-      %li.nav-item
-        = link_to members_path, class: "nav-link #{params[:controller] == 'members' ? 'active' : ''}" do
-          %i.nav-icon.fa.fa-users
-          Members
-      - if microloans?  
-        %li.nav-item
-          = link_to loans_path, class: "nav-link #{params[:controller] == 'loans' ? 'active' : ''}" do
-            %i.nav-icon.fa.fa-money-check
-            Loans
-      = render partial: "shared/sidebar_transactions"
-      - if ["OJT"].exclude? current_user.roles.last    
-        = render partial: "shared/sidebar_accounts"
-        = render partial: "shared/sidebar_accounting"
-        = render partial: "shared/sidebar_microinsurance"
-        = render partial: "shared/sidebar_administration"
-        = render partial: "shared/sidebar_data_stores"
-        = render partial: "shared/sidebar_adjustments"
-        = render partial: "shared/sidebar_monitoring"
+.sidebar.close
+  = link_to root_path do
+    .logo-details
+      %i.bi.bi-house-door
+      %span.logo-name
+        KOINS
+  %ul.nav-links
+    %li
+      = link_to root_path, class: "" do
+        %i.bi.bi-speedometer
+        %span.link-name
+          Operations

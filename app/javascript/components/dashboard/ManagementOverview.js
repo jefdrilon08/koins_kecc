@@ -65,8 +65,9 @@ export default class ManagementOverview extends React.Component {
     var colSpan = 12;
 
     var areaColor     = "#bad5fd";
-    var clusterColor  = "#c5ffc1";
+    var totalColor    = "#c5ffc1";
     var branchColor   = "#797979";
+    var clusterColor  = "#f3b9b9";
 
     var tPrincipal        = 0.00;
     var tPrincipalPaid    = 0.00;
@@ -271,7 +272,7 @@ export default class ManagementOverview extends React.Component {
         var cPar              = (cParAmount / cPortfolio);
 
         rows.push(
-          <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: clusterColor}}>
+          <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: totalColor}}>
             <td>
               <strong>
                 {clusters[j].name} Total
@@ -505,9 +506,9 @@ export default class ManagementOverview extends React.Component {
     } else {
       return (
         <div>
-          <h4>
+          <h2>
             Overview
-          </h4>
+          </h2>
           <div className="row">
             <div className="col-md-10 col-xs-12">
               <div className="form-group">
@@ -521,18 +522,19 @@ export default class ManagementOverview extends React.Component {
               </div>
             </div>
             <div className="col-md-2 col-xs-12">
-              <div className="form-group">
+              <div className="d-grid gap-2">
                 <button 
-                  className="btn btn-info btn-block"
+                  className="btn btn-primary btn-block"
                   disabled={this.state.isFetching}
                   onClick={this.handleSyncClicked.bind(this)}
                 >
-                  <span className="fa fa-sync"/>
+                  <span className="bi bi-arrow-repeat"/>
                   Sync
                 </button>
               </div>
             </div>
           </div>
+          <hr/>
           {this.renderOverviewTable()}
         </div>
       );

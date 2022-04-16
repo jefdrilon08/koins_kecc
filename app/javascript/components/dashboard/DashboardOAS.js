@@ -7,9 +7,6 @@ import SkCubeLoading from '../SkCubeLoading';
 import {numberAsPercent, numberWithCommas} from '../utils/helpers';
 import {Accordion, AccordionItem,AccordionItemHeading,AccordionItemButton,AccordionItemPanel}from 'react-accessible-accordion';
 
-
-
-
 const customStyles = {
   content : {
     top                   : '50%',
@@ -201,14 +198,17 @@ export default class DashboardOAS extends React.Component {
               Actions
             </label>
             <br/>
-            <button
-              className="btn btn-primary btn-block"
-              onClick={this.handleSyncClicked.bind(this)}
-              disabled={this.state.isLoading}
-            >
-              <span className="fa fa-sync"/>
-              Sync
-            </button>
+            <div className="d-grid gap-2">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={this.handleSyncClicked.bind(this)}
+                disabled={this.state.isLoading}
+              >
+                <span className="bi bi-arrow-repeat"/>
+                Sync
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -242,12 +242,6 @@ export default class DashboardOAS extends React.Component {
             <td className="text-center">
               {e.active_loans}
             </td>
-            {/*<td className="text-right">
-              {numberWithCommas(e.principal)}
-            </td>
-            <td className="text-right">
-              {numberWithCommas(e.principal_paid)}
-            </td>*/}
             <td className="text-right">
               {numberWithCommas(e.portfolio)}
             </td>
@@ -315,12 +309,6 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     Active Loans
                   </th>
-                  {/*<th className="text-right">
-                    Principal
-                  </th>
-                  <th className="text-right">
-                    Principal Paid
-                  </th>*/}
                   <th className="text-right">
                     Portfolio
                   </th>
@@ -349,12 +337,6 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     {o.total_active_loans}
                   </th>
-                 {/* <th className="text-right">
-                    {numberWithCommas(o.total_principal)}
-                  </th>
-                  <th className="text-right">
-                    {numberWithCommas(o.total_principal_paid)}
-                  </th>*/}
                   <th className="text-right">
                     {numberWithCommas(o.total_portfolio)}
                   </th>
@@ -914,6 +896,7 @@ export default class DashboardOAS extends React.Component {
     return  (
       <div>
         {this.renderControls()}
+        <hr/>
         {this.renderBranchLoansStats()} 
         {this.renderMemberCounts()}
         {this.renderWatchlist()}

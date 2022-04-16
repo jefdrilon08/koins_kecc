@@ -4,7 +4,18 @@
 @import "bootstrap-icons/font/bootstrap-icons";
 @import "select2/dist/css/select2";
 
+// Local imports
+@import "./variables";
+@import "./sidebar";
 @import "./login";
 @import "./sk-cube-grid";
 @import "./member";
 
+.main-wrapper {
+  padding-top: 14px;
+}
+
+.navbar, .navbar i {
+  color: $nav-text-color;
+  font-weight: 400;
+}

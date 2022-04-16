@@ -394,4 +394,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     })
   }
+
+  // SIDEBAR JS
+  let arrow = document.querySelectorAll(".arrow");
+  arrow.forEach((o, i) => {
+    let arrowParent = e.target.parentElement.parentElement;
+    arrowParent.classList.toggle("show-menu");
+  });
+
+  let sidebar     = document.querySelector(".sidebar");
+  let sidebarBtn  = document.querySelector(".bi-menu");
+
+  sidebarBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("close");
+  });
 });
