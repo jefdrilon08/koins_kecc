@@ -15,7 +15,20 @@
   padding-top: 14px;
 }
 
-.navbar, .navbar i {
+.navbar, .navbar i, .navbar-light .navbar-nav .nav-link {
   color: $nav-text-color;
   font-weight: 400;
 }
+
+.navbar-light .navbar-nav .nav-link:hover {
+  color: #ebebeb;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+label {
+  font-weight: 600;
+}
+

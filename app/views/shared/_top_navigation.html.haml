@@ -2,3 +2,4 @@
   .container-fluid
     = link_to "#", class: "navbar-brand" do
       %i.bi.bi-menu.bi-list
+    = render partial: "shared/subheader", locals: { side_actions: @subheader_side_actions  || [] }

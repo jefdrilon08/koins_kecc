@@ -67,7 +67,7 @@ export default class ManagementOverview extends React.Component {
     var areaColor     = "#bad5fd";
     var totalColor    = "#c5ffc1";
     var branchColor   = "#797979";
-    var clusterColor  = "#f3b9b9";
+    var clusterColor  = "#f3cf99";
 
     var tPrincipal        = 0.00;
     var tPrincipalPaid    = 0.00;
