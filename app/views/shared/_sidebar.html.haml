@@ -24,5 +24,9 @@
             Members
         %li
           = link_to "#", class: "" do
-            %i.bi.bi-plus.sub-icon
+            %i.bi.bi-plus
             New Member
+        %li
+          = link_to members_path(status: "pending"), class: "" do
+            %i.bi.bi-exclamation
+            Pending Members
