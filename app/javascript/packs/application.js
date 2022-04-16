@@ -11,8 +11,6 @@ import 'bootstrap';
 
 import "@fortawesome/fontawesome-free/js/all";
 
-import '@coreui/coreui';
-
 // React Components
 import DashboardMainUI from "../components/dashboard/MainUI";
 import MembersFormDisplay from "../components/members/FormDisplay";

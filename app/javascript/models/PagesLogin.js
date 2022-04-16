@@ -91,6 +91,7 @@ var _toggleInput = function() {
     $btnLogin.html($btnLogin.data('original-text'));
   }
 };
+
 var init  = function() {
   _cacheDom();
   _bindEvents();

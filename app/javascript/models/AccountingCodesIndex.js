@@ -1,5 +1,3 @@
-import 'datatables.net-bs4';
-
 var $dataTable;
 
 var init  = function() {
