@@ -242,13 +242,13 @@ export default class DashboardOAS extends React.Component {
             <td className="text-center">
               {e.active_loans}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(e.portfolio)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(e.principal_past_due_amount)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(e.par_amount)}
             </td>
             <td className="text-center">
@@ -309,13 +309,13 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     Active Loans
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     Portfolio
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     Past Due Amount
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     Par Amount
                   </th>
                   <th className="text-center">
@@ -337,13 +337,13 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     {o.total_active_loans}
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     {numberWithCommas(o.total_portfolio)}
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     {numberWithCommas(o.total_principal_past_due_amount)}
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     {numberWithCommas(o.total_par_amount)}
                   </th>
                   <th className="text-center">
@@ -554,13 +554,13 @@ export default class DashboardOAS extends React.Component {
             <td>
               {o.records[i].loan_product.name}
 	    </td>
-	    <td className="text-right">
+	    <td className="text-end">
               {numberWithCommas(o.records[i].principal_balance)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(o.records[i].interest_balance)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(o.records[i].total_balance)}
               </strong>
@@ -576,13 +576,13 @@ export default class DashboardOAS extends React.Component {
           <th colSpan="4">
             GRAND TOTAL ({o.records.length}) 
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(totalPrincipalBalance)}
 	  </th>
-	  <th className="text-right">
+	  <th className="text-end">
             {numberWithCommas(totalInterestBalance)}
           </th>
- 	  <th className="text-right">
+ 	  <th className="text-end">
             {numberWithCommas(totalPastDue)}
           </th>
  
@@ -617,13 +617,13 @@ export default class DashboardOAS extends React.Component {
                   <th>
                     Loan Product
                   </th>
-		  <th className="text-right">
+		  <th className="text-end">
                     Past Due Amount - Principal
                   </th>
- 	          <th className="text-right">
+ 	          <th className="text-end">
                     Past Due Amount - Interest
                   </th>
-		  <th className="text-right">
+		  <th className="text-end">
                     Total Past Due
                   </th>
                 </tr>

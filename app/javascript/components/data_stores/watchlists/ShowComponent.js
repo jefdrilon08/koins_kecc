@@ -143,13 +143,13 @@ export default class ShowComponent extends React.Component {
             <td>
               {records[i].loan_product.name}
             </td>
-	    <td className="text-right">
+	    <td className="text-end">
               {numberWithCommas(records[i].principal_balance)}
             </td>
-	    <td className="text-right">
+	    <td className="text-end">
               {numberWithCommas(records[i].interest_balance)}
             </td>
-	    <td className="text-right">
+	    <td className="text-end">
               {numberWithCommas(records[i].total_balance)}
             </td>
           </tr>
@@ -164,9 +164,9 @@ export default class ShowComponent extends React.Component {
         <th colSpan="4">
           GRAND TOTAL ({x}) 
         </th>
-        <th className="text-right">{numberWithCommas(totalPrincipalBalance)}</th>
-	<th className="text-right">{numberWithCommas(totalInterestBalance)}</th>
-	<th className="text-right">
+        <th className="text-end">{numberWithCommas(totalPrincipalBalance)}</th>
+	<th className="text-end">{numberWithCommas(totalInterestBalance)}</th>
+	<th className="text-end">
           {numberWithCommas(totalPastDue)}
         </th>
       </tr>
@@ -316,14 +316,14 @@ export default class ShowComponent extends React.Component {
                 <th>
                   Loan Product
                 </th>
-		<th className="text-right">
+		<th className="text-end">
                   Past Due Amount - Principal
                 </th>
- 		<th className="text-right">
+ 		<th className="text-end">
                   Past Due Amount - Interest
                 </th>
  
-		<th className="text-right">
+		<th className="text-end">
                   Past Due Amount - Total
                 </th>
               </tr>

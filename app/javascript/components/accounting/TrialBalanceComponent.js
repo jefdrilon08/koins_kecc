@@ -226,22 +226,22 @@ export default class TrialBalanceComponent extends React.Component {
               {entry.name} 
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(entry.beginning_debit)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(entry.beginning_credit)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(entry.current_debit)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(entry.current_credit)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(entry.ending_debit)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(entry.ending_credit)}
           </td>
         </tr>
@@ -259,22 +259,22 @@ export default class TrialBalanceComponent extends React.Component {
               <th>
                 Accounting Name
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Beginning DR
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Beginning CR
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Current DR
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Current CR
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Ending DR
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Ending CR
               </th>
             </tr>

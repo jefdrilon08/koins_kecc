@@ -10,9 +10,9 @@
       %th
         %center
           Due Date
-      %th.text-right
+      %th.text-end
         Amount Due
-      %th.text-right
+      %th.text-end
         Running Balance
       - if @loan.active?
         %th
@@ -39,9 +39,9 @@
             %strong
               - if o.due_date
                 #{o.due_date.strftime("%b %d, %Y")}
-        %td.text-right.text-muted
+        %td.text-end.text-muted
           #{number_to_currency(o.amount_due, unit: "")}
-        %td.text-right
+        %td.text-end
           - running_balance = (running_balance - o.total_paid)
           = number_to_currency(running_balance, unit: "")
         - if @loan.active?
@@ -58,10 +58,10 @@
         %center
           %strong
             Total
-      %td.text-right
+      %td.text-end
         %strong
           #{number_to_currency(@loan.total_dues, unit: "")}
-      %td.text-right
+      %td.text-end
         %strong
           #{number_to_currency(running_balance, unit: "")}
       - if @loan.active?

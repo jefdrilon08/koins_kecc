@@ -49,17 +49,17 @@ export default class GeneralLedgerComponent extends React.Component {
               {entries[i].particular}
             </small>
           </td>
-          <td className="text-right" width={"8%"}>
+          <td className="text-end" width={"8%"}>
             <small>
               {this.numberWithCommas(entries[i].dr_amount)}
             </small>
           </td>
-          <td className="text-right" width={"8%"}>
+          <td className="text-end" width={"8%"}>
             <small>
               {this.numberWithCommas(entries[i].cr_amount)}
             </small>
           </td>
-          <td className="text-right text-muted" width={"10%"}>
+          <td className="text-end text-muted" width={"10%"}>
             {this.numberWithCommas(entries[i].running_balance)}
           </td>
         </tr>
@@ -93,13 +93,13 @@ export default class GeneralLedgerComponent extends React.Component {
               </th>
               <th width="50%">
               </th>
-              <th className="text-right" width="8%">
+              <th className="text-end" width="8%">
                 Debit
               </th>
-              <th className="text-right" width="8%">
+              <th className="text-end" width="8%">
                 Credit
               </th>
-              <th className="text-right" width="10%">
+              <th className="text-end" width="10%">
                 {this.numberWithCommas(this.props.data.beginning_balance)}
               </th>
             </tr>
@@ -112,13 +112,13 @@ export default class GeneralLedgerComponent extends React.Component {
               <th colspan={5}>
                 Ending for {this.props.data.accounting_code_name}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {this.numberWithCommas(currentDrSum)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {this.numberWithCommas(currentCrSum)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {this.numberWithCommas(this.props.data.ending_balance)}
               </th>
             </tr>

@@ -5,7 +5,7 @@
         %strong
           Pending
       .col-md-6
-        .text-right
+        .text-end
           .text-muted
             .fa.fa-store
             #{accounting_entry[:branch].to_s} - #{accounting_entry[:book].to_s}
@@ -14,16 +14,16 @@
       %tr
         %th{ width: "50%" }
           Accounting Code
-        %th.text-right{ width: "25%" }
+        %th.text-end{ width: "25%" }
           Debit
-        %th.text-right{ width: "25%" }
+        %th.text-end{ width: "25%" }
           Credit
       - accounting_entry[:journal_entries].each do |o|
         - if o[:post_type] == "DR"
           %tr
             %td
               #{o[:accounting_code_name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:amount], unit: "")}
             %td
       - accounting_entry[:journal_entries].each do |o|
@@ -32,7 +32,7 @@
             %td
               #{o[:accounting_code_name]}
             %td
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:amount], unit: "")}
     %hr
     - if @data[:status] == "active"
@@ -76,7 +76,7 @@
               %p
                 #{accounting_entry[:particular]}
         .col-md-4
-          %p.text-right
+          %p.text-end
             %label
               %strong
                 Approved By:

@@ -5,7 +5,7 @@
   %tr
     %th
       Accounting Code
-    %th.text-right{ width: "25%" }
+    %th.text-end{ width: "25%" }
       Amount
   - @data[:assets].each do |o|
     %tr
@@ -13,12 +13,12 @@
         #{o[:accounting_code][:code]} 
         %span.text-muted
           #{o[:accounting_code][:name]}
-      %td.text-right
+      %td.text-end
         #{number_to_currency(o[:amount], unit: "")}
   %tr
     %th
       Total Assets
-    %th.text-right
+    %th.text-end
       #{number_to_currency(@data[:total_assets], unit: '')}
   %tr
     %th{ colspan: 2 }
@@ -26,7 +26,7 @@
   %tr
     %th
       Accounting Code
-    %th.text-right{ width: "25%" }
+    %th.text-end{ width: "25%" }
       Amount
   - @data[:liabilities].each do |o|
     %tr
@@ -34,12 +34,12 @@
         #{o[:accounting_code][:code]} 
         %span.text-muted
           #{o[:accounting_code][:name]}
-      %td.text-right
+      %td.text-end
         #{number_to_currency(o[:amount], unit: "")}
   %tr
     %th
       Total Liabilities
-    %th.text-right
+    %th.text-end
       #{number_to_currency(@data[:total_liabilities], unit: '')}
   %tr
     %th{ colspan: 2 }
@@ -47,7 +47,7 @@
   %tr
     %th
       Accounting Code
-    %th.text-right{ width: "25%" }
+    %th.text-end{ width: "25%" }
       Amount
   - @data[:equities].each do |o|
     %tr
@@ -55,17 +55,17 @@
         #{o[:accounting_code][:code]} 
         %span.text-muted
           #{o[:accounting_code][:name]}
-      %td.text-right
+      %td.text-end
         #{number_to_currency(o[:amount], unit: "")}
   %tr
     %th
       Total Equities
-    %th.text-right
+    %th.text-end
       #{number_to_currency(@data[:total_equities], unit: '')}
   %tr
     %th
       Net Income
-    %td.text-right
+    %td.text-end
       #{number_to_currency(@net_income, unit: "")}
   - if @statutory_funds_beginning.present?
     %tr
@@ -74,7 +74,7 @@
     %tr
       %th
         Accounting Code
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         Amount
     - total_equities_on_share_capital = 0.00
     - @data[:equities].each do |o|
@@ -84,14 +84,14 @@
             #{o[:accounting_code][:code]} 
             %span.text-muted
               #{o[:accounting_code][:name]}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o[:amount], unit: "")}
         - total_equities_on_share_capital += o[:amount].to_f.round(2)
     %tr
-      %td.text-right
+      %td.text-end
         %b
           Total Share Capital
-      %td.text-right
+      %td.text-end
         %b
           #{number_to_currency(total_equities_on_share_capital, unit: "")}
     / Statutory Funds beginning
@@ -99,14 +99,14 @@
       %td
         %b
           Statutory Funds, Beg
-      %td.text-right
+      %td.text-end
         #{number_to_currency(@statutory_funds_beginning[:amount], unit: '')}
     / Statutory Funds from income
     %tr
       %td
         %b
           Statutory Funds, Current
-      %td.text-right
+      %td.text-end
         #{number_to_currency(@net_income, unit: '')}
     / Statutory Funds end
     - if @statutory_funds_beginning.present?
@@ -114,18 +114,18 @@
         %td
           %b
             Statutory Funds, End
-        %td.text-right
+        %td.text-end
           #{number_to_currency(@statutory_funds_beginning[:amount].to_f + @net_income, unit: '')}
     %tr
-      %th.text-right
+      %th.text-end
         Total Equity
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@data[:total_equities].to_f + @net_income, unit: '')}
   %tr
     %td
       %b
         TOTAL LIABILITIES AND EQUITY
-    %td.text-right
+    %td.text-end
       %b
         #{number_to_currency(@data[:total_equities].to_f + @net_income + @data[:total_liabilities], unit: '')}
   - if @data[:fund_balance].any?
@@ -138,10 +138,10 @@
           #{o[:accounting_code][:code]} 
           %span.text-muted
             #{o[:accounting_code][:name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: "")}
     %tr
       %th
         Total Fund Balance
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@data[:total_fund_balance], unit: '')}

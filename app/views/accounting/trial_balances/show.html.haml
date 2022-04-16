@@ -11,17 +11,17 @@
                   Accounting Code
                 %th
                   Accounting Name
-                %th.text-right
+                %th.text-end
                   Beginning DR
-                %th.text-right
+                %th.text-end
                   Beginning CR
-                %th.text-right
+                %th.text-end
                   Current DR
-                %th.text-right
+                %th.text-end
                   Current CR
-                %th.text-right
+                %th.text-end
                   Ending DR
-                %th.text-right
+                %th.text-end
                   Ending CR
             %tbody
               - @data["entries"].each do |o|
@@ -32,17 +32,17 @@
                   %td
                     %strong
                       #{o["name"]}
-                  %td.text-right
+                  %td.text-end
                     = number_to_currency(o["beginning_debit"], unit: "")
-                  %td.text-right
+                  %td.text-end
                     = number_to_currency(o["beginning_credit"], unit: "")
-                  %td.text-right
+                  %td.text-end
                     = number_to_currency(o["current_debit"], unit: "")
-                  %td.text-right
+                  %td.text-end
                     = number_to_currency(o["current_credit"], unit: "")
-                  %td.text-right
+                  %td.text-end
                     = number_to_currency(o["ending_debit"], unit: "")
-                  %td.text-right
+                  %td.text-end
                     = number_to_currency(o["ending_credit"], unit: "")
 
 = render partial: "accounting/trial_balances/modals/delete"

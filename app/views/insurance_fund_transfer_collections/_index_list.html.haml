@@ -12,7 +12,7 @@
         Collection Date
       %th
         Branch
-      %th.text-right
+      %th.text-end
         Amount Collected
       %th
         %center
@@ -47,7 +47,7 @@
               #{o.collection_date.strftime("%b %d, %Y")}
         %td
           #{o.branch}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o.total_collected, unit: "")}
         %td

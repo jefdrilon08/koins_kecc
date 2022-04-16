@@ -5,15 +5,15 @@
         %tr
           %th{ width: "50%" }
             Accounting Code
-          %th.text-right{ widith: "25%" }
+          %th.text-end{ widith: "25%" }
             Debit
-          %th.text-right{ widith: "25%" }
+          %th.text-end{ widith: "25%" }
             Credit
       %tbody
         %tr
           %th
             #{@data[:net_entry][:accounting_code][:name]}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(@data[:net_entry][:debit], unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(@data[:net_entry][:credit], unit: "")}

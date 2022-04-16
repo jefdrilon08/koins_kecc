@@ -7,7 +7,7 @@
         Account
       %th.text-center
         Adjustment
-      %th.text-right
+      %th.text-end
         Amount
       - if @adjustment_record.pending?
         %th.text-center
@@ -30,7 +30,7 @@
             .badge.badge-danger
               .fa.fa-minus
               Deduct
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: '')}
         - if @adjustment_record.pending?
           %td.text-center

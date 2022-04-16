@@ -6,7 +6,7 @@
           Date
       %th
         Approved By
-      %th.text-right
+      %th.text-end
         Amount
       %th{ width: "50%" }
         Amortization
@@ -27,7 +27,7 @@
               %hr
               #{o.id}
               %hr
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o.amount, unit: "")}
         %td
@@ -37,11 +37,11 @@
                 %th
                   %center
                     Date
-                %th.text-right
+                %th.text-end
                   Principal Paid
-                %th.text-right
+                %th.text-end
                   Interest Paid
-                %th.text-right
+                %th.text-end
                   Total
             %tbody
               - o.data.with_indifferent_access[:amort_entries].each do |a|
@@ -51,15 +51,15 @@
                       %strong
                         %small
                           #{a[:due_date].to_date.strftime("%b %d, %Y")}
-                  %td.text-right
+                  %td.text-end
                     .text-muted
                       %small
                         #{number_to_currency(a[:principal_paid], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     .text-muted
                       %small
                         #{number_to_currency(a[:interest_paid], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     .text-muted
                       %small
                         #{number_to_currency(a[:interest_paid].to_f + a[:principal_paid].to_f, unit: "")}

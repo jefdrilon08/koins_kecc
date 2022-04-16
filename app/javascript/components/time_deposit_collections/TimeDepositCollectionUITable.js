@@ -132,7 +132,7 @@ export default class TimeDepositCollectionUITable extends React.Component {
       for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
         var paymentRecord = this.props.data.data.records[i].records[j];
         components.push(
-          <td key={"na-" + member.id + "-" + j} className="text-right">
+          <td key={"na-" + member.id + "-" + j} className="text-end">
             {numberWithCommas(paymentRecord.amount)}
             <div className="text-muted">
               <small>
@@ -144,7 +144,7 @@ export default class TimeDepositCollectionUITable extends React.Component {
       }
 
       components.push(
-        <td key={"c-member-total-" + member.id} className="text-right">
+        <td key={"c-member-total-" + member.id} className="text-end">
           <strong>
             {numberWithCommas(this.props.data.data.records[i].total_collected)}
           </strong>
@@ -175,7 +175,7 @@ export default class TimeDepositCollectionUITable extends React.Component {
     var totals  = this.props.data.data.totals;
     for(var i = 0; i < totals.length; i++) {
       records.push(
-        <td key={"total-time-deposit-payment-" + i} className="text-right">
+        <td key={"total-time-deposit-payment-" + i} className="text-end">
           <strong>
             {numberWithCommas(totals[i].amount)}
           </strong>
@@ -184,7 +184,7 @@ export default class TimeDepositCollectionUITable extends React.Component {
     }
 
     records.push(
-      <td key="grand-total" className="text-right">
+      <td key="grand-total" className="text-end">
         <div className="badge badge-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}

@@ -8,7 +8,7 @@
           Loan Product
         %th
           Principal
-      %th.text-right
+      %th.text-end
         Amount
       - if @savings_insurance_transfer_collection.pending?
         %th.text-center
@@ -24,7 +24,7 @@
             #{o[:clip_data][:loan_product_name]}
           %td
             #{number_to_currency(o[:clip_data][:principal], unit: '')}  
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: '')}
         - if @savings_insurance_transfer_collection.pending?
           %td.text-center
@@ -36,7 +36,7 @@
       - if @savings_insurance_transfer_collection.clip
         %th
         %th
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@savings_insurance_transfer_collection.total_amount, unit: '')}
       - if @savings_insurance_transfer_collection.pending?
         %th

@@ -6,7 +6,7 @@
           .col
             %h2
               #{@survey.name}
-          .col.text-right
+          .col.text-end
             .btn-group
               = link_to edit_administration_survey_path(@survey), class: 'btn' do
                 .fa.fa-pencil-alt
@@ -27,7 +27,7 @@
                   &nbsp;
                   Priority: #{o.priority}
             .col
-              .text-right
+              .text-end
                 .btn-group
                   = link_to administration_survey_survey_question_form_path(@survey, survey_question_id: o), class: "btn" do
                     .fa.fa-pencil-alt

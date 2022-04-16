@@ -83,13 +83,13 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
               {records[i].accounting_code.name}
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].accounting_entry_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].subsidiary_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].diff)}
           </td>
         </tr>
@@ -111,13 +111,13 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
               {records[i].accounting_code.name}
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].accounting_entry_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].subsidiary_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].diff)}
           </td>
         </tr>
@@ -144,13 +144,13 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
                 <th>
                   Loan Product
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Trial Balance
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Subsidiary Ledger
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   DIFF
                 </th>
               </tr>
@@ -168,13 +168,13 @@ export default class AccountingEntrySubsidiaryBalancingComponent extends React.C
                 <th>
                   Account
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   General Ledger
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Personal Funds
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   DIFF
                 </th>
               </tr>

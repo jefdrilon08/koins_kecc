@@ -42,11 +42,11 @@
           PN Number
         %th
           Loan Product
-        %th.text-right
+        %th.text-end
           Principal Balance
-        %th.text-right
+        %th.text-end
           Interest Balance
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @loan.data["restructured_loans"].each do |rl|
@@ -56,11 +56,11 @@
               #{rl.fetch("pn_number")}
           %td
             #{rl["loan_product"]["name"]}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rl.fetch("principal_balance"), unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rl.fetch("interest_balance"), unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rl.fetch("total_balance"), unit: "")}
 
 
@@ -74,11 +74,11 @@
           PN Number
         %th
           Loan Product
-        %th.text-right
+        %th.text-end
           Principal Balance
-        %th.text-right
+        %th.text-end
           Interest Balance
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @loan.data["new_restructured_loans"].each do |rl|
@@ -88,16 +88,16 @@
               #{rl.fetch("pn_number")}
           %td
             #{rl["loan_product"]["name"]}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rl.fetch("principal_balance"), unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rl.fetch("k_sagip_interest_balance"), unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rl.fetch("principal_balance").to_f + rl.fetch("k_sagip_interest_balance").to_f, unit: "") }
       %tr
         %th{colspan: "4"}
           Total
-        %td.text-right
+        %td.text-end
           #{number_to_currency(@loan.data["new_restructured_loans"].sum{ |a| a["principal_balance"].to_f }, unit: "") }
             
   

@@ -29,16 +29,16 @@ export default class MemberRecord extends React.Component {
           <td className="">
             {records[i].date}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].beginning_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].deposits)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].withdrawals)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(records[i].ending_balance)}
           </td>
         </tr>
@@ -53,7 +53,7 @@ export default class MemberRecord extends React.Component {
             Interest Earned
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(this.state.data.interest)}
           </strong>
@@ -82,7 +82,7 @@ export default class MemberRecord extends React.Component {
             </h4>
           </div>
           <div className="col">
-            <div className="text-right">
+            <div className="text-end">
               <a href={"/savings_accounts/" + this.state.data.member_account.id} target='_blank'>
                 Go to Account
               </a>
@@ -96,16 +96,16 @@ export default class MemberRecord extends React.Component {
               <th>
                 Date
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Beginning Balance
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Deposit
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Withdrawals
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Ending Balance
               </th>
             </tr>

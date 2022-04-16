@@ -94,7 +94,7 @@
                 %th
                   %center
                     Date Posted
-                %th.text-right
+                %th.text-end
                   Amount
                 %th
                   %center
@@ -135,16 +135,16 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
-                %th.text-right
+                %th.text-end
                   Equity Value
                 - if microinsurance?
-                  %th.text-right
+                  %th.text-end
                     Equity Value Interest 
             %tbody
               - @account_transactions.each do |o|
@@ -177,16 +177,16 @@
                           .badge.badge-danger
                             .fa.fa-upload
                             Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["equity_value"], unit: "")}
                   - if microinsurance?
-                    %td.text-right.text-muted
+                    %td.text-end.text-muted
                       #{number_to_currency(o.interests.first.try(:interest_amount), unit: "")}
         - elsif @insurance_account.account_subtype == Settings.pl
           %table.table.table-hover.table-sm.table-bordered
@@ -200,7 +200,7 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Amount
             %tbody
               - @account_transactions.each do |o|
@@ -228,7 +228,7 @@
                         .badge.badge-danger
                           .fa.fa-upload
                           Withdraw
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
         - elsif @insurance_account.account_subtype == Settings.kalinga
           %table.table.table-hover.table-sm.table-bordered
@@ -239,7 +239,7 @@
                 %th
                   %center
                     Date
-                %th.text-right
+                %th.text-end
                   Amount
             %tbody
               - @account_transactions.each do |o|  
@@ -267,11 +267,11 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
             %tbody
               - @account_transactions.each do |o|  
@@ -304,11 +304,11 @@
                           .badge.badge-danger
                             .fa.fa-upload
                             Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
         - elsif @insurance_account.account_subtype == Settings.rf
           #react-root
@@ -323,11 +323,11 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
             %tbody
               - @account_transactions.each do |o|
@@ -355,11 +355,11 @@
                         .badge.badge-danger
                           .fa.fa-upload
                           Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
         - else
           #react-root
@@ -374,11 +374,11 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
             %tbody
               - @account_transactions.each do |o|
@@ -406,9 +406,9 @@
                         .badge.badge-danger
                           .fa.fa-upload
                           Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}

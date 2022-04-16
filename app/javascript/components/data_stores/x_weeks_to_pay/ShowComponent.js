@@ -265,16 +265,16 @@ export default class ShowComponent extends React.Component {
                 {records[i].loan_product.name}
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(records[i].principal)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(records[i].overall_principal_balance)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(records[i].overall_interest_balance)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(records[i].overall_balance)}
             </td>
             <td>
@@ -288,22 +288,22 @@ export default class ShowComponent extends React.Component {
     rows.push(
       <tr key={"grand-total"}>
         <td colSpan="4"/>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalLoanAmount)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalPrincipalBalance)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalInterestBalance)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalBalance)}
           </strong>
@@ -332,16 +332,16 @@ export default class ShowComponent extends React.Component {
               <th>
                 Product
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Loan Amount
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Principal Balance
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Interest Balance
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Total Balance
               </th>
               <th className="">

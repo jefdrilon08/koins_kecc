@@ -13,11 +13,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @active_loans.each do |loan|
@@ -30,13 +30,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 
@@ -63,11 +63,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @for_verification_loans.each do |loan|
@@ -82,13 +82,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 - else
@@ -111,11 +111,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @verified_loans.each do |loan|
@@ -130,13 +130,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 - else
@@ -159,11 +159,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @in_process_loans.each do |loan|
@@ -178,13 +178,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 - else
@@ -205,11 +205,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @pending_loans.each do |loan|
@@ -224,13 +224,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 - else
@@ -330,11 +330,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @paid_loans.each do |loan|
@@ -347,13 +347,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 - else
@@ -375,11 +375,11 @@
           Loan Product
         %th.text-center
           Cycle 
-        %th.text-right
+        %th.text-end
           Total Due
-        %th.text-right
+        %th.text-end
           Total Paid
-        %th.text-right
+        %th.text-end
           Total Balance
     %tbody
       - @writeoff_loans .each do |loan|
@@ -392,13 +392,13 @@
             #{loan.loan_product}
           %td.text-center
             #{loan.cycle}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_paid, unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 - else

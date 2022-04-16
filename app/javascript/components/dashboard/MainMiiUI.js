@@ -109,7 +109,7 @@ export default class MainMiiUI extends React.Component {
               </h4>
             </div>
             <div className="col">
-              <div className="text-right">
+              <div className="text-end">
                 {this.renderRoles()}
               </div>
             </div>

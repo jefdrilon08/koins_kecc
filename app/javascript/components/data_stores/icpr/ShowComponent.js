@@ -47,7 +47,7 @@ export default class ShowComponent extends React.Component {
 
   renderMonths(o) {
     return  o.months.map(function(x) {
-              return  <td key={o.id + '-month-' + x.month_index} className="text-right">
+              return  <td key={o.id + '-month-' + x.month_index} className="text-end">
                         {numberWithCommas(x.amount)}
                       </td>
             });
@@ -75,19 +75,19 @@ export default class ShowComponent extends React.Component {
                           {o.center.name}
                         </td>
                         {context.renderMonths(o)}
-                        <td className="text-right">
+                        <td className="text-end">
                           {numberWithCommas(o.total_equity)} 
                         </td>
-                        <td className="text-right">
+                        <td className="text-end">
                           {numberWithCommas(o.ave_equity)} 
                         </td>
-                        <td className="text-right">
+                        <td className="text-end">
                           {numberWithCommas(o.equity_interest_amount)} 
                         </td>
-                        <td className="text-right">
+                        <td className="text-end">
                           {numberWithCommas(o.savings_distribute)} 
                         </td>
-                        <td className="text-right">
+                        <td className="text-end">
                           {numberWithCommas(o.cbu_distribute)}
                         </td>
                       </tr>
@@ -114,55 +114,55 @@ export default class ShowComponent extends React.Component {
                 <th>
                   Center
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Jan
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Feb
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Mar
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Apr
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   May
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Jun
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Jul
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Aug
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Sep
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Oct
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Nov
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Dec
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Total
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Average
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Equity Interest Amount
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Savings Distribute
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   CBU Distribute
                 </th>
               </tr>
@@ -173,13 +173,13 @@ export default class ShowComponent extends React.Component {
                 <th colSpan="18">
                   Total
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   {numberWithCommas(this.state.data.total_equity_interest_amount)}
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   {numberWithCommas(this.state.data.total_savings_distribute)}
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   {numberWithCommas(this.state.data.total_cbu_distribute)}
                 </th>
               </tr>

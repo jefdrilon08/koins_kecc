@@ -20,37 +20,37 @@ export default class Officer extends React.Component {
             <td width="4%">
               {centers[i].loans[j].date_released}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal_paid)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].overall_principal_balance)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].interest)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].interest_paid)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].overall_interest_balance)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].total_paid)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal_due)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].total_due)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].total_balance)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberAsPercent(centers[i].loans[j].principal_rr)}
             </td>
           </tr>
@@ -67,37 +67,37 @@ export default class Officer extends React.Component {
               {centers[i].loans.length}
             </center>
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].overall_principal_balance)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].interest)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].interest_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].overall_interest_balance)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].total_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal_due)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].total_due)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].total_balance)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberAsPercent(centers[i].principal_rr)}
           </th>
         </tr>
@@ -165,37 +165,37 @@ export default class Officer extends React.Component {
               </th>
               <th>
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.principal)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.principal_paid)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.overall_principal_balance)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.interest)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.interest_paid)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.overall_interest_balance)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.total_paid)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.principal_due)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.total_due)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberWithCommas(data.total_balance)}
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 {numberAsPercent(data.principal_rr)}
               </th>
             </tr>

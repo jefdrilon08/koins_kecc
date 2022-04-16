@@ -14,7 +14,7 @@
         Savings Type
       %th
         Insurance Type
-      %th.text-right
+      %th.text-end
         Total Amount
   %tbody
     - @savings_insurance_transfer_collections.each do |o|
@@ -45,7 +45,7 @@
           #{o.data["savings_subtype"]}
         %td
           #{o.data["insurance_subtype"]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o.total_amount, unit: '')}
 
 = paginate @savings_insurance_transfer_collections

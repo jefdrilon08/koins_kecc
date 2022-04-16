@@ -7,7 +7,7 @@
         Branch
       %th.text-center
         Type
-      %th.text-right
+      %th.text-end
         Balance
   %tbody
     - @insurance_accounts.each do |o|
@@ -20,5 +20,5 @@
         %td.text-center
           %small
             #{o.account_subtype}
-        %th.text-right
+        %th.text-end
           #{number_to_currency(o.balance, unit: '')}

@@ -5,7 +5,7 @@
       %th Branch
       %th Status
       %th Prepared By
-      %th.text-right
+      %th.text-end
         Total
   %tbody
     - member_account_validations.each do |member_account_validation|
@@ -23,6 +23,6 @@
           = member_account_validation.status
         %td.prepared-by.text-muted
           = member_account_validation.prepared_by
-        %td.text-right
+        %td.text-end
           %b
             = number_to_currency(member_account_validation.total, unit: '')

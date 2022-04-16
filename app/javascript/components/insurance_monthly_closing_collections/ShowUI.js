@@ -152,7 +152,7 @@ export default class ShowUI extends React.Component {
                 <th>
                   Total Interest:
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   {numberWithCommas(totalInterest)}
                 </th>
               </tr>

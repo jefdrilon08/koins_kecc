@@ -145,7 +145,7 @@ export default class WithdrawalCollectionUIComponent extends React.Component {
                 <th>
                   Total Collected:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
@@ -155,7 +155,7 @@ export default class WithdrawalCollectionUIComponent extends React.Component {
                 <th>
                   Particular:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderParticular()}
                 </td>
               </tr>

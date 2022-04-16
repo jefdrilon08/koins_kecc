@@ -143,7 +143,7 @@ export default class InsuranceWithdrawalCollectionUIComponent extends React.Comp
                 <th>
                   Total Collected:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
@@ -153,7 +153,7 @@ export default class InsuranceWithdrawalCollectionUIComponent extends React.Comp
                 <th>
                   Particular:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderParticular()}
                 </td>
               </tr>

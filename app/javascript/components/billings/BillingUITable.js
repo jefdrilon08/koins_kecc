@@ -232,7 +232,7 @@ export default class BillingUITable extends React.Component {
         if(paymentRecord.record_type == "LOAN_PAYMENT" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending"  && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
-              <td key={"loan-payment-" + paymentRecord.loan_id} className="text-right">
+              <td key={"loan-payment-" + paymentRecord.loan_id} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -245,7 +245,7 @@ export default class BillingUITable extends React.Component {
             );
           } else {
             components.push(
-              <td key={"loan-payment-" + paymentRecord.loan_id} className="text-right">
+              <td key={"loan-payment-" + paymentRecord.loan_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -256,7 +256,7 @@ export default class BillingUITable extends React.Component {
         } else if(paymentRecord.record_type == "SAVINGS" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending" && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false )  {
             components.push(
-              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -269,7 +269,7 @@ export default class BillingUITable extends React.Component {
             );
           } else {
             components.push(
-              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -280,7 +280,7 @@ export default class BillingUITable extends React.Component {
         } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending" && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
-              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -293,7 +293,7 @@ export default class BillingUITable extends React.Component {
             );
           } else {
             components.push(
-              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -304,7 +304,7 @@ export default class BillingUITable extends React.Component {
         } else if(paymentRecord.record_type == "WP" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending"  && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
-              <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"WP-" + paymentRecord.member_account_id} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -317,7 +317,7 @@ export default class BillingUITable extends React.Component {
             );
           } else {
             components.push(
-              <td key={"WP-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"WP-" + paymentRecord.member_account_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -331,7 +331,7 @@ export default class BillingUITable extends React.Component {
       }
 
       components.push(
-        <td key={"c-member-total-" + member.id} className="text-right">
+        <td key={"c-member-total-" + member.id} className="text-end">
           <strong>
             {numberWithCommas(this.props.data.data.records[i].total_collected)}
           </strong>
@@ -339,7 +339,7 @@ export default class BillingUITable extends React.Component {
       );
 
       components.push(
-        <td key={"c-member-grand-total-" + member.id} className="text-right">
+        <td key={"c-member-grand-total-" + member.id} className="text-end">
           <strong>
             {numberWithCommas(grandTotal)}
           </strong>
@@ -380,7 +380,7 @@ export default class BillingUITable extends React.Component {
         grandTotal += parseFloat(totals[i].amount);
 
         records.push(
-          <td key={"total-loan-payment-" + totals[i].key} className="text-right">
+          <td key={"total-loan-payment-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -390,7 +390,7 @@ export default class BillingUITable extends React.Component {
         grandTotal += parseFloat(totals[i].amount);
 
         records.push(
-          <td key={"total-savings-" + totals[i].key} className="text-right">
+          <td key={"total-savings-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -400,7 +400,7 @@ export default class BillingUITable extends React.Component {
         grandTotal += parseFloat(totals[i].amount);
 
         records.push(
-          <td key={"total-insurance-" + totals[i].key} className="text-right">
+          <td key={"total-insurance-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -408,7 +408,7 @@ export default class BillingUITable extends React.Component {
         );
       } else if(totals[i].record_type == "WP") {
         records.push(
-          <td key={"wp-" + totals[i].key} className="text-right">
+          <td key={"wp-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -418,7 +418,7 @@ export default class BillingUITable extends React.Component {
     }
 
     records.push(
-      <td key="grand-total" className="text-right">
+      <td key="grand-total" className="text-end">
         <div className="badge badge-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}
@@ -429,7 +429,7 @@ export default class BillingUITable extends React.Component {
 
     // Grand Total
     records.push(
-      <td key="grand-total-final" className="text-right">
+      <td key="grand-total-final" className="text-end">
         <div className="badge badge-info">
           <strong>
             {numberWithCommas(grandTotal)}

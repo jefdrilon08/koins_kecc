@@ -44,37 +44,37 @@ export default class LoanProduct extends React.Component {
               </th>
               <th width="4%">
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.principal)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.principal_paid)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.principal_balance)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.interest)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.interest_paid)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.interest_balance)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.total_paid)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.principal_due)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.total_due)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberWithCommas(data.total_balance)}
               </th>
-              <th className="text-right" width="7%">
+              <th className="text-end" width="7%">
                 {numberAsPercent(data.principal_rr)}
               </th>
             </tr>

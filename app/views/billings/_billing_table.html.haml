@@ -33,8 +33,8 @@
               .badge.badge-danger
                 .fa.fa-times
           - r[:payments].each do |o|
-            %td.text-right
+            %td.text-end
               - if o[:amount].to_f > 0
                 #{number_to_currency(o[:amount], unit: "")} 
-          %td.text-right
+          %td.text-end
             #{number_to_currency(r[:withdraw_payments], unit: "")}

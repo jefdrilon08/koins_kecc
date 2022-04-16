@@ -136,13 +136,13 @@ export default class ManagementOverview extends React.Component {
                 <th>
                   Branch Name
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Portfolio
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Past Due Amount
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   PAR Amount
                 </th>
                 <th className="">
@@ -219,13 +219,13 @@ export default class ManagementOverview extends React.Component {
                   {branches[k].name}
                 </strong>
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {numberWithCommas(branches[k].data.portfolio)}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {numberWithCommas(branches[k].data.principal_balance)}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {numberWithCommas(branches[k].data.par_amount)}
               </td>
               <td className="">
@@ -278,17 +278,17 @@ export default class ManagementOverview extends React.Component {
                 {clusters[j].name} Total
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(cPortfolio)}
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(cPastDueAmount)}
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(cParAmount)}
               </strong>
@@ -354,17 +354,17 @@ export default class ManagementOverview extends React.Component {
               {areas[i].name} Total
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             <strong>
               {numberWithCommas(aPortfolio)}
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             <strong>
               {numberWithCommas(aPastDueAmount)}
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             <strong>
               {numberWithCommas(aParAmount)}
             </strong>
@@ -430,17 +430,17 @@ export default class ManagementOverview extends React.Component {
             Grand Total
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(tPortfolio)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(tPastDueAmount)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(tParAmount)}
           </strong>

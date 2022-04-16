@@ -49,13 +49,13 @@
       %th
         TOTAL
       - @accrued_billing[:data].data['headers'].each do |hders|
-        %td.text-right
+        %td.text-end
           %strong
             #{hders['interest_receivable_amount']}
-      %td.text-right
+      %td.text-end
         %strong
           #{number_to_currency(@accrued_billing[:data].data['total_cash_payment'] , unit: '')}
-      %td.text-right
+      %td.text-end
         %strong
           #{number_to_currency(@accrued_billing[:data].data['total_payment'] , unit: '')}
  

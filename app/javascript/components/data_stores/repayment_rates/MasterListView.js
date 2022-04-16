@@ -49,16 +49,16 @@ export default class MasterListView extends React.Component {
           <td>
             {loans[i].maturity_date} 
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].principal)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].overall_principal_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].overall_interest_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].overall_balance)}
           </td>
         </tr>
@@ -76,16 +76,16 @@ export default class MasterListView extends React.Component {
         <th colSpan="5">
           Total ({loans.length})
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalLoanAmount)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalPrincipalBalance)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalInterestBalance)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalTotalBalance)}
         </th>
       </tr>
@@ -121,16 +121,16 @@ export default class MasterListView extends React.Component {
               <th>
                 Maturity Date
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Loan Amount
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Principal Balance
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Interest Balance
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Total Balance
               </th>
             </tr>

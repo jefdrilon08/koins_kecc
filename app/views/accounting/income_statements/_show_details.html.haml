@@ -9,12 +9,12 @@
           #{o[:accounting_code][:code]} 
           %span.text-muted
             #{o[:accounting_code][:name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: "")}
     %tr
       %th
         Total Income
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         #{number_to_currency(@data[:total_income], unit: '')}
     %tr
       %th{ colspan: 2 }
@@ -25,15 +25,15 @@
           #{o[:accounting_code][:code]} 
           %span.text-muted
             #{o[:accounting_code][:name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: "")}
     %tr
       %th
         Total Expenses
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         #{number_to_currency(@data[:total_expenses], unit: '')}
     %tr
       %th
         Net Income
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         #{number_to_currency(@data[:total_net_income], unit: '')}
