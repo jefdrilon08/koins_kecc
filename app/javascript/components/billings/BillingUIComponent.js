@@ -417,7 +417,7 @@ export default class BillingUIComponent extends React.Component {
   renderChanges() {
     if(this.state.changes.length > 0) {
       return (
-        <div className="c-callout c-callout-danger">
+        <div className="alert alert-danger">
           <small className="text-muted">
             Some changes occurred. Please save changes.
           </small>

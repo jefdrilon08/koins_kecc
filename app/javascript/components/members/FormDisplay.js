@@ -389,7 +389,7 @@ export default class FormDisplay extends React.Component {
       );
     } else if(state.data != false) {
       return (
-        <div>
+        <div id="member-form">
           <h2>Member Form</h2>
           <hr/>
           {this.renderErrorDisplay()}

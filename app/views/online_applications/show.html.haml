@@ -9,13 +9,13 @@
           - if @online_application.data["approve_process"].present?
             - @online_application.data["approve_process"].each do |opp|
               - if opp["type"] == "assign_branch_by"
-                .c-callout.c-callout-info
+                .alert.alert-info
                   %p This has already been assigned to #{@online_application.branch.name} SATO by #{opp["name"]} on #{opp["date_assign"]}
               - elsif opp["type"] == "verify_by"
-                .c-callout.c-callout-info
+                .alert.alert-info
                   %p This has already been verified by #{opp["name"]} on #{opp["date_assign"]}
               - else
-                .c-callout.c-callout-success
+                .alert.alert-success
                   %p This has already been process by #{opp["name"]} on #{opp["date_assign"]}
 
         - if @online_application.for_verification?
