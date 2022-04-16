@@ -1,5 +1,5 @@
 .table-responsive
-  %table.table.table-sm.table-hover
+  %table.table.table-sm.table-hover.table-bordered
     %thead
       %tr
         %th
@@ -46,8 +46,8 @@
           %td
             %center
               - if o.active?
-                .badge.badge-success
+                .badge.bg-success
                   #{o.status}
               - else
-                .badge.badge-danger
+                .badge.bg-danger
                   #{o.status}

@@ -41,7 +41,7 @@
             #{o.mobile_number}
           %td
             - if o.for_verification?
-              .badge.badge-warning
+              .badge.bg-warning
                 FOR VERIFICATION
             - elsif o.processing?
               .badge.badge-secondary
@@ -50,10 +50,10 @@
               .badge.badge-info
                 VERIFIED
             - elsif o.processed?
-              .badge.badge-success
+              .badge.bg-success
                 PROCESSED
             - elsif o.rejected?
-              .badge.badge-danger
+              .badge.bg-danger
                 REJECTED
           %td
             #{o.created_at.strftime("%B %d, %Y")}

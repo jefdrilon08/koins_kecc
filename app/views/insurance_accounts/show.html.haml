@@ -82,7 +82,7 @@
                           .badge.badge-info
                             Active
                         - else 
-                          .badge.badge-danger
+                          .badge.bg-danger
                             Matured
 
         - elsif @insurance_account.account_subtype == Settings.hiip
@@ -120,7 +120,7 @@
                         .badge.badge-info
                           Active
                       - else 
-                        .badge.badge-danger
+                        .badge.bg-danger
                           Matured
         - elsif @insurance_account.account_subtype == Settings.life
           #react-root
@@ -165,16 +165,16 @@
                             .fa.fa-plus
                             Inc in LIFE
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
                         - if o.withdraw_ev?
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw EV
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw
                   %td.text-end.text-muted
@@ -221,11 +221,11 @@
                             .fa.fa-plus
                             Inc in PL
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
-                        .badge.badge-danger
+                        .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
                   %td.text-end
@@ -292,16 +292,16 @@
                             .fa.fa-plus
                             Inc in EV
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
                         - if o.withdraw_ev?
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw EV
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw
                   %td.text-end.text-muted
@@ -348,11 +348,11 @@
                             .fa.fa-plus
                             Inc in RF
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
-                        .badge.badge-danger
+                        .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
                   %td.text-end.text-muted
@@ -399,11 +399,11 @@
                             .fa.fa-plus
                             Inc
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
-                        .badge.badge-danger
+                        .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
                   %td.text-end.text-muted

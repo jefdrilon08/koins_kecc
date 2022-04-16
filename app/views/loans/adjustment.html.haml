@@ -129,10 +129,10 @@
                       #{number_to_currency(o[:principal_balance].to_f + o[:interest_balance].to_f, unit: '')}
                   %td.text-center
                     - if o[:is_paid] == true
-                      .badge.badge-success
+                      .badge.bg-success
                         Paid
                     - else
-                      .badge.badge-danger
+                      .badge.bg-danger
                         Due
               %tr
                 %th{ colspan: 2 }
@@ -236,10 +236,10 @@
                         #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
-                          .badge.badge-success
+                          .badge.bg-success
                             Paid
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             Due
                   %tr
                     %th
@@ -326,10 +326,10 @@
                         #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
-                          .badge.badge-success
+                          .badge.bg-success
                             Paid
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             Due
                   %tr
                     %th.text-center

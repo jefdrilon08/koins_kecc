@@ -27,10 +27,10 @@
             #{r[:member][:full_name]}
           %td
             - if r[:attendance]
-              .badge.badge-success
+              .badge.bg-success
                 .fa.fa-check
             - else
-              .badge.badge-danger
+              .badge.bg-danger
                 .fa.fa-times
           - r[:payments].each do |o|
             %td.text-end

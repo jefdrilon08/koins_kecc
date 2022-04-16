@@ -111,6 +111,11 @@
   background: $secondary-color;
   display: none;
 }
+
+.sidebar .nav-links li .sub-menu i {
+  min-width: 0px;
+}
+
 .sidebar .nav-links li.show-menu .sub-menu{
   display: block;
 }

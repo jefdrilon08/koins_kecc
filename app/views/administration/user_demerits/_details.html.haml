@@ -24,10 +24,10 @@
       Status:
     .text-muted
       - if @user_demerit.pending?
-        .badge.badge-danger
+        .badge.bg-danger
           Pending
       - elsif @user_demerit.approved?
-        .badge.badge-success
+        .badge.bg-success
           Approved
 %br
 .row

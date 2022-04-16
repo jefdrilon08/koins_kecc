@@ -3,7 +3,7 @@
     .card
       .card-body
         %h2
-          %span.badge.badge-danger#error= flash[:error]  
+          %span.badge.bg-danger#error= flash[:error]  
         = form_tag upload_deposit_collections_path, multipart: true do
           .row
             .col-md-4

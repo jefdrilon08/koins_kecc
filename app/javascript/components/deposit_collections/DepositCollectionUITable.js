@@ -203,7 +203,7 @@ export default class DepositCollectionUITable extends React.Component {
 
     records.push(
       <td key="grand-total" className="text-end">
-        <div className="badge badge-success">
+        <div className="badge bg-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}
           </strong>

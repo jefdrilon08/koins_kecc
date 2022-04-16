@@ -3,7 +3,7 @@
     .card
       .card-body
         %h2
-          %span.badge.badge-danger#error= flash[:error]
+          %span.badge.bg-danger#error= flash[:error]
         = form_tag import_legal_dependents_members_path, multipart: true do
           .row
             .col-md-6

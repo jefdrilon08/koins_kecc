@@ -35,10 +35,10 @@
             #{o.data["p_term"]}
           %td.text-center
             - if o.pending?
-              .badge.badge-danger
+              .badge.bg-danger
                 Pending
             - elsif o.approved?
-              .badge.badge-success
+              .badge.bg-success
                 Approved
           %td.text-center
             = link_to loan_adjustment_path(@loan, o), class: 'btn btn-primary' do

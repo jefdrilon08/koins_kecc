@@ -59,13 +59,13 @@
         .badge.badge-info
           Active
       - elsif @loan.pending?
-        .badge.badge-danger
+        .badge.bg-danger
           Pending
       - elsif @loan.paid?
-        .badge.badge-success
+        .badge.bg-success
           Paid
       -elsif @loan.writeoff?
-        .badge.badge-warning
+        .badge.bg-warning
           Writeoff
   %tr
     %th

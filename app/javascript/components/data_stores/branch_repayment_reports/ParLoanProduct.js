@@ -30,7 +30,7 @@ export default class LoanProduct extends React.Component {
 
     return  (
       <div>
-        <div className="badge badge-success">
+        <div className="badge bg-success">
           {data.loan_product.name}
         </div>
 

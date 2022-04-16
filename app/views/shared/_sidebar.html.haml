@@ -10,3 +10,19 @@
         %i.bi.bi-speedometer
         %span.link-name
           Operations
+
+    %li{ class: "#{params[:controller] == 'members' ? 'active' : ''}" }
+      .icon-link
+        = link_to members_path, class: "" do
+          %i.bi.bi-person-square
+          %span.link-name
+            Members
+        %i.bi.bi-caret-down.arrow
+      %ul.sub-menu
+        %li
+          = link_to members_path, class: "link-name" do
+            Members
+        %li
+          = link_to "#", class: "" do
+            %i.bi.bi-plus.sub-icon
+            New Member

@@ -1,7 +1,6 @@
 require("@rails/ujs").start();
 
-import JQuery from 'jquery';
-window.$ = window.JQuery = JQuery;
+import $ from 'jquery';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -396,8 +395,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // SIDEBAR JS
   let arrow = document.querySelectorAll(".arrow");
   arrow.forEach((o, i) => {
-    let arrowParent = e.target.parentElement.parentElement;
-    arrowParent.classList.toggle("show-menu");
+    o.addEventListener("click", (e) => {
+      let arrowParent = e.target.parentElement.parentElement;
+      arrowParent.classList.toggle("show-menu");
+    });
   });
 
   let sidebar     = document.querySelector(".sidebar");

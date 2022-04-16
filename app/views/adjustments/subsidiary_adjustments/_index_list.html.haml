@@ -24,10 +24,10 @@
           #{o.meta["generated_by"]["last_name"]}, #{o.meta["generated_by"]["first_name"]}
         %td.text-center
           - if o.pending?
-            .badge.badge-danger
+            .badge.bg-danger
               Pending
           - elsif o.approved?
-            .badge.badge-success
+            .badge.bg-success
               Approved
         %td
           -if o.data["accounting_entry"].present?

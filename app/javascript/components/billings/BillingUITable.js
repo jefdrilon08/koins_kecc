@@ -193,7 +193,7 @@ export default class BillingUITable extends React.Component {
         components.push(
           <td key={"c-member-attnd-" + member.id}>
             <center>
-              <div className="badge badge-success">
+              <div className="badge bg-success">
                 <span className="fa fa-check"/>
               </div>
             </center>
@@ -203,7 +203,7 @@ export default class BillingUITable extends React.Component {
         components.push(
           <td key={"c-member-attnd-" + member.id}>
             <center>
-              <div className="badge badge-danger">
+              <div className="badge bg-danger">
                 <span className="fa fa-minus"/>
               </div>
             </center>
@@ -419,7 +419,7 @@ export default class BillingUITable extends React.Component {
 
     records.push(
       <td key="grand-total" className="text-end">
-        <div className="badge badge-success">
+        <div className="badge bg-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}
           </strong>

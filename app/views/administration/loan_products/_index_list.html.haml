@@ -40,17 +40,17 @@
         %td
           %center
             - if o.insured
-              .badge.badge-success
+              .badge.bg-success
                 .fa.fa-check
             - else
-              .badge.badge-danger
+              .badge.bg-danger
                 .fa.fa-times
         %td.text-center
           - if o.is_entry_point
-            .badge.badge-success
+            .badge.bg-success
               .fa.fa-check
           - else
-            .badge.badge-danger
+            .badge.bg-danger
               .fa.fa-times
         %td.text-center
           #{number_to_currency(o.monthly_interest_rate * 100, unit: "")} %

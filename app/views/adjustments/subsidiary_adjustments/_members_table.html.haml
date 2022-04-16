@@ -23,11 +23,11 @@
           #{o[:member_account][:account_subtype]}
         %td.text-center
           - if o[:adjustment] == "ADD"
-            .badge.badge-success
+            .badge.bg-success
               .fa.fa-plus
               Add
           - elsif o[:adjustment] == "DEDUCT"
-            .badge.badge-danger
+            .badge.bg-danger
               .fa.fa-minus
               Deduct
         %td.text-end

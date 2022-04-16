@@ -226,7 +226,7 @@ export default class RepaymentRatesView extends React.Component {
               </label>
               <label style={{marginRight: "12px"}}>
                 Number of Past Due:
-                <span className="badge badge-danger">
+                <span className="badge bg-danger">
                   {numPastDue}
                 </span>
               </label>

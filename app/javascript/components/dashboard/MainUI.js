@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-
 import SkCubeLoading from '../SkCubeLoading';
 
 // DASHBOARDS
