@@ -379,19 +379,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const authenticityToken = $("meta[name='csrf-token']").attr('content');
   const options = { authenticityToken, ...payload }
 
-  const components = hooks[route];
-  if (components) {
-    components.forEach((component) => {
-      if (typeof component.init === "function") {
-        // "init" object
-        component.init(options)
-      } else {
-        // React component
-        renderComponent(component, options)
-      }
-    })
-  }
-
   // SIDEBAR JS
   let arrow = document.querySelectorAll(".arrow");
   arrow.forEach((o, i) => {
@@ -407,4 +394,17 @@ document.addEventListener("DOMContentLoaded", () => {
   sidebarBtn.addEventListener("click", () => {
     sidebar.classList.toggle("close");
   });
+
+  const components = hooks[route];
+  if (components) {
+    components.forEach((component) => {
+      if (typeof component.init === "function") {
+        // "init" object
+        component.init(options)
+      } else {
+        // React component
+        renderComponent(component, options)
+      }
+    })
+  }
 });
