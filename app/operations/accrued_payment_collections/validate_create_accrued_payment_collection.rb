@@ -1,5 +1,5 @@
 module AccruedPaymentCollections
-  class ValidateAccruedPaymentCollection < AppValidator
+  class ValidateCreateAccruedPaymentCollection < AppValidator
     def initialize(config:)
       super()
       @config           = config

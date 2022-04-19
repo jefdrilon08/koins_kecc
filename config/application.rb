@@ -21,6 +21,8 @@ module Koins
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     #config.eager_load_paths += Dir["#{config.root}/lib/**/"]
+    #config.autoload_paths << "#{config.root}/lib"
+    #config.eager_load_paths << "#{config.root}/lib"
 
     config.time_zone = 'Asia/Manila'
     config.active_record.default_timezone = :local # Or :utc

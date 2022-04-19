@@ -1,5 +1,5 @@
 module Accounting
-  class PatronageRefundValidateApprove < AppValidator
+  class PatronageRefundValidateApproved < AppValidator
     def initialize(config:)
       super()
 
