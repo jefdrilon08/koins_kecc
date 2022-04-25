@@ -7,7 +7,9 @@ class DataStore < ApplicationRecord
     "error", 
     "closed", 
     "approved", 
-    "pending"
+    "pending",
+    "for_printing",
+    "checked"
   ]
 
   validates :meta, presence: true

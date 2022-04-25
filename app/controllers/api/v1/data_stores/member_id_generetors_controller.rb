@@ -39,12 +39,20 @@ module Api
             member_type:    member_type
               
 
-          }
-
-
-          raise "jef".inspect         
+        }
+     
         end
         
+        def check_member_id
+          data_store_id = params[:data][:data_store]
+          @id_form_status = DataStore.find(data_store_id).update!(status: "checked")
+          
+          #render json: { message: "ok"  }
+
+          
+        end
+
+
         def contact_person
           @member = Member.find(params[:member_id])
           @member_data = @member.data.with_indifferent_access[:contact_person]
@@ -76,6 +84,12 @@ module Api
         end
 
       end
+
+      #def jef
+      #  raise "jef".inspect
+      #end
+
+
     end
   end
 end

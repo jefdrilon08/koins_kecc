@@ -24,6 +24,10 @@ var $labelMemberName
 var $message;
 var templateErrorList;
 
+var $btnCheck;
+var $modalCheck;
+var $btnConfirmCheck;
+
 var _members;
 var _members_list;
 var _memberId;
@@ -31,6 +35,8 @@ var _urlCenters = "/api/v1/data_stores/member_id_generetors/fetch_members";
 var _urlAddMember = "/api/v1/data_stores/member_id_generetors/add_member";
 var _urlContactPerson = "/api/v1/data_stores/member_id_generetors/contact_person";
 var _urlAddContactPerson = "/api/v1/data_stores/member_id_generetors/add_contact_person";
+var _urlCheckIdForm = "/api/v1/data_stores/member_id_generetors/check_member_id";
+
 
 var _cacheDom = function() {
   $modalNew                 = $("#modal-new");
@@ -47,6 +53,12 @@ var _cacheDom = function() {
   $inputContactNumber       = $("#contact-number");
   $btnConfirmContactPerson  = $("#btn-confirm-contact-person");
   $labelMemberName          = $("#member-name");
+  
+  $btnCheck                 = $("#btn-check");
+  $modalCheck               = $("#modal-check");
+  $btnConfirmCheck          = $("#btn-confirm-check")
+
+
 
   templateErrorList   = $("#template-error-list").html();
 }
@@ -68,6 +80,40 @@ var _loadMemberOptions  = function() {
 
 
 var _bindEvents = function() {
+
+  
+  $btnCheck.on("click", function(){
+  
+  
+    $modalCheck.modal("show");
+  } );
+
+
+  $btnConfirmCheck.on("click", function(){
+    var data = {
+      data_store:  $(this).data("id")
+    }
+
+    $.ajax({
+      method: 'POST',
+      url: _urlCheckIdForm,
+      data: {
+        data: data
+      },
+      success: function(response) {
+        window.location.reload();
+        
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in checking id details");
+      }
+    });
+
+
+
+  });
+
 
   $btnConfirmContactPerson.on("click", function(){
     //alert($inputContactNumber.val())

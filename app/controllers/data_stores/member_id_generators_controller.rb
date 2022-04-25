@@ -42,19 +42,36 @@ module DataStores
         }
       ]
 
-      @subheader_side_actions = [
-        {
-          id: "btn-check",
-          link: "#",
-          class: "fa fa-plus",
-          text: "Check"
-        }
-      ]
+      if @data_store.status == "pending"
+
+        @subheader_side_actions = [
+          {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-plus",
+            text: "Check"
+          }
+        ]
+      end
+      if @data_store.status == "checked"
+
+        @subheader_side_actions = [
+          {
+            id: "btn-for-printing",
+            link: "#",
+            class: "fa fa-plus",
+            text: "For Printing"
+          }
+        ]
+      end
     end
     def for_member_id_excel
-      download_excel = ::Reports::DownloadForMemberIdGeneratorExcel.new(report_id: params[:id]).execute!
+      excel = ::Reports::DownloadForMemberIdGeneratorExcel.new(report_id: params[:id]).execute!
       filename = DataStore.find(params[:id]).meta["refference_number"] 
-      download_excel.serialize "#{Rails.root}/tmp/#{filename}"
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      
+    
+  
       send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
     end
