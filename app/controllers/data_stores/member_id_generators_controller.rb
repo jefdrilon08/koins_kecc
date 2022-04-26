@@ -3,10 +3,30 @@ module DataStores
     def index
       @data_store = DataStore.where(
                                     "meta ->> 'branch_id' IN (?) AND  
-                                     meta ->> 'data_store_type' = ?", 
+                                     meta ->> 'data_store_type' = ?" , 
                                      @branches.pluck(:id),
                                      "GENERATED_ID"
                                     )
+    
+      if params[:branch_id].present?
+      @data_store = DataStore.where(
+                                    "meta ->> 'branch_id' = ? AND  
+                                     meta ->> 'data_store_type' = ?", 
+                                     params[:branch_id],
+                                     "GENERATED_ID"
+                                    )
+      end
+      if params[:status].present?
+        @data_store = DataStore.where(
+                                    "meta ->> 'branch_id' IN (?) AND  
+                                     meta ->> 'data_store_type' = ? AND status = ?" , 
+                                     @branches.pluck(:id),
+                                     "GENERATED_ID",
+                                     params[:status]
+                                    )
+      end
+
+
       @subheader_items = [
         {
           text: "Data Stores"
@@ -50,20 +70,32 @@ module DataStores
             link: "#",
             class: "fa fa-plus",
             text: "Check"
+          },
+          {
+            id: "btn-excel-printing",
+            link: "/data_stores/member_id_generators/" + "#{@data_store.id}" +"/for_member_id_excel",
+            class: "fa fa-plus",
+            text: "Download Excel"
           }
         ]
-      end
-      if @data_store.status == "checked"
-
+      elsif @data_store.status == "checked"
         @subheader_side_actions = [
           {
             id: "btn-for-printing",
             link: "#",
             class: "fa fa-plus",
             text: "For Printing"
+          },
+          {
+            id: "btn-excel-printing",
+            link: "/data_stores/member_id_generators/" + "#{@data_store.id}" +"/for_member_id_excel",
+            class: "fa fa-plus",
+            text: "Download Excel"
           }
         ]
+        
       end
+    
     end
     def for_member_id_excel
       excel = ::Reports::DownloadForMemberIdGeneratorExcel.new(report_id: params[:id]).execute!

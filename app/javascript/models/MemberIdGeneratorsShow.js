@@ -28,6 +28,8 @@ var $btnCheck;
 var $modalCheck;
 var $btnConfirmCheck;
 
+var btnDelayAmort;
+
 var _members;
 var _members_list;
 var _memberId;
@@ -36,6 +38,7 @@ var _urlAddMember = "/api/v1/data_stores/member_id_generetors/add_member";
 var _urlContactPerson = "/api/v1/data_stores/member_id_generetors/contact_person";
 var _urlAddContactPerson = "/api/v1/data_stores/member_id_generetors/add_contact_person";
 var _urlCheckIdForm = "/api/v1/data_stores/member_id_generetors/check_member_id";
+var _urlRemoveMember = "/api/v1/data_stores/member_id_generetors/remove_member";
 
 
 var _cacheDom = function() {
@@ -57,7 +60,7 @@ var _cacheDom = function() {
   $btnCheck                 = $("#btn-check");
   $modalCheck               = $("#modal-check");
   $btnConfirmCheck          = $("#btn-confirm-check")
-
+  $btnDelayAmort            = $(".btn-delay-amort");
 
 
   templateErrorList   = $("#template-error-list").html();
@@ -81,6 +84,32 @@ var _loadMemberOptions  = function() {
 
 var _bindEvents = function() {
 
+  $btnDelayAmort.on("click", function(){
+    data_store_id = $(this).data("id")
+    member_test = $(this).data("member")
+    alert(member_test)
+    var data = {
+      data_store_id:  data_store_id,
+      member_id: member_test
+    }
+
+    $.ajax({
+      method: 'POST',
+      url: _urlRemoveMember,
+      data: {
+        data: data
+      },
+      success: function(response) {
+        window.location.reload();
+        
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Error in checking id details");
+      }
+    });
+
+  });
   
   $btnCheck.on("click", function(){
   

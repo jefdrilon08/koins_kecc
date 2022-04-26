@@ -1,16 +1,10 @@
-
-.row
-  .col-md-4
-    .form-group
-      %label
-        ACTION
-      = link_to data_stores_for_member_id_download_excel_url, class: 'btn' do
-        .fa.fa-download
 .row
   .col
     .card
       .card-body
-        = render partial: "form_add"
+        - if @data_store.status == "pending"
+          = render partial: "form_add"
+        
         %ul.nav.nav-tabs{:role => "tablist"} 
           %li.nav-item
             %a.nav-link.active.show{"aria-controls" => "profile", "aria-selected" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"}
@@ -24,7 +18,7 @@
           #savings_accounts.tab-pane{:role => "tabpanel"}
             = render partial: "member_details"
 
-jef show
+
 = render partial: "data_stores/member_id_generators/modals/contact_person"
 
 

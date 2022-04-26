@@ -51,6 +51,22 @@ module Api
 
           
         end
+        def remove_member
+          data_store_id = params[:data][:data_store_id]
+          member_id = params[:data][:member_id]
+          
+          @data_store = DataStore.find(data_store_id) 
+          @data_store_data = @data_store.data
+          
+          a = @data_store_data.select{ |o| o["id"] != member_id }
+        
+          
+
+          @data_store.update(data: a)
+          render json: { message: "ok"  }
+
+          
+        end
 
 
         def contact_person

@@ -492,6 +492,7 @@ namespace :api do
       post "/member_id_generetors/add_contact_person", to: "member_id_generetors#add_contact_person"
       post "/member_id_generetors/add_member", to: "member_id_generetors#add_member"
       post "/member_id_generetors/check_member_id", to: "member_id_generetors#check_member_id"
+      post "/member_id_generetors/remove_member", to: "member_id_generetors#remove_member"
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
       post "/patronage_refund/approve", to: "patronage_refund#approve"
