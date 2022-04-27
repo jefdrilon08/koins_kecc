@@ -21,9 +21,9 @@ module Members
           agree_to_terms:
         )
 
-      @first_name       = first_name
-      @middle_name      = middle_name
-      @last_name        = last_name
+      @first_name       = first_name.upcase
+      @middle_name      = middle_name.upcase
+      @last_name        = last_name.upcase
       @gender           = gender
       @date_of_birth    = date_of_birth
       @email            = email
@@ -70,6 +70,16 @@ module Members
       if @last_name.blank?
         @errors[:last_name] = "last name required"
         @num_errors += 1
+      end
+      
+      if @first_name.present? and @last_name.present? and @date_of_birth.present?
+        @member = ReadOnlyMember.joins(:branch).where(
+                  "last_name = ? and first_name = ? and date_of_birth = ?",
+                  @last_name, @first_name, @date_of_birth).last
+        if @member.present?
+          @errors[:agree_to_terms] = "member already exists in #{@member.branch.name} SatO"
+          @num_errors += 1
+        end
       end
 
       if @gender.blank?
