@@ -86,8 +86,6 @@ var $inputMykoinsPasswordConfirmation;
 var $btnSaveMykoinsPassword;
 
 
-var $btnMakePayment;  
-var $modalMakePayment;
 var $btnConfirmMakePayment;
 var $selectMakePaymentType;
 
@@ -208,8 +206,6 @@ var _cacheDom = function() {
   $inputMykoinsPasswordConfirmation = $("#input-mykoins-password-confirmation");
   $btnSaveMykoinsPassword           = $("#btn-save-mykoins-password");
   
-  $btnMakePayment   = $("#btn-make-payment");
-  $modalMakePayment   = $("#modal-make-payment-type");
   $btnConfirmMakePayment  = $("#btn-confirm-make-payment-type")
   $selectMakePaymentType  = $("#select-make-payment-type")
 
@@ -273,11 +269,6 @@ var _bindEvents = function() {
         }
       }
     });
-  });
-
-
-  $btnMakePayment.on("click", function(){
-    $modalMakePayment.modal("show");
   });
 
   $btnSaveMykoinsPassword.on("click", function() {
