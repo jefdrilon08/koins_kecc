@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import * as bootstrap from "bootstrap";
 import $ from 'jquery';
 
 import "pdfmake/build/pdfmake"
@@ -119,6 +120,13 @@ var _authenticityToken;
 var _cacheDom = function() {
   $message          = $(".message");
 
+  /**
+   * Bootstrap 5 modal initialization
+   */
+  $modalDelayAmort  = new bootstrap.Modal(
+                        document.getElementById("modal-delay-amort")
+                      );
+
   $btnNewAdjustment         = $("#btn-new-adjustment");
   $btnConfirmNewAdjustment  = $("#btn-confirm-new-adjustment");
   $modalNewAdjustment       = $("#modal-new-adjustment");
@@ -164,7 +172,6 @@ var _cacheDom = function() {
   $btnDelayAmort        = $(".btn-delay-amort");
   $oldDate              = $(".old-date");
   $btnConfirmDelayAmort = $("#btn-confirm-delay-amort");
-  $modalDelayAmort      = $("#modal-delay-amort");
   $inputDelayAmort      = $("#input-delay-amort");
   $inputReason          = $("#input-reason");
 
@@ -566,7 +573,7 @@ var _bindEvents = function() {
 
     $oldDate.html(oldDate);
 
-    $modalDelayAmort.modal("show");
+    $modalDelayAmort.show();
   });
 
   $btnConfirmDelayAmort.on("click", function() {
