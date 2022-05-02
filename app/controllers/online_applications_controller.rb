@@ -2,24 +2,65 @@ class OnlineApplicationsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    valid_roles_list_all  = ::Users::FetchValidRoles.new(
-                              module_name: "online_application_list_all"
-                            ).execute!
+    @branch_details = {}
+    @branch_details[:branch_data] = []
+    @online_application_status = ::OnlineApplication::STATUSES
+    @online_applications_list  = OnlineApplication.where(
+                                                    "
+                                                     branch_id IN (?)",
+                                                    @branches.pluck(:id)
+                                                  )
 
-    if current_user.current_roles.intersection(valid_roles_list_all).length > 0
-      @online_applications  = OnlineApplication
-                                .select("*")
-                                .includes(:branch)
-    else
-      @online_applications  = OnlineApplication.where(
-                                "branch_id IN (?)",
-                                @branches.pluck(:id)
-                              )
+    
+    @branch_account = @online_applications_list.pluck(:branch_id).uniq 
+    @cluster_account = Cluster.find(Branch.find(@branch_account).pluck(:cluster_id).uniq)
+
+  
+    
+    Branch.find(@branch_account).each do |bd|
+      tmp = { 
+              branch_id: bd["id"],
+              cluster_id: bd["cluster_id"],
+              test:  []
+            }
+
+
+      @online_application_status.each do |a|
+        status_count =  OnlineApplication.where(
+                                                "branch_id = ? and
+
+                                                  status = ?
+                                                ",
+                                                bd["id"],
+                                                a
+
+                                                )
+        if status_count.present?
+          tmp_details = { app_status: a, total_number: status_count.count }
+        else
+          tmp_details = { app_status: a, total_number: 0 }
+          
+        end
+        tmp[:test] << tmp_details
+      end
+
+
+
+
+      @branch_details[:branch_data] << tmp
     end
+    
+    @branch_details
+    @online_applications_test  = OnlineApplication.where("branch_id is not null")
+    @online_applications  = OnlineApplication.where("branch_id is null and status = ?","for_verification")
+                            
 
     @q      = params[:q]
     @status = params[:status]
     @branch = Branch.find_by_id(params[:branch_id])
+
+  
+
 
     if @q.present?
       @online_applications  = @online_applications.where(
@@ -29,17 +70,28 @@ class OnlineApplicationsController < ApplicationController
     end
 
     if @status.present?
-      @online_applications  = @online_applications.where(
+      @online_applications  = @online_applications_test.where(
                                 status: @status
                               )
+      
     end
 
     if @branch.present?
-      @online_applications  = @online_applications.where(
+      @online_applications  = @online_applications_test.where(
                                 branch_id: @branch.id
                               )
     end
 
+
+    if  @branch.present? and @status.present?
+      @online_applications  = @online_applications_test.where(
+                                branch_id: @branch.id, status: @status
+                              )
+      
+    end
+
+
+  
     @online_applications  = @online_applications
                               .order("status ASC, last_name ASC")
                               .page(params[:page]).per(LIST_PAGE_SIZE)
@@ -101,5 +153,10 @@ class OnlineApplicationsController < ApplicationController
         text: "Download Form"
       }
     end
+    
+    def show_details
+      raise "jef".inspect
+    end
+
   end
 end
