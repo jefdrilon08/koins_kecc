@@ -4,16 +4,16 @@
   .card-body
     %ul.nav.nav-tabs{:role => "tablist"}
       %li.nav-item
-        %a.nav-link.active.show{"aria-controls" => "centers", "aria-selected" => "true", "data-toggle" => "tab", :href => "#centers", :role => "tab"} 
+        %a.nav-link.active.show{"aria-controls" => "centers", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#centers", :role => "tab"} 
           Centers
       %li.nav-item
-        %a.nav-link.show{"aria-controls" => "members", "aria-selected" => "true", "data-toggle" => "tab", :href => "#members", :role => "tab"} 
+        %a.nav-link.show{"aria-controls" => "members", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#members", :role => "tab"} 
           Active Members (#{@members.count})
       %li.nav-item
-        %a.nav-link.show{"aria-controls" => "registered_members", "aria-selected" => "true", "data-toggle" => "tab", :href => "#registered_members", :role => "tab"} 
+        %a.nav-link.show{"aria-controls" => "registered_members", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#registered_members", :role => "tab"} 
           MyKOINS Members (#{@registered_members.count})
       %li.nav-item
-        %a.nav-link.show{"aria-controls" => "unregistered_members", "aria-selected" => "true", "data-toggle" => "tab", :href => "#unregistered_members", :role => "tab"} 
+        %a.nav-link.show{"aria-controls" => "unregistered_members", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#unregistered_members", :role => "tab"} 
           Not Registered MyKOINS Members (#{@unregistered_members.count})
     .tab-content
       #centers.tab-pane.active.show{:role => "tabpanel"}

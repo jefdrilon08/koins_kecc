@@ -4,13 +4,13 @@
       .card-body
         %ul.nav.nav-tabs{:role => "tablist"}
           %li.nav-item
-            %a.nav-link.active.show{"aria-controls" => "details", "aria-selected" => "true", "data-toggle" => "tab", :href => "#details", :role => "tab"} 
+            %a.nav-link.active.show{"aria-controls" => "details", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#details", :role => "tab"} 
               Details
           %li.nav-item
-            %a.nav-link{"aria-controls" => "atttachments", "aria-selected" => "false", "data-toggle" => "tab", :href => "#attachments", :role => "tab"} 
+            %a.nav-link{"aria-controls" => "atttachments", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#attachments", :role => "tab"} 
               Attachments
           %li.nav-item
-            %a.nav-link{"aria-controls" => "member_atttachment_files", "aria-selected" => "false", "data-toggle" => "tab", :href => "#member_attachment_files", :role => "tab"} 
+            %a.nav-link{"aria-controls" => "member_atttachment_files", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#member_attachment_files", :role => "tab"} 
               Member Attachments
         .tab-content
           #details.tab-pane.active.show{:role => "tabpanel"}

@@ -75,7 +75,7 @@
 %hr
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
-    %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
+    %a.nav-link.active.show{"aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#active-members", :role => "tab"}
       Admitted Members (#{@data[:counts][:active_members][:total]})
 .tab-content
   #active-members.tab-pane.active.show{:role => "tabpanel"}
