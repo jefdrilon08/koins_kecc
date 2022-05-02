@@ -58,9 +58,7 @@ var templateErrorList;
 var $btnConfirmClaimsCopy;
 var $inputDateOfDeath;
 
-var $btnRestructure;
 var $btnConfirmRestructure;
-var $modalRestructure;
 var $selectRestructureLoanProduct;
 var $btnRecomputeRestructure;
 var $modalRecomputeRestructure;
@@ -167,9 +165,7 @@ var _cacheDom = function() {
   $btnConfirmClaimsCopy             = $("#btn-confirm-claims-copy");
   $inputDateOfDeath                 = $("#input-date-of-death");
 
-  $btnRestructure               = $("#btn-restructure");
   $btnConfirmRestructure        = $("#btn-confirm-restructure");
-  $modalRestructure             = $("#modal-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
   $selectActiveLoans            = $("#select-active-loans");
   $inputCoMakerA                = $("#input-co-maker-a");
@@ -307,11 +303,6 @@ var _bindEvents = function() {
 
   $selectModeOfPayment.on("change", function() {
     _changeTermOptions($(this).val());
-  });
-
-  $btnRestructure.on("click", function() {
-    $message.html("");
-    $modalRestructure.modal("show");
   });
 
   $btnRecomputeRestructure.on("click", function() {
