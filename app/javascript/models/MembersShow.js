@@ -171,9 +171,9 @@ var _cacheDom = function() {
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
 
   $selectActiveLoans            = $("#select-active-loans").select2({ theme: "bootstrap-5" });
+  $selectCoMakerB               = $("#select-co-maker-b").select2({ theme: "bootstrap-5" });
 
   $inputCoMakerA                = $("#input-co-maker-a");
-  $selectCoMakerB               = $("#select-co-maker-b");
   $inputPnNumber                = $("#input-pn-number");
   $inputClipNumber              = $("#input-clip-number");
   $inputDatePrepared            = $("#input-date-prepared");
