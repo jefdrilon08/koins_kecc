@@ -1,6 +1,5 @@
 import Mustache from "mustache";
 import $ from 'jquery';
-import 'select2';
 
 var $modalGenerateAccessToken;
 var $modalSignature;
@@ -205,11 +204,6 @@ var _cacheDom = function() {
   $modalRestructure             = $("#modal-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
   $selectActiveLoans            = $("#select-active-loans");
-  $selectActiveLoans.select2({
-    allowClear: true,
-    width: "auto",
-    theme: "bootstrap"
-  });
   $inputCoMakerA                = $("#input-co-maker-a");
   $selectCoMakerB               = $("#select-co-maker-b");
   $inputPnNumber                = $("#input-pn-number");
@@ -1242,28 +1236,26 @@ var _bindEvents = function() {
 
     $btnConfirmReinstatement.on("click", function() {
       $btnConfirmReinstatement.prop("disabled", true);
-      //alert("hello");
         $.ajax({
-        url: _urlReinstatement,
-        method: 'POST',
-        dataType: 'json',
-        data: { 
-          member_id: _memberId,
-          reinstatement_date: $inputReinstatementDate.val(),
-          authenticity_token: _authenticityToken
-        },
-        success: function(response) {
-          $message.html("Successfully reinstate member");
-          window.location.reload();
-        },
-        error: function(response) {
-          $message.html("Error in generating access_token");
-          $btnConfirmReinstatement.prop("disabled", false);
-        }
+          url: _urlReinstatement,
+          method: 'POST',
+          dataType: 'json',
+          data: { 
+            member_id: _memberId,
+            reinstatement_date: $inputReinstatementDate.val(),
+            authenticity_token: _authenticityToken
+          },
+          success: function(response) {
+            $message.html("Successfully reinstate member");
+            window.location.reload();
+          },
+          error: function(response) {
+            $message.html("Error in generating access_token");
+            $btnConfirmReinstatement.prop("disabled", false);
+          }
+        });
       });
-
     });
-  });
 
   $btnClaimsCopy.on("click", function() {
     $modalClaimsCopy.modal("show");
