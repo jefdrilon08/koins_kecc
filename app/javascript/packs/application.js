@@ -6,11 +6,8 @@ window.$ = window.JQuery = JQuery;
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-
 import 'bootstrap';
-
 import "@fortawesome/fontawesome-free/js/all";
-
 import '@coreui/coreui';
 
 // React Components

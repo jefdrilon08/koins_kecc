@@ -10,6 +10,7 @@
 @import "./login";
 @import "./sk-cube-grid";
 @import "./member";
+@import "./accordion";
 
 .c-sidebar {
   background: #2b2c2d;
