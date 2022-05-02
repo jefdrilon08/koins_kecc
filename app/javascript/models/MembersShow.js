@@ -60,7 +60,6 @@ var $inputDateOfDeath;
 
 var $btnRestructure;
 var $btnConfirmRestructure;
-var $modalRestructure;
 var $selectRestructureLoanProduct;
 var $btnRecomputeRestructure;
 var $modalRecomputeRestructure;
@@ -169,7 +168,6 @@ var _cacheDom = function() {
 
   $btnRestructure               = $("#btn-restructure");
   $btnConfirmRestructure        = $("#btn-confirm-restructure");
-  $modalRestructure             = $("#modal-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
   $selectActiveLoans            = $("#select-active-loans");
   $inputCoMakerA                = $("#input-co-maker-a");
@@ -311,7 +309,6 @@ var _bindEvents = function() {
 
   $btnRestructure.on("click", function() {
     $message.html("");
-    $modalRestructure.modal("show");
   });
 
   $btnRecomputeRestructure.on("click", function() {
