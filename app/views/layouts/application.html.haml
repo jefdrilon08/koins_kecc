@@ -4,12 +4,14 @@
     %title
       = "[#{App.pipeline.upcase}] " if !App.production?
       = content_for?(:title) ? "#{yield(:title)} - #{App.name}" : "#{App.name}"
+    = stylesheet_link_tag "application"
+    = stylesheet_link_tag "main"
+    = javascript_include_tag "application"
     = csrf_meta_tags
     = csp_meta_tag
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no" }
     %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
-    = stylesheet_pack_tag 'application'
-    = javascript_pack_tag 'application'
+
     - if microinsurance?
       = favicon_link_tag "kmba.ico"
     - else

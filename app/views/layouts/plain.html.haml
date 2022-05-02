@@ -8,8 +8,8 @@
     = csp_meta_tag
     %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
 
-    = stylesheet_pack_tag 'application', media: "all"
-    = javascript_pack_tag 'application'
+    = stylesheet_link_tag "main"
+    = javascript_include_tag "application"
     - if microinsurance?
       = favicon_link_tag "kmba.ico"
     - else

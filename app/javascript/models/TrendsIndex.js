@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 import "select2/dist/js/select2.min";
 import "chart.js/dist/chart.min.js";
 

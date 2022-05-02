@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 
 var $btnSyncMaintaningBalance;
 var $btnConfirmSyncMaintainingBalance;

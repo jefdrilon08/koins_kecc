@@ -1,8 +1,10 @@
 namespace :kezar do
   task :send_payments => :environment do
-    branch        = Branch.find(ENV["BRANCH_ID"])
-    start_date    = ENV["START_DATE"] || Date.today - 1.month
+    branch_id     = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+    branch        = Branch.find(branch_id)
+    start_date    = ENV["START_DATE"] || Date.today - 2.month
     end_date      = ENV["END_DATE"] || Date.today
+    endpoint      = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://us-central1-rms-kmba.cloudfunctions.net/apiTest/payment/batch/upload"
 
     account_type      = "INSURANCE"
     account_subtypes  = ["Life Insurance Fund", "Retirement Fund"]
@@ -18,7 +20,9 @@ namespace :kezar do
       start_date,
       end_date,
       branch.id
-    )
+    ).limit(500)
+
+    puts "Uploading #{account_transactions.size} transactions..."
 
     records = account_transactions.map{ |o|
       {
@@ -31,20 +35,22 @@ namespace :kezar do
         paymentChannel: "Bank Transfer",
         orDate: o.transacted_at.strftime("%Y-%m-%d"),
         description: "test",
-        extranlRef: o.id
+        externalRef: o.id
       }
     }
 
+    puts records.to_json
+
     payload = records
 
-    puts "Posting to #{ENV['KEZAR_API_SEND_PAYMENTS']}..."
+    puts "Posting to #{endpoint}..."
 
     result  = HTTParty.post(
-                ENV['KEZAR_API_SEND_PAYMENTS'],
+                endpoint,
                 body: payload.to_json,
                 :headers => { 'Content-Type' => 'application/json' }
               )
 
-    print(result)
+    puts(result)
   end
 end

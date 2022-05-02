@@ -3,6 +3,9 @@
   .col
     .card
       .card-body
+        = render partial: "index_list_summary"
+        .h4
+          Appliction
         = render partial: "index_filter"
         - if @online_applications.any?
           = render partial: "index_list", locals: { online_applications: @online_applications }

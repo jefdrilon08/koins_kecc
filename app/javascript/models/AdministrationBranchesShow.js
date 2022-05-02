@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 
 var $btnRegister;
 var $btnConfirmRegister;

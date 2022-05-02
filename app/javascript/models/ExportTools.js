@@ -1,4 +1,4 @@
-import Mustsache from "mustache/mustache";
+import Mustsache from "mustache";
 
 var $branch;
 var $startDate;

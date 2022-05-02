@@ -62,7 +62,7 @@ module Accounting
                               amount: 0.00
                             }
                             loan_id= Loan.select("id, 
-                              date_approved as date_approved").where("member_id = '#{o.fetch('member_id')}' AND status IN ('active','paid') and extract(year from date_approved) < '2020'" 
+                              date_approved as date_approved").where("member_id = '#{o.fetch('member_id')}' AND status IN ('active','paid','writeoff') and extract(year from date_approved) < '#{@year}'" 
                               )
                                       temp_dates= {}
                                       temp_dates[:months]= []
@@ -207,7 +207,7 @@ module Accounting
                 centers.id AS center_id,
                 centers.name AS center_name
                 FROM members  
-                INNER JOIN centers ON centers.id = members.center_id AND members.branch_id = '#{@branch.id}' AND members.status IN ('active','resigned','cleared','pending','transferred','archived')  
+                INNER JOIN centers ON centers.id = members.center_id AND members.branch_id = '#{@branch.id}' AND members.status IN ('active','resigned','cleared','pending','transferred','archived','writeoff')  
                 ORDER BY  members.identification_number
       EOS
 
