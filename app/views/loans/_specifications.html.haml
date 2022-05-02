@@ -56,7 +56,7 @@
       Status:
     %td.text-end
       - if @loan.active?
-        .badge.badge-info
+        .badge.bg-info
           Active
       - elsif @loan.pending?
         .badge.bg-danger
@@ -64,7 +64,7 @@
       - elsif @loan.paid?
         .badge.bg-success
           Paid
-      -elsif @loan.writeoff?
+      - elsif @loan.writeoff?
         .badge.bg-warning
           Writeoff
   %tr
