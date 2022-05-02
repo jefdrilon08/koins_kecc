@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import * as bootstrap from "bootstrap";
 import $ from 'jquery';
 
 var $modalSignature;
@@ -124,13 +125,7 @@ var _memberId;
 var _authenticityToken;
 var _loanId;
 
-var _canvas;
-var _signaturePad;
-
 var _cacheDom = function() {
-  _canvas       = document.querySelector("#signature-canvas");
-
-  $modalSignature                   = $("#modal-signature");
   $modalNewLoan                     = $("#modal-new-loan");
   $modalCreateSurvey                = $("#modal-create-survey");
   $modalDelete                      = $("#modal-delete");
@@ -139,7 +134,6 @@ var _cacheDom = function() {
   $modalChangeMemberType            = $("#modal-change-member-type");
   $modalChangeRecognitionDate       = $("#modal-change-recognition-date");
   $modalUploadProfilePicture        = $("#modal-upload-profile-picture");
-  $modalUploadSignature             = $("#modal-upload-signature");
   $modalDeleteProfilePicture        = $("#modal-delete-profile-picture");
   $modalDeleteSignature             = $("#modal-delete-signature");
   $modalRegister                    = $("#modal-register");
@@ -626,11 +620,6 @@ var _bindEvents = function() {
         }
       }
     });
-  });
-
-  $btnUploadSignature.on("click", function() {
-    $message.html("");
-    $modalUploadSignature.modal("show");
   });
 
   $btnConfirmUploadSignature.on("click", function() {
@@ -1157,14 +1146,6 @@ var _bindEvents = function() {
         }
       });
     }
-  });
-
-  $btnClearSignature.on("click", function() {
-    _signaturePad.clear();
-  });
-
-  $btnGenerateSignature.on("click", function() {
-    $modalSignature.modal("show");
   });
 
   $btnResignFromInsurance.on("click", function() {

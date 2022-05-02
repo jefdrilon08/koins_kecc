@@ -1,5 +1,5 @@
 #modal-upload-signature.modal.fade{:tabindex => "-1"}
-  .modal-dialog
+  .modal-dialog.modal-lg
     .modal-content
       .modal-header
         %h3.modal-title
@@ -13,6 +13,6 @@
           %button#btn-confirm-upload-signature.btn.btn-primary
             .fa.fa-check
             Confirm
-          %button.btn{"data-dismiss" => "modal", :type => "button"}
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
             .fa.fa-times
             Cancel

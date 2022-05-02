@@ -125,7 +125,7 @@
         - else
           %p
             No signature
-        #btn-upload-signature.btn.btn-success.btn-block
+        #btn-upload-signature.btn.btn-success.btn-block{ data: { "bs-toggle" => "modal", "bs-target" => "#modal-upload-signature" } }
           .fa.fa-upload
           Upload Signature
         - if @member.signature_file.attached?
