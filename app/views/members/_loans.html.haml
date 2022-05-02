@@ -40,7 +40,7 @@
             %strong
               #{number_to_currency(loan.total_balance, unit: "")}
 
-  %button#btn-restructure.btn.btn-info.text-white
+  %button#btn-restructure.btn.btn-info.text-white{ data: { "bs-toggle": "modal", "bs-target": "#modal-restructure" } }
     .fa.fa-sync
     Restructure
 - else
