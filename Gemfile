@@ -1,54 +1,52 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.0'
+ruby '3.1.1'
 
-gem 'rails', '~> 6.0'
-#gem 'pg', '>= 0.18', '< 2.0'
-gem 'pg'
-gem 'puma'
-gem 'sass-rails', '~> 5.0'
-gem 'bootsnap', '>= 1.1.0', require: false
-gem 'dotenv-rails'
-gem 'haml'
-gem 'devise'
-gem 'simple_form'
+gem 'activerecord-import'
 gem 'awesome_print'
-gem 'whenever'
-gem 'mini_magick'
 gem 'aws-sdk-s3', require: false
 gem 'aws-sdk-sns'
-gem 'kaminari'
-gem 'activerecord-import'
-gem 'config'
-gem 'sidekiq'
-gem 'cocoon'
-gem 'redis'
-gem 'caxlsx_rails'
+gem 'bootsnap', '>= 1.1.0', require: false
 gem 'caxlsx'
+gem 'caxlsx_rails'
+gem 'cocoon'
+gem 'config'
+gem 'cssbundling-rails'
+gem 'devise'
+gem 'dotenv-rails'
+gem 'haml'
 gem 'hirb'
-gem 'numbers_and_words'
-gem 'zip-zip'
-gem 'tty-table'
-gem 'rollbar'
 gem 'httparty'
-#gem 'rack-timeout'
-gem 'newrelic_rpm'
-gem 'sendgrid-ruby'
-gem 'rack-cors'
+gem 'jsbundling-rails'
 gem 'jwt'
-gem 'net-smtp', require: false
-gem 'net-pop', require: false
+gem 'kaminari'
+gem 'mini_magick'
 gem 'net-imap', require: false
+gem 'net-pop', require: false
+gem 'net-smtp', require: false
+gem 'newrelic_rpm'
+gem 'numbers_and_words'
+gem 'pg'
+gem 'puma'
+gem 'rack-cors'
+gem 'rails'
+gem 'redis'
+gem 'rollbar'
+gem 'sendgrid-ruby'
+gem 'sidekiq'
+gem 'simple_form'
+gem 'stimulus-rails'
+gem 'tty-table'
+gem 'turbo-rails'
+gem 'whenever'
+gem 'zip-zip'
 
 # TODO: Remove eventually
 gem 'jquery-rails'
 
 gem 'uglifier'
-gem 'sprockets'
-
-# Webpacker
-gem 'webpacker', '~> 6.0.0.rc.6'
+gem 'sprockets-rails'
 
 # For ruby 2.7.1
 # Note for Ubuntu: Make synmlink to ln -s /bin/mkdir /usr/bin/mkdir
@@ -70,9 +68,6 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'guard-rspec', require: false
   gem 'bullet'
 

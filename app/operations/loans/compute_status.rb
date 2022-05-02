@@ -73,9 +73,7 @@ module Loans
         total_paid: 0.00,
         total_principal_past_due: 0.00,
         total_interest_past_due: 0.00,
-        total_past_due: 0.00,
-        principal: @loan.principal,
-        interest: @loan.interest
+        total_past_due: 0.00
       }
     end
 

@@ -30,17 +30,19 @@ bundle install
 yarn install
 ```
 
-5. KOINS uses `react-js` for various javascript front-end interfaces. Source code is found in the directory `react`. Compile (and optionally `---watch`) the necessary react related assets:
+5. As of **Rails 7**, the system uses `postcss` for compiling css and `esbuild` for javascript. Scripts to perform building is `package.json`. To run all components, use the `Profile` which can be easily ran using the following command:
 
 ```
-./node_modules/.bin/webpack --watch
+./bin/dev
 ```
 
-6. Run the server
+This will run the following (see `Procfile` for reference):
 
-```
-bundle exec rails server
-```
+* `puma` application server
+* sidekiq for operations
+* sidekiq for accounting
+* css compiler
+* js compiler
 
 ## Importing Database to Heroku
 

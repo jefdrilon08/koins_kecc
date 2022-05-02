@@ -1,11 +1,9 @@
 = form_tag "", method: 'GET' do
   .row
-    .col-md-4
-      .form-group
-        %label
-          ACTION
-      
-          .fa.fa-download
+    .col
+      .card
+        .card-body
+          = render partial: "index_filter"
   .row
     .col
       .card

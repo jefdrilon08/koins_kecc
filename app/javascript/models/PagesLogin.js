@@ -1,4 +1,4 @@
-import Mustache from "mustache/mustache";
+import Mustache from "mustache";
 
 var url         = "/api/v1/login";
 var loadingText = '<i class="fa fa-spin"></i> Loading...';

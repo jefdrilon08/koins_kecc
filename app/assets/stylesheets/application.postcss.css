@@ -1,14 +1,16 @@
+/* Entry point for your PostCSS build */
+
 @import "bootstrap/dist/css/bootstrap";
+@import "@coreui/coreui/dist/css/coreui";
 @import '@fortawesome/fontawesome-free';
 @import "select2/dist/css/select2";
 @import "datatables.net-bs4/css/dataTables.bootstrap4";
 @import "datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4";
 
 @import "./login";
-@import "@coreui/coreui/scss/coreui";
-
 @import "./sk-cube-grid";
 @import "./member";
+@import "./accordion";
 
 .c-sidebar {
   background: #2b2c2d;
@@ -152,7 +154,7 @@ input:checked + .slider:before {
   margin: 0 auto;
   top: calc(50% - 24px);
 }
-  
+
 .bd-example-modal-lg .modal-dialog .modal-content{
   background-color: transparent;
   border: none;
