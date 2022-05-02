@@ -26,14 +26,13 @@ class OnlineApplicationsController < ApplicationController
 
 
       @online_application_status.each do |a|
-        status_count =  OnlineApplication.where(
-                                                "branch_id = ? and
-                                                 status = ?
-                                                ",
-                                                bd["id"],
-                                                a
+        status_count  = OnlineApplication.where(
+                          "branch_id = ? and status = ?",
+                          bd["id"],
+                          a
 
-                                                )
+                        )
+
         if status_count.present?
           tmp_details = { app_status: a, total_number: status_count.count }
         else
