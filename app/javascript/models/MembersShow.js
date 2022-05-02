@@ -1,6 +1,8 @@
 import Mustache from "mustache";
 import * as bootstrap from "bootstrap";
 import $ from 'jquery';
+import select2 from 'select2';
+select2($);
 
 var $modalSignature;
 var $modalDelete;
@@ -167,7 +169,9 @@ var _cacheDom = function() {
 
   $btnConfirmRestructure        = $("#btn-confirm-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
-  $selectActiveLoans            = $("#select-active-loans");
+
+  $selectActiveLoans            = $("#select-active-loans").select2({ theme: "bootstrap-5" });
+
   $inputCoMakerA                = $("#input-co-maker-a");
   $selectCoMakerB               = $("#select-co-maker-b");
   $inputPnNumber                = $("#input-pn-number");

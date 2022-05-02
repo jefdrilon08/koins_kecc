@@ -2,7 +2,8 @@
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
-@import "select2/dist/css/select2";
+@import "select2/src/scss/core";
+@import "select2-bootstrap-5-theme/src/include-all";
 
 // Local imports
 @import "./variables";
