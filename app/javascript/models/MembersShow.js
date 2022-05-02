@@ -49,8 +49,6 @@ var $message;
 var $btnResignFromInsurance;
 var $modalResignFromInsurance;
 var $btnConfirmInsuranceResign;
-var $btnReinstatement;
-var $modalReinstatement;
 var $btnConfirmReinstatement;
 var $inputDateResigned;
 var $inputReason;
@@ -167,8 +165,6 @@ var _cacheDom = function() {
   $btnResignFromInsurance           = $("#btn-resign-from-insurance");
   $modalResignFromInsurance         = $("#modal-resign-from-insurance");
   $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
-  $btnReinstatement                 = $("#btn-reinstatement");
-  $modalReinstatement               = $("#modal-reinstatement");
   $btnConfirmReinstatement          = $("#btn-confirm-reinstatement")
   $btnUploadProfilePicture          = $("#btn-upload-profile-picture");
   $btnConfirmUploadProfilePicture   = $("#btn-confirm-upload-profile-picture");
@@ -1168,31 +1164,27 @@ var _bindEvents = function() {
     });
   });
 
-  $btnReinstatement.on("click", function() {
-    $modalReinstatement.modal("show");
-
-    $btnConfirmReinstatement.on("click", function() {
-      $btnConfirmReinstatement.prop("disabled", true);
-        $.ajax({
-          url: _urlReinstatement,
-          method: 'POST',
-          dataType: 'json',
-          data: { 
-            member_id: _memberId,
-            reinstatement_date: $inputReinstatementDate.val(),
-            authenticity_token: _authenticityToken
-          },
-          success: function(response) {
-            $message.html("Successfully reinstate member");
-            window.location.reload();
-          },
-          error: function(response) {
-            $message.html("Error in generating access_token");
-            $btnConfirmReinstatement.prop("disabled", false);
-          }
-        });
-      });
+  $btnConfirmReinstatement.on("click", function() {
+    $btnConfirmReinstatement.prop("disabled", true);
+    $.ajax({
+      url: _urlReinstatement,
+      method: 'POST',
+      dataType: 'json',
+      data: { 
+        member_id: _memberId,
+        reinstatement_date: $inputReinstatementDate.val(),
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Successfully reinstate member");
+        window.location.reload();
+      },
+      error: function(response) {
+        $message.html("Error in generating access_token");
+        $btnConfirmReinstatement.prop("disabled", false);
+      }
     });
+  });
 
   $btnClaimsCopy.on("click", function() {
     $modalClaimsCopy.modal("show");
