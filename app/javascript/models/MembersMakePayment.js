@@ -58,7 +58,7 @@ var _bindEvents = function() {
   
   $btnDestroy.on("click", function() {
     $message.html("");
-    $modalDelete.modal("show");
+    $modalDelete.show();
     _id = $(this).data("make-payment-id")
   });
 
@@ -100,7 +100,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
     _id = $(this).data("make-payment-id")
     
   });

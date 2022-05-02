@@ -29,7 +29,7 @@ var _bindEvents = function() {
   $btnPrintWithdrawalRequest.on("click", function() {
     $message.html("");
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "withdrawal_request";
 

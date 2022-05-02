@@ -41,7 +41,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnAdjustDatePosted.on("click", function() {
     accountingEntryId = $(this).data('id');
-    $modalAdjustDatePosted.modal("show");
+    $modalAdjustDatePosted.show();
   });
 
   $btnConfirmAdjustDatePosted.on("click", function() {
@@ -88,7 +88,7 @@ var _bindEvents = function() {
   $btnPrint.on("click", function() {
     var accountingEntryId = $btnPrint.data('id');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,
@@ -102,7 +102,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     accountingEntryId  = $(this).data("id");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

@@ -121,7 +121,7 @@ var _bindEvents = function() {
 
 $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
 
@@ -176,7 +176,7 @@ $btnApprove.on("click", function() {
     $displayMember.html(currentMember);
     $displayLoanProductName.html(currentLoanProduct);
 
-    $modalDeleteMember.modal("show");
+    $modalDeleteMember.show();
   });
 
   $btnConfirmDeleteMember.on("click", function() {

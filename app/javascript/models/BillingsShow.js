@@ -63,7 +63,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnZeroOut.on("click", function() {
-    $modalZeroOut.modal("show");
+    $modalZeroOut.show();
     $message.html("");
   });
 
@@ -109,7 +109,7 @@ var _bindEvents = function() {
 
   $btnUncheck.on("click", function() {
     
-    $modalUncheck.modal("show");
+    $modalUncheck.show();
     $message.html("");
   });
   
@@ -155,7 +155,7 @@ var _bindEvents = function() {
 
 
   $btnCheck.on("click", function() {
-    $modalCheck.modal("show");
+    $modalCheck.show();
     $message.html("");
   });
 
@@ -198,7 +198,7 @@ var _bindEvents = function() {
   });
 
   $btnPrintWp.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $message.html("");
 
     var type = "wp";
@@ -228,7 +228,7 @@ var _bindEvents = function() {
 
 
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "billing";
 
@@ -238,7 +238,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

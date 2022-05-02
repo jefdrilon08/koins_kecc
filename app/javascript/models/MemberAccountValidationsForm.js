@@ -66,7 +66,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnAddMember.on("click", function() {
-    // $modalLoading.modal("show");
+    // $modalLoading.show();
     $btnAddMember.prop("disabled", true);
     $message.html("Loading...");
 
@@ -121,7 +121,7 @@ var _bindEvents = function() {
     var deleteMemberId = $btn.data('delete-member-id');
 
     if (memberAccountValidationStatus == "cancelled"){
-      $modalMemberCancellation.modal("show");
+      $modalMemberCancellation.show();
       $message.html("");
 
       $btnConfirmMemberCancellation.on("click", function() {

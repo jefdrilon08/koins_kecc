@@ -4,7 +4,6 @@ import $ from 'jquery';
 import select2 from 'select2';
 select2($);
 
-var $modalSignature;
 var $modalDelete;
 var $modalCreateSurvey;
 var $modalRestore;
@@ -310,7 +309,7 @@ var _bindEvents = function() {
   });
 
   $btnRecomputeRestructure.on("click", function() {
-    $modalRecomputeRestructure.modal("show");
+    $modalRecomputeRestructure.show();
   });
 
   $modalConfirmRecomputeRestructure.on("click", function(){
@@ -432,7 +431,7 @@ var _bindEvents = function() {
   $btnErase.on("click", function(){
     
     _loanId = $(this).data("id");
-    $modalErase.modal("show");
+    $modalErase.show();
   });
 
   $btnConfirmErase.on("click", function(){
@@ -456,7 +455,7 @@ var _bindEvents = function() {
 
   $btnRegister.on("click", function() {
     $message.html("");
-    $modalRegister.modal("show");
+    $modalRegister.show();
   });
 
   $btnConfirmRegister.on("click", function() {
@@ -502,7 +501,7 @@ var _bindEvents = function() {
 
   $btnDeleteSignature.on("click", function() {
     $message.html("");
-    $modalDeleteSignature.modal("show");
+    $modalDeleteSignature.show();
   });
 
   $btnConfirmDeleteSignature.on("click", function() {
@@ -548,7 +547,7 @@ var _bindEvents = function() {
 
   $btnDeleteProfilePicture.on("click", function() {
     $message.html("");
-    $modalDeleteProfilePicture.modal("show");
+    $modalDeleteProfilePicture.show();
   });
 
   $btnConfirmDeleteProfilePicture.on("click", function() {
@@ -655,7 +654,7 @@ var _bindEvents = function() {
 
   $btnUploadProfilePicture.on("click", function() {
     $message.html("");
-    $modalUploadProfilePicture.modal("show");
+    $modalUploadProfilePicture.show();
   });
 
   $btnConfirmUploadProfilePicture.on("click", function() {
@@ -765,7 +764,7 @@ var _bindEvents = function() {
 
   $btnChangeMemberType.on("click", function() {
     $message.html(""); 
-    $modalChangeMemberType.modal("show");
+    $modalChangeMemberType.show();
   });
 
   $btnConfirmChangeMemberType.on("click", function() {
@@ -853,7 +852,7 @@ var _bindEvents = function() {
 
   $btnRestore.on("click", function() {
     $message.html("");
-    $modalRestore.modal("show");
+    $modalRestore.show();
   });
 
   $btnConfirmRestore.on("click", function() {
@@ -899,7 +898,7 @@ var _bindEvents = function() {
 
   $btnUnlock.on("click", function() {
     $message.html("");
-    $modalUnlock.modal("show");
+    $modalUnlock.show();
   });
 
   $btnConfirmUnlock.on("click", function() {
@@ -945,7 +944,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function() {
     $message.html("");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -991,7 +990,7 @@ var _bindEvents = function() {
 
   $btnCreateSurvey.on("click", function() {
     $message.html("");
-    $modalCreateSurvey.modal("show");
+    $modalCreateSurvey.show();
   });
 
   $btnConfirmCreateSurvey.on("click", function() {
@@ -1108,7 +1107,7 @@ var _bindEvents = function() {
   });
 
   $btnResignFromInsurance.on("click", function() {
-    $modalResignFromInsurance.modal("show");
+    $modalResignFromInsurance.show();
 
     $btnConfirmInsuranceResign.on("click", function() {
       $btnConfirmInsuranceResign.prop("disabled", true);

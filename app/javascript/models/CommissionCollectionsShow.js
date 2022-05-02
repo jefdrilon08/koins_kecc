@@ -30,7 +30,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -73,7 +73,7 @@ var _bindEvents = function() {
 
   $btnUpdate.on("click", function() {
     $message.html("");
-    $modalUpdate.modal("show");
+    $modalUpdate.show();
   });
 
   $btnConfirmUpdate.on("click", function() {

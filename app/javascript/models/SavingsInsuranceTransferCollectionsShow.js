@@ -54,7 +54,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnApprove.on("click", function() {
-    $modalApprove.modal("show");
+    $modalApprove.show();
     $message.html("");
   });
 

@@ -66,7 +66,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnAssignBranch.on("click", function() {
-    $modalAssignBranch.modal("show");
+    $modalAssignBranch.show();
   });
 
   $btnConfirmAssignBranch.on("click", function() {
@@ -120,7 +120,7 @@ var _bindEvents = function() {
   });
 
   $btnVerify.on("click", function() {
-    $modalVerify.modal("show");
+    $modalVerify.show();
   });
 
   $btnConfirmVerify.on("click", function() {
@@ -192,7 +192,7 @@ var _bindEvents = function() {
   }
 
   $btnReject.on("click", function() {
-    $modalReject.modal("show");
+    $modalReject.show();
   });
 
   $btnConfirmReject.on("click", function() {
@@ -286,7 +286,7 @@ var _bindEvents = function() {
   });
 
   $btnProcess.on("click", function() {
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $selectBranch.on("change", function() {

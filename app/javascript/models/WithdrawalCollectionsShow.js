@@ -31,7 +31,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "withdrawal_collection";
 
@@ -41,7 +41,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

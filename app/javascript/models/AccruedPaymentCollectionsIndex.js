@@ -153,7 +153,7 @@ var _bindEvents = function() {
   
   $btnDelete.on("click", function() {
     _moratoriumId = $(this).data("id");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -221,7 +221,7 @@ var _bindEvents = function() {
   });
 
   $btnNewTransaction.on("click", function() {
-    $modalNewTransaction.modal("show");
+    $modalNewTransaction.show();
   });
 
   $btnConfirmNewTransaction.on("click", function() {

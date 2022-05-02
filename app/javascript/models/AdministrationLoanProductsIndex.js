@@ -23,7 +23,7 @@ var _cacheDom = function(config) {
 var _bindEvents = function(config) {
   $btnUpload.on("click", function() {
     $message.html("");
-    $modalUpload.modal("show");
+    $modalUpload.show();
   });
 }
 

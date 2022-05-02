@@ -33,7 +33,7 @@ var _bindEvents = function() {
  $btnPrintPdf.on("click", function() {
     var print_mi = $btnPrintPdf.data('id');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,

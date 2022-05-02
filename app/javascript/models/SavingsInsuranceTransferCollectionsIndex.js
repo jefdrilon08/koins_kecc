@@ -90,7 +90,7 @@ var _bindEvents = function() {
   });
 
   $btnNewTransaction.on("click", function() {
-    $modalNewTransaction.modal("show");
+    $modalNewTransaction.show();
     $message.html("");
   });
 

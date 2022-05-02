@@ -40,7 +40,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     $.ajax({
       url: "/api/v1/print/generate_file",
@@ -66,7 +66,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function(){
     $message.html("");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -94,7 +94,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
   
 

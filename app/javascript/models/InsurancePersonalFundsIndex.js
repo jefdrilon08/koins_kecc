@@ -45,7 +45,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
 
@@ -109,7 +109,7 @@ var _bindEvents = function() {
   });
 
   $btnGenerateAll.on("click", function() {
-    $modalGenerateAll.modal("show");
+    $modalGenerateAll.show();
     $message.html("");
   });
 

@@ -151,7 +151,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -198,7 +198,7 @@ var _bindEvents = function() {
 
   $btnDeleteAccountingEntry.on("click", function() {
     $message.html("");
-    $modalDeleteAccountingEntry.modal("show");
+    $modalDeleteAccountingEntry.show();
 
     $displayPostType.html($(this).data("post-type"));
     $displayAccountingCode.html($(this).data("accounting-code-name"));
@@ -314,7 +314,7 @@ var _bindEvents = function() {
     $displayMember.html(currentMember);
     $displayAccountSubtype.html(currentAccountSubtype);
 
-    $modalDeleteMember.modal("show");
+    $modalDeleteMember.show();
   });
 
   $btnConfirmDeleteMember.on("click", function() {
@@ -415,7 +415,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
-    $modalDelete.modal("show");
+    $modalDelete.show();
     $message.html("");
   });
   

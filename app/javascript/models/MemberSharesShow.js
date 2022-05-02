@@ -19,7 +19,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var id    = $(this).data("id");
     

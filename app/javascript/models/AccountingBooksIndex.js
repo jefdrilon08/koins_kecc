@@ -78,7 +78,7 @@ var _bindEvents = function() {
       alert("End date required");
     }
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $message.html("Printing...");
 
     $modalPrint.modal("hide");

@@ -49,7 +49,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "insurance_fund_transfer_collection";
 
@@ -59,12 +59,12 @@ var _bindEvents = function() {
 
   $btnFinalize.on("click", function() {
     $message.html("");
-    $modalFinalize.modal("show");
+    $modalFinalize.show();
   });
 
    $btnRevert.on("click", function() {
     $message.html("");
-    $modalRevert.modal("show");
+    $modalRevert.show();
   });
 
   $btnConfirmFinalize.on("click", function() {
@@ -147,7 +147,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

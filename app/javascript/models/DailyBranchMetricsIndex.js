@@ -27,7 +27,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
   });
 
   $btnConfirmNew.on("click", function() {

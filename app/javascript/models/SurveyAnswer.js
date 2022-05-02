@@ -24,7 +24,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnDeleteSurveyAnswer.on("click", function() {
     $message.html("");
-    $modalDeleteSurveyAnswer.modal("show");
+    $modalDeleteSurveyAnswer.show();
   });
 
   $btnConfirmDeleteSurveyAnswer.on("click", function() {

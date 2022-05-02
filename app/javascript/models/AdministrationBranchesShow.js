@@ -82,7 +82,7 @@ var _bindEvents = function() {
 
   $btnRegister.on("click", function() {
     $message.html("");
-    $modalRegister.modal("show");
+    $modalRegister.show();
 
     _id               = $(this).data('id');
     _memberFirstName  = $(this).data('first-name');

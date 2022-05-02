@@ -133,7 +133,7 @@ var _bindEvents = function() {
     //$selectCenter.val()
     //$selectMember.val()
     */
-    $modalContactPerson.modal("show");
+    $modalContactPerson.show();
   }) 
 
   $selectCenter.on("change", function() {

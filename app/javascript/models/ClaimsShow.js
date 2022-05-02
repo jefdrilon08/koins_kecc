@@ -709,43 +709,43 @@ var _bindEvents = function() {
 
   // check
   $btnCheck.on("click", function() {
-    $modalCheck.modal("show");
+    $modalCheck.show();
     $message.html("");
   });
 
   // proceed
   $btnProceed.on("click", function() {
-    $modalProceed.modal("show");
+    $modalProceed.show();
     $message.html("");
   });
 
   // declined
   $btnDeclined.on("click", function() {
-    $modalDeclined.modal("show");
+    $modalDeclined.show();
     $message.html("");
   });
 
   // Add note
   $btnNote.on("click", function() {
-    $modalNote.modal("show");
+    $modalNote.show();
     $message.html("");
   });
 
   // Approve
   $btnApprove.on("click", function() {
-    $modalApprove.modal("show");
+    $modalApprove.show();
     $message.html("");
   });
 
   // Post
   $btnPost.on("click", function() {
-    $modalPost.modal("show");
+    $modalPost.show();
     $message.html("");
   });
 
   // Pending
   $btnPending.on("click", function() {
-    $modalPending.modal("show");
+    $modalPending.show();
     $message.html("");
   });
 
@@ -753,7 +753,7 @@ var _bindEvents = function() {
     var accountingEntryId = $btnPrint.data('id');
     var cId = $btnPrint.data('cid');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,

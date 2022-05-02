@@ -77,7 +77,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnLoadCenter.on("click", function() {
-    $modalLoadCenter.modal("show");
+    $modalLoadCenter.show();
   });
 
   $btnConfirmLoadCenter.on("click", function() {
@@ -125,7 +125,7 @@ var _bindEvents = function() {
   });
 
   $btnLoadBranch.on("click", function() {
-    $modalLoadBranch.modal("show");
+    $modalLoadBranch.show();
   });
 
   $btnConfirmLoadBranch.on("click", function() {
@@ -258,7 +258,7 @@ var _bindEvents = function() {
   });
 
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "deposit_collection";
 
@@ -267,7 +267,7 @@ var _bindEvents = function() {
   });
 
   $btnPrintAccountingEntry.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "deposit_collection_accounting_entry";
 
@@ -277,7 +277,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -321,7 +321,7 @@ var _bindEvents = function() {
 
   $btnFinalize.on("click", function() {
     $message.html("");
-    $modalFinalize.modal("show");
+    $modalFinalize.show();
   });
 
   $btnConfirmFinalize.on("click", function() {

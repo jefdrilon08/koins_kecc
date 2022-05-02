@@ -252,7 +252,7 @@ var _bindEvents = function() {
     
     _dataStoreId = $(this).data("data-store-id");
   
-    $modalCheck.modal("show");
+    $modalCheck.show();
   });
 
 
@@ -287,7 +287,7 @@ var _bindEvents = function() {
     
     _dataStoreId = $(this).data("data-store-id");
   
-    $modalApproved.modal("show");
+    $modalApproved.show();
   });
 
 
@@ -447,7 +447,7 @@ var _bindEvents = function() {
   $btnProcess.on("click", function() {
   
     _moratoriumId = $(this).data("id");
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $btnConfirmProcess.on("click", function() {
@@ -489,7 +489,7 @@ var _bindEvents = function() {
   $btnDelete.on("click", function() {
     alert("jef")
     _moratoriumId = $(this).data("id");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -584,7 +584,7 @@ var _bindEvents = function() {
     
   
 
-    $modalRemovePayment.modal("show");
+    $modalRemovePayment.show();
 
   });
 
@@ -608,7 +608,7 @@ var _bindEvents = function() {
    
 
 
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $btnConfirmNew.on("click", function(e) {

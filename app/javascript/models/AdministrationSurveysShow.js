@@ -34,7 +34,7 @@ var _bindEvents = function() {
   $btnDeleteQuestion.on("click", function() {
     surveyQuestionId  = $(this).data("id");
 
-    $modalDeleteQuestion.modal("show");
+    $modalDeleteQuestion.show();
     $message.html("");
   });
 
@@ -77,7 +77,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
-    $modalDelete.modal("show");
+    $modalDelete.show();
     $message.html("");
   });
 
