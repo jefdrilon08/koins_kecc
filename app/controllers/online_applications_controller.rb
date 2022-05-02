@@ -28,8 +28,7 @@ class OnlineApplicationsController < ApplicationController
       @online_application_status.each do |a|
         status_count =  OnlineApplication.where(
                                                 "branch_id = ? and
-
-                                                  status = ?
+                                                 status = ?
                                                 ",
                                                 bd["id"],
                                                 a
