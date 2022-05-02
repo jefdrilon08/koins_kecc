@@ -20,7 +20,7 @@ class BillingForWriteoffCollectionsController < DataStoreController
   
   def show
     @billing_data_store = DataStore.find(params[:id])
-    @member_list = @billing_data_store.data['record'].map{|o| ["#{o['member_id']}"]}
+    @member_list = @billing_data_store.data['record'].map{|o| "#{o['member_id']}"}
     @subheader_items = [
       {
         text: "Billing for Writeoff Collections #{@member_list}"
