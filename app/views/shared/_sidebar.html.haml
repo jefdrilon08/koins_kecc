@@ -11,7 +11,7 @@
         %span.link-name
           Operations
 
-    %li{ class: "#{params[:controller] == 'members' ? 'active' : ''}" }
+    %li{ class: "#{['members', 'online_applications'].include?(params[:controller]) ? 'active' : ''}" }
       .icon-link
         = link_to members_path, class: "" do
           %i.bi.bi-person-square
@@ -24,12 +24,16 @@
             Members
         %li
           = link_to member_form_path, class: "" do
-            %i.bi.bi-plus
+            %i.bi.bi-plus-circle
             New Member
         %li
           = link_to members_path(status: "pending"), class: "" do
-            %i.bi.bi-exclamation
+            %i.bi.bi-exclamation-circle
             Pending Members
+        %li
+          = link_to online_applications_path do
+            %i.bi.bi-globe
+            Online Applications
 
     - if microloans?
       %li{ class: "#{params[:controller] == 'loans' ? 'active' : ''}" }
@@ -45,7 +49,7 @@
               Loans
           %li
             = link_to loans_path(status: "pending"), class: "" do
-              %i.bi.bi-exclamation
+              %i.bi.bi-exclamation-circle
               Pending
             = link_to loans_path(status: "for-verification"), class: "" do
               %i.bi.bi-folder-check

@@ -1,6 +1,6 @@
 import Mustache from "mustache";
-import * as bootstrap from "bootstrap";
 import $ from 'jquery';
+import * as bootstrap from "bootstrap";
 import select2 from 'select2';
 select2($);
 
@@ -63,7 +63,7 @@ var $btnConfirmRestructure;
 var $selectRestructureLoanProduct;
 var $btnRecomputeRestructure;
 var $modalRecomputeRestructure;
-var $modalConfirmRecomputeRestructure;
+var $btnConfirmRecomputeRestructure;
 var $selectActiveLoans;
 var $inputCoMakerA;
 var $selectCoMakerB;
@@ -153,6 +153,18 @@ var _cacheDom = function() {
     document.getElementById("modal-register")
   )
 
+  $modalResignFromInsurance = new bootstrap.Modal(
+    document.getElementById("modal-resign-from-insurance")
+  )
+
+  $modalErase = new bootstrap.Modal(
+    document.getElementById("modal-erase")
+  )
+
+  $modalRecomputeRestructure = new bootstrap.Modal(
+    document.getElementById("modal-recompute-restructure")
+  )
+
   $btnConfirmSignature              = $("#btn-confirm-signature");
   $btnGenerateSignature             = $("#btn-generate-signature");
   $btnClearSignature                = $("#btn-clear-signature");
@@ -174,6 +186,7 @@ var _cacheDom = function() {
   $btnChangeMemberType              = $("#btn-change-member-type");
   $btnConfirmChangeMemberType       = $("#btn-confirm-change-member-type");
   $btnConfirmChangeRecognitionDate  = $("#btn-confirm-change-recognition-date");
+  $btnConfirmRecomputeRestructure   = $("#btn-confirm-recompute-restructure")
   $btnUploadSignature               = $("#btn-upload-signature");
   $btnConfirmUploadSignature        = $("#btn-confirm-upload-signature");
   $inputRecognitionDate             = $("#input-recognition-date");
@@ -183,7 +196,6 @@ var _cacheDom = function() {
   $selectLoanProduct                = $("#select-loan-product");
   $selectSurvey                     = $("#select-survey");
   $btnResignFromInsurance           = $("#btn-resign-from-insurance");
-  $modalResignFromInsurance         = $("#modal-resign-from-insurance");
   $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
   $btnConfirmReinstatement          = $("#btn-confirm-reinstatement")
   $btnUploadProfilePicture          = $("#btn-upload-profile-picture");
@@ -216,11 +228,8 @@ var _cacheDom = function() {
 
 
   $btnRecomputeRestructure               = $("#btn-recompute-restructure");
-  $modalRecomputeRestructure             = $("#modal-recompute-restructure");
-  $modalConfirmRecomputeRestructure      = $("#btn-confirm-recompute-restructure")
 
   $btnErase                    = $(".btn-erase"); 
-  $modalErase                  = $("#modal-erase");
   $btnConfirmErase             = $("#btn-confirm-erase");
   
   $message          = $(".message");
@@ -342,7 +351,7 @@ var _bindEvents = function() {
     $modalRecomputeRestructure.show();
   });
 
-  $modalConfirmRecomputeRestructure.on("click", function(){
+  $btnConfirmRecomputeRestructure.on("click", function(){
     
     $btnRecomputeRestructure.prop("disabled", true)
     var data  = {

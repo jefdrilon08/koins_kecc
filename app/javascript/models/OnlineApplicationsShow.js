@@ -1,5 +1,6 @@
 import Mustache from "mustache";
-
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -38,10 +39,22 @@ var $inputReason;
 var _centers = [];
 
 var _cacheDom = function() {
-  $modalProcess                       = $("#modal-process");
-  $modalReject                        = $("#modal-reject");
-  $modalVerify                        = $("#modal-verify");
-  $modalAssignBranch                  = $("#modal-assign-branch");
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-process")
+  )
+
+  $modalReject = new bootstrap.Modal(
+    document.getElementById("modal-reject")
+  )
+
+  $modalVerify = new bootstrap.Modal(
+    document.getElementById("modal-verify")
+  )
+
+  $modalAssignBranch = new bootstrap.Modal(
+    document.getElementById("modal-assign-branch")
+  )
+
   $btnProcess                         = $("#btn-process");
   $btnConfirmProcess                  = $("#btn-confirm-process");
   $btnReject                          = $("#btn-reject");
