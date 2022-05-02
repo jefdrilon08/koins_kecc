@@ -84,7 +84,7 @@
         .value.text-muted
           %b
             -  if @member.modifiable
-              = link_to "#", id: "btn-change-recognition-date" do
+              = link_to "#", id: "btn-change-recognition-date", data: { "bs-toggle" => "modal", "bs-target" => "#modal-change-recognition-date" } do
                 - if @member.recognition_date.present?
                   #{@member.recognition_date.strftime("%b %d, %Y")}
                 - else

@@ -9,7 +9,6 @@ var $modalCreateSurvey;
 var $modalRestore;
 var $modalUnlock;
 var $modalChangeMemberType;
-var $modalChangeRecognitionDate;
 var $modalUploadProfilePicture;
 var $modalUploadSignature;
 var $modalDeleteProfilePicture;
@@ -34,7 +33,6 @@ var $btnRestore;
 var $btnConfirmRestore;
 var $btnGenerateMissingAccounts;
 var $btnChangeMemberType;
-var $btnChangeRecognitionDate;
 var $btnConfirmChangeMemberType;
 var $btnConfirmChangeRecognitionDate;
 var $btnConfirmDeleteProfilePicture;
@@ -132,7 +130,6 @@ var _cacheDom = function() {
   $modalUnlock                      = $("#modal-unlock");
   $modalRestore                     = $("#modal-restore");
   $modalChangeMemberType            = $("#modal-change-member-type");
-  $modalChangeRecognitionDate       = $("#modal-change-recognition-date");
   $modalUploadProfilePicture        = $("#modal-upload-profile-picture");
   $modalDeleteProfilePicture        = $("#modal-delete-profile-picture");
   $modalDeleteSignature             = $("#modal-delete-signature");
@@ -157,7 +154,6 @@ var _cacheDom = function() {
   $btnConfirmUnlock                 = $("#btn-confirm-unlock");
   $btnGenerateMissingAccounts       = $("#btn-generate-missing-accounts");
   $btnChangeMemberType              = $("#btn-change-member-type");
-  $btnChangeRecognitionDate         = $("#btn-change-recognition-date");
   $btnConfirmChangeMemberType       = $("#btn-confirm-change-member-type");
   $btnConfirmChangeRecognitionDate  = $("#btn-confirm-change-recognition-date");
   $btnUploadSignature               = $("#btn-upload-signature");
@@ -750,11 +746,6 @@ var _bindEvents = function() {
         });
       }
     }
-  });
-
-  $btnChangeRecognitionDate.on("click", function() {
-    $message.html(""); 
-    $modalChangeRecognitionDate.modal("show");
   });
 
   $btnConfirmChangeRecognitionDate.on("click", function() {
