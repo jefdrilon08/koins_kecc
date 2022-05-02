@@ -3,7 +3,6 @@ import * as bootstrap from "bootstrap";
 import $ from 'jquery';
 
 var $modalSignature;
-var $modalNewLoan;
 var $modalDelete;
 var $modalCreateSurvey;
 var $modalRestore;
@@ -17,7 +16,6 @@ var $modalRegister;
 var $btnGenerateSignature;
 var $btnClearSignature;
 var $btnConfirmSignature;
-var $btnNewLoan;
 var $btnConfirmNewLoan;
 var $btnCreateSurvey;
 var $btnConfirmCreateSurvey;
@@ -85,7 +83,6 @@ var $inputMykoinsPassword;
 var $inputMykoinsPasswordConfirmation;
 var $btnSaveMykoinsPassword;
 
-
 var $btnConfirmMakePayment;
 var $selectMakePaymentType;
 
@@ -118,7 +115,6 @@ var _authenticityToken;
 var _loanId;
 
 var _cacheDom = function() {
-  $modalNewLoan                     = $("#modal-new-loan");
   $modalCreateSurvey                = $("#modal-create-survey");
   $modalDelete                      = $("#modal-delete");
   $modalUnlock                      = $("#modal-unlock");
@@ -131,7 +127,6 @@ var _cacheDom = function() {
   $btnConfirmSignature              = $("#btn-confirm-signature");
   $btnGenerateSignature             = $("#btn-generate-signature");
   $btnClearSignature                = $("#btn-clear-signature");
-  $btnNewLoan                       = $("#btn-new-loan");
   $btnCreateSurvey                  = $("#btn-create-survey");
   $btnConfirmCreateSurvey           = $("#btn-confirm-create-survey");
   $btnConfirmNewLoan                = $("#btn-confirm-new-loan");
@@ -1046,11 +1041,6 @@ var _bindEvents = function() {
         }
       }
     });
-  });
-
-  $btnNewLoan.on("click", function() {
-    $message.html("");
-    $modalNewLoan.modal("show");
   });
 
   $btnConfirmNewLoan.on("click", function() {
