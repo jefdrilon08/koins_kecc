@@ -114,15 +114,45 @@ var _authenticityToken;
 var _loanId;
 
 var _cacheDom = function() {
-  $modalCreateSurvey                = $("#modal-create-survey");
-  $modalDelete                      = $("#modal-delete");
-  $modalUnlock                      = $("#modal-unlock");
-  $modalRestore                     = $("#modal-restore");
-  $modalChangeMemberType            = $("#modal-change-member-type");
-  $modalUploadProfilePicture        = $("#modal-upload-profile-picture");
-  $modalDeleteProfilePicture        = $("#modal-delete-profile-picture");
-  $modalDeleteSignature             = $("#modal-delete-signature");
-  $modalRegister                    = $("#modal-register");
+  /**
+   * Bootstrap 5 modal initialization
+   **/
+  $modalCreateSurvey = new bootstrap.Modal(
+    document.getElementById("modal-create-survey")
+  )
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  )
+
+  $modalUnlock = new bootstrap.Modal(
+    document.getElementById("modal-unlock")
+  )
+
+  $modalRestore = new bootstrap.Modal(
+    document.getElementById("modal-restore")
+  )
+
+  $modalChangeMemberType = new bootstrap.Modal(
+    document.getElementById("modal-change-member-type")
+  )
+
+  $modalUploadProfilePicture = new bootstrap.Modal(
+    document.getElementById("modal-upload-profile-picture")
+  ) 
+
+  $modalDeleteProfilePicture = new bootstrap.Modal(
+    document.getElementById("modal-delete-profile-picture")
+  )
+
+  $modalDeleteSignature = new bootstrap.Modal(
+    document.getElementById("modal-delete-signature")
+  )
+
+  $modalRegister = new bootstrap.Modal(
+    document.getElementById("modal-register")
+  )
+
   $btnConfirmSignature              = $("#btn-confirm-signature");
   $btnGenerateSignature             = $("#btn-generate-signature");
   $btnClearSignature                = $("#btn-clear-signature");
