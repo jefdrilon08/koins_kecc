@@ -1,0 +1,17 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          Writeoff Collection for #{@data_store.meta["branch_name"]} /
+          #{@data_store.meta["center_name"]} - 
+          #{@data_store.meta["transaction_date"]}
+
+        - if @data_store["status"] == "pending"
+          = render partial: "form_add"
+
+
+
+        
+
+         
