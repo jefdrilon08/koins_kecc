@@ -1,0 +1,6 @@
+%table.table.table-sm.table-bordered
+  %tr
+    %th
+      Member
+      = select_tag :member, options_for_select(@member_list_item), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+
