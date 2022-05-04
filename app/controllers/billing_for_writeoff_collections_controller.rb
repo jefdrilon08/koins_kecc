@@ -19,16 +19,16 @@ class BillingForWriteoffCollectionsController < DataStoreController
   end
   
   def show
-    @data_store = DataStore.find(params[:id])
+    @data_store           = DataStore.find(params[:id])
     @member_with_writeoff = @data_store.data['record'].map{|o| "#{o['member_id']}"}
-    @member_list = Member.where("id IN (?)" , @member_with_writeoff)
-    @member_list_item = @member_list.map{ |o| ["#{o["last_name"]}, #{o["first_name"]} ", o["id"] ] }
+    @member_list          = Member.where("id IN (?)" , @member_with_writeoff)
+    @member_list_item     = @member_list.map{ |o| ["#{o["last_name"]}, #{o["first_name"]} ", o["id"] ] }
+    @data                 = @data_store.data.with_indifferent_access
+    @data_view            = @data[:record].select{|x| x["enabled"] == true}
 
-    #raise @member_list_item.inspect
-    
     @subheader_items = [
       {
-        text: "Billing for Writeoff Collections #{@member_list}"
+        text: "Billing for Writeoff Collections"
       }
     ]
 

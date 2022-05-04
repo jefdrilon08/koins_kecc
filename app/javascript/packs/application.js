@@ -197,6 +197,7 @@ import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
 import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
 import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
 import BillingForWriteoffCollectionIndex from "../models/BillingForWriteoffCollectionIndex.js";
+import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollectionShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -374,7 +375,8 @@ const hooks = {
   "data_stores/member_id_generators/index":           [MemberIdGeneratorsIndex],
   "data_stores/member_id_generators/show":            [MemberIdGeneratorsShow],
   "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow],
-  "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex]
+  "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex],
+  "billing_for_writeoff_collections/show":           [BillingForWriteoffCollectionShow]
 
 }
 

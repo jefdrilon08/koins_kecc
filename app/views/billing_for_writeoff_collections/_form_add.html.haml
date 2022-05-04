@@ -3,4 +3,8 @@
     %th
       Member
       = select_tag :member, options_for_select(@member_list_item), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
-
+    
+    %th 
+      Action
+      %button#btn-add.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}" } }
+        Add

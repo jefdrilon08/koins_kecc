@@ -1,0 +1,12 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "30%" }
+        Member
+  %tbody
+    - @data_view.each_with_index do |o, i|
+      %tr
+        %td
+          %strong
+            #{o[:name]}
+ 
