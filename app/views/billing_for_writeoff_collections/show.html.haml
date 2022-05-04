@@ -10,7 +10,11 @@
         - if @data_store["status"] == "pending"
           = render partial: "form_add"
 
-
+        - if @data_view.any?
+          = render partial: "members_table"
+        -else
+          %p
+            No records found
 
         
 

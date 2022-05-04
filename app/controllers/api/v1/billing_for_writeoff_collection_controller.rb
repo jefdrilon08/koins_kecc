@@ -15,6 +15,18 @@ module Api
 
         billing_for_writeoff_collection = ::BillingForWriteoffCollection::Create.new(config: config).execute!
       end
+      
+      def add_member
+        config = {
+          data_store_id: params[:id],
+          member_id: params[:member_id]
+        }
+
+        ::BillingForWriteoffCollection::AddMember.new(config: config).execute!
+        render json: { message: "Done" }
+      
+      end
+
     end
   end
 end

@@ -76,6 +76,7 @@ module BillingForWriteoffCollection
       @data_store.data['record'] << {
         member_id: records,
         name:      Member.find(records).full_name,
+        enabled:   false,
         loan_data: []
       }
      end
