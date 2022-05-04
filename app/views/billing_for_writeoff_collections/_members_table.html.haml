@@ -3,10 +3,20 @@
     %tr
       %th{ width: "30%" }
         Member
+      - @data[:header].each do |o , i|
+        %th
+          #{o[:name]}
+      %th
+        Cash Payment
   %tbody
     - @data_view.each_with_index do |o, i|
       %tr
         %td
-          %strong
-            #{o[:name]}
- 
+          = link_to member_path(o[:member_id]), target: "_blank" do
+            %strong
+              #{o[:name]}
+          - o[:loan_data].each do |loan_data|
+            %td.text-right
+              #{number_to_currency(loan_data[:amount] , unit: '')}
+        %td.text-right
+          #{number_to_currency(0.0, unit: '')}
