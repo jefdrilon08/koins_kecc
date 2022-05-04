@@ -101,8 +101,16 @@ module BillingForWriteoffCollection
             enabled: false,
             amount: nil
           }
-        end
+        end 
       end
+          loan_data[:loan_data] << {
+            name: "Withdraw Payment",
+            loan_id: '',
+            loan_product_id: nil,
+            enabled: true,
+            amount: 0.0
+          }
+
      end
    end
    def execute!
