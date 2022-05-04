@@ -30,6 +30,8 @@ class BillingForWriteoffCollectionsController < DataStoreController
 
     @subheader_items = [
       {
+        is_link: true,
+        path: billing_for_writeoff_collections_path,
         text: "Billing for Writeoff Collections"
       }
     ]
