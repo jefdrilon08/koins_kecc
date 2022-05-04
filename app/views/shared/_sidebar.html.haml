@@ -61,7 +61,7 @@
               %i.bi.bi-bookmark-check
               Active
 
-    %li{ class: "#{['billings'].include?(params[:controller]) ? 'active' : ''}" }
+    %li{ class: "#{['billings', 'billing_for_full_payments'].include?(params[:controller]) ? 'active' : ''}" }
       .icon-link
         = link_to "#", class: "" do
           %i.bi.bi-cast
@@ -77,6 +77,10 @@
             = link_to billings_path(status: "pending"), class: "" do
               %i.bi.bi-receipt
               Billings
+          %li
+            = link_to billing_for_full_payments_path, class: "" do
+              %i.bi.bi-receipt
+              Billings for Full Payment
         - if microinsurance?
           %li
             = link_to insurance_fund_transfer_collections_path, class: "" do
