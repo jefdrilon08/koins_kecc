@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from "jquery";
 import ErrorDisplay from '../ErrorDisplay';
 
 export default class AddAccountingFund extends React.Component {

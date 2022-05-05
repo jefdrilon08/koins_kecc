@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var depositCollectionId;
@@ -44,17 +46,34 @@ var _urlLoadBranch                    = "/api/v1/deposit_collections/load_branch
 var _urlLoadCenter                    = "/api/v1/deposit_collections/load_center";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalFinalize = new bootstrap.Modal(
+    document.getElementById("modal-finalize")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
+  $modalLoadBranch = new bootstrap.Modal(
+    document.getElementById("modal-load-branch")
+  );
+
+  $modalLoadCenter = new bootstrap.Modal(
+    document.getElementById("modal-load-center")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
   
   $btnFinalize        = $("#btn-finalize");
   $btnConfirmFinalize = $("#btn-confirm-finalize");
-  $modalFinalize      = $("#modal-finalize");
 
   $btnPrint                  = $("#btn-print");
   $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
-  $modalPrint                = $("#modal-print");
 
   $selectBook     = $("#select-book");
   $btnConfirmBook = $("#btn-confirm-book");
@@ -64,11 +83,9 @@ var _cacheDom = function() {
 
   $btnLoadBranch        = $("#btn-load-branch");
   $btnConfirmLoadBranch = $("#btn-confirm-load-branch");
-  $modalLoadBranch      = $("#modal-load-branch");
 
   $btnLoadCenter        = $("#btn-load-center");
   $btnConfirmLoadCenter = $("#btn-confirm-load-center");
-  $modalLoadCenter      = $("#modal-load-center");
   $selectCenter         = $("#select-center");
 
   $message          = $(".message");

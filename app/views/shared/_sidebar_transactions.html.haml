@@ -26,6 +26,10 @@
         = link_to membership_payment_collections_path, class: "" do
           %i.bi.bi-receipt
           Membership Payments
+      %li
+        = link_to deposit_collections_path, class: "" do
+          %i.bi.bi-receipt
+          Deposits
 
     - if microinsurance?
       %li
