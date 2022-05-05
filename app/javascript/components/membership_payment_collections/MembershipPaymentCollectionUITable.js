@@ -2,7 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table';
 import Modal from 'react-modal';
 import Toggle from 'react-toggle';
-import "react-toggle/style.css";
+import $ from 'jquery';
 
 import {numberWithCommas} from '../utils/helpers';
 import {customStyles} from '../utils/consts';
