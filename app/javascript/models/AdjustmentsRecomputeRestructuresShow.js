@@ -55,7 +55,7 @@ var _bindEvents = function() {
           "Success! Redirecting..."
         );
 
-        $modalPrint.modal("hide");
+        $modalPrint.hide();
         window.open("/print?filename=" + response.filename, '_blank');
       },
       error: function(response) {

@@ -139,7 +139,7 @@ var _bindEvents = function() {
 
     var type = "time_deposit_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + timeDepositCollectionId);
   });
 

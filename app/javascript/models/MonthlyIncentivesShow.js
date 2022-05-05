@@ -41,7 +41,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_mi + "&type=print_monthly_incentives");
   });
 

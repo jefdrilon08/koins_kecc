@@ -262,7 +262,7 @@ var _bindEvents = function() {
 
     var type = "deposit_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + depositCollectionId);
   });
 
@@ -271,7 +271,7 @@ var _bindEvents = function() {
 
     var type = "deposit_collection_accounting_entry";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + depositCollectionId);
   });
 

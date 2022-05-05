@@ -73,7 +73,7 @@ var _bindEvents = function() {
     
     var type = "print_ledger";
     
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 
@@ -96,7 +96,7 @@ var _bindEvents = function() {
           "Success! Redirecting..."
         );
 
-        $modalPrint.modal("hide");
+        $modalPrint.hide();
         window.open("/print?filename=" + response.filename, '_blank');
       },
       error: function(response) {

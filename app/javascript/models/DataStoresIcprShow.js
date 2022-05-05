@@ -67,7 +67,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_icpr + "&type=print_pr");
   });
 
@@ -141,7 +141,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_entry + "&type=print_entry");
   });
 

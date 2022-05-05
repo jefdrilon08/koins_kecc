@@ -33,7 +33,7 @@ var _bindEvents = function() {
 
     var type = "withdrawal_request";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 };

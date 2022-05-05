@@ -53,7 +53,7 @@ var _bindEvents = function() {
 
     var type = "insurance_fund_transfer_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + insuranceFundTransferCollectionId);
   });
 

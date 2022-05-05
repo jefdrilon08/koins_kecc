@@ -761,7 +761,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + accountingEntryId + "&type=claims_voucher" + "&cid=" + cId);
   });
 

@@ -107,7 +107,7 @@ var _bindEvents = function() {
           );
           $btnAddMember.prop("disabled", false);
 
-          // $modalLoading.modal("hide");
+          // $modalLoading.hide();
         }
       }
     });

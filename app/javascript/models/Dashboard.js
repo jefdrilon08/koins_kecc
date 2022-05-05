@@ -1,6 +1,6 @@
 import Mustache from "mustache";
-import * as bootstrap from "bootstrap";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnGenerateAccountingReport;
 var $btnGenerateDailyReport;

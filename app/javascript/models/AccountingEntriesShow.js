@@ -96,7 +96,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + accountingEntryId + "&type=accounting_entry");
   });
 

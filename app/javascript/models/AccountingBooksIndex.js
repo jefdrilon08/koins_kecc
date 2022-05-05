@@ -81,7 +81,7 @@ var _bindEvents = function() {
     $modalPrint.show();
     $message.html("Printing...");
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&start_date=" + startDate + "&end_date=" + endDate + "&branch_id=" + branchId + "&accounting_fund_id=" + accountingFundId + "&book=" + book);
   });
 

@@ -35,7 +35,7 @@ var _bindEvents = function() {
     
     var type = "membership_payment_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + membershipPaymentCollectionId);
   });
 

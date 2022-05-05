@@ -214,13 +214,13 @@ export default class BillingUITable extends React.Component {
         <td key={"c-member-" + member.id}>
           <strong>
             <a href={"/members/" + member.id + "/display"} target="_blank">
-              {this.props.data.data.records[i].member.full_name} -
-
+              {this.props.data.data.records[i].member.full_name}
             </a>
           </strong>
-            <small>
-              {this.props.data.data.records[i].member.member_type}
-            </small>
+          <br/>
+          <small className="badge bg-info">
+            {this.props.data.data.records[i].member.member_type}
+          </small>
         </td>
       );
 
@@ -429,7 +429,7 @@ export default class BillingUITable extends React.Component {
     // Grand Total
     records.push(
       <td key="grand-total-final" className="text-end">
-        <div className="badge badge-info">
+        <div className="badge bg-primary">
           <strong>
             {numberWithCommas(grandTotal)}
           </strong>
