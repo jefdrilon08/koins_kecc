@@ -40,5 +40,6 @@ SIDEBAR_TRANSACTIONS_CONTROLLERS = [
   "membership_payment_collections",
   "insurance_fund_transfer_collections",
   "deposit_collections",
-  "time_deposit_collections"
+  "time_deposit_collections",
+  "withdrawal_collections"
 ]

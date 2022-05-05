@@ -27,13 +27,17 @@
           %i.bi.bi-receipt
           Membership Payments
       %li
-        = link_to deposit_collections_path, class: "" do
-          %i.bi.bi-receipt
-          Deposits
-      %li
         = link_to time_deposit_collections_path, class: "" do
           %i.bi.bi-receipt
           Time Deposits
+    %li
+      = link_to deposit_collections_path, class: "" do
+        %i.bi.bi-receipt
+        Deposits
+    %li
+      = link_to withdrawal_collections_path, class: "" do
+        %i.bi.bi-receipt
+        Withdrawals
 
     - if microinsurance?
       %li

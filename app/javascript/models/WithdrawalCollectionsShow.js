@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var withdrawalCollectionId;
@@ -18,9 +20,12 @@ var _urlApprove = "/api/v1/withdrawal_collections/approve";
 var _urlPrint   = "/api/v1/print/generate_file";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnPrint   = $("#btn-print");
   $modalPrint = $("#modal-print");
