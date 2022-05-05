@@ -1,4 +1,4 @@
-%li{ class: "#{['billings', 'billing_for_full_payments'].include?(params[:controller]) ? 'active' : ''}" }
+%li{ class: "#{SIDEBAR_TRANSACTIONS_CONTROLLERS.include?(params[:controller]) ? 'active' : ''}" }
   .icon-link
     = link_to "#", class: "" do
       %i.bi.bi-cast
@@ -18,6 +18,15 @@
         = link_to billing_for_full_payments_path, class: "" do
           %i.bi.bi-receipt
           Billings for Full Payment
+      %li
+        = link_to accrued_payment_collections_path, class: "" do
+          %i.bi.bi-receipt
+          Accrued Interest Billing
+      %li
+        = link_to membership_payment_collections_path, class: "" do
+          %i.bi.bi-receipt
+          Membership Payments
+
     - if microinsurance?
       %li
         = link_to insurance_fund_transfer_collections_path, class: "" do

@@ -1,4 +1,7 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from "select2";
 
 var $btnNewTransaction;
 var $btnConfirmNewTransaction;
@@ -20,9 +23,12 @@ var urlCreateMembershipPaymentCollection  = "/api/v1/membership_payment_collecti
 var _authenticityToken;
 
 var _cacheDom = function() {
+  $modalNewTransaction = new bootstrap.Modal(
+    document.getElementById("modal-new-transaction")
+  );
+
   $btnNewTransaction        = $("#btn-new-transaction");
   $btnConfirmNewTransaction = $("#btn-confirm-new-transaction");
-  $modalNewTransaction      = $("#modal-new-transaction");
 
   $selectBranch         = $("#select-branch");
   $selectCenter         = $("#select-center");

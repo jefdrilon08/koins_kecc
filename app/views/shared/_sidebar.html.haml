@@ -11,9 +11,9 @@
         %span.link-name
           Operations
 
-    = render "shared/sidebar_members"
+    = render partial: "shared/sidebar_members"
 
     - if microloans?
-      = render "shared/sidebar_loans"
+      = render partial: "shared/sidebar_loans"
 
-    = render "shared/sidebar_transactions"
+    = render partial: "shared/sidebar_transactions"

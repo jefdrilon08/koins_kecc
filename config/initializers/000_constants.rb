@@ -32,3 +32,11 @@ VALID_FILE_TYPES = [
   "image/png",
   "image/jpeg"
 ]
+
+SIDEBAR_TRANSACTIONS_CONTROLLERS = [
+  "billings",
+  "billing_for_full_payments",
+  "accrued_payment_collections",
+  "membership_payment_collections",
+  "insurance_fund_transfer_collections"
+]

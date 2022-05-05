@@ -1,10 +1,11 @@
 import Mustache from "mustache";
-import 'select2';
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var $btnNewTransaction;
 var $btnConfirmNewTransaction;
 var $modalNewTransaction;
-
 var $modalDelete;
 var $modalProcess;
 var $modalBatchProcess;
@@ -51,40 +52,28 @@ var init  = function(options) {
 };
 
 var _cacheDom = function() {
-  $modalNewTransaction    = $("#modal-new-transaction");
-  $modalDelete            = $("#modal-delete");
-  $modalProcess           = $("#modal-process");
-  $modalBatchProcess      = $("#modal-batch-process");
-  $selectBranch           = $("#select-branch");
-  $selectCenter           = $("#select-center");
-  $selectMember           = $("#select-member");
-  $selectProcessCenter    = $("#select-process-center");
-  $selectLoans            = $("#select-loans");
-  $inputDateInitialized   = $("#input-date-initialized");
-  $inputNumberOfDays      = $("#input-number-of-days");
-  $inputReason            = $("#input-reason");
-  $btnNewTransaction      = $("#btn-new-transaction");
-  $btnDelete              = $(".btn-delete");
-  $btnProcess             = $(".btn-process");
-  $btnBatchProcess        = $("#btn-batch-process");
+  $modalNewTransaction = new bootstrap.Modal(
+    document.getElementById("modal-new-transaction")
+  );
+
+  $selectBranch             = $("#select-branch");
+  $selectCenter             = $("#select-center");
+  $selectProcessCenter      = $("#select-process-center");
+  $inputDateInitialized     = $("#input-date-initialized");
+  $inputNumberOfDays        = $("#input-number-of-days");
+  $inputReason              = $("#input-reason");
+  $btnNewTransaction        = $("#btn-new-transaction");
   $btnConfirmNewTransaction = $("#btn-confirm-new-transaction");
-  $btnConfirmDelete       = $("#btn-confirm-delete");
-  $btnConfirmProcess      = $("#btn-confirm-process");
-  $btnConfirmBatchProcess = $("#btn-confirm-batch-process");
-  $message                = $(".message");
+  $btnConfirmDelete         = $("#btn-confirm-delete");
+  $btnConfirmProcess        = $("#btn-confirm-process");
+  $btnConfirmBatchProcess   = $("#btn-confirm-batch-process");
+  $message                  = $(".message");
 
   templateErrorList = $("#template-error-list").html();
-
-  $selectLoans.select2({
-    allowClear: true,
-    width: "auto",
-    theme: "bootstrap"
-  });
 };
 
 var _loadCenterOptions  = function() {
   $selectCenter.html("");
-  $selectMember.html("");
 
   if(_centers.length > 0) {
     _centerId = _centers[0].id;
@@ -92,18 +81,6 @@ var _loadCenterOptions  = function() {
     for(var i = 0; i < _centers.length; i++) {
       $selectCenter.append(new Option(_centers[i].name, _centers[i].id));
     }
-  }
-
-  if(_members.length > 0) {
-    _memberId = _members[0].id;
-
-    for(var i = 0; i < _members.length; i++) {
-      $selectMember.append(new Option(_members[i].full_name, _members[i].id));
-    }
-
-    $selectMember.val(_memberId);
-
-    _fetchLoans();
   }
 };
 
@@ -141,59 +118,8 @@ var _fetchLoans = function() {
 };
 
 var _bindEvents = function() {
-  $selectMember.on("change", function() {
-    _memberId = $(this).val();
-
-    _fetchLoans();
-  });
-
-  
-    var centerId = $selectProcessCenter.val();
-  
-  
-  $btnDelete.on("click", function() {
-    _moratoriumId = $(this).data("id");
-    $modalDelete.show();
-  });
-
-  $btnConfirmDelete.on("click", function() {
-    $message.html("Loading...");
-    $btnConfirmDelete.prop("disabled", true);
-
-    $.ajax({
-      url: _urlDelete,
-      method: "POST",
-      data: {
-        id: _moratoriumId
-      },
-      success: function(response) {
-        $message.html("Success!");
-        window.location.reload();
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Error in deleting record!");
-        $message.html("");
-        $btnConfirmDelete.prop("disabled", false);
-      }
-    });
-  });
-
   $selectCenter.on("change", function() {
     _centerId = $selectCenter.val();
-
-    _members  = _centers.find(c => c.id === _centerId).members;
-
-    $selectMember.html("");
-    for(var i = 0; i < _members.length; i++) {
-      $selectMember.append(new Option(_members[i].full_name, _members[i].id));
-    }
-
-    if(_members.length > 0) {
-      _memberId = _members[i].id;
-
-      _fetchLoans();
-    }
   });
 
   $selectBranch.on("change", function() {
@@ -227,14 +153,10 @@ var _bindEvents = function() {
   $btnConfirmNewTransaction.on("click", function() {
     _branchId           = $selectBranch.val();
     _centerId           = $selectCenter.val();
-    _memberId           = $selectMember.val();
-    _loanIds            = $selectLoans.val();
-
 
     $btnConfirmNewTransaction.prop("disabled", true);
     $selectBranch.prop("disabled", true);
     $selectCenter.prop("disabled", true);
-    $selectMember.prop("disabled", true);
    
     $message.html("Loading...");
 
@@ -244,7 +166,6 @@ var _bindEvents = function() {
       data: {
         branch_id: _branchId,
         center_id: _centerId,
-        member_id: _memberId,
         authenticity_token: _authenticityToken
       },
       success: function(resonse) {
@@ -272,11 +193,6 @@ var _bindEvents = function() {
           $btnConfirmNewTransaction.prop("disabled", false);
           $selectBranch.prop("disabled", false);
           $selectCenter.prop("disabled", false);
-          $selectMember.prop("disabled", false);
-          $selectLoans.prop("disabled", false);
-          $inputDateInitialized.prop("disabled", false);
-          $inputReason.prop("disabled", false);
-          $inputNumberOfDays.prop("disabled", false);
         }
       }
     });
