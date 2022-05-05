@@ -1,10 +1,14 @@
 import Mustache from "mustache";
-import 'select2';
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
+select2($);
 
-var $modalNew;
 var $modalDelete;
 var $modalProcess;
 var $modalBatchProcess;
+var $modalRemovePayment;
+
 var $selectBranch;
 var $selectCenter;
 var $selectMember;
@@ -27,7 +31,6 @@ var $btnConfirmProcess;
 var $btnConfirmBatchProcess;
 var $btnAdd;
 var $btnRemove;
-var $modalRemovePayment;
 var $btnConfirmRemove;
 
 var $btnAddParticular;
@@ -38,12 +41,9 @@ var $btnAddAr;
 var $inputArNumber;
 var $selectBook;
 
-
 var $message;
 var templateErrorList;
 var _authenticityToken;
-
-
 
 var $inputBatchNumberOfDays;
 var $selectBatchBranch;
@@ -94,13 +94,13 @@ var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
 var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 var _urlAddMember     = "/api/v1/billing_for_full_payments/add_member";
-var _urlRemovePayment     = "/api/v1/billing_for_full_payments/remove_payment_member";
-var _urlAddParticular     = "/api/v1/billing_for_full_payments/add_particular";
-var _urlAddOr     = "/api/v1/billing_for_full_payments/add_or";
-var _urlAddAr     = "/api/v1/billing_for_full_payments/add_ar";
-var _urlApproved     = "/api/v1/billing_for_full_payments/approved";
-var _urlChecked     = "/api/v1/billing_for_full_payments/checked";
-var _urlUpdateBook     = "/api/v1/billing_for_full_payments/update_book";
+var _urlRemovePayment = "/api/v1/billing_for_full_payments/remove_payment_member";
+var _urlAddParticular = "/api/v1/billing_for_full_payments/add_particular";
+var _urlAddOr         = "/api/v1/billing_for_full_payments/add_or";
+var _urlAddAr         = "/api/v1/billing_for_full_payments/add_ar";
+var _urlApproved      = "/api/v1/billing_for_full_payments/approved";
+var _urlChecked       = "/api/v1/billing_for_full_payments/checked";
+var _urlUpdateBook    = "/api/v1/billing_for_full_payments/update_book";
 
 var init  = function(options) {
   _authenticityToken = options.authenticityToken;
@@ -110,10 +110,22 @@ var init  = function(options) {
 };
 
 var _cacheDom = function() {
-  $modalNew                     = $("#modal-new");
-  $modalDelete                  = $("#modal-delete");
-  $modalProcess                 = $("#modal-change-payment"); //para sa modal
-  $modalBatchProcess            = $("#modal-batch-process");
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-change-payment")
+  );
+
+  $modalRemovePayment = new bootstrap.Modal(
+    document.getElementById("modal-remove-payment")
+  );
+
+  $modalCheck = new bootstrap.Modal(
+    document.getElementById("modal-check")
+  );
+
+  $modalApproved = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
   $selectProcessCenter          = $("#select-process-center");
@@ -135,19 +147,16 @@ var _cacheDom = function() {
   $message                      = $(".message");
 
   $inputBatchNumberOfDays       = $("#input-batch-number-of-moratorium-days");
-  $selectBatchBranch       = $("#select-batch-branch");
-  $inputDateInitializedCutOff = $("#input-date-initialized-cut-off");
-  $batchStartDate             = $("#batch-input-start-date");
-  $batchEndDate             = $("#batch-input-end-date");
-  $batchAccruedType         = $("#select-batch-accrued-type");
-  $inputCollectionDate      = $("#collection-date");
-  $btnAdd                   = $("#btn-add");
-  $selectMember             = $("#select-member");
-  $selectLoans              = $("#select-loans");
-  $modalRemovePayment       = $("#modal-remove-payment");
-  $btnConfirmRemove         = $("#btn-confirm-remove");
-
-
+  $selectBatchBranch            = $("#select-batch-branch");
+  $inputDateInitializedCutOff   = $("#input-date-initialized-cut-off");
+  $batchStartDate               = $("#batch-input-start-date");
+  $batchEndDate                 = $("#batch-input-end-date");
+  $batchAccruedType             = $("#select-batch-accrued-type");
+  $inputCollectionDate          = $("#collection-date");
+  $btnAdd                       = $("#btn-add");
+  $selectMember                 = $("#select-member");
+  $selectLoans                  = $("#select-loans");
+  $btnConfirmRemove             = $("#btn-confirm-remove");
 
   $btnAddParticular         = $("#btn-add-particular");
   $inputParticular          = $("#particular");
@@ -159,12 +168,10 @@ var _cacheDom = function() {
   $inputArNumber          = $("#ar_number");
 
   $btnApproved      = $("#btn-approved")
-  $modalApproved    = $("#modal-approve")
   $btnConfirmApproved = $("#btn-confirm-approved")
 
 
   $btnChecked = $("#btn-checked");
-  $modalCheck = $("#modal-check");
   $btnConfirmCheck = $("#btn-confirm-check");
 
 
@@ -180,9 +187,8 @@ var _cacheDom = function() {
   templateErrorList = $("#template-error-list").html();
 
   $selectLoans.select2({
-    allowClear: true,
     width: "auto",
-    theme: "bootstrap"
+    theme: "bootstrap-5"
   });
 };
 

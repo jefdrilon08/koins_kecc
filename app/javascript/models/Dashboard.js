@@ -26,18 +26,18 @@ var _userId;
 var _xKoinsAppAuthSecret;
 
 var _cacheDom = function() {
+  $modalGenerateDailyReport = new bootstrap.Modal(
+    document.getElementById("modal-generate-daily-report")
+  );
+
+  $modalGenerateAccountingReport = new bootstrap.Modal(
+    document.getElementById("modal-generate-accounting-report")
+  );
+
   $btnGenerateDailyReport             = $("#btn-generate-daily-report");
   $btnGenerateAccountingReport        = $("#btn-generate-accounting-report");
   $btnConfirmGenerateDailyReport      = $("#btn-confirm-generate-daily-report");
   $btnConfirmGenerateAccountingReport = $("#btn-confirm-generate-accounting-report");
-
-  $modalGenerateDailyReport = new bootstrap.Modal(
-                                document.getElementById("modal-generate-daily-report")
-                              );
-
-  $modalGenerateAccountingReport  = new bootstrap.Modal(
-                                      document.getElementById("modal-generate-accounting-report")
-                                    );
 
   $selectBranch                       = $("#select-branch");
   $inputAsOf                          = $("#input-as-of");

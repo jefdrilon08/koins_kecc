@@ -37,24 +37,6 @@ export default class BillingUIComponent extends React.Component {
       member: m,
       transaction: t
     });
-/*    
-    for(var i = 0; i < currentData.data.records.length; i++) {
-      if(currentData.data.records[i].member.id == m.id) {
-        for(var j = 0; j < currentData.data.records[i].records.length; j++) {
-          if(currentData.data.records[i].records[j].record_type == t.record_type) {
-            if(t.record_type == "LOAN_PAYMENT" && currentData.data.records[i].records[j].loan_id == t.loan_id) {
-              currentData.data.records[i].records[j].amount = t.amount;
-              console.log("Updating LOAN_PAYMENT for member " + m.id + " for loan " + t.loan_id + " to amount " + t.amount);
-            } else if(t.record_type != "LOAN_PAYMENT" && currentData.data.records[i].records[j].member_account_id == t.member_account_id) {
-              currentData.data.records[i].records[j].amount = t.amount;
-              console.log("Updating SUBSIDIARY for member " + m.id + " for loan " + t.member_account_id + " to amount " + t.amount);
-            }
-
-          }
-        }
-      }
-    }
-*/
 
     for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
       currentData.data.totals[totalsIndex].amount = 0.00;

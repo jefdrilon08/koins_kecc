@@ -1,8 +1,8 @@
 import React from 'react';
+import $ from 'jquery';
 import ReactTable from 'react-table';
 import Modal from 'react-modal';
 import Toggle from 'react-toggle';
-import "react-toggle/style.css";
 
 import {numberWithCommas} from '../utils/helpers';
 import {customStyles} from '../utils/consts';
@@ -184,7 +184,6 @@ export default class BillingUITable extends React.Component {
               <Toggle
                 defaultChecked={record.attendance}
                 onChange={this.handleToggled.bind(this, member.id)}
-                className="btn"
               />
             </center>
           </td>

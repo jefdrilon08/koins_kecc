@@ -69,18 +69,6 @@ var _cacheDom = function() {
     document.getElementById("modal-new")
   )
 
-  $modalDelete = new bootstrap.Modal(
-    document.getElementById("modal-delete")
-  )
-
-  $modalProcess = new bootstrap.Modal(
-    document.getElementById("modal-process")
-  )
-
-  $modalBatchProcess = new bootstrap.Modal(
-    document.getElementById("modal-batch-process")
-  )
-
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
   $selectMember                 = $("#select-member");
