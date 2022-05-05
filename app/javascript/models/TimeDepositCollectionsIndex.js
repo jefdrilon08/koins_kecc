@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnNewTransaction;
 var $btnConfirmNewTransaction;
@@ -19,9 +21,12 @@ var urlCreateDepositCollection  = "/api/v1/time_deposit_collections";
 var _authenticityToken;
 
 var _cacheDom = function() {
+  $modalNewTransaction = new bootstrap.Modal(
+    document.getElementById("modal-new-transaction")
+  );
+
   $btnNewTransaction        = $("#btn-new-transaction");
   $btnConfirmNewTransaction = $("#btn-confirm-new-transaction");
-  $modalNewTransaction      = $("#modal-new-transaction");
 
   $selectBranch         = $("#select-branch");
   $inputCollectionDate  = $("#input-collection-date");

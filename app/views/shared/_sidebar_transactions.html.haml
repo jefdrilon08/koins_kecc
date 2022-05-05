@@ -30,6 +30,10 @@
         = link_to deposit_collections_path, class: "" do
           %i.bi.bi-receipt
           Deposits
+      %li
+        = link_to time_deposit_collections_path, class: "" do
+          %i.bi.bi-receipt
+          Time Deposits
 
     - if microinsurance?
       %li

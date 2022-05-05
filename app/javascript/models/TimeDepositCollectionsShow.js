@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var timeDepositCollectionId;
@@ -26,12 +28,18 @@ var _urlModifyCashManagementTemplate  = "/api/v1/time_deposit_collections/modify
 var _urlModifyBook                    = "/api/v1/time_deposit_collections/modify_book";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnPrint   = $("#btn-print");
-  $modalPrint = $("#modal-print");
 
   $selectBook     = $("#select-book");
   $btnConfirmBook = $("#btn-confirm-book");

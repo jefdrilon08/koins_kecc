@@ -38,5 +38,7 @@ SIDEBAR_TRANSACTIONS_CONTROLLERS = [
   "billing_for_full_payments",
   "accrued_payment_collections",
   "membership_payment_collections",
-  "insurance_fund_transfer_collections"
+  "insurance_fund_transfer_collections",
+  "deposit_collections",
+  "time_deposit_collections"
 ]
