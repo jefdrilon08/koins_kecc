@@ -14,10 +14,6 @@
         = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-microloans-collections" } do
           %i.bi.bi-receipt
           Collections
-      %li
-        = link_to time_deposit_collections_path, class: "" do
-          %i.bi.bi-receipt
-          Time Deposits
     %li
       = link_to deposit_collections_path, class: "" do
         %i.bi.bi-receipt
@@ -34,6 +30,11 @@
       = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-interest" } do
         %i.bi.bi-calculator
         Interest
+    - if microloans?
+      %li
+        = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-monthly-transactions" } do
+          %i.bi.bi-calendar-event
+          Monthly Transactions
 
     - if microinsurance?
       %li
