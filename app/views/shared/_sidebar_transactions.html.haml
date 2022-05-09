@@ -39,21 +39,13 @@
         %i.bi.bi-receipt
         Withdrawals
     %li
-      = link_to "#", class: "" do
+      = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-new-entry" } do
         %i.bi.bi-plus-circle
         New Entry
     %li
-      = link_to accounting_accounting_entry_form_path(book: "CRB"), class: "" do
-        %i.bi.bi-plus-circle
-        Cash Receipts
-    %li
-      = link_to accounting_accounting_entry_form_path(book: "CDB"), class: "" do
-        %i.bi.bi-plus-circle
-        Cash Disbursements
-    %li
-      = link_to accounting_accounting_entry_form_path(book: "JVB"), class: "" do
-        %i.bi.bi-plus-circle
-        General Journal
+      = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-interest" } do
+        %i.bi.bi-calculator
+        Interest
 
     - if microinsurance?
       %li

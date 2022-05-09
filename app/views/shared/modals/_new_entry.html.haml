@@ -1,7 +1,19 @@
-#modal-new-entry.modal.fade
+#modal-nav-new-entry.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
         %h3.modal-title
           New Entry
       .modal-body
+        = link_to accounting_accounting_entry_form_path(book: "CRB"), class: "btn btn-primary w-100" do
+          %span.btn-label
+            %i.bi.bi-plus-circle
+          Cash Receipts
+        = link_to accounting_accounting_entry_form_path(book: "CDB"), class: "btn btn-primary w-100 mt-4" do
+          %span.btn-label
+            %i.bi.bi-plus-circle
+          Cash Disbursements
+        = link_to accounting_accounting_entry_form_path(book: "JVB"), class: "btn btn-primary w-100 mt-4" do
+          %span.btn-label
+            %i.bi.bi-plus-circle
+          General Journal
