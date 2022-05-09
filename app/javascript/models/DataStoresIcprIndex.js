@@ -1,3 +1,5 @@
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import Mustache from "mustache";
 
 var authenticityToken;
@@ -13,7 +15,10 @@ var $message;
 var templateErrorList;
 
 var _cacheDom = function() {
-  $modalNew         = $("#modal-new");
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  );
+
   $btnNew           = $("#btn-new");
   $btnConfirmNew    = $("#btn-confirm-new");
   $selectYear       = $("#select-year");

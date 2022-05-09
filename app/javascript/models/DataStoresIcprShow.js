@@ -1,20 +1,23 @@
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import Mustache from "mustache";
+
+var $modalUpdate;
+var $modalPrint;
+var $modalApprove;
+var $modalSetRate;
 
 var $btnUpdate;
 var $btnConfirmUpdate;
-var $modalUpdate;
-var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
 
 var $btnApprove;
 var $btnConfirmApprove;
-var $modalApprove;
 var $btnPrint;
 var loader;
 var $btnSetRate;
 var $btnConfirmSetRate;
-var $modalSetRate;
 var $inputEquityInterestRate;
 var $inputSavingsRate;
 var $inputCbuRate;
@@ -26,21 +29,25 @@ var authenticityToken;
 var $message;
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalSetRate = new bootstrap.Modal(
+    document.getElementById("modal-set-rate")
+  );
+
   $btnUpdate        = $("#btn-update");
   $btnConfirmUpdate = $("#btn-confirm-update");
-  $modalUpdate      = $("#modal-update");
   $btnPrint         = $("#btn-print");
   $printMessage       = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
-  $modalPrint         = $("#modal-print");
 
   $btnSetRate               = $("#btn-set-rate");
   $btnConfirmSetRate        = $("#btn-confirm-set-rate");
-  $modalSetRate             = $("#modal-set-rate");
   $inputEquityInterestRate  = $("#input-equity-interest-rate");
   $inputSavingsRate         = $("#input-savings-rate");
   $inputCbuRate             = $("#input-cbu-rate");
