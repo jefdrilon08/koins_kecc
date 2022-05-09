@@ -11,21 +11,9 @@
         Transactions
     - if microloans?
       %li
-        = link_to billings_path(status: "pending"), class: "" do
+        = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-microloans-collections" } do
           %i.bi.bi-receipt
-          Billings
-      %li
-        = link_to billing_for_full_payments_path, class: "" do
-          %i.bi.bi-receipt
-          Billings for Full Payment
-      %li
-        = link_to accrued_payment_collections_path, class: "" do
-          %i.bi.bi-receipt
-          Accrued Interest Billing
-      %li
-        = link_to membership_payment_collections_path, class: "" do
-          %i.bi.bi-receipt
-          Membership Payments
+          Collections
       %li
         = link_to time_deposit_collections_path, class: "" do
           %i.bi.bi-receipt

@@ -1,3 +1,5 @@
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import Mustache from "mustache";
 
 var $btnUpdate;
