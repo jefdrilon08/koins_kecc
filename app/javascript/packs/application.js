@@ -195,6 +195,7 @@ import BillingForWriteoffShow from "../models/BillingForWriteoffShow.js";
 import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
 import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
 import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
+import Sidebar from "../models/Sidebar.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -380,20 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const options = { authenticityToken, ...payload }
 
   // SIDEBAR JS
-  let arrow = document.querySelectorAll(".arrow");
-  arrow.forEach((o, i) => {
-    o.addEventListener("click", (e) => {
-      let arrowParent = e.target.parentElement.parentElement;
-      arrowParent.classList.toggle("show-menu");
-    });
-  });
-
-  let sidebar     = document.querySelector(".sidebar");
-  let sidebarBtn  = document.querySelector(".bi-menu");
-
-  sidebarBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("close");
-  });
+  Sidebar.init();
 
   const components = hooks[route];
   if (components) {

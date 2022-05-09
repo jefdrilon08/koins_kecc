@@ -39,6 +39,10 @@
         %i.bi.bi-receipt
         Withdrawals
     %li
+      = link_to "#", class: "" do
+        %i.bi.bi-plus-circle
+        New Entry
+    %li
       = link_to accounting_accounting_entry_form_path(book: "CRB"), class: "" do
         %i.bi.bi-plus-circle
         Cash Receipts
