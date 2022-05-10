@@ -109,6 +109,9 @@ namespace :api do
   end
 
   namespace :v1 do
+    #billing_for_writeoff_collection
+    post "/billing_for_writeoff_collection/create", to: "billing_for_writeoff_collection#create"
+    post "/billing_for_writeoff_collection/add_member", to: "billing_for_writeoff_collection#add_member"
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"

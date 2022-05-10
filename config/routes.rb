@@ -234,8 +234,11 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
-  # billing for writeoff
+  # billing for writeoff collections
+  get "/billing_for_writeoff_collections", to: "billing_for_writeoff_collections#index"
+  get "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#show"
   
+  # billing for writeoff
   get "/billing_for_writeoff", to: "billing_for_writeoff#index"
   get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"
   delete "/billing_for_writeoff/:id", to: "billing_for_writeoff#destroy"

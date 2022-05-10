@@ -44,7 +44,7 @@ namespace :report do
     #mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     loan_type = ENV['LTYPE']
-    d_rel = ENV['r_date'].to_d
+    d_rel = ENV['r_date']
     br_id = Branch.where(name: br_name).ids
     prin_amt = ENV['prin_amt']
     @data = [] 
@@ -59,8 +59,8 @@ namespace :report do
    @data_store_data = @data_store.data.with_indifferent_access
 
    @data_store_data[:records].each.with_index do |l|
-     #if l[:loan_product][:name] == loan_type and l[:date_released] >= d_rel
-      if l[:date_released] >= d_rel
+     if l[:loan_product][:name] == loan_type and l[:date_released] >= d_rel
+      #if l[:date_released] >= d_rel
        loan = Loan.find(l[:id])        
         mem = Member.find(l[:member][:id])
         dob = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
