@@ -4,6 +4,8 @@ var _authenticityToken;
 var _id;
 
 var $btnAdd;
+var $UpdateAmount;
+var $modalUpdate
 var _memberId;
 
 var $message;
@@ -12,6 +14,11 @@ var templateErrorList;
 var _cacheDom = function() {
    $btnAdd		= $("#btn-add");
    $selectMember	= $("#select-member");
+   $UpdateAmount	= $(".undo");
+   $modalUpdate		= $("#modal-update-transaction");
+   $paymentAmount	= $("#paymentAmount");		
+   $memberName		= $("#memberName");	
+   $loanType		= $("#loanType");
 
    $message  = $(".message");
 
@@ -57,10 +64,20 @@ var _bindEvents = function() {
           $selectMember.prop("disabled", false);
         }
       }
-     });
-
-	   
-  });
+     });	   
+   });
+	//end btnAdd
+   $UpdateAmount.on("click" , function() {
+	var loan_id 		= $(this).data("loan-id")
+	var payment_amount	= $(this).data("payment-amount")
+	var member_name		= $(this).data("member-name")
+	var loan_type		= $(this).data("loan-type")
+	   //alert(loan_type);
+	$paymentAmount.val(payment_amount)
+	$memberName.text(member_name)
+	$loanType.text(loan_type)
+	$modalUpdate.modal("show")
+   });
 }
 
 

@@ -91,7 +91,7 @@ module BillingForWriteoffCollection
             loan_id: l.id,
             loan_product_id: l.loan_product_id,
             enabled: true,
-            amount: 0.0
+            amount: l.total_balance
           }
         else
           loan_data[:loan_data] << {

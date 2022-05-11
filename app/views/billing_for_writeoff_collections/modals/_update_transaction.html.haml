@@ -1,0 +1,43 @@
+#modal-update-transaction.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title
+          %table
+            %tbody
+              %tr
+                %th 
+                  %h5 Member:  
+                %td 
+                  
+                  %h5#memberName{:name => "memberName"}
+            
+              %tr
+                %th 
+                  %h5 Loan Product :  
+                %td 
+                  %h5#loanType{:name => "loanType" , :value => ""}
+
+      .modal-body
+        .modal-body-content
+          .callout.callout-info
+            %h5.modal-title
+              %table
+                %tbody
+                  %tr
+                    %th
+                      %h5 Amount : 
+                    %td        
+                      %h5
+                        %input#paymentAmount{:name => "paymentAmount", :type => "text", :value => ""}
+ 
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-approve.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
+
