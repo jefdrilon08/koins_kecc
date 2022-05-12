@@ -27,6 +27,18 @@ module Api
       
       end
 
+      def update_amount
+        config = {
+          data_store_id: params[:id],
+          loan_id: params[:loan_id],
+          payment_amount: params[:payment_amount],
+          member_id: params[:member_id]
+        }
+        ::BillingForWriteoffCollection::UpdateAmount.new(config: config).execute!
+        render json: { message: "Done" }
+
+      end
+
     end
   end
 end

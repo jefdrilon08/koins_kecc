@@ -17,6 +17,10 @@
                   %h5 Loan Product :  
                 %td 
                   %h5#loanType{:name => "loanType" , :value => ""}
+              %tr
+                %th
+                  %label#memberId{:name => "memberId", :value => "" , :hidden => "hidden"}
+        
 
       .modal-body
         .modal-body-content
@@ -27,14 +31,14 @@
                   %tr
                     %th
                       %h5 Amount : 
-                    %td        
+                    %td       
                       %h5
-                        %input#paymentAmount{:name => "paymentAmount", :type => "text", :value => ""}
+                        %input.text-right#paymentAmount{:name => "paymentAmount", :type => "text", :value => ""}
  
           .message
       .modal-footer
         .controls
-          %button#btn-confirm-approve.btn.btn-primary
+          %button#btn-confirm-amount.btn.btn-primary{ data: { id: "#{@data_store.id}"} }
             .fa.fa-check
             Confirm
           %button.btn{"data-dismiss" => "modal", :type => "button"}
