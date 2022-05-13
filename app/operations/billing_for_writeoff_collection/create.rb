@@ -119,22 +119,9 @@ module BillingForWriteoffCollection
      end
    end
    
-  def total_per_member!
-      data = @data_store
-      member_list = data.data.with_indifferent_access
-      member_list[:record].each do |o|
-        loan_data = member_list[:record].select{|x| x["member_id"] == o['member_id']}.last['loan_data']
-        total_amount = loan_data.sum { |tot_amount| tot_amount['amount']}
-        o['total_payment'] += total_amount
-      end
-      @data_store.update(data: data)
-   end
-
-   
-   def execute!
+  def execute!
     process_data_header!
     process_data_record!
-    #total_per_member!
     @data_store.save!
     @data_store
    end
