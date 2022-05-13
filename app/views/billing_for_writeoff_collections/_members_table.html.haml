@@ -30,6 +30,8 @@
               }
                 #{number_to_currency(loan_data[:amount] , unit: '')}
         %td.text-right
-          #{number_to_currency(0.0, unit: '')}
+          %strong
+            #{number_to_currency(o[:total_cash_payment], unit: '')}
         %td.text-right
-          #{number_to_currency(0.0, unit: '')}
+          %strong
+            #{number_to_currency(o[:total_payment], unit: '')}

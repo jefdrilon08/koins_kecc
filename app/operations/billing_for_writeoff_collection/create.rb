@@ -73,10 +73,15 @@ module BillingForWriteoffCollection
    def process_data_record!
      #member_data
      @h_data.joins(:member).order(:last_name).pluck(:member_id).uniq.each do |records|
+      #l = Loan.where("member_id = ? and status = 'writeoff'" , records)
+      total_per_member = @h_data.where(member_id: records)
+      total_balance_member = total_per_member.sum(:principal_balance).to_f + total_per_member.sum(:interest_balance).to_f
       @data_store.data['record'] << {
         member_id: records,
         name:      Member.find(records).full_name,
         enabled:   false,
+        total_cash_payment: total_balance_member,
+        total_payment: total_balance_member,
         loan_data: []
       }
      end
@@ -91,7 +96,7 @@ module BillingForWriteoffCollection
             loan_id: l.id,
             loan_product_id: l.loan_product_id,
             enabled: true,
-            amount: l.total_balance
+            amount: l.total_balance.to_f
           }
         else
           loan_data[:loan_data] << {
@@ -99,7 +104,7 @@ module BillingForWriteoffCollection
             loan_id: '',
             loan_product_id: nil,
             enabled: false,
-            amount: nil
+            amount: 0.0
           }
         end 
       end
@@ -113,11 +118,26 @@ module BillingForWriteoffCollection
 
      end
    end
+   
+  def total_per_member!
+      data = @data_store
+      member_list = data.data.with_indifferent_access
+      member_list[:record].each do |o|
+        loan_data = member_list[:record].select{|x| x["member_id"] == o['member_id']}.last['loan_data']
+        total_amount = loan_data.sum { |tot_amount| tot_amount['amount']}
+        o['total_payment'] += total_amount
+      end
+      @data_store.update(data: data)
+   end
+
+   
    def execute!
     process_data_header!
     process_data_record!
+    #total_per_member!
     @data_store.save!
     @data_store
    end
+      
   end
 end
