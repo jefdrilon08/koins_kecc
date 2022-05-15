@@ -35,6 +35,11 @@
         = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-monthly-transactions" } do
           %i.bi.bi-calendar-event
           Monthly Transactions
+      %li
+        = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-writeoffs" } do
+          %i.bi.bi-pencil-square
+          Writeoffs
+        
 
     - if microinsurance?
       %li

@@ -1,14 +1,12 @@
-= title
-.row
-  .col
-    .card
-      .card-body
-        - if @records.any?
-          = render partial: "index_list"
-          = paginate @records
-        - else
-          %p
-            No records
+%h4
+  For Writeoffs
+
+- if @records.any?
+  = render partial: "index_list"
+  = paginate @records
+- else
+  %p
+    No records
 
 = render partial: "data_stores/for_writeoff/modals/new"
         
