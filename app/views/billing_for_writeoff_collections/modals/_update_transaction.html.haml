@@ -1,0 +1,47 @@
+#modal-update-transaction.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title
+          %table
+            %tbody
+              %tr
+                %th 
+                  %h5 Member:  
+                %td 
+                  
+                  %h5#memberName{:name => "memberName"}
+            
+              %tr
+                %th 
+                  %h5 Loan Product :  
+                %td 
+                  %h5#loanType{:name => "loanType" , :value => ""}
+              %tr
+                %th
+                  %label#memberId{:name => "memberId", :value => "" , :hidden => "hidden"}
+        
+
+      .modal-body
+        .modal-body-content
+          .callout.callout-info
+            %h5.modal-title
+              %table
+                %tbody
+                  %tr
+                    %th
+                      %h5 Amount : 
+                    %td       
+                      %h5
+                        %input.text-right#paymentAmount{:name => "paymentAmount", :type => "text", :value => ""}
+ 
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-amount.btn.btn-primary{ data: { id: "#{@data_store.id}"} }
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
+
