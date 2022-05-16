@@ -8,10 +8,14 @@ module BillingForWriteoffCollection
       @data           = @data_store.data.with_indifferent_access
 
     end
-
-    def execute!
+    
+    def add_member!
       member_update = @data[:record].select{|x| x["member_id"] == @member_id}.last
       member_update['enabled'] = true
+    end
+
+    def execute!
+      add_member!
       @data_store.update(data: @data)
     end
 

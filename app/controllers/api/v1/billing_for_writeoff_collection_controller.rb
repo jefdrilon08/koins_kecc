@@ -23,6 +23,7 @@ module Api
         }
 
         ::BillingForWriteoffCollection::AddMember.new(config: config).execute!
+        ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
         render json: { message: "Done" }
       
       end
@@ -35,6 +36,7 @@ module Api
           member_id: params[:member_id]
         }
         ::BillingForWriteoffCollection::UpdateAmount.new(config: config).execute!
+        ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
         render json: { message: "Done" }
 
       end

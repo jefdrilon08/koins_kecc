@@ -63,11 +63,13 @@ module BillingForWriteoffCollection
      end
      @header.uniq.each do |headers|
       @data_store.data['header'] << {
-        name: headers.name
+        name: headers.name,
+        total_amount: 0.0
       }
      end
      @data_store.data['header'] << {
-      name: "Withdraw Payment"
+      name: "Withdraw Payment",
+      total_amount: 0.0
      }
    end
    def process_data_record!
