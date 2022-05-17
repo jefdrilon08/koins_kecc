@@ -63,10 +63,10 @@ module Accounting
                               year: @year,
                               amount: 0.00
                             }
-                            loan_id = Loan.where(id: "b6d98dc7-4c9c-4f16-a6f8-972740b9a867")
-                            # loan_id= Loan.select("id, 
-                            #   date_approved").where("member_id = '#{o.fetch('member_id')}' AND status IN ('active','paid','writeoff') and extract(year from date_approved) <= '#{@year}'" 
-                            #   )
+                            # loan_id = Loan.where(id: "b6d98dc7-4c9c-4f16-a6f8-972740b9a867")
+                            loan_id= Loan.select("id, 
+                              date_approved").where("member_id = '#{o.fetch('member_id')}' AND status IN ('active','paid','writeoff') and extract(year from date_approved) <= '#{@year}'" 
+                              )
                                       temp_dates= {}
                                       temp_dates[:months]= []
                                       (1..12).to_a.each do |m_p|
@@ -109,7 +109,7 @@ module Accounting
                           end #end of 1..12
                           
                            temp[:total_interest_paid_amount] = temp[:months].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
-                          raise temp[:total_interest_paid_amount].inspect
+                          #raise temp[:total_interest_paid_amount].inspect
                            temp[:ave_interest]   = (temp[:total_interest_paid_amount] / 12).round(2)
                           temp
 
