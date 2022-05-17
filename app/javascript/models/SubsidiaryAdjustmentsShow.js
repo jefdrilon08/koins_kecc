@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var _authenticityToken;
 var _id;
@@ -58,11 +60,30 @@ var _urlDeleteAccountingCode            = "/api/v1/adjustments/subsidiary_adjust
 var _urlUpdateAccountingEntryParticular = "/api/v1/adjustments/subsidiary_adjustments/update_accounting_entry_particular";
 
 var _cacheDom = function() {
+  $modalDeleteAccountingEntry = new bootstrap.Modal(  
+    document.getElementById("modal-delete-accounting-entry")
+  );
+
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
+  $modalDeleteMember = new bootstrap.Modal(
+    document.getElementById("modal-delete-member")
+  );
+
+  $modalDeleteAccountingEntry = new bootstrap.Modal(
+    document.getElementById("modal-delete-accounting-entry")
+  );
+
   $inputParticular                    = $("#input-particular");
   $btnUpdateAccountingEntryParticular = $("#btn-update-accounting-entry-particular");
 
   $btnDeleteAccountingEntry   = $("#btn-delete-accounting-entry");
-  $modalDeleteAccountingEntry = $("#modal-delete-accounting-entry");
 
   $selectAccountingCode   = $("#select-accounting-code");
   $inputAccountingAmount  = $("#input-accounting-amount");
@@ -71,11 +92,9 @@ var _cacheDom = function() {
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnDelete         = $("#btn-delete");
   $btnConfirmDelete  = $("#btn-confirm-delete");
-  $modalDelete       = $("#modal-delete");
 
   $selectMember     = $("#select-member");
   $selectAccount    = $("#select-account");
@@ -85,11 +104,9 @@ var _cacheDom = function() {
 
   $btnDeleteMember        = $(".btn-delete-member");
   $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
-  $modalDeleteMember      = $("#modal-delete-member");
 
   $btnDeleteAccountingEntry         = $(".btn-delete-accounting-entry");
   $btnConfirmDeleteAccountingEntry  = $("#btn-confirm-delete-accounting-entry");
-  $modalDeleteAccountingEntry       = $("#modal-delete-accounting-entry");
 
   $displayMember          = $(".display-member");
   $displayAccountSubtype  = $(".display-account-subtype");
