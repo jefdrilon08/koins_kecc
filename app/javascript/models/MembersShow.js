@@ -1,5 +1,7 @@
 import Mustache from "mustache";
-import 'select2';
+import $ from "jquery";
+import select2 from 'select2';
+select2($);
 
 var $modalGenerateAccessToken;
 var $modalSignature;
@@ -206,7 +208,6 @@ var _cacheDom = function() {
   $selectActiveLoans            = $("#select-active-loans");
   $selectActiveLoans.select2({
     allowClear: true,
-    width: "auto",
     theme: "bootstrap"
   });
   $inputCoMakerA                = $("#input-co-maker-a");
