@@ -380,9 +380,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const authenticityToken = $("meta[name='csrf-token']").attr('content');
   const options = { authenticityToken, ...payload }
 
-  // SIDEBAR JS
-  Sidebar.init();
-
   const components = hooks[route];
   if (components) {
     components.forEach((component) => {
@@ -394,5 +391,10 @@ document.addEventListener("DOMContentLoaded", () => {
         renderComponent(component, options)
       }
     })
+  }
+
+  if(route != "pages/login") {
+    // SIDEBAR JS
+    Sidebar.init();
   }
 });
