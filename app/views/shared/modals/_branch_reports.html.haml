@@ -1,0 +1,114 @@
+#modal-nav-branch-reports.modal.fade
+  .modal-dialog.modal-xl
+    .modal-content
+      .modal-header
+        %h3.modal-title 
+          Branch Reports
+      .modal-body
+        .row
+          .col-3
+            = link_to "/data_stores/repayment_rates", class: "btn btn-primary w-100", disabled: microinsurance? do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              RR
+          .col-3
+            = link_to "/data_stores/manual_aging", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Manual Aging
+          .col-3
+            = link_to "/data_stores/branch_loans_stats", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Loan Stats
+          .col-3
+            = link_to "/data_stores/personal_funds", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              PF
+
+        .mt-4
+
+        .row
+          .col-3
+            = link_to "/data_stores/insurance_personal_funds", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              IPF
+          .col-3
+            = link_to "/data_stores/member_counts", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Member Counts
+          .col-3
+            = link_to "/data_stores/soa_expenses", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              SOA Expenses
+          .col-3
+            = link_to "/data_stores/soa_loans", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              SOA Loans
+
+        .mt-4
+
+        .row
+          .col-3
+            = link_to "/data_stores/soa_funds", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              SOA Funds
+          .col-3
+            = link_to "/data_stores/watchlists", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Watchlists
+          .col-3
+            = link_to "/data_stores/monthly_new_and_resigned", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Monthly New / Resigned
+          .col-3
+            = link_to "/data_stores/monthly_incentives", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Monthly Incentives
+
+        .mt-4
+
+        .row
+          .col-3
+            = link_to "/data_stores/x_weeks_to_pay", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              X Weeks to Pay
+          .col-3
+            = link_to "/data_stores/branch_resignations", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Branch Resignations
+          .col-3
+            = link_to "/data_stores/daily_branch_metrics", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Daily Branch Metrics
+          .col-3
+            = link_to "/data_stores/members_in_good_standing", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Good Standing
+
+        .mt-4
+
+        .row
+          .col-3
+            = link_to "/data_stores/member_id_generators", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              ID Form
+          .col-3
+            = link_to "/reports/government_identification_numbers", class: "btn btn-primary w-100" do
+              %span.btn-label
+                %i.bi.bi-wrench-adjustable
+              Government ID Numbers

@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import 'select2';
 
 var $modalNew;
@@ -50,10 +52,22 @@ var init  = function(options) {
 };
 
 var _cacheDom = function() {
-  $modalNew               = $("#modal-new");
-  $modalDelete            = $("#modal-delete");
-  $modalProcess           = $("#modal-process");
-  $modalBatchProcess      = $("#modal-batch-process");
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-process")
+  );
+
+  $modalBatchProcess = new bootstrap.Modal(
+    document.getElementById("modal-batch-process")
+  );
+
   $selectBranch           = $("#select-branch");
   $selectCenter           = $("#select-center");
   $selectMember           = $("#select-member");

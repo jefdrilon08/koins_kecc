@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var _authenticityToken;
 
@@ -18,6 +20,10 @@ var templateErrorList;
 var _urlNew = "/api/v1/adjustments/batch_moratorium_adjustments/create";
 
 var _cacheDom = function() {
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  )
+
   $btnNew               = $("#btn-new");
   $btnConfirmNew        = $("#btn-confirm-new");
   $inputNumberOfDays    = $("#input-number-of-days");
@@ -25,7 +31,6 @@ var _cacheDom = function() {
   $inputDateInitialized = $("#input-date-initialized");
   $selectBranch         = $("#select-branch");
   $selectCenter         = $("#select-center");
-  $modalNew             = $("#modal-new");
 
   $message  = $(".message");
 

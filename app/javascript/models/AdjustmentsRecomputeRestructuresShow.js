@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var recomputeRestructureId;
@@ -23,16 +25,25 @@ var _urlPrint   = "#" //"/api/v1/print/generate_file";
 var _urlDelete = "/api/v1/adjustments/recompute_restructures/destroy";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnDelete         = $("#btn-delete");
-  $modalDelete       = $("#modal-delete");
   $btnConfirmDelete  = $("#btn-confirm-delete");
   
   $btnPrint   = $("#btn-print");
-  $modalPrint = $("#modal-print");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();

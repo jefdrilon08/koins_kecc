@@ -1,4 +1,6 @@
 import Mustache from 'mustache';
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $inputQ;
 var $results;
