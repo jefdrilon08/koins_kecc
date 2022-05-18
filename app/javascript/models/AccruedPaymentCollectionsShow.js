@@ -1,7 +1,8 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import 'select2';
 
-var $modalNew;
 var $modalDelete;
 var $modalApproveTransaction;
 var $modalProcess;
@@ -95,12 +96,22 @@ var init  = function(options) {
 };
 
 var _cacheDom = function() {
-  $modalNew                     = $("#modal-new");
-  $modalApproveTransaction	= $("#modal-approve-transaction");
-  $modalDelete                  = $("#modal-delete");
-  $modalProcess                 = $("#modal-update-transaction"); //para sa modal
-  $modalBatchProcess            = $("#modal-batch-process");
-  $modalZeroOut			= $("#modal-zero-out");	
+  $modalApproveTransaction = new bootstrap.Modal(
+    document.getElementById("modal-approve-transaction")
+  )
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  )
+
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-update-transaction")
+  )
+
+  $modalZeroOut = new bootstrap.Modal(
+    document.getElementById("modal-zero-out")
+  )
+
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
   $selectMember                 = $("#select-member");
