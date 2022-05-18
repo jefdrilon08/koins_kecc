@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import $ from "jquery";
 
 var url         = "/api/v1/login";
 var loadingText = '<i class="fa fa-spin"></i> Loading...';
