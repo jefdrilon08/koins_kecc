@@ -14,7 +14,13 @@ namespace :administration do
   end
   resources :loan_product_categories
   resources :membership_arrangements
-  resources :membership_types
+  resources :membership_types do
+    get "/add_loan_product_configrations", to: "membership_types#add_loan_product_configurations"
+  end
+
+
+
+
   resources :referrers
   
   resources :member_shares, only: [:index]

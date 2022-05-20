@@ -52,6 +52,7 @@ import MembershipArrangementShow from "../components/MembershipArrangementShow.j
 import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and_resigned/ShowComponent.js";
 import MembersInGoodStandingShowComponent from "../components/data_stores/members_in_good_standing/ShowComponent.js";
 import ForWriteoffShowComponent from "../components/data_stores/for_writeoff/ShowComponent.js";
+import MembershipTypeShow from "../components/administration/membership_types/MembershpTypesShow.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -361,6 +362,7 @@ const hooks = {
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
+  "administration/membership_types/add_loan_product_configurations":  [MembershipTypeShow],
   "loans/reverse_form":                               [LoansReverseForm],
   "excel_reports/index":                 	            [MidasIndex],
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
