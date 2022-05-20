@@ -50,7 +50,9 @@ module BillingForWriteoffCollection
               }
             },
           header: [],
-          record: []
+          record: [],
+          total_cash_payment: 0.0,
+          total_payment: 0.0
         },
         status: "pending"
       )
@@ -98,7 +100,9 @@ module BillingForWriteoffCollection
             loan_id: l.id,
             loan_product_id: l.loan_product_id,
             enabled: true,
-            amount: l.total_balance.to_f
+            amount: l.total_balance.to_f,
+            record_type: "LOAN_PAYMENT",
+            loan_amort: []
           }
         else
           loan_data[:loan_data] << {
@@ -115,7 +119,8 @@ module BillingForWriteoffCollection
             loan_id: '',
             loan_product_id: nil,
             enabled: true,
-            amount: 0.0
+            amount: 0.0,
+            record_type: "WP"
           }
 
      end
