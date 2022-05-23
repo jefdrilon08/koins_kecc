@@ -383,8 +383,6 @@ GEM
       rspec-support (~> 3.10)
     rspec-support (3.11.0)
     ruby-statistics (3.0.0)
-    ruby-vips (2.1.4)
-      ffi (~> 1.12)
     ruby_http_client (3.5.5)
     rubyzip (2.3.2)
     selenium-webdriver (4.1.0)
@@ -506,7 +504,6 @@ DEPENDENCIES
   redis
   rollbar
   rspec-rails
-  ruby-vips (~> 2.1.4)
   selenium-webdriver
   sendgrid-ruby
   sidekiq
