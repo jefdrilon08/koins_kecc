@@ -41,6 +41,7 @@ gem 'tty-table'
 gem 'turbo-rails'
 gem 'whenever'
 gem 'zip-zip'
+gem "ruby-vips", "~> 2.1.4"
 
 
 # TODO: Remove eventually
@@ -55,7 +56,6 @@ gem 'nokogiri'
 
 group :production do
   gem 'puma_worker_killer'
-  gem "ruby-vips", "~> 2.1.4"
 end
 
 group :development, :test do
