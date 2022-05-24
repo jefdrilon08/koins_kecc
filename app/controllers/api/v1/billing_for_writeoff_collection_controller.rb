@@ -24,6 +24,7 @@ module Api
 
         ::BillingForWriteoffCollection::AddMember.new(config: config).execute!
         ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
+        ::BillingForWriteoffCollection::BuildAccountingEntry.new(config: config).execute!
         render json: { message: "Done" }
       
       end
@@ -37,6 +38,7 @@ module Api
         }
         ::BillingForWriteoffCollection::UpdateAmount.new(config: config).execute!
         ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
+        ::BillingForWriteoffCollection::BuildAccountingEntry.new(config: config).execute!
         render json: { message: "Done" }
 
       end

@@ -12,12 +12,20 @@ module BillingForWriteoffCollection
     def update_total_amount!
       enabled_loan = @record.select{|y| y[:enabled] == true}
       @header.each do |hd|
-        @total_amount = []
+        @total_amount     = []
+        @total_principal  = []
+        @total_interest   = []
         enabled_loan.each do |el|
           total_amount = el['loan_data'].select{|u| u['name'] == hd[:name] }.last[:amount]
-          @total_amount << total_amount
+          principal_amount = el['loan_data'].select{|u| u['name'] == hd[:name] }.last[:principal_amount]
+          interest_amount = el['loan_data'].select{|u| u['name'] == hd[:name] }.last[:interest_amount]
+          @total_amount << total_amount.to_f
+          @total_principal << principal_amount.to_f
+          @total_interest << interest_amount.to_f
         end
-          hd[:total_amount] = @total_amount.sum
+        hd[:total_amount] = @total_amount.sum.to_f
+        hd[:principal_amount] = @total_principal.sum.to_f
+        hd[:interest_amount] = @total_interest.sum.to_f
       end
     end
 

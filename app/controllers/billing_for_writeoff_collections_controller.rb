@@ -27,6 +27,7 @@ class BillingForWriteoffCollectionsController < DataStoreController
     @member_list_item       = @member_list.map{ |o| ["#{o["last_name"]}, #{o["first_name"]} ", o["id"] ] }
     @data                   = @data_store.data.with_indifferent_access
     @data_view              = @data[:record].select{|x| x["enabled"] == true}
+    @accounting_entry       = @data[:accounting_entry]
 
     @subheader_items = [
       {
