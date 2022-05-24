@@ -44,4 +44,11 @@
         %td.text-right
           %strong
             #{number_to_currency(o[:total_amount], unit: '')}
+      %td.text-right
+        %strong
+          #{number_to_currency(@data[:total_cash_payment], unit: '')}
+      %td.text-right
+        %strong
+          #{number_to_currency(@data[:total_payment], unit: '')}
+
 

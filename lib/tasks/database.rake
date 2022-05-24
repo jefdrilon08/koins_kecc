@@ -235,7 +235,7 @@ namespace :db do
   task :restore => :environment do
     puts "Restoring database..."
 
-    if ::ActiveRecord::Base.connection_config[:adapter] == 'postgresql'
+    if ::ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == 'postgresql'
       cmd = nil
       with_config do |app, host, db, user, pw|
         cmd = "PGPASSWORD=#{pw} pg_restore --verbose --host #{host} --username #{user} --clean --no-owner --no-acl --dbname #{db} #{ENV['PG_BACKUP_DUMP']}"
@@ -273,10 +273,10 @@ namespace :db do
 
   def with_config
     yield Rails.application.class.name.partition('::').first,
-      ActiveRecord::Base.connection_config[:host],
-      ActiveRecord::Base.connection_config[:database],
-      ActiveRecord::Base.connection_config[:username],
-      ActiveRecord::Base.connection_config[:password]
+      ActiveRecord::Base.connection_db_config.configuration_hash[:host],
+      ActiveRecord::Base.connection_db_config.configuration_hash[:database],
+      ActiveRecord::Base.connection_db_config.configuration_hash[:username],
+      ActiveRecord::Base.connection_db_config.configuration_hash[:password]
   end
 
   task :save_blip => :environment do

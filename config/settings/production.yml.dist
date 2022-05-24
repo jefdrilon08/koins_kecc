@@ -1214,6 +1214,8 @@ loan_products:
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
         skip_for_special_loan_fund: "true"

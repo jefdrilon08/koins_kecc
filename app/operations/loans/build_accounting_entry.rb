@@ -2,6 +2,7 @@ module Loans
   class BuildAccountingEntry
     def initialize(config:)
       @config       = config
+      
       @loan         = @config[:loan]
       @member       = @config[:member]
       @branch       = @member.branch
@@ -421,6 +422,19 @@ module Loans
                 }
 
                 temp_amount -= amount
+            end
+
+          elsif s_deduction.skip_for_membership_type.present? and s_deduction.skip_for_membership_type_status == true
+            membership_type_present = s_deduction.skip_for_membership_type.select{ |a| a==@member.member_type  }.count
+            if membership_type_present > 0
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: 0.0
+                }
+              
+
             end
 
           else
