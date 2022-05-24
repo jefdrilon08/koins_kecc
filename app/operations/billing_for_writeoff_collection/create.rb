@@ -66,7 +66,10 @@ module BillingForWriteoffCollection
      @header.uniq.each do |headers|
       @data_store.data['header'] << {
         name: headers.name,
-        total_amount: 0.0
+        loan_id: headers.id,
+        total_amount: 0.0,
+        principal_amount: 0.0,
+        interest_amount: 0.0
       }
      end
      @data_store.data['header'] << {
@@ -101,6 +104,8 @@ module BillingForWriteoffCollection
             loan_product_id: l.loan_product_id,
             enabled: true,
             amount: l.total_balance.to_f,
+            principal_amount: 0.0,
+            interest_amount: 0.0,
             record_type: "LOAN_PAYMENT",
             loan_amort: []
           }
@@ -110,7 +115,9 @@ module BillingForWriteoffCollection
             loan_id: '',
             loan_product_id: nil,
             enabled: false,
-            amount: 0.0
+            amount: 0.0,
+            principal_amount: 0.0,
+            interest_amount: 0.0,
           }
         end 
       end

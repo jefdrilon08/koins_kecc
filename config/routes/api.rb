@@ -114,6 +114,7 @@ namespace :api do
     post "/billing_for_writeoff_collection/add_member", to: "billing_for_writeoff_collection#add_member"
     post "/billing_for_writeoff_collection/update_amount", to: "billing_for_writeoff_collection#update_amount"
     post "/billing_for_writeoff_collection/update_total", to: "billing_for_writeoff_collection#update_total"
+    post "/billing_for_writeoff_collection/build_accounting_entry", to: "billing_for_writeoff_collection#build_accounting_entry"
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"

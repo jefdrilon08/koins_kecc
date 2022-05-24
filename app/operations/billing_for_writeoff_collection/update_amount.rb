@@ -29,10 +29,58 @@ module BillingForWriteoffCollection
       @member['total_cash_payment'] = total_cash_payment.to_f
     end
 
+    def update_amort_amount!
+      loan_data = @member_data.select{|z| z["loan_id"] == @loan_id}.last
+      amort = loan_data[:loan_amort]
+      @amount = @payment_amount.to_f
+      if !amort.nil?
+        amort.each do |o|
+          principal_balance = 0.0.to_f
+          interest_balance = 0.0.to_f
+          o[:principal_amount] = 0.0.to_f
+          o[:interest_amount] = 0.0.to_f
+          if @amount > 0.0
+            if o[:interest_balance] >= @amount.to_f
+              interest_balance = o[:interest_balance].to_f
+	      interest_balance -= @amount.to_f
+	      o[:interest_amount] = @amount.to_f
+	      @amount = 0.0
+            elsif o[:interest_balance] < @amount.to_f
+	      @amount -= o[:interest_balance].to_f
+	      o[:interest_amount] = o[:interest_balance].to_f
+	    end
+            if o[:principal_balance] >= @amount.to_f
+              principal_balance = o[:principal_balance].to_f
+	      principal_balance -= @amount.to_f
+	      o[:principal_amount] = @amount.to_f
+	      @amount = 0.0
+            elsif o[:principal_balance] < @amount.to_f
+	      @amount -= o[:principal_balance].to_f
+	      o[:principal_amount] = o[:principal_balance].to_f
+	    end
+	  end
+          o[:total_amount] = o[:principal_amount] + o[:interest_amount]
+        end
+      end
+    end
+
+    def update_distribution!
+      loan_data = @member_data.select{|z| z["loan_id"] == @loan_id}.last
+      amort = loan_data[:loan_amort]
+      if !amort.nil?
+        amort.each do |o|
+	  loan_data[:principal_amount] = amort.sum { |principal_amount| principal_amount[:principal_amount].to_f}
+          loan_data[:interest_amount]  = amort.sum { |interest_amount| interest_amount[:interest_amount].to_f}
+        end
+      end
+    end
+
     def execute!
       update_member_payment!
       update_total_payment_per_member!
       update_total_cash_payment_per_member!
+      update_amort_amount!
+      update_distribution!
       @data_store.update(data: @data)
     end
 
