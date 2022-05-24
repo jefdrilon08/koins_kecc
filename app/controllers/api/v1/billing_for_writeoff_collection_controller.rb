@@ -26,7 +26,6 @@ module Api
         ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
         ::BillingForWriteoffCollection::BuildAccountingEntry.new(config: config).execute!
         render json: { message: "Done" }
-      
       end
 
       def update_amount
@@ -36,11 +35,15 @@ module Api
           payment_amount: params[:payment_amount],
           member_id: params[:member_id]
         }
-        ::BillingForWriteoffCollection::UpdateAmount.new(config: config).execute!
-        ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
-        ::BillingForWriteoffCollection::BuildAccountingEntry.new(config: config).execute!
-        render json: { message: "Done" }
-
+       errors = ::BillingForWriteoffCollection::ValidateAmount.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::BillingForWriteoffCollection::UpdateAmount.new(config: config).execute!
+          ::BillingForWriteoffCollection::UpdateTotal.new(config: config).execute!
+          ::BillingForWriteoffCollection::BuildAccountingEntry.new(config: config).execute!
+          render json: { message: "Done" }
+        end
       end
 
     end
