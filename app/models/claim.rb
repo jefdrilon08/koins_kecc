@@ -5,7 +5,7 @@ class Claim < ApplicationRecord
   YEAR_LEVEL = ["GRADE 7", "GRADE 8", "GRADE 9", "GRADE 10", "GRADE 11", "GRADE 12", "1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
   TYPES_OF_LOAN = ["K-BAHAY W1", "K-BAHAY W2", "K-BAHAY W3",
                    "K-BENEPISYO W1", "K-BENEPISYO W2", "K-BENEPISYO W3",
-                   "K-EDUKASYON", "K-EDUKASYON W2", "K-EDUKASYON W3",
+                   "K-EDUKASYON", "K-EDUKASYON W2", "K-EDUKASYON W3","K-EDUKASYON W4",
                    "K-KALUSUGAN W1", "K-KALUSUGAN W2","K-KALUSUGAN W3","K-KALUSUGAN W4", "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7",
                    "K-KABUHAYAN", "K-KABUHAYAN W2", "K-KABUHAYAN W3", "K-KALAMIDAD", "K-SAGIP", "K-KASAL", "K-KASANGKAPAN", "K-MAGGAGAWA", "K (BUSINESS DISRUPTION LOAN)",
                    "K-NHA W1", "K-NHA W12", "K-Noche Buena", "K-PWD", "K-Toda", "K-TRABAHO", "K-ALALAY W2", "K-YAKAP",
