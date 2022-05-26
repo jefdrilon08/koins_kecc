@@ -114,7 +114,7 @@ var _bindEvents = function() {
       },
       error: function(response) {
         errors = [];
-
+	alert(JSON.parse(response.responseText).full_messages)
         try {
           errors = JSON.parse(response.responseText).full_messages;
         } catch(err) {
