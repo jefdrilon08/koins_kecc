@@ -145,6 +145,12 @@ module Administration
           class: "fa fa-times",
           data: { method: :delete, confirm: "Are you sure?" },
           text: "Delete"
+        },
+        {
+          link: administration_membership_type_add_loan_product_configrations_path(params[:id]),
+          class: "fa fa-plus",
+          text: "Add Loan Product Config"
+
         }
       ]
 
@@ -168,6 +174,21 @@ module Administration
 
     def membership_type_params
       params.require(:membership_type).permit!
+    end
+    def add_loan_product_configurations 
+      @subheader_items = [
+        {
+          text: "Administration"
+        },
+        {
+          text: "Membership Types"
+        },
+        {
+          text: "Loan Configurations"
+        }
+
+      ]    
+      #params.require(:membership_type).permit!
     end
   end
 end

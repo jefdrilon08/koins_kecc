@@ -20,7 +20,7 @@ namespace :kezar do
       start_date,
       end_date,
       branch.id
-    )
+    ).limit(500)
 
     puts "Uploading #{account_transactions.size} transactions..."
 

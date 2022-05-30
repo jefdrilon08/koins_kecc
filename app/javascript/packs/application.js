@@ -5,7 +5,6 @@ import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-
 import "@fortawesome/fontawesome-free/js/all";
 
 // React Components
@@ -23,7 +22,6 @@ import InsuranceFundTransferCollectionUIComponent from "../components/insurance_
 import InsuranceWithdrawalCollectionUIComponent from "../components/insurance_withdrawal_collections/InsuranceWithdrawalCollectionUIComponent";
 import MonthlyClosingCollectionsShowUI from "../components/monthly_closing_collections/ShowUI";
 import InsuranceMonthlyClosingCollectionsShowUI from "../components/insurance_monthly_closing_collections/ShowUI";
-import CommissionCollectionsShowUI from "../components/commission_collections/ShowUI";
 import InsuranceStatusComponent from "../components/member_accounts/InsuranceStatusComponent";
 import TrialBalanceComponent from "../components/accounting/TrialBalanceComponent";
 import GeneralLedgerComponent from "../components/accounting/GeneralLedgerComponent";
@@ -51,6 +49,7 @@ import MembershipArrangementShow from "../components/MembershipArrangementShow.j
 import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and_resigned/ShowComponent.js";
 import MembersInGoodStandingShowComponent from "../components/data_stores/members_in_good_standing/ShowComponent.js";
 import ForWriteoffShowComponent from "../components/data_stores/for_writeoff/ShowComponent.js";
+import MembershipTypeShow from "../components/administration/membership_types/MembershpTypesShow.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -196,6 +195,8 @@ import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
 import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
 import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
 import Sidebar from "../models/Sidebar.js";
+import BillingForWriteoffCollectionIndex from "../models/BillingForWriteoffCollectionIndex.js";
+import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollectionShow.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -244,7 +245,7 @@ const hooks = {
   "insurance_monthly_closing_collections/index":      [InsuranceMonthlyClosingCollectionsIndex],
   "insurance_monthly_closing_collections/show":       [InsuranceMonthlyClosingCollectionsShow, InsuranceMonthlyClosingCollectionsShowUI],
   "commission_collections/index":                     [CommissionCollectionsIndex],
-  "commission_collections/show":                      [CommissionCollectionsShow, CommissionCollectionsShowUI],
+  "commission_collections/show":                      [CommissionCollectionsShow],
   "insurance_accounts/show":                          [InsuranceStatusComponent],
   "accounting/trial_balance":                         [TrialBalanceComponent],
   "accounting/general_ledger":                        [GeneralLedgerComponent],
@@ -359,6 +360,7 @@ const hooks = {
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
   "administration/membership_arrangements/show":      [MembershipArrangementShow],
+  "administration/membership_types/add_loan_product_configurations":  [MembershipTypeShow],
   "loans/reverse_form":                               [LoansReverseForm],
   "excel_reports/index":                 	            [MidasIndex],
   "data_stores/members_in_good_standing/index":       [MembersInGoodStandingIndex],
@@ -372,7 +374,10 @@ const hooks = {
   "billing_for_writeoff/show":                        [BillingForWriteoffShow],
   "data_stores/member_id_generators/index":           [MemberIdGeneratorsIndex],
   "data_stores/member_id_generators/show":            [MemberIdGeneratorsShow],
-  "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow]
+  "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow],
+  "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex],
+  "billing_for_writeoff_collections/show":           [BillingForWriteoffCollectionShow]
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -3,13 +3,52 @@
   .col
     .card
       .card-body
-        - if @commission_collection.error?
-          = render partial: "error_page"
-        - else
-          - if debug?
-            %pre
-              #{JSON.pretty_generate(JSON.parse(@commission_collection.data.to_json))}
-          #react-root
+        - if @commission_collection_data[:records].count > 0
+          %table.ui.table
+            %thead
+              %tr
+                %th{width: "2%"}
+                %th{width: "25%"} Referrer
+                %th{width: "20%"} Category
+                %th{width: "15%"} Start Date
+                %th{width: "15%"} End Date
+                %th Total
+                %th Commission
+            %tbody
+              - @commission_collection_data[:records].each_with_index do |rec, i|
+                %tr
+                  %td #{i + 1}
+                  %td
+                    #{rec[:referrer]}
+                  %td
+                    #{rec[:category].try(:upcase)}
+                  %td
+                    #{rec[:start_date]}
+                  %td
+                    #{rec[:end_date]}
+                  %td.curr
+                    #{number_to_currency(rec[:total_life_rf], unit: "")}
+                  %td.curr
+                    #{number_to_currency(rec[:commission], unit: "")}
+            %thead
+              %tr
+                %th
+                %th Total
+                %th
+                %th
+                %th
+                %th
+                %th.curr
+                  #{number_to_currency(@commission_collection_data[:total_commission], unit: "")}
+
+        -else
+          %p
+            No records found.
+        - if !@commission_collection_data.nil?
+          = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_data }
+          - if !@commission_collection.approved?
+            - if ["MIS"].include? current_user.roles.last
+              = render partial: "commission_collections/accounting_entry_settings"
 
 = render partial: "commission_collections/modals/update"
 = render partial: "commission_collections/modals/approve"

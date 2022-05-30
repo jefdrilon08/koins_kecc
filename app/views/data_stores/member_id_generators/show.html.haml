@@ -2,7 +2,9 @@
   .col
     .card
       .card-body
-        = render partial: "form_add"
+        - if @data_store.status == "pending"
+          = render partial: "form_add"
+        
         %ul.nav.nav-tabs{:role => "tablist"} 
           %li.nav-item
             %a.nav-link.active.show{"aria-controls" => "profile", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#home", :role => "tab"}
@@ -16,5 +18,8 @@
           #savings_accounts.tab-pane{:role => "tabpanel"}
             = render partial: "member_details"
 
-jef show
+
 = render partial: "data_stores/member_id_generators/modals/contact_person"
+
+
+= render partial: "data_stores/member_id_generators/modals/check"

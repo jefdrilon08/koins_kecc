@@ -7,6 +7,7 @@ module Adjustments
         @make_payment_details = @config[:make_payment]
         @make_payment_details_data = MakePayment.find(@make_payment_details.id)
         @user = @config[:user]
+        @current_date = @config[:current_date]
       end
       def execute!
         @make_payment_details["data"].each do |mpd|
@@ -36,7 +37,7 @@ module Adjustments
           @account_transaction.subsidiary_type = "Loan"
           @account_transaction.amount = (@data_amort[:amort_entries].sum{ |a| a[:principal_paid] }.to_f + @data_amort[:amort_entries].sum{ |a| a[:interest_paid] }.to_f).to_f
           @account_transaction.transaction_type = "loan_payment"
-          @account_transaction.transacted_at = "2021-11-25"
+          @account_transaction.transacted_at = @current_date
           @account_transaction.status = "approved"
           @account_transaction.data = @data_amort
 

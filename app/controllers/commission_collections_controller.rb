@@ -2,7 +2,7 @@ class CommissionCollectionsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @commission_collections = CommissionCollection.all.order(date_prepared: :desc)
+    @commission_collections = CommissionCollection.all.order(end_date: :desc)
 
     if params[:start_date].present? and params[:end_date].present? and params[:start_date] <= params[:end_date]
       @commission_collections  = @commission_collections.where(
@@ -40,6 +40,14 @@ class CommissionCollectionsController < ApplicationController
 
   def show
     @commission_collection = CommissionCollection.find(params[:id])
+    
+    if @commission_collection.data.present?
+      @commission_collection_data = @commission_collection.data.with_indifferent_access
+    end
+
+    if !@commission_collection_data.nil?
+      @accounting_entry_data = @commission_collection_data[:accounting_entry]
+    end
 
     if @commission_collection.processing?
       redirect_to commission_collections_path

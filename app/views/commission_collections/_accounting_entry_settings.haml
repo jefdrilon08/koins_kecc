@@ -1,0 +1,99 @@
+.row
+  .col
+    .card
+      .card-body
+        #settings
+          .row
+            .col-md-3.col-xs-12
+              %h5
+                Trasaction Fee
+              .card
+                .card-body
+                  %p
+                    Amount
+                  .row
+                    .col-md-6.col-xs-12
+                      = text_field_tag :transaction_fee, @commission_collection.transaction_fee, class: "form-control select-select2", id: "input-text-transaction-fee"
+                    .col-md-6.col-xs-12
+                      #btn-confirm-transaction-fee.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Add Transaction Fee
+                  .message
+            .col-md-5.col-xs-12
+              %h5
+                Modify Accounting Code
+              .card
+                .card-body
+                  %p
+                    Currently being used: #{@commission_collection.template}
+                  .row
+                    .col-md-8.col-xs-12
+                      = select_tag :template, options_for_select(templates, @commission_collection.template), class: "form-control select-select2", id: "select-template", prompt: "-- RESET TO DEFAULT --"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-template.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Use Template
+                  .message
+            .col-md-4.col-xs-12
+              %h5
+                Modify Book
+              .card
+                .card-body
+                  %p
+                    Currently book: #{@commission_collection.book}
+                  .row
+                    .col-md-8.col-xs-12
+                      = select_tag :book, options_for_select(["CDB", "JVB", "CRB"], @commission_collection.book), class: "form-control select-select2", id: "select-book"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-book.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Use Book
+                  .message
+          .row
+            .col-md-12.col-xs-12
+              %h5
+                Modify Particular
+              .card
+                .card-body
+                  %p
+                    Currently being used: #{@commission_collection.particular}
+                  .row
+                    .col-md-8.col-xs-12
+                      = text_area_tag :particular, @commission_collection.particular, class: "form-control select-select2", id: "input-text-particular"
+                    .col-md-4.col-xs-12
+                      #btn-confirm-particular.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Update particular
+                  .message
+          .row
+            .col-md-12.col-xs-12
+              %h5
+                Additional Field
+              .card
+                .card-body
+                  .row
+                    .col-md-3.col-xs-12
+                      %p Check Number
+                      = text_field_tag :particular, @commission_collection.check_number, class: "form-control select-select2", id: "input-text-check-number"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-check-number.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                    .col-md-3.col-xs-12
+                      %p Check Voucher Number
+                      = text_field_tag :particular, @commission_collection.check_voucher_number, class: "form-control select-select2", id: "input-text-check-voucher-number"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-check-voucher-number.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                    .col-md-3.col-xs-12
+                      %p Payee
+                      = text_field_tag :particular, @commission_collection.payee, class: "form-control select-select2", id: "input-text-payee"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-payee.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                  .message

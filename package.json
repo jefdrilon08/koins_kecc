@@ -38,7 +38,8 @@
   ],
   "devDependencies": {},
   "scripts": {
-    "build": "esbuild app/javascript/packs/*.* --bundle --loader:.js=jsx --sourcemap --outdir=app/assets/builds",
-    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/main.css --no-source-map --load-path=node_modules"
+    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/main.css --no-source-map --load-path=node_modules",
+    "build:js": "esbuild app/javascript/packs/*.* --bundle --loader:.js=jsx --sourcemap --outdir=app/assets/builds",
+    "build": "cp config/settings/production.yml.dist config/settings/production.yml"
   }
 }

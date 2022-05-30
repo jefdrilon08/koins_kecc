@@ -18,6 +18,7 @@ module DataStores
       @repayment_rate_as_of = DataStore.repayment_rates.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{@as_of}",@branch.id).last
       @member_counts_as_of  = DataStore.member_counts.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{@as_of}",@branch.id).last
       @member_counts_prev   = DataStore.member_counts.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{month_prev}",@branch.id).first
+      @soa_expenses = DataStore.soa_expenses.where("meta->>'branch_id' =?","#{@branch.id}").order('created_at DESC').first
       @loans_stat_officer_present  =  ::DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(rr_data:  @repayment_rate_as_of.data.with_indifferent_access).execute!
       @loans_stat_officer_prev     =  ::DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(rr_data:  @repayment_rate_prev.data.with_indifferent_access).execute!
       @member_counts_pres = ::DataStores::BuildMemberCountsPerOfficer.new(mc_data: @member_counts_as_of.data.with_indifferent_access).execute!
@@ -26,6 +27,7 @@ module DataStores
     end
 
     def execute!
+        
 
       @officers = @loans_stat_officer_present[:officers].map{|off| off[:officer]}.uniq
      
@@ -73,19 +75,22 @@ module DataStores
             end
           end
         #LOAN STAT PRESENT DISBURSED AMOUNT AND COUNT
-          @loans_stat_officer_present[:officers].each do |lp|
-            if officers[:id] == lp[:officer][:id]
-              lp[:loan_products].each do |loans|
-                loans[:loans].each do |ll|
-                  date_released = ll.fetch("date_released").try(:to_date)
-                  if date_released.month == @month and date_released.year == @year
-                    @officers_data[:disbursed_amount] += ll[:principal].to_f
-                    @officers_data[:loans_disbursed] += 1
-                  end
-                end
-              end
-            end
+        #disburse_amount
+        get_soa_expenses!
+        @result.each do |off|
+          if officers[:id] == off["officer_id"]
+          @officers_data[:disbursed_amount] = off["principal"]
           end
+        end
+        #loan_size_per_so
+        get_loan_size!
+        @loan_size_per_so.each do |size|
+           if officers[:id] == size["officer_id"]
+            @officers_data[:loans_disbursed] = size["counter"]
+          end
+        end
+
+
         
         #MEMBER COUNTS PRESENT
           @member_counts_pres[:officers].each do |mcp|
@@ -119,7 +124,7 @@ module DataStores
           end
         #drop out
           drop_out_rate = ((((@officers_data[:beg_outreached].to_f + @officers_data[:new_members]) - @officers_data[:loaners]) / @officers_data[:beg_outreached]) * 100).round(2)
-          @officers_data[:drop_out_rate] = drop_out_rate
+          @officers_data[:drop_out_rate] = drop_out_rate 
 
         #incentive
          incentive = @incentive_table.select{ |o| (@officers_data[:rr]/100) >= o.min_rr and (@officers_data[:rr]/100) <= o.max_rr }.first
@@ -184,7 +189,22 @@ module DataStores
        
     end
 
-    
+    def get_soa_expenses!
+      @result= ActiveRecord::Base.connection.execute(<<-EOS).to_a
+        SELECT  
+        arr->'officer'->>'id' as officer_id,
+        SUM ((arr->>'principal')::float) as principal
+        FROM data_stores,json_array_elements(data->'records') arr(records) where data_stores.id = '#{@soa_expenses.id}' group by officer_id
+      EOS
+    end
+
+    def get_loan_size!
+      @loan_size_per_so =  ActiveRecord::Base.connection.execute(<<-EOS).to_a
+        SELECT COUNT(arr->'loan_product'->>'name') as counter,
+        arr->'officer'->>'id' as officer_id
+        FROM data_stores,json_array_elements(data->'records') arr(records) where data_stores.id = '#{@soa_expenses.id}' group by officer_id
+      EOS
+    end
 
   end
 end

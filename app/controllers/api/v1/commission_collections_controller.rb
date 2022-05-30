@@ -4,67 +4,64 @@ module Api
       before_action :authenticate_user!
 
       def fetch
-        insurance_monthly_closing_collection  = InsuranceMonthlyClosingCollection.find(params[:id])
+        commission_collection  = CommissionCollection.find(params[:id])
 
         data  = {
-          id: insurance_monthly_closing_collection.id,
-          meta: insurance_monthly_closing_collection.meta,
-          closing_date: insurance_monthly_closing_collection.closing_date.strftime("%b %d, %Y"),
-          data: insurance_monthly_closing_collection.data
+          id: commission_collection.id,
+          meta: commission_collection.meta,
+          data: commission_collection.data
         }
 
         render json:  data
       end
 
       def approve
-        insurance_monthly_closing_collection  = InsuranceMonthlyClosingCollection.find(params[:id])
+        commission_collection  = CommissionCollection.find(params[:id])
 
         config  = {
-          insurance_monthly_closing_collection: insurance_monthly_closing_collection,
+          commission_collection: commission_collection,
           user: current_user
         }
 
-        errors  = ::InsuranceMonthlyClosingCollections::ValidateApprove.new(
+        errors  = ::CommissionCollections::ValidateApprove.new(
                     config: config
                   ).execute!
 
         if errors[:messages].size == 0
-          insurance_monthly_closing_collection.update!(status: "processing")
+          commission_collection.update!(status: "processing")
 
           # Start job
           args = {
-            insurance_monthly_closing_collection_id: insurance_monthly_closing_collection.id,
+            commission_collection_id: commission_collection.id,
             user_id: current_user.id
           }
 
-          ProcessApproveInsuranceMonthlyClosingCollection.perform_later(args)
+          ProcessApproveCommissionCollection.perform_later(args)
 
-          render json: { id: insurance_monthly_closing_collection.id }
+          render json: { id: commission_collection.id }
         else
           render json: errors, status: 400
         end
       end
 
       def update
-        insurance_monthly_closing_collection  = InsuranceMonthlyClosingCollection.find(params[:id])
-        branch                                = insurance_monthly_closing_collection.branch
-        closing_date                          = insurance_monthly_closing_collection.closing_date
-
-        insurance_monthly_closing_collection.update!(
+        commission_collection  = CommissionCollection.find(params[:id])
+        
+        commission_collection.update!(
           status: "processing"
         )
 
         args  = {
           user_id: current_user.id,
           branch_id: branch.id,
-          closing_date: closing_date.to_s,
-          insurance_monthly_closing_collection_id: insurance_monthly_closing_collection.id
+          commission_collection_id: commission_collection.id
         }
 
         # Start job
-        ProcessMonthlyClosingCollection.perform_later(args)
+        # ProcessMonthlyClosingCollection.perform_later(args)
+        ProcessCommissionCollection.perform_later(args)
 
-        render json: { id: insurance_monthly_closing_collection.id }
+        render json: { id: commission_collection.id }
       end
 
       def create
@@ -111,6 +108,135 @@ module Api
 
           render json: { id: commission_collection.id }
         end
+      end
+
+      def modify_book
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        book                   = params[:book]
+
+        config  = {
+          book: book,
+          user: current_user,
+          commission_collection: commission_collection,
+        }
+
+  
+        ::CommissionCollections::ModifyBook.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def add_transaction_fee
+        commission_collection = CommissionCollection.where(id: params[:id]).first
+        transaction_fee       = params[:transaction_fee].to_f
+
+        config  = {
+          transaction_fee: transaction_fee,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        errors  = ::CommissionCollections::ValidateAddTransactionFee.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::CommissionCollections::AddTransactionFee.new(
+            config: config
+          ).execute!
+
+          render json: { id: commission_collection.id }
+        end
+      end
+
+      def modify_particular
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        particular   = params[:particular]
+
+        config  = {
+          particular: particular,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::ModifyParticular.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def save_payee
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        payee   = params[:payee]
+
+        config  = {
+          payee: payee,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::SavePayee.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def save_check_number
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        check_number   = params[:check_number]
+
+        config  = {
+          check_number: check_number,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::SaveCheckNumber.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def save_check_voucher_number
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        check_voucher_number   = params[:check_voucher_number]
+
+        config  = {
+          check_voucher_number: check_voucher_number,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+        ::CommissionCollections::SaveCheckVoucherNumber.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
+      end
+
+      def modify_template
+        commission_collection  = CommissionCollection.where(id: params[:id]).first
+        template  = params[:template]
+
+        config  = {
+          template: template,
+          commission_collection: commission_collection,
+          user: current_user
+        }
+
+      
+        ::CommissionCollections::ModifyTemplate.new(
+          config: config
+        ).execute!
+
+        render json: { id: commission_collection.id }
       end
     end
   end

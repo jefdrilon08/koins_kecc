@@ -73,7 +73,7 @@ class TransferMemberRecordsController < ApplicationController
 
     @subheader_side_actions = []
       if @records.status == "pending"
-        if helpers.sbk_bk_mis_user
+        if helpers.sbk_mis_user
             @subheader_side_actions << {
               id: "btn-approve",
               link: "#",

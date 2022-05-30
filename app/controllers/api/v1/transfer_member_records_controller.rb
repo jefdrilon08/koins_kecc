@@ -59,7 +59,7 @@ module Api
           if errors[:messages].any?
               render json: errors, status: 400
           else
-
+              
             transfer_member_records.update(status: "processing")
             args = {
               transfer_member_records: transfer_member_records.id,

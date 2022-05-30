@@ -27,9 +27,37 @@ module CommissionCollections
         }
       end
 
+      if @end_date.present? and @start_date.present? and @category.present?
+        if CommissionCollection.where(
+            "start_date = ? AND end_date = ? AND category = ?",
+            @start_date, 
+            @end_date,
+            @category
+          ).any?
+
+          @errors[:messages] << {
+            key: "commission_collection",
+            message: "Already created commission."
+          }
+        end
+      end
+
+      if @start_date.present? and @category.present?
+        last_commission_collection = CommissionCollection.where(category: @category).order("date_prepared ASC").last
+
+        if last_commission_collection.present?
+          if @start_date <= last_commission_collection.end_date
+            @errors[:messages] << {
+              key: "commission_collection",
+              message: "Start date must be advance in last generated commission."
+            }
+          end
+        end
+      end
+
       if @category.blank?
         @errors[:messages] << {
-          key: "branch",
+          key: "category",
           message: "Category required"
         }
       end      

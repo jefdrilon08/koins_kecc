@@ -222,11 +222,11 @@ module Loans
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
         if deduction_type == "share_capital_fee"
-            #raise @loan.data["share_capital_available"].inspect
-            total_member_shares = MemberShare.where("member_id = ? and  certificate_for = ? and is_void is null",@member.id, "KCOOP").sum(:number_of_shares)
+            total_member_shares = MemberAccount.where(member_id: @member.id, account_subtype: "Share Capital").last.balance.to_f / 100.0
+            
             @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
 
-            partial_number_of_share =  total_member_shares +  @share_capital_deposit.last["number_of_share"]
+            partial_number_of_share =  total_member_shares.to_i +  @share_capital_deposit.last["number_of_share"]
             
             if s_deduction.max_share < partial_number_of_share
               share_avail =  s_deduction.max_share  - total_member_shares
@@ -243,19 +243,38 @@ module Loans
             amount          = @total_share_paid
             name            = accounting_code.name
             code            = accounting_code.code
-
-            if @loan.data["share_capital_available"] == true
-              journal_entries << {
-                accounting_code_id: accounting_code.id,
-                code: code,
-                name: name,
-                amount: amount
-              }
             
+          
 
-              temp_amount -= amount
+            if s_deduction["skip_sc"].present?
+              number_of_sharecap = MemberAccount.where(account_subtype: "Share Capital").last.balance.to_f
+              if number_of_sharecap > 0
+                journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: amount
+                }
+                temp_amount -= amount
+              end
+            
+            else
+              if (@member_data[:entry_point_loan_cycle].to_i + 1.to_i).to_i > 1
+      
+                if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
+                  journal_entries << {
+                    accounting_code_id: accounting_code.id,
+                    code: code,
+                    name: name,
+                    amount: amount
+                  }
+                  temp_amount -= amount
+                end
             end
             
+            
+            end
+
         elsif deduction_type == "straight_one_time"
           #if @member.loans.active_or_paid.count == 0
           if @loan_cycles.size == 0

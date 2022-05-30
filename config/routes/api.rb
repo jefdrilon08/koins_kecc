@@ -109,6 +109,12 @@ namespace :api do
   end
 
   namespace :v1 do
+    #billing_for_writeoff_collection
+    post "/billing_for_writeoff_collection/create", to: "billing_for_writeoff_collection#create"
+    post "/billing_for_writeoff_collection/add_member", to: "billing_for_writeoff_collection#add_member"
+    post "/billing_for_writeoff_collection/update_amount", to: "billing_for_writeoff_collection#update_amount"
+    post "/billing_for_writeoff_collection/update_total", to: "billing_for_writeoff_collection#update_total"
+    post "/billing_for_writeoff_collection/build_accounting_entry", to: "billing_for_writeoff_collection#build_accounting_entry"
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
@@ -367,6 +373,13 @@ namespace :api do
     post "/commission_collections", to: "commission_collections#create"
     post "/commission_collections/update", to: "commission_collections#update"
     post "/commission_collections/approve", to: "commission_collections#approve"
+    post "/commission_collections/modify_template", to: "commission_collections#modify_template"
+    post "/commission_collections/modify_book", to: "commission_collections#modify_book"
+    post "/commission_collections/modify_particular", to: "commission_collections#modify_particular"
+    post "/commission_collections/save_payee", to: "commission_collections#save_payee"
+    post "/commission_collections/save_check_number", to: "commission_collections#save_check_number"
+    post "/commission_collections/save_check_voucher_number", to: "commission_collections#save_check_voucher_number"
+    post "/commission_collections/add_transaction_fee", to: "commission_collections#add_transaction_fee"
 
     # Membership Payment Collection
     post "/membership_payment_collections", to: "membership_payment_collections#create"
@@ -484,6 +497,8 @@ namespace :api do
       post "/member_id_generetors/contact_person", to: "member_id_generetors#contact_person"
       post "/member_id_generetors/add_contact_person", to: "member_id_generetors#add_contact_person"
       post "/member_id_generetors/add_member", to: "member_id_generetors#add_member"
+      post "/member_id_generetors/check_member_id", to: "member_id_generetors#check_member_id"
+      post "/member_id_generetors/remove_member", to: "member_id_generetors#remove_member"
       post "/patronage_refund/queue", to: "patronage_refund#queue"
       get "/patronage_refund/fetch", to: "patronage_refund#fetch"
       post "/patronage_refund/approve", to: "patronage_refund#approve"

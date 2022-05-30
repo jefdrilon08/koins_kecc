@@ -139,10 +139,14 @@ module ExcelReports
                   l_purpose = sett.loan_purpose
                 end
                 #pod_type
-                if l['maturity_date'].to_date == mat_date.to_date
-                  pod_type = "50-01"
+                if l['maturity_date'] != nil
+                  if l['maturity_date'].to_date == mat_date.to_date
+                    pod_type = "50-01"
+                  else
+                    pod_type = "54-02"
+                  end
                 else
-                  pod_type = "54-02"
+                  pod_type = '54-02'
                 end
                 #overdue
                 overdue = l['num_days_par']

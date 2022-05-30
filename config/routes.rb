@@ -234,8 +234,11 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
-  # billing for writeoff
+  # billing for writeoff collections
+  get "/billing_for_writeoff_collections", to: "billing_for_writeoff_collections#index"
+  get "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#show"
   
+  # billing for writeoff
   get "/billing_for_writeoff", to: "billing_for_writeoff#index"
   get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"
   delete "/billing_for_writeoff/:id", to: "billing_for_writeoff#destroy"
@@ -433,6 +436,8 @@ Rails.application.routes.draw do
     get "/member_id_generators", to: "member_id_generators#index"
     get "/member_id_generators/:id", to: "member_id_generators#show"
     delete "/member_id_generators/:id", to: "member_id_generators#destroy"
+    get "/member_id_generators/:id/for_member_id_excel", to: "member_id_generators#for_member_id_excel", as: :for_member_id_download_excel
+
 
     get "/insurance_personal_funds", to: "insurance_personal_funds#index"
     get "/insurance_personal_funds/:id", to: "insurance_personal_funds#show"

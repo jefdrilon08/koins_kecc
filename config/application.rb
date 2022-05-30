@@ -9,7 +9,6 @@ Bundler.require(*Rails.groups)
 module Koins
   class Application < Rails::Application
     config.load_defaults 7.0 
-
     config.autoloader = :classic
 
     # Configuration for the application, engines, and railties goes here.
