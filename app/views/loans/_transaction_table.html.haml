@@ -50,7 +50,7 @@
                     %center
                       %strong
                         %small
-                          #{a[:due_date].to_date.strftime("%b %d, %Y")}
+                          #{a[:due_date].try(:to_date).try(:strftime, "%b %d, %Y")}
                   %td.text-end
                     .text-muted
                       %small
