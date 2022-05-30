@@ -1,17 +1,17 @@
 module AccruedPaymentCollections
   class BuildAccountingEntry
     def initialize(accrued_billing:, current_user:)
-      @user =  current_user
-      @accrued_billing = accrued_billing
-      @book         = "CRB"
-      @prepared_by  = @user.full_name
-      @particular   = "To record payment for accrued interest"
-      @branch = Branch.find(@accrued_billing.branch_id) 
-      @current_date = ::Utils::GetCurrentDate.new(
-                        config: {
-                          branch: @branch
-                        }
-                      ).execute!
+      @user             = current_user
+      @accrued_billing  = accrued_billing
+      @book             = "CRB"
+      @prepared_by      = @user.try(:full_name)
+      @particular       = "To record payment for accrued interest"
+      @branch           = Branch.find(@accrued_billing.branch_id) 
+      @current_date     = ::Utils::GetCurrentDate.new(
+                            config: {
+                              branch: @branch
+                            }
+                          ).execute!
       end
       
     def execute!
