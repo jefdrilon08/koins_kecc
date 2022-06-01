@@ -1,5 +1,8 @@
 module Adjustments
   class MakePaymentsController < ApplicationController
+    before_action :authenticate_user!
+
+
     def index
       make_payment_type = params[:make_payment_type]
       if params[:make_payment_type].present? || params[:status].present?

@@ -13,7 +13,7 @@ module MakePayments
 
     
 
-      @prepared_by  = @user.full_name
+      @prepared_by  = @user.try(:full_name)
       @particular   = @make_payment_data.meta["particular"]
       @or_number    = @make_payment_data.meta["or_number"]
       @ar_number    = @make_payment_data.meta["ar_number"]
