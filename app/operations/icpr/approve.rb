@@ -88,8 +88,8 @@ module Icpr
         transaction_type  = 'deposit'
         transacted_at     = @date_approved
         status            = 'approved'
-        created_at        = Time.now.to_s(:db)
-        updated_at        = Time.now.to_s(:db)
+        created_at        = Time.now.to_s
+        updated_at        = Time.now.to_s
 
         data  = {
           is_withdraw_payment: false,
@@ -119,8 +119,8 @@ module Icpr
         transaction_type  = 'deposit'
         transacted_at     = @date_approved
         status            = 'approved'
-        created_at        = Time.now.to_s(:db)
-        updated_at        = Time.now.to_s(:db)
+        created_at        = Time.now.to_s
+        updated_at        = Time.now.to_s
 
         data  = {
           is_withdraw_payment: false,
