@@ -22,7 +22,7 @@ module DataStores
 
       if !@record.error?
         @subheader_items << {
-          text: "#{@record.data["branch"]["name"]} - #{@record.data["as_of"].to_date.strftime("%B %d, %Y")}"
+          text: "#{@record.data["branch"].fetch("name")} - #{@record.data["as_of"].try(:to_date).try(:strftime, "%B %d, %Y")}"
         }
       end
 
