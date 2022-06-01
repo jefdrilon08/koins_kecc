@@ -48,7 +48,7 @@ module Loans
           post_type: "CR",
           accounting_code_id: j[:accounting_code_id],
           accounting_code_name: j[:name],
-          amount: j[:amount]
+          amount: j[:amount].to_f
         }
       end
 
@@ -61,7 +61,7 @@ module Loans
           post_type: "DR",
           accounting_code_id: j[:accounting_code_id],
           accounting_code_name: j[:name],
-          amount: j[:amount]
+          amount: j[:amount].to_f
         }
       end
       
@@ -75,12 +75,12 @@ module Loans
     def build_debit_journal_entries! #debit
       journal_entries = []
       @for_debit.each do |fd|
-        if fd[:amount] > 0 
+        if fd[:amount].to_f > 0 
           journal_entries << {
             accounting_code_id: fd[:accounting_code_id],
             code: fd[:code],
             name: fd[:name],
-            amount: fd[:amount]
+            amount: fd[:amount].to_f
           }
         end
       end
@@ -91,12 +91,12 @@ module Loans
     def build_credit_journal_entries! #debi
       journal_entries = []
       @for_credit.each do |fc|
-        if fc[:amount] > 0
+        if fc[:amount].to_f > 0
           journal_entries << {
             accounting_code_id: fc[:accounting_code_id],
             code: fc[:code],
             name: fc[:name],
-            amount: fc[:amount]
+            amount: fc[:amount].to_f
           }
         end
       end
