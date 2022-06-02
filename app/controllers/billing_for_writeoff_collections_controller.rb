@@ -36,7 +36,19 @@ class BillingForWriteoffCollectionsController < DataStoreController
         text: "Billing for Writeoff Collections"
       }
     ]
+    @subheader_side_actions = []
+    if @data_store.status == 'pending'
+      if helpers.sbk_bk_mis_user
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            data: {id: @data_store.id},
+            text: "Approve"
+          }
+        end
 
+    end
   end
 
 end
