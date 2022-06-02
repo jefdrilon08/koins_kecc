@@ -385,6 +385,21 @@ module Loans
             temp_amount -= amount
 
           #elsif @member.member_type  == target_member_type
+          elsif @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+            target_member_type  = s_deduction.meta.member_type
+            accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
+            amount              = s_deduction.amount
+            name                = accounting_code.name
+            code                = accounting_code.code
+            
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: 0.0
+            }
+            
+
           elsif s_deduction.for_primary_loan.present? and s_deduction.for_primary_loan == true 
             primary_loan_id = s_deduction.primary_loan_id
             loan_count = Loan.where("member_id = ? and status = ? and loan_product_id IN (?)", @member.id,"active", primary_loan_id).count

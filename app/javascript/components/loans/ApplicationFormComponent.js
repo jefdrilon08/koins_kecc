@@ -513,6 +513,15 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.setState({ data: data });
   }
+  handleServiceFeeChanged(event) {
+    const target  = event.target;
+    const value   = target.type === 'checkbox' ? target.checked : target.value;
+
+    var data  = this.state.data;
+    data.data.service_fee_available  = value || false;
+
+    this.setState({ data: data });
+  }
 
   handleCoMakerThreeProfilePictureSelected(event) {
     const context         = this;
@@ -629,6 +638,7 @@ export default class ApplicationFormComponent extends React.Component {
       var businessPermitAvailable = this.state.data.data.business_permit_available || false;
       var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
       var shareCapitalAvailable = this.state.data.data.share_capital_available || false;
+      var serviceFeeAvailable = this.state.data.data.service_fee_available || false;
 
       console.log(this.props.settings)
 
@@ -931,6 +941,18 @@ export default class ApplicationFormComponent extends React.Component {
               />
               <label>
                 Off Sharecapital
+              </label>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <input 
+                type="checkbox" 
+                checked={serviceFeeAvailable}
+                onChange={this.handleServiceFeeChanged.bind(this)}
+              />
+              <label>
+                Off Service Fee
               </label>
             </div>
           </div>
