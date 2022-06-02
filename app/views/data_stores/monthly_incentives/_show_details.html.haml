@@ -16,7 +16,7 @@
         Officer
       - @data_records.each do |off|
         %th.text-center
-          #{off[:officer][:last_name].upcase}, #{off[:officer][:first_name].upcase}
+          #{off[:officer][:last_name].try(:upcase)}, #{off[:officer][:first_name].try(:upcase)}
     %tr
       %th
         Status
@@ -75,8 +75,13 @@
       %th
         Dropout Percentage
       - @data_records.each do |drp|
+<<<<<<< HEAD
         %th.text-end
           #{drp[:drop_out_rate].round(2)}%
+=======
+        %th.text-right
+          #{drp[:drop_out_rate].try(:round, 2) || 0.0}% 
+>>>>>>> bug fix 2882
     %tr
       %th
         Present Month Repayment Rate
@@ -93,8 +98,13 @@
       %th
         PAR Amount
       - @data_records.each do |par|
+<<<<<<< HEAD
         %th.text-end
           #{number_to_currency(par[:par_amount].round(2), unit: "")}
+=======
+        %th.text-right
+          #{number_to_currency(par[:par_amount].try(:round, 2), unit: "")}
+>>>>>>> bug fix 2882
     %tr
       %th
         Present Par Rate
@@ -111,8 +121,13 @@
       %th
         Portfolio
       - @data_records.each do |port|
+<<<<<<< HEAD
         %th.text-end
           #{number_to_currency(port[:portfolio].round(2), unit: "")}
+=======
+        %th.text-right
+          #{number_to_currency(port[:portfolio].try(:round, 2), unit: "")}
+>>>>>>> bug fix 2882
     %tr
       %th
         Loan Amount Disbursed
@@ -182,5 +197,9 @@
         #{number_to_currency(@data[:total_average_so_incentive],unit: "")}
       %th 
         SOM Incentive
+<<<<<<< HEAD
       %th.text-end
+=======
+      %th.text-right
+>>>>>>> bug fix 2882
         #{number_to_currency(@data[:som_incentive],unit: "")}
