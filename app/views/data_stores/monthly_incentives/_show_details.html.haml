@@ -16,7 +16,7 @@
         Officer
       - @data_records.each do |off|
         %th.text-center
-          #{off[:officer][:last_name].upcase}, #{off[:officer][:first_name].upcase}
+          #{off[:officer][:last_name].try(:upcase)}, #{off[:officer][:first_name].try(:upcase)}
     %tr
       %th
         Status
@@ -76,7 +76,7 @@
         Dropout Percentage
       - @data_records.each do |drp|
         %th.text-right
-          #{drp[:drop_out_rate].round(2) || 0.0}% 
+          #{drp[:drop_out_rate].try(:round, 2) || 0.0}% 
     %tr
       %th
         Present Month Repayment Rate
@@ -94,7 +94,7 @@
         PAR Amount
       - @data_records.each do |par|
         %th.text-right
-          #{number_to_currency(par[:par_amount].round(2), unit: "")}
+          #{number_to_currency(par[:par_amount].try(:round, 2), unit: "")}
     %tr
       %th
         Present Par Rate
@@ -112,7 +112,7 @@
         Portfolio
       - @data_records.each do |port|
         %th.text-right
-          #{number_to_currency(port[:portfolio].round(2), unit: "")}
+          #{number_to_currency(port[:portfolio].try(:round, 2), unit: "")}
     %tr
       %th
         Loan Amount Disbursed
