@@ -107,7 +107,7 @@ module AccruedPaymentCollections
       hders.each_with_index do |hd , i|
         j = ab.data['member_data'].sum{ |b| b["loan_data"] }
         u = j.select{ |y| y["name"] == hd["name"] }
-        v = (u.sum{ |p| p["amount"] }).to_f.round(2)
+        v = (u.sum{ |p| p["amount"] }).try(:to_f).try(:round, 2)
         hd['interest_receivable_amount'] = v
         ac = ab
         ac.data['headers'][i]['interest_receivable_amount'] = v
