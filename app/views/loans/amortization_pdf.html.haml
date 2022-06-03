@@ -45,13 +45,13 @@
       Original Maturity Date:
     %td.text
       - if @loan.active? || @loan.paid?
-        #{@loan.original_maturity_date.strftime("%b %d, %Y")}
+        #{@loan.original_maturity_date.try(:strftime, "%b %d, %Y")}
   %tr
     %th
       Current Maturity Date:
     %td.text
       - if @loan.active? || @loan.paid?
-        #{@loan.maturity_date.to_date.strftime("%b %d, %Y")}
+        #{@loan.maturity_date.try(:to_date).try(:strftime, "%b %d, %Y")}
   %tr
     %th
       Term:
