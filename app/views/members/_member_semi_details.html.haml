@@ -84,7 +84,7 @@
         .value.text-muted
           %b
             -  if @member.modifiable
-              = link_to "#", id: "btn-change-recognition-date" do
+              = link_to "#", id: "btn-change-recognition-date", data: { "bs-toggle" => "modal", "bs-target" => "#modal-change-recognition-date" } do
                 - if @member.recognition_date.present?
                   #{@member.recognition_date.strftime("%b %d, %Y")}
                 - else
@@ -125,7 +125,7 @@
         - else
           %p
             No signature
-        #btn-upload-signature.btn.btn-success.btn-block
+        #btn-upload-signature.btn.btn-success.btn-block{ data: { "bs-toggle" => "modal", "bs-target" => "#modal-upload-signature" } }
           .fa.fa-upload
           Upload Signature
         - if @member.signature_file.attached?
@@ -162,7 +162,7 @@
             %h6
               Reinstatement
             %div
-              #btn-reinstatement.btn.btn-danger.btn-block
+              #btn-reinstatement.btn.btn-danger.btn-block{ data: { "bs-toggle": "modal", "bs-target": "#modal-reinstatement" } }
                 .fa.fa-times
                 Reinstate
       %hr
@@ -177,13 +177,13 @@
       %h6
         Claims Copy
       %div
-        #btn-claims-copy.btn.btn-primary.btn-block
+        #btn-claims-copy.btn.btn-primary.btn-block{ data: { "bs-toggle": "modal", "bs-target": "#modal-claims-copy" } }
           .fa.fa-print
           Claims Copy PDF
       %hr
       %h6
         CLIP Make Payment
       %div
-        #btn-make-payment.btn.btn-secondary.btn-block
+        #btn-make-payment.btn.btn-secondary.btn-block{ data: { "bs-toggle": "modal", "bs-target": "#modal-make-payment-type" } }
           .fa.fa-print
           CLIP Make Payment

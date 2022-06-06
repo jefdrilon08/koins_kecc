@@ -82,7 +82,7 @@
                           .badge.badge-info
                             Active
                         - else 
-                          .badge.badge-danger
+                          .badge.bg-danger
                             Matured
 
         - elsif @insurance_account.account_subtype == Settings.hiip
@@ -94,7 +94,7 @@
                 %th
                   %center
                     Date Posted
-                %th.text-right
+                %th.text-end
                   Amount
                 %th
                   %center
@@ -120,7 +120,7 @@
                         .badge.badge-info
                           Active
                       - else 
-                        .badge.badge-danger
+                        .badge.bg-danger
                           Matured
         - elsif @insurance_account.account_subtype == Settings.life
           #react-root
@@ -135,16 +135,16 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
-                %th.text-right
+                %th.text-end
                   Equity Value
                 - if microinsurance?
-                  %th.text-right
+                  %th.text-end
                     Equity Value Interest 
             %tbody
               - @account_transactions.each do |o|
@@ -165,28 +165,28 @@
                             .fa.fa-plus
                             Inc in LIFE
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
                         - if o.withdraw_ev?
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw EV
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["equity_value"], unit: "")}
                   - if microinsurance?
-                    %td.text-right.text-muted
+                    %td.text-end.text-muted
                       #{number_to_currency(o.interests.first.try(:interest_amount), unit: "")}
         - elsif @insurance_account.account_subtype == Settings.pl
           %table.table.table-hover.table-sm.table-bordered
@@ -200,7 +200,7 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Amount
             %tbody
               - @account_transactions.each do |o|
@@ -221,14 +221,14 @@
                             .fa.fa-plus
                             Inc in PL
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
-                        .badge.badge-danger
+                        .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
         - elsif @insurance_account.account_subtype == Settings.kalinga
           %table.table.table-hover.table-sm.table-bordered
@@ -239,7 +239,7 @@
                 %th
                   %center
                     Date
-                %th.text-right
+                %th.text-end
                   Amount
             %tbody
               - @account_transactions.each do |o|  
@@ -267,11 +267,11 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
             %tbody
               - @account_transactions.each do |o|  
@@ -292,23 +292,23 @@
                             .fa.fa-plus
                             Inc in EV
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
                         - if o.withdraw_ev?
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw EV
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             .fa.fa-upload
                             Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
         - elsif @insurance_account.account_subtype == Settings.rf
           #react-root
@@ -323,11 +323,11 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
             %tbody
               - @account_transactions.each do |o|
@@ -348,18 +348,18 @@
                             .fa.fa-plus
                             Inc in RF
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
-                        .badge.badge-danger
+                        .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}
         - else
           #react-root
@@ -374,11 +374,11 @@
                 %th
                   %center
                     Type
-                %th.text-right
+                %th.text-end
                   Beginning Balance
-                %th.text-right
+                %th.text-end
                   Amount
-                %th.text-right
+                %th.text-end
                   Ending Balance
             %tbody
               - @account_transactions.each do |o|
@@ -399,16 +399,16 @@
                             .fa.fa-plus
                             Inc
                         - else
-                          .badge.badge-success
+                          .badge.bg-success
                             .fa.fa-download
                             Deposit
                       - elsif o.withdraw?
-                        .badge.badge-danger
+                        .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o.amount, unit: "")}
-                  %td.text-right.text-muted
+                  %td.text-end.text-muted
                     #{number_to_currency(o.data["ending_balance"], unit: "")}

@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var _authenticityToken;
 var _id;
@@ -42,23 +44,24 @@ var currentPostType         = "";
 
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
 
+  $modalDeleteMemeber = new bootstrap.Modal(
+    document.getElementById("modal-delete-member") 
+  );
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
   $inputAmount        = $("#input-amount");
 
   $btnDeleteMember        = $(".btn-delete-member");
   $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
-  $modalDeleteMember      = $("#modal-delete-member");
 
   $selectMember     = $("#select-member");
   $selectLoan       = $("#select-loan")
   $btnAdd           = $("#btn-add");
-
- 
-
 
   $displayMember          = $(".display-member");
   $displayLoanProductName = $(".display-loan-product-name");
@@ -121,7 +124,7 @@ var _bindEvents = function() {
 
 $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
 
@@ -176,7 +179,7 @@ $btnApprove.on("click", function() {
     $displayMember.html(currentMember);
     $displayLoanProductName.html(currentLoanProduct);
 
-    $modalDeleteMember.modal("show");
+    $modalDeleteMember.show();
   });
 
   $btnConfirmDeleteMember.on("click", function() {

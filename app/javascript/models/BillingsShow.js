@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var id;
@@ -29,33 +31,48 @@ var $modalZeroOut;
 var $message;
 var templateErrorList;
 
-var _urlApprove = "/api/v1/billings/approve";
-var _urlCheck   = "/api/v1/billings/check";
+var _urlApprove   = "/api/v1/billings/approve";
+var _urlCheck     = "/api/v1/billings/check";
 var _urlUncheck   = "/api/v1/billings/uncheck";
-var _urlZeroOut = "/api/v1/billings/zero_out";
-var _urlPrint   = "/api/v1/print/generate_file";
-var _urlDownload= "/billings/excel";
+var _urlZeroOut   = "/api/v1/billings/zero_out";
+var _urlPrint     = "/api/v1/print/generate_file";
+var _urlDownload  = "/billings/excel";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalCheck = new bootstrap.Modal(
+    document.getElementById("modal-check")
+  );
+
+  $modalUncheck = new bootstrap.Modal(
+    document.getElementById("modal-uncheck")
+  );
+
+  $modalZeroOut = new bootstrap.Modal(
+    document.getElementById("modal-zero-out")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnCheck         = $("#btn-check");
   $btnConfirmCheck  = $("#btn-confirm-check");
-  $modalCheck       = $("#modal-check");
   
   $btnUncheck         = $("#btn-uncheck");
   $btnConfirmUncheck  = $("#btn-confirm-uncheck");
-  $modalUncheck       = $("#modal-uncheck");
 
   $btnPrint   = $("#btn-print");
   $btnPrintWp = $("#btn-print-wp");
-  $modalPrint = $("#modal-print");
   $btnExcel   = $("#btn-excel");
   $btnZeroOut         = $("#btn-zero-out");
   $btnConfirmZeroOut  = $("#btn-confirm-zero-out");
-  $modalZeroOut       = $("#modal-zero-out");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -63,7 +80,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnZeroOut.on("click", function() {
-    $modalZeroOut.modal("show");
+    $modalZeroOut.show();
     $message.html("");
   });
 
@@ -109,7 +126,7 @@ var _bindEvents = function() {
 
   $btnUncheck.on("click", function() {
     
-    $modalUncheck.modal("show");
+    $modalUncheck.show();
     $message.html("");
   });
   
@@ -155,7 +172,7 @@ var _bindEvents = function() {
 
 
   $btnCheck.on("click", function() {
-    $modalCheck.modal("show");
+    $modalCheck.show();
     $message.html("");
   });
 
@@ -198,12 +215,12 @@ var _bindEvents = function() {
   });
 
   $btnPrintWp.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $message.html("");
 
     var type = "wp";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 
@@ -228,17 +245,17 @@ var _bindEvents = function() {
 
 
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "billing";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

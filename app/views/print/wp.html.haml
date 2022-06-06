@@ -27,7 +27,7 @@
       %th{ width: "2%" }
       %th{ width: "30%" }
         Member
-      %th.text-right
+      %th.text-end
         WP
     - @billing[:withdraw_payments].each_with_index do |o, i|
       %tr
@@ -35,14 +35,14 @@
           #{i+1}
         %td
           #{o[:member][:full_name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: "")}
           - total_wp += o[:amount].to_f
     %tr
       %th
       %th
         Total
-      %th.text-right
+      %th.text-end
         #{number_to_currency(total_wp, unit: "")}
 
 %small

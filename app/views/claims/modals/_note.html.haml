@@ -1,4 +1,4 @@
-#modal-note.modal.fade{:tabindex => "-1"}
+#modal-note.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
@@ -19,6 +19,6 @@
           %button#btn-save-note.btn.btn-primary
             .fa.fa-check
             Save
-          %button.btn{"data-dismiss" => "modal", :type => "button"}
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
             .fa.fa-times
             Cancel

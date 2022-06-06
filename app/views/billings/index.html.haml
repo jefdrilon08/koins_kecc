@@ -1,15 +1,15 @@
 = title
-.row
-  .col
-    .card
-      .card-body
-        = render partial: "index_filter"
-        - if @billings.any?
-          = render partial: "index_list", locals: { billings: @billings }
-          = paginate @billings
-        - else
-          %p
-            No billings found
+%h4
+  Billings
+.card
+  .card-body
+    = render partial: "index_filter"
+    - if @billings.any?
+      = render partial: "index_list", locals: { billings: @billings }
+      = paginate @billings
+    - else
+      %p
+        No billings found
 
 = render partial: "billings/modals/new_transaction"
 = render partial: "templates/error_list"

@@ -67,7 +67,7 @@
         Accounting Entry
       = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: o[:data].with_indifferent_access[:accounting_entry] }
       %hr
-      .text-right
+      .text-end
         .btn-print-withdrawal-request.btn.btn-info{ data: { id: o[:id] } }
           .fa.fa-print
           Print

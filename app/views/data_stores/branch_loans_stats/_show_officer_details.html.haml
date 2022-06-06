@@ -14,15 +14,15 @@
           Loan Product
         %th.text-center
           Active Loans
-        %th.text-right
+        %th.text-end
           Principal
-        %th.text-right
+        %th.text-end
           Principal Paid
-        %th.text-right
+        %th.text-end
           Portfolio
-        %th.text-right
+        %th.text-end
           Past Due Amount
-        %th.text-right
+        %th.text-end
           Par Amount
         %th.text-center
           Par Rate
@@ -36,18 +36,18 @@
               #{o_lp[:name]}
           %td.text-center
             #{o_lp[:active_loans]}
-          %td.text-right
+          %td.text-end
             .text-muted
               #{number_to_currency(o_lp[:principal], unit: "")}
-          %td.text-right
+          %td.text-end
             .text-muted
               #{number_to_currency(o_lp[:principal_paid], unit: "")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(o_lp[:portfolio], unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o_lp[:principal_past_due_amount], unit: "")}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o_lp[:par_amount], unit: "")}
           %td.text-center
             #{number_to_currency(o_lp[:par_rate].to_f * 100, unit: "")} %
@@ -61,19 +61,19 @@
         %td.text-center
           %strong
             #{o[:active_loans]}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o[:principal], unit: "")}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o[:principal_paid], unit: "")}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o[:portfolio], unit: "")}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o[:principal_past_due_amount], unit: "")}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o[:par_amount], unit: "")}
         %td.text-center

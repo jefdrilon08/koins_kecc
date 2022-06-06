@@ -12,11 +12,11 @@
               %th
                 %center
                   Type
-              %th.text-right
+              %th.text-end
                 Beginning Balance
-              %th.text-right
+              %th.text-end
                 Amount
-              %th.text-right
+              %th.text-end
                 Ending Balance
           %tbody
             - @account_transactions.each do |o|
@@ -27,9 +27,9 @@
                 %td
                   %center
                     #{o.transaction_type}
-                %td.text-right.text-muted
+                %td.text-end.text-muted
                   #{number_to_currency(o.data["beginning_balance"], unit: "")}
-                %td.text-right
+                %td.text-end
                   #{number_to_currency(o.amount, unit: "")}
-                %td.text-right.text-muted
+                %td.text-end.text-muted
                   #{number_to_currency(o.data["ending_balance"], unit: "")}

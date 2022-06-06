@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var _authenticityToken;
 var _id;
@@ -24,13 +26,19 @@ var _urlApprove                         = "/api/v1/adjustments/batch_moratorium_
 var _urlDelete                          = "/api/v1/adjustments/batch_moratorium_adjustments/destroy";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnDelete         = $("#btn-delete");
   $btnConfirmDelete  = $("#btn-confirm-delete");
-  $modalDelete       = $("#modal-delete");
 
   $message  = $(".message");
 
@@ -40,7 +48,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -86,7 +94,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
-    $modalDelete.modal("show");
+    $modalDelete.show();
     $message.html("");
   });
   

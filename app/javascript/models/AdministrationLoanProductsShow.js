@@ -47,7 +47,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnMaintainingBalance.on("click", function() {
-    $modalMaintainingBalance.modal("show");
+    $modalMaintainingBalance.show();
     $message.html("");
   });
 
@@ -93,7 +93,7 @@ var _bindEvents = function() {
   });
 
   $btnPrerequisite.on("click", function() {
-    $modalPrerequisite.modal("show");
+    $modalPrerequisite.show();
     $message.html("");
   });
 
@@ -139,7 +139,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
-    $modalDelete.modal("show");
+    $modalDelete.show();
     $message.html("");
   });
 

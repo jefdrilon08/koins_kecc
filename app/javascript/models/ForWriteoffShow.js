@@ -1,8 +1,6 @@
 import Mustache from "mustache";
-var $modalPrint;
-var $printMessage;
-var $btnPrintPdf;
-
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnPrint;
 var loader;
@@ -11,17 +9,12 @@ var id;
 var templateErrorList;
 var authenticityToken;
 var $btnExcel;
-var _urlDownload= "/data_stores/for_writeoff/excel";
 var $message;
 
+var _urlDownload= "/data_stores/for_writeoff/excel";
+
 var _cacheDom = function() {
-
-  $btnPrint           = $("#btn-print");
-  $printMessage       = $(".print-message");
-  $btnPrintPdf        = $("#btn-print-pdf");
-  $btnExcel           = $("#btn-excel")
-  $modalPrint         = $("#modal-print");
-
+  $btnExcel         = $("#btn-excel")
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -29,7 +22,6 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
-
 
   $btnExcel.on("click", function() {
     $.ajax({
@@ -49,13 +41,7 @@ var _bindEvents = function() {
       }
     });
   });
-
-
 };
-
-
-
-
 
 var init  = function(options) {
   id                = options.id;

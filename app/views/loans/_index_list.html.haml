@@ -11,9 +11,9 @@
         %th
           %center
             Maturity Date
-        %th.text-right
+        %th.text-end
           Amount
-        %th.text-right
+        %th.text-end
           Balance
         %th
           %center
@@ -40,17 +40,17 @@
                 %small
                   - if loan.maturity_date.present?
                     #{loan.maturity_date.strftime("%b %d, %Y")}
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(loan.total_dues, unit: "")}
-          %td.text-right
+          %td.text-end
             .text-muted
               #{number_to_currency(loan.total_balance, unit: "")}
           %td
             %center
               - if loan.pending?
-                .badge.badge-danger
+                .badge.bg-danger
                   #{loan.status}
               - else
-                .badge.badge-success
+                .badge.bg-success
                   #{loan.status}

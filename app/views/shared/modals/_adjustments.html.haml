@@ -1,0 +1,51 @@
+#modal-nav-adjustments.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title 
+          Adjustments
+      .modal-body
+        = link_to adjustments_subsidiary_adjustments_path, class: "btn btn-primary w-100" do
+          %span.btn-label
+            %i.bi.bi-wrench-adjustable
+          Subsidiary
+        - if microloans?
+          = link_to adjustments_batch_moratorium_adjustments_path, class: "btn btn-primary w-100 mt-4" do
+            %span.btn-label
+              %i.bi.bi-wrench-adjustable
+            Batch Moratorium
+
+          = link_to adjustments_moratoriums_path, class: "btn btn-primary w-100 mt-4" do
+            %span.btn-label
+              %i.bi.bi-wrench-adjustable
+            Moratoriums
+
+          = link_to adjustments_accrued_interests_path, class: "btn btn-primary w-100 mt-4" do
+            %span.btn-label
+              %i.bi.bi-wrench-adjustable
+            Accrued Interest
+
+          = link_to adjustments_recompute_restructures_path, class: "btn btn-primary w-100 mt-4" do
+            %span.btn-label
+              %i.bi.bi-wrench-adjustable
+            Recompute Restructure
+
+          = link_to adjustments_make_payments_path, class: "btn btn-primary w-100 mt-4" do
+            %span.btn-label
+              %i.bi.bi-wrench-adjustable
+            Make Payment
+
+        = link_to transfer_member_records_path, class: "btn btn-primary w-100 mt-4" do
+          %span.btn-label
+            %i.bi.bi-wrench-adjustable
+          Transfer Member
+
+        = link_to members_search_path, class: "btn btn-primary w-100 mt-4" do
+          %span.btn-label
+            %i.bi.bi-wrench-adjustable
+          Member Checker
+
+        = link_to address_update_path, class: "btn btn-primary w-100 mt-4" do
+          %span.btn-label
+            %i.bi.bi-wrench-adjustable
+          Update Member Address

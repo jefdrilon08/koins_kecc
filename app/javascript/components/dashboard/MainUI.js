@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-
 import SkCubeLoading from '../SkCubeLoading';
 
 // DASHBOARDS
@@ -65,20 +64,6 @@ export default class MainUI extends React.Component {
     return dashboards;
   }
 
-  renderRoles() {
-    var rolesDisplay  = [];
-
-    for(var i = 0; i < this.state.roles.length; i++) {
-      rolesDisplay.push(
-        <span key={"role-" + i} className="badge badge-info">
-          {this.state.roles[i]}
-        </span>
-      );
-    }
-
-    return rolesDisplay;
-  }
-
   render() {
     var context = this;
     var state   = context.state;
@@ -103,19 +88,6 @@ export default class MainUI extends React.Component {
     } else {
       return  (
         <div>
-          <div className="row">
-            <div className="col">
-              <h4>
-                <span className="fa fa-user"/>
-                {state.username}
-              </h4>
-            </div>
-            <div className="col">
-              <div className="text-right">
-                {this.renderRoles()}
-              </div>
-            </div>
-          </div>
           {this.renderDashboards()}
         </div>
       );

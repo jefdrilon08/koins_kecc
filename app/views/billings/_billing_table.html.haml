@@ -27,14 +27,14 @@
             #{r[:member][:full_name]}
           %td
             - if r[:attendance]
-              .badge.badge-success
+              .badge.bg-success
                 .fa.fa-check
             - else
-              .badge.badge-danger
+              .badge.bg-danger
                 .fa.fa-times
           - r[:payments].each do |o|
-            %td.text-right
+            %td.text-end
               - if o[:amount].to_f > 0
                 #{number_to_currency(o[:amount], unit: "")} 
-          %td.text-right
+          %td.text-end
             #{number_to_currency(r[:withdraw_payments], unit: "")}

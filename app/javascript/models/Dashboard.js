@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnGenerateAccountingReport;
 var $btnGenerateDailyReport;
@@ -24,12 +26,19 @@ var _userId;
 var _xKoinsAppAuthSecret;
 
 var _cacheDom = function() {
+  $modalGenerateDailyReport = new bootstrap.Modal(
+    document.getElementById("modal-generate-daily-report")
+  );
+
+  $modalGenerateAccountingReport = new bootstrap.Modal(
+    document.getElementById("modal-generate-accounting-report")
+  );
+
   $btnGenerateDailyReport             = $("#btn-generate-daily-report");
   $btnGenerateAccountingReport        = $("#btn-generate-accounting-report");
   $btnConfirmGenerateDailyReport      = $("#btn-confirm-generate-daily-report");
   $btnConfirmGenerateAccountingReport = $("#btn-confirm-generate-accounting-report");
-  $modalGenerateDailyReport           = $("#modal-generate-daily-report");
-  $modalGenerateAccountingReport      = $("#modal-generate-accounting-report");
+
   $selectBranch                       = $("#select-branch");
   $inputAsOf                          = $("#input-as-of");
   $selectAccReportBranch              = $("#select-acc-report-branch");
@@ -46,7 +55,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnGenerateAccountingReport.on("click", function() {
     $message.html("");
-    $modalGenerateAccountingReport.modal("show");
+    $modalGenerateAccountingReport.show();
   });
 
   $btnConfirmGenerateAccountingReport.on("click", function() {
@@ -114,7 +123,7 @@ var _bindEvents = function() {
 
   $btnGenerateDailyReport.on("click", function() {
     $message.html("");
-    $modalGenerateDailyReport.modal("show");
+    $modalGenerateDailyReport.show();
   });
 
   $btnConfirmGenerateDailyReport.on("click", function() {

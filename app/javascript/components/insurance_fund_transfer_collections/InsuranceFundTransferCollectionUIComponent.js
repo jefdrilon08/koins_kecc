@@ -286,7 +286,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
                 <th>
                   Total Collected:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
@@ -296,7 +296,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
                 <th>
                   OR Number:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderOrNumber()}
                 </td>
               </tr>
@@ -304,7 +304,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
                 <th>
                   Particular:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderParticular()}
                 </td>
               </tr>
@@ -312,7 +312,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
                 <th>
                   Reference Number:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderReferenceNumber()}
                 </td>
               </tr>

@@ -45,11 +45,11 @@
                 Book
               %th
                 PARTICULAR
-              %th.text-right
+              %th.text-end
                 Debit
-              %th.text-right
+              %th.text-end
                 Credit
-              %th.text-right
+              %th.text-end
                 BALANCE
             %tr
               %th{ width: "20%" }
@@ -70,7 +70,7 @@
               %th
               %th
               %th
-              %th.text-right
+              %th.text-end
                 #{number_to_currency(entry[:beginning_balance], unit: '')}
             - entry[:entries].each do |o|
               - current_dr_sum += o[:dr_amount].to_f.round(2)
@@ -88,11 +88,11 @@
                   #{o[:book]}
                 %td{ width: "50%" }
                   #{o[:particular]}
-                %td.text-right{ width: "8%" }
+                %td.text-end{ width: "8%" }
                   #{number_to_currency(o[:dr_amount], unit: '')}
-                %td.text-right{ width: "8%" }
+                %td.text-end{ width: "8%" }
                   #{number_to_currency(o[:cr_amount], unit: '')}
-                %td.text-right{ width: "8%" }
+                %td.text-end{ width: "8%" }
                   #{number_to_currency(o[:running_balance], unit: '')}
 
             %tr
@@ -100,11 +100,11 @@
                 Ending for #{entry[:accounting_code_name]}
               %th
               %th
-              %th.text-right
+              %th.text-end
                 #{number_to_currency(current_dr_sum, unit: '')}
-              %th.text-right
+              %th.text-end
                 #{number_to_currency(current_cr_sum, unit: '')}
-              %th.text-right
+              %th.text-end
                 #{number_to_currency(entry[:ending_balance], unit: '')}
 
 :javascript

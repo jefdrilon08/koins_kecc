@@ -136,10 +136,10 @@ export default class AccountingEntryPreview extends React.Component {
               {btnRemove}
               {this.props.journalEntries[i].accounting_code_name}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(this.props.journalEntries[i].amount)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
             </td>
           </tr>
         );
@@ -175,9 +175,9 @@ export default class AccountingEntryPreview extends React.Component {
               {btnRemove}
               {this.props.journalEntries[i].accounting_code_name}
             </td>
-            <td className="text-right">
+            <td className="text-end">
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(this.props.journalEntries[i].amount)}
             </td>
           </tr>
@@ -195,7 +195,7 @@ export default class AccountingEntryPreview extends React.Component {
               </strong>
             </div>
             <div className="col-md-6">
-              <div className="text-right">
+              <div className="text-end">
                 <div className="text-muted">
                   <span className="fa fa-store"/>
                   {this.props.branch}
@@ -212,10 +212,10 @@ export default class AccountingEntryPreview extends React.Component {
                 <th width="50%">
                   Accounting Code
                 </th>
-                <th className="text-right" width="25%">
+                <th className="text-end" width="25%">
                   Debit
                 </th>
-                <th className="text-right" width="25%">
+                <th className="text-end" width="25%">
                   Credit
                 </th>
               </tr>
@@ -235,7 +235,7 @@ export default class AccountingEntryPreview extends React.Component {
               </p>
             </div>
             <div className="col">
-              <p className="text-right">
+              <p className="text-end">
                 <label>
                   <strong>
                     Approved By:

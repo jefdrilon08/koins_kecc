@@ -166,7 +166,7 @@ export default class SurveyUIComponent extends React.Component {
               </h4>
             </div>
             <div className="col">
-              <div className="text-right">
+              <div className="text-end">
                 <div className="btn-group">
                   <a 
                     href="#" 

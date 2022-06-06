@@ -1,7 +1,8 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import 'select2';
 
-var $modalNew;
 var $modalDelete;
 var $modalApproveTransaction;
 var $modalProcess;
@@ -95,12 +96,22 @@ var init  = function(options) {
 };
 
 var _cacheDom = function() {
-  $modalNew                     = $("#modal-new");
-  $modalApproveTransaction	= $("#modal-approve-transaction");
-  $modalDelete                  = $("#modal-delete");
-  $modalProcess                 = $("#modal-update-transaction"); //para sa modal
-  $modalBatchProcess            = $("#modal-batch-process");
-  $modalZeroOut			= $("#modal-zero-out");	
+  $modalApproveTransaction = new bootstrap.Modal(
+    document.getElementById("modal-approve-transaction")
+  )
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  )
+
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-update-transaction")
+  )
+
+  $modalZeroOut = new bootstrap.Modal(
+    document.getElementById("modal-zero-out")
+  )
+
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
   $selectMember                 = $("#select-member");
@@ -224,7 +235,7 @@ var _bindEvents = function() {
 
   $btnBatchProcess.on("click", function() {
   
-    $modalBatchProcess.modal("show");
+    $modalBatchProcess.show();
   });
 
   $btnConfirmBatchProcess.on("click", function() {
@@ -355,7 +366,7 @@ var _bindEvents = function() {
   $btnProcess.on("click", function() {
     alert("jef")
     _moratoriumId = $(this).data("id");
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
   
   $btnAddOr.on("click", function() {
@@ -437,7 +448,7 @@ var _bindEvents = function() {
   $btnZero.on("click", function() {
      _id = $(this).data("id");
 	  //alert(_id);
-     $modalZeroOut.modal("show");
+     $modalZeroOut.show();
   });
   $btnConfirmZero.on("click", function() {
     $message.html("Loading..."); 
@@ -480,7 +491,7 @@ var _bindEvents = function() {
    $btnApprove.on("click", function() {
      _id = $(this).data("id");
 	  //alert(_id);
-    $modalApproveTransaction.modal("show");
+    $modalApproveTransaction.show();
   });
 
 
@@ -522,7 +533,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function() {
     _id = $(this).data("id");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -599,7 +610,7 @@ var _bindEvents = function() {
 	  _dataStoreId       = dataStoreId
 	  //_recordType        = recordType
 	  //alert(_dataStoreId);
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $btnConfirmNew.on("click", function(e) {

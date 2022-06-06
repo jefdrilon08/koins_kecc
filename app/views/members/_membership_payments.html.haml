@@ -14,7 +14,7 @@
           Name
         %th
           Type
-        %th.text-right
+        %th.text-end
           Amount
         %th.text-center
           Status
@@ -33,7 +33,7 @@
             #{o.membership_name}
           %td
             #{o.membership_type}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o.amount, unit: "")}
           %td.text-center
             #{o.status}

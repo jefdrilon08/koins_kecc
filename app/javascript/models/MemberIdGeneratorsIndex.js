@@ -32,7 +32,7 @@ var _bindEvents = function() {
 
   $btnNew.on("click", function() {
     //alert("jef")
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
 

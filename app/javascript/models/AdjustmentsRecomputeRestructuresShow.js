@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var recomputeRestructureId;
@@ -23,16 +25,22 @@ var _urlPrint   = "#" //"/api/v1/print/generate_file";
 var _urlDelete = "/api/v1/adjustments/recompute_restructures/destroy";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnDelete         = $("#btn-delete");
-  $modalDelete       = $("#modal-delete");
   $btnConfirmDelete  = $("#btn-confirm-delete");
   
   $btnPrint   = $("#btn-print");
-  $modalPrint = $("#modal-print");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -40,7 +48,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     $.ajax({
       url: "/api/v1/print/generate_file",
@@ -55,7 +63,7 @@ var _bindEvents = function() {
           "Success! Redirecting..."
         );
 
-        $modalPrint.modal("hide");
+        $modalPrint.hide();
         window.open("/print?filename=" + response.filename, '_blank');
       },
       error: function(response) {
@@ -66,7 +74,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function(){
     $message.html("");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -78,6 +86,7 @@ var _bindEvents = function() {
       method: "POST",
       data: {
         id: recomputeRestructureId,
+        authenticity_token: authenticityToken
       },
       success: function(response) {
         $message.html("Success!");
@@ -94,7 +103,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
   
 

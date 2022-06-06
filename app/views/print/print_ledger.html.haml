@@ -45,11 +45,11 @@
           Withdraw Payment
         -else
           #{b[:transaction_type]}
-      %td.text-right{:width=> "20%"}
+      %td.text-end{:width=> "20%"}
         #{number_to_currency(b[:data]["beginning_balance"], unit: '')}
-      %td.text-right{:width=> "20%"}
+      %td.text-end{:width=> "20%"}
         #{number_to_currency(b[:amount],unit: '')}
-      %td.text-right{:width=> "20%"}
+      %td.text-end{:width=> "20%"}
         #{number_to_currency(b[:data]["ending_balance"],unit: '')}
 
 :javascript

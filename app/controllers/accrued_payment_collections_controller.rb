@@ -1,4 +1,6 @@
 class AccruedPaymentCollectionsController < ApplicationController
+  before_action :authenticate_user!
+
 	def index
 		@subheader_items = [
         {
@@ -15,10 +17,11 @@ class AccruedPaymentCollectionsController < ApplicationController
 
   def show 
     @accrued_interest_collection  = AccruedBilling.find(params[:id])
+
     record = ::AccruedPaymentCollections::BuildAccountingEntry.new(
-                                        accrued_billing:@accrued_interest_collection,
-                                        current_user: current_user
-                                        ).execute!
+      accrued_billing: @accrued_interest_collection,
+      current_user: current_user
+    ).execute!
  
 
     @data = @accrued_interest_collection.data.with_indifferent_access

@@ -33,7 +33,7 @@ var _bindEvents = function() {
  $btnPrintPdf.on("click", function() {
     var print_icpr = $btnPrintPdf.data('id');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,
@@ -41,7 +41,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_icpr + "&type=print_migs");
   });
 

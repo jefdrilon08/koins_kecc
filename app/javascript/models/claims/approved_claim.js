@@ -52,7 +52,7 @@ var approvedClaim = (function() {
 
     // check
     $checkButton.on('click', function() {
-      $modalCheck.modal("show");
+      $modalCheck.show();
       $message.html("");
     });
 

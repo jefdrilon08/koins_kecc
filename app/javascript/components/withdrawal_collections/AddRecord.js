@@ -1,5 +1,6 @@
 import React from 'react';
 import ErrorDisplay from '../ErrorDisplay';
+import $ from "jquery";
 
 export default class AddRecord extends React.Component {
   constructor(props) {

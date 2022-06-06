@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var depositCollectionId;
@@ -44,17 +46,34 @@ var _urlLoadBranch                    = "/api/v1/deposit_collections/load_branch
 var _urlLoadCenter                    = "/api/v1/deposit_collections/load_center";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalFinalize = new bootstrap.Modal(
+    document.getElementById("modal-finalize")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
+  $modalLoadBranch = new bootstrap.Modal(
+    document.getElementById("modal-load-branch")
+  );
+
+  $modalLoadCenter = new bootstrap.Modal(
+    document.getElementById("modal-load-center")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
   
   $btnFinalize        = $("#btn-finalize");
   $btnConfirmFinalize = $("#btn-confirm-finalize");
-  $modalFinalize      = $("#modal-finalize");
 
   $btnPrint                  = $("#btn-print");
   $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
-  $modalPrint                = $("#modal-print");
 
   $selectBook     = $("#select-book");
   $btnConfirmBook = $("#btn-confirm-book");
@@ -64,11 +83,9 @@ var _cacheDom = function() {
 
   $btnLoadBranch        = $("#btn-load-branch");
   $btnConfirmLoadBranch = $("#btn-confirm-load-branch");
-  $modalLoadBranch      = $("#modal-load-branch");
 
   $btnLoadCenter        = $("#btn-load-center");
   $btnConfirmLoadCenter = $("#btn-confirm-load-center");
-  $modalLoadCenter      = $("#modal-load-center");
   $selectCenter         = $("#select-center");
 
   $message          = $(".message");
@@ -77,7 +94,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnLoadCenter.on("click", function() {
-    $modalLoadCenter.modal("show");
+    $modalLoadCenter.show();
   });
 
   $btnConfirmLoadCenter.on("click", function() {
@@ -125,7 +142,7 @@ var _bindEvents = function() {
   });
 
   $btnLoadBranch.on("click", function() {
-    $modalLoadBranch.modal("show");
+    $modalLoadBranch.show();
   });
 
   $btnConfirmLoadBranch.on("click", function() {
@@ -258,26 +275,26 @@ var _bindEvents = function() {
   });
 
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "deposit_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + depositCollectionId);
   });
 
   $btnPrintAccountingEntry.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "deposit_collection_accounting_entry";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + depositCollectionId);
   });
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -321,7 +338,7 @@ var _bindEvents = function() {
 
   $btnFinalize.on("click", function() {
     $message.html("");
-    $modalFinalize.modal("show");
+    $modalFinalize.show();
   });
 
   $btnConfirmFinalize.on("click", function() {

@@ -47,7 +47,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   
   $btnApproveReverseLoan.on("click", function() {
-    $modalApproveReverseLoan.modal("show");
+    $modalApproveReverseLoan.show();
    // $txtReverseReason.val();
   });
   

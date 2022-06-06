@@ -5,11 +5,11 @@
         Name
       %th
         Category
-      %th.text-right
+      %th.text-end
         Min Loan Amount
-      %th.text-right
+      %th.text-end
         Max Loan Amount
-      %th.text-right
+      %th.text-end
         Denomination
       %th.text-center
         Insured
@@ -31,26 +31,26 @@
               #{o.id}
         %td
           #{o.loan_product_category}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o.min_loan_amount, unit: "")}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o.max_loan_amount, unit: "")}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o.denomination, unit: "")}
         %td
           %center
             - if o.insured
-              .badge.badge-success
+              .badge.bg-success
                 .fa.fa-check
             - else
-              .badge.badge-danger
+              .badge.bg-danger
                 .fa.fa-times
         %td.text-center
           - if o.is_entry_point
-            .badge.badge-success
+            .badge.bg-success
               .fa.fa-check
           - else
-            .badge.badge-danger
+            .badge.bg-danger
               .fa.fa-times
         %td.text-center
           #{number_to_currency(o.monthly_interest_rate * 100, unit: "")} %

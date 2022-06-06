@@ -89,7 +89,7 @@ export default class IndexDisplay extends React.Component {
               accessor: "balance",
               Cell: row => (
                 <strong>
-                  <div className="text-right">
+                  <div className="text-end">
                     {numberWithCommas(row.original.balance)}
                     <br/>
                     <small className="text-muted">

@@ -19,7 +19,7 @@
               #{o[:member][:last_name]}, #{o[:member][:first_name]}
         %td
           #{o[:loan][:loan_name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:amount], unit: '')}
         - if @data_store.pending?
           %td.text-center

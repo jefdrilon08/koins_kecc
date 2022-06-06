@@ -1,14 +1,11 @@
 require("@rails/ujs").start();
 
-import JQuery from 'jquery';
-window.$ = window.JQuery = JQuery;
+import $ from 'jquery';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import 'bootstrap';
 import "@fortawesome/fontawesome-free/js/all";
-import '@coreui/coreui';
 
 // React Components
 import DashboardMainUI from "../components/dashboard/MainUI";
@@ -197,6 +194,7 @@ import BillingForWriteoffShow from "../models/BillingForWriteoffShow.js";
 import MemberIdGeneratorsIndex from "../models/MemberIdGeneratorsIndex.js";
 import MemberIdGeneratorsShow from "../models/MemberIdGeneratorsShow.js";
 import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
+import Sidebar from "../models/Sidebar.js";
 import BillingForWriteoffCollectionIndex from "../models/BillingForWriteoffCollectionIndex.js";
 import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollectionShow.js";
 
@@ -398,5 +396,10 @@ document.addEventListener("DOMContentLoaded", () => {
         renderComponent(component, options)
       }
     })
+  }
+
+  if(route != "pages/login") {
+    // SIDEBAR JS
+    Sidebar.init();
   }
 });

@@ -99,7 +99,7 @@ export default class AccountingEntryPrecisionComponent extends React.Component {
           <td>
             {journalEntries[i].accounting_entry.date_posted}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {journalEntries[i].amount}
           </td>
         </tr>
@@ -133,7 +133,7 @@ export default class AccountingEntryPrecisionComponent extends React.Component {
                   <th>
                     Date Posted
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     Amount
                   </th>
                 </tr>

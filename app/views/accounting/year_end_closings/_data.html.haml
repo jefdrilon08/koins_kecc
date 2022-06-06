@@ -18,9 +18,9 @@
         %tr
           %th{ width: "50%" }
             Accounting Code
-          %th.text-right{ widith: "25%" }
+          %th.text-end{ widith: "25%" }
             Debit
-          %th.text-right{ widith: "25%" }
+          %th.text-end{ widith: "25%" }
             Credit
       %tbody
         - @data[:original_entries][:debit].each do |o|
@@ -28,18 +28,18 @@
             %td
               %strong
                 #{o[:accounting_code][:name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:debit], unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:credit], unit: "")}
         - @data[:original_entries][:credit].each do |o|
           %tr
             %td
               %strong
                 #{o[:accounting_code][:name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:debit], unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:credit], unit: "")}
   .col
     %h4
@@ -49,9 +49,9 @@
         %tr
           %th{ width: "50%" }
             Accounting Code
-          %th.text-right{ widith: "25%" }
+          %th.text-end{ widith: "25%" }
             Debit
-          %th.text-right{ widith: "25%" }
+          %th.text-end{ widith: "25%" }
             Credit
       %tbody
         - @data[:closing_entries][:credit].each do |o|
@@ -59,16 +59,16 @@
             %td
               %strong
                 #{o[:accounting_code][:name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:debit], unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:credit], unit: "")}
         - @data[:closing_entries][:debit].each do |o|
           %tr
             %td
               %strong
                 #{o[:accounting_code][:name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:debit], unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(o[:credit], unit: "")}

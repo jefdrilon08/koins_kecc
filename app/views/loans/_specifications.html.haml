@@ -1,86 +1,86 @@
-%table.table.table-hover.table-sm
+%table.table.table-hover.table-sm.table-bordered
   %tr
     %th
       PN Number:
-    %td.text-right
+    %td.text-end
       #{@loan.pn_number}
   %tr
     %th
       Branch:
-    %td.text-right
+    %td.text-end
       #{@loan.branch}
   %tr
     %th
       Center:
-    %td.text-right
+    %td.text-end
       #{@loan.center}
   %tr
     %th
       Project Type:
-    %td.text-right
+    %td.text-end
       #{@loan.project_type}
   %tr
     %th
       Co-maker (Kasama sa sentro): 
-    %td.text-right
+    %td.text-end
       - if @loan.has_co_maker_one?
         = link_to member_path(@loan.data["co_maker_one"]["id"]) do
           #{@loan.co_maker_one}
   - if @co_maker.present? and @co_maker.profile_picture.attached?
     %tr
       %th
-      %td.text-right
+      %td.text-end
         = image_tag @co_maker.profile_picture, width: 100
   %tr
     %th
       Co-maker (Kamag-anak):
-    %td.text-right
+    %td.text-end
       #{@loan.co_maker_two}
   - if @loan.co_maker_relative_profile_picture.attached?
     %tr
       %th
-      %td.text-right
+      %td.text-end
         = image_tag @loan.co_maker_relative_profile_picture, width: 100
   %tr
     %th
       Co-maker (Hindi kamag-anak / kapitbahay)
-    %td.text-right
+    %td.text-end
       #{@loan.co_maker_three}
   - if @loan.co_maker_non_relative_profile_picture.attached?
     %tr
       %th
-      %td.text-right
+      %td.text-end
         = image_tag @loan.co_maker_non_relative_profile_picture, width: 100
   %tr
     %th
       Status:
-    %td.text-right
+    %td.text-end
       - if @loan.active?
-        .badge.badge-info
+        .badge.bg-info
           Active
       - elsif @loan.pending?
-        .badge.badge-danger
+        .badge.bg-danger
           Pending
       - elsif @loan.paid?
-        .badge.badge-success
+        .badge.bg-success
           Paid
-      -elsif @loan.writeoff?
-        .badge.badge-warning
+      - elsif @loan.writeoff?
+        .badge.bg-warning
           Writeoff
   %tr
     %th
       Loan Product:
-    %td.text-right
+    %td.text-end
       #{@loan.loan_product}
   %tr
     %th
       Loan Product Type:
-    %td.text-right
+    %td.text-end
       #{@loan.loan_product_type}
   %tr
     %th
       Monthly I.R.:
-    %td.text-right
+    %td.text-end
       #{number_to_currency((@loan.monthly_interest_rate * 100).round(2), unit: "")} %
 
   / Maintaining balance
@@ -90,19 +90,19 @@
         %tr
           %th
             Maintaining Balance:
-          %td.text-right
+          %td.text-end
             #{ @loan.principal.to_f  * a[:maintaining_balance][:percentage].to_f} 
 
 
   %tr
     %th
       Date Prepared:
-    %td.text-right
+    %td.text-end
       #{@loan.date_prepared.strftime("%b %d, %Y")}
   %tr
     %th
       First Date of Payment
-    %td.text-right
+    %td.text-end
       - if @loan.pending?
         = link_to "#", id: "btn-first-date-of-payment" do
           .fa.fa-pencil-alt
@@ -112,13 +112,13 @@
   %tr
     %th
       Date Approved:
-    %td.text-right
+    %td.text-end
       - if @loan.active_or_paid?
         #{@loan.date_approved.strftime("%b %d, %Y")}
   %tr
     %th
       Date Released:
-    %td.text-right
+    %td.text-end
       - if @loan.pending?
         = link_to "#", id: "btn-date-released" do
           .fa.fa-pencil-alt
@@ -128,7 +128,7 @@
   %tr
     %th
       Date Completed:
-    %td.text-right
+    %td.text-end
       - if @loan.paid? and @loan.date_completed.present?
         #{@loan.date_completed.strftime("%b %d, %Y")}
       - elsif @loan.paid? and @loan.date_completed.blank?
@@ -136,21 +136,21 @@
   %tr
     %th
       Maturity Date:
-    %td.text-right
+    %td.text-end
       - if @loan.active? || @loan.paid?
         #{@loan.maturity_date}
   %tr
     %th
       Max Active Date:
-    %td.text-right
+    %td.text-end
       #{@loan.max_active_date}
   %tr
     %th
       Term:
-    %td.text-right
+    %td.text-end
       #{@loan.term} (#{@loan.num_weeks} installments)
   %tr
     %th
       Payment Type:
-    %td.text-right
+    %td.text-end
       #{@loan.payment_type}

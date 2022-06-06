@@ -65,8 +65,9 @@ export default class ManagementOverview extends React.Component {
     var colSpan = 12;
 
     var areaColor     = "#bad5fd";
-    var clusterColor  = "#c5ffc1";
+    var totalColor    = "#c5ffc1";
     var branchColor   = "#797979";
+    var clusterColor  = "#f3cf99";
 
     var tPrincipal        = 0.00;
     var tPrincipalPaid    = 0.00;
@@ -135,13 +136,13 @@ export default class ManagementOverview extends React.Component {
                 <th>
                   Branch Name
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Portfolio
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Past Due Amount
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   PAR Amount
                 </th>
                 <th className="">
@@ -218,13 +219,13 @@ export default class ManagementOverview extends React.Component {
                   {branches[k].name}
                 </strong>
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {numberWithCommas(branches[k].data.portfolio)}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {numberWithCommas(branches[k].data.principal_balance)}
               </td>
-              <td className="text-right">
+              <td className="text-end">
                 {numberWithCommas(branches[k].data.par_amount)}
               </td>
               <td className="">
@@ -271,23 +272,23 @@ export default class ManagementOverview extends React.Component {
         var cPar              = (cParAmount / cPortfolio);
 
         rows.push(
-          <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: clusterColor}}>
+          <tr key={"cluster-total-" + clusters[j].id} style={{backgroundColor: totalColor}}>
             <td>
               <strong>
                 {clusters[j].name} Total
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(cPortfolio)}
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(cPastDueAmount)}
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(cParAmount)}
               </strong>
@@ -353,17 +354,17 @@ export default class ManagementOverview extends React.Component {
               {areas[i].name} Total
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             <strong>
               {numberWithCommas(aPortfolio)}
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             <strong>
               {numberWithCommas(aPastDueAmount)}
             </strong>
           </td>
-          <td className="text-right">
+          <td className="text-end">
             <strong>
               {numberWithCommas(aParAmount)}
             </strong>
@@ -429,17 +430,17 @@ export default class ManagementOverview extends React.Component {
             Grand Total
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(tPortfolio)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(tPastDueAmount)}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(tParAmount)}
           </strong>
@@ -505,9 +506,9 @@ export default class ManagementOverview extends React.Component {
     } else {
       return (
         <div>
-          <h4>
+          <h2>
             Overview
-          </h4>
+          </h2>
           <div className="row">
             <div className="col-md-10 col-xs-12">
               <div className="form-group">
@@ -521,18 +522,19 @@ export default class ManagementOverview extends React.Component {
               </div>
             </div>
             <div className="col-md-2 col-xs-12">
-              <div className="form-group">
+              <div className="d-grid gap-2">
                 <button 
-                  className="btn btn-info btn-block"
+                  className="btn btn-primary btn-block"
                   disabled={this.state.isFetching}
                   onClick={this.handleSyncClicked.bind(this)}
                 >
-                  <span className="fa fa-sync"/>
+                  <span className="bi bi-arrow-repeat"/>
                   Sync
                 </button>
               </div>
             </div>
           </div>
+          <hr/>
           {this.renderOverviewTable()}
         </div>
       );

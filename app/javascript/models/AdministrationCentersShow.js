@@ -23,7 +23,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnAssignOfficer.on("click", function() {
-    $modalAssignOfficer.modal("show");
+    $modalAssignOfficer.show();
   });
 
   $btnConfirmAssignOfficer.on("click", function() {

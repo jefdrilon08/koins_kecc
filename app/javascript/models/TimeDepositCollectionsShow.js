@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var timeDepositCollectionId;
@@ -26,12 +28,18 @@ var _urlModifyCashManagementTemplate  = "/api/v1/time_deposit_collections/modify
 var _urlModifyBook                    = "/api/v1/time_deposit_collections/modify_book";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnPrint   = $("#btn-print");
-  $modalPrint = $("#modal-print");
 
   $selectBook     = $("#select-book");
   $btnConfirmBook = $("#btn-confirm-book");
@@ -135,17 +143,17 @@ var _bindEvents = function() {
   });
 
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "time_deposit_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + timeDepositCollectionId);
   });
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from 'jquery';
+import "select2";
 
 var $branchSelect;
 var $centerSelect;

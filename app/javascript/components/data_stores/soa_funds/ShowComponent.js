@@ -104,12 +104,12 @@ export default class ShowComponent extends React.Component {
 
     for(var j = 0; j < paymentRecords.length; j++) {
       rows.push(
-        <td className="text-right" key={"payment-" + id + "-" + j + "debit"}>
+        <td className="text-end" key={"payment-" + id + "-" + j + "debit"}>
           {paymentRecords[j].debit > 0 ? numberWithCommas(paymentRecords[j].debit) : ''}
         </td>
       );
       rows.push(
-        <td className="text-right" key={"payment-" + id + "-" + j + "-credit"}>
+        <td className="text-end" key={"payment-" + id + "-" + j + "-credit"}>
           {paymentRecords[j].credit > 0 ? numberWithCommas(paymentRecords[j].credit) : ''}
         </td>
       );
@@ -183,14 +183,14 @@ export default class ShowComponent extends React.Component {
 
     for(var i = 0; i < totals.length; i++) {
       cols.push(
-        <td className="text-right" key={"total-" + id + "-" + i + "-debit"}>
+        <td className="text-end" key={"total-" + id + "-" + i + "-debit"}>
           <strong>
             {totals[i].debit > 0 ? numberWithCommas(totals[i].debit) : ''}
           </strong>
         </td>
       );
       cols.push(
-        <td className="text-right" key={"total-" + id + "-" + i + "-credit"}>
+        <td className="text-end" key={"total-" + id + "-" + i + "-credit"}>
           <strong>
             {totals[i].credit > 0 ? numberWithCommas(totals[i].credit) : ''}
           </strong>
@@ -371,12 +371,12 @@ export default class ShowComponent extends React.Component {
     for(var i = 0; i < settings.length; i++) {
 
       totals.push(
-        <td key={"grand-total-" + i + "-debit"} className="text-right">
+        <td key={"grand-total-" + i + "-debit"} className="text-end">
           {numberWithCommas(totalVals[i].debit)}
         </td>
       );
       totals.push(
-        <td key={"grand-total-" + i + "-credit"} className="text-right">
+        <td key={"grand-total-" + i + "-credit"} className="text-end">
           {numberWithCommas(totalVals[i].credit)}
         </td>
       );

@@ -1,5 +1,6 @@
 import React from 'react';
 import ErrorDisplay from '../ErrorDisplay';
+import $ from "jquery";
 
 export default class AddRecord extends React.Component {
   constructor(props) {
@@ -242,14 +243,18 @@ export default class AddRecord extends React.Component {
                     <label>
                       Actions
                     </label>
-                    <button
-                      className="btn btn-primary btn-block"
-                      disabled={this.state.isLoading}
-                      onClick={this.handleClick.bind(this)}
-                    >
-                      <span className="fa fa-plus" />
-                      Add Transaction
-                    </button>
+                    <div className="form-group">
+                      <div className="btn-group">
+                        <button
+                          className="btn btn-primary btn-block"
+                          disabled={this.state.isLoading}
+                          onClick={this.handleClick.bind(this)}
+                        >
+                          <span className="fa fa-plus" />
+                          Add Transaction
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

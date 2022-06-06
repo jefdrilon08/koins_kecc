@@ -1,15 +1,15 @@
 = title
-.row
-  .col
-    .card
-      .card-body
-        = render partial: "index_filter"
-        - if @monthly_closing_collections.any?
-          = render partial: "index_list"
-          = paginate @monthly_closing_collections
-        - else
-          %p
-            No records found
+%h4
+  Monthly Closing Collections      
+.card
+  .card-body
+    = render partial: "index_filter"
+    - if @monthly_closing_collections.any?
+      = render partial: "index_list"
+      = paginate @monthly_closing_collections
+    - else
+      %p
+        No records found
 
 = render partial: "monthly_closing_collections/modals/new"
 = render partial: "templates/error_list"

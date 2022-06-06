@@ -34,7 +34,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnDelete.on("click", function() {
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {

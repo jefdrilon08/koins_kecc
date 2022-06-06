@@ -3,7 +3,7 @@ namespace :kezar do
     branch_id     = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
     branch        = Branch.find(branch_id)
     start_date    = ENV["START_DATE"] || Date.today - 2.month
-    end_date      = ENV["END_DATE"] || Date.today
+    end_date      = ENV["END_DATE"] || Date.today - 2.month
     endpoint      = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://us-central1-rms-kmba.cloudfunctions.net/apiTest/payment/batch/upload"
 
     account_type      = "INSURANCE"
@@ -38,6 +38,8 @@ namespace :kezar do
         externalRef: o.id
       }
     }
+
+    raise records.inspect
 
     puts records.to_json
 

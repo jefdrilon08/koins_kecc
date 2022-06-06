@@ -1,14 +1,11 @@
-= title
-.row
-  .col
-    .card
-      .card-body
-        - if @records.any?
-          = render partial: "index_list"
-          = paginate @records
-        - else
-          %p
-            No records
+%h4
+  Interest on Share Capital
+- if @records.any?
+  = render partial: "index_list"
+  = paginate @records
+- else
+  %p
+    No records
 
 = render partial: "data_stores/icpr/modals/new"
 = render partial: "templates/error_list"

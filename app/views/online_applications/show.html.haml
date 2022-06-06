@@ -9,23 +9,23 @@
           - if @online_application.data["approve_process"].present?
             - @online_application.data["approve_process"].each do |opp|
               - if opp["type"] == "assign_branch_by"
-                .c-callout.c-callout-info
+                .alert.alert-info
                   %p This has already been assigned to #{@online_application.branch.name} SATO by #{opp["name"]} on #{opp["date_assign"]}
               - elsif opp["type"] == "verify_by"
-                .c-callout.c-callout-info
+                .alert.alert-info
                   %p This has already been verified by #{opp["name"]} on #{opp["date_assign"]}
               - else
-                .c-callout.c-callout-success
+                .alert.alert-success
                   %p This has already been process by #{opp["name"]} on #{opp["date_assign"]}
 
         - if @online_application.for_verification?
-          %h4.badge.badge-warning
+          %h4.badge.bg-warning
             Status: FOR VERIFICATION
         - elsif @online_application.verified?
           %h4.badge.badge-info
             Status: VERIFIED
         - elsif @online_application.processed?
-          %h4.badge.badge-success
+          %h4.badge.bg-success
             Statu: PROCESSED
         - elsif @online_application.rejected?
           .alert.alert-danger
@@ -242,7 +242,7 @@
                   #{o["relationship"]}
                 %td
                   - if i == 0
-                    .badge.badge-success
+                    .badge.bg-success
                       YES
 
         %h4

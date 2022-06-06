@@ -37,10 +37,10 @@
                 #{ai.accrued_type}
               %td
                 - if ai.status == "pending"
-                  .badge.badge-danger
+                  .badge.bg-danger
                     #{ai.status}
                 - else
-                  .bande.badge-success
+                  .bande.bg-success
                     #{ai.status}
               %td
                 = link_to adjustments_accrued_interest_path(ai.id), class: 'btn btn-primary' do

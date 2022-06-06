@@ -6,7 +6,7 @@
           #{accounting_entry[:book]} 
           #{accounting_entry[:reference_number]}
       .col-md-6
-        .text-right
+        .text-end
           .text-muted
             .fa.fa-store
             #{accounting_entry[:book]} - #{@branch}
@@ -15,15 +15,15 @@
       %tr
         %th{ width: "50%" }
           Accounting Code
-        %th.text-right{ width: "25%" }
+        %th.text-end{ width: "25%" }
           Debit
-        %th.text-right{ width: "25%" }
+        %th.text-end{ width: "25%" }
           Credit
       - accounting_entry[:debit_journal_entries].each do |o|
         %tr
           %td
             #{o[:code]} - #{o[:name]}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o[:amount], unit: "")}
           %td
       - accounting_entry[:credit_journal_entries].each do |o|
@@ -31,5 +31,5 @@
           %td
             #{o[:code]} - #{o[:name]}
           %td
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o[:amount], unit: "")}

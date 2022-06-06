@@ -113,13 +113,13 @@ export default class ShowComponent extends React.Component {
           <td>
             {payment.date}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(payment.principal_paid)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(payment.interest_paid)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(parseFloat(payment.principal_paid) + parseFloat(payment.interest_paid))}
           </td>
         </tr>
@@ -147,13 +147,13 @@ export default class ShowComponent extends React.Component {
         <th className="">
           GRAND TOTAL
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(total_principal_paid)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(total_interest_paid)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(total_paid)}
         </th>
       </tr>
@@ -186,13 +186,13 @@ export default class ShowComponent extends React.Component {
           <th>
             Date
           </th>
-          <th className="text-right">
+          <th className="text-end">
             Principal
           </th>
-          <th className="text-right">
+          <th className="text-end">
             Interest
           </th>
-          <th className="text-right">
+          <th className="text-end">
             Total
           </th>
         </tr>
@@ -214,13 +214,13 @@ export default class ShowComponent extends React.Component {
               {r.loan_product.name}
             </small>
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(r.total_principal_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(r.total_interest_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(parseFloat(r.total_principal_paid) + parseFloat(r.total_interest_paid))}
           </th>
         </tr>
@@ -345,7 +345,7 @@ export default class ShowComponent extends React.Component {
         <th colSpan="3">
           TOTAL
         </th>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(total)}
           </strong>

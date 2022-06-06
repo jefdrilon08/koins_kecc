@@ -10,7 +10,7 @@
         Date Approved
       %th
         Center / Branch
-      %th.text-right
+      %th.text-end
         Amount Collected
       %th
         %center
@@ -33,16 +33,16 @@
               #{o.date_approved.strftime("%b %d, %Y")}
         %td
           #{o.center.name} / #{o.branch}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o.total_collected, unit: "")}
         %td
           %center
             - if o.pending?
-              .badge.badge-danger
+              .badge.bg-danger
                 Pending
             - elsif o.approved?
-              .badge.badge-success
+              .badge.bg-success
                 Approved
             - elsif o.processing?
               .badge.badge-info

@@ -1,4 +1,4 @@
-#modal-remove.modal.fade{:tabindex => "-1"}
+#modal-remove.modal.fade
   .modal-dialog
     .modal-content
       .modal-header
@@ -8,7 +8,7 @@
         .modal-body-content
           .row
             .col
-              .c-callout.c-callout-info
+              .alert.alert-info
                 Are you sure you want to remove?
               .message
       .modal-footer
@@ -16,6 +16,6 @@
           %button#btn-confirm-remove.btn.btn-primary
             .fa.fa-check
             Confirm
-          %button.btn{"data-dismiss" => "modal", :type => "button"}
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
             .fa.fa-times
             Cancel
