@@ -69,7 +69,7 @@ module BillingForWriteoffCollection
               }
             )
             account_transaction.save!
-            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(ld[:savings_account_id]), account_transactions: nil)execute!
+            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(ld[:savings_account_id]), account_transactions: nil).execute!
           end
         end
       end
