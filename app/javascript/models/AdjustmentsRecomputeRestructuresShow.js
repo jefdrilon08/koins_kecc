@@ -33,9 +33,6 @@ var _cacheDom = function() {
     document.getElementById("modal-delete")
   );
 
-  $modalPrint = new bootstrap.Modal(
-    document.getElementById("modal-print")
-  );
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
@@ -89,6 +86,7 @@ var _bindEvents = function() {
       method: "POST",
       data: {
         id: recomputeRestructureId,
+        authenticity_token: authenticityToken
       },
       success: function(response) {
         $message.html("Success!");
