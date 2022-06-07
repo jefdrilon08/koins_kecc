@@ -1,5 +1,7 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var authenticityToken;
 
@@ -18,7 +20,10 @@ var _userId;
 var _xKoinsAppAuthSecret;
 
 var _cacheDom = function() {
-  $modalNew      = $("#modal-new");
+  $modalNew      = new bootstrap.Modal(
+    document.getElementById("modal-new")
+
+  );
   $btnNew        = $("#btn-new");
   $btnConfirmNew = $("#btn-confirm-new");
 
@@ -31,8 +36,9 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
+    
     $modalNew.show();
-    $message.html("");
+    //$message.html("");
   });
 
   $btnConfirmNew.on("click", function() {
