@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import $ from "jquery";
 var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
