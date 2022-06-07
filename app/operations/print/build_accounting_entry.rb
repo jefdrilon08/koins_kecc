@@ -9,7 +9,7 @@ module Print
 
     def execute!
       @data[:id]                    = @accounting_entry.id
-      @data[:date_prepared]         = @accounting_entry.date_prepared.strftime("%B %d, %Y")
+      @data[:date_prepared]         = @accounting_entry.date_prepared.try(:strftime, "%B %d, %Y")
       @data[:book]                  = @accounting_entry.book
       @data[:reference_number]      = @accounting_entry.reference_number
       @data[:data]                  = @accounting_entry.data

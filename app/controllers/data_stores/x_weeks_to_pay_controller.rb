@@ -16,8 +16,8 @@ module DataStores
     def show
       super
 
-      @meta = @record.meta.with_indifferent_access
-      @data = @record.data.with_indifferent_access
+      @meta = @record.meta.try(:with_indifferent_access)
+      @data = @record.data.try(:with_indifferent_access)
 
       @subheader_items = [
         { text: "Data Stores" },

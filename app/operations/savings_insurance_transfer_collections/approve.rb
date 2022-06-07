@@ -34,6 +34,11 @@ module SavingsInsuranceTransferCollections
     private
 
     def rehash_accounts!
+      @data[:records].each do |r|
+        ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:insurance_account_id])).execute!
+        ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:savings_account_id])).execute!
+        
+      end
     end
 
     def post_accounting_entry!
@@ -83,8 +88,8 @@ module SavingsInsuranceTransferCollections
         transaction_type  = 'deposit'
         transacted_at     = @date_approved
         status            = 'approved'
-        created_at        = Time.now.to_s(:db)
-        updated_at        = Time.now.to_s(:db)
+        created_at        = Time.now.to_s
+        updated_at        = Time.now.to_s
 
         if @savings_insurance_transfer_collection.clip
           data  = {
@@ -166,8 +171,8 @@ module SavingsInsuranceTransferCollections
         transaction_type  = 'withdraw'
         transacted_at     = @date_approved
         status            = 'approved'
-        created_at        = Time.now.to_s(:db)
-        updated_at        = Time.now.to_s(:db)
+        created_at        = Time.now.to_s
+        updated_at        = Time.now.to_s
 
         data  = {
           is_withdraw_payment: false,

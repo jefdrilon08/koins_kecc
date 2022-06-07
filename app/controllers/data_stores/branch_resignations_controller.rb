@@ -26,8 +26,9 @@ module DataStores
 
       if !@record.error?
         @subheader_items << {
-          text: "#{@record.data.with_indifferent_access[:branch][:name]} - #{@record.meta.with_indifferent_access[:start_date].to_date.strftime("%B %d, %Y")} to #{@record.meta.with_indifferent_access[:end_date].to_date.strftime("%B %d, %Y")}"
+          text: "#{@data[:branch].fetch(:name)} - #{@meta[:start_date].try(:to_date).try(:strftime, "%B %d, %Y")} to #{@meta[:end_date].try(:to_date).try(:strftime, "%B %d, %Y")}"
         }
+        
       end
 
       @subheader_side_actions = [

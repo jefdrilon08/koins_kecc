@@ -12,8 +12,12 @@ module Api
           center: center,
           current_user: current_user  
         }
-
-        billing_for_writeoff_collection = ::BillingForWriteoffCollection::Create.new(config: config).execute!
+        errors = ::BillingForWriteoffCollection::ValidateCreate.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          billing_for_writeoff_collection = ::BillingForWriteoffCollection::Create.new(config: config).execute!
+        end
       end
       
       def add_member
@@ -44,6 +48,23 @@ module Api
           ::BillingForWriteoffCollection::BuildAccountingEntry.new(config: config).execute!
           render json: { message: "Done" }
         end
+      end
+
+      def approve
+        record = DataStore.find(params[:id])
+        config = {
+          data_store: record.id,
+          user: current_user.id
+        } 
+        args = {
+          data_store: record.id,
+          user: current_user.id
+        }
+        #record.update(status: "processing")
+        #ProcessApproveBillingForWriteoffCollections.perform_later(args)
+        ::BillingForWriteoffCollection::Approve.new(config: config).execute!
+
+          render json: { message: "ok" }
       end
 
     end
