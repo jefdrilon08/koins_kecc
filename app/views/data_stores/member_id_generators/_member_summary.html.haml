@@ -6,14 +6,15 @@
       %th Name
       %th ID#
       %th Center
-    - @data_store.data.each_with_index do |ds, i|
-      %tr
-        %td #{ i + 1}
-        %td #{ds["id_type"]}
-        %td #{ds["first_name"].titlecase} #{ds["last_name"].titlecase}
-        %td #{ds["member_id_number"]}
-        %td #{ds["center"]}
-        - if @data_store.status == "pending"
-          %td.text-center
-            .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: @data_store.id, member: "#{ds["id"]}" } }
-              .fa.fa-minus
+      - if @data_store.data.any?
+        - @data_store.data.each_with_index do |ds, i|
+          %tr
+            %td #{ i + 1}
+            %td #{ds["id_type"]}
+            %td #{ds["first_name"].titlecase} #{ds["last_name"].titlecase}
+            %td #{ds["member_id_number"]}
+            %td #{ds["center"]}
+            - if @data_store.status == "pending"
+              %td.text-center
+                .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: @data_store.id, member: "#{ds["id"]}" } }
+                .fa.fa-minus
