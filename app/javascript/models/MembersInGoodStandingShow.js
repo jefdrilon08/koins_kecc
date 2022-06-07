@@ -1,4 +1,7 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
@@ -19,7 +22,11 @@ var _cacheDom = function() {
   $printMessage       = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
 
-  $modalPrint         = $("#modal-print");
+  
+  $modalPrint      = new bootstrap.Modal(
+    document.getElementById("modal-print")
+
+  );
 
 
   $message          = $(".message");
