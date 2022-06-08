@@ -1,4 +1,8 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
+
 var authenticityToken;
 
 var $btnNew;
@@ -14,7 +18,10 @@ var _urlCenters       = "/api/v1/branches/fetch_centers";
 
 var _cacheDom = function() {
   $btnNew	    = $("#btn-new");
-  $modalNew         = $("#modal-new");
+  $modalNew      = new bootstrap.Modal(
+    document.getElementById("modal-new")
+
+  );
   $btnConfirmNew    = $("#btn-confirm-new");
   $selectBranch     = $("#select-branch");
   $selectCenter     = $("#select-center");
@@ -77,7 +84,7 @@ var _bindEvents = function() {
 
      
  $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
 

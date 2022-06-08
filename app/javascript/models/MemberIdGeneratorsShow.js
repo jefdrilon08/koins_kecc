@@ -121,7 +121,7 @@ var _bindEvents = function() {
   $btnCheck.on("click", function(){
   
   
-    $modalCheck.modal("show");
+    $modalCheck.show();
   } );
 
 
