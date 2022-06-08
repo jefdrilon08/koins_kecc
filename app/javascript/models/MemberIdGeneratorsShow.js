@@ -1,4 +1,7 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var authenticityToken;
 
@@ -58,7 +61,11 @@ var _cacheDom = function() {
   $labelMemberName          = $("#member-name");
   
   $btnCheck                 = $("#btn-check");
-  $modalCheck               = $("#modal-check");
+
+  $modalCheck      = new bootstrap.Modal(
+    document.getElementById("modal-check")
+
+  );
   $btnConfirmCheck          = $("#btn-confirm-check")
   $btnDelayAmort            = $(".btn-delay-amort");
 
@@ -114,7 +121,7 @@ var _bindEvents = function() {
   $btnCheck.on("click", function(){
   
   
-    $modalCheck.modal("show");
+    $modalCheck.show();
   } );
 
 

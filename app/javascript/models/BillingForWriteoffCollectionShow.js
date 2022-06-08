@@ -1,4 +1,7 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var _authenticityToken;
 var _id;
