@@ -79,15 +79,11 @@ export default class Filter extends React.Component {
       <div className="row">
         <div className="col-md-3 col-xs-12">
           <div className="form-group">
-            <label>
-              View Name
-            </label>
             <div className="row">
               <div className="col">
                 <Toggle
                   checked={this.props.currentView == "RR"}
                   onChange={this.props.handleViewToggled.bind(this, "RR")}
-                  className="btn"
                 />
                 <br/>
                 <label>
@@ -98,7 +94,6 @@ export default class Filter extends React.Component {
                 <Toggle
                   checked={this.props.currentView == "AOR"}
                   onChange={this.props.handleViewToggled.bind(this, "AOR")}
-                  className="btn"
                 />
                 <br/>
                 <label>
@@ -109,7 +104,6 @@ export default class Filter extends React.Component {
                 <Toggle
                   checked={this.props.currentView == "ML"}
                   onChange={this.props.handleViewToggled.bind(this, "ML")}
-                  className="btn"
                 />
                 <br/>
                 <label>
