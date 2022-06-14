@@ -5,11 +5,12 @@
         %h3.modal-title
           Interest Modules
       .modal-body
-        = link_to "/data_stores/icpr", class: "btn btn-primary w-100" do
-          %span.btn-label
-            %i.bi.bi-calculator
-          Interest on Share Capital
-        = link_to "/data_stores/patronage_refund", class: "btn btn-primary w-100 mt-4" do
-          %span.btn-label
-            %i.bi.bi-calculator
-          Patronage Refund
+        .row
+          .col-12
+            = link_to "/data_stores/icpr", class: "btn-nav-square-md" do
+              Interest on Share Capital
+        .mt-4
+        .row
+          .col-12
+            = link_to "/data_stores/patronage_refund", class: "btn-nav-square-md" do
+              Patronage Refund

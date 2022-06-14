@@ -43,3 +43,7 @@ SIDEBAR_TRANSACTIONS_CONTROLLERS = [
   "time_deposit_collections",
   "withdrawal_collections"
 ]
+
+SIDEBAR_REPORTS_CONTROLLERS = [
+  "repayment_rates"
+]

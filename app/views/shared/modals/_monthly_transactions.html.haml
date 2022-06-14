@@ -5,15 +5,17 @@
         %h3.modal-title
           Collection Modules
       .modal-body
-        = link_to monthly_closing_collections_path, class: "btn btn-primary w-100" do
-          %span.btn-label
-            %i.bi.bi-calendar-event
-          Monthly Transacions
-        = link_to insurance_monthly_closing_collections_path, class: "btn btn-primary w-100 mt-4" do
-          %span.btn-label
-            %i.bi.bi-calendar-event
-          Insurance Monthly Closing
-        = link_to "data_stores/monthly_incentives", class: "btn btn-primary w-100 mt-4" do
-          %span.btn-label
-            %i.bi.bi-calendar-event
-          Monthly Incentives
+        .row
+          .col
+            = link_to monthly_closing_collections_path, class: "btn-nav-square-md" do
+              Monthly Transacions
+        .mt-4
+        .row
+          .col
+            = link_to insurance_monthly_closing_collections_path, class: "btn-nav-square-md" do
+              Insurance Monthly Closing
+        .mt-4
+        .row
+          .col
+            = link_to "data_stores/monthly_incentives", class: "btn-nav-square-md" do
+              Monthly Incentives

@@ -5,6 +5,7 @@
 @import "select2/src/scss/core";
 @import "select2-bootstrap-5-theme/src/include-all";
 @import "react-toggle/style";
+@import 'mdb-ui-kit/src/scss/mdb.free.scss';
 
 // Local imports
 @import "./variables";
@@ -13,6 +14,20 @@
 @import "./sk-cube-grid";
 @import "./member";
 @import "./accordion";
+
+.btn-nav-square-md {
+  @extend .btn, .btn-primary, .btn-square-md, .d-flex, .align-items-center, .justify-content-center, .mx-auto;
+}
+
+.btn-square-md {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  height: 100px !important;
+  text-align: center;
+  padding: 0px;
+  font-size:12px;
+  font-weight: bold;
+}
 
 .btn-label {
   left: -12px;

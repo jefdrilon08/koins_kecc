@@ -1,3 +1,4 @@
+import $ from "jquery";
 import Mustache from "mustache";  
 
 var authenticityToken;
