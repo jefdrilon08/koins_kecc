@@ -1,4 +1,4 @@
-.sidebar.close
+.sidebar
   = link_to root_path do
     .logo-details
       %i.bi.bi-house-door
@@ -18,6 +18,19 @@
 
     = render partial: "shared/sidebar_transactions"
     = render partial: "shared/sidebar_reports"
+
+    %li
+      .profile-details
+        = link_to profile_path do
+          .profile-content
+            %img{ src: "#{current_user.profile_picture_url}", alt: "profileImg" }
+          .name-job
+            .profile-name
+              #{current_user.username}
+            .job
+              #{current_user.full_name}
+          = link_to destroy_user_session_path do
+            %i.bi.bi-box-arrow-left
 
 = render partial: "shared/modals/new_entry"
 = render partial: "shared/modals/interest"

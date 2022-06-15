@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => SIDEKIQ_WEB_PATH
   end
 
+  get "/profile", to: "pages#profile", as: :profile
+
   # online applications
   resources :online_applications, only: [:index, :show]
 
@@ -21,7 +23,7 @@ Rails.application.routes.draw do
   get "/trends", to: "trends#index", as: :trends
 
   # Change password
-  get "/change_password", to: "pages#change_password"
+  get "/change_password", to: "pages#change_password", as: :change_password
 
   # dashboard
   get "/dashboard/finance", to: "pages#finance", as: :dashboard_finance
