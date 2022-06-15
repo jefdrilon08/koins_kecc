@@ -1,4 +1,26 @@
-namespace :report do 
+namespace :report do
+  task :member_registry => :environment do
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    mem = Member.where("status != 'archived' and branch_id = ?", br_id)
+    @data = []
+    mem.each do |member|
+      mem_data  = member.data
+      gov       = mem_data['government_identification_numbers']
+      tin_no    = gov['tin_number']
+      address   = mem_data['address']
+      dependent = member.legal_dependents.count
+      if member.status = 'resigned'
+        res = member.date_resigned
+      else
+        res = ''
+      end
+      data      = "#{member.identification_number}|#{member.full_name}|#{tin_no}|#{member.date_of_membership}||||4|400.00|100.00|#{address['street']} #{address['district']} #{address['city']} #{address['region']} #{address['province']}|#{member.date_of_birth}|#{member.age}|#{member.gender}|#{member.civil_status}|||#{dependent}|#{member.religion}||#{res}"
+      @data << data
+    end
+    puts @data
+  end
+
   task :city => :environment do
     br_name = ENV['SATO']
     br_id = Branch.where(name: br_name).ids

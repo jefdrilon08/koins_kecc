@@ -234,6 +234,11 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
 
+  #additional_share
+  get "/additional_share", to: "additional_share#index"
+  get "/additional_share/:id", to: "additional_share#show"
+  delete "/additional_share/:id", to: "additional_share#destroy"
+
   # billing for writeoff collections
   get "/billing_for_writeoff_collections", to: "billing_for_writeoff_collections#index"
   get "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#show"

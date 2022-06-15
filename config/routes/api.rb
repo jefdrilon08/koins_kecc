@@ -109,6 +109,13 @@ namespace :api do
   end
 
   namespace :v1 do
+    #additional_share
+    post "additional_share/create", to: "additional_share#create"
+    post "additional_share/add_member", to: "additional_share#add_member"
+    post "additional_share/update_amount", to: "additional_share#update_amount"
+    post "additional_share/approve", to: "additional_share#approve"
+    post "additional_share/add_particular", to: "additional_share#add_particular"
+
     #billing_for_writeoff_collection
     post "/billing_for_writeoff_collection/create", to: "billing_for_writeoff_collection#create"
     post "/billing_for_writeoff_collection/add_member", to: "billing_for_writeoff_collection#add_member"
