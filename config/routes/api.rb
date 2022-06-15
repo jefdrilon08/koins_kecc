@@ -179,6 +179,7 @@ namespace :api do
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
     post "/change_password", to: "users#change_password"
+    post "/update_profile_picture", to: "users#update_profile_picture"
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"

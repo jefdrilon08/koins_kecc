@@ -13,9 +13,9 @@
             </p>
             <hr/>
             <div class="d-grid gap-2">
-              <button class="btn btn-primary">
+              <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-update-profile-picture">
                 Update Profile Picture
-              </button>
+              </a>
               <a href="<%= change_password_path %>" class="btn btn-outline-danger">
                 Change Password
               </a>
@@ -113,3 +113,5 @@
     </div>
   </div>
 </div>
+
+<%= render partial: "shared/modals/update_profile_picture" %>

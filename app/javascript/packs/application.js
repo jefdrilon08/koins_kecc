@@ -197,6 +197,7 @@ import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
 import Sidebar from "../models/Sidebar.js";
 import BillingForWriteoffCollectionIndex from "../models/BillingForWriteoffCollectionIndex.js";
 import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollectionShow.js";
+import Profile from  "../models/Profile.js";
 
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
@@ -376,8 +377,8 @@ const hooks = {
   "data_stores/member_id_generators/show":            [MemberIdGeneratorsShow],
   "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow],
   "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex],
-  "billing_for_writeoff_collections/show":           [BillingForWriteoffCollectionShow]
-
+  "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
+  "pages/profile":                                    [Profile]
 }
 
 document.addEventListener("DOMContentLoaded", () => {
