@@ -1,0 +1,36 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "20%" }
+        Member
+      - @data[:header].each do |o , i|
+        %th{ width: "20%" }
+          #{o[:name]}
+
+  %tbody
+    - @data_view.each_with_index do |o, i|
+      %tr
+        %td
+          = link_to member_path(o[:member_id]), target: "_blank" do
+            %strong
+              #{o[:name]}
+          - o[:records].each do |records|
+            %td.text-right
+              -if @data_store.status == 'pending'
+                %a.undo{ data: {
+                  member_name:  o[:name],
+                  member_account_id: records[:member_account_id],
+                  account_subtype: records[:account_subtype],
+                  withdraw_amount: records[:amount],
+                  member_id: o[:member_id]
+                  }, 
+                :href => "#"
+                }
+                  #{number_to_currency(records[:amount], unit: '')}
+              -else
+                #{number_to_currency(records[:amount], unit: '')}
+
+          %td.text-right
+            #{number_to_currency(o[:total_add_capital], unit: '')}
+
+ 
