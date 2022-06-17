@@ -1,4 +1,8 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import 'select2';
+
 
 var _authenticityToken;
 var _id;
@@ -6,6 +10,7 @@ var _id;
 var $btnAdd;
 var $UpdateAmount;
 var $modalUpdate;
+var $modalApproveTransaction;
 var $btnApprove;
 var $btnAddParticular;
 var $inputParticular;
@@ -19,23 +24,29 @@ var templateErrorList;
 var _urlAddParticular = "/api/v1/additional_share/add_particular";
 
 var _cacheDom = function() {
+   $modalUpdate 	    = new bootstrap.Modal(
+     document.getElementById("modal-update-transaction")
+   )
+
+   $modalApproveTransaction = new bootstrap.Modal(
+     document.getElementById("modal-approve-transaction")
+   )
+
+	
    $btnAdd			= $("#btn-add");
    $btnApprove			= $("#btn-approve");	
    $btnConfirmProcess   	= $("#btn-confirm-process");
    $btnConfirmAmount		= $("#btn-confirm-amount")
    $selectMember		= $("#select-member");
    $UpdateAmount		= $(".undo");
-   $modalUpdate			= $("#modal-update-transaction");
-   $modalApproveTransaction	= $("#modal-approve-transaction");
    $withdrawAmount		= $("#withdrawAmount");		
    $memberName			= $("#memberName");
    $memberId			= $("#memberId");
    $accountSubType		= $("#accountSubType");
    $btnAddParticular         	= $("#btn-add-particular");
    $inputParticular          	= $("#particular");
-
-   $message  = $(".message");
-
+   $message  			= $(".message");
+	
 };
 
 var _bindEvents = function() {
@@ -94,7 +105,7 @@ var _bindEvents = function() {
 	   $memberName.text(member_name)
 	   $accountSubType.text(account_subtype)
 	   $memberId.text(member_id)
-	   $modalUpdate.modal("show")
+	   $modalUpdate.show();
 
    });
 
@@ -103,7 +114,6 @@ var _bindEvents = function() {
 	_id 		= $(this).data("id");	
 	_memberId	= $memberId.text()
 
-	   //alert($memberId.text());
 	   var data = {
 		id: _id,
 		member_name: $memberName.text(),
@@ -145,7 +155,7 @@ var _bindEvents = function() {
    $btnApprove.on("click", function() {
      _id = $(this).data("id");
            //alert(_id);
-        $modalApproveTransaction.modal("show");
+        $modalApproveTransaction.show();
    });
 
     $btnConfirmProcess.on("click", function() {
