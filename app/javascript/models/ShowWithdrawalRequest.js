@@ -29,11 +29,11 @@ var _bindEvents = function() {
   $btnPrintWithdrawalRequest.on("click", function() {
     $message.html("");
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var type = "withdrawal_request";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 };

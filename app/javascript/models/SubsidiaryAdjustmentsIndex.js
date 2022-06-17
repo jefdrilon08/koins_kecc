@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var _authenticityToken;
 
@@ -14,10 +16,13 @@ var templateErrorList;
 var _urlNew = "/api/v1/adjustments/subsidiary_adjustments/create";
 
 var _cacheDom = function() {
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  );
+
   $btnNew         = $("#btn-new");
   $btnConfirmNew  = $("#btn-confirm-new");
   $selectBranch   = $("#select-branch");
-  $modalNew       = $("#modal-new");
 
   $message  = $(".message");
 
@@ -26,7 +31,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
   

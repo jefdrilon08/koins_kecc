@@ -69,7 +69,7 @@ module Reports
               data[:date_of_birth]
               ],  
               style: [nil, nil, nil, nil, nil,  date_format_cell, date_format_cell, nil, currency_cell, currency_cell, nil, nil]
-              @insured_amount_total = @insured_amount_total + data[:insured_amount] 
+              @insured_amount_total = @insured_amount_total.try(:to_f) + data[:insured_amount].try(:to_f)
               @loan_amount_total = @loan_amount_total + data[:amount]
               @count = @count + 1
           end

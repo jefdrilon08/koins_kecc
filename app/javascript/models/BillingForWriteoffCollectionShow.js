@@ -1,11 +1,18 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var _authenticityToken;
 var _id;
 
 var $btnAdd;
+var $btnApprove;
+var $btnConfirmProcess; 
 var $UpdateAmount;
-var $modalUpdate
+var $modalUpdate;
+var $modalApproveTransaction;
+
 
 var _loanId;
 var _memberId;
@@ -15,10 +22,14 @@ var templateErrorList;
 
 var _cacheDom = function() {
    $btnAdd		= $("#btn-add");
+	
    $btnConfirmAmount	= $("#btn-confirm-amount")
+   $btnApprove		= $("#btn-approve");
+   $btnConfirmProcess   = $("#btn-confirm-process");
    $selectMember	= $("#select-member");
    $UpdateAmount	= $(".undo");
    $modalUpdate		= $("#modal-update-transaction");
+   $modalApproveTransaction = $("#modal-approve-transaction");
    $paymentAmount	= $("#paymentAmount");		
    $memberName		= $("#memberName");
    $memberId		= $("#memberId");
@@ -114,7 +125,7 @@ var _bindEvents = function() {
       },
       error: function(response) {
         errors = [];
-
+	alert(JSON.parse(response.responseText).full_messages)
         try {
           errors = JSON.parse(response.responseText).full_messages;
         } catch(err) {
@@ -129,6 +140,53 @@ var _bindEvents = function() {
         );
     }
     }); 
+   });
+
+   $btnApprove.on("click", function() {
+     _id = $(this).data("id");
+	   //alert(_id);
+	$modalApproveTransaction.modal("show");
+   });
+
+   $btnConfirmProcess.on("click", function() {
+     var data = {
+       id: _id,
+       authenticity_token: _authenticityToken
+     };
+	   //alert(_id);
+     $btnConfirmProcess.prop("disabled", true);
+     $message.html("Loading...");
+
+    console.log(data);
+    $.ajax({
+      url: "/api/v1/billing_for_writeoff_collection/approve",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.href="/billing_for_writeoff_collections";
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmProcess.prop("disabled", false);
+        }
+      }
+    });
    });
  
 }

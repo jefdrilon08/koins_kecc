@@ -1,3 +1,5 @@
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import Mustache from "mustache";
 
 var $btnUpdate;
@@ -54,14 +56,14 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnSetRate.on("click", function() {
     $message.html("");
-    $modalSetRate.modal("show");
+    $modalSetRate.show();
   });
 
 
   $btnPrintPdf.on("click", function() {
     var print_icpr = $btnPrintPdf.data('id');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,
@@ -69,7 +71,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_icpr + "&type=print_pr");
   });
 
@@ -127,13 +129,13 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnPrint.on("click", function() {
     var print_entry = $btnPrint.data('id');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,
@@ -141,7 +143,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_entry + "&type=print_entry");
   });
   
@@ -185,7 +187,7 @@ var _bindEvents = function() {
 
   $btnUpdate.on("click", function() {
     $message.html("");
-    $modalUpdate.modal("show");
+    $modalUpdate.show();
   });
 
   

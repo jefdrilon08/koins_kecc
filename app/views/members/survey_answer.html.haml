@@ -11,11 +11,11 @@
           - o[:survey_question][:data][:options].each do |option|
             %div
               - if option[:content] == o[:answer]
-                .badge.badge-success
+                .badge.bg-success
                   .fa.fa-check
                 #{option[:content]}
               - else
-                .badge.badge-danger
+                .badge.bg-danger
                   .fa.fa-times
                 #{option[:content]}
           %hr

@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnUpdate;
 var $btnConfirmUpdate;
@@ -15,13 +17,19 @@ var authenticityToken;
 var $message;
 
 var _cacheDom = function() {
+  $modalUpdate = new bootstrap.Modal(
+    document.getElementById("modal-update")
+  );
+
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
   $btnUpdate        = $("#btn-update");
   $btnConfirmUpdate = $("#btn-confirm-update");
-  $modalUpdate      = $("#modal-update");
   
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -30,7 +38,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -73,7 +81,7 @@ var _bindEvents = function() {
 
   $btnUpdate.on("click", function() {
     $message.html("");
-    $modalUpdate.modal("show");
+    $modalUpdate.show();
   });
 
   $btnConfirmUpdate.on("click", function() {

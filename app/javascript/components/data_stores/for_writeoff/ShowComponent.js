@@ -203,37 +203,37 @@ export default class ShowComponent extends React.Component {
             <td className="text-center">
               {member_data[i].loan_status}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {member_data[i].principal_balance}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {member_data[i].interest_balance}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/savings_accounts/" + member_data[i].psa_id} target='_blank'>
               {member_data[i].psa_balance}</a>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/savings_accounts/" + member_data[i].rsa_id} target='_blank'>
               {member_data[i].rsa_balance}</a>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/savings_accounts/" + member_data[i].gk_id} target='_blank'>
               {member_data[i].gk_balance}</a>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/insurance_accounts/" + member_data[i].rf_id} target='_blank'>
               {member_data[i].rf_balance}</a>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/insurance_accounts/" + member_data[i].lf_id} target='_blank'>
               {member_data[i].lf_balance}</a>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/equity_accounts/" + member_data[i].cbu_id} target='_blank'>
               {member_data[i].cbu_balance}</a>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <a href={"/equity_accounts/" + member_data[i].equity_id} target='_blank'>
               {member_data[i].equity_balance}</a>
             </td>

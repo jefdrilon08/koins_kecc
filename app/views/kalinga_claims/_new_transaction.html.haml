@@ -1,4 +1,4 @@
-#modal-new-transaction.modal.fade{:tabindex => "-1"}
+#modal-new-transaction.modal.fade
   = form_tag send("new_kalinga_claim_application_path"), method: :post do |f|
     .modal-dialog.modal-lg
       .modal-content
@@ -32,6 +32,6 @@
             /   .fa.fa-check
             /   Confirm
             = submit_tag "New Record", class: "btn btn-primary"
-            %button.btn{"data-dismiss" => "modal", :type => "button"}
+            %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
               .fa.fa-times
               Cancel

@@ -65,7 +65,8 @@ class TimeDepositCollectionsController < ApplicationController
         @subheader_side_actions << {
           class: "fa fa-times",
           link: time_deposit_collection_path(@time_deposit_collection),
-          data: { method: :delete, confirm: "Are you sure?" }
+          data: { method: :delete, confirm: "Are you sure?" },
+          text: "Delete"
         }
 
         @subheader_side_actions << {

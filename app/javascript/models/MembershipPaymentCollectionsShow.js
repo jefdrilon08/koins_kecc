@@ -1,4 +1,7 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from "select2";
 
 var options;
 var membershipPaymentCollectionId;
@@ -18,12 +21,17 @@ var _urlApprove = "/api/v1/membership_payment_collections/approve";
 var _urlPrint   = "/api/v1/print/generate_file";
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
-
-  $btnPrint   = $("#btn-print");
-  $modalPrint = $("#modal-print");
+  $btnPrint           = $("#btn-print");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -31,17 +39,17 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
     
     var type = "membership_payment_collection";
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + membershipPaymentCollectionId);
   });
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {

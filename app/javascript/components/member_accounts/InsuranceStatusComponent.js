@@ -78,11 +78,11 @@ export default class InsuranceStatusComponent extends React.Component {
 
 			var badgeClassName			= "badge-light";
 			if(status == "lapsed"){
-				badgeClassName = "badge-danger";
+				badgeClassName = "bg-danger";
 			} else if(status == "advanced"){
 				badgeClassName = "badge-primary";
 			} else if(status == "past due"){
-				badgeClassName = "badge-danger";
+				badgeClassName = "bg-danger";
 			}
 
 		return (

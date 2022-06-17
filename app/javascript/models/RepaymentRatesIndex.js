@@ -1,3 +1,4 @@
+import $ from "jquery";
 import Mustache from "mustache";  
 
 var authenticityToken;
@@ -30,7 +31,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
 

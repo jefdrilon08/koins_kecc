@@ -38,11 +38,11 @@
             #{o.updated_at.strftime("%B %d, %Y %H:%M")}
           %td.text-center
             - if o.pending?
-              .badge.badge-danger
+              .badge.bg-danger
                 Pending
             - if o.processing?
               .badge.badge-info
                 Processing
             - if o.done?
-              .badge.badge-success
+              .badge.bg-success
                 Done

@@ -1,6 +1,6 @@
 %table.table.table-sm.table-bordered
   %tr
-    %th.text-right
+    %th.text-end
       Amount Locked
     %th
       Start Date
@@ -10,11 +10,11 @@
       Interest Rate
     %th.text-center
       Num Days
-    %th.text-right
+    %th.text-end
       Interest Garnered
   - @autorenewals.each do |o|
     %tr
-      %td.text-right
+      %td.text-end
         #{number_to_currency(o.data["balance"], unit: '')}
       %td
         #{o.data["start_date"].to_date.strftime("%B %d, %Y")}
@@ -24,5 +24,5 @@
         #{o.data["lock_in_period"]["interest_rate"]}
       %td.text-center
         #{o.data["lock_in_period"]["num_days"]}
-      %td.text-right
+      %td.text-end
         #{number_to_currency(o.data["lock_in_period"]["expected_interest"], unit: '')}

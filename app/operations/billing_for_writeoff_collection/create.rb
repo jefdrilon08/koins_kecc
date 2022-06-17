@@ -32,7 +32,7 @@ module BillingForWriteoffCollection
               company_name: Settings.company_name,
               branch: @branch.to_s.upcase,
               prepared_by: @user.to_s,
-              particular: "",
+              particular: "to record collection for the accounts that previously written off",
               debit_journal_entries: [],
               credit_journal_entries: [],
               journal_entries: [],
@@ -96,7 +96,8 @@ module BillingForWriteoffCollection
      #loan_data
      @data_store.data['record'].each do |loan_data|
       @header.each do |hld|
-        l = Loan.where("member_id = ? and loan_product_id = ? and status = 'writeoff'" , loan_data[:member_id] , hld.id).last
+        l = Loan.where("member_id = ? and loan_product_id = ? and status = 'writeoff'" , loan_data[:member_id] , hld.id).last        
+
         if l.present?
           loan_data[:loan_data] << {
             name: hld.name,
@@ -104,6 +105,7 @@ module BillingForWriteoffCollection
             loan_product_id: l.loan_product_id,
             enabled: true,
             amount: l.total_balance.to_f,
+            expected_amount: l.total_balance.to_f,
             principal_amount: 0.0,
             interest_amount: 0.0,
             record_type: "LOAN_PAYMENT",
@@ -116,15 +118,18 @@ module BillingForWriteoffCollection
             loan_product_id: nil,
             enabled: false,
             amount: 0.0,
+            expected_amount: 0.0,
             principal_amount: 0.0,
             interest_amount: 0.0,
           }
         end 
       end
+        mem_acc = MemberAccount.where(member_id: loan_data[:member_id] , account_type: 'SAVINGS' , account_subtype: 'K-IMPOK').last.id
           loan_data[:loan_data] << {
             name: "Withdraw Payment",
             loan_id: '',
             loan_product_id: nil,
+            savings_account_id: mem_acc,
             enabled: true,
             amount: 0.0,
             record_type: "WP"

@@ -206,7 +206,7 @@ export default class ShowComponent extends React.Component {
     console.log(this.state.accountHeaders);
     for(var i = 0; i < this.state.accountHeaders.length; i++) {
       headers.push(
-        <th className="text-right" key={"account-header-" + i}>
+        <th className="text-end" key={"account-header-" + i}>
           {this.state.accountHeaders[i]}
         </th>
       );
@@ -221,7 +221,7 @@ export default class ShowComponent extends React.Component {
     for(var i = 0; i < accounts.length; i++) {
       if(accounts[i].account_type == "SAVINGS" && accounts[i].id) {
         columns.push(
-          <td className="text-right">
+          <td className="text-end">
             <a href={"/savings_accounts/" + accounts[i].id} target="_blank">
               {numberWithCommas(accounts[i].balance)}
             </a>
@@ -229,7 +229,7 @@ export default class ShowComponent extends React.Component {
         );
       } else {
         columns.push(
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(accounts[i].balance)}
           </td>
         );
@@ -287,7 +287,7 @@ export default class ShowComponent extends React.Component {
 
     for(var i = 0; i < totals.length; i++) {
       columns.push(
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totals[i])}
         </th>
       );

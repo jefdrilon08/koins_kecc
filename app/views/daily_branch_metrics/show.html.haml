@@ -137,88 +137,88 @@
           %thead
             %tr
               %th
-              %th.text-right
+              %th.text-end
                 Male
-              %th.text-right
+              %th.text-end
                 Female
-              %th.text-right
+              %th.text-end
                 Others
-              %th.text-right
+              %th.text-end
                 Total
           %tbody
             %tr
               %td
                 %b
                   Loaners
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["male"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["female"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["others"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["total"]}
             %tr
               %td
                 %b
                   Pure Savers
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["pure_savers"]["male"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["pure_savers"]["female"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["pure_savers"]["others"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["pure_savers"]["total"]}
             %tr
               %td
                 %b
                   Admitted Members
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["active_members"]["male"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["active_members"]["female"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["active_members"]["others"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["active_members"]["total"]}
           - if @daily_branch_metric.data["inactive_members"].present?
             %tr
               %td
                 %b
                   Inactive Members
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["inactive_members"]["male"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["inactive_members"]["female"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["inactive_members"]["others"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["inactive_members"]["total"]}
             %tr
               %td
                 %b
                   Total
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["male"] + @daily_branch_metric.data["pure_savers"]["male"] + @daily_branch_metric.data["active_members"]["male"] + @daily_branch_metric.data["inactive_members"]["male"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["female"] + @daily_branch_metric.data["pure_savers"]["female"] + @daily_branch_metric.data["active_members"]["female"] + @daily_branch_metric.data["inactive_members"]["female"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["others"] + @daily_branch_metric.data["pure_savers"]["others"] + @daily_branch_metric.data["active_members"]["others"] + @daily_branch_metric.data["inactive_members"]["others"]}
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["total"] + @daily_branch_metric.data["pure_savers"]["total"] + @daily_branch_metric.data["active_members"]["total"] + @daily_branch_metric.data["inactive_members"]["total"]}
           - else
             %tr
               %td
                 %b
                   Total
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["male"] + @daily_branch_metric.data["pure_savers"]["male"] + @daily_branch_metric.data["active_members"]["male"] }
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["female"] + @daily_branch_metric.data["pure_savers"]["female"] + @daily_branch_metric.data["active_members"]["female"] }
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["others"] + @daily_branch_metric.data["pure_savers"]["others"] + @daily_branch_metric.data["active_members"]["others"] }
-              %td.text-right
+              %td.text-end
                 #{@daily_branch_metric.data["loaners"]["total"] + @daily_branch_metric.data["pure_savers"]["total"] + @daily_branch_metric.data["active_members"]["total"] }
 
         %hr

@@ -34,10 +34,10 @@
                   #{rd.data["loans"].last["total_loanable_amount"]}
                 %td
                   - if rd.status == "pending"
-                    .badge.badge-danger
+                    .badge.bg-danger
                       #{rd.status}
                   - else
-                    .badge.badge-success
+                    .badge.bg-success
                       #{rd.status}
 
                 %td

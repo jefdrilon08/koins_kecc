@@ -33,7 +33,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNewTransaction.on("click", function() {
-    $modalNewTransaction.modal("show");
+    $modalNewTransaction.show();
   });
 
   $btnConfirmNewTransaction.on("click", function() {

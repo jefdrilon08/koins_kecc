@@ -64,37 +64,37 @@ export default class RepaymentRatesView extends React.Component {
           <td>
             {loanProduct.name}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].principal)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].principal_paid)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].overall_principal_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].interest)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].interest_paid)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].overall_interest_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].total_paid)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].overall_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].principal_paid_due)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].principal_balance)}
           </td>
-          <td className="text-right">
+          <td className="text-end">
             {numberWithCommas(loans[i].principal_due)}
           </td>
           <td className="text-center">
@@ -148,37 +148,37 @@ export default class RepaymentRatesView extends React.Component {
             Total ({loans.length})
           </strong>
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalPrincipal)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalPrincipalPaid)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalOverallPrincipalBalance)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalInterest)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalInterestPaid)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalOverallInterestBalance)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalTotalPaid)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalOverallBalance)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalPrincipalPaidDue)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalPrincipalBalance)}
         </th>
-        <th className="text-right">
+        <th className="text-end">
           {numberWithCommas(totalPrincipalDue)}
         </th>
         <th className="text-center">
@@ -217,7 +217,7 @@ export default class RepaymentRatesView extends React.Component {
             </h5>
           </div>
           <div className="col-md-6">
-            <div className="text-right">
+            <div className="text-end">
               <label style={{marginRight: "12px"}}>
                 Total Records: 
                 <span className="badge badge-secondary">
@@ -226,7 +226,7 @@ export default class RepaymentRatesView extends React.Component {
               </label>
               <label style={{marginRight: "12px"}}>
                 Number of Past Due:
-                <span className="badge badge-danger">
+                <span className="badge bg-danger">
                   {numPastDue}
                 </span>
               </label>
@@ -251,37 +251,37 @@ export default class RepaymentRatesView extends React.Component {
               <th>
                 Product
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Principal
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 P. Paid
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 P. Bal
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Interest
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 I. Paid
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 I. Bal.
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Total Paid
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Total Bal.
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Paid Due
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Past Due
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 Cum. Due
               </th>
               <th className="text-center">

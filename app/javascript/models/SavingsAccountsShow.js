@@ -69,11 +69,11 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   console.log("TANGINA");
   $btnPrintLedger.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
     
     var type = "print_ledger";
     
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 
@@ -81,7 +81,7 @@ var _bindEvents = function() {
     _currentWithdrawalRequestId = $(this).data("id");
     $message.html("");
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     $.ajax({
       url: "/api/v1/print/generate_file",
@@ -96,7 +96,7 @@ var _bindEvents = function() {
           "Success! Redirecting..."
         );
 
-        $modalPrint.modal("hide");
+        $modalPrint.hide();
         window.open("/print?filename=" + response.filename, '_blank');
       },
       error: function(response) {
@@ -109,7 +109,7 @@ var _bindEvents = function() {
     _currentWithdrawalRequestId = $(this).data("id");
     $message.html("");
 
-    $modalApproveWithdrawalRequest.modal("show");
+    $modalApproveWithdrawalRequest.show();
   });
 
   $btnConfirmApproveWithdrawalRequest.on("click", function() {
@@ -155,7 +155,7 @@ var _bindEvents = function() {
     _currentWithdrawalRequestId = $(this).data("id");
     $message.html("");
 
-    $modalDeleteWithdrawalRequest.modal("show");
+    $modalDeleteWithdrawalRequest.show();
   });
 
   $btnConfirmDeleteWithdrawalRequest.on("click", function() {
@@ -199,7 +199,7 @@ var _bindEvents = function() {
 
   $btnRequestTimeDepositWithdrawal.on("click", function() {
     $message.html("");
-    $modalRequestTimeDepositWithdrawal.modal("show");
+    $modalRequestTimeDepositWithdrawal.show();
   });
 
   $btnConfirmRequestTimeDepositWithdrawal.on("click", function() {
@@ -242,7 +242,7 @@ var _bindEvents = function() {
 
   $btnSyncMaintaningBalance.on("click", function() {
     $message.html("");
-    $modalSyncMaintainingBalance.modal("show");
+    $modalSyncMaintainingBalance.show();
   });
 
   $btnConfirmSyncMaintainingBalance.on("click", function() {

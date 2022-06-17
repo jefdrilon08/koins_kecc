@@ -1,21 +1,6 @@
 .row
   .col
     %h5
-      Access Token
-    .card.card-body.bg-light
-      %center
-        %code
-          - if @member.access_token.present?
-            #{@member.access_token}
-          - else
-            No access token
-    #btn-generate-access-token.btn.btn-info.btn-block
-      .fa.fa-sync
-      Generate Access Token
-
-    %hr
-
-    %h5
       Change Password
     .card.card-body
       .row

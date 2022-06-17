@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import * as bootstrap from "bootstrap";
+import $ from 'jquery';
 
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];
@@ -118,6 +120,13 @@ var _authenticityToken;
 var _cacheDom = function() {
   $message          = $(".message");
 
+  /**
+   * Bootstrap 5 modal initialization
+   */
+  $modalDelayAmort  = new bootstrap.Modal(
+                        document.getElementById("modal-delay-amort")
+                      );
+
   $btnNewAdjustment         = $("#btn-new-adjustment");
   $btnConfirmNewAdjustment  = $("#btn-confirm-new-adjustment");
   $modalNewAdjustment       = $("#modal-new-adjustment");
@@ -163,7 +172,6 @@ var _cacheDom = function() {
   $btnDelayAmort        = $(".btn-delay-amort");
   $oldDate              = $(".old-date");
   $btnConfirmDelayAmort = $("#btn-confirm-delay-amort");
-  $modalDelayAmort      = $("#modal-delay-amort");
   $inputDelayAmort      = $("#input-delay-amort");
   $inputReason          = $("#input-reason");
 
@@ -204,7 +212,7 @@ var _bindEvents = function() {
 
 
   $btnReverseLoan.on("click", function() {
-    $modalReverseLoan.modal("show");
+    $modalReverseLoan.show();
   });
   $btnConfirmReverseLoan.on("click", function() {
     
@@ -247,7 +255,7 @@ var _bindEvents = function() {
 
   
   $btnUploadApplicationForm.on("click", function() {
-    $modalUploadApplicationForm.modal("show");
+    $modalUploadApplicationForm.show();
   });
 
   $btnConfirmUploadApplicationForm.on("click", function() {
@@ -323,7 +331,7 @@ var _bindEvents = function() {
   });
 
   $btnReject.on("click", function() {
-    $modalReject.modal("show");
+    $modalReject.show();
   });
 
   $btnConfirmReject.on("click", function() {
@@ -371,7 +379,7 @@ var _bindEvents = function() {
   });
 
   $btnForRelease.on("click", function() {
-    $modalForRelease.modal("show");
+    $modalForRelease.show();
   });
 
   $btnConfirmForRelease.on("click", function() {
@@ -413,7 +421,7 @@ var _bindEvents = function() {
   });
 
   $btnProcess.on("click", function() {
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $btnConfirmProcess.on("click", function() {
@@ -455,7 +463,7 @@ var _bindEvents = function() {
   });
 
   $btnVerify.on("click", function() {
-    $modalVerify.modal("show");
+    $modalVerify.show();
   });
 
   $btnConfirmVerify.on("click", function() {
@@ -497,7 +505,7 @@ var _bindEvents = function() {
   });
 
   $btnNewAdjustment.on("click", function() {
-    $modalNewAdjustment.modal("show");
+    $modalNewAdjustment.show();
   });
 
   $btnConfirmNewAdjustment.on("click", function() {
@@ -565,7 +573,7 @@ var _bindEvents = function() {
 
     $oldDate.html(oldDate);
 
-    $modalDelayAmort.modal("show");
+    $modalDelayAmort.show();
   });
 
   $btnConfirmDelayAmort.on("click", function() {
@@ -617,7 +625,7 @@ var _bindEvents = function() {
   });
 
   $btnChangeBook.on("click", function() {
-    $modalChangeBook.modal("show");
+    $modalChangeBook.show();
   });
 
   $btnConfirmChangeBook.on("click", function() {
@@ -666,7 +674,7 @@ var _bindEvents = function() {
 
   $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
   $btnConfirmApprove.on("click", function() {
@@ -710,7 +718,7 @@ var _bindEvents = function() {
 
   $btnDateReleased.on("click", function() {
     $message.html("");
-    $modalDateReleased.modal("show");
+    $modalDateReleased.show();
   });
 
   $btnConfirmDateReleased.on("click", function() {
@@ -758,7 +766,7 @@ var _bindEvents = function() {
 
   $btnFirstDateOfPayment.on("click", function() {
     $message.html("");
-    $modalFirstDateOfPayment.modal("show");
+    $modalFirstDateOfPayment.show();
   });
 
   $btnConfirmFirstDateOfPayment.on("click", function() {
@@ -807,7 +815,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function() {
     $message.html("");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -849,7 +857,7 @@ var _bindEvents = function() {
   });
 
   $btnReage.on("click", function() {
-    $modalReage.modal("show");
+    $modalReage.show();
   });
 
   $btnConfirmReage.on("click", function() {

@@ -141,7 +141,7 @@ export default class DepositCollectionUITable extends React.Component {
         var paymentRecord = this.props.data.data.records[i].records[j];
         if(this.props.data.status == "pending") {
           components.push(
-            <td key={"deposit-payment-" + j} className="text-right">
+            <td key={"deposit-payment-" + j} className="text-end">
               <strong>
                 <a 
                   href="#"
@@ -154,7 +154,7 @@ export default class DepositCollectionUITable extends React.Component {
           );
         } else {
           components.push(
-            <td key={"na-" + member.id + "-" + j} className="text-right">
+            <td key={"na-" + member.id + "-" + j} className="text-end">
               {numberWithCommas(paymentRecord.amount)}
             </td>
           )
@@ -162,7 +162,7 @@ export default class DepositCollectionUITable extends React.Component {
       }
 
       components.push(
-        <td key={"c-member-total-" + member.id} className="text-right">
+        <td key={"c-member-total-" + member.id} className="text-end">
           <strong>
             {numberWithCommas(this.props.data.data.records[i].total_collected)}
           </strong>
@@ -193,7 +193,7 @@ export default class DepositCollectionUITable extends React.Component {
     var totals  = this.props.data.data.totals;
     for(var i = 0; i < totals.length; i++) {
       records.push(
-        <td key={"total-deposit-payment-" + i} className="text-right">
+        <td key={"total-deposit-payment-" + i} className="text-end">
           <strong>
             {numberWithCommas(totals[i].amount)}
           </strong>
@@ -202,8 +202,8 @@ export default class DepositCollectionUITable extends React.Component {
     }
 
     records.push(
-      <td key="grand-total" className="text-right">
-        <div className="badge badge-success">
+      <td key="grand-total" className="text-end">
+        <div className="badge bg-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}
           </strong>

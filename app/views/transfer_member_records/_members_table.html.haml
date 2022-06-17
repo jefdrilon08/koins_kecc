@@ -23,7 +23,7 @@
      %tr
       %td.text-center
        #{md[:account_subtype]}
-      %td.text-right
+      %td.text-end
        #{number_to_currency(md[:balance], unit: '')}
    %tr
     -if @records[:status] == "pending"

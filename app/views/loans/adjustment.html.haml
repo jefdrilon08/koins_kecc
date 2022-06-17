@@ -65,23 +65,23 @@
                 %th
                 %th
                   Due Date
-                %th.text-right
+                %th.text-end
                   Principal
-                %th.text-right
+                %th.text-end
                   Interest
-                %th.text-right
+                %th.text-end
                   Total
-                %th.text-right
+                %th.text-end
                   Principal Paid
-                %th.text-right
+                %th.text-end
                   Interest Paid
-                %th.text-right
+                %th.text-end
                   Total
-                %th.text-right
+                %th.text-end
                   Principal Balance
-                %th.text-right
+                %th.text-end
                   Interest Balance
-                %th.text-right
+                %th.text-end
                   Total
                 %th.text-center
                   Status
@@ -106,54 +106,54 @@
                     #{i + 1}
                   %td
                     #{o[:due_date].to_date.strftime("%b %d, %Y")}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o[:principal], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o[:interest], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     %strong
                       #{number_to_currency(o[:amount_due], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o[:principal_paid], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o[:interest_paid], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     %strong
                       #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o[:principal_balance], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     #{number_to_currency(o[:interest_balance], unit: '')}
-                  %td.text-right
+                  %td.text-end
                     %strong
                       #{number_to_currency(o[:principal_balance].to_f + o[:interest_balance].to_f, unit: '')}
                   %td.text-center
                     - if o[:is_paid] == true
-                      .badge.badge-success
+                      .badge.bg-success
                         Paid
                     - else
-                      .badge.badge-danger
+                      .badge.bg-danger
                         Due
               %tr
                 %th{ colspan: 2 }
                   Total
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_principal, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_interest, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_principal + total_interest, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_principal_paid, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_interest_paid, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_principal_paid + total_interest_paid, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_principal_balance, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_interest_balance, unit: '')}
-                %th.text-right
+                %th.text-end
                   #{number_to_currency(total_principal_balance + total_interest_balance, unit: '')}
 
           %hr
@@ -194,17 +194,17 @@
                   %tr
                     %th.text-center
                       \#
-                    %th.text-right
+                    %th.text-end
                       Principal
-                    %th.text-right
+                    %th.text-end
                       Interest
-                    %th.text-right
+                    %th.text-end
                       Total
-                    %th.text-right
+                    %th.text-end
                       Paid Principal
-                    %th.text-right
+                    %th.text-end
                       Paid Interest
-                    %th.text-right
+                    %th.text-end
                       Paid
                     %th.text-center
                       Status
@@ -222,38 +222,38 @@
                     %tr
                       %td.text-center
                         #{i + 1}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:interest], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:amount_due], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal_paid], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:interest_paid], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
-                          .badge.badge-success
+                          .badge.bg-success
                             Paid
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             Due
                   %tr
                     %th
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(total_principal, unit: '')}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(total_interest, unit: '')}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(total_principal + total_interest, unit: '')}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(total_principal_paid, unit: '')}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(total_interest_paid, unit: '')}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(total_principal_paid + total_interest_paid, unit: '')}
             .col-md-6.col-xs-12
               %h3
@@ -290,17 +290,17 @@
                   %tr
                     %th.text-center
                       \#
-                    %th.text-right
+                    %th.text-end
                       Principal
-                    %th.text-right
+                    %th.text-end
                       Interest
-                    %th.text-right
+                    %th.text-end
                       Total
-                    %th.text-right
+                    %th.text-end
                       Paid Principal
-                    %th.text-right
+                    %th.text-end
                       Paid Interest
-                    %th.text-right
+                    %th.text-end
                       Paid
                     %th.text-center
                       Status
@@ -312,39 +312,39 @@
                     %tr
                       %td.text-center
                         #{i + 1}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:interest], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal] + o[:interest], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal_paid], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:interest_paid], unit: '')}
-                      %td.text-right
+                      %td.text-end
                         #{number_to_currency(o[:principal_paid].to_f + o[:interest_paid].to_f, unit: '')}
                       %td.text-center
                         - if o[:is_paid] == true
-                          .badge.badge-success
+                          .badge.bg-success
                             Paid
                         - else
-                          .badge.badge-danger
+                          .badge.bg-danger
                             Due
                   %tr
                     %th.text-center
                       TOTAL
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(@data[:p_principal], unit: "")}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(@data[:should_be_interest], unit: "")}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(@data[:should_be_dues], unit: "")}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(@data[:total_principal_paid], unit: "")}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(@data[:total_interest_paid], unit: "")}
-                    %th.text-right
+                    %th.text-end
                       #{number_to_currency(@data[:total_principal_paid].to_f + @data[:total_interest_paid].to_f, unit: "")}
 
 = render partial: "loans/adjustments/modals/delete"

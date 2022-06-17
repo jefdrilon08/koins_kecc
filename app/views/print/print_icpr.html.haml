@@ -44,11 +44,11 @@
               #{rec[:identification_number]}
             %td
               #{rec[:center_name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:patronage_interest_amount].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}
   - else
     %table.table.table-bordered.table-sm
@@ -71,11 +71,11 @@
               #{rec[:identification_number]}
             %td
               #{rec[:center_name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:patronage_interest_amount].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}
 
 - elsif @icpr[:type] == "INTEREST ON SHARE CAPITAL"
@@ -104,11 +104,11 @@
               #{rec[:identification_number]}
             %td
               #{rec[:center_name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:equity_interest_amount].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}
   - else
     %table.table.table-bordered.table-sm
@@ -131,9 +131,9 @@
               #{rec[:identification_number]}
             %td
               #{rec[:center_name]}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:equity_interest_amount].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:savings_distribute].round(2), unit: "")}
-            %td.text-right
+            %td.text-end
               #{number_to_currency(rec[:cbu_distribute].round(2), unit: "")}

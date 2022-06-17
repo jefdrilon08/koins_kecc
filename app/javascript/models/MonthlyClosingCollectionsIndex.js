@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnNew;
 var $btnConfirmNew;
@@ -17,9 +19,12 @@ var cable;
 var event;
 
 var _cacheDom = function() {
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  );
+
   $btnNew         = $("#btn-new");
   $btnConfirmNew  = $("#btn-confirm-new");
-  $modalNew       = $("#modal-new");
 
   $selectBranch         = $("#select-branch");
   $selectAccountSubtype = $("#select-account-subtype");
@@ -31,7 +36,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
 

@@ -1,5 +1,6 @@
 import Mustache from "mustache";
-
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -38,10 +39,22 @@ var $inputReason;
 var _centers = [];
 
 var _cacheDom = function() {
-  $modalProcess                       = $("#modal-process");
-  $modalReject                        = $("#modal-reject");
-  $modalVerify                        = $("#modal-verify");
-  $modalAssignBranch                  = $("#modal-assign-branch");
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-process")
+  )
+
+  $modalReject = new bootstrap.Modal(
+    document.getElementById("modal-reject")
+  )
+
+  $modalVerify = new bootstrap.Modal(
+    document.getElementById("modal-verify")
+  )
+
+  $modalAssignBranch = new bootstrap.Modal(
+    document.getElementById("modal-assign-branch")
+  )
+
   $btnProcess                         = $("#btn-process");
   $btnConfirmProcess                  = $("#btn-confirm-process");
   $btnReject                          = $("#btn-reject");
@@ -66,7 +79,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnAssignBranch.on("click", function() {
-    $modalAssignBranch.modal("show");
+    $modalAssignBranch.show();
   });
 
   $btnConfirmAssignBranch.on("click", function() {
@@ -120,7 +133,7 @@ var _bindEvents = function() {
   });
 
   $btnVerify.on("click", function() {
-    $modalVerify.modal("show");
+    $modalVerify.show();
   });
 
   $btnConfirmVerify.on("click", function() {
@@ -192,7 +205,7 @@ var _bindEvents = function() {
   }
 
   $btnReject.on("click", function() {
-    $modalReject.modal("show");
+    $modalReject.show();
   });
 
   $btnConfirmReject.on("click", function() {
@@ -286,7 +299,7 @@ var _bindEvents = function() {
   });
 
   $btnProcess.on("click", function() {
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $selectBranch.on("change", function() {

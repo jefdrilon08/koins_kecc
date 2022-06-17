@@ -27,140 +27,170 @@
       %th
         Admitted Members
       - @data_records.each do |dis|
-        %th.text-right
+        %th.text-end
           #{dis[:admitted_members]}
     %tr
       %th
         Pure Savers
       - @data_records.each do |outr|
-        %th.text-right
+        %th.text-end
           #{outr[:pure_savers]}
     %tr
       %th
         Active Loaners
       - @data_records.each do |rr|
-        %th.text-right
+        %th.text-end
           #{rr[:loaners]}
     %tr
       %th
         Total Members
       - @data_records.each do |rr|
-        %th.text-right
+        %th.text-end
           #{rr[:outreached]}
     %tr
       %th
         Outreached - Active Loaners
       - @data_records.each do |beg|
-        %th.text-right
+        %th.text-end
           #{beg[:loaners]}
     %tr
       %th
         Beginning  Active Loaners
       - @data_records.each do |beg|
-        %th.text-right
+        %th.text-end
           #{beg[:beg_outreached]}
     %tr
       %th
         Additional Members
       - @data_records.each do |adm|
-        %th.text-right
+        %th.text-end
           #{adm[:new_members]}
     %tr
       %th
         Resigned Members
       - @data_records.each do |rm|
-        %th.text-right
+        %th.text-end
           #{rm[:resigned_members]}
     %tr
       %th
         Dropout Percentage
       - @data_records.each do |drp|
+<<<<<<< HEAD
         %th.text-right
           #{drp[:drop_out_rate].try(:round, 2) || 0.0}% 
+=======
+<<<<<<< HEAD
+        %th.text-end
+          #{drp[:drop_out_rate].round(2)}%
+=======
+        %th.text-right
+          #{drp[:drop_out_rate].try(:round, 2) || 0.0}% 
+>>>>>>> bug fix 2882
+>>>>>>> master
     %tr
       %th
         Present Month Repayment Rate
       - @data_records.each do |prp|
-        %th.text-right
+        %th.text-end
           #{prp[:rr].round(2)}%
     %tr
       %th
         Previous Month Repayment Rate
       - @data_records.each do |prevrr|
-        %th.text-right
+        %th.text-end
           #{prevrr[:prev_rr].round(2)}%
     %tr
       %th
         PAR Amount
       - @data_records.each do |par|
+<<<<<<< HEAD
         %th.text-right
           #{number_to_currency(par[:par_amount].try(:round, 2), unit: "")}
+=======
+<<<<<<< HEAD
+        %th.text-end
+          #{number_to_currency(par[:par_amount].round(2), unit: "")}
+=======
+        %th.text-right
+          #{number_to_currency(par[:par_amount].try(:round, 2), unit: "")}
+>>>>>>> bug fix 2882
+>>>>>>> master
     %tr
       %th
         Present Par Rate
       - @data_records.each do |ppr|
-        %th.text-right
+        %th.text-end
           #{ppr[:par_rate].round(2)}%
     %tr
       %th
         Previous Par Rate
       - @data_records.each do |prevpar|
-        %th.text-right
+        %th.text-end
           #{prevpar[:prev_par_rate].round(2)}%
     %tr
       %th
         Portfolio
       - @data_records.each do |port|
+<<<<<<< HEAD
         %th.text-right
           #{number_to_currency(port[:portfolio].try(:round, 2), unit: "")}
+=======
+<<<<<<< HEAD
+        %th.text-end
+          #{number_to_currency(port[:portfolio].round(2), unit: "")}
+=======
+        %th.text-right
+          #{number_to_currency(port[:portfolio].try(:round, 2), unit: "")}
+>>>>>>> bug fix 2882
+>>>>>>> master
     %tr
       %th
         Loan Amount Disbursed
       - @data_records.each do |ldm|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(ldm[:disbursed_amount].round(2), unit: "")}
     %tr
       %th
         Loan Disbursed
       - @data_records.each do |ld|
-        %th.text-right
+        %th.text-end
           #{ld[:loans_disbursed]}
     %tr
       %th
         Incentive
       - @data_records.each do |intc|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(intc[:incentive], unit: "")}
     %tr
       %th
         Verbal Warning Demerits
       - @data_records.each do |vwd|
-        %th.text-right
+        %th.text-end
           #{vwd[:verbal_warning_demerits].to_i}
     %tr
       %th
         Written Warning Demerits
       - @data_records.each do |wwd|
-        %th.text-right
+        %th.text-end
           #{wwd[:written_warning_demerits].to_i}
 
     %tr
       %th
         Drop-out Demerits
       - @data_records.each do |dd|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(dd[:drop_out_demerits].round(2), unit: "")}
     %tr
       %th
         Total Demerits
       - @data_records.each do |td|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(td[:total_demerits], unit: "")}
     %tr
       %th
         Final Incentives
       - @data_records.each do |fin|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(fin[:final_incentive], unit: "")}
 
 %hr
@@ -169,18 +199,26 @@
     %tr
       %th
         Total SO Incentive
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@data[:total_so_incentive].round(2),unit: "")}
       %th 
         Total Regular SO
-      %th.text-right
+      %th.text-end
         #{@data[:total_regular_so]}
     %tr
       %th
         Total Average SO Incentive
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@data[:total_average_so_incentive],unit: "")}
       %th 
         SOM Incentive
+<<<<<<< HEAD
       %th.text-right
+=======
+<<<<<<< HEAD
+      %th.text-end
+=======
+      %th.text-right
+>>>>>>> bug fix 2882
+>>>>>>> master
         #{number_to_currency(@data[:som_incentive],unit: "")}

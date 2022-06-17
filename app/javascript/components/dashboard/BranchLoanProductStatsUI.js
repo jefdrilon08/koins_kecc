@@ -214,19 +214,19 @@ export default class BranchLoanProductStatsUI extends React.Component {
                 {activeLoans}
               </center>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <div className="text-muted">
                 <strong>
                   {portfolio}
                 </strong>
               </div>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {pastDueAmt}
               </strong>
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {parAmt}
               </strong>
@@ -258,13 +258,13 @@ export default class BranchLoanProductStatsUI extends React.Component {
                 <th className="text-center">
                   Active Loans
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Portfolio
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Past Due Amount
                 </th>
-                <th className="text-right">
+                <th className="text-end">
                   Par Amount
                 </th>
                 <th className="text-center">
@@ -290,17 +290,17 @@ export default class BranchLoanProductStatsUI extends React.Component {
                     {data.num_loans}
                   </strong>
                 </td>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(data.total_principal_portfolio)}
                   </strong>
                 </td>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(data.total_past_due)}
                   </strong>
                 </td>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(data.total_principal_balance)}
                   </strong>

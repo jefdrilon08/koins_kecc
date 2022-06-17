@@ -37,24 +37,6 @@ export default class BillingUIComponent extends React.Component {
       member: m,
       transaction: t
     });
-/*    
-    for(var i = 0; i < currentData.data.records.length; i++) {
-      if(currentData.data.records[i].member.id == m.id) {
-        for(var j = 0; j < currentData.data.records[i].records.length; j++) {
-          if(currentData.data.records[i].records[j].record_type == t.record_type) {
-            if(t.record_type == "LOAN_PAYMENT" && currentData.data.records[i].records[j].loan_id == t.loan_id) {
-              currentData.data.records[i].records[j].amount = t.amount;
-              console.log("Updating LOAN_PAYMENT for member " + m.id + " for loan " + t.loan_id + " to amount " + t.amount);
-            } else if(t.record_type != "LOAN_PAYMENT" && currentData.data.records[i].records[j].member_account_id == t.member_account_id) {
-              currentData.data.records[i].records[j].amount = t.amount;
-              console.log("Updating SUBSIDIARY for member " + m.id + " for loan " + t.member_account_id + " to amount " + t.amount);
-            }
-
-          }
-        }
-      }
-    }
-*/
 
     for(var totalsIndex = 0; totalsIndex < currentData.data.totals.length; totalsIndex++) {
       currentData.data.totals[totalsIndex].amount = 0.00;
@@ -417,7 +399,7 @@ export default class BillingUIComponent extends React.Component {
   renderChanges() {
     if(this.state.changes.length > 0) {
       return (
-        <div className="c-callout c-callout-danger">
+        <div className="alert alert-danger">
           <small className="text-muted">
             Some changes occurred. Please save changes.
           </small>
@@ -467,7 +449,7 @@ export default class BillingUIComponent extends React.Component {
                 <th>
                   Expected Collections:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   <div className="text-muted">
                     {numberWithCommas(this.state.data.data.total_expected_collections)}
                   </div>
@@ -477,7 +459,7 @@ export default class BillingUIComponent extends React.Component {
                 <th>
                   Total Collected:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
@@ -487,7 +469,7 @@ export default class BillingUIComponent extends React.Component {
                 <th>
                   Book:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderBook()}
                 </td>
               </tr>
@@ -495,7 +477,7 @@ export default class BillingUIComponent extends React.Component {
                 <th>
                   OR Number:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderOrNumber()}
                 </td>
               </tr>
@@ -503,7 +485,7 @@ export default class BillingUIComponent extends React.Component {
                 <th>
                   AR Number:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderArNumber()}
                 </td>
               </tr>
@@ -511,7 +493,7 @@ export default class BillingUIComponent extends React.Component {
                 <th>
                   Particular:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderParticular()}
                 </td>
               </tr>

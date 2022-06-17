@@ -3,7 +3,7 @@
     %tr
       %th
         Type
-      %th.text-right
+      %th.text-end
         Current Balance
   %tbody
     - @insurance_accounts.each do |o|
@@ -13,14 +13,14 @@
             %strong
               #{o.account_subtype}
         - if o.clip
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(o.clip_active_balance, unit: "")}
         - elsif o.hiip
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(o.hiip_active_balance, unit: "")}
         - else
-          %td.text-right
+          %td.text-end
             %strong
               #{number_to_currency(o.balance, unit: "")}

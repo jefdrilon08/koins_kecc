@@ -1,6 +1,6 @@
 class BillingForWriteoffController < DataStoreController
   def index
-  super
+    super
     # @records.each do |o|
     #   raise o[:status].inspect
     # end

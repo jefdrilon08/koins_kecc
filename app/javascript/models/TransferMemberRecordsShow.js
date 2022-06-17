@@ -153,7 +153,7 @@ $btnSaveParticular.on("click", function() {
   });
 $btnApprove.on("click", function() {
     $message.html("");
-    $modalApprove.modal("show");
+    $modalApprove.show();
   });
 
 
@@ -204,7 +204,7 @@ $btnApprove.on("click", function() {
    
 
     $displayMember.html(currentMember);
-    $modalDeleteMember.modal("show");
+    $modalDeleteMember.show();
   });
 
   $btnConfirmDeleteMember.on("click", function() {

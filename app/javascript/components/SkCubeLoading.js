@@ -1,5 +1,4 @@
 import React from "react";
-import "../../assets/stylesheets/sk-cube-grid.css";
 
 export default class SkCubeLoading extends React.Component {
   constructor(props) {

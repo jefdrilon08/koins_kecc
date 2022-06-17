@@ -1,5 +1,7 @@
 import Mustache from "mustache";
-import 'select2';
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var $modalNew;
 var $modalDelete;
@@ -29,15 +31,12 @@ var $message;
 var templateErrorList;
 var _authenticityToken;
 
-
-
 var $inputBatchNumberOfDays;
 var $selectBatchBranch;
 var $inputDateInitializedCutOff;
 var $batchStartDate;
 var $batchEndDate;
 var $batchAccruedType;
-
 
 var _centers  = [];
 var _members  = [];
@@ -65,9 +64,18 @@ var init  = function(options) {
 };
 
 var _cacheDom = function() {
-  $modalNew                     = $("#modal-new");
-  $modalDelete                  = $("#modal-delete");
-  $modalProcess                 = $("#modal-process");
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-process")
+  );
+
   $modalBatchProcess            = $("#modal-batch-process");
   $selectBranch                 = $("#select-branch");
   $selectCenter                 = $("#select-center");
@@ -174,7 +182,7 @@ var _bindEvents = function() {
 
   $btnBatchProcess.on("click", function() {
   
-    $modalBatchProcess.modal("show");
+    $modalBatchProcess.show();
   });
 
   $btnConfirmBatchProcess.on("click", function() {
@@ -231,7 +239,7 @@ var _bindEvents = function() {
 
   $btnProcess.on("click", function() {
     _moratoriumId = $(this).data("id");
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $btnConfirmProcess.on("click", function() {
@@ -272,7 +280,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function() {
     _moratoriumId = $(this).data("id");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -340,7 +348,7 @@ var _bindEvents = function() {
   });
 
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
   });
 
   $btnConfirmNew.on("click", function() {

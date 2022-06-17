@@ -1,13 +1,4 @@
-:css 
-  .table th, .table td {
-    border: none!important;
-    padding: 8px;
-  }
-
-
-%h3.text-muted
-  Basic Information
-%table.table.table-responsive#profile-table
+%table.table.table-bordered.table-responsive#profile-table
   %tbody
     %tr
       %th{:width => "300px;"} Pangalan
@@ -28,13 +19,8 @@
     %tr
       %th Address
       %td= @addressVal.join(', ')
- 
-        
-      
-%h3.text-muted
-  Other Information
 
-%table.table.table-responsive#profile-table
+%table.table.table-bordered.table-responsive#profile-table
   %tbody
     %tr
       %th{:width => "300px;"} Numero ng Mobile

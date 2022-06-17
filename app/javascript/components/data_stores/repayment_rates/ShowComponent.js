@@ -209,6 +209,7 @@ export default class ShowComponent extends React.Component {
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
             handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
+          <hr/>
           <RepaymentRatesView
             data={this.state.data}
           />
@@ -229,6 +230,7 @@ export default class ShowComponent extends React.Component {
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
             handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
+          <hr/>
           <AgingOfReceivablesView
             data={this.state.data}
           />
@@ -249,6 +251,7 @@ export default class ShowComponent extends React.Component {
             handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
             handleOfficerChanged={this.handleOfficerChanged.bind(this)}
           />
+          <hr/>
           <MasterListView
             data={this.state.data}
           />

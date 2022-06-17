@@ -155,14 +155,18 @@ export default class FormBankAccounts extends React.Component {
               <label>
                 Actions
               </label>
-              <button
-                className="btn btn-info btn-block"
-                disabled={this.props.formDisabled}
-                onClick={this.handleAddClicked.bind(this)}
-              >
-                <span className="fa fa-plus" />
-                Add
-              </button>
+              <div className="form-group">
+                <div className="btn-group">
+                  <button
+                    className="btn btn-primary btn-block"
+                    disabled={this.props.formDisabled}
+                    onClick={this.handleAddClicked.bind(this)}
+                  >
+                    <span className="fa fa-plus" />
+                    Add
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

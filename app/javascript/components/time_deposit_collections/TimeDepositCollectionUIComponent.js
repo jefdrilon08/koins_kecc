@@ -288,7 +288,7 @@ export default class TimeDepositCollectionUIComponent extends React.Component {
                 <th>
                   Total Collected:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   <strong>
                     {numberWithCommas(this.state.data.data.total_collected)}
                   </strong>
@@ -298,7 +298,7 @@ export default class TimeDepositCollectionUIComponent extends React.Component {
                 <th>
                   OR Number:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderOrNumber()}
                 </td>
               </tr>
@@ -306,7 +306,7 @@ export default class TimeDepositCollectionUIComponent extends React.Component {
                 <th>
                   AR Number:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderArNumber()}
                 </td>
               </tr>
@@ -314,7 +314,7 @@ export default class TimeDepositCollectionUIComponent extends React.Component {
                 <th>
                   Particular:
                 </th>
-                <td className="text-right">
+                <td className="text-end">
                   {this.renderParticular()}
                 </td>
               </tr>

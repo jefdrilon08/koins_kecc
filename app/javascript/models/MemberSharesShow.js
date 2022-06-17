@@ -19,7 +19,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-    $modalPrint.modal("show");
+    $modalPrint.show();
 
     var id    = $(this).data("id");
     
@@ -29,7 +29,7 @@ var _bindEvents = function() {
       var type  = "member_share_for_mba"
     }
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);
   });
 };

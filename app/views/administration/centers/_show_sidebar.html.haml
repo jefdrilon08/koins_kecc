@@ -10,20 +10,20 @@
       %tr
         %th
           Branch
-        %td.text-muted.text-right
+        %td.text-muted.text-end
           = link_to administration_branch_path(@center.branch) do
             #{@center.branch.name}
       
       %tr
         %th
           Meeting Day
-        %td.text-muted.text-right
+        %td.text-muted.text-end
           #{@center.meeting_day_display}
 
       %tr
         %th
           Socioeconomic Officer
-        %td.text-muted.text-right
+        %td.text-muted.text-end
           #{@center.user}
     %hr
     #btn-assign-officer.btn.btn-block.btn-info.text-white

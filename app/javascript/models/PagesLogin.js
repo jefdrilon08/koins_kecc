@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import $ from "jquery";
 
 var url         = "/api/v1/login";
 var loadingText = '<i class="fa fa-spin"></i> Loading...';
@@ -91,6 +92,7 @@ var _toggleInput = function() {
     $btnLogin.html($btnLogin.data('original-text'));
   }
 };
+
 var init  = function() {
   _cacheDom();
   _bindEvents();

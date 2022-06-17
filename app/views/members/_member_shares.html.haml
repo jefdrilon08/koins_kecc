@@ -38,7 +38,7 @@
             #{o.try(:certificate_for)}
           %td.text-center
             - if o.is_void
-              .badge.badge-danger
+              .badge.bg-danger
                 .fa.fa-check
           - if current_user.roles.include?("BK") || current_user.roles.include?("SBK") || current_user.roles.include?("MIS")
             %td

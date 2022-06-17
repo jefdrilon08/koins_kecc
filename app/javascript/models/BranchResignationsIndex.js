@@ -1,4 +1,7 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import select2 from 'select2';
 
 var authenticityToken;
 
@@ -14,7 +17,11 @@ var $message;
 var templateErrorList;
 
 var _cacheDom = function() {
-  $modalNew      = $("#modal-new");
+  
+  $modalNew      = new bootstrap.Modal(
+    document.getElementById("modal-new")
+
+  );
   $btnNew        = $("#btn-new");
   $btnConfirmNew = $("#btn-confirm-new");
 
@@ -28,7 +35,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
     $message.html("");
   });
 

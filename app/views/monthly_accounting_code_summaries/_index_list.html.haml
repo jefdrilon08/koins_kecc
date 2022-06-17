@@ -6,9 +6,9 @@
           Accounting Code
         %th
           Branch
-        %th.text-right
+        %th.text-end
           DR Amount
-        %th.text-right
+        %th.text-end
           CR Amount
         %th.text-center
           Month
@@ -21,9 +21,9 @@
             #{o.accounting_code.name}
           %td
             #{o.branch.name}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o.dr_amount, unit: '')}
-          %td.text-right
+          %td.text-end
             #{number_to_currency(o.cr_amount, unit: '')}
           %td.text-center
             #{MONTHS_FOR_SELECT.select{ |m| m[1] == o.month }.first[0]}

@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import $ from "jquery";
 var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
@@ -33,7 +34,7 @@ var _bindEvents = function() {
  $btnPrintPdf.on("click", function() {
     var print_mi = $btnPrintPdf.data('id');
 
-    $modalPrint.modal("show");
+    $modalPrint.show();
     $printMessage.html(
       Mustache.render(
         loader,
@@ -41,7 +42,7 @@ var _bindEvents = function() {
       )
     );
 
-    $modalPrint.modal("hide");
+    $modalPrint.hide();
     window.open("/print?id=" + print_mi + "&type=print_monthly_incentives");
   });
 

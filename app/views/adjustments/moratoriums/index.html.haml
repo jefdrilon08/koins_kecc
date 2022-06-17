@@ -46,13 +46,13 @@
                     #{o.number_of_days}
                   %td.text-center
                     - if o.pending?
-                      .badge.badge-danger
+                      .badge.bg-danger
                         Pending
                     - elsif o.processing?
                       .badge.badge-info
                         Processing
                     - elsif o.done?
-                      .badge.badge-success
+                      .badge.bg-success
                         Done
                   %td.text-center
                     - if o.pending?

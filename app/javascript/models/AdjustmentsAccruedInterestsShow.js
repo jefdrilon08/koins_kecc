@@ -1,4 +1,6 @@
 import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
 import 'select2';
 
 var $modalNew;
@@ -176,7 +178,7 @@ var _bindEvents = function() {
   });
 
   $btnBatchProcess.on("click", function() {
-    $modalBatchProcess.modal("show");
+    $modalBatchProcess.show();
   });
 
   $btnConfirmBatchProcess.on("click", function() {
@@ -219,7 +221,7 @@ var _bindEvents = function() {
 
   $btnProcess.on("click", function() {
     _moratoriumId = $(this).data("id");
-    $modalProcess.modal("show");
+    $modalProcess.show();
   });
 
   $btnConfirmProcess.on("click", function() {
@@ -260,7 +262,7 @@ var _bindEvents = function() {
 
   $btnErase.on("click", function(){
     _memberDetails = $(this).data("id");
-    $modalErase.modal("show");
+    $modalErase.show();
   });
 
   $btnConfirmErase.on("click", function(){
@@ -285,14 +287,14 @@ var _bindEvents = function() {
   
   $btnRemove.on("click", function() {
     _memberDetails = $(this).data("id");
-    $modalRemove.modal("show");
+    $modalRemove.show();
   
   });
 
 
   $btnDelete.on("click", function() {
     _moratoriumId = $(this).data("id");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmRemove.on("click", function(){
@@ -381,7 +383,7 @@ var _bindEvents = function() {
   });
 
   $btnNew.on("click", function() {
-    $modalNew.modal("show");
+    $modalNew.show();
   });
 
   $btnConfirmNew.on("click", function() {

@@ -20,37 +20,37 @@ export default class ParOfficer extends React.Component {
             <td width="4%">
               {centers[i].loans[j].date_released}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal_paid)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal_balance)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].interest)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].interest_paid)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].interest_balance)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].total_paid)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].principal_due)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].total_due)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberWithCommas(centers[i].loans[j].total_balance)}
             </td>
-            <td className="text-right" width="7%">
+            <td className="text-end" width="7%">
               {numberAsPercent(centers[i].loans[j].principal_rr)}
             </td>
           </tr>
@@ -64,37 +64,37 @@ export default class ParOfficer extends React.Component {
           </th>
           <th width="4%">
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal_balance)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].interest)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].interest_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].interest_balance)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].total_paid)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].principal_due)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].total_due)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(centers[i].total_balance)}
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberAsPercent(centers[i].principal_rr)}
           </th>
         </tr>

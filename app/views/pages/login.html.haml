@@ -1,33 +1,30 @@
-= title
+.d-flex.align-items-center{ style: "height: 100vh;" }
+  .container
+    .card
+      .card-body
+        %center
+          - if microinsurance?
+            = image_tag "kmba_logo.png", width: "220px"
+          - else
+            = image_tag "logo.png", width: "220px"
 
-.container
-  .row
-    .col
-      #login-form
-        .card
-          .card-body
-            %center
-              - if microinsurance?
-                = image_tag "kmba_logo.png", width: "220px"
-              - else
-                = image_tag "logo.png", width: "220px"
-            %hr
-            .input-group
-              .input-group-prepend
-                .input-group-text
-                  .fa.fa-user
+        %hr
+        .row
+          .col
+            .mb-4
+              %label.form-label{ for: "input-username" }
+                Username
               = text_field_tag :username, "", id: "input-username", class: "form-control", placeholder: "USERNAME"
-            .input-group
-              .input-group-prepend
-                .input-group-text
-                  .fa.fa-key
+            .mb-4
+              %label.form-label{ for: "input-password" }
+                Password
               = password_field_tag :username, "", id: "input-password", class: "form-control", placeholder: "PASSWORD"
-            %hr
-            .row
-              .col
-                .message
-                %center
-                  .btn-group
-                    #btn-login.btn.btn-primary
-                      .fa.fa-sign-in-alt
-                      Login to System
+        %hr
+        .row
+          .col
+            .message
+            %center
+              .btn-group
+                #btn-login.btn.btn-primary
+                  .fa.fa-sign-in-alt
+                  Login to System

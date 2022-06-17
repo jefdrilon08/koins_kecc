@@ -3,9 +3,9 @@
     %tr
       %th
         Type
-      %th.text-right
+      %th.text-end
         Maintaining Balance
-      %th.text-right
+      %th.text-end
         Current Balance
   %tbody
     - @savings_accounts.each do |o|
@@ -14,8 +14,8 @@
           %strong
             = link_to savings_account_path(o.id) do
               #{o.account_subtype}
-        %td.text-right.text-muted
+        %td.text-end.text-muted
           #{number_to_currency(o.maintaining_balance, unit: "")}
-        %td.text-right
+        %td.text-end
           %strong
             #{number_to_currency(o.balance, unit: "")}

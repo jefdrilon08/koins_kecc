@@ -62,16 +62,16 @@
                         #{o[:date_posted]}
                     %td
                       #{j[:accounting_code][:name]}
-                    %td.text-right
+                    %td.text-end
                       #{j[:debit_amount]}
-                    %td.text-right
+                    %td.text-end
                 - o[:credit_entries].each_with_index do |j,i|
                   %tr
                     %td
                     %td
                       #{j[:accounting_code][:name]}
-                    %td.text-right
-                    %td.text-right
+                    %td.text-end
+                    %td.text-end
                       #{j[:credit_amount]}
                 %tr
                   %td{ colspan: 4 }

@@ -212,25 +212,25 @@ var _bindEvents = function() {
 
   // check
   $btnCheck.on("click", function() {
-    $modalCheck.modal("show");
+    $modalCheck.show();
     $message.html("");
   });
 
   // validate
   $btnValidate.on("click", function() {
-    $modalValidate.modal("show");
+    $modalValidate.show();
     $message.html("");
   });
 
   // Approve
   $btnApprove.on("click", function() {
-    $modalApprove.modal("show");
+    $modalApprove.show();
     $message.html("");
   });
 
   // Cancel
   $btnCancel.on("click", function() {
-    $modalCancel.modal("show");
+    $modalCancel.show();
     $message.html("");
   });
 

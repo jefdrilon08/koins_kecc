@@ -2,7 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table';
 import Modal from 'react-modal';
 import Toggle from 'react-toggle';
-import "react-toggle/style.css";
+import $ from 'jquery';
 
 import {numberWithCommas} from '../utils/helpers';
 import {customStyles} from '../utils/consts';
@@ -134,7 +134,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         if(paymentRecord.record_type == "ID" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
-              <td key={"id-payment"} className="text-right">
+              <td key={"id-payment"} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -147,7 +147,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
             );
           } else {
             components.push(
-              <td key={"id-payment"} className="text-right">
+              <td key={"id-payment"} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -155,7 +155,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         } else if(paymentRecord.record_type == "MEMBERSHIP_PAYMENT" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
-              <td key={"membership-payment-" + paymentRecord.account_subtype} className="text-right">
+              <td key={"membership-payment-" + paymentRecord.account_subtype} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -168,7 +168,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
             );
           } else {
             components.push(
-              <td key={"membership-payment-" + paymentRecord.account_subtype} className="text-right">
+              <td key={"membership-payment-" + paymentRecord.account_subtype} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -176,7 +176,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         } else if(paymentRecord.record_type == "EQUITY" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
-              <td key={"equity-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"equity-" + paymentRecord.member_account_id} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -189,7 +189,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
             );
           } else {
             components.push(
-              <td key={"equity-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"equity-" + paymentRecord.member_account_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -197,7 +197,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
-              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-end">
                 <strong>
                   <a
                     href="#"
@@ -210,7 +210,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
             );
           } else {
             components.push(
-              <td key={"insurance-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"insurance-" + paymentRecord.member_account_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -218,7 +218,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         } else if(paymentRecord.record_type == "SAVINGS" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending") {
             components.push(
-              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-end">
                 <strong>
                   <a 
                     href="#"
@@ -231,7 +231,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
             );
           } else {
             components.push(
-              <td key={"savings-" + paymentRecord.member_account_id} className="text-right">
+              <td key={"savings-" + paymentRecord.member_account_id} className="text-end">
                 {numberWithCommas(paymentRecord.amount)}
               </td>
             );
@@ -245,7 +245,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
       }
 
       components.push(
-        <td key={"c-member-total-" + member.id} className="text-right">
+        <td key={"c-member-total-" + member.id} className="text-end">
           <strong>
             {numberWithCommas(this.props.data.data.records[i].total_collected)}
           </strong>
@@ -277,7 +277,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
     for(var i = 0; i < totals.length; i++) {
       if(totals[i].record_type == "ID") {
         records.push(
-          <td key={"total-id-payment"} className="text-right">
+          <td key={"total-id-payment"} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -285,7 +285,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         );
       } else if(totals[i].record_type == "MEMBERSHIP_PAYMENT") {
         records.push(
-          <td key={"total-membership-payment-" + totals[i].key} className="text-right">
+          <td key={"total-membership-payment-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -293,7 +293,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         );
       } else if(totals[i].record_type == "EQUITY") {
         records.push(
-          <td key={"total-equity-" + totals[i].key} className="text-right">
+          <td key={"total-equity-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -301,7 +301,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         );
       } else if(totals[i].record_type == "INSURANCE") {
         records.push(
-          <td key={"total-insurance-" + totals[i].key} className="text-right">
+          <td key={"total-insurance-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -309,7 +309,7 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
         );
       } else if(totals[i].record_type == "SAVINGS") {
         records.push(
-          <td key={"total-savings-" + i} className="text-right">
+          <td key={"total-savings-" + i} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>
@@ -319,8 +319,8 @@ export default class MembershipPaymentCollectionUITable extends React.Component 
     }
 
     records.push(
-      <td key="grand-total" className="text-right">
-        <div className="badge badge-success">
+      <td key="grand-total" className="text-end">
+        <div className="badge bg-success">
           <strong>
             {numberWithCommas(this.props.data.data.total_collected)}
           </strong>

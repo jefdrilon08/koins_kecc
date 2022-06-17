@@ -12,11 +12,11 @@
       %th
         %center
           Adjusment
-      %th.text-right
+      %th.text-end
         Beginning Balance
-      %th.text-right
+      %th.text-end
         Amount
-      %th.text-right
+      %th.text-end
         Ending Balance
   %tbody
     - @account_transactions.each do |o|
@@ -47,17 +47,17 @@
             - if o.data["is_adjustment"].present?
               - if o.deposit?
                 %center
-                  .badge.badge-success
+                  .badge.bg-success
                     .fa.fa-plus
                     ADD
               - else
                 %center
-                  .badge.badge-danger
+                  .badge.bg-danger
                     .fa.fa-minus
                     DEDUCT
-        %td.text-right.text-muted
+        %td.text-end.text-muted
           #{number_to_currency(o.data["beginning_balance"], unit: "")}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o.amount, unit: "")}
-        %td.text-right.text-muted
+        %td.text-end.text-muted
           #{number_to_currency(o.data["ending_balance"], unit: "")}

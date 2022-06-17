@@ -4,23 +4,23 @@
     .card
       .card-body
         - if @billing.pending?
-          .c-callout.c-callout-info
+          .alert.alert-info
             %p
               Pindutin ang amount upang baguhin ito.
         - elsif @billing.processing?
-          .c-callout.c-callout-danger
+          .alert.alert-danger
             %p
               This billing is still being processed.
         - elsif @billing.approved?
-          .c-callout.c-callout-success
+          .alert.alert-success
             %p
               This billing has been approved on #{@billing.date_approved.strftime("%b %d, %Y")}
 
         - if !@billing.checked?
-          .c-callout.c-callout-danger
+          .alert.alert-danger
             This billing has not been checked yet.
         - else
-          .c-callout.c-callout-info
+          .alert.alert-info
             Checked By: #{@billing.checked_by}
 
         %h5

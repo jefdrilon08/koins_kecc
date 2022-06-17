@@ -7,9 +7,6 @@ import SkCubeLoading from '../SkCubeLoading';
 import {numberAsPercent, numberWithCommas} from '../utils/helpers';
 import {Accordion, AccordionItem,AccordionItemHeading,AccordionItemButton,AccordionItemPanel}from 'react-accessible-accordion';
 
-
-
-
 const customStyles = {
   content : {
     top                   : '50%',
@@ -201,14 +198,17 @@ export default class DashboardOAS extends React.Component {
               Actions
             </label>
             <br/>
-            <button
-              className="btn btn-primary btn-block"
-              onClick={this.handleSyncClicked.bind(this)}
-              disabled={this.state.isLoading}
-            >
-              <span className="fa fa-sync"/>
-              Sync
-            </button>
+            <div className="d-grid gap-2">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={this.handleSyncClicked.bind(this)}
+                disabled={this.state.isLoading}
+              >
+                <span className="bi bi-arrow-repeat"/>
+                Sync
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -242,19 +242,13 @@ export default class DashboardOAS extends React.Component {
             <td className="text-center">
               {e.active_loans}
             </td>
-            {/*<td className="text-right">
-              {numberWithCommas(e.principal)}
-            </td>
-            <td className="text-right">
-              {numberWithCommas(e.principal_paid)}
-            </td>*/}
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(e.portfolio)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(e.principal_past_due_amount)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(e.par_amount)}
             </td>
             <td className="text-center">
@@ -315,19 +309,13 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     Active Loans
                   </th>
-                  {/*<th className="text-right">
-                    Principal
-                  </th>
-                  <th className="text-right">
-                    Principal Paid
-                  </th>*/}
-                  <th className="text-right">
+                  <th className="text-end">
                     Portfolio
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     Past Due Amount
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     Par Amount
                   </th>
                   <th className="text-center">
@@ -349,19 +337,13 @@ export default class DashboardOAS extends React.Component {
                   <th className="text-center">
                     {o.total_active_loans}
                   </th>
-                 {/* <th className="text-right">
-                    {numberWithCommas(o.total_principal)}
-                  </th>
-                  <th className="text-right">
-                    {numberWithCommas(o.total_principal_paid)}
-                  </th>*/}
-                  <th className="text-right">
+                  <th className="text-end">
                     {numberWithCommas(o.total_portfolio)}
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     {numberWithCommas(o.total_principal_past_due_amount)}
                   </th>
-                  <th className="text-right">
+                  <th className="text-end">
                     {numberWithCommas(o.total_par_amount)}
                   </th>
                   <th className="text-center">
@@ -572,13 +554,13 @@ export default class DashboardOAS extends React.Component {
             <td>
               {o.records[i].loan_product.name}
 	    </td>
-	    <td className="text-right">
+	    <td className="text-end">
               {numberWithCommas(o.records[i].principal_balance)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(o.records[i].interest_balance)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               <strong>
                 {numberWithCommas(o.records[i].total_balance)}
               </strong>
@@ -594,13 +576,13 @@ export default class DashboardOAS extends React.Component {
           <th colSpan="4">
             GRAND TOTAL ({o.records.length}) 
           </th>
-          <th className="text-right">
+          <th className="text-end">
             {numberWithCommas(totalPrincipalBalance)}
 	  </th>
-	  <th className="text-right">
+	  <th className="text-end">
             {numberWithCommas(totalInterestBalance)}
           </th>
- 	  <th className="text-right">
+ 	  <th className="text-end">
             {numberWithCommas(totalPastDue)}
           </th>
  
@@ -635,13 +617,13 @@ export default class DashboardOAS extends React.Component {
                   <th>
                     Loan Product
                   </th>
-		  <th className="text-right">
+		  <th className="text-end">
                     Past Due Amount - Principal
                   </th>
- 	          <th className="text-right">
+ 	          <th className="text-end">
                     Past Due Amount - Interest
                   </th>
-		  <th className="text-right">
+		  <th className="text-end">
                     Total Past Due
                   </th>
                 </tr>
@@ -914,6 +896,7 @@ export default class DashboardOAS extends React.Component {
     return  (
       <div>
         {this.renderControls()}
+        <hr/>
         {this.renderBranchLoansStats()} 
         {this.renderMemberCounts()}
         {this.renderWatchlist()}

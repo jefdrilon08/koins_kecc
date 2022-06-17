@@ -5,9 +5,9 @@
         Code
       %th{ width: "30%" }
         Name
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         Debit
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         Credit
   %tbody
     - @data[:records].each do |o|
@@ -18,14 +18,14 @@
         %td
           %strong
             #{o[:accounting_code][:name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:debit], unit: "")}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(o[:credit], unit: "")}
     %tr
       %th{ colspan: "2" }
         TOTAL
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@data[:total_debit], unit: "")}
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@data[:total_credit], unit: "")}

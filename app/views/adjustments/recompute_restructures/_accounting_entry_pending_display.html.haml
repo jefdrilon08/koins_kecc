@@ -7,7 +7,7 @@
           %strong
             Pending
         .col-md-6
-          .text-right
+          .text-end
             .text-muted
               .fa.fa-store
               #{a[:branch].to_s} - #{a[:book].to_s}
@@ -16,16 +16,16 @@
         %tr
           %th{ width: "50%" }
             Accounting Code
-          %th.text-right{ width: "25%" }
+          %th.text-end{ width: "25%" }
             Debit
-          %th.text-right{ width: "25%" }
+          %th.text-end{ width: "25%" }
             Credit
         - a[:journal_entries].each do |dje|
           - if dje[:post_type] == "DR"
             %tr
               %td
                 #{AccountingCode.find(dje[:accounting_code_id])}
-              %td.text-right
+              %td.text-end
                 #{dje[:amount]}
               %td
         - a[:journal_entries].each do |dje|
@@ -34,7 +34,7 @@
               %td
                 #{AccountingCode.find(dje[:accounting_code_id])}
               %td
-              %td.text-right
+              %td.text-end
                 #{dje[:amount]}
       %hr 
       .row
@@ -47,7 +47,7 @@
               %p
                 #{a[:particular]}
         .col-md-4
-          %p.text-right
+          %p.text-end
             %label
               %strong
                 Approved By:

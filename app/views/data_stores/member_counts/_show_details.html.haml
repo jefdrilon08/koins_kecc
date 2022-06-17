@@ -260,19 +260,19 @@
 
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
-    %a.nav-link.active.show{"aria-selected" => "true", "data-toggle" => "tab", :href => "#active-members", :role => "tab"}
+    %a.nav-link.active.show{"aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#active-members", :role => "tab"}
       Admitted Members (#{@data[:counts][:active_members][:total]})
 
   - if @data[:counts][:inactive_members].present?
     %li.nav-item
-      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#inactive-members", :role => "tab"}
+      %a.nav-link{"aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#inactive-members", :role => "tab"}
         Inactive Member (#{@data[:counts][:inactive_members][:total]})
   - if microloans?  
     %li.nav-item
-      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
+      %a.nav-link{"aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
         Pure Savers (#{@data[:counts][:pure_savers][:total]})
     %li.nav-item
-      %a.nav-link{"aria-selected" => "false", "data-toggle" => "tab", :href => "#loaners", :role => "tab"}
+      %a.nav-link{"aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#loaners", :role => "tab"}
         Active Borrowers (#{@data[:counts][:loaners][:total]})
 .tab-content
   #active-members.tab-pane.active.show{:role => "tabpanel"}

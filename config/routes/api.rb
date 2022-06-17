@@ -122,6 +122,7 @@ namespace :api do
     post "/billing_for_writeoff_collection/update_amount", to: "billing_for_writeoff_collection#update_amount"
     post "/billing_for_writeoff_collection/update_total", to: "billing_for_writeoff_collection#update_total"
     post "/billing_for_writeoff_collection/build_accounting_entry", to: "billing_for_writeoff_collection#build_accounting_entry"
+    post "/billing_for_writeoff_collection/approve", to: "billing_for_writeoff_collection#approve"
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
@@ -185,6 +186,7 @@ namespace :api do
     post "/login", to: "users#login"
     get "/roles", to: "users#roles"
     post "/change_password", to: "users#change_password"
+    post "/update_profile_picture", to: "users#update_profile_picture"
 
     # Dashboard
     get "/dashboard", to: "dashboard#index"

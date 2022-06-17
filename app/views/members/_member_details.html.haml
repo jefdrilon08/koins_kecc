@@ -1,58 +1,58 @@
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
-    %a.nav-link.active.show{"aria-controls" => "profile", "aria-selected" => "true", "data-toggle" => "tab", :href => "#home", :role => "tab"} 
+    %a.nav-link.active.show{"aria-controls" => "profile", "aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#home", :role => "tab"} 
       Profile
   - if Settings.activate_microloans  
     %li.nav-item
-      %a.nav-link{"aria-controls" => "loans", "aria-selected" => "false", "data-toggle" => "tab", :href => "#loans", :role => "tab"} 
+      %a.nav-link{"aria-controls" => "loans", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#loans", :role => "tab"} 
         Loans
   %li.nav-item
-    %a.nav-link{"aria-controls" => "savings_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#savings_accounts", :role => "tab"} 
+    %a.nav-link{"aria-controls" => "savings_accounts", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#savings_accounts", :role => "tab"} 
       Savings
   %li.nav-item
-    %a.nav-link{"aria-controls" => "insurance_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#insurance_accounts", :role => "tab"}
+    %a.nav-link{"aria-controls" => "insurance_accounts", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#insurance_accounts", :role => "tab"}
       Insurance
   %li.nav-item
-    %a.nav-link{"aria-controls" => "equity_accounts", "aria-selected" => "false", "data-toggle" => "tab", :href => "#equity_accounts", :role => "tab"}
+    %a.nav-link{"aria-controls" => "equity_accounts", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#equity_accounts", :role => "tab"}
       Equity
   %li.nav-item
-    %a.nav-link{"aria-controls" => "survey_answers", "aria-selected" => "false", "data-toggle" => "tab", :href => "#survey_answers", :role => "tab"}
+    %a.nav-link{"aria-controls" => "survey_answers", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#survey_answers", :role => "tab"}
       Surveys
   %li.nav-item
-    %a.nav-link{"aria-controls" => "member_shares", "aria-selected" => "false", "data-toggle" => "tab", :href => "#member_shares", :role => "tab"}
+    %a.nav-link{"aria-controls" => "member_shares", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#member_shares", :role => "tab"}
       Shares
   %li.nav-item
-    %a.nav-link{"aria-controls" => "attachment_files", "aria-selected" => "false", "data-toggle" => "tab", :href => "#attachment_files", :role => "tab"}
+    %a.nav-link{"aria-controls" => "attachment_files", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#attachment_files", :role => "tab"}
       Attachment Files    
   %li.nav-item  
-    %a.nav-link{"aria-controls" => "membership_payments", "aria-selected" => "false", "data-toggle" => "tab", :href => "#membership_payments", :role => "tab"}
+    %a.nav-link{"aria-controls" => "membership_payments", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#membership_payments", :role => "tab"}
       Membership Payments
 
   - if current_user.current_roles.intersection(Settings.try(:module_authorization_roles).try(:mykoins) || []).any?
     %li.nav-item
-      %a.nav-link{"aria-controls" => "MyKOINS", "aria-selected" => "false", "data-toggle" => "tab", :href => "#mykoins", :role => "tab"}
+      %a.nav-link{"aria-controls" => "MyKOINS", "aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#mykoins", :role => "tab"}
         My KOINS
 
-.tab-content
-  #home.tab-pane.active.show{:role => "tabpanel"}
+.tab-content.border-start.border-bottom.border-end
+  #home.p-3.tab-pane.active.show{:role => "tabpanel"}
     = render partial: "profile_details"
   - if Settings.activate_microloans  
-    #loans.tab-pane{:role => "tabpanel"}
+    #loans.tab-pane.p-3{:role => "tabpanel"}
       = render partial: "loans"
-  #savings_accounts.tab-pane{:role => "tabpanel"}
+  #savings_accounts.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "savings_accounts"
-  #insurance_accounts.tab-pane{:role => "tabpanel"}
+  #insurance_accounts.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "insurance_accounts"
-  #equity_accounts.tab-pane{:role => "tabpanel"}
+  #equity_accounts.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "equity_accounts"
-  #survey_answers.tab-pane{:role => "tabpanel"}
+  #survey_answers.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "members/survey_answers", locals: { survey_answers: @survey_answers }
-  #member_shares.tab-pane{:role => "tabpanel"}
+  #member_shares.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "members/member_shares", locals: { member_shares: @member_shares }
-  #attachment_files.tab-pane{:role => "tabpanel"}
+  #attachment_files.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "members/attachment_files"
-  #membership_payments.tab-pane{:role => "tabpanel"}
+  #membership_payments.p-3.tab-pane{:role => "tabpanel"}
     = render partial: "members/membership_payments", locals: { membership_payments: @membership_payments }
   - if current_user.current_roles.intersection(Settings.try(:module_authorization_roles).try(:mykoins) || []).any?
-    #mykoins.tab-pane{:role => "tabpanel"}
+    #mykoins.p-3.tab-pane{:role => "tabpanel"}
       = render partial: "members/mykoins"

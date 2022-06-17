@@ -30,9 +30,9 @@
       %th
         Center
       - @withdrawal_collection[:data][:totals].each do |h|
-        %th.text-right
+        %th.text-end
           #{h[:key]}
-      %th.text-right
+      %th.text-end
         Amt Rec.
   %tbody
     - @withdrawal_collection[:data][:records].each_with_index do |r, i|
@@ -44,9 +44,9 @@
         %td
           #{Member.find(r[:member][:id]).center.name}
         - r[:records].each do |rr|
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rr[:amount], unit: '')}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(r[:total_collected], unit: '')}
     %tr
       %th
@@ -54,9 +54,9 @@
       %th
         TOTAL
       - @withdrawal_collection[:data][:totals].each do |t|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(t[:amount], unit: '')}
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@withdrawal_collection[:data][:total_collected], unit: '')}
 
 %hr
@@ -70,24 +70,24 @@
     %tr
       %th{ width: "50%" }
         Accounting Code
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         Debit
-      %th.text-right{ width: "25%" }
+      %th.text-end{ width: "25%" }
         Credit
   %tbody
     - @withdrawal_collection[:data][:accounting_entry][:debit_journal_entries].each do |a|
       %tr
         %td
           #{a[:code]} - #{a[:name]}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(a[:amount], unit: "")}
-        %td.text-right
+        %td.text-end
     - @withdrawal_collection[:data][:accounting_entry][:credit_journal_entries].each do |a|
       %tr
         %td
           #{a[:code]} - #{a[:name]}
-        %td.text-right
-        %td.text-right
+        %td.text-end
+        %td.text-end
           #{number_to_currency(a[:amount], unit: "")}
 
 %p

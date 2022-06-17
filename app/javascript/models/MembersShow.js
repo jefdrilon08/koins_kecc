@@ -1,28 +1,22 @@
 import Mustache from "mustache";
-import $ from "jquery";
+import $ from 'jquery';
+import * as bootstrap from "bootstrap";
 import select2 from 'select2';
 select2($);
 
-var $modalGenerateAccessToken;
-var $modalSignature;
-var $modalNewLoan;
 var $modalDelete;
 var $modalCreateSurvey;
 var $modalRestore;
 var $modalUnlock;
 var $modalChangeMemberType;
-var $modalChangeRecognitionDate;
 var $modalUploadProfilePicture;
 var $modalUploadSignature;
 var $modalDeleteProfilePicture;
 var $modalDeleteSignature;
 var $modalRegister;
-var $btnGenerateAccessToken;
 var $btnGenerateSignature;
 var $btnClearSignature;
-var $btnConfirmGenerateAccessToken;
 var $btnConfirmSignature;
-var $btnNewLoan;
 var $btnConfirmNewLoan;
 var $btnCreateSurvey;
 var $btnConfirmCreateSurvey;
@@ -38,7 +32,6 @@ var $btnRestore;
 var $btnConfirmRestore;
 var $btnGenerateMissingAccounts;
 var $btnChangeMemberType;
-var $btnChangeRecognitionDate;
 var $btnConfirmChangeMemberType;
 var $btnConfirmChangeRecognitionDate;
 var $btnConfirmDeleteProfilePicture;
@@ -55,8 +48,6 @@ var $message;
 var $btnResignFromInsurance;
 var $modalResignFromInsurance;
 var $btnConfirmInsuranceResign;
-var $btnReinstatement;
-var $modalReinstatement;
 var $btnConfirmReinstatement;
 var $inputDateResigned;
 var $inputReason;
@@ -65,18 +56,14 @@ var $fileProfilePicture;
 var $fileSignature;
 var templateErrorList;
 
-var $btnClaimsCopy;   
-var $modalClaimsCopy; 
 var $btnConfirmClaimsCopy;
 var $inputDateOfDeath;
 
-var $btnRestructure;
 var $btnConfirmRestructure;
-var $modalRestructure;
 var $selectRestructureLoanProduct;
 var $btnRecomputeRestructure;
 var $modalRecomputeRestructure;
-var $modalConfirmRecomputeRestructure;
+var $btnConfirmRecomputeRestructure;
 var $selectActiveLoans;
 var $inputCoMakerA;
 var $selectCoMakerB;
@@ -95,9 +82,6 @@ var $inputMykoinsPassword;
 var $inputMykoinsPasswordConfirmation;
 var $btnSaveMykoinsPassword;
 
-
-var $btnMakePayment;  
-var $modalMakePayment;
 var $btnConfirmMakePayment;
 var $selectMakePaymentType;
 
@@ -105,7 +89,6 @@ var $btnErase;
 var $modalErase;
 var $btnConfirmErase;
 
-var _urlGenerateAccessToken     = "/api/v1/members/generate_access_token";
 var _urlSaveSignature           = "/api/v1/members/save_signature";
 var _urlNewLoan                 = "/api/v1/loans/apply";
 var _urlRestructure             = "/api/v1/loans/restructure";
@@ -130,32 +113,61 @@ var _memberId;
 var _authenticityToken;
 var _loanId;
 
-var _canvas;
-var _signaturePad;
-
 var _cacheDom = function() {
-  _canvas       = document.querySelector("#signature-canvas");
+  /**
+   * Bootstrap 5 modal initialization
+   **/
+  $modalCreateSurvey = new bootstrap.Modal(
+    document.getElementById("modal-create-survey")
+  )
 
-  $modalGenerateAccessToken         = $("#modal-generate-access-token");
-  $modalSignature                   = $("#modal-signature");
-  $modalNewLoan                     = $("#modal-new-loan");
-  $modalCreateSurvey                = $("#modal-create-survey");
-  $modalDelete                      = $("#modal-delete");
-  $modalUnlock                      = $("#modal-unlock");
-  $modalRestore                     = $("#modal-restore");
-  $modalChangeMemberType            = $("#modal-change-member-type");
-  $modalChangeRecognitionDate       = $("#modal-change-recognition-date");
-  $modalUploadProfilePicture        = $("#modal-upload-profile-picture");
-  $modalUploadSignature             = $("#modal-upload-signature");
-  $modalDeleteProfilePicture        = $("#modal-delete-profile-picture");
-  $modalDeleteSignature             = $("#modal-delete-signature");
-  $modalRegister                    = $("#modal-register");
-  $btnGenerateAccessToken           = $("#btn-generate-access-token");
-  $btnConfirmGenerateAccessToken    = $("#btn-confirm-generate-access-token");
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  )
+
+  $modalUnlock = new bootstrap.Modal(
+    document.getElementById("modal-unlock")
+  )
+
+  $modalRestore = new bootstrap.Modal(
+    document.getElementById("modal-restore")
+  )
+
+  $modalChangeMemberType = new bootstrap.Modal(
+    document.getElementById("modal-change-member-type")
+  )
+
+  $modalUploadProfilePicture = new bootstrap.Modal(
+    document.getElementById("modal-upload-profile-picture")
+  ) 
+
+  $modalDeleteProfilePicture = new bootstrap.Modal(
+    document.getElementById("modal-delete-profile-picture")
+  )
+
+  $modalDeleteSignature = new bootstrap.Modal(
+    document.getElementById("modal-delete-signature")
+  )
+
+  $modalRegister = new bootstrap.Modal(
+    document.getElementById("modal-register")
+  )
+
+  $modalResignFromInsurance = new bootstrap.Modal(
+    document.getElementById("modal-resign-from-insurance")
+  )
+
+  $modalErase = new bootstrap.Modal(
+    document.getElementById("modal-erase")
+  )
+
+  $modalRecomputeRestructure = new bootstrap.Modal(
+    document.getElementById("modal-recompute-restructure")
+  )
+
   $btnConfirmSignature              = $("#btn-confirm-signature");
   $btnGenerateSignature             = $("#btn-generate-signature");
   $btnClearSignature                = $("#btn-clear-signature");
-  $btnNewLoan                       = $("#btn-new-loan");
   $btnCreateSurvey                  = $("#btn-create-survey");
   $btnConfirmCreateSurvey           = $("#btn-confirm-create-survey");
   $btnConfirmNewLoan                = $("#btn-confirm-new-loan");
@@ -172,9 +184,9 @@ var _cacheDom = function() {
   $btnConfirmUnlock                 = $("#btn-confirm-unlock");
   $btnGenerateMissingAccounts       = $("#btn-generate-missing-accounts");
   $btnChangeMemberType              = $("#btn-change-member-type");
-  $btnChangeRecognitionDate         = $("#btn-change-recognition-date");
   $btnConfirmChangeMemberType       = $("#btn-confirm-change-member-type");
   $btnConfirmChangeRecognitionDate  = $("#btn-confirm-change-recognition-date");
+  $btnConfirmRecomputeRestructure   = $("#btn-confirm-recompute-restructure")
   $btnUploadSignature               = $("#btn-upload-signature");
   $btnConfirmUploadSignature        = $("#btn-confirm-upload-signature");
   $inputRecognitionDate             = $("#input-recognition-date");
@@ -184,10 +196,7 @@ var _cacheDom = function() {
   $selectLoanProduct                = $("#select-loan-product");
   $selectSurvey                     = $("#select-survey");
   $btnResignFromInsurance           = $("#btn-resign-from-insurance");
-  $modalResignFromInsurance         = $("#modal-resign-from-insurance");
   $btnConfirmInsuranceResign        = $("#btn-confirm-insurance-resign");
-  $btnReinstatement                 = $("#btn-reinstatement");
-  $modalReinstatement               = $("#modal-reinstatement");
   $btnConfirmReinstatement          = $("#btn-confirm-reinstatement")
   $btnUploadProfilePicture          = $("#btn-upload-profile-picture");
   $btnConfirmUploadProfilePicture   = $("#btn-confirm-upload-profile-picture");
@@ -196,22 +205,22 @@ var _cacheDom = function() {
   $inputReason                      = $("#input-reason");
   $inputReinstatementDate           = $("#input-reinstatement-date");
 
-  $btnClaimsCopy                    = $("#btn-claims-copy");
-  $modalClaimsCopy                  = $("#modal-claims-copy");
   $btnConfirmClaimsCopy             = $("#btn-confirm-claims-copy");
   $inputDateOfDeath                 = $("#input-date-of-death");
 
-  $btnRestructure               = $("#btn-restructure");
   $btnConfirmRestructure        = $("#btn-confirm-restructure");
-  $modalRestructure             = $("#modal-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
+
+  $selectActiveLoans            = $("#select-active-loans").select2({ theme: "bootstrap" });
+  $selectCoMakerB               = $("#select-co-maker-b").select2({ theme: "bootstrap" });
+
   $selectActiveLoans            = $("#select-active-loans");
   $selectActiveLoans.select2({
     allowClear: true,
     theme: "bootstrap"
   });
+
   $inputCoMakerA                = $("#input-co-maker-a");
-  $selectCoMakerB               = $("#select-co-maker-b");
   $inputPnNumber                = $("#input-pn-number");
   $inputClipNumber              = $("#input-clip-number");
   $inputDatePrepared            = $("#input-date-prepared");
@@ -225,11 +234,8 @@ var _cacheDom = function() {
 
 
   $btnRecomputeRestructure               = $("#btn-recompute-restructure");
-  $modalRecomputeRestructure             = $("#modal-recompute-restructure");
-  $modalConfirmRecomputeRestructure      = $("#btn-confirm-recompute-restructure")
 
   $btnErase                    = $(".btn-erase"); 
-  $modalErase                  = $("#modal-erase");
   $btnConfirmErase             = $("#btn-confirm-erase");
   
   $message          = $(".message");
@@ -239,8 +245,6 @@ var _cacheDom = function() {
   $inputMykoinsPasswordConfirmation = $("#input-mykoins-password-confirmation");
   $btnSaveMykoinsPassword           = $("#btn-save-mykoins-password");
   
-  $btnMakePayment   = $("#btn-make-payment");
-  $modalMakePayment   = $("#modal-make-payment-type");
   $btnConfirmMakePayment  = $("#btn-confirm-make-payment-type")
   $selectMakePaymentType  = $("#select-make-payment-type")
 
@@ -306,11 +310,6 @@ var _bindEvents = function() {
     });
   });
 
-
-  $btnMakePayment.on("click", function(){
-    $modalMakePayment.modal("show");
-  });
-
   $btnSaveMykoinsPassword.on("click", function() {
     var password              = $inputMykoinsPassword.val();
     var password_confirmation = $inputMykoinsPasswordConfirmation.val();
@@ -354,16 +353,11 @@ var _bindEvents = function() {
     _changeTermOptions($(this).val());
   });
 
-  $btnRestructure.on("click", function() {
-    $message.html("");
-    $modalRestructure.modal("show");
-  });
-
   $btnRecomputeRestructure.on("click", function() {
-    $modalRecomputeRestructure.modal("show");
+    $modalRecomputeRestructure.show();
   });
 
-  $modalConfirmRecomputeRestructure.on("click", function(){
+  $btnConfirmRecomputeRestructure.on("click", function(){
     
     $btnRecomputeRestructure.prop("disabled", true)
     var data  = {
@@ -482,7 +476,7 @@ var _bindEvents = function() {
   $btnErase.on("click", function(){
     
     _loanId = $(this).data("id");
-    $modalErase.modal("show");
+    $modalErase.show();
   });
 
   $btnConfirmErase.on("click", function(){
@@ -506,7 +500,7 @@ var _bindEvents = function() {
 
   $btnRegister.on("click", function() {
     $message.html("");
-    $modalRegister.modal("show");
+    $modalRegister.show();
   });
 
   $btnConfirmRegister.on("click", function() {
@@ -552,7 +546,7 @@ var _bindEvents = function() {
 
   $btnDeleteSignature.on("click", function() {
     $message.html("");
-    $modalDeleteSignature.modal("show");
+    $modalDeleteSignature.show();
   });
 
   $btnConfirmDeleteSignature.on("click", function() {
@@ -598,7 +592,7 @@ var _bindEvents = function() {
 
   $btnDeleteProfilePicture.on("click", function() {
     $message.html("");
-    $modalDeleteProfilePicture.modal("show");
+    $modalDeleteProfilePicture.show();
   });
 
   $btnConfirmDeleteProfilePicture.on("click", function() {
@@ -639,11 +633,6 @@ var _bindEvents = function() {
         }
       }
     });
-  });
-
-  $btnUploadSignature.on("click", function() {
-    $message.html("");
-    $modalUploadSignature.modal("show");
   });
 
   $btnConfirmUploadSignature.on("click", function() {
@@ -710,7 +699,7 @@ var _bindEvents = function() {
 
   $btnUploadProfilePicture.on("click", function() {
     $message.html("");
-    $modalUploadProfilePicture.modal("show");
+    $modalUploadProfilePicture.show();
   });
 
   $btnConfirmUploadProfilePicture.on("click", function() {
@@ -776,11 +765,6 @@ var _bindEvents = function() {
     }
   });
 
-  $btnChangeRecognitionDate.on("click", function() {
-    $message.html(""); 
-    $modalChangeRecognitionDate.modal("show");
-  });
-
   $btnConfirmChangeRecognitionDate.on("click", function() {
     $message.html("Changing member recognition date...");
 
@@ -825,7 +809,7 @@ var _bindEvents = function() {
 
   $btnChangeMemberType.on("click", function() {
     $message.html(""); 
-    $modalChangeMemberType.modal("show");
+    $modalChangeMemberType.show();
   });
 
   $btnConfirmChangeMemberType.on("click", function() {
@@ -913,7 +897,7 @@ var _bindEvents = function() {
 
   $btnRestore.on("click", function() {
     $message.html("");
-    $modalRestore.modal("show");
+    $modalRestore.show();
   });
 
   $btnConfirmRestore.on("click", function() {
@@ -959,7 +943,7 @@ var _bindEvents = function() {
 
   $btnUnlock.on("click", function() {
     $message.html("");
-    $modalUnlock.modal("show");
+    $modalUnlock.show();
   });
 
   $btnConfirmUnlock.on("click", function() {
@@ -1005,7 +989,7 @@ var _bindEvents = function() {
 
   $btnDelete.on("click", function() {
     $message.html("");
-    $modalDelete.modal("show");
+    $modalDelete.show();
   });
 
   $btnConfirmDelete.on("click", function() {
@@ -1051,7 +1035,7 @@ var _bindEvents = function() {
 
   $btnCreateSurvey.on("click", function() {
     $message.html("");
-    $modalCreateSurvey.modal("show");
+    $modalCreateSurvey.show();
   });
 
   $btnConfirmCreateSurvey.on("click", function() {
@@ -1096,11 +1080,6 @@ var _bindEvents = function() {
         }
       }
     });
-  });
-
-  $btnNewLoan.on("click", function() {
-    $message.html("");
-    $modalNewLoan.modal("show");
   });
 
   $btnConfirmNewLoan.on("click", function() {
@@ -1172,44 +1151,8 @@ var _bindEvents = function() {
     }
   });
 
-  $btnClearSignature.on("click", function() {
-    _signaturePad.clear();
-  });
-
-  $btnGenerateSignature.on("click", function() {
-    $modalSignature.modal("show");
-  });
-
-
-  $btnGenerateAccessToken.on("click", function() {
-    $modalGenerateAccessToken.modal("show");
-  });
-
-  $btnConfirmGenerateAccessToken.on("click", function() {
-    $message.html("Loading...");
-    $btnConfirmGenerateAccessToken.prop("disabled", true);
-
-    $.ajax({
-      url: _urlGenerateAccessToken,
-      method: 'POST',
-      data: {
-        id: _memberId,
-        authenticity_token: _authenticityToken
-      },
-      dataType: 'json',
-      success: function(response) {
-        $message.html("Success! Redirecting...");
-        window.location.reload();
-      },
-      error: function(response) {
-        $message.html("Error in generating access_token");
-        $btnConfirmGenerateAccessToken.prop("disabled", false);
-      }
-    });
-  });
-
   $btnResignFromInsurance.on("click", function() {
-    $modalResignFromInsurance.modal("show");
+    $modalResignFromInsurance.show();
 
     $btnConfirmInsuranceResign.on("click", function() {
       $btnConfirmInsuranceResign.prop("disabled", true);
@@ -1237,45 +1180,25 @@ var _bindEvents = function() {
     });
   });
 
-  $btnReinstatement.on("click", function() {
-    $modalReinstatement.modal("show");
-
-    $btnConfirmReinstatement.on("click", function() {
-      $btnConfirmReinstatement.prop("disabled", true);
-      //alert("hello");
-        $.ajax({
-        url: _urlReinstatement,
-        method: 'POST',
-        dataType: 'json',
-        data: { 
-          member_id: _memberId,
-          reinstatement_date: $inputReinstatementDate.val(),
-          authenticity_token: _authenticityToken
-        },
-        success: function(response) {
-          $message.html("Successfully reinstate member");
-          window.location.reload();
-        },
-        error: function(response) {
-          $message.html("Error in generating access_token");
-          $btnConfirmReinstatement.prop("disabled", false);
-        }
-      });
-
-    });
-  });
-
-  $btnClaimsCopy.on("click", function() {
-    $modalClaimsCopy.modal("show");
-
-    $btnConfirmClaimsCopy.on("click", function() {
-      $btnConfirmClaimsCopy.prop("disabled", true);
-      var dateOfDeath = $inputDateOfDeath.val();
-      var memberId = _memberId
-
-      window.open("/print?member_id=" + memberId+ "&date_of_death=" + dateOfDeath + "&type=claims_copy");
-      $modalClaimsCopy.modal("hide");
-      window.location.reload();
+  $btnConfirmReinstatement.on("click", function() {
+    $btnConfirmReinstatement.prop("disabled", true);
+    $.ajax({
+      url: _urlReinstatement,
+      method: 'POST',
+      dataType: 'json',
+      data: { 
+        member_id: _memberId,
+        reinstatement_date: $inputReinstatementDate.val(),
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Successfully reinstate member");
+        window.location.reload();
+      },
+      error: function(response) {
+        $message.html("Error in generating access_token");
+        $btnConfirmReinstatement.prop("disabled", false);
+      }
     });
   });
 }

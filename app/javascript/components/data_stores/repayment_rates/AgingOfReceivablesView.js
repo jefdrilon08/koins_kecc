@@ -98,17 +98,17 @@ export default class AgingOfReceivablesView extends React.Component {
             <td className="">
               {dateReleased}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(categoryAPastDueAmount)}
               <br/>
               {numberWithCommas(categoryAParAmount)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(categoryBPastDueAmount)}
               <br/>
               {numberWithCommas(categoryBParAmount)}
             </td>
-            <td className="text-right">
+            <td className="text-end">
               {numberWithCommas(categoryCPastDueAmount)}
               <br/>
               {numberWithCommas(categoryCParAmount)}
@@ -131,7 +131,7 @@ export default class AgingOfReceivablesView extends React.Component {
             Grand Total
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalPastDueAmount)}
             <br/>
@@ -140,7 +140,7 @@ export default class AgingOfReceivablesView extends React.Component {
             {counter}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalCategoryAPastDueAmount)}
             <br/>
@@ -149,7 +149,7 @@ export default class AgingOfReceivablesView extends React.Component {
             {categoryACounter}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalCategoryBPastDueAmount)}
             <br/>
@@ -158,7 +158,7 @@ export default class AgingOfReceivablesView extends React.Component {
             {categoryBCounter}
           </strong>
         </td>
-        <td className="text-right">
+        <td className="text-end">
           <strong>
             {numberWithCommas(totalCategoryCPastDueAmount)}
             <br/>
@@ -194,13 +194,13 @@ export default class AgingOfReceivablesView extends React.Component {
               <th>
                 Total
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 1-30
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 31-365
               </th>
-              <th className="text-right">
+              <th className="text-end">
                 365 onwards
               </th>
             </tr>

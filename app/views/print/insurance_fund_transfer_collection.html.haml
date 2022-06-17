@@ -31,9 +31,9 @@
       %th
         Center
       - @insurance_fund_transfer_collection[:data][:totals].each do |h|
-        %th.text-right
+        %th.text-end
           #{h[:key]}
-      %th.text-right
+      %th.text-end
         Amt Rec.
   %tbody
     - @insurance_fund_transfer_collection[:data][:records].each_with_index do |r, i|
@@ -45,9 +45,9 @@
         %td
           #{Member.find(r[:member][:id]).center.name}
         - r[:records].each do |rr|
-          %td.text-right
+          %td.text-end
             #{number_to_currency(rr[:amount], unit: '')}
-        %td.text-right
+        %td.text-end
           #{number_to_currency(r[:total_collected], unit: '')}
     %tr
       %th
@@ -55,9 +55,9 @@
       %th
         TOTAL
       - @insurance_fund_transfer_collection[:data][:totals].each do |t|
-        %th.text-right
+        %th.text-end
           #{number_to_currency(t[:amount], unit: '')}
-      %th.text-right
+      %th.text-end
         #{number_to_currency(@insurance_fund_transfer_collection[:data][:total_collected], unit: '')}
 %hr
 %p

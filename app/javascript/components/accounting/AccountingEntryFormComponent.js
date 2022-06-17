@@ -1051,13 +1051,17 @@ export default class AccountingEntryFormComponent extends React.Component {
           <div className="col-md-2"> 
             <div className="form-group">
               <label>Actions</label>
-              <button
-                className="btn btn-info btn-block"
-                onClick={this.handleAddJournalEntryClicked.bind(this)}
-              >
-                <span className="fa fa-plus"/>
-                Add
-              </button>
+              <div className="form-group">
+                <div className="btn-group">
+                  <button
+                    className="btn btn-info btn-block"
+                    onClick={this.handleAddJournalEntryClicked.bind(this)}
+                  >
+                    <span className="fa fa-plus"/>
+                    Add
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
