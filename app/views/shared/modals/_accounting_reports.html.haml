@@ -5,6 +5,8 @@
         %h3.modal-title 
           Accounting Reports
       .modal-body
+        %h5
+          General
         .row
           .col
             = link_to "/accounting/trial_balances", class: "btn-nav-square-md" do
@@ -26,3 +28,30 @@
           .col
             = link_to accounting_books_jvb_path, class: "btn-nav-square-md" do
               General Journal
+          .col
+            = link_to accounting_books_misc_path, class: "btn-nav-square-md" do
+              Miscellaneous
+
+        .mt-4
+        %h5
+          Financial Statements
+        %hr
+        .row
+          .col
+            = link_to accounting_balance_sheets_path, class: "btn-nav-square-md" do
+              Balance Sheets
+          .col
+            = link_to accounting_income_statements_path, class: "btn-nav-square-md" do
+              Income Statements
+
+        .mt-4
+        %h5
+          Others
+        %hr
+        .row
+          .col
+            = link_to "/data/_stores/accounting_entries_summaries", class: "btn-nav-square-md" do
+              Voucher Summmary
+          .col
+            = link_to monthly_accounting_code_summaries_path, class: "btn-nav-square-md" do
+              Monthly AC Summaries
