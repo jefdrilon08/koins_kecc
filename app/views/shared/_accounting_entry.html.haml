@@ -3,7 +3,7 @@
     .row
       .col-md-6
         %strong
-          = link_to accounting_accounting_entry_path(accounting_entry, book: accounting_entry.book.downcase) do
+          = link_to accounting_accounting_entry_path(accounting_entry, book: accounting_entry.book.downcase), class: "text-white" do
             - if accounting_entry.approved?
               #{accounting_entry.book}
               #{accounting_entry.reference_number} - 
@@ -14,7 +14,7 @@
               Pending
       .col-md-6
         .text-end
-          .text-muted
+          .text-white
             .fa.fa-store
             #{accounting_entry.book} - #{accounting_entry.branch.to_s} - #{accounting_entry.try(:accounting_fund).try(:name)}
   .card-body

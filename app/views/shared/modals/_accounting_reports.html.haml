@@ -5,3 +5,24 @@
         %h3.modal-title 
           Accounting Reports
       .modal-body
+        .row
+          .col
+            = link_to "/accounting/trial_balances", class: "btn-nav-square-md" do
+              Trial Balance
+          .col
+            = link_to "/accounting/general_ledgers", class: "btn-nav-square-md" do
+              General Ledgers
+        .mt-4
+        %h5
+          Books
+        %hr
+        .row
+          .col
+            = link_to accounting_books_crb_path, class: "btn-nav-square-md" do
+              Cash Receipts
+          .col
+            = link_to accounting_books_cdb_path, class: "btn-nav-square-md" do
+              Cash Disbursements
+          .col
+            = link_to accounting_books_jvb_path, class: "btn-nav-square-md" do
+              General Journal
