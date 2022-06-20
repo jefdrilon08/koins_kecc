@@ -1,6 +1,8 @@
-var $dataTable;
+import $ from "jquery";
 import DataTable from "datatables.net";
 DataTable($);
+
+var $dataTable;
 
 var init  = function() {
   _cacheDom();
