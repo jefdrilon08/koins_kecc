@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import $ from "jquery";
 
 var $searchBtn;
 var $downloadBtn;

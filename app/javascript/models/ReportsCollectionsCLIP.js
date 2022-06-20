@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 var $downloadBtn;       
 var $startDate;        
 var $endDate;      

@@ -1,5 +1,7 @@
 import Mustache from "mustache";
-import "select2/dist/js/select2.min";
+import $ from "jquery";
+import select2 from 'select2';
+select2($);
 import "chart.js/dist/chart.min.js";
 
 var $btnSync;

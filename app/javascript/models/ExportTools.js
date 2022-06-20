@@ -1,4 +1,5 @@
 import Mustsache from "mustache";
+import $ from "jquery";
 
 var $branch;
 var $startDate;

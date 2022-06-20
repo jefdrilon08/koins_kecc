@@ -5,11 +5,8 @@
         %h3.modal-title 
           Writeoffs
       .modal-body
-        = link_to "/data_stores/for_writeoff", class: "btn btn-primary w-100" do
-          %span.btn-label
-            %i.bi.bi-pencil-square
+        = link_to "/data_stores/for_writeoff", class: "btn-nav-square-md" do
           List of Members for Writeoff
-        = link_to billing_for_writeoff_path, class: "btn btn-primary w-100 mt-4" do
-          %span.btn-label
-            %i.bi.bi-pencil-square
+        .mt-4
+        = link_to billing_for_writeoff_path, class: "btn-nav-square-md" do
           Collection for Writeoff

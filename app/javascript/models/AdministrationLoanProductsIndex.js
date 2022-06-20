@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 var $btnUpload;
 var $btnConfirmUpload;
 var $modalUpload;

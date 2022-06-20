@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import $ from "jquery";
 
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];

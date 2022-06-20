@@ -1,4 +1,6 @@
 var $dataTable;
+import DataTable from "datatables.net";
+DataTable($);
 
 var init  = function() {
   _cacheDom();

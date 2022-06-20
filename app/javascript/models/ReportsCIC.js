@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 var $providerCode; 
 var $downloadBtn;     
 var $startDate;      

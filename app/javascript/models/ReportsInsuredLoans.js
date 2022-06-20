@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 var $btnPrint;
 var $btnDownloadCsv;
 var $filterStartDate;
