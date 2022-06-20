@@ -58,6 +58,8 @@ class DataStore < ApplicationRecord
   scope :billing_for_writeoff, ->{where("meta->>'data_store_type' = ?","BILLING_FOR_WRITEOFF")}
   scope :insurance_personal_funds, -> { where("meta->>'data_store_type' = ?", "INSURANCE_PERSONAL_FUNDS") }
   scope :billing_for_writeoff_collections, ->{where("meta->>'data_store_type' = ?","BILLING_FOR_WRITEOFF_COLLECTION")}
+  scope :additional_share, ->{where("meta->>'data_store_type' = ?","ADDITIONAL_SHARE")}
+
 
   # For attaching json dumps
   has_one_attached :data_json_dump

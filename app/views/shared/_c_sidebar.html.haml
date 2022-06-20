@@ -79,6 +79,10 @@
           .c-sidebar-nav-icon.fa.fa-money-check
           Time Deposits
     %li.c-sidebar-nav-item
+      = link_to additional_share_path, class: "c-sidebar-nav-link #{params[:controller] == "additional_share" ? 'active' : ''}" do
+        .c-sidebar-nav-icon.fa.fa-money-check
+        Additional Share Capital
+    %li.c-sidebar-nav-item
       = link_to withdrawal_collections_path, class: "c-sidebar-nav-link #{params[:controller] == "withdrawal_collections" ? 'active' : ''}" do
         .c-sidebar-nav-icon.fa.fa-money-check
         Withdrawals

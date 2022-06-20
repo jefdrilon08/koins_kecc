@@ -197,6 +197,8 @@ import MonthlyIncentivesShow from "../models/MonthlyIncentivesShow.js";
 import Sidebar from "../models/Sidebar.js";
 import BillingForWriteoffCollectionIndex from "../models/BillingForWriteoffCollectionIndex.js";
 import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollectionShow.js";
+import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
+import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
 
 const renderComponent = (Component, payload) => {
@@ -378,6 +380,8 @@ const hooks = {
   "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow],
   "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex],
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
+  "additional_share/index":			      [AdditionalShareIndex],
+  "additional_share/show":			      [AdditionalShareShow],
   "pages/profile":                                    [Profile]
 }
 
