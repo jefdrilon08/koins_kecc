@@ -32,65 +32,66 @@ var _cacheDom = function() {
    )
 
 	
-   $btnAdd			= $("#btn-add");
-   $btnApprove			= $("#btn-approve");	
-   $btnConfirmProcess   	= $("#btn-confirm-process");
-   $btnConfirmAmount		= $("#btn-confirm-amount")
-   $selectMember		= $("#select-member");
-   $UpdateAmount		= $(".undo");
+   $btnAdd			      = $("#btn-add");
+   $btnApprove			  = $("#btn-approve");	
+   $btnConfirmProcess = $("#btn-confirm-process");
+   $btnConfirmAmount	= $("#btn-confirm-amount")
+   $selectMember      = $("#select-member");
+   $UpdateAmount      = $(".undo");
    $withdrawAmount		= $("#withdrawAmount");		
-   $memberName			= $("#memberName");
-   $memberId			= $("#memberId");
+   $memberName			  = $("#memberName");
+   $memberId			    = $("#memberId");
    $accountSubType		= $("#accountSubType");
-   $btnAddParticular         	= $("#btn-add-particular");
-   $inputParticular          	= $("#particular");
-   $message  			= $(".message");
+   $btnAddParticular  = $("#btn-add-particular");
+   $inputParticular   = $("#particular");
+   $message  			    = $(".message");
 	
 };
 
 var _bindEvents = function() {
   $btnAdd.on("click", function() {
-     _memberId = $selectMember.val();
-     _id = $(this).data("id");	  
+   _memberId = $selectMember.val();
+   _id = $(this).data("id");	  
 
-     var data = {
-     	id: _id,
-	member_id: _memberId,
-	authenticity_token: _authenticityToken
-     }; 
-     $selectMember.prop("disabled", true);
+    var data = {
+      id: _id,
+      member_id: _memberId,
+      authenticity_token: _authenticityToken
+    };
+
+    $selectMember.prop("disabled", true);
  
-     $.ajax({
-	url: "/api/v1/additional_share/add_member",
-	method: 'POST',
-	data: data,
-	success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
-        
-        window.location.reload();
-      	},
-	error: function(response) {
-        var errors  = [];
-	alert(JSON.parse(response.responseText).full_messages)
-	$selectMember.prop("disabled", false);
-	try {
-          errors  = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors  = ["Something went wrong"]
-        } finally {
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
-          $selectMember.prop("disabled", false);
-        }
+    $.ajax({
+      url: "/api/v1/additional_share/add_member",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+      $message.html(
+        "Success! Redirecting..."
+      );
+
+      window.location.reload();
+      },
+      error: function(response) {
+      var errors  = [];
+      alert(JSON.parse(response.responseText).full_messages)
+      $selectMember.prop("disabled", false);
+      try {
+      errors  = JSON.parse(response.responseText).full_messages;
+      } catch(err) {
+      errors  = ["Something went wrong"]
+      } finally {
+      $message.html(
+      Mustache.render(
+      templateErrorList,
+      { errors: errors }
+      )
+      );
+      $selectMember.prop("disabled", false);
       }
-     });	   
-   });
+      }
+      });	   
+    });
 	//end btnAdd
    $UpdateAmount.on("click" , function() {
 	   _memberAccountId 		= $(this).data("member-account-id")
