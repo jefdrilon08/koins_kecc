@@ -255,6 +255,22 @@ module Api
         render json: { message: "ok" }
       end
 
+      def modify_member_record
+        billing         = Billing.find(params[:id])
+        current_member  = params[:current_member]
+
+        cmd = ::Billings::ModifyMemberRecord.new(
+          billing: billing,
+          current_member: current_member
+        )
+
+        cmd.execute!
+
+        billing = cmd.billing
+
+        render json: billing
+      end
+
       def modify_transaction_record
         billing             = Billing.find(params[:id])
         current_transaction = params[:current_transaction]

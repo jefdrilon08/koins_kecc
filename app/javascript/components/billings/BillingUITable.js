@@ -1,13 +1,14 @@
 import React from 'react';
 import $ from 'jquery';
 import ReactTable from 'react-table';
-import Modal from 'react-modal';
 import Toggle from 'react-toggle';
 
 import {numberWithCommas} from '../utils/helpers';
 import {customStyles} from '../utils/consts';
 
 import ErrorDisplay from '../ErrorDisplay';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 export default class BillingUITable extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ export default class BillingUITable extends React.Component {
       currentAmountValue: false,
       currentMember: false,
       modalIsOpen: false,
+      modalArIsOpen: false,
       isLoading: false,
       errors: false,
       grandTotal: 0.00
@@ -167,6 +169,23 @@ export default class BillingUITable extends React.Component {
     return t;
   }
 
+  renderARNumber(member) {
+    if(member.ar_number) {
+      return (
+        <>
+          <br/>
+          <small className="badge bg-secondary">
+            AR: {member.ar_number}
+          </small>
+        </>
+      )
+    } else {
+      return (
+        <></>
+      )
+    }
+  }
+
 
   buildRecords() {
     var records = [];
@@ -213,9 +232,10 @@ export default class BillingUITable extends React.Component {
       components.push(
         <td key={"c-member-" + member.id}>
           <strong>
-            <a href={"/members/" + member.id + "/display"} target="_blank">
+            <a onClick={this.handleMemberClicked.bind(this, this.props.data.data.records[i].member)}>
               {this.props.data.data.records[i].member.full_name}
             </a>
+            {this.renderARNumber(this.props.data.data.records[i].member)}
           </strong>
           <br/>
           <small className="badge bg-info">
@@ -344,7 +364,6 @@ export default class BillingUITable extends React.Component {
           </strong>
         </td>
       );
-      //alert(grandTotal);
 
       records.push(
         <tr key={"member-row-" + i} style={{ backgroundColor: (record.attendance ? '' : '') }}>
@@ -444,6 +463,14 @@ export default class BillingUITable extends React.Component {
     );
   }
 
+  handleMemberClicked(member) {
+    console.log(member);
+    this.setState({
+      modalArIsOpen: true,
+      currentMember: member
+    })
+  }
+
   handleTransactionClicked(paymentRecord, member) {
     this.setState({
       modalIsOpen: true,
@@ -520,6 +547,47 @@ export default class BillingUITable extends React.Component {
     }
   }
 
+  handleARModalConfirm() {
+    var currentMember       = this.state.currentMember;
+    var context             = this;
+
+    var data = {
+      current_member: currentMember,
+      id: this.props.id,
+      authenticity_token: this.props.authenticityToken
+    }
+
+    this.setState({
+      isLoading: true
+    });
+    
+    $.ajax({
+      url: "/api/v1/billings/modify_member_record",
+      method: "POST",
+      data: data,
+      success: function(response) {
+        context.setState({
+          currentMember: false,
+          modalArIsOpen: false,
+          isLoading: false
+        });
+
+        context.props.updateData(response);
+      },
+      error: function(response) {
+        try {
+          context.setState({
+            isLoading: false,
+            errors: ["Something went wrong"]
+          });
+        } catch(err) {
+          console.log(response);
+          alert("Something went wrong!");
+        }
+      }
+    });
+  }
+
   handleModalConfirm() {
     var currentTransaction  = this.state.currentTransaction;
     var currentMember       = this.state.currentMember;
@@ -535,19 +603,6 @@ export default class BillingUITable extends React.Component {
     this.setState({
       isLoading: true
     });
-
-/*
-    this.props.handleChangeTransaction(currentMember, currentTransaction, this.state.currentAmountValue);
-
-    context.setState({
-      currentTransaction: false,
-      currentAmountValue: false,
-      currentMember: false,
-      modalIsOpen: false,
-      isLoading: false,
-      errors: false
-    });
-*/
     
     $.ajax({
       url: "/api/v1/billings/modify_transaction_record",
@@ -601,102 +656,118 @@ export default class BillingUITable extends React.Component {
     }
   }
 
-  renderModalContent() {
+  render() {
     var currentTransaction  = this.state.currentTransaction;
     var currentMember       = this.state.currentMember;
 
-    if(currentTransaction) {
-      return (
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <h5>
-                Member: &nbsp;
-                <span className="text-muted">
-                  {currentMember.full_name}
-                </span>
-              </h5>
-              <h5>
-                Transaction Type:  &nbsp;
-                <span className="text-muted">
-                  {currentTransaction.record_type}
-                </span>
-              </h5>
-              {this.renderTransactionParticular()}
-
-              <hr/>
-
-              <input
-                type="number"
-                className="form-control"
-                value={currentTransaction.amount}
-                disabled={this.state.isLoading}
-                onChange={this.handleInputAmountChanged.bind(this)}
-              />
-
-              {this.renderLoadingStatus()}
-            </div>
-          </div>
-          <hr/>
-          <div className="row">
-            <div className="col">
-              <center>
-                <div className="btn-group">
-                  <button 
-                    className="btn btn-success" 
-                    onClick={this.handleModalConfirm.bind(this)}
-                    disabled={this.state.isLoading}
-                  >
-                    <span className="fa fa-check" />
-                    Confirm Change
-                  </button>
-
-                  <button 
-                    className="btn btn-danger" 
-                    onClick={this.handleModalClose.bind(this)}
-                    disabled={this.state.isLoading}
-                  >
-                    <span className="fa fa-times" />
-                    Cancel Change
-                  </button>
-                </div>
-              </center>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          Internal Error
-        </div>
-      );
-    }
-  }
-
-  render() {
     return (
-      <div className="table-responsive">
+      <>
         <Modal
-          isOpen={this.state.modalIsOpen}
-          style={customStyles}
+          show={this.state.modalIsOpen}
+          onHide={this.handleModalClose.bind(this)}
         >
-          {this.renderModalContent()}
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {currentMember.fullName}
+            </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <h5>
+              Transaction Type:  &nbsp;
+              <span className="text-muted">
+                {currentTransaction.record_type}
+              </span>
+            </h5>
+            {this.renderTransactionParticular()}
+
+            <hr/>
+
+            <input
+              type="number"
+              className="form-control"
+              value={currentTransaction.amount}
+              disabled={this.state.isLoading}
+              onChange={this.handleInputAmountChanged.bind(this)}
+            />
+
+            {this.renderLoadingStatus()}
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button 
+              variant="primary"
+              onClick={this.handleModalConfirm.bind(this)}
+              disabled={this.state.isLoading}
+            >
+              Confirm Change
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={this.handleModalClose.bind(this)}
+              disabled={this.state.isLoading}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
         </Modal>
-        <table className="table table-bordered table-hover table-sm">
-          <thead>
-            <tr>
-              {this.buildHeaders()}
-            </tr>
-          </thead>
-          <tbody>
-            {this.buildRecords()}
-          </tbody>
-          <tfoot>
-            {this.buildTotals()}
-          </tfoot>
-        </table>
-      </div>
+
+        <Modal
+          show={this.state.modalArIsOpen}
+          onHide={() => { this.setState({ modalArIsOpen: false }) }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {currentMember.full_name}
+            </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <h5>
+              AR Number:
+            </h5>
+            <input
+              type="number"
+              className="form-control"
+              value={currentMember.ar_number}
+              disabled={this.state.isLoading}
+              onChange={(event) => { currentMember.ar_number = event.target.value; this.setState({ currentMember: currentMember }); }}
+            />
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button 
+              variant="primary"
+              disabled={this.state.isLoading}
+              onClick={this.handleARModalConfirm.bind(this)}
+            >
+              Save changes
+            </Button>
+            <Button 
+              variant="secondary"
+              onClick={() => { this.setState({ modalArIsOpen: false }) }}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <div className="table-responsive">
+          <table className="table table-bordered table-hover table-sm">
+            <thead>
+              <tr>
+                {this.buildHeaders()}
+              </tr>
+            </thead>
+            <tbody>
+              {this.buildRecords()}
+            </tbody>
+            <tfoot>
+              {this.buildTotals()}
+            </tfoot>
+          </table>
+        </div>
+      </>
     );
   }
 }

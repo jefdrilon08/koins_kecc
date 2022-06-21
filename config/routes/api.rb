@@ -317,6 +317,7 @@ namespace :api do
     post "/billings", to: "billings#create"
     post "/billings/update", to: "billings#update"
     post "/billings/modify_transaction_record", to: "billings#modify_transaction_record"
+    post "/billings/modify_member_record", to: "billings#modify_member_record"
     post "/billings/toggle_attendance", to: "billings#toggle_attendance"
     post "/billings/toggle_attendance_on", to: "billings#toggle_attendance_on"
     post "/billings/toggle_attendance_off", to: "billings#toggle_attendance_off"

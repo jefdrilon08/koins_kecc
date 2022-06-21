@@ -525,6 +525,43 @@ export default class BillingUIComponent extends React.Component {
             handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             data={accounting_entry_data.data}
           />
+          <hr/>
+          <h6>
+            AR Number
+          </h6>
+          <table className="table table-responsive table-sm">
+            <thead>
+              <tr>
+                <th>
+                  Member
+                </th>
+                <th>
+                  AR Number
+                </th>
+                <th>
+                  Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.data.data.records.map((o) => {
+                if(o.member.ar_number) {
+                  return (
+                    <tr key={"ar-row-" + o.member.id}>
+                      <td>
+                        {o.member.full_name}
+                      </td>
+                      <td>
+                        {o.member.ar_number}
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  )
+                }
+              })}
+            </tbody>
+          </table>
         </div>
       );
     }
