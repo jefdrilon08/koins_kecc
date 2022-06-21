@@ -1,12 +1,15 @@
 module BillingForWriteoffCollection
   class Approve
     def initialize(config:)
-      @config = config
-      @data_store = DataStore.find(@config[:data_store])
-      @data = @data_store.data.with_indifferent_access
-      @accounting_entry_data = @data_store.data.with_indifferent_access[:accounting_entry]
-      @records = @data[:record]	
-      @user = User.find(@config[:user])
+      @config                 = config
+      @data_store             = @config[:record]
+      @data                   = @data_store.data.with_indifferent_access
+      @accounting_entry_data  = @data_store.data.with_indifferent_access[:accounting_entry]
+      @records                = @data[:record]	
+      @header                 = @data[:header]
+      @user                   = @config[:user]
+      @total_cash_payment     = @data[:total_cash_payment]
+      @total_payment          = @data[:total_payment]
       @date = ::Utils::GetCurrentDate.new(
               config: {
                 branch: @branch
@@ -17,6 +20,13 @@ module BillingForWriteoffCollection
 
     def execute!
       insert_payment!
+      approved_entry!
+      @accounting_entry_data[:reference_number] = @accounting_entry.reference_number
+      @accounting_entry_data[:status]           = @accounting_entry.status
+      @accounting_entry_data[:approved_by]      = @accounting_entry.approved_by
+      @data_store.meta[:date_approved] = @date
+      @data_store.update!(status: "approved",data: {accounting_entry: @accounting_entry_data, record: @records , header: @header , total_cash_payment: @total_cash_payment , total_payment: @total_payment})
+      @data_store
     end
 
     def insert_payment!
@@ -53,6 +63,12 @@ module BillingForWriteoffCollection
 	      }
             )
             account_transaction.save!
+            ::Loans::FixAmort.new(loan: Loan.find(ld[:loan_id])).execute!
+            l   = Loan.find(ld[:loan_id])
+            bal = l.principal_balance.to_f + l.interest.to_f
+            if bal > 0
+              l.update(status: 'writeoff')
+            end
           elsif ld[:enabled] == true && ld[:name] == "Withdraw Payment"
             account_transaction = AccountTransaction.new(
               amount: ld[:amount],
@@ -74,6 +90,30 @@ module BillingForWriteoffCollection
         end
       end
     end
+
+    def approved_entry!
+      config  = {
+        accounting_entry_data: @accounting_entry_data.with_indifferent_access,
+        user: @user
+      }
+
+      accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                          config: config
+                        ).execute!
+
+      # Post to books
+        config  = {
+          accounting_entry: accounting_entry,
+          user: @user
+        }
+
+        @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                            ).execute!
+
+        @accounting_entry
+    end
+
 
   end
 end

@@ -60,11 +60,10 @@ module Api
           data_store: record.id,
           user: current_user.id
         }
-        #record.update(status: "processing")
-        #ProcessApproveBillingForWriteoffCollections.perform_later(args)
-        ::BillingForWriteoffCollection::Approve.new(config: config).execute!
-
-          render json: { message: "ok" }
+        record.update(status: "processing")
+        ProcessApproveBillingForWriteoffCollections.perform_later(args)
+        #::BillingForWriteoffCollection::Approve.new(config: config).execute!
+        render json: { message: "ok" }
       end
 
     end

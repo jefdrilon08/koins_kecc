@@ -21,15 +21,20 @@ var $message;
 var templateErrorList;
 
 var _cacheDom = function() {
-   $btnAdd		= $("#btn-add");
+   $modalUpdate 	    = new bootstrap.Modal(
+     document.getElementById("modal-update-transaction")
+   )
 	
+   $modalApproveTransaction = new bootstrap.Modal(
+     document.getElementById("modal-approve-transaction")
+   )
+
+   $btnAdd		= $("#btn-add");	
    $btnConfirmAmount	= $("#btn-confirm-amount")
    $btnApprove		= $("#btn-approve");
    $btnConfirmProcess   = $("#btn-confirm-process");
    $selectMember	= $("#select-member");
    $UpdateAmount	= $(".undo");
-   $modalUpdate		= $("#modal-update-transaction");
-   $modalApproveTransaction = $("#modal-approve-transaction");
    $paymentAmount	= $("#paymentAmount");		
    $memberName		= $("#memberName");
    $memberId		= $("#memberId");
@@ -94,7 +99,7 @@ var _bindEvents = function() {
 	$memberName.text(member_name)
 	$loanType.text(loan_type)
 	$memberId.text(member_id)
-	$modalUpdate.modal("show")
+	$modalUpdate.show();
 
    });
 
@@ -145,7 +150,7 @@ var _bindEvents = function() {
    $btnApprove.on("click", function() {
      _id = $(this).data("id");
 	   //alert(_id);
-	$modalApproveTransaction.modal("show");
+	$modalApproveTransaction.show();
    });
 
    $btnConfirmProcess.on("click", function() {

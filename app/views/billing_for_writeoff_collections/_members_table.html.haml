@@ -19,7 +19,8 @@
               #{o[:name]}
           - o[:loan_data].each do |loan_data|
             %td.text-right
-              -if loan_data[:enabled] == true 
+              //-if loan_data[:enabled] == true
+              -if @data_store.status == 'pending'
                 %a.undo{ data: {
                   member_name:  o[:name],
                   loan_id: loan_data[:loan_id],
@@ -29,6 +30,10 @@
                   }, 
                 :href => "#"
                 }
+                  -if loan_data[:enabled] == true
+                    #{number_to_currency(loan_data[:amount] , unit: '')}
+              -else
+                -if loan_data[:enabled] == true
                   #{number_to_currency(loan_data[:amount] , unit: '')}
         %td.text-right
           %strong
