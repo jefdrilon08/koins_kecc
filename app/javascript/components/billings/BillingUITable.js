@@ -177,6 +177,9 @@ export default class BillingUITable extends React.Component {
           <small className="badge bg-secondary">
             AR: {member.ar_number}
           </small>
+          <small className="badge bg-warning">
+            OR: {member.or_number}
+          </small>
         </>
       )
     } else {
