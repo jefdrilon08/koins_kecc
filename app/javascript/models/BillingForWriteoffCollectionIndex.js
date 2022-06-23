@@ -99,12 +99,12 @@ var _bindEvents = function() {
    $selectCenter.prop("disabled", true);
 
    var data = {
-	branch_id: branchId,
-	center_id: centerId,
-	authenticity_token: authenticityToken
+	  branch_id: branchId,
+	  center_id: centerId,
+	  authenticity_token: authenticityToken
    }
 	 
-     $.ajax({
+    $.ajax({
       url: "/api/v1/billing_for_writeoff_collection/create",
       method: 'POST',
       data: data,
@@ -128,11 +128,11 @@ var _bindEvents = function() {
           )
         );
 
-   	$btnConfirmNew.prop("disabled", true);
-   	$selectBranch.prop("disabled", true);
-   	$selectCenter.prop("disabled", true);
+   	  $btnConfirmNew.prop("disabled", true);
+   	  $selectBranch.prop("disabled", true);
+   	  $selectCenter.prop("disabled", true);
      }
-    }); //alert(data);   
+    });   
  });
 
 }

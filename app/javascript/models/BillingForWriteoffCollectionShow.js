@@ -21,55 +21,50 @@ var $message;
 var templateErrorList;
 
 var _cacheDom = function() {
-   $modalUpdate 	    = new bootstrap.Modal(
-     document.getElementById("modal-update-transaction")
-   )
+  $modalUpdate = new bootstrap.Modal(
+    document.getElementById("modal-update-transaction")
+  )
 	
-   $modalApproveTransaction = new bootstrap.Modal(
-     document.getElementById("modal-approve-transaction")
-   )
+  $modalApproveTransaction = new bootstrap.Modal(
+    document.getElementById("modal-approve-transaction")
+  )
 
-   $btnAdd		= $("#btn-add");	
-   $btnConfirmAmount	= $("#btn-confirm-amount")
-   $btnApprove		= $("#btn-approve");
-   $btnConfirmProcess   = $("#btn-confirm-process");
-   $selectMember	= $("#select-member");
-   $UpdateAmount	= $(".undo");
-   $paymentAmount	= $("#paymentAmount");		
-   $memberName		= $("#memberName");
-   $memberId		= $("#memberId");
-   $loanType		= $("#loanType");
-
-   $message  = $(".message");
-
+  $btnAdd		          = $("#btn-add");	
+  $btnConfirmAmount	  = $("#btn-confirm-amount")
+  $btnApprove		      = $("#btn-approve");
+  $btnConfirmProcess  = $("#btn-confirm-process");
+  $selectMember	      = $("#select-member");
+  $UpdateAmount	      = $(".undo");
+  $paymentAmount	    = $("#paymentAmount");		
+  $memberName		      = $("#memberName");
+  $memberId		        = $("#memberId");
+  $loanType		        = $("#loanType");
+  $message            = $(".message");
 };
 
 var _bindEvents = function() {
   $btnAdd.on("click", function() {
-     _memberId = $selectMember.val();
-     _id = $(this).data("id");	  
-
-     var data = {
-     	id: _id,
-	member_id: _memberId,
-	authenticity_token: _authenticityToken
-     }; 
-     $selectMember.prop("disabled", true);
+    _memberId = $selectMember.val();
+    _id = $(this).data("id");	  
+    var data = {
+      id: _id,
+	    member_id: _memberId,
+	    authenticity_token: _authenticityToken
+    };  
+    $selectMember.prop("disabled", true);
  
-     $.ajax({
-	url: "/api/v1/billing_for_writeoff_collection/add_member",
-	method: 'POST',
-	data: data,
-	success: function(response) {
+    $.ajax({
+	    url: "/api/v1/billing_for_writeoff_collection/add_member",
+	    method: 'POST',
+	    data: data,
+	    success: function(response) {
         $message.html(
           "Success! Redirecting..."
         );
-        
         window.location.reload();
-      	},
-	error: function(response) {
+      },
+	    error: function(response) {
         var errors  = [];
-
         try {
           errors  = JSON.parse(response.responseText).full_messages;
         } catch(err) {
@@ -84,68 +79,61 @@ var _bindEvents = function() {
           $selectMember.prop("disabled", false);
         }
       }
-     });	   
-   });
-	//end btnAdd
-   $UpdateAmount.on("click" , function() {
-	_loanId 		= $(this).data("loan-id")
-	var payment_amount	= $(this).data("payment-amount")
-	var member_name		= $(this).data("member-name")
-	var loan_type		= $(this).data("loan-type")
-	var member_id		= $(this).data("member-id")
+    });	   
+  });
 
-	   //alert(member_id);
+$UpdateAmount.on("click" , function() {
+  _loanId 		        = $(this).data("loan-id")
+	var payment_amount  = $(this).data("payment-amount")
+	var member_name		  = $(this).data("member-name")
+	var loan_type		    = $(this).data("loan-type")
+	var member_id		    = $(this).data("member-id")
 	$paymentAmount.val(payment_amount)
 	$memberName.text(member_name)
 	$loanType.text(loan_type)
 	$memberId.text(member_id)
 	$modalUpdate.show();
-
-   });
-
-   $btnConfirmAmount.on("click", function() {
-	_paymentAmount	= $paymentAmount.val()	     
-	_id 		= $(this).data("id");	
-	_memberId	= $memberId.text()
-
-	   //alert($memberId.text());
-	   var data = {
+});
+   
+$btnConfirmAmount.on("click", function() {
+  _paymentAmount	= $paymentAmount.val()	     
+  _id 		        = $(this).data("id");	
+  _memberId	      = $memberId.text()
+  
+  var data = {
 		id: _id,
 		member_name: $memberName.text(),
 		member_id: _memberId,   
 		loan_id: _loanId,   
 		payment_amount: _paymentAmount,
 		authenticity_token: _authenticityToken
-	   	};
-      $.ajax({
-      url: "/api/v1/billing_for_writeoff_collection/update_amount",
-      method: 'POST',
-      data: data,
-      success: function(response) {
-	$message.html(
-          "Success! Redirecting..."
-        );
-        
-        window.location.reload();
-      },
-      error: function(response) {
-        errors = [];
-	alert(JSON.parse(response.responseText).full_messages)
-        try {
-          errors = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors.push("Something went wrong");
-          console.log(response);
-        }
-
-        $message.html(
-          Mustache.render(
-           
-          )
-        );
+	};
+  $.ajax({
+    url: "/api/v1/billing_for_writeoff_collection/update_amount",
+    method: 'POST',
+    data: data,
+    success: function(response) {
+	    $message.html(
+        "Success! Redirecting..."
+      );  
+      window.location.reload();
+    },
+    error: function(response) {
+      errors = [];
+	    alert(JSON.parse(response.responseText).full_messages)
+      try {
+        errors = JSON.parse(response.responseText).full_messages;
+      } catch(err) {
+        errors.push("Something went wrong");
+        console.log(response);
+      }
+      $message.html(
+        Mustache.render(   
+        )
+      );
     }
-    }); 
-   });
+  }); 
+});
 
    $btnApprove.on("click", function() {
      _id = $(this).data("id");

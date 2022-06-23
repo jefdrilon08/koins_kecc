@@ -39,7 +39,7 @@ module Api
           payment_amount: params[:payment_amount],
           member_id: params[:member_id]
         }
-       errors = ::BillingForWriteoffCollection::ValidateAmount.new(config: config).execute!
+        errors = ::BillingForWriteoffCollection::ValidateAmount.new(config: config).execute!
         if errors[:messages].any?
           render json: errors, status: 400
         else
@@ -62,7 +62,6 @@ module Api
         }
         record.update(status: "processing")
         ProcessApproveBillingForWriteoffCollections.perform_later(args)
-        #::BillingForWriteoffCollection::Approve.new(config: config).execute!
         render json: { message: "ok" }
       end
 

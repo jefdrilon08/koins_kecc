@@ -10,12 +10,11 @@ module BillingForWriteoffCollection
       @user                   = @config[:user]
       @total_cash_payment     = @data[:total_cash_payment]
       @total_payment          = @data[:total_payment]
-      @date = ::Utils::GetCurrentDate.new(
-              config: {
-                branch: @branch
-                }
-              ).execute!
-
+      @date                   = ::Utils::GetCurrentDate.new(
+                                  config: {
+                                    branch: @branch
+                                  }
+                                ).execute!
     end
 
     def execute!
@@ -24,7 +23,7 @@ module BillingForWriteoffCollection
       @accounting_entry_data[:reference_number] = @accounting_entry.reference_number
       @accounting_entry_data[:status]           = @accounting_entry.status
       @accounting_entry_data[:approved_by]      = @accounting_entry.approved_by
-      @data_store.meta[:date_approved] = @date
+      @data_store.meta[:date_approved]          = @date
       @data_store.update!(status: "approved",data: {accounting_entry: @accounting_entry_data, record: @records , header: @header , total_cash_payment: @total_cash_payment , total_payment: @total_payment})
       @data_store
     end
@@ -47,39 +46,37 @@ module BillingForWriteoffCollection
             end
             account_transaction = AccountTransaction.new(
               amount: ld[:amount],
-	      subsidiary_id: ld[:loan_id],
-	      subsidiary_type: "Loan",
-	      transaction_type: "loan_payment",
-	      transacted_at: @date,
-	      status: "approved",
-	      
+	            subsidiary_id: ld[:loan_id],
+	            subsidiary_type: "Loan",
+	            transaction_type: "loan_payment",
+	            transacted_at: @date,
+	            status: "approved",
               data: {
-	        amort_entries: @amort,
-		total_interest_paid: ld[:interest_amount].to_f.round(2),
-		total_principal_paid: ld[:principal_amount].to_f.round(2),
-		amount_due: ld[:amount],
-		particular:  @accounting_entry_data[:particular],
-		approved_by: @user.full_name
-	      }
+	              amort_entries: @amort,
+		            total_interest_paid: ld[:interest_amount].to_f.round(2),
+		            total_principal_paid: ld[:principal_amount].to_f.round(2),
+		            amount_due: ld[:amount],
+		            particular:  @accounting_entry_data[:particular],
+		            approved_by: @user.full_name
+	            }
             )
             account_transaction.save!
             ::Loans::FixAmort.new(loan: Loan.find(ld[:loan_id])).execute!
             l   = Loan.find(ld[:loan_id])
             bal = l.principal_balance.to_f + l.interest.to_f
-            if bal > 0
+            if bal != 0
               l.update(status: 'writeoff')
             end
           elsif ld[:enabled] == true && ld[:name] == "Withdraw Payment"
             account_transaction = AccountTransaction.new(
               amount: ld[:amount],
-	      subsidiary_id: ld[:savings_account_id],
-	      subsidiary_type: "MemberAccount",
-	      transaction_type: "withdraw",
-	      transacted_at: @date,
-	      status: "approved",
-	      
+	            subsidiary_id: ld[:savings_account_id],
+	            subsidiary_type: "MemberAccount",
+	            transaction_type: "withdraw",
+	            transacted_at: @date,
+	            status: "approved",
               data: {
-	        is_withdraw_payment: true,
+	              is_withdraw_payment: true,
                 beginning_balance: 0.0,
                 ending_balance: 0.0  
               }
@@ -96,25 +93,19 @@ module BillingForWriteoffCollection
         accounting_entry_data: @accounting_entry_data.with_indifferent_access,
         user: @user
       }
-
       accounting_entry  = ::Accounting::AccountingEntries::Save.new(
                           config: config
                         ).execute!
-
       # Post to books
-        config  = {
-          accounting_entry: accounting_entry,
-          user: @user
-        }
-
-        @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
-                            config: config
-                            ).execute!
-
-        @accounting_entry
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                          config: config
+                        ).execute!
+      @accounting_entry
     end
-
-
   end
 end
  
