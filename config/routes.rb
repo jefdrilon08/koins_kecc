@@ -244,7 +244,8 @@ Rails.application.routes.draw do
   # billing for writeoff collections
   get "/billing_for_writeoff_collections", to: "billing_for_writeoff_collections#index"
   get "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#show"
-  
+  delete "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#destroy"
+
   # billing for writeoff
   get "/billing_for_writeoff", to: "billing_for_writeoff#index"
   get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"

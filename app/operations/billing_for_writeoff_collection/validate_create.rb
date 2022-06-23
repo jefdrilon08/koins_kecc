@@ -15,7 +15,6 @@ module BillingForWriteoffCollection
         }
       end
       @errors[:full_messages] = @errors[:messages].map{ |o| o[:message] }
-     
       @errors
     end
 

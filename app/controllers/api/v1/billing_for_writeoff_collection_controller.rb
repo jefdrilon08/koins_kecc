@@ -39,7 +39,7 @@ module Api
           payment_amount: params[:payment_amount],
           member_id: params[:member_id]
         }
-       errors = ::BillingForWriteoffCollection::ValidateAmount.new(config: config).execute!
+        errors = ::BillingForWriteoffCollection::ValidateAmount.new(config: config).execute!
         if errors[:messages].any?
           render json: errors, status: 400
         else
@@ -49,7 +49,17 @@ module Api
           render json: { message: "Done" }
         end
       end
-
+      
+      def add_particular
+        data_store_id     = params[:id]
+        txtParticular    =  params[:txtParticular]
+        
+        data_store = DataStore.find(data_store_id)
+        data_store.data['accounting_entry']['particular'] = txtParticular
+        data_store.save!
+        render json: { message: "Done" }
+      end
+      
       def approve
         record = DataStore.find(params[:id])
         config = {
@@ -60,11 +70,9 @@ module Api
           data_store: record.id,
           user: current_user.id
         }
-        #record.update(status: "processing")
-        #ProcessApproveBillingForWriteoffCollections.perform_later(args)
-        ::BillingForWriteoffCollection::Approve.new(config: config).execute!
-
-          render json: { message: "ok" }
+        record.update(status: "processing")
+        ProcessApproveBillingForWriteoffCollections.perform_later(args)
+        render json: { message: "ok" }
       end
 
     end
