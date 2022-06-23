@@ -49,7 +49,17 @@ module Api
           render json: { message: "Done" }
         end
       end
-
+      
+      def add_particular
+        data_store_id     = params[:id]
+        txtParticular    =  params[:txtParticular]
+        
+        data_store = DataStore.find(data_store_id)
+        data_store.data['accounting_entry']['particular'] = txtParticular
+        data_store.save!
+        render json: { message: "Done" }
+      end
+      
       def approve
         record = DataStore.find(params[:id])
         config = {
