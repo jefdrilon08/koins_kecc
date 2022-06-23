@@ -6,6 +6,10 @@
       %th
         Short Name
       %th
+        OR Prefix
+      %th
+        AR Prefix
+      %th
         Current Date
       %th
         Center Count
@@ -21,6 +25,10 @@
             #{branch.name.upcase}
         %td
           #{branch.short_name.upcase}
+        %td
+          #{branch.or_prefix}
+        %td
+          #{branch.ar_prefix}
         %td
           #{::Utils::GetCurrentDate.new(config: { branch: branch }).execute!.strftime("%b %d, %Y")}
         %td
