@@ -1,3 +1,6 @@
+%h4
+  Branch Form
+
 = simple_form_for [:administration, branch] do |f|
   .row
     .col
@@ -21,6 +24,33 @@
     .col
       .form-group
         = f.input :color, as: :string, input_html: { class: 'form-control', type: 'color' }
+  .mt-4
+  %h5
+    OR Configuration
+  .row
+    .col
+      .form-group
+        = f.input :or_prefix, as: :string, label: 'Prefix', input_html: { class: 'form-control' }
+    .col
+      .form-group
+        = f.input :or_current_max, as: :string, label: 'Current Max', input_html: { class: 'form-control' }
+    .col
+      .form-group
+        = f.input :or_counter, as: :string, label: 'Counter', input_html: { class: 'form-control' }
+  .mt-4
+  %h5
+    AR Configuration
+  .row
+    .col
+      .form-group
+        = f.input :ar_prefix, as: :string, label: 'Prefix', input_html: { class: 'form-control' }
+    .col
+      .form-group
+        = f.input :ar_current_max, as: :string, label: 'Current Max', input_html: { class: 'form-control' }
+    .col
+      .form-group
+        = f.input :ar_counter, as: :string, label: 'Counter', input_html: { class: 'form-control' }
+
     
   %hr
   .btn-group

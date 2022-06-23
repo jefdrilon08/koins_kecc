@@ -15,6 +15,10 @@ module ApplicationHelper
     end
   end
 
+  def is_mis_user?
+    current_user.roles.include?("MIS")
+  end
+
   def sbk_mis_user
     sbk_mis_user = ["SBK","MIS"].include? current_user.roles.last
   end

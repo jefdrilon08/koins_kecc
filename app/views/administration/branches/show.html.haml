@@ -1,5 +1,9 @@
 %h4{ style: "color: #{@branch.color || "#000"}" }
   #{@branch.name}
+%h5
+  OR Prefix: #{@branch.or_prefix} | OR Counter: #{@branch.or_counter} | OR Max: #{@branch.or_current_max}
+%h5
+  AR Prefix: #{@branch.ar_prefix} | AR Counter: #{@branch.ar_counter} | AR Max: #{@branch.ar_current_max}
 .card
   .card-body
     %ul.nav.nav-tabs{:role => "tablist"}

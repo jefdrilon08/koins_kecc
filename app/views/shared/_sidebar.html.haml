@@ -19,6 +19,9 @@
     = render partial: "shared/sidebar_transactions"
     = render partial: "shared/sidebar_reports"
 
+    - if is_mis_user?
+      = render partial: "shared/sidebar_config"
+
     %li
       .profile-details
         = link_to profile_path do
@@ -41,3 +44,4 @@
 = render partial: "shared/modals/branch_reports"
 = render partial: "shared/modals/accounting_reports"
 = render partial: "shared/modals/insurance_reports"
+= render partial: "shared/modals/admin"

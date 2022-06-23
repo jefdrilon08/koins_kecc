@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_035432) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_23_053011) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -280,6 +280,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_035432) do
     t.date "current_date"
     t.string "color"
     t.boolean "is_main"
+    t.string "or_prefix"
+    t.integer "or_counter", default: 0
+    t.integer "or_current_max"
+    t.string "ar_prefix"
+    t.integer "ar_counter", default: 0
+    t.integer "ar_current_max"
     t.index ["cluster_id"], name: "index_branches_on_cluster_id"
   end
 
