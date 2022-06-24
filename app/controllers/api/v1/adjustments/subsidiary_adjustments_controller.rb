@@ -105,7 +105,9 @@ module Api
             render json: { message: "ok" }
           end
         end
-
+        def print
+          raise "Helloworld".inspect
+        end
         def add_member
           adjustment_record = AdjustmentRecord.subsidiary.where(id: params[:id]).first
           member            = Member.where(id: params[:member_id]).first

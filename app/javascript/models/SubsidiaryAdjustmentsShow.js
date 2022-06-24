@@ -41,6 +41,8 @@ var $displayAccountSubtype;
 var $displayPostType;
 var $displayAccountingCode;
 
+var $btnPrint;
+
 var $message;
 
 var templateErrorList;
@@ -50,7 +52,9 @@ var currentMemberAccountId  = "";
 var currentAccountSubtype   = "";
 var currentAccountingCodeId = "";
 var currentPostType         = "";
-
+var $modalPrint;
+var loader;
+var $printMessage;
 var _urlApprove                         = "/api/v1/adjustments/subsidiary_adjustments/approve";
 var _urlDelete                          = "/api/v1/adjustments/subsidiary_adjustments/destroy";
 var _urlAdd                             = "/api/v1/adjustments/subsidiary_adjustments/add_member";
@@ -58,8 +62,11 @@ var _urlDeleteMember                    = "/api/v1/adjustments/subsidiary_adjust
 var _urlAddAccountingCode               = "/api/v1/adjustments/subsidiary_adjustments/add_accounting_code";
 var _urlDeleteAccountingCode            = "/api/v1/adjustments/subsidiary_adjustments/delete_accounting_code";
 var _urlUpdateAccountingEntryParticular = "/api/v1/adjustments/subsidiary_adjustments/update_accounting_entry_particular";
+var _urlPrint                           = "/api/v1/adjustments/subsidiary_adjustments/print"
 
 var _cacheDom = function() {
+  $modalPrint         = $("#modal-print");
+  $printMessage       = $(".print-message");
   $modalDeleteAccountingEntry = new bootstrap.Modal(  
     document.getElementById("modal-delete-accounting-entry")
   );
@@ -101,7 +108,7 @@ var _cacheDom = function() {
   $selectAdjustment = $("#select-adjustment");
   $inputAmount      = $("#input-amount");
   $btnAdd           = $("#btn-add");
-
+  
   $btnDeleteMember        = $(".btn-delete-member");
   $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
 
@@ -113,8 +120,10 @@ var _cacheDom = function() {
   $displayPostType        = $(".display-post-type");
   $displayAccountingCode  = $(".display-accounting-code");
 
-  $message  = $(".message");
+  $btnPrint         = $("#btn-print");
 
+  $message  = $(".message");
+  loader            = $("#template-loader").html();
   templateErrorList = $("#template-error-list").html();
 };
 
@@ -374,6 +383,21 @@ var _bindEvents = function() {
         }
       }
     });
+  });
+
+
+  $btnPrint.on("click", function() {
+    var adjustment_record = $btnPrint.data('id');
+    $modalPrint.show();
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrint.hide();
+    window.open("/print?id=" + adjustment_record + "&type=print_adjustment_record");
   });
 
   $btnAdd.on("click", function() {

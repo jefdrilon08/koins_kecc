@@ -10,12 +10,20 @@ class PrintController < ApplicationController
       messages: {},
       full_messages: []
     }
+
     if type == "print_monthly_incentives"
       monthly_incentive = params[:id]
       data = ::Print::BuildMonthlyIncentive.new(config: monthly_incentive).execute!
       @monthly_incentive = data
       render "print/monthly_incentive",layout: "print"
 
+    elsif type == "print_adjustment_record"
+    
+      adjustment_record = params[:id]
+      data = ::Print::SubsidiaryPrint.new(config: adjustment_record).execute!
+       @adjustment_record = data
+       #raise @adjustment_record[:debit_journal_entries].inspect
+       render "print/adjustment_record", layout: "print"
 
     elsif type == "accounting_entry"
       accounting_entry = AccountingEntry.find(params[:id])

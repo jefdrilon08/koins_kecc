@@ -35,6 +35,7 @@ module Adjustments
           text: "New"
         }
       ]
+
     end
 
     def show
@@ -61,8 +62,17 @@ module Adjustments
       ]
 
       @subheader_side_actions = []
-
+         @subheader_side_actions << {
+          id: "btn-print",
+          link: "#",
+          class: "fa fa-print",
+          text: "Print",
+           data: {
+            id: "#{@adjustment_record.id}"
+          }
+        }
       if @adjustment_record.pending?
+       
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
@@ -76,7 +86,10 @@ module Adjustments
           class: "fa fa-times",
           text: "Delete"
         }
+       
+
       end
+
 
       @payload = {
         id: @adjustment_record.id

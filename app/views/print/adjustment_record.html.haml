@@ -1,0 +1,85 @@
+%span.print-text
+  %center
+    %br
+    %br
+    %p
+      %b
+        #{@adjustment_record[:company_name]}
+      %br
+      %b
+        #{@adjustment_record[:company_address]}
+      %b
+        #{@adjustment_record[:branch]}
+  
+%table.table.table-sm.table-bordered{:width=>"100%",:border=>"1"}
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Member's Name
+      %th.text-center
+        Account
+      %th.text-center
+        Amount
+      %th.text-center
+        Adjustment Type
+    - @adjustment_record[:records].each_with_index do |data,index|
+      %tr
+        %th
+          #{index+1}
+        %td.text-center
+          #{data[:last_name]} , #{data[:first_name]} #{data[:middle_name]}
+        %td.text-center
+          #{data[:account_subtype]} 
+        %td.text-end
+          #{number_to_currency(data[:amount].round(2), unit: "")}
+        %td.text-center
+          #{data[:adjustment_type]}
+        
+  %tbody
+    %br
+      %br
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th.text-center
+        Accounting  
+      %th.text-center
+        Debit
+      %th.text-center
+        Credit
+    - @adjustment_record[:debit_journal_entries].each do |debit|
+      %tr
+        %td.text-center
+          #{debit[:code]} - #{debit[:name]}
+        %td.text-end
+          #{debit[:amount]} 
+        %td
+    - @adjustment_record[:credit_journal_entries].each do |credit|
+      %tr
+        %td.text-center
+          #{credit[:code]} - #{credit[:name]}
+        %td
+        %td.text-end
+          #{credit[:amount]}
+  %tbody
+%br
+%br
+%p
+Particular :
+%br
+#{@adjustment_record[:particular]}
+%br
+%br
+%br
+%p
+Prepared by:
+%br
+#{@adjustment_record[:prepared_by]}
+%br
+%br
+%br
+%p
+Approved by:
+%br
+#{@adjustment_record[:approved_by]}
