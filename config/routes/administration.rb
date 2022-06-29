@@ -1,4 +1,6 @@
 namespace :administration do
+  get "/", to: "pages#index"
+
   resources :users, except: [:destroy] do
     resources :user_demerits
   end

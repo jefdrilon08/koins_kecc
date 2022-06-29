@@ -36,6 +36,10 @@ namespace :api do
   post "/announcements", to: "announcements#create"
   get "/announcements/:id", to: "announcements#show"
 
+  # Closing Records
+  post "/closing_records", to: "closing_records#create"
+  get "/closing_records/records", to: "closing_records#records"
+
   # Exec Reports
   get "/exec_reports/psr_query", to: "exec_reports#psr_query"
   

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_23_053011) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_28_070140) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -187,6 +187,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_23_053011) do
     t.string "adjustment_type"
     t.date "date_approved"
     t.string "approved_by"
+  end
+
+  create_table "administration_branch_closing_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "data_store_id", null: false
+    t.string "record_type"
+    t.jsonb "data"
+    t.date "closing_date"
+    t.uuid "branch_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_administration_branch_closing_records_on_branch_id"
+    t.index ["data_store_id"], name: "index_administration_branch_closing_records_on_data_store_id"
   end
 
   create_table "amortization_schedule_entries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1290,6 +1302,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_23_053011) do
   add_foreign_key "accrued_billings", "centers"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "administration_branch_closing_records", "branches"
+  add_foreign_key "administration_branch_closing_records", "data_stores"
   add_foreign_key "amortization_schedule_entries", "loans"
   add_foreign_key "announcements", "branches"
   add_foreign_key "attachment_files", "members"

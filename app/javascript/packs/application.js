@@ -50,6 +50,8 @@ import MonthlyNewAndResignedShow from "../components/data_stores/monthly_new_and
 import MembersInGoodStandingShowComponent from "../components/data_stores/members_in_good_standing/ShowComponent.js";
 import ForWriteoffShowComponent from "../components/data_stores/for_writeoff/ShowComponent.js";
 import MembershipTypeShow from "../components/administration/membership_types/MembershpTypesShow.js";
+import AdministrationDashboard from "../components/administration/pages/AdministrationDashboard.js";
+import ClosingRecordsManager from "../components/closing_records/ClosingRecordsManager.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -280,6 +282,8 @@ const hooks = {
   "pages/daily_report_insurance_account_status":      [InsuranceAccountStatusIndex],
   "pages/seriatim":                                   [Seriatim],
   "claims/index":                                     [ClaimsIndex],
+  "closing_records/index":                            [ClosingRecordsManager],
+  "administration/pages/index":                       [AdministrationDashboard],
   "administration/users/index":                       [AdministrationUsersIndex],
   "administration/users/show":                        [BranchManagerComponent],
   "administration/loan_products/show":                [AdministrationLoanProductsShow],
@@ -380,8 +384,8 @@ const hooks = {
   "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow],
   "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex],
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
-  "additional_share/index":			      [AdditionalShareIndex],
-  "additional_share/show":			      [AdditionalShareShow],
+  "additional_share/index":                           [AdditionalShareIndex],
+  "additional_share/show":                            [AdditionalShareShow],
   "pages/profile":                                    [Profile]
 }
 
