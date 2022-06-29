@@ -6,8 +6,8 @@ module Api
       closing_date  = params[:closing_date]
 
       cmd = ::ClosingRecords::ValidateFetchDataStores.new(
-        branch: branch,
-        record_type: record_type,
+        branch:       branch,
+        record_type:  record_type,
         closing_date: closing_date
       )
 
@@ -17,8 +17,8 @@ module Api
         render json: { errors: cmd.errors }, status: :unprocessable_entity
       else
         cmd = ::ClosingRecords::FetchDataStores.new(
-          branch: branch,
-          record_type: record_type,
+          branch:       branch,
+          record_type:  record_type,
           closing_date: closing_date
         )
 
@@ -30,13 +30,15 @@ module Api
 
     def create
       branch        = ReadOnlyBranch.find_by_id(params[:branch_id])
+      data_store    = ReadOnlyDataStore.find_by_id(params[:data_store_id])
       record_type   = params[:record_type]
       closing_date  = params[:closing_date]
 
       cmd = ::ClosingRecords::ValidateCreate.new(
-        branch: branch,
-        record_type: record_type,
-        closing_date: closing_date
+        branch:       branch,
+        record_type:  record_type,
+        closing_date: closing_date,
+        data_store:   data_store
       )
 
       cmd.execute!
@@ -45,9 +47,10 @@ module Api
         render json: { errors: cmd.errors }, status: :unprocessable_entity
       else
         cmd = ::ClosingRecords::Create.new(
-          branch: branch,
-          record_type: record_type,
-          closing_date: closing_date
+          branch:       branch,
+          record_type:  record_type,
+          closing_date: closing_date,
+          data_store:   data_store
         )
 
         cmd.execute!

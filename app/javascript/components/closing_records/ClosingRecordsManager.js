@@ -76,9 +76,10 @@ export default function ClosingRecordsManager(props) {
     setErrors([]);
 
     const payload = {
-      branch_id:    branchId,
-      closing_date: currentDate,
-      record_type:  recordType
+      branch_id:      branchId,
+      closing_date:   currentDate,
+      record_type:    recordType,
+      data_store_id:  dataStoreId
     }
 
     const headers = {

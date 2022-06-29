@@ -3,12 +3,14 @@ module ClosingRecords
     attr_accessor :errors,
                   :branch,
                   :record_type,
-                  :closing_date
+                  :closing_date,
+                  :data_store
 
-    def initialize(branch:, record_type:, closing_date:)
+    def initialize(branch:, record_type:, closing_date:, data_store:)
       @branch       = branch
       @record_type  = record_type
       @closing_date = closing_date
+      @data_store   = data_store
 
       @errors = []
     end
@@ -24,6 +26,10 @@ module ClosingRecords
 
       if @closing_date.blank?
         @errors << "Closing date required"
+      end
+
+      if @data_store.blank?
+        @errors << "Data store required"
       end
 
       @errors << "Not yet implemented"
