@@ -38,7 +38,8 @@ module Api
         branch:       branch,
         record_type:  record_type,
         closing_date: closing_date,
-        data_store:   data_store
+        data_store:   data_store,
+        user:         current_user
       )
 
       cmd.execute!
@@ -50,7 +51,8 @@ module Api
           branch:       branch,
           record_type:  record_type,
           closing_date: closing_date,
-          data_store:   data_store
+          data_store:   data_store,
+          user:         current_user
         )
 
         cmd.execute!
