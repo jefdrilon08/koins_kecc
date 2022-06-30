@@ -23,7 +23,9 @@ export default function ClosingRecordsList(props) {
               return (
                 <tr>
                   <td>
-                    {o.type}
+                    <a href={o.path} target="_blank">
+                      {o.type}
+                    </a>
                   </td>
                   <td>
                     {o.closing_date}

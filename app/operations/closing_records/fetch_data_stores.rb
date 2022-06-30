@@ -30,11 +30,20 @@ module ClosingRecords
           @month,
           @year
         ).order("updated_at DESC").map{ |o|
+          path = "#"
+
+          if @record_type == "TRIAL_BALANCE"
+            path = "/accounting/trial_balances/#{o.id}"
+          else @record_type == "GENERAL_LEDGER"
+            path = "/accounting/general_ledgers/#{o.id}"
+          end
+
           {
             id: o.id,
             label: "#{o.start_date.strftime("%b %d %Y")} - #{o.end_date.strftime("%b %d %Y")} (Updated: #{o.updated_at.strftime("%b %d %Y")})",
             type: @record_type,
-            closing_date: @closing_date.strftime("%b %d %Y")
+            closing_date: @closing_date.strftime("%b %d %Y"),
+            path: path
           }
         }
       else
@@ -45,11 +54,14 @@ module ClosingRecords
           @month,
           @year
         ).order("updated_at DESC").map{ |o|
+          path = "#"
+
           {
             id: o.id,
             label: "#{o.as_of.strftime("%b %d %Y")} (Updated: #{o.updated_at.strftime("%b %d %Y")})",
             type: @record_type,
-            closing_date: @closing_date.strftime("%b %d %Y")
+            closing_date: @closing_date.strftime("%b %d %Y"),
+            path: path
           }
         }
       end

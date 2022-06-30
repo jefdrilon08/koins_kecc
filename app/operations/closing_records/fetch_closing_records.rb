@@ -23,10 +23,19 @@ module ClosingRecords
       )
 
       results.each do |o|
+        path = "#"
+
+        if o.record_type == "TRIAL_BALANCE"
+          path = "/accounting/trial_balances/#{o.data_store_id}"
+        else o.record_type == "GENERAL_LEDGER"
+          path = "/accounting/general_ledgers/#{o.data_store_id}"
+        end
+
         @records << {
           type:         o.record_type,
           closing_date: o.closing_date.strftime("%b %d %Y"),
-          status:       "done"
+          status:       "done",
+          path:         path
         }
       end
 
@@ -37,7 +46,8 @@ module ClosingRecords
           @records << {
             type:         record_type,
             closing_date: "N/A",
-            status:       "pending"
+            status:       "pending",
+            path:         "#"
           }
         end
       end
