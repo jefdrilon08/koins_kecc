@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnNew;
 var $btnConfirmNew;
@@ -23,7 +24,9 @@ var _cacheDom = function() {
   $selectBranch   = $("#select-branch");
   $selectMonth    = $("#select-month");
   $selectYear     = $("#select-year");
-  $modalNew       = $("#modal-new");
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  )
 
   $message                = $(".message");
   $xFormControl           = $(".x-form-control");
