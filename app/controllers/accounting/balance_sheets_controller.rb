@@ -9,7 +9,11 @@ module Accounting
                         ).order(Arel.sql("meta->>'year' DESC, meta->>'month' DESC"))
 
       @branch_id  = params[:branch_id]
-      @month      = params[:date][:month]
+
+      if params[:date].present? and params[:date][:month].present?
+        @month      = params[:date][:month]
+      end
+
       @year       = params[:year]
 
       if @branch_id.present?
