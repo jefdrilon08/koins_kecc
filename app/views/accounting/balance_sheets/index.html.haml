@@ -1,8 +1,11 @@
 = title
 .row
   .col
+    %h4
+      Balance Sheets
     .card
       .card-body
+        = render partial: "index_filter"
         - if @balance_sheets.any?
           = render partial: "index_list"
           = paginate @balance_sheets

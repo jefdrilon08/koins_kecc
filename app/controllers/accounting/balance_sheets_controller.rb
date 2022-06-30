@@ -3,10 +3,35 @@ module Accounting
     before_action :authenticate_user!
 
     def index
-      @balance_sheets = DataStore.balance_sheets.where(
+      @balance_sheets = ReadOnlyDataStore.balance_sheets.where(
                           "meta->>'branch_id' IN (?)",
                           @branches.pluck(:id)
-                        )
+                        ).order(Arel.sql("meta->>'year' DESC, meta->>'month' DESC"))
+
+      @branch_id  = params[:branch_id]
+      @month      = params[:date][:month]
+      @year       = params[:year]
+
+      if @branch_id.present?
+        @balance_sheets = @balance_sheets.where(
+          "meta->>'branch_id' = ?",
+          @branch_id
+        )
+      end
+
+      if @month.present?
+        @balance_sheets = @balance_sheets.where(
+          "meta->>'month' = ?",
+          @month
+        )
+      end
+
+      if @year.present?
+        @balance_sheets = @balance_sheets.where(
+          "meta->>'year' = ?",
+          @year
+        )
+      end
 
       @balance_sheets = @balance_sheets.page(params[:page]).per(20)
 
