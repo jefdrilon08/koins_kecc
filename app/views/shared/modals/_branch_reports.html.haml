@@ -71,6 +71,21 @@
 
         .row
           .col-6
+            = link_to administration_member_shares_path, class: "btn-nav-square-md" do
+              Member Shares
+          .col-3
+            = link_to administration_member_shares_printed_path, class: "btn-nav-square-md" do
+              Printed Certificates
+          .col-3
+            = link_to administration_member_shares_no_certificates_path, class: "btn-nav-square-md" do
+              No Certificates
+          
+
+        .mt-4
+
+
+        .row
+          .col-6
             = link_to "/data_stores/member_id_generators", class: "btn-nav-square-md" do
               ID Form
           .col-6
