@@ -10,9 +10,12 @@ module ClosingRecords
     def initialize(branch:, record_type:, closing_date:, data_store:, user:)
       @branch       = branch
       @record_type  = record_type
-      @closing_date = closing_date
+      @closing_date = closing_date.to_date
       @data_store   = data_store
       @user         = user
+
+      @month  = @closing_date.month
+      @year   = @closing_date.year
 
       @data = {}
     end
@@ -34,6 +37,19 @@ module ClosingRecords
       )
 
       @record.save!
+
+      # Trigger nullifying current_date in branch
+      closing_records = ReadOnlyAdministrationBranchClosingRecord.where(
+        "branch_id = ? AND EXTRACT(month FROM closing_date) = ? AND EXTRACT(year FROM closing_date) = ?",
+        @branch.id,
+        @month,
+        @year
+      )
+
+      if closing_records.count == ReadOnlyAdministrationBranchClosingRecord::RECORD_TYPES.size
+        b = Branch.find(@branch.id)
+        b.update!(current_date: nil)
+      end
 
       @record
     end
