@@ -1,0 +1,15 @@
+#modal-nav-system-tools.modal.fade
+  .modal-dialog.modal-xl
+    .modal-content
+      .modal-header
+        %h3.modal-title 
+          System Tools
+      .modal-body
+        .row
+          .col
+            = link_to upload_deposit_path, class: "btn-nav-square-md" do
+              Upload Deposit
+            .mt-4
+            = link_to upload_fund_transfer_path, class: "btn-nav-square-md" do
+              Upload Fund Transfer
+            .mt-4
