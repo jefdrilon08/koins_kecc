@@ -1,8 +1,10 @@
-= title
 .row
   .col
+    %h4
+      Income Statements
     .card
       .card-body
+        = render partial: "index_filter"
         - if @income_statements.any?
           = render partial: "index_list"
           = paginate @income_statements

@@ -8,6 +8,35 @@ module Accounting
                               @branches.pluck(:id)
                             )
 
+      @branch_id  = params[:branch_id]
+
+      if params[:date].present? and params[:date][:month].present?
+        @month      = params[:date][:month]
+      end
+
+      @year       = params[:year]
+
+      if @branch_id.present?
+        @income_statements = @income_statements.where(
+          "meta->>'branch_id' = ?",
+          @branch_id
+        )
+      end
+
+      if @month.present?
+        @income_statements = @income_statements.where(
+          "meta->>'month' = ?",
+          @month
+        )
+      end
+
+      if @year.present?
+        @income_statements = @income_statements.where(
+          "meta->>'year' = ?",
+          @year
+        )
+      end
+
       @income_statements = @income_statements.page(params[:page]).per(20)
 
       @subheader_items = [
