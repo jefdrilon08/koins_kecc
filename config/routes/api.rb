@@ -38,6 +38,7 @@ namespace :api do
 
   # Closing Records
   post "/closing_records", to: "closing_records#create"
+  get "/closing_records", to: "closing_records#index"
   get "/closing_records/records", to: "closing_records#records"
 
   # Exec Reports

@@ -1,5 +1,30 @@
 module Api
   class ClosingRecordsController < ::Api::FrontController
+    def index
+      branch        = ReadOnlyBranch.find_by_id(params[:branch_id])
+      closing_date  = params[:closing_date]
+
+      cmd = ::ClosingRecords::ValidateFetchClosingRecords.new(
+        branch:       branch,
+        closing_date: closing_date
+      )
+
+      cmd.execute!
+
+      if cmd.errors.size > 0
+        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      else
+        cmd = ::ClosingRecords::FetchClosingRecords.new(
+          branch:       branch,
+          closing_date: closing_date
+        )
+
+        cmd.execute!
+
+        render json: { records: cmd.records }
+      end
+    end
+
     def records
       branch        = ReadOnlyBranch.find_by_id(params[:branch_id])
       record_type   = params[:record_type]

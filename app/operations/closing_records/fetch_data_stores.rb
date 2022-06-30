@@ -32,7 +32,9 @@ module ClosingRecords
         ).order("updated_at DESC").map{ |o|
           {
             id: o.id,
-            label: "#{o.start_date.strftime("%b %d %Y")} - #{o.end_date.strftime("%b %d %Y")} (Updated: #{o.updated_at.strftime("%b %d %Y")})"
+            label: "#{o.start_date.strftime("%b %d %Y")} - #{o.end_date.strftime("%b %d %Y")} (Updated: #{o.updated_at.strftime("%b %d %Y")})",
+            type: @record_type,
+            closing_date: @closing_date.strftime("%b %d %Y")
           }
         }
       else
@@ -45,7 +47,9 @@ module ClosingRecords
         ).order("updated_at DESC").map{ |o|
           {
             id: o.id,
-            label: "#{o.as_of.strftime("%b %d %Y")} (Updated: #{o.updated_at.strftime("%b %d %Y")})"
+            label: "#{o.as_of.strftime("%b %d %Y")} (Updated: #{o.updated_at.strftime("%b %d %Y")})",
+            type: @record_type,
+            closing_date: @closing_date.strftime("%b %d %Y")
           }
         }
       end

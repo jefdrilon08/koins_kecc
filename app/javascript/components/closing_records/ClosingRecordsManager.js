@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import ErrorList from '../ErrorList';
+import ClosingRecordsList from './ClosingRecordsList';
 
 export default function ClosingRecordsManager(props) {
   const [recordTypes] = useState([
@@ -27,6 +28,7 @@ export default function ClosingRecordsManager(props) {
   const [branchId, setBranchId]             = useState(props.branches[0].id);
   const [token]                             = useState(props.token);
   const [records, setRecords]               = useState([]);
+  const [closingRecords, setClosingRecords] = useState([]);
   const [dataStoreId, setDataStoreId]       = useState("");
 
   const handleCurrentDateChanged = (newCurrentDate) => {
@@ -35,6 +37,43 @@ export default function ClosingRecordsManager(props) {
     setCurrentDate(newCurrentDate);
 
     loadRecords(branchId, newCurrentDate, recordType);
+    loadClosingRecords(branchId, newCurrentDate, recordType);
+  }
+
+  const loadClosingRecords = (_branchId, _currentDate, _recordType) => {
+    const payload = {
+      branch_id:    _branchId,
+      closing_date: _currentDate,
+      record_type:  _recordType
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': token
+    }
+
+    const options = {
+      headers: headers,
+      params: payload
+    }
+
+    axios.get(
+      '/api/closing_records/',
+      options
+    ).then((res) => {
+      console.log(res.data.records);
+      setClosingRecords(res.data.records);
+      setIsLoading(false);
+
+      if(res.data.records.length > 0) {
+        setDataStoreId(res.data.records[0].id)
+      } else {
+        setDataStoreId("")
+      }
+    }).catch((error) => {
+      console.log(error.response.data);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
   }
 
   const loadRecords = (_branchId, _currentDate, _recordType) => {
@@ -98,12 +137,26 @@ export default function ClosingRecordsManager(props) {
       options
     ).then((res) => {
       console.log(res);
+      setIsLoading(false);
+      setModalNewIsOpen(false);
+      loadRecords(branchId, currentDate, recordType);
+      loadClosingRecords(branchId, currentDate, recordType);
     }).catch((error) => {
       console.log(error.response.data);
       setErrors(error.response.data.errors);
       setIsLoading(false);
     })
   }
+
+  const handleBranchChanged = (val) => {
+    setBranchId(val);
+    loadRecords(val, currentDate, recordType);
+    loadClosingRecords(val, currentDate, recordType);
+  }
+
+  useEffect(() => {
+    loadRecords(branchId, currentDate, recordType);
+  }, [])
   
   return (
     <>
@@ -126,7 +179,7 @@ export default function ClosingRecordsManager(props) {
                 <select 
                   className="form-control" 
                   value={branchId} 
-                  onChange={(event) => { setBranchId(event.target.value); loadRecords(event.target.value, currentDate, recordType); } }
+                  onChange={(event) => { handleBranchChanged(event.target.value) } }
                   disabled={isLoading}
                 >
                   {branches.map((o, i) => {
@@ -230,6 +283,18 @@ export default function ClosingRecordsManager(props) {
       >
         Register Closing Record
       </Button>
+      <hr/>
+      <h2>
+        Records
+      </h2>
+      <ClosingRecordsList 
+        closingRecords={closingRecords} 
+        branches={branches}
+        isLoading={isLoading}
+        handleBranchChanged={handleBranchChanged}
+        handleCurrentDateChanged={handleCurrentDateChanged}
+        branchId={branchId}
+      />
     </>
   )
 }
