@@ -25,10 +25,27 @@ module ClosingRecords
       results.each do |o|
         path = "#"
 
-        if o.record_type == "TRIAL_BALANCE"
+        case o.record_type 
+        when "TRIAL_BALANCE"
           path = "/accounting/trial_balances/#{o.data_store_id}"
-        else o.record_type == "GENERAL_LEDGER"
+        when "GENERAL_LEDGER"
           path = "/accounting/general_ledgers/#{o.data_store_id}"
+        when "REPAYMENT_RATES"
+          path = "/data_stores/repayment_rates/#{o.data_store_id}"
+        when "BALANCE_SHEET"
+          path = "/accounting/balance_sheets/#{o.data_store_id}"
+        when "INCOME_STATEMENT"
+          path = "/accounting/income_statements/#{o.data_store_id}"
+        when "SOA_FUNDS"
+          path = "/data_stores/soa_funds/#{o.data_store_id}"
+        when "SOA_EXPENSES"
+          path = "/data_stores/soa_expenses/#{o.data_store_id}"
+        when "SOA_LOANS"
+          path = "/data_stores/soa_loans/#{o.data_store_id}"
+        when "MANUAL_AGING"
+          path = "/data_stores/manual_aging/#{o.data_store_id}"
+        when "PERSONAL_FUNDS"
+          path = "/data_stores/personal_funds/#{o.data_store_id}"
         end
 
         @records << {
