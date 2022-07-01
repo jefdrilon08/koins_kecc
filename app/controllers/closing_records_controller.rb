@@ -5,7 +5,8 @@ class ClosingRecordsController < ApplicationController
     branches = @branches.map{ |o|
       {
         id: o.id,
-        name: o.name
+        name: o.name,
+        current_date: o.current_date.try(:strftime, "%b %d %Y") || Date.today.strftime("%b %d %Y")
       }
     }
 

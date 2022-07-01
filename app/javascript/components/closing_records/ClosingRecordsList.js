@@ -71,7 +71,7 @@ export default function ClosingRecordsList(props) {
                     value={o.id}
                     key={"branch-selection-" + o.id}
                   >
-                    {o.name}
+                    {o.name + " (" + o.current_date + ")"}
                   </option>
                 )
               })}

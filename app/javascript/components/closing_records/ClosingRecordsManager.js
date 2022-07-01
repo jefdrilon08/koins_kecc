@@ -185,7 +185,7 @@ export default function ClosingRecordsManager(props) {
                   {branches.map((o, i) => {
                     return (
                       <option key={"branch-" + o.id} value={o.id}>
-                        {o.name}
+                        {o.name + " (" + o.current_date + ")"}
                       </option>
                     )
                   })}
