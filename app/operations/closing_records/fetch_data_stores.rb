@@ -23,7 +23,7 @@ module ClosingRecords
 
     def execute!
       if ["TRIAL_BALANCE", "GENERAL_LEDGER", "SOA_FUNDS", "SOA_EXPENSES", "SOA_LOANS"].include?(@record_type)
-        @records = ReadOnlyDataStore.where(
+        @records = ReadOnlyDataStore.done.where(
           "meta->>'data_store_type' = ? AND meta->>'branch_id' = ? AND EXTRACT(month FROM end_date) = ? AND EXTRACT(year FROM end_date) = ?",
           @record_type,
           @branch.id,
@@ -47,7 +47,7 @@ module ClosingRecords
           }
         }
       elsif ["BALANCE_SHEET", "INCOME_STATEMENT"].include?(@record_type)
-        @records = ReadOnlyDataStore.where(
+        @records = ReadOnlyDataStore.done.where(
           "meta->>'data_store_type' = ? AND meta->>'branch_id' = ? AND meta->>'month' = ? AND meta->>'year' = ?",
           @record_type,
           @branch.id,
