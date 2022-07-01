@@ -6,7 +6,7 @@ module Accounting
       @income_statements  = DataStore.income_statements.where(
                               "meta->>'branch_id' IN (?)",
                               @branches.pluck(:id)
-                            )
+                            ).order(Arel.sql("meta->>'year' DESC, meta->>'month' DESC"))
 
       @branch_id  = params[:branch_id]
 
