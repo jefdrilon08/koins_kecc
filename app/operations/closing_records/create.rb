@@ -38,7 +38,7 @@ module ClosingRecords
 
       @record.save!
 
-      # Trigger nullifying current_date in branch
+      # Trigger notifying user for closing approval
       closing_records = ReadOnlyAdministrationBranchClosingRecord.where(
         "branch_id = ? AND EXTRACT(month FROM closing_date) = ? AND EXTRACT(year FROM closing_date) = ?",
         @branch.id,
@@ -47,8 +47,6 @@ module ClosingRecords
       )
 
       if closing_records.count == ReadOnlyAdministrationBranchClosingRecord::RECORD_TYPES.size
-        b = Branch.find(@branch.id)
-        b.update!(current_date: nil)
       end
 
       @record
