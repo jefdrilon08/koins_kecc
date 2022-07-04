@@ -170,14 +170,16 @@ class AccountingController < ApplicationController
         text: "General Journal"
       }
     ]
-
-    @subheader_side_actions = [
-      {
-        link: accounting_accounting_entry_form_path(book: "jvb"),
-        class: "fa fa-plus",
-        text: "New Entry"
-      }
-    ]
+    
+    if helpers.bk_mis_user
+      @subheader_side_actions = [
+        {
+          link: accounting_accounting_entry_form_path(book: "jvb"),
+          class: "fa fa-plus",
+          text: "New Entry"
+        }
+      ]
+    end
 
     @payload = {
       book: "JVB"
@@ -233,13 +235,15 @@ class AccountingController < ApplicationController
       }
     ]
 
-    @subheader_side_actions = [
-      {
-        link: accounting_accounting_entry_form_path(book: "crb"),
-        class: "fa fa-plus",
-        text: "New Entry"
-      }
-    ]
+    if helpers.oas_mis_user
+      @subheader_side_actions = [
+        {
+          link: accounting_accounting_entry_form_path(book: "crb"),
+          class: "fa fa-plus",
+          text: "New Entry"
+        }
+      ]
+    end
 
     @payload = {
       book: "CRB"
@@ -295,13 +299,15 @@ class AccountingController < ApplicationController
       }
     ]
 
-    @subheader_side_actions = [
-      {
-        link: accounting_accounting_entry_form_path(book: "cdb"),
-        class: "fa fa-plus",
-        text: "New Entry"
-      }
-    ]
+    if helpers.oas_mis_user
+      @subheader_side_actions = [
+        {
+          link: accounting_accounting_entry_form_path(book: "cdb"),
+          class: "fa fa-plus",
+          text: "New Entry"
+        }
+      ]
+    end
 
     @payload = {
       book: "CDB"

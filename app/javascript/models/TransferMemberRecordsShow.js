@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var _authenticityToken;
 var _id;
@@ -35,11 +36,15 @@ var _cacheDom = function() {
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
 
   $btnDeleteMember        = $(".btn-delete-member");
   $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
-  $modalDeleteMember      = $("#modal-delete-member");
+  $modalDeleteMember = new bootstrap.Modal(
+    document.getElementById("modal-delete-member")
+  );
   $selectCenter     = $("#select-center");
   $selectMember     = $("#select-member");
 

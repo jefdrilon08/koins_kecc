@@ -283,7 +283,7 @@ var _bindEvents = function() {
     }
 
     if(_members.length > 0) {
-      _memberId = _members[i].id;
+      _memberId = _members[0].id;
 
       _fetchLoans();
     }
