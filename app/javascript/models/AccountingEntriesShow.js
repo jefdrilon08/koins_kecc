@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnApprove;
 var $btnConfirmApprove;
@@ -22,17 +23,21 @@ var _authenticityToken;
 var accountingEntryId;
 
 var _cacheDom = function() {
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  )
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $btnPrint           = $("#btn-print");
-  $modalApprove       = $("#modal-approve");
   $modalPrint         = $("#modal-print");
   $message            = $(".message");
   $printMessage       = $(".print-message");
 
   $btnAdjustDatePosted        = $("#btn-adjust-date-posted");
   $btnConfirmAdjustDatePosted = $("#btn-confirm-adjust-date-posted");
-  $modalAdjustDatePosted      = $("#modal-adjust-date-posted");
+  $modalAdjustDatePosted      = new bootstrap.Modal(
+    document.getElementById("modal-adjust-date-posted")
+  )
   $inputAdjustDatePosted      = $("#input-adjust-date-posted");
 
   templateErrorList = $("#template-error-list").html();
