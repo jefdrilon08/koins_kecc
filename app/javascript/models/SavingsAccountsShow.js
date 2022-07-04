@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnSyncMaintaningBalance;
 var $btnConfirmSyncMaintainingBalance;
@@ -47,19 +48,34 @@ var _cacheDom = function() {
 
   $btnApproveWithdrawalRequest        = $(".btn-approve-withdrawal-request");
   $btnConfirmApproveWithdrawalRequest = $("#btn-confirm-approve-withdrawal-request");
-  $modalApproveWithdrawalRequest      = $("#modal-approve-withdrawal-request");
+
+  $modalApproveWithdrawalRequest = new bootstrap.Modal(
+    document.getElementById("modal-approve-withdrawal-request")
+  )
+
+
+
 
   $btnSyncMaintaningBalance         = $("#btn-sync-maintaining-balance");
   $btnConfirmSyncMaintainingBalance = $("#btn-confirm-sync-maintaining-balance");
-  $modalSyncMaintainingBalance      = $("#modal-sync-maintaining-balance");
+  
+  $modalSyncMaintainingBalance = new bootstrap.Modal(
+    document.getElementById("modal-sync-maintaining-balance")
+  )
+
+
   $inputMaintainingBalance          = $("#input-maintaining-balance");
 
   $btnRequestTimeDepositWithdrawal        = $("#btn-request-time-deposit-withdrawal");
   $btnConfirmRequestTimeDepositWithdrawal = $("#btn-confirm-request-time-deposit-withdrawal");
-  $modalRequestTimeDepositWithdrawal      = $("#modal-request-time-deposit-withdrawal");
+  $modalRequestTimeDepositWithdrawal = new bootstrap.Modal(
+    document.getElementById("modal-request-time-deposit-withdrawal")
+  )
 
   $btnPrintWithdrawalRequest  = $(".btn-print-withdrawal-request");
-  $modalPrint                 = $("#modal-print");
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  )
   
   $btnPrintLedger             = $("#btn-print-ledger");
 
