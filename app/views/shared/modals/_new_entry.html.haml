@@ -15,7 +15,8 @@
             = link_to accounting_accounting_entry_form_path(book: "CDB"), class: "btn-nav-square-md" do
               Cash Disbursements
         .mt-4
-        .row
-          .col
-            = link_to accounting_accounting_entry_form_path(book: "JVB"), class: "btn-nav-square-md" do
-              General Journal
+        - if sbk_bk_mis_user 
+          .row
+            .col
+              = link_to accounting_accounting_entry_form_path(book: "JVB"), class: "btn-nav-square-md" do
+                General Journal
