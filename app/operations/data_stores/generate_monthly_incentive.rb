@@ -18,17 +18,17 @@ module DataStores
       @repayment_rate_as_of = DataStore.repayment_rates.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{@as_of}",@branch.id).last
       @member_counts_as_of  = DataStore.member_counts.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{@as_of}",@branch.id).last
       @member_counts_prev   = DataStore.member_counts.where("meta->>'as_of' = ? and meta->>'branch_id' = ?","#{month_prev}",@branch.id).first
-      @soa_expenses = DataStore.soa_expenses.where("meta->>'branch_id' =?","#{@branch.id}").order('created_at DESC').first
+      @soa_expenses = DataStore.soa_expenses.where("meta->>'branch_id' =? and meta->>'start_date' = ? and meta->>'end_date' = ? ","#{@branch.id}","#{@start_date.strftime("%Y-%m-%d")}","#{@end_date.strftime("%Y-%m-%d")}").order('created_at DESC').first
       @loans_stat_officer_present  =  ::DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(rr_data:  @repayment_rate_as_of.data.with_indifferent_access).execute!
       @loans_stat_officer_prev     =  ::DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(rr_data:  @repayment_rate_prev.data.with_indifferent_access).execute!
       @member_counts_pres = ::DataStores::BuildMemberCountsPerOfficer.new(mc_data: @member_counts_as_of.data.with_indifferent_access).execute!
       @member_counts_prev = ::DataStores::BuildMemberCountsPerOfficer.new(mc_data: @member_counts_prev.data.with_indifferent_access).execute!
       @new_and_resigned_pres = DataStore.monthly_new_and_resigned.where("meta->>'branch_id' = ? and meta->>'as_of' = ?","#{@branch.id}", "#{@as_of}").last
+
     end
 
     def execute!
-        
-
+        #raise @soa_expenses.inspect
       @officers = @loans_stat_officer_present[:officers].map{|off| off[:officer]}.uniq
      
       @officers.each do |officers|
