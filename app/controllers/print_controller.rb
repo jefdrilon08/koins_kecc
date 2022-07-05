@@ -201,14 +201,16 @@ class PrintController < ApplicationController
 
       render "print/general_ledger", layout: "print"
     elsif type == "trial_balance"
-      start_date  = params[:start_date].try(:to_date)
-      end_date    = params[:end_date].try(:to_date)
-      branch      = Branch.where(id: params[:branch_id]).first
+      trial_balance = DataStore.find(params[:id])
+     
+      start_date  = trial_balance[:start_date]
+      end_date    = trial_balance[:end_date]
+      branch = Branch.find(trial_balance.meta['branch_id'])
 
       config  = {
         start_date: start_date,
         end_date: end_date,
-        branch: branch
+        branch:  branch
       }
 
       trial_balance_data  = ::Accounting::FetchTrialBalance.new(

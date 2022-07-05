@@ -60,9 +60,10 @@ module Accounting
         xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
       }
     end
-
     def show
       @general_ledger  = DataStore.find(params[:id])
+
+      @trial_balance  = DataStore.find(params[:id])
 
       @data = ::Accounting::TrialBalances::DeriveFromGeneralLedger.new(
                 gl_data: @general_ledger.data
@@ -89,7 +90,7 @@ module Accounting
 
         @subheader_items << { text: "Prepared by: #{@prepared_by}" }
 
-
+        
         @subheader_side_actions = [
           {
             id: "btn-gl",
@@ -102,9 +103,15 @@ module Accounting
             link: "#",
             class: "fa fa-times",
             text: "Delete"
-          }
-        ]
+          },
+          {
+          id: "btn-print",
+          link: "/print?type=trial_balance&id=#{@trial_balance.id}",
+          class: "fa fa-print",
+          text: "Print Trial Balance",
+          }         
 
+        ]
         @payload = {
           id: @general_ledger.id,
           urlDelete: "#{ENV['BACKEND_API_URL']}/api/v1/general_ledgers/delete",
