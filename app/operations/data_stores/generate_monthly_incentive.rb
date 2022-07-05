@@ -28,9 +28,7 @@ module DataStores
     end
 
     def execute!
-        #raise @soa_expenses.inspect
       @officers = @loans_stat_officer_present[:officers].map{|off| off[:officer]}.uniq
-     
       @officers.each do |officers|
         @officers_data = {
         officer: officers,
