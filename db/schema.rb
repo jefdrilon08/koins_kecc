@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_29_171220) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_05_020912) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -1515,6 +1515,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_29_171220) do
     t.boolean "is_regular"
     t.date "incentivized_date"
     t.string "access_token"
+    t.boolean "is_verified"
+    t.string "verification_token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

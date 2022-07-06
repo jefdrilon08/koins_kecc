@@ -25,10 +25,12 @@ module Users
 
         if user.blank?
           @errors['username'] = 'User not found'
-        elsif user.valid_password?(@password)
-          @token = user.generate_jwt
-        else
+        elsif !user.valid_password?(@password)
           @errors['password'] = 'Invalid password'
+        elsif !user.verified?
+          @errors['username'] = 'User is not verified'
+        else
+          @token = user.generate_jwt
         end
       end
     end

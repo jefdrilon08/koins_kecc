@@ -9,6 +9,7 @@ namespace :api do
 
   # Users
   post "/users/login", to: "users#login"
+  post "/users/forgot_password", to: "users#forgot_password"
 
   # Members
   get "/members", to: "members#index"
@@ -189,7 +190,6 @@ namespace :api do
 		post "/administration/member_shares/print", to: "member_shares#print"
 
     # Users
-    post "/login", to: "users#login"
     get "/roles", to: "users#roles"
     post "/change_password", to: "users#change_password"
     post "/update_profile_picture", to: "users#update_profile_picture"

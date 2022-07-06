@@ -19,12 +19,17 @@
               %label.form-label{ for: "input-password" }
                 Password
               = password_field_tag :username, "", id: "input-password", class: "form-control", placeholder: "PASSWORD"
+            .message
         %hr
         .row
           .col
-            .message
             %center
               .btn-group
                 #btn-login.btn.btn-primary
                   .fa.fa-sign-in-alt
                   Login to System
+              %hr
+              = link_to "#", id: "btn-forgot-password" do
+                Forgot Password
+
+= render partial: "shared/modals/send_forgot_password"

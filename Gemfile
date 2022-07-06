@@ -7,6 +7,7 @@ gem 'activerecord-import'
 gem 'awesome_print'
 gem 'aws-sdk-s3', require: false
 gem 'aws-sdk-sns'
+gem 'aws-sdk-ses'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'caxlsx'
 gem 'caxlsx_rails'
