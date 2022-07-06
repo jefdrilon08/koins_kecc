@@ -87,6 +87,9 @@ GEM
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
+    aws-sdk-ses (1.47.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-sns (1.53.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
@@ -463,6 +466,7 @@ DEPENDENCIES
   activerecord-import
   awesome_print
   aws-sdk-s3
+  aws-sdk-ses
   aws-sdk-sns
   bootsnap (>= 1.1.0)
   bullet

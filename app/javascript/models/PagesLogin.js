@@ -1,79 +1,137 @@
 import Mustache from "mustache";
-import $ from "jquery";
+import axios from 'axios';
+import * as bootstrap from "bootstrap";
 
-var url         = "/api/v1/login";
-var loadingText = '<i class="fa fa-spin"></i> Loading...';
-var errorList   = "";
-var isLoading   = false;
+let urlLogin          = "/api/users/login";
+let urlForgotPassword = "/api/users/forgot_password";
+let loadingText       = '<i class="fa fa-spin"></i> Loading...';
+let errorList         = "";
+let isLoading         = false;
 
-var $inputUsername;
-var $inputPassword;
-var $btnLogin;
-var $message;
+let $inputUsername;
+let $inputPassword;
+let $inputEmail;
+let $btnLogin;
+let $btnForgotPassword;
+let $btnSendemail
+let $modalSendForgotPassword;
+let $message;
+let $messageModal;
 
-var authenticityToken;
+const _cacheDom = function() {
+  errorList           = document.querySelector("#template-error-list").innerHTML;
+  $inputUsername      = document.querySelector("#input-username");
+  $inputPassword      = document.querySelector("#input-password");
+  $inputEmail         = document.querySelector("#input-email");
+  $btnLogin           = document.querySelector("#btn-login");
+  $btnForgotPassword  = document.querySelector("#btn-forgot-password");
+  $btnSendEmail       = document.querySelector("#btn-send-email");
+  $message            = document.querySelector(".message");
+  $messageModal       = document.querySelector("#message-modal");
 
-var _cacheDom = function() {
-  errorList         = $("#template-error-list").html();
-  authenticityToken = $("meta[name='csrf-token']").attr('content');
-
-  $inputUsername      = $("#input-username");
-  $inputPassword      = $("#input-password");
-  $btnLogin           = $("#btn-login");
-  $message            = $(".message");
+  $modalSendForgotPassword = new bootstrap.Modal(
+    document.getElementById("modal-send-forgot-password")
+  )
 };
 
-var _bindEvents = function() {
+const _bindEvents = function() {
+  $btnSendEmail.addEventListener("click", function() {
+    $messageModal.innerHTML = "";
+
+    const data = {
+      email:  $inputEmail.value
+    }
+
+    _toggleInput();
+
+    axios.post(
+      urlForgotPassword,
+      data,
+      {}
+    ).then((response) => {
+      console.log(response);
+
+      $messageModal.innerHTML = "Email sent!";
+      $inputEmail.value = "";
+      _toggleInput();
+    }).catch((error) => {
+      try {
+        var obj = error.response.data.errors;
+
+        var errors = []
+
+        for(const key in obj) {
+          errors.push(obj[key]);
+        }
+
+        $messageModal.innerHTML = Mustache.render(
+          errorList,
+          { errors: errors }
+        );
+
+        _toggleInput();
+      } catch(e) {
+        console.log(e);
+        $message.innerHTML = "Something went wrong...";
+        _toggleInput();
+      }
+    });
+  });
+
+  $btnForgotPassword.addEventListener("click", function() {
+    $modalSendForgotPassword.show();
+  });
+
   $inputUsername.focus();
 
-  $inputUsername.keyup(function(e) {
+  $inputUsername.addEventListener("keyup", function(e) {
     if(e.keyCode == 13) {
       $btnLogin.click();
     }
   });
 
-  $inputPassword.keyup(function(e) {
+  $inputPassword.addEventListener("keyup", function(e) {
     if(e.keyCode == 13) {
       $btnLogin.click();
     }
   });
 
-  $btnLogin.on("click", function() {
-    var data  = {
-      username: $inputUsername.val(),
-      password: $inputPassword.val(),
-      authenticity_token: authenticityToken
+  $btnLogin.addEventListener("click", function() {
+    const data  = {
+      username: $inputUsername.value,
+      password: $inputPassword.value
     };
 
     _toggleInput();
 
-    $.ajax({
-      url: url,
-      method: 'POST',
-      data: data,
-      dataType: 'json',
-      success: function(response) {
-        window.location.href = "/";
-      },
-      error: function(response) {
-        try {
-          var payload = JSON.parse(response.responseText);
-          var errors  = payload.errors.full_messages;
-          $message.html(
-            Mustache.render(
-              errorList,
-              { errors: errors }
-            )
-          );
+    axios.post(
+      urlLogin,
+      data,
+      {}
+    ).then((response) => {
+      window.location.href = "/";
+    }).catch((error) => {
+      try {
+        var obj = error.response.data.errors;
 
-          _toggleInput();
+        var errors = []
 
-          $inputUsername.focus();
-        } catch(e) {
-          console.log(e);
-          $message.html("Something went wrong...");
-          _toggleInput();
+        for(const key in obj) {
+          errors.push(obj[key]);
         }
+
+        $message.innerHTML = Mustache.render(
+          errorList,
+          { errors: errors }
+        );
+
+        _toggleInput();
+
+        $inputUsername.focus();
+      } catch(e) {
+        console.log(e);
+        $message.innerHTML = "Something went wrong...";
+        _toggleInput();
       }
     });
   });
@@ -81,16 +139,11 @@ var _bindEvents = function() {
 
 var _toggleInput = function() {
   isLoading = !isLoading;
-  $inputUsername.prop("disabled", isLoading);
-  $inputPassword.prop("disabled", isLoading);
-  $btnLogin.prop("disabled", isLoading);
-
-  if(isLoading) {
-    $btnLogin.data('original-text', $btnLogin.html());
-    $btnLogin.html(loadingText);
-  } else {
-    $btnLogin.html($btnLogin.data('original-text'));
-  }
+  $inputUsername.disabled = isLoading;
+  $inputPassword.disabled = isLoading;
+  $btnLogin.disabled      = isLoading;
+  $inputEmail.disabled    = isLoading;
+  $btnSendEmail           = isLoading;
 };
 
 var init  = function() {
