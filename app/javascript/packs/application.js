@@ -55,6 +55,7 @@ import ClosingRecordsManager from "../components/closing_records/ClosingRecordsM
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
+import PagesForgotPassword from "../models/PagesForgotPassword.js";
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
 import SavingsAccountsShowWithdrawalRequest from "../models/ShowWithdrawalRequest.js";
 import AccountingCodesIndex from "../models/AccountingCodesIndex.js";
@@ -220,6 +221,7 @@ const hooks = {
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
   "pages/login":                                      [PagesLogin],
+  "pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
   "accounting/crb":                                   [AccountingBooksIndex],

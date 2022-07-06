@@ -26,7 +26,7 @@ module Users
         </p>
       HEREDOC
 
-      ses = Aws::SES::Client.new
+      ses = Aws::SES::Client.new(region: ENV['AWS_REGION'])
 
       begin
         Rails.logger.info("Sending forgot password email to #{recipient}")

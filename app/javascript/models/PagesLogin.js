@@ -146,7 +146,7 @@ var _toggleInput = function() {
   $btnSendEmail           = isLoading;
 };
 
-var init  = function() {
+var init = function(options) {
   _cacheDom();
   _bindEvents();
 };
