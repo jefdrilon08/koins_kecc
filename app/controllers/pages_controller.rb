@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :authenticate_user!, except: [:login]
+  before_action :authenticate_user!, except: [:login, :forgot_password]
 
   def index
     @pending_members_count = ReadOnlyMember
@@ -34,6 +34,26 @@ class PagesController < ApplicationController
     @subheader_items = [
       { text: "Change Password" }
     ]
+  end
+
+  def forgot_password
+    verification_token = params[:verification_token]
+
+    if verification_token.blank?
+      redirect_to root_path
+    else
+      @user = User.find_by_verification_token(verification_token)
+
+      if @user.blank?
+        redirect_to root_path
+      else
+        @payload = {
+          verification_token: verification_token
+        }
+
+        render 'pages/forgot_password', layout: 'plain'
+      end
+    end
   end
 
   def profile
