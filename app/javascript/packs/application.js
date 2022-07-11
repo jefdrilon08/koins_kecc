@@ -9,6 +9,7 @@ import "@fortawesome/fontawesome-free/js/all";
 
 // React Components
 import DashboardMainUI from "../components/dashboard/MainUI";
+import MembersProfile from "../components/members/MembersProfile.js";
 import MembersFormDisplay from "../components/members/FormDisplay";
 import SurveyAnswerUIDisplay from "../components/members/SurveyAnswerUIDisplay";
 import LoanApplicationForm from "../components/loans/ApplicationFormComponent";
@@ -215,7 +216,7 @@ const hooks = {
   "members/form":                                     [MembersFormDisplay],
   "members/index":                                    [MembersIndex],
   "members/search":                                   [MembersSearch],
-  "members/show":                                     [MembersShow],
+  "members/show":                                     [MembersProfile],
   "members/form_make_payments":                       [MembersMakePayments],
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],

@@ -1,0 +1,314 @@
+import React, { useState, useEffect } from "react";
+import MembersProfileLegalDependents from "./MembersProfileLegalDependents";
+import MembersProfileBeneficiaries from "./MembersProfileBeneficiaries";
+import MembersProfileResignationRecords from "./MembersProfileResignationRecords";
+
+export default function MembersProfileHome(props) {
+  return (
+    <div id="semi_member_details">
+      <div className="row">
+        <div className="col-md-3">
+          <ul className="list-group list-group-unbordered">
+            <li className="list-group-item">
+              Branch
+              <div className="value text-muted">
+                <b>
+                  {props.branch ? props.branch.name : "N/A"}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Center
+              <div className="value text-muted">
+                <b>
+                  {props.center ? props.center.name : "N/A"}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Status
+              <div className="value text-muted">
+                <b>
+                  {props.member.status.toUpperCase()}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Date of Membership
+              <div className="value text-muted">
+                <b>
+                  {props.dateOfMembership ? props.dateOfMembership : "N/A"}
+                </b>
+              </div>
+            </li>
+            {(() => {
+              if(props.isResigned) {
+                return (
+                  <li className="list-group-item">
+                    Date Resigned
+                    <div className="value text-muted">
+                      <b>
+                        {props.dateResigned}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+            })()}
+            {(() => {
+              if(props.previousDateResigned) {
+                return (
+                  <li className="list-group-item">
+                    Previous Date Resigned
+                    <div className="value text-muted">
+                      <b>
+                        {props.previousDateResigned}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+            })()}
+            <li className="list-group-item">
+              Insurance Status
+              <div className="value text-muted">
+                <b>
+                  {props.member.insurance_status.toUpperCase()}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Membership Type
+              <div className="value text-muted">
+                <b>
+                  {props.membershipType.name}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Arrangement
+              <div className="value text-muted">
+                <b>
+                  {props.membershipArrangement.name}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Recognition Date
+              <div className="value text-muted">
+                <b>
+                  {props.recognitionDate}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Length of Stay (MBA)
+              <div className="value text-muted">
+                <b>
+                  {props.lengthOfStay}
+                </b>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div className="col-md-9">
+          <table id="profile-table" className="table table-bordered table-responsive">
+            <thead>
+            </thead>
+            <tbody>
+              <tr>
+                <th>
+                  Pangalan
+                </th>
+                <td>
+                  {props.member.last_name}, {props.member.first_name} {props.member.middle_name}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Mother Maiden Name
+                </th>
+                <td>
+                  {props.data.mothers_middle_name}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Identification Number
+                </th>
+                <td>
+                  {props.member.identification_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Kasarian
+                </th>
+                <td>
+                  {props.member.gender.toUpperCase()}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Edad
+                </th>
+                <td>
+                  {props.memberAge}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Kapanganakan
+                </th>
+                <td>
+                  {props.dateOfBirth}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Address
+                </th>
+                <td>
+                  {props.address}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Numero ng Mobile
+                </th>
+                <td>
+                  {props.member.mobile_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Numero ng Telepono
+                </th>
+                <td>
+                  {props.member.home_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Katayuang Sibil
+                </th>
+                <td>
+                  {props.member.civil_status}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Relihiyon
+                </th>
+                <td>
+                  {props.member.religion}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Lugar ng Kapanganakan
+                </th>
+                <td>
+                  {props.member.place_of_birth.toUpperCase()}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  PHILHEALTH #
+                </th>
+                <td>
+                  {props.data.phil_health_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  PAG-IBIG #
+                </th>
+                <td>
+                  {props.data.pag_ibig_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  SSS #
+                </th>
+                <td>
+                  {props.data.sss_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  TIN #
+                </th>
+                <td>
+                  {props.data.tin_number}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Is Reinstated
+                </th>
+                <td>
+                  {props.isReinstated ? "YES" : "NO"}
+                </td>
+              </tr>
+              {(() => {
+                if(props.isReinstated) {
+                  return (
+                    <tr>
+                      <th>
+                        Reinstatement Date
+                      </th>
+                      <td>
+                        {props.data.reinstatement.reinstatement_date}
+                      </td>
+                    </tr>
+                  )
+                }
+              })()}
+              {(() => {
+                if(props.isReinstated) {
+                  return (
+                    <tr>
+                      <th>
+                        Old Recognition Date
+                      </th>
+                      <td>
+                        {props.data.reinstatement.old_recognition_date}
+                      </td>
+                    </tr>
+                  )
+                }
+              })()}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col">
+          <h3 className="text-muted">
+            Legal Dependents
+          </h3>
+          <MembersProfileLegalDependents
+            records={props.legalDependents}
+          />
+          <hr/>
+          <h3 className="text-muted">
+            Beneficiaries
+          </h3>
+          <MembersProfileBeneficiaries
+            records={props.beneficiaries}
+          />
+          <hr/>
+          <h3 className="text-muted">
+            Resignation Records
+          </h3>
+          <MembersProfileResignationRecords
+            records={props.resignationRecords}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -4,7 +4,7 @@
       .modal-header
         %h3.modal-title
           Restructure Loans
-      .modal-body
+      .modal-body{ style: "overflow: hidden;" }
         .modal-body-content
           .row
             .col
@@ -18,7 +18,7 @@
                 %label
                   Active Loans
                 %br
-                = select_tag :active_loans, options_from_collection_for_select(@active_loans, :id, :loan_product_name), class: "form-control select-select2 js-searchable", id: "select-active-loans", multiple: true
+                = select_tag :active_loans, options_from_collection_for_select(@active_loans, :id, :loan_product_name), class: "selectpicker", id: "select-active-loans", multiple: true, "data-live-search" => "true"
           %h6
             Co-maker Information
           .row

@@ -15,6 +15,7 @@ class MembersController < ApplicationController
     @members  = Member.select("*")
                       .includes(:center, :branch, :profile_picture_attachment)
                       .where(branch_id: @branches.pluck(:id))
+
     @q        = params[:q]
     @status   = params[:status]
     @restored = params[:restored].present?
@@ -24,10 +25,10 @@ class MembersController < ApplicationController
     @centers  = @branches.first.centers
 
     if @q.present?
-      @members  = @members.where(
-                    "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
-                    q: "%#{@q.upcase}%"
-                  )
+      @members = @members.where(
+        "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+        q: "%#{@q.upcase}%"
+      )
     end
 
     if @branch.present?
@@ -238,47 +239,325 @@ class MembersController < ApplicationController
   end
 
   def show
-    @member                 = Member.find(params[:id])
-    @data                   = @member.data.with_indifferent_access
-    @address                = @data[:address]
-    @addressVal             = [@address[:street],@address[:district],@address[:city],@address[:province],@address[:region]]
-    @recognition_date       = @data[:recognition_date]
-    @active_loans           = Loan.active.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @paid_loans             = Loan.paid.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @pending_loans          = Loan.pending.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @for_verification_loans = Loan.for_verification.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
-    @verified_loans         = Loan.verified.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
-    @in_process_loans       = Loan.in_process.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC")
-    @writeoff_loans         = Loan.writeoff.includes(:loan_product).where(member_id: params[:id]).order("loan_products.name ASC, loans.cycle ASC")
-    @savings_accounts   = MemberAccount.savings.where(member_id: @member.id)
-    @insurance_accounts = MemberAccount.insurance.where(member_id: @member.id)
-    @equity_accounts    = MemberAccount.equities.where(member_id: @member.id)
-    
+    @member             = Member.find(params[:id])
+    @data               = @member.data.with_indifferent_access
+    @address            = @data[:address]
+    @addressVal         = [@address[:street],@address[:district],@address[:city],@address[:province],@address[:region]]
+    @recognition_date   = @data[:recognition_date]
 
-    @member_shares  = @member.member_shares.order("created_at ASC")
+    @savings_accounts = MemberAccount.savings.where(
+      member_id: @member.id
+    )
 
-    @membership_payments  = @member.membership_payment_records.where("amount > 0").order("date_paid ASC")
+    @insurance_accounts = MemberAccount.insurance.where(
+      member_id: @member.id
+    )
 
-    @surveys        = Survey.all.order("name ASC")
+    @equity_accounts = MemberAccount.equities.where(
+      member_id: @member.id
+    )
+
+    @member_shares = @member.member_shares.order("created_at ASC").map{ |o|
+      {
+        id:                 o.id,
+        date_of_issue:      o.date_of_issue.strftime("%b %d, %Y"),
+        certificate_number: o.certificate_number,
+        certificate_for:    o.certificate_for,
+        is_void:            o.is_void,
+        number_of_shares:   o.number_of_shares
+      }
+    }
+
+    @membership_payments = @member.membership_payment_records.where(
+      "amount > 0"
+    ).order(
+      "date_paid ASC"
+    ).map{ |o|
+      {
+        id:               o.id,
+        date_paid:        o.date_paid.strftime("%b %d, %Y"),
+        membership_name:  o.membership_name,
+        membership_type:  o.membership_type,
+        amount:           view_context.number_to_currency(o.amount, unit: ''),
+        status:           o.status
+      }
+    }
+
+    @surveys = Survey.all.order("name ASC")
+
     @survey_answers = SurveyAnswer.where(
-                        "meta -> 'member' ->> 'id' = ?",
-                        @member.id
-                      ).order("updated_at DESC")
+      "meta -> 'member' ->> 'id' = ?",
+      @member.id
+    ).order("updated_at DESC").map{ |o|
+      {
+        id:           o.id,
+        survey_name:  o.survey.name,
+        updated_at:   o.updated_at.localtime.strftime("%b %d, %Y")
+      }
+    }
+
+    @active_loans = ReadOnlyLoan.active.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC, loans.cycle ASC"
+    )
+
+    @for_verification_loans = ReadOnlyLoan.for_verification.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC"
+    )
+
+    @paid_loans = ReadOnlyLoan.paid.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC, loans.cycle ASC"
+    )
+
+    @pending_loans = ReadOnlyLoan.pending.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC, loans.cycle ASC"
+    )
+
+    @verified_loans = ReadOnlyLoan.verified.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC"
+    )
+
+    @in_process_loans = ReadOnlyLoan.in_process.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC"
+    )
+
+    @writeoff_loans = ReadOnlyLoan.writeoff.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC, loans.cycle ASC"
+    )
 
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
 
-    @loan_products  = LoanProduct.select("*").order("name ASC")
+    @loan_products  = ReadOnlyLoanProduct.select("*").order("name ASC")
 
     @loan_cycles  = @member.data.with_indifferent_access[:loan_cycles]
 
     @missing_accounts = ::Members::FetchMissingAccounts.new(
-                          config: {
-                            member: @member
-                          }
-                        ).execute!
+      config: {
+        member: @member
+      }
+    ).execute!
+
+    @legal_dependents = @member.legal_dependents.map{ |o|
+      {
+        id:                     o.id,
+        full_name:              o.full_name,
+        date_of_birth:          o.try(:date_of_birth).try(:strftime, "%b %d, %Y"),
+        age:                    o.age,
+        relationship:           o.relationship,
+        educational_attainment: o.data['educational_attainment'],
+        course:                 o.data['course']
+      }
+    }
+
+    @beneficiaries = @member.beneficiaries.map{ |o|
+      {
+        id:             o.id,
+        is_primary:     o.is_primary,
+        full_name:      o.full_name,
+        date_of_birth:  o.try(:date_of_birth).try(:strftime, "%b %d, %Y"),
+        age:            o.age,
+        relationship:   o.relationship
+      }
+    }
+
+    @resignation_records = []
+
+    if @data[:resignation_records].present?
+      @resignation_records = @data[:resignation_records].map{ |o|
+        if o[:data].present?
+          return {
+            date_resigned:  o[:date_resigned].try(:to_date).try(:strftime, "%b %d, %Y"),
+            type:           o[:data].present? ? o[:data][:type] : o[:member_resignation_type][:name],
+            reason:         o[:data].present? ? o[:data][:reason] : o[:member_resignation_type][:particular][:name]
+          }
+        end
+      }
+    end
 
     @payload = {
-      "memberId": @member.id
+      "memberId":                     @member.id,
+      "member":                       @member,
+      "member_age":                   @member.age,
+      "date_of_birth":                @member.date_of_birth.strftime("%b %d, %Y"),
+      "data":                         @data,
+      "branch":                       @member.branch,
+      "center":                       @member.center,
+      "is_resigned":                  @member.resigned?,
+      "profile_picture_url":          @member.profile_picture_url,
+      "date_of_membership":           @member.date_of_membership,
+      "date_resigned":                @member.date_resigned.try(:strftime, "%b %d, %Y"),
+      "previous_date_resigned":       @member.previous_date_resigned.try(:strftime, "%b %d, %Y"),
+      "membership_type":              @member.membership_type,
+      "membership_arrangement":       @member.membership_arrangement,
+      "recognition_date":             @member.recognition_date.try(:strftime, "%b %d, %Y"),
+      "length_of_stay":               @member.length_of_stay,
+      "legal_dependents":             @legal_dependents,
+      "beneficiaries":                @beneficiaries,
+      "resignation_records":          @resignation_records,
+      "address":                      @addressVal,
+      "entry_point_loan_cycle_count": @member.entry_point_loan_cycle_count,
+      "survey_answers":               @survey_answers,
+      "token":                        current_user.generate_jwt,
+      "total_savings":                view_context.number_to_currency(@savings_accounts.sum(:balance), unit: ''),
+      "total_equity":                 view_context.number_to_currency(@equity_accounts.sum(:balance), unit: ''),
+      "member_shares":                @member_shares,
+      "membership_payments":          @membership_payments,
+      "roles":                        current_user.roles
+    }
+
+    @payload[:active_loans] = @active_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:for_verification_loans] = @for_verification_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:verified_loans] = @verified_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:in_process_loans] = @in_process_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:pending_loans] = @pending_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:paid_loans] = @paid_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:writeoff_loans] = @writeoff_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_writeoff, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+    @payload[:savings_accounts] = @savings_accounts.map{ |o|
+      {
+        id:                   o.id,
+        type:                 o.account_subtype,
+        maintaining_balance:  view_context.number_to_currency(o.maintaining_balance, unit: ''),
+        current_balance:      view_context.number_to_currency(o.balance, unit: '')
+      }
+    }
+
+    @payload[:insurance_accounts] = @insurance_accounts.map{ |o|
+      balance = o.balance
+
+      if o.clip
+        balance = o.clip_active_balance
+      elsif o.hiip
+        balance = o.hiip_active_balance
+      end
+
+      {
+        id:       o.id,
+        type:     o.account_subtype,
+        balance:  view_context.number_to_currency(balance, unit: '')
+      }
+    }
+
+    @payload[:equity_accounts] = @equity_accounts.map{ |o|
+      {
+        id:       o.id,
+        type:     o.account_subtype,
+        balance:  view_context.number_to_currency(o.balance, unit: '')
+      }
+    }
+
+    @payload[:total_insurance] = 0.00
+
+    @insurance_accounts.each do |o|
+      balance = o.balance
+
+      if o.clip
+        balance = o.clip_active_balance
+      elsif o.hiip
+        balance = o.hiip_active_balance
+      end
+
+      @payload[:total_insurance] += balance
+    end
+
+    @payload[:total_insurance] = view_context.number_to_currency(@payload[:total_insurance], unit: '')
+
+    @payload[:attachment_files] = @member.attachment_files.map{ |o|
+      {
+        id:         o.id,
+        file_name:  o.file_name,
+        is_image:   o.file.image?,
+        link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+      }
     }
 
     # subheader items

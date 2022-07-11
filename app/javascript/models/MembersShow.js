@@ -211,14 +211,8 @@ var _cacheDom = function() {
   $btnConfirmRestructure        = $("#btn-confirm-restructure");
   $selectRestructureLoanProduct = $("#select-restructure-loan-product");
 
-  $selectActiveLoans            = $("#select-active-loans").select2({ theme: "bootstrap" });
-  $selectCoMakerB               = $("#select-co-maker-b").select2({ theme: "bootstrap" });
-
-  $selectActiveLoans            = $("#select-active-loans");
-  $selectActiveLoans.select2({
-    allowClear: true,
-    theme: "bootstrap"
-  });
+  $selectActiveLoans            = $("#select-active-loans").select2();
+  $selectCoMakerB               = $("#select-co-maker-b").select2();
 
   $inputCoMakerA                = $("#input-co-maker-a");
   $inputPnNumber                = $("#input-pn-number");
