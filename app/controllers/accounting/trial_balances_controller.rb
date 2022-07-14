@@ -62,23 +62,21 @@ module Accounting
       }
     end
     def show
-      @general_ledger     = DataStore.find(params[:id])
-
       @trial_balance      = ReadOnlyDataStore.find(params[:id])
       
       @data = ::Accounting::TrialBalances::DeriveFromGeneralLedger.new(
-                gl_data: @general_ledger.data
+                gl_data: @trial_balance.data
               ).execute!.with_indifferent_access
 
-      if @general_ledger.processing?
+      if @trial_balance.processing?
         redirect_to accounting_general_ledgers_path
       else
-        @start_date           = @general_ledger.meta["start_date"].to_date.strftime("%B %d, %Y")
-        @end_date             = @general_ledger.meta["end_date"].to_date.strftime("%B %d, %Y")
-        @branch_name          = @general_ledger.meta["branch_name"]
-        @updated_at           = @general_ledger.updated_at.strftime("%B %d, %Y %H:%M")
-        @accounting_fund_name = @general_ledger.meta["accounting_fund_name"]
-        @prepared_by          = "#{@general_ledger.meta["user"]["last_name"]}, #{@general_ledger.meta["user"]["first_name"]}"
+        @start_date           = @trial_balance.meta["start_date"].to_date.strftime("%B %d, %Y")
+        @end_date             = @trial_balance.meta["end_date"].to_date.strftime("%B %d, %Y")
+        @branch_name          = @trial_balance.meta["branch_name"]
+        @updated_at           = @trial_balance.updated_at.strftime("%B %d, %Y %H:%M")
+        @accounting_fund_name = @trial_balance.meta["accounting_fund_name"]
+        @prepared_by          = "#{@trial_balance.meta["user"]["last_name"]}, #{@trial_balance.meta["user"]["first_name"]}"
 
         @subheader_items = [
           { is_link: true, path: accounting_general_ledgers_path, text: "Trial Balances" },
@@ -95,7 +93,7 @@ module Accounting
         @subheader_side_actions = [
           {
             id: "btn-gl",
-            link: "/accounting/general_ledgers/#{@general_ledger.id}",
+            link: "/accounting/general_ledgers/#{@trial_balance.id}",
             class: "fa fa-arrow-left",
             text: "General Ledger"
           },
@@ -114,7 +112,7 @@ module Accounting
 
         ]
         @payload = {
-          id: @general_ledger.id,
+          id: @trial_balance.id,
           urlDelete: "#{ENV['BACKEND_API_URL']}/api/v1/general_ledgers/delete",
           userId: current_user.id,
           xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
