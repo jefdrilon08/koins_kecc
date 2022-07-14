@@ -5,6 +5,7 @@ module Accounting
     def index
       current_date  = Date.today
 
+
       @start_date = Date.new(current_date.year, current_date.month, 1)
       @end_date   = Date.new(current_date.year, current_date.month, -1)
 
@@ -61,10 +62,10 @@ module Accounting
       }
     end
     def show
-      @general_ledger  = DataStore.find(params[:id])
+      @general_ledger     = DataStore.find(params[:id])
 
-      @trial_balance  = DataStore.find(params[:id])
-
+      @trial_balance      = ReadOnlyDataStore.find(params[:id])
+      
       @data = ::Accounting::TrialBalances::DeriveFromGeneralLedger.new(
                 gl_data: @general_ledger.data
               ).execute!.with_indifferent_access
