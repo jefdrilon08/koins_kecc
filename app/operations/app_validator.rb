@@ -1,4 +1,6 @@
 class AppValidator
+  attr_accessor :errors
+
   def initialize
     @errors = {
       messages: [],
@@ -17,5 +19,9 @@ class AppValidator
       key: "system",
       message: "not yet implemented"
     }
+  end
+
+  def messages
+    @errors[:full_messages]
   end
 end

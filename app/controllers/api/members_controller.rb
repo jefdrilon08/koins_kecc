@@ -1,32 +1,59 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index]
-    before_action :authenticate_user!, only: [:index]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock]
+    before_action :authenticate_user!, only: [:index, :unlock]
+
+    def unlock
+      member = Member.find(params[:id])
+
+      config = {
+        member: member,
+        user:   @user
+      }
+
+      cmd = ::Members::ValidateUnlock.new(
+        config: config
+      )
+
+      cmd.execute!
+
+      if cmd.messages.any?
+        render json: { errors: cmd.messages }, status: :unprocessable_entity
+      else
+        member.update!(modifiable: true)
+
+        render json: { message: "ok", id: member.id }
+      end
+    end
 
     def index
-      branches  = ReadOnlyBranch.select("branches.id, branches.name").where(
-                    id: ReadOnlyUserBranch.where(
-                          active: true,
-                          user_id: @user.id
-                        ).pluck(:branch_id)
-                  ).order(
-                    "name ASC"
-                  )
+      branches = ReadOnlyBranch.select(
+        "branches.id, branches.name"
+      ).where(
+        id: ReadOnlyUserBranch.where(
+              active: true,
+              user_id: @user.id
+            ).pluck(:branch_id)
+      ).order(
+        "name ASC"
+      )
 
       q = params[:q]
 
-      members = Member.joins(:branch).select(
-                  "members.id, members.first_name, members.middle_name, members.last_name, branches.name AS branch_name, status"
-                ).where(
-                  "branches.id IN (?) AND status = ?",
-                  branches.pluck(:id),
-                  "active"
-                ).where(
-                  "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
-                  q: "%#{q.upcase}%"
-                ).order(
-                  "members.last_name ASC"
-                ).limit(50)
+      members = Member.joins(
+        :branch
+      ).select(
+        "members.id, members.first_name, members.middle_name, members.last_name, branches.name AS branch_name, status"
+      ).where(
+        "branches.id IN (?) AND status = ?",
+        branches.pluck(:id),
+        "active"
+      ).where(
+        "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(identification_number) LIKE :q",
+        q: "%#{q.upcase}%"
+      ).order(
+        "members.last_name ASC"
+      ).limit(50)
 
       render json: { members: members }
     end

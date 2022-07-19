@@ -12,6 +12,8 @@ import MembersProfileSurveyAnswers from './MembersProfileSurveyAnswers';
 import MembersProfileShares from './MembersProfileShares';
 import MembersProfileAttachmentFiles from './MembersProfileAttachmentFiles';
 import MembersProfileMembershipPayments from './MembersProfileMembershipPayments';
+import MembersProfileMyKoins from './MembersProfileMyKoins';
+import MembersProfileActions from './MembersProfileActions';
 
 export default function MembersProfile(props) {
   const [member]                    = useState(props.member);
@@ -135,6 +137,11 @@ export default function MembersProfile(props) {
                     My KOINS
                   </a>
                 </li>
+                <li className="nav-item">
+                  <a href="#actions" role="tab" data-bs-toggle="tab" aria-controls="actions" className="nav-link">
+                    Actions
+                  </a>
+                </li>
               </ul>
               <div className="tab-content border-start border-bottom border-end">
                 <div id="home" className="home p-3 tab-pane active show" role="tabpanel">
@@ -217,7 +224,18 @@ export default function MembersProfile(props) {
                   />
                 </div>
                 <div id="mykoins" className="home p-3 tab-pane" role="tabpanel">
-                  My KOINS
+                  <MembersProfileMyKoins
+                    memberId={member.id}
+                    token={token}
+                  />
+                </div>
+                <div id="actions" className="home p-3 tab-pane" role="tabpanel">
+                  <MembersProfileActions
+                    member={member}
+                    memberId={member.id}
+                    token={token}
+                    roles={roles}
+                  />
                 </div>
               </div>
             </div>
