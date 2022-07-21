@@ -1,4 +1,29 @@
 namespace :report do
+  task :accrued_list => :environment do
+    
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    @data   = []
+
+    loan_details   = Loan.where("branch_id = ? and data ->> 'accrued_interest' IS NOT NULL ",br_id).ids
+    
+    loan_details.each do |ld|
+    loans = Loan.find(ld)
+    am    = loans.data['accrued_interest']
+    cb    = am['total_accrued_interest'] - am['total_accrued_interest_balance']
+
+    if cb > 0
+      status = "Active"
+    else 
+      status = "Paid"
+    end
+    data  = "#{loans.member.full_name}|#{loans.loan_product.name}|#{am['total_accrued_interest']}|#{am['total_accrued_interest_balance']}|#{cb}|#{status}"
+    @data << data
+
+    end  
+    puts @data
+  end
+
   task :member_registry => :environment do
     br_name = ENV['SATO']
     br_id = Branch.where(name: br_name).ids
@@ -36,6 +61,78 @@ namespace :report do
     end
     puts @data
   end
+
+  task :project_type_loan_details => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    @data   = []
+    if br_id.present?
+      loan_details = Loan.where("status = 'active' and branch_id = ? and loan_product_id IS NOT NULL",br_id).pluck(:loan_product_id).uniq
+    else
+      loan_details = Loan.where("status = 'active' and loan_product_id IS NOT NULL").pluck(:loan_product_id).uniq
+    end
+    loan_details.each do |s|
+
+    lp      = LoanProduct.find(s).name
+    ss      = Loan['principal']
+    if br_id.present?
+      s_count = Loan.where("status = 'active' and branch_id=? and loan_product_id=?" ,br_id,s).count
+    else
+      s_count = Loan.where("status = 'active' and loan_product_id=?",s).count
+    end
+
+    lb    = "#{lp}|#{s_count}|#{ss}"
+    @data << lb
+    end
+    puts @data
+  end
+  task :project_type_report => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    @data   = [] 
+    if br_id.present?
+      project_type = Loan.where("status = 'active' and branch_id = ? and project_type_id IS NOT NULL", br_id).ids
+    else
+      project_type = Loan.where("status = 'active' and project_type_id IS NOT NULL").pluck(:project_type_id).uniq
+    end
+    project_type.each do |pt|
+    loans   = Loan.find(pt)
+    pp      = loans['project_type_id']
+    ptn     = ProjectType.find(pp).name
+    data    = "#{loans.member.full_name}|#{loans.loan_product.name}|#{ptn}"
+
+    @data << data
+    end
+    puts @data
+  end
+
+  task :member_for_write_off => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    @data   = []
+
+    if br_id.present?
+      project_type = Loan.where("status = 'writeoff' and branch_id = ? and project_type_id IS NOT NULL", br_id).ids
+    else
+      project_type = Loan.where("status = 'writeoff' and project_type_id IS NOT NULL").pluck(:project_type_id).uniq
+    end
+
+    project_type.each do |pt|
+    loans   = Loan.find(pt)
+    ss      = loans['date_prepared']
+    ib      = loans['interest_balance']
+    md      = loans['maturity_date']
+    st      = loans['status']
+    idc     = loans['center_id']
+    cn      = Center.find(idc).name
+    
+    data    = "#{loans.member.full_name}|#{cn}|#{loans.loan_product.name}|#{loans.principal}|#{ib}|#{ss}|#{st}"
+
+    @data << data
+
+    end
+    puts @data
+  end 
 
   task :loan_project_type => :environment do
     s_date= ENV['s_date']
