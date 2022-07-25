@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock]
-    before_action :authenticate_user!, only: [:index, :unlock]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password]
+    before_action :authenticate_user!, only: [:index, :unlock, :update_password]
 
     def unlock
       member = Member.find(params[:id])
@@ -56,6 +56,32 @@ module Api
       ).limit(50)
 
       render json: { members: members }
+    end
+
+    def update_password
+      password              = params[:password]
+      password_confirmation = params[:password_confirmation]
+      member                = Member.find_by_id(params[:id])
+
+      cmd = ::Members::ValidateUpdatePassword.new(
+        member:                 member,
+        password:               password,
+        password_confirmation:  password_confirmation,
+        user:                   @user
+      )
+
+      cmd.execute!
+
+      if cmd.messages.any?
+        render json: { errors: cmd.messages }, status: :unprocessable_entity
+      else
+        member.update!(
+          password: password,
+          password_confirmation: password_confirmation
+        )
+
+        render json: { message: "ok" }
+      end
     end
 
     def change_password

@@ -6,14 +6,40 @@ export default function MembersProfileMyKoins(props) {
   const [password, setPassword]               = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isLoading, setIsLoading]             = useState(false);
+  const [errors, setErrors]                   = useState([]);
 
   const handleSavePassword = () => {
-    const data = {
+    setIsLoading(true);
+    setErrors([]);
+
+    const payload = {
+      id:                     props.memberId,
       password:               password,
       password_confirmation:  passwordConfirm
     }
 
-    setIsLoading(true);
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/update_password',
+      payload,
+      options
+    ).then((res) => {
+      alert("Successfully updated password!");
+      setIsLoading(false);
+      setPassword("");
+      setPasswordConfirm("");
+    }).catch((error) => {
+      console.log(error.response.data);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
   }
 
   return (
@@ -48,6 +74,30 @@ export default function MembersProfileMyKoins(props) {
             />
           </div>
           <hr/>
+          {(() => {
+            if(errors.length > 0) {
+              return (
+                <div className="">
+                  <h5>
+                    Errors
+                  </h5>
+                  <ul>
+                    {errors.map((o, i) => {
+                      return (
+                        <li key={`err-${i}`}>
+                          {o}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              )
+            } else {
+              return (
+                <></>
+              )
+            }
+          })()}
           <button 
             className="btn btn-success btn-block"
             onClick={handleSavePassword}
