@@ -2,10 +2,10 @@ module DataStores
   class RepaymentRatesController < DataStoreController
     def index
       super
-
+      @data_store = DataStore
       @subheader_items = [
         { text: "Data Stores" },
-        { text: "Repayment Rates" }
+        { text: "Repayment Rates", is_link: true, path:  "/data_stores/repayment_rates" }
       ]
 
       @subheader_side_actions = [
@@ -20,7 +20,7 @@ module DataStores
 
     def show
       super
-
+      @data_store = DataStore.find(params[:id])
       @subheader_items = [
         { text: "Data Stores" },
         { text: "Repayment Rates", is_link: true, path:  "/data_stores/repayment_rates" }
@@ -31,10 +31,15 @@ module DataStores
           text: "#{@record.meta["branch_name"]} - #{@record.meta["as_of"].to_date.strftime("%B %d, %Y")}"
         }
       end
-
       @subheader_side_actions = [
         { text: "Delete", class: "fa fa-times", link: "/data_stores/repayment_rates/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
+      @subheader_side_actions << {
+        id: "btn-print",
+        link: "/print?type=repayment_rates&id=#{params[:id]}",
+        class: "fa fa-print",
+        text: "Print",
+        }
 
       @payload = {
         id: @record.id,
