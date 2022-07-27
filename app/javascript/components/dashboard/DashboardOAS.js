@@ -833,7 +833,7 @@ export default class DashboardOAS extends React.Component {
                 </tr>
                 <tr>
                   <th>
-                    Admitted Members
+                    New Members
                   </th>
                   <td className="text-center">
                     {o.data.counts.active_members.male}
@@ -851,7 +851,7 @@ export default class DashboardOAS extends React.Component {
                
                 <tr>
                   <th>
-                   Inactive Members
+                   Non-patronizing Members
                   </th>
                   <td className="text-center">
                     {inactive_male}

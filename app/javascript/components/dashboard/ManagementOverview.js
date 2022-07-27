@@ -158,10 +158,10 @@ export default class ManagementOverview extends React.Component {
                   Active Borrowers
                 </th>
                 <th className="text-center">
-                  Admitted Members
+                  New Members
                 </th>
                 <th className="text-center">
-                  Inactive Members
+                  Non-patronizing Members
                 </th>
                 <th>
                   As Of
