@@ -47,6 +47,9 @@ namespace :api do
 
   # Exec Reports
   get "/exec_reports/psr_query", to: "exec_reports#psr_query"
+
+  # Loans
+  post "/loans/restructure", to: "loans#restructure"
   
   namespace :members do
     # Loans

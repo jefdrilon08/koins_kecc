@@ -387,6 +387,17 @@ class MembersController < ApplicationController
       }
     end
 
+    @co_makers = ReadOnlyMember.active.where(
+      center_id: @member.center_id
+    ).where.not(
+      id: @member.id
+    ).map{ |o|
+      {
+        id: o.id,
+        name: o.full_name
+      }
+    }
+
     @payload = {
       "memberId":                     @member.id,
       "member":                       @member,
@@ -415,7 +426,8 @@ class MembersController < ApplicationController
       "total_equity":                 view_context.number_to_currency(@equity_accounts.sum(:balance), unit: ''),
       "member_shares":                @member_shares,
       "membership_payments":          @membership_payments,
-      "roles":                        current_user.roles
+      "roles":                        current_user.roles,
+      "co_makers":                    @co_makers
     }
 
     @payload[:active_loans] = @active_loans.map{ |o|
@@ -557,6 +569,13 @@ class MembersController < ApplicationController
         file_name:  o.file_name,
         is_image:   o.file.image?,
         link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+      }
+    }
+
+    @payload[:loan_products_for_restructuring] = helpers.loan_products_for_restructuring.map{ |o|
+      {
+        id: o.id,
+        name: o.name
       }
     }
 

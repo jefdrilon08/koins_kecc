@@ -15,7 +15,7 @@ export default function ErrorList(props) {
             <ul>
               {props.errors.map((e, i) => {
                 return (
-                  <li key={"error-" + i}>
+                  <li key={`error-${i}`}>
                     {e}
                   </li>
                 )

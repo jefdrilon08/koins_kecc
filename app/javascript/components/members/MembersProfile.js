@@ -16,50 +16,52 @@ import MembersProfileMyKoins from './MembersProfileMyKoins';
 import MembersProfileActions from './MembersProfileActions';
 
 export default function MembersProfile(props) {
-  const [member]                    = useState(props.member);
-  const [data]                      = useState(props.data);
-  const [isResigned]                = useState(props.is_resigned);
-  const [dateOfMembership]          = useState(props.date_of_membership);
-  const [memberAge]                 = useState(props.member_age);
-  const [dateOfBirth]               = useState(props.date_of_birth);
-  const [dateResigned]              = useState(props.date_resigned);
-  const [previousDateResigned]      = useState(props.previous_date_resigned);
-  const [membershipType]            = useState(props.membership_type);
-  const [membershipArrangement]     = useState(props.membership_arrangement);
-  const [recognitionDate]           = useState(props.recognition_date);
-  const [lengthOfStay]              = useState(props.length_of_stay);
-  const [branch]                    = useState(props.branch);
-  const [center]                    = useState(props.center);
-  const [profilePictureUrl]         = useState(props.profile_picture_url);
-  const [memberData]                = useState(props.member_data);
-  const [activeLoans]               = useState(props.active_loans);
-  const [pendingLoans]              = useState(props.pending_loans);
-  const [forVerificationLoans]      = useState(props.for_verification_loans);
-  const [paidLoans]                 = useState(props.paid_loans);
-  const [verifiedLoans]             = useState(props.verified_loans);
-  const [inProcessLoans]            = useState(props.in_process_loans);
-  const [writeoffLoans]             = useState(props.writeoff_loans);
-  const [savingsAccounts]           = useState(props.savings_accounts);
-  const [insuranceAccounts]         = useState(props.insurance_accounts);
-  const [equityAccounts]            = useState(props.equity_accounts);
-  const [memberShares]              = useState(props.member_shares);
-  const [membershipPayments]        = useState(props.membership_payments);
-  const [surveys]                   = useState(props.surveys);
-  const [surveyAnswers]             = useState(props.survey_answers);
-  const [loanBalance]               = useState(props.loan_balance);
-  const [loanCycles]                = useState(props.loan_cycles);
-  const [missingAccounts]           = useState(props.missing_accounts);
-  const [token]                     = useState(props.token);
-  const [address]                   = useState(props.address);
-  const [legalDependents]           = useState(props.legal_dependents);
-  const [beneficiaries]             = useState(props.beneficiaries);
-  const [resignationRecords]        = useState(props.resignation_records);
-  const [entryPointLoanCycleCount]  = useState(props.entry_point_loan_cycle_count);
-  const [totalSavings]              = useState(props.total_savings);
-  const [totalInsurance]            = useState(props.total_insurance);
-  const [totalEquity]               = useState(props.total_equity);
-  const [roles]                     = useState(props.roles);
-  const [attachmentFiles]           = useState(props.attachment_files);
+  const [member]                        = useState(props.member);
+  const [data]                          = useState(props.data);
+  const [isResigned]                    = useState(props.is_resigned);
+  const [dateOfMembership]              = useState(props.date_of_membership);
+  const [memberAge]                     = useState(props.member_age);
+  const [dateOfBirth]                   = useState(props.date_of_birth);
+  const [dateResigned]                  = useState(props.date_resigned);
+  const [previousDateResigned]          = useState(props.previous_date_resigned);
+  const [membershipType]                = useState(props.membership_type);
+  const [membershipArrangement]         = useState(props.membership_arrangement);
+  const [recognitionDate]               = useState(props.recognition_date);
+  const [lengthOfStay]                  = useState(props.length_of_stay);
+  const [branch]                        = useState(props.branch);
+  const [center]                        = useState(props.center);
+  const [profilePictureUrl]             = useState(props.profile_picture_url);
+  const [memberData]                    = useState(props.member_data);
+  const [activeLoans]                   = useState(props.active_loans);
+  const [pendingLoans]                  = useState(props.pending_loans);
+  const [forVerificationLoans]          = useState(props.for_verification_loans);
+  const [paidLoans]                     = useState(props.paid_loans);
+  const [verifiedLoans]                 = useState(props.verified_loans);
+  const [inProcessLoans]                = useState(props.in_process_loans);
+  const [writeoffLoans]                 = useState(props.writeoff_loans);
+  const [savingsAccounts]               = useState(props.savings_accounts);
+  const [insuranceAccounts]             = useState(props.insurance_accounts);
+  const [equityAccounts]                = useState(props.equity_accounts);
+  const [memberShares]                  = useState(props.member_shares);
+  const [membershipPayments]            = useState(props.membership_payments);
+  const [surveys]                       = useState(props.surveys);
+  const [surveyAnswers]                 = useState(props.survey_answers);
+  const [loanBalance]                   = useState(props.loan_balance);
+  const [loanCycles]                    = useState(props.loan_cycles);
+  const [missingAccounts]               = useState(props.missing_accounts);
+  const [token]                         = useState(props.token);
+  const [address]                       = useState(props.address);
+  const [legalDependents]               = useState(props.legal_dependents);
+  const [beneficiaries]                 = useState(props.beneficiaries);
+  const [resignationRecords]            = useState(props.resignation_records);
+  const [entryPointLoanCycleCount]      = useState(props.entry_point_loan_cycle_count);
+  const [totalSavings]                  = useState(props.total_savings);
+  const [totalInsurance]                = useState(props.total_insurance);
+  const [totalEquity]                   = useState(props.total_equity);
+  const [roles]                         = useState(props.roles);
+  const [attachmentFiles]               = useState(props.attachment_files);
+  const [loanProductsForRestructuring]  = useState(props.loan_products_for_restructuring);
+  const [coMakers]                      = useState(props.co_makers);
 
   return (
     <>
@@ -168,6 +170,8 @@ export default function MembersProfile(props) {
                 </div>
                 <div id="loans" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileLoans
+                    memberId={member.id}
+                    token={token}
                     activeLoans={activeLoans}
                     pendingLoans={pendingLoans}
                     forVerificationLoans={forVerificationLoans}
@@ -176,6 +180,8 @@ export default function MembersProfile(props) {
                     writeoffLoans={writeoffLoans}
                     paidLoans={paidLoans}
                     entryPointLoanCycleCount={entryPointLoanCycleCount}
+                    loanProductsForRestructuring={loanProductsForRestructuring}
+                    coMakers={coMakers}
                   />
                 </div>
                 <div id="savings_accounts" className="home p-3 tab-pane" role="tabpanel">

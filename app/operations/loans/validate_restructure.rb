@@ -29,7 +29,7 @@ module Loans
           key: "pn_number",
           message: "pn_number required"
         }
-      elsif Loan.where(pn_number: @pn_number).count > 0
+      elsif ReadOnlyLoan.where(pn_number: @pn_number).count > 0
         @errors[:messages] << {
           key: "pn_number",
           message: "pn_number already taken"
