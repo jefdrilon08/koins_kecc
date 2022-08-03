@@ -46,13 +46,17 @@ module ClosingRecords
           path = "/data_stores/manual_aging/#{o.data_store_id}"
         when "PERSONAL_FUNDS"
           path = "/data_stores/personal_funds/#{o.data_store_id}"
+        when "MEMBER_COUNTS"
+          path = "/data_stores/member_counts/#{o.data_store_id}"
         end
 
         @records << {
-          type:         o.record_type,
-          closing_date: o.closing_date.strftime("%b %d %Y"),
-          status:       "done",
-          path:         path
+          type:           o.record_type,
+          closing_date:   o.closing_date.strftime("%b %d %Y"),
+          status:         "done",
+          path:           path,
+          data_store_id:  o.data_store_id,
+          data:           o.data
         }
       end
 

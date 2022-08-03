@@ -19,9 +19,9 @@ export default function ClosingRecordsList(props) {
             </tr>
           </thead>
           <tbody>
-            {props.closingRecords.map((o) => {
+            {props.closingRecords.map((o, i) => {
               return (
-                <tr>
+                <tr key={`cr-${i}`}>
                   <td>
                     <a href={o.path} target="_blank">
                       {o.type}

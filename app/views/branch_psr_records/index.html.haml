@@ -1,0 +1,12 @@
+.row
+  .col
+    .card
+      .card-body
+        %h4
+          Branch PSR Records
+        - if @records.any?
+          = render partial: "index_list", locals: { rercords: @records }
+          = paginate @records
+        - else
+          %p
+            No records found.

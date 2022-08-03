@@ -1,0 +1,20 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+        Branch
+      %th
+        Closing Date
+      %th
+        Status
+  %tbody
+    - @records.each do |o|
+      %tr
+        %td
+          = link_to branch_psr_record_path(o) do
+            %b
+              #{o.branch.name}
+        %td
+          #{o.closing_date.strftime("%b %d, %Y")}
+        %td
+          #{o.status}

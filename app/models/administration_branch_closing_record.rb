@@ -9,10 +9,11 @@ class AdministrationBranchClosingRecord < ApplicationRecord
     "SOA_EXPENSES",
     "SOA_LOANS",
     "MANUAL_AGING",
-    "PERSONAL_FUNDS"
+    "PERSONAL_FUNDS",
+    "MEMBER_COUNTS"
   ]
 
-  belongs_to :data_store
+  belongs_to :data_store, optional: true
   belongs_to :branch
 
   validates :record_type, presence: true, inclusion: { in:  RECORD_TYPES }

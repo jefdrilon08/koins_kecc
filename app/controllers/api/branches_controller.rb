@@ -19,5 +19,24 @@ module Api
 
       render json: { branches: branches }
     end
+
+    def close
+      branch_id     = params[:branch_id]
+      branch        = ReadOnlyBranch.find_by_id(branch_id)
+      closing_date  = params[:closing_date]
+
+      cmd = ::Branches::ValidateClose.new(
+        branch: branch,
+        closing_date: closing_date
+      )
+
+      cmd.execute!
+
+      if cmd.errors.any?
+        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      else
+        render json: { message: "ok" }
+      end
+    end
   end
 end

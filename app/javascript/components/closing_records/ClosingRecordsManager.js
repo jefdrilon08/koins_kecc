@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import ErrorList from '../ErrorList';
 import ClosingRecordsList from './ClosingRecordsList';
+import ClosingRecordsControls from './ClosingRecordsControls';
 
 export default function ClosingRecordsManager(props) {
   const [recordTypes] = useState([
@@ -16,7 +17,8 @@ export default function ClosingRecordsManager(props) {
     "SOA_EXPENSES",
     "SOA_LOANS",
     "MANUAL_AGING",
-    "PERSONAL_FUNDS"
+    "PERSONAL_FUNDS",
+    "MEMBER_COUNTS"
   ]);
 
   const [modalNewIsOpen, setModalNewIsOpen] = useState(false);
@@ -38,6 +40,18 @@ export default function ClosingRecordsManager(props) {
 
     loadRecords(branchId, newCurrentDate, recordType);
     loadClosingRecords(branchId, newCurrentDate, recordType);
+  }
+
+  const branchName = () => {
+    name = "";
+
+    branches.forEach((o) => {
+      if(o.id == branchId) {
+        name = o.name;
+      }
+    });
+
+    return name;
   }
 
   const loadClosingRecords = (_branchId, _currentDate, _recordType) => {
@@ -294,6 +308,15 @@ export default function ClosingRecordsManager(props) {
         handleBranchChanged={handleBranchChanged}
         handleCurrentDateChanged={handleCurrentDateChanged}
         branchId={branchId}
+      />
+      <ClosingRecordsControls
+        closingRecords={closingRecords}
+        token={token}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        branchId={branchId}
+        closingDate={currentDate}
+        branchName={branchName()}
       />
     </>
   )

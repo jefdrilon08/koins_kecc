@@ -44,7 +44,7 @@ module ClosingRecords
         end
       end
 
-      if @data_store.blank?
+      if @record_type.present? and @data_store.blank?
         @errors << "Data store required"
       end
 

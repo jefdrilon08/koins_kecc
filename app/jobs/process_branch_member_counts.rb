@@ -14,9 +14,9 @@ class ProcessBranchMemberCounts < ApplicationJob
         data_store_type: args[:data_store_type]
       }
 
-      data_store  = ::DataStores::SaveMemberCounts.new(
-                      config: config
-                    ).execute!
+      data_store = ::DataStores::SaveMemberCounts.new(
+        config: config
+      ).execute!
 
       # Save DwBranchMemberCounts
       ::DataWarehouse::SaveDwBranchMemberCountsFromDataStore.new(

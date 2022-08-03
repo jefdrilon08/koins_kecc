@@ -15,9 +15,9 @@ class ProcessRepaymentRates < ApplicationJob
         data_store_type: args[:data_store_type]
       }
 
-      data_store  = ::DataStores::SaveRepaymentRates.new(
-                      config: config
-                    ).execute!
+      data_store = ::DataStores::SaveRepaymentRates.new(
+        config: config
+      ).execute!
 
       # Create daily_branch_metric
       ::Branches::SaveDailyBranchMetric.new(

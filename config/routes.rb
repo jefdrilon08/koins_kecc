@@ -57,6 +57,8 @@ Rails.application.routes.draw do
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
 
   get "/upload_clip", to: "pages#upload_clip"
+
+  resources :branch_psr_records, only: [:index, :show]
   
   # Adjustments
   namespace :adjustments do
