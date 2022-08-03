@@ -64,7 +64,8 @@ export default function MembersProfileLoans(props) {
       options
     ).then((res) => {
       console.log(res);
-      window.location.reload();
+  
+      window.location.href = `/loans/${res.data.id}`;
     }).catch((error) => {
       console.log(error.response.data);
       setErrors(error.response.data.errors);

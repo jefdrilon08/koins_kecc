@@ -57,7 +57,7 @@ module Api
 
         cmd.execute!
 
-        render json: { message: "ok" }
+        render json: { message: "ok", id: cmd.loan.id }
       end
     end
   end

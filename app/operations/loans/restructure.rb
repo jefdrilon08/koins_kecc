@@ -1,5 +1,7 @@
 module Loans
   class Restructure
+    attr_accessor :loan
+
     def initialize(user:, co_maker:, co_maker_member:, pn_number:, clip_number:, date_prepared:, num_installments:, term:, member:, active_loans:, loan_product:, date_released: nil, beneficiary_first_name:, beneficiary_middle_name:, beneficiary_last_name:, beneficiary_date_of_birth:, beneficiary_relationship:)
       @user             = user
       @co_maker         = co_maker

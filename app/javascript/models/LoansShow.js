@@ -123,13 +123,64 @@ var _cacheDom = function() {
   /**
    * Bootstrap 5 modal initialization
    */
-  $modalDelayAmort  = new bootstrap.Modal(
-                        document.getElementById("modal-delay-amort")
-                      );
+  $modalDelayAmort = new bootstrap.Modal(
+    document.getElementById("modal-delay-amort")
+  );
+
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
+
+  $modalDelete = new bootstrap.Modal(
+    document.getElementById("modal-delete")
+  );
+
+  $modalNewAdjustment = new bootstrap.Modal(
+    document.getElementById("modal-new-adjustment")
+  );
+
+  $modalUploadApplicationForm = new bootstrap.Modal(
+    document.getElementById("modal-upload-application-form")
+  );
+
+  $modalFirstDateOfPayment = new bootstrap.Modal(
+    document.getElementById("modal-first-date-of-payment")
+  );
+
+  $modalReage = new bootstrap.Modal(
+    document.getElementById("modal-reage")
+  );
+
+  $modalDateReleased = new bootstrap.Modal(
+    document.getElementById("modal-date-released")
+  );
+
+  $modalChangeBook = new bootstrap.Modal(
+    document.getElementById("modal-change-book")
+  );
+
+  $modalVerify = new bootstrap.Modal(
+    document.getElementById("modal-verify")
+  );
+
+  $modalProcess = new bootstrap.Modal(
+    document.getElementById("modal-process")
+  );
+
+  $modalForRelease = new bootstrap.Modal(
+    document.getElementById("modal-for-release")
+  );
+
+  $modalReject = new bootstrap.Modal(
+    document.getElementById("modal-reject")
+  );
+
+  $modalReverseLoan = new bootstrap.Modal(
+    document.getElementById("modal-reverse-loan")
+  );
 
   $btnNewAdjustment         = $("#btn-new-adjustment");
   $btnConfirmNewAdjustment  = $("#btn-confirm-new-adjustment");
-  $modalNewAdjustment       = $("#modal-new-adjustment");
   $inputPrincipal           = $("#input-principal");
   $inputMonthlyInterestRate = $("#input-monthly-interest-rate");
   $inputNumInstallments     = $("#input-num-installments");
@@ -137,36 +188,29 @@ var _cacheDom = function() {
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
 
   $btnUploadApplicationForm         = $("#btn-upload-application-form");
   $btnConfirmUploadApplicationForm  = $("#btn-confirm-upload-application-form");
-  $modalUploadApplicationForm       = $("#modal-upload-application-form");
   $inputFileApplicationForm         = $("#input-file-application-form");
 
   $btnDownloadForm  = $("#btn-download-form");
 
   $btnReage         = $("#btn-reage");
   $btnConfirmReage  = $("#btn-confirm-reage");
-  $modalReage       = $("#modal-reage");
 
   $btnDelete        = $("#btn-delete");
   $btnConfirmDelete = $("#btn-confirm-delete");
-  $modalDelete      = $("#modal-delete");
 
   $btnFirstDateOfPayment        = $("#btn-first-date-of-payment");
   $btnConfirmFirstDateOfPayment = $("#btn-confirm-first-date-of-payment");
-  $modalFirstDateOfPayment      = $("#modal-first-date-of-payment");
   $inputFirstDateOfPayment      = $("#input-first-date-of-payment");
 
   $btnDateReleased        = $("#btn-date-released");
   $btnConfirmDateReleased = $("#btn-confirm-date-released");
-  $modalDateReleased      = $("#modal-date-released");
   $inputDateReleased      = $("#input-date-released");
 
   $btnChangeBook        = $("#btn-change-book");
   $btnConfirmChangeBook = $("#btn-confirm-change-book");
-  $modalChangeBook      = $("#modal-change-book");
   $selectBook           = $("#select-book");
 
   $btnDelayAmort        = $(".btn-delay-amort");
@@ -177,29 +221,21 @@ var _cacheDom = function() {
 
   $btnVerify        = $("#btn-verify");
   $btnConfirmVerify = $("#btn-confirm-verify");
-  $modalVerify      = $("#modal-verify");
 
   $btnProcess        = $("#btn-process");
   $btnConfirmProcess = $("#btn-confirm-process");
-  $modalProcess      = $("#modal-process");
 
   $btnForRelease        = $("#btn-for-release");
   $btnConfirmForRelease = $("#btn-confirm-for-release");
-  $modalForRelease      = $("#modal-for-release");
 
   $btnReject            = $("#btn-reject");
   $btnConfirmReject     = $("#btn-confirm-reject");
-  $modalReject          = $("#modal-reject");
   $inputRejectionReason = $("#input-rejection-reason");
-
 
   $btnReverseLoan         = $("#btn-reverse-loan")
   $btnConfirmReverseLoan  = $("#btn-confirm-reverse-loan");
-  $modalReverseLoan       = $("#modal-reverse-loan");
-
 
   $btnApproveReverseLoan  = $("#btn-approve-reverse-loan");
-
 
   templateErrorList = $("#template-error-list").html();
 };
