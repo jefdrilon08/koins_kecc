@@ -21,4 +21,12 @@ class BranchPsrRecord < ApplicationRecord
       self.status = "pending"
     end
   end
+
+  def done?
+    self.status == "done"
+  end
+
+  def pending?
+    self.status == "pending"
+  end
 end

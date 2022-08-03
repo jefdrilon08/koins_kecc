@@ -17,4 +17,9 @@
         %td
           #{o.closing_date.strftime("%b %d, %Y")}
         %td
-          #{o.status}
+          - if o.done?
+            .badge.bg-success
+              Done
+          - elsif o.pending?
+            .badge.bg-danger
+              Pending
