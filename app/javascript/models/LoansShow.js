@@ -118,7 +118,7 @@ var _id;
 var _authenticityToken;
 
 var _cacheDom = function() {
-  $message          = $(".message");
+  $message = $(".message");
 
   /**
    * Bootstrap 5 modal initialization

@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get "/billing_per_center", to: "pages#billing_per_center"
 
   # Closing Records
-  get "/closing_records", to: "closing_records#index"
+  get "/closing_records", to: "closing_records#index", as: :closing_records
 
    # import
   get "/import_members", to: "pages#import_members"
