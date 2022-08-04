@@ -313,8 +313,15 @@ class PrintController < ApplicationController
 
       @withdrawal_request = data
 
-      render "print/withdrawal_request", layout: "print"
-    elsif type == "sample"
+    elsif type == "repayment_rates"
+
+     repayment_rate = DataStore.find(params[:id])
+
+     data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
+
+     @repayment_rate = data
+
+     render "print/repayment_rate", layout:"print"
       
     else
       raise "Invalid type: #{type}"

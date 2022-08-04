@@ -204,7 +204,6 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
-
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
@@ -390,6 +389,7 @@ const hooks = {
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
   "pages/profile":                                    [Profile]
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {

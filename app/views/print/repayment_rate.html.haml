@@ -1,0 +1,97 @@
+:css
+	@page{size:landscape; margin:20px;
+	}
+%small
+%strong
+%br
+	#{Settings.company_name}
+	#{Settings.company_address}
+VAT Registration Tin Number: #{Settings.company_tin_number}
+%br
+#{@repayment_rate[:branch]}
+%br
+#{@repayment_rate[:as_of]}
+%br
+%table.table.table-sm.table-bordered{:width=>"100%",:border=>"1"}
+	%thead
+		%tr
+			%th.text-end
+				Member's Name
+			%th.text-center
+				Product
+			%th.text-center
+				Principal
+			%th.text-center
+				P. Paid
+			%th.text-center
+				I. Paid
+			%th.text-center
+				I. Bal.
+			%th.text-center
+				Total Paid
+			%th.text-center
+				Total Bal.
+			%th.text-center
+				Paid Due
+			%th.text-center
+				Past Due
+			%th.text-center
+				Cum. Due
+			%th.text-center
+				RR
+	%tbody
+		%tfoot
+		- @repayment_rate[:data].data['records'].each do |rr|
+			%tr
+				%td.text-center
+					#{rr['member']['last_name']} ,#{rr['member']['first_name']}
+					#{rr['member']['middle_name']}
+				%td
+					#{rr['loan_product']['name']}
+				%td.text-end
+					#{number_to_currency(rr['principal'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['principal_paid'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['interest_due'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['overall_interest_balance'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['overall_balance'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['principal_paid'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['principal_paid_due'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['principal_balance'].round(2), unit: "")}
+				%td.text-end
+					#{number_to_currency(rr['principal_due'].round(2), unit: "")}
+				%td.text-end
+					- principal_rr = rr['principal_rr']*100
+					#{number_to_percentage(principal_rr, precision: 2)}
+		%tr
+			%th.text-end
+				Total :
+			%th
+			%td
+				#{number_to_currency(@repayment_rate[:total_principal].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_principal_paid].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_overall_principal_balance].round(2), unit:"")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_interest].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_total_paid].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_overall_balance].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_principal_paid_due].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_principal_balance].round(2), unit: "")}
+			%th
+				#{number_to_currency(@repayment_rate[:total_principal_due].round(2), unit: "")}
+			%th
+				#{number_to_percentage(@repayment_rate[:total_rr], precision: 2)}
+					
+	
