@@ -35,9 +35,19 @@ module Branches
         if num_done != records.size
           @errors << "Records missing"
         end
+
+        existing_record = BranchPsrRecord.where(
+          branch:         @branch,
+          closing_month:  @closing_date.month,
+          closing_year:   @closing_date.year
+        ).first
+
+        if existing_record.present?
+          @errors << "Branch already closed"
+        end
       end
 
-      @errors << "Not yet implemented"
+      #@errors << "Not yet implemented"
 
       @errors
     end

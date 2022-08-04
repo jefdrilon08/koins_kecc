@@ -50,7 +50,9 @@ export default function ClosingRecordsControls(props) {
       options
     ).then((res) => {
       console.log(res);
+      alert("Successfully closed branch!");
       props.setIsLoading(false);
+      setModalIsOpen(false);
     }).catch((error) => {
       console.log(error.response.data);
       setErrors(error.response.data.errors);

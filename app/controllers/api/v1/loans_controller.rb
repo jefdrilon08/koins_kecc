@@ -449,9 +449,9 @@ module Api
           user: current_user
         }
 
-        errors  = ::Loans::ValidateApprove.new(
-                    config: config
-                  ).execute!
+        errors = ::Loans::ValidateApprove.new(
+          config: config
+        ).execute!
 
         if errors[:messages].any?
           render json: errors, status: 400

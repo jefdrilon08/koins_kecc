@@ -65,3 +65,18 @@
                   #{loan_data["loan_product"]["name"]}
                 %td
                   #{loan_data["count"]}
+            %tr
+              %th
+                Gross Income
+              %td
+                #{@record.data["gross_income"]}
+            %tr
+              %th
+                Operating Expense
+              %td
+                #{@record.data["operating_expense"]}
+            %tr
+              %th
+                Net Income Before Admin Expense
+              %td
+                #{@record.data["net_income_before_admin_expense"]}

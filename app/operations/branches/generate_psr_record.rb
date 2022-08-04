@@ -2,16 +2,20 @@ module Branches
   class GeneratePsrRecord
     attr_accessor :record
 
-    def initialize(branch:, closing_date:)
+    def initialize(branch:, closing_date:, branch_psr_record: nil)
       @branch       = branch
       @closing_date = closing_date.to_date
 
-      @record = BranchPsrRecord.new(
-        branch:         @branch,
-        closing_date:   @closing_date,
-        closing_year:   @closing_date.year,
-        closing_month:  @closing_date.month
-      )
+      @record = branch_psr_record
+
+      if @record.blank?
+        @record = BranchPsrRecord.new(
+          branch:         @branch,
+          closing_date:   @closing_date,
+          closing_year:   @closing_date.year,
+          closing_month:  @closing_date.month
+        )
+      end
 
       @data = {}
     end
@@ -24,6 +28,8 @@ module Branches
 
       generate_member_counts!
       generate_loan_data!
+      generate_aging_data!
+      generate_fs_data!
 
       @record.data = @data
 
@@ -32,6 +38,24 @@ module Branches
       @record.save!
 
       @record
+    end
+
+    def generate_fs_data!
+      closing_record = @closing_records.select{ |o| o[:type] == "INCOME_STATEMENT" }.first
+
+      data_store  = ReadOnlyDataStore.find(closing_record[:data_store_id])
+      data        = data_store.data.with_indifferent_access
+
+      @data[:gross_income]                    = data[:total_income]
+      @data[:operating_expense]               = data[:total_expenses]
+      @data[:net_income_before_admin_expense] = data[:total_net_income]
+    end
+
+    def generate_aging_data!
+      closing_record = @closing_records.select{ |o| o[:type] == "MANUAL_AGING" }.first
+
+      data_store  = ReadOnlyDataStore.find(closing_record[:data_store_id])
+      data        = data_store.data.with_indifferent_access
     end
 
     def generate_loan_data!

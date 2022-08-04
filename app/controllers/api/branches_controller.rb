@@ -23,7 +23,7 @@ module Api
     def close
       branch_id     = params[:branch_id]
       branch        = ReadOnlyBranch.find_by_id(branch_id)
-      closing_date  = params[:closing_date]
+      closing_date  = params[:closing_date].try(:to_date)
 
       cmd = ::Branches::ValidateClose.new(
         branch: branch,
@@ -35,6 +35,21 @@ module Api
       if cmd.errors.any?
         render json: { errors: cmd.errors }, status: :unprocessable_entity
       else
+        branch_psr_record = BranchPsrRecord.new(
+          branch: branch,
+          closing_date:   closing_date,
+          closing_year:   closing_date.year,
+          closing_month:  closing_date.month,
+          status: "pending",
+          data: {}
+        )
+
+        branch_psr_record.save!
+
+        ProcessGenerateBranchPsrRecord.perform_later({
+          id: branch_psr_record.id
+        })
+
         render json: { message: "ok" }
       end
     end
