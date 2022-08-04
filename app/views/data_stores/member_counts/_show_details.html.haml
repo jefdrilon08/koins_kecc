@@ -43,7 +43,7 @@
         #{@data[:counts][:loaners][:total]}
   %tr
     %th
-      Admitted Members
+      New Members
     - if microinsurance?
       %td.text-center
         #{@data[:counts][:active_members][:inforce]}
@@ -63,7 +63,7 @@
   - if @data[:counts][:inactive_members].present?
     %tr
       %th
-        Inactive Members
+        Non-patronizing Members
       %td.text-center
         #{@data[:counts][:inactive_members][:male]}
       %td.text-center
@@ -179,7 +179,7 @@
           #{@data[:counts][:loaners][:total]}
   %tr
     %th
-      Admitted Members
+      New Members
     - if microinsurance? 
       %td.text-center
         #{@data[:counts][:active_members][:inforce]}
@@ -209,7 +209,7 @@
   - if @data[:counts][:inactive_members].present?
     %tr
       %th
-        Inactive Members
+        Non-patronizing Members
       - if microinsurance? 
         %td.text-center
           #{@data[:counts][:inactive_members][:inforce]}
@@ -261,12 +261,12 @@
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item
     %a.nav-link.active.show{"aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#active-members", :role => "tab"}
-      Admitted Members (#{@data[:counts][:active_members][:total]})
+      New Members (#{@data[:counts][:active_members][:total]})
 
   - if @data[:counts][:inactive_members].present?
     %li.nav-item
       %a.nav-link{"aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#inactive-members", :role => "tab"}
-        Inactive Member (#{@data[:counts][:inactive_members][:total]})
+        Non-patronizing Members (#{@data[:counts][:inactive_members][:total]})
   - if microloans?  
     %li.nav-item
       %a.nav-link{"aria-selected" => "false", "data-bs-toggle" => "tab", :href => "#pure-savers", :role => "tab"}
