@@ -13,6 +13,8 @@ class ProcessGenerateBranchPsrRecord < ApplicationJob
       branch_psr_record:  branch_psr_record
     )
 
+    branch.update!(current_date: nil)
+
     cmd.execute!
   end
 end
