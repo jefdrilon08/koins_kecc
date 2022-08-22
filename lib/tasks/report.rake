@@ -1,6 +1,56 @@
 namespace :report do
-  task :accrued_list => :environment do
+  task :mba_report => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    trans_date = '2022-07-31'
+    @data    = []
     
+    member = Member.where("status = 'active' and branch_id = ? and data ->> 'recognition_date' <= ?", br_id , trans_date)
+    member.each do |mem|
+      recog_date = mem.data['recognition_date']
+      member_account = MemberAccount.where("account_subtype = ? AND member_id = ?", "Life Insurance Fund", mem.id)
+      account_transaction = AccountTransaction.where("amount > 0 AND subsidiary_id = ? AND transacted_at <= ?", member_account.pluck(:id), trans_date).order("transacted_at ASC").last
+
+      default_periodic_payment  = 15
+      if account_transaction.present?
+        latest = account_transaction
+        at = latest.data.with_indifferent_access[:ending_balance].to_f
+        td = trans_date.to_date
+        last_payment_date = latest.transacted_at
+        days_lapsed = (last_payment_date.to_date - td).to_i
+        weeks_lapsed = (days_lapsed / 7).to_i + 1
+      end
+      data = "#{mem.full_name}|#{mem.center.name}|#{mem.data['recognition_date']}|#{days_lapsed}|#{weeks_lapsed}"
+      
+      @data << data
+    end
+    puts @data
+  end
+  
+task :involuntary_resignation => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    trans_date = '2020-07-31'
+    @data    = []
+
+    member_account = MemberAccount.joins(:member).where("members.status = 'active' and account_type = 'SAVINGS' and members.branch_id = ? and account_subtype IN (?)", br_id, ["K-IMPOK","Golden K","Personal Savings Account"]).ids
+    
+    member_account.each do |mem_acc|
+      mem = MemberAccount.find(mem_acc)
+      acc_trans = AccountTransaction.where("subsidiary_id = ? and transaction_type = 'deposit' and data ->> 'is_interest' != 'true'", mem_acc).order(:transacted_at).last
+      loan = Loan.where(member_id: mem.member_id , status: 'active').count
+      if acc_trans.present?
+        if acc_trans.transacted_at <= trans_date
+          data = "#{acc_trans.subsidiary_id}|#{mem.member_id}|#{loan}|#{acc_trans.transacted_at}"
+        end
+      else
+      end
+      @data << data
+    end
+    puts @data
+  end
+
+  task :accrued_list => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
     @data   = []
@@ -90,16 +140,18 @@ namespace :report do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
     @data   = [] 
+    entry_point = LoanProduct.where(is_entry_point: true).ids
     if br_id.present?
-      project_type = Loan.where("status = 'active' and branch_id = ? and project_type_id IS NOT NULL", br_id).ids
+      project_type = Loan.where("status = 'active' and branch_id = ? and project_type_id IS NOT NULL and loan_product_id IN (?)", br_id , entry_point).ids
     else
-      project_type = Loan.where("status = 'active' and project_type_id IS NOT NULL").pluck(:project_type_id).uniq
+      project_type = Loan.where("status = 'active' and project_type_id IS NOT NULL and loan_product_id IN (?)" , entry_point).pluck(:project_type_id).uniq
     end
     project_type.each do |pt|
     loans   = Loan.find(pt)
     pp      = loans['project_type_id']
-    ptn     = ProjectType.find(pp).name
-    data    = "#{loans.member.full_name}|#{loans.loan_product.name}|#{ptn}"
+    add  = Member.find(loans.member_id).data['address']
+    categ   = ProjectType.find(pp).project_type_category.name
+    data    = "#{loans.member.full_name}|#{loans.member.branch}|#{loans.center.name}|#{add['street']}|#{add['district']}|#{add['city']}|#{add['province']}|#{categ}|#{loans.project_type.name}"
 
     @data << data
     end
