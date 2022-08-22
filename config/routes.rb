@@ -257,6 +257,8 @@ Rails.application.routes.draw do
   get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"
   delete "/billing_for_writeoff/:id", to: "billing_for_writeoff#destroy"
 
+  #involuntary_resignation
+  get "involuntary_resignation", to: "involuntary_resignation#index"
   
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"
