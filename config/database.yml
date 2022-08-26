@@ -7,7 +7,7 @@ default: &default
   username: <%= ENV["KOINS_DATABASE_USERNAME"] %>
   password: <%= ENV["KOINS_DATABASE_PASSWORD"] %>
   host: <%= ENV["KOINS_DATABASE_HOST"] %>
-  schema_search_path: public,heroku_ext
+  #schema_search_path: public,heroku_ext
 
 development:
   <<: *default
