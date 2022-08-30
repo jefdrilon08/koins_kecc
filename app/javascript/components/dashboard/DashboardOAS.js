@@ -528,11 +528,34 @@ export default class DashboardOAS extends React.Component {
       var totalPrincipalBalance  = 0.00;
       var totalInterestBalance  = 0.00;
 
+      var totalCategoryAParAmount     = 0.00;
+      var totalCategoryBParAmount     = 0.00;
+      var totalCategoryCParAmount     = 0.00;
+
       for(var i = 0; i < o.records.length; i++) {
+	var categoryAParAmount     = 0.00;
+	var categoryBParAmount     = 0.00;
+	var categoryCParAmount     = 0.00;
+
+	var numDaysPar  = parseInt(o.records[i].num_days_par);
+      	var par         = o.records[i].par;
+	      
 	totalPastDue += parseFloat(o.records[i].total_balance);
 	totalPrincipalBalance += parseFloat(o.records[i].principal_balance);
 	totalInterestBalance += parseFloat(o.records[i].interest_balance);
-	      
+
+	if(par > 0) { 
+	   if(numDaysPar >= 1 && numDaysPar <= 30) {
+	     categoryAParAmount     	= parseFloat(o.records[i].overall_principal_balance);
+	     totalCategoryAParAmount    += categoryAParAmount;
+	   } else if(numDaysPar >= 31 && numDaysPar <= 365) {
+	     categoryBParAmount     	= parseFloat(o.records[i].overall_principal_balance);
+	     totalCategoryBParAmount    += categoryBParAmount;
+	   } else if(numDaysPar >= 365){
+	     categoryCParAmount     	= parseFloat(o.records[i].overall_principal_balance);
+	     totalCategoryCParAmount    += categoryCParAmount;
+	   }
+	}
         rows.push(
           <tr key={"watchlist-record-" + o.records[i].id}>
             <td className="text-center">
@@ -565,7 +588,16 @@ export default class DashboardOAS extends React.Component {
                 {numberWithCommas(o.records[i].total_balance)}
               </strong>
             </td>
-          </tr>
+	    <td className="text-end">
+              {numberWithCommas(categoryAParAmount)}
+	    </td>
+	    <td className="text-end">
+              {numberWithCommas(categoryBParAmount)}
+	    </td>
+	    <td className="text-end">
+              {numberWithCommas(categoryCParAmount)}
+	    </td>
+	  </tr>
         );
       }
 
@@ -584,7 +616,17 @@ export default class DashboardOAS extends React.Component {
           </th>
  	  <th className="text-end">
             {numberWithCommas(totalPastDue)}
-          </th>
+	  </th>
+	  <th className="text-end">
+            {numberWithCommas(totalCategoryAParAmount)}
+	  </th>
+	  <th className="text-end">
+            {numberWithCommas(totalCategoryBParAmount)}
+	  </th>
+	  <th className="text-end">
+            {numberWithCommas(totalCategoryCParAmount)}
+	  </th>
+
  
         </tr>
       );
@@ -626,7 +668,16 @@ export default class DashboardOAS extends React.Component {
 		  <th className="text-end">
                     Total Past Due
                   </th>
-                </tr>
+		  <th className="text-end">
+                    PAR 1 - 30 days
+                  </th>
+  		  <th className="text-end">
+                    PAR 31 - 365 days
+                  </th>
+		  <th className="text-end">
+                    PAR 365 days onwards
+                  </th>
+	      	</tr>
               </thead>
               <tbody>
                 {rows}

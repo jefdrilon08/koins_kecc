@@ -116,9 +116,36 @@ export default class ShowComponent extends React.Component {
     var totalPrincipalBalance = 0.00;
     var totalInterestBalance = 0.00;
     var x = 0;
+   
+    var totalCategoryAParAmount     = 0.00;
+    var totalCategoryBParAmount     = 0.00;
+    var totalCategoryCParAmount     = 0.00;
+
     for(var i = 0; i < records.length; i++) {
       if(records[i].total_balance > 0) {
-        totalPastDue += parseFloat(records[i].total_balance);
+	var categoryAParAmount     = 0.00;
+	var categoryBParAmount     = 0.00;
+	var categoryCParAmount     = 0.00;
+
+	var numDaysPar  = parseInt(records[i].num_days_par);
+      	var par         = records[i].par;
+	      
+	if(par > 0) { 
+	   if(numDaysPar >= 1 && numDaysPar <= 30) {
+	     categoryAParAmount     	= parseFloat(records[i].overall_principal_balance);
+             totalCategoryAParAmount    += categoryAParAmount;
+
+	   } else if(numDaysPar >= 31 && numDaysPar <= 365) {
+	     categoryBParAmount     	= parseFloat(records[i].overall_principal_balance);
+             totalCategoryBParAmount    += categoryBParAmount;
+
+	   } else if(numDaysPar >= 365){
+	     categoryCParAmount     	= parseFloat(records[i].overall_principal_balance);
+             totalCategoryCParAmount    += categoryCParAmount;
+
+	   }
+	}
+	totalPastDue += parseFloat(records[i].total_balance);
 	totalPrincipalBalance += parseFloat(records[i].principal_balance);
 	totalInterestBalance += parseFloat(records[i].interest_balance);
 	x = x+1
@@ -151,7 +178,16 @@ export default class ShowComponent extends React.Component {
             </td>
 	    <td className="text-end">
               {numberWithCommas(records[i].total_balance)}
-            </td>
+	    </td>
+	    <td className="text-end">
+              {numberWithCommas(categoryAParAmount)}
+	    </td>
+	    <td className="text-end">
+              {numberWithCommas(categoryBParAmount)}
+	    </td>
+	    <td className="text-end">
+              {numberWithCommas(categoryCParAmount)}
+	    </td>
           </tr>
         );
       }
@@ -169,7 +205,25 @@ export default class ShowComponent extends React.Component {
 	<th className="text-end">
           {numberWithCommas(totalPastDue)}
         </th>
-      </tr>
+	<th className="text-end">
+	  <strong>
+           {numberWithCommas(totalCategoryAParAmount)}
+           <br/>
+ 	  </strong>
+	</th>	
+	<th className="text-end">
+	  <strong>
+           {numberWithCommas(totalCategoryBParAmount)}
+           <br/>
+ 	  </strong>
+	</th>	
+	<th className="text-end">
+	  <strong>
+           {numberWithCommas(totalCategoryCParAmount)}
+           <br/>
+ 	  </strong>
+	</th>			
+       </tr>
     );
 
     return rows;
@@ -325,7 +379,18 @@ export default class ShowComponent extends React.Component {
  
 		<th className="text-end">
                   Past Due Amount - Total
+		</th>
+		<th className="text-end">
+                  PAR 1 - 30 days
                 </th>
+ 		<th className="text-end">
+                  PAR 31 - 365 days
+		</th>
+		<th className="text-end">
+                  PAR 365 days onwards
+                </th>
+ 
+ 
               </tr>
             </thead>
             <tbody>
