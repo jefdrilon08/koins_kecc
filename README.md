@@ -44,7 +44,11 @@ This will run the following (see `Procfile` for reference):
 * css compiler
 * js compiler
 
-## Importing Database to Heroku
+## Scripts
+
+* nginx systemd service: `scripts/nginx.service`
+
+## Importing Database to Heroku (Deprecated)
 
 In order for PG Backups to access and import your dump file you will need to upload it somewhere with an HTTP-accessible URL.
 
