@@ -48,6 +48,14 @@ This will run the following (see `Procfile` for reference):
 
 * nginx systemd service: `scripts/nginx.service`
 
+To initialize nginx via systemd:
+
+```
+sudo cp scripts/nginx.service /lib/systemd/system/nginx.service
+sudo systemctl enable nginx
+sudo systemctl start nginx
+```
+
 ## Importing Database to Heroku (Deprecated)
 
 In order for PG Backups to access and import your dump file you will need to upload it somewhere with an HTTP-accessible URL.

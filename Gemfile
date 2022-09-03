@@ -44,7 +44,6 @@ gem 'whenever'
 gem 'zip-zip'
 gem "ruby-vips", "~> 2.1.4"
 
-
 # TODO: Remove eventually
 gem 'jquery-rails'
 
