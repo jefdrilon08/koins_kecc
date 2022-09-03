@@ -1,0 +1,39 @@
+Parameters:
+  VpcCidr:
+    Description: The CIDR value for the VPC
+    Type: String
+    Default: 10.0.0.0/16
+  PublicSubnet1Cidr:
+    Description: The CIDR value for Public Subnet 1
+    Type: String
+    Default: 10.0.1.0/24
+  PrivateSubnet1Cidr:
+    Description: The CIDR value for Private Subnet 1
+    Type: String
+    Default: 10.0.2.0/24
+  KOINSAmiID:
+    Description: The default AMI ID for the KOINS application
+    Type: String
+    Default: ami-12345
+
+Resources:
+  MainVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        -
+          Key: Name
+          Value: KOINS VPC
+
+  MainInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        -
+          Key: Name
+          Value: KOINS Internet Gateway
+ 
+  Public
