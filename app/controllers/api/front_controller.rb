@@ -34,6 +34,12 @@ module Api
       end
     end
 
+    def authorize_admin!
+      if !@user.is_admin?
+        render json: { errors: { user: 'unauthorized' } }, status: :unprocessable_entity
+      end
+    end
+
     def authenticate_member!
       token = request.headers["X-KOINS-PWA-TOKEN"]
 

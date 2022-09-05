@@ -1,6 +1,32 @@
 module Api
   class BranchesController < ::Api::FrontController
     before_action :authenticate_user!
+    before_action :authorize_admin!, only: [:update_coordinates]
+
+    def update_coordinates
+      lat     = params[:lat].to_f
+      lon     = params[:lon].to_f
+      branch  = Branch.find_by_id(params[:id])
+
+      cmd = ::Branches::ValidateUpdateCoordinates.new(
+        lat: lat,
+        lon: lon,
+        branch: branch
+      )
+
+      cmd.execute!
+
+      if cmd.errors.any?
+        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      else
+        branch.update!(
+          lat: lat,
+          lon: lon
+        )
+
+        render json: { message: "ok" }
+      end
+    end
 
     def index
       branches  = ReadOnlyBranch.select("id, name").where(

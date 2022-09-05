@@ -35,6 +35,7 @@ namespace :api do
   # Branches
   get "/branches", to: "branches#index"
   post "/branches/close", to: "branches#close"
+  post "/branches/update_coordinates", to: "branches#update_coordinates"
 
   # Announcements
   get "/announcements", to: "announcements#index"

@@ -1,4 +1,10 @@
-import React, { useState, useEffect } from "react";
+import 
+  React, { 
+  useState, 
+  useEffect, 
+  useMemo, 
+  useRef
+} from "react";
 import Modal from 'react-bootstrap/Modal';
 import {
   MapContainer,
@@ -7,11 +13,37 @@ import {
   TileLayer,
   useMap
 } from 'react-leaflet';
+import axios from "axios";
 
 export default function AdministrationBranchesShow(props) {
-  const [user, setUser]                     = useState(props.user);
+  const [token]                             = useState(props.token);
   const [data, setData]                     = useState(props.data);
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [isLoading, setIsLoading]           = useState(false);
+  const [draggable, setIsDraggable]         = useState(true);
+
+  const markerRef = useRef(null);
+
+  const mapEventHandlers = useMemo(
+    () => ({
+      dragend() {
+        const marker = markerRef.current
+        if (marker != null) {
+          let temp  = {...data};
+          let pos   = marker.getLatLng();
+
+          console.log(pos);
+
+          temp.lat  = pos.lat;
+          temp.lon  = pos.lng;
+
+          console.log(`lat: ${temp.lat} lon: ${temp.lon}`);
+          setData(temp);
+        }
+      },
+    }),
+    [],
+  )
 
   return (
     <>
@@ -32,15 +64,18 @@ export default function AdministrationBranchesShow(props) {
             style={{
               height: "500px"
             }}
+            eventHandlers={mapEventHandlers}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[data.lat, data.lon]}>
-              <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </Popup>
+            <Marker 
+              position={{ lat: data.lat,  lon: data.lon }}
+              draggable={draggable}
+              ref={markerRef}
+              eventHandlers={mapEventHandlers}
+            >
             </Marker>
           </MapContainer>
           <hr/>
@@ -51,12 +86,14 @@ export default function AdministrationBranchesShow(props) {
                   Lat
                 </label>
                 <input
+                  disabled={isLoading}
                   className="form-control"
                   type="number"
                   value={data.lat}
                   onChange={(event) => {
-                    data.lat = event.target.value;
-                    setData(data);
+                    let temp = {...data};
+                    temp.lat = event.target.value;
+                    setData(temp);
                   }}
                 />
               </div>
@@ -67,27 +104,66 @@ export default function AdministrationBranchesShow(props) {
                   Lon
                 </label>
                 <input
+                  disabled={isLoading}
                   className="form-control"
                   type="number"
                   value={data.lon}
                   onChange={(event) => {
-                    data.lon = event.target.value;
-                    setData(data);
+                    let temp = {...data};
+                    temp.lon = event.target.value;
+                    setData(temp);
                   }}
                 />
               </div>
             </div>
           </div>
           <hr/>
+        </Modal.Body>
+        <Modal.Footer>
           <button
-            className="btn btn-secondary w-100"
+            disabled={isLoading}
+            className="btn btn-primary"
+            onClick={() => {
+              setIsLoading(true);
+              setIsDraggable(false);
+
+              axios.post(
+                "/api/branches/update_coordinates",
+                {
+                  id: data.id,
+                  lat: data.lat,
+                  lon: data.lon
+                },
+                {
+                  headers: {
+                    "X-KOINS-HQ-TOKEN": token
+                  }
+                }
+              ).then((res) => {
+                setIsLoading(false);
+                setIsDraggable(true);
+              }).catch((error) => {
+                console.log(error);
+                alert("Error in updating coordinates!");
+                setIsLoading(false);
+                setIsDraggable(true);
+              });
+            }}
+          >
+            <i className="bi bi-check me-2"/>
+            Save
+          </button>
+          <button
+            disabled={isLoading}
+            className="btn btn-secondary"
             onClick={() => {
               setIsMapModalOpen(false);
             }}
           >
+            <i className="bi bi-x me-2"/>
             Close
           </button>
-        </Modal.Body>
+        </Modal.Footer>
       </Modal>
       <div className="row">
         <div className="col-md-6 col-xs-12">

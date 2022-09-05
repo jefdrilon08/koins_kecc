@@ -154,8 +154,8 @@ module Administration
 
       @payload = {
         id: @branch.id,
-        user: current_user,
-        data: cmd.data
+        data: cmd.data,
+        token: current_user.generate_jwt
       }
     end
 
