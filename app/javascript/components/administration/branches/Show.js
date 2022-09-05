@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal';
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap
+} from 'react-leaflet';
 
 export default function AdministrationBranchesShow(props) {
   const [user, setUser]                     = useState(props.user);
@@ -18,6 +25,24 @@ export default function AdministrationBranchesShow(props) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <MapContainer
+            center={[data.lat, data.lon]}
+            zoom={13}
+            scrollWheelZoom={true}
+            style={{
+              height: "500px"
+            }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Marker position={[data.lat, data.lon]}>
+              <Popup>
+                A pretty CSS3 popup. <br /> Easily customizable.
+              </Popup>
+            </Marker>
+          </MapContainer>
           <hr/>
           <div className="row">
             <div className="col-md-6 col-xs-12">

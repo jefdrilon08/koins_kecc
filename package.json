@@ -17,6 +17,7 @@
     "datatables.net-dt": "^1.12.1",
     "esbuild": "^0.15.7",
     "jquery": "^3.6.0",
+    "leaflet": "^1.8.0",
     "mdb-ui-kit": "^5.0.0",
     "moment": "^2.29.1",
     "mustache": "^4.2.0",
