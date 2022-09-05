@@ -9,6 +9,7 @@ class PagesController < ApplicationController
       .count("id")
 
     @payload = {
+      token: current_user.generate_jwt,
       username: current_user.username,
       roles: current_user.roles,
       is_microinsurance: Settings.activate_microinsurance,

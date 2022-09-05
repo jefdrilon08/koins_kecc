@@ -8,6 +8,7 @@ import DashboardMII from './DashboardMII';
 import DashboardManagementMii from './DashboardManagementMii';
 
 import ManagementOverview from './ManagementOverview';
+import MapOverview from './MapOverview';
 
 export default function MainUI(props) {
   const [isError, setIsError]                   = useState(false);
@@ -15,38 +16,6 @@ export default function MainUI(props) {
   const [roles, setRoles]                       = useState(props.roles);
   const [username, setUsername]                 = useState(props.username);
   const [isMicroinsurance, setIsMicroinsurance] = useState(props.is_microinsurance);
-
-  const renderDashboards = () => {
-    let dashboards = [];
-
-    if (isMicroinsurance){
-      dashboards.push(
-        <DashboardManagementMii
-          key={"dashboard-Management-Mii"}
-        />
-      );
-
-      dashboards.push(
-        <DashboardMII
-          key={"dashboard-MII"}
-        />
-      );
-    } else {
-      dashboards.push(
-        <DashboardManagement
-          key={"dashboard-Management"}
-        />
-      );
-
-      dashboards.push(
-        <DashboardOAS
-          key={"dashboard-OAS"}
-        />
-      );
-    }
-
-    return dashboards;
-  }
 
   if(isMicroinsurance) {
     return (
@@ -71,21 +40,25 @@ export default function MainUI(props) {
           </li>
           <li className="nav-item">
             <a href="#map" role="tab" data-bs-toggle="tab" aria-controls="map" className="nav-link">
-              Map
+              Map Overview
             </a>
           </li>
         </ul>
         <div className="tab-content border-start border-bottom border-end">
           <div id="overview" className="overview p-3 tab-pane active show" role="tabpanel">
             <ManagementOverview
+              token={props.token}
             />
           </div>
           <div id="branch-stats" className="branch-stats p-3 tab-pane" role="tabpanel">
             <DashboardOAS
+              token={props.token}
             />
           </div>
           <div id="map" className="map p-3 tab-pane" role="tabpanel">
-            Map
+            <MapOverview
+              token={props.token}
+            />
           </div>
         </div>
       </>
