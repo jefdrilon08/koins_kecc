@@ -144,7 +144,7 @@ module Administration
     end
 
     def show
-      @branch   = ReadOnlyBranch.find(params[:id])
+      @branch = ReadOnlyBranch.find(params[:id])
 
       cmd = ::Branches::BuildBranchHash.new(
         branch: @branch
@@ -154,6 +154,7 @@ module Administration
 
       @payload = {
         id: @branch.id,
+        user: current_user,
         data: cmd.data
       }
 

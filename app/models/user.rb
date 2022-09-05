@@ -64,7 +64,6 @@ class User < ApplicationRecord
   end
 
   def is_admin?
-    is_mis?
   end
 
   def profile_picture_url
