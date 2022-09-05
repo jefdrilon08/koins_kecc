@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_05_155359) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_05_173413) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -346,6 +346,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_05_155359) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "meeting_day"
     t.uuid "user_id"
+    t.decimal "lat"
+    t.decimal "lon"
     t.index ["branch_id"], name: "index_centers_on_branch_id"
   end
 

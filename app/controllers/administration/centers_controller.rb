@@ -118,38 +118,17 @@ module Administration
     end
 
     def show
-      @center = Center.find(params[:id])
+      @center = ReadOnlyCenter.find(params[:id])
 
-      @subheader_items = [
-        {
-          text: "Administration"
-        },
-        {
-          is_link: true,
-          path: administration_centers_path,
-          text: "Centers"
-        },
-        {
-          text: "#{@center.name}"
-        }
-      ]
+      cmd = ::Centers::BuildCenterHash.new(
+        center: @center
+      )
 
-      @subheader_side_actions = [
-        {
-          link: edit_administration_center_path(@center),
-          class: "fa fa-pencil-alt",
-          text: "Edit"
-        },
-         {
-          link: administration_center_path(@center),
-          class: "fa fa-times",
-          data: { method: :delete, confirm: "Are you sure?" },
-          text: "Delete"
-        }
-      ]
+      cmd.execute!
 
       @payload = {
-        id: @center.id
+        token: current_user.generate_jwt,
+        data: cmd.data
       }
     end
 
