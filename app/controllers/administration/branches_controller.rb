@@ -144,17 +144,17 @@ module Administration
     end
 
     def show
-      @branch   = Branch.find(params[:id])
-      @centers  = @branch.centers.includes([:user]).order("name ASC")
-      @members  = @branch.members.active.joins(center: :user).order("last_name ASC")
+      @branch   = ReadOnlyBranch.find(params[:id])
 
-      @registered_members   = @members.where("members.access_token IS NOT NULL")
-      @unregistered_members = @members.where("members.access_token IS NULL")
+      cmd = ::Branches::BuildBranchHash.new(
+        branch: @branch
+      )
 
-      @users  = User.where(id: @centers.pluck(:user_id).uniq).order("last_name ASC")
+      cmd.execute!
 
       @payload = {
-        id: @branch.id
+        id: @branch.id,
+        data: cmd.data
       }
 
       @subheader_items = [

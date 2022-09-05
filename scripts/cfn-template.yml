@@ -15,6 +15,10 @@ Parameters:
     Description: The default AMI ID for the KOINS application
     Type: String
     Default: ami-011d390f3d8e23372
+  RedisServerAmiID:
+    Description: The default AMI ID for a custom redis server
+    Type: String
+    Default: ami-011d390f3d8e23372
   WebServerInstanceType:
     Description: Instance type for KOINS Web server
     Type: String
@@ -90,8 +94,8 @@ Resources:
       RouteTableId: !Ref PublicRouteTable1
 
 
-  # KOINS Webapp server security group
-  WebAppServerSecurityGroup:
+  # SecurityGroup: Main WebApp Server
+  MainWebAppServerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allows port 80 access
@@ -107,6 +111,8 @@ Resources:
           FromPort: '22'
           ToPort: '22'
           CidrIp: 0.0.0.0/0
+
+  # RDS PostgreSQL security group
   
   # Elastic IP
   MainElasticIp:

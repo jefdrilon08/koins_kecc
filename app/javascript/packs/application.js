@@ -53,6 +53,7 @@ import ForWriteoffShowComponent from "../components/data_stores/for_writeoff/Sho
 import MembershipTypeShow from "../components/administration/membership_types/MembershpTypesShow.js";
 import AdministrationDashboard from "../components/administration/pages/AdministrationDashboard.js";
 import ClosingRecordsManager from "../components/closing_records/ClosingRecordsManager.js";
+import AdministrationBranchesShow from "../components/administration/branches/Show.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -113,7 +114,6 @@ import AdministrationLoanProductsIndex from "../models/AdministrationLoanProduct
 import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
 import AdministrationClustersIndex from "../models/AdministrationClustersIndex.js";
 import AdministrationBranchesIndex from "../models/AdministrationBranchesIndex.js";
-import AdministrationBranchesShow from "../models/AdministrationBranchesShow.js";
 import AdministrationCentersShow from "../models/AdministrationCentersShow.js";
 import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js";
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
