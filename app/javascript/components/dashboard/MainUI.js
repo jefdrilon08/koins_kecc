@@ -38,25 +38,18 @@ export default function MainUI(props) {
               Branch Stats
             </a>
           </li>
-          <li className="nav-item">
-            <a href="#map" role="tab" data-bs-toggle="tab" aria-controls="map" className="nav-link">
-              Map Overview
-            </a>
-          </li>
         </ul>
         <div className="tab-content border-start border-bottom border-end">
           <div id="overview" className="overview p-3 tab-pane active show" role="tabpanel">
+            <MapOverview
+              token={props.token}
+            />
             <ManagementOverview
               token={props.token}
             />
           </div>
           <div id="branch-stats" className="branch-stats p-3 tab-pane" role="tabpanel">
             <DashboardOAS
-              token={props.token}
-            />
-          </div>
-          <div id="map" className="map p-3 tab-pane" role="tabpanel">
-            <MapOverview
               token={props.token}
             />
           </div>
