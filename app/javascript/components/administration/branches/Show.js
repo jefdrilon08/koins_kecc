@@ -1,14 +1,96 @@
 import React, { useState, useEffect } from "react";
+import Modal from 'react-bootstrap/Modal';
 
 export default function AdministrationBranchesShow(props) {
-  const [user, setUser] = useState(props.user);
-  const [data, setData] = useState(props.data);
+  const [user, setUser]                     = useState(props.user);
+  const [data, setData]                     = useState(props.data);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   return (
     <>
-      <h4>
-        {data.name}
-      </h4>
+      <Modal 
+        show={isMapModalOpen}
+        size="xl"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Setup Branch Coordinates
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <hr/>
+          <div className="row">
+            <div className="col-md-6 col-xs-12">
+              <div className="form-group">
+                <label>
+                  Lat
+                </label>
+                <input
+                  className="form-control"
+                  type="number"
+                  value={data.lat}
+                  onChange={(event) => {
+                    data.lat = event.target.value;
+                    setData(data);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="col-md-6 col-xs-12">
+              <div className="form-group">
+                <label>
+                  Lon
+                </label>
+                <input
+                  className="form-control"
+                  type="number"
+                  value={data.lon}
+                  onChange={(event) => {
+                    data.lon = event.target.value;
+                    setData(data);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <hr/>
+          <button
+            className="btn btn-secondary w-100"
+            onClick={() => {
+              setIsMapModalOpen(false);
+            }}
+          >
+            Close
+          </button>
+        </Modal.Body>
+      </Modal>
+      <div className="row">
+        <div className="col-md-6 col-xs-12">
+          <h2>
+            {data.name}
+          </h2>
+        </div>
+        <div className="col-md-6 col-xs-12 text-end">
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              window.location.href=`/administration/branches/${data.id}/edit`;
+            }}
+          >
+            <i className="bi bi-pencil me-2"/>
+            Edit
+          </button>
+          <button
+            className="btn btn-secondary ms-4"
+            onClick={() => {
+              setIsMapModalOpen(true);
+            }}
+          >
+            <i className="bi bi-map me-2"/>
+            Map
+          </button>
+        </div>
+      </div>
       <hr/>
       <table className="table table-bordered table-sm">
         <tbody>

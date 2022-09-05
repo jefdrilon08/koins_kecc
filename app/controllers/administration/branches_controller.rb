@@ -157,29 +157,6 @@ module Administration
         user: current_user,
         data: cmd.data
       }
-
-      @subheader_items = [
-        {
-          text: "Administration"
-        },
-        {
-          is_link: true,
-          path: administration_branches_path,
-          text: "Branches"
-        },
-        {
-          text: "#{@branch.name} (Current Date: #{::Utils::GetCurrentDate.new(config: { branch: @branch }).execute!.strftime("%b %d, %Y")})"
-        }
-      ]
-
-      @subheader_side_actions = [
-        {
-          id: "btn-edit",
-          link: edit_administration_branch_path(@branch),
-          class: "fa fa-pencil-alt",
-          text: "Edit Branch"
-        }
-      ]
     end
 
     def authorize_access!

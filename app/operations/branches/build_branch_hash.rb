@@ -16,7 +16,8 @@ module Branches
         ar_prefix:      @branch.ar_prefix,
         ar_counter:     @branch.ar_counter,
         ar_current_max: @branch.ar_current_max,
-        centers: []
+        lat:            @branch.lat || 14.6091,
+        lon:            @branch.lon || 121.0223
       }
     end
 
