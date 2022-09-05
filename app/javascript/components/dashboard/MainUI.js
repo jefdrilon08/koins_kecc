@@ -1,41 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import $ from 'jquery';
 import SkCubeLoading from '../SkCubeLoading';
 
 // DASHBOARDS
 import DashboardOAS from './DashboardOAS';
-import DashboardManagement from './DashboardManagement';
 import DashboardMII from './DashboardMII';
 import DashboardManagementMii from './DashboardManagementMii';
 
-export default class MainUI extends React.Component {
-  constructor(props) {
-    super(props);
+import ManagementOverview from './ManagementOverview';
 
-    this.state  = {
-      isError: false,
-      isLoading: true,
-      roles: props.roles,
-      username: props.username,
-      is_microinsurance: props.is_microinsurance
-    };
-  }
+export default function MainUI(props) {
+  const [isError, setIsError]                   = useState(false);
+  const [isLoading, setIsLoading]               = useState(true);
+  const [roles, setRoles]                       = useState(props.roles);
+  const [username, setUsername]                 = useState(props.username);
+  const [isMicroinsurance, setIsMicroinsurance] = useState(props.is_microinsurance);
 
-  componentDidMount() {
-    var context = this;
+  const renderDashboards = () => {
+    let dashboards = [];
 
-    this.setState({
-      isLoading: false
-    });
-  }
-
-  renderDashboards() {
-    var dashboards  = [];
-
-    console.log("Parameters: ");
-    console.log(this.state.is_microinsurance);
-
-    if (this.state.is_microinsurance){
+    if (isMicroinsurance){
       dashboards.push(
         <DashboardManagementMii
           key={"dashboard-Management-Mii"}
@@ -64,33 +48,47 @@ export default class MainUI extends React.Component {
     return dashboards;
   }
 
-  render() {
-    var context = this;
-    var state   = context.state;
-
-    if(state.isLoading) {
-      return  (
-        <div>
-          <SkCubeLoading/>
-          <center>
-            <h5>
-              Initializing Dashboard
-            </h5>
-          </center>
+  if(isMicroinsurance) {
+    return (
+      <>
+        <DashboardManagementMii/>
+        <DashboardMII/>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <ul className="nav nav-tabs" role="tablist">
+          <li className="nav-item">
+            <a href="#overview" role="tab" data-bs-toggle="tab" aria-controls="overview" className="nav-link active show">
+              Overview
+            </a>
+          </li>
+          <li className="nav-item">
+            <a href="#branch-stats" role="tab" data-bs-toggle="tab" aria-controls="branch-stats" className="nav-link">
+              Branch Stats
+            </a>
+          </li>
+          <li className="nav-item">
+            <a href="#map" role="tab" data-bs-toggle="tab" aria-controls="map" className="nav-link">
+              Map
+            </a>
+          </li>
+        </ul>
+        <div className="tab-content border-start border-bottom border-end">
+          <div id="overview" className="overview p-3 tab-pane active show" role="tabpanel">
+            <ManagementOverview
+            />
+          </div>
+          <div id="branch-stats" className="branch-stats p-3 tab-pane" role="tabpanel">
+            <DashboardOAS
+            />
+          </div>
+          <div id="map" className="map p-3 tab-pane" role="tabpanel">
+            Map
+          </div>
         </div>
-      );
-    } else if(state.isError) {
-      return  (
-        <div>
-          Dashboard ERROR
-        </div>
-      );
-    } else {
-      return  (
-        <div>
-          {this.renderDashboards()}
-        </div>
-      );
-    }
+      </>
+    )
   }
 }

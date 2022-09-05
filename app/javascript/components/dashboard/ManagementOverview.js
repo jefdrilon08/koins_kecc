@@ -505,10 +505,7 @@ export default class ManagementOverview extends React.Component {
       );
     } else {
       return (
-        <div>
-          <h2>
-            Overview
-          </h2>
+        <>
           <div className="row">
             <div className="col-md-10 col-xs-12">
               <div className="form-group">
@@ -536,7 +533,7 @@ export default class ManagementOverview extends React.Component {
           </div>
           <hr/>
           {this.renderOverviewTable()}
-        </div>
+        </>
       );
     }
   }
