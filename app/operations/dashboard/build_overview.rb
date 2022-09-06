@@ -132,6 +132,8 @@ module Dashboard
       {
         id: branch.id,
         name: branch.name,
+        lat: branch.lat,
+        lon: branch.lon,
         cluster: {
           id: branch.cluster.id,
           name: branch.cluster.name

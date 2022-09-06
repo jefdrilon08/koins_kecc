@@ -1,6 +1,7 @@
 import React from 'react';
-import $ from 'jquery';
+import axios from 'axios';
 
+import MapOverview from './MapOverview';
 import SkCubeLoading from '../SkCubeLoading';
 import {numberAsPercent, numberWithCommas} from '../utils/helpers';
 
@@ -23,26 +24,23 @@ export default class ManagementOverview extends React.Component {
   fetch() {
     var context = this;
 
-    $.ajax({
-      method: 'GET',
-      url: '/api/v1/dashboard/overview',
-      data: {
-        as_of: context.state.asOf
-      },
-      success: function(response) {
-        console.log(response);
-
-        context.setState({
-          isLoading: false,
-          isFetching: false,
-          data: response
-        });
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Error in fetching overview data");
+    axios.get(
+      '/api/dashboard/overview',
+      {
+        headers: {
+          "X-KOINS-HQ-TOKEN": this.props.token
+        }
       }
-    });
+    ).then((res) => {
+      context.setState({
+        isLoading: false,
+        isFetching: false,
+        data: res.data
+      })
+    }).catch((error) => {
+      console.log(error);
+      alert("Error in fetching dashboard overview");
+    })
   }
 
   handleSyncClicked() {
@@ -531,6 +529,10 @@ export default class ManagementOverview extends React.Component {
               </div>
             </div>
           </div>
+          <MapOverview
+            token={this.props.token}
+            data={this.state.data}
+          />
           <hr/>
           {this.renderOverviewTable()}
         </>

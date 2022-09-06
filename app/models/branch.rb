@@ -10,4 +10,13 @@ class Branch < ApplicationRecord
   def to_s
     name
   end
+
+  def to_obj
+    {
+      id:   self.id,
+      name: self.name,
+      lat:  self.lat,
+      lon:  self.lon
+    }
+  end
 end

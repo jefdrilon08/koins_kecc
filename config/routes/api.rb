@@ -1,5 +1,10 @@
 namespace :api do
   # Standard API
+
+  # Dashboard
+  get "/dashboard/branch_markers", to: "dashboard#branch_markers"
+  get "/dashboard/overview", to: "dashboard#overview"
+
   get "/loan_product_types", to: "loan_product_types#index"
   post "/status_check", to: "public#status_check"
   get "/public/branches", to: "public#branches"

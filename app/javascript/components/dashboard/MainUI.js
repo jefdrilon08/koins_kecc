@@ -8,9 +8,9 @@ import DashboardMII from './DashboardMII';
 import DashboardManagementMii from './DashboardManagementMii';
 
 import ManagementOverview from './ManagementOverview';
-import MapOverview from './MapOverview';
 
 export default function MainUI(props) {
+  const [token]                                 = useState(props.token);
   const [isError, setIsError]                   = useState(false);
   const [isLoading, setIsLoading]               = useState(true);
   const [roles, setRoles]                       = useState(props.roles);
@@ -41,9 +41,6 @@ export default function MainUI(props) {
         </ul>
         <div className="tab-content border-start border-bottom border-end">
           <div id="overview" className="overview p-3 tab-pane active show" role="tabpanel">
-            <MapOverview
-              token={props.token}
-            />
             <ManagementOverview
               token={props.token}
             />
