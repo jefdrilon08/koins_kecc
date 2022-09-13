@@ -9,7 +9,8 @@ module Loaders
         columns = [
           :id, 
           :name, 
-          :code
+          :code,
+          :is_active
         ]
 
         ProjectTypeCategory.import columns, @data[:project_type_categories]
