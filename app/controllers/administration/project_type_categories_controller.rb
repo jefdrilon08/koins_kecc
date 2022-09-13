@@ -27,7 +27,6 @@ module Administration
 
     def create
       @project_type_category  = ProjectTypeCategory.new(project_type_category_params)
-
       if @project_type_category.save
         redirect_to administration_project_type_category_path(@project_type_category)
       else
@@ -74,18 +73,23 @@ module Administration
         { text: "Project Type Categories", path: administration_project_type_categories_path, is_link: true },
         { text: "#{@project_type_category.id}" }
       ]
-
       @subheader_side_actions = [
-        { text: "Edit", class: "fa fa-pencil-alt", path: edit_administration_project_type_category_path(@project_type_category) },
         {
+          id: "btn-edit",
+          link: edit_administration_project_type_category_path(@project_type_category),
+          class: "fa fa-pencil-alt",
+          text: "Edit Branch"
+        },
+         {
           text: "Delete",
           class: "fa fa-times",
-          path: administration_project_type_categories_path(@project_type_category),
+          path: administration_project_type_category_path(@project_type_category),
           data: {
             method: :delete,
             confirm: "Are you sure?"
           }
         }
+
       ]
     end
 
@@ -95,5 +99,16 @@ module Administration
 
       redirect_to project_type_categories_path
     end
+    
+    private
+
+    def load_user!
+      @user = User.find(params[:id])
+    end
+
+    def project_type_category_params
+      params.require(:project_type_category).permit!
+    end
+
   end
 end
