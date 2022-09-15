@@ -13,7 +13,7 @@ export default function BranchPsrRecordsShow(props) {
         <div className="card-body">
           <h4>
             {data.branch}
-            <small className="text-muted">
+            <small className="text-muted ms-2">
               {data.closing_date}
             </small>
           </h4>
@@ -91,6 +91,50 @@ export default function BranchPsrRecordsShow(props) {
                 <td className="text-center">
                   {numberAsPercent(data.data.active_borrowers / data.data.active_total)}
                 </td>
+              </tr>
+              <tr>
+                <th>
+                  Total Number of Active Loans
+                </th>
+                <th className="text-center">
+                  {data.data.total_active_loans}
+                </th>
+              </tr>
+              {data.data.loans.map((o) => {
+                return (
+                  <tr key={`loan-count-${o.loan_product.id}`}>
+                    <th>
+                      {o.loan_product.name}
+                    </th>
+                    <td className="text-center">
+                      {o.count}
+                    </td>
+                  </tr>
+                )
+              })}
+              <tr>
+                <th>
+                  Gross Income
+                </th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.gross_income)}
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  Operating Expense
+                </th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.operating_expense)}
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  Net Income Before ADmin Expense
+                </th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.net_income_before_admin_expense)}
+                </th>
               </tr>
             </tbody>
           </table>
