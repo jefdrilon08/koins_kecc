@@ -300,7 +300,7 @@ export default class BillingUIComponent extends React.Component {
               disabled={this.state.isSaving}
               onClick={this.saveParticular.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -331,7 +331,7 @@ export default class BillingUIComponent extends React.Component {
               disabled={this.state.isSaving}
               onClick={this.saveOrNumber.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -388,7 +388,7 @@ export default class BillingUIComponent extends React.Component {
               disabled={this.state.isSaving}
               onClick={this.saveArNumber.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -421,7 +421,7 @@ export default class BillingUIComponent extends React.Component {
           </ul>
           <hr/>
           <button className="btn btn-info" onClick={this.handleSaveChangesClicked.bind(this)}>
-            <span className="fa fa-check"></span>
+            <span className="bi bi-check"></span>
             Save Changes
           </button>
         </div>

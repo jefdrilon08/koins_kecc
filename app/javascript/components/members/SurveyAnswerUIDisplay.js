@@ -199,7 +199,7 @@ export default class SurveyAnswerUIDisplay extends React.Component {
                   disabled={this.state.isSaving}
                   onClick={this.handleSave.bind(this)}
                 >
-                  <span className="fa fa-check"/>
+                  <span className="bi bi-check"/>
                   Save
                 </button>
                 <button
@@ -207,7 +207,7 @@ export default class SurveyAnswerUIDisplay extends React.Component {
                   disabled={this.state.isSaving}
                   onClick={this.handleCancel.bind(this)}
                 >
-                  <span className="fa fa-times"/>
+                  <span className="bi bi-x"/>
                   Cancel
                 </button>
               </div>

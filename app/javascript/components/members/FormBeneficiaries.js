@@ -370,14 +370,14 @@ export default class FormBeneficiaries extends React.Component {
                 className="btn btn-primary"
                 onClick={this.handleConfirmSaveClicked.bind(this)}
               >
-                <span className="fa fa-check"/>
+                <span className="bi bi-check"/>
                 Confirm
               </button>
               <button
                 className="btn btn-danger"
                 onClick={this.handleCancelClicked.bind(this)}
               >
-                <span className="fa fa-times"/>
+                <span className="bi bi-x"/>
                 Cancel
               </button>
             </div>

@@ -19,7 +19,7 @@
       %tr
         %td.text-center
           = link_to "/data_stores/soa_expenses/#{o.id}" do
-            .fa.fa-search
+            .bi.bi-search
         %td.text-center
           %strong
             #{o.start_date.try(:to_date).try(:strftime, "%b %d, %Y")}

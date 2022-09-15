@@ -41,13 +41,13 @@ export default class BillingUITable extends React.Component {
               className="btn btn-success btn-sm"
               onClick={this.handleToggleAllOn.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
             </div>
             <div 
               className="btn btn-danger btn-sm"
               onClick={this.handleToggleAllOff.bind(this)}
             >
-              <span className="fa fa-times"/>
+              <span className="bi bi-x"/>
             </div>
           </div>
         </center>
@@ -215,7 +215,7 @@ export default class BillingUITable extends React.Component {
           <td key={"c-member-attnd-" + member.id}>
             <center>
               <div className="badge bg-success">
-                <span className="fa fa-check"/>
+                <span className="bi bi-check"/>
               </div>
             </center>
           </td>

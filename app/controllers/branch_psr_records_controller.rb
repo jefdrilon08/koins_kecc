@@ -13,5 +13,10 @@ class BranchPsrRecordsController < ApplicationController
 
   def show
     @record = BranchPsrRecord.find(params[:id])
+
+    @payload = {
+      token: current_user.generate_jwt,
+      data: @record.to_h
+    }
   end
 end

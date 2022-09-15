@@ -32,7 +32,7 @@ export default class FormBankAccounts extends React.Component {
                 className="btn btn-danger btn-sm"
                 onClick={this.handleDeleteClicked.bind(this, i)}
               >
-                <span className="fa fa-times"/>
+                <span className="bi bi-x"/>
                 Del
               </button>
             </td>

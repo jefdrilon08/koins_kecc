@@ -277,14 +277,14 @@ export default class SurveyUIComponent extends React.Component {
                     disabled={this.props.isSaving}
                     onClick={this.save.bind(this)}
                   >
-                    <span className="fa fa-check"/>
+                    <span className="bi bi-check"/>
                     Save Question
                   </button>
                   <button
                     className="btn btn-danger"
                     disabled={this.props.isSaving}
                   >
-                    <span className="fa fa-times"/>
+                    <span className="bi bi-x"/>
                     Cancel
                   </button>
                 </div>

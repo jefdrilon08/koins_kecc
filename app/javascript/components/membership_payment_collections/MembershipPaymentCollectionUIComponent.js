@@ -197,7 +197,7 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
               disabled={this.state.isSaving}
               onClick={this.saveParticular.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -228,7 +228,7 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
               disabled={this.state.isSaving}
               onClick={this.saveOrNumber.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -258,7 +258,7 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
               disabled={this.state.isSaving}
               onClick={this.saveArNumber.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>

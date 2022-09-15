@@ -28,7 +28,7 @@
           Loans
       %li.c-sidebar-nav-item
         = link_to online_applications_path, class: "c-sidebar-nav-link #{params[:controller] == "online_applications" ? 'active' : ''}" do
-          .c-sidebar-nav-icon.fa.fa-globe-asia
+          .c-sidebar-nav-icon.bi.bi-globe
           Online Applications
     - if is_not_ojt
       - if microloans?
@@ -101,15 +101,15 @@
           Equity Withdrawals
     %li.c-sidebar-nav-item
       = link_to accounting_accounting_entry_form_path(book: "CRB"), class: "c-sidebar-nav-link" do
-        .c-sidebar-nav-icon.fa.fa-plus
+        .c-sidebar-nav-icon.bi.bi-plus
         Cash Receipts
     %li.c-sidebar-nav-item
       = link_to accounting_accounting_entry_form_path(book: "CDB"), class: "c-sidebar-nav-link" do
-        .c-sidebar-nav-icon.fa.fa-plus
+        .c-sidebar-nav-icon.bi.bi-plus
         Cash Disbursements
     %li.c-sidebar-nav-item
       = link_to accounting_accounting_entry_form_path(book: "JVB"), class: "c-sidebar-nav-link" do
-        .c-sidebar-nav-icon.fa.fa-plus
+        .c-sidebar-nav-icon.bi.bi-plus
         General Journal
       - if microloans?  
         %li.c-sidebar-nav-item

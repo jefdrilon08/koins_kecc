@@ -115,7 +115,7 @@ export default class EquityWithdrawalCollectionUIComponent extends React.Compone
               disabled={this.state.isSaving}
               onClick={this.saveParticular.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>

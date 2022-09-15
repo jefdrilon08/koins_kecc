@@ -112,7 +112,7 @@ export default class WithdrawalCollectionUITable extends React.Component {
             onClick={this.handleRemoveRecord.bind(this, member.id)}
             disabled={this.state.isLoading}
           >
-            <span className="fa fa-times"/>
+            <span className="bi bi-x"/>
           </button>
         );
       }
@@ -367,7 +367,7 @@ export default class WithdrawalCollectionUITable extends React.Component {
                     onClick={this.handleModalConfirm.bind(this)}
                     disabled={this.state.isLoading}
                   >
-                    <span className="fa fa-check" />
+                    <span className="bi bi-check" />
                     Confirm Change
                   </button>
 
@@ -376,7 +376,7 @@ export default class WithdrawalCollectionUITable extends React.Component {
                     onClick={this.handleModalClose.bind(this)}
                     disabled={this.state.isLoading}
                   >
-                    <span className="fa fa-times" />
+                    <span className="bi bi-x" />
                     Cancel Change
                   </button>
                 </div>

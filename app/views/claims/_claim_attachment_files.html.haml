@@ -1,6 +1,6 @@
 - if @claim.pending?
   = link_to new_claim_claim_attachment_file_path(@claim), class: "btn btn-primary btn-sm" do
-    .fa.fa-plus
+    .bi.bi-plus
     New Claim Attachment File
 - if @claim.claim_attachment_files.size == 0
   %p

@@ -478,7 +478,7 @@ function MembershipArrangementShow(props) {
         onClick={() => handleSave()}
       >
         <span
-          className="fa fa-check"
+          className="bi bi-check"
         >
         </span>
         Save

@@ -115,7 +115,7 @@ export default class DepositCollectionUITable extends React.Component {
             onClick={this.handleRemovedClicked.bind(this, member)}
             disabled={this.state.isLoading}
           >
-            <span className="fa fa-times"/>
+            <span className="bi bi-x"/>
           </button>
         );
       }
@@ -393,7 +393,7 @@ export default class DepositCollectionUITable extends React.Component {
                     onClick={this.handleModalConfirm.bind(this)}
                     disabled={this.state.isLoading}
                   >
-                    <span className="fa fa-check" />
+                    <span className="bi bi-check" />
                     Confirm Change
                   </button>
 
@@ -402,7 +402,7 @@ export default class DepositCollectionUITable extends React.Component {
                     onClick={this.handleModalClose.bind(this)}
                     disabled={this.state.isLoading}
                   >
-                    <span className="fa fa-times" />
+                    <span className="bi bi-x" />
                     Cancel Change
                   </button>
                 </div>
@@ -450,7 +450,7 @@ export default class DepositCollectionUITable extends React.Component {
                   onClick={this.handleRemoveRecord.bind(this, currentMember.id)}
                   disabled={this.state.isLoading}
                 >
-                  <span className="fa fa-check" />
+                  <span className="bi bi-check" />
                   Confirm
                 </button>
                 &emsp;
@@ -459,7 +459,7 @@ export default class DepositCollectionUITable extends React.Component {
                   onClick={this.handleRemoveModalClose.bind(this)}
                   disabled={this.state.isLoading}
                 >
-                  <span className="fa fa-times" />
+                  <span className="bi bi-x" />
                   Cancel
                 </button>
               </div>

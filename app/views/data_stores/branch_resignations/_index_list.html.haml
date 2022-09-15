@@ -20,7 +20,7 @@
         %td.text-center
           %strong
             = link_to "/data_stores/branch_resignations/#{o.id}" do
-              .fa.fa-search
+              .bi.bi-search
         %td
           #{o.meta["start_date"].to_date.strftime("%b %d, %Y") if o.meta.present? and o.meta["start_date"].present?}
         %td

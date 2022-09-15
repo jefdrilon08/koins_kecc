@@ -830,14 +830,14 @@ export default class AccountingEntryFormComponent extends React.Component {
               className="btn btn-primary"
               onClick={this.handleSaveJournalEntryClicked.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Update
             </button>
             <button 
               className="btn btn-danger"
               onClick={this.handleCancelJournalEntryClicked.bind(this)}
             >
-              <span className="fa fa-times"/>
+              <span className="bi bi-x"/>
               Cancel
             </button>
           </div>
@@ -1092,11 +1092,11 @@ export default class AccountingEntryFormComponent extends React.Component {
             className="btn btn-primary"
             onClick={this.save.bind(this)}
           >
-            <span className="fa fa-check"/>
+            <span className="bi bi-check"/>
             Save
           </button>
           <a href={"/accounting/books/" + data.book.toLowerCase()} className="btn btn-danger">
-            <span className="fa fa-times" />
+            <span className="bi bi-x" />
             Cancel
           </a>
         </div>

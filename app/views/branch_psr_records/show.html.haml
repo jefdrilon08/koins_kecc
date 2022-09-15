@@ -1,5 +1,6 @@
 .row
   .col
+    #react-root
     .card
       .card-body
         %h4
@@ -53,6 +54,11 @@
                 Percentage of Borrowers
               %td
                 #{((@record.data["active_borrowers"].to_f / @record.data["active_total"].to_f) * 100).round(2)}
+            %tr
+              %th
+                Outstanding Loans
+              %td
+                TODO
             %tr
               %th
                 Total number of active loans

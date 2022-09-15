@@ -5,7 +5,7 @@ import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import "@fortawesome/fontawesome-free/js/all";
+//import "@fortawesome/fontawesome-free/js/all";
 
 // React Components
 import DashboardMainUI from "../components/dashboard/MainUI";
@@ -55,6 +55,7 @@ import AdministrationDashboard from "../components/administration/pages/Administ
 import ClosingRecordsManager from "../components/closing_records/ClosingRecordsManager.js";
 import AdministrationBranchesShow from "../components/administration/branches/Show.js";
 import AdministrationCentersShow from "../components/administration/centers/Show.js";
+import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -231,6 +232,7 @@ const hooks = {
   "accounting/accounting_codes/index":                [AccountingCodesIndex],
   "loans/show":                                       [LoansShow, LoanAccountingEntryComponent],
   "loans/form":                                       [LoanApplicationForm],
+  "branch_psr_records/show":                          [BranchPsrRecordsShow],
   "billings/index":                                   [BillingsIndex],
   "billings/show":                                    [BillingsShow, BillingUIComponent],
   "membership_payment_collections/index":             [MembershipPaymentCollectionsIndex],

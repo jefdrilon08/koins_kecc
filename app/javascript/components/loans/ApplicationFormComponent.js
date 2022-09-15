@@ -966,7 +966,7 @@ export default class ApplicationFormComponent extends React.Component {
                   onClick={this.handleSave.bind(this)}
                   disabled={this.state.isSaving || this.state.isActive}
                 >
-                  <span className="fa fa-check"/>
+                  <span className="bi bi-check"/>
                   Save
                 </button>
                 <button
@@ -974,7 +974,7 @@ export default class ApplicationFormComponent extends React.Component {
                   onClick={this.handleCancel.bind(this)}
                   disabled={this.state.isSaving || this.state.isActive}
                 >
-                  <span className="fa fa-times"/>
+                  <span className="bi bi-x"/>
                   Cancel
                 </button>
               </div>

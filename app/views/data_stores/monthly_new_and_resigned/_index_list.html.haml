@@ -17,7 +17,7 @@
       %tr
         %th.text-center
           = link_to "/data_stores/monthly_new_and_resigned/#{o.id}" do
-            .fa.fa-search
+            .bi.bi-search
         %td.text-center
           %strong
             #{o.as_of.try(:to_date).try(:strftime, "%B %Y")}

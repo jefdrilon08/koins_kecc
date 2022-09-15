@@ -65,7 +65,7 @@ export default function MembersProfileShares(props) {
                       if(o.is_void) {
                         return (
                           <div className="badge badge-danger">
-                            <span className="fa fa-check"/>
+                            <span className="bi bi-check"/>
                           </div>
                         )
                       }

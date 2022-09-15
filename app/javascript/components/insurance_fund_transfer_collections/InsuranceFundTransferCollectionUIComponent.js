@@ -196,7 +196,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
               disabled={this.state.isSaving}
               onClick={this.saveOrNumber.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -227,7 +227,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
               disabled={this.state.isSaving}
               onClick={this.saveParticular.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>
@@ -258,7 +258,7 @@ export default class InsuranceFundTransferCollectionUIComponent extends React.Co
               disabled={this.state.isSaving}
               onClick={this.saveReferenceNumber.bind(this)}
             >
-              <span className="fa fa-check"/>
+              <span className="bi bi-check"/>
               Save
             </button>
           </div>

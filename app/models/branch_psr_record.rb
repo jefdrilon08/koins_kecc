@@ -29,4 +29,13 @@ class BranchPsrRecord < ApplicationRecord
   def pending?
     self.status == "pending"
   end
+
+  def to_h
+    {
+      id:           self.id,
+      branch:       self.branch.name,
+      closing_date: self.closing_date.strftime("%b %d, %Y"),
+      data:         self.data
+    }
+  end
 end

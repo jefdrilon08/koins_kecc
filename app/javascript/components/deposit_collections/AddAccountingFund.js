@@ -146,7 +146,7 @@ export default class AddAccountingFund extends React.Component {
               disabled={this.state.isLoading}
               onClick={this.saveAccountingFund.bind(this)}
             >
-              <span className="fa fa-check" />
+              <span className="bi bi-check" />
               Save
             </button>
           </div>

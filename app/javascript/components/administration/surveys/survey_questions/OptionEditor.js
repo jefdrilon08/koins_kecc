@@ -78,7 +78,7 @@ export default class OptionEditor extends React.Component {
               className="btn btn-danger btn-sm"
               onClick={this.removeOption.bind(this)}
             >
-              <span className="fa fa-times"/>
+              <span className="bi bi-x"/>
               Remove
             </button>
           </div>

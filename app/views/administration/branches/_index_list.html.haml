@@ -39,7 +39,7 @@
         %td
           .btn-group
             = link_to administration_branch_path(branch), class: 'btn btn-sm btn-primary' do
-              .fa.fa-search
+              .bi.bi-search
               Show
             - if current_user.current_roles.include?("MIS")
               = link_to edit_administration_branch_path(branch), class: 'btn btn-sm btn-info' do

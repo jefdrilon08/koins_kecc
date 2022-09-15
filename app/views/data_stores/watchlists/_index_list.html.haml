@@ -17,7 +17,7 @@
       %tr
         %td.text-center
           = link_to "/data_stores/watchlists/#{o.id}" do
-            .fa.fa-search
+            .bi.bi-search
         %td.text-center
           %strong
             #{o.try(:as_of).try(:to_date).try(:strftime, "%b %d, %Y")}

@@ -457,7 +457,7 @@ export default class DashboardOAS extends React.Component {
               onClick={this.closeCycleCountSummaryModal.bind(this)}
               className="btn btn-danger btn-sm"
             >
-              <span className="fa fa-times"/>
+              <span className="bi bi-x"/>
               Close
             </button>
           </Modal>

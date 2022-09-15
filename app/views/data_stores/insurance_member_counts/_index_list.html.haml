@@ -18,7 +18,7 @@
         %td.text-center
           %strong
             = link_to "/data_stores/insurance_member_counts/#{o.id}" do
-              .fa.fa-search
+              .bi.bi-search
         %td
           %strong
             #{o.as_of.try(:to_date).try(:strftime, "%b %d, %Y")}

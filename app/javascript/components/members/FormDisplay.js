@@ -555,7 +555,7 @@ export default class FormDisplay extends React.Component {
                   onClick={this.handleSave.bind(this)}
                   disabled={this.state.formDisabled}
                 >
-                  <span className="fa fa-check"/>
+                  <span className="bi bi-check"/>
                   Save Record
                 </button>
                 <button 
@@ -563,7 +563,7 @@ export default class FormDisplay extends React.Component {
                   onClick={this.handleCancel.bind(this)}
                   disabled={this.state.formDisabled}
                 >
-                  <span className="fa fa-times"/>
+                  <span className="bi bi-x"/>
                   Cancel
                 </button>
               </div>

@@ -42,7 +42,7 @@
                 Approved
           %td.text-center
             = link_to loan_adjustment_path(@loan, o), class: 'btn btn-primary' do
-              .fa.fa-search
+              .bi.bi-search
 - else
   %p
     - if @loan.data.with_indifferent_access[:reverse_loan_details].present?

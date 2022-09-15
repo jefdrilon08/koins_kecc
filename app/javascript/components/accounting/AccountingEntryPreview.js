@@ -118,7 +118,7 @@ export default class AccountingEntryPreview extends React.Component {
                         className="btn btn-sm btn-danger"
                         onClick={context.props.handleRemoveClicked.bind(this, i)}
                       >
-                        <span className="fa fa-times"/>
+                        <span className="bi bi-x"/>
                       </button>;
 
           btnEdit = <button
@@ -157,7 +157,7 @@ export default class AccountingEntryPreview extends React.Component {
                         className="btn btn-sm btn-danger"
                         onClick={context.props.handleRemoveClicked.bind(this, i)}
                       >
-                        <span className="fa fa-times"/>
+                        <span className="bi bi-x"/>
                       </button>;
 
           btnEdit = <button

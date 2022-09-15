@@ -326,7 +326,7 @@ export default class FormResignationComponent extends React.Component {
                     onClick={this.handleConfirmationClicked.bind(this)}
                     disabled={this.state.isProcessing}
                   >
-                    <span className="fa fa-check"/>
+                    <span className="bi bi-check"/>
                     Confirm Resignation
                   </button>
                   <button
@@ -334,7 +334,7 @@ export default class FormResignationComponent extends React.Component {
                     onClick={this.handleCancelClicked.bind(this)}
                     disabled={this.state.isProcessing}
                   >
-                    <span className="fa fa-times"/>
+                    <span className="bi bi-x"/>
                     Cancel
                   </button>
                 </div>
@@ -463,7 +463,7 @@ export default class FormResignationComponent extends React.Component {
               className="btn btn-danger btn-lg"
               onClick={this.handleResignBtnClicked.bind(this)}
             >
-              <span className="fa fa-times"/>
+              <span className="bi bi-x"/>
               Resign Member
             </button>
           </div>
