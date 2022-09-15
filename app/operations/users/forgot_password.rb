@@ -27,7 +27,7 @@ module Users
       HEREDOC
 
       ses = Aws::SES::Client.new(
-        region: ENV['AWS_REGION']
+        region: ENV['AWS_REGION'],
         credentials: Aws::Credentials.new(
           ENV['AWS_ACCESS_KEY_ID'], 
           ENV['AWS_SECRET_ACCESS_KEY_ID']
