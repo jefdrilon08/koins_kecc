@@ -114,6 +114,66 @@ export default function BranchPsrRecordsShow(props) {
               })}
               <tr>
                 <th>
+                  Outstanding Loans
+                </th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.total_overall_principal_balance)} 
+                </th>
+              </tr>
+              {data.data.loans.map((o) => {
+                return (
+                  <tr key={`loan-portfolio-${o.loan_product.id}`}>
+                    <th>
+                      {o.loan_product.name}
+                    </th>
+                    <td className="text-end">
+                      {numberWithCommas(o.overall_principal_balance)}
+                    </td>
+                  </tr>
+                )
+              })}
+              <tr>
+                <th>
+                  Loans Disbursed for the Month
+                </th>
+                <th className="text-center">
+                  {data.data.total_num_disbursed}
+                </th>
+              </tr>
+              {data.data.loans.map((o) => {
+                return (
+                  <tr key={`loan-num-disbursed-${o.loan_product.id}`}>
+                    <th>
+                      {o.loan_product.name}
+                    </th>
+                    <td className="text-center">
+                      {o.num_disbursed}
+                    </td>
+                  </tr>
+                )
+              })}
+              <tr>
+                <th>
+                  Amount Disbursed As Of
+                </th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.total_amount_disbursed)} 
+                </th>
+              </tr>
+              {data.data.loans.map((o) => {
+                return (
+                  <tr key={`loan-amount-disbursed-${o.loan_product.id}`}>
+                    <th>
+                      {o.loan_product.name}
+                    </th>
+                    <td className="text-end">
+                      {numberWithCommas(o.amount_disbursed)}
+                    </td>
+                  </tr>
+                )
+              })}
+              <tr>
+                <th>
                   Gross Income
                 </th>
                 <th className="text-end">

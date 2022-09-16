@@ -40,6 +40,8 @@ module Branches
       @record
     end
 
+    private
+
     def generate_fs_data!
       closing_record = @closing_records.select{ |o| o[:type] == "INCOME_STATEMENT" }.first
 
@@ -91,6 +93,12 @@ module Branches
 
         loan_product_category = loan_product.loan_product_category
 
+        record = ::DataWarehouse::SaveDwBranchMonthlyLoanProductDisbursedCount.new(
+          branch:       @branch,
+          as_of:        @closing_date,
+          loan_product: loan_product
+        ).execute!
+
         @data[:loans] << {
           loan_product: {
             id: loan_product.id,
@@ -100,6 +108,8 @@ module Branches
             id: loan_product_category.id,
             name: loan_product_category.name
           },
+          num_disbursed:              record.total,
+          amount_disbursed:           record.amount,
           count:                      loans.size,
           principal:                  loans.inject(0){ |sum, o| sum + o[:principal] },
           interest:                   loans.inject(0){ |sum, o| sum + o[:interest] },
@@ -120,6 +130,9 @@ module Branches
           overall_interest_balance:   loans.inject(0){ |sum, o| sum + o[:overall_interest_balance] },
           overall_balance:            loans.inject(0){ |sum, o| sum + o[:overall_balance] }
         }
+
+        @data[:total_num_disbursed]     = @data[:loans].inject(0){ |sum, o| sum + o[:num_disbursed] }
+        @data[:total_amount_disbursed]  = @data[:loans].inject(0){ |sum, o| sum + o[:amount_disbursed] }
       end
     end
 
