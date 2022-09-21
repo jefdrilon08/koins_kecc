@@ -298,11 +298,11 @@ module Api
           # Trigger koins resignation
           member = Member.find(data[:member][:id])
 
-          if member.access_token.present?
-            ::Epassbook::TriggerResign.new(
-              identification_number: member.identification_number
-            ).execute!
-          end
+          # if member.access_token.present?
+          #   ::Epassbook::TriggerResign.new(
+          #     identification_number: member.identification_number
+          #   ).execute!
+          # end
 
           render json: { message: "ok" }
         end
