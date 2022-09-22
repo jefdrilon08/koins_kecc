@@ -33,6 +33,7 @@ namespace :administration do
   post "/member_shares/void", to: "member_shares#void"
 
   resources :project_type_categories
+  resources :project_types
 
   resources :surveys, only: [:index, :show, :edit, :update] do
     get "/survey_question_form", to: "surveys#survey_question_form"
