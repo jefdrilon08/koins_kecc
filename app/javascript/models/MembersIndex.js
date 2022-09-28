@@ -1,4 +1,5 @@
 import Mustache from "mustache";
+import * as bootstrap from "bootstrap";
 import $ from 'jquery';
 
 var $branchSelect;
