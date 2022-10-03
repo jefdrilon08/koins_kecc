@@ -29,7 +29,7 @@ module Branches
 
       @result = []
 
-      batch_size = 50
+      batch_size = 25
       Rails.logger.info("Batch size: #{batch_size}")
 
       max_offset = num_loans / batch_size
