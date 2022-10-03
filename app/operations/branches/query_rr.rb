@@ -31,24 +31,11 @@ module Branches
 
       @result = []
 
-      batch_size = 25
-      Rails.logger.info("Batch size: #{batch_size}")
-
-      max_offset = num_loans / batch_size
-
-      if num_loans == 0
-        max_offset = 1
-      end
-
-      Rails.logger.info("Max Offset: #{max_offset}")
-
       total_start_time = Time.now
 
-      #for offset in 1..max_offset do
       loan_ids.each do |loan_id|
         start_time = Time.now
 
-        #Rails.logger.info("Performing query for offset #{offset}")
         @result += ReportingDbLoan.connection.execute(<<-EOS).to_a
                     SELECT
                       loans.id,
@@ -133,14 +120,12 @@ module Branches
         end_time = Time.now
 
         num_minutes = (end_time - start_time) / 1.minutes
-
-        Rails.logger.info("Done processing offset for RR query in #{num_minutes.round(2)} minutes for batch_size #{batch_size}")
       end
 
       total_end_time = Time.now
       num_minutes = (total_end_time - total_start_time) / 1.minutes
 
-      Rails.logger.info("Done processing TOTAL RR query in #{num_minutes.round(2)} minutes for batch_size #{batch_size}")
+      Rails.logger.info("Done processing TOTAL RR query in #{num_minutes.round(2)} minutes.")
 
       Rails.logger.info("Done performing query for RR")
 
