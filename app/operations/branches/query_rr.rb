@@ -13,7 +13,7 @@ module Branches
     def execute!
       Rails.logger.info("Starting query for repayment rates for branch #{@branch.name} as_of #{@as_of}...")
 
-      num_loans = ReportingDbLoan.where(
+      loan_ids = ReportingDbLoan.where(
         "(loans.status IN (?) AND loans.date_approved <= ? AND loans.max_active_date >= ? AND loans.branch_id = ?) OR (loans.status = ? AND loans.date_approved <= ? AND loans.max_active_date > ? AND loans.branch_id = ?)",
         ['active', 'processing'],
         @as_of,
@@ -23,7 +23,9 @@ module Branches
         @as_of,
         @as_of,
         @branch.id
-      ).count
+      ).pluck(:id)
+
+      num_loans = loan_ids.size
 
       Rails.logger.info("Number of loans for processing RR: #{num_loans}")
 
@@ -42,10 +44,11 @@ module Branches
 
       total_start_time = Time.now
 
-      for offset in 1..max_offset do
+      #for offset in 1..max_offset do
+      loan_ids.each do |loan_id|
         start_time = Time.now
 
-        Rails.logger.info("Performing query for offset #{offset}")
+        #Rails.logger.info("Performing query for offset #{offset}")
         @result += ReportingDbLoan.connection.execute(<<-EOS).to_a
                     SELECT
                       loans.id,
@@ -123,16 +126,8 @@ module Branches
                     INNER JOIN branches b ON b.id = loans.branch_id
                     INNER JOIN loan_products lp ON lp.id = loans.loan_product_id
                     INNER JOIN members m ON m.id = loans.member_id
-                    WHERE
-                      (
-                        loans.status IN ('active', 'processing') AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date >= '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
-                      )
-                      OR
-                      (
-                        loans.status = 'paid' AND loans.date_approved <= '#{@as_of}' AND loans.max_active_date > '#{@as_of}' AND loans.branch_id = '#{@branch.id}'
-                      )
-                    LIMIT #{batch_size} 
-                    OFFSET #{offset}
+                    WHERE loans.id = '#{loan_id}'
+                    LIMIT 1
                   EOS
 
         end_time = Time.now
