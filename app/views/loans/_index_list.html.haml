@@ -2,6 +2,8 @@
   %table.table.table-sm.table-hover
     %thead
       %tr
+        %th.text-center
+          %span
         %th{ width: "25%" }
           Member
         %th
@@ -21,10 +23,13 @@
     %tbody
       - @loans.each do |loan|
         %tr
-          %td
+          %td.text-center
             %strong
               = link_to loan_path(loan.id), target: '_blank' do
-                #{loan.data.fetch("member_full_name", nil)}
+                .bi.bi-search
+          %td
+            %strong
+              #{loan.data.fetch("member_full_name", nil)}
           %td
             %small
               %strong
