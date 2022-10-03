@@ -2,8 +2,7 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans            = ReadOnlyLoan.joins(:member, :loan_product)
-                            .where("loans.branch_id IN (?)", @branches.pluck(:id))
+    @loans  = ReadOnlyLoan.joins(:member).where("loans.branch_id IN (?)", @branches.pluck(:id))
 
     @q                      = params[:q]
     @status                 = params[:status] || "active"

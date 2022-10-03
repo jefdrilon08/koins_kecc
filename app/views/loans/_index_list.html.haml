@@ -24,16 +24,16 @@
           %td
             %strong
               = link_to loan_path(loan.id), target: '_blank' do
-                #{loan.member.full_name}
+                #{loan.data.fetch("member_full_name", nil)}
           %td
             %small
               %strong
                 - if loan.is_remote?
                   .bi.bi-globe
-                #{loan.loan_product}
+                #{loan.data.fetch("loan_product_name", nil)}
           %td
             %small
-              #{loan.data["accounting_entry"]["branch"]}
+              #{loan.data.fetch("branch_name", nil)} / #{loan.data.fetch("center_name", nil)}
           %td
             - if loan.active_or_paid?
               %center
