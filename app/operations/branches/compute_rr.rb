@@ -40,7 +40,8 @@ module Branches
     end
 
     def execute!
-      query_result!
+      #query_result!
+      query_result_offset!
       build_result!
 
       @data[:loan_products] = @data[:records].map{ |o|
@@ -283,6 +284,14 @@ module Branches
         #sort by last_name
         @data[:records] = @data[:records].sort_by { |hash|hash[:member][:last_name]}
       end
+    end
+
+    def query_result_offset!
+      @result = ::Branches::QueryRr.new(
+        branch: @branch,
+        as_of: @as_of,
+        manual_aging: @manual_aging
+      ).execute!
     end
 
     def query_result!

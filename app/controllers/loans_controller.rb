@@ -2,13 +2,15 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans            = ReadOnlyLoan.includes(:center, :branch, :member, :loan_product)
+    @loans            = ReadOnlyLoan.joins(:member, :loan_product)
                             .where("loans.branch_id IN (?)", @branches.pluck(:id))
 
     @q                      = params[:q]
     @status                 = params[:status] || "active"
     @loan_product_id        = params[:loan_product_id]
     @branch_id              = params[:branch_id]
+    @center_id              = params[:center_id]
+    
     @is_online_application  = params[:is_online_application]
 
     @centers  = @branches.first.centers
@@ -20,6 +22,12 @@ class LoansController < ApplicationController
                     q: "#{@q.upcase}%",
                     b: @branches.pluck(:id)
                   )
+    end
+
+    if @center_id.present?
+      @center = ReadOnlyCenter.find(@center_id)
+
+      @loans  = @loans.where(center_id: @center.id)
     end
 
     if @branch_id.present?

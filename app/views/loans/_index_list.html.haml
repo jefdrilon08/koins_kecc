@@ -33,7 +33,7 @@
                 #{loan.loan_product}
           %td
             %small
-              #{loan.branch.name} / #{loan.center.name}
+              #{loan.data["accounting_entry"]["branch"]}
           %td
             - if loan.active_or_paid?
               %center
