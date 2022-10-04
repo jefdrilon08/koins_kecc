@@ -18,12 +18,11 @@ class LoansController < ApplicationController
     @centers  = @branches.first.centers
 
     if @q.present?
-      @loans  = @loans
-                  .where(
-                    "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND loans.branch_id IN (:b)",
-                    q: "#{@q.upcase}%",
-                    b: @branches.pluck(:id)
-                  )
+      @loans = @loans.where(
+        "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND loans.branch_id IN (:b)",
+        q: "#{@q.upcase}%",
+        b: @branches.pluck(:id)
+      )
     end
 
     if @center_id.present?
@@ -50,7 +49,7 @@ class LoansController < ApplicationController
       @loans = @loans.where(is_online_application: true)
     end
 
-    @loans  = @loans.order("loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+    @loans  = @loans.order("loans.status ASC, loans.maturity_date ASC").page(params[:page]).per(LIST_PAGE_SIZE)
 
     @subheader_items = [
       { text: "Loans" }
