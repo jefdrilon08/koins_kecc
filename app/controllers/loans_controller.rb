@@ -2,7 +2,10 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans  = ReadOnlyLoan.includes(:member).where("loans.branch_id IN (?)", @branches.pluck(:id))
+    @loans = ReadOnlyLoan.includes(:member).where(
+      "loans.branch_id IN (?)", 
+      @branches.pluck(:id)
+    )
 
     @q                      = params[:q]
     @status                 = params[:status] || "active"
@@ -44,13 +47,10 @@ class LoansController < ApplicationController
     end
 
     if @is_online_application.present?
-      @loans  = @loans.where("loans.data->>'is_remote_application' IS NOT NULL")
-    else
-      @loans  = @loans.where("loans.data->>'is_remote_application' IS NULL")
+      @loans = @loans.where(is_online_application: true)
     end
 
-    @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
-  
+    @loans  = @loans.order("loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
 
     @subheader_items = [
       { text: "Loans" }

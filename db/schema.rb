@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_20_035120) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -1015,6 +1015,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_20_035120) do
     t.date "original_maturity_date"
     t.boolean "is_restructured"
     t.uuid "loan_product_type_id"
+    t.boolean "is_online_application"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
