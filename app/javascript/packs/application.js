@@ -3,6 +3,7 @@ require("@rails/ujs").start();
 import $ from 'jquery';
 
 import React from 'react';
+import { createRoot } from "react-dom/client";
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 //import "@fortawesome/fontawesome-free/js/all";
@@ -205,12 +206,6 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
-const renderComponent = (Component, payload) => {
-  ReactDOM.render(
-    <Component {...payload} />,
-    document.getElementById("react-root"),
-  )
-}
 
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
@@ -391,7 +386,15 @@ const hooks = {
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
   "pages/profile":                                    [Profile]
+}
 
+const renderComponent = (Component, payload) => {
+  const rootElement = document.getElementById("react-root");
+  const root        = createRoot(rootElement);
+
+  root.render(
+    <Component {...payload} />
+  )
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -14,7 +14,7 @@ export default function MembersProfileAttachmentFiles(props) {
         if(props.records.length > 0) {
           return (
             <>
-              {records.map((o) => {
+              {props.records.map((o) => {
                 return (
                   <div key={`attachment-${o.id}`}>
                     <table className="table table-bordered table-sm table-hover">
