@@ -2,7 +2,7 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans = ReadOnlyLoan.includes(:member).where(
+    @loans = Loan.includes(:member).where(
       "loans.branch_id IN (?)", 
       @branches.pluck(:id)
     )
@@ -26,13 +26,13 @@ class LoansController < ApplicationController
     end
 
     if @center_id.present?
-      @center = ReadOnlyCenter.find(@center_id)
+      @center = Center.find(@center_id)
 
       @loans  = @loans.where(center_id: @center.id)
     end
 
     if @branch_id.present?
-      @branch = ReadOnlyBranch.find(@branch_id)
+      @branch = Branch.find(@branch_id)
 
       @loans  = @loans.where(branch_id: @branch.id)
     end
