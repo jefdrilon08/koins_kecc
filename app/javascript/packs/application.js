@@ -59,6 +59,7 @@ import ClosingRecordsManager from "../components/closing_records/ClosingRecordsM
 import AdministrationBranchesShow from "../components/administration/branches/Show.js";
 import AdministrationCentersShow from "../components/administration/centers/Show.js";
 import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
+import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -387,7 +388,8 @@ const hooks = {
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
-  "pages/profile":                                    [Profile]
+  "pages/profile":                                    [Profile],
+  "visualize/monthly_psr":                            [VisualizeMonthlyPsr]
 }
 
 const renderComponent = (Component, payload) => {

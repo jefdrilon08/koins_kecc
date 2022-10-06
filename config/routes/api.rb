@@ -55,6 +55,9 @@ namespace :api do
   get "/closing_records", to: "closing_records#index"
   get "/closing_records/records", to: "closing_records#records"
 
+  # Branch PSR Records
+  post "/branch_psr_records/fetch", to: "branch_psr_records#fetch"
+
   # Exec Reports
   get "/exec_reports/psr_query", to: "exec_reports#psr_query"
 

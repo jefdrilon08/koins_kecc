@@ -11,6 +11,10 @@ class Branch < ApplicationRecord
     name
   end
 
+  def to_h
+    to_obj
+  end
+
   def to_obj
     {
       id:   self.id,

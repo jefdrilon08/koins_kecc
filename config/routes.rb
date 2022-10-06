@@ -62,6 +62,9 @@ Rails.application.routes.draw do
   get "/upload_clip", to: "pages#upload_clip"
 
   resources :branch_psr_records, only: [:index, :show]
+
+  # Visualize
+  get "/visualize/monthly_psr", to: "visualize#monthly_psr", as: :visualize_monthly_psr
   
   # Adjustments
   namespace :adjustments do
