@@ -22,8 +22,16 @@ class ApplicationController < ActionController::Base
     if user_signed_in?
       @default_branch_name = Settings.try(:defaults).try(:default_branch).try(:name)
       @branches = ReadOnlyBranch.where(
-                    id: ReadOnlyUserBranch.where(active: true, user_id: current_user.id).pluck(:branch_id)
-                  ).order(Arel.sql("name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC"))
+        id: ReadOnlyUserBranch.where(
+          active: true, user_id: current_user.id
+        ).pluck(
+          :branch_id
+        )
+      ).order(
+        Arel.sql(
+          "name#{" = '#{@default_branch_name}'" if @default_branch_name} ASC"
+        )
+      )
     end
   end
 
