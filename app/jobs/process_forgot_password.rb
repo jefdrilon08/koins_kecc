@@ -1,5 +1,5 @@
 class ProcessForgotPassword < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(args)
     user = User.find_by_email(args[:email])
