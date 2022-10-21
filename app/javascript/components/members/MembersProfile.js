@@ -186,45 +186,45 @@ export default function MembersProfile(props) {
                 </div>
                 <div id="savings_accounts" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileSavings
-                    records={savingsAccounts}
+                    records={savingsAccounts || []}
                     total={totalSavings}
                   />
                 </div>
                 <div id="insurance_accounts" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileInsurance
-                    records={insuranceAccounts}
+                    records={insuranceAccounts || []}
                     total={totalSavings}
                   />
                 </div>
                 <div id="equity_accounts" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileEquities
-                    records={equityAccounts}
+                    records={equityAccounts || []}
                     total={totalEquity}
                   />
                 </div>
                 <div id="survey_answers" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileSurveyAnswers
-                    records={surveyAnswers}
+                    records={surveyAnswers || []}
                     memberId={member.id}
                   />
                 </div>
                 <div id="shares" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileShares
-                    records={memberShares}
+                    records={memberShares || []}
                     memberId={member.id}
                     roles={roles}
                   />
                 </div>
                 <div id="attachments" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileAttachmentFiles
-                    records={attachmentFiles}
+                    records={attachmentFiles || []}
                     memberId={member.id}
                     roles={roles}
                   />
                 </div>
                 <div id="membership_payments" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileMembershipPayments
-                    records={membershipPayments}
+                    records={membershipPayments || []}
                     memberId={member.id}
                     roles={roles}
                   />

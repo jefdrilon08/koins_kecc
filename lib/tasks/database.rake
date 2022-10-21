@@ -1,4 +1,27 @@
 namespace :db do
+  task :clear_schema_migrations => :environment do
+    current_version = ENV['VERSION'].to_i
+    puts "Current migration version: #{current_version}"
+
+    valid_migrations = []
+
+    ActiveRecord::SchemaMigration.all.pluck(:version).each do |version|
+      if version.to_i < current_version
+        valid_migrations << version.to_s
+      end
+    end
+
+    puts "Deleting all schema_migrations...."
+    ActiveRecord::SchemaMigration.delete_all
+
+    valid_migrations.each do |version|
+      puts "Creating schema_migration for #{version}"
+      ActiveRecord::SchemaMigration.create!(version: version)
+    end
+
+    puts "Done."
+  end
+
   task :backup => :environment do
     filename = "#{Time.now.to_i}-backup-#{ENV['RAILS_ENV'] ||= 'development'}.dump"
 

@@ -1,6 +1,14 @@
 = title @loan.pn_number
 .row
   .col
+    .card
+      .card-body
+        %h3
+          #{@loan.member.full_name}
+        %p
+          #{@loan.loan_product.name} / Cycle #{@loan.cycle }
+.row
+  .col
     %ul.nav.nav-tabs{:role => "tablist"}
       %li.nav-item
         %a.nav-link.active.show{"aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#details", :role => "tab"} Details

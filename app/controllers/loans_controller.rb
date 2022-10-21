@@ -2,28 +2,37 @@ class LoansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @loans            = ReadOnlyLoan.includes(:center, :branch, :member, :loan_product)
-                            .where("loans.branch_id IN (?)", @branches.pluck(:id))
+    @loans = Loan.includes(:member).where(
+      "loans.branch_id IN (?)", 
+      @branches.pluck(:id)
+    )
 
     @q                      = params[:q]
     @status                 = params[:status] || "active"
     @loan_product_id        = params[:loan_product_id]
     @branch_id              = params[:branch_id]
+    @center_id              = params[:center_id]
+    
     @is_online_application  = params[:is_online_application]
 
     @centers  = @branches.first.centers
 
     if @q.present?
-      @loans  = @loans
-                  .where(
-                    "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND loans.branch_id IN (:b)",
-                    q: "#{@q.upcase}%",
-                    b: @branches.pluck(:id)
-                  )
+      @loans = @loans.where(
+        "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND loans.branch_id IN (:b)",
+        q: "#{@q.upcase}%",
+        b: @branches.pluck(:id)
+      )
+    end
+
+    if @center_id.present?
+      @center = Center.find(@center_id)
+
+      @loans  = @loans.where(center_id: @center.id)
     end
 
     if @branch_id.present?
-      @branch = ReadOnlyBranch.find(@branch_id)
+      @branch = Branch.find(@branch_id)
 
       @loans  = @loans.where(branch_id: @branch.id)
     end
@@ -37,13 +46,10 @@ class LoansController < ApplicationController
     end
 
     if @is_online_application.present?
-      @loans  = @loans.where("loans.data->>'is_remote_application' IS NOT NULL")
-    else
-      @loans  = @loans.where("loans.data->>'is_remote_application' IS NULL")
+      @loans = @loans.where(is_online_application: true)
     end
 
-    @loans  = @loans.order("members.last_name ASC, loans.status ASC").page(params[:page]).per(LIST_PAGE_SIZE)
-  
+    @loans  = @loans.order("loans.status ASC, loans.maturity_date ASC").page(params[:page]).per(LIST_PAGE_SIZE)
 
     @subheader_items = [
       { text: "Loans" }

@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnNewTransaction;
 var $btnConfirmNewTransaction;
@@ -21,7 +22,6 @@ var _urlSave          = "/api/v1/savings_insurance_transfer_collections/save";
 var _cacheDom = function() {
   $btnNewTransaction        = $("#btn-new-transaction");
   $btnConfirmNewTransaction = $("#btn-confirm-new-transaction");
-  $modalNewTransaction      = $("#modal-new-transaction");
   $selectBranch             = $("#select-branch");
   $selectCenter             = $("#select-center");
   $selectSavingsSubtype     = $("#select-savings-subtype");
@@ -29,6 +29,11 @@ var _cacheDom = function() {
   $inputCollectionDate      = $("#input-collection-date");
   $message                  = $(".message");
   templateErrorList         = $("#template-error-list").html();
+
+  //$modalNewTransaction      = $("#modal-new-transaction");
+  $modalNewTransaction = new bootstrap.Modal(
+    document.getElementById("modal-new-transaction")
+  )
 };
 
 var _bindEvents = function() {

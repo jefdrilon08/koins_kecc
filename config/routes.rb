@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   devise_for :users, skip: [:sessions]
 
+  # Actioncable
+  mount ActionCable.server => '/cable'
+
   as :user do
     get 'login', to: 'pages#login', as: :new_user_session
     get 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session
@@ -59,6 +62,9 @@ Rails.application.routes.draw do
   get "/upload_clip", to: "pages#upload_clip"
 
   resources :branch_psr_records, only: [:index, :show]
+
+  # Visualize
+  get "/visualize/monthly_psr", to: "visualize#monthly_psr", as: :visualize_monthly_psr
   
   # Adjustments
   namespace :adjustments do

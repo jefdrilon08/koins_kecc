@@ -115,6 +115,34 @@ class Loan < ApplicationRecord
     if self.date_approved.present? and self.date_released.blank?
       self.date_released = self.date_approved
     end
+
+    # Insert meta information on member, branch, center, loan product
+    temp_data = self.data.with_indifferent_access
+
+    # member
+    if member.present?
+      temp_data[:member] = {
+        first_name: member.first_name,
+        middle_name: member.middle_name,
+        last_name:    member.last_name
+      }
+
+      temp_data[:member_full_name] = member.full_name
+    end
+
+    if branch.present?
+      temp_data[:branch_name] = branch.name
+    end
+
+    if center.present?
+      temp_data[:center_name] = center.name
+    end
+
+    if loan_product.present?
+      temp_data[:loan_product_name] = loan_product.name
+    end
+
+    self.data = temp_data
   end
 
   def has_co_maker_one?

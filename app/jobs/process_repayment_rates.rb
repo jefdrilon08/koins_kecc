@@ -40,6 +40,18 @@ class ProcessRepaymentRates < ApplicationJob
         ).execute!
       end
 
+      # Perform notification on general_channel
+      ActionCable.server.broadcast(
+        "branch_channel_#{branch.id}",
+        {
+          notifId:    "#{record.id}",
+          title:      "Done Processing",
+          link:       "/data_stores/repayment_rates/#{record.id}",
+          updatedAt:  record.updated_at.strftime("%b %d, %Y %H:%M"),
+          content:    "Repayment Rates Report has been processed!"
+        }
+      )
+
     rescue Exception => e
       record.update!(
         status: "error",

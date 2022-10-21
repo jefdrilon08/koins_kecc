@@ -3,9 +3,12 @@ require("@rails/ujs").start();
 import $ from 'jquery';
 
 import React from 'react';
+import { createRoot } from "react-dom/client";
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-//import "@fortawesome/fontawesome-free/js/all";
+import * as bootstrap from "bootstrap";
+
+import consumer from "../channels/consumer";
 
 // React Components
 import DashboardMainUI from "../components/dashboard/MainUI";
@@ -56,6 +59,7 @@ import ClosingRecordsManager from "../components/closing_records/ClosingRecordsM
 import AdministrationBranchesShow from "../components/administration/branches/Show.js";
 import AdministrationCentersShow from "../components/administration/centers/Show.js";
 import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
+import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -205,12 +209,6 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
-const renderComponent = (Component, payload) => {
-  ReactDOM.render(
-    <Component {...payload} />,
-    document.getElementById("react-root"),
-  )
-}
 
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
@@ -390,8 +388,60 @@ const hooks = {
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
-  "pages/profile":                                    [Profile]
+  "pages/profile":                                    [Profile],
+  "visualize/monthly_psr":                            [VisualizeMonthlyPsr]
+}
 
+const renderComponent = (Component, payload) => {
+  const rootElement = document.getElementById("react-root");
+  const root        = createRoot(rootElement);
+
+  root.render(
+    <Component {...payload} />
+  )
+}
+
+const toastNotification = (payload) => {
+  let notifId   = payload.notifId;
+  let link      = payload.link;
+  let title     = payload.title;
+  let updatedAt = payload.updatedAt;
+  let content   = payload.content;
+
+  let notif = `
+    <div id="notif-${notifId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+      <div class="toast-header">
+        <strong class="me-auto">
+          <a href='${link}'>
+            ${title}
+          </a>
+        </strong>
+        <small>
+          ${updatedAt}
+        </small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+        </button>
+      </div>
+      <div class="toast-body">
+        ${content}
+      </div>
+    </div>
+  `;
+
+  console.log(notif);
+
+  let toastSection = document.getElementById('toast-section');
+
+  let div = document.createElement('div');
+  div.innerHTML = notif.trim();
+
+  toastSection.appendChild(div.firstChild);
+
+  let notifElement = document.getElementById(`notif-${notifId}`);
+  console.log(notifElement);
+
+  const toast = new bootstrap.Toast(notifElement);
+  toast.show();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -415,5 +465,30 @@ document.addEventListener("DOMContentLoaded", () => {
   if(route != "pages/login") {
     // SIDEBAR JS
     Sidebar.init();
+
+    const branchIds = JSON.parse(
+      $("meta[name='branch-ids']").attr('content')
+    ).branch_ids;
+
+    // Create a subscription for each branch
+    branchIds.forEach((branchId) => {
+      consumer.subscriptions.create({
+        channel: "BranchChannel",
+        room: `${branchId}`
+      }, {
+        connected() {
+          console.log(`Connected to branch_channel_${branchId}`);
+        },
+
+        disconnected() {
+          console.log(`Disconnected from branch_channel_${branchId}`);
+        },
+
+        received(data) {
+          console.log(data);
+          toastNotification(data);
+        }
+      });
+    });
   }
 });
