@@ -27,7 +27,6 @@ namespace :adjust do
     MembershipPaymentCollection.select("id,or_number,ar_number,total_collected,data,status,center_id,branch_id,updated_at").find_in_batches(batch_size: 100) do |group|
       group.each do |o|
         puts "Updating membership payment collection #{o.id}"
-i
         o.update!(updated_at: Time.now)
       end
     end
