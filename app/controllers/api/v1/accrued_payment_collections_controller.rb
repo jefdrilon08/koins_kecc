@@ -18,18 +18,15 @@ module Api
                         member_id: member_id,
           		user: current_user
         	}
+               errors = :: AccruedPaymentCollections::ValidateCreateAccruedPaymentCollection.new(config: config).execute!
+               if errors[:messages].any?
+                render json: errors, status: 400
+              else
+                accrued_payment_collection = ::AccruedPaymentCollections::CreateAccruedPaymentCollection.new(config: config).execute!
+                render json: { message: "Done" }
+              end
 
-        	#billing = AccruedBilling.new(
-                      #collection_date: collection_date,
-                      #branch_id: branch_id,
-                      #center_id: center_id
-                      #)
-
-          #billing.save!
-          accrued_payment_collection = ::AccruedPaymentCollections::CreateAccruedPaymentCollection.new(
-                                            config: config
-                                          ).execute!
-          render json: { message: "ok", id: accrued_payment_collection.id }
+          #render json: { message: "ok", id: accrued_payment_collection.id }
     	end
 
         def update_transaction
