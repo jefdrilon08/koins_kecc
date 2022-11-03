@@ -443,6 +443,9 @@ Rails.application.routes.draw do
     get "/watchlists/:id", to: "watchlists#show"
     delete "/watchlists/:id", to: "watchlists#destroy"
 
+    get "/project_types", to: "project_types#index"
+    get "/project_types/:id", to: "project_types#show"
+
     get "/repayment_rates", to: "repayment_rates#index"
     get "/repayment_rates/:id", to: "repayment_rates#show"
     delete "/repayment_rates/:id", to: "repayment_rates#destroy"

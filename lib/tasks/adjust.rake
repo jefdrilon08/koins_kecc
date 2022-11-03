@@ -1,4 +1,18 @@
 namespace :adjust do
+  task :input_member_name_in_loan_data => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    Loan.where("branch_id = ?", br_id).find_in_batches(batch_size: 100) do |group|
+      group.each do |o|
+        member_name = Member.find(o.member_id).full_name
+        data = o.data.with_indifferent_access
+        data["member_full_name"] = member_name
+        o.update(data: data)
+        puts "input #{member_name}"
+
+      end
+    end
+  end
   task :load_additional_fields_in_journal_entries => :environment do
     JournalEntry.select("*").find_in_batches(batch_size: 100) do |group|
       group.each do |o|
@@ -13,7 +27,6 @@ namespace :adjust do
     MembershipPaymentCollection.select("id,or_number,ar_number,total_collected,data,status,center_id,branch_id,updated_at").find_in_batches(batch_size: 100) do |group|
       group.each do |o|
         puts "Updating membership payment collection #{o.id}"
-
         o.update!(updated_at: Time.now)
       end
     end
