@@ -115,6 +115,7 @@ export default function ClosingRecordsManager(props) {
       setIsLoading(false);
 
       if(res.data.records.length > 0) {
+        console.log(res.data.records[0].id);
         setDataStoreId(res.data.records[0].id)
       } else {
         setDataStoreId("")

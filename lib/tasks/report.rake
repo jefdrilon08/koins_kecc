@@ -74,6 +74,28 @@ task :involuntary_resignation => :environment do
     puts @data
   end
 
+  task :delinquent_list => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    mem = Member.where("status = 'writeoff' and branch_id = ?", br_id)
+    @data   = []
+    
+    mem.each do |member|
+    mem_data    = member.data
+    
+      if status   = 'writeoff'
+        status    = 'Delinquent'
+        end  
+
+      data = "#{}|#{member.identification_number}|#{member.full_name}|#{status}|#{member.id}"
+      @data << data
+    end
+
+
+  puts @data
+
+  end
+
   task :member_registry => :environment do
     br_name = ENV['SATO']
     br_id = Branch.where(name: br_name).ids

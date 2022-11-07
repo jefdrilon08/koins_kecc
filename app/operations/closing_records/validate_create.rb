@@ -40,7 +40,7 @@ module ClosingRecords
         end
 
         if @closing_date.month != current_date.month
-          @errors << "Invalid month"
+          @errors << "Invalid month #{@closing_date.month} vs #{current_date.month}"
         end
       end
 

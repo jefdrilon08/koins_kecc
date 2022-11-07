@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ErrorList from '../ErrorList';
-import axios from 'axios';
 import { numberAsPercent, numberWithCommas } from "../utils/helpers";
 
 export default function BranchPsrRecordsShow(props) {

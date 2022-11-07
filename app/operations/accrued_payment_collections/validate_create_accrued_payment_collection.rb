@@ -31,12 +31,20 @@ module AccruedPaymentCollections
         }
       end
 
-      if @collection_date.blank?
+      if AccruedBilling.where("status = 'pending' and branch_id = ? and center_id = ? " , @branch.id , @center.id).count > 0
         @errors[:messages] << {
-          key: "collection_date",
-          message: "collection date required"
+          key: "billing",      
+          message: "Please resolve pending accrued billing for #{@center.to_s} / #{@branch.to_s} before creating a new one."
         }
       end
+      
+      if Loan.where("center_id = ? and loans.data ->> 'accrued_interest' IS NOT NULL" , @center).count == 0
+        @errors[:messages] << {
+          key: "billing",      
+          message: "There's no Accrued Balance for #{@center.to_s} / #{@branch.to_s} ."
+        }
+      end
+      
 
 #      if @branch and @center and @collection_date
 #        if MembershipPaymentCollection.where(branch_id: @branch.id, center_id: @center.id, collection_date: @collection_date).count > 0
