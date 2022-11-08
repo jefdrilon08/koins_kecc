@@ -205,6 +205,7 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
+import BankTransferIndex from "../models/BankTransferIndex.js"
 const renderComponent = (Component, payload) => {
   ReactDOM.render(
     <Component {...payload} />,
@@ -390,7 +391,8 @@ const hooks = {
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
-  "pages/profile":                                    [Profile]
+  "pages/profile":                                    [Profile],
+  "bank_transfer/index":                              [BankTransferIndex]
 
 }
 

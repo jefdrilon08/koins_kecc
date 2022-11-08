@@ -9,6 +9,7 @@ import ErrorDisplay from '../ErrorDisplay';
 import ApplicationFormFinancialInformation from './ApplicationFormFinancialInformation';
 import ApplicationFormCLIPBeneficiary from './ApplicationFormCLIPBeneficiary';
 import ApplicationFormProjectType from './ApplicationFormProjectType';
+import ApplicationTransferOption from './ApplicationTransferOption';
 
 export default class ApplicationFormComponent extends React.Component {
   constructor(props) {
@@ -25,7 +26,10 @@ export default class ApplicationFormComponent extends React.Component {
       currentLoanProductTypeId: "",
       projectTypeCategories: [],
       projectTypes: [],
+      optionTransfer: [],
+      TransferOptions: [],
       currentProjectTypeCategoryId: "",
+      currentBankTransferId: "",
       data: false,
       coMakerProfilePicture: false,
       coMakerThreeProfilePicture: false,
@@ -109,7 +113,9 @@ export default class ApplicationFormComponent extends React.Component {
       success: function(response) {
         console.log(response);
         var currentProjectTypeCategoryId  = context.state.currentProjectTypeCategoryId;
+        var currentBankTransferId         = context.state.currentBankTransferId;
         var projectTypes                  = [];
+        var TransferOptions               = [];
 
         if(response.loan.project_type_id) {
           for(var i = 0; i < response.project_type_categories.length; i++) {
@@ -123,13 +129,28 @@ export default class ApplicationFormComponent extends React.Component {
             }
           }
         }
+        if(response.loan.bank_id) {
+          for(var i = 0; i < response.transfer_option.length; i++) {
+            for(var j = 0; j < response.transfer_option[i].bank_transfers.length; j++) {
+              if(response.loan.bank_id == response.transfer_option[i].bank_transfers[j].id) {
+                currentBankTransferId = response.transfer_option[i].id;
+                TransferOptions       = response.transfer_option[i].bank_transfers;
+                console.log("Bank Transfer to be loaded:");
+                console.log(TransferOptions);
+              }
+            }
+          }
+        }
 
         context.setState({
           isLoading: false,
           data: response.loan,
           projectTypeCategories: response.project_type_categories,
+          optionTransfer: response.transfer_option,
           projectTypes: projectTypes,
+          TransferOptions: TransferOptions,
           currentProjectTypeCategoryId: currentProjectTypeCategoryId,
+          currentBankTransferId: currentBankTransferId,
           coMakerProfilePicture: response.loan.co_maker_relative_profile_picture_url,
           coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url });
       },
@@ -482,6 +503,11 @@ export default class ApplicationFormComponent extends React.Component {
   handleProjectTypeCategoryChanged(event) {
     this.setState({
       currentProjectTypeCategoryId: event.target.value
+    });
+  }
+  handleTransferOptionChanged(event) {
+    this.setState({
+      currentBankTransferId: event.target.value
     });
   }
 
@@ -905,6 +931,21 @@ export default class ApplicationFormComponent extends React.Component {
             </div>
           </div>
           <hr/>
+          <h5>
+            Bank Transfer
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <ApplicationTransferOption
+                optionTransfer={this.state.optionTransfer}
+                updateData={this.updateData.bind(this)}
+                currentBankTransferId={this.state.currentBankTransferId}
+                handleTransferOptionChanged={this.handleTransferOptionChanged.bind(this)}
+                disabled={this.state.isSaving || this.state.isActive}
+                data={this.state.data}
+              />
+            </div>
+          </div>
           <h5>
             Other Parameters
           </h5>

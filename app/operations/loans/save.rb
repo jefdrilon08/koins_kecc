@@ -8,6 +8,10 @@ module Loans
       @member       = Member.where(id: @loan_data[:member_id]).first
       @branch       = Branch.where(id: @loan_data[:branch_id]).first
       @center       = Center.where(id: @loan_data[:center_id]).first
+      
+      if @loan_data[:bank_id].present?
+        @bank_transfer = BankTransfer.find(@loan_data[:bank_id])
+      end
 
       #@loan_product_type = LoanProductType.find_by_id(@loan_data[:loan_product_type_id])
 
@@ -52,6 +56,18 @@ module Loans
       @loan.project_type_id   = @loan_data[:project_type_id]
       @loan.term              = @loan_data[:term]
       @loan.data              = @loan_data[:data]
+      
+    
+    if @bank_transfer.present?
+      @bank_data  = { bank_transfer_id: @bank_transfer.id, 
+                    bank_transfer_name: @bank_transfer.name, 
+                    bank_transfer_amount: @bank_transfer.amount.to_f,
+                    accounting_entry_id: @bank_transfer.accounting_entry_id,
+                    transfer_option_id: @bank_transfer.transfer_option_id
+
+                  }
+      @loan.data[:bank_transfer]= @bank_data
+    end
 
       # Setup loan cycle
       @loan_cycles            = @member_data[:loan_cycles]
@@ -191,6 +207,7 @@ module Loans
                                   num_installments: @loan.num_installments,
                                   particular: particular,
                                   book: @book,
+                                  bank_data: @bank_data,
                                   loan: @loan
                                 }
                               ).execute!
@@ -217,6 +234,7 @@ module Loans
             filename: 'co_maker_non_relative.jpg'
           }
         end
+
 
         @loan.save!
       end

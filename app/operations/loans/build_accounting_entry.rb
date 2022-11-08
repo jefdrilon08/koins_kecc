@@ -2,7 +2,7 @@ module Loans
   class BuildAccountingEntry
     def initialize(config:)
       @config       = config
-      
+      @bank_data    = @config[:bank_data]
       @loan         = @config[:loan]
       @member       = @config[:member]
       @branch       = @member.branch
@@ -817,7 +817,19 @@ module Loans
 #
 #        temp_amount -= amount
 #      end
-
+      if @bank_data.present?
+      
+        accounting_code = AccountingCode.find(@bank_data[:accounting_entry_id])
+        amount = @bank_data[:bank_transfer_amount].to_f
+  
+        journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: accounting_code.code,
+                  name: accounting_code.name,
+                  amount: amount
+        }
+        temp_amount -= amount
+      end
       # Cash in bank for amount released
       accounting_code = AccountingCode.find(@settings_branch_accounting_codes.cash_in_bank_accounting_code_id)
 

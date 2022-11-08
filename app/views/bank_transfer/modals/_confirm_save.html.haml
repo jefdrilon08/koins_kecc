@@ -1,0 +1,29 @@
+#modal-new.modal.fade
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            %form
+            .mb-3
+              %label Bank/Ewallet name
+              %input#bankname.form-control
+            .mb-3
+              %label Amount
+              %input#amount.form-control
+            .mb-3
+              %label Tranfer Option
+              = select_tag :select1, options_for_select(@transferoption.collect{|s|["#{s[:name]}",s[:id]]}) ,class: "form-control form-select", prompt: "--SELECT--"
+            .mb-3
+              %label Accounting Entry
+              = select_tag :select, options_for_select(@accounting_code.collect{|s|["#{s[:code]} - #{s[:name]}",s[:id]]}) ,class: "form-control form-select", prompt: "--SELECT--"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

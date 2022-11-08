@@ -548,8 +548,21 @@ module Api
                                         }
                                       }
                                     }
+          
+          transfer_option =  TransferOption.all.order("name ASC").map{ |c|
+                                      {
+                                        id: c.id,
+                                        name: c.name,
+                                        bank_transfers: c.bank_transfers.order("name ASC").map{ |p|
+                                          {
+                                            id: p.id,
+                                            name: p.name
+                                          }
+                                        }
+                                      }
+                                    }
 
-          render json: { loan: loan, project_type_categories: project_type_categories }
+          render json: { loan: loan, project_type_categories: project_type_categories, transfer_option: transfer_option }
         end
       end
       

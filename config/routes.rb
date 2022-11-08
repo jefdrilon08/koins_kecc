@@ -549,4 +549,8 @@ Rails.application.routes.draw do
 
   # turkey tools
   get "turkey", to: "turkey#index"
+  #bank_transfer
+  get "/bank_transfer", to: "bank_transfer#index"
+  get "/bank_transfer/new", to: "bank_transfer#new"
+
 end
