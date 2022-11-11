@@ -16,6 +16,7 @@ module TransferMemberRecords
 
 		def execute!
 			update_member!
+			update_loans!
 			approved_entry_from!
 			approved_entry_to!
 			@accounting_entry_from[:reference_number] = @from_accounting_entry.reference_number
@@ -44,6 +45,20 @@ module TransferMemberRecords
 			 member.save!
 			 end
 		end
+		
+		def update_loans!
+			@data_records[:records].each do |rec|
+				rec[:loan_records].each do |lr|
+					loan_id = lr[:loan_id]
+					branch_id =  @transfer_member_records.branch_id_to_transfer
+					
+					loan = Loan.find(loan_id).update(center_id: rec[:transfer_to_center][:id],branch_id: branch_id)
+					
+				end
+			end
+		end
+		
+
 		def approved_entry_from!
 			config  = {
 		accounting_entry_data: @accounting_entry_from.with_indifferent_access,

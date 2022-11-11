@@ -25,7 +25,7 @@ module Api
       def add_member
         center = Center.find(params[:center_id])
         member =Member.find(params[:member_id])
-        active_loans= Loan.where(member_id: member.id,status: "active").count
+        active_loans= Loan.where(member_id: member.id,status: "active")
         member_accounts = MemberAccount.where("member_id = ? and balance > ? and account_subtype != ?",member.id, 0.0,"Credit Life Insurance Plan")
         transfer_member_records = TransferMemberRecord.find(params[:id])
 
@@ -37,12 +37,13 @@ module Api
           transfer_member_records: transfer_member_records
           
         }
+
         errors = ::TransferMemberRecords::ValidateAddMember.new(config: config).execute!
         if errors[:full_messages].any?
             render json: errors, status: 400
         else
             ::TransferMemberRecords::AddMember.new(config: config).execute!
-            render json: { message: "ok" }
+            render json:  { message: "ok" }
         end
 
       end

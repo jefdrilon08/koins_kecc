@@ -108,8 +108,9 @@ var _bindEvents = function() {
         }
       }
     });
+    
   });
-$btnSaveParticular.on("click", function() {
+  $btnSaveParticular.on("click", function() {
     var particular_to        = $particularTo.val();
     var particlar_from        = $particularFrom.val();
     
@@ -157,7 +158,7 @@ $btnSaveParticular.on("click", function() {
       }
     });
   });
-$btnApprove.on("click", function() {
+  $btnApprove.on("click", function() {
     $message.html("");
     $modalApprove.show();
   });

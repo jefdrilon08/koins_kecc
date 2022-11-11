@@ -1,4 +1,5 @@
 class TransferMemberRecordsController < ApplicationController
+  before_action :authenticate_user!
 	  
     def destroy
       @transfer_member_records = TransferMemberRecord.find(params[:id])

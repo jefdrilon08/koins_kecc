@@ -20,12 +20,7 @@ module TransferMemberRecords
         }
       end
 
-      if @active_loans > 0 
-        @errors[:messages]<<{
-          key: "active_loans",
-          message: "Member have active loan"
-        }
-      end
+   
       if @center.blank?
           @errors[:messages] << {
             key: "center",

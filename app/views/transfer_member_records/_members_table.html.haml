@@ -25,6 +25,60 @@
        #{md[:account_subtype]}
       %td.text-end
        #{number_to_currency(md[:balance], unit: '')}
+   -if dd[:loan_records].present?
+    %tr
+     %th.text-center{:colspan => "2"}
+      Loans Data
+    -dd[:loan_records].each do |lr|
+     %tr
+      %th.text-center{:colspan =>"2"}
+       #{LoanProduct.find(lr[:loan_product_id]).name}
+     %tr
+      %td.text-center
+       PN NUMBER
+      %td.text-end
+       #{lr[:pn_number]}
+     %tr
+      %td.text-center
+       Terms
+      %td.text-end
+       #{lr[:term]}
+     %tr
+      %td.text-center
+       Number of Installments
+      %td.text-end
+       #{lr[:num_installments]}
+     %tr
+      %td.text-center
+       Principal
+      %td.text-end
+       #{number_to_currency(lr[:principal],unit: '')}
+     %tr
+      %td.text-center
+       Interest
+      %td.text-end
+       #{number_to_currency(lr[:interest],unit: '')}
+     %tr
+      %td.text-center
+       Principal Paid
+      %td.text-end
+       #{number_to_currency(lr[:principal_paid],unit: '')}
+     %tr
+      %td.text-center
+       Interest Paid
+      %td.text-end
+       #{number_to_currency(lr[:interest_paid],unit: '')}
+     %tr
+      %td.text-center
+       Principal Balance
+      %td.text-end
+       #{number_to_currency(lr[:principal_balance],unit: '')}
+     %tr
+      %td.text-center
+       Interest Balance
+      %td.text-end
+       #{number_to_currency(lr[:interest_balance],unit:'')}
+
    %tr
     -if @records[:status] == "pending"
      %td.text-center{:colspan => "2"}
