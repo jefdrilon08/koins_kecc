@@ -313,7 +313,7 @@ export default class BillingUIComponent extends React.Component {
 
   renderOrNumber() {
     var orNumber  = this.state.data.data.or_number;
-    /*
+   
     if(this.state.data.status == "pending") {
       return  (
         <div className="row">
@@ -340,8 +340,8 @@ export default class BillingUIComponent extends React.Component {
     } else {
       return this.state.data.data.or_number;
     }
-    */
-    return this.state.data.data.or_number;
+    
+     /*return this.state.data.data.or_number;*/
   }
 
   renderBook() {
@@ -370,7 +370,6 @@ export default class BillingUIComponent extends React.Component {
 
   renderArNumber() {
     var arNumber  = this.state.data.data.ar_number;
-    /*
     if(this.state.data.status == "pending") {
       return  (
         <div className="row">
@@ -397,8 +396,8 @@ export default class BillingUIComponent extends React.Component {
     } else {
       return this.state.data.data.ar_number;
     }
-    */
-    return this.state.data.data.ar_number;
+   
+   /* return this.state.data.data.ar_number; */
   }
 
   renderChanges() {

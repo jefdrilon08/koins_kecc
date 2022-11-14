@@ -10,6 +10,8 @@ module TransferMemberRecords
       @equity_accounting_codes    = Settings.equity_accounting_codes
       @insurance_accounting_codes = Settings.insurance_accounting_codes
       @branch_settings            = Settings.branch_accounting_codes
+      @loan_product_settings      = Settings.loan_product_accounting_codes
+      @total_loans_balance        = 0.00
     end
 
     def execute!
@@ -33,6 +35,7 @@ module TransferMemberRecords
         }
       end
 
+
       @accounting_entry[:credit_journal_entries].each do |adbj|
         @accounting_entry[:journal_entries] << {
           id: "",
@@ -42,6 +45,22 @@ module TransferMemberRecords
           amount: adbj[:amount].round(2)
         }
       end
+
+      
+      @branch_settings.each do |bs|
+          if bs[:branch_id] == @transfer_member_records[:branch_id]
+            due_to_acc_code_id = bs[:due_to_accounting_code_id]
+            due_to_acc_code = AccountingCode.find(due_to_acc_code_id)
+            amount= @total_loans_balance
+              @accounting_entry[:journal_entries] << {
+              id: "",
+              post_type: "CR",
+              accounting_code_id: due_to_acc_code.code,
+              accounting_code_name: due_to_acc_code.name,
+              amount: amount.round(2)
+            }
+          end
+      end
     
     @accounting_entry
     end
@@ -50,6 +69,29 @@ module TransferMemberRecords
 
     def build_debit_journal_entries!
       journal_entries = []
+
+      @records.each do |rec|
+        if rec[:loan_records].present?
+          rec[:loan_records].each do |lr|
+            @loan_product_settings.each do |lps|
+              if lr[:loan_product_id] == lps.loan_product_id
+                principal_accounting_code = lps.receivable_accounting_code_id
+                recievable_accounting_code = AccountingCode.find(principal_accounting_code)
+                if lr[:principal_balance] > 0.0 
+                  journal_entries << {
+                  accounting_code_id: recievable_accounting_code.id,
+                  code: recievable_accounting_code.code,
+                  name: recievable_accounting_code.name,
+                  amount: lr[:principal_balance]
+                  }
+                  @total_loans_balance += lr[:principal_balance]
+                end
+              end
+            end
+          end
+        end
+      end
+
       @branch_settings.each do |bs|
         if bs[:branch_id] == @transfer_member_records[:branch_id]
           due_to_acc_code_id = bs[:due_from_accounting_code_id]
@@ -62,6 +104,13 @@ module TransferMemberRecords
             amount: amount.round(2)
           }
         end
+      end
+
+      if journal_entries.count > 1
+        journal= journal_entries.group_by { |item|
+          [item[:accounting_code_id]]
+        }.values.flat_map{|items| items.first.merge(amount: items.sum{|h| h[:amount]})}
+        journal_entries = journal
       end
 
       journal_entries
@@ -99,6 +148,9 @@ module TransferMemberRecords
             end
           end
         end
+
+        
+
       end
       if journal_entries.count > 1
         journal= journal_entries.group_by { |item|

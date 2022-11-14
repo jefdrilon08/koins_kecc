@@ -25,8 +25,8 @@ module Billings
     end
 
     def execute!
-      issue_or_number!
-      issue_ar_number!
+      # issue_or_number!
+      # issue_ar_number!
 
       post_accounting_entry!
       process_loan_payments!
@@ -43,16 +43,16 @@ module Billings
       @data[:accounting_entry][:approved_by]      = @accounting_entry.approved_by
 
       # Update OR and AR Number for billing (with accounting entry)
-      @data[:or_number]                           = @or_number
-      @data[:ar_number]                           = @ar_number
-      @data[:accounting_entry][:data][:or_number] = @or_number
-      @data[:accounting_entry][:data][:ar_number] = @ar_number
+      # @data[:or_number]                           = @or_number
+      # @data[:ar_number]                           = @ar_number
+      # @data[:accounting_entry][:data][:or_number] = @or_number
+      # @data[:accounting_entry][:data][:ar_number] = @ar_number
 
-      # Update OR and AR Number for member records
-      @data[:records].each do |record|
-        record[:member][:or_number] = @or_number
-        record[:member][:ar_number] = @ar_number
-      end
+      # # Update OR and AR Number for member records
+      # @data[:records].each do |record|
+      #   record[:member][:or_number] = @or_number
+      #   record[:member][:ar_number] = @ar_number
+      # end
 
       @billing.update!(
         status: "approved",
@@ -65,21 +65,21 @@ module Billings
 
     private
 
-    def issue_or_number!
-      cmd = ::Branches::IssueOrNumber.new(
-        branch: @branch
-      )
+    # def issue_or_number!
+    #   cmd = ::Branches::IssueOrNumber.new(
+    #     branch: @branch
+    #   )
 
-      @or_number = cmd.execute!
-    end
+    #   @or_number = cmd.execute!
+    # end
 
-    def issue_ar_number!
-      cmd = ::Branches::IssueArNumber.new(  
-        branch: @branch
-      )
+    # def issue_ar_number!
+    #   cmd = ::Branches::IssueArNumber.new(  
+    #     branch: @branch
+    #   )
 
-      @ar_number = cmd.execute!
-    end
+    #   @ar_number = cmd.execute!
+    # end
 
     def process_loan_payments!
       @data_loan_payments.each do |o|
@@ -146,8 +146,8 @@ module Billings
 
     def post_accounting_entry!
       # Setup OR and AR Number
-      @data_accounting_entry[:data][:or_number] = @or_number
-      @data_accounting_entry[:data][:ar_number] = @ar_number
+      # @data_accounting_entry[:data][:or_number] = @or_number
+      # @data_accounting_entry[:data][:ar_number] = @ar_number
 
       # Create new accounting entry
       config  = {
