@@ -1,5 +1,23 @@
 module Api
   class PublicController < ActionController::API
+    def save_members
+      members = params["members"]
+      puts params
+
+      cmd = ::Kmba::ValidateSaveMembers.new(
+        members: members 
+      )
+
+      cmd.execute!
+
+      if cmd.errors.length > 0
+        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      else
+        render json: { message: "ok" }
+      end
+
+    end
+
     def areas
       areas = Area.select("id, name")
 
