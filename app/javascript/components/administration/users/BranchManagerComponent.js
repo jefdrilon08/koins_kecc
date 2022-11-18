@@ -80,7 +80,6 @@ export default class BranchManagerComponent extends React.Component {
               <Toggle
                 defaultChecked={userBranches[i].active}
                 onChange={this.handleToggled.bind(this, userBranches[i].id)}
-                className="btn"
               />
             </center>
           </td>
