@@ -15,7 +15,7 @@ class LoansController < ApplicationController
     
     @is_online_application  = params[:is_online_application]
 
-    @centers  = @branches.first.centers
+    @centers = @branches.try(:first).try(:centers) || []
 
     if @q.present?
       @loans = @loans.where(
