@@ -79,3 +79,25 @@ Transfer production database to staging:
 ```
 heroku pg:copy koins-production DATABASE --remote staging
 ```
+
+## Notes
+
+### Create PostgreSQL user
+
+1. Create a new user
+
+```
+sudo -u postgres createuser developer -P
+```
+
+2. Login to postgres
+
+```
+sudo su - postgres && psql
+```
+
+3. Alter role to Superuser
+
+```
+ALTER USER developer WITH SUPERUSER;
+```
