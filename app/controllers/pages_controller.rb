@@ -1,5 +1,9 @@
 class PagesController < ApplicationController
-  before_action :authenticate_user!, except: [:login, :forgot_password]
+  before_action :authenticate_user!, except: [:login, :forgot_password, :ping]
+
+  def ping
+    render json: { message: "pong" }
+  end
 
   def index
     @pending_members_count = ReadOnlyMember

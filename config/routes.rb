@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   devise_for :users, skip: [:sessions]
 
+  # For heartbeat
+  get "/ping", to: "pages#ping"
+
   # Actioncable
   mount ActionCable.server => '/cable'
 
