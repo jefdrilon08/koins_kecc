@@ -71,12 +71,17 @@ module Accounting
             class: "fa fa-check"
           }
         elsif @accounting_entry.book == "CDB"
+
+
           user = @accounting_entry.prepared_by.to_s.split(",")
+        
           a = user[1].strip
     
           userDetails =  User.where("last_name like ? and first_name like ?","%#{user[0]}" ,"%#{a}").last
-        
-          if userDetails.roles.select{ |a| a == "BK" }
+          
+
+          if userDetails.roles.select{ |a| a == "BK" }.last
+            
             if helpers.sbk_mis_user
               @subheader_side_actions << {
                 id: "btn-approve",
@@ -88,7 +93,8 @@ module Accounting
                 class: "fa fa-check"
               }
             end
-          elsif userDetails.roles.select{ |a| a == "OAS" }
+          elsif userDetails.roles.select{ |a| a == "OAS" }.last
+        
             if helpers.sbk_bk_mis_user
               @subheader_side_actions << {
                 id: "btn-approve",
