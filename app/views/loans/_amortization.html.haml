@@ -30,10 +30,10 @@
           %center
             - if o.is_paid
               .badge.bg-success
-                .fa.fa-check
+                .bi.bi-check
             - else
               .badge.bg-danger
-                .fa.fa-times
+                .bi.bi-x
         %td
           %center
             %strong
@@ -48,7 +48,7 @@
           %td.text-center
             - if o.is_paid.blank?
               .btn.btn-danger.btn-sm.btn-delay-amort{ data: { id: o.id, old_date: "#{o.due_date}" } }
-                .fa.fa-minus
+                .bi.bi-subtract
     %tr
       - if current_user.roles.include?("MIS")
         %td
