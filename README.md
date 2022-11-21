@@ -102,7 +102,7 @@ sudo su - postgres && psql
 ALTER USER developer WITH SUPERUSER;
 ```
 
-### Install Lates Redis on Ubuntu
+### Install Latest Redis on Ubuntu
 
 1. Uninstall default version of redis-server:
 
@@ -115,3 +115,11 @@ sudo apt purge redis-server
 2. Use following tutorial:
 
 [Click here](https://redis.io/docs/getting-started/installation/install-redis-on-linux/)
+
+3. Turn off protected mode (production)
+
+From the redis server, enter the cli and issue the following command:
+
+```
+CONFIG SET protected-mode no
+```
