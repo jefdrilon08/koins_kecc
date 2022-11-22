@@ -309,12 +309,14 @@ class LoansController < ApplicationController
     end
 
     if @loan.pending?
-      @subheader_side_actions << {
-        id: "btn-approve",
-        class: "fa fa-check",
-        link: "#",
-        text: "Approve"
-      }
+      if helpers.sbk_bk_mis_user
+        @subheader_side_actions << {
+          id: "btn-approve",
+          class: "fa fa-check",
+          link: "#",
+          text: "Approve"
+        }
+      end
 
       @subheader_side_actions << {
         id: "btn-delete",

@@ -407,41 +407,48 @@ const toastNotification = (payload) => {
   let title     = payload.title;
   let updatedAt = payload.updatedAt;
   let content   = payload.content;
+  let branchId  = payload.branchId;
 
-  let notif = `
-    <div id="notif-${notifId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-      <div class="toast-header">
-        <strong class="me-auto">
-          <a href='${link}'>
-            ${title}
-          </a>
-        </strong>
-        <small>
-          ${updatedAt}
-        </small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
-        </button>
+  const branchIds = JSON.parse(
+    $("meta[name='branch-ids']").attr('content')
+  ).branch_ids;
+
+  if(branchId && branchIds.includes(branchId)) {
+    let notif = `
+      <div id="notif-${notifId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        <div class="toast-header">
+          <strong class="me-auto">
+            <a href='${link}'>
+              ${title}
+            </a>
+          </strong>
+          <small>
+            ${updatedAt}
+          </small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+          </button>
+        </div>
+        <div class="toast-body">
+          ${content}
+        </div>
       </div>
-      <div class="toast-body">
-        ${content}
-      </div>
-    </div>
-  `;
+    `;
 
-  console.log(notif);
+    console.log(notif);
 
-  let toastSection = document.getElementById('toast-section');
+    let toastSection = document.getElementById('toast-section');
 
-  let div = document.createElement('div');
-  div.innerHTML = notif.trim();
+    let div = document.createElement('div');
+    div.innerHTML = notif.trim();
 
-  toastSection.appendChild(div.firstChild);
+    toastSection.appendChild(div.firstChild);
 
-  let notifElement = document.getElementById(`notif-${notifId}`);
-  console.log(notifElement);
+    let notifElement = document.getElementById(`notif-${notifId}`);
+    console.log(notifElement);
 
-  const toast = new bootstrap.Toast(notifElement);
-  toast.show();
+    const toast = new bootstrap.Toast(notifElement);
+    toast.show();
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -466,29 +473,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // SIDEBAR JS
     Sidebar.init();
 
-    const branchIds = JSON.parse(
-      $("meta[name='branch-ids']").attr('content')
-    ).branch_ids;
-
     // Create a subscription for each branch
-    branchIds.forEach((branchId) => {
-      consumer.subscriptions.create({
-        channel: "BranchChannel",
-        room: `${branchId}`
-      }, {
-        connected() {
-          console.log(`Connected to branch_channel_${branchId}`);
-        },
+    consumer.subscriptions.create({
+      channel: "NotificationsChannel"
+    }, {
+      connected() {
+        console.log(`Connected to notifications_channel`);
+      },
 
-        disconnected() {
-          console.log(`Disconnected from branch_channel_${branchId}`);
-        },
+      disconnected() {
+        console.log(`Disconnected from notifications_channel`);
+      },
 
-        received(data) {
-          console.log(data);
-          toastNotification(data);
-        }
-      });
+      received(data) {
+        console.log(data);
+        toastNotification(data);
+      }
     });
   }
 });

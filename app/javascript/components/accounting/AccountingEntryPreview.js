@@ -125,7 +125,7 @@ export default class AccountingEntryPreview extends React.Component {
                       className="btn btn-sm btn-info"
                       onClick={context.props.handleJournalEntryEdit.bind(this, i)}
                     >
-                      <span className="fa fa-pencil-alt"/>
+                      <span className="bi bi-pencil"/>
                     </button>
         }
 
@@ -164,7 +164,7 @@ export default class AccountingEntryPreview extends React.Component {
                       className="btn btn-sm btn-info"
                       onClick={context.props.handleJournalEntryEdit.bind(this, i)}
                     >
-                      <span className="fa fa-pencil-alt"/>
+                      <span className="bi bi-pencil"/>
                     </button>
         }
 

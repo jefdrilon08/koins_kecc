@@ -101,3 +101,17 @@ sudo su - postgres && psql
 ```
 ALTER USER developer WITH SUPERUSER;
 ```
+
+### Install Lates Redis on Ubuntu
+
+1. Uninstall default version of redis-server:
+
+```shell
+sudo systemctl stop redis-server
+sudo systemctl disable redis-server
+sudo apt purge redis-server
+```
+
+2. Use following tutorial:
+
+[Click here](https://redis.io/docs/getting-started/installation/install-redis-on-linux/)
