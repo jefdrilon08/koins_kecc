@@ -283,7 +283,12 @@ class MembersController < ApplicationController
       }
     }
 
-    @surveys = Survey.all.order("name ASC")
+    @surveys = Survey.all.order("name ASC").map{ |o|
+      {
+        id: o.id,
+        name: o.name
+      }
+    }
 
     @survey_answers = SurveyAnswer.where(
       "meta -> 'member' ->> 'id' = ?",
@@ -427,7 +432,8 @@ class MembersController < ApplicationController
       "member_shares":                @member_shares,
       "membership_payments":          @membership_payments,
       "roles":                        current_user.roles,
-      "co_makers":                    @co_makers
+      "co_makers":                    @co_makers,
+      "surveys":                      @surveys
     }
 
     @payload[:active_loans] = @active_loans.map{ |o|
@@ -591,14 +597,7 @@ class MembersController < ApplicationController
       }
     ]
 
-    @subheader_side_actions = [
-      {
-        id: "btn-create-survey",
-        class: "fa fa-plus",
-        link: "#",
-        text: "New Survey"
-      }
-    ]
+    @subheader_side_actions = []
 
     if (Settings.activate_microloans and @member.pending?) or (Settings.activate_microinsurance and @member.pending_dormant?)
       @subheader_side_actions << {

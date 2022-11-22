@@ -239,6 +239,7 @@ export default function MembersProfile(props) {
                   <MembersProfileActions
                     member={member}
                     memberId={member.id}
+                    surveys={surveys}
                     token={token}
                     roles={roles}
                   />

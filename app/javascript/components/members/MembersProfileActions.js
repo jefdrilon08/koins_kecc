@@ -6,8 +6,41 @@ import axios from 'axios';
 export default function MembersProfileActions(props) {
   const [isLoading, setIsLoading]                 = useState(false);
   const [isModalUnlockOpen, setIsModalUnlockOpen] = useState(false);
+  const [isModalSurveyOpen, setIsModalSurveyOpen] = useState(false);
+  const [surveyId, setSurveyId]                   = useState(props.surveys.length > 0 ? props.surveys[0].id : "");
   const [errors, setErrors]                       = useState([]);
   const [modifiable, setModifiable]               = useState(props.member.modifiable);
+
+  const handleCreateSurveyClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId,
+      survey_id: surveyId
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/create_survey',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully created survey!");
+      window.location.href="/members/" + props.memberId + "/survey_answers/" + res.data.id + "/form";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
 
   const handleConfirmClicked = () => {
     setIsLoading(true);
@@ -41,6 +74,59 @@ export default function MembersProfileActions(props) {
   return (
     <>
       <Modal
+        show={isModalSurveyOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            New Member Survey
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>
+            Select a Survey Type
+          </p>
+          <select
+            value={surveyId}
+            onChange={(event) => {
+              setSurveyId(event.target.value);
+            }}
+            className="form-control"
+          >
+            {props.surveys.map((o) => {
+                return (
+                  <option value={o.id} key={`survey-${o.id}`}>
+                    {o.name}
+                  </option>
+                )
+              })
+            }
+          </select>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleCreateSurveyClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setIsModalSurveyOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      <Modal
         show={isModalUnlockOpen}
       >
         <Modal.Header>
@@ -72,6 +158,29 @@ export default function MembersProfileActions(props) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Member Survey
+            </strong>
+            <p>
+              Gumawa ng bagong survey.
+            </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setIsModalSurveyOpen(true)
+              }}
+            >
+              New Survey
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <hr/>
 
       <div className="row">
         <div className="col">

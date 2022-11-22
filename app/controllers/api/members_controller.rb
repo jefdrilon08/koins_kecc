@@ -1,7 +1,34 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password]
-    before_action :authenticate_user!, only: [:index, :unlock, :update_password]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey]
+    before_action :authenticate_user!, only: [:index, :unlock, :update_password, :create_survey]
+
+    def create_survey
+      member  = Member.find(params[:id])
+      survey  = Survey.find_by_id(params[:survey_id])
+
+      config = {
+        member: member,
+        survey: survey,
+        user:   @user
+      }
+
+      errors = ::Members::ValidateCreateSurvey.new(
+        config: config
+      ).execute!
+
+      if errors[:messages].any?
+        render json: errors, status: :unprocessable_entity
+      else
+        survey_answer = ::Members::BuildSurveyAnswer.new(
+          config: config
+        ).execute!
+
+        survey_answer.save!
+
+        render json: { id: survey_answer.id }
+      end
+    end
 
     def unlock
       member = Member.find(params[:id])

@@ -29,6 +29,7 @@ namespace :api do
   get "/members/total_funds", to: "members#total_funds"
   post "/members/apply_online", to: "members#apply_online"
   post "/members/unlock", to: "members#unlock"
+  post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
 
   # Messages
