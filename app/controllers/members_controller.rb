@@ -378,7 +378,7 @@ class MembersController < ApplicationController
     if @data[:resignation_records].present?
       @resignation_records = @data[:resignation_records].map{ |o|
         if o[:data].present?
-          return {
+          {
             date_resigned:  o[:date_resigned].try(:to_date).try(:strftime, "%b %d, %Y"),
             type:           o[:data].present? ? o[:data][:type] : o[:member_resignation_type][:name],
             reason:         o[:data].present? ? o[:data][:reason] : o[:member_resignation_type][:particular][:name]

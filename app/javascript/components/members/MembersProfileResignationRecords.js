@@ -31,17 +31,19 @@ export default function MembersProfileResignationRecords(props) {
               </thead>
               <tbody>
                 {props.records.map((o, i) => {
-                  <tr key={"resignation-record-" + i}>
-                    <td>
-                      {o.date_resigned}
-                    </td>
-                    <td>
-                      {o.type}
-                    </td>
-                    <td>
-                      {o.reason}
-                    </td>
-                  </tr>
+                  return (
+                    <tr key={"resignation-record-" + i}>
+                      <td>
+                        {o.date_resigned}
+                      </td>
+                      <td>
+                        {o.type}
+                      </td>
+                      <td>
+                        {o.reason}
+                      </td>
+                    </tr>
+                  )
                 })}
               </tbody>
             </table>
