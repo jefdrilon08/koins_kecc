@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnApprove;
 var $btnReverse;
@@ -299,16 +300,24 @@ var _cacheDom = function() {
   $modalValidate               = $("#modal-validate-confirmation");
   
   // Validate
-  $modalCheck                  = $("#modal-check-confirmation");
-  $modalApprove                = $("#modal-approve-confirmation");
-  $modalReverse                = $(".modal-reverse-confirmation");
-  $modalCancel                 = $("#modal-cancel-confirmation");
+  $modalCheck = new bootstrap.Modal(
+    document.getElementById("modal-check-confirmation")
+  )
+
+  $modalCancel = new bootstrap.Modal(
+    document.getElementById("modal-cancel-confirmation")
+  )
+
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve-confirmation")
+  )
+
 
   $modalErrorsApproval          = $(".modal-approve").find(".errors");
   $modalErrorsReverse           = $(".modal-reverse").find(".errors");
   $modalErrorsValidate          = $(".modal-validate").find(".errors");
   $modalErrorsCheck             = $(".modal-check").find(".errors");
-  $modalErrorsCancel             = $(".modal-cancel").find(".errors"); 
+  $modalErrorsCancel            = $(".modal-cancel").find(".errors"); 
   $modalSuccessApproval         = $(".modal-approve").find(".success");
   $modalSuccessReverse          = $(".modal-reverse").find(".success");
   $modalControls                = $(".modal-controls");
