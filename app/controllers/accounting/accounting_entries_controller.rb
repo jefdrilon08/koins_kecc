@@ -121,6 +121,18 @@ module Accounting
               class: "fa fa-check"
             }
           end
+        elsif @accounting_entry.book == "CRB"
+            @subheader_side_actions << {
+              id: "btn-approve",
+              link: "#",
+              text: "Approve",
+              data: {
+                id: "#{@accounting_entry.id}"
+              },
+              class: "fa fa-check"
+            }
+          
+        
         end
       end
     end
