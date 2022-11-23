@@ -172,8 +172,6 @@ module CommissionCollections
       @commission_collection.status  = "pending"
       @commission_collection.save!
 
-      #ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
-
       @commission_collection
     end
   end

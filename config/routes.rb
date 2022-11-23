@@ -8,9 +8,6 @@ Rails.application.routes.draw do
   # For heartbeat
   get "/ping", to: "pages#ping"
 
-  # Actioncable
-  mount ActionCable.server => '/cable'
-
   as :user do
     get 'login', to: 'pages#login', as: :new_user_session
     get 'logout', to: 'devise/sessions#destroy', as: :destroy_user_session

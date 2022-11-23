@@ -116,8 +116,6 @@ module InsuranceMonthlyClosingCollections
 
       @progress = 100
 
-      #ActionCable.server.broadcast 'monthly_closing_collections_channel', { id: @monthly_closing_collection.id, progress: @progress }
-
       @insurance_monthly_closing_collection
     end
   end
