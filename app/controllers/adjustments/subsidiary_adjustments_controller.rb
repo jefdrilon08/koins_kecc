@@ -72,13 +72,15 @@ module Adjustments
           }
         }
       if @adjustment_record.pending?
-       
-        @subheader_side_actions << {
-          id: "btn-approve",
-          link: "#",
-          class: "fa fa-check",
-          text: "Approve"
-        }
+          
+        if helpers.sbk_mis_user
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            text: "Approve"
+          }
+        end
 
         @subheader_side_actions << {
           id: "btn-delete",
