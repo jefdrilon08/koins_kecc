@@ -216,6 +216,31 @@ export default function MembersProfileActions(props) {
           </div>
         </div>
       </div>
+      
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Modify
+            </strong>
+            <p>
+              Palitan ang impormasyon ukol sa myembrong ito.
+            </p>
+            {(() => {
+              return (
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => { window.location.href=`/members/${props.memberId}/form_resignation` }}
+                >
+                  Resign Member
+                </button>
+              )
+            })()}
+          </div>
+        </div>
+      </div>
     </>
   )
 }
