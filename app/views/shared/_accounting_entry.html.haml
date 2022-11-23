@@ -77,6 +77,12 @@
                   Date of Check:
                 .text-muted
                   #{accounting_entry.data["date_of_check"]}
+            - if accounting_entry.prepared_by
+              .col
+                %strong
+                  Prepared By:
+                .text-muted
+                  #{accounting_entry.prepared_by}
         - if accounting_entry.data["payee"].present?
           %br
           %strong
