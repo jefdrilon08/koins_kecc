@@ -1,5 +1,7 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
+
 
 var $btnAdd;
 var $btnDelete;
@@ -37,7 +39,9 @@ var _cacheDom = function() {
   $btnDelete            = $(".btn-delete");
   $btnApprove           = $("#btn-approve");
   $btnConfirmApprove    = $("#btn-confirm-approve");
-  $modalApprove         = $("#modal-approve");
+  $modalApprove         = new bootstrap.Modal( 
+    document.getElementById("modal-approve")
+  );
   $selectMember         = $("#select-member");
   $inputAmount          = $("#input-amount");
   $inputParticular      = $("#input-particular");
