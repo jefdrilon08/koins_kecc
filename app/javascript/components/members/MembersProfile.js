@@ -242,6 +242,7 @@ export default function MembersProfile(props) {
                     surveys={surveys}
                     token={token}
                     roles={roles}
+                    status={member.status}
                   />
                 </div>
               </div>

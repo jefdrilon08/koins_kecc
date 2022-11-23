@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey]
-    before_action :authenticate_user!, only: [:index, :unlock, :update_password, :create_survey]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi]
+    before_action :authenticate_user!, only: [:index, :unlock, :update_password, :create_survey, :balik_kasapi]
 
     def create_survey
       member  = Member.find(params[:id])
@@ -30,9 +30,43 @@ module Api
       end
     end
 
-    def unlock
+    def balik_kasapi
       member = Member.find(params[:id])
+      
+      config = {
+        user: @user,
+        member: member
+      }
 
+      errors  = ::Members::ValidateRestore.new(
+                  config: config
+                ).execute!
+      
+    
+      if errors[:messages].any?
+
+        render json: errors, status: 400
+      else
+        
+        ::Members::Restore.new(
+          config: config
+        ).execute!
+
+        render json: { id: member.id,  message: "ok"  }
+
+
+      end
+
+
+
+    end
+
+
+    def unlock
+
+        
+      member = Member.find(params[:id])
+      
       config = {
         member: member,
         user:   @user

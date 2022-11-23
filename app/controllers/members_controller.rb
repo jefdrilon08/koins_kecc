@@ -433,7 +433,8 @@ class MembersController < ApplicationController
       "membership_payments":          @membership_payments,
       "roles":                        current_user.roles,
       "co_makers":                    @co_makers,
-      "surveys":                      @surveys
+      "surveys":                      @surveys,
+      "status":                      @member.status
     }
 
     @payload[:active_loans] = @active_loans.map{ |o|

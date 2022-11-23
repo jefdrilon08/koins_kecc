@@ -10,6 +10,7 @@ export default function MembersProfileActions(props) {
   const [surveyId, setSurveyId]                   = useState(props.surveys.length > 0 ? props.surveys[0].id : "");
   const [errors, setErrors]                       = useState([]);
   const [modifiable, setModifiable]               = useState(props.member.modifiable);
+  const [isModalBalikKasapiOpen, setModalBalikKasapiOpen] = useState(false);
 
   const handleCreateSurveyClicked = () => {
     setIsLoading(true);
@@ -62,6 +63,7 @@ export default function MembersProfileActions(props) {
       payload,
       options
     ).then((res) => {
+      window.location.href="/members/" + props.memberId + "/display/";
       setModifiable(!modifiable);
       setIsModalUnlockOpen(false);
       setIsLoading(false);
@@ -71,6 +73,36 @@ export default function MembersProfileActions(props) {
     })
   }
 
+  const handleConfirmBalikKasapi = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/balik_kasapi',
+      payload,
+      options
+    ).then((res) => {
+      alert("Successfully change member status!");
+      window.location.href="/members/" + props.memberId + "/display/";
+      setModifiable(!modifiable);
+      setIsModalUnlockOpen(false);
+      setIsLoading(false);
+    }).catch((error) => {
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
   return (
     <>
       <Modal
@@ -158,6 +190,39 @@ export default function MembersProfileActions(props) {
           </Button>
         </Modal.Footer>
       </Modal>
+      
+      <Modal
+        show={isModalBalikKasapiOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Unlock to Modify
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>
+            Ibalik kasapi ang miyembro?
+          </p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => { handleConfirmBalikKasapi() }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { setModalBalikKasapiOpen(false) }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <div className="row">
         <div className="col">
@@ -218,7 +283,6 @@ export default function MembersProfileActions(props) {
       </div>
       
       <hr/>
-
       <div className="row">
         <div className="col">
           <div className="note note-info">
@@ -226,21 +290,34 @@ export default function MembersProfileActions(props) {
               Modify
             </strong>
             <p>
-              Palitan ang impormasyon ukol sa myembrong ito.
+              Palitan ang status ng miyember Resing/Balik kasapi.
             </p>
             {(() => {
-              return (
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => { window.location.href=`/members/${props.memberId}/form_resignation` }}
-                >
-                  Resign Member
-                </button>
-              )
+              if(props.member.status == "active") {
+                return (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => { window.location.href=`/members/${props.memberId}/form_resignation` }}
+                  >
+                    Resign Member
+                  </button>
+                )
+              } else if(props.member.status == "resigned") {
+                return (
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => { setModalBalikKasapiOpen(true) }}
+                  >
+                    <span className="bi bi-padlock"/>
+                    Balik Kasapi
+                  </button>
+                )
+              }
             })()}
           </div>
         </div>
       </div>
+
     </>
   )
 }
