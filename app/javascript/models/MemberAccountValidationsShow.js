@@ -297,7 +297,9 @@ var _cacheDom = function() {
   $errors                      = $("#errors");
   $errorsTemplate              = $("#errors-template");
   
-  $modalValidate               = $("#modal-validate-confirmation");
+  $modalValidate               = new bootstrap.Modal(
+    document.getElementById("modal-validate-confirmation")
+  );
   
   // Validate
   $modalCheck = new bootstrap.Modal(
