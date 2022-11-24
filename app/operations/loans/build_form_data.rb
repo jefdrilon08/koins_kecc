@@ -22,7 +22,7 @@ module Loans
       settings            = Settings.loan_products.select{ |o| o.loan_product_id == @loan_product.id }.first
       maintaining_balance = member_accounts.sum(:maintaining_balance)
 
-      if settings.maintaining_balance.present?
+      if settings.present? and settings.maintaining_balance.present?
         member_accounts.where(account_type: settings.maintaining_balance.account_type, account_subtype: settings.maintaining_balance.account_subtype).each do |ma|
           if settings.maintaining_balance.threshold.present? and @loan.principal >= settings.maintaining_balance.threshold.to_f.round(2)
             maintaining_balance += (@loan.principal * settings.maintaining_balance.percentage)
@@ -91,7 +91,8 @@ module Loans
 
       loan_product_settings = Settings.loan_products.select{ |o| o.loan_product_id == @loan_product.id }.first
 
-      @data[:loan_product_maintaining_balance_percentage] = loan_product_settings.maintaining_balance.percentage * 100
+      #@data[:loan_product_maintaining_balance_percentage] = loan_product_settings.maintaining_balance.percentage * 100
+      @data[:loan_product_maintaining_balance_percentage] = loan_product_settings.try(:maintaining_balance).try(:percentage) || 0 * 100
 
       cib_id = Settings.branch_accounting_codes.select{ |o| o.branch_id == @branch.id }.first.try(:cash_in_bank_accounting_code_id)
 

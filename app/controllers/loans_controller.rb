@@ -1,5 +1,14 @@
 class LoansController < ApplicationController
   before_action :authenticate_user!
+  before_action :load_loan!, only: [:show, :adjustment, :reverse_form, :amortization_pdf]
+
+  def load_loan!
+    @loan = ReadOnlyLoan.find_by_id(params[:id])
+
+    if @loan.blank?
+      redirect_to loans_path
+    end
+  end
 
   def index
     @loans = Loan.includes(:member).where(
@@ -174,34 +183,29 @@ class LoansController < ApplicationController
   end
 
   def show
-    @loan                   = ReadOnlyLoan.find(params[:id])
-    @amortization_schedule  = @loan.amortization_schedule_entries.order(
-                                "due_date ASC"
-                              )
+    @amortization_schedule = @loan.amortization_schedule_entries.order(
+      "due_date ASC"
+    )
 
-    @loan_payments  = ReadOnlyAccountTransaction.approved_loan_payments.where(
-                        subsidiary_id: @loan.id,
-                        subsidiary_type: "Loan"
-                      )
+    @loan_payments = ReadOnlyAccountTransaction.approved_loan_payments.where(
+      subsidiary_id: @loan.id,
+      subsidiary_type: "Loan"
+    )
 
-    @activity_logs  = ReadOnlyActivityLog.where(
-                        "data ->> 'loan_id' = ?",
-                        @loan.id
-                      ).order("created_at DESC")
+    @activity_logs = ReadOnlyActivityLog.where(
+      "data ->> 'loan_id' = ?",
+      @loan.id
+    ).order("created_at DESC")
 
     @adjustment_records = AdjustmentRecord.reamortization.where(
-                            "meta->>'loan_id' = ?",
-                            @loan.id
-                          ).order("created_at DESC")
+      "meta->>'loan_id' = ?",
+      @loan.id
+    ).order("created_at DESC")
 
 
     if @loan.has_co_maker_one?
       @co_maker = ReadOnlyMember.find(@loan.data["co_maker_one"]["id"])
     end
-
-
-
-
 
     # subheader items
     @subheader_items = [
@@ -335,9 +339,8 @@ class LoansController < ApplicationController
   end
 
   def amortization_pdf
-    @loan                   = ReadOnlyLoan.find(params[:id])
-    @amortization_schedule  = @loan.amortization_schedule_entries.order(
-                                "due_date ASC"
-                              )
+    @amortization_schedule = @loan.amortization_schedule_entries.order(
+      "due_date ASC"
+    )
   end
 end
