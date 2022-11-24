@@ -35,7 +35,12 @@ module Loans
 
     def attach_profile_pictures!
       if @member.profile_picture.attached?
-        @data[:profile_picture] = Base64.strict_encode64(URI.open(@member.profile_picture.url).read)
+        begin
+          @data[:profile_picture] = Base64.strict_encode64(URI.open(@member.profile_picture.url).read)
+        rescue => e
+          Rails.logger.info("Missing profile picture for member #{@member.id}: #{@member.profile_picture.url}")
+          @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+        end
       else
         @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
       end
