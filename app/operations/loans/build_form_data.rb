@@ -35,11 +35,16 @@ module Loans
 
     def attach_profile_pictures!
       if @member.profile_picture.attached?
-        profile_picture = URI.open(@member.profile_picture.url)
+        begin
+          profile_picture = URI.open(@member.profile_picture.url)
 
-        if profile_picture.present?
-          @data[:profile_picture] = Base64.strict_encode64(profile_picture.read)
-        else
+          if profile_picture.present?
+            @data[:profile_picture] = Base64.strict_encode64(profile_picture.read)
+          else
+            Rails.logger.info("Missing profile picture for member #{@member.id}: #{@member.profile_picture.url}")
+            @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+          end
+        rescue
           Rails.logger.info("Missing profile picture for member #{@member.id}: #{@member.profile_picture.url}")
           @data[:profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
         end
@@ -52,11 +57,16 @@ module Loans
       end
 
       if @co_maker_object.present? and @co_maker_object.profile_picture.attached?
-        profile_picture = URI.open(@co_maker_object.profile_picture.url)
+        begin
+          profile_picture = URI.open(@co_maker_object.profile_picture.url)
 
-        if profile_picture.present?
-          @data[:comaker_profile_picture] = Base64.strict_encode64(profile_picture.read)
-        else
+          if profile_picture.present?
+            @data[:comaker_profile_picture] = Base64.strict_encode64(profile_picture.read)
+          else
+            Rails.logger.info("Missing profile picture for co maker member #{@co_maker_object.id}: #{@co_maker_object.profile_picture.url}")
+            @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+          end
+        rescue
           Rails.logger.info("Missing profile picture for co maker member #{@co_maker_object.id}: #{@co_maker_object.profile_picture.url}")
           @data[:comaker_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
         end
@@ -65,11 +75,16 @@ module Loans
       end
 
       if @loan.co_maker_relative_profile_picture.attached?
-        profile_picture = URI.open(@loan.co_maker_relative_profile_picture.url)
+        begin
+          profile_picture = URI.open(@loan.co_maker_relative_profile_picture.url)
 
-        if profile_picture.present?
-          @data[:comaker_relative_profile_picture] = Base64.strict_encode64(URI.open(profile_picture).read)
-        else
+          if profile_picture.present?
+            @data[:comaker_relative_profile_picture] = Base64.strict_encode64(URI.open(profile_picture).read)
+          else
+            Rails.logger.info("Missing profile picture for comaker relative #{@loan.co_maker_relative_profile_picture.url}")
+            @data[:comaker_relative_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+          end
+        rescue
           Rails.logger.info("Missing profile picture for comaker relative #{@loan.co_maker_relative_profile_picture.url}")
           @data[:comaker_relative_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
         end
@@ -78,11 +93,16 @@ module Loans
       end
 
       if @loan.co_maker_non_relative_profile_picture.attached?
-        profile_picture = URI.open(@loan.co_maker_non_relative_profile_picture.url)
+        begin
+          profile_picture = URI.open(@loan.co_maker_non_relative_profile_picture.url)
 
-        if profile_picture.present?
-          @data[:comaker_non_relative_profile_picture] = Base64.strict_encode64(URI.open(profile_picture).read)
-        else
+          if profile_picture.present?
+            @data[:comaker_non_relative_profile_picture] = Base64.strict_encode64(URI.open(profile_picture).read)
+          else
+            Rails.logger.info("Missing profile picture for comaker non relative #{@loan.co_maker_non_relative_profile_picture.url}")
+            @data[:comaker_non_relative_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
+          end
+        rescue
           Rails.logger.info("Missing profile picture for comaker non relative #{@loan.co_maker_non_relative_profile_picture.url}")
           @data[:comaker_non_relative_profile_picture] = Base64.strict_encode64(URI.open("#{Rails.root}/app/assets/images/1x1.png").read)
         end
