@@ -32,12 +32,14 @@ export default function MembersProfileLoans(props) {
     setIsLoading(true);
     setErrors([]);
 
+    console.log(rActiveLoans);
+
     const payload = {
       co_maker:                   coMaker,
       co_maker_id:                coMakerMemberId,
       loan_product_id:            loanProductId,
       member_id:                  memberId,
-      active_loan_ids:            activeLoans.map((o) => { return o.id }),
+      active_loan_ids:            rActiveLoans.map((o) => { return o.value }),
       pn_number:                  pnNumber,
       clip_number:                clipNumber,
       date_prepared:              datePrepared,
