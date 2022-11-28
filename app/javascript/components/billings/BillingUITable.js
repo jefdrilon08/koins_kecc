@@ -677,6 +677,12 @@ export default class BillingUITable extends React.Component {
 
           <Modal.Body>
             <h5>
+              Member: &nbsp;
+              <span className="text-muted">
+                {currentMember.full_name}
+              </span>
+            </h5>
+            <h5>
               Transaction Type:  &nbsp;
               <span className="text-muted">
                 {currentTransaction.record_type}
