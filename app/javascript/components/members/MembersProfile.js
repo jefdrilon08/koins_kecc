@@ -193,7 +193,7 @@ export default function MembersProfile(props) {
                 <div id="insurance_accounts" className="home p-3 tab-pane" role="tabpanel">
                   <MembersProfileInsurance
                     records={insuranceAccounts || []}
-                    total={totalSavings}
+                    total={totalInsurance}
                   />
                 </div>
                 <div id="equity_accounts" className="home p-3 tab-pane" role="tabpanel">
