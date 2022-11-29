@@ -52,7 +52,7 @@
               %td
                 = ff.input :files, as: :file, input_html: { class: 'form-control' , multiple: true}, label: false
             %td
-              = link_to "#", class: "btn btn-danger btn-delete", data: { member_account_validation_record_id: ff.object.id, delete_member_id: ff.object.member.id } do
+              = link_to "#", class: "btn btn-danger btn-delete", method: :Delete , data: { member_account_validation_record_id: ff.object.id, delete_member_id: ff.object.member.id } do
                 .fa.fa-times   
                 Delete
         %thead
