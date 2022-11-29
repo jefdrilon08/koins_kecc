@@ -613,6 +613,10 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Equity Value"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Maintaining Balance Savings"
+
 
 # Mba new insurance accounts
 hiip: "Hospital Income Insurance Plan"
