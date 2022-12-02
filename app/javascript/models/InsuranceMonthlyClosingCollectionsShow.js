@@ -23,8 +23,10 @@ var _cacheDom = function() {
   
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
-
+  
+  $modalApprove         = new bootstrap.Modal( 
+    document.getElementById("modal-approve")
+  );
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 };
