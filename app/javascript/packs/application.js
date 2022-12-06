@@ -60,6 +60,7 @@ import AdministrationBranchesShow from "../components/administration/branches/Sh
 import AdministrationCentersShow from "../components/administration/centers/Show.js";
 import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
 import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
+import TransferSavingsRecordsShow from "../components/transfer_savings/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -209,6 +210,8 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
+import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
+import TransferSavingsShow from "../models/TransferSavingsShow.js";
 
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
@@ -389,7 +392,9 @@ const hooks = {
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
   "pages/profile":                                    [Profile],
-  "visualize/monthly_psr":                            [VisualizeMonthlyPsr]
+  "visualize/monthly_psr":                            [VisualizeMonthlyPsr],
+  "transfer_savings/index":                           [TransferSavingsIndex],
+  "transfer_savings/show":                            [TransferSavingsShow,TransferSavingsRecordsShow]
 }
 
 const renderComponent = (Component, payload) => {
