@@ -86,6 +86,8 @@ Rails.application.routes.draw do
     
     get "/make_payments", to: "make_payments#index", as: :make_payments
     get "/make_payments/:id", to: "make_payments#show", as: :make_payment
+
+
   end
   
   # EXPORTS
@@ -548,6 +550,12 @@ Rails.application.routes.draw do
   get "/reports/insurance_interest", to: "reports#insurance_interest", as: :insurance_interest
   get '/reports/download_excel_insurance_interest', to: 'reports#download_excel_insurance_interest', as: :download_excel_insurance_interest
   get "/reports/address_update", to: "reports#address_update", as: :address_update
+  
+
+  #transfer_savings
+  get "/transfer_savings", to: "transfer_savings#index"
+  get "/transfer_savings/:id", to: "transfer_savings#show" 
+
   
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"

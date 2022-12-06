@@ -387,6 +387,12 @@ namespace :api do
     #midas
     get "/excel_reports/generate", to: "excel_reports#generate"
     
+    #transfer_savings
+    post "/transfer_savings/create", to: "transfer_savings#create"
+    post "/transfer_savings/approved", to: "transfer_savings#approved"
+    get "/transfer_savings/fetch", to: "transfer_savings#fetch"
+
+    
     #transfer_member_records
     post "/transfer_member_records/create", to: "transfer_member_records#create"
     post "/transfer_member_records/add_member", to: "transfer_member_records#add_member"

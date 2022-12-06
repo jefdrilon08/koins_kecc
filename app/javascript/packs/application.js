@@ -60,6 +60,7 @@ import AdministrationBranchesShow from "../components/administration/branches/Sh
 import AdministrationCentersShow from "../components/administration/centers/Show.js";
 import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
 import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
+import TransferSavingsRecordsShow from "../components/transfer_savings/ShowComponent.js";
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -208,6 +209,8 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
+import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
+import TransferSavingsShow from "../models/TransferSavingsShow.js";
 
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
@@ -388,7 +391,9 @@ const hooks = {
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
   "pages/profile":                                    [Profile],
-  "visualize/monthly_psr":                            [VisualizeMonthlyPsr]
+  "visualize/monthly_psr":                            [VisualizeMonthlyPsr],
+  "transfer_savings/index":                           [TransferSavingsIndex],
+  "transfer_savings/show":                            [TransferSavingsShow,TransferSavingsRecordsShow]
 }
 
 const renderComponent = (Component, payload) => {
@@ -400,6 +405,59 @@ const renderComponent = (Component, payload) => {
   )
 }
 
+/*<<<<<<< HEAD
+=======
+const toastNotification = (payload) => {
+  let notifId   = payload.notifId;
+  let link      = payload.link;
+  let title     = payload.title;
+  let updatedAt = payload.updatedAt;
+  let content   = payload.content;
+  let branchId  = payload.branchId;
+
+  const branchIds = JSON.parse(
+    $("meta[name='branch-ids']").attr('content')
+  ).branch_ids;
+
+  if(branchId && branchIds.includes(branchId)) {
+    let notif = `
+      <div id="notif-${notifId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        <div class="toast-header">
+          <strong class="me-auto">
+            <a href='${link}'>
+              ${title}
+            </a>
+          </strong>
+          <small>
+            ${updatedAt}
+          </small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
+          </button>
+        </div>
+        <div class="toast-body">
+          ${content}
+        </div>
+      </div>
+    `;
+
+    console.log(notif);
+
+    let toastSection = document.getElementById('toast-section');
+
+    let div = document.createElement('div');
+    div.innerHTML = notif.trim();
+
+    toastSection.appendChild(div.firstChild);
+
+    let notifElement = document.getElementById(`notif-${notifId}`);
+    console.log(notifElement);
+
+    const toast = new bootstrap.Toast(notifElement);
+    toast.show();
+  }
+}
+*/
+//>>>>>>> develop
 document.addEventListener("DOMContentLoaded", () => {
   const { route, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
   const authenticityToken = $("meta[name='csrf-token']").attr('content');
@@ -421,5 +479,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if(route != "pages/login") {
     // SIDEBAR JS
     Sidebar.init();
+//<<<<<<< HEAD
+//=======
+
+    // Create a subscription for each branch
+    consumer.subscriptions.create({
+      channel: "NotificationsChannel"
+    }, {
+      connected() {
+        console.log(`Connected to notifications_channel`);
+      },
+
+      disconnected() {
+        console.log(`Disconnected from notifications_channel`);
+      },
+
+      received(data) {
+        console.log(data);
+        toastNotification(data);
+      }
+    });
+//>>>>>>> develop
+
   }
 });
