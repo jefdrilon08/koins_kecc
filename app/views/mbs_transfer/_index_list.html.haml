@@ -1,0 +1,46 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Collection Date
+      %th
+        Date Approved
+      %th
+        Branch
+      %th
+        Center
+      %th.text-center
+        Status
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/mbs_transfer/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          %strong
+          #{o.meta.with_indifferent_access[:transaction_date]}
+        %td
+          #{o.meta.with_indifferent_access[:date_approved]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:branch_name]} 
+        %td.text-center
+          #{o.meta.with_indifferent_access[:center_name]} 
+        %td.text-center
+          - if o[:status] == "processing"
+            .badge.badge-info
+              Processing
+          - elsif o[:status] == "done"
+            .badge.badge-success
+              Done
+          - elsif o[:status] == "pending"
+            .badge.badge-danger
+              pending
+          - elsif o[:status] == "approved"
+            .badge.badge-success
+              approved
+          - elsif o[:status] == "error"
+            .badge.badge-danger
+              Error
+ 

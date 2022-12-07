@@ -249,6 +249,10 @@ Rails.application.routes.draw do
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
   resources :billing_for_full_payments 
+  
+  #mbs_transfer
+  get "/mbs_transfer", to: "mbs_transfer#index"
+  get "/mbs_transfer/:id", to: "mbs_transfer#show"
 
   #additional_share
   get "/additional_share", to: "additional_share#index"

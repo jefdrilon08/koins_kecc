@@ -21,7 +21,7 @@ module Reports
                                     sss_number:         o.fetch("sss_number"),
                                     pag_ibig_number:    o.fetch("pag_ibig_number"),
                                     phil_health_number: o.fetch("phil_health_number"),
-                                    tin_number:         o.fetch("tin_number"),
+                                    tin_number:         o.fetch("tin_number").to_s,
                                     share_capital_balance:      o.fetch("share_capital_balance")
                               
                                   }

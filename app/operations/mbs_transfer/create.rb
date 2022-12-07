@@ -1,4 +1,4 @@
-module AdditionalShare
+module MbsTransfer
   class Create
   
     def initialize(config: )
@@ -6,7 +6,7 @@ module AdditionalShare
       @branch           = @config[:branch]
       @center           = @config[:center]
       @transaction_date = Date.today
-      @data_store_type  = "ADDITIONAL_SHARE"
+      @data_store_type  = "MBS_TRANSFER"
       @current_date     = ::Utils::GetCurrentDate.new(
                           config: {
                             branch: @branch
@@ -31,7 +31,7 @@ module AdditionalShare
               company_name: Settings.company_name,
               branch: @branch.to_s.upcase,
               prepared_by: @user.to_s,
-              particular: "TO RECORD TRANSFER OF CBU, PSA & RSA FOR PAYMENT OF ADDITIONAL SHARE CAPITAL OF #{@center.name}",
+              particular: "TO RECORD TRANSFER OF CBU & RSA FOR MBS OF #{@center.name}",
               debit_journal_entries: [],
               credit_journal_entries: [],
               journal_entries: [],
@@ -63,27 +63,16 @@ module AdditionalShare
         accounting_code_id: '5091fee6-b2a2-40a0-a717-c53ab483ea43',
         total_amount: 0.0
       }
-      @data_store.data['header'] << {
-        name: "PERSONAL SAVINGS",
-        accounting_code_id: 'ba2c06dc-749a-4ca3-b09c-950669385126',
-        total_amount: 0.0
-      }
-      @data_store.data['header'] << {
+     @data_store.data['header'] << {
         name: "REGULAR SAVINGS",
         accounting_code_id: 'b7c23e58-e44e-46ae-a3ec-b5081d6eed32',
         total_amount: 0.0
       }
       @data_store.data['header'] << {
         name: "MBS",
-        accounting_code_id: '1dee33d9-8071-4ad9-99ce-ce23f45f7fbd',
+        accounting_code_id: '1e849571-b1e3-49d8-af5d-2bcbb4b5c314',
         total_amount: 0.0
       }
-      @data_store.data['header'] << {
-        name: "ADDITIONAL SHARE CAP",
-        accounting_code_id: '370f5e4f-e4c8-454e-90b2-17919cc5ef92',
-        total_amount: 0.0
-      }
-
     end
 
     def execute!

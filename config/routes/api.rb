@@ -137,6 +137,13 @@ namespace :api do
   end
 
   namespace :v1 do
+    #mbs_transfer
+    post "mbs_transfer/create", to: "mbs_transfer#create"
+    post "mbs_transfer/add_member", to: "mbs_transfer#add_member"
+    post "mbs_transfer/update_amount", to: "mbs_transfer#update_amount"
+    post "mbs_transfer/add_particular", to: "mbs_transfer#add_particular"
+    post "mbs_transfer/approve", to: "mbs_transfer#approve"
+
     #additional_share
     post "additional_share/create", to: "additional_share#create"
     post "additional_share/add_member", to: "additional_share#add_member"

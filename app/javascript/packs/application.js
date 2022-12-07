@@ -211,6 +211,8 @@ import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
 import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
 import TransferSavingsShow from "../models/TransferSavingsShow.js";
+import MbsTransferIndex from "../models/MbsTransferIndex";
+import MbsTransferShow from "../models/MbsTransferShow";
 
 const hooks = {
   "members/form":                                     [MembersFormDisplay],
@@ -390,6 +392,8 @@ const hooks = {
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
+  "mbs_transfer/index":                               [MbsTransferIndex],
+  "mbs_transfer/show":                                [MbsTransferShow],	
   "pages/profile":                                    [Profile],
   "visualize/monthly_psr":                            [VisualizeMonthlyPsr],
   "transfer_savings/index":                           [TransferSavingsIndex],
