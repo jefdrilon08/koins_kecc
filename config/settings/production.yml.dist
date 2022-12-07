@@ -5940,6 +5940,7 @@ loan_products:
     receivable_accounting_code_id: "5dc4178d-6b2d-404a-9908-950ebc59b361"
     interest_receivable_accounting_code_id: "99a05d29-843b-400e-ab63-4d01ad46d901"
     default_amount: 5000.00
+    special_interest_area_id: "074a8979-6912-49e0-a61d-41b975d22979"
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
@@ -6136,6 +6137,18 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
+    special_use_term_interest:
+      -
+        term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.039
+      -
+        term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.048
+#<<<<<<< HEAD
   -
     loan_product_id: "43e1ae2f-b723-4646-816c-5659146cf2ad"                         # KABUHAYAN W4
     receivable_accounting_code_id: "0b54bd3b-d492-40c8-8e65-e1360d7cf11b"
@@ -6315,6 +6328,8 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
+#=======
+#>>>>>>> develop
 
   -
     loan_product_id: "9b9ee937-88ec-4332-98fb-b35c677079a5"                         # K - KALUSUGAN W9
