@@ -80,6 +80,15 @@ module Loans
           end
         end
       end
+
+      #special Interest for kabuhayan W3
+      if @settings.special_interest_area_id == @branch.cluster.area_id
+        @settings.special_use_term_interest.each do |t|
+          if t.term == @loan.term and @loan.num_installments > t.min_num_installments and @loan.num_installments <= t.max_num_installments
+            @loan.monthly_interest_rate = t.monthly_interest_rate
+          end
+        end
+      end
       
       if @settings.zero_interest != "true" # for loans has interest/Normal loans
         params  = {
