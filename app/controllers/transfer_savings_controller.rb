@@ -25,14 +25,16 @@ class TransferSavingsController < ApplicationController
       @data_transfer = @transfer_savings_record.data.with_indifferent_access
       @accounting_entry = @data_transfer[:accounting_entry]
 
-      @subheader_side_actions = [
-        {
-         id: "btn-approved",
-         link: "#",
-         class: "fa fa-plus",
-         text: "Approved"
-       }
-     ]
+      if @transfer_savings_record.pending?
+        @subheader_side_actions = [
+          {
+           id: "btn-approved",
+           link: "#",
+           class: "fa fa-plus",
+           text: "Approved"
+         }
+       ]
+      end
 
        @payload = {
         id: @transfer_savings_record.id

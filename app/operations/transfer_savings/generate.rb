@@ -7,7 +7,7 @@ module TransferSavings
       @user = User.find(@config[:user])
       @account_subtype_psa = "Personal Savings Account"
       @account_subtype_mbs = "Maintaining Balance Savings"
-      @accounting_code_mbs = AccountingCode.find("cb330c40-a450-4e86-94f9-4c850e4a1d92")
+      @accounting_code_mbs = AccountingCode.find("1e849571-b1e3-49d8-af5d-2bcbb4b5c314")
       @accounting_code_psa = AccountingCode.find("ba2c06dc-749a-4ca3-b09c-950669385126")
       @members = Member.where("branch_id = ? ","#{@transfer_savings_records.branch_id}")
 
