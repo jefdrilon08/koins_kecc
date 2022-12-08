@@ -559,6 +559,9 @@ default_withdrawal_accounts:
     account_subtype: "Savings Investment Fund"
   -
     account_type: "SAVINGS"
+    account_subtype: "Personal Savings Account"
+  -
+    account_type: "SAVINGS"
     account_subtype: "Maintaining Balance Savings"
   -
     account_type: "INSURANCE"
