@@ -1,63 +1,75 @@
 :css
   .member-details {
-    margin: 85px 0px 0px 375px;
-    font-size: 20px;
+    margin: 35px 0px 0px 200px;
+    margin-top: 60px;
+    margin-right: 20px;
+    font-size: 12px;
   }
 
   .member-name {
-    margin-top: 245px;
-    margin-left: 80px;
-    max-width: 900px;
-    font-size: 45px;
+    margin-top: 140px;
+    margin-left: 40px;
+    max-width: 690px;
+    font-size: 35px;
   }
 
   .member-no-of-share {
-    font-size: 20px;
-    margin: 33px 0px 0px 370px;
+    margin: 30px 0px 0px 270px;
+  }
+
+  .member-recognition-day {
+    margin-left: 75px;
   }
 
   .member-recognition-month {
-    margin-left: 110px;
+    margin-left: 80px;
   }
 
   .member-recognition-year {
-    margin-left: 155px;
+    margin-left: 140px;
   }
 
   #member-certificate {
   }
   .pangulo-sign{
-    margin-left:245px;
-    margin-right:325px;
+    margin-left:210px;
+    margin-right:420px;
+  }
+  .kalihim-sign{
+    margin-left:-190px;
+    margin-right:10px;
   }
 
+  
   .sign{
-    margin-top:-10px;
+    margin-top: 10px;
   }
 
   .name{
-    margin-top: -60px;
+    margin-top: -50px;
   }
 
   .kalihim-name{
-    font-size: 15px;
-    margin-left:210px;
-    margin-right:270px;
+    font-size: 12px;
+    margin-left:180px;
+    margin-right:120px;
   }
 
   .pangulo-name{
-    font-size: 15px;
+    font-size: 12px;
+    margin-left:90px;
+    margin-right:90px;
   }
 
   .kalihim-pos{
     
-    margin-left:280px;
-    margin-right:375px;
+    margin-left:210px;
+    margin-right:295px;
   }
 
   .pos{
     font-size: 12px;
-    margin-top: -10px;
+    margin-top: 2px;
   }
 
 #member-certificate
@@ -71,7 +83,7 @@
 
   - x = "#{@member_share_data[:date_of_issue_year]}-#{@member_share_data[:date_of_issue_month]}-#{@member_share_data[:date_of_issue_day].to_i}"
   .member-details
-    %label
+    %label.member-recognition-day
       #{@member_share_data[:date_of_issue_day]}
     %label.member-recognition-month
       #{::Utils::MonthToFilipino.new(@member_share_data[:date_of_issue_month].to_i).execute!.capitalize}
@@ -79,19 +91,12 @@
       #{@member_share_data[:date_of_issue_year]}
   .sign
     %label.pangulo-sign
-      -if x >= '2022-2-28'
-        = image_tag "signatures/kalihim_0322.bmp", class: "img-responsive" , size: "110"
-      -else
-        = image_tag "signatures/kalihim_2020.bmp", class: "img-responsive" , size: "110"
-    %label
-      = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "110"
+      = image_tag "signatures/kalihim_0322.bmp", class: "img-responsive" , size: "90"
+    %label.kalihim-sign
+      = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "90"
   .name
-    -if x >= '2022-2-28'
-      %label.kalihim-name
-        #{Settings.kalihim}
-    -else
-      %label.kalihim-name
-        #{Settings.old_kalihim}
+    %label.kalihim-name
+      #{Settings.kalihim}
     %label.pangulo-name
       #{Settings.taga_pangulo}
   .pos
