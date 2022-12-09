@@ -10,7 +10,8 @@ module MbsTransfer
 
     def execute!
       mem_acc = MemberAccount.find(@member_account_id)
-      if @withdraw_amount.to_f > mem_acc.balance.to_f 
+      @mem_balance = mem_acc.balance.to_f - 100
+      if @withdraw_amount.to_f > @mem_balance
         @errors[:messages] << {
           key:  "billing",
           message: "withdraw amount is larger than balance"
