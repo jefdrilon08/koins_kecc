@@ -1,75 +1,65 @@
 import Mustache from "mustache";
 import $ from "jquery";
 import * as bootstrap from "bootstrap";
+import select2 from 'select2';
+select2($);
 
 
-var _authenticityToken;
-var _id;
+var authenticityToken;
 
 var $btnAdd;
-var $UpdateAmount;
-var $modalUpdate;
-var $modalApproveTransaction;
-var $btnApprove;
-var $btnAddParticular;
-var $inputParticular;
-
-var _memberAccountId;
 var _memberId;
-
-var $message;
+var _id;
 var templateErrorList;
-
-var _urlAddParticular = "/api/v1/additional_share/add_particular";
+var _urlAddParticular = "/api/v1/mbs_transfer/add_particular";
 
 var _cacheDom = function() {
-   $modalUpdate 	    = new bootstrap.Modal(
+  $modalUpdate 	    = new bootstrap.Modal(
      document.getElementById("modal-update-transaction")
    )
-
+  
    $modalApproveTransaction = new bootstrap.Modal(
      document.getElementById("modal-approve-transaction")
    )
 
-	
-   $btnAdd			      = $("#btn-add");
-   $btnApprove			  = $("#btn-approve");	
-   $btnConfirmProcess = $("#btn-confirm-process");
-   $btnConfirmAmount	= $("#btn-confirm-amount");
-   $selectMember      = $("#select-member");
-   $UpdateAmount      = $(".undo");
-   $withdrawAmount		= $("#withdrawAmount");		
-   $memberName			  = $("#memberName");
-   $memberId			    = $("#memberId");
-   $accountSubType		= $("#accountSubType");
-   $btnAddParticular  = $("#btn-add-particular");
-   $inputParticular   = $("#particular");
-   $message  			    = $(".message");
-	
-};
+
+  $btnAdd	    = $("#btn-add");
+  $btnApprove			  = $("#btn-approve");	
+  $btnConfirmProcess = $("#btn-confirm-process");
+  $btnConfirmAmount	= $("#btn-confirm-amount")
+  $selectMember      = $("#select-member");
+  $message          = $(".message");
+  $UpdateAmount      = $(".undo");
+  $withdrawAmount		= $("#withdrawAmount");		
+  $memberName			  = $("#memberName");
+  $memberId			    = $("#memberId");
+  $accountSubType		= $("#accountSubType");
+  $btnAddParticular  = $("#btn-add-particular");
+  $inputParticular   = $("#particular");
+ 
+  templateErrorList = $("#template-error-list").html();
+}
 
 var _bindEvents = function() {
+    
   $btnAdd.on("click", function() {
    _memberId = $selectMember.val();
-   _id = $(this).data("id");	  
-
-    var data = {
+   _id = $(this).data("id");	
+   var data = {
       id: _id,
       member_id: _memberId,
-      authenticity_token: _authenticityToken
+      authenticity_token: authenticityToken
     };
-
+    
     $selectMember.prop("disabled", true);
- 
     $.ajax({
-      url: "/api/v1/additional_share/add_member",
+      url: "/api/v1/mbs_transfer/add_member",
       method: 'POST',
       data: data,
       success: function(response) {
       $message.html(
         "Success! Redirecting..."
       );
-
       window.location.reload();
       },
       error: function(response) {
@@ -90,10 +80,10 @@ var _bindEvents = function() {
       $selectMember.prop("disabled", false);
       }
       }
-      });	   
-    });
-	//end btnAdd
-   $UpdateAmount.on("click" , function() {
+      });
+  });
+
+     $UpdateAmount.on("click" , function() {
 	   _memberAccountId 		= $(this).data("member-account-id")
 	   var withdraw_amount		= $(this).data("withdraw-amount")
 	   var member_name		= $(this).data("member-name")
@@ -107,9 +97,9 @@ var _bindEvents = function() {
 	   $memberId.text(member_id)
 	   $modalUpdate.show();
 
-   });
+     });
 
-   $btnConfirmAmount.on("click", function() {
+      $btnConfirmAmount.on("click", function() {
 	_withdrawAmount	= $withdrawAmount.val()	     
 	_id 		= $(this).data("id");	
 	_memberId	= $memberId.text()
@@ -120,10 +110,10 @@ var _bindEvents = function() {
 		member_id: _memberId,   
 		member_account_id: _memberAccountId,   
 		withdraw_amount: _withdrawAmount,
-		authenticity_token: _authenticityToken
+		authenticity_token: authenticityToken
 	   	};
       $.ajax({
-      url: "/api/v1/additional_share/update_amount",
+      url: "/api/v1/mbs_transfer/update_amount",
       method: 'POST',
       data: data,
       success: function(response) {
@@ -150,55 +140,8 @@ var _bindEvents = function() {
         );
     }
     }); 
-   });
+   });	
 
-   $btnApprove.on("click", function() {
-     _id = $(this).data("id");
-           //alert(_id);
-        $modalApproveTransaction.show();
-   });
-
-    $btnConfirmProcess.on("click", function() {
-     var data = {
-       id: _id,
-       authenticity_token: _authenticityToken
-     };
-           //alert(_id);
-     $btnConfirmProcess.prop("disabled", true);
-     $message.html("Loading...");
-
-    console.log(data);
-    $.ajax({
-      url: "/api/v1/additional_share/approve",
-      method: 'POST',
-      data: data,
-      success: function(response) {
-        $message.html("Success! Redirecting...");
-        window.location.href="/additional_share";
-      },
-      error: function(response) {
-        console.log(response);
-	alert(JSON.parse(response.responseText).full_messages);      
-	var errors  = [];
-        try {
-          errors  = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors  = ["Something went wrong"];
-          console.log(err);
-        } finally {
-          console.log(errors);
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-	      { errors: errors }
-	    )
-          );
-
-          $btnConfirmProcess.prop("disabled", false);
-        }
-      }
-    });
-   });
 
    $btnAddParticular.on("click", function() {
     var txtParticular = $inputParticular.val()
@@ -209,7 +152,7 @@ var _bindEvents = function() {
       data: {
 	id: _id,
 	txtParticular: txtParticular,
-        authenticity_token: _authenticityToken
+        authenticity_token: authenticityToken
       },
       success: function(response) {
         $message.html("Success!");
@@ -237,12 +180,57 @@ var _bindEvents = function() {
 
    });
 
- 
+   $btnApprove.on("click", function() {
+     _id = $(this).data("id");
+        $modalApproveTransaction.show();
+   });
+	
+   $btnConfirmProcess.on("click", function() {
+    var data = {
+       id: _id,
+       authenticity_token: authenticityToken
+     };
+     $btnConfirmProcess.prop("disabled", true);
+     $message.html("Loading...");
+
+    console.log(data);
+    $.ajax({
+      url: "/api/v1/mbs_transfer/approve",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.href="/mbs_transfer";
+      },
+      error: function(response) {
+        console.log(response);
+	alert(JSON.parse(response.responseText).full_messages);      
+	var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+	      { errors: errors }
+	    )
+          );
+
+          $btnConfirmProcess.prop("disabled", false);
+        }
+      }
+    });
+
+   });
+
+
 }
-
-
 var init  = function(config) {
-  _authenticityToken = config.authenticityToken;
+  authenticityToken = config.authenticityToken;
 
   _cacheDom();
   _bindEvents();

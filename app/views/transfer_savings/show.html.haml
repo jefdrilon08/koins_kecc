@@ -1,0 +1,14 @@
+= title @transfer_savings_record.id
+.h4
+  Transfer Savings Module
+.row
+  .col
+    .card
+      .card-body
+        #react-root
+        %hr
+          %h5
+            Accounting Entry
+          = render partial: "accounting_entry", locals: { accounting_entry: @accounting_entry}
+
+= render partial: "/transfer_savings/modal/approve"

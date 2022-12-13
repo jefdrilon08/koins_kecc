@@ -131,6 +131,8 @@ class DataStoreController < ApplicationController
       "insurance_personal_funds"     => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "billing_for_writeoff_collections" => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "additional_share"             => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
+      "mbs_transfer"                => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
+
     }
   end
 

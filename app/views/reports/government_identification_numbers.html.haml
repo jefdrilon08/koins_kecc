@@ -15,10 +15,12 @@
         
             %tbody
               - if @government_identification_numbers.present?
-                - @government_identification_numbers[:records].each do |gin|
-                  %tr
-                    %td #{ gin[:id_number] }
-                    %td #{ gin[:last_name]}, #{gin[:first_name]}, #{gin[:middle_name] }
-                    %td #{ gin[:center_name]} 
-                    %td #{ gin[:tin_number] }
-                    %td #{ gin[:share_capital_balance] }
+                - @government_identification_numbers[:records].each do |gin| 
+                  - @tin = gin[:tin_number].to_s
+                  -if @tin.present?
+                    %tr
+                      %td #{ gin[:id_number] }
+                      %td #{ gin[:last_name]}, #{gin[:first_name]}, #{gin[:middle_name] }
+                      %td #{ gin[:center_name]} 
+                      %td #{@tin}
+                      %td #{ gin[:share_capital_balance] }

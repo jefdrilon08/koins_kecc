@@ -1,27 +1,23 @@
-module AdditionalShare
+module MbsTransfer
   class AddMember
-  
     def initialize(config:)
       @config           = config
       @data_store_id    = @config[:data_store_id]
       @member_id        = @config[:member_id]
       @data_store       = DataStore.find(@data_store_id)
       @data             = @data_store.data.with_indifferent_access
-
     end
-
-
+    
     def execute!
       add_member!
       add_records!
       @data_store.update(data: @data)
     end
-
-
+    
     def add_member!
       @data['record'] << {
         member_id: @member_id,
-        member_account_id: MemberAccount.where(member_id: @member_id , account_subtype: "Share Capital").last.id,
+        member_account_id: MemberAccount.where(member_id: @member_id , account_subtype: "Maintaining Balance Savings").last.id,
         name: Member.find(@member_id).full_name,
         total_add_capital: 0.0,
         records: []
@@ -43,27 +39,13 @@ module AdditionalShare
       }
 
       a[:records] << {
-        member_account_id: psa.id,
-        accounting_code_id: "ba2c06dc-749a-4ca3-b09c-950669385126",
-        account_subtype: "Personal Savings Account",
-        amount: 0.0
-      } 
-
-      a[:records] << {
         member_account_id: rsa.id,
         accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32",
         account_subtype: "K-IMPOK",
         amount: 0.0
       }
-      a[:records] << {
-        member_account_id: mbs.id,
-        accounting_code_id: "1dee33d9-8071-4ad9-99ce-ce23f45f7fbd",
-        account_subtype: "Maintaining Balance Savings",
-        amount: 0.0
-      }
-
     end
-    
-  end
-end
  
+
+  end
+end 
