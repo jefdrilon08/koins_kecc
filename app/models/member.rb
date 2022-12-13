@@ -144,6 +144,30 @@ class Member < ApplicationRecord
     end
   end
 
+  def interest_start_date
+    if self.data.with_indifferent_access[:restoration_records].blank?
+      return self.data.with_indifferent_access[:recognition_date]
+    else
+      return self.data.with_indifferent_access[:restoration_records][0][:date_restored]
+    end
+  end
+
+  def reinstatement_date
+    if self.data.with_indifferent_access[:reinstatement][:reinstatement_date].present?
+      return self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date
+    else
+      return nil
+    end
+  end
+
+  def old_recognition_date
+    if self.data.with_indifferent_access[:reinstatement][:old_recognition_date].present?
+      return self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date
+    else
+      return nil
+    end
+  end
+
   def life_number_of_lapsed
     ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first
       
@@ -272,6 +296,14 @@ class Member < ApplicationRecord
       []
     else
       self.data.with_indifferent_access[:resignation_records]
+    end
+  end
+
+  def restoration_records
+    if self.data.with_indifferent_access[:restoration_records].blank?
+      []
+    else
+      self.data.with_indifferent_access[:restoration_records]
     end
   end
 

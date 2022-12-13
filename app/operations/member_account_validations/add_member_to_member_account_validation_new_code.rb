@@ -7,6 +7,7 @@ module MemberAccountValidations
       @resignation_date                     = @config[:resignation_date]
       @member_classification                = @config[:member_classification]
       @member_account_validation            = @config[:member_account_validation]
+      @date_restored                        = @member.interest_start_date.try(:to_date)
       @equity_interest_implementation_date  = "2019-01-01".to_date
       @interest_starting_date               = "2021-09-15".to_date
       @lif_50_percent                       = 0.00
@@ -21,22 +22,35 @@ module MemberAccountValidations
       @pl_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Policy Loan").first
       @ev_member_account    = @member.member_accounts.where(account_type: "INSURANCE", account_subtype: "Equity Value").first     
       
-      # For RF Interest
-      @interest_amount = @rf_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @interest_starting_date).sum(:amount).to_f
+      if @date_restored.present?
+        @interest_amount        = @rf_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @date_restored).sum(:amount).to_f
+        @equity_interest_amount = @ev_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @date_restored).sum(:amount).to_f
+    
+        @data                 = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
+                               member: @member, 
+                               lif_member_account: @lif_member_account, 
+                               rf_member_account: @rf_member_account, 
+                               resignation_date: @resignation_date,
+                               rf_interest_amount: @interest_amount
+                             ).execute!
+        
+        # @equity_value         = @ev_member_account.try(:balance).to_f
+        @equity_value         = @lif_member_account.try(:balance).to_f / 2 
+      else
+        @interest_amount = @rf_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @interest_starting_date).sum(:amount).to_f  
+        @equity_interest_amount = @ev_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @interest_starting_date).sum(:amount).to_f
 
-      # For equity interest
-      @equity_interest_amount = @ev_member_account.account_transactions.where("status = ? AND data->>'is_interest' = ? AND transacted_at >= ?", "approved", "true", @interest_starting_date).sum(:amount).to_f
+        @data                 = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
+                                  member: @member, 
+                                  lif_member_account: @lif_member_account, 
+                                  rf_member_account: @rf_member_account, 
+                                  resignation_date: @resignation_date,
+                                  rf_interest_amount: @interest_amount
+                                ).execute!
 
-      @data                 = ::MemberAccountValidations::GenerateMemberAccountDetailsForLifAndRfForValidation.new(
-                                member: @member, 
-                                lif_member_account: @lif_member_account, 
-                                rf_member_account: @rf_member_account, 
-                                resignation_date: @resignation_date,
-                                rf_interest_amount: @interest_amount
-                              ).execute!
-
-      @equity_value         = @ev_member_account.try(:balance).to_f
-
+        # @equity_value         = @ev_member_account.try(:balance).to_f
+        @equity_value         = @lif_member_account.try(:balance).to_f / 2 
+      end
       if !@pl_member_account.nil?
         @policy_loan = @pl_member_account.try(:balance).to_f
       else
@@ -82,7 +96,7 @@ module MemberAccountValidations
       else
         @rf_amount    = @rf_current_balance
         @lif_amount   = @lif_current_balance
-      end  
+      end   
 
       # Check if member is 3 years above in KMBA
       @current_date = ::Utils::GetCurrentDate.new(
@@ -102,9 +116,11 @@ module MemberAccountValidations
         
         if @advance_lif > 0
           ev_less_interest = @equity_value - @equity_interest_amount
-          @lif_50_percent = (ev_less_interest - (@advance_lif / 2))
+          # @lif_50_percent = (ev_less_interest - (@advance_lif / 2))
+          @lif_50_percent = (@equity_value - (@advance_lif / 2))
         else
-          @lif_50_percent = @equity_value - @equity_interest_amount
+          # @lif_50_percent = @equity_value - @equity_interest_amount
+          @lif_50_percent = @equity_value 
         end
       end
 
