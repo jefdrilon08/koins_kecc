@@ -1,7 +1,6 @@
 import Mustache from "mustache";
-import $ from "jquery";
+import $ from 'jquery';
 import * as bootstrap from "bootstrap";
-
 
 var $btnAdd;
 var $btnDelete;
@@ -24,6 +23,32 @@ var $inputEffectiveDate;
 var $inputClipNumber;
 var $inputBeneficiary;
 
+//k-bente
+var $inputKbenteBeneficiaryName;
+var $inputDateOfBirth;
+var $inputGender;
+var $inputStatus;
+var $inputaddress;
+var $inputEffectivityDate;
+var $inputPremium;
+var $inputRelationship;
+
+//k-kalinga
+var $inputKkalingaBeneficiaryName;
+var $inputKkalingaDateOfBirth;
+var $inputKkalingaGender;
+var $inputKkalingaStatus;
+var $inputKkalingaaddress;
+var $inputKkalingaEffectivityDate;
+var $inputKkalingaPremium;
+var $inputKkalingaRelationship;
+
+//printing kbente
+var $modalPrint;
+var $printMessage;
+var $btnPrintPdf;
+var $btnPrint;
+
 var _id;
 var _options;
 var _authenticityToken;
@@ -39,7 +64,7 @@ var _cacheDom = function() {
   $btnDelete            = $(".btn-delete");
   $btnApprove           = $("#btn-approve");
   $btnConfirmApprove    = $("#btn-confirm-approve");
-  $modalApprove         = new bootstrap.Modal( 
+  $modalApprove = new bootstrap.Modal(
     document.getElementById("modal-approve")
   );
   $selectMember         = $("#select-member");
@@ -55,9 +80,45 @@ var _cacheDom = function() {
   $inputEffectiveDate   = $("#input-effective-date");
   $inputClipNumber      = $("#input-clip-number");
   $inputBeneficiary     = $("#input-beneficiary");
+  
+  //k-bente
+  $inputKbenteBeneficiaryName   = $("#input-kbente-beneficiary-name");
+  $inputDateOfBirth             = $("#input-date-of-birth");
+  $inputGender                  = $("#input-gender");
+  $inputStatus                  = $("#input-status");
+  $inputaddress                 = $("#input-address");
+  $inputEffectivityDate         = $("#input-effectivity-date");
+  $inputPremium                 = $("#input-premium");
+  $inputRelationship            = $("#input-relationship");
+
+  //k-kalinga
+  $inputKkalingaBeneficiaryName = $("#input-kkalinga-beneficiary-name");
+  $inputKkalingaDateOfBirth     = $("#input-kkalinga-date-of-birth");
+  $inputKkalingaGender          = $("#input-kkalinga-gender");
+  $inputKkalingaStatus          = $("#input-kkalinga-status");
+  $inputKkalingaaddress         = $("#input-kkalinga-address");
+  $inputKkalingaEffectivityDate = $("#input-kkalinga-effectivity-date");
+  $inputKkalingaPremium         = $("#input-kkalinga-premium");
+  $inputKkalingaRelationship    = $("#input-kkalinga-relationship");
+
+  //printing kbente & kkalinga
+  $btnPrint                     = $("#btn-print");
+  $printMessage                 = $(".print-message");
+  $btnPrintPdf                  = $("#btn-print-pdf");
+  $modalPrint                   = $("modal-print");
 };
 
 var _bindEvents = function() {
+
+  $btnPrint.on("click", function() {
+    $modalPrint.show();
+
+    var type = "print_kbente_bill";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + _id);
+  });
+
   $btnApprove.on("click", function() {
     $modalApprove.show();
     $message.html("");
@@ -158,6 +219,26 @@ var _bindEvents = function() {
     var clipNumber           = $inputClipNumber.val();
     var beneficiary          = $inputBeneficiary.val();
 
+    //k-bente
+    var kbenteBeneficiaryName  = $inputKbenteBeneficiaryName.val();
+    var dateOfBirth            = $inputDateOfBirth.val();
+    var gender                 = $inputGender.val();
+    var status                 = $inputStatus.val();
+    var address                = $inputaddress.val();
+    var effectivityDate        = $inputEffectivityDate.val();
+    var premium                = $inputPremium.val();
+    var relationship           = $inputRelationship.val(); 
+
+    //k-kalinga
+    var kkalingaBeneficiaryName        = $inputKkalingaBeneficiaryName.val();
+    var kkalingaDateOfBirth            = $inputKkalingaDateOfBirth.val();
+    var kkalingaGender                 = $inputKkalingaGender.val();
+    var kkalingaStatus                 = $inputKkalingaStatus.val();
+    var kkalingaaddress                = $inputKkalingaaddress.val();
+    var kkalingaEffectivityDate        = $inputKkalingaEffectivityDate.val();
+    var kkalingaPremium                = $inputKkalingaPremium.val();
+    var kkalingaRelationship           = $inputKkalingaRelationship.val(); 
+  
     $btnAdd.prop("disabled", true);
     $inputAmount.prop("disabled", true);
     $selectMember.prop("disabled", true);
@@ -170,6 +251,27 @@ var _bindEvents = function() {
     $inputEffectiveDate.prop("disabled", true);
     $inputClipNumber.prop("disabled", true);
     $inputBeneficiary.prop("disabled", true);
+    
+    //k-bente
+    $inputKbenteBeneficiaryName.prop("disabled", true);
+    $inputDateOfBirth.prop("disabled", true);
+    $inputGender.prop("disabled", true);
+    $inputStatus.prop("disabled", true);
+    $inputaddress.prop("disabled", true);
+    $inputEffectivityDate.prop("disabled", true);
+    $inputPremium.prop("disabled", true);
+    $inputRelationship.prop("disabled", true);
+
+    //k-kalinga
+    $inputKkalingaBeneficiaryName.prop("disabled", true);
+    $inputKkalingaDateOfBirth.prop("disabled", true);
+    $inputKkalingaGender.prop("disabled", true);
+    $inputKkalingaStatus.prop("disabled", true);
+    $inputKkalingaaddress.prop("disabled", true);
+    $inputKkalingaEffectivityDate.prop("disabled", true);
+    $inputKkalingaPremium.prop("disabled", true);
+    $inputKkalingaRelationship.prop("disabled", true);
+
 
     var data  = {
       id: _id,
@@ -183,11 +285,26 @@ var _bindEvents = function() {
       maturity_date: maturityDate,
       effective_date: effectiveDate,
       clip_number: clipNumber,
-      beneficiary: beneficiary
+      beneficiary: beneficiary,
+      kbente_beneficiary_name: kbenteBeneficiaryName,
+      date_of_birth: dateOfBirth,
+      gender: gender,
+      status: status,
+      address: address,
+      effectivity_date: effectivityDate,
+      premium: premium,
+      relationship: relationship,
+      kkalinga_beneficiary_name: kkalingaBeneficiaryName,
+      kkalinga_date_of_birth: kkalingaDateOfBirth,
+      kkalinga_gender: kkalingaGender,
+      kkalinga_status: kkalingaStatus,
+      kkalinga_address: kkalingaaddress,
+      kkalinga_effectivity_date: kkalingaEffectivityDate,
+      kkalinga_premium: kkalingaPremium,
+      kkalinga_relationship: kkalingaRelationship
     };
 
     $message.html("Loading...");
-
     $.ajax({
       url: _urlAdd,
       method: 'POST',
@@ -223,6 +340,27 @@ var _bindEvents = function() {
           $inputEffectiveDate.prop("disabled", false);
           $inputClipNumber.prop("disabled", false);
           $inputBeneficiary.prop("disabled", false);
+          
+          //k-bente
+          $inputKbenteBeneficiaryName.prop("disabled", false);
+          $inputDateOfBirth.prop("disabled", false);
+          $inputGender.prop("disabled", false);
+          $inputStatus.prop("disabled", false);
+          $inputaddress.prop("disabled", false);
+          $inputEffectivityDate.prop("disabled", false);
+          $inputPremium.prop("disabled", false);
+          $inputRelationship.prop("disabled", false);
+
+           //k-kalinga
+          $inputKkalingaBeneficiaryName.prop("disabled", false);
+          $inputKkalingaDateOfBirth.prop("disabled", false);
+          $inputKkalingaGender.prop("disabled", false);
+          $inputKkalingaStatus.prop("disabled", false);
+          $inputKkalingaaddress.prop("disabled", false);
+          $inputKkalingaEffectivityDate.prop("disabled", false);
+          $inputKkalingaPremium.prop("disabled", false);
+          $inputKkalingaRelationship.prop("disabled", false);
+
         }
       }
     });

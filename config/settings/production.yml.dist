@@ -617,6 +617,12 @@ default_member_accounts:
     account_type: "INSURANCE"
     account_subtype: "Equity Value"
   -
+    account_type: "INSURANCE"
+    account_subtype: "K-BENTE"
+  -
+    account_type: "INSURANCE"
+    account_subtype: "K-KALINGA"
+  -
     account_type: "SAVINGS"
     account_subtype: "Maintaining Balance Savings"
 
@@ -628,6 +634,8 @@ life: "Life Insurance Fund"
 pl: "Policy Loan"
 ev: "Equity Value"
 rf: "Retirement Fund"
+bente: "K-BENTE"
+kalinga: "K-KALINGA"
 
 default_equity_withdrawal_accounts:
   -
@@ -855,6 +863,14 @@ insurance_accounting_codes:
   -
     insurance_type: "Credit Life Insurance Plan"
     deposit_accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+    withdrawal_accounting_code_id: ""
+  -
+    insurance_type: "K-BENTE"
+    deposit_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: ""
+  -
+    insurance_type: "K-KALINGA"
+    deposit_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
     withdrawal_accounting_code_id: ""
 
 
