@@ -1,4 +1,4 @@
-module SavingsInsuranceTransferCollections
+ module SavingsInsuranceTransferCollections
   class AddMember
     def initialize(config:)
       @config                                 = config
@@ -22,6 +22,30 @@ module SavingsInsuranceTransferCollections
         end
       end
 
+      if @savings_insurance_transfer_collection.kbente
+        @kbente_beneficiary_name      = @config[:kbente_beneficiary_name]
+        @date_of_birth                = @config[:date_of_birth]
+        @gender                       = @config[:gender]
+        @status                       = @config[:status]
+        @address                      = @config[:address]
+        @effectivity_date             = @config[:effectivity_date]
+        @premium                      = @config[:premium]
+        @relationship                 = @config[:relationship]
+        @beneficiary_age              = ((@effectivity_date.to_time - @date_of_birth.to_time)/(60*60*24*365)).floor(4)
+      end
+
+      if @savings_insurance_transfer_collection.kkalinga
+        @kkalinga_beneficiary_name             = @config[:kkalinga_beneficiary_name]
+        @kkalinga_date_of_birth                = @config[:kkalinga_date_of_birth]
+        @kkalinga_gender                       = @config[:kkalinga_gender]
+        @kkalinga_status                       = @config[:kkalinga_status]
+        @kkalinga_address                      = @config[:kkalinga_address]
+        @kkalinga_effectivity_date             = @config[:kkalinga_effectivity_date]
+        @kkalinga_premium                      = @config[:kkalinga_premium]
+        @kkalinga_relationship                 = @config[:kkalinga_relationship]
+        # @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
+      end
+      
       @data   = @savings_insurance_transfer_collection.try(:data).try(:with_indifferent_access)
       @branch = @savings_insurance_transfer_collection.branch
 
@@ -58,6 +82,58 @@ module SavingsInsuranceTransferCollections
           savings_account_balance: @savings_account.balance,
           insurance_account_balance: @insurance_account.balance
         }
+      elsif @savings_insurance_transfer_collection.kbente
+        @data[:records] << {
+          member: {
+            id: @member.id,
+            first_name: @member.first_name,
+            middle_name: @member.middle_name,
+            last_name: @member.last_name
+          },
+          kbente_data: {
+            gender: @gender,
+            kbente_beneficiary_name: @kbente_beneficiary_name,
+            date_of_birth: @date_of_birth,
+            status: @status,
+            address: @address,
+            effectivity_date: @effectivity_date,
+            premium: @premium,
+            relationship: @relationship,
+            beneficiary_age: @beneficiary_age
+          },
+          savings_account_id: @savings_account.id,
+          insurance_account_id: @insurance_account.id,
+          amount: @amount,
+          savings_account_balance: @savings_account.balance,
+          insurance_account_balance: @insurance_account.balance
+        }  
+
+      elsif @savings_insurance_transfer_collection.kkalinga
+        @data[:records] << {
+          member: {
+            id: @member.id,
+            first_name: @member.first_name,
+            middle_name: @member.middle_name,
+            last_name: @member.last_name
+          },
+          kkalinga_data: {
+            kkalinga_gender: @kkalinga_gender,
+            kkalinga_beneficiary_name: @kkalinga_beneficiary_name,
+            kkalinga_date_of_birth: @kkalinga_date_of_birth,
+            kkalinga_status: @kkalinga_status,
+            kkalinga_address: @kkalinga_address,
+            kkalinga_effectivity_date: @kkalinga_effectivity_date,
+            kkalinga_premium: @kkalinga_premium,
+            kkalinga_relationship: @kkalinga_relationship,
+            kkalinga_beneficiary_age: @kkalinga_beneficiary_age
+          },
+          savings_account_id: @savings_account.id,
+          insurance_account_id: @insurance_account.id,
+          amount: @amount,
+          savings_account_balance: @savings_account.balance,
+          insurance_account_balance: @insurance_account.balance
+        }  
+       # raise @data[:records][0][:kkalinga_data].inspect  
       else  
         @data[:records] << {
           member: {
