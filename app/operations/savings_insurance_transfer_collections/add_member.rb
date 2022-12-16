@@ -43,7 +43,7 @@
         @kkalinga_effectivity_date             = @config[:kkalinga_effectivity_date]
         @kkalinga_premium                      = @config[:kkalinga_premium]
         @kkalinga_relationship                 = @config[:kkalinga_relationship]
-        # @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
+        @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
       end
       
       @data   = @savings_insurance_transfer_collection.try(:data).try(:with_indifferent_access)
