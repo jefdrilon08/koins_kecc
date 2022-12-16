@@ -17,6 +17,18 @@ module SavingsInsuranceTransferCollections
         @effective_date                          = @config[:effective_date]
       end
 
+      if @savings_insurance_transfer_collection.kbente
+        @kbente_beneficiary_name      = @config[:kbente_beneficiary_name]
+        @date_of_birth                = @config[:date_of_birth]
+        @gender                       = @config[:gender]
+        @status                       = @config[:status]
+        @address                      = @config[:address]
+        @effectivity_date             = @config[:effectivity_date]
+        @premium                      = @config[:premium]
+        @relationship                 = @config[:relationship]
+        @beneficiary_age              = ((@effectivity_date.to_time - @date_of_birth.to_time)/(60*60*24*365)).floor(4)
+      end
+
       @data = @savings_insurance_transfer_collection.try(:data).try(:with_indifferent_access)
 
       if @data.present?
@@ -54,7 +66,7 @@ module SavingsInsuranceTransferCollections
         }
       end
 
-      if !@savings_insurance_transfer_collection.clip
+      if !@savings_insurance_transfer_collection.clip && !@savings_insurance_transfer_collection.kbente
         if @member.present? and @savings_insurance_transfer_collection.member_ids.include?(@member.id)
           @errors[:messages] << {
             key: "message",
@@ -132,6 +144,71 @@ module SavingsInsuranceTransferCollections
             message: "Effectivity Date is required"
           }
         end
+      end
+      if @savings_insurance_transfer_collection.kbente
+        if !@kbente_beneficiary_name.present?
+          @errors[:messages] << {
+            key: "kbente_beneficiary_name",
+            message: "Beneficiary Name is required"
+          }
+        end
+
+        if !@date_of_birth.present?
+          @errors[:messages] << {
+            key: "date_of_birth",
+            message: "Birthdate is required"
+          }
+        end
+        
+        if !@gender.present?
+          @errors[:messages] << {
+            key: "gender",
+            message: "Gender is required"
+          }
+        end
+
+        if !@status.present?
+          @errors[:messages] << {
+            key: "status",
+            message: "Status is required"
+          }
+        end
+
+        if !@address.present?
+          @errors[:messages] << {
+            key: "address",
+            message: "Address is required"
+          }
+        end
+
+        if !@effectivity_date.present?
+          @errors[:messages] << {
+            key: "effectivity_date",
+            message: "Effectivity Date is required"
+          }
+        end
+        
+        # if !@premium.present?
+        #   @errors[:messages] << {
+        #     key: "premium",
+        #     message: "premium is required"
+        #   }
+        # end
+
+        if !@relationship.present?
+          @errors[:messages] << {
+            key: "relationship",
+            message: "Relationship is required"
+          }
+        end
+
+        if @beneficiary_age < 21
+          @errors[:messages] << {
+            key: "beneficiary_age",
+            message: "You should be 21 years old and above"
+          }
+        end
+
       end
 
       #not_yet_implemented!

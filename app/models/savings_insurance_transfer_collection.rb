@@ -85,4 +85,13 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
   def clip
     self.data.with_indifferent_access[:insurance_subtype] == "Credit Life Insurance Plan"
   end
+
+  def kbente
+    self.data.with_indifferent_access[:insurance_subtype] == "K-BENTE"
+  end
+
+  def kkalinga
+    self.data.with_indifferent_access[:insurance_subtype] == "K-KALINGA"
+  end
+
 end

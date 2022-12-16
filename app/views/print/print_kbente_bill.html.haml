@@ -1,0 +1,153 @@
+:css
+  .print-text {
+    font-size: 1em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: 1.1em;
+    font-family: calibri;
+  }
+
+  table.member th.header{
+    text-align: left;
+    font-weight: bold;
+  }
+
+%span.print-text
+  %center
+    %br
+    %p
+      %b
+        #{Settings.company}
+      %br  
+      %b
+        #{Settings.company_address}
+      %br  
+      %b
+        K-BENTE BILLING
+      %br  
+      %b
+        Branch : #{@print_kbente_bill.branch} 
+      %br 
+      %b
+        
+%left
+  %br
+
+  %span.print-text-sub
+    %p
+      %b
+        Prepared : #{@print_kbente_bill[:data]["accounting_entry"]["prepared_by"]} 
+  %p
+  %table.member{"border:" => "", :none => ""}
+    %tr
+      %th.header{width: 30}
+      %th.header{width: 320} Member
+      %th.header.curr{width: 320} Name of Insured
+      %th.header.curr{width: 100} Age
+      %th.header.curr{width: 100} Gender
+      %th.header.curr{width: 110} BirthDate
+      %th.header.curr{width: 110} Effectivity Date
+      %th.header.curr{width: 110} Relationship
+      %th.header.curr{width: 90} Amount
+
+      
+    - @print_kbente_bill[:data]["records"].each do |o|
+      %tr
+        %td
+          %td
+            #{o["member"]["last_name"]}, #{o["member"]["first_name"]} #{o["member"]["middle_name"]}
+          %td
+            #{o["kbente_data"]["kbente_beneficiary_name"]}
+          %td
+            #{o["kbente_data"]["beneficiary_age"].to_i}
+          %td
+            #{o["kbente_data"]["gender"]}
+          %td
+            #{o["kbente_data"]["date_of_birth"]}
+          %td
+            #{o["kbente_data"]["effectivity_date"]}
+          %td
+            #{o["kbente_data"]["relationship"]}
+          %td
+            #{o["kbente_data"]["premium"]}
+    %tr
+      %th.header
+      %th.header Total
+      %th.header.curr 
+      %th.header.curr 
+      %th.header.curr
+      %th.header.curr 
+      %th.header.curr 
+      %th.header.curr 
+      %th.header.curr #{number_to_currency(@print_kbente_bill.total_amount, unit: "")}
+
+%hr
+%h5
+  #{@print_kbente_bill[:data]["accounting_entry"]["book"]} | #{@print_kbente_bill[:data]["accounting_entry"]["reference_number"]}
+
+%br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "50%" }
+        Accounting Code
+      %th.text-right{ width: "25%" }
+        Debit
+      %th.text-right{ width: "25%" }
+        Credit
+  %tbody
+    - @print_kbente_bill[:data]["accounting_entry"]["debit_journal_entries"].each do |a|
+      %tr
+        %td
+          #{a["code"]} - #{a["name"]}
+        %td.text-right
+          #{number_to_currency(a["amount"], unit: "")}
+        %td.text-right
+    - @print_kbente_bill[:data]["accounting_entry"]["credit_journal_entries"].each do |a|
+      %tr
+        %td
+          #{a["code"]} - #{a["name"]}
+        %td.text-right
+        %td.text-right
+          #{number_to_currency(a["amount"], unit: "")}
+
+%p
+  %span
+    %strong
+      Particular: 
+  #{@print_kbente_bill[:data]["accounting_entry"]["particular"]}
+%br
+%br
+%br
+%br
+.row
+  .col
+    %center
+      %strong
+        #{@print_kbente_bill[:data]["accounting_entry"]["prepared_by"]}
+      %br
+      Prepared By:
+  .col
+    %center
+      %strong 
+        -if Settings.activate_microinsurance == true
+          %th{width: 255} #{"EVELYN LAGMAY"}
+        -else
+          %th{width: 255}
+      %br
+      Reviewed By:
+  .col
+    %center
+      %strong
+        -if Settings.activate_microinsurance == true
+          %th{width: 350} #{"SILVIDA ANTIQUERA"}
+        -else
+          %th{width: 350} #{@print_kbente_bill[:data]["accounting_entry"]["approved_by"]}
+      %br
+      Approved By:
+
+:javascript
+  window.print();

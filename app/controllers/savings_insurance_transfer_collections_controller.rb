@@ -73,10 +73,46 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
         @clip_number = @clip_data[:clip_number]
         @beneficiary = @clip_data[:beneficiary]
       end
-
       @members  = Member.active.where(center_id: @savings_insurance_transfer_collection.center.id)
     end
 
+    if @savings_insurance_transfer_collection.kbente
+      @kbente_data = @savings_insurance_transfer_collection.data.with_indifferent_access[:kbente_data]
+      
+      if @kbente_data.present?
+        @kbente_beneficiary_name = @kbente_data[:kbente_beneficiary_name]
+        @date_of_birth = @kbente_data[:date_of_birth]
+        @gender = @kbente_data[:gender]
+        @status = @kbente_data[:status]
+        @address = @kbente_data[:address]
+        @effectivity_date = @kbente_data[:effectivity_date]
+        @premium = @kbente_data[:premium]
+        @relationship = @kbente_data[:relationship]
+        @beneficiary_age = @kbente_data[:beneficiary_age]
+        #@beneficiary_age[:beneficiary_age] = @beneficiary_age[:date_of_birth].present? ? Date.today.year - @data[:date_of_birth].to_date.year : ""
+      end
+
+      @members  = Member.active.where(center_id: @savings_insurance_transfer_collection.center.id)
+    end
+    
+    if @savings_insurance_transfer_collection.kkalinga
+      @kkalinga_data = @savings_insurance_transfer_collection.data.with_indifferent_access[:kkalinga_data]
+      
+      if @kkalinga_data.present?
+        @kkalinga_beneficiary_name = @kkalinga_data[:kkalinga_beneficiary_name]
+        @kkalinga_date_of_birth = @kkalinga_data[:kkalinga_date_of_birth]
+        @kkalinga_gender = @kkalinga_data[:kkalinga_gender]
+        @kkalinga_status = @kkalinga_data[:kkalinga_status]
+        @kkalinga_address = @kkalinga_data[:kkalinga_address]
+        @kkalinga_effectivity_date = @kkalinga_data[:effectivity_date]
+        @kkalinga_premium = @kkalinga_data[:kkalinga_premium]
+        @kkalinga_relationship = @kkalinga_data[:kkalinga_relationship]
+        @kkalinga_beneficiary_age = @kkalinga_data[:kkalinga_beneficiary_age]
+        @beneficiary_age[:beneficiary_age] = @beneficiary_age[:date_of_birth].present? ? Date.today.year - @data[:date_of_birth].to_date.year : ""
+      end
+
+      @members  = Member.active.where(center_id: @savings_insurance_transfer_collection.center.id)
+    end
     
 
 
@@ -115,7 +151,20 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
         data: { method: :delete, confirm: "Are you sure?" }
       }
     end
-
+    if @savings_insurance_transfer_collection.kbente
+      if @savings_insurance_transfer_collection.approved?
+        if ["MIS", "BK", "SBK"].include? current_user.roles.last
+           @subheader_side_actions << {
+            id: "btn-print",
+            class: "fa fa-print",
+            text: "Print",
+            data: {
+              id: "#{@savings_insurance_transfer_collection}"
+                  }
+          }
+        end
+      end
+    end
     @payload = {
       id: @savings_insurance_transfer_collection.id
     }
