@@ -576,6 +576,86 @@ namespace :adjust do
 
     puts "Done for #{branch.id}"
   end
+  
+  task :set_max_active_date_branch => :environment do
+    branch  = Branch.find(ENV['BRANCH_ID'])
+    current_date_details = ENV['CURRENT_DATE']
+
+    puts "Starting set_max_active_date..."
+    current_date  = current_date_details
+    #current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
+
+    # Do this in batches
+    Loan.where(status: ['active']).find_in_batches(batch_size: 2500) do |group|
+     
+     ids = group.pluck(:id).map{ |o| "'#{o}'" }.join(",")
+
+      data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+                SELECT DISTINCT ON (loans.id)
+                  loans.id AS loan_id,
+                  loans.first_date_of_payment,
+                  loans.status AS status,
+                  DATE(account_transactions.transacted_at) as last_transaction_date,
+                  DATE(amortization_schedule_entries.due_date) as last_amortization_date
+                FROM
+                  loans
+                  LEFT OUTER JOIN
+                    account_transactions ON account_transactions.subsidiary_id = loans.id
+                  INNER JOIN
+                    amortization_schedule_entries ON amortization_schedule_entries.loan_id = loans.id
+                  WHERE
+                    loans.status IN ('active') AND loans.id IN (#{ids})
+                  ORDER BY
+                    loans.id,
+                    amortization_schedule_entries.due_date DESC,
+                    account_transactions.transacted_at DESC
+              EOS
+      
+
+    
+
+      sets  = data.map{ |d|
+                loan_id                 = d.fetch("loan_id")
+                last_transaction_date   = d.try(:fetch, "last_transaction_date").try(:to_date)
+                last_amortization_date  = d.try(:fetch, "last_amortization_date").try(:to_date)
+                status                  = d.fetch("status")
+
+                max_active_date = current_date
+
+                if last_amortization_date.present?
+                  max_active_date = last_amortization_date
+                end
+
+                if last_transaction_date.present?
+                  if current_date > last_amortization_date and ['active', 'processing'].include?(status)
+                    max_active_date = current_date
+                  elsif last_transaction_date > last_amortization_date
+                    max_active_date = last_transaction_date
+                  elsif status == 'paid' and last_transaction_date < last_amortization_date
+                    max_active_date = last_transaction_date
+                  end
+                else
+                  max_active_date = current_date
+                end
+
+                "('#{loan_id}', '#{max_active_date.to_date.to_s}')"
+              }.join(",")
+
+      query = "
+        UPDATE loans AS l SET
+          max_active_date = DATE(c.max_active_date)
+        FROM (values
+          #{sets}
+        ) AS c(loan_id, max_active_date)
+        WHERE c.loan_id = l.id::text
+      "
+
+      ActiveRecord::Base.connection.execute(query)
+    end
+
+
+    puts "Done."
+  end
 
   task :set_max_active_date => :environment do
     #branch  = Branch.find(ENV['BRANCH_ID'])
