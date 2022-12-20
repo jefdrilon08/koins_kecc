@@ -86,6 +86,56 @@ module Api
             amount: amount,
             user: current_user
           }
+        elsif savings_insurance_transfer_collection.kbente
+                  kbente_beneficiary_name = params[:kbente_beneficiary_name]
+                  date_of_birth = params[:date_of_birth]
+                  gender = params[:gender]
+                  status = params[:status]
+                  address = params[:address]
+                  effectivity_date = params[:effectivity_date]
+                  premium = params[:premium]
+                  relationship = params[:relationship]
+
+                  config  = {
+                    savings_insurance_transfer_collection: savings_insurance_transfer_collection,
+                    kbente_beneficiary_name: kbente_beneficiary_name,
+                    date_of_birth: date_of_birth,
+                    gender: gender,
+                    status: status,
+                    address: address,
+                    effectivity_date: effectivity_date,
+                    premium: premium,
+                    relationship: relationship,
+                    #beneficiary_age: beneficiary_age,
+                    member: member,
+                    amount: amount,
+                    user: current_user
+                  }
+        elsif savings_insurance_transfer_collection.kkalinga
+                  kkalinga_beneficiary_name = params[:kkalinga_beneficiary_name]
+                  kkalinga_date_of_birth = params[:kkalinga_date_of_birth]
+                  kkalinga_gender = params[:kkalinga_gender]
+                  kkalinga_status = params[:kkalinga_status]
+                  kkalinga_address = params[:kkalinga_address]
+                  kkalinga_effectivity_date = params[:kkalinga_effectivity_date]
+                  kkalinga_premium = params[:kkalinga_premium]
+                  kkalinga_relationship = params[:kkalinga_relationship]
+
+                  config  = {
+                    savings_insurance_transfer_collection: savings_insurance_transfer_collection,
+                    kkalinga_beneficiary_name: kkalinga_beneficiary_name,
+                    kkalinga_date_of_birth: kkalinga_date_of_birth,
+                    kkalinga_gender: kkalinga_gender,
+                    kkalinga_status: kkalinga_status,
+                    kkalinga_address: kkalinga_address,
+                    kkalinga_effectivity_date: kkalinga_effectivity_date,
+                    kkalinga_premium: kkalinga_premium,
+                    kkalinga_relationship: kkalinga_relationship,
+                    #beneficiary_age: beneficiary_age,
+                    member: member,
+                    amount: amount,
+                    user: current_user
+                  }
         else
           config  = {
             savings_insurance_transfer_collection: savings_insurance_transfer_collection,

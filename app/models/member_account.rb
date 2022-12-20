@@ -37,6 +37,14 @@ class MemberAccount < ApplicationRecord
     self.account_subtype == "Hospital Income Insurance Plan"
   end
 
+  def kbente
+    self.account_subtype == "K-BENTE"
+  end
+
+  def kkalinga
+    self.account_subtype == "K-KALINGA"
+  end
+  
   def clip_active_balance
     AccountTransaction.where("subsidiary_id = ? AND data->'data'->>'maturity_date' >= ?", self.id, Date.today).sum(:amount)
   end

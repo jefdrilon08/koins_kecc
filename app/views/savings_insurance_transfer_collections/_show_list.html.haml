@@ -8,7 +8,29 @@
           Loan Product
         %th
           Principal
-      %th.text-end
+      - if @savings_insurance_transfer_collection.kbente
+        %th
+          Name of Insured
+        %th
+          Beneficiary Age
+        %th
+          Date of Birth
+        %th
+          Effectivity Date
+        %th
+          Relationship
+      - if @savings_insurance_transfer_collection.kkalinga
+        %th
+          Name of Insured
+        %th
+          Beneficiary Age
+        %th
+          Date of Birth
+        %th
+          Effectivity Date
+        %th
+          Relationship
+      %th.text-right
         Amount
       - if @savings_insurance_transfer_collection.pending?
         %th.text-center
@@ -23,8 +45,31 @@
           %td
             #{o[:clip_data][:loan_product_name]}
           %td
-            #{number_to_currency(o[:clip_data][:principal], unit: '')}  
-        %td.text-end
+            #{number_to_currency(o[:clip_data][:principal], unit: '')}
+        - if @savings_insurance_transfer_collection.kbente
+          %td
+            #{o[:kbente_data][:kbente_beneficiary_name]}
+          %td
+            #{o[:kbente_data][:beneficiary_age].to_i}
+          %td
+            #{o[:kbente_data][:date_of_birth]}
+          %td
+            #{o[:kbente_data][:effectivity_date]}
+          %td
+            #{o[:kbente_data][:relationship]}
+        - if @savings_insurance_transfer_collection.kkalinga
+          %td
+            #{o[:kkalinga_data][:kkalinga_beneficiary_name]}
+          %td
+            #{o[:kkalinga_data][:kkalinga_beneficiary_age].to_i}
+          %td
+            #{o[:kkalinga_data][:kkalinga_date_of_birth]}
+          %td
+            #{o[:kkalinga_data][:kkalinga_effectivity_date]}
+          %td
+            #{o[:kkalinga_data][:kkalinga_relationship]}
+          
+        %td.text-right
           #{number_to_currency(o[:amount], unit: '')}
         - if @savings_insurance_transfer_collection.pending?
           %td.text-center
@@ -36,7 +81,19 @@
       - if @savings_insurance_transfer_collection.clip
         %th
         %th
-      %th.text-end
+      - if @savings_insurance_transfer_collection.kbente
+        %th
+        %th
+        %th
+        %th
+        %th
+      - if @savings_insurance_transfer_collection.kkalinga
+        %th
+        %th
+        %th
+        %th
+        %th
+      %th.text-right
         #{number_to_currency(@savings_insurance_transfer_collection.total_amount, unit: '')}
       - if @savings_insurance_transfer_collection.pending?
         %th

@@ -322,7 +322,21 @@ class PrintController < ApplicationController
      @repayment_rate = data
 
      render "print/repayment_rate", layout:"print"
-      
+    
+    elsif type == "print_kbente_bill"
+      print_kbente_bill = SavingsInsuranceTransferCollection.find(params[:id])
+
+      config  = {
+        print_kbente_bill: print_kbente_bill
+      }
+
+      data  = ::Print::BuildPrintKbenteBill.new(
+                config: config
+              ).execute!
+
+      @print_kbente_bill = data
+
+      render "print/print_kbente_bill", layout: "print"
     else
       raise "Invalid type: #{type}"
     end

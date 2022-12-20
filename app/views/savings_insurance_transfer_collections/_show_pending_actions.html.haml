@@ -35,6 +35,85 @@
       .form-group
         %label CLIP Beneficiary
         = text_field_tag :beneficiary, @beneficiary, id: 'input-beneficiary', class: 'form-control'
+
+- if @savings_insurance_transfer_collection.kbente
+  .h4
+    FOR K-BENTE DATA
+  .row
+    .col-md-3
+      .form-group
+        %label Name of Insured        
+        = text_field_tag :kbente_beneficiary_name, @kbente_beneficiary_name, id: 'input-kbente-beneficiary-name', class: 'form-control'
+    .col-md-3
+      .form-group
+        %label BirthDate      
+        = date_field_tag :date_of_birth, @date_of_birth, id: 'input-date-of-birth', class: 'form-control'
+    .col-md-3  
+      .form-group
+        %label Gender        
+        = select_tag :gender, options_for_select(["Male", "Female"], @gender), id: 'input-gender', class: 'form-control'
+        -#= text_field_tag :gender, @gender, id: 'input-gender', class: 'form-control'
+    .col-md-3  
+      .form-group
+        %label Status    
+        = select_tag :status, options_for_select(["Single", "Married", "Divorced", "Separated", "Widowed"], @status), id: 'input-status', class: 'form-control'
+  .row
+    .col-md-3  
+      .form-group
+        %label Address    
+        = text_field_tag :address, @address, id: 'input-address', class: 'form-control'
+    .col-md-3  
+      .form-group
+        %label Effectivity Date
+        = date_field_tag :effectivity_date, @effectivity_date, id: 'input-effectivity-date', class: 'form-control'
+    .col-md-3
+      .form-group
+        %label Premium
+        = number_field_tag :premium, 20.00, id: 'input-premium', class: 'form-control'
+    .col-md-3
+      .form-group
+        %label Relationship
+        = select_tag :relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Husband","Wife", "Brother", "Sister", "Grandfather", "Grandmother","Grandson", "Granddaughter", "Uncle", "Aunt", "Nephew", "Niece"], @relationship), id: 'input-relationship', class: 'form-control'
+
+- if @savings_insurance_transfer_collection.kkalinga
+  .h4
+    FOR K-KALINGA DATA
+  .row
+    .col-md-3
+      .form-group
+        %label Name of Insured        
+        = text_field_tag :kkalinga_beneficiary_name, @kkalinga_beneficiary_name, id: 'input-kkalinga-beneficiary-name', class: 'form-control'
+    .col-md-3
+      .form-groups
+        %label BirthDate      
+        = date_field_tag :kkalinga_date_of_birth, @kkalinga_date_of_birth, id: 'input-kkalinga-date-of-birth', class: 'form-control'
+    .col-md-3  
+      .form-group
+        %label Gender        
+        = select_tag :kkalinga_gender, options_for_select(["Male", "Female"], @kkalinga_gender), id: 'input-kkalinga-gender', class: 'form-control'
+        -#= text_field_tag :gender, @gender, id: 'input-gender', class: 'form-control'
+    .col-md-3  
+      .form-group
+        %label Status    
+        = select_tag :kkalinga_status, options_for_select(["Single", "Married", "Divorced", "Separated", "Widowed"], @kkalinga_status), id: 'input-kkalinga-status', class: 'form-control'
+  .row
+    .col-md-3  
+      .form-group
+        %label Address    
+        = text_field_tag :kkalinga_address, @kkalinga_address, id: 'input-kkalinga-address', class: 'form-control'
+    .col-md-3  
+      .form-group
+        %label Effectivity Date
+        = date_field_tag :kkalinga_effectivity_date, @kkalinga_effectivity_date, id: 'input-kkalinga-effectivity-date', class: 'form-control'
+    .col-md-3
+      .form-group
+        %label Premium
+        = number_field_tag :kkalinga_premium, 20.00, id: 'input-kkalinga-premium', class: 'form-control'
+    .col-md-3
+      .form-group
+        %label Relationship
+        = select_tag :kkalinga_relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Husband","Wife", "Brother", "Sister", "Grandfather", "Grandmother","Grandson", "Granddaughter", "Uncle", "Aunt", "Nephew", "Niece"], @kkalinga_relationship), id: 'input-kkalinga-relationship', class: 'form-control'
+
 .row
   .col-md-6
     .form-group
@@ -51,7 +130,7 @@
       %label
         Actions
       %button#btn-add.btn.btn-info.btn-block
-        .bi.bi-plus
+        .fa.fa-plus
         Add
 .row
   .col-md-10
@@ -64,5 +143,5 @@
       %label
         Actions
       %button#btn-update-particular.btn.btn-info.btn-block
-        .bi.bi-plus
+        .fa.fa-plus
         Save Particular

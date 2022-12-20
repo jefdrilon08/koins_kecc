@@ -44,6 +44,10 @@ module MemberAccounts
 				@data[:default_periodic_payment] = 5 
 			elsif @member_account.account_subtype == "Life Insurance Fund"
 				@data[:default_periodic_payment] = 15
+			elsif @member_account.account_subtype == "K-BENTE"
+				@data[:default_periodic_payment] = 20 
+			elsif @member_account.account_subtype == "K-KALINGA"
+				@data[:default_periodic_payment] = 50
 			end
 
 			@data[:coverage_date] 	= (@recognition_date + ((@current_balance / @data[:default_periodic_payment]).to_i).weeks).strftime("%B %d, %Y")
