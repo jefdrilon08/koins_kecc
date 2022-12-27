@@ -844,6 +844,65 @@ export default function MembersProfileLoans(props) {
 
       <hr/>
       <h6>
+        Writeoff Loans
+      </h6>
+      {(() => {
+        if(props.writeoffLoans.length > 0) {
+          return (
+            <table className="table table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>
+                    PN Number
+                  </th>
+                  <th>
+                    Loan Product
+                  </th>
+                  <th className="text-center">
+                    Cycle
+                  </th>
+                  <th className="text-end">
+                    Total Paid
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {props.writeoffLoans.map((o) => {
+                  return (
+                    <tr key={"writeoff-loan-" + o.id}>
+                      <td>
+                        <a href={`/loans/${o.id}`}>
+                          <strong>
+                            {o.pn_number}
+                          </strong>
+                        </a>
+                      </td>
+                      <td className="text-muted">
+                        {o.loan_product}
+                      </td>
+                      <td className="text-center">
+                        {o.cycle}
+                      </td>
+                      <td className="text-end">
+                        <strong>
+                          {o.total_paid}
+                        </strong>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )
+        } else {
+          return (
+            <p>
+              No loans found.
+            </p>
+          )
+        }
+      })()}
+      <h6>
         Paid Loans
       </h6>
       {(() => {

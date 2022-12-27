@@ -516,7 +516,7 @@ class MembersController < ApplicationController
         loan_product:   o.loan_product.name,
         cycle:          o.cycle,
         total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
-        total_paid:     view_context.number_to_currency(o.total_writeoff, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
         total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
       }
     }
