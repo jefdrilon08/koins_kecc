@@ -18,7 +18,8 @@ module BillingForWriteoffCollection
     end
 
     def execute!
-      insert_payment!
+      raise "jef".inspect
+      #insert_payment!
       approved_entry!
       @accounting_entry_data[:reference_number] = @accounting_entry.reference_number
       @accounting_entry_data[:status]           = @accounting_entry.status
