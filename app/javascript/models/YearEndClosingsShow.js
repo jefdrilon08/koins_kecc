@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnApprove;
 var $btnConfirmApprove;
@@ -25,7 +26,9 @@ var init  = function(options) {
 var _cacheDom = function() {
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
+  $modalApprove       = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
 
   $message  = $(".message");
 
