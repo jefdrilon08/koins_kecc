@@ -111,7 +111,7 @@ module BillingForWriteoff
     end
 
     def default_particular!
-      "TO WRITE OFF DELIQUENT ACCOUNTS FOR BRANCH - #{@accounting_entry[:branch]} YEAR 2019"
+      "TO WRITE OFF DELIQUENT ACCOUNTS FOR SATO - #{@accounting_entry[:branch]} YEAR 2019"
     end
   end
 end
