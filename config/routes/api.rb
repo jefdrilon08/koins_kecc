@@ -270,6 +270,8 @@ namespace :api do
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
     post "/members/register_member", to: "members#register_member"
     post "/members/save_make_payment", to: "members#save_make_payment"
+    get "/risk_profiles/fetch_daily_metric", to: "risk_profiles#fetch_daily_metric"
+
 
     #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
