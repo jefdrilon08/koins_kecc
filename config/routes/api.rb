@@ -182,6 +182,10 @@ namespace :api do
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
+    #Onlinedisbursement
+    post "bank_transfer/create",  to: "bank_transfer#create"
+    post "bank_transfer/create_channel", to:"bank_transfer#create_channel"
+
     # Adjustments
     namespace :adjustments do
       post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"

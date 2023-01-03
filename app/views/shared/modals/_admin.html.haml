@@ -38,27 +38,28 @@
           .col
             = link_to administration_centers_path, class: "btn-nav-square-md" do
               Centers
-        
-        - if is_mis_user?
-          .mt-4
-          .row
-            .col
-              = link_to administration_membership_arrangements_path, class: "btn-nav-square-md" do
-                Membership Arrangements
-            .col
-              = link_to administration_membership_types_path, class: "btn-nav-square-md" do
-                Membership Types
-          .mt-4
-          .row
-            .col
-              = link_to administration_surveys_path, class: "btn-nav-square-md" do
-                Surveys
-            .col
-              = link_to administration_project_type_categories_path, class: "btn-nav-square-md" do
-                Project Type Categories
-            .col
-              = link_to administration_announcements_path, class: "btn-nav-square-md" do
-                Announcements
-            .col
-              = link_to administration_referrers_path, class: "btn-nav-square-md" do
-                Referrers
+        .mt-4
+        .row
+          .col
+            = link_to administration_membership_arrangements_path, class: "btn-nav-square-md" do
+              Membership Arrangements
+          .col
+            = link_to administration_membership_types_path, class: "btn-nav-square-md" do
+              Membership Types
+        .mt-4
+        .row
+          .col
+            = link_to administration_surveys_path, class: "btn-nav-square-md" do
+              Surveys
+          .col
+            = link_to administration_project_type_categories_path, class: "btn-nav-square-md" do
+              Project Type Categories
+          .col
+            = link_to administration_announcements_path, class: "btn-nav-square-md" do
+              Announcements
+          .col
+            = link_to administration_referrers_path, class: "btn-nav-square-md" do
+              Referrers
+          .col
+            = link_to "/bank_transfer", class:"btn-nav-square-md" do
+              Bank Transfer

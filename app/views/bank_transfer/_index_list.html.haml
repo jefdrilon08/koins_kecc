@@ -1,0 +1,52 @@
+%th
+	Bank Info
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+	%thead
+		%tr
+			%th
+			%th
+				Bank & Ewallet
+			%th
+				Amount
+			%th
+				Transfer Option
+	%tbody
+		- @bank.each do |bb|
+			%tr
+				%td.text-center
+					.btn-group
+						= link_to bank_transfer_path, class: 'btn btn-sm btn-primary' do
+							.bi.bi-search
+				%td
+					#{bb.name.upcase}
+				%td
+					#{bb.amount}
+				%td
+					#{TransferOption.find(bb.transfer_option_id).name}
+
+%br
+%th
+	.strong
+		Channel Info
+%table.table.table-sm.table-hover.table-bordered
+	
+	%thead
+
+		%tr
+			%th
+			%th
+				Transfer Option
+			%th
+				Code
+	%tbody
+	- @transferoption.each do |aa|
+		%tr
+			%td.text-center
+				.btn-group
+					= link_to bank_transfer_path, class: 'btn btn-sm btn-primary' do
+						%strong
+							.bi.bi-search
+			%td
+				#{aa.name.upcase}
+			%td
+				#{aa.code}
