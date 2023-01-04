@@ -22,10 +22,10 @@ var _cacheDom = function() {
   $btnPrintPdf      =  $("#btn-print-pdf");
 
   
-  $modalPrint      = new bootstrap.Modal(
-    document.getElementById("modal-print")
+  //$modalPrint      = new bootstrap.Modal(
+  //  document.getElementById("modal-print")
 
-  );
+  //);
 
 
   $message          = $(".message");
@@ -39,13 +39,13 @@ var _bindEvents = function() {
  $btnPrintPdf.on("click", function() {
     var print_icpr = $btnPrintPdf.data('id');
 
-    $modalPrint.show();
-    $printMessage.html(
-      Mustache.render(
-        loader,
-        {}
-      )
-    );
+    //$modalPrint.show();
+    //$printMessage.html(
+    //  Mustache.render(
+    //    loader,
+    //    {}
+    //  )
+    //);
 
     $modalPrint.hide();
     window.open("/print?id=" + print_icpr + "&type=print_migs");
