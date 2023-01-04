@@ -1,6 +1,10 @@
 = title @record.id
-.row
-  .col
-    .card
-      .card-body
-        #react-root
+.h5
+  Soa Loans #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["start_date"]).strftime("%b %d, %Y")} to #{DateTime.parse(@record.data["end_date"]).strftime("%b %d, %Y")}
+  %br
+    %br
+      .row
+        .col
+          .card
+            .card-body
+              #react-root

@@ -1,6 +1,10 @@
 = title @record.id
-.row
-  .col
-    .card
-      .card-body
-        #react-root
+.h5
+  Manual Aging #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["as_of"]).strftime("%b %d, %Y")}
+  %br
+    %br
+      .row
+        .col
+          .card
+            .card-body
+              #react-root
