@@ -120,6 +120,7 @@ module Api
                   kkalinga_effectivity_date = params[:kkalinga_effectivity_date]
                   kkalinga_premium = params[:kkalinga_premium]
                   kkalinga_relationship = params[:kkalinga_relationship]
+                  poc_number = params[:poc_number]
 
                   config  = {
                     savings_insurance_transfer_collection: savings_insurance_transfer_collection,
@@ -131,7 +132,7 @@ module Api
                     kkalinga_effectivity_date: kkalinga_effectivity_date,
                     kkalinga_premium: kkalinga_premium,
                     kkalinga_relationship: kkalinga_relationship,
-                    #beneficiary_age: beneficiary_age,
+                    poc_number: poc_number,
                     member: member,
                     amount: amount,
                     user: current_user
