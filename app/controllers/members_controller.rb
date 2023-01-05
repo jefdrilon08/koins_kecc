@@ -104,6 +104,14 @@ class MembersController < ApplicationController
 
   def blip_form_pdf
     @member = Member.find(params[:id])
+
+    @user_roles = UserBranch.joins(:user).where("branch_id = ? AND active = true", @member.branch_id).pluck(:user_id).uniq
+    @user_roles.each do |y|
+      user = User.find(y)
+        if user.current_roles.shift == "FM"
+          @som = user[:first_name].upcase + " "+ user[:last_name].upcase
+        end
+      end
   end
   
   def member_registry_excel
