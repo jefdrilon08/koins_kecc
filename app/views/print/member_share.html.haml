@@ -1,20 +1,21 @@
 :css
   .member-details {
     margin: 35px 0px 0px 200px;
-    margin-top: 60px;
+    margin-top: 65px;
     margin-right: 20px;
     font-size: 12px;
   }
 
   .member-name {
-    margin-top: 140px;
+    margin-top: 250px;
     margin-left: 40px;
-    max-width: 690px;
-    font-size: 35px;
+    max-width: 900px;
+    font-size: 40px;
   }
 
   .member-no-of-share {
-    margin: 30px 0px 0px 270px;
+    font-size: 15px;
+    margin: 20px 0px 0px 240px;
   }
 
   .member-recognition-day {
@@ -32,8 +33,8 @@
   #member-certificate {
   }
   .pangulo-sign{
-    margin-left:210px;
-    margin-right:420px;
+    margin-left:200px;
+    margin-right:450px;
   }
   .kalihim-sign{
     margin-left:-190px;
@@ -42,11 +43,11 @@
 
   
   .sign{
-    margin-top: 10px;
+    margin-top: 3px;
   }
 
   .name{
-    margin-top: -50px;
+    margin-top: -38px;
   }
 
   .kalihim-name{
@@ -57,7 +58,7 @@
 
   .pangulo-name{
     font-size: 12px;
-    margin-left:90px;
+    margin-left:100px;
     margin-right:90px;
   }
 
@@ -91,9 +92,9 @@
       #{@member_share_data[:date_of_issue_year]}
   .sign
     %label.pangulo-sign
-      = image_tag "signatures/kalihim_0322.bmp", class: "img-responsive" , size: "90"
+      = image_tag "signatures/kalihim_0322.bmp", class: "img-responsive" , size: "80"
     %label.kalihim-sign
-      = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "90"
+      = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "80"
   .name
     %label.kalihim-name
       #{Settings.kalihim}
