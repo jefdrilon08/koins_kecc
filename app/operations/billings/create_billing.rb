@@ -165,6 +165,28 @@ module Billings
           amount: total
         }
       end
+      
+      # DEPOSITS
+      ::Billings::NextPayment::EQUITY_SUBTYPES.each do |o|
+        @data[:headers] << "Deposit #{o}"
+
+        total = 0.00
+        @data[:records].each do |r|
+          r[:records].each do |rr|
+            if rr[:record_type] == "EQUITY"
+              if rr[:account_subtype] == o
+                total += rr[:amount].to_f.round(2)
+              end
+            end
+          end
+        end
+
+        @data[:totals] << {
+          record_type: "EQUITY",
+          key: o,
+          amount: total
+        }
+      end
 
       # INSURANCE
       ::Billings::NextPayment::INSURANCE_SUBTYPES.each do |o|

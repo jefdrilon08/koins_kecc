@@ -45,6 +45,7 @@ module Billings
                                           }.first
 
       @savings_accounting_codes   = Settings.savings_accounting_codes
+      @equity_accounting_codes   = Settings.equity_accounting_codes
       @insurance_accounting_codes = Settings.insurance_accounting_codes
 
       # Trap settings not found
@@ -215,6 +216,19 @@ module Billings
           amount: 0.00
         }
       end
+      # savings (deposit)
+      @equity_accounting_codes.each do |o|
+        accounting_code = ReadOnlyAccountingCode.find(o.deposit_accounting_code_id)
+
+        journal_entries << {
+          accounting_code_id: accounting_code.id,
+          code: accounting_code.code,
+          name: accounting_code.name,
+          record_type: "EQUITY",
+          equity_type: o.equity_type,
+          amount: 0.00
+        }
+      end
 
       # insurance
       @insurance_accounting_codes.each do |o|
@@ -238,6 +252,15 @@ module Billings
                 journal_entries[i][:amount] += rr[:amount].to_f
               end
             end
+
+          elsif rr[:record_type] == "EQUITY" and rr[:amount].to_f > 0
+            journal_entries.each_with_index do |j, i|
+              if rr[:account_subtype] == j[:equity_type] and j[:record_type] == "EQUITY"
+                journal_entries[i][:amount] += rr[:amount].to_f
+              end
+            end
+
+          
           elsif rr[:record_type] == "INSURANCE" and rr[:amount].to_f > 0
             journal_entries.each_with_index do |j, i|
               if rr[:account_subtype] == j[:insurance_type] and j[:record_type] == "INSURANCE"

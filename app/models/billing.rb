@@ -104,6 +104,19 @@ class Billing < ApplicationRecord
 
     records
   end
+  
+  def equity
+    records = []
+    self.data.with_indifferent_access[:records].each do |o|
+      o[:records].each do |oo|
+        if oo[:record_type] == "EQUITY" and oo[:amount].try(:to_f) > 0
+          records << oo
+        end
+      end
+    end
+
+    records
+  end
 
   def reference_number
     self.data.with_indifferent_access[:accounting_entry][:reference_number]
