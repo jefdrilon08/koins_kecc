@@ -13,6 +13,10 @@ module Billings
       "Life Insurance Fund",
       "Retirement Fund"
     ]
+    
+    EQUITY_SUBTYPES  = [
+      "CBU"
+    ]
 
     def initialize(config:)
       @config           = config
@@ -65,6 +69,11 @@ module Billings
       SAVINGS_SUBTYPES.each do |savings_subtype|
         @data[:records] << build_savings_deposit(savings_subtype)
       end
+      
+      # Equity deposits
+      EQUITY_SUBTYPES.each do |equity_subtype|
+        @data[:records] << build_equity_deposit(equity_subtype)
+      end
 
       # Insurance deposits
       INSURANCE_SUBTYPES.each do |insurance_subtype|
@@ -104,6 +113,38 @@ module Billings
       if member_account.present?
         data[:enabled]            = true
         data[:member_account_id]  = member_account.id
+      end
+
+      data
+    end
+    
+    def build_equity_deposit(equity_subtype)
+      data  = {
+        record_type: "EQUITY",
+        account_subtype: equity_subtype,
+        amount: 0.00,
+        enabled: false,
+        member_account_id: false
+      }
+
+      member_account  = MemberAccount.equities.where(
+                          member_id: @member.id, 
+                          account_subtype: equity_subtype
+                        ).first
+     
+      if member_account.present?
+        data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+
+        #defaults  = 0.0 #Settings.try(:defaults).try(:insurance_deposits)
+
+        #if defaults.present? and @member.loans.size <= 1
+        #  defaults.each do |o|
+        #    if o.account_subtype == equity_subtype
+        #      data[:amount] = o.amount
+        #    end
+        #  end
+        #end
       end
 
       data

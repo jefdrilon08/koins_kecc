@@ -18,6 +18,10 @@ module Billings
       @data_loan_payments     = @billing.loan_payments
       @data_deposits          = @billing.deposits
       @data_insurance         = @billing.insurance
+      @data_equity         = @billing.equity
+
+
+      
       @data_withdraw_payments = @billing.withdraw_payments
       @data_accounting_entry  = @billing.accounting_entry
 
@@ -33,6 +37,7 @@ module Billings
       process_savings!
       process_insurance!
       process_withdraw_payments!
+      process_equity!
 
       @data[:approved_by] = @user.full_name
 
@@ -109,6 +114,22 @@ module Billings
         }
 
         ::Billings::ApproveSavingsDepositHash.new(
+          config: config
+        ).execute!
+      end
+    end
+    
+    def process_equity!
+      @data_equity.each do |o|
+        config  = {
+          date_paid: @date_approved,
+          deposit: o,
+          user: @user,
+          particular: @data_accounting_entry[:particular]
+        }
+
+      
+        ::Billings::ApproveEquityDepositHash.new(
           config: config
         ).execute!
       end

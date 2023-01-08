@@ -299,6 +299,33 @@ export default class BillingUITable extends React.Component {
 
           // Add grand total
           grandTotal += parseFloat(paymentRecord.amount);
+        
+        } else if(paymentRecord.record_type == "EQUITY" && paymentRecord.enabled == true) {
+          if(this.props.data.status == "pending" && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
+            components.push(
+              <td key={"equity-" + paymentRecord.member_account_id} className="text-end">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"equity-" + paymentRecord.member_account_id} className="text-end">
+                {numberWithCommas(paymentRecord.amount)}
+              </td>
+            );
+          }
+
+          // Add grand total
+          grandTotal += parseFloat(paymentRecord.amount);
+
+
         } else if(paymentRecord.record_type == "INSURANCE" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending" && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
@@ -323,6 +350,10 @@ export default class BillingUITable extends React.Component {
 
           // Add grand total
           grandTotal += parseFloat(paymentRecord.amount);
+
+
+
+
         } else if(paymentRecord.record_type == "WP" && paymentRecord.enabled == true) {
           if(this.props.data.status == "pending"  && this.props.data.data.is_checked == null || this.props.data.data.is_checked == false) {
             components.push(
@@ -412,6 +443,16 @@ export default class BillingUITable extends React.Component {
 
         records.push(
           <td key={"total-savings-" + totals[i].key} className="text-end">
+            <strong>
+              {numberWithCommas(totals[i].amount)}
+            </strong>
+          </td>
+        );
+      } else if(totals[i].record_type == "EQUITY") {
+        grandTotal += parseFloat(totals[i].amount);
+
+        records.push(
+          <td key={"total-equity-" + totals[i].key} className="text-end">
             <strong>
               {numberWithCommas(totals[i].amount)}
             </strong>

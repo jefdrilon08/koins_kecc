@@ -79,6 +79,8 @@ module Billings
           validate_wp!
         elsif @current_transaction[:record_type] == "INSURANCE"
           validate_insurance!
+        elsif @current_transaction[:record_type] == "EQUITY"
+          validate_equity!
         elsif @current_transaction[:record_type] == "LOAN_PAYMENT"
           validate_loan_payment!
         else
@@ -166,6 +168,17 @@ module Billings
         @errors[:messages] << {
           key: "member_account",
           message: "member_account for insurance payment not found"
+        }
+      end
+    end
+    
+    def validate_equity!
+      member_account  = MemberAccount.equities.where(id: @current_transaction[:member_account_id]).first
+
+      if member_account.blank?
+        @errors[:messages] << {
+          key: "member_account",
+          message: "member_account for equity payment not found"
         }
       end
     end
