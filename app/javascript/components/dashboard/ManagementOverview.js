@@ -25,7 +25,7 @@ export default class ManagementOverview extends React.Component {
     var context = this;
 
     axios.get(
-      '/api/dashboard/overview',
+      '/api/dashboard/overview?as_of=' + this.state.asOf,
       {
         headers: {
           "X-KOINS-HQ-TOKEN": this.props.token
