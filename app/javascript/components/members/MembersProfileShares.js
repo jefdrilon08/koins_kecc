@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function MembersProfileShares(props) {
-  if(props.records.length > 0) {
+  if(props.records.length >= 0) {
     return (
       <>
         <a
