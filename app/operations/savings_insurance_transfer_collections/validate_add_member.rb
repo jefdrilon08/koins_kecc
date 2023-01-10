@@ -29,6 +29,20 @@ module SavingsInsuranceTransferCollections
         @beneficiary_age              = ((@effectivity_date.to_time - @date_of_birth.to_time)/(60*60*24*365)).floor(4)
       end
 
+      if @savings_insurance_transfer_collection.kkalinga
+        @kkalinga_beneficiary_name      = @config[:kkalinga_beneficiary_name]
+        @kkalinga_date_of_birth                = @config[:kkalinga_date_of_birth]
+        @kkalinga_gender                       = @config[:kkalinga_gender]
+        @kkalinga_status                       = @config[:kkalinga_status]
+        @kkalinga_address                      = @config[:kkalinga_address]
+        @kkalinga_effectivity_date             = @config[:kkalinga_effectivity_date]
+        @kkalinga_premium                      = @config[:kkalinga_premium]
+        @kkalinga_relationship                 = @config[:kkalinga_relationship]
+        @poc_number                            = @config[:poc_number]
+        @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
+
+      end
+
       @data = @savings_insurance_transfer_collection.try(:data).try(:with_indifferent_access)
 
       if @data.present?
@@ -66,7 +80,7 @@ module SavingsInsuranceTransferCollections
         }
       end
 
-      if !@savings_insurance_transfer_collection.clip && !@savings_insurance_transfer_collection.kbente
+      if !@savings_insurance_transfer_collection.clip && !@savings_insurance_transfer_collection.kbente && !@savings_insurance_transfer_collection.kkalinga
         if @member.present? and @savings_insurance_transfer_collection.member_ids.include?(@member.id)
           @errors[:messages] << {
             key: "message",
@@ -206,6 +220,80 @@ module SavingsInsuranceTransferCollections
           @errors[:messages] << {
             key: "beneficiary_age",
             message: "You should be 21 years old and above"
+          }
+        end
+
+      end
+
+
+      if @savings_insurance_transfer_collection.kkalinga
+        if !@kkalinga_beneficiary_name.present?
+          @errors[:messages] << {
+            key: "kbente_beneficiary_name",
+            message: "Beneficiary Name is required"
+          }
+        end
+
+        if !@kkalinga_date_of_birth.present?
+          @errors[:messages] << {
+            key: "date_of_birth",
+            message: "Birthdate is required"
+          }
+        end
+        
+        if !@kkalinga_gender.present?
+          @errors[:messages] << {
+            key: "gender",
+            message: "Gender is required"
+          }
+        end
+
+        if !@kkalinga_status.present?
+          @errors[:messages] << {
+            key: "status",
+            message: "Status is required"
+          }
+        end
+
+        if !@kkalinga_address.present?
+          @errors[:messages] << {
+            key: "address",
+            message: "Address is required"
+          }
+        end
+
+        if !@kkalinga_effectivity_date.present?
+          @errors[:messages] << {
+            key: "effectivity_date",
+            message: "Effectivity Date is required"
+          }
+        end
+        
+        if !@poc_number.present?
+          @errors[:messages] << {
+            key: "poc_number",
+            message: "POCNumber is required"
+          }
+        end
+
+        if !@kkalinga_relationship.present?
+          @errors[:messages] << {
+            key: "relationship",
+            message: "Relationship is required"
+          }
+        end
+ 
+        if @kkalinga_beneficiary_age < 17 
+          @errors[:messages] << {
+            key: "kkalinga_beneficiary_age",
+            message: "You should be 18 yrs old and above"
+          }
+        end
+
+        if @kkalinga_beneficiary_age > 65 
+          @errors[:messages] << {
+            key: "kkalinga_beneficiary_age",
+            message: "You should be 65 yrs old and below"
           }
         end
 

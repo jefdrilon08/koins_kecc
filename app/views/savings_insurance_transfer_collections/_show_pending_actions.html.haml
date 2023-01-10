@@ -66,10 +66,10 @@
       .form-group
         %label Effectivity Date
         = date_field_tag :effectivity_date, @effectivity_date, id: 'input-effectivity-date', class: 'form-control'
-    .col-md-3
-      .form-group
-        %label Premium
-        = number_field_tag :premium, 20.00, id: 'input-premium', class: 'form-control'
+    / .col-md-3
+    /   .form-group
+    /     %label Premium
+    /     = number_field_tag :premium, 20.00, id: 'input-premium', class: 'form-control'
     .col-md-3
       .form-group
         %label Relationship
@@ -107,8 +107,8 @@
         = date_field_tag :kkalinga_effectivity_date, @kkalinga_effectivity_date, id: 'input-kkalinga-effectivity-date', class: 'form-control'
     .col-md-3
       .form-group
-        %label Premium
-        = number_field_tag :kkalinga_premium, 20.00, id: 'input-kkalinga-premium', class: 'form-control'
+        %label POC#       
+        = text_field_tag :poc_number, @poc_number, id: 'input-pocnumber', class: 'form-control'
     .col-md-3
       .form-group
         %label Relationship
@@ -120,11 +120,24 @@
       %label
         Member
       = select_tag :member, options_from_collection_for_select(@members, :id, :full_name), id: 'select-member', class: 'form-control'
-  .col-md-4
-    .form-group
-      %label
-        Amount
-      = number_field_tag :amount, 0.00, id: 'input-amount', class: 'form-control'
+  - if @savings_insurance_transfer_collection.kbente 
+    .col-md-4
+      .form-group
+        %label
+          Amount
+        = number_field_tag :amount, 20.00, id: 'input-amount', class: 'form-control'
+  - elsif @savings_insurance_transfer_collection.kkalinga
+    .col-md-4
+      .form-group
+        %label
+          Amount
+        = number_field_tag :amount, 50.00, id: 'input-amount', class: 'form-control'
+  - else
+    .col-md-4
+      .form-group
+        %label
+          Amount
+        = number_field_tag :amount, 0.00, id: 'input-amount', class: 'form-control'
   .col-md-2
     .form-group
       %label

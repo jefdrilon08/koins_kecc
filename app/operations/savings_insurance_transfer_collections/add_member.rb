@@ -43,6 +43,7 @@
         @kkalinga_effectivity_date             = @config[:kkalinga_effectivity_date]
         @kkalinga_premium                      = @config[:kkalinga_premium]
         @kkalinga_relationship                 = @config[:kkalinga_relationship]
+        @poc_number                            = @config[:poc_number]
         @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
       end
       
@@ -125,7 +126,8 @@
             kkalinga_effectivity_date: @kkalinga_effectivity_date,
             kkalinga_premium: @kkalinga_premium,
             kkalinga_relationship: @kkalinga_relationship,
-            kkalinga_beneficiary_age: @kkalinga_beneficiary_age
+            kkalinga_beneficiary_age: @kkalinga_beneficiary_age,
+            poc_number: @poc_number
           },
           savings_account_id: @savings_account.id,
           insurance_account_id: @insurance_account.id,

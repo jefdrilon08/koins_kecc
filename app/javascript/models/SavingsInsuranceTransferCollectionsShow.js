@@ -42,6 +42,7 @@ var $inputKkalingaaddress;
 var $inputKkalingaEffectivityDate;
 var $inputKkalingaPremium;
 var $inputKkalingaRelationship;
+var $inputPOCNumber;
 
 //printing kbente
 var $modalPrint;
@@ -100,6 +101,7 @@ var _cacheDom = function() {
   $inputKkalingaEffectivityDate = $("#input-kkalinga-effectivity-date");
   $inputKkalingaPremium         = $("#input-kkalinga-premium");
   $inputKkalingaRelationship    = $("#input-kkalinga-relationship");
+  $inputPOCNumber               = $("#input-pocnumber");
 
   //printing kbente & kkalinga
   $btnPrint                     = $("#btn-print");
@@ -238,6 +240,7 @@ var _bindEvents = function() {
     var kkalingaEffectivityDate        = $inputKkalingaEffectivityDate.val();
     var kkalingaPremium                = $inputKkalingaPremium.val();
     var kkalingaRelationship           = $inputKkalingaRelationship.val(); 
+    var pocNumber                      = $inputPOCNumber.val(); 
   
     $btnAdd.prop("disabled", true);
     $inputAmount.prop("disabled", true);
@@ -271,7 +274,7 @@ var _bindEvents = function() {
     $inputKkalingaEffectivityDate.prop("disabled", true);
     $inputKkalingaPremium.prop("disabled", true);
     $inputKkalingaRelationship.prop("disabled", true);
-
+    $inputPOCNumber.prop("disabled", true);
 
     var data  = {
       id: _id,
@@ -301,7 +304,8 @@ var _bindEvents = function() {
       kkalinga_address: kkalingaaddress,
       kkalinga_effectivity_date: kkalingaEffectivityDate,
       kkalinga_premium: kkalingaPremium,
-      kkalinga_relationship: kkalingaRelationship
+      kkalinga_relationship: kkalingaRelationship,
+      poc_number: pocNumber
     };
 
     $message.html("Loading...");
@@ -360,6 +364,7 @@ var _bindEvents = function() {
           $inputKkalingaEffectivityDate.prop("disabled", false);
           $inputKkalingaPremium.prop("disabled", false);
           $inputKkalingaRelationship.prop("disabled", false);
+          $inputPOCNumber.prop("disabled", false);
 
         }
       }
