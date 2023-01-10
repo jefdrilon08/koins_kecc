@@ -23,7 +23,7 @@ module Print
 				}
 				temp
 			} 
-			@data[:records]= @data[:records].sort_by { |hash|hash[:last_name]}
+			@data[:records]= @data[:records].sort_by { |hash|hash[:center_name]}
 
 			@data
 		end

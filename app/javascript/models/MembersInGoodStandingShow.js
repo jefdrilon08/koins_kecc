@@ -18,7 +18,7 @@ var $message;
 var _cacheDom = function() {
 
   $btnPrint         = $("#btn-print");
-  $printMessage       = $(".print-message");
+  $printMessage     = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
 
   
@@ -47,7 +47,7 @@ var _bindEvents = function() {
     //  )
     //);
 
-    $modalPrint.hide();
+    //$modalPrint.hide();
     window.open("/print?id=" + print_icpr + "&type=print_migs");
   });
 
