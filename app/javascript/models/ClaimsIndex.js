@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnNewTransaction;
 var $btnConfirm;
@@ -28,10 +29,10 @@ var _authenticityToken;
 var _cacheDom = function() {
   $btnNewTransaction        = $("#btn-new-transaction");
   $btnConfirm               = $("#btn-confirm");
-  $modalNewTransaction      = $("#modal-new-transaction");
-
-  $btnDailyReport               = $("#btn-daily-report");
-
+  $modalNewTransaction = new bootstrap.Modal(
+    document.getElementById("modal-new-transaction")
+  );
+  $btnDailyReport        = $("#btn-daily-report");
   $selectBranch          = $("#select-branch");
   $selectCenter          = $("#select-center");
   $selectMember          = $("#select-member");
