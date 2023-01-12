@@ -71,6 +71,15 @@ module Billings
               end
             end
           end
+        elsif t[:record_type] == "EQUITY"
+          @data[:records].each_with_index do |r, i|
+            r[:records].each_with_index do |rr, j|
+              if rr[:record_type] == "EQUITY" and t[:key] == MemberAccount.equities.where(id: rr[:member_account_id]).first.account_subtype
+                total_collected += rr[:amount].try(:to_f).round(2)
+                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+              end
+            end
+          end
         elsif t[:record_type] == "WP"
           @data[:records].each_with_index do |r, i|
             r[:records].each_with_index do |rr, j|
