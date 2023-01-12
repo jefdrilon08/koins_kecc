@@ -19,9 +19,14 @@ module Api
           if errors[:full_messages].any?
             render json: errors, status: 400
           else
-            ::Closing::ApproveYearEndClosing.new(
-              config: config
-            ).execute!
+            record.update!(status: "processing")
+            ProcessApproveYearEnd.perform_later(
+              id: record.id,
+              user_id: current_user.id
+            )
+            #::Closing::ApproveYearEndClosing.new(
+            #  config: config
+            #).execute!
           end
         end
 

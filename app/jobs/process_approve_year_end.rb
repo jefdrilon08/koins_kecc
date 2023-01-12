@@ -1,0 +1,41 @@
+class ProcessApproveYearEnd < ApplicationJob
+  queue_as :operations
+
+  def perform(args)
+    data_store = DataStore.find(args[:id])
+    user    = User.find(args[:user_id])
+
+    begin
+      config  = {
+        data_store: data_store,
+        user: user
+      }
+      
+      ActiveRecord::Base.transaction do
+        ::Closing::ApproveYearEndClosing.new(
+          config: config
+        ).execute!
+
+        #::Billings::Approve.new(
+        #  config: config
+        #).execute!
+
+
+        ActivityLog.create!(
+          content: "#{user.full_name} approved year end closing",
+          activity_type: "approval",
+          data: {
+            user_id: user.id,
+            billing_id: data_store.id
+          }
+        )
+      end
+    rescue Exception => e
+      logger.info "Exception occurred!"
+      logger.info e
+      billing.update!(
+        status: "pending"
+      )
+    end
+  end
+end
