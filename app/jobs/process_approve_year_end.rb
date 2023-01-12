@@ -26,15 +26,15 @@ class ProcessApproveYearEnd < ApplicationJob
           activity_type: "approval",
           data: {
             user_id: user.id,
-            billing_id: data_store.id
+            data_store: data_store.id
           }
         )
       end
     rescue Exception => e
       logger.info "Exception occurred!"
       logger.info e
-      billing.update!(
-        status: "pending"
+      data_store.update!(
+        status: "done"
       )
     end
   end
