@@ -30,12 +30,14 @@ class ProcessApproveYearEnd < ApplicationJob
           }
         )
       end
-    rescue Exception => e
-      logger.info "Exception occurred!"
-      logger.info e
-      data_store.update!(
-        status: "done"
-      )
+    #rescue Exception => e
+    #  raise e.inspect
+    #  logger.info "Exception occurred!"
+    #  logger.info e
+    #  data_store.update!(
+    #    data_store: e,
+    #    status: "error"
+    #  )
     end
   end
 end
