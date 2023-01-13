@@ -27,9 +27,15 @@
           - if o.processing?
             .badge.badge-info
               Processing
+          - elsif o.approved?
+            .badge.bg-success
+              approved
           - elsif o.done?
             .badge.bg-success
               Done
+          - elsif o.pending?
+            .badge.bg-warning
+              pending
           - elsif o.error?
             .badge.bg-danger
               Error

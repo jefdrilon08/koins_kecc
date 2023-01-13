@@ -10,7 +10,7 @@ module Icpr
     end
 
     def execute!
-      if !@data_store.done?
+      if !@data_store.pending?
         @errors[:messages] << {
           key: "status",
           message: "Cannot approve record"
