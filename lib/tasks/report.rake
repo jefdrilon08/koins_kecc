@@ -83,8 +83,8 @@ task :involuntary_resignation => :environment do
     mem.each do |member|
     mem_data    = member.data
     
-      if status   = 'writeoff'
-        status    = 'Delinquent'
+      if status   == 'writeoff'
+        status    == 'Delinquent'
         end  
 
       data = "#{}|#{member.identification_number}|#{member.full_name}|#{status}|#{member.id}"
@@ -289,7 +289,7 @@ task :involuntary_resignation => :environment do
         elsif lp_id == 'c140c10f-eed0-4a77-af8f-65a2f2a6600e' or lp_id == '671aa2f6-3cb6-45dc-b3e4-0f566648421b' or lp_id == 'fd131b36-c215-4c82-9e4e-3816d19b9004'
           lp = 'Services'
         end
-        dta = "#{l[:member][:first_name]}|#{l[:member][:middle_name]}|#{l[:member][:last_name]}|#{mem.gender}|#{dob}|#{"Acquire equipment/ fixed assets"}|#{lp}|#{ct}||#{l[:principal]}|#{month}|#{m_rate}|#{l[:date_released]}|#{mobile_no}|#{l[:overall_principal_balance]}"
+        dta = "#{l[:member][:first_name]}|#{l[:member][:middle_name]}|#{l[:member][:last_name]}|#{mem.gender}|#{dob}|#{"Acquire equipment/ fixed assets"}|#{lp}|#{ct}||#{l[:principal]}|#{month}|#{m_rate}|#{l[:date_released]}|#{mobile_no}|#{l[:overall_principal_balance]}|#{l[:maturity_date]}"
        @data << dta
      end
      
@@ -408,14 +408,14 @@ task :involuntary_resignation => :environment do
         mem = Member.find(m[:id])
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
         tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"active borrower"}|#{mem.date_of_membership}|#{tin}"
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"active borrower"}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
       @data_store_data[:counts][:active_members][:members].each do |m|
         mem = Member.find(m[:id])
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
         tin = mem.data["government_identification_numbers"]["tin_number"]
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"admitted member"}|#{mem.date_of_membership}|#{tin}"
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"admitted member"}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
       puts @data          
