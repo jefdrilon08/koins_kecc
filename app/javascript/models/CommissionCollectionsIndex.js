@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnNew;
 var $btnConfirmNew;
@@ -17,8 +18,9 @@ var authenticityToken;
 var _cacheDom = function() {
   $btnNew         = $("#btn-new");
   $btnConfirmNew  = $("#btn-confirm-new");
-  $modalNew       = $("#modal-new");
-
+  $modalNew = new bootstrap.Modal(
+    document.getElementById("modal-new")
+  );
   $inputStartDate     = $("#input-start-date");
   $inputEndDate       = $("#input-end-date");
   $selectCategory     = $("#select-category");
