@@ -55,7 +55,7 @@ module DataStores
           }
         }
 
-      if @record.done? and @record.data["status"] == "pending"
+      if @record.pending? and @record.data["status"] == "pending"
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
