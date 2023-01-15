@@ -165,6 +165,13 @@ namespace :api do
     post "/billing_for_writeoff/approve",     to: "billing_for_writeoff#approve"
     post "/billing_for_writeoff/delete_member", to: "billing_for_writeoff#delete_member"
 
+    #update project type
+
+    post "/members_project_types_controller/create", to: "members_project_types#create"
+    get "/members_project_types_controller/fetch_project_type_category", to: "members_project_types#fetch_project_type_category"
+
+
+
     # Process Online Application
     post "/online_applications/process", to: "online_applications#process_application"
     post "/online_applications/reject", to: "online_applications#reject"

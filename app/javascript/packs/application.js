@@ -209,6 +209,8 @@ import BillingForWriteoffCollectionShow from "../models/BillingForWriteoffCollec
 import AdditionalShareIndex from "../models/AdditionalShareIndex.js";
 import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
+import MembersProjectTypesIndex from "../models/MembersProjectTypesIndex.js";
+import MembersProjectTypesShow from "../models/MembersProjectTypesShow.js";
 //<<<<<<< HEAD
 import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
 import TransferSavingsShow from "../models/TransferSavingsShow.js";
@@ -277,6 +279,12 @@ const hooks = {
   "data_stores/icpr/show":                            [DataStoresIcprShow, DataStoresIcprShowComponent],
   "data_stores/patronage_refund/index":               [PatronageRefundIndex],
   "data_stores/patronage_refund/show":                [PatronageRefundShow,DataStoresPatronageRefundShowComponent],
+  
+
+  "data_stores/members_project_types/index":          [MembersProjectTypesIndex],
+  "data_stores/members_project_types/show":          [MembersProjectTypesShow],
+  
+
   "accounting/balance_sheets/index":                  [BalanceSheetsIndex],
   "accounting/income_statements/index":               [IncomeStatementsIndex],
   "adjustments/subsidiary_adjustments/index":         [SubsidiaryAdjustmentsIndex],

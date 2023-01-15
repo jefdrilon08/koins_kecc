@@ -373,6 +373,10 @@ Rails.application.routes.draw do
 
   # Data Stores
   namespace :data_stores do
+    get "/members_project_types", to: "members_project_types#index"
+    
+    get "/members_project_types/:id", to: "members_project_types#show"
+
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"
     delete "/icpr/:id", to: "icpr#destroy"
