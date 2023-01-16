@@ -39,11 +39,11 @@ var _cacheDom = function() {
   
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
+  $modalApprove       = new bootstrap.Modal(document.getElementById("modal-approve"));
 
   $btnSetRate               = $("#btn-set-rate");
   $btnConfirmSetRate        = $("#btn-confirm-set-rate");
-  $modalSetRate             = $("#modal-set-rate");
+  $modalSetRate             = new bootstrap.Modal(document.getElementById("modal-set-rate"));
   $inputPatronageInterestRate  = $("#input-patronage-interest-rate");
   $inputSavingsRate         = $("#input-savings-rate");
   $inputCbuRate             = $("#input-cbu-rate");

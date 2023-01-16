@@ -77,7 +77,7 @@ module Accounting
       
       @data[:records].each do |o|
         member_id                   = o[:id]
-        savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Personal Savings Account").ids.shift
+        savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Maintaining Balance Savings").ids.shift
         savings_account_balance     = MemberAccount.find(savings_account_id).balance.round(2)
         savings_distribute          = o[:savings_distribute].to_f.round(2)
         savings_account_new_balance = (savings_account_balance + savings_distribute).round(2)
@@ -100,6 +100,7 @@ module Accounting
           is_for_exit_age: false,
           is_for_loan_payments: false,
           is_time_deposit: false,
+          is_patronage_refund: true,
           accounting_entry_reference_number: @accounting_entry.reference_number,
           beginning_balance: savings_account_balance,
           ending_balance: savings_account_new_balance,
@@ -131,6 +132,7 @@ module Accounting
           is_for_exit_age: false,
           is_for_loan_payments: false,
           is_time_deposit: false,
+          is_patronage_refund: true,
           accounting_entry_reference_number: nil,
           beginning_balance: cbu_account_balance,
           ending_balance: cbu_account_new_balance,
@@ -147,7 +149,7 @@ module Accounting
     def rehash_savings!
       @data[:records].each do |o|
         member_id                   = o[:id]
-        personal_savings_account    = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Personal Savings Account").ids.shift
+        personal_savings_account    = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Maintaining Balance Savings").ids.shift
         cbu_account                 = MemberAccount.where(member_id: member_id, account_type: "EQUITY",account_subtype: "CBU").ids.shift
         ::MemberAccounts::Rehash.new(
           member_account: MemberAccount.find(personal_savings_account), account_transactions: nil).execute!

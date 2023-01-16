@@ -117,7 +117,7 @@ class DataStoreController < ApplicationController
       "claims_counts"                => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "monthly_incentives"           => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "monthly_new_and_resigned"     => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[num_new num_resigned] },
-      "patronage_refund"             => { order: "as_of DESC",      meta: %w[branch_name start_date end_date equity_rate], data: %w[] },
+      "patronage_refund"             => { order: "updated_at DESC",      meta: %w[branch_name start_date end_date equity_rate], data: %w[] },
       "personal_funds"               => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "repayment_rates"              => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "soa_expenses"                 => { order: "start_date DESC", meta: %w[branch_name start_date end_date], data: %w[] },
