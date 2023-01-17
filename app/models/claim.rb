@@ -231,7 +231,19 @@ class Claim < ApplicationRecord
   # def old_balance
   #   self.new_balance - self.data.with_indifferent_access[:amount].to_f
   # end
-
+  def find_in_batches(start: nil, finish: nil, batch_size: 500, error_on_ignore: nil)
+    relation = self
+    unless block_given?
+      return to_enum(:find_in_batches, start: start, finish: finish, batch_size: batch_size, error_on_ignore: error_on_ignore) do
+        total = apply_limits(relation, start, finish).size
+        (total - 1).div(batch_size) + 1
+      end
+    end
+    
+    in_batches(of: batch_size, start: start, finish: finish, load: true, error_on_ignore: error_on_ignore) do |batch|
+      yield batch.to_a
+    end
+  end
   
 end
 
