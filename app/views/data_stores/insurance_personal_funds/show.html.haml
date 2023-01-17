@@ -1,12 +1,16 @@
 = title @record.id
-.row
-  .col
-    .card
-      .card-body
-        - if @record.error?
-          = render partial: "data_stores/error_page"
-        - else
-          #react-root
+.h5
+  Insurance Personal Funds #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["as_of"]).strftime("%b %d, %Y")}
+  %br
+    %br
+      .row
+        .col
+          .card
+            .card-body
+              - if @record.error?
+                = render partial: "data_stores/error_page"
+              - else
+                #react-root
 
 = render partial: "data_stores/insurance_personal_funds/modals/update"
 = render partial: "templates/error_list"

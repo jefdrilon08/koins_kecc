@@ -1,10 +1,14 @@
 - @data = @record.data.with_indifferent_access
 = title @record.id
-.row
-  .col
-    .card
-      .card-body
-        - if @record.error?
-          = render partial: "data_stores/error_page"
-        - else
-          #react-root
+.h5
+  X - Weeks To Pay #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["as_of"]).strftime("%b %d, %Y")}
+  %br
+    %br
+      .row
+        .col
+          .card
+            .card-body
+              - if @record.error?
+                = render partial: "data_stores/error_page"
+              - else
+                #react-root

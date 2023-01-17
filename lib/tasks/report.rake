@@ -763,25 +763,40 @@ task :involuntary_resignation => :environment do
   end
 
   task :dl_soa_loans => :environment do
-  require 'csv'
-  uuid = ENV['UUID']
-  @data = DataStore.find(uuid)
-    CSV.open("#{Rails.root}/tmp/soa_loans_data_uuid_#{uuid}.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "LAST_NAME" ,"FIRST_NAME", "LOAN_ID" , "LOAN PRODUCT","TOTAL_INTEREST_PAID" ] ) do |csv|
-        data = @data.data.with_indifferent_access
-        data[:records].each do |rec|
-          f_name    = rec[:member]["first_name"]
-          l_name    = rec[:member]["last_name"]
-          id_number = rec[:member][:identification_number]
-          loan_id   = rec[:loan]["id"]
-          loan_product = rec[:loan_product]["name"]
-          total_interest_paid= rec[:total_interest_paid]
-          csv << [id_number,l_name, f_name,loan_id,loan_product,total_interest_paid]
-        end
-        puts "DONE"
-    end
+    require 'csv'
+    uuid = ENV['UUID']
+    @data = DataStore.find(uuid)
+      CSV.open("#{Rails.root}/tmp/soa_loans_data_uuid_#{uuid}.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "LAST_NAME" ,"FIRST_NAME", "LOAN_ID" , "LOAN PRODUCT","TOTAL_INTEREST_PAID" ] ) do |csv|
+          data = @data.data.with_indifferent_access
+          data[:records].each do |rec|
+            f_name    = rec[:member]["first_name"]
+            l_name    = rec[:member]["last_name"]
+            id_number = rec[:member][:identification_number]
+            loan_id   = rec[:loan]["id"]
+            loan_product = rec[:loan_product]["name"]
+            total_interest_paid= rec[:total_interest_paid]
+            csv << [id_number,l_name, f_name,loan_id,loan_product,total_interest_paid]
+          end
+          puts "DONE"
+      end
   end
 
 
-
-
+  task :write_off => :environment do
+    require 'csv'
+    year = ENV['YEAR']
+    @data = DataStore.where("meta->> 'as_of' = ? ","#{year}").order(Arel.sql("meta->>'branch_id'"))
+      CSV.open("#{Rails.root}/tmp/writeoff.csv", "w",:write_headers=> true, :headers => ["BRANCH" , "NUMBER OF MEMBERS WRITEOFF" ,"TOTAL AMOUNT"] ) do |csv|
+        @data.each do |b|
+          records = b.data.with_indifferent_access[:record]
+          @branch = b[:meta]["branch_name"]
+          @count = records.count
+          @amount = 0.0
+          records.each do |rec|
+            @amount += rec[:amount]
+          end
+          csv << [@branch,@count,@amount]
+        end
+      end
+  end
 end
