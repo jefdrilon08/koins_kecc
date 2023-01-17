@@ -27,7 +27,7 @@ module DataStores
 
       @data_store.update!(
         data: data_result,
-        status: "done"
+        status: "pending"
         
       )
 

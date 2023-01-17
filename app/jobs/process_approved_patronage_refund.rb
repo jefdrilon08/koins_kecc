@@ -15,7 +15,7 @@ class ProcessApprovedPatronageRefund < ApplicationJob
                       config: config
                     ).execute!
 
-      data_store.update!(status: "done")
+      data_store.update!(status: "approved")
     rescue Exception => e
       data_store.update!(
         status: "error",
