@@ -495,6 +495,11 @@ export default class ApplicationFormComponent extends React.Component {
           24
         </option>
       );
+      termItems.push(
+        <option value={50} key={"semi-monthly-" + 50}>
+          50
+        </option>
+      );
     }
 
     return termItems;
