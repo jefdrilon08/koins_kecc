@@ -5482,6 +5482,9 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+              -
+                num_installments: 50
+                ratio: 0.0175
       -
         name: "Golden Protection Fund"
         accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
@@ -5531,6 +5534,9 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+              -
+                num_installments: 50
+                ratio: 0.0175
       -
         name: "Deposit to credit life insurance plan"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"

@@ -183,6 +183,7 @@ class LoansController < ApplicationController
   end
 
   def show
+    @loan = ReadOnlyLoan.find_by_id(params[:id])
     @amortization_schedule = @loan.amortization_schedule_entries.order(
       "due_date ASC"
     )
