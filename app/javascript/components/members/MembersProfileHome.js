@@ -81,7 +81,7 @@ export default function MembersProfileHome(props) {
               Membership Type
               <div className="value text-muted">
                 <b>
-                  {props.membershipType.name}
+                  {props.membershipType ? props.membershipType.name : "N/A"}
                 </b>
               </div>
             </li>
@@ -89,18 +89,35 @@ export default function MembersProfileHome(props) {
               Arrangement
               <div className="value text-muted">
                 <b>
-                  {props.membershipArrangement.name}
+                  {props.membershipArrangement ? props.membershipArrangement.name : "N/A"}
                 </b>
               </div>
             </li>
-            <li className="list-group-item">
-              Recognition Date
-              <div className="value text-muted">
-                <b>
-                  {props.recognitionDate}
-                </b>
-              </div>
-            </li>
+
+            {(() => {
+              if(props.isReinstated) {
+                return (
+                  <li className="list-group-item">
+                    Reinstatement Date
+                    <div className="value text-muted">
+                      <b>
+                        {props.data.reinstatement.reinstatement_date}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+              return (
+               <li className="list-group-item">
+                Recognition Date
+                <div className="value text-muted">
+                  <b>
+                    {props.recognitionDate}
+                  </b>
+                </div>
+              </li>
+              )
+            })()}    
             <li className="list-group-item">
               Length of Stay (MBA)
               <div className="value text-muted">
@@ -209,7 +226,7 @@ export default function MembersProfileHome(props) {
                   Lugar ng Kapanganakan
                 </th>
                 <td>
-                  {props.member.place_of_birth.toUpperCase()}
+                  {props.member.place_of_birth}
                 </td>
               </tr>
               <tr>

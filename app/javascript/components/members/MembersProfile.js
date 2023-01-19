@@ -19,6 +19,7 @@ export default function MembersProfile(props) {
   const [member]                        = useState(props.member);
   const [data]                          = useState(props.data);
   const [isResigned]                    = useState(props.is_resigned);
+  const [isReinstated]                  = useState(props.reinstated);
   const [dateOfMembership]              = useState(props.date_of_membership);
   const [memberAge]                     = useState(props.member_age);
   const [dateOfBirth]                   = useState(props.date_of_birth);
@@ -153,6 +154,7 @@ export default function MembersProfile(props) {
                     branch={branch}
                     center={center}
                     isResigned={isResigned}
+                    isReinstated={isReinstated}
                     dateOfMembership={dateOfMembership}
                     dateResigned={dateResigned}
                     previousDateResigned={previousDateResigned}
