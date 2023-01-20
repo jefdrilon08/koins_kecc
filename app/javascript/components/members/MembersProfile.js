@@ -146,6 +146,7 @@ export default function MembersProfile(props) {
                   </a>
                 </li>
               </ul>
+              
               <div className="tab-content border-start border-bottom border-end">
                 <div id="home" className="home p-3 tab-pane active show" role="tabpanel">
                   <MembersProfileHome

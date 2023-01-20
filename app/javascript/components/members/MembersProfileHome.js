@@ -93,7 +93,6 @@ export default function MembersProfileHome(props) {
                 </b>
               </div>
             </li>
-
             {(() => {
               if(props.isReinstated) {
                 return (
