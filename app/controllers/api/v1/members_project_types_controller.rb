@@ -23,21 +23,38 @@ module Api
       end
 
       def fetch_project_type_category
-      
         project_type_category = ProjectType.where(project_type_category_id: params[:id]).order("name ASC").map{ |c|
-          
           {
             id: c.id,
             name: c.name
           }
-
-
-
         }
-
-
         render json: { project_type_category: project_type_category  }
       end
+
+      def save
+          data_store_id =  params[:data_store_id]
+          project_category_id = params[:project_category_id]
+          project_type_id = params[:project_type_id]
+          member_id = params[:member_id]
+
+          config = {
+            data_store_id: data_store_id,
+            project_category_id: project_category_id,
+            project_type_id: project_type_id,
+            member_id: member_id
+
+          }
+
+
+          
+          record = ::DataStores::SaveMembersProjectTypes.new(config: config).execute!
+          
+          
+
+      end
+
+      # for delete
 
 
       def update_amount

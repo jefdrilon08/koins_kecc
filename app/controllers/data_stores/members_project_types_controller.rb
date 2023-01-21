@@ -2,6 +2,10 @@ module DataStores
 	class MembersProjectTypesController < DataStoreController
     
     def index
+      
+      @data_stores = DataStore.select("*").where("meta ->> 'branch_id' in (?) and meta ->> 'data_store_type' = ?", @branches.pluck(:id), "PROJECT TYPE" ) 
+
+      
      
       @subheader_items = [
         {

@@ -1,0 +1,23 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        
+      %th
+        Branch
+      %th.text-center
+        Center
+      %th.text-center
+        Status
+  %thead
+    - @data_stores.each_with_index do |o, i|
+      %tr
+        %td
+          #{ i + 1 }
+        %td
+          #{o['meta']['brancih_name'] }
+        %td
+          #{o['meta']['center_name'] }
+        %td
+          #{o['status'] }
+

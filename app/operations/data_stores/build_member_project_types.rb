@@ -18,7 +18,10 @@ module DataStores
     end
     def execute!
       
-      @data = DataStore.create!( meta: @meta, status: "pending"  )
+      @data = DataStore.create!( 
+                                meta: @meta,
+                                data: [],
+                                status: "pending"  )
 
       @data.save!
 
