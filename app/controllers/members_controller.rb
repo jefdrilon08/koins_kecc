@@ -442,7 +442,9 @@ class MembersController < ApplicationController
       "roles":                        current_user.roles,
       "co_makers":                    @co_makers,
       "surveys":                      @surveys,
-      "status":                      @member.status
+      "status":                       @member.status,
+      "reinstated":                   @member.reinstated
+      
     }
 
     @payload[:active_loans] = @active_loans.map{ |o|

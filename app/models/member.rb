@@ -291,6 +291,15 @@ class Member < ApplicationRecord
     end 
   end
 
+  def reinstated
+    if self.data.with_indifferent_access[:reinstatement].present?
+      self.data.with_indifferent_access[:reinstatement][:is_reinstated] == true
+    else
+      false
+    end 
+  end
+
+
   def resignation_records
     if self.data.with_indifferent_access[:resignation_records].blank?
       []
@@ -564,7 +573,7 @@ class Member < ApplicationRecord
       meta: self.meta
     }
   end
-
+  
   def find_in_batches(start: nil, finish: nil, batch_size: 500, error_on_ignore: nil)
     relation = self
     unless block_given?
@@ -578,5 +587,4 @@ class Member < ApplicationRecord
       yield batch.to_a
     end
   end
-  
 end
