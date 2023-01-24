@@ -40,6 +40,12 @@ var $batchEndDate;
 var $batchAccruedType;
 
 
+var $latitudeData;
+var $longtitudeData;
+var $btnApprove;
+var $btnConfirmApprove;
+var $modalApprove;
+
 var $btnAdd;
 
 
@@ -54,7 +60,8 @@ var _memberId;
 var _moratoriumId;
 
 var _urlCreate        = "/api/v1/members_project_types_controller/create";
-var _urlDelete        = "/api/v1/adjustments/accrued_interests/delete";
+var _urlDelete        = "/api/v1/members_project_types_controller/delete";
+var _urlApprove        = "/api/v1/members_project_types_controller/approve";
 var _urlProcess       =  "#" // "/api/v1/adjustments/moratoriums/process";
 var _urlProcess       = "/api/v1/adjustments/accrued_interests/process";
 var _urlBatchProcess  = "/api/v1/adjustments/accrued_interests/batch_process";
@@ -100,6 +107,15 @@ var _cacheDom = function() {
   $inputCollectionDate      = $("#collection-date")
   templateErrorList = $("#template-error-list").html();
 
+  $latitudeData =    $("#latitude-data");
+  $longtitudeData =  $("#longtitude-data");
+  $btnApprove = $("#btn-approve")
+  $btnConfirmApprove = $("#btn-confirm-approve")
+  
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  )
+
   $selectLoans.select2({
     allowClear: true,
     width: "auto",
@@ -123,13 +139,93 @@ var _loadCenterOptions  = function() {
 
 
 var _bindEvents = function() {
+  
+  $btnApprove.on("click", function(){
+    $modalApprove.show();
+
+  })
+
+
+  $btnConfirmApprove.on("click", function(){
+    
+    _id = $(this).data("id")
+  
+    
+    $.ajax({
+      url: _urlApprove,
+      method: "POST",
+      data: {
+        data_store_id: _id,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        alert("Successfully Approved")
+        window.location.href="/data_stores/members_project_types/";
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+        }
+      }
+    });
+  
+
+  })
+
+
+  $btnDelete.on("click", function(){
+    
+    _id = $(this).data("id")
+    var data_index = $(this).data("data-index")
+    $.ajax({
+      url: _urlDelete,
+      method: "POST",
+      data: {
+        data_store_id: _id  , 
+        data_index: data_index,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+        }
+      }
+    });
+
+  })
+
+
   $btnAdd.on("click", function(){
     
     _id = $(this).data("id");
     project_category = $selectBranch.val();
     project_type = $selectCenter.val()
 
-    
     $.ajax({
       url: _urlSave,
       method: "POST",
@@ -138,6 +234,8 @@ var _bindEvents = function() {
         project_category_id: project_category,
         project_type_id: project_type,
         member_id: $selectMember.val(),
+        latitude_data: $latitudeData.val(),
+        longtitude_data: $longtitudeData.val(),
         authenticity_token: _authenticityToken
       },
       success: function(response) {

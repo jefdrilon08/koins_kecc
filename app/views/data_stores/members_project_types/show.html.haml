@@ -1,1 +1,13 @@
-= render partial: "form_add"
+- if @data_store.pending?
+  = render partial: "form_add"
+
+
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "show" 
+
+
+
+= render partial: "data_stores/members_project_types/modals/approve"

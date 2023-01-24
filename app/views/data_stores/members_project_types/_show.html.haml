@@ -1,0 +1,44 @@
+
+%table.table
+  %thead
+    %h6
+      Members Project Type/ #{@data_store_meta["branch_name"]} / #{@data_store_meta["center_name"]}
+
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+        
+      %th
+        Member
+      %th.text-center
+        Project Type Category
+      %th.text-center
+        Project Type
+      %th.text-center
+        Lat
+      %th.text-center
+        Lon
+  %thead
+    - @data_store_data.each_with_index do |o, i|
+      %tr
+        %td
+          #{ i + 1 }
+        %td
+          #{o['details']['member'] }
+        %td
+          #{o['details']['project_type_category'] }
+        %td
+          #{o['details']['project_type'] }
+        %td
+          #{o['details']['latitude_data'] }
+        %td
+          #{o['details']['longtitude_data'] }
+        
+        - if @data_store.pending?
+          %td
+            %button.btn.btn-sm.btn-danger.btn-delete{data: { id: @data_store.id, data_index: "#{i}" } }
+              .fa.fa-times
+              Delete
+    
+

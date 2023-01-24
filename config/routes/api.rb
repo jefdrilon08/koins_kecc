@@ -170,6 +170,8 @@ namespace :api do
     post "/members_project_types_controller/create", to: "members_project_types#create"
     get "/members_project_types_controller/fetch_project_type_category", to: "members_project_types#fetch_project_type_category"
     post "/members_project_types_controller/save", to: "members_project_types#save"
+    post "/members_project_types_controller/delete", to: "members_project_types#delete"
+    post "/members_project_types_controller/approve", to: "members_project_types#approve"
 
 
 

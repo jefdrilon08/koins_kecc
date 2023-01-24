@@ -10,6 +10,13 @@
       Project Type Category
       = select_tag :project_type_category, options_from_collection_for_select([], :id, :name), class: "form-control select-select2", id: "select-project-type-category", prompt: "-- SELECT --"
     
+    %th
+      Lat
+      = text_field_tag :latitude_data, params[:latitude_data], class: 'form-control', type: :text, id: "latitude-data"
+    %th
+      Lon
+      = text_field_tag :longtitude_data, params[:longtitude_data], class: 'form-control', type: :text, id: "longtitude-data"
+
     %th 
       Action
       %button#btn-add.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}" } }

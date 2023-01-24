@@ -2,7 +2,7 @@
   %thead
     %tr
       %th
-        
+      %th
       %th
         Branch
       %th.text-center
@@ -15,7 +15,11 @@
         %td
           #{ i + 1 }
         %td
-          #{o['meta']['brancih_name'] }
+          = link_to "/data_stores/members_project_types/#{o.id}" do
+            .bi.bi-search
+          
+        %td
+          #{o['meta']['branch_name'] }
         %td
           #{o['meta']['center_name'] }
         %td

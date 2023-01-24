@@ -16,7 +16,9 @@ module DataStores
         details: {
           project_type: project_type.name,
           project_type_category: project_type_category.name,
-          member: member.full_name
+          member: member.full_name,
+          latitude_data: config[:latitude_data].to_d,
+          longtitude_data: config[:longtitude_data].to_d
         }
 
       }

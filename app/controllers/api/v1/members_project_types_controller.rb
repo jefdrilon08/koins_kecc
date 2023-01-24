@@ -3,6 +3,38 @@ module Api
     class MembersProjectTypesController < ApplicationController
       skip_before_action :verify_authenticity_token
       
+      def approve
+         data_store_id = params[:data_store_id]
+
+         config = {
+            data_store_id: data_store_id
+
+         }
+
+
+         record = ::DataStores::ApproveProjectTypes.new(config: config).execute!
+
+         #DataStore.find(data_store_id).update!(status: "approve").inspect
+         
+          
+         render json: {id: data_store_id}
+      end
+
+      def delete
+          data_store_id =  params[:data_store_id]
+          data_index = params[:data_index].to_i
+          
+          record = DataStore.find(data_store_id)
+          record_data = record.data
+          record_data.delete_at(data_index)
+
+          record.update!(data: record_data)
+          
+          
+          render json: { id: data_store_id}
+
+      end
+      
       def create
   
           branch_id = params[:branch_id]
@@ -37,12 +69,16 @@ module Api
           project_category_id = params[:project_category_id]
           project_type_id = params[:project_type_id]
           member_id = params[:member_id]
+          latitude_data = params[:latitude_data]
+          longtitude_data = params[:longtitude_data]
 
           config = {
             data_store_id: data_store_id,
             project_category_id: project_category_id,
             project_type_id: project_type_id,
-            member_id: member_id
+            member_id: member_id,
+            latitude_data: latitude_data,
+            longtitude_data: longtitude_data
 
           }
 
