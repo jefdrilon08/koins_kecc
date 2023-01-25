@@ -1,8 +1,10 @@
-// = title
+= title
+
 .row
   .col
     .card
       .card-body
+        = render partial: "index_filter"
         - if @records.any?
           = render partial: "index_list"
           = paginate @records
