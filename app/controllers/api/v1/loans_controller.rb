@@ -536,11 +536,11 @@ module Api
 
           loan  = ::Loans::Fetch.new(config: config).execute!
 
-          project_type_categories = ProjectTypeCategory.all.order("name ASC").map{ |c|
+          project_type_categories = ProjectTypeCategory.where(is_active: true).order("name ASC").map{ |c|
                                       {
                                         id: c.id,
                                         name: c.name,
-                                        project_types: c.project_types.order("name ASC").map{ |p|
+                                        project_types: c.project_types.where(is_active: true).order("name ASC").map{ |p|
                                           {
                                             id: p.id,
                                             name: p.name
