@@ -4,6 +4,9 @@ module TransferMemberRecords
 			@config = config
 			@transfer_member_records = TransferMemberRecord.find(@config[:transfer_member_records])
 			@user = User.find(@config[:user])
+			@branch = Branch.find(@transfer_member_records["branch_id_to_transfer"])
+			@branch_code  = @branch.short_name
+      @cluster_code = @branch.cluster.short_name
 			@data_records = @transfer_member_records.data.with_indifferent_access
 			@accounting_entry_from = @data_records[:accounting_entry_from]
 			@accounting_entry_to = @data_records[:accounting_entry_to]
@@ -36,14 +39,25 @@ module TransferMemberRecords
 		end
 
 		def update_member!
-			 @data_records[:records].each do |rec|
-			 member = Member.find(rec[:member][:id])
-			 center = Center.find(rec[:transfer_to_center][:id])
-			 member.branch_id =  @transfer_member_records.branch_id_to_transfer
-			 member.identification_number = ::Members::GenerateMemberIdentificationNumber.new( member: member).execute!
-			 member.center = center
-			 member.save!
-			 end
+			@branch_counter = @branch.member_counter
+			@counter = 1 
+			@data_records[:records].each do |rec|
+				member = Member.find(rec[:member][:id])
+				center = Center.find(rec[:transfer_to_center][:id])
+
+				member.branch_id =  @transfer_member_records.branch_id_to_transfer
+				if @counter == 1
+				next_member_counter  = @branch_counter + @counter
+				else
+					next_member_counter  = @branch_counter + @counter
+				end
+				@counter = @counter + 1
+
+				member_identification_number  = @cluster_code + @branch_code + next_member_counter.to_s.rjust(5, "0")
+				member.identification_number = member_identification_number
+				member.center = center
+				member.save!
+			end
 		end
 		
 		def update_loans!
@@ -52,7 +66,7 @@ module TransferMemberRecords
 					loan_id = lr[:loan_id]
 					branch_id =  @transfer_member_records.branch_id_to_transfer
 					
-					loan = Loan.find(loan_id).update(center_id: rec[:transfer_to_center][:id],branch_id: branch_id)
+					loan = Loan.find(loan_id).update(center_id: rec[:transfer_to_center][:id],branch_id: branch_id,user_id: rec[:transfer_to_center][:so_id])
 					
 				end
 			end

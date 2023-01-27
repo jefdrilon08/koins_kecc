@@ -23,28 +23,85 @@ module Api
 
       end
       def add_member
-        center = Center.find(params[:center_id])
-        member =Member.find(params[:member_id])
-        active_loans= Loan.where(member_id: member.id,status: "active")
-        member_accounts = MemberAccount.where("member_id = ? and balance > ? and account_subtype != ?",member.id, 0.0,"Credit Life Insurance Plan")
-        transfer_member_records = TransferMemberRecord.find(params[:id])
+        @transfer_member_records = TransferMemberRecord.find(params[:id])
+        @from_branch = Branch.find(@transfer_member_records[:branch_id])
+        @to_branch = Branch.find(@transfer_member_records[:branch_id_to_transfer])
+        
+        #branch-center to  other branch-center
+        if params[:center_from_id].present? and params[:center_id].present? and params[:member_id] == ""
+         
+          from_center = params[:center_from_id]
+          to_center = params[:center_id]
 
-        config={
-          member: member,
-          center: center,
-          active_loans: active_loans,
-          member_accounts: member_accounts,
-          transfer_member_records: transfer_member_records
+          config = {
+            from_center: from_center,
+            to_center: to_center,
+            from_branch: @from_branch.id,
+            to_branch: @to_branch.id,
+            transfer_member_record: @transfer_member_records.id
+
+          }
+
+          errors = ::TransferMemberRecords::ValidateCenter.new(config: config).execute!
+
+          if errors[:full_messages].any?
+            render json: errors,status: 400
+          else
+            ::TransferMemberRecords::CenterTransfer.new(config: config).execute!
+            render json: {message: "ok"}
+          end
+
           
-        }
+        
+        #member to other branch-center
+        elsif params[:member_id] and params[:center_id] and params[:center_from_id] == ""
+          
+          center = Center.find(params[:center_id])
+          member = Member.find(params[:member_id])
+          active_loans= Loan.where(member_id: member.id,status: "active")
+          member_accounts = MemberAccount.where("member_id = ? and balance > ? and account_subtype != ?",member.id, 0.0,"Credit Life Insurance Plan")
+            config={
+              member: member,
+              center: center,
+              active_loans: active_loans,
+              member_accounts: member_accounts,
+              transfer_member_records: @transfer_member_records
+              
+            }
 
-        errors = ::TransferMemberRecords::ValidateAddMember.new(config: config).execute!
-        if errors[:full_messages].any?
-            render json: errors, status: 400
-        else
-            ::TransferMemberRecords::AddMember.new(config: config).execute!
-            render json:  { message: "ok" }
+          errors = ::TransferMemberRecords::ValidateAddMember.new(config: config).execute!
+          if errors[:full_messages].any?
+              render json: errors, status: 400
+              raise errors.inspect
+          else
+              ::TransferMemberRecords::AddMember.new(config: config).execute!
+              render json:  { message: "ok" }
+          end
+
+        elsif params[:center_id].present? and params[:center_from_id].present? and params[:member_id].present? 
+          
+          @errors = {
+            messages: [],
+            full_messages: []
+          }
+
+          @errors[:messages] << {
+            key: "cannot be",
+            message: "#{@branch.name} Member and #{@branch.name} Center has value"
+          }
+
+          @errors[:messages].each do |e|
+            @errors[:full_messages] << e[:message]
+          end
+
+          if @errors[:full_messages].any?
+              render json: @errors, status: 400
+          end
+
         end
+
+
+       
 
       end
 

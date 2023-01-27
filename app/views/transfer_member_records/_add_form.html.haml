@@ -1,19 +1,24 @@
 .row
-  .col-md-5.col-xs-6
+  .col-md-2.col-xs-6
     .form-group
       %label
         #{@from_branch.name} Members 
       = select_tag :member, options_for_select(@members.map{ |o| ["#{o[:last_name]}, #{o[:first_name]} (#{o[:center][:name]})", o[:id]] }), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT MEMBER --"
-  .col-md-5.col-xs-6
+  .col-md-4.col-xs-6
+    .form-group
+      %label
+        #{@from_branch.name} Center
+      = select_tag :select_center_from, options_for_select(@center_from.map{ |o| ["#{o[:name]}", o[:id]] }), class: "form-control select-select2", id: "select-center-from", prompt: "-- #{@from_branch} CENTER --"
+  .col-md-4.col-xs-6
     .form-group
       %label
         Transfer to #{@to_branch.name} Center
-      = select_tag :center, options_for_select(@center.map{ |o| ["#{o[:name]}", o[:id]] }), class: "form-control select-select2", id: "select-center", prompt: "-- SELECT CENTER --"
+      = select_tag :center, options_for_select(@center.map{ |o| ["#{o[:name]}", o[:id]] }), class: "form-control select-select2", id: "select-center", prompt: "-- #{@to_branch.name} CENTER --"
   .col-md-2.col-xs-6
     .form-group
       %label
         Actions
-      #btn-add.btn.btn-block.btn-success
+      #btn-add.btn.btn-block.btn-success.btn-sm
         .bi.bi-plus
         ADD 
 .row
