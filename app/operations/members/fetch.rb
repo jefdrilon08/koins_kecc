@@ -47,7 +47,8 @@ module Members
         },
         banks: [],
         # legal_dependents: [],
-        beneficiaries: []
+        beneficiaries: [],
+        project_types: []
       }
 
       legal_dependents  = @member.legal_dependents.map{ |o|
@@ -68,7 +69,7 @@ module Members
       membership_type         = @member.membership_type
       referrer                = @member.referrer
       coordinator             = Referrer.where(id: @member.coordinator_id).first
-
+  
       @member_data  = {
         id: @member.id || "",
         first_name: @member.first_name || "",

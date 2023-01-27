@@ -400,6 +400,23 @@ class MembersController < ApplicationController
       }
     end
 
+
+    @project_type = []
+
+    if @data[:project_type].present?
+      @project_type = @data[:project_type].map { |o|
+        if o[:details].present?
+          {
+            project_type_category: o[:details][:project_type_category],
+            project_type: o[:details][:project_type]
+
+          }
+
+        end
+      }
+    end
+
+
     @co_makers = ReadOnlyMember.active.where(
       center_id: @member.center_id
     ).where.not(
@@ -443,7 +460,8 @@ class MembersController < ApplicationController
       "co_makers":                    @co_makers,
       "surveys":                      @surveys,
       "status":                       @member.status,
-      "reinstated":                   @member.reinstated
+      "reinstated":                   @member.reinstated,
+      "project_type":                 @project_type
       
     }
 

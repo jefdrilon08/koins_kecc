@@ -63,6 +63,7 @@ export default function MembersProfile(props) {
   const [attachmentFiles]               = useState(props.attachment_files);
   const [loanProductsForRestructuring]  = useState(props.loan_products_for_restructuring);
   const [coMakers]                      = useState(props.co_makers);
+  const [projectType]                   = useState(props.project_type);
 
   return (
     <>
@@ -169,6 +170,7 @@ export default function MembersProfile(props) {
                     legalDependents={legalDependents}
                     beneficiaries={beneficiaries}
                     resignationRecords={resignationRecords}
+                    projectType={projectType}
                   />
                 </div>
                 <div id="loans" className="home p-3 tab-pane" role="tabpanel">

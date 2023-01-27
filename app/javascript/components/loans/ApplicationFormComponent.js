@@ -3,6 +3,7 @@ import $ from 'jquery';
 import moment from 'moment';
 import Select from 'react-select';
 import Resizer from 'react-image-file-resizer';
+import Modal from 'react-modal';
 
 import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';

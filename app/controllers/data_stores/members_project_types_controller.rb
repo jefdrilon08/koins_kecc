@@ -30,7 +30,7 @@ module DataStores
       @branch = @data_store_meta[:branch_id]
       @center = @data_store_meta[:center_id]
       @member_list = Member.where(branch_id: @branch, center_id: @center).map{ |o| ["#{o["last_name"]}, #{o["first_name"]}", o["id"] ]   }
-      @project_type_category = ProjectTypeCategory.all.map{ |o| ["#{o["name"]}", o["id"] ]   }
+      @project_type_category = ProjectTypeCategory.where(is_active: "true").map{ |o| ["#{o["name"]}", o["id"] ]   }
       
       @subheader_items  = [
         {

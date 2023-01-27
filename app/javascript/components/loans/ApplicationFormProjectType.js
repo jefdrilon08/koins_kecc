@@ -16,6 +16,11 @@ export default class ApplicationFormProjectType extends React.Component {
     this.props.updateData(data);
   }
 
+  handleProjectTypeCategoryChange(event) {
+
+
+  }
+
   render() {
     var projectTypeCategoryOptions  = [];
 

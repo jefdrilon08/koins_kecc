@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MembersProfileLegalDependents from "./MembersProfileLegalDependents";
 import MembersProfileBeneficiaries from "./MembersProfileBeneficiaries";
 import MembersProfileResignationRecords from "./MembersProfileResignationRecords";
+import MembersProfileProjectType from "./MembersProfileProjectType";
 
 export default function MembersProfileHome(props) {
   return (
@@ -303,6 +304,13 @@ export default function MembersProfileHome(props) {
       <hr/>
       <div className="row">
         <div className="col">
+          <h3 className="text-muted">
+            Project Type
+          </h3>
+          <MembersProfileProjectType
+            records={props.projectType}
+          />
+          <hr/>
           <h3 className="text-muted">
             Legal Dependents
           </h3>

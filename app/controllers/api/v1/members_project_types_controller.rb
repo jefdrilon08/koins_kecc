@@ -55,7 +55,7 @@ module Api
       end
 
       def fetch_project_type_category
-        project_type_category = ProjectType.where(project_type_category_id: params[:id]).order("name ASC").map{ |c|
+        project_type_category = ProjectType.where(project_type_category_id: params[:id], is_active: "true").order("name ASC").map{ |c|
           {
             id: c.id,
             name: c.name
