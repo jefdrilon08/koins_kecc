@@ -35,7 +35,8 @@ module Administration
     end
 
     def print
-      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order("member_shares.data->> 'date_printed' DESC")
+      
+      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order(Arel.sql("member_shares.data->> 'date_printed' DESC"))
 
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
