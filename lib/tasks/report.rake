@@ -766,16 +766,25 @@ task :involuntary_resignation => :environment do
     require 'csv'
     uuid = ENV['UUID']
     @data = DataStore.find(uuid)
-      CSV.open("#{Rails.root}/tmp/soa_loans_data_uuid_#{uuid}.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "LAST_NAME" ,"FIRST_NAME", "LOAN_ID" , "LOAN PRODUCT","TOTAL_INTEREST_PAID" ] ) do |csv|
+      CSV.open("#{Rails.root}/tmp/soa_loans_data_uuid_#{uuid}.csv", "w",:write_headers=> true, :headers => ["ID NUMBER" , "LAST_NAME" ,"FIRST_NAME","TOTAL_INTEREST_PAID" ] ) do |csv|
           data = @data.data.with_indifferent_access
+          @temp = {
+            records: []
+          }
           data[:records].each do |rec|
-            f_name    = rec[:member]["first_name"]
-            l_name    = rec[:member]["last_name"]
-            id_number = rec[:member][:identification_number]
-            loan_id   = rec[:loan]["id"]
-            loan_product = rec[:loan_product]["name"]
-            total_interest_paid= rec[:total_interest_paid]
-            csv << [id_number,l_name, f_name,loan_id,loan_product,total_interest_paid]
+            @temp[:records] << {
+              first_name: rec[:member]["first_name"],
+              last_name: rec[:member]["last_name"],
+              identification_number: rec[:member][:identification_number],
+              total_interest_paid: rec[:total_interest_paid]
+            }
+          end
+          members = @temp[:records].group_by { |item|
+            [item[:identification_number]]
+          }.values.flat_map{|items| items.first.merge(total_interest_paid: items.sum{|h| h[:total_interest_paid]})}
+
+          members.each do |mem|
+            csv << [mem[:identification_number],mem[:last_name],mem[:first_name],mem[:total_interest_paid]]
           end
           puts "DONE"
       end
