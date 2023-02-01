@@ -275,8 +275,10 @@ class Member < ApplicationRecord
     if record.present?
       record.date_paid.strftime("%b %d, %Y")
     else
-      if Settings.try(:use_recognition_date) == true and self.recognition_date.present?
+      if Settings.try(:use_recognition_date) == true and self.recognition_date.present? and !self.reinstated.present?
         self.recognition_date.strftime("%b %d, %Y")
+      elsif Settings.try(:use_recognition_date) == true and self.recognition_date.present? and self.reinstated.present?
+        self.old_recognition_date.strftime("%b %d, %Y")
       else
         ""
       end
