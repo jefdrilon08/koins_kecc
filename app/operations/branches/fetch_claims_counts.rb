@@ -93,30 +93,84 @@ module Branches
                     claims.claim_type,
                     claims.status,
                     claims.member_id,
-                    claims.data->>'type_of_loan' as type_of_loan,
-                    claims.data->>'creditors_name' as creditors_name,
-                    claims.data->>'classification_of_insured' as classification_of_insured,
-                    claims.data->>'type_of_insurance_policy' as type_of_insurance_policy,
-                    claims.data->>'cause_of_death_tpd_accident' as cause_of_death_tpd_accident,
-                    claims.data->>'gender' as gender,
-                    claims.data->>'name_of_insured' as name_of_insured,
-                    claims.data->>'identification_number' as identification_number,
-                    claims.data->>'policy_number' as policy_number,
-                    claims.data->>'type_of_insurance_policy' as type_of_insurance_policy,
-                    claims.data->>'classification_of_insured' as classification_of_insured,
-                    claims.data->>'date_reported' as date_reported,
-                    claims.data->>'date_paid' as date_paid,
+                    CASE
+                      WHEN claims.data->>'type_of_loan' ISNULL then 'N/A'
+                      ELSE claims.data->>'type_of_loan'   
+                      END AS type_of_loan,
+                    
+                    CASE
+                      WHEN claims.data->>'creditors_name' ISNULL then 'N/A'
+                      ELSE claims.data->>'creditors_name'   
+                      END AS creditors_name,
+                    
+                    CASE
+                      WHEN claims.data->>'classification_of_insured' ISNULL then 'N/A'
+                      ELSE claims.data->>'classification_of_insured'   
+                      END AS classification_of_insured,
+                    
+                    CASE
+                      WHEN claims.data->>'type_of_insurance_policy' ISNULL then 'N/A'
+                      ELSE claims.data->>'type_of_insurance_policy'   
+                      END AS type_of_insurance_policy,
+                    
+                    CASE
+                      WHEN claims.data->>'cause_of_death_tpd_accident' ISNULL then 'N/A'
+                      ELSE claims.data->>'cause_of_death_tpd_accident'   
+                      END AS cause_of_death_tpd_accident,
+                    
+                    CASE
+                      WHEN claims.data->>'gender' ISNULL then 'N/A'
+                      ELSE claims.data->>'gender'   
+                      END AS gender,
+                    
+                    CASE
+                      WHEN claims.data->>'name_of_insured' ISNULL then 'N/A'
+                      ELSE claims.data->>'name_of_insured'   
+                      END AS name_of_insured,
+                    
+                    CASE
+                      WHEN claims.data->>'identification_number' ISNULL then 'N/A'
+                      ELSE claims.data->>'identification_number'   
+                      END AS identification_number,
+                    
+                    CASE
+                      WHEN claims.data->>'policy_number' ISNULL then 'N/A'
+                      ELSE claims.data->>'policy_number'   
+                      END AS policy_number,
+                    
+                    CASE
+                      WHEN claims.data->>'type_of_insurance_policy' ISNULL then 'N/A'
+                      ELSE claims.data->>'type_of_insurance_policy'   
+                      END AS type_of_insurance_policy,
+                    
+                    CASE
+                      WHEN claims.data->>'date_reported' ISNULL then 'N/A'
+                      ELSE claims.data->>'date_reported'   
+                      END AS date_reported,
+                    
+                    CASE
+                      WHEN claims.data->>'date_paid' ISNULL then 'N/A'
+                      ELSE claims.data->>'date_paid'   
+                      END AS date_paid,
+                    
                     COALESCE(claims.data->>'total_amount_payable', '0.00')::float AS total_amount_payable,
                     COALESCE(claims.data->>'amount', '0.00')::float AS amount,
                     centers.id AS center_id,
-                    centers.name AS center_name
-                  FROM claims
-                  LEFT JOIN
-                    centers ON centers.id = claims.center_id
-                  WHERE 
-                    (claims.branch_id::text = '#{@branch.id}')
-                  GROUP BY
-                    claims.id, centers.id
+                    centers.name AS center_name,
+                    CONCAT(members.first_name,' ',members.middle_name,' ',members.last_name) AS membername
+                            FROM claims
+                            LEFT JOIN
+                              centers ON centers.id = claims.center_id
+                    LEFT JOIN 
+                      members ON claims.member_id = members.id
+                    WHERE 
+                      (claims.branch_id::text = '#{@branch.id}')
+                    GROUP BY
+                      claims.id, 
+                      centers.id,
+                      members.first_name,
+                      members.middle_name,
+                      members.last_name
                 EOS
     end
   end
