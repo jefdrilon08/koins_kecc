@@ -97,7 +97,10 @@ module Administration
       @center = Center.find(params[:id])
 
       if @center.update(center_params)
+         Loan.where("center_id =? and status IN (?)", params[:id], ["active","pending"]).update(user_id: params[:user_id])
+
         redirect_to administration_center_path(@center)
+
       else
         @subheader_items = [
           {
