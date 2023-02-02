@@ -50,72 +50,38 @@ namespace :manual do
   task :list_of_writeoff => :environment do
     require 'csv'
     branch_id = ENV['BRANCH_ID']
-      @data = DataStore.billing_for_writeoff.order(Arel.sql("meta->>'branch_id' ASC"))
-        CSV.open("#{Rails.root}/tmp/writeoff.csv", "w",:write_headers=> true, :headers => ["MEMBER NAME" ,"BRANCH","WRITEOFF YEAR", "GK","RSA","MBS","PSA","SIF","TIME DEPOSIT","CLIP",
-          "EQUITY VALUE","HIIP","LF","RF","POLICY LOAN","CBU","SHARE CAPITAL"] ) do |csv|
-          
-            @data.each do |b|
-              @year =  b["meta"]["as_of"]
-              @branch = b["meta"]["branch_name"]
-              a_data = b["data"]
-
-              a_data_rec= a_data.with_indifferent_access[:record]        
-              a_data_rec.each do |rec|
-                @member_name = Member.find(rec["member"]["id"]).full_name
-                @member_account_savings = MemberAccount.where(member_id: rec["member"]["id"], account_type: "SAVINGS")
-                @member_account_insurance = MemberAccount.where(member_id: rec["member"]["id"], account_type: "INSURANCE")
-                @member_account_equity = MemberAccount.where(member_id: rec["member"]["id"], account_type: "EQUITY")
-
-                if @member_account_savings.present?
-                  @member_account_savings.each do |sav|
-                    if sav[:account_subtype] == "Golden K"
-                      @gk = sav[:balance].to_f
-                    elsif sav[:account_subtype] == "K-IMPOK"
-                      @kimpok = sav[:balance].to_f
-                    elsif sav[:account_subtype] == "Maintaining Balance Savings"
-                      @mbs = sav[:balance].to_f
-                    elsif sav[:account_subtype] == "Personal Savings Account"
-                      @psa = sav[:balance].to_f
-                    elsif sav[:account_subtype] == "Savings Investment Fund"
-                      @sif = sav[:balance].to_f
-                    elsif sav[:account_subtype] == "Time Deposit"
-                      @td = sav[:balance].to_f
-                    end
-                  end
-                end
-                
-                if @member_account_insurance.present?
-                  @member_account_insurance.each do |ins|
-                    if ins[:account_subtype] == "Credit Life Insurance Plan"
-                      @clip = ins[:balance].to_f
-                    elsif ins[:account_subtype] == "Equity Value"
-                      @ev = ins[:balance].to_f
-                    elsif ins[:account_subtype] == "Hospital Income Insurance Plan"
-                      @hip = ins[:balance].to_f
-                    elsif ins[:account_subtype] == "Life Insurance Fund"
-                      @lif = ins[:balance].to_f
-                    elsif ins[:account_subtype] == "Policy Loan"
-                      @pl = ins[:balance].to_f
-                    elsif ins[:account_subtype] == "Retirement Fund"
-                      @rf = ins[:balance].to_f
-                    end
-                  end
-                end
-
-                if @member_account_equity.present?
-                  @member_account_equity.each do |eq|
-                    if eq[:account_subtype] == "CBU"
-                      @cbu = eq[:balance].to_f
-                    elsif eq[:account_subtype] == "Share Capital"
-                      @sc = eq[:balance].to_f
-                    end
-                  end
-                end
-                csv << [@member_name,@branch,@year,@gk,@kimpok,@mbs,@psa,@sif,@td,@clip,@ev,@hip,@lif,@rf,@pl,@cbu,@sc]
-              end
+      @data = DataStore.billing_for_writeoff.where("meta->> 'as_of' = '2021'").order(Arel.sql("meta->>'branch_id' ASC"))
+      #@data = DataStore.where(id: "8e870864-fc34-4e55-8a8e-80d3295558da")
+        CSV.open("#{Rails.root}/tmp/writeoff.csv", "w",:write_headers=> true, :headers => ["ID","BRANCH" ,"MALE","FEMALE","TOTAL # OF MEMBERS","WRITEOFF AMOUNT","WRITEOFF YEAR"] ) do |csv|
             
-         
-          end
+              @data.each do |b|
+                @id = b.id
+                @year =  b["meta"]["as_of"]
+                @branch = b["meta"]["branch_name"]
+                @female = 0
+                @male = 0
+                @loans = 0
+                @amount = 0
+                a_data = b["data"]
+
+                a_data_rec= a_data.with_indifferent_access[:record]        
+                  @counts = a_data_rec.group_by{ |obj| obj["member"]["id"] }.map{|mem , obj| [mem,obj.count]}.to_h
+                  
+                  @counts.each do |c|
+                     @member = Member.find(c[0])
+                     @gender = @member.gender
+                      
+                      if @gender == "Female"
+                        @female += 1
+                      elsif @gender == "Male"
+                        @male += 1
+                      end
+                  end
+
+                  @amount = a_data_rec.sum{|item| item[:amount]}
+                  csv << [@id, @branch, @male,@female,@counts.count,@amount,@year]
+              end
+
         end
   end
 end

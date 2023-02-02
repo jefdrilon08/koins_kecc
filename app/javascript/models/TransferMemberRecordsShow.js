@@ -19,6 +19,7 @@ var $selectCenter;
 var $btnAdd;
 var $displayMember;
 var $displayAccountingCode;
+var $SelectCenterFrom;
 
 var $btnSaveParticular;
 var $particularTo;
@@ -52,6 +53,7 @@ var _cacheDom = function() {
   $btnSaveParticular = $("#btn-save-particular");
   $particularTo      = $("#particular-to");
   $particularFrom    = $("#particular-from");
+  $SelectCenterFrom     = $("#select-center-from");
 
   $displayMember          = $(".display-member");
   $message  = $(".message");
@@ -63,12 +65,14 @@ var _bindEvents = function() {
 
   $btnAdd.on("click", function() {
     var memberId        = $selectMember.val();
+    var CenterFromId    = $SelectCenterFrom.val();
     var centerId        = $selectCenter.val();
     
     var data  = {
       id: _id,
       member_id: memberId,
       center_id: centerId,
+      center_from_id: CenterFromId,
       authenticity_token: _authenticityToken
     };
 

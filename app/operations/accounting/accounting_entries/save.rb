@@ -52,6 +52,7 @@ module Accounting
         end
 
         @accounting_entry_data[:journal_entries].each do |o|
+          
           if o[:id].present?
             temp  = JournalEntry.find(o[:id])
 

@@ -31,7 +31,7 @@ module TransferMemberRecords
               @accounting_entry[:journal_entries] << {
               id: "",
               post_type: "DR",
-              accounting_code_id: due_to_acc_code.code,
+              accounting_code_id: due_to_acc_code_id,
               accounting_code_name: due_to_acc_code.name,
               amount: amount.round(2)
             }
@@ -65,7 +65,9 @@ module TransferMemberRecords
 
     def build_debit_journal_entries!
       journal_entries = []
+
       @records.each do |rec|
+
         rec[:member_accounts].each do |mem|
           if mem[:account_type] == "EQUITY"
             @equity_accounting_codes.each do |eq|
@@ -83,7 +85,7 @@ module TransferMemberRecords
          
           elsif mem[:account_type] == "SAVINGS"
             @savings_accounting_codes.each do |sav|
-              if sav[:savings_type] == mem[:account_subtype]
+              if sav[:savings_type] == mem[:account_subtype] and mem[:balance].to_f > 0.0
                 sav_acount_code = sav[:deposit_accounting_code_id]
                 accnt_code = AccountingCode.find(sav_acount_code)
                 journal_entries << {

@@ -9,7 +9,7 @@ module Members
 
     def execute!
       current_counter = @branch.member_counter || 1
-
+      
       next_member_counter           = current_counter + 1
       member_identification_number  = @cluster_code + @branch_code + next_member_counter.to_s.rjust(5, "0")
 

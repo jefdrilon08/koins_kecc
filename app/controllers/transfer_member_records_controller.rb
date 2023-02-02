@@ -13,7 +13,7 @@ class TransferMemberRecordsController < ApplicationController
 
 	  def index
       
-      @records = TransferMemberRecord.all
+      @records = TransferMemberRecord.all.order("updated_at DESC")
 
 
       @subheader_items = [
@@ -42,7 +42,14 @@ class TransferMemberRecordsController < ApplicationController
       @data_records = @records.data.with_indifferent_access
       @accounting_entry_from = @data_records[:accounting_entry_from]
       @accounting_entry_to = @data_records[:accounting_entry_to]
-      
+      @center_from = Center.where(branch_id: @records.branch_id).map{ |cnt|
+        {
+          id: cnt.id,
+          name: cnt.name
+        }
+      }
+ 
+        
       @particular_from = @accounting_entry_from[:particular] || "To Record Transfer Member/s From #{@from_branch.name} to #{@to_branch.name}"
       @particular_to = @accounting_entry_to[:particular] || "To Received Transfer Member/s From #{@from_branch.name}"
       if @records[:status] == "pending"

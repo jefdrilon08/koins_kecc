@@ -20,11 +20,12 @@
     %th.text-center
      Amount
     -dd[:member_accounts].each do |md|
-     %tr
-      %td.text-center
-       #{md[:account_subtype]}
-      %td.text-end
-       #{number_to_currency(md[:balance], unit: '')}
+     -if md[:balance].to_f > 0.0
+      %tr
+       %td.text-center
+        #{md[:account_subtype]}
+       %td.text-end
+        #{number_to_currency(md[:balance], unit: '')}
    -if dd[:loan_records].present?
     %tr
      %th.text-center{:colspan => "2"}
