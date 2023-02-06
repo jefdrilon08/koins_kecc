@@ -373,6 +373,8 @@ Rails.application.routes.draw do
 
   # Data Stores
   namespace :data_stores do
+    get "/share_capital_summary", to: "share_capital_summary#index"
+    
     get "/members_project_types", to: "members_project_types#index"
     
     get "/members_project_types/:id", to: "members_project_types#show"
@@ -478,6 +480,9 @@ Rails.application.routes.draw do
     get "/insurance_personal_funds", to: "insurance_personal_funds#index"
     get "/insurance_personal_funds/:id", to: "insurance_personal_funds#show"
     delete "/insurance_personal_funds/:id", to: "insurance_personal_funds#destroy"
+
+    get "share_capital_summary/:id", to: "share_capital_summary#show"
+    get "/share_capital_summary", to: "share_capital_summary#index"
   end
   
   # daily_branch_metrics
