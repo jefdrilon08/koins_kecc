@@ -112,7 +112,7 @@ module Api
                     user: current_user
                   }
         elsif savings_insurance_transfer_collection.kkalinga
-                  kkalinga_beneficiary_name = params[:kkalinga_beneficiary_name]
+                  kkalinga_name_of_insured = params[:kkalinga_name_of_insured]
                   kkalinga_date_of_birth = params[:kkalinga_date_of_birth]
                   kkalinga_gender = params[:kkalinga_gender]
                   kkalinga_status = params[:kkalinga_status]
@@ -120,11 +120,12 @@ module Api
                   kkalinga_effectivity_date = params[:kkalinga_effectivity_date]
                   kkalinga_premium = params[:kkalinga_premium]
                   kkalinga_relationship = params[:kkalinga_relationship]
+                  kkalinga_beneficiary_name = params[:kkalinga_beneficiary_name]
                   poc_number = params[:poc_number]
 
                   config  = {
                     savings_insurance_transfer_collection: savings_insurance_transfer_collection,
-                    kkalinga_beneficiary_name: kkalinga_beneficiary_name,
+                    kkalinga_name_of_insured: kkalinga_name_of_insured,
                     kkalinga_date_of_birth: kkalinga_date_of_birth,
                     kkalinga_gender: kkalinga_gender,
                     kkalinga_status: kkalinga_status,
@@ -132,6 +133,7 @@ module Api
                     kkalinga_effectivity_date: kkalinga_effectivity_date,
                     kkalinga_premium: kkalinga_premium,
                     kkalinga_relationship: kkalinga_relationship,
+                    kkalinga_beneficiary_name: kkalinga_beneficiary_name,
                     poc_number: poc_number,
                     member: member,
                     amount: amount,

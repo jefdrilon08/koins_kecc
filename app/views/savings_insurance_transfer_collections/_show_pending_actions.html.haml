@@ -60,7 +60,7 @@
   .row
     .col-md-3  
       .form-group
-        %label Address    
+        %label Address(Optional)    
         = text_field_tag :address, @address, id: 'input-address', class: 'form-control'
     .col-md-3  
       .form-group
@@ -73,7 +73,7 @@
     .col-md-3
       .form-group
         %label Relationship
-        = select_tag :relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Husband","Wife", "Brother", "Sister", "Grandfather", "Grandmother","Grandson", "Granddaughter", "Uncle", "Aunt", "Nephew", "Niece"], @relationship), id: 'input-relationship', class: 'form-control'
+        = select_tag :relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Husband","Wife","Member"], @relationship), id: 'input-relationship', class: 'form-control'
 
 - if @savings_insurance_transfer_collection.kkalinga
   .h4
@@ -82,7 +82,7 @@
     .col-md-3
       .form-group
         %label Name of Insured        
-        = text_field_tag :kkalinga_beneficiary_name, @kkalinga_beneficiary_name, id: 'input-kkalinga-beneficiary-name', class: 'form-control'
+        = text_field_tag :kkalinga_name_of_insured, @kkalinga_name_of_insured, id: 'input-kkalinga-name-of-insured', class: 'form-control'
     .col-md-3
       .form-groups
         %label BirthDate      
@@ -91,7 +91,6 @@
       .form-group
         %label Gender        
         = select_tag :kkalinga_gender, options_for_select(["Male", "Female"], @kkalinga_gender), id: 'input-kkalinga-gender', class: 'form-control'
-        -#= text_field_tag :gender, @gender, id: 'input-gender', class: 'form-control'
     .col-md-3  
       .form-group
         %label Status    
@@ -99,7 +98,7 @@
   .row
     .col-md-3  
       .form-group
-        %label Address    
+        %label Address(Full Adress)     
         = text_field_tag :kkalinga_address, @kkalinga_address, id: 'input-kkalinga-address', class: 'form-control'
     .col-md-3  
       .form-group
@@ -107,12 +106,16 @@
         = date_field_tag :kkalinga_effectivity_date, @kkalinga_effectivity_date, id: 'input-kkalinga-effectivity-date', class: 'form-control'
     .col-md-3
       .form-group
+        %label Beneficiary Name       
+        = text_field_tag :kkalinga_beneficiary_name, @kkalinga_beneficiary_name, id: 'input-kkalinga-beneficiary-name', class: 'form-control'
+    .col-md-3
+      .form-group
         %label POC#       
         = text_field_tag :poc_number, @poc_number, id: 'input-pocnumber', class: 'form-control'
     .col-md-3
       .form-group
         %label Relationship
-        = select_tag :kkalinga_relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Husband","Wife", "Brother", "Sister", "Grandfather", "Grandmother","Grandson", "Granddaughter", "Uncle", "Aunt", "Nephew", "Niece"], @kkalinga_relationship), id: 'input-kkalinga-relationship', class: 'form-control'
+        = select_tag :kkalinga_relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Husband","Wife","Member"], @kkalinga_relationship), id: 'input-kkalinga-relationship', class: 'form-control'
 
 .row
   .col-md-6

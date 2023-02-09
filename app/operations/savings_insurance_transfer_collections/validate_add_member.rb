@@ -30,14 +30,15 @@ module SavingsInsuranceTransferCollections
       end
 
       if @savings_insurance_transfer_collection.kkalinga
-        @kkalinga_beneficiary_name      = @config[:kkalinga_beneficiary_name]
+        @kkalinga_name_of_insured              = @config[:kkalinga_name_of_insured]
         @kkalinga_date_of_birth                = @config[:kkalinga_date_of_birth]
         @kkalinga_gender                       = @config[:kkalinga_gender]
         @kkalinga_status                       = @config[:kkalinga_status]
         @kkalinga_address                      = @config[:kkalinga_address]
         @kkalinga_effectivity_date             = @config[:kkalinga_effectivity_date]
-        @kkalinga_premium                      = @config[:kkalinga_premium]
+        @kkalinga_premium                      = @config[:premium]
         @kkalinga_relationship                 = @config[:kkalinga_relationship]
+        @kkalinga_beneficiary_name             = @config[:kkalinga_beneficiary_name]
         @poc_number                            = @config[:poc_number]
         @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
 
@@ -188,12 +189,12 @@ module SavingsInsuranceTransferCollections
           }
         end
 
-        if !@address.present?
-          @errors[:messages] << {
-            key: "address",
-            message: "Address is required"
-          }
-        end
+        # if !@address.present?
+        #   @errors[:messages] << {
+        #     key: "address",
+        #     message: "Address is required"
+        #   }
+        # end
 
         if !@effectivity_date.present?
           @errors[:messages] << {
@@ -216,21 +217,41 @@ module SavingsInsuranceTransferCollections
           }
         end
 
-        if @beneficiary_age < 21
+        if @beneficiary_age > 65 && (@relationship == "Husband" or @relationship == "Wife" or @relationship == "Mother" or @relationship == "Father")
           @errors[:messages] << {
             key: "beneficiary_age",
-            message: "You should be 21 years old and above"
+            message: "You should be 65 years old and below"
+          }
+        end
+
+        if @beneficiary_age > 21 && (@relationship == "Daughter" or @relationship == "Son")
+          @errors[:messages] << {
+            key: "beneficiary_age",
+            message: "You should be 21 years old and below"
+          }
+        end
+
+        if @beneficiary_age <= 0.03836 && (@relationship == "Daughter" or @relationship == "Son")
+          @errors[:messages] << {
+            key: "beneficiary_age",
+            message: "You should be 2weeks old and above"
           }
         end
 
       end
-
 
       if @savings_insurance_transfer_collection.kkalinga
         if !@kkalinga_beneficiary_name.present?
           @errors[:messages] << {
             key: "kbente_beneficiary_name",
             message: "Beneficiary Name is required"
+          }
+        end
+
+        if !@kkalinga_name_of_insured.present?
+          @errors[:messages] << {
+            key: "kkalinga_name_of_insured",
+            message: "Name of Insured is required"
           }
         end
 

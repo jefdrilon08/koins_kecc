@@ -25,10 +25,10 @@
         #{Settings.company_address}
       %br  
       %b
-        K-BENTE BILLING
+        K-KALINGA BILLING
       %br  
       %b
-        Branch : #{@print_kbente_bill.branch} 
+        Branch : #{@print_kkalinga_bill.branch} 
       %br 
       %b
         
@@ -38,7 +38,7 @@
   %span.print-text-sub
     %p
       %b
-        Prepared : #{@print_kbente_bill[:data]["accounting_entry"]["prepared_by"]} 
+        Prepared : #{@print_kkalinga_bill[:data]["accounting_entry"]["prepared_by"]} 
   %p
   %table.member{"border:" => "", :none => ""}
     %tr
@@ -50,28 +50,34 @@
       %th.header.curr{width: 110} BirthDate
       %th.header.curr{width: 110} Effectivity Date
       %th.header.curr{width: 110} Relationship
+      %th.header.curr{width: 110} Beneficiary Name
+      %th.header.curr{width: 110} POC#
       %th.header.curr{width: 90} Amount
 
       
-    - @print_kbente_bill[:data]["records"].each do |o|
+    - @print_kkalinga_bill[:data]["records"].each do |o|
       %tr
         %td
           %td
             #{o["member"]["last_name"]}, #{o["member"]["first_name"]} #{o["member"]["middle_name"]}
           %td
-            #{o["kbente_data"]["kbente_beneficiary_name"]}
+            #{o["kkalinga_data"]["kkalinga_name_of_insured"]}
           %td
-            #{o["kbente_data"]["beneficiary_age"].to_i}
+            #{o["kkalinga_data"]["kkalinga_beneficiary_age"].to_i}
           %td
-            #{o["kbente_data"]["gender"]}
+            #{o["kkalinga_data"]["kkalinga_gender"]}
           %td
-            #{o["kbente_data"]["date_of_birth"]}
+            #{o["kkalinga_data"]["kkalinga_date_of_birth"]}
           %td
-            #{o["kbente_data"]["effectivity_date"]}
+            #{o["kkalinga_data"]["kkalinga_effectivity_date"]}
           %td
-            #{o["kbente_data"]["relationship"]}
+            #{o["kkalinga_data"]["kkalinga_relationship"]}
           %td
-            #{20}
+            #{o["kkalinga_data"]["kkalinga_beneficiary_name"]}
+          %td
+            #{o["kkalinga_data"]["poc_number"]}
+          %td
+            #{50}
     %tr
       %th.header
       %th.header Total
@@ -81,11 +87,13 @@
       %th.header.curr 
       %th.header.curr 
       %th.header.curr 
-      %th.header.curr #{number_to_currency(@print_kbente_bill.total_amount, unit: "")}
+      %th.header.curr 
+      %th.header.curr 
+      %th.header.curr #{number_to_currency(@print_kkalinga_bill.total_amount, unit: "")}
 
 %hr
 %h5
-  #{@print_kbente_bill[:data]["accounting_entry"]["book"]} | #{@print_kbente_bill[:data]["accounting_entry"]["reference_number"]}
+  #{@print_kkalinga_bill[:data]["accounting_entry"]["book"]} | #{@print_kkalinga_bill[:data]["accounting_entry"]["reference_number"]}
 
 %br
 
@@ -99,14 +107,14 @@
       %th.text-right{ width: "25%" }
         Credit
   %tbody
-    - @print_kbente_bill[:data]["accounting_entry"]["debit_journal_entries"].each do |a|
+    - @print_kkalinga_bill[:data]["accounting_entry"]["debit_journal_entries"].each do |a|
       %tr
         %td
           #{a["code"]} - #{a["name"]}
         %td.text-right
           #{number_to_currency(a["amount"], unit: "")}
         %td.text-right
-    - @print_kbente_bill[:data]["accounting_entry"]["credit_journal_entries"].each do |a|
+    - @print_kkalinga_bill[:data]["accounting_entry"]["credit_journal_entries"].each do |a|
       %tr
         %td
           #{a["code"]} - #{a["name"]}
@@ -118,7 +126,7 @@
   %span
     %strong
       Particular: 
-  #{@print_kbente_bill[:data]["accounting_entry"]["particular"]}
+  #{@print_kkalinga_bill[:data]["accounting_entry"]["particular"]}
 %br
 %br
 %br
@@ -127,7 +135,7 @@
   .col
     %center
       %strong
-        #{@print_kbente_bill[:data]["accounting_entry"]["prepared_by"]}
+        #{@print_kkalinga_bill[:data]["accounting_entry"]["prepared_by"]}
       %br
       Prepared By:
   .col
@@ -145,7 +153,7 @@
         -if Settings.activate_microinsurance == true
           %th{width: 350} #{"SILVIDA ANTIQUERA"}
         -else
-          %th{width: 350} #{@print_kbente_bill[:data]["accounting_entry"]["approved_by"]}
+          %th{width: 350} #{@print_kkalinga_bill[:data]["accounting_entry"]["approved_by"]}
       %br
       Approved By:
 
