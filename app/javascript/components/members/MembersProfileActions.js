@@ -11,6 +11,7 @@ export default function MembersProfileActions(props) {
   const [errors, setErrors]                       = useState([]);
   const [modifiable, setModifiable]               = useState(props.member.modifiable);
   const [isModalBalikKasapiOpen, setModalBalikKasapiOpen] = useState(false);
+  const [isModalDelete, setIsModalDelete]         = useState(false);
 
   const handleCreateSurveyClicked = () => {
     setIsLoading(true);
@@ -102,6 +103,39 @@ export default function MembersProfileActions(props) {
       setErrors(error.response.data.errors);
       setIsLoading(false);
     })
+  }
+
+  const handleConfirmDelete = () => {
+    setIsLoading(true);
+
+    const payload = {
+    id: props.memberId
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+
+    const options = {
+    headers: headers
+    }
+
+    axios.post(
+      '/api/members/delete',
+      payload,
+      options
+    ).then((res) => { 
+      alert("Successfully Delete");
+      window.location.href="/members/";
+      setIsModalDelete(false);
+      setIsLoading(false);
+      setIsLoading(false);
+    }).catch((error) => {
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+
   }
   return (
     <>
@@ -318,6 +352,69 @@ export default function MembersProfileActions(props) {
         </div>
       </div>
 
+      <hr/>
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            {(() => {
+              if(props.member.status == "pending" && props.member.identification_number == null) {
+                return (
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                setIsModalDelete(true)
+              }}
+                  >
+                    Delete member
+                  </button>
+                )
+              } else if(props.member.status == "active") {
+                return (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => { setIsModalDelete(false) }}
+                  >
+                    <span className="bi bi-padlock"/>
+                    Delete Member
+                  </button>
+                )
+              }
+            })()}
+          </div>
+        </div>
+      </div>
+      <Modal
+        show={isModalDelete}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Delete Member
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>
+            Are you sure you want to delete this member?
+          </p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => { handleConfirmDelete() }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { setIsModalDelete(false) }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

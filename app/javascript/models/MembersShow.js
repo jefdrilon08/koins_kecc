@@ -982,7 +982,7 @@ var _bindEvents = function() {
   });
 
   $btnDelete.on("click", function() {
-    alert("jef")
+    console.log("hello");
     $message.html("");
     $modalDelete.show();
   });

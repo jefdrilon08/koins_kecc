@@ -366,7 +366,6 @@ module Api
 
       def delete
         member  = Member.find(params[:id])
-        
         config  = {
           member: member,
           user: current_user
