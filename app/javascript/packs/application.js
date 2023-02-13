@@ -61,6 +61,8 @@ import AdministrationCentersShow from "../components/administration/centers/Show
 import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
 import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
 import TransferSavingsRecordsShow from "../components/transfer_savings/ShowComponent.js";
+import ShareCapitalSummary from "../components/share_capital_summary/ShowComponents.js";
+
 
 // "init" Objects
 import PagesLogin from "../models/PagesLogin.js";
@@ -217,7 +219,8 @@ import TransferSavingsShow from "../models/TransferSavingsShow.js";
 import MbsTransferIndex from "../models/MbsTransferIndex";
 import MbsTransferShow from "../models/MbsTransferShow";
 //=======
-import BankTransferIndex from "../models/BankTransferIndex.js"
+import BankTransferIndex from "../models/BankTransferIndex.js";
+import ShareCapitalSummaryIndex from "../models/ShareCapitalSummaryIndex.js";
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -419,7 +422,9 @@ const hooks = {
   "transfer_savings/show":                            [TransferSavingsShow,TransferSavingsRecordsShow],
 //=======
   "pages/profile":                                    [Profile],
-  "bank_transfer/index":                              [BankTransferIndex]
+  "bank_transfer/index":                              [BankTransferIndex],
+  "data_stores/share_capital_summary/index":          [ShareCapitalSummaryIndex],
+  "data_stores/share_capital_summary/show": 		  [ShareCapitalSummary]
 
 //>>>>>>> Instapay_Pesonet
 }
@@ -508,25 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // SIDEBAR JS
     Sidebar.init();
 //<<<<<<< HEAD
-//=======
 
-    // Create a subscription for each branch
-    consumer.subscriptions.create({
-      channel: "NotificationsChannel"
-    }, {
-      connected() {
-        console.log(`Connected to notifications_channel`);
-      },
-
-      disconnected() {
-        console.log(`Disconnected from notifications_channel`);
-      },
-
-      received(data) {
-        console.log(data);
-        toastNotification(data);
-      }
-    });
 //>>>>>>> develop
 
   }

@@ -1,0 +1,11 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+      - if @records.any?
+        = render partial: "index_list"
+      - else
+        %p
+          No Record
+= render partial: "data_stores/share_capital_summary/modals/new"

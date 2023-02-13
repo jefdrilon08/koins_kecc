@@ -613,6 +613,9 @@ namespace :api do
       post "/insurance_personal_funds/queue_bulk", to: "insurance_personal_funds#queue_bulk"
       get "/insurance_personal_funds/fetch", to: "insurance_personal_funds#fetch"
       get "/insurance_personal_funds/download_excel", to: "insurance_personal_funds#download_excel"
+
+      post "/share_capital_summary/create", to: "share_capital_summary#create"
+      get "/share_capital_summary/fetch", to: "share_capital_summary#fetch"
     end
 
     namespace :epassbook do
