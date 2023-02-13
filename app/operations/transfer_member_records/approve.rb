@@ -19,9 +19,10 @@ module TransferMemberRecords
 
 		def execute!
 			update_member!
-			update_loans!
+			
 			approved_entry_from!
 			approved_entry_to!
+			
 			@accounting_entry_from[:reference_number] = @from_accounting_entry.reference_number
 			@accounting_entry_from[:status] = @from_accounting_entry.status
 			@accounting_entry_from[:approved_by] = @from_accounting_entry.approved_by
@@ -29,8 +30,8 @@ module TransferMemberRecords
 			@accounting_entry_to[:reference_number] = @to_accounting_entry.reference_number
 			@accounting_entry_to[:status] = @to_accounting_entry.status
 			@accounting_entry_to[:approved_by] = @to_accounting_entry.approved_by
-
-
+			
+			update_loans!
 
 
 			@transfer_member_records.update!(data: {accounting_entry_to: @accounting_entry_to, accounting_entry_from: @accounting_entry_from,records: @data_records[:records]},
@@ -65,9 +66,12 @@ module TransferMemberRecords
 				rec[:loan_records].each do |lr|
 					loan_id = lr[:loan_id]
 					branch_id =  @transfer_member_records.branch_id_to_transfer
-					
-					loan = Loan.find(loan_id).update(center_id: rec[:transfer_to_center][:id],branch_id: branch_id,user_id: rec[:transfer_to_center][:so_id])
-					
+			
+
+					loan = Loan.find(loan_id)
+					loan_data = loan.data.with_indifferent_access
+					loan_data[:accounting_entry]= @accounting_entry_to
+					loan.update(center_id: rec[:transfer_to_center][:id],branch_id: branch_id,user_id: rec[:transfer_to_center][:so_id],data:loan_data)
 				end
 			end
 		end
