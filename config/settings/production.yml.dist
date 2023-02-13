@@ -47,6 +47,9 @@ branch_config:
   -
     id: "70dc66d9-728e-4370-a444-16092ac816c4"  #TUNGKO
     current_date: "2020-09-30"
+  - 
+    id: "339144e0-9544-4a7a-b2d4-b500cc329034"  #MUZON
+    #current_date: "2023-02-13"
 
 #east1
   -
@@ -1018,6 +1021,14 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "15cae8c3-5d3a-4960-a7aa-4db11e175336"
     due_from_accounting_code_id: "d7a32064-7b46-43fb-bc5d-c5dff74d9aef"
+  -
+    branch_id: "339144e0-9544-4a7a-b2d4-b500cc329034"                              #Muzon
+    cash_in_bank_accounting_code_id: "7c9cb9f1-d871-4003-ae46-f65ce0ab369f"
+    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
+    time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
+    due_to_accounting_code_id: "4223bc22-4186-44c9-8981-41249baac956"
+    due_from_accounting_code_id: "21bfa305-b4cd-4ee0-88fa-447533a9882c"
 
 #east 1
   
