@@ -1,4 +1,4 @@
- module SavingsInsuranceTransferCollections
+module SavingsInsuranceTransferCollections
   class AddMember
     def initialize(config:)
       @config                                 = config
@@ -35,14 +35,15 @@
       end
 
       if @savings_insurance_transfer_collection.kkalinga
-        @kkalinga_beneficiary_name             = @config[:kkalinga_beneficiary_name]
+        @kkalinga_name_of_insured              = @config[:kkalinga_name_of_insured]
         @kkalinga_date_of_birth                = @config[:kkalinga_date_of_birth]
         @kkalinga_gender                       = @config[:kkalinga_gender]
         @kkalinga_status                       = @config[:kkalinga_status]
         @kkalinga_address                      = @config[:kkalinga_address]
         @kkalinga_effectivity_date             = @config[:kkalinga_effectivity_date]
-        @kkalinga_premium                      = @config[:kkalinga_premium]
+        @kkalinga_premium                      = @config[:premium]
         @kkalinga_relationship                 = @config[:kkalinga_relationship]
+        @kkalinga_beneficiary_name             = @config[:kkalinga_beneficiary_name]
         @poc_number                            = @config[:poc_number]
         @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
       end
@@ -119,13 +120,14 @@
           },
           kkalinga_data: {
             kkalinga_gender: @kkalinga_gender,
-            kkalinga_beneficiary_name: @kkalinga_beneficiary_name,
+            kkalinga_name_of_insured: @kkalinga_name_of_insured,
             kkalinga_date_of_birth: @kkalinga_date_of_birth,
             kkalinga_status: @kkalinga_status,
             kkalinga_address: @kkalinga_address,
             kkalinga_effectivity_date: @kkalinga_effectivity_date,
             kkalinga_premium: @kkalinga_premium,
             kkalinga_relationship: @kkalinga_relationship,
+            kkalinga_beneficiary_name: @kkalinga_beneficiary_name,
             kkalinga_beneficiary_age: @kkalinga_beneficiary_age,
             poc_number: @poc_number
           },

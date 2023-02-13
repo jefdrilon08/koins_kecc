@@ -12,24 +12,28 @@
         %th
           Name of Insured
         %th
-          Beneficiary Age
+          Age
         %th
           Date of Birth
         %th
           Effectivity Date
         %th
-          Relationship
+          Beneficiary Relationship
       - if @savings_insurance_transfer_collection.kkalinga
         %th
           Name of Insured
         %th
-          Beneficiary Age
+          Age
         %th
           Date of Birth
         %th
           Effectivity Date
         %th
-          Relationship
+          Beneficiary Relationship
+        %th
+          Beneficiary Name
+        %th
+          POC#
       %th.text-right
         Amount
       - if @savings_insurance_transfer_collection.pending?
@@ -59,7 +63,7 @@
             #{o[:kbente_data][:relationship]}
         - if @savings_insurance_transfer_collection.kkalinga
           %td
-            #{o[:kkalinga_data][:kkalinga_beneficiary_name]}
+            #{o[:kkalinga_data][:kkalinga_name_of_insured]}
           %td
             #{o[:kkalinga_data][:kkalinga_beneficiary_age].to_i}
           %td
@@ -68,6 +72,8 @@
             #{o[:kkalinga_data][:kkalinga_effectivity_date]}
           %td
             #{o[:kkalinga_data][:kkalinga_relationship]}
+          %td
+            #{o[:kkalinga_data][:kkalinga_beneficiary_name]}
           %td
             #{o[:kkalinga_data][:poc_number]}
           
@@ -89,7 +95,10 @@
         %th
         %th
         %th
+        
       - if @savings_insurance_transfer_collection.kkalinga
+        %th
+        %th
         %th
         %th
         %th

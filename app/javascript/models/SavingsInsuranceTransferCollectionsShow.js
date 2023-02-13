@@ -42,6 +42,7 @@ var $inputKkalingaaddress;
 var $inputKkalingaEffectivityDate;
 var $inputKkalingaPremium;
 var $inputKkalingaRelationship;
+var $inputKkalingaNameOfInsured;
 var $inputPOCNumber;
 
 //printing kbente
@@ -49,6 +50,12 @@ var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
 var $btnPrint;
+
+//printing kkalinga
+var $modalPrintK;
+var $printMessageK;
+var $btnPrintPdfK;
+var $btnPrintK;
 
 var _id;
 var _options;
@@ -101,13 +108,20 @@ var _cacheDom = function() {
   $inputKkalingaEffectivityDate = $("#input-kkalinga-effectivity-date");
   $inputKkalingaPremium         = $("#input-kkalinga-premium");
   $inputKkalingaRelationship    = $("#input-kkalinga-relationship");
+  $inputKkalingaNameOfInsured   = $("#input-kkalinga-name-of-insured");
   $inputPOCNumber               = $("#input-pocnumber");
 
-  //printing kbente & kkalinga
+  //printing kbente
   $btnPrint                     = $("#btn-print");
   $printMessage                 = $(".print-message");
   $btnPrintPdf                  = $("#btn-print-pdf");
   $modalPrint                   = $("modal-print");
+
+  //printing kkalinga
+  $btnPrintK                     = $("#btn-print-k");
+  $printMessageK                 = $(".print-message-k");
+  $btnPrintPdfK                  = $("#btn-print-pdf-k");
+  $modalPrintK                   = $("modal-print-k");
 };
 
 var _bindEvents = function() {
@@ -118,6 +132,15 @@ var _bindEvents = function() {
     var type = "print_kbente_bill";
 
     $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + _id);
+  });
+
+  $btnPrintK.on("click", function() {
+    $modalPrintK.show();
+
+    var type = "print_kkalinga_bill";
+
+    $modalPrintK.hide();
     window.open("/print?type=" + type + "&id=" + _id);
   });
 
@@ -240,6 +263,7 @@ var _bindEvents = function() {
     var kkalingaEffectivityDate        = $inputKkalingaEffectivityDate.val();
     var kkalingaPremium                = $inputKkalingaPremium.val();
     var kkalingaRelationship           = $inputKkalingaRelationship.val(); 
+    var kkalingaNameOfInsured          = $inputKkalingaNameOfInsured.val();
     var pocNumber                      = $inputPOCNumber.val(); 
   
     $btnAdd.prop("disabled", true);
@@ -274,6 +298,7 @@ var _bindEvents = function() {
     $inputKkalingaEffectivityDate.prop("disabled", true);
     $inputKkalingaPremium.prop("disabled", true);
     $inputKkalingaRelationship.prop("disabled", true);
+    $inputKkalingaNameOfInsured.prop("disabled", true);
     $inputPOCNumber.prop("disabled", true);
 
     var data  = {
@@ -297,7 +322,7 @@ var _bindEvents = function() {
       effectivity_date: effectivityDate,
       premium: premium,
       relationship: relationship,
-      kkalinga_beneficiary_name: kkalingaBeneficiaryName,
+      kkalinga_name_of_insured: kkalingaNameOfInsured,
       kkalinga_date_of_birth: kkalingaDateOfBirth,
       kkalinga_gender: kkalingaGender,
       kkalinga_status: kkalingaStatus,
@@ -305,6 +330,8 @@ var _bindEvents = function() {
       kkalinga_effectivity_date: kkalingaEffectivityDate,
       kkalinga_premium: kkalingaPremium,
       kkalinga_relationship: kkalingaRelationship,
+      kkalinga_beneficiary_name: kkalingaBeneficiaryName,
+      
       poc_number: pocNumber
     };
 
@@ -364,6 +391,7 @@ var _bindEvents = function() {
           $inputKkalingaEffectivityDate.prop("disabled", false);
           $inputKkalingaPremium.prop("disabled", false);
           $inputKkalingaRelationship.prop("disabled", false);
+          $inputKkalingaNameOfInsured.prop("disabled", false);
           $inputPOCNumber.prop("disabled", false);
 
         }
