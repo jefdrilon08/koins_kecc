@@ -32,6 +32,8 @@ namespace :api do
   post "/members/balik_kasapi", to: "members#balik_kasapi"
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
+  post "/members/delete", to: "members#delete"
+
 
   # Messages
   post "/messages", to: "messages#create"
