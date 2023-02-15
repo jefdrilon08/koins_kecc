@@ -1,0 +1,29 @@
+%h5
+  As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+%table.table.table-bordered.table-hover.table-sm
+  %tr
+    %th{ width: "50%" }
+    %th.text-center
+      UPLOADED DOCUMENTS
+    %th.text-center
+      ACTIVE MEMBERS
+    %th.text-center
+      PERCENTAGE
+
+  %tr
+    %th
+      Uploaded Documents Count   
+    %td.text-center
+      #{@data[:number_of_attached_files]}
+    %td.text-center
+      #{@data[:number_of_active_members]}
+    %td.text-center
+      #{@data[:percentage]}
+
+
+%hr
+%ul.nav.nav-tabs{:role => "tablist"}
+  %li.nav-item
+    %a.nav-link.active.show{"aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#active-members", :role => "tab"}
+      Uploaded Documents Counts (#{@data[:percentage]})  
+
