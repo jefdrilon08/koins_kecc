@@ -2361,6 +2361,53 @@ namespace :adjust do
     end
   end
 
+  task :process_uploaded_documents_counts => :environment do
+    @data_store_type  = "UPLOADED_DOCUMENTS_COUNTS"
+    @as_of            = Date.today
+    @branches         = Branch.all
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    @branches.each do |branch|
+
+      puts "Processing #{branch.name}"
+
+      @record = DataStore.uploaded_documents_counts.where(
+                      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                      branch.id,
+                      @as_of
+                    ).first
+
+      if @record.blank?
+        @record = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      branch: {
+                        id: branch.id,
+                        name: branch.name
+                      },
+                      as_of: @as_of,
+                      data_store_type: @data_store_type
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+        args  = {
+          record: @record,
+          data_store_type: @data_store_type
+        }
+
+        ProcessUploadedDocumentsCounts.perform_later(args)
+      end
+      puts "Done!"
+    end
+  end
+
   task :process_insurance_personal_funds => :environment do
     @data_store_type  = "INSURANCE_PERSONAL_FUNDS"
     @as_of            = Date.today
