@@ -234,9 +234,10 @@
               %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.relationship.try(:upcase)
         - else
         %tr
-          %th{style: "width: 15%; text-align: center; height: 25px;"} SECONDARY BENEFICIARY
           - @member.beneficiaries.each do |bene|
             - if !bene.is_primary
+              %tr
+              %th{style: "width: 15%; text-align: center; height: 25px;"} SECONDARY BENEFICIARY
               %td{:colspan => "2", style: "width: 45%; text-align: center; height: 25px;"}= bene.full_name_upcase
               %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.date_of_birth.strftime("%b %d, %Y")
               %td{style: "width: 20%; text-align: center; height: 25px;"}= bene.relationship.try(:upcase)
@@ -244,6 +245,15 @@
     %center
       %p{:style => "padding: 7px 7px 7px 7px;"}
         I hereby state and declare that all the answers contained herein are true and correct and I fully understand that any willful misstatement in this application that would render me eligible for insurance when I would otherwise be ineligible shall be sufficient cause for the cancellation of my membership in the Association at any time such misstatement is known. In addition, the Association has no obligation on whatever claims I will file, except fr the refund of my contributions, if misstatement is known durong claims validation. And I am fully aware that my legal dependents and I are covered by one year waiting period.
+      - if @member.has_signature?
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        #{image_tag url_for(@member.signature_file),:size => "180x30", :crop => :fill}
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        &emsp;SIGNATURE OF THE APPLICANT 
+        %br
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;DATE SIGNED:
+        #{@member.data.with_indifferent_access['recognition_date'].to_date.strftime("%b %d, %Y")}
+      - else
         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;____________________________________
         %br
         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;SIGNATURE OF THE APPLICANT
@@ -253,6 +263,29 @@
   .signatories
     %table{:style => "width:100%;"}
       %tr
+      - if @member.has_signature?
+        %td{:width => "33%", :height => "33", style: "text-align: center; padding: 15px 0px 15px 0px;"}
+          PROCESSED BY:
+          %br
+          %br
+          -#{@member.center.user.print_full_name}
+          %br
+          TECHNICAL OFFICER
+        %td{:width => "33%", :height => "33",style: "text-align: center; padding: 15px 0px 15px 0px;"}
+          APPROVED BY:
+          %br
+          %br
+          #{@som}
+          %br
+          BRANCH MANAGER
+        %td{:width => "33%", :height => "33",style: "text-align: center; padding: 15px 0px 15px 0px;"}
+          CONCURRED BY:
+          %br
+          #{image_tag url_for(Member.find("5003b19f-fc75-460b-8db9-d309c0356b55").signature_file),:size => "180x30", :crop => :fill}
+          %br
+            SILVIDA REYES ANTIQUERA
+          KMBA GENERAL MANAGER
+      - else
         %td{:width => "33%", :height => "33", style: "text-align: center; padding: 15px 0px 15px 0px;"}
           PROCESSED BY:
           %br

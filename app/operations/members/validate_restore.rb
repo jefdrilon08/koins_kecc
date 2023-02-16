@@ -7,7 +7,7 @@ module Members
       @member = @config[:member]
       @user   = @config[:user]
 
-      @valid_roles  = ["MIS", "SBK"]
+      @valid_roles  = ["MIS", "SBK", "REMOTE-FM"]
     end
 
     def execute!

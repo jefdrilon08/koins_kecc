@@ -13,7 +13,7 @@ module Reports
       if @insurance_status.present?
         @members = @members.where(insurance_status: @insurance_status)
       end
- 
+
 
       @p        = Axlsx::Package.new
     end
@@ -36,7 +36,7 @@ module Reports
           black_white_date = wb.styles.add_style(:bg_color => "000000", :fg_color => "FFFFFF", :format_code => "dd-mm-yyyy", font_name: "Calibri")
           black_white = wb.styles.add_style(:bg_color => "000000", :fg_color => "FFFFFF", font_name: "Calibri")
 
-          sheet.add_row [ 
+          sheet.add_row [
             "ID NUMBER",
             "FIRST NAME",
             "MIDDLE NAME",
@@ -44,6 +44,7 @@ module Reports
             "STATUS",
             "INSURANCE STATUS",
             "RECOGNITION DATE",
+            "DATE RESIGNED",
             "DOB",
             "AGE",
             "BRANCH",
@@ -57,7 +58,7 @@ module Reports
           @members.each_with_index do |member|
 
             member_row = []
-            
+
             member_row << member.identification_number
             member_row << member.first_name.try(:upcase)
             member_row << member.middle_name.try(:upcase)
@@ -65,18 +66,16 @@ module Reports
             member_row << member.status
             member_row << member.insurance_status
             member_row << member.data['recognition_date']
+            member_row << member.date_resigned
             member_row << member.try(:date_of_birth).try(:to_date)
             member_row << member.age
             member_row << member.branch.name
             member_row << member.center.name
+            if member.attachment_files.count ==0
+                member_row << '1'
+                member_row << 'BLIPFORM'
+            else
             member_row << member.attachment_files.count
-            
-            if member.attachment_files.count > 0
-              if member.attachment_files.where("upper(file_name) LIKE ?", "%BLIP%").count > 0
-                member.attachment_files.where("upper(file_name) LIKE ?", "%BLIP%").each do |blip| 
-                  member_row << blip.try(:file_name)
-                end
-              end
             end
 
             if member.status == "resigned"
@@ -84,10 +83,10 @@ module Reports
             elsif member.status == "active"
               sheet.add_row member_row, style: [ nil, nil, nil, nil, nil, nil, date_format_cell, date_format_cell, nil, nil, nil, nil, nil, nil, nil]
             end
-            
-            
-            if member.attachment_files.where("upper(file_name) LIKE ?", "%BC%").count > 0
-              member.attachment_files.where("upper(file_name) LIKE ?", "%BC%").each do |bc| 
+
+
+            if member.attachment_files.count > 0
+              member.attachment_files.each do |bc|
                 file_name = bc.file_name
                 bc = file_name.split('_')[0]
                 bc_name = file_name.split('_')[1]
@@ -97,61 +96,6 @@ module Reports
               end
             end
 
-            if member.attachment_files.where("upper(file_name) LIKE ?", "%ID%").count > 0
-              member.attachment_files.where("upper(file_name) LIKE ?", "%ID%").each do |id|
-                file_name = id.file_name
-                id = file_name.split('_')[0]
-                id_name = file_name.split('_')[1]
-                id_remarks = file_name.split('_')[2]
-
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, id, id_name, id_remarks ]
-              end
-            end
-
-            if member.attachment_files.where("upper(file_name) LIKE ?", "%MC%").count > 0
-              member.attachment_files.where("upper(file_name) LIKE ?", "%MC%").each do |mc|
-                file_name = mc.file_name
-                mc = file_name.split('_')[0]
-                mc_name = file_name.split('_')[1]
-                mc_remarks = file_name.split('_')[2]
-
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, mc, mc_name, mc_remarks]
-              end
-            end
-
-            if member.attachment_files.where("upper(file_name) LIKE ?", "%COHA%").count > 0
-              member.attachment_files.where("upper(file_name) LIKE ?", "%COHA%").each do |coha|
-                file_name = coha.file_name
-                coha = file_name.split('_')[0]
-                coha_name = file_name.split('_')[1]
-                coha_remarks = file_name.split('_')[2]
-
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, coha, coha_name, coha_remarks]
-              end
-            end
-
-            if member.attachment_files.where("upper(file_name) LIKE ?", "%OTHER%").count > 0
-              member.attachment_files.where("upper(file_name) LIKE ?", "%OTHER%").each do |other|
-                sheet.add_row [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, other.try(:file_name)]
-              end
-            end
-
-            # member.attachment_files.order("file_name").each do |att|
-
-              # if att.file_name == "BC" 
-              #   member_row << att.file_name
-              # elsif att.file_name == "BLIPFORM"
-              #   member_row << att.file_name
-              # elsif att.file_name == "COHABITATION"
-              #   member_row << att.file_name
-              # elsif att.file_name == "ID"
-              #   member_row << att.file_name
-              # elsif att.file_name == "MC"
-              #   member_row << att.file_name
-              # elsif att.file_name == "OTHERFILE"
-              #   member_row << att.file_name
-              # end
-            # end
           end
         end
       end
@@ -160,3 +104,4 @@ module Reports
     end
   end
 end
+

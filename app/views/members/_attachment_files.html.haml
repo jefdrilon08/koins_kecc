@@ -1,10 +1,14 @@
 = link_to new_member_attachment_file_path(@member), class: "btn btn-primary btn-sm" do
-  .bi.bi-plus
+  .fa.fa-plus
   New Attachment File
 %hr
 - if @member.attachment_files.size == 0
+  %div
+    #btn.btn-warning.btn-block
+      = link_to member_blip_form_pdf_path(@member), target: "_blank", class: "btn btn-default btn-block" do
+        .fa.fa-download
+        BLIPFORM
   %p
-    No attachment files for this member
 - else
   - @member.attachment_files.each do |attachment_file|
     %table.table.table-bordered.table-sm.table-hover

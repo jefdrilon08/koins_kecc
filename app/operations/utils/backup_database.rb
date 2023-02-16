@@ -3,10 +3,10 @@ module Utils
     def initialize(config:)
       @config = config
 
-      @pw       = ::ActiveRecord::Base.connection_config[:password]
-      @host     = ::ActiveRecord::Base.connection_config[:host]
-      @username = ::ActiveRecord::Base.connection_config[:username]
-      @db       = ::ActiveRecord::Base.connection_config[:database]
+      @pw       = ::ActiveRecord::Base.connection_db_config.configuration_hash[:password]
+      @host     = ::ActiveRecord::Base.connection_db_config.configuration_hash[:host]
+      @username = ::ActiveRecord::Base.connection_db_config.configuration_hash[:username]
+      @db       = ::ActiveRecord::Base.connection_db_config.configuration_hash[:database]
 
       @destination_file = @config[:destination_file]
     end
