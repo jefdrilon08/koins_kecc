@@ -44,6 +44,7 @@ every :day, at: '4:45am' do
   rake "adjust:process_insurance_member_counts"
   rake "adjust:process_personal_funds"
   rake "adjust:process_claims_counts"
+  rake "adjust:process_uploaded_documents_counts"
 end
 
 every :day, at: '1am' do

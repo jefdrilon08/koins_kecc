@@ -596,6 +596,7 @@ namespace :api do
       post "/member_counts/queue", to: "member_counts#queue"
       post "/insurance_member_counts/queue", to: "insurance_member_counts#queue"
       post "/claims_counts/queue", to: "claims_counts#queue"
+      post "/uploaded_documents_counts/queue", to: "uploaded_documents_counts#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
       get "/monthly_new_and_resigned/fetch", to: "monthly_new_and_resigned#fetch"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
