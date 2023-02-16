@@ -4,7 +4,7 @@ class Claim < ApplicationRecord
 	CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT = ["Cardiovascular", "Respiratory", "Hematological", "Gastro Intestinal", "Gynecological", "Neurological", "Suicide", "Motor Vehicular Accident", "Others"]
   YEAR_LEVEL = ["GRADE 7", "GRADE 8", "GRADE 9", "GRADE 10", "GRADE 11", "GRADE 12", "1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
   TYPES_OF_LOAN = ["K-BAHAY W1", "K-BAHAY W2", "K-BAHAY W3",
-                   "K-BENEPISYO W1", "K-BENEPISYO W2", "K-BENEPISYO W3",
+                   "K-BENEPISYO W1", "K-BENEPISYO W2", "K-BENEPISYO W3", "K-BENEPISYO W4",
                    "K-MOTORSIKLO",
                    "K-EDUKASYON", "K-EDUKASYON W2", "K-EDUKASYON W3","K-EDUKASYON W4",
                    "K-KALUSUGAN W1", "K-KALUSUGAN W2","K-KALUSUGAN W3","K-KALUSUGAN W4", "K-KALUSUGAN W5","K-KALUSUGAN W6","K-KALUSUGAN W7",

@@ -70,10 +70,10 @@ class PagesController < ApplicationController
       filename = "#{Time.now.to_i}-backup-#{ENV['RAILS_ENV'] ||= 'development'}.dump"
       destination_file = "#{destination_directory}/#{filename}"
 
-      pw = ::ActiveRecord::Base.connection_config[:password]
-      host = ::ActiveRecord::Base.connection_config[:host]
-      username = ::ActiveRecord::Base.connection_config[:username]
-      db = ::ActiveRecord::Base.connection_config[:database]
+      pw = ::ActiveRecord::Base.connection_db_config.configuration_hash[:password]
+      host = ::ActiveRecord::Base.connection_db_config.configuration_hash[:host]
+      username = ::ActiveRecord::Base.connection_db_config.configuration_hash[:username]
+      db = ::ActiveRecord::Base.connection_db_config.configuration_hash[:database]
 
       cmd = "PGPASSWORD=#{pw} pg_dump --host #{host} --username #{username} --verbose --clean --no-owner --no-acl --format=c #{db} > #{destination_file}"
       `#{cmd}`

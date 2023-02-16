@@ -45,12 +45,12 @@ module InsuranceFundTransferCollections
                 }
               end
 
-              if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and MemberAccountValidationRecord.where(status: "approved", member_id: member.id).present?
-                @errors[:messages] << {
-                  key: "validation",
-                  message: "#{member.full_name}, is already validated!"
-                }
-              end
+              # if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and MemberAccountValidationRecord.where(status: "approved", member_id: member.id).present?
+              #   @errors[:messages] << {
+              #     key: "validation",
+              #     message: "#{member.full_name}, is already validated!"
+              #   }
+              # end
             end
           end
         end
