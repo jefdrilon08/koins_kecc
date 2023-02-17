@@ -19,6 +19,7 @@ class BillingForWriteoffCollectionsController < DataStoreController
   
   def show
     @data_store             = DataStore.find(params[:id])
+    #raise @data_store.data['record'].inspect
     @get_members            = @data_store.data['record'].select{|o| o["enabled"] == false}
     @member_with_writeoff   = @get_members.map{|o| "#{o['member_id']}"}
     @member_list            = Member.where("id IN (?)" , @member_with_writeoff)
