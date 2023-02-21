@@ -12,3 +12,9 @@
             .mt-4
             = link_to savings_insurance_transfer_collections_path, class: "btn-nav-square-md" do
               Savings Insurance Transfers
+            .mt-4
+            = link_to commission_collections_path, class: "btn-nav-square-md #{params[:controller] == "commission_collections" ? 'active' : ''}" do
+              Commission
+            .mt-4
+            = link_to claims_path, class: "btn-nav-square-md" do
+              Claims Register
