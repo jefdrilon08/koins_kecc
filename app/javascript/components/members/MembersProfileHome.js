@@ -234,7 +234,7 @@ export default function MembersProfileHome(props) {
                   PHILHEALTH #
                 </th>
                 <td>
-                  {props.data.phil_health_number}
+                  {props.data.government_identification_numbers.phil_health_number}
                 </td>
               </tr>
               <tr>
@@ -242,7 +242,7 @@ export default function MembersProfileHome(props) {
                   PAG-IBIG #
                 </th>
                 <td>
-                  {props.data.pag_ibig_number}
+                  {props.data.government_identification_numbers.pag_ibig_number}
                 </td>
               </tr>
               <tr>
@@ -250,7 +250,7 @@ export default function MembersProfileHome(props) {
                   SSS #
                 </th>
                 <td>
-                  {props.data.sss_number}
+                  {props.data.government_identification_numbers.sss_number}
                 </td>
               </tr>
               <tr>
@@ -258,7 +258,7 @@ export default function MembersProfileHome(props) {
                   TIN #
                 </th>
                 <td>
-                  {props.data.tin_number}
+                  {props.data.government_identification_numbers.tin_number}
                 </td>
               </tr>
               <tr>
