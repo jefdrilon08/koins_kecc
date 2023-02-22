@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var memberAccountValidationId;
@@ -43,7 +44,6 @@ var _cacheDom = function() {
   $totalAdvanceRf                  = $(".total-advance-rf");
   $totalInterest                   = $(".total-interest");
   $grandTotal                      = $(".grand-total");
-
   $section                         = $(".transaction-table");
   $btnDelete                       = $(".btn-delete");
   $memberSelect                    = $("#member-select");
@@ -55,14 +55,16 @@ var _cacheDom = function() {
   $resignationDate                 = $("#resignation-date");
   $btnAddMember                    = $("#btn-add-member");
   $modalLoading                    = $("#modal-loading");
-  $modalMemberCancellation         = $("#modal-member-cancellation");
   $btnConfirmMemberCancellation    = $("#btn-confirm-member-cancellation");
   $inputDateCancelled              = $("#input-date-cancelled");
   $inputReason                     = $("#input-reason");
   $memberClassification            = $("#member-classification");
-
   $message                        = $(".message");
   templateErrorList               = $("#template-error-list").html();  
+
+  $modalMemberCancellation = new bootstrap.Modal(
+    document.getElementById("modal-member-cancellation")
+  );
 };
 
 var _bindEvents = function() {
@@ -123,7 +125,6 @@ var _bindEvents = function() {
 
     if (memberAccountValidationStatus == "cancelled"){
       $modalMemberCancellation.show();
-      $message.html("");
 
       $btnConfirmMemberCancellation.on("click", function() {
         $btnConfirmMemberCancellation.prop("disabled", true);
