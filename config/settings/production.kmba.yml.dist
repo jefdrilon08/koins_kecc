@@ -451,10 +451,10 @@ templates:
 
 cash_management_templates:
   -
-    name: "MBTC Savings BLIP"
+    name: "Cash in Bank - BDO Savings BLIP"
     insurance_accounting_codes:
       - 
-        dr_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
+        dr_accounting_code_id: "ee139377-6879-477f-90fb-07187b4f81dd"
       -
         insurance_type: "Life Insurance Fund"
         deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
@@ -464,14 +464,14 @@ cash_management_templates:
         deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
         withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
   -
-    name: "MBTC Current BLIP"
+    name: "Cash in Bank - BPI Savings BLIP"
     insurance_accounting_codes:
       - 
-        dr_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+        dr_accounting_code_id: "72e097ce-1a6f-4984-9523-dc8e4b1fafa3" 
       -
         insurance_type: "Life Insurance Fund"
-        deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
-        withdrawal_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
+        deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011" 
+        withdrawal_accounting_code_id: "184a4473-8795-46b2-aec7-33561471353b"
       -
         insurance_type: "Retirement Fund"
         deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
@@ -503,10 +503,23 @@ cash_management_templates:
         deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
         withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
   -
-    name: "Due to/from General Fund_BLIP"
+    name: "MBTC Current BLIP"
     insurance_accounting_codes:
       - 
-        dr_accounting_code_id: "3f2d41e6-415a-4619-89d7-1ea2cbcc535e"
+        dr_accounting_code_id: "8f18c095-cb9e-4571-9b8a-f33adc4dfabc"
+      -
+        insurance_type: "Life Insurance Fund"
+        deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
+        withdrawal_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
+      -
+        insurance_type: "Retirement Fund"
+        deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
+        withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
+  -
+    name: "MBTC Savings BLIP"
+    insurance_accounting_codes:
+      - 
+        dr_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
       -
         insurance_type: "Life Insurance Fund"
         deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"
@@ -516,10 +529,10 @@ cash_management_templates:
         deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
         withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
   -
-    name: "Cash in Bank - BDO Savings BLIP"
+    name: "Due to/from General Fund_BLIP"
     insurance_accounting_codes:
       - 
-        dr_accounting_code_id: "ee139377-6879-477f-90fb-07187b4f81dd"
+        dr_accounting_code_id: "3f2d41e6-415a-4619-89d7-1ea2cbcc535e"
       -
         insurance_type: "Life Insurance Fund"
         deposit_accounting_code_id: "87286b3b-7ca8-4ba4-a377-292a34c5e011"

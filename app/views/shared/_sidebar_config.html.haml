@@ -13,8 +13,10 @@
       = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-admin" } do
         %i.bi.bi-shield-fill-check
         Admin
-    - if is_mis_user?
+    - if is_mis_user? or is_remote_bk_user?
       %li
         = link_to "#", class: "", data: { "bs-toggle": "modal", "bs-target": "#modal-nav-system-tools" } do
           %i.bi.bi-tools
           System Tools
+
+
