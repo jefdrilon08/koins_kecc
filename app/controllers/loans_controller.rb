@@ -28,7 +28,7 @@ class LoansController < ApplicationController
 
     if @q.present?
       @loans = @loans.where(
-        "upper(members.first_name) LIKE :q OR upper(members.last_name) LIKE :q OR upper(members.identification_number) LIKE :q AND loans.branch_id IN (:b)",
+        "upper(data->'member'->>'first_name') LIKE :q OR upper(data->'member'->>'last_name') LIKE :q AND loans.branch_id IN (:b)",
         q: "#{@q.upcase}%",
         b: @branches.pluck(:id)
       )
