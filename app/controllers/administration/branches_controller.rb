@@ -40,15 +40,17 @@ module Administration
           text: "Branches"
         }
       ]
-
-      @subheader_side_actions = [
-        {
-          id: "btn-new",
-          link: new_administration_branch_path,
-          class: "fa fa-plus",
-          text: "New Branch"
-        }
-      ]
+      
+      if helpers.is_mis_user? 
+        @subheader_side_actions = [
+          {
+            id: "btn-new",
+            link: new_administration_branch_path,
+            class: "fa fa-plus",
+            text: "New Branch"
+          }
+        ]
+      end
     end
 
     def new
