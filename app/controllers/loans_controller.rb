@@ -78,6 +78,7 @@ class LoansController < ApplicationController
       end
 
       @member = Member.where(id: params[:member_id]).first
+  
       @branch = @member.branch
 
       if @member.blank?
@@ -85,23 +86,18 @@ class LoansController < ApplicationController
       end
 
       # subheader items
-      @subheader_items = [
+      @subheader_side_actions = []
+      @subheader_side_actions = [
         {
-          is_link: true,
-          path: loans_path,
-          text: "Loans"
+          text: "Loan Application"
         },
         {
           is_link: true,
           path: member_path(@member),
           text: "#{@member.full_name}"
-        },
-        {
-          text: "Loan Application"
         }
       ]
 
-      @subheader_side_actions = []
 
       membership_arrangement = @member.membership_arrangement
 
