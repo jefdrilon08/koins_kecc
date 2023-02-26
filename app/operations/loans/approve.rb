@@ -10,6 +10,9 @@ module Loans
       @loan_product     = @loan.loan_product
       @num_installments = @loan.num_installments
       @term             = @loan.term
+      @project_type_id = @loan.project_type_id
+
+      
       
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
@@ -40,6 +43,7 @@ module Loans
       # Setup loan cycle
       @loan_cycles            = @member_data[:loan_cycles] || []
       @entry_point_loan_cycle = @member_data[:entry_point_loan_cycle] || 0
+      @project_type = ProjectType.find(@project_type_id)
     end
 
     def execute!
@@ -83,7 +87,23 @@ module Loans
       # Updat member data
       @member_data[:loan_cycles]            = @loan_cycles
       @member_data[:entry_point_loan_cycle] = @entry_point_loan_cycle
+
+      @member_data[:project_type] = [ 
+          { project_type_id: @project_type_id,
+            project_type_category_id: @project_type.project_type_category_id,
+            details: {
+              project_type: @project_type.name,
+              project_type_category: @project_type.project_type_category.name ,
+              latitude_data: 0.0,
+              longtitude_data: 0.0
+            }
+            
+          }
+          
+      ]
+
       @member.update!(data: @member_data)
+      
 
       amorts = @loan.amortization_schedule_entries.order("due_date DESC")
 
