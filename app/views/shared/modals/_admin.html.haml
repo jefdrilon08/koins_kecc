@@ -5,14 +5,14 @@
         %h3.modal-title 
           Administration
       .modal-body
-        - if is_mis_user?
-          .row
+        .row
+          - if is_mis_user?
             .col
               = link_to administration_users_path, class: "btn-nav-square-md" do
                 Users
-            .col
-              = link_to accounting_accounting_codes_path, class: "btn-nav-square-md" do
-                Chart of Accounts
+          .col
+            = link_to accounting_accounting_codes_path, class: "btn-nav-square-md" do
+              Chart of Accounts
 
           .mt-4
           .row

@@ -38,29 +38,30 @@ module Accounting
           text: "Chart of Accounts"
         }
       ]
-
-      @subheader_side_actions = [
-        {
-          link: accounting_download_accounting_codes_path,
-          class: "fa fa-download",
-          text: "Download"
-        },
-        {
-          link: "/accounting/print_chart_of_accounts",
-          class: "fa fa-print",
-          text: "Print"
-        },
-        {
-          link: new_accounting_accounting_code_path,
-          class: "fa fa-plus",
-          text: "New Accounting Code"
-        },
-        {
-          link: "/accounting/download_excel_chart_of_accounts",
-          class: "fa fa-download",
-          text: "Excel"
-        }
-      ]
+      if helpers.is_mis_user?
+        @subheader_side_actions = [
+          {
+            link: accounting_download_accounting_codes_path,
+            class: "fa fa-download",
+            text: "Download"
+          },
+          {
+            link: "/accounting/print_chart_of_accounts",
+            class: "fa fa-print",
+            text: "Print"
+          },
+          {
+            link: new_accounting_accounting_code_path,
+            class: "fa fa-plus",
+            text: "New Accounting Code"
+          },
+          {
+            link: "/accounting/download_excel_chart_of_accounts",
+            class: "fa fa-download",
+            text: "Excel"
+          }
+        ]
+      end
     end
 
     def print
