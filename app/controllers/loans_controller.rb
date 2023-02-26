@@ -58,7 +58,12 @@ class LoansController < ApplicationController
       @loans = @loans.where(is_online_application: true)
     end
 
-    @loans  = @loans.order("loans.status ASC, loans.maturity_date ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+    #@loans  = @loans.order("loans.status ASC, loans.maturity_date ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+  
+    @loans  = @loans.order(Arel.sql("data->>'member_full_name' ASC"),"loans.status ASC, loans.maturity_date ASC" ).page(params[:page]).per(LIST_PAGE_SIZE)
+    
+
+
 
     @subheader_items = [
       { text: "Loans" }
