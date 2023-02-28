@@ -1,4 +1,6 @@
 import React from 'react';
+import $ from 'jquery';
+import SkCubeLoading from '../SkCubeLoading';
 import ReactTable from 'react-table';
 import Modal from 'react-modal';
 import Toggle from 'react-toggle';
@@ -53,48 +55,6 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
     );
 
     return headers;
-  }
-
-  handleRemoveRecord(id) {
-    var context = this;
-
-    this.setState({
-      isLoading: true
-    });
-
-    $.ajax({
-      url: "/api/v1/insurance_fund_transfer_collections/remove_member",
-      method: 'POST',
-      data: {
-        authenticity_token: context.props.authenticityToken,
-        member_id: id,
-        id: context.props.data.id
-      },
-      success: function(response) {
-        context.setState({
-          errors: false,
-          message: "Success! Redirecting..."
-        });
-
-        window.location.reload();
-      },
-      error: function(response) {
-        try {
-          console.log(response);
-          context.setState({
-            errors: JSON.parse(response.responseText),
-            isLoading: false,
-            message: "Error"
-          });
-        } catch(err) {
-          context.setState({
-            errors: false,
-            message: "Error!",
-            isLoading: false
-          });
-        }
-      }
-    });
   }
 
   buildRecords() {
@@ -217,6 +177,48 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
         {records}
       </tr>
     );
+  }
+
+  handleRemoveRecord(id) {
+    var context = this;
+
+    this.setState({
+      isLoading: true
+    });
+
+    $.ajax({
+      url: "/api/v1/insurance_fund_transfer_collections/remove_member",
+      method: 'POST',
+      data: {
+        authenticity_token: context.props.authenticityToken,
+        member_id: id,
+        id: context.props.data.id
+      },
+      success: function(response) {
+        context.setState({
+          errors: false,
+          message: "Success! Redirecting..."
+        });
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          console.log(response);
+          context.setState({
+            errors: JSON.parse(response.responseText),
+            isLoading: false,
+            message: "Error"
+          });
+        } catch(err) {
+          context.setState({
+            errors: false,
+            message: "Error!",
+            isLoading: false
+          });
+        }
+      }
+    });
   }
 
   handleTransactionClicked(paymentRecord, member) {
@@ -406,28 +408,30 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
 
   render() {
     return (
-      <div className="table-responsive">
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          style={customStyles}
-        >
-          {this.renderModalContent()}
-        </Modal>
-        {this.renderLoadingStatus()}
-        <table className="table table-bordered table-hover table-sm">
-          <thead>
-            <tr>
-              {this.buildHeaders()}
-            </tr>
-          </thead>
-          <tbody>
-            {this.buildRecords()}
-          </tbody>
-          <tfoot>
-            {this.buildTotals()}
-          </tfoot>
-        </table>
-      </div>
+      <>
+        <div className="table-responsive">
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            style={customStyles}
+          >
+            {this.renderModalContent()}
+          </Modal>
+          {this.renderLoadingStatus()}
+          <table className="table table-bordered table-hover table-sm">
+            <thead>
+              <tr>
+                {this.buildHeaders()}
+              </tr>
+            </thead>
+            <tbody>
+              {this.buildRecords()}
+            </tbody>
+            <tfoot>
+              {this.buildTotals()}
+            </tfoot>
+          </table>
+        </div>
+      </>
     );
   }
 }

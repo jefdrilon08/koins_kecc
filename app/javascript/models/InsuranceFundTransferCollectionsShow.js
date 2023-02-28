@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var options;
 var insuranceFundTransferCollectionId;
@@ -31,18 +32,26 @@ var _urlFinalize      = "/api/v1/insurance_fund_transfer_collections/finalize";
 var _cacheDom = function() {
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
-  $modalApprove       = $("#modal-approve");
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  );
 
   $btnFinalize        = $("#btn-finalize");
   $btnConfirmFinalize = $("#btn-confirm-finalize");
-  $modalFinalize      = $("#modal-finalize");
+  $modalFinalize = new bootstrap.Modal(
+    document.getElementById("modal-finalize")
+  );
 
   $btnRevert          = $("#btn-revert");
   $btnConfirmRevert   = $("#btn-confirm-revert");
-  $modalRevert        = $("#modal-revert");
+  $modalRevert = new bootstrap.Modal(
+    document.getElementById("modal-revert")
+  );
 
   $btnPrint   = $("#btn-print");
-  $modalPrint = $("#modal-print");
+  $modalPrint = new bootstrap.Modal(
+    document.getElementById("modal-print")
+  );
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -69,7 +78,6 @@ var _bindEvents = function() {
   });
 
   $btnConfirmFinalize.on("click", function() {
-    $message.html("Loading...");
     $btnConfirmFinalize.prop("disabled", true);
 
     $.ajax({
