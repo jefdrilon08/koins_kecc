@@ -75,7 +75,7 @@ module AdditionalShare
       }
       @data_store.data['header'] << {
         name: "MBS",
-        accounting_code_id: '1dee33d9-8071-4ad9-99ce-ce23f45f7fbd',
+        accounting_code_id: '1e849571-b1e3-49d8-af5d-2bcbb4b5c314',
         total_amount: 0.0
       }
       @data_store.data['header'] << {
