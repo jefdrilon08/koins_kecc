@@ -43,11 +43,12 @@
   %table.member{"border:" => "", :none => ""}
     %tr
       %th.header{width: 30}
-      %th.header{width: 320} Member
-      %th.header.curr{width: 320} Name of Insured
-      %th.header.curr{width: 100} Age
-      %th.header.curr{width: 100} Gender
+      %th.header{width: 270} Member
+      %th.header.curr{width: 270} Name of Insured
+      %th.header.curr{width: 70} Age
+      %th.header.curr{width: 70} Gender
       %th.header.curr{width: 110} BirthDate
+      %th.header.curr{width: 110} Date Prepared
       %th.header.curr{width: 110} Effectivity Date
       %th.header.curr{width: 110} Relationship
       %th.header.curr{width: 90} Amount
@@ -69,6 +70,8 @@
           %td
             #{o["kbente_data"]["effectivity_date"]}
           %td
+            #{@print_kbente_bill.date_approved}
+          %td
             #{o["kbente_data"]["relationship"]}
           %td
             #{20}
@@ -78,6 +81,7 @@
       %th.header.curr 
       %th.header.curr 
       %th.header.curr
+      %th.header.curr 
       %th.header.curr 
       %th.header.curr 
       %th.header.curr 
@@ -137,8 +141,6 @@
           %th{width: 255} #{"EVELYN LAGMAY"}
         -else
           %th{width: 255}
-      %br
-      Reviewed By:
   .col
     %center
       %strong

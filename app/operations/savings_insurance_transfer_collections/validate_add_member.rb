@@ -220,7 +220,7 @@ module SavingsInsuranceTransferCollections
         if @beneficiary_age > 65 && (@relationship == "Husband" or @relationship == "Wife" or @relationship == "Mother" or @relationship == "Father")
           @errors[:messages] << {
             key: "beneficiary_age",
-            message: "You should be 65 years old and below"
+            message: "You should be below 65 years old"
           }
         end
 
@@ -228,6 +228,20 @@ module SavingsInsuranceTransferCollections
           @errors[:messages] << {
             key: "beneficiary_age",
             message: "You should be 21 years old and below"
+          }
+        end
+
+        if @beneficiary_age > 65 && (@relationship == "Member")
+          @errors[:messages] << {
+            key: "beneficiary_age",
+            message: "You should be below 65 years old"
+          }
+        end
+
+        if @beneficiary_age < 18 && (@relationship == "Member")
+          @errors[:messages] << {
+            key: "beneficiary_age",
+            message: "You should be 18 to 64 years old"
           }
         end
 
@@ -314,7 +328,7 @@ module SavingsInsuranceTransferCollections
         if @kkalinga_beneficiary_age > 65 
           @errors[:messages] << {
             key: "kkalinga_beneficiary_age",
-            message: "You should be 65 yrs old and below"
+            message: "You should be below 65 yrs old"
           }
         end
 

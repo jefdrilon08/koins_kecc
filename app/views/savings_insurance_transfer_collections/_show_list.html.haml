@@ -16,6 +16,8 @@
         %th
           Date of Birth
         %th
+          Date Prepared
+        %th
           Effectivity Date
         %th
           Beneficiary Relationship
@@ -27,11 +29,13 @@
         %th
           Date of Birth
         %th
+          Date Prepared
+        %th
           Effectivity Date
         %th
-          Beneficiary Relationship
-        %th
           Beneficiary Name
+        %th
+          Beneficiary Relationship
         %th
           POC#
       %th.text-right
@@ -60,6 +64,8 @@
           %td
             #{o[:kbente_data][:effectivity_date]}
           %td
+            #{@savings_insurance_transfer_collection.date_approved}
+          %td
             #{o[:kbente_data][:relationship]}
         - if @savings_insurance_transfer_collection.kkalinga
           %td
@@ -71,9 +77,11 @@
           %td
             #{o[:kkalinga_data][:kkalinga_effectivity_date]}
           %td
-            #{o[:kkalinga_data][:kkalinga_relationship]}
+            #{@savings_insurance_transfer_collection.date_approved}
           %td
             #{o[:kkalinga_data][:kkalinga_beneficiary_name]}
+          %td
+            #{o[:kkalinga_data][:kkalinga_relationship]}
           %td
             #{o[:kkalinga_data][:poc_number]}
           
@@ -95,8 +103,10 @@
         %th
         %th
         %th
+        %th
         
       - if @savings_insurance_transfer_collection.kkalinga
+        %th
         %th
         %th
         %th
