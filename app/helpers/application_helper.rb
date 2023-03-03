@@ -22,6 +22,10 @@ module ApplicationHelper
   def is_remote_bk_user?
     current_user.roles.include?("REMOTE-BK")
   end
+
+  def is_bk?
+    current_user.roles.include?("BK")
+  end
   
   def sbk_mis_user
     sbk_mis_user = ["SBK","MIS"].include? current_user.roles.last

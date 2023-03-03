@@ -48,9 +48,10 @@
       %th.header.curr{width: 100} Age
       %th.header.curr{width: 100} Gender
       %th.header.curr{width: 110} BirthDate
+      %th.header.curr{width: 110} Date Prepared
       %th.header.curr{width: 110} Effectivity Date
-      %th.header.curr{width: 110} Relationship
       %th.header.curr{width: 110} Beneficiary Name
+      %th.header.curr{width: 110} Relationship
       %th.header.curr{width: 110} POC#
       %th.header.curr{width: 90} Amount
 
@@ -71,9 +72,11 @@
           %td
             #{o["kkalinga_data"]["kkalinga_effectivity_date"]}
           %td
-            #{o["kkalinga_data"]["kkalinga_relationship"]}
+            #{@print_kkalinga_bill.date_approved}
           %td
             #{o["kkalinga_data"]["kkalinga_beneficiary_name"]}
+          %td
+            #{o["kkalinga_data"]["kkalinga_relationship"]}
           %td
             #{o["kkalinga_data"]["poc_number"]}
           %td
@@ -145,8 +148,6 @@
           %th{width: 255} #{"EVELYN LAGMAY"}
         -else
           %th{width: 255}
-      %br
-      Reviewed By:
   .col
     %center
       %strong
