@@ -8,12 +8,10 @@ module AdditionalShare
       @records = @data[:record]       
       @header = @data[:header]
       @user = @config[:user]
-      @date = ::Utils::GetCurrentDate.new(
-              config: {
-                branch: @branch
-                }
-              ).execute!       
+      @branch_id = @data_store.meta['branch_id']
+      @date = Branch.find(@branch_id).current_date
 
+      
     end 
 
     def execute!
