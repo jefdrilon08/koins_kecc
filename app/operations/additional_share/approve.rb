@@ -1,15 +1,18 @@
 module AdditionalShare
   class Approve
     def initialize(config:)    
-      @config = config       
-      @data_store = @config[:record]
-      @data = @data_store.data.with_indifferent_access
-      @accounting_entry_data = @data_store.data.with_indifferent_access[:accounting_entry]
-      @records = @data[:record]       
-      @header = @data[:header]
-      @user = @config[:user]
-      @branch_id = @data_store.meta['branch_id']
-      @date = Branch.find(@branch_id).current_date
+      @config                 = config       
+      @data_store             = @config[:record]
+      @data                   = @data_store.data.with_indifferent_access
+      @accounting_entry_data  = @data_store.data.with_indifferent_access[:accounting_entry]
+      @records                = @data[:record]       
+      @header                 = @data[:header]
+      @user                   = @config[:user]
+      @date                   = ::Utils::GetCurrentDate.new(
+                                   config: {
+                                      branch: Branch.find(@data_store.meta["branch_id"])
+                                      }
+                                    ).execute!  
 
       
     end 
