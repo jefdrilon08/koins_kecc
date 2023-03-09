@@ -93,5 +93,9 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
   def kkalinga
     self.data.with_indifferent_access[:insurance_subtype] == "K-KALINGA"
   end
+  
+  def accounting_entry
+    self.data.with_indifferent_access[:accounting_entry]
+  end
 
 end

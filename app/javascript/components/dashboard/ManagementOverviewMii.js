@@ -1259,6 +1259,376 @@ renderOverviewTableClaims() {
     );
   }
 
+    renderOverviewTableUploadedDocumentsSummary() {
+    var areas   = this.state.data.areas;
+    var rows    = [];
+    var colSpan = 16;
+
+    var areaColor     = "#bad5fd";
+    var clusterColor  = "#c5ffc1";
+    var branchColor   = "#797979";
+
+    var tTotalUploadedFIle                = 0;
+    var tTotalActiveMember                = 0;
+    var tTotalPercentage                  = 0.00;
+ 
+
+    var tTotalKcoopUploadedFile       = 0;
+    var tTotalKcoopActiveMember       = 0;
+    var tTotalKcoopPercentage         = 0;
+    var tTotalCapsrUploadedFile       = 0;
+    var tTotalCapsrActiveMember       = 0;
+    var tTotalCapsrPercentage         = 0;
+    var tTotalAssociateUploadedFile   = 0;
+    var tTotalAssociateActiveMember   = 0;
+    var tTotalAssociatePercentage     = 0;
+    var tTotalJvoUploadedFile         = 0;
+    var tTotalJvoActiveMember         = 0;
+    var tTotalJvoPercentage           = 0;
+
+    rows.push(
+      <tr style={{backgroundColor: areaColor}}>
+        <th className="text-center" colSpan={colSpan}>
+          <h4>        
+            UPLOADED FILES SUMMARY
+          </h4>  
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+        </th>
+        <th className="text-center" colSpan="3">
+          KCOOP
+        </th>
+        <th className="text-center" colSpan="3">
+          CAPS-R
+        </th>
+        <th className="text-center" colSpan="3">
+          ASSOCIATE
+        </th>
+        <th className="text-center" colSpan="3">
+          JVOMFI
+        </th>
+        <th className="text-center" colSpan="3">
+          TOTAL
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+        </th>
+        <th className="text-center">
+          UPLOADED FILES
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+        <th className="text-center">
+          UPLOADED FILES
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+        <th className="text-center">
+          UPLOADED FILES
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+        <th className="text-center">
+          UPLOADED FILES
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+        <th className="text-center">
+          UPLOADED FILES
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+      </tr> 
+    );
+
+    for(var i = 0; i < areas.length; i++) {
+     
+      var clusters    = areas[i].clusters;
+
+      for(var j = 0; j < clusters.length; j++) {
+
+        var branches  = clusters[j].branches;
+
+        for(var k = 0; k < branches.length; k++) {
+        
+    var tTotalUploadedFIle                = 0;
+    var tTotalActiveMember                = 0;
+    var tTotalPercentage                  = 0.00;
+ 
+
+    var tTotalKcoopUploadedFile       = 0;
+    var tTotalKcoopActiveMember       = 0;
+    var tTotalKcoopPercentage       = 0;
+    var tTotalCapsrUploadedFile       = 0;
+    var tTotalCapsrActiveMember = 0;
+    var tTotalCapsrPercentage   = 0;
+    var tTotalAssociateUploadedFile   = 0;
+    var tTotalAssociateActiveMember = 0;
+    var tTotalAssociatePercentage = 0;
+    var tTotalJvoUploadedFile         = 0;
+    var tTotalJvoActiveMember   = 0;
+    var tTotalJvoPercentage = 0;
+
+          tTotalUploadedFIle += branches[k].data.total_uploaded_documents;
+          tTotalActiveMember += branches[k].data.total_active_members;
+          tTotalPercentage += branches[k].data.total_percentage;
+         
+
+          tTotalKcoopUploadedFile += branches[k].data.total_uploaded_documents_kcoop;
+          tTotalKcoopActiveMember += branches[k].data.total_active_members_kcoop;
+          tTotalKcoopPercentage += branches[k].data.total_percentage_kcoop;
+          tTotalCapsrUploadedFile += branches[k].data.total_uploaded_documents_capsr;
+          tTotalCapsrActiveMember += branches[k].data.total_active_members_capsr;
+          tTotalCapsrPercentage += branches[k].data.total_percentage_capsr;
+          tTotalAssociateUploadedFile += branches[k].data.total_uploaded_documents_associate;
+          tTotalAssociateActiveMember += branches[k].data.total_active_members_associate;
+          tTotalAssociatePercentage += branches[k].data.total_percentage_associate;
+          tTotalJvoUploadedFile += branches[k].data.total_uploaded_documents_jvo;
+          tTotalJvoActiveMember += branches[k].data.total_active_members_jvo;
+          tTotalJvoPercentage += branches[k].data.total_percentage_jvo;
+
+        }
+      }
+
+      tTotalKcoopUploadedFile = tTotalKcoopUploadedFile
+      tTotalKcoopActiveMember = tTotalKcoopActiveMember
+      tTotalKcoopPercentage = tTotalKcoopPercentage
+      tTotalCapsrUploadedFile = tTotalCapsrUploadedFile
+      tTotalCapsrActiveMember = tTotalCapsrActiveMember
+      tTotalCapsrPercentage = tTotalCapsrPercentage
+      tTotalAssociateUploadedFile = tTotalAssociateUploadedFile
+      tTotalAssociateActiveMember = tTotalAssociateActiveMember
+      tTotalAssociatePercentage = tTotalAssociatePercentage
+      tTotalJvoUploadedFile = tTotalJvoUploadedFile
+      tTotalJvoActiveMember = tTotalJvoActiveMember
+      tTotalJvoPercentage = tTotalJvoPercentage 
+
+
+      tTotalUploadedFIle                = tTotalKcoopUploadedFile + tTotalCapsrUploadedFile + tTotalAssociateUploadedFile + tTotalJvoUploadedFile
+      tTotalActiveMember                = tTotalKcoopActiveMember + tTotalCapsrActiveMember + tTotalAssociateActiveMember + tTotalJvoActiveMember
+      tTotalPercentage                  = tTotalUploadedFIle * 100 / tTotalActiveMember
+    }
+    rows.push(
+      <tr>
+        <td>
+          <strong>
+            <a href={"blip_summary"} target='_blank'>  
+              UPLOADED DOCUMENTS
+            </a>
+          </strong>
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopUploadedFile)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopActiveMember)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalKcoopPercentage)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrUploadedFile)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrActiveMember)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalCapsrPercentage)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateUploadedFile)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociateActiveMember)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalAssociatePercentage)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoUploadedFile)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoActiveMember)}
+        </td> 
+        <td className="text-center">
+          {numberWithCommas(tTotalJvoPercentage)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalUploadedFIle)}
+        </td>  
+        <td className="text-center">
+          {numberWithCommas(tTotalActiveMember)}
+        </td>
+        <td className="text-center">
+          {numberWithCommas(tTotalPercentage)}
+        </td>       
+      </tr>
+    );
+
+    return (
+      <table className="table table-sm table-bordered">
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    );
+  }
+
+  renderOverviewTableUploadedDocumentsCounts() {
+    var areas   = this.state.data.areas;
+    var rows    = [];
+    var colSpan = 13;
+
+    var areaColor     = "#bad5fd";
+    var clusterColor  = "#c5ffc1";
+    var branchColor   = "#797979";
+
+    var tTotalUploadedFIle                = 0.00;
+    var tTotalActiveMember                = 0.00;
+    var tTotalPercentage                  = 0.00;
+
+    var tUploadedFile                     = 0;
+    var tActiveMember                     = 0;
+    var tPercentage                       = 0;
+   
+    rows.push(
+      <tr style={{backgroundColor: areaColor}}>
+        <th className="text-center" colSpan={colSpan}>
+          <h4>        
+            UPLOADED DOCUMENTS COUNTS PER BRANCH
+          </h4>  
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+          Branch Name
+        </th>
+        <th className="text-center">
+          UPLOADED DOCUMENTS
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+        <th>
+          As Of (Uploaded Documents Counts)
+        </th>
+      </tr>
+    );
+
+    for(var i = 0; i < areas.length; i++) {
+     
+      var clusters    = areas[i].clusters;
+
+      for(var j = 0; j < clusters.length; j++) {
+
+        var branches  = clusters[j].branches;
+
+        for(var k = 0; k < branches.length; k++) {
+    
+          tTotalUploadedFIle                += branches[k].data.total_uploaded_documents_counts;
+          tTotalActiveMember                += branches[k].data.total_active_members;
+          tTotalPercentage                  += branches[k].data.total_percentage;
+          tUploadedFile                     += branches[k].data.number_of_attached_files;
+          tActiveMember                     += branches[k].data.number_of_active_members;
+          tPercentage                       += branches[k].data.percentage;
+          
+
+          rows.push(
+            <tr key={"branch-" + branches[k].id}>
+              <td>
+                <strong>
+                  {branches[k].name}
+                </strong>
+              </td>
+              <td className="text-center">
+                {branches[k].data.number_of_attached_files}
+              </td>
+              <td className="text-center">
+                {branches[k].data.number_of_active_members}
+              </td>
+              <td className="text-center">
+                {branches[k].data.percentage}%
+              </td>
+              <td className="text-center">
+                {branches[k].data.uploaded_documents_counts_as_of}
+              </td>
+            </tr>
+          );
+        }
+      }
+    }
+
+    rows.push(
+      <tr style={{backgroundColor: "#696", color: "#fff"}}>
+        <td>
+          <strong>
+            Grand Total
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tUploadedFile}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tActiveMember}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalPercentage = tUploadedFile * 100 / tActiveMember}
+          </strong>
+        </td>
+        <td>
+        </td>
+      </tr>
+    );
+
+    return (
+      <table className="table table-sm table-bordered">
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    );
+  }
+
   render() {
     if(this.state.isLoading) {
       return (
@@ -1307,6 +1677,10 @@ renderOverviewTableClaims() {
           {this.renderOverviewTableClaimsSummary()}
           <br />
           {this.renderOverviewTableClaims()}
+          <br />
+          {this.renderOverviewTableUploadedDocumentsSummary()}
+          <br />
+          {this.renderOverviewTableUploadedDocumentsCounts()}
         </div>
       );
     }

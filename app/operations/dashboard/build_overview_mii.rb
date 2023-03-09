@@ -13,7 +13,7 @@ module Dashboard
 
       data_stores = DataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
-        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[CLAIMS_COUNTS PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
+        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[UPLOADED_DOCUMENTS_COUNTS CLAIMS_COUNTS PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
         .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC"))
 
       {
@@ -37,11 +37,13 @@ module Dashboard
       mc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "INSURANCE_MEMBER_COUNTS" }
       pf = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "PERSONAL_FUNDS" }
       cc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "CLAIMS_COUNTS" }
+      udc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "UPLOADED_DOCUMENTS_COUNTS" }
 
       d = {
         personal_funds_as_of: "",
         member_counts_as_of: "",
         claims_counts_as_of: "",
+        uploaded_documents_counts_as_of: "",
         total_life: 0.00,
         total_rf: 0.00,
         total_life_rf: 0.00,
@@ -126,7 +128,42 @@ module Dashboard
         total_calamity_assistance_associate_amount: 0.00,
         total_calamity_assistance_jvo_amount: 0.00,
         area: "",
+
+        total_uploaded_documents: 0,
+        # total_active_members: 0,
+        # total_percentage: 0.00,
+        total_uploaded_documents_kcoop: 0,
+        total_active_members_kcoop: 0,
+        total_percentage_kcoop: 0.00,
+        total_uploaded_documents_capsr: 0,
+        total_active_members_capsr: 0,
+        total_percentage_capsr: 0.00,
+        total_uploaded_documents_associate: 0,
+        total_active_members_associate: 0,
+        total_percentage_associate: 0.00,
+        total_uploaded_documents_jvo: 0,
+        total_active_members_jvo: 0,
+        total_percentage_jvo: 0.00,
+        total_uploaded_documents_counts: 0,
+        total_active_members: 0,
+        total_percentage: 0,
+        number_of_attached_files: 0,
+        number_of_active_members: 0,
+        percentage: 0,
       }
+
+      if udc.present?
+        counts = udc.data
+        area = udc.data["area"]
+
+        d[:area] = area
+        d[:uploaded_documents_counts_as_of]  = udc.meta["as_of"]
+            
+        d[:number_of_attached_files]     = counts["number_of_attached_files"]  
+        d[:number_of_active_members]     = counts["number_of_active_members"] 
+        d[:percentage]                   = counts["percentage"] 
+
+      end
 
       if pf.present?
         d[:personal_funds_as_of] = pf.meta["as_of"]

@@ -92,6 +92,7 @@
       %th.header.curr 
       %th.header.curr 
       %th.header.curr 
+      %th.header.curr
       %th.header.curr #{number_to_currency(@print_kkalinga_bill.total_amount, unit: "")}
 
 %hr
@@ -148,6 +149,8 @@
           %th{width: 255} #{"EVELYN LAGMAY"}
         -else
           %th{width: 255}
+      %br
+      Reviewed By:
   .col
     %center
       %strong
