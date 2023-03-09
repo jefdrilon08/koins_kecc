@@ -1,0 +1,86 @@
+-if @records.any?
+    -@records.each do |rec|
+        %table.table.table-bordered.table-sm.table-hover
+            %tbody
+                %tr
+                    %th.text-center
+                        Identification Number
+                    %th.text-center
+                        Member Name
+                    %th.text-center
+                        Center
+                    %th.text-center
+                        Member Type
+                %tr
+                    %td.text-center
+                        #{rec[:identification_number]}
+                    %td.text-center
+                        =link_to member_path(rec[:member_id]), target: '_blank' do
+                            #{rec[:member_name]}
+                    %td.text-center
+                        #{Member.find(rec[:member_id]).center.name.upcase}
+                    %td.text-center
+                        #{rec[:member_type]}
+                %tr
+                    %th.text-center{colspan: 4}
+                        Loan Records
+                %tr
+                    %th.text-center
+                        Loan Product
+                    %th.text-center
+                        Maturity Date
+                    %th.text-center
+                        Total Balance (Principal + Interest)
+                    %th.text-center
+                        Last Payment Made
+                -rec[:loan_records].each do |lr|
+                    %tr
+                        %td.text-center
+                            = link_to loan_path(lr[:loan_id]),target: '_blank' do
+                                #{lr[:loan_product]}
+                        %td.text-center
+                            #{lr[:maturity_date]}
+                        %td.text-center
+                            #{(lr[:principal_balance] + lr[:interest_balance]).to_f.round(2)}
+                        %td.text-center
+                            -if lr[:last_loan_payment].present?
+                                #{lr[:last_loan_payment].to_date} 
+                            -else
+                                NO PAYMENT
+                %tr
+                    %th.text-center{colspan: 4}
+                        Member Accounts
+                %tr
+                    %th.text-center{colspan: 2}
+                        Accounts
+                    %th.text-center
+                        Balance
+                    %th.text-center
+                        Last Deposit Transaction
+                -rec[:member_accounts].each do |ma|
+                    %tr
+                        %td.text-center{colspan: 2}
+                            =link_to savings_account_path(ma[:id]),target: '_blank' do
+                                #{ma[:account_subtype]}
+                        
+                        %td.text-center
+                            #{ma[:balance]}
+                        %td.text-center
+                            #{ma[:last_transaction]}
+                %tr
+                    %td.text-center{:colspan => "4"}
+                        .btn.btn-success.btn-print-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loan_records].to_json,member_accounts: rec[:member_accounts].to_json}} PRINT LETTER
+                    
+                    
+
+           
+             
+-else
+    %p 
+        NO RECORD FOUND
+
+
+
+
+
+

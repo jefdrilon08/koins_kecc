@@ -1,0 +1,12 @@
+%h4
+  For Involuntary Members
+
+  - if @records.any?
+    = render partial: "index_list"
+    = paginate @records
+  - else
+    %hr
+      %h6
+        No records
+
+= render partial: "data_stores/involuntary_members/modals/new"

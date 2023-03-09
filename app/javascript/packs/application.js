@@ -218,6 +218,8 @@ import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
 import TransferSavingsShow from "../models/TransferSavingsShow.js";
 import MbsTransferIndex from "../models/MbsTransferIndex";
 import MbsTransferShow from "../models/MbsTransferShow";
+import InvoluntaryMembersIndex from "../models/InvoluntaryMembersIndex.js";
+import InvoluntaryMembersShow from "../models/InvoluntaryMembersShow.js";
 //=======
 import BankTransferIndex from "../models/BankTransferIndex.js";
 import ShareCapitalSummaryIndex from "../models/ShareCapitalSummaryIndex.js";
@@ -423,8 +425,13 @@ const hooks = {
 //=======
   "pages/profile":                                    [Profile],
   "bank_transfer/index":                              [BankTransferIndex],
+//<<<<<<< HEAD
   "data_stores/share_capital_summary/index":          [ShareCapitalSummaryIndex],
-  "data_stores/share_capital_summary/show": 		  [ShareCapitalSummary]
+  "data_stores/share_capital_summary/show":						[ShareCapitalSummary]
+//=======
+  "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
+  "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow]
+//>>>>>>> ab4e03ef4c22761a4d3c089335f304017ae920b6
 
 //>>>>>>> Instapay_Pesonet
 }

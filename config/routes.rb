@@ -392,6 +392,9 @@ Rails.application.routes.draw do
     get "/for_writeoff/for_writeoff_excel", to: "for_writeoff#for_writeoff_excel", as: :for_writeoff_download_excel
     resources :for_writeoff,only: [:index,:show,:destroy]
 
+    get "/involuntary_members", to: "involuntary_members#index"
+    get "/involuntary_members/:id", to: "involuntary_members#show"
+
     get "/patronage_refund", to: "patronage_refund#index"
     get "/patronage_refund/:id", to: "patronage_refund#show"
     delete "/patronage_refund/:id", to: "patronage_refund#destroy"

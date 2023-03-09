@@ -611,7 +611,8 @@ namespace :api do
       get "/members_in_good_standing/fetch", to: "members_in_good_standing#fetch"
       post "/for_writeoff/queue", to: "for_writeoff#queue"
       get "/for_writeoff/fetch", to: "for_writeoff#fetch"
-
+      post "/involuntary_members/queue", to: "involuntary_members#queue"
+      post "/involuntary_members/print",to: "involuntary_members#print"
       post "/insurance_personal_funds/queue", to: "insurance_personal_funds#queue"
       post "/insurance_personal_funds/queue_bulk", to: "insurance_personal_funds#queue_bulk"
       get "/insurance_personal_funds/fetch", to: "insurance_personal_funds#fetch"
