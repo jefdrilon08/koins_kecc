@@ -1,0 +1,11 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          List for Involuntary Members #{@data_store.meta["branch_name"]} - As of #{@data_store[:as_of]}
+        %hr
+          = render partial: "members_table"
+
+
+= render partial: "data_stores/involuntary_members/modals/details"

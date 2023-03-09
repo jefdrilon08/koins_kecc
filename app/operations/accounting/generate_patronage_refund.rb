@@ -113,7 +113,7 @@ module Accounting
                            temp[:ave_interest]   = (temp[:total_interest_paid_amount] / 12).round(2)
                           temp
 
-                        }
+    }
                         
                        @data
        

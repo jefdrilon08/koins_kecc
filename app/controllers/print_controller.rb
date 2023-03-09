@@ -17,6 +17,12 @@ class PrintController < ApplicationController
       @monthly_incentive = data
       render "print/monthly_incentive",layout: "print"
 
+    elsif type == "print_involuntary_members"
+      data_str = params[:data]
+      data = ::Print::BuildInvoluntaryLetter.new(config: JSON.parse(data_str)).execute!
+      @data = data
+      render "print/print_involuntary_letter",layout: "print"
+      
     elsif type == "print_adjustment_record"
     
       adjustment_record = params[:id]

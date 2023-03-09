@@ -216,6 +216,8 @@ import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
 import TransferSavingsShow from "../models/TransferSavingsShow.js";
 import MbsTransferIndex from "../models/MbsTransferIndex";
 import MbsTransferShow from "../models/MbsTransferShow";
+import InvoluntaryMembersIndex from "../models/InvoluntaryMembersIndex.js";
+import InvoluntaryMembersShow from "../models/InvoluntaryMembersShow.js";
 //=======
 import BankTransferIndex from "../models/BankTransferIndex.js"
 //const renderComponent = (Component, payload) => {
@@ -419,7 +421,9 @@ const hooks = {
   "transfer_savings/show":                            [TransferSavingsShow,TransferSavingsRecordsShow],
 //=======
   "pages/profile":                                    [Profile],
-  "bank_transfer/index":                              [BankTransferIndex]
+  "bank_transfer/index":                              [BankTransferIndex],
+  "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
+  "data_stores/involuntary_members/show": 												[InvoluntaryMembersShow]
 
 //>>>>>>> Instapay_Pesonet
 }
