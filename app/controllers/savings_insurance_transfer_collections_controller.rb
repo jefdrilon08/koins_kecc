@@ -152,8 +152,8 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
         data: { method: :delete, confirm: "Are you sure?" }
       }
     end
-    if @savings_insurance_transfer_collection.kbente
-      if @savings_insurance_transfer_collection.approved?
+    if @savings_insurance_transfer_collection.kbente 
+      if @savings_insurance_transfer_collection.approved? or @savings_insurance_transfer_collection.pending?
         if ["MIS", "BK", "SBK"].include? current_user.roles.last
            @subheader_side_actions << {
             id: "btn-print",
@@ -167,7 +167,7 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
       end
     end
     if @savings_insurance_transfer_collection.kkalinga
-      if @savings_insurance_transfer_collection.approved?
+      if @savings_insurance_transfer_collection.approved? or @savings_insurance_transfer_collection.pending?
         if ["MIS", "BK", "SBK"].include? current_user.roles.last
            @subheader_side_actions << {
             id: "btn-print-k",

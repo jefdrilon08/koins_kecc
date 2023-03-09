@@ -7,7 +7,8 @@ module SavingsInsuranceTransferCollections
 
       @branch                 = @savings_insurance_transfer_collection.branch
       @data                   = @savings_insurance_transfer_collection.data.with_indifferent_access
-      @accounting_entry_data  = @data[:accounting_entry]
+      # @accounting_entry_data  = @data[:accounting_entry]
+      @accounting_entry_data  = @savings_insurance_transfer_collection.accounting_entry
 
       @date_approved  = ::Utils::GetCurrentDate.new(
                           config: {

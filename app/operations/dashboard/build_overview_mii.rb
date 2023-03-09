@@ -13,7 +13,7 @@ module Dashboard
 
       data_stores = DataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
-        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[CLAIMS_COUNTS PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
+        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[UPLOADED_DOCUMENTS_COUNTS CLAIMS_COUNTS PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
         .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC"))
 
       {
@@ -37,11 +37,13 @@ module Dashboard
       mc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "INSURANCE_MEMBER_COUNTS" }
       pf = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "PERSONAL_FUNDS" }
       cc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "CLAIMS_COUNTS" }
+      udc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "UPLOADED_DOCUMENTS_COUNTS" }
 
       d = {
         personal_funds_as_of: "",
         member_counts_as_of: "",
         claims_counts_as_of: "",
+        uploaded_documents_counts_as_of: "",
         total_life: 0.00,
         total_rf: 0.00,
         total_life_rf: 0.00,
@@ -126,7 +128,182 @@ module Dashboard
         total_calamity_assistance_associate_amount: 0.00,
         total_calamity_assistance_jvo_amount: 0.00,
         area: "",
+
+        total_uploaded_documents: 0,
+        # total_active_members: 0,
+        # total_percentage: 0.00,
+        total_uploaded_documents_kcoop: 0,
+        total_active_members_kcoop: 0,
+        total_percentage_kcoop: 0.00,
+        total_uploaded_documents_capsr: 0,
+        total_active_members_capsr: 0,
+        total_percentage_capsr: 0.00,
+        total_uploaded_documents_associate: 0,
+        total_active_members_associate: 0,
+        total_percentage_associate: 0.00,
+        total_uploaded_documents_jvo: 0,
+        total_active_members_jvo: 0,
+        total_percentage_jvo: 0.00,
+        total_uploaded_documents_counts: 0,
+        total_active_members: 0,
+        total_percentage: 0,
+        number_of_attached_files: 0,
+        number_of_active_members: 0,
+        percentage: 0,
       }
+
+      if udc.present?
+        d[:uploaded_documents_as_of] = udc.meta["as_of"]
+
+        udc.data["data"].each.with_index do |p, i|
+          d[:total_uploaded_documents] += p["number_of_attached_files"].to_f.round(2)
+          d[:total_active_members] += p["number_of_active_members"].to_f.round(2)
+          d[:total_percentage] += 00
+          d[:total_uploaded_documents_kcoop] += 00
+          d[:total_active_members_kcoop] += 00
+          d[:total_percentage_kcoop] += 00
+          d[:total_uploaded_documents_capsr] += 00
+          d[:total_active_members_capsr] += 00
+          d[:total_percentage_capsr] += 00
+          d[:total_uploaded_documents_associate] += 00
+          d[:total_active_members_associate] += 00
+          d[:total_percentage_associate] += 00 
+          d[:total_uploaded_documents_jvo] += 00
+          d[:total_active_members_jvo] += 00
+          d[:total_percentage_jvo] += 00
+        end
+      end
+
+      if udc.present?
+        counts = udc.data
+        area = udc.data["area"]
+
+        d[:area] = area
+        d[:uploaded_documents_counts_as_of]  = udc.meta["as_of"]
+            
+        d[:number_of_attached_files]     = counts["number_of_attached_files"]  
+        d[:number_of_active_members]     = counts["number_of_active_members"] 
+        d[:percentage]                   = counts["percentage"] 
+        cc.data["counts"]["approved_claims"]["claims"].each.with_index do |c, i|
+            
+          d[:total_claims_amount] += c["amount"].to_f.round(2)
+
+          if c["claim_type"] == "BLIP"
+            d[:total_blip_claims] += c["amount"].to_f.round(2)
+
+            if area["name"] == "HEAD OFFICE"
+              d[:total_blip_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_blip_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_blip_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_blip_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_blip_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_blip_jvo] += 1
+            else
+              d[:total_blip_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_blip_kcoop] += 1
+            end
+          elsif c["claim_type"] == "CLIP"
+            d[:total_clip_claims] += c["amount"].to_f.round(2)
+          
+            if area["name"] == "HEAD OFFICE"
+              d[:total_clip_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_clip_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_clip_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_clip_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_clip_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_clip_jvo] += 1
+            else
+              d[:total_clip_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_clip_kcoop] += 1
+            end
+          elsif c["claim_type"] == "HIIP"
+            d[:total_hiip_claims] += c["amount"].to_f.round(2)
+
+            if area["name"] == "HEAD OFFICE"
+              d[:total_hiip_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_hiip_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_hiip_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_hiip_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_hiip_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_hiip_jvo] += 1
+            else
+              d[:total_hiip_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_hiip_kcoop] += 1
+            end
+          elsif c["claim_type"] == "CALAMITY ASSISTANCE"
+            d[:total_calamity_assistance_claims] += c["amount"].to_f.round(2)
+          
+            if area["name"] == "HEAD OFFICE"
+              d[:total_calamity_assistance_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_calamity_assistance_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_calamity_assistance_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_calamity_assistance_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_calamity_assistance_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_calamity_assistance_jvo] += 1
+            else
+              d[:total_calamity_assistance_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_calamity_assistance_kcoop] += 1
+            end
+          elsif c["claim_type"] == "K-BENTE"
+            d[:total_kbente_claims] += c["amount"].to_f.round(2)
+
+            if area["name"] == "HEAD OFFICE"
+              d[:total_kbente_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_kbente_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_kbente_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_kbente_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_kbente_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_kbente_jvo] += 1
+            else
+              d[:total_kbente_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_kbente_kcoop] += 1
+            end
+          elsif c["claim_type"] == "K-KALINGA"
+            d[:total_kkalinga_claims] += c["amount"].to_f.round(2)
+          
+            if area["name"] == "HEAD OFFICE"
+              d[:total_kkalinga_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_kkalinga_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_kkalinga_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_kkalinga_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_kkalinga_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_kkalinga_jvo] += 1
+            else
+              d[:total_kkalinga_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_kkalinga_kcoop] += 1
+            end
+          elsif c["claim_type"] == "KUYA JUN SCHOLARSHIP PROGRAM"
+            d[:total_kjsp_claims] += c["amount"].to_f.round(2)
+          
+            if area["name"] == "HEAD OFFICE"
+              d[:total_kjsp_associate_amount] += c["amount"].to_f.round(2)
+              d[:total_kjsp_associate] += 1
+            elsif area["name"] == "VISAYAS"
+              d[:total_kjsp_capsr_amount] += c["amount"].to_f.round(2)
+              d[:total_kjsp_capsr] += 1
+            elsif area["name"] == "NORTH LUZON"
+              d[:total_kjsp_jvo_amount] += c["amount"].to_f.round(2)
+              d[:total_kjsp_jvo] += 1
+            else
+              d[:total_kjsp_kcoop_amount] += c["amount"].to_f.round(2)
+              d[:total_kjsp_kcoop] += 1
+            end
+          end
+        end
+
+      end
 
       if pf.present?
         d[:personal_funds_as_of] = pf.meta["as_of"]
