@@ -6,12 +6,19 @@ module Print
 			@member = Member.find(@config["member_id"])
 			@loan_records = @config["loan_records"]
 			@member_accounts = @config["member_accounts"]
-			
-
 			@member_data = @member.data.with_indifferent_access
 		end 
 
 		def execute!
+		#	raise @member_accounts.inspect
+			@last_savings_deposit = @member_accounts.sort_by{|key| key["last_transaction"] }.reverse.first
+			@last_loan_transaction = @loan_records.sort_by{|key| 
+				if key["last_loan_payment"].present?
+					key["last_loan_payment"]
+				end
+				}.reverse.first
+
+
 			@total_loan_balance = 0
 					@loan_records.each do |lr|
 						principal_balance = lr["principal_balance"]
@@ -26,8 +33,12 @@ module Print
 				member_address: @member_data[:address][:street] + " "+@member_data[:address][:district]+ " "+ @member_data[:address][:city] + " "+ @member_data[:address][:region],
 				total_loan_balance: @total_loan_balance.to_f.round(2),
 				loan_records: @loan_records,
-				member_account: @member_accounts
+				member_account: @member_accounts,
+				last_savings_deposit: @last_savings_deposit["last_transaction"],
+				last_loan_payment_transaction: @last_loan_transaction["last_loan_payment"]
 			}
+
+
 			@data
 		end
 	end

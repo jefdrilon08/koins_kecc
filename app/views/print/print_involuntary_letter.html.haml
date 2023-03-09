@@ -1,5 +1,5 @@
 :css
-  @page { size: portrait; margin: 30px;}
+  @page { size: portrait; margin: 60px;}
   .just-font br {
   content: "";
   display: block;
@@ -51,25 +51,38 @@
 %br
 %div.just-font{style: "font-size: 10.66px"}
   %br
-    #{Date.today.strftime("%B %d, %Y")}
+    %b
+      #{Date.today.strftime("%B %d, %Y")}
   %br
-    #{@data[:member_full_name].upcase}
+    %b
+      #{@data[:member_full_name].upcase}
   %br
-    #{@data[:member_branch].upcase} / #{@data[:member_center]}
+    %b
+      #{@data[:member_branch].upcase} / #{@data[:member_center]}
   %br
-    #{@data[:member_address]}
+    %b
+      #{@data[:member_address]}
 %br
 %p{style: "font-size: 10.66px"}
-  G./Gng. #{@data[:member_full_name]}:
+  %b
+    G./Gng. #{@data[:member_full_name]}:
 %p{style: "font-size: 10.66px"}
   Nais naming ipagbigay-alam sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan (piliin ang naangkop):
   %ul.list-group
     %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/ 
-      &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong petsa hanggang sa kasalukuyan
+      &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
+      %b
+        #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
+      hanggang sa kasalukuyan
     %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/
-      &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; Total Loan Balance: #{@data[:total_loan_balance]}
+      &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
+      -@data[:loan_records].each do |lr|
+        %div.just-font
+          %br
+            %b
+              #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
     %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/
       &nbsp&nbsp Paglabag sa anumang probisyon ng By-laws o anumang polisiya at patakarang ipinatutupad ng kooperatiba
@@ -79,7 +92,10 @@
 %p{style: "font-size: 10.66px"}
   Ayon sa mga polisiya, ang mga ito ay sapat na dahilan upang ikaw ay tanggalin bilang miyembro ng kooperatiba.
 %p{style: "font-size: 10.66px"}
-  Dahil dito, ikaw ay aming binibigyan hanggang sa petsang (30 araw) upang makipag-ugnayan sa amin upang maipaliwanag kung bakit ikaw ay hindi dapat tanggalin bilang miyembro ng kooperatiba.
+  Dahil dito, ikaw ay aming binibigyan hanggang sa petsang 
+  %b
+    (30 araw) 
+  upang makipag-ugnayan sa amin upang maipaliwanag kung bakit ikaw ay hindi dapat tanggalin bilang miyembro ng kooperatiba.
 %p{style: "font-size: 10.66px"}
   Ang hindi mo pagtugon sa sulat na ito ay maaring magdulot ng mga sumusunod:
   %ul.list-group
