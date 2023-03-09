@@ -53,6 +53,8 @@
   %br
     %b
       #{Date.today.strftime("%B %d, %Y")}
+%br
+%div.just-font{style: "font-size: 10.66px"}
   %br
     %b
       #{@data[:member_full_name].upcase}
@@ -67,7 +69,7 @@
   %b
     G./Gng. #{@data[:member_full_name]}:
 %p{style: "font-size: 10.66px"}
-  Nais naming ipagbigay-alam sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan (piliin ang naangkop):
+  Nais naming ipagbigay-alam na sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan:
   %ul.list-group
     %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/ 
@@ -94,7 +96,7 @@
 %p{style: "font-size: 10.66px"}
   Dahil dito, ikaw ay aming binibigyan hanggang sa petsang 
   %b
-    (30 araw) 
+    #{(Date.today + 30.days).to_date.strftime("%B %d, %Y")}
   upang makipag-ugnayan sa amin upang maipaliwanag kung bakit ikaw ay hindi dapat tanggalin bilang miyembro ng kooperatiba.
 %p{style: "font-size: 10.66px"}
   Ang hindi mo pagtugon sa sulat na ito ay maaring magdulot ng mga sumusunod:
