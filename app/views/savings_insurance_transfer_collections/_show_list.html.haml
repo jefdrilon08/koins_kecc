@@ -44,7 +44,7 @@
         %th.text-center
           Actions
   %tbody
-    - records.each do |o|
+    - records.each_with_index do |o, i|
       %tr
         %td
           = link_to member_path(o[:member][:id]), target: '_blank' do
@@ -89,7 +89,7 @@
           #{number_to_currency(o[:amount], unit: '')}
         - if @savings_insurance_transfer_collection.pending?
           %td.text-center
-            %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{o[:member][:id]}" } }
+            %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
               .fa.fa-times
     %tr
       %th
