@@ -35,26 +35,27 @@ module Api
       def remove_member
         savings_insurance_transfer_collection = SavingsInsuranceTransferCollection.where(id: params[:id]).first
         member                                = Member.where(id: params[:member_id]).first
+        member_index                          = params[:member_id]
 
         config  = {
           savings_insurance_transfer_collection: savings_insurance_transfer_collection,
-          member: member,
+          member_index: member_index,
           user: current_user
         }
 
-        errors  = ::SavingsInsuranceTransferCollections::ValidateRemoveMember.new(
-                    config: config
-                  ).execute!
+        # errors  = ::SavingsInsuranceTransferCollections::ValidateRemoveMember.new(
+        #             config: config
+        #           ).execute!
 
-        if errors[:full_messages].any?
-          render json: { errors: errors }, status: 400
-        else
+        # if errors[:full_messages].any?
+        #   render json: { errors: errors }, status: 400
+        # else
           ::SavingsInsuranceTransferCollections::RemoveMember.new(
             config: config
           ).execute!
 
           render json: { message: "ok" }
-        end
+        #end
       end
 
       def add_member
