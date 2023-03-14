@@ -1,6 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
-
+import * as bootstrap from "bootstrap";
 import "pdfmake/build/pdfmake"
 const pdfMake = window["pdfMake"];
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -39,7 +39,7 @@ var _cacheDom = function() {
   $txtReverseReason       = $("#reverse-reason");
 
   
-  $modalApproveReverseLoan = $("#modal-approve-reverse-loan");
+  $modalApproveReverseLoan = new bootstrap.Modal(document.getElementById("modal-approve-reverse-loan"));
   $btnConfirmReverseLoan = $("#btn-confirm-approve-reverse-loan");
 
   templateErrorList = $("#template-error-list").html();
@@ -48,6 +48,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
   
   $btnApproveReverseLoan.on("click", function() {
+    //alert("jayson");
     $modalApproveReverseLoan.show();
    // $txtReverseReason.val();
   });
