@@ -27,9 +27,15 @@ export default function MonthlyPsrPastDue(props) {
 
   const buildData = (records) => {
     const _data = records.map((o) => {
+      let total_principal_due = o.data.total_principal_due;
+
+      if(!total_principal_due) {
+        total_principal_due = 0.00;
+      }
+
       return {
         date: o.closing_date,
-        past_due: o.data.total_principal_due
+        past_due: total_principal_due
       }
     });
 

@@ -27,9 +27,15 @@ export default function MonthlyPsrPortfolio(props) {
 
   const buildData = (records) => {
     const _data = records.map((o) => {
+      let total_overall_principal_balance = o.data.total_overall_principal_balance;
+
+      if(!total_overall_principal_balance) {
+        total_overall_principal_balance = 0.00;
+      }
+
       return {
         date: o.closing_date,
-        portfolio: o.data.total_overall_principal_balance
+        portfolio: total_overall_principal_balance
       }
     });
 

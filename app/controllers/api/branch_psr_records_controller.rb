@@ -8,6 +8,9 @@ module Api
 
       branch_psr_records = BranchPsrRecord.where(
         branch_id: branch.id
+      ).where(
+        "extract(year from closing_date) = ?",
+        year
       ).order(
         "closing_date ASC"
       )

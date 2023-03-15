@@ -1,6 +1,4 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import SkCubeLoading from "../SkCubeLoading";
-import axios from 'axios';
 import { numberWithCommas } from "../utils/helpers";
 import {
   VictoryLine,

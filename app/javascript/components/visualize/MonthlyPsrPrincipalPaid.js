@@ -27,9 +27,11 @@ export default function MonthlyPsrPrincipalPaid(props) {
 
   const buildData = (records) => {
     const _data = records.map((o) => {
+      const total_principal_paid = o.data.total_principal_paid ? o.data.total_principal_paid : 0.00;
+
       return {
         date: o.closing_date,
-        principal_paid: o.data.total_principal_paid
+        principal_paid: total_principal_paid
       }
     });
 

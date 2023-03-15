@@ -29,12 +29,17 @@ export default function MonthlyPsrMemberCount(props) {
 
   const buildData = (records) => {
     const _data = records.map((o) => {
+      const active_borrowers = o.data.active_borrowers ? o.data.active_borrowers : 0;
+      const pure_savers = o.data.pure_savers ? o.data.pure_savers : 0;
+      const admitted = o.data.admitted ? o.data.admitted : 0;
+      const resigned = o.data.resigned ? o.data.resigned : 0;
+
       return {
         date: o.closing_date,
-        active_borrowers: o.data.active_borrowers,
-        pure_savers: o.data.pure_savers,
-        admitted: o.data.admitted,
-        resigned: o.data.resigned
+        active_borrowers: active_borrowers,
+        pure_savers: pure_savers,
+        admitted: admitted,
+        resigned: resigned
       }
     });
 
