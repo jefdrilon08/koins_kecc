@@ -1,4 +1,8 @@
 namespace :rehash do
+  task :fix_identification_number=> :environment do
+    branch_id = ENV['branch_id']
+
+  end
   task :loan_rehash_with_payment => :environment do
     first_payment = "2021-01-18".to_date
     a = AmortizationScheduleEntry.where("loan_id = ?" ,"573f02c2-b609-4ee3-ab13-41496121909c" ).order(:due_date)
