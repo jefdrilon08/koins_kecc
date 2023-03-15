@@ -427,7 +427,7 @@ const hooks = {
   "bank_transfer/index":                              [BankTransferIndex],
 //<<<<<<< HEAD
   "data_stores/share_capital_summary/index":          [ShareCapitalSummaryIndex],
-  "data_stores/share_capital_summary/show":						[ShareCapitalSummary]
+  "data_stores/share_capital_summary/show":						[ShareCapitalSummary],
 //=======
   "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
   "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow]
