@@ -1,7 +1,40 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :delete]
-    before_action :authenticate_user!, only: [:index, :unlock, :update_password, :create_survey, :balik_kasapi, ]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi]
+    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi]
+
+    def save
+      member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
+
+      config  = {
+        member_data: member_data,
+        user: current_user
+      }
+
+      errors = ::Members::ValidateSave.new(
+        config: config
+      ).execute!
+
+      if errors[:full_messages].any?
+        render json: errors, status: 400
+      else
+        member  = ::Members::Save.new(
+                    config: config
+                  ).execute!
+
+        ActivityLog.create!(
+          content: "#{current_user.full_name} modified member #{member.full_name}",
+          activity_type: "modification",
+          data: {
+            user_id: current_user.id,
+            member_id: member.id,
+            member_data: member_data
+          }
+        )
+
+        render json: { id: member.id }
+      end
+    end
 
     def create_survey
       member  = Member.find(params[:id])

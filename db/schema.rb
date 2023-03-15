@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_01_022359) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -250,6 +250,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
     t.index ["member_id"], name: "index_attachment_files_on_member_id"
   end
 
+  create_table "bank_transfers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.decimal "amount"
+    t.jsonb "data"
+    t.uuid "accounting_entry_id"
+    t.uuid "transfer_option_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["transfer_option_id"], name: "index_bank_transfers_on_transfer_option_id"
+  end
+
   create_table "beneficiaries", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "member_id"
     t.string "first_name"
@@ -294,7 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
     t.index ["branch_id"], name: "index_branch_psr_records_on_branch_id"
   end
 
-  create_table "branches", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "branches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "cluster_id"
     t.string "name"
     t.string "short_name"
@@ -496,7 +507,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
     t.index ["cluster_id"], name: "index_daily_branch_metrics_on_cluster_id"
   end
 
-  create_table "data_stores", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "data_stores", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.json "meta"
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
@@ -1477,6 +1488,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
     t.string "branch_id_to_transfer"
   end
 
+  create_table "transfer_options", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transfer_savings_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "branch_id"
+    t.uuid "center_id"
+    t.date "date_approved"
+    t.string "status"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id"], name: "index_transfer_savings_records_on_branch_id"
+    t.index ["center_id"], name: "index_transfer_savings_records_on_center_id"
+  end
+
   create_table "user_branches", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id"
     t.uuid "branch_id"
@@ -1513,7 +1543,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
     t.index ["user_id"], name: "index_user_tasks_on_user_id"
   end
 
-  create_table "users", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -1536,7 +1566,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
     t.string "access_token"
     t.boolean "is_verified"
     t.string "verification_token"
-    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
@@ -1569,6 +1598,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
   add_foreign_key "amortization_schedule_entries", "loans"
   add_foreign_key "announcements", "branches"
   add_foreign_key "attachment_files", "members"
+  add_foreign_key "bank_transfers", "transfer_options"
   add_foreign_key "beneficiaries", "members"
   add_foreign_key "billings", "branches"
   add_foreign_key "billings", "centers"
@@ -1717,6 +1747,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_04_023933) do
   add_foreign_key "survey_questions", "surveys"
   add_foreign_key "time_deposit_collections", "branches"
   add_foreign_key "time_deposit_collections", "centers"
+  add_foreign_key "transfer_savings_records", "branches"
+  add_foreign_key "transfer_savings_records", "centers"
   add_foreign_key "user_demerits", "branches"
   add_foreign_key "user_demerits", "users"
   add_foreign_key "user_tasks", "users"
