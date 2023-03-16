@@ -1,4 +1,27 @@
 namespace :rehash do
+  task :fix_identification_number=> :environment do
+    branch_id = ENV['branch_id']
+
+    branch  = Branch.find(branch_id)
+    branch_code = branch.short_name
+    cluster_code = branch.cluster.short_name
+    members = Member.where(branch_id: branch_id)
+    counter = 1
+    
+    members.each do |mem|
+      if counter == 1
+        identification_number = cluster_code + branch_code + counter.to_s.rjust(5, "0")
+      else
+        identification_number = cluster_code + branch_code + counter.to_s.rjust(5, "0")
+      end
+        counter += 1
+      Member.find(mem.id).update(identification_number: identification_number)
+      puts "updating #{mem.id} identification_number: #{identification_number}"
+    end
+    puts "DONE"
+
+
+  end
   task :loan_rehash_with_payment => :environment do
     first_payment = "2021-01-18".to_date
     a = AmortizationScheduleEntry.where("loan_id = ?" ,"573f02c2-b609-4ee3-ab13-41496121909c" ).order(:due_date)
