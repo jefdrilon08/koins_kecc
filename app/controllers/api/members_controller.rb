@@ -1,6 +1,6 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :delete]
     before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi]
 
     def save
@@ -92,8 +92,7 @@ module Api
     
     end
 
-    def delete
-    
+      def delete
         member  = Member.find(params[:id])
         config  = {
           member: member,
