@@ -33,6 +33,7 @@ class BranchPsrRecord < ApplicationRecord
   def to_h
     {
       id:           self.id,
+      branch_id:    self.branch_id,
       branch:       self.branch.name,
       closing_date: self.closing_date.strftime("%b %d, %Y"),
       data:         self.data

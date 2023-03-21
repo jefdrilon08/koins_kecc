@@ -224,6 +224,8 @@ export default class FormDisplay extends React.Component {
     var context = this;
     var state   = context.state;
 
+    console.log(data);
+
     $.ajax({
       url: "/api/v1/members/save",
       method: "POST",

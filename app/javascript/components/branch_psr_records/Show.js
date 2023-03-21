@@ -189,7 +189,7 @@ export default function BranchPsrRecordsShow(props) {
               </tr>
               <tr>
                 <th>
-                  Net Income Before ADmin Expense
+                  Net Income Before Admin Expense
                 </th>
                 <th className="text-end">
                   {numberWithCommas(data.data.net_income_before_admin_expense)}

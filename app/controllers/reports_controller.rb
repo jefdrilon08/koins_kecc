@@ -11,8 +11,8 @@ class ReportsController < ApplicationController
     if params[:branch_id].present?
       @branch = Branch.find(params[:branch_id])
     end
-      @branches = Branch.all
 
+    @branches = Branch.all
   end
   
   def address_update
