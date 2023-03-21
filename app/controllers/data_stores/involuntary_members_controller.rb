@@ -22,7 +22,7 @@ module DataStores
 		@subheader_side_actions = []
 			@subheader_side_actions << {
 	          id: "",
-	          link: "/data_stores/members_in_good_standing/#{@record.id}",
+	          link: "/data_stores/involuntary_members/#{@record.id}",
 	          class: "fa fa-times",
 	          data: {
 	            method: :delete,

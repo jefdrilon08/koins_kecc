@@ -44,7 +44,7 @@ module DataStores
 
         member_accounts.each do |mem|
           if mem[:account_subtype] == "K-IMPOK"
-            account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
+            account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ?  and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
             if account_transaction.present?
                 @kimpok_last_transaction = account_transaction 
                   @member_accounts<< {
@@ -53,62 +53,6 @@ module DataStores
                     balance: mem.balance.to_f,
                     last_transaction: @kimpok_last_transaction.transacted_at.to_date
                   }
-            end
-          elsif mem[:account_subtype] == "CBU"
-             account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
-            if account_transaction.present?
-                  @cbu_last_transaction = account_transaction 
-                    @member_accounts<< {
-                        id: mem[:id],
-                        account_subtype: mem[:account_subtype],
-                        balance: mem.balance.to_f,
-                        last_transaction: @cbu_last_transaction.transacted_at.to_date
-                      }
-               
-            end
-          elsif mem[:account_subtype] == "Share Capital"
-             account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
-            if account_transaction.present?
-                @sc_last_transaction = account_transaction
-                  @member_accounts<< {
-                      id: mem[:id],
-                      account_subtype: mem[:account_subtype],
-                      balance: mem.balance.to_f,
-                      last_transaction: @sc_last_transaction.transacted_at.to_date
-                    }
-            end
-          elsif mem[:account_subtype] == "Maintaining Balance Savings"
-             account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
-            if account_transaction.present?
-                @mbs_last_transaction = account_transaction
-                  @member_accounts<< {
-                      id: mem[:id],
-                      account_subtype: mem[:account_subtype],
-                      balance: mem.balance.to_f,
-                      last_transaction: @mbs_last_transaction.transacted_at.to_date
-                    }
-            end
-          elsif mem[:account_subtype] == "Personal Savings Account"
-             account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
-            if account_transaction.present?
-                @psa_last_transaction = account_transaction
-                  @member_accounts<< {
-                      id: mem[:id],
-                      account_subtype: mem[:account_subtype],
-                      balance: mem.balance.to_f,
-                      last_transaction: @psa_last_transaction.transacted_at.to_date
-                    }
-            end
-          elsif mem[:account_subtype] == "Time Deposit"
-             account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
-            if account_transaction.present?
-                @td_last_transaction = account_transaction
-                  @member_accounts<< {
-                      id: mem[:id],
-                      account_subtype: mem[:account_subtype],
-                      balance: mem.balance.to_f,
-                      last_transaction: @td_last_transaction.transacted_at.to_date
-                    }
             end
           elsif mem[:account_subtype] == "Golden K"
              account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
@@ -124,9 +68,7 @@ module DataStores
           end
         end #END MEMBER ACCOUNTS
             if o[:member_type] != "GK"
-              if ((@as_of.to_date - @kimpok_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years and
-                 ((@as_of.to_date - @psa_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years and
-                 ((@as_of.to_date - @cbu_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years 
+              if ((@as_of.to_date - @kimpok_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years 
                  
                  temp = {
                       member_id: o.fetch("member_id"),
@@ -140,9 +82,7 @@ module DataStores
           
               end
             else
-              if ((@as_of.to_date - @gk_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years and
-                 ((@as_of.to_date - @psa_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years and
-                 ((@as_of.to_date - @cbu_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years 
+              if ((@as_of.to_date - @gk_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years
                  
                  temp = {
                       member_id: o.fetch("member_id"),
