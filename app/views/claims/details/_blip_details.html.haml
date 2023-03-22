@@ -21,140 +21,175 @@
 %table.table.table-sm.table-hover
   %tbody
     %tr
-      %th Date Prepared
+      %th Date Reported/Notice
+      %td 
+        = @data[:date_reported].to_date.strftime("%b %d, %Y")
+      %th Date Processed
+      %td 
+        = @claim[:date_prepared].to_date.strftime("%b %d, %Y")
+    %tr
+      %th Date Completed Documents
+      %td 
+        - if @data[:date_completed_documents].nil?
+        - else  
+          = @data[:date_completed_documents].to_date.strftime("%b %d, %Y")
+    %tr
+      %th
       %td
-        = @claim.date_prepared.try(:strftime, "%b %d, %Y")
+        %br
+      %th
+      %td
+    %tr
+      %th Member Name
+      %td 
+        = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
       %th Date of Policy Issue
       %td
         = @data[:date_of_policy_issue].to_date.strftime("%b %d, %Y")
     %tr
-      %th Date Reported/Notice
+      %th Policy Number
+      %td
+        = @data[:policy_number]
+      %th Length of Stay
       %td 
-        = @data[:date_reported].to_date.strftime("%b %d, %Y")
+        = @data[:length_of_stay] 
+    %tr
+      %th Type of Insurance Policy 
+      %td
+        = @data[:type_of_insurance_policy]
+      %th Member's Contribution (LIF)
+      %td
+        = @data[:equity_value]       
+    %tr
+      %th
+      %td
+
+      %th Retirement Fund 
+      %td
+        = @data[:retirement_fund]
+    %tr
+      %th Name of Insured
+      %td
+        = @data[:name_of_insured]
+      %th Category of Cause of Death/TPD/Accident
+      %td
+        = @data[:category_of_cause_of_death_tpd_accident]
+    %tr
+      %th Classification of Insured
+      %td
+        = @data[:classification_of_insured]
+      %th Cause of Death/TPD/Accident
+      %td
+        = @data[:cause_of_death_tpd_accident]
+    -if @data[:order_of_child].blank?    
+    -else 
+      %tr
+        %th Order of Child
+        %td
+          = @data[:order_of_child]
+        %th
+        %td
+    %tr
+      %th Date of Death/TPD/Accident 
+      %td
+        = @data[:date_of_death_tpd_accident].to_date.strftime("%b %d, %Y")
+    %tr
+      %th Birthdate of Insured
+      %td
+        = @data[:date_of_birth].to_date.strftime("%b %d, %Y")
+      %th Beneficiary
+      %td
+        = @data[:beneficiary]
+    %tr
+      %th Gender
+      %td
+        = @data[:gender]
+      %th Claims Payment Through
+      %td
+        = @data[:claims_payment]
+    %tr
+      %th Age
+      %td
+        = @data[:age]
+      %th Account Name
+      %td
+        = @data[:account_name]
+    %tr
+      %th Face Amount 
+      %td
+        = @data[:face_amount]
+      %th Account Number
+      %td
+        = @data[:account_number]
+    %tr
+      %th Returned Contribution
+      %td
+        = @data[:returned_contribution]     
+    %tr  
+      %th Lapsed Amount
+      %td
+        = @data[:arrears]
+       
+      %th Claims Office Report
+      %td
+        = @data[:cause_of_delay]
+    %tr
+      %th Amount of Claim Payable
+      %td
+        = @data[:amount]
+      %th 
+      %td
+        = @data[:reason_of_delay]
+    %tr
+      %th CB Uploaded Documents
+      %td
+        = @claim.member.attachment_files.pluck(:file_name).map(&:inspect).join(", ")
+      %th Prepared By
+      %td
+        = @claim.prepared_by
+    %tr
+      %th
+      %td
+
+      %th Checked by
+      %td 
+        = @claim.try(:checked_by).try(:titleize)
+    %tr
+      %th
+      %td
+        %br
+      %th Date Checked
+      %td 
+        = @claim.try(:date_checked).try(:strftime, "%b %d, %Y")
+
+    %tr
+      %th Approved by
+      %td 
+        = @claim.try(:approved_by).try(:titleize)
+    %tr
+      %th Date Approved
+      %td 
+        = @claim.try(:date_approved).try(:strftime, "%b %d, %Y")
+      %th Date Posted
+      %td 
+        = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
+    %tr
+      %th 
+      %td 
+       
+      %th Posted by
+      %td 
+        = @claim.try(:posted_by).try(:titleize)
+    %tr
+      %th 
+      %td 
+       
       %th Date Paid
       %td 
-        = @data[:date_paid].try(:to_date).try(:strftime, "%b %d, %Y")
-      %tr
-        %th Member Name
-        %td 
-          = link_to "#{@claim.member.full_name} (#{@claim.member.identification_number})", member_path(@claim.member), target: "_blank"
-        %th Length of Stay
-        %td 
-          = @data[:length_of_stay] 
-      %tr
-        %th Policy Number
-        %td
-          = @data[:policy_number]
-        %th Date of Death/TPD/Accident 
-        %td
-          = @data[:date_of_death_tpd_accident].to_date.strftime("%b %d, %Y")
-      %tr
-        %th Type of Insurance Policy 
-        %td
-          = @data[:type_of_insurance_policy]
-
-        %th Classification of Insured
-        %td
-          = @data[:classification_of_insured]
-      %tr
-        %th Name of Insured
-        %td
-          = @data[:name_of_insured]
-        %th Gender
-        %td
-          = @data[:gender]
-      %tr
-        %th Age
-        %td
-          = @data[:age]
-        %th Birthdate of Insured
-        %td
-          = @data[:date_of_birth].to_date.strftime("%b %d, %Y")
-      %tr
-        %th Face Amount 
-        %td
-          = @data[:face_amount]
-        %th Beneficiary
-        %td
-          = @data[:beneficiary]
-      %tr
-        %th Member's Contribution (LIF)
-        %td
-          = @data[:equity_value]
-        %th Retirement Fund 
-        %td
-          = @data[:retirement_fund]
-      %tr
-        %th Returned Contribution
-        %td
-          = @data[:returned_contribution]
-        %th Category of Cause of Death/TPD/Accident
-        %td
-          = @data[:category_of_cause_of_death_tpd_accident]
-      %tr
-        %th Arrears
-        %td
-          = @data[:arrears]
-        %th Cause of Death/TPD/Accident
-        %td
-          = @data[:cause_of_death_tpd_accident]
-      %tr
-        %th Total Amount Payable
-        %td
-          = @data[:amount]
-        %th Prepared By
-        %td
-          = @claim.prepared_by
-      %tr
-        %th CB Uploaded Documents
-        %td
-          = @claim.member.attachment_files.pluck(:file_name).map(&:inspect).join(", ")
-        %th
-        %td
-      %tr  
-        - if @data[:order_of_child].blank?
-        - else
-          %th Order of Child
-          %td
-            = @data[:order_of_child]
-          %th
-          %td
-      %tr
-        %th Claims Payment Through
-        %td
-          = @data[:claims_payment]
-        %th
-        %td
-      %tr
-        %th Account Name
-        %td
-          = @data[:account_name]
-        %th Account Number
-        %td
-          = @data[:account_number]
-        %th
-        %td
-      %tr
-        %th Checked by
-        %td 
-          = @claim.try(:checked_by).try(:titleize)
-        %th Date Checked
-        %td 
-          = @claim.try(:date_checked).try(:strftime, "%b %d, %Y")
-      %tr
-        %th Approved by
-        %td 
-          = @claim.try(:approved_by).try(:titleize)
-        %th Date Approved
-        %td 
-          = @claim.try(:date_approved).try(:strftime, "%b %d, %Y")
-      %tr
-        %th Posted by
-        %td 
-          = @claim.try(:posted_by).try(:titleize)
-        %th Date Posted
-        %td 
-          = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
+        - if @data[:accounting_entry][:data][:date_paid].present?
+          = @data[:accounting_entry][:data][:date_paid].try(:to_date).try(:strftime, "%b %d, %Y") 
+        - elsif @data[:date_paid]
+          = @data[:date_paid].to_date.strftime("%b %d, %Y")     
 - if @claim.note.present?
   - if @claim.pending?  
     .bs-callout.bs-callout-primary
@@ -172,5 +207,3 @@
           %b
             DECLINED NOTE:
           #{@claim.declined_note}
-      
-

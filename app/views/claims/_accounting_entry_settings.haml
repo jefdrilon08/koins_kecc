@@ -73,6 +73,14 @@
                 .card-body
                   .row
                     .col-md-3.col-xs-12
+                      %p Date Paid
+                      = date_field_tag :particular, @claim.date_paid, class: "form-control select-select2", id: "input-date-date-paid"
+                    .col-md-1.col-xs-12
+                      %p ...
+                      #btn-confirm-date-paid.btn.btn-block.btn-warning
+                        .fa.fa-sync
+                        Save
+                    .col-md-3.col-xs-12
                       %p Check Number
                       = text_field_tag :particular, @claim.check_number, class: "form-control select-select2", id: "input-text-check-number"
                     .col-md-1.col-xs-12

@@ -50,6 +50,9 @@ var blipForm = (function() {
     $accountName                = $("#account-name");
     $accountNumber              = $("#account-number");
     $control                    = $("#control");
+    $causeOfDelay               = $("#cause-of-delay");
+    $reasonOfDelay              = $("#reason-of-delay");
+    $dateCompletedDocuments     = $("#date-completed-documents"); 
 
   }
 
@@ -87,7 +90,10 @@ var blipForm = (function() {
             age: $age.val(),
             claims_payment: $claimsPayment.val(),
             account_name: $accountName.val(),
-            account_number: $accountNumber.val()
+            account_number: $accountNumber.val(),
+            cause_of_delay: $causeOfDelay.val(),
+            reason_of_delay: $reasonOfDelay.val(),
+            date_completed_documents: $dateCompletedDocuments.val()
           },
           authenticity_token: authenticityToken,
           
@@ -123,7 +129,7 @@ var blipForm = (function() {
   var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
   var classificationOfInsuredValue = ($classificationOfInsured.val());
   
-  if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)"){
+  if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)"){
     $orderOfChildField.show();
   }
   else{
@@ -188,7 +194,7 @@ var blipForm = (function() {
       }
  
     // if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Member"){ 
-      if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
+      if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
           }
@@ -226,7 +232,7 @@ var blipForm = (function() {
 
         $('#face-amount').val(value);
         $returnedContributionField.show();
-      } else if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
+      } else if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
         if (months < 3 && years < 1){
             var value = 0.00
           }
@@ -300,7 +306,7 @@ var blipForm = (function() {
       var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
       var classificationOfInsuredValue = ($classificationOfInsured.val());
 
-      if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)"){
+      if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)"){
         $orderOfChildField.show();
       }
       else{
@@ -364,7 +370,7 @@ var blipForm = (function() {
           $('#length-of-stay').val(stay)
         }
       }
-      if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
+      if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
           }
@@ -402,7 +408,7 @@ var blipForm = (function() {
 
         $('#face-amount').val(value);
         $returnedContributionField.show();
-      } else if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
+      } else if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
         if (months < 3 && years < 1){
             var value = 0.00
           }
@@ -502,7 +508,7 @@ var blipForm = (function() {
           $('#length-of-stay').val(stay)
         }
       }
-      if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
+      if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
           }
@@ -540,7 +546,7 @@ var blipForm = (function() {
 
         $('#face-amount').val(value);
         $returnedContributionField.show();
-      } else if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
+      } else if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
         if (months < 3 && years < 1){
             var value = 0.00
           }
