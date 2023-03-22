@@ -584,6 +584,9 @@ Rails.application.routes.draw do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
 
+  # PSR Schedule
+  get "/psr_schedules/generate", to: "psr_schedules#generate", as: :psr_schedules_generate
+
   # ACTIVITY LOGS
   #resources :activity_logs, only: [:index]
 

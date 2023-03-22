@@ -1,4 +1,6 @@
 namespace :api do
+  # PSR Schedules
+  post "/psr_schedules/generate", to: "psr_schedules#generate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
 

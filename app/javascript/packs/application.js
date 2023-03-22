@@ -62,6 +62,7 @@ import BranchPsrRecordsShow from "../components/branch_psr_records/Show.js";
 import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
 import TransferSavingsRecordsShow from "../components/transfer_savings/ShowComponent.js";
 import ShareCapitalSummary from "../components/share_capital_summary/ShowComponents.js";
+import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
 
 
 // "init" Objects
@@ -415,25 +416,18 @@ const hooks = {
   "billing_for_writeoff_collections/show":            [BillingForWriteoffCollectionShow],
   "additional_share/index":                           [AdditionalShareIndex],
   "additional_share/show":                            [AdditionalShareShow],
-//<<<<<<< HEAD
   "mbs_transfer/index":                               [MbsTransferIndex],
   "mbs_transfer/show":                                [MbsTransferShow],	
-  //"pages/profile":                                    [Profile],
   "visualize/monthly_psr":                            [VisualizeMonthlyPsr],
   "transfer_savings/index":                           [TransferSavingsIndex],
   "transfer_savings/show":                            [TransferSavingsShow,TransferSavingsRecordsShow],
-//=======
   "pages/profile":                                    [Profile],
   "bank_transfer/index":                              [BankTransferIndex],
-//<<<<<<< HEAD
   "data_stores/share_capital_summary/index":          [ShareCapitalSummaryIndex],
   "data_stores/share_capital_summary/show":						[ShareCapitalSummary],
-//=======
   "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
-  "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow]
-//>>>>>>> ab4e03ef4c22761a4d3c089335f304017ae920b6
-
-//>>>>>>> Instapay_Pesonet
+  "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow],
+  "psr_schedules/generate":                           [PsrSchedulesGenerate],
 }
 
 const renderComponent = (Component, payload) => {
@@ -445,59 +439,6 @@ const renderComponent = (Component, payload) => {
   )
 }
 
-/*<<<<<<< HEAD
-=======
-const toastNotification = (payload) => {
-  let notifId   = payload.notifId;
-  let link      = payload.link;
-  let title     = payload.title;
-  let updatedAt = payload.updatedAt;
-  let content   = payload.content;
-  let branchId  = payload.branchId;
-
-  const branchIds = JSON.parse(
-    $("meta[name='branch-ids']").attr('content')
-  ).branch_ids;
-
-  if(branchId && branchIds.includes(branchId)) {
-    let notif = `
-      <div id="notif-${notifId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
-        <div class="toast-header">
-          <strong class="me-auto">
-            <a href='${link}'>
-              ${title}
-            </a>
-          </strong>
-          <small>
-            ${updatedAt}
-          </small>
-          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close">
-          </button>
-        </div>
-        <div class="toast-body">
-          ${content}
-        </div>
-      </div>
-    `;
-
-    console.log(notif);
-
-    let toastSection = document.getElementById('toast-section');
-
-    let div = document.createElement('div');
-    div.innerHTML = notif.trim();
-
-    toastSection.appendChild(div.firstChild);
-
-    let notifElement = document.getElementById(`notif-${notifId}`);
-    console.log(notifElement);
-
-    const toast = new bootstrap.Toast(notifElement);
-    toast.show();
-  }
-}
-*/
-//>>>>>>> develop
 document.addEventListener("DOMContentLoaded", () => {
   const { route, payload } = JSON.parse($("meta[name='parameters']").attr('content'));
   const authenticityToken = $("meta[name='csrf-token']").attr('content');
@@ -519,9 +460,5 @@ document.addEventListener("DOMContentLoaded", () => {
   if(route != "pages/login") {
     // SIDEBAR JS
     Sidebar.init();
-//<<<<<<< HEAD
-
-//>>>>>>> develop
-
   }
 });
