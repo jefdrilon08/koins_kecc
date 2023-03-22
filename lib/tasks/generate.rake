@@ -3,6 +3,20 @@ namespace :generate do
     ProcessCutoffReports.perform_later({})
   end
 
+  task :jef => :environment do
+      a = Member.where(branch_id: "339144e0-9544-4a7a-b2d4-b500cc329034")
+
+      puts a.map{ |g| 
+                        if  g.data["project_type"].present?
+                          f = []
+                          f << "#{g.data["project_type"]} | jef"
+                          puts f
+                        end
+
+                        }
+  end
+
+
   task :members_file => :environment do
     start_date  = ENV["START_DATE"] || Date.yesterday
     end_date    = ENV["END_DATE"] || Date.tomorrow

@@ -1,5 +1,5 @@
 module DataStores
-  class ProjectTypesController < DataStoreController
+  class ProjectTypesSummaryController < DataStoreController
     def index
       
       @subheader_items = [
