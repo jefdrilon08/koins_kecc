@@ -37,14 +37,49 @@
     
   }
   .header{
-    margin-bottom: 140px
+    margin-bottom: 50px;
   }
   .footer{
-    margin-bottom: 100px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .img{
+    padding: 20px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
   }
 
 
 %div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 150px; margin-right: 20px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 13.32px"}
+          KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE
+      %br
+        %span
+          %var 4
+          %sup th
+          Floor KMBA Members Center Building
+      %br
+        %span
+          Telephone Numbers: (632) 8442-9607 or 5310-2470 / Fax Number: 
+        %br
+          (632) 8442-9607 loc. 204
+      %br
+        %span
+          %b
+            CDA REG. NO.: 9520-1016000000028521
+      %br
+        %span
+          %b
+            CIN: 16201628521
 %strong{style: "font-size: 13.32px"}
   %center
     ABISO NG POSIBLENG PAGKATANGGAL SA KOOPERATIBA
@@ -71,20 +106,22 @@
 %p{style: "font-size: 10.66px"}
   Nais naming ipagbigay-alam na sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan:
   %ul.list-group
-    %li.list-group-item{style: "font-size: 10.66px"}
-      %input{:required => "", :type => "checkbox"}>/ 
-      &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
-      %b
-        #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
-      hanggang sa kasalukuyan
-    %li.list-group-item{style: "font-size: 10.66px"}
-      %input{:required => "", :type => "checkbox"}>/
-      &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
-      -@data[:loan_records].each do |lr|
-        %div.just-font
-          %br
-            %b
-              #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
+    - if @data[:last_savings_deposit].present?
+      %li.list-group-item{style: "font-size: 10.66px"}
+        %input{:required => "", :type => "checkbox"}>/ 
+        &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
+        %b
+          #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
+        hanggang sa kasalukuyan
+    -if @data[:loan_records].any?
+      %li.list-group-item{style: "font-size: 10.66px"}
+        %input{:required => "", :type => "checkbox"}>/
+        &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
+        -@data[:loan_records].each do |lr|
+          %div.just-font
+            %br
+              %b
+                #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
     %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/
       &nbsp&nbsp Paglabag sa anumang probisyon ng By-laws o anumang polisiya at patakarang ipinatutupad ng kooperatiba
@@ -134,3 +171,7 @@
   %br
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspPangalan at Lagda/Relasyon Sa Miyembro/Petsa
 %div.footer
+  %br
+    %b
+      ANNEX 1: ABISO NG POSIBLENG PAGKATANGGAL SA KOOPERATIBA
+  
