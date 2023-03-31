@@ -38,6 +38,7 @@ var urlSaveCheckNumber        = "/api/v1/claims/save_check_number";
 var urlSaveCheckVoucherNumber = "/api/v1/claims/save_check_voucher_number";
 var urlSavePayee              = "/api/v1/claims/save_payee";
 var urlSaveNote               = "/api/v1/claims/save_note";
+var urlSaveDatePaid           = "/api/v1/claims/save_date_paid";
 var urlAddTransactionFee      = "/api/v1/claims/add_transaction_fee";
 
 var $modalApprove;
@@ -94,6 +95,9 @@ var $btnConfirmCheckNumber;
 
 var $inputTextCheckVoucherNumber;
 var $btnConfirmCheckVoucherNumber;
+
+var $inputDatePaid;
+var $btnConfirmDatePaid;
 
 var $btnPrint;
 var $btnDailyReport;
@@ -662,6 +666,51 @@ var _bindEvents = function() {
     });
   });
 
+  $btnConfirmDatePaid.on("click", function() {
+    var date_paid  = $inputDatePaid.val();
+
+    $message.html("Loading...");
+
+    $inputDatePaid.prop("disabled", true);
+    $btnConfirmDatePaid.prop("disabled", true);
+
+    $.ajax({
+      url: urlSaveDatePaid,
+      method: 'POST',
+      data: { 
+        id: claimId,
+        date_paid: date_paid,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html(
+          "Success! Redirecting..."
+        );
+
+        window.location.reload();
+      },
+      error: function(response) {
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputDatePaid.prop("disabled", false);
+          $btnConfirmDatePaid.prop("disabled", false);
+        }
+      }
+    });
+  });
+
 
   $btnSaveNote.on("click", function() {
     var note  = $inputNote.val();
@@ -833,6 +882,10 @@ var _cacheDom = function() {
 
   $inputTextParticular          = $("#input-text-particular");
   $btnConfirmParticular         = $("#btn-confirm-particular");
+
+  $inputDatePaid                = $("#input-date-date-paid");
+  $btnConfirmDatePaid           = $("#btn-confirm-date-paid");
+
   $btnConfirmTransactionFee     = $("#btn-confirm-transaction-fee");
   $inputTextTransactionFee      = $("#input-text-transaction-fee");
 

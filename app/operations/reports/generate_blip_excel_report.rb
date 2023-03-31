@@ -40,9 +40,9 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
           
           sheet.add_row [ 
-            "Date Encoded",
-            "Time Encoded",
-            "Date Prepared",
+            "Date Reported/Notice",
+            "Date Completed Documents",
+            "Date Processed",
             "Cluster",
             "Branch",
             "Name of Member",
@@ -56,12 +56,14 @@ module Reports
             "Sex",
             "Date of Policy Issue",
             "Face Amount",
-            "Arrears",
+            "Lapsed Amount",
             "Date of Death/TPD",
             "Death date was reported",
             "Date Paid",
             "Cause of Death/TPD/MVAH",
             "Category of Cause of Death/TPD/MVAH",
+            "Cause of Delay",
+            "Reason of Delay",
             "Benefit Payable",
             "Equity Value (LIFE)",
             "Retirement Fund (RF)",
@@ -72,8 +74,8 @@ module Reports
 
           @claims.each do |claim|
             sheet.add_row [
-                claim.created_at.try(:strftime, "%b %d, %Y"),
-                claim.created_at.strftime("%I:%M%P"),
+                claim.data["date_reported"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                claim.data["date_completed_documents"].try(:to_date).try(:strftime, "%b %d, %Y"),
                 claim.date_prepared.try(:strftime, "%b %d, %Y"),
                 claim.branch.cluster.name,
                 claim.branch.name,
@@ -94,6 +96,8 @@ module Reports
                 claim.date_prepared.try(:strftime, "%b %d, %Y"),
                 claim.data["cause_of_death_tpd_accident"],
                 claim.data["category_of_cause_of_death_tpd_accident"],
+                claim.data["cause_of_delay"],
+                claim.data["reason_of_delay"],
                 claim.data["face_amount"],
                 claim.data["equity_value"],
                 claim.data["retirement_fund"],
@@ -120,9 +124,13 @@ module Reports
             "",
             "",
             "",
-            "TOTAL",
             "",
+            "",
+            "",
+            "TOTAL",
             @total_face_amount,
+            "",
+            "",
             "",
             "",
             "",
@@ -135,7 +143,7 @@ module Reports
             "",
             "",
             ""
-          ], style: [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, header_cells, nil, currency_cell_right_bold, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, nil,nil, nil]
+          ], style: [ nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, header_cells, currency_cell_right_bold, nil, nil, nil, nil, nil, nil, nil, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, nil,nil, nil]
 
         end
       end

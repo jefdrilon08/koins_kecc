@@ -127,9 +127,9 @@ module Claims
         @errors << "Date Reported field is required"
       end
 
-      if @date_paid.blank?
-        @errors << "Date Paid field is required"
-      end
+      # if @date_paid.blank?
+      #   @errors << "Date Paid field is required"
+      # end
 
       # if @claims_payment.blank?
       #   @errors << "Claims Payment field is required"

@@ -15,6 +15,10 @@ module ApplicationHelper
     end
   end
 
+  def is_mis_fm?
+    is_mis_user = ["MIS", "FM"].include? current_user.roles.last
+  end
+
   def is_mis_user?
     current_user.roles.include?("MIS")
   end
