@@ -582,7 +582,7 @@ namespace :adjust do
     current_date_details = ENV['CURRENT_DATE']
 
     puts "Starting set_max_active_date..."
-    current_date  = current_date_details
+    current_date  = current_date_details.to_date
     #current_date  = ::Utils::GetCurrentDate.new(config: { branch: branch }).execute!
 
     # Do this in batches
